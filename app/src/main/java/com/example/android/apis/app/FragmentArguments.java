@@ -21,6 +21,7 @@ import com.example.android.apis.R;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -69,11 +70,11 @@ public class FragmentArguments extends Activity {
          * Parse attributes during inflation from a view hierarchy into the
          * arguments we handle.
          */
-        @Override public void onInflate(Activity activity, AttributeSet attrs,
-                Bundle savedInstanceState) {
-            super.onInflate(activity, attrs, savedInstanceState);
+        @Override public void onInflate(Context context, AttributeSet attrs,
+                                        Bundle savedInstanceState) {
+            super.onInflate(context, attrs, savedInstanceState);
 
-            TypedArray a = activity.obtainStyledAttributes(attrs,
+            TypedArray a = context.obtainStyledAttributes(attrs,
                     R.styleable.FragmentArguments);
             mLabel = a.getText(R.styleable.FragmentArguments_android_label);
             a.recycle();
@@ -100,7 +101,7 @@ public class FragmentArguments extends Activity {
             View v = inflater.inflate(R.layout.hello_world, container, false);
             View tv = v.findViewById(R.id.text);
             ((TextView)tv).setText(mLabel != null ? mLabel : "(no label)");
-            tv.setBackgroundDrawable(getResources().getDrawable(android.R.drawable.gallery_thumb));
+            tv.setBackground(getResources().getDrawable(android.R.drawable.gallery_thumb, null));
             return v;
         }
     }

@@ -41,7 +41,7 @@ public class FragmentAlertDialog extends Activity {
         setContentView(R.layout.fragment_dialog);
 
         View tv = findViewById(R.id.text);
-        ((TextView)tv).setText("Example of displaying an alert dialog with a DialogFragment");
+        ((TextView)tv).setText(R.string.example_alert_dialogfragment);
 
         // Watch for button clicks.
         Button button = (Button)findViewById(R.id.show);
