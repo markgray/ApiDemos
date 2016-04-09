@@ -52,7 +52,7 @@ public class ContactsFilterInstrumentation extends Instrumentation {
         Activity activity = startActivitySync(intent);
 
         // This is the Activity object that was started, to do with as we want.
-        Log.i("ContactsFilterInstrumentation", "Started: " + activity);
+        Log.i("ContactsFilterInstr...", "Started: " + activity);
 
         // We are going to enqueue a couple key events to simulate the user
         // filtering the list.  This is the low-level API so we must send both
@@ -66,7 +66,7 @@ public class ContactsFilterInstrumentation extends Instrumentation {
         waitForIdleSync();
 
         // And we are done!
-        Log.i("ContactsFilterInstrumentation", "Done!");
+        Log.i("ContactsFilterInstr...", "Done!");
         finish(Activity.RESULT_OK, null);
     }
 }

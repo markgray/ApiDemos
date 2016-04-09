@@ -54,7 +54,7 @@ public class ContactsSelectInstrumentation extends Instrumentation {
         Activity activity = startActivitySync(intent);
 
         // This is the Activity object that was started, to do with as we want.
-        Log.i("ContactsSelectInstrumentation", "Started: " + activity);
+        Log.i("ContactsSelectInstr...", "Started: " + activity);
 
         // Monitor for the expected start activity call.
         ActivityMonitor am = addMonitor(IntentFilter.create(
@@ -73,13 +73,13 @@ public class ContactsSelectInstrumentation extends Instrumentation {
 
         // Was the expected activity started?
         if (checkMonitorHit(am, 1)) {
-            Log.i("ContactsSelectInstrumentation", "Activity started!");
+            Log.i("ContactsSelectInstr...", "Activity started!");
         } else {
-            Log.i("ContactsSelectInstrumentation", "*** ACTIVITY NOT STARTED!");
+            Log.i("ContactsSelectInstr...", "*** ACTIVITY NOT STARTED!");
         }
 
         // And we are done!
-        Log.i("ContactsSelectInstrumentation", "Done!");
+        Log.i("ContactsSelectInstr...", "Done!");
         finish(Activity.RESULT_OK, null);
     }
 }
