@@ -16,6 +16,7 @@
 
 package com.example.android.apis.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ListFragment;
@@ -25,6 +26,7 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
 import android.text.TextUtils;
@@ -45,6 +47,7 @@ import android.widget.SearchView.OnQueryTextListener;
  */
 public class LoaderCursor extends Activity {
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +62,7 @@ public class LoaderCursor extends Activity {
     }
 
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class CursorLoaderListFragment extends ListFragment
             implements OnQueryTextListener, OnCloseListener,
             LoaderManager.LoaderCallbacks<Cursor> {
@@ -72,6 +76,7 @@ public class LoaderCursor extends Activity {
         // If non-null, this is the current filter the user has provided.
         String mCurFilter;
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         @Override public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
 
@@ -97,6 +102,7 @@ public class LoaderCursor extends Activity {
             getLoaderManager().initLoader(0, null, this);
         }
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         public static class MySearchView extends SearchView {
             public MySearchView(Context context) {
                 super(context);
@@ -111,6 +117,7 @@ public class LoaderCursor extends Activity {
             }
         }
 
+        @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
         @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             // Place an action bar item for searching.
             MenuItem item = menu.add("Search");
@@ -124,6 +131,7 @@ public class LoaderCursor extends Activity {
             item.setActionView(mSearchView);
         }
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         public boolean onQueryTextChange(String newText) {
             // Called when the action bar search text has changed.  Update
             // the search filter, and restart the loader to do a new query
@@ -147,6 +155,7 @@ public class LoaderCursor extends Activity {
             return true;
         }
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         @Override
         public boolean onClose() {
             if (!TextUtils.isEmpty(mSearchView.getQuery())) {
@@ -170,6 +179,7 @@ public class LoaderCursor extends Activity {
             Contacts.LOOKUP_KEY,
         };
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             // This is called when a new Loader needs to be created.  This
             // sample only has one Loader, so we don't care about the ID.
@@ -193,6 +203,7 @@ public class LoaderCursor extends Activity {
                     Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
         }
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             // Swap the new cursor in.  (The framework will take care of closing the
             // old cursor once we return.)
@@ -206,6 +217,7 @@ public class LoaderCursor extends Activity {
             }
         }
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         public void onLoaderReset(Loader<Cursor> loader) {
             // This is called when the last Cursor provided to onLoadFinished()
             // above is about to be closed.  We need to make sure we are no
