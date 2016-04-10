@@ -18,11 +18,13 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -36,6 +38,7 @@ import android.widget.TextView;
  */
 public class FragmentArguments extends Activity {
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_arguments);
@@ -51,6 +54,7 @@ public class FragmentArguments extends Activity {
 
 
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class MyFragment extends Fragment {
         CharSequence mLabel;
 
@@ -84,6 +88,7 @@ public class FragmentArguments extends Activity {
          * During creation, if arguments have been supplied to the fragment
          * then parse those out.
          */
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
         @Override public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
@@ -96,8 +101,9 @@ public class FragmentArguments extends Activity {
         /**
          * Create the view for this fragment, using the arguments given to it.
          */
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                                           Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.hello_world, container, false);
             View tv = v.findViewById(R.id.text);
             ((TextView)tv).setText(mLabel != null ? mLabel : "(no label)");

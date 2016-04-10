@@ -18,9 +18,11 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +38,7 @@ import android.widget.TextView;
 public class FragmentCustomAnimations extends Activity {
     int mStackLevel = 1;
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +69,7 @@ public class FragmentCustomAnimations extends Activity {
     }
 
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     void addFragmentToStack() {
         mStackLevel++;
 
@@ -86,6 +90,7 @@ public class FragmentCustomAnimations extends Activity {
 
 
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class CountingFragment extends Fragment {
         int mNum;
 
@@ -117,13 +122,14 @@ public class FragmentCustomAnimations extends Activity {
          * The Fragment's UI is just a simple text view showing its
          * instance number.
          */
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.hello_world, container, false);
             View tv = v.findViewById(R.id.text);
-            ((TextView)tv).setText("Fragment #" + mNum);
-            tv.setBackgroundDrawable(getResources().getDrawable(android.R.drawable.gallery_thumb));
+            ((TextView)tv).setText(String.format("%s%d", getString(R.string.fragment_number), mNum));
+            tv.setBackground(getResources().getDrawable(android.R.drawable.gallery_thumb, null));
             return v;
         }
     }

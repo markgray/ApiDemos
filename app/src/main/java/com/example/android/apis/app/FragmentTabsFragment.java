@@ -19,10 +19,12 @@ import java.util.ArrayList;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,9 +34,11 @@ import android.widget.TabHost;
 /**
  * Sample fragment that contains tabs of other fragments.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentTabsFragment extends Fragment {
     TabManager mTabManager;
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +93,7 @@ public class FragmentTabsFragment extends Fragment {
         private final Context mContext;
         private final FragmentManager mManager;
         private final int mContainerId;
-        private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
+        private final ArrayList<TabInfo> mTabs = new ArrayList<>();
         private TabHost mTabHost;
         private TabInfo mLastTab;
         private boolean mInitialized;
@@ -148,6 +152,7 @@ public class FragmentTabsFragment extends Fragment {
             mTabHost.addTab(tabSpec);
         }
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
         public void handleViewStateRestored(Bundle savedInstanceState) {
             if (savedInstanceState != null) {
                 mCurrentTabTag = savedInstanceState.getString("tab");
@@ -212,6 +217,7 @@ public class FragmentTabsFragment extends Fragment {
             }
         }
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
         private FragmentTransaction doTabChanged(String tabId, FragmentTransaction ft) {
             TabInfo newTab = null;
             for (int i=0; i<mTabs.size(); i++) {
@@ -232,14 +238,12 @@ public class FragmentTabsFragment extends Fragment {
                         ft.detach(mLastTab.fragment);
                     }
                 }
-                if (newTab != null) {
-                    if (newTab.fragment == null) {
-                        newTab.fragment = Fragment.instantiate(mContext,
-                                newTab.clss.getName(), newTab.args);
-                        ft.add(mContainerId, newTab.fragment, newTab.tag);
-                    } else {
-                        ft.attach(newTab.fragment);
-                    }
+                if (newTab.fragment == null) {
+                    newTab.fragment = Fragment.instantiate(mContext,
+                            newTab.clss.getName(), newTab.args);
+                    ft.add(mContainerId, newTab.fragment, newTab.tag);
+                } else {
+                    ft.attach(newTab.fragment);
                 }
 
                 mLastTab = newTab;

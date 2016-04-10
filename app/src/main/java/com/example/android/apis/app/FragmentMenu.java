@@ -18,10 +18,12 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,6 +48,7 @@ public class FragmentMenu extends Activity {
         }
     };
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +87,7 @@ public class FragmentMenu extends Activity {
     }
 
     // Update fragment visibility based on current check box state.
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     void updateFragmentVisibility() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         if (mCheckBox1.isChecked()) ft.show(mFragment1);
@@ -98,6 +102,7 @@ public class FragmentMenu extends Activity {
      * have a UI (it does not implement onCreateView), but it could also
      * have one if it wanted.
      */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class MenuFragment extends Fragment {
 
         @Override
@@ -116,6 +121,7 @@ public class FragmentMenu extends Activity {
     /**
      * Second fragment with a menu.
      */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class Menu2Fragment extends Fragment {
 
         @Override

@@ -19,12 +19,14 @@ package com.example.android.apis.app;
 import com.example.android.apis.R;
 import com.example.android.apis.Shakespeare;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -58,6 +60,7 @@ public class FragmentLayout extends Activity {
 
     public static class DetailsActivity extends Activity {
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -86,6 +89,7 @@ public class FragmentLayout extends Activity {
      * data to the user as appropriate based on the currrent UI layout.
      */
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class TitlesFragment extends ListFragment {
         boolean mDualPane;
         int mCurCheckPosition = 0;
@@ -95,7 +99,7 @@ public class FragmentLayout extends Activity {
             super.onActivityCreated(savedInstanceState);
 
             // Populate list with our static array of titles.
-            setListAdapter(new ArrayAdapter<String>(getActivity(),
+            setListAdapter(new ArrayAdapter<>(getActivity(),
                     android.R.layout.simple_list_item_activated_1, Shakespeare.TITLES));
 
             // Check to see if we have a frame in which to embed the details
@@ -176,6 +180,7 @@ public class FragmentLayout extends Activity {
      * item.
      */
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class DetailsFragment extends Fragment {
         /**
          * Create a new instance of DetailsFragment, initialized to

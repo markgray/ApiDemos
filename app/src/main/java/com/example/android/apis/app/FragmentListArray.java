@@ -18,8 +18,10 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.Shakespeare;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ListFragment;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +34,7 @@ import android.widget.ListView;
  */
 public class FragmentListArray extends Activity {
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +46,13 @@ public class FragmentListArray extends Activity {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class ArrayListFragment extends ListFragment {
 
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-            setListAdapter(new ArrayAdapter<String>(getActivity(),
+            setListAdapter(new ArrayAdapter<>(getActivity(),
                     android.R.layout.simple_list_item_1, Shakespeare.TITLES));
         }
 

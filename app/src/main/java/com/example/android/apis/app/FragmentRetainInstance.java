@@ -18,9 +18,11 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +38,7 @@ import android.widget.ProgressBar;
  * easier than using the raw Activity.onRetainNonConfiguratinInstance() API.
  */
 public class FragmentRetainInstance extends Activity {
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +54,7 @@ public class FragmentRetainInstance extends Activity {
      * This is a fragment showing UI that will be updated from work done
      * in the retained fragment.
      */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class UiFragment extends Fragment {
         RetainedFragment mWorkFragment;
 
@@ -95,6 +99,7 @@ public class FragmentRetainInstance extends Activity {
      * activity instances.  It represents some ongoing work, here a thread
      * we have that sits around incrementing a progress indicator.
      */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class RetainedFragment extends Fragment {
         ProgressBar mProgressBar;
         int mPosition;
@@ -125,6 +130,7 @@ public class FragmentRetainInstance extends Activity {
                             try {
                                 wait();
                             } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
                         }
 
@@ -142,6 +148,7 @@ public class FragmentRetainInstance extends Activity {
                         try {
                             wait(50);
                         } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -175,9 +182,10 @@ public class FragmentRetainInstance extends Activity {
             super.onActivityCreated(savedInstanceState);
             
             // Retrieve the progress bar from the target's view hierarchy.
-            mProgressBar = (ProgressBar)getTargetFragment().getView().findViewById(
+            //noinspection ConstantConditions
+            mProgressBar =  (ProgressBar)getTargetFragment().getView().findViewById(
                     R.id.progress_horizontal);
-            
+
             // We are ready for our thread to go.
             synchronized (mThread) {
                 mReady = true;

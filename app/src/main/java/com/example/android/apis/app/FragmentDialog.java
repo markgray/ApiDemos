@@ -18,10 +18,12 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,10 +41,7 @@ public class FragmentDialog extends Activity {
         setContentView(R.layout.fragment_dialog);
 
         View tv = findViewById(R.id.text);
-        ((TextView)tv).setText("Example of displaying dialogs with a DialogFragment.  "
-                + "Press the show button below to see the first dialog; pressing "
-                + "successive show buttons will display other dialog styles as a "
-                + "stack, with dismissing or back going to the previous dialog.");
+        ((TextView)tv).setText(R.string.dialog_fragment_example_instructions);
 
         // Watch for button clicks.
         Button button = (Button)findViewById(R.id.show);
@@ -64,6 +63,7 @@ public class FragmentDialog extends Activity {
     }
 
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     void showDialog() {
         mStackLevel++;
 
@@ -99,6 +99,7 @@ public class FragmentDialog extends Activity {
     }
 
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class MyDialogFragment extends DialogFragment {
         int mNum;
 
@@ -149,8 +150,9 @@ public class FragmentDialog extends Activity {
                 Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.fragment_dialog, container, false);
             View tv = v.findViewById(R.id.text);
-            ((TextView)tv).setText("Dialog #" + mNum + ": using style "
-                    + getNameForNum(mNum));
+            String dialogLabel = getString(R.string.dialog_number) + mNum + ": using style "
+                    + getNameForNum(mNum);
+            ((TextView)tv).setText(dialogLabel);
 
             // Watch for button clicks.
             Button button = (Button)v.findViewById(R.id.show);

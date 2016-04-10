@@ -18,10 +18,12 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,7 @@ import android.widget.TextView;
  */
 public class FragmentHideShow extends Activity {
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,22 +53,24 @@ public class FragmentHideShow extends Activity {
     void addShowHideListener(int buttonId, final Fragment fragment) {
         final Button button = (Button)findViewById(buttonId);
         button.setOnClickListener(new OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             public void onClick(View v) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.setCustomAnimations(android.R.animator.fade_in,
                         android.R.animator.fade_out);
                 if (fragment.isHidden()) {
                     ft.show(fragment);
-                    button.setText("Hide");
+                    button.setText(R.string.hide);
                 } else {
                     ft.hide(fragment);
-                    button.setText("Show");
+                    button.setText(R.string.show);
                 }
                 ft.commit();
             }
         });
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class FirstFragment extends Fragment {
         TextView mTextView;
 
@@ -74,7 +79,7 @@ public class FragmentHideShow extends Activity {
                 Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.labeled_text_edit, container, false);
             View tv = v.findViewById(R.id.msg);
-            ((TextView)tv).setText("The fragment saves and restores this text.");
+            ((TextView)tv).setText(R.string.text_for_fragment_to_save);
 
             // Retrieve the text editor, and restore the last saved state if needed.
             mTextView = (TextView)v.findViewById(R.id.saved);
@@ -93,6 +98,7 @@ public class FragmentHideShow extends Activity {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class SecondFragment extends Fragment {
 
         @Override
@@ -100,13 +106,13 @@ public class FragmentHideShow extends Activity {
                 Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.labeled_text_edit, container, false);
             View tv = v.findViewById(R.id.msg);
-            ((TextView)tv).setText("The TextView saves and restores this text.");
+            ((TextView)tv).setText(R.string.textview_text_to_save);
 
             // Retrieve the text editor and tell it to save and restore its state.
             // Note that you will often set this in the layout XML, but since
             // we are sharing our layout with the other fragment we will customize
             // it here.
-            ((TextView)v.findViewById(R.id.saved)).setSaveEnabled(true);
+            v.findViewById(R.id.saved).setSaveEnabled(true);
             return v;
         }
     }

@@ -18,10 +18,12 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.LayoutInflater;
@@ -34,6 +36,7 @@ import android.widget.TextView;
 
 public class FragmentReceiveResult extends Activity {
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +55,9 @@ public class FragmentReceiveResult extends Activity {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class ReceiveResultFragment extends Fragment {
-        // Definition of the one requestCode we use for receiving resuls.
+        // Definition of the one requestCode we use for receiving results.
         static final private int GET_CODE = 0;
 
         private TextView mResults;

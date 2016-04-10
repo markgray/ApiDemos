@@ -18,8 +18,10 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +31,9 @@ import android.view.ViewGroup;
  * Demonstrates a fragment that can be configured through both Bundle arguments
  * and layout attributes.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentArgumentsFragment extends Fragment {
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

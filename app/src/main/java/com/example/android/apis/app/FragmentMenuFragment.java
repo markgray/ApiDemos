@@ -18,9 +18,11 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +33,7 @@ import android.widget.CheckBox;
 /**
  * Demonstrates how fragments can participate in the options menu.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentMenuFragment extends Fragment {
     Fragment mFragment1;
     Fragment mFragment2;
@@ -44,6 +47,7 @@ public class FragmentMenuFragment extends Fragment {
         }
     };
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -84,6 +88,7 @@ public class FragmentMenuFragment extends Fragment {
     }
 
     // Update fragment visibility based on current check box state.
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     void updateFragmentVisibility() {
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
         if (mCheckBox1.isChecked()) ft.show(mFragment1);

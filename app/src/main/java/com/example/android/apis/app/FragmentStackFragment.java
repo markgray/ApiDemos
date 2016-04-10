@@ -18,8 +18,10 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,9 +29,11 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentStackFragment extends Fragment {
     int mStackLevel = 1;
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +62,7 @@ public class FragmentStackFragment extends Fragment {
         });
         button = (Button)v.findViewById(R.id.delete_fragment);
         button.setOnClickListener(new OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
             public void onClick(View v) {
                 getChildFragmentManager().popBackStack();
             }
@@ -72,6 +77,7 @@ public class FragmentStackFragment extends Fragment {
         outState.putInt("level", mStackLevel);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     void addFragmentToStack() {
         mStackLevel++;
 

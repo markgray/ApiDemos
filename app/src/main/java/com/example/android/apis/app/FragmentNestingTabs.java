@@ -16,12 +16,14 @@
 package com.example.android.apis.app;
 
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -30,43 +32,60 @@ import android.widget.Toast;
  * with other action bar features.
  */
 public class FragmentNestingTabs extends Activity {
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FragmentManager.enableDebugLogging(true);
         super.onCreate(savedInstanceState);
 
         final ActionBar bar = getActionBar();
-        bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
+        if (bar != null) {
+            bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        }
+        if (bar != null) {
+            bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
+        }
 
-        bar.addTab(bar.newTab()
-                .setText("Menus")
-                .setTabListener(new TabListener<FragmentMenuFragment>(
-                        this, "menus", FragmentMenuFragment.class)));
-        bar.addTab(bar.newTab()
-                .setText("Args")
-                .setTabListener(new TabListener<FragmentArgumentsFragment>(
-                        this, "args", FragmentArgumentsFragment.class)));
-        bar.addTab(bar.newTab()
-                .setText("Stack")
-                .setTabListener(new TabListener<FragmentStackFragment>(
-                        this, "stack", FragmentStackFragment.class)));
-        bar.addTab(bar.newTab()
-                .setText("Tabs")
-                .setTabListener(new TabListener<FragmentTabsFragment>(
-                        this, "tabs", FragmentTabsFragment.class)));
+        if (bar != null) {
+            bar.addTab(bar.newTab()
+                    .setText("Menus")
+                    .setTabListener(new TabListener<>(
+                            this, "menus", FragmentMenuFragment.class)));
+        }
+        if (bar != null) {
+            bar.addTab(bar.newTab()
+                    .setText("Args")
+                    .setTabListener(new TabListener<>(
+                            this, "args", FragmentArgumentsFragment.class)));
+        }
+        if (bar != null) {
+            bar.addTab(bar.newTab()
+                    .setText("Stack")
+                    .setTabListener(new TabListener<>(
+                            this, "stack", FragmentStackFragment.class)));
+        }
+        if (bar != null) {
+            bar.addTab(bar.newTab()
+                    .setText("Tabs")
+                    .setTabListener(new TabListener<>(
+                            this, "tabs", FragmentTabsFragment.class)));
+        }
 
         if (savedInstanceState != null) {
-            bar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
+            if (bar != null) {
+                bar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
+            }
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
         private final Activity mActivity;
         private final String mTag;
@@ -78,6 +97,7 @@ public class FragmentNestingTabs extends Activity {
             this(activity, tag, clz, null);
         }
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
         public TabListener(Activity activity, String tag, Class<T> clz, Bundle args) {
             mActivity = activity;
             mTag = tag;
@@ -95,6 +115,7 @@ public class FragmentNestingTabs extends Activity {
             }
         }
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
         public void onTabSelected(Tab tab, FragmentTransaction ft) {
             if (mFragment == null) {
                 mFragment = Fragment.instantiate(mActivity, mClass.getName(), mArgs);
@@ -104,6 +125,7 @@ public class FragmentNestingTabs extends Activity {
             }
         }
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
         public void onTabUnselected(Tab tab, FragmentTransaction ft) {
             if (mFragment != null) {
                 ft.detach(mFragment);

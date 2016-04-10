@@ -18,11 +18,13 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -53,6 +55,7 @@ public class FragmentAlertDialog extends Activity {
     }
 
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     void showDialog() {
         DialogFragment newFragment = MyAlertDialogFragment.newInstance(
                 R.string.alert_dialog_two_buttons_title);
@@ -71,6 +74,7 @@ public class FragmentAlertDialog extends Activity {
 
     
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class MyAlertDialogFragment extends DialogFragment {
 
         public static MyAlertDialogFragment newInstance(int title) {

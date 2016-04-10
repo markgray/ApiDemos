@@ -16,21 +16,23 @@
 
 package com.example.android.apis.app;
 
-import com.example.android.apis.R;
-
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.android.apis.R;
+
 public class FragmentDialogOrActivity extends Activity {
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,15 +57,14 @@ public class FragmentDialogOrActivity extends Activity {
         });
     }
 
-
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     void showDialog() {
         // Create the fragment and show it as a dialog.
         DialogFragment newFragment = MyDialogFragment.newInstance();
         newFragment.show(getFragmentManager(), "dialog");
     }
 
-
-
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class MyDialogFragment extends DialogFragment {
         static MyDialogFragment newInstance() {
             return new MyDialogFragment();
@@ -74,7 +75,7 @@ public class FragmentDialogOrActivity extends Activity {
                 Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.hello_world, container, false);
             View tv = v.findViewById(R.id.text);
-            ((TextView)tv).setText("This is an instance of MyDialogFragment");
+            ((TextView)tv).setText(R.string.my_dialog_fragment_label);
             return v;
         }
     }

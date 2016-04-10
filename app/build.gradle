@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.android.apis"
-        minSdkVersion 23
+        minSdkVersion 8
         targetSdkVersion 23
 
         testApplicationId "com.example.android.apis.tests"

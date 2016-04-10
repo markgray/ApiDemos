@@ -1577,4 +1577,12 @@
     <string name="process_text_send_title">Select text to process</string>
     <string name="process_text_send_description">Select a piece of text from this box to trigger the text selection action mode. In there, you will find \"ApiDemos\". That is because this app declares it can handle text processing intents. Try selecting that action to send the selected text to that activity and retrieve processed text back.</string>
     <string name="example_alert_dialogfragment">Example of displaying an alert dialog with a DialogFragment</string>
+    <string name="fragment_number">Fragment #</string>
+    <string name="dialog_number">Dialog #</string>
+    <string name="dialog_fragment_example_instructions">Example of displaying dialogs with a DialogFragment.  Press the show button below to see the first dialog; pressing successive show buttons will display other dialog styles as a stack, with dismissing or back going to the previous dialog.</string>
+    <string name="my_dialog_fragment_label">This is an instance of MyDialogFragment</string>
+    <string name="textview_text_to_save">The TextView saves and restores this text.</string>
+    <string name="hide">Hide</string>
+    <string name="text_for_fragment_to_save">The fragment saves and restores this text.</string>
+    <string name="fragment_num">Fragment #</string>
 </resources>

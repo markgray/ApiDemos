@@ -18,9 +18,12 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +35,7 @@ import android.widget.TextView;
 public class FragmentStack extends Activity {
     int mStackLevel = 1;
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +50,7 @@ public class FragmentStack extends Activity {
         });
         button = (Button)findViewById(R.id.delete_fragment);
         button.setOnClickListener(new OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             public void onClick(View v) {
                 getFragmentManager().popBackStack();
             }
@@ -68,6 +73,7 @@ public class FragmentStack extends Activity {
     }
 
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     void addFragmentToStack() {
         mStackLevel++;
 
@@ -85,6 +91,7 @@ public class FragmentStack extends Activity {
 
 
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class CountingFragment extends Fragment {
         int mNum;
 
@@ -116,13 +123,15 @@ public class FragmentStack extends Activity {
          * The Fragment's UI is just a simple text view showing its
          * instance number.
          */
+        @SuppressLint("DefaultLocale")
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.hello_world, container, false);
             View tv = v.findViewById(R.id.text);
-            ((TextView)tv).setText("Fragment #" + mNum);
-            tv.setBackgroundDrawable(getResources().getDrawable(android.R.drawable.gallery_thumb));
+            ((TextView)tv).setText(String.format("%s%d", getString(R.string.fragment_num), mNum));
+            tv.setBackground(getResources().getDrawable(android.R.drawable.gallery_thumb, null));
             return v;
         }
     }
