@@ -1,0 +1,17 @@
+Manifest.permission.READ_CONTACTS
+Manifest.permission.WRITE_CONTACTS
+Manifest.permission.VIBRATE
+Manifest.permission.ACCESS_COARSE_LOCATION
+Manifest.permission.INTERNET
+Manifest.permission.SET_WALLPAPER
+Manifest.permission.WRITE_EXTERNAL_STORAGE
+Manifest.permission.SEND_SMS
+Manifest.permission.RECEIVE_SMS
+Manifest.permission.RECEIVE_MMS
+Manifest.permission.WRITE_SMS
+Manifest.permission.READ_SMS
+Manifest.permission.NFC
+Manifest.permission.TRANSMIT_IR
+Manifest.permission.READ_PHONE_STATE
+Manifest.permission.RECORD_AUDIO
+Manifest.permission.CAMERA
