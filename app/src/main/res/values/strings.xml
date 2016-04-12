@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -388,7 +387,7 @@
     <string name="reorder_four_text">This is the last in a sequence of four Activities.</string>
     <string name="reorder_second_to_front">Bring the second in front</string>
 
-    <string name ="activity_rotation_animation">App/Activity/Rotation Animation</string>
+    <string name="activity_rotation_animation">App/Activity/Rotation Animation</string>
 
     <string name="menu_from_xml_title">App/Menu/Inflate from XML</string>
     <string name="menu_from_xml_instructions_press_menu">Select a menu resource and press the menu key.</string>
@@ -1534,7 +1533,8 @@
 
     <!-- =========================== -->
     <!--  Security API demo strings  -->
-    <!-- =========================== --> <skip />
+    <!-- =========================== -->
+    <skip />
 
     <string name="keystore_entries_list">List of entries:</string>
 
