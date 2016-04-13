@@ -1585,4 +1585,5 @@
     <string name="hide">Hide</string>
     <string name="text_for_fragment_to_save">The fragment saves and restores this text.</string>
     <string name="fragment_num">Fragment #</string>
+    <string name="ask_user_for_permissions">ASK USER FOR PERMISSIONS</string>
 </resources>

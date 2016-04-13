@@ -5,6 +5,9 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 @TargetApi(Build.VERSION_CODES.KITKAT)
 public class AskForPermissions extends Activity {
@@ -32,5 +35,13 @@ public class AskForPermissions extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ask_for_permissions);
+        Button askUser = (Button) findViewById(R.id.ask_for_permission);
+        askUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Going to ask user for permission", Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 }
