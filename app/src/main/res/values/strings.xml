@@ -1586,4 +1586,6 @@
     <string name="text_for_fragment_to_save">The fragment saves and restores this text.</string>
     <string name="fragment_num">Fragment #</string>
     <string name="ask_user_for_permissions">ASK USER FOR PERMISSIONS</string>
+    <string name="permission_contacts_rationale">Do you want this app to access contacts?</string>
+    <string name="ok">Okay</string>
 </resources>
