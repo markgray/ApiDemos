@@ -3800,7 +3800,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".AskForPermissions"
-            android:label="AskForPermission/Marshmallow">
+            android:label="AskForPermission/Marshmallow"
+            android:theme="@android:style/Theme.Material.Light">>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
