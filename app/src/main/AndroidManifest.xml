@@ -3801,7 +3801,7 @@
         </activity>
         <activity android:name=".AskForPermissions"
             android:label="AskForPermission/Marshmallow"
-            android:theme="@android:style/Theme.Material.Light">>
+            android:theme="@style/Theme.AppCompat.Light" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
