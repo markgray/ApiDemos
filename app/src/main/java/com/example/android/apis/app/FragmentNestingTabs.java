@@ -31,6 +31,7 @@ import android.widget.Toast;
  * This demonstrates the use of action bar tabs and how they interact
  * with other action bar features.
  */
+@SuppressWarnings("deprecation")
 public class FragmentNestingTabs extends Activity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -82,6 +83,7 @@ public class FragmentNestingTabs extends Activity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        //noinspection ConstantConditions
         outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
     }
 
