@@ -29,6 +29,7 @@ import android.widget.Toast;
  * This demonstrates the use of action bar tabs and how they interact
  * with other action bar features.
  */
+@SuppressWarnings("deprecation")
 public class FragmentTabs extends Activity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -36,24 +37,25 @@ public class FragmentTabs extends Activity {
         super.onCreate(savedInstanceState);
 
         final ActionBar bar = getActionBar();
+        //noinspection ConstantConditions
         bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
 
         bar.addTab(bar.newTab()
                 .setText("Simple")
-                .setTabListener(new TabListener<FragmentStack.CountingFragment>(
+                .setTabListener(new TabListener<>(
                         this, "simple", FragmentStack.CountingFragment.class)));
         bar.addTab(bar.newTab()
                 .setText("Contacts")
-                .setTabListener(new TabListener<LoaderCursor.CursorLoaderListFragment>(
+                .setTabListener(new TabListener<>(
                         this, "contacts", LoaderCursor.CursorLoaderListFragment.class)));
         bar.addTab(bar.newTab()
                 .setText("Apps")
-                .setTabListener(new TabListener<LoaderCustom.AppListFragment>(
+                .setTabListener(new TabListener<>(
                         this, "apps", LoaderCustom.AppListFragment.class)));
         bar.addTab(bar.newTab()
                 .setText("Throttle")
-                .setTabListener(new TabListener<LoaderThrottle.ThrottledLoaderListFragment>(
+                .setTabListener(new TabListener<>(
                         this, "throttle", LoaderThrottle.ThrottledLoaderListFragment.class)));
 
         if (savedInstanceState != null) {
@@ -65,6 +67,7 @@ public class FragmentTabs extends Activity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        //noinspection ConstantConditions
         outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
     }
 
