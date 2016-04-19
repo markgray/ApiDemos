@@ -20,6 +20,7 @@ package com.example.android.apis.view;
 //class is in a sub-package.
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -69,6 +70,7 @@ public class LinearLayout8 extends Activity {
         return true;
     }
 
+    @SuppressLint("RtlHardcoded")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
