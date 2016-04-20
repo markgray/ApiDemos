@@ -1849,6 +1849,9 @@ Tabs
         .view.Tabs6
 
 Text
+    Views/Text/EditText
+        .view.EditTextDemo
+
     Views/Text/Linkify                           all
         .text.Link
             Four different ways to generate html like links and styled text: text1 shows
@@ -1876,17 +1879,14 @@ Text
             Need to add android:focusable="true" and android:focusableInTouchMode="true"
             to each of the buttons in order for the Marquee animations to run.
 
-    Views/Text/EditText
-        .view.EditTextDemo
-
-
-TextClock
-    Views/TextClock                        all - v17+ or crash
+    Views/Text/TextClock                        all - v17+ or crash
         .view.TextClockDemo
 
-TextSwitcher
-    Views/TextSwitcher                     all
+    Views/Text/TextSwitcher                     all
         .view.TextSwitcher1
+
+    Views/Text/TextView
+        .view.TextViewDemo
 
 Visibility
     Views/Visibility                       all
