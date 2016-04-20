@@ -693,6 +693,12 @@ App
         .app.VoiceRecognition
             Sample code that invokes the speech recognition intent API.
 
+AskForPermission/Marshmallow
+  Marshmallow
+    AskForPermission/Marshmallow
+        .AskForPermissions
+            Just asks for all permissions listed in AndroidManifest.xml using Marshmallow api
+
 Content
   Assets
     Content/Assets/Read Asset              all
@@ -712,6 +718,11 @@ Content
     Shows how to use Intent.ACTION_INSTALL_PACKAGE, and Intent.ACTION_UNINSTALL_PACKAGE
     to install and uninstall packages.
 
+    Process Text Intent
+    Content/Process Text Intent
+    .content.ProcessTextLauncher
+    Shows how to handle text selection intents
+
     Provider
     Content/Provider/Changed Contacts      all -- but LoaderManager.LoaderCallbacks<Cursor>
     .content.ChangedContacts                  requires v11, and some fields require v18
@@ -723,6 +734,10 @@ Content
             Demonstrates launching the contacts app to pick a contact.  Does not require
             permission to read contacts, as that permission will be granted when the 
             selected contact is returned.
+
+    Content/Provider/Share Content
+        .content.ShareContent
+            Demonstrates the share content api
 
   Resources
     Content/Resources/Layout Reference     all
@@ -1242,34 +1257,6 @@ Security
     Security/KeyStore                      all -- v18+ or crash
         .security.KeyStoreUsage
             Shows how to use api to generate Key pairs, sign and verify.
-
-Text
-    Text/Linkify                           all
-        .text.Link
-            Four different ways to generate html like links and styled text: text1 shows
-            the android:autoLink property, which automatically linkifies things like URLs
-             and phone numbers found in the text. No java code is needed to make this 
-             work; text2 has links specified by putting <a> tags in the string resource.
-             By default these links will appear but not respond to user input. To make 
-             them active, you need to call setMovementMethod() on the TextView object;
-             text3 shows creating text with links from HTML in the Java code, rather than
-             from a string resource.  Note that for a fixed string, using a (localizable)
-             resource as shown above is usually a better way to go, this example is 
-             intended to illustrate how you might display text that came from a dynamic
-             source (eg, the network); text4 illustrates constructing a styled string 
-             containing a link without using HTML at all.  Again, for a fixed string you
-             should probably be using a string resource, not a hardcoded value.
-
-    Text/LogTextBox                        all
-        .text.LogTextBox1
-            Using a LogTextBox to display a scrollable text area to which text is 
-            appended. LogTextBox.java is a custom TextView that is Editable and by 
-            default scrollable, like EditText without a cursor.
-
-    Text/Marquee                           all
-        .text.Marquee
-            Need to add android:focusable="true" and android:focusableInTouchMode="true"
-            to each of the buttons in order for the Marquee animations to run.
 
 Views
   Animation
@@ -1860,6 +1847,38 @@ Tabs
         .view.Tabs5
     Views/Tabs/6. Right aligned            all
         .view.Tabs6
+
+Text
+    Views/Text/Linkify                           all
+        .text.Link
+            Four different ways to generate html like links and styled text: text1 shows
+            the android:autoLink property, which automatically linkifies things like URLs
+             and phone numbers found in the text. No java code is needed to make this
+             work; text2 has links specified by putting <a> tags in the string resource.
+             By default these links will appear but not respond to user input. To make
+             them active, you need to call setMovementMethod() on the TextView object;
+             text3 shows creating text with links from HTML in the Java code, rather than
+             from a string resource.  Note that for a fixed string, using a (localizable)
+             resource as shown above is usually a better way to go, this example is
+             intended to illustrate how you might display text that came from a dynamic
+             source (eg, the network); text4 illustrates constructing a styled string
+             containing a link without using HTML at all.  Again, for a fixed string you
+             should probably be using a string resource, not a hardcoded value.
+
+    Views/Text/LogTextBox                        all
+        .text.LogTextBox1
+            Using a LogTextBox to display a scrollable text area to which text is
+            appended. LogTextBox.java is a custom TextView that is Editable and by
+            default scrollable, like EditText without a cursor.
+
+    Views/Text/Marquee                           all
+        .text.Marquee
+            Need to add android:focusable="true" and android:focusableInTouchMode="true"
+            to each of the buttons in order for the Marquee animations to run.
+
+    Views/Text/EditText
+        .view.EditTextDemo
+
 
 TextClock
     Views/TextClock                        all - v17+ or crash

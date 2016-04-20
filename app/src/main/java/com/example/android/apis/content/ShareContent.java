@@ -16,14 +16,15 @@
 
 package com.example.android.apis.content;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.Button;
 import com.example.android.apis.R;
 
 /**
@@ -37,7 +38,8 @@ public class ShareContent extends Activity {
         setContentView(R.layout.share_content);
 
         // Watch for button clicks.
-        ((Button)findViewById(R.id.share_image)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.share_image).setOnClickListener(new View.OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
