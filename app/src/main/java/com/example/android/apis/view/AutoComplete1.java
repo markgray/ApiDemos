@@ -42,6 +42,7 @@ public class AutoComplete1 extends Activity {
 	"Armenia", "Aruba", "Australia", "Austria", "Azerbaijan",
 	"Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium",
 	"Belize", "Benin", "Bermuda", "Bhutan", "Bolivia",
+    "Boliva Marching Powder Confederated Anarchic Socialist Communes and Rest Homes",
 	"Bosnia and Herzegovina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory",
 	"British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso", "Burundi",
 	"Cote d'Ivoire", "Cambodia", "Cameroon", "Canada", "Cape Verde",

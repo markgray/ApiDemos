@@ -1682,22 +1682,49 @@ Layouts
 
     Views/Layouts/LinearLayout/09. Layout Weight  --all
         .view.LinearLayout9
-            
+            Demonstrates how the layout_weight attribute can shrink an element too big
+            to fit on screen -- OR -- Demonstrates a simple linear layout. The layout
+            fills the screen, with the children stacked from the top.
 
     Views/Layouts/LinearLayout/10. Background Image  --all
         .view.LinearLayout10
+            Demonstrates the use of LinearLayout backgrounds to group labels,
+            EditTexts, and buttons, -- OR -- Demonstrates using a LinearLayout
+            background to group related TextViews, EditTexts, and Buttons.
+            (EditText is hard to read because of background color -- please fix.)
+
   RelativeLayout
     Views/Layouts/RelativeLayout/1. Vertical  --all
         .view.RelativeLayout1
+            A simple layout which demonstrates stretching a view to fill the space
+            between two other views.
+
     Views/Layouts/RelativeLayout/2. Simple Form  --all
         .view.RelativeLayout2
+            Demonstrates using a relative layout to create a form.
+
   ScrollView
     Views/Layouts/ScrollView/1. Short      all
         .view.ScrollView1
+            Demonstrates wrapping a (short) layout in a ScrollView.
+
     Views/Layouts/ScrollView/2. Long       all
         .view.ScrollView2
+            Demonstrates wrapping a LONG layout (Created programmatically) in a ScrollView.
+
     Views/Layouts/ScrollView/3. Internal Selection  --all
         .view.InternalSelectionScroll
+            Demonstrates how a well behaved view with internal selection InternalSelectionView
+            can cause its parent android.widget.ScrollView to scroll to keep the internally
+            interesting rectangle on the screen.  InternalSelectionView achieves this by calling
+            android.view.View#requestRectangleOnScreen each time its internal selection changes.
+            android.widget.ScrollView, in turn, implements android.view.View#requestRectangleOnScreen
+            thereby acheiving the result.  Note that android.widget.ListView also implements the
+            method, so views that call android.view.View#requestRectangleOnScreen that are embedded
+            within either android.widget.ScrollView's or android.widget.ListView's can expect to
+            keep their internal interesting rectangle visible.  Needs keyboard and a fix to
+            background colors in InternalSelectView.java
+
   TableLayout
     Views/Layouts/TableLayout/01. Basic    all
         .view.TableLayout1
