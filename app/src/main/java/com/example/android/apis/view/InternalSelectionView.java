@@ -23,6 +23,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 
 
@@ -222,6 +223,40 @@ public class InternalSelectionView extends View {
         return false;
     }
 
+    /**
+     * Implement this method to handle touch screen motion events.
+     * <p/>
+     * If this method is used to detect click actions, it is recommended that
+     * the actions be performed by implementing and calling
+     * {@link #performClick()}. This will ensure consistent system behavior,
+     * including:
+     * <ul>
+     * <li>obeying click sound preferences
+     * <li>dispatching OnClickListener calls
+     * <li>handling AccessibilityNodeInfo#ACTION_CLICK ACTION_CLICK when
+     * accessibility features are enabled
+     * </ul>
+     *
+     * @param event The motion event.
+     * @return True if the event was handled, false otherwise.
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
+        if (mSelectedRow > 0) {
+            mSelectedRow--;
+            invalidate();
+            ensureRectVisible();
+            return true;
+        }
+        if (mSelectedRow < (mNumRows - 1)) {
+            mSelectedRow++;
+            invalidate();
+            ensureRectVisible();
+            return true;
+        }
+        return true;
+    }
 
     @Override
     public void getFocusedRect(Rect r) {
