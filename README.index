@@ -1728,20 +1728,41 @@ Layouts
   TableLayout
     Views/Layouts/TableLayout/01. Basic    all
         .view.TableLayout1
+            Very simple example of TableLayout done entirely in xml, three rows, three columns of
+            TextViews
+
     Views/Layouts/TableLayout/02. Empty Cells  --all
         .view.TableLayout2
+            TableLayout of Button and TextView's showing how to leave a cell empty
+
     Views/Layouts/TableLayout/03. Long Content  --all
         .view.TableLayout3
+            Rows have different number of columns and content doesn't fit on screen:
+            column 4 of row 2 shrinks all of the other columns android:shrinkColumns="2, 3"
+
     Views/Layouts/TableLayout/04. Stretchable  --all
         .view.TableLayout4
+            Stretch some columns: second column uses android:gravity="right",
+            android:stretchColumns="1" (column numbers are zero based)
+
     Views/Layouts/TableLayout/05. Spanning and Stretchable  --all
         .view.TableLayout5
+            Uses android:stretchColumns="1" and has View divider line children along with TableRow's
+
     Views/Layouts/TableLayout/06. More Spanning and Stretchable  --all
         .view.TableLayout6
+            Uses android:stretchColumns="1" to stretch second column, and android:layout_column="1"
+            to skip column 0 for some TableRow's
+
     Views/Layouts/TableLayout/07. Column Collapse  --all
         .view.TableLayout7
+            Button's toggle collapsed state of column 0 or column 2, also show how to build a
+            TableRow and add it to a TableLayout programmatically
     Views/Layouts/TableLayout/08. Toggle Stretch  --all
         .view.TableLayout8
+            Uses Button to toggle stretch attribute of one column. Includes programmatically built
+            TableRow along with xml TableRows
+
     Views/Layouts/TableLayout/09. Toggle Shrink  --all
         .view.TableLayout9
     Views/Layouts/TableLayout/10. Simple Form  --all
