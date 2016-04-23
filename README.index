@@ -1758,6 +1758,7 @@ Layouts
         .view.TableLayout7
             Button's toggle collapsed state of column 0 or column 2, also show how to build a
             TableRow and add it to a TableLayout programmatically
+
     Views/Layouts/TableLayout/08. Toggle Stretch  --all
         .view.TableLayout8
             Uses Button to toggle stretch attribute of one column. Includes programmatically built
@@ -1765,10 +1766,20 @@ Layouts
 
     Views/Layouts/TableLayout/09. Toggle Shrink  --all
         .view.TableLayout9
+            Button uses setColumnShrinkable to toggle the shrinkColumns attribute of a table which
+            has a column so long it forces the last columns off the screen.
+
     Views/Layouts/TableLayout/10. Simple Form  --all
         .view.TableLayout10
+            Uses xml only to construct a form
+
     Views/Layouts/TableLayout/11. Gravity  --all
         .view.TableLayout11
+            Shows difference in layout for android:gravity="right",
+            android:layout_gravity="center_horizontal" and
+            android:layout_gravity="right|bottom" (large cell height is set by
+            a "stut" of 68dp for the right|bottom example row.)
+
     Views/Layouts/TableLayout/12. Cell Spanning  --all
         .view.TableLayout12
 
