@@ -1778,18 +1778,26 @@ Layouts
             Shows difference in layout for android:gravity="right",
             android:layout_gravity="center_horizontal" and
             android:layout_gravity="right|bottom" (large cell height is set by
-            a "stut" of 68dp for the right|bottom example row.)
+            a "strut" of 68dp for the right|bottom example row.)
 
     Views/Layouts/TableLayout/12. Cell Spanning  --all
         .view.TableLayout12
+            Creates large multicolumn cells for several rows using android:layout_span=
 
 Lists
     Views/Lists/01. Array                  all
         .view.List1
+            Uses an ArrayAdapter<String> to fill a ListActivity's list
+
     Views/Lists/02. Cursor (People)        all
         .view.List2
+            Builds a cursor using getContentResolver().query(...) of the Contacts provider for a
+            projection of Contacts._ID, and Contacts.DISPLAY_NAME and sets it as the ListAdapter
+            for the ListActivity's list
+
     Views/Lists/03. Cursor (Phones)        all
         .view.List3
+
     Views/Lists/04. ListAdapter            all
         .view.List4
     Views/Lists/05. Separators             all
