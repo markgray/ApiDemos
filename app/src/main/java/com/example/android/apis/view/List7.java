@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
@@ -74,6 +75,34 @@ public class List7 extends ListActivity implements OnItemSelectedListener {
                 // The "text1" view defined in the XML template
                 new int[] {android.R.id.text1});
         setListAdapter(adapter);
+    }
+
+    /**
+     * This method will be called when an item in the list is selected.
+     * Subclasses should override. Subclasses can call
+     * getListView().getItemAtPosition(position) if they need to access the
+     * data associated with the selected item.
+     *
+     * @param l        The ListView where the click happened
+     * @param v        The view that was clicked within the ListView
+     * @param position The position of the view in the list
+     * @param id       The row id of the item that was clicked
+     */
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        setSelection(position);
+        Cursor c = (Cursor) getListView().getItemAtPosition(position);
+        int type = c.getInt(COLUMN_PHONE_TYPE);
+        String phone = c.getString(COLUMN_PHONE_NUMBER);
+        String label = null;
+        //Custom type? Then get the custom label
+        if (type == Phone.TYPE_CUSTOM) {
+            label = c.getString(COLUMN_PHONE_LABEL);
+        }
+        //Get the readable string
+        String numberType = (String) Phone.getTypeLabel(getResources(), type, label);
+        String text = numberType + ": " + phone;
+        mPhone.setText(text);
     }
 
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {

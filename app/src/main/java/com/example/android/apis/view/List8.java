@@ -33,7 +33,7 @@ import java.util.ArrayList;
 
 
 /**
- * A list view that demonstrates the use of setEmptyView. This example alos uses
+ * A list view that demonstrates the use of setEmptyView. This example also uses
  * a custom layout file that adds some extra buttons to the screen.
  */
 public class List8 extends ListActivity {
