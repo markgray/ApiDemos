@@ -1839,16 +1839,46 @@ Lists
 
     Views/Lists/10. Single choice list     all
         .view.List10
+            This example shows how to use choice mode on a list. This list is in
+            CHOICE_MODE_SINGLE mode, which means the items behave like radiobuttons.
+
     Views/Lists/11. Multiple choice list   all
         .view.List11
+            This example shows how to use choice mode on a list. This list is in
+            CHOICE_MODE_MULTIPLE mode, which means the items behave like checkboxes.
+
     Views/Lists/12. Transcript             all
         .view.List12
+            Demonstrates the using a list view in transcript mode. The bottom of the layout
+            is an EditText, clicking on the EditText view .add()'s  the text to the
+            ArrayAdapter filling the ListView above it.
+
     Views/Lists/13. Slow Adapter           all
         .view.List13
+            Demonstrates how a list can avoid expensive operations during scrolls or flings.
+            In this case, we pretend that binding a view to its data is slow (even though it
+            really isn't). When a scroll/fling is happening, the adapter binds the view to
+            temporary data. After the scroll/fling has finished, the temporary data is
+            replaced with the actual data. Usable approach but needs major modification to
+            use in real world application.
+
     Views/Lists/14. Efficient Adapter      all
         .view.List14
+            Demonstrates how to write an efficient list adapter. The adapter used in this example
+            binds to an ImageView and to a TextView for each row in the list.
+            To work efficiently the adapter implemented here uses two techniques:
+            - It reuses the convertView passed to getView() to avoid inflating View
+              when it is not necessary
+            - It uses the ViewHolder pattern to avoid calling findViewById()
+              when it is not necessary
+            The ViewHolder pattern consists in storing a data structure in the tag of the view
+            returned by getView(). This data structure contains references to the views we want
+            to bind data to, thus avoiding calls to findViewById() every time getView() is invoked.
+
     Views/Lists/15. Selection Mode         all -- v11+ or crash
         .view.List15
+            This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection
+            mode on ListView.
     Views/Lists/16. Border selection mode  all -- v11+ or crash
         .view.List16
     Views/Lists/17. Activate items         all -- v11+ or crash

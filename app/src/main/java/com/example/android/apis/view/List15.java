@@ -17,7 +17,9 @@ package com.example.android.apis.view;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.ListActivity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -31,22 +33,26 @@ import android.widget.Toast;
  * This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection mode on ListView.
  */
 public class List15 extends ListActivity {
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ListView lv = getListView();
         lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         lv.setMultiChoiceModeListener(new ModeCallback());
-        setListAdapter(new ArrayAdapter<String>(this,
+        setListAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_checked, mStrings));
     }
     
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        //noinspection ConstantConditions
         getActionBar().setSubtitle("Long press to start selection");
     }
     
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private class ModeCallback implements ListView.MultiChoiceModeListener {
 
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
