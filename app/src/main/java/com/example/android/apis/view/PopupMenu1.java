@@ -16,7 +16,9 @@
 
 package com.example.android.apis.view;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +38,7 @@ public class PopupMenu1 extends Activity {
         setContentView(R.layout.popup_menu_1);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onPopupButtonClick(View button) {
         PopupMenu popup = new PopupMenu(this, button);
         popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());

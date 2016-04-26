@@ -16,7 +16,9 @@
 
 package com.example.android.apis.view;
 
+import android.annotation.TargetApi;
 import android.app.ListActivity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -29,13 +31,14 @@ import android.widget.ListView;
  */
 public class List17 extends ListActivity {
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Use the built-in layout for showing a list item with a single
         // line of text whose background is changes when activated.
-        setListAdapter(new ArrayAdapter<String>(this,
+        setListAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_activated_1, mStrings));
         getListView().setTextFilterEnabled(true);
         
