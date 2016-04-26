@@ -1920,7 +1920,7 @@ Progress Bar
             been dropped as of Android 5.0 appCompat library.
 
     Views/Progress Bar/3. Dialogs          all
-       .view.ProgressBar3
+        .view.ProgressBar3
 
     Views/Progress Bar/4. In Title Bar     all -- does not work lollipop
         .view.ProgressBar4
