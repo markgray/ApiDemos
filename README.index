@@ -1921,21 +1921,48 @@ Progress Bar
 
     Views/Progress Bar/3. Dialogs          all
         .view.ProgressBar3
+            Demonstrates the use of progress dialogs.  Uses Activity#onCreateDialog
+             Activity#showDialog to ensure the dialogs will be properly saved and
+             restored. Buttons on the main Layout allow you to choose between one
+             which sets the title using dialog.setTitle("Indeterminate") and one which
+             has no title. (Direct use of showDialog is deprecated, use a DialogFragment
+             instead.
 
     Views/Progress Bar/4. In Title Bar     all -- does not work lollipop
         .view.ProgressBar4
+            Demonstrates how to use an indeterminate progress indicator in the window's
+            title bar. This does not work for android starting with 5.0
 
 Radio Group
     Views/Radio Group                      all
         .view.RadioGroup1
+            Demonstrates RadioGroup, including adding a RadioButton to an xml defined
+            RadioGroup programmatically, retrieving the R.id.* of the RadioButton selected,
+            clearing all buttons, and the value View.NO_ID (=-1) returned when no RadioButton
+            is selected.
 
 Rating Bar
     Views/Rating Bar                       all
         .view.RatingBar1
+            Demonstrates how to use a rating bar. The top two RatingBar's have their
+            RatingBar.OnRatingBarChangeListener set to this and a onRatingChanged method
+            updates a TextView and two RatingBar indicators based on the values passed to
+            it.
+
+Rotating Button
+    Views/Rotating Button                 all -- v11+ or crash
+        .view.RotatingButton
+            This application demonstrates the ability to transform views in 2D and 3D,
+            scaling them, translating them, and rotating them (in 2D and 3D). Use the
+            seek bars to set the various transform properties of the button. It sets the
+            SeekBar.OnSeekBarChangeListener of each SeekBar to morph the button using
+            setTranslationX, setTranslationY, setScaleX, setScaleY, setRotationX, setRotationY,
+            and setRotation.
 
 ScrollBars
     Views/ScrollBars/1. Basic              all
         .view.ScrollBar1
+
     Views/ScrollBars/2. Fancy              all
         .view.ScrollBar2
     Views/ScrollBars/3. Style              all

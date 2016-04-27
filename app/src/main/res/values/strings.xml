@@ -1588,4 +1588,12 @@
     <string name="ask_user_for_permissions">ASK USER FOR PERMISSIONS</string>
     <string name="permission_contacts_rationale">Do you want this app to access contacts?</string>
     <string name="ok">Okay</string>
+    <string name="tx">TX</string>
+    <string name="ty">TY</string>
+    <string name="sx">SX</string>
+    <string name="sy">SY</string>
+    <string name="x">X</string>
+    <string name="y">Y</string>
+    <string name="z">Z</string>
+    <string name="rotating_button">Rotating Button</string>
 </resources>

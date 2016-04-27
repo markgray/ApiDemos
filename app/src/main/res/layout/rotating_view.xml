@@ -14,12 +14,13 @@
      limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/container"
     android:splitMotionEvents="true"
-    >
+    tools:targetApi="honeycomb">
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -33,7 +34,7 @@
             android:paddingLeft="5dip"
             android:paddingRight="5dip"
             android:textStyle="bold"
-            android:text="TX"
+            android:text="@string/tx"
             />
         <SeekBar
             android:orientation="horizontal"
@@ -48,7 +49,7 @@
             android:paddingLeft="15dip"
             android:paddingRight="5dip"
             android:textStyle="bold"
-            android:text="TY"
+            android:text="@string/ty"
             />
         <SeekBar
             android:orientation="horizontal"
@@ -71,7 +72,7 @@
             android:paddingLeft="5dip"
             android:paddingRight="5dip"
             android:textStyle="bold"
-            android:text="SX"
+            android:text="@string/sx"
             />
         <SeekBar
             android:orientation="horizontal"
@@ -86,7 +87,7 @@
             android:paddingLeft="15dip"
             android:paddingRight="5dip"
             android:textStyle="bold"
-            android:text="SY"
+            android:text="@string/sy"
             />
         <SeekBar
             android:orientation="horizontal"
@@ -109,7 +110,7 @@
             android:paddingLeft="5dip"
             android:paddingRight="5dip"
             android:textStyle="bold"
-            android:text="X"
+            android:text="@string/x"
             />
         <SeekBar
             android:orientation="horizontal"
@@ -124,7 +125,7 @@
             android:paddingLeft="15dip"
             android:paddingRight="5dip"
             android:textStyle="bold"
-            android:text="Y"
+            android:text="@string/y"
             />
         <SeekBar
             android:orientation="horizontal"
@@ -139,7 +140,7 @@
             android:paddingLeft="15dip"
             android:paddingRight="5dip"
             android:textStyle="bold"
-            android:text="Z"
+            android:text="@string/z"
             />
         <SeekBar
             android:orientation="horizontal"
@@ -154,7 +155,7 @@
         android:layout_height="150dip"
         android:layout_marginLeft="50dip"
         android:layout_marginTop="50dip"
-        android:text="Rotating Button"
+        android:text="@string/rotating_button"
         android:id="@+id/rotatingButton"
         />
 </LinearLayout>

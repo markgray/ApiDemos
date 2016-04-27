@@ -20,7 +20,9 @@ package com.example.android.apis.view;
 // class is in a sub-package.
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -48,8 +50,9 @@ public class RotatingButton extends Activity {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             public void onProgressChanged(SeekBar seekBar, int progress,
-                    boolean fromUser) {
+                                          boolean fromUser) {
                 rotatingButton.setTranslationX((float)progress);
             }
         });
@@ -63,8 +66,9 @@ public class RotatingButton extends Activity {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             public void onProgressChanged(SeekBar seekBar, int progress,
-                    boolean fromUser) {
+                                          boolean fromUser) {
                 rotatingButton.setTranslationY((float)progress);
             }
         });
@@ -79,8 +83,9 @@ public class RotatingButton extends Activity {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             public void onProgressChanged(SeekBar seekBar, int progress,
-                    boolean fromUser) {
+                                          boolean fromUser) {
                 rotatingButton.setScaleX((float)progress/10f);
             }
         });
@@ -95,8 +100,9 @@ public class RotatingButton extends Activity {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             public void onProgressChanged(SeekBar seekBar, int progress,
-                    boolean fromUser) {
+                                          boolean fromUser) {
                 rotatingButton.setScaleY((float)progress/10f);
             }
         });
@@ -110,8 +116,9 @@ public class RotatingButton extends Activity {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             public void onProgressChanged(SeekBar seekBar, int progress,
-                    boolean fromUser) {
+                                          boolean fromUser) {
                 // prevent seeking on app creation
                 rotatingButton.setRotationX((float)progress);
             }
@@ -126,8 +133,9 @@ public class RotatingButton extends Activity {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             public void onProgressChanged(SeekBar seekBar, int progress,
-                    boolean fromUser) {
+                                          boolean fromUser) {
                 // prevent seeking on app creation
                 rotatingButton.setRotationY((float)progress);
             }
@@ -142,8 +150,9 @@ public class RotatingButton extends Activity {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             public void onProgressChanged(SeekBar seekBar, int progress,
-                    boolean fromUser) {
+                                          boolean fromUser) {
                 // prevent seeking on app creation
                 rotatingButton.setRotation((float)progress);
             }
