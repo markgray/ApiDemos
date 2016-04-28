@@ -16,22 +16,22 @@
 
 package com.example.android.apis.view;
 
-import com.example.android.apis.R;
-
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
-import android.view.MenuItem.OnActionExpandListener;
-import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
+
+import com.example.android.apis.R;
 
 import java.util.List;
 
@@ -39,6 +39,7 @@ import java.util.List;
  * This demonstrates the usage of SearchView in an ActionBar as a menu item.
  * It sets a SearchableInfo on the SearchView for suggestions and submitting queries to.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SearchViewActionBar extends Activity implements SearchView.OnQueryTextListener {
 
     private SearchView mSearchView;
@@ -67,6 +68,7 @@ public class SearchViewActionBar extends Activity implements SearchView.OnQueryT
         return true;
     }
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void setupSearchView(MenuItem searchItem) {
 
         if (isAlwaysExpanded()) {
@@ -94,18 +96,15 @@ public class SearchViewActionBar extends Activity implements SearchView.OnQueryT
         mSearchView.setOnQueryTextListener(this);
     }
 
+    @SuppressLint("SetTextI18n")
     public boolean onQueryTextChange(String newText) {
         mStatusView.setText("Query = " + newText);
         return false;
     }
 
+    @SuppressLint("SetTextI18n")
     public boolean onQueryTextSubmit(String query) {
         mStatusView.setText("Query = " + query + " : submitted");
-        return false;
-    }
-
-    public boolean onClose() {
-        mStatusView.setText("Closed!");
         return false;
     }
 

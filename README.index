@@ -1962,11 +1962,21 @@ Rotating Button
 ScrollBars
     Views/ScrollBars/1. Basic              all
         .view.ScrollBar1
+            Demonstrates scrolling with a ScrollView. Done entirely in xml, the ScrollView is
+            the root view with a single LinearLayout child (ScrollView's can have only one.)
 
     Views/ScrollBars/2. Fancy              all
         .view.ScrollBar2
+            Demonstrates scrolling with a ScrollView, android:scrollbarTrackVertical
+            and android:scrollbarTrackVertical as set to colored drawables created in xml
+            using <shape> and android:scrollbarSize="12dip" makes it wider than normal.
+            http://developer.android.com/guide/topics/resources/drawable-resource.html#Shape
+
     Views/ScrollBars/3. Style              all
         .view.ScrollBar3
+            Demonstrates scrolling with ScrollView's with android:scrollbarStyle set to
+            outsideOverlay and outsideInset in the xml, and one set programmatically using
+            setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET)
 
 Search View
     Views/Search View/Action Bar           v11+
