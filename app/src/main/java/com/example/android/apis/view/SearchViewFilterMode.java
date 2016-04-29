@@ -18,7 +18,9 @@ package com.example.android.apis.view;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Window;
@@ -30,12 +32,15 @@ import android.widget.SearchView;
 /**
  * Shows a list that can be filtered in-place with a SearchView in non-iconified mode.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SearchViewFilterMode extends Activity implements SearchView.OnQueryTextListener {
 
+    @SuppressWarnings("unused")
     private static final String TAG = "SearchViewFilterMode";
 
     private SearchView mSearchView;
     private ListView mListView;
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private ArrayAdapter<String> mAdapter;
 
     private final String[] mStrings = Cheeses.sCheeseStrings;
@@ -49,7 +54,7 @@ public class SearchViewFilterMode extends Activity implements SearchView.OnQuery
 
         mSearchView = (SearchView) findViewById(R.id.search_view);
         mListView = (ListView) findViewById(R.id.list_view);
-        mListView.setAdapter(mAdapter = new ArrayAdapter<String>(this,
+        mListView.setAdapter(mAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
                 mStrings));
         mListView.setTextFilterEnabled(true);
@@ -67,7 +72,7 @@ public class SearchViewFilterMode extends Activity implements SearchView.OnQuery
         if (TextUtils.isEmpty(newText)) {
             mListView.clearTextFilter();
         } else {
-            mListView.setFilterText(newText.toString());
+            mListView.setFilterText(newText);
         }
         return true;
     }

@@ -1981,10 +1981,24 @@ ScrollBars
 Search View
     Views/Search View/Action Bar           v11+
         .view.SearchViewActionBar
+            This demonstrates the usage of SearchView in an ActionBar as a menu item. It sets
+            a SearchableInfo on the SearchView for suggestions and submitting queries to. In
+            AndroidManifest.xml a <meta-data> element android:name="android.app.default_searchable"
+            android:value=".app.SearchQueryResults" sets the Activity to handle search requests.
+
     Views/Search View/Always Expanded      v11+
         .view.SearchViewAlwaysVisible
+            This Activity extends .view.SearchViewActionBar, with the only difference being it
+            Override's isAlwaysExpanded() to return true instead of false.
+
     Views/Search View/Filter               v11+
         .view.SearchViewFilterMode
+            Shows a list that can be filtered in-place with a SearchView in non-iconified mode.
+            calls setTextFilterEnabled(true) on the layout's ListView to filter the children
+            displayed in the ListView and the value it gets in the onQueryTextChange callback
+            it implements as a SearchView.OnQueryTextListener to setFilterText on the ListView.
+            (Very sweet -- need to try this!)
+            http://stackoverflow.com/questions/30398247/how-to-filter-a-recyclerview-with-a-searchview
 
 Secure View
     Views/Secure View                      all -- v9+ or crash
