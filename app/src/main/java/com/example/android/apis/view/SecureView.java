@@ -18,8 +18,11 @@ package com.example.android.apis.view;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -34,7 +37,7 @@ import android.widget.Toast;
  * This activity demonstrates two different ways in which views can be made more secure to
  * touch spoofing attacks by leveraging framework features.
  *
- * The activity presents 3 buttons that obtensibly perform a risky security critical
+ * The activity presents 3 buttons that ostensibly perform a risky security critical
  * function.  Under ordinary circumstances, the user would never click on these buttons
  * or would at least think long and hard about it.  However, a carefully crafted toast can
  * overlay the contents of the activity in such a way as to make the user believe the buttons
@@ -42,7 +45,7 @@ import android.widget.Toast;
  * activity potentially yielding an effect other than what the user intended.
  *
  * To simulate the spoofing risk, this activity pops up a specially crafted overlay as
- * a toast layed out so as to cover the buttons and part of the descriptive text.
+ * a toast lay-ed out so as to cover the buttons and part of the descriptive text.
  * For the purposes of this demonstration, pretend that the overlay was actually popped
  * up by a malicious application published by the International Cabal of Evil Penguins.
  *
@@ -66,6 +69,7 @@ import android.widget.Toast;
  *
  * Refer to the comments on {@View} for more information about view security.
  */
+@SuppressWarnings("JavaDoc")
 public class SecureView extends Activity {
     private int mClickCount;
 
@@ -96,7 +100,7 @@ public class SecureView extends Activity {
     private void showOverlay() {
         // Generate a toast view with a special layout that will position itself right
         // on top of this view's interesting widgets.  Sneaky huh?
-        SecureViewOverlay overlay = (SecureViewOverlay)
+        @SuppressLint("InflateParams") SecureViewOverlay overlay = (SecureViewOverlay)
                 getLayoutInflater().inflate(R.layout.secure_view_overlay, null);
         overlay.setActivityToSpoof(this);
 
@@ -124,6 +128,7 @@ public class SecureView extends Activity {
 
     private void setTouchFilter(Button button) {
         button.setOnTouchListener(new OnTouchListener() {
+            @TargetApi(Build.VERSION_CODES.GINGERBREAD)
             public boolean onTouch(View v, MotionEvent event) {
                 if ((event.getFlags() & MotionEvent.FLAG_WINDOW_IS_OBSCURED) != 0) {
                     if (event.getAction() == MotionEvent.ACTION_UP) {

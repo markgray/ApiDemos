@@ -16,6 +16,7 @@
 
 package com.example.android.apis.view;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.CheckBox;
@@ -58,6 +59,7 @@ public class SeekBar1 extends Activity implements SeekBar.OnSeekBarChangeListene
                 });
     }
 
+    @SuppressLint("SetTextI18n")
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch) {
         mProgressText.setText(progress + " " + 
                 getString(R.string.seekbar_from_touch) + "=" + fromTouch);

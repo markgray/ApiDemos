@@ -2003,22 +2003,68 @@ Search View
 Secure View
     Views/Secure View                      all -- v9+ or crash
         .view.SecureView
+            This activity demonstrates two different ways in which views can be made more secure to
+            touch spoofing attacks by leveraging framework features.
+
+            The activity presents 3 buttons that ostensibly perform a risky security critical
+            function.  Under ordinary circumstances, the user would never click on these buttons
+            or would at least think long and hard about it.  However, a carefully crafted toast can
+            overlay the contents of the activity in such a way as to make the user believe the buttons
+            are innocuous.  Since the toast cannot receive input, the touches are passed down to the
+            activity potentially yielding an effect other than what the user intended.
+
+            To simulate the spoofing risk, this activity pops up a specially crafted overlay as
+            a toast lay-ed out so as to cover the buttons and part of the descriptive text.
+            For the purposes of this demonstration, pretend that the overlay was actually popped
+            up by a malicious application published by the International Cabal of Evil Penguins.
+
+            The 3 buttons are set up as follows:
+
+            1. The "unsecured button" does not apply any touch filtering of any kind.
+               When the toast appears, this button remains clickable as usual which creates an
+               opportunity for spoofing to occur.
+
+            2. The "built-in secured button" leverages the android:filterTouchesWhenObscured view
+               attribute to ask the framework to filter out touches when the window is obscured.
+               When the toast appears, the button does not receive the touch and appears to be inoperable.
+
+            3. The "custom secured button" adds a touch listener to the button which intercepts the
+               touch event and checks whether the window is obscured.  If so, it warns the user and
+               drops the touch event.  This example is intended to demonstrate how a view can
+               perform its own filtering and provide additional feedback by examining the MotionEvent
+               flags to determine whether the window is obscured.  Here we use a touch listener but
+               a custom view subclass could perform the filtering by overriding
+               View#onFilterTouchEventForSecurity(MotionEvent).
 
 Seek Bar
     Views/Seek Bar                         all
         .view.SeekBar1
+            Demonstrates how to use a seek bar. It implements SeekBar.OnSeekBarChangeListener which
+            has the three call backs: onProgressChanged, onStartTrackingTouch, and onStopTrackingTouch
+            displaying appropriate text based on the information passed it.
 
 Spinner
     Views/Spinner                          all
         .view.Spinner1
+            Demonstrates the use of the Spinner widget. It creates ArrayAdapter<CharSequence>'s
+            from string-array resources and setDropDownViewResource to set the view used by the
+            adapter to create drop down views, then uses setAdapter to set the adapter used by
+            each Spinner. setOnItemSelectedListener is used to set an OnItemSelectedListener
+            for each which involves implementing onItemSelected and onNothingSelected to receive
+            callbacks when an item in the Spinner's is selected.
 
 Splitting Touches across Views
-    Views/Splitting Touches across Views   all
+    Views/Splitting Touches across Views   all - v11+ or crash in layout
         .view.SplitTouchView
+            This activity demonstrates splitting touch events across multiple views within a
+            view group.  Here we have two ListViews within a LinearLayout that has the attribute
+            android:splitMotionEvents set to "true". Try scrolling both lists simultaneously
+            using multiple fingers.
 
 Switches
     Views/Switches                         all - v14+ or crash in layout
         .view.Switches
+            Demonstrates the use of the toggle switch widget.
 
 System UI Visibility
     Views/System UI Visibility/Content Browser  -- v16
