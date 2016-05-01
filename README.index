@@ -2064,13 +2064,26 @@ Splitting Touches across Views
 Switches
     Views/Switches                         all - v14+ or crash in layout
         .view.Switches
-            Demonstrates the use of the toggle switch widget.
+            Demonstrates the use of the toggle switch widget. Customized text removed for Lolipop
+            unless attribute android:showText="true" is added
 
 System UI Visibility
     Views/System UI Visibility/Content Browser  -- v16
         .view.ContentBrowserActivity
+            This activity demonstrates how to use system UI flags to implement
+            a content browser style of UI (such as a book reader). Includes "Content",
+            and implementation of a view for displaying immersive content, using system
+            UI flags to transition in and out of modes where the user is focused on
+            that content. When the user clicks, it toggles the visibility of navigation
+            elements.
+
     Views/System UI Visibility/Content Browser Nav Bar  -- v19
         .view.ContentBrowserNavActivity
+            This activity demonstrates how to use system UI flags to implement a content
+            browser style of UI (such as a book reader) that hides the nav bar as well as
+            the status bar. The difference is the addition of the flags
+            SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION, and SYSTEM_UI_FLAG_IMMERSIVE.
+
     Views/System UI Visibility/Game        v19
         .view.GameActivity
     Views/System UI Visibility/System UI Modes  -- v18

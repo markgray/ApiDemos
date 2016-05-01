@@ -16,6 +16,7 @@
 
 package com.example.android.apis.view;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
@@ -23,6 +24,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -33,14 +35,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SeekBar;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.SearchView.OnQueryTextListener;
 
 import com.example.android.apis.R;
 
@@ -48,6 +49,8 @@ import com.example.android.apis.R;
  * This activity demonstrates how to use system UI flags to implement
  * a content browser style of UI (such as a book reader).
  */
+@SuppressWarnings("deprecation")
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ContentBrowserActivity extends Activity
         implements OnQueryTextListener, ActionBar.TabListener {
 
@@ -57,11 +60,13 @@ public class ContentBrowserActivity extends Activity
      * content.
      */
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static class Content extends ScrollView
             implements View.OnSystemUiVisibilityChangeListener, View.OnClickListener {
         TextView mText;
         TextView mTitleView;
         SeekBar mSeekView;
+        @SuppressWarnings("unused")
         boolean mNavVisible;
         int mBaseSystemUiVisibility = SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | SYSTEM_UI_FLAG_LAYOUT_STABLE;
@@ -175,11 +180,13 @@ public class ContentBrowserActivity extends Activity
                 (SeekBar)findViewById(R.id.seekbar));
 
         ActionBar bar = getActionBar();
+        //noinspection ConstantConditions
         bar.addTab(bar.newTab().setText("Tab 1").setTabListener(this));
         bar.addTab(bar.newTab().setText("Tab 2").setTabListener(this));
         bar.addTab(bar.newTab().setText("Tab 3").setTabListener(this));
     }
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -217,14 +224,17 @@ public class ContentBrowserActivity extends Activity
     public void onSort(MenuItem item) {
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.show_tabs:
+                //noinspection ConstantConditions,deprecation
                 getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
                 item.setChecked(true);
                 return true;
             case R.id.hide_tabs:
+                //noinspection ConstantConditions,deprecation
                 getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 item.setChecked(true);
                 return true;
@@ -251,14 +261,14 @@ public class ContentBrowserActivity extends Activity
     }
 
     @Override
-    public void onTabSelected(Tab tab, FragmentTransaction ft) {
+    public void onTabSelected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
     }
 
     @Override
-    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+    public void onTabUnselected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
     }
 
     @Override
-    public void onTabReselected(Tab tab, FragmentTransaction ft) {
+    public void onTabReselected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
     }
 }
