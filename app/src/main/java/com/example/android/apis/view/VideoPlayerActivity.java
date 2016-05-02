@@ -16,6 +16,7 @@
 
 package com.example.android.apis.view;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
@@ -23,10 +24,10 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,11 +36,11 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SeekBar;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.SearchView.OnQueryTextListener;
 
 import com.example.android.apis.R;
 
@@ -49,6 +50,8 @@ import com.example.android.apis.R;
  * when the user isn't interacting with the screen to achieve full screen
  * video playback).
  */
+@SuppressWarnings("deprecation")
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class VideoPlayerActivity extends Activity
         implements OnQueryTextListener, ActionBar.TabListener {
 
@@ -68,6 +71,7 @@ public class VideoPlayerActivity extends Activity
         boolean mAddedMenuListener;
         boolean mMenusOpen;
         boolean mPaused;
+        @SuppressWarnings("unused")
         boolean mNavVisible;
         int mLastSystemUiVis;
 
@@ -99,6 +103,7 @@ public class VideoPlayerActivity extends Activity
             super.onAttachedToWindow();
             if (mActivity != null) {
                 mAddedMenuListener = true;
+                //noinspection ConstantConditions
                 mActivity.getActionBar().addOnMenuVisibilityListener(this);
             }
         }
@@ -106,6 +111,7 @@ public class VideoPlayerActivity extends Activity
         @Override protected void onDetachedFromWindow() {
             super.onDetachedFromWindow();
             if (mAddedMenuListener) {
+                //noinspection ConstantConditions
                 mActivity.getActionBar().removeOnMenuVisibilityListener(this);
             }
         }
@@ -151,6 +157,7 @@ public class VideoPlayerActivity extends Activity
             setNavVisibility(true);
         }
 
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         void setNavVisibility(boolean visible) {
             int newVis = SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -199,11 +206,13 @@ public class VideoPlayerActivity extends Activity
                 (SeekBar)findViewById(R.id.seekbar));
 
         ActionBar bar = getActionBar();
+        //noinspection ConstantConditions
         bar.addTab(bar.newTab().setText("Tab 1").setTabListener(this));
         bar.addTab(bar.newTab().setText("Tab 2").setTabListener(this));
         bar.addTab(bar.newTab().setText("Tab 3").setTabListener(this));
     }
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -245,10 +254,12 @@ public class VideoPlayerActivity extends Activity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.show_tabs:
+                //noinspection ConstantConditions,deprecation
                 getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
                 item.setChecked(true);
                 return true;
             case R.id.hide_tabs:
+                //noinspection ConstantConditions,deprecation
                 getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 item.setChecked(true);
                 return true;
@@ -268,14 +279,14 @@ public class VideoPlayerActivity extends Activity
     }
 
     @Override
-    public void onTabSelected(Tab tab, FragmentTransaction ft) {
+    public void onTabSelected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
     }
 
     @Override
-    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+    public void onTabUnselected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
     }
 
     @Override
-    public void onTabReselected(Tab tab, FragmentTransaction ft) {
+    public void onTabReselected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
     }
 }

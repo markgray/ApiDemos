@@ -2086,18 +2086,44 @@ System UI Visibility
 
     Views/System UI Visibility/Game        v19
         .view.GameActivity
+            This activity demonstrates how to use the system UI flags to implement
+            an immersive game.
+
     Views/System UI Visibility/System UI Modes  -- v18
         .view.SystemUIModes
+            This activity demonstrates some of the available ways to reduce the size or
+            visual contrast of the system decor, in order to better focus the user's
+            attention or use available screen real estate on the task at hand. Uses
+            CheckBox'es to set or unset the various flags passed to View.setSystemUiVisibility
+            for the IV extends ImageView which serves as the background in the FrameLayout
+            holding it and the CheckBox'es which are overlay it.
+
     Views/System UI Visibility/System UI Modes Overlay  -- v16
         .view.SystemUIModesOverlay
+            Extend .view.SystemUIModes with the addition of requesting the window feature
+            Window.FEATURE_ACTION_BAR_OVERLAY which overlays the action bar rather than
+            positioning the action bar in the space above the window content.
+
     Views/System UI Visibility/Translucent Bars  -- v19
         .view.TranslucentBarsActivity
+            Layout sets the attribute android:fitsSystemWindows="true" to adjust view layout
+            based on system windows such as the status bar. When true, it  adjusts the padding
+            of the view to leave space for the system windows. Will only take effect if this
+            view is in a non-embedded activity. This has the effect of allowing the text
+            displayed to be visible below the system navigation bar and notification bar.
+
     Views/System UI Visibility/Video Player  -- v16
         .view.VideoPlayerActivity
+            Implementation of a view for displaying full-screen video playback, using system
+            UI flags to transition in and out of modes where the entire screen can be filled
+            with content (at the expense of no user interaction).
 
 Tabs
     Views/Tabs/1. Content By Id            all
         .view.Tabs1
+            An example of an TabActivity that uses labels TabSpec#setIndicator(CharSequence)
+            for its indicators and views by id from a layout file TabSpec#setContent(int).
+            TextView's sharing a FrameLayout are selected by the tabs.
     Views/Tabs/2. Content By Factory       all
         .view.Tabs2
     Views/Tabs/3. Content By Intent        all

@@ -16,6 +16,8 @@
 
 package com.example.android.apis.view;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
@@ -23,6 +25,7 @@ import android.app.ActionBar.Tab;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -49,6 +52,8 @@ import com.example.android.apis.R;
  * the system decor, in order to better focus the user's attention or use available screen real
  * estate on the task at hand.
  */
+@SuppressWarnings("deprecation")
+@TargetApi(Build.VERSION_CODES.KITKAT)
 public class SystemUIModes extends Activity
         implements OnQueryTextListener, ActionBar.TabListener {
     public static class IV extends ImageView implements View.OnSystemUiVisibilityChangeListener {
@@ -75,6 +80,7 @@ public class SystemUIModes extends Activity
         }
 
         private class MyActionModeCallback implements ActionMode.Callback {
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 mode.setTitle("My Action Mode!");
                 mode.setSubtitle(null);
@@ -124,6 +130,7 @@ public class SystemUIModes extends Activity
         win.setAttributes(winParams);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void setOverscan(boolean on) {
         Window win = getWindow();
         WindowManager.LayoutParams winParams = win.getAttributes();
@@ -136,6 +143,7 @@ public class SystemUIModes extends Activity
         win.setAttributes(winParams);
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void setTranslucentStatus(boolean on) {
         Window win = getWindow();
         WindowManager.LayoutParams winParams = win.getAttributes();
@@ -148,6 +156,7 @@ public class SystemUIModes extends Activity
         win.setAttributes(winParams);
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void setTranslucentNavigation(boolean on) {
         Window win = getWindow();
         WindowManager.LayoutParams winParams = win.getAttributes();
@@ -160,19 +169,23 @@ public class SystemUIModes extends Activity
         win.setAttributes(winParams);
     }
 
+    @SuppressLint("DefaultLocale")
     private String getDisplaySize() {
         DisplayMetrics dm = getResources().getDisplayMetrics();
         return String.format("DisplayMetrics = (%d x %d)", dm.widthPixels, dm.heightPixels);
     }
+    @SuppressLint("DefaultLocale")
     private String getViewSize() {
         return String.format("View = (%d,%d - %d,%d)",
                 mImage.getLeft(), mImage.getTop(),
                 mImage.getRight(), mImage.getBottom());
     }
+    @SuppressLint("SetTextI18n")
     void refreshSizes() {
         mMetricsText.setText(getDisplaySize() + " " + getViewSize());
     }
 
+    @SuppressWarnings("unused")
     static int TOAST_LENGTH = 500;
     IV mImage;
     CheckBox[] mCheckControls = new CheckBox[8];
@@ -209,6 +222,7 @@ public class SystemUIModes extends Activity
         mCheckControls[5] = (CheckBox) findViewById(R.id.layoutStable);
         mCheckControls[6] = (CheckBox) findViewById(R.id.layoutFullscreen);
         mCheckControls[7] = (CheckBox) findViewById(R.id.layoutHideNavigation);
+        //noinspection ForLoopReplaceableByForEach
         for (int i=0; i<mCheckControls.length; i++) {
             mCheckControls[i].setOnCheckedChangeListener(checkChangeListener);
         }
@@ -249,8 +263,10 @@ public class SystemUIModes extends Activity
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
+                            //noinspection ConstantConditions
                             getActionBar().hide();
                         } else {
+                            //noinspection ConstantConditions
                             getActionBar().show();
                         }
                     }
@@ -271,6 +287,7 @@ public class SystemUIModes extends Activity
         mMetricsText = (TextView) findViewById(R.id.metricsText);
     }
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -320,10 +337,12 @@ public class SystemUIModes extends Activity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.show_tabs:
+                //noinspection ConstantConditions,deprecation
                 getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
                 item.setChecked(true);
                 return true;
             case R.id.hide_tabs:
+                //noinspection ConstantConditions,deprecation
                 getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 item.setChecked(true);
                 return true;
@@ -332,15 +351,15 @@ public class SystemUIModes extends Activity
     }
 
     @Override
-    public void onTabSelected(Tab tab, FragmentTransaction ft) {
+    public void onTabSelected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
     }
 
     @Override
-    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+    public void onTabUnselected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
     }
 
     @Override
-    public void onTabReselected(Tab tab, FragmentTransaction ft) {
+    public void onTabReselected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
     }
 
     public void updateCheckControls() {

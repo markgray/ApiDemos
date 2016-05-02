@@ -28,6 +28,7 @@ import com.example.android.apis.R;
  * An example of tabs that uses labels ({@link TabSpec#setIndicator(CharSequence)})
  * for its indicators and views by id from a layout file ({@link TabSpec#setContent(int)}).
  */
+@SuppressWarnings("deprecation")
 public class Tabs1 extends TabActivity {
 
     @Override

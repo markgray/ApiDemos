@@ -16,30 +16,15 @@
 
 package com.example.android.apis.view;
 
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
+import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.SearchView;
-import android.widget.SeekBar;
-import android.widget.ShareActionProvider;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.SearchView.OnQueryTextListener;
 
 import com.example.android.apis.R;
 import com.example.android.apis.graphics.TouchPaint;
@@ -54,6 +39,7 @@ public class GameActivity extends Activity {
      * Implementation of a view for the game, filling the entire screen.
      */
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class Content extends TouchPaint.PaintView implements
             View.OnSystemUiVisibilityChangeListener, View.OnClickListener {
         Activity mActivity;
@@ -117,6 +103,7 @@ public class GameActivity extends Activity {
             // When we become visible or invisible, play is paused.
             // Optional: pause game when window loses focus.  This will cause it to
             // pause, for example, when the notification shade is pulled down.
+            //noinspection StatementWithEmptyBody
             if (!hasWindowFocus) {
                 //setGamePaused(true);
             }
@@ -144,6 +131,7 @@ public class GameActivity extends Activity {
             }
         }
 
+        @TargetApi(Build.VERSION_CODES.KITKAT)
         void updateNavVisibility() {
             int newVis = SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION

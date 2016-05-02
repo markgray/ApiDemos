@@ -16,6 +16,8 @@
 
 package com.example.android.apis.view;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Window;
 
@@ -23,6 +25,7 @@ import android.view.Window;
  * Version of demo that uses the action bar in overlay mode.
  */
 public class SystemUIModesOverlay extends SystemUIModes {
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
