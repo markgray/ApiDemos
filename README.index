@@ -2124,12 +2124,29 @@ Tabs
             An example of an TabActivity that uses labels TabSpec#setIndicator(CharSequence)
             for its indicators and views by id from a layout file TabSpec#setContent(int).
             TextView's sharing a FrameLayout are selected by the tabs.
+
     Views/Tabs/2. Content By Factory       all
         .view.Tabs2
+            Example of using a tab content factory for the content via
+            TabHost.TabSpec#setContent(android.widget.TabHost.TabContentFactory)
+            It also demonstrates using an icon on one of the tabs via
+            TabHost.TabSpec#setIndicator(CharSequence, android.graphics.drawable.Drawable)
+            but this does not work using the default Theme as of Ice Cream Sandwitch.
+
     Views/Tabs/3. Content By Intent        all
         .view.Tabs3
+            An example of tab content that launches an activity via
+            android.widget.TabHost.TabSpec#setContent(android.content.Intent), the
+            three tabs launch .view.List1, .view.List8, and .view.Controls1
+            respectively, using Intent's. The last sets the Intent flag so that it is
+            recreated each time the tab is clicked using:
+            Intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
     Views/Tabs/4. Non Holo theme           all
         .view.Tabs4
+            Identical to Tabs2. The change is in the theme used in the manifest file:
+            android:theme="@android:style/Theme" The Icon shows up now unlike Tabs2.
+
     Views/Tabs/5. Scrollable               all
         .view.Tabs5
     Views/Tabs/6. Right aligned            all
