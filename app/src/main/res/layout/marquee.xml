@@ -23,6 +23,8 @@
     <Button
         android:layout_width="150dip" 
         android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:text="@string/marquee_default"
         android:singleLine="true"
         android:ellipsize="marquee"/>
@@ -30,6 +32,8 @@
     <Button
         android:layout_width="150dip" 
         android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:text="@string/marquee_once"
         android:singleLine="true"
         android:ellipsize="marquee"
@@ -38,6 +42,8 @@
     <Button
         android:layout_width="150dip" 
         android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:text="@string/marquee_forever"
         android:singleLine="true"
         android:ellipsize="marquee"
