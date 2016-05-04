@@ -31,8 +31,8 @@ import android.util.AttributeSet;
  * <b>XML attributes</b>
  * <p>
  * See
- * {@link android.R.styleable#TextView TextView Attributes},
- * {@link android.R.styleable#View View Attributes}
+ * android.R.styleable#TextView TextView Attributes,
+ * android.R.styleable#View View Attributes
  */
 public class LogTextBox extends TextView {
     public LogTextBox(Context context) {

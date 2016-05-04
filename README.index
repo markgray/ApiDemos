@@ -2149,28 +2149,36 @@ Tabs
 
     Views/Tabs/5. Scrollable               all
         .view.Tabs5
+            Demonstrates the Tab scrolling when too many tabs are displayed to fit
+            in the screen. In the layout a HorizontalScrollView contains the TabWidget
+            and 30 tabs are added to it using Tabhost.addTab (TabHost.TabSpec tabSpec)
+            the callback createTabContent creates the content as each tab is selected.
+
     Views/Tabs/6. Right aligned            all
         .view.Tabs6
+            Uses a right gravity for the TabWidget. Does not seem to have any effect.
 
 Text
     Views/Text/EditText
         .view.EditTextDemo
+            Demonstrates the android.widget.EditText widget. android:imeOptions="actionSearch"
+            only produces an action key in landscape orientation for some reason. (No :id?)
 
     Views/Text/Linkify                           all
         .text.Link
             Four different ways to generate html like links and styled text: text1 shows
             the android:autoLink property, which automatically linkifies things like URLs
-             and phone numbers found in the text. No java code is needed to make this
-             work; text2 has links specified by putting <a> tags in the string resource.
-             By default these links will appear but not respond to user input. To make
-             them active, you need to call setMovementMethod() on the TextView object;
-             text3 shows creating text with links from HTML in the Java code, rather than
-             from a string resource.  Note that for a fixed string, using a (localizable)
-             resource as shown above is usually a better way to go, this example is
-             intended to illustrate how you might display text that came from a dynamic
-             source (eg, the network); text4 illustrates constructing a styled string
-             containing a link without using HTML at all.  Again, for a fixed string you
-             should probably be using a string resource, not a hardcoded value.
+            and phone numbers found in the text. No java code is needed to make this
+            work; text2 has links specified by putting <a> tags in the string resource.
+            By default these links will appear but not respond to user input. To make
+            them active, you need to call setMovementMethod() on the TextView object;
+            text3 shows creating text with links from HTML in the Java code, rather than
+            from a string resource.  Note that for a fixed string, using a (localizable)
+            resource as shown above is usually a better way to go, this example is
+            intended to illustrate how you might display text that came from a dynamic
+            source (eg, the network); text4 illustrates constructing a styled string
+            containing a link without using HTML at all.  Again, for a fixed string you
+            should probably be using a string resource, not a hardcoded value.
 
     Views/Text/LogTextBox                        all
         .text.LogTextBox1
