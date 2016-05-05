@@ -20,6 +20,7 @@ import com.example.android.apis.R;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -74,6 +75,7 @@ public class TextSwitcher1 extends Activity implements ViewSwitcher.ViewFactory,
         TextView t = new TextView(this);
         t.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
         t.setTextSize(36);
+        Log.i("makeView", "New View requested");
         return t;
     }
 }

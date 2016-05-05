@@ -2193,9 +2193,16 @@ Text
 
     Views/Text/TextClock                        all - v17+ or crash
         .view.TextClockDemo
+            Variants of TextClock: Default formats; Shows the date only; Uses styles
+            (different android:format12Hour, and android:format24Hour strings with
+            font and face defined in string xml); Shows seconds; Uses a fixed time zone.
 
     Views/Text/TextSwitcher                     all
         .view.TextSwitcher1
+            Uses a TextSwitcher to animate changes in the View controlled by the TextSwitcher.
+            Two TextView's are requested from the app's overriding of ViewSwitcher.ViewFactory
+            method makeView, and when the View needs to be updated TextSwitcher.setText is
+            called to change the text and animate to it.
 
     Views/Text/TextView
         .view.TextViewDemo
