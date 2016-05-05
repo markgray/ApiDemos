@@ -18,12 +18,11 @@ package com.example.android.apis.view;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
-import android.text.Html;
-import android.widget.TextClock;
-import com.example.android.apis.R;
-
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.TextClock;
+
+import com.example.android.apis.R;
 
 /**
  * Variants of {@link TextClock}.
