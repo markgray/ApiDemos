@@ -2206,12 +2206,21 @@ Text
 
     Views/Text/TextView
         .view.TextViewDemo
+            Demonstrates the android.widget.TextView widget. Shows different values for
+            android:textAppearance: ?android:attr/textAppearanceSmall,
+            ?android:attr/textAppearanceMedium, and ?android:attr/textAppearanceLarge,
+            as well as the effect of android:textIsSelectable="true" (needs keyboard),
+            android:visibility="invisible", and android:background="#ff00ff00"
 
 Visibility
     Views/Visibility                       all
         .view.Visibility1
+            Demonstrates making a view VISIBLE, INVISIBLE and GONE. Three buttons control
+            the visibility of a TextView which is sandwiched between two other TextView's
 
 WebView
     Views/WebView                          all
         .view.WebView1
+            Sample creating 1 webviews. Html data is loaded into the layout's WebView using
+            WebView.loadData
 
