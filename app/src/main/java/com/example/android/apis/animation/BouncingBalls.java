@@ -18,10 +18,13 @@ package com.example.android.apis.animation;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
-import android.graphics.drawable.ColorDrawable;
-import com.example.android.apis.R;
-
-import android.animation.*;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -30,6 +33,7 @@ import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,9 +41,11 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 
+import com.example.android.apis.R;
+
 import java.util.ArrayList;
 
-
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class BouncingBalls extends Activity {
     /** Called when the activity is first created. */
     @Override
@@ -54,10 +60,12 @@ public class BouncingBalls extends Activity {
 
         private static final int RED = 0xffFF8080;
         private static final int BLUE = 0xff8080FF;
+        @SuppressWarnings("unused")
         private static final int CYAN = 0xff80ffff;
+        @SuppressWarnings("unused")
         private static final int GREEN = 0xff80ff80;
 
-        public final ArrayList<ShapeHolder> balls = new ArrayList<ShapeHolder>();
+        public final ArrayList<ShapeHolder> balls = new ArrayList<>();
         AnimatorSet animation = null;
 
         public MyAnimationView(Context context) {
@@ -134,6 +142,7 @@ public class BouncingBalls extends Activity {
             fadeAnim.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
+                    //noinspection SuspiciousMethodCalls
                     balls.remove(((ObjectAnimator)animation).getTarget());
 
                 }

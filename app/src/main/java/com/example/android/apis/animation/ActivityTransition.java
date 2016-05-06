@@ -17,11 +17,13 @@ package com.example.android.apis.animation;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.SharedElementCallback;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,6 +36,7 @@ import java.util.Map;
  */
 public class ActivityTransition extends Activity {
 
+    @SuppressWarnings("unused")
     private static final String TAG = "ActivityTransition";
 
     private static final String KEY_ID = "ViewTransitionValues:id";
@@ -99,6 +102,7 @@ public class ActivityTransition extends Activity {
         setupHero();
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setupHero() {
         String name = getIntent().getStringExtra(KEY_ID);
         mHero = null;
@@ -114,6 +118,7 @@ public class ActivityTransition extends Activity {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void clicked(View v) {
         mHero = (ImageView) v;
         Intent intent = new Intent(this, ActivityTransitionDetails.class);

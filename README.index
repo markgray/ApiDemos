@@ -14,17 +14,23 @@ Accessibility
   Accessibility Service (Really sucks on Android, so skip)
 
 Animation (disabled for froyo)
-  Animation/Activity Transition v20  
+  Animation/Activity Transition v20+
         .animation.ActivityTransition Becomes:
-    Animation/Details of a specific thingy v20  
+    Animation/Details of a specific thingy v20+
         .animation.ActivityTransitionDetails
             Uses ActivityOptions.makeSceneTransitionAnimation to transition using
             a shared view as the epicenter of the transition.
 
-  Animation/Bouncing Balls v11 
+  Animation/Bouncing Balls v11+
         .animation.BouncingBalls
             Uses several different kinds of ObjectAnimator to animate bouncing 
-            color changing balls.
+            color changing balls. When onTouchEvent is called with either a
+            MotionEvent.ACTION_DOWN or MotionEvent.ACTION_MOVE a ball of random
+            color is added at the events event.getX(), event.getY() coordinates.
+            The ball motion and geometry is animated then an animator of the balls
+            alpha is play fading it out from an alpha of 1.0 to 0.0 in 250 milliseconds.
+            The onAnimationEnd callback of the fade animation is set to an
+            AnimatorListenerAdapter which removes the ball when the animation is done.
 
   Animation/Cloning v11 
         .animation.AnimationCloning

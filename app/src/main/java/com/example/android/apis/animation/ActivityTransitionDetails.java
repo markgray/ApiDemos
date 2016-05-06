@@ -17,11 +17,13 @@ package com.example.android.apis.animation;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,6 +33,7 @@ import android.widget.ImageView;
  */
 public class ActivityTransitionDetails extends Activity {
 
+    @SuppressWarnings("unused")
     private static final String TAG = "ActivityTransitionDetails";
 
     private static final String KEY_ID = "ViewTransitionValues:id";
@@ -55,9 +58,17 @@ public class ActivityTransitionDetails extends Activity {
             mImageResourceId = ActivityTransition.getDrawableIdForKey(name);
         }
 
-        return getResources().getDrawable(mImageResourceId);
+        Drawable drawable;
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+            //noinspection deprecation
+            drawable = getResources().getDrawable(mImageResourceId);
+        } else {
+                drawable = getResources().getDrawable(mImageResourceId, null);
+        }
+        return drawable;
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void clicked(View v) {
         Intent intent = new Intent(this, ActivityTransition.class);
         intent.putExtra(KEY_ID, mName);
