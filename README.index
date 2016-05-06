@@ -11,7 +11,7 @@ atLeastKitKat           v19
 atLeastLRelease         v20
 
 Accessibility
-  Acessibility Service (Really sucks on Android, so skip)
+  Accessibility Service (Really sucks on Android, so skip)
 
 Animation (disabled for froyo)
   Animation/Activity Transition v20  
