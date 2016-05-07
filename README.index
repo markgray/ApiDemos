@@ -37,7 +37,7 @@ Animation (disabled for froyo)
             Creates an ObjectAnimator to animate the y position of an object from 0 to the
             bottom of the View, .clones it and uses .setTarget to set it as the animation
             of a second View. Then it creates two ObjectAnimator's to: animate the y position
-            of an object down, and a second to animate y position up again and create an AnimatorSet
+            of an object down, and a second to animate y position up again and creates an AnimatorSet
             to play them sequentially, clones this AnimatorSet and .setTarget's the clone as the
             AnimatorSet for a second object. Uses an AnimatorSet play the first two ObjectAnimator's
             and first AnimatorSet, requesting that they be run at the same time by calling
@@ -50,12 +50,13 @@ Animation (disabled for froyo)
             "public Object evaluate(float fraction, Object startValue, Object endValue)"
             function. The x and y coordinates of an "animation.ShapeHolder ball" are 
             animated by calling evaluate, and onAnimationUpdate is called which calls
-            invalidate() which caused the onDraw method to be called.
+            invalidate() which causes the onDraw method to be called.
 
   Animation/Default Layout Animations v11 -- layout uses GridLayout so crash,  if < v14.
         .animation.LayoutAnimationsByDefault
-            Uses the animateLayoutChanges tag in XML to automate transition animations
-            as items are removed from or added to a container.
+            Uses android:animateLayoutChanges="true" in the GridLayout used to contain buttons,
+            to automate transition animations using the default animations as Buttons are added
+            to or removed from that ViewGroup.            .
 
   Animation/Events v11
         .animation.AnimatorEvents

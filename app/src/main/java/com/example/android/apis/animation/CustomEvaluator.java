@@ -25,6 +25,7 @@ import com.example.android.apis.R;
 
 import java.util.ArrayList;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -33,11 +34,14 @@ import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class CustomEvaluator extends Activity {
 
     @Override
@@ -99,11 +103,13 @@ public class CustomEvaluator extends Activity {
             mBall = ball;
         }
 
+        @SuppressWarnings("unused")
         public void setXY(XYHolder xyHolder) {
             mBall.setX(xyHolder.getX());
             mBall.setY(xyHolder.getY());
         }
 
+        @SuppressWarnings("unused")
         public XYHolder getXY() {
             return new XYHolder(mBall.getX(), mBall.getY());
         }
@@ -111,7 +117,8 @@ public class CustomEvaluator extends Activity {
 
     public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener {
 
-        public final ArrayList<ShapeHolder> balls = new ArrayList<ShapeHolder>();
+        @SuppressWarnings("unused")
+        public final ArrayList<ShapeHolder> balls = new ArrayList<>();
         ValueAnimator bounceAnim = null;
         ShapeHolder ball = null;
         BallXYHolder ballHolder = null;
@@ -124,6 +131,7 @@ public class CustomEvaluator extends Activity {
 
         private void createAnimation() {
             if (bounceAnim == null) {
+                //noinspection unused
                 XYHolder startXY = new XYHolder(0f, 0f);
                 XYHolder endXY = new XYHolder(300f, 500f);
                 bounceAnim = ObjectAnimator.ofObject(ballHolder, "xY",
