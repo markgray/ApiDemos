@@ -18,9 +18,10 @@ package com.example.android.apis.animation;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.widget.Button;
 import com.example.android.apis.R;
-
 import android.animation.*;
 import android.app.Activity;
 import android.content.Context;
@@ -35,10 +36,9 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
-
 import java.util.ArrayList;
 
-
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class AnimationCloning extends Activity {
     /** Called when the activity is first created. */
     @Override
@@ -60,10 +60,11 @@ public class AnimationCloning extends Activity {
 
     public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener {
 
-        public final ArrayList<ShapeHolder> balls = new ArrayList<ShapeHolder>();
+        public final ArrayList<ShapeHolder> balls = new ArrayList<>();
         AnimatorSet animation = null;
         private float mDensity;
 
+        @SuppressWarnings("unused")
         public MyAnimationView(Context context) {
             super(context);
 
@@ -94,7 +95,7 @@ public class AnimationCloning extends Activity {
                 s1.playSequentially(animDown, animUp);
                 animDown.addUpdateListener(this);
                 animUp.addUpdateListener(this);
-                AnimatorSet s2 = (AnimatorSet) s1.clone();
+                AnimatorSet s2 = s1.clone();
                 s2.setTarget(balls.get(3));
 
                 animation = new AnimatorSet();

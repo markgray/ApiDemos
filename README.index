@@ -34,8 +34,15 @@ Animation (disabled for froyo)
 
   Animation/Cloning v11 
         .animation.AnimationCloning
-            Uses AnimatorSet to create copies of an animation which execute both
-            as playTogether(x,y) and playSeqentially(x,y)
+            Creates an ObjectAnimator to animate the y position of an object from 0 to the
+            bottom of the View, .clones it and uses .setTarget to set it as the animation
+            of a second View. Then it creates two ObjectAnimator's to: animate the y position
+            of an object down, and a second to animate y position up again and create an AnimatorSet
+            to play them sequentially, clones this AnimatorSet and .setTarget's the clone as the
+            AnimatorSet for a second object. Uses an AnimatorSet play the first two ObjectAnimator's
+            and first AnimatorSet, requesting that they be run at the same time by calling
+            playTogether(ObjectAnimator1,ObjectAnimator2,AnimatorSet1), and the second AnimatorSet
+            to run after the first AnimatorSet by calling playSeqentially(AnimatorSet1,AnimatorSet2).
 
   Animation/Custom Evaluator v11 
         .animation.CustomEvaluator
