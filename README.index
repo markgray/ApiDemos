@@ -61,8 +61,9 @@ Animation (disabled for froyo)
   Animation/Events v11
         .animation.AnimatorEvents
             Supposed to show when the various Sequencer Events and Animator Events: 
-            Start Repeat Cancel and End occur, but Repeat Events do not seem to ever
-            be generated (for what it is worth).
+            Start Repeat Cancel and End occur, but Repeat Events are not generated
+            for the Seqencer because the api does not support setRepeatCount on a
+            AnimatorSet.
 
   Animation/Hide-Show Animations v11
         .animation.LayoutAnimationsHideShow
@@ -79,7 +80,8 @@ Animation (disabled for froyo)
             Adds and removes buttons using custom or default animations. Buttons are 
             too small for the number on ub->htc_one, and i7->Nexus 5 I recall, but 
             perfect on quad->nexus 7, and i7->Excite 10, ub->Nexus 9, k7->LG G pad 8.3,
-            and bizarre but true k7->Nexus 4.
+            and bizarre but true k7->Nexus 4. This problem is due to bug in FixedGridlayout?
+
 
   Animation/Loading v11
         .animation.AnimationLoading

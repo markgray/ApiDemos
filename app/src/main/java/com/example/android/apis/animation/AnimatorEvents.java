@@ -20,6 +20,8 @@ package com.example.android.apis.animation;
 // class is in a sub-package.
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import com.example.android.apis.R;
@@ -45,6 +47,7 @@ import android.widget.LinearLayout;
 /**
  * This demo shows how the AnimatorListener events work.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class AnimatorEvents extends Activity {
 
     TextView startText, repeatText, cancelText, endText;
@@ -105,7 +108,8 @@ public class AnimatorEvents extends Activity {
     public class MyAnimationView extends View implements Animator.AnimatorListener,
     ValueAnimator.AnimatorUpdateListener {
 
-        public final ArrayList<ShapeHolder> balls = new ArrayList<ShapeHolder>();
+        @SuppressWarnings("unused")
+        public final ArrayList<ShapeHolder> balls = new ArrayList<>();
         Animator animation;
         ShapeHolder ball = null;
         boolean endImmediately = false;
@@ -119,7 +123,7 @@ public class AnimatorEvents extends Activity {
             if (animation == null) {
                 ObjectAnimator yAnim = ObjectAnimator.ofFloat(ball, "y",
                         ball.getY(), getHeight() - 50f).setDuration(1500);
-                yAnim.setRepeatCount(0);
+                yAnim.setRepeatCount(2);
                 yAnim.setRepeatMode(ValueAnimator.REVERSE);
                 yAnim.setInterpolator(new AccelerateInterpolator(2f));
                 yAnim.addUpdateListener(this);
@@ -128,7 +132,7 @@ public class AnimatorEvents extends Activity {
                 ObjectAnimator xAnim = ObjectAnimator.ofFloat(ball, "x",
                         ball.getX(), ball.getX() + 300).setDuration(1000);
                 xAnim.setStartDelay(0);
-                xAnim.setRepeatCount(0);
+                xAnim.setRepeatCount(2);
                 xAnim.setRepeatMode(ValueAnimator.REVERSE);
                 xAnim.setInterpolator(new AccelerateInterpolator(2f));
 

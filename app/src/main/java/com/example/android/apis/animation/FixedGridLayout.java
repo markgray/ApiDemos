@@ -17,19 +17,17 @@
 package com.example.android.apis.animation;
 
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
 /**
  * A layout that arranges its children in a grid.  The size of the
- * cells is set by the {@link #setCellSize} method and the
+ * cells is set by the setCellSize method and the
  * android:cell_width and android:cell_height attributes in XML.
  * The number of rows and columns is determined at runtime.  Each
  * cell contains exactly one view, and they flow in the natural
  * child order (the order in which they were added, or the index
- * in {@link #addViewAt}.  Views can not span multiple cells.
+ * in addViewAt.  Views can not span multiple cells.
  *
  * <p>This class was copied from the FixedGridLayout Api demo; see that demo for
  * more information on using the layout.</p>

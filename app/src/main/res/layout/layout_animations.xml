@@ -14,10 +14,12 @@
      limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/parent"
+    tools:ignore="HardcodedText"
     >
     <LinearLayout
         android:orientation="horizontal"
@@ -28,8 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Button"
-            android:id="@+id/addNewButton"
-            />
+            android:id="@+id/addNewButton" />
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

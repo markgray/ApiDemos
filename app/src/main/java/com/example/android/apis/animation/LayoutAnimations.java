@@ -26,6 +26,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.Keyframe;
 import android.animation.LayoutTransition;
 import android.animation.PropertyValuesHolder;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -39,6 +41,7 @@ import android.widget.Button;
  * This application demonstrates how to use LayoutTransition to automate transition animations
  * as items are removed from or added to a container.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class LayoutAnimations extends Activity {
 
     private int numButtons = 1;
@@ -58,8 +61,8 @@ public class LayoutAnimations extends Activity {
 
         container = new FixedGridLayout(this);
         container.setClipChildren(false);
-        ((FixedGridLayout)container).setCellHeight(90);
-        ((FixedGridLayout)container).setCellWidth(100);
+        ((FixedGridLayout)container).setCellHeight(200);
+        ((FixedGridLayout)container).setCellWidth(400);
         final LayoutTransition transitioner = new LayoutTransition();
         container.setLayoutTransition(transitioner);
         defaultAppearingAnim = transitioner.getAnimator(LayoutTransition.APPEARING);
@@ -82,6 +85,8 @@ public class LayoutAnimations extends Activity {
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Button newButton = new Button(LayoutAnimations.this);
+                newButton.setMinHeight(64);
+                newButton.setMinWidth(64);
                 newButton.setText(String.valueOf(numButtons++));
                 newButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
@@ -163,6 +168,7 @@ public class LayoutAnimations extends Activity {
                         this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhScaleX, pvhScaleY).
                 setDuration(transition.getDuration(LayoutTransition.CHANGE_APPEARING));
         customChangingAppearingAnim.addListener(new AnimatorListenerAdapter() {
+            @SuppressWarnings("ConstantConditions")
             public void onAnimationEnd(Animator anim) {
                 View view = (View) ((ObjectAnimator) anim).getTarget();
                 view.setScaleX(1f);
@@ -180,6 +186,7 @@ public class LayoutAnimations extends Activity {
                         this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhRotation).
                 setDuration(transition.getDuration(LayoutTransition.CHANGE_DISAPPEARING));
         customChangingDisappearingAnim.addListener(new AnimatorListenerAdapter() {
+            @SuppressWarnings("ConstantConditions")
             public void onAnimationEnd(Animator anim) {
                 View view = (View) ((ObjectAnimator) anim).getTarget();
                 view.setRotation(0f);
@@ -190,6 +197,7 @@ public class LayoutAnimations extends Activity {
         customAppearingAnim = ObjectAnimator.ofFloat(null, "rotationY", 90f, 0f).
                 setDuration(transition.getDuration(LayoutTransition.APPEARING));
         customAppearingAnim.addListener(new AnimatorListenerAdapter() {
+            @SuppressWarnings("ConstantConditions")
             public void onAnimationEnd(Animator anim) {
                 View view = (View) ((ObjectAnimator) anim).getTarget();
                 view.setRotationY(0f);
@@ -200,6 +208,7 @@ public class LayoutAnimations extends Activity {
         customDisappearingAnim = ObjectAnimator.ofFloat(null, "rotationX", 0f, 90f).
                 setDuration(transition.getDuration(LayoutTransition.DISAPPEARING));
         customDisappearingAnim.addListener(new AnimatorListenerAdapter() {
+            @SuppressWarnings("ConstantConditions")
             public void onAnimationEnd(Animator anim) {
                 View view = (View) ((ObjectAnimator) anim).getTarget();
                 view.setRotationX(0f);

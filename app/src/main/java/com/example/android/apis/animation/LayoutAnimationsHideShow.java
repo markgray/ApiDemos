@@ -20,6 +20,8 @@ package com.example.android.apis.animation;
 // class is in a sub-package.
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.widget.LinearLayout;
 import com.example.android.apis.R;
 
@@ -40,8 +42,10 @@ import android.widget.Button;
  * This application demonstrates how to use LayoutTransition to automate transition animations
  * as items are hidden or shown in a container.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class LayoutAnimationsHideShow extends Activity {
 
+    @SuppressWarnings("unused")
     private int numButtons = 1;
     ViewGroup container = null;
     private LayoutTransition mTransitioner;
@@ -80,7 +84,7 @@ public class LayoutAnimationsHideShow extends Activity {
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 for (int i = 0; i < container.getChildCount(); ++i) {
-                    View view = (View) container.getChildAt(i);
+                    View view = container.getChildAt(i);
                     view.setVisibility(View.VISIBLE);
                 }
             }
@@ -128,6 +132,7 @@ public class LayoutAnimationsHideShow extends Activity {
                 setDuration(mTransitioner.getDuration(LayoutTransition.CHANGE_APPEARING));
         mTransitioner.setAnimator(LayoutTransition.CHANGE_APPEARING, changeIn);
         changeIn.addListener(new AnimatorListenerAdapter() {
+            @SuppressWarnings("ConstantConditions")
             public void onAnimationEnd(Animator anim) {
                 View view = (View) ((ObjectAnimator) anim).getTarget();
                 view.setScaleX(1f);
@@ -146,6 +151,7 @@ public class LayoutAnimationsHideShow extends Activity {
                 setDuration(mTransitioner.getDuration(LayoutTransition.CHANGE_DISAPPEARING));
         mTransitioner.setAnimator(LayoutTransition.CHANGE_DISAPPEARING, changeOut);
         changeOut.addListener(new AnimatorListenerAdapter() {
+            @SuppressWarnings("ConstantConditions")
             public void onAnimationEnd(Animator anim) {
                 View view = (View) ((ObjectAnimator) anim).getTarget();
                 view.setRotation(0f);
@@ -157,6 +163,7 @@ public class LayoutAnimationsHideShow extends Activity {
                 setDuration(mTransitioner.getDuration(LayoutTransition.APPEARING));
         mTransitioner.setAnimator(LayoutTransition.APPEARING, animIn);
         animIn.addListener(new AnimatorListenerAdapter() {
+            @SuppressWarnings("ConstantConditions")
             public void onAnimationEnd(Animator anim) {
                 View view = (View) ((ObjectAnimator) anim).getTarget();
                 view.setRotationY(0f);
@@ -168,6 +175,7 @@ public class LayoutAnimationsHideShow extends Activity {
                 setDuration(mTransitioner.getDuration(LayoutTransition.DISAPPEARING));
         mTransitioner.setAnimator(LayoutTransition.DISAPPEARING, animOut);
         animOut.addListener(new AnimatorListenerAdapter() {
+            @SuppressWarnings("ConstantConditions")
             public void onAnimationEnd(Animator anim) {
                 View view = (View) ((ObjectAnimator) anim).getTarget();
                 view.setRotationX(0f);
