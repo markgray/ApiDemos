@@ -82,11 +82,21 @@ Animation (disabled for froyo)
             perfect on quad->nexus 7, and i7->Excite 10, ub->Nexus 9, k7->LG G pad 8.3,
             and bizarre but true k7->Nexus 4. This problem is due to bug in FixedGridlayout?
 
-
-  Animation/Loading v11
+  Animation/Loading v11 -> v23 or higher required due to android:fraction="0"
         .animation.AnimationLoading
-            Loads an animation from Xml files: R.anim.object_animator, R.anim.animator,
-            R.anim.animator_set, and R.anim.color_animator.
+            Loads animations from Xml files: R.animator.object_animator (animates ball[0] "y"
+            from 0 to 200, and reverses), R.animator.animator (animates ball[1] alpha from 1 to
+            0 and reverses), R.animator.animator_set (an animator set which animates ball[2]'s
+            "x" from 0 to 200, and "y" from 0 to 400), R.animator.color_animator (an animator
+            which animates ball[3]'s color from #0f0 to #00ffff), R.animator.object_animator_pvh
+            (an animator which animates ball[4]'s "x" from 0 to 400, and "y" from 0 to 200 using
+            propertyValuesHolder's), R.animator.object_animator_pvh_kf (uses propertyValuesHolder
+            to hold keyframe specs for x and y and uses the default linear interpolator on balls[5]
+            uses the same animator on balls[6] with the addition of an alpha animation), and
+            R.animator.object_animator_pvh_kf_interpolated (the animation used for balls[7] has an
+            accelerate interpolator applied on each keyframe interval instead of the default used on
+            balls[5], As these two animations use the exact same path, the effect of the per-keyframe
+            interpolator has been made obvious.)
 
   Animation/Multiple Properties v11
         .animation.MultiPropertyAnimation

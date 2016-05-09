@@ -21,6 +21,7 @@ package com.example.android.apis.animation;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
 import android.graphics.Color;
 import com.example.android.apis.R;
 
@@ -36,6 +37,7 @@ import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -44,8 +46,10 @@ import android.widget.LinearLayout;
 /**
  * This application demonstrates loading Animator objects from XML resources.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class AnimationLoading extends Activity {
 
+    @SuppressWarnings("unused")
     private static final int DURATION = 1500;
 
     /** Called when the activity is first created. */
@@ -60,6 +64,7 @@ public class AnimationLoading extends Activity {
         Button starter = (Button) findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
                 animView.startAnimation();
             }
         });
@@ -69,7 +74,7 @@ public class AnimationLoading extends Activity {
 
         private static final float BALL_SIZE = 100f;
 
-        public final ArrayList<ShapeHolder> balls = new ArrayList<ShapeHolder>();
+        public final ArrayList<ShapeHolder> balls = new ArrayList<>();
         Animator animation = null;
 
         public MyAnimationView(Context context) {
@@ -89,12 +94,12 @@ public class AnimationLoading extends Activity {
 
             if (animation == null) {
                 ObjectAnimator anim = (ObjectAnimator) AnimatorInflater.
-                        loadAnimator(appContext, R.anim.object_animator);
+                        loadAnimator(appContext, R.animator.object_animator);
                 anim.addUpdateListener(this);
                 anim.setTarget(balls.get(0));
 
                 ValueAnimator fader = (ValueAnimator) AnimatorInflater.
-                        loadAnimator(appContext, R.anim.animator);
+                        loadAnimator(appContext, R.animator.animator);
                 fader.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     public void onAnimationUpdate(ValueAnimator animation) {
                         balls.get(1).setAlpha((Float) animation.getAnimatedValue());
@@ -103,24 +108,24 @@ public class AnimationLoading extends Activity {
 
                 AnimatorSet seq =
                         (AnimatorSet) AnimatorInflater.loadAnimator(appContext,
-                        R.anim.animator_set);
+                        R.animator.animator_set);
                 seq.setTarget(balls.get(2));
 
                 ObjectAnimator colorizer = (ObjectAnimator) AnimatorInflater.
-                        loadAnimator(appContext, R.anim.color_animator);
+                        loadAnimator(appContext, R.animator.color_animator);
                 colorizer.setTarget(balls.get(3));
 
                 ObjectAnimator animPvh = (ObjectAnimator) AnimatorInflater.
-                        loadAnimator(appContext, R.anim.object_animator_pvh);
+                        loadAnimator(appContext, R.animator.object_animator_pvh);
                 animPvh.setTarget(balls.get(4));
 
 
                 ObjectAnimator animPvhKf = (ObjectAnimator) AnimatorInflater.
-                        loadAnimator(appContext, R.anim.object_animator_pvh_kf);
+                        loadAnimator(appContext, R.animator.object_animator_pvh_kf);
                 animPvhKf.setTarget(balls.get(5));
 
                 ValueAnimator faderKf = (ValueAnimator) AnimatorInflater.
-                        loadAnimator(appContext, R.anim.value_animator_pvh_kf);
+                        loadAnimator(appContext, R.animator.value_animator_pvh_kf);
                 faderKf.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     public void onAnimationUpdate(ValueAnimator animation) {
                         balls.get(6).setAlpha((Float) animation.getAnimatedValue());
@@ -134,7 +139,7 @@ public class AnimationLoading extends Activity {
                 // exact same path, the effect of the per-keyframe interpolator
                 // has been made obvious.
                 ObjectAnimator animPvhKfInterpolated = (ObjectAnimator) AnimatorInflater.
-                        loadAnimator(appContext, R.anim.object_animator_pvh_kf_interpolated);
+                        loadAnimator(appContext, R.animator.object_animator_pvh_kf_interpolated);
                 animPvhKfInterpolated.setTarget(balls.get(7));
 
                 animation = new AnimatorSet();

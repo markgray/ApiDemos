@@ -14,10 +14,14 @@
      limitations under the License.
 -->
 
-<objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+
+<animator xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:duration="1000"
-    android:valueFrom="#0f0"
-    android:valueTo="#00ffff"
-    android:propertyName="color"
+    android:valueFrom="1"
+    android:valueTo="0"
+    android:valueType="floatType"
     android:repeatCount="1"
-    android:repeatMode="reverse"/>
+    android:repeatMode="reverse"
+    tools:targetApi="honeycomb" />
+
