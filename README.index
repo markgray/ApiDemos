@@ -101,8 +101,12 @@ Animation (disabled for froyo)
   Animation/Multiple Properties v11
         .animation.MultiPropertyAnimation
             Uses AnimatorSet.playTogether(Animator... items) to play four different 
-            animations at once: yBouncer, yAlphaBouncer, whxyBouncer, and yxBouncer
-            which are set up in the method createAnimation().
+            animations at once: yBouncer (animates y using a BounceInterpolator), yAlphaBouncer
+            (animates y and alpha using an AccelerateInterpolator), whxyBouncer (animates width,
+            height, x and y using PropertyValuesHolder's), and yxBouncer (animates y and x
+            using Keyframe's to split the animation into three sections with a repeat count of
+            one and setRepeatMode(ValueAnimator.REVERSE)) which are set up in the method
+            createAnimation().
 
   Animation/Path Animations v11 -- uses android.util.Property crashes if < v14. Also 
         uses android.animation.ObjectAnimator crashes if < v21. Also extends abstract

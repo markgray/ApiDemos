@@ -19,6 +19,8 @@ package com.example.android.apis.animation;
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 import android.animation.*;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.view.animation.AccelerateInterpolator;
 import com.example.android.apis.R;
 
@@ -39,10 +41,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 /**
- * This application demonstrates the seeking capability of ValueAnimator. The SeekBar in the
- * UI allows you to set the position of the animation. Pressing the Run button will play from
- * the current position of the animation.
+ * Uses AnimatorSet.playTogether(Animator... items) to play four different
+ * animations at once: yBouncer, yAlphaBouncer, whxyBouncer, and yxBouncer
+ * which are set up in the method createAnimation().
+ *
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class MultiPropertyAnimation extends Activity {
 
     private static final int DURATION = 1500;
@@ -69,9 +73,10 @@ public class MultiPropertyAnimation extends Activity {
 
         private static final float BALL_SIZE = 100f;
 
-        public final ArrayList<ShapeHolder> balls = new ArrayList<ShapeHolder>();
+        public final ArrayList<ShapeHolder> balls = new ArrayList<>();
         AnimatorSet animation = null;
         Animator bounceAnim = null;
+        @SuppressWarnings("unused")
         ShapeHolder ball = null;
 
         public MyAnimationView(Context context) {
