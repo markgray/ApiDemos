@@ -18,6 +18,8 @@ package com.example.android.apis.animation;
 import android.animation.ObjectAnimator;
 import android.animation.TypeConverter;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -27,9 +29,9 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.Property;
 import android.view.View;
 import android.view.animation.Animation;
@@ -40,6 +42,8 @@ import android.widget.RadioGroup;
 import com.example.android.apis.R;
 
 /** This application demonstrates the use of Path animation. */
+
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class PathAnimations extends Activity implements
         RadioGroup.OnCheckedChangeListener, View.OnLayoutChangeListener {
 
@@ -221,7 +225,7 @@ public class PathAnimations extends Activity implements
         protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
             super.onLayout(changed, left, top, right, bottom);
             if (changed) {
-                Matrix scale = new Matrix();
+                @SuppressLint("DrawAllocation") Matrix scale = new Matrix();
                 float scaleWidth = (right-left)/TRAVERSE_PATH_SIZE;
                 float scaleHeight= (bottom-top)/TRAVERSE_PATH_SIZE;
                 scale.setScale(scaleWidth, scaleHeight);
