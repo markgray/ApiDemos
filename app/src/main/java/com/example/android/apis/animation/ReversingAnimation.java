@@ -24,6 +24,7 @@ import com.example.android.apis.R;
 
 import java.util.ArrayList;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -32,12 +33,14 @@ import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ReversingAnimation extends Activity {
 
     @Override
@@ -66,7 +69,8 @@ public class ReversingAnimation extends Activity {
 
     public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener {
 
-        public final ArrayList<ShapeHolder> balls = new ArrayList<ShapeHolder>();
+        @SuppressWarnings("unused")
+        public final ArrayList<ShapeHolder> balls = new ArrayList<>();
         ValueAnimator bounceAnim = null;
         ShapeHolder ball = null;
 
@@ -94,6 +98,7 @@ public class ReversingAnimation extends Activity {
             bounceAnim.reverse();
         }
 
+        @SuppressWarnings("unused")
         public void seek(long seekTime) {
             createAnimation();
             bounceAnim.setCurrentPlayTime(seekTime);
