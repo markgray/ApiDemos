@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import android.animation.ValueAnimator;
 import android.animation.ObjectAnimator;
 import android.animation.AnimatorSet;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -34,6 +35,7 @@ import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
@@ -46,9 +48,11 @@ import android.widget.SeekBar;
  * UI allows you to set the position of the animation. Pressing the Run button will play from
  * the current position of the animation.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class AnimationSeeking extends Activity {
 
     private static final int DURATION = 1500;
+    @SuppressWarnings("FieldCanBeLocal")
     private SeekBar mSeekBar;
 
     /** Called when the activity is first created. */
@@ -86,6 +90,7 @@ public class AnimationSeeking extends Activity {
         });
     }
 
+    @SuppressWarnings("unused")
     public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener, Animator.AnimatorListener {
 
         private static final int RED = 0xffFF8080;
@@ -94,7 +99,7 @@ public class AnimationSeeking extends Activity {
         private static final int GREEN = 0xff80ff80;
         private static final float BALL_SIZE = 100f;
 
-        public final ArrayList<ShapeHolder> balls = new ArrayList<ShapeHolder>();
+        public final ArrayList<ShapeHolder> balls = new ArrayList<>();
         AnimatorSet animation = null;
         ValueAnimator bounceAnim = null;
         ShapeHolder ball = null;
@@ -160,6 +165,7 @@ public class AnimationSeeking extends Activity {
         }
 
         public void onAnimationEnd(Animator animation) {
+            //noinspection SuspiciousMethodCalls
             balls.remove(((ObjectAnimator)animation).getTarget());
 
         }

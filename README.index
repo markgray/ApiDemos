@@ -147,12 +147,18 @@ Animation (disabled for froyo)
         Scene.getSceneForLayout, as does android.transition itself.
         .animation.Transitions
             Uses classes from android.transition to animate transitions between 4 (or 3) 
-            different layouts.
+            different layouts. scene4 is not an actual 'Scene', but rather a dynamic
+            change in the UI, transitioned to using beginDelayedTransition() to tell
+            the TransitionManager to get ready to run a transition at the next frame.
+            It merely resizes four of the views in whichever of the first three Scenes
+            happens to be displayed at that moment.
 
   Animation/View Flip v11
         .animation.ListFlipper
             Uses fancy custom ObjectAnimator to swap two list views occupying the same
-            space in a LinearLayout, one always set to android:visibility="gone"
+            space in a LinearLayout, by setting one to android:visibility="gone" and the
+            other to android:visibility="visible" when they are to be "flipped", the
+            english list starts as the visible list as defined in the Layout xml file.
 
 App
   Action Bar (All Disabled for Froyo)

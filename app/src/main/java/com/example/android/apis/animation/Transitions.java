@@ -15,7 +15,9 @@
  */
 package com.example.android.apis.animation;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +32,7 @@ import com.example.android.apis.R;
  * are loaded from resource files and transitions are run between those scenes
  * as well as a dynamically-configured scene.
  */
+@TargetApi(Build.VERSION_CODES.KITKAT)
 public class Transitions extends Activity {
 
     Scene mScene1, mScene2, mScene3;

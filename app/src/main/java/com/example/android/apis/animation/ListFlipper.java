@@ -21,6 +21,8 @@ package com.example.android.apis.animation;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -39,9 +41,12 @@ import android.widget.SeekBar;
  * UI allows you to set the position of the animation. Pressing the Run button will play from
  * the current position of the animation.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ListFlipper extends Activity {
 
+    @SuppressWarnings("unused")
     private static final int DURATION = 1500;
+    @SuppressWarnings("unused")
     private SeekBar mSeekBar;
 
     private static final String[] LIST_STRINGS_EN = new String[] {
@@ -74,10 +79,10 @@ public class ListFlipper extends Activity {
         mFrenchList = (ListView) findViewById(R.id.list_fr);
 
         // Prepare the ListView
-        final ArrayAdapter<String> adapterEn = new ArrayAdapter<String>(this,
+        final ArrayAdapter<String> adapterEn = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, LIST_STRINGS_EN);
         // Prepare the ListView
-        final ArrayAdapter<String> adapterFr = new ArrayAdapter<String>(this,
+        final ArrayAdapter<String> adapterFr = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, LIST_STRINGS_FR);
 
         mEnglishList.setAdapter(adapterEn);

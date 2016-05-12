@@ -15,7 +15,9 @@
  */
 package com.example.android.apis.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +29,7 @@ import android.widget.Toast;
  * standard options menu. This demo is for informative purposes only; see ActionBarUsage for
  * an example of using the Action Bar in a more idiomatic manner.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ActionBarMechanics extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
