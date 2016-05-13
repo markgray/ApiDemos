@@ -172,11 +172,14 @@ App
         .app.ActionBarNavigationTarget
             Shows how to use "Up" button in Action Bar, new Document is created in a 
             seperate activity, so you have to use "recents" to switch to it, and then
-            the "up" button works as "up", otherwise it works as "Back".
+            the "up" button works as "up", otherwise it works as "Back". Uses the
+            attribute android:taskAffinity=":bar_navigation" to associate the activities.
 
     App/Action Bar/Action Bar Tabs v11
         .app.ActionBarTabs
-            You need to toggle tab mode before tabs show in action bar.
+            You need to toggle tab mode before tabs show in action bar. Crashes when rotated
+            because it needs a zero argument contructor. The text should be passed in a bundle.
+            Working on doing this Right.
 
     App/Action Bar/Action Bar Usage v11
         .app.ActionBarUsage

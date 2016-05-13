@@ -15,21 +15,23 @@
  */
 package com.example.android.apis.app;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.example.android.apis.R;
 
 /**
  * This demonstrates implementing common navigation flows with the action bar.
  */
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+@SuppressLint("SetTextI18n")
 public class ActionBarNavigation extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class ActionBarNavigation extends Activity {
 
         // Turn on the up affordance.
         final ActionBar bar = getActionBar();
+        //noinspection ConstantConditions
         bar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP, ActionBar.DISPLAY_HOME_AS_UP);
 
         setContentView(R.layout.action_bar_navigation);
