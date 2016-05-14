@@ -179,12 +179,16 @@ App
         .app.ActionBarTabs
             You need to toggle tab mode before tabs show in action bar. Crashes when rotated
             because it needs a zero argument contructor. The text should be passed in a bundle.
-            Working on doing this Right.
+            Working on doing this Right. Did so, but need to use retained fragments in order
+            to keep tabs (TODO: add retained fragments to this)
 
     App/Action Bar/Action Bar Usage v11
         .app.ActionBarUsage
-            Shows a bunch of different action bar actions, and how to use and configure
-            in both java and xml
+            This demonstrates idiomatic usage of the Action Bar. The default Honeycomb theme
+            includes the action bar by default and a menu resource is used to populate the
+            menu data itself. If you'd like to see how these things work under the hood, see
+            ActionBarMechanics. Shows a bunch of different action bar actions, and how to use
+            and configure in both java and xml
 
     App/Action Bar/Action Provider/Settings Action Provider v14
         .app.ActionBarSettingsActionProviderActivity

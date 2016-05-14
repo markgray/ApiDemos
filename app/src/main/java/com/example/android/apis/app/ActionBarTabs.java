@@ -39,11 +39,30 @@ import android.widget.Toast;
 @SuppressWarnings("deprecation")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ActionBarTabs extends Activity {
+
+    public boolean tabsMode = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            tabsMode = savedInstanceState.getBoolean("tabsMode");
+        }
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.action_bar_tabs);
+        if (tabsMode) {
+            //noinspection ConstantConditions
+            getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+            getActionBar().setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
+        } else {
+            //noinspection ConstantConditions
+            getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+            getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE, ActionBar.DISPLAY_SHOW_TITLE);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("tabsMode", tabsMode);
+        super.onSaveInstanceState(outState);
     }
 
     public void onAddTab(View v) {
@@ -73,11 +92,9 @@ public class ActionBarTabs extends Activity {
         if (bar.getNavigationMode() == ActionBar.NAVIGATION_MODE_TABS) {
             bar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
             bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE, ActionBar.DISPLAY_SHOW_TITLE);
-            TabContentFragment.setTabsMode(false);
         } else {
             bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
             bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
-            TabContentFragment.setTabsMode(true);
         }
     }
 
@@ -125,7 +142,6 @@ public class ActionBarTabs extends Activity {
 
         private String mText = "new tab";
         private TextView textView;
-        private static boolean tabsMode = false;
 
         public TabContentFragment() {
         }
@@ -145,7 +161,6 @@ public class ActionBarTabs extends Activity {
 
             if (savedInstanceState != null) {
                 mText = savedInstanceState.getString("mText");
-                tabsMode = savedInstanceState.getBoolean("tabsMode");
             }
             textView = (TextView) fragView.findViewById(R.id.text);
             textView.setText(mText);
@@ -153,35 +168,10 @@ public class ActionBarTabs extends Activity {
             return fragView;
         }
 
-        /**
-         * Called to ask the fragment to save its current dynamic state, so it
-         * can later be reconstructed in a new instance of its process is
-         * restarted.  If a new instance of the fragment later needs to be
-         * created, the data you place in the Bundle here will be available
-         * in the Bundle given to {@link #onCreate(Bundle)},
-         * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}, and
-         * {@link #onActivityCreated(Bundle)}.
-         * <p/>
-         * <p>This corresponds to {@link Activity#onSaveInstanceState(Bundle)
-         * Activity.onSaveInstanceState(Bundle)} and most of the discussion there
-         * applies here as well.  Note however: <em>this method may be called
-         * at any time before {@link #onDestroy()}</em>.  There are many situations
-         * where a fragment may be mostly torn down (such as when placed on the
-         * back stack with no UI showing), but its state will not be saved until
-         * its owning activity actually needs to save its state.
-         *
-         * @param outState Bundle in which to place your saved state.
-         */
         @Override
         public void onSaveInstanceState(Bundle outState) {
             outState.putString("mText", mText);
-            outState.putBoolean("tabsMode", tabsMode);
             super.onSaveInstanceState(outState);
-        }
-
-
-        public static void setTabsMode(boolean tabsMode) {
-            tabsMode = tabsMode;
         }
     }
 }

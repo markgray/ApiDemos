@@ -16,10 +16,13 @@
 
 package com.example.android.apis.app;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +41,7 @@ import java.io.InputStream;
  * a menu item with ShareActionProvider as its action provider. The
  * ShareActionProvider is responsible for managing the UI for sharing actions.
  */
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class ActionBarShareActionProviderActivity extends Activity {
 
     private static final String SHARED_FILE_NAME = "shared.png";
@@ -91,15 +95,17 @@ public class ActionBarShareActionProviderActivity extends Activity {
      * Copies a private raw resource content to a publicly readable
      * file such that the latter can be shared with other applications.
      */
+    @SuppressLint("WorldReadableFiles")
     private void copyPrivateRawResuorceToPubliclyAccessibleFile() {
         InputStream inputStream = null;
         FileOutputStream outputStream = null;
         try {
             inputStream = getResources().openRawResource(R.raw.robot);
+            //noinspection deprecation
             outputStream = openFileOutput(SHARED_FILE_NAME,
                     Context.MODE_WORLD_READABLE | Context.MODE_APPEND);
             byte[] buffer = new byte[1024];
-            int length = 0;
+            int length;
             try {
                 while ((length = inputStream.read(buffer)) > 0){
                     outputStream.write(buffer, 0, length);
@@ -111,11 +117,13 @@ public class ActionBarShareActionProviderActivity extends Activity {
             /* ignore */
         } finally {
             try {
+                //noinspection ConstantConditions
                 inputStream.close();
             } catch (IOException ioe) {
                /* ignore */
             }
             try {
+                //noinspection ConstantConditions
                 outputStream.close();
             } catch (IOException ioe) {
                /* ignore */

@@ -15,8 +15,10 @@
  */
 package com.example.android.apis.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +36,7 @@ import com.example.android.apis.R;
  * menu data itself. If you'd like to see how these things work under the hood, see
  * ActionBarMechanics.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ActionBarUsage extends Activity implements OnQueryTextListener {
     TextView mSearchText;
     int mSortMode = -1;

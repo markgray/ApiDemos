@@ -16,9 +16,12 @@
 
 package com.example.android.apis.app;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.provider.Settings;
 import android.view.ActionProvider;
 import android.view.LayoutInflater;
@@ -36,6 +39,7 @@ import com.example.android.apis.R;
  * ActionProvider for launching the system settings and adds a menu item with that
  * provider.
  */
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class ActionBarSettingsActionProviderActivity extends Activity {
 
     /**
@@ -86,7 +90,7 @@ public class ActionBarSettingsActionProviderActivity extends Activity {
         public View onCreateActionView() {
             // Inflate the action view to be shown on the action bar.
             LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-            View view = layoutInflater.inflate(R.layout.action_bar_settings_action_provider, null);
+            @SuppressLint("InflateParams") View view = layoutInflater.inflate(R.layout.action_bar_settings_action_provider, null);
             ImageButton button = (ImageButton) view.findViewById(R.id.button);
             // Attach a click listener for launching the system settings.
             button.setOnClickListener(new View.OnClickListener() {
