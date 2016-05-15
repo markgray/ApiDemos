@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2008 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2008 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -17,17 +16,26 @@
 <!-- Demonstrates how to use a custom title.
      See corresponding Java code com.example.android.apis.app.CustomTitle.java. -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/screen"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical">
-    <TextView android:id="@+id/left_text"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="RelativeOverlap">
+
+    <TextView
+        android:id="@+id/left_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:text="@string/custom_title_left" />
-    <TextView android:id="@+id/right_text"
+
+    <TextView
+        android:id="@+id/right_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:text="@string/custom_title_right" />
+
 </RelativeLayout>

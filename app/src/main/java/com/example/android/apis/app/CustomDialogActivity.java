@@ -40,9 +40,11 @@ public class CustomDialogActivity extends Activity {
         // Be sure to call the super class.
         super.onCreate(savedInstanceState);
         
-        // See assets/res/any/layout/dialog_activity.xml for this
-        // view layout definition, which is being set here as
-        // the content of our screen.
+        // See assets/res/any/layout/dialog_activity.xml for an
+        // Example using default theme. layout/custom_dialog_activity
+        // is  being set here as the content of our screen and the
+        // Theme.CustomDialog defined in values/styles.xml is used
+        // by AndroidManifest.xml to configure the activity.
         setContentView(R.layout.custom_dialog_activity);
     }
 }

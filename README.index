@@ -202,21 +202,21 @@ App
             packaged with the app in res/raw by copying it to shared.png in the apps 
             private storage area.
 
-    App/Action Bar/Display Options v11
+    App/Action Bar/Display Options v16
         .app.ActionBarDisplayOptions
             Shows how various action bar display option flags can be combined and their
             effects. The flags are: DISPLAY_HOME_AS_UP, DISPLAY_SHOW_HOME, DISPLAY_USE_LOGO,
             DISPLAY_SHOW_TITLE, DISPLAY_SHOW_CUSTOM, all fields in ActionBar. Also you
-            can cycle the gravity from START->CENTER_HORIZONTAL->END->START, all fields
-            in Gravity, as well as toggle the bar's visibility using ActionBar.hide() and
-            ActionBar.show(), and toggle system ui visibility using setSystemUiVisibility(0)
+            can cycle the gravity of the Custom View from START->CENTER_HORIZONTAL->END->START,
+            all fields in Gravity, as well as toggle the bar's visibility using ActionBar.hide()
+            and ActionBar.show(), and toggle system ui visibility using setSystemUiVisibility(0)
             to make it visible, and setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN) to
             make it invisible.
 
   Activity
     App/Activity/Animation                 all
         .app.Animation
-        JELLY_BEAN (v16+) required for "modern animations" by java code
+        JELLY_BEAN (v16+) required for "modern animations" by java code if/else statement
         animates in to:
         .app.AlertDialogSamples
             Example of using a custom animation when transitioning between activities. 
@@ -233,19 +233,20 @@ App
 
     App/Activity/Custom Dialog             all
         .app.CustomDialogActivity
-            Creates a pop-up over the App/Activity list which looks like a dialog, and 
+            Creates a pop-up activity over the App/Activity list which looks like a dialog, and
             uses a android:theme="@style/Theme.CustomDialog" set in the AndroidManifest.
 
     App/Activity/Custom Title              all
         .app.CustomTitle
             How to use a custom title. Uses Window.FEATURE_CUSTOM_TITLE to create a 
-            custom title bar for the activity, and allows the user to change the title.
+            custom title bar from layout/custom_title_1 for the activity, and allows
+            the user to change the title.
 
     App/Activity/Dialog                    all
         .app.DialogActivity
             Creates a Dialog using a style derived from a theme that is appropriate 
             and available given the Api level: style/ThemeCurrentDialog is defined in
-            each values/styles.xml values-v11/styles.xml values-v19/styles.xml and
+            each: values/styles.xml values-v11/styles.xml values-v19/styles.xml and
             values-v20/styles.xml with the parent set to android:Theme.Dialog, 
             android:Theme.Holo.Dialog, android:Theme.Material.Dialog, and
             android:Theme.Material.Light.Dialog respectively.
@@ -265,7 +266,7 @@ App
 
     App/Activity/<b>Hello <i>World</i></b> all
         .app.HelloWorld
-            Simple app which only displays a TextView.
+            Simple app which only displays a layout containing a single TextView.
 
     App/Activity/Intent Activity Flags     all
         .app.IntentActivityFlags

@@ -17,10 +17,12 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
@@ -34,6 +36,8 @@ import android.widget.Spinner;
  * This demo shows how various action bar display option flags can be combined
  * and their effects.
  */
+@SuppressWarnings("deprecation")
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class ActionBarDisplayOptions extends Activity implements View.OnClickListener,
         ActionBar.TabListener, Spinner.OnItemSelectedListener, ActionBar.OnNavigationListener {
     private View mCustomView;
@@ -57,6 +61,7 @@ public class ActionBarDisplayOptions extends Activity implements View.OnClickLis
         mCustomView = getLayoutInflater().inflate(R.layout.action_bar_display_options_custom, null);
         // Configure several action bar elements that will be toggled by display options.
         final ActionBar bar = getActionBar();
+        //noinspection ConstantConditions
         bar.setCustomView(mCustomView,
                 new ActionBar.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
@@ -64,7 +69,7 @@ public class ActionBarDisplayOptions extends Activity implements View.OnClickLis
         bar.addTab(bar.newTab().setText("Tab 2").setTabListener(this));
         bar.addTab(bar.newTab().setText("Tab 3").setTabListener(this));
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1);
         adapter.add("Item 1");
         adapter.add("Item 2");
@@ -113,9 +118,11 @@ public class ActionBarDisplayOptions extends Activity implements View.OnClickLis
                         break;
                 }
                 lp.gravity = lp.gravity & ~Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK | newGravity;
+                //noinspection ConstantConditions
                 bar.setCustomView(mCustomView, lp);
                 return;
             case R.id.toggle_visibility:
+                //noinspection ConstantConditions
                 if (bar.isShowing()) {
                     bar.hide();
                 } else {
@@ -133,7 +140,9 @@ public class ActionBarDisplayOptions extends Activity implements View.OnClickLis
                 return;
         }
 
+        //noinspection ConstantConditions
         int change = bar.getDisplayOptions() ^ flags;
+        //noinspection WrongConstant
         bar.setDisplayOptions(change, flags);
     }
 
@@ -165,8 +174,8 @@ public class ActionBarDisplayOptions extends Activity implements View.OnClickLis
                     default:
                         mode = ActionBar.NAVIGATION_MODE_STANDARD;
                 }
+                //noinspection ConstantConditions
                 bar.setNavigationMode(mode);
-                return;
         }
     }
 

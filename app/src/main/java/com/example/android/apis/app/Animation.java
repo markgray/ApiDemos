@@ -20,11 +20,13 @@ package com.example.android.apis.app;
 // class is in a sub-package.
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +37,7 @@ import android.widget.Button;
 /**
  * <p>Example of using a custom animation when transitioning between activities.</p>
  */
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class Animation extends Activity {
     private static final String TAG = "Animation";
 
@@ -153,6 +156,7 @@ public class Animation extends Activity {
             v.setPressed(false);
             v.refreshDrawableState();
             Bitmap bm = v.getDrawingCache();
+            //noinspection unused
             Canvas c = new Canvas(bm);
             //c.drawARGB(255, 255, 0, 0);
             ActivityOptions opts = ActivityOptions.makeThumbnailScaleUpAnimation(
