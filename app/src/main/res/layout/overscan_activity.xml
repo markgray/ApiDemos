@@ -20,11 +20,13 @@
      of the top-level view may be obscured around the edges by the display, leaving the
      edge of the box background used here invisible. -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/box_white">
+    android:background="@drawable/box_white"
+    tools:ignore="HardcodedText,ContentDescription">
 
-    <!-- This is still in the same position as the top-level FrameLayout, so the contentx
+    <!-- This is still in the same position as the top-level FrameLayout, so the content
         of this TextView may also be obscured. -->
     <TextView
         android:layout_width="wrap_content"

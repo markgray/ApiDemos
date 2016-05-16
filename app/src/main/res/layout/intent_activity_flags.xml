@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2010 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -18,25 +17,37 @@
      See corresponding Java code com.android.sdk.app.IntentActivityFlags.java. -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical" android:padding="4dip"
-        android:gravity="center_horizontal"
-        android:layout_width="match_parent" android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="4dip"
+    tools:ignore="InefficientWeight">
 
     <TextView
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:layout_weight="0" android:paddingBottom="4dip"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/intent_activity_flags"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:paddingBottom="4dip"
+        android:text="@string/intent_activity_flags"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <Button android:id="@+id/flag_activity_clear_task"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/flag_activity_clear_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/flag_activity_clear_task">
+
         <requestFocus />
     </Button>
 
-    <Button android:id="@+id/flag_activity_clear_task_pi"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/flag_activity_clear_task_pi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/flag_activity_clear_task_pi">
+
         <requestFocus />
     </Button>
 

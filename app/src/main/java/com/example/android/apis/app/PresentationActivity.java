@@ -18,8 +18,8 @@ package com.example.android.apis.app;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
-import com.example.android.apis.R;
-
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Presentation;
@@ -29,10 +29,10 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.drawable.GradientDrawable;
 import android.hardware.display.DisplayManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Display;
@@ -40,17 +40,19 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.example.android.apis.R;
 
 
 /**
@@ -77,6 +79,7 @@ import android.widget.TextView;
  * on which to show content based on the currently selected route.
  * </p>
  */
+@TargetApi(Build.VERSION_CODES.M)
 public class PresentationActivity extends Activity
         implements OnCheckedChangeListener, OnClickListener, OnItemSelectedListener {
     private final String TAG = "PresentationActivity";
@@ -95,6 +98,7 @@ public class PresentationActivity extends Activity
     private DisplayManager mDisplayManager;
     private DisplayListAdapter mDisplayListAdapter;
     private CheckBox mShowAllDisplaysCheckbox;
+    @SuppressWarnings("FieldCanBeLocal")
     private ListView mListView;
     private int mNextImageNumber;
 
@@ -105,7 +109,7 @@ public class PresentationActivity extends Activity
 
     // List of all currently visible presentations indexed by display id.
     private final SparseArray<DemoPresentation> mActivePresentations =
-            new SparseArray<DemoPresentation>();
+            new SparseArray<>();
 
     /**
      * Initialization of the Activity after it is first created.  Must at least
@@ -122,7 +126,7 @@ public class PresentationActivity extends Activity
             mSavedPresentationContents =
                     savedInstanceState.getSparseParcelableArray(PRESENTATION_KEY);
         } else {
-            mSavedPresentationContents = new SparseArray<DemoPresentationContents>();
+            mSavedPresentationContents = new SparseArray<>();
         }
 
         // Get the display manager service.
@@ -371,6 +375,7 @@ public class PresentationActivity extends Activity
             mContext = context;
         }
 
+        @SuppressLint({"InflateParams", "DefaultLocale"})
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             final View v;
@@ -410,7 +415,7 @@ public class PresentationActivity extends Activity
                 s.setVisibility(View.GONE);
                 s.setAdapter(null);
             } else {
-                ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(mContext,
+                ArrayAdapter<String> modeAdapter = new ArrayAdapter<>(mContext,
                         android.R.layout.simple_list_item_1);
                 s.setVisibility(View.VISIBLE);
                 s.setAdapter(modeAdapter);
@@ -507,6 +512,7 @@ public class PresentationActivity extends Activity
 
             // Show a n image for visual interest.
             ImageView image = (ImageView)findViewById(R.id.image);
+            //noinspection deprecation
             image.setImageDrawable(r.getDrawable(PHOTOS[photo]));
 
             GradientDrawable drawable = new GradientDrawable();

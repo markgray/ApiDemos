@@ -19,6 +19,7 @@ package com.example.android.apis.app;
 import com.example.android.apis.R;
 import com.example.android.apis.graphics.CubeRenderer;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.MediaRouteActionProvider;
 import android.app.Presentation;
@@ -28,6 +29,7 @@ import android.content.res.Resources;
 import android.media.MediaRouter;
 import android.media.MediaRouter.RouteInfo;
 import android.opengl.GLSurfaceView;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -64,8 +66,9 @@ import android.widget.TextView;
  * simultaneous presentations on different displays.
  * </p>
  */
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 public class PresentationWithMediaRouterActivity extends Activity {
-    private final String TAG = "PresentationWithMediaRouterActivity";
+    private final String TAG = "PresentationWMRActivity";
 
     private MediaRouter mMediaRouter;
     private DemoPresentation mPresentation;
@@ -132,7 +135,7 @@ public class PresentationWithMediaRouterActivity extends Activity {
 
         // Dismiss the presentation when the activity is not visible.
         if (mPresentation != null) {
-            Log.i(TAG, "Dismissing presentation because the activity is no longer visible.");
+            Log.i(TAG, "Dismiss presentation activity invisible.");
             mPresentation.dismiss();
             mPresentation = null;
         }
@@ -272,6 +275,7 @@ public class PresentationWithMediaRouterActivity extends Activity {
 
             // Get the resources for the context of the presentation.
             // Notice that we are getting the resources from the context of the presentation.
+            //noinspection unused
             Resources r = getContext().getResources();
 
             // Inflate the layout.

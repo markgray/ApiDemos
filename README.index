@@ -268,22 +268,25 @@ App
         .app.HelloWorld
             Simple app which only displays a layout containing a single TextView.
 
-    App/Activity/Intent Activity Flags     all
+    App/Activity/Intent Activity Flags     all -> v11
         .app.IntentActivityFlags
             This activity demonstrates how to build a backstack of activities into an
             array of Intent[] and use it to replace the current backstack by using 
             makeRestartActivityTask() to create Intent[0] with the flags set to 
-            re-launch ApiDemos task in its base state, and requesting to reset the back 
-            stack. It then launches these intents using startActivities() if the 
-            FLAG_ACTIVITY_CLEAR_TASK button is pressed, or putting them into a 
-            PendingIntent which it "later" calls using PendingIntent.send()
+            re-launch ApiDemos task in its base state, Intent[1] to launch ApiDemos
+            at the "Views" "com.example.android.apis.Path", Intent[2] to launch
+            ApiDemos at the "Views/Lists" "com.example.android.apis.Path" and requesting
+            to reset the back stack to these three "activities". It then launches these
+            intents using startActivities() if the FLAG_ACTIVITY_CLEAR_TASK button is
+            pressed, or putting them into a PendingIntent which it "later" calls using
+            PendingIntent.send()
 
     App/Activity/Intents                   all
         .app.Intents
             Uses Intent.createChooser(Intent, "title") to create a "chooser intent" 
-            from three different mime types of Intent.ACTION_GET_CONTENT Intents based
-            on which button the user clicks, and it then hands the created "chooser 
-            Intent" to startActivity(Intent)
+            from three different mime types ("audio/*", "image/*", and "*/*") of
+            Intent.ACTION_GET_CONTENT Intents based on which button the user clicks,
+            and it then hands the created "chooser Intent" to startActivity(Intent)
 
     App/Activity/Overscan                  v18
         .app.OverscanActivity
@@ -298,11 +301,11 @@ App
             SharedPreferences.Editor to save state in the onPause() callback, then 
             restoring the state in the onResume callback.
 
-    App/Activity/Presentation              registerDisplayListener needs v17
+    App/Activity/Presentation -- registerDisplayListener v17 getSupportedModes v23
         .app.PresentationActivity
-            Presents a presentation on a secondary display.
+            Presents a presentation on a secondary display. (Needs secondary display.)
 
-    App/Activity/Presentation with Media Router MediaRouter needs v16
+    App/Activity/Presentation with Media Router MediaRouter needs v17
         .app.PresentationWithMediaRouterActivity
             The activity uses the MediaRouter API to automatically detect when a 
             presentation display is available and to allow the user to control the

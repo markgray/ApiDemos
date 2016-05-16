@@ -2,12 +2,14 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.app.PendingIntent.CanceledException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.widget.Button;
 /**
  * Example of various Intent flags to modify the activity stack.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class IntentActivityFlags extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
