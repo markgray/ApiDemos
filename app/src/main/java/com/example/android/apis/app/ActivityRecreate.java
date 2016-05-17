@@ -18,12 +18,15 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ActivityRecreate extends Activity {
     int mCurTheme;
 
@@ -46,9 +49,12 @@ public class ActivityRecreate extends Activity {
                     mCurTheme = android.R.style.Theme_Holo_Light;
                     break;
             }
-            setTheme(mCurTheme);
+
+        } else {
+            mCurTheme = android.R.style.Theme_Holo_Light;
         }
 
+    setTheme(mCurTheme);
         setContentView(R.layout.activity_recreate);
 
         // Watch for button clicks.

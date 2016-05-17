@@ -30,6 +30,7 @@ import android.widget.QuickContactBadge;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 
+@SuppressWarnings({"unused"})
 public class QuickContactsDemo extends ListActivity {
     static final String[] CONTACTS_SUMMARY_PROJECTION = new String[] {
             Contacts._ID, // 0
@@ -61,6 +62,7 @@ public class QuickContactsDemo extends ListActivity {
         Cursor c =
                 getContentResolver().query(Contacts.CONTENT_URI, CONTACTS_SUMMARY_PROJECTION, select,
                 null, Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
+        //noinspection deprecation
         startManagingCursor(c);
         ContactListItemAdapter adapter = new ContactListItemAdapter(this, R.layout.quick_contacts, c);
         setListAdapter(adapter);
@@ -69,6 +71,7 @@ public class QuickContactsDemo extends ListActivity {
 
     private final class ContactListItemAdapter extends ResourceCursorAdapter {
         public ContactListItemAdapter(Context context, int layout, Cursor c) {
+            //noinspection deprecation
             super(context, layout, c);
         }
 

@@ -316,16 +316,16 @@ App
     App/Activity/QuickContactsDemo         all
         .app.QuickContactsDemo
             Shows how to query the contacts database using a cursor, and display the
-            results in a ListActivity hosted Listview. It uses a deprecated api which 
+            results in a ListActivity hosted ListView. It uses a deprecated api which
             queries the database on the UI thread -- it is better to use LoaderManager
             with a CursorLoader. See the documentation for LoaderManager for an example
-            of how to do this.
+            of how to do this. TODO: write LoaderManager version.
 
     App/Activity/Receive Result            all
         .app.ReceiveResult
-            Show how to start a second activity to generate a result, receive it using 
-            startActivityForResult(intent, GET_CODE), followed on completion by the 
-            callback onActivityResult(int requestCode, int resultCode, Intent data).
+            Show how to start a second activity (.app.SendResult) to generate a result,
+            receive it using startActivityForResult(intent, GET_CODE), followed on completion
+            by the callback onActivityResult(int requestCode, int resultCode, Intent data).
             It launches the Activity SendResult, which then returns the result using
             setResult(RESULT_OK, (new Intent()).setAction("Corky!")), followed by
             finish().

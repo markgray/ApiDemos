@@ -31,7 +31,7 @@ import android.widget.TextView;
 
 /**
  * Shows how an activity can send data to its launching activity when done.y.
- * <p>This can be used, for example, to implement a dialog alowing the user to
+ * <p>This can be used, for example, to implement a dialog allowing the user to
 pick an e-mail address or image -- the picking activity sends the selected
 data back to the originating activity when done.</p>
 
@@ -105,8 +105,7 @@ public class ReceiveResult extends Activity {
      * @param data From sending activity as per setResult().
      */
     @Override
-	protected void onActivityResult(int requestCode, int resultCode,
-		Intent data) {
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // You can use the requestCode to select between multiple child
         // activities you may have started.  Here there is only one thing
         // we launch.
@@ -136,7 +135,7 @@ public class ReceiveResult extends Activity {
         }
     }
 
-    // Definition of the one requestCode we use for receiving resuls.
+    // Definition of the one requestCode we use for receiving results.
     static final private int GET_CODE = 0;
 
     private OnClickListener mGetListener = new OnClickListener() {
