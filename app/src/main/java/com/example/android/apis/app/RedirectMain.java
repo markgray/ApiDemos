@@ -84,6 +84,7 @@ public class RedirectMain extends Activity {
         }
     }
 
+    @SuppressWarnings("FinalPrivateMethod")
     private final boolean loadPrefs() {
         // Retrieve the current redirect values.
         // NOTE: because this preference is shared between multiple
@@ -118,5 +119,6 @@ public class RedirectMain extends Activity {
         }
     };
 
+    @SuppressWarnings("FieldCanBeLocal")
     private String mTextPref;
 }

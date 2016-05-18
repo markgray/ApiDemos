@@ -32,6 +32,7 @@ import android.widget.TextView;
  */
 public class RedirectGetter extends Activity
 {
+    @SuppressWarnings("FieldCanBeLocal")
     private String mTextPref;
     private TextView mText;
 
@@ -53,6 +54,7 @@ public class RedirectGetter extends Activity
         loadPrefs();
     }
 
+    @SuppressWarnings("FinalPrivateMethod")
     private final void loadPrefs()
     {
         // Retrieve the current redirect values.
