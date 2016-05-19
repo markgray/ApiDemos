@@ -18,7 +18,9 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
@@ -28,6 +30,7 @@ import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 
 
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class RotationAnimation extends Activity {
 
     private int mRotationAnimation = LayoutParams.ROTATION_ANIMATION_ROTATE;

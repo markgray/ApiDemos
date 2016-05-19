@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2013 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2013 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -18,57 +17,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/rotation_animation_description"
         android:textColor="#FFFFFFFF"
         android:textSize="16sp"
-        android:textStyle="bold"
-        android:text="@string/rotation_animation_description"
-        />
+        android:textStyle="bold" />
+
     <CheckBox
         android:id="@+id/windowFullscreen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="@string/rotation_animation_fullscreen"
-        />
+        android:text="@string/rotation_animation_fullscreen" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/rotation_animation_choices"
             android:textColor="#FFFFFFFF"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="@string/rotation_animation_choices"
-            />
+            android:textStyle="bold" />
+
         <RadioGroup
             android:id="@+id/rotation_radio_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:checkedButton="@+id/rotation_anim_selection"
-            >
+            android:orientation="horizontal">
+
             <RadioButton
                 android:id="@+id/rotate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="@string/rotation_animation_rotate"
-                />
+                android:text="@string/rotation_animation_rotate" />
+
             <RadioButton
                 android:id="@+id/crossfade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
                 android:layout_marginStart="6dp"
-                android:text="@string/rotation_animation_crossfade"
-                />
+                android:text="@string/rotation_animation_crossfade" />
+
             <RadioButton
                 android:id="@+id/jumpcut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
                 android:layout_marginStart="6dp"
-                android:text="@string/rotation_animation_jumpcut"
-                />
+                android:text="@string/rotation_animation_jumpcut" />
         </RadioGroup>
     </LinearLayout>
 </LinearLayout>

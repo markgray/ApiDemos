@@ -367,9 +367,12 @@ App
     App/Activity/Save &amp; Restore State  all
         .app.SaveRestoreState              Broken?
             Supposed to show that only EditText with an "id" assigned to the view will
-            have its state preserved, but both EditText views remember text entered?
+            have its state preserved, but both EditText views remember text entered after
+            switching to another app and back. However if you rotate screen then only the
+            state of the EditText with android:freezesText="true" is saved, the new content
+            of other EditText is forgotten.
 
-    App/Activity/Screen Orientation        all
+    App/Activity/Screen Orientation        all -- v18+ required for full use
         .app.ScreenOrientation
             Lets the user choose the screen orientation programmatically -- some orientations
             are only available for v9+, and some only for v18+ but froyo ignores them rather 
