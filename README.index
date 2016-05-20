@@ -406,13 +406,22 @@ App
         .app.SetWallpaperActivity
             This demonstrates the how to write an activity that gets the current system 
             wallpaper, modifies it and sets the modified bitmap as system wallpaper. The
-            image it uses is too small for larger screens.
+            image it uses is too small for larger screens because the current wallpaper
+            is compressed to fit in the ImageView used by the layout, which is then used
+            to set the new wallpaper.
 
     App/Activity/Soft Input Modes          all
         .app.SoftInputModes
-            Shows how the various soft input modes: "Unspecified", "Resize", "Pan", and 
-            "Nothing" effect the resizing of the UI windows when the IME is displayed,
-            they are set with: getWindow().setSoftInputMode(mResizeModeValues[position])
+            Shows how the various soft input modes: "Unspecified" (The system will try to
+            pick one or the other depending on the contents of the window); "Resize"
+            (allow the window to be resized when an input method is shown, so that its
+            contents are not covered by the input method); "Pan" (window will pan when
+            an input method is shown, so it doesn't need to deal with resizing but is just
+            panned by the framework to ensure the current input focus is visible); and
+            "Nothing" (window will not adjust for a shown input method. The window will
+            not be resized, and it will not be panned to make its focus visible) effect
+            the resizing of the UI windows when the IME is displayed. They are set with:
+            getWindow().setSoftInputMode(mResizeModeValues[position])
 
     App/Activity/Translucent               all
         .app.TranslucentActivity
@@ -424,20 +433,22 @@ App
         .app.TranslucentBlurActivity
             This is the same as .app.TranslucentActivity, with the background blurred on
             older api's - WindowManager.LayoutParams.FLAG_BLUR_BEHIND is no longer 
-            supported so Lollipop does not blur at all.
+            supported as of API level 14, so Lollipop does not blur at all.
 
     App/Activity/Wallpaper                 all
         .app.WallpaperActivity
             This is an app which has the system wallpaper behind it. It does this by 
             setting the theme on the window in AndroidManifest to Theme.Wallpaper,
-            which inherits from the system theme android:style/Theme.Wallpaper.
+            which inherits from the system theme android:style/Theme.Wallpaper, which
+            has android:windowShowWallpaper = "true".
 
   Alarm
     App/Alarm/Alarm Controller             all
         .app.AlarmController
             Shows how to schedule both one-shot alarms (OneShotAlarm.java), and repeating
             alarms (RepeatingAlarm.java) using AlarmManager.set() for one-shot and 
-            AlarmManager.setRepeating() for the repeating alarm.
+            AlarmManager.setRepeating() for the repeating alarm. OneShotAlarm and RepeatingAlarm
+            are declared as <receiver>'s in AndroidManifest.xml
 
     App/Alarm/Alarm Service                all
         .app.AlarmService

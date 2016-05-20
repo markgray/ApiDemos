@@ -44,6 +44,7 @@ public class TranslucentBlurActivity extends Activity {
         super.onCreate(icicle);
 
         // Have the system blur any windows behind this one.
+        //noinspection deprecation
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
                 WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
         

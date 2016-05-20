@@ -1,23 +1,22 @@
 package com.example.android.apis.app;
 
-import com.example.android.apis.R;
-
+import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.admin.DevicePolicyManager;
-import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import com.example.android.apis.R;
 
 /**
  * Demonstrates how the various soft input modes impact window resizing.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SoftInputModes extends Activity {
     Spinner mResizeMode;
     final CharSequence[] mResizeModeLabels = new CharSequence[] {
@@ -47,7 +46,7 @@ public class SoftInputModes extends Activity {
         setContentView(R.layout.soft_input_modes);
         
         mResizeMode = (Spinner)findViewById(R.id.resize_mode);
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this,
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, mResizeModeLabels);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mResizeMode.setAdapter(adapter);
