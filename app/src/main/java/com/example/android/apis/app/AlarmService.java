@@ -20,6 +20,7 @@ package com.example.android.apis.app;
 // class is in a sub-package.
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -59,6 +60,7 @@ public class AlarmService extends Activity {
     }
 
     private OnClickListener mStartAlarmListener = new OnClickListener() {
+        @SuppressLint("ShortAlarm")
         public void onClick(View v) {
             // We want the alarm to go off 30 seconds from now.
             long firstTime = SystemClock.elapsedRealtime();

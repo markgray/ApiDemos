@@ -16,11 +16,14 @@
 
 package com.example.android.apis.app;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -56,6 +59,8 @@ App/Dialog/Alert Dialog
  *         </tr>
  * </table> 
  */
+@SuppressWarnings("deprecation")
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class AlertDialogSamples extends Activity {
     private static final String TAG = "AlertDialogSamples";
     private static final int DIALOG_YES_NO_MESSAGE = 1;
@@ -75,11 +80,13 @@ public class AlertDialogSamples extends Activity {
 
     private static final int MAX_PROGRESS = 100;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private ProgressDialog mProgressSpinnerDialog;
     private ProgressDialog mProgressDialog;
     private int mProgress;
-    private Handler mProgressHandler;
+    static private Handler mProgressHandler;
 
+    @SuppressWarnings("deprecation")
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
@@ -308,7 +315,7 @@ public class AlertDialogSamples extends Activity {
         case DIALOG_TEXT_ENTRY:
             // This example shows how to add a custom layout to an AlertDialog
             LayoutInflater factory = LayoutInflater.from(this);
-            final View textEntryView = factory.inflate(R.layout.alert_dialog_text_entry, null);
+            @SuppressLint("InflateParams") final View textEntryView = factory.inflate(R.layout.alert_dialog_text_entry, null);
             return new AlertDialog.Builder(AlertDialogSamples.this)
                 .setTitle(R.string.alert_dialog_text_entry)
                 .setView(textEntryView)
@@ -334,6 +341,7 @@ public class AlertDialogSamples extends Activity {
      * call {@link android.app.Activity#setContentView(int)} to
      * describe what is to be displayed in the screen.
      */
+    @SuppressLint("HandlerLeak")
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -20,15 +20,18 @@ package com.example.android.apis.app;
 // class is in a sub-package.
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -37,8 +40,9 @@ import android.widget.Toast;
  * intent receiver.
  * 
  * @see AlarmService
- * @see AlarmService_Alarm
+ * @see AlarmService_Service
  */
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class AlarmService_Service extends Service {
     NotificationManager mNM;
 
@@ -78,6 +82,7 @@ public class AlarmService_Service extends Service {
                     try {
                         mBinder.wait(endTime - System.currentTimeMillis());
                     } catch (Exception e) {
+                        Log.e("AlarmService: ", e.getMessage(), e);
                     }
                 }
             }
