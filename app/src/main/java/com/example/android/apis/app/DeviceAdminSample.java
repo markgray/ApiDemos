@@ -16,8 +16,7 @@
 
 package com.example.android.apis.app;
 
-import com.example.android.apis.R;
-
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.admin.DeviceAdminReceiver;
@@ -27,6 +26,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.preference.CheckBoxPreference;
@@ -43,9 +43,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.example.android.apis.R;
+
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This activity provides a comprehensive UI for exploring and operating the DevicePolicyManager
@@ -57,6 +58,7 @@ import java.util.List;
  * 2:  A DeviceAdminReceiver, to receive updates from the DevicePolicyManager when certain aspects
  *     of the device security status have changed.
  */
+@TargetApi(Build.VERSION_CODES.M)
 public class DeviceAdminSample extends PreferenceActivity {
 
     // Miscellaneous utilities and definitions
@@ -216,6 +218,7 @@ public class DeviceAdminSample extends PreferenceActivity {
         }
 
         protected void postReloadSummaries() {
+            //noinspection ConstantConditions
             getView().post(new Runnable() {
                 @Override
                 public void run() {
@@ -393,6 +396,7 @@ public class DeviceAdminSample extends PreferenceActivity {
         }
 
         private void postUpdateDpmDisableFeatures() {
+            //noinspection ConstantConditions
             getView().post(new Runnable() {
                 @Override
                 public void run() {
@@ -1064,7 +1068,7 @@ public class DeviceAdminSample extends PreferenceActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction() == ACTION_DEVICE_ADMIN_DISABLE_REQUESTED) {
+            if (Objects.equals(intent.getAction(), ACTION_DEVICE_ADMIN_DISABLE_REQUESTED)) {
                 abortBroadcast();
             }
             super.onReceive(context, intent);

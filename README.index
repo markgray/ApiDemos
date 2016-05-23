@@ -475,7 +475,7 @@ App
             returns. All this is very deprecated - TODO: Write a DialogFragment version.
 
   Device Admin
-    App/Device Admin                       Works only on newer versions(?) v17+ or crash
+    App/Device Admin                       Works only on newer versions(?) v23+ or crash
         .app.DeviceAdminSample
             Shows how to implement a comprehensive UI for exploring and operating the 
             DevicePolicyManager api.
@@ -484,7 +484,8 @@ App
     App/Fragment/Alert Dialog              v11
         .app.FragmentAlertDialog
             Demonstrates how to show an AlertDialog that is managed by a Fragment. Uses
-            DialogFragment as base class and overrides onCreateDialog
+            DialogFragment as base class and overrides onCreateDialog in which it builds
+            the AlertDialog using an AlertDialog.Builder
 
     App/Fragment/Arguments                 v11
         .app.FragmentArguments
