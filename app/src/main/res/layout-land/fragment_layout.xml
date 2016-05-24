@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2010 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -19,16 +18,26 @@
 
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    tools:ignore="DisableBaselineAlignment">
 
-    <fragment class="com.example.android.apis.app.FragmentLayout$TitlesFragment"
-            android:id="@+id/titles" android:layout_weight="1"
-            android:layout_width="0px" android:layout_height="match_parent" />
+    <fragment
+        android:id="@+id/titles"
+        class="com.example.android.apis.app.FragmentLayout$TitlesFragment"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
-    <FrameLayout android:id="@+id/details" android:layout_weight="1"
-            android:layout_width="0px" android:layout_height="match_parent"
-            android:background="?android:attr/detailsElementBackground" />
-    
+    <FrameLayout
+        android:id="@+id/details"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="?android:attr/detailsElementBackground"
+        tools:targetApi="honeycomb" />
+
 </LinearLayout>
 

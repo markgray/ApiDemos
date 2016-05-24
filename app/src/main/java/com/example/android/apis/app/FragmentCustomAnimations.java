@@ -18,6 +18,7 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
@@ -122,6 +123,7 @@ public class FragmentCustomAnimations extends Activity {
          * The Fragment's UI is just a simple text view showing its
          * instance number.
          */
+        @SuppressLint("DefaultLocale")
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,

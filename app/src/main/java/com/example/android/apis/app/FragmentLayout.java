@@ -157,7 +157,7 @@ public class FragmentLayout extends Activity {
                     if (index == 0) {
                         ft.replace(R.id.details, details);
                     } else {
-                        ft.replace(R.id.a_item, details);
+                        ft.replace(R.id.details, details);
                     }
                     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     ft.commit();

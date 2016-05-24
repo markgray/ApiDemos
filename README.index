@@ -497,13 +497,16 @@ App
         .app.FragmentContextMenu
             Demonstration of displaying a context menu from a fragment.
 
-    App/Fragment/Custom Animations         v11
+    App/Fragment/Custom Animations         v11 -> v21 due to getDrawable call
         .app.FragmentCustomAnimations
             Uses FragmentTransaction.setCustomAnimations to cause animations to be used
             when replacing one fragment with the next. The "POP" button is not connected
             to anything, because this example reuses the layout for .app.FragmentStack,
             but the back button does take you back through the numbered fragments on the
-            stack after you "Push" them, again using the same animation.
+            stack after you "Push" them, again using the same animation. onSaveInstanceState
+            saves the mStackLevel in an int "level" which is used when the Activity is
+            recreated to remember the stack level, mStackLevel is then used to set the int
+            argument "num" passed to the new fragment when it is created.
 
     App/Fragment/Dialog                    v11
         .app.FragmentDialog
@@ -524,7 +527,8 @@ App
     App/Fragment/Hide and Show             v11
         .app.FragmentHideShow
             Demonstration of hiding and showing fragments while keeping fragment state
-            using FragmentTransaction.hide(Fragment), and FragmentTransaction.show(Fragment)
+            using FragmentTransaction.hide(Fragment), and FragmentTransaction.show(Fragment).
+            The Fragment's are created in the layout using the <fragment> xml element.
 
     App/Fragment/Layout                    v11
         .app.FragmentLayout                CRASHES both Xcite and Nexus 7
@@ -533,6 +537,8 @@ App
             landscape. It crashes as is in landscape mode because of a reference to the
             non-existent containerViewId R.id.a_item in the call at line 156: 
                   (FragmentTransaction) ft.replace(R.id.a_item, details)
+            This was obviously added by a runaway modification script, and the container
+            id should be R.id.details
 
     App/Fragment/List Array                v11
         .app.FragmentListArray
