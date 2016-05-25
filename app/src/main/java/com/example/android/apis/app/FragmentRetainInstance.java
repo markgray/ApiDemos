@@ -35,7 +35,7 @@ import android.widget.ProgressBar;
  * This example shows how you can use a Fragment to easily propagate state
  * (such as threads) across activity instances when an activity needs to be
  * restarted due to, for example, a configuration change.  This is a lot
- * easier than using the raw Activity.onRetainNonConfiguratinInstance() API.
+ * easier than using the raw Activity.onRetainNonConfigurationInstance() API.
  */
 public class FragmentRetainInstance extends Activity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)

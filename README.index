@@ -531,7 +531,7 @@ App
             The Fragment's are created in the layout using the <fragment> xml element.
 
     App/Fragment/Layout                    v11
-        .app.FragmentLayout                CRASHES both Xcite and Nexus 7
+        .app.FragmentLayout                CRASHES both Xcite and Nexus 7 (fixed)
             Demonstration of using fragments to implement different activity layouts.
             This sample provides a different layout (and activity flow) when run in
             landscape. It crashes as is in landscape mode because of a reference to the
@@ -556,14 +556,18 @@ App
         .app.FragmentNestingTabs
             Uses tabs in the ActionBar to select between other activities in App/Fragment:
             FragmentMenuFragment.java, FragmentArgumentsFragment.java, FragmentStackFragment.java,
-            FragmentTabsFragment.java
+            FragmentTabsFragment.java. Uses FragmentManager.enableDebugLogging(true) to produce
+            debugging info from  the FragmentManager (very useful)
 
     App/Fragment/Receive Result            v11
         .app.FragmentReceiveResult
-            FragmentReceiveResult builds a FrameLayout in java -- no xml layout. It 
-            starts the activity SendResult (startActivityForResult) which returns the 
+            FragmentReceiveResult builds a FrameLayout in java -- no xml layout. To this it adds
+            the Fragment ReceiveResultFragment which uses the layout R.layout.receive_result. Then
+            it starts the activity SendResult (startActivityForResult) which returns the
             users input in an intent setResult(RESULT_OK, (new Intent()).setAction("Corky!"))
-            which FragmentReceiveResult receives in the callback onActivityResult.
+            which FragmentReceiveResult receives in the callback onActivityResult and then
+            appends it to the Editable TextView id R.id.results contained in the layout
+            R.layout.receive_result.
 
     App/Fragment/Retain Instance           v11
         .app.FragmentRetainInstance
@@ -571,7 +575,7 @@ App
             causing it and the thread it is running to be retained when the device configuration
             changes. Shows how you can use a Fragment to easily propagate state (such as 
             threads) across activity instances when an activity needs to be restarted. This is
-            a lot easier than using the raw Activity.onRetainNonConfiguratinInstance() API.
+            a lot easier than using the raw Activity.onRetainNonConfigurationInstance() API.
 
     App/Fragment/Stack                     v11
         .app.FragmentStack
