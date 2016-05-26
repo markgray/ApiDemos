@@ -577,14 +577,15 @@ App
             threads) across activity instances when an activity needs to be restarted. This is
             a lot easier than using the raw Activity.onRetainNonConfigurationInstance() API.
 
-    App/Fragment/Stack                     v11
+    App/Fragment/Stack                     v11 -> crashes less than v16
         .app.FragmentStack
             Shows how to push and pop fragments using the system backstack. 
             FragmentTransaction.addToBackStack() adds the fragement to the backstack, and
             getFragmentManager().popBackStack() (or simply pressing "back" button) goes back
-            one fragment, using a fancy animation for pop.
+            one fragment, using a fancy animation for push and pop. (Not really visible on
+            Nexus 6 Marshmallow, but striking on Excite 10.)
 
-    App/Fragment/Tabs                      v11
+    App/Fragment/Tabs                      v11 -> v13 because of .detach
         .app.FragmentTabs
             This demonstrates the use of action bar tabs and how they interact with other
             action bar features. The Activities chosen to populate the tabs all have 

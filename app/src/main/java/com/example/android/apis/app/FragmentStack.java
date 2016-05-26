@@ -123,15 +123,16 @@ public class FragmentStack extends Activity {
          * The Fragment's UI is just a simple text view showing its
          * instance number.
          */
+        @SuppressWarnings("deprecation")
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         @SuppressLint("DefaultLocale")
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.hello_world, container, false);
             View tv = v.findViewById(R.id.text);
             ((TextView)tv).setText(String.format("%s%d", getString(R.string.fragment_num), mNum));
-            tv.setBackground(getResources().getDrawable(android.R.drawable.gallery_thumb, null));
+            tv.setBackground(getResources().getDrawable(android.R.drawable.gallery_thumb));
             return v;
         }
     }
