@@ -597,15 +597,17 @@ App
         .app.LauncherShortcuts
             Supposed to show all that goes into creating a shortcut, and responding 
             to it, but could not get it to work.
+            TODO: separate Activity into its own Application
 
   Loader
     App/Loader/Cursor                      v11
         .app.LoaderCursor
             Creates a custom class CursorLoaderListFragment which extends ListFragment, 
             with the necessary callbacks to serve as a CursorLoader to load and display 
-            contacts data in the ListFragment.
+            contacts data in the ListFragment. Includes the use of a SearchView which
+            might come in handy for MarkovChain
 
-    App/Loader/Custom                      v11
+    App/Loader/Custom                      v11 -> v140
         .app.LoaderCustom
             Shows how to implement a custom AsyncTaskLoader, it uses the system function
             PackageManager.getInstalledApplications to retrieve a List<ApplicationInfo> 
