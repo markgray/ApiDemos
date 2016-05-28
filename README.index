@@ -607,29 +607,30 @@ App
             contacts data in the ListFragment. Includes the use of a SearchView which
             might come in handy for MarkovChain
 
-    App/Loader/Custom                      v11 -> v140
+    App/Loader/Custom                      v11 -> v14
         .app.LoaderCustom
             Shows how to implement a custom AsyncTaskLoader, it uses the system function
             PackageManager.getInstalledApplications to retrieve a List<ApplicationInfo> 
             containing the AndroidManifest information for all the installed apps.
 
-    App/Loader/Retained                    v11
+    App/Loader/Retained                    v11 -> v14
         .app.LoaderRetained
             Shows how to retain a ListFragment by calling setRetainInstance(true) in the
             onActivityCreated callback.
 
     App/Loader/Throttle                    v11
         .app.LoaderThrottle
-            Impliments a custom CursorLoader which pretends to be a SQLite database, and
+            Implements a custom CursorLoader which pretends to be a SQLite database, and
             simulates a slow provider of data LoaderThrottle$SimpleProvider
 
   Menu
-    App/Menu/Inflate from XML              all
+    App/Menu/Inflate from XML              all -> v14
         .app.MenuInflateFromXml            crashes froyo invalidateOptionsMenu()
             Lets you choose from a bunch of different xml menus: R.menu.title_only, 
             R.menu.title_icon, R.menu.submenu, R.menu.groups, R.menu.checkable, 
             R.menu.shortcuts, R.menu.order, R.menu.category_order, R.menu.visible, 
             and R.menu.disabled and use MenuInflater.inflate to inflate them.
+            R.menu.title_icon does not show the icon (boo hoo!)
 
   Notification
     App/Notification/IncomingMessage       all

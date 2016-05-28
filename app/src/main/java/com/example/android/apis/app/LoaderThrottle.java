@@ -17,6 +17,7 @@
 package com.example.android.apis.app;
 
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ListFragment;
@@ -37,8 +38,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.BaseColumns;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -55,6 +58,7 @@ import java.util.HashMap;
  * structured data through displaying it in the UI, using throttling to reduce
  * the number of queries done when its data changes.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class LoaderThrottle extends Activity {
     // Debugging.
     static final String TAG = "LoaderThrottle";
@@ -189,7 +193,7 @@ public class LoaderThrottle extends Activity {
 
             // Create and initialize projection map for all columns.  This is
             // simply an identity mapping.
-            mNotesProjectionMap = new HashMap<String, String>();
+            mNotesProjectionMap = new HashMap<>();
             mNotesProjectionMap.put(MainTable._ID, MainTable._ID);
             mNotesProjectionMap.put(MainTable.COLUMN_NAME_DATA, MainTable.COLUMN_NAME_DATA);
         }
@@ -208,8 +212,8 @@ public class LoaderThrottle extends Activity {
          * Handle incoming queries.
          */
         @Override
-        public Cursor query(Uri uri, String[] projection, String selection,
-                String[] selectionArgs, String sortOrder) {
+        public Cursor query(@NonNull Uri uri, String[] projection, String selection,
+                            String[] selectionArgs, String sortOrder) {
 
             // Constructs a new query builder and sets its table name
             SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
@@ -243,6 +247,7 @@ public class LoaderThrottle extends Activity {
             Cursor c = qb.query(db, projection, selection, selectionArgs,
                     null /* no group */, null /* no filter */, sortOrder);
 
+            //noinspection ConstantConditions
             c.setNotificationUri(getContext().getContentResolver(), uri);
             return c;
         }
@@ -251,7 +256,7 @@ public class LoaderThrottle extends Activity {
          * Return the MIME type for an known URI in the provider.
          */
         @Override
-        public String getType(Uri uri) {
+        public String getType(@NonNull Uri uri) {
             switch (mUriMatcher.match(uri)) {
                 case MAIN:
                     return MainTable.CONTENT_TYPE;
@@ -266,7 +271,7 @@ public class LoaderThrottle extends Activity {
          * Handler inserting new data.
          */
         @Override
-        public Uri insert(Uri uri, ContentValues initialValues) {
+        public Uri insert(@NonNull Uri uri, ContentValues initialValues) {
             if (mUriMatcher.match(uri) != MAIN) {
                 // Can only insert into to main URI.
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -280,7 +285,7 @@ public class LoaderThrottle extends Activity {
                 values = new ContentValues();
             }
 
-            if (values.containsKey(MainTable.COLUMN_NAME_DATA) == false) {
+            if (!values.containsKey(MainTable.COLUMN_NAME_DATA)) {
                 values.put(MainTable.COLUMN_NAME_DATA, "");
             }
 
@@ -291,6 +296,7 @@ public class LoaderThrottle extends Activity {
             // If the insert succeeded, the row ID exists.
             if (rowId > 0) {
                 Uri noteUri = ContentUris.withAppendedId(MainTable.CONTENT_ID_URI_BASE, rowId);
+                //noinspection ConstantConditions
                 getContext().getContentResolver().notifyChange(noteUri, null);
                 return noteUri;
             }
@@ -302,7 +308,7 @@ public class LoaderThrottle extends Activity {
          * Handle deleting data.
          */
         @Override
-        public int delete(Uri uri, String where, String[] whereArgs) {
+        public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
             SQLiteDatabase db = mOpenHelper.getWritableDatabase();
             String finalWhere;
 
@@ -329,6 +335,7 @@ public class LoaderThrottle extends Activity {
                     throw new IllegalArgumentException("Unknown URI " + uri);
             }
 
+            //noinspection ConstantConditions
             getContext().getContentResolver().notifyChange(uri, null);
 
             return count;
@@ -338,7 +345,7 @@ public class LoaderThrottle extends Activity {
          * Handle updating data.
          */
         @Override
-        public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
+        public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
             SQLiteDatabase db = mOpenHelper.getWritableDatabase();
             int count;
             String finalWhere;
@@ -361,6 +368,7 @@ public class LoaderThrottle extends Activity {
                     throw new IllegalArgumentException("Unknown URI " + uri);
             }
 
+            //noinspection ConstantConditions
             getContext().getContentResolver().notifyChange(uri, null);
 
             return count;
@@ -391,6 +399,7 @@ public class LoaderThrottle extends Activity {
         SimpleCursorAdapter mAdapter;
 
         // If non-null, this is the current filter the user has provided.
+        @SuppressWarnings("unused")
         String mCurFilter;
 
         // Task we have running to populate the database.
@@ -438,6 +447,7 @@ public class LoaderThrottle extends Activity {
                                 if (isCancelled()) {
                                     break;
                                 }
+                                //noinspection StringBufferReplaceableByString
                                 StringBuilder builder = new StringBuilder("Data ");
                                 builder.append(c);
                                 ContentValues values = new ContentValues();
@@ -447,6 +457,7 @@ public class LoaderThrottle extends Activity {
                                 try {
                                     Thread.sleep(250);
                                 } catch (InterruptedException e) {
+                                    Log.i(TAG, "Sleep interrupted");
                                 }
                             }
                             return null;

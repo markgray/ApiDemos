@@ -16,8 +16,7 @@
 
 package com.example.android.apis.app;
 
-import com.example.android.apis.app.LoaderCursor.CursorLoaderListFragment.MySearchView;
-
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ListFragment;
@@ -27,6 +26,7 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
 import android.text.TextUtils;
@@ -37,14 +37,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.SearchView.OnCloseListener;
 import android.widget.SearchView.OnQueryTextListener;
+import android.widget.SimpleCursorAdapter;
 
 /**
  * Demonstration of the use of a CursorLoader to load and display contacts
  * data in a fragment.
  */
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class LoaderRetained extends Activity {
 
     @Override

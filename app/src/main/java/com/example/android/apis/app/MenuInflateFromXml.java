@@ -18,7 +18,9 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,12 +39,13 @@ import android.widget.Toast;
  * the spinner, and then hit the menu button. To choose another, back out of the
  * activity and start over.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class MenuInflateFromXml extends Activity {
     /**
      * Different example menu resources.
      */
     private static final int sMenuExampleResources[] = {
-        R.menu.title_only, R.menu.title_icon, R.menu.submenu, R.menu.groups,
+            R.menu.title_icon, R.menu.title_only, R.menu.submenu, R.menu.groups,
         R.menu.checkable, R.menu.shortcuts, R.menu.order, R.menu.category_order,
         R.menu.visible, R.menu.disabled
     };
@@ -51,7 +54,7 @@ public class MenuInflateFromXml extends Activity {
      * Names corresponding to the different example menu resources.
      */
     private static final String sMenuExampleNames[] = {
-        "Title only", "Title and Icon", "Submenu", "Groups",
+            "Title and Icon", "Title only", "Submenu", "Groups",
         "Checkable", "Shortcuts", "Order", "Category and Order",
         "Visible", "Disabled"
     };
@@ -80,7 +83,7 @@ public class MenuInflateFromXml extends Activity {
         layout.setOrientation(LinearLayout.VERTICAL);
         
         // Create the spinner to allow the user to choose a menu XML
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, sMenuExampleNames); 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner = new Spinner(this);
