@@ -630,10 +630,11 @@ App
             R.menu.title_icon, R.menu.submenu, R.menu.groups, R.menu.checkable, 
             R.menu.shortcuts, R.menu.order, R.menu.category_order, R.menu.visible, 
             and R.menu.disabled and use MenuInflater.inflate to inflate them.
-            R.menu.title_icon does not show the icon (boo hoo!)
+            R.menu.title_icon does not show the icon (boo hoo!), but oddly enough
+            the submenu does?
 
   Notification
-    App/Notification/IncomingMessage       all
+    App/Notification/IncomingMessage       all -> v16
         .app.IncomingMessage               interstitial crashes froyo startActivities()
             Allows you to choose between a regular app notification, and an interstitial
             notification and shows how to launch IncomingMessageView from either type of
@@ -641,15 +642,18 @@ App
             which on clicking the "Switch to App" button uses the same function as the 
             non-interstitial notification to launch IncomingMessageView.
 
-    App/Notification/Notifying Service Controller  -- all
+    App/Notification/Notifying Service Controller  -- all -> v16
         .app.NotifyingService
-            Updates a notification every 5 seconds from a background thread.
+            Updates a notification every 5 seconds from a background thread. Note use of
+            ConditionVariable to implement the condition variable locking paradigm, blocking
+            for 5*1000 miliseconds after every notification (very useful approach).
+
 
     App/Notification/NotifyWithText        all
         .app.NotifyWithText
             Show notification in a Toast.
 
-    App/Notification/Status Bar            all
+    App/Notification/Status Bar            all -> v16
         .app.StatusBarNotifications
             froyo crash -- sound/vibrate/all calls: Intent.makeRestartActivityTask() 
             and PendingIntent.getActivities() -> v11+ only. Displays icon, and text when

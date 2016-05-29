@@ -18,12 +18,14 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +34,7 @@ import android.widget.RemoteViews;
 /**
  * Demonstrates adding notifications to the status bar
  */
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class StatusBarNotifications extends Activity {
 
     private NotificationManager mNotificationManager;
@@ -47,7 +50,7 @@ public class StatusBarNotifications extends Activity {
 
         Button button;
 
-        // Get the notification manager serivce.
+        // Get the notification manager service.
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         button = (Button) findViewById(R.id.happy);
@@ -150,12 +153,12 @@ public class StatusBarNotifications extends Activity {
         // notification.  Note the use of FLAG_UPDATE_CURRENT so that if there
         // is already an active matching pending intent, we will update its
         // extras (and other Intents in the array) to be the ones passed in here.
+        //noinspection UnnecessaryLocalVariable
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, NotificationDisplay.class).putExtra("moodimg", moodId),
                 PendingIntent.FLAG_UPDATE_CURRENT);
         return contentIntent;
     }
-    
 
     private PendingIntent makeDefaultIntent() {
         // A typical convention for notifications is to launch the user deeply
@@ -184,11 +187,11 @@ public class StatusBarNotifications extends Activity {
         // notification.  Note the use of FLAG_UPDATE_CURRENT so that if there
         // is already an active matching pending intent, we will update its
         // extras (and other Intents in the array) to be the ones passed in here.
+        //noinspection UnnecessaryLocalVariable
         PendingIntent contentIntent = PendingIntent.getActivities(this, 0,
                 intents, PendingIntent.FLAG_UPDATE_CURRENT);
         return contentIntent;
     }
-
 
     private void setMood(int moodId, int textId, boolean showTicker) {
         // In this sample, we'll use the same text for the ticker and the expanded notification
@@ -230,6 +233,7 @@ public class StatusBarNotifications extends Activity {
         notif.tickerText = text;
 
         // the icon for the status bar
+        //noinspection deprecation
         notif.icon = moodId;
 
         // our custom view

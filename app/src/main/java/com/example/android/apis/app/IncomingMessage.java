@@ -20,6 +20,7 @@ import java.util.Random;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -27,6 +28,7 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +36,7 @@ import android.widget.Button;
 /**
  * UI for posting an example notification.
  */
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class IncomingMessage extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +67,7 @@ public class IncomingMessage extends Activity {
      * application should be in when launching it from a notification.
      */
     static Intent[] makeMessageIntentStack(Context context, CharSequence from,
-            CharSequence msg) {
+                                           CharSequence msg) {
         // A typical convention for notifications is to launch the user deeply
         // into an application representing the data in the notification; to
         // accomplish this, we can build an array of intents to insert the back

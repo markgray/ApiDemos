@@ -1394,7 +1394,7 @@
 
     <string name="incoming_message_view_message_text">This is the text of the posted notification.</string>
     <string name="imcoming_message_view_message2_text">Did you notice that the status bar icon disappeared?</string>
-    <string name="imcoming_message_ticker_text">New text message: <xliff:g id="text">%0$s</xliff:g></string>
+    <string name="imcoming_message_ticker_text">New text message: %1$s</string>
 
     <string name="log_text_box_1_do_nothing_text">Do nothing</string>
     <string name="log_text_box_1_add_text">Add</string>
