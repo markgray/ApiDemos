@@ -79,6 +79,7 @@ public class SearchInvoke extends Activity
         // the default key mode in your activity's onCreate() handler.
         mMenuMode.setOnItemSelectedListener(
             new OnItemSelectedListener() {
+                @Override
                 public void onItemSelected(
                         AdapterView<?> parent, View view, int position, long id) {
                     if (position == MENUMODE_TYPE_TO_SEARCH) {
@@ -87,7 +88,7 @@ public class SearchInvoke extends Activity
                         setDefaultKeyMode(DEFAULT_KEYS_DISABLE);
                     }
                 }
-
+                @Override
                 public void onNothingSelected(AdapterView<?> parent) {
                     setDefaultKeyMode(DEFAULT_KEYS_DISABLE);
                 }
@@ -96,6 +97,7 @@ public class SearchInvoke extends Activity
         // Attach actions to buttons
         mStartSearch.setOnClickListener(
             new OnClickListener() {
+                @Override
                 public void onClick(View v) {
                     onSearchRequested();
                 }
@@ -118,6 +120,7 @@ public class SearchInvoke extends Activity
         switch (mMenuMode.getSelectedItemPosition())
         {
         case MENUMODE_SEARCH_KEY:
+            //noinspection UnusedAssignment
             item = menu.add( 0, 0, 0, "(Search Key)");
             break;
             
@@ -127,14 +130,17 @@ public class SearchInvoke extends Activity
             break;
             
         case MENUMODE_TYPE_TO_SEARCH:
+            //noinspection UnusedAssignment
             item = menu.add( 0, 0, 0, "(Type-To-Search)");
             break;
             
         case MENUMODE_DISABLED:
+            //noinspection UnusedAssignment
             item = menu.add( 0, 0, 0, "(Disabled)");
             break;
         }
-        
+
+        //noinspection UnusedAssignment
         item = menu.add(0, 1, 0, "Clear History");
         return true;
     }
@@ -194,7 +200,7 @@ public class SearchInvoke extends Activity
             return false;
         }
         
-        // It's possible to prefill the query string before launching the search
+        // It's possible to pre-fill the query string before launching the search
         // UI.  For this demo, we simply copy it from the user input field.
         // For most applications, you can simply pass null to startSearch() to
         // open the UI with an empty query string.
@@ -207,6 +213,7 @@ public class SearchInvoke extends Activity
         // For most applications, you can simply pass null to startSearch().
         Bundle appDataBundle = null;
         final String queryAppDataString = mQueryAppData.getText().toString();
+        //noinspection ConstantConditions
         if (queryAppDataString != null) {
             appDataBundle = new Bundle();
             appDataBundle.putString("demo_key", queryAppDataString);

@@ -697,10 +697,10 @@ App
             actually do anything unless the device has a "Search Key" like Froyo does.
 
   Service
-    App/Service/Foreground Service Controller  -- all
+    App/Service/Foreground Service Controller  -- all -> v19
         .app.ForegroundService$Controller
             This demonstrates how you can implement services that run in the foreground
-            when needed.
+            when needed. Informative use of new Class[] TODO: Study reflection!
 
     App/Service/Isolated Service Controller    -- v16
         .app.IsolatedService$Controller

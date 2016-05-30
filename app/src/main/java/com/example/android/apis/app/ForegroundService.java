@@ -16,12 +16,14 @@
 
 package com.example.android.apis.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -44,6 +46,7 @@ import com.example.android.apis.R;
  * against the Android 2.0 SDK, and it will against everything down to
  * Android 1.0.
  */
+@TargetApi(Build.VERSION_CODES.KITKAT)
 public class ForegroundService extends Service {
     static final String ACTION_FOREGROUND = "com.example.android.apis.FOREGROUND";
     static final String ACTION_BACKGROUND = "com.example.android.apis.BACKGROUND";
@@ -72,7 +75,7 @@ public class ForegroundService extends Service {
             Log.w("ApiDemos", "Unable to invoke method", e);
         } catch (IllegalAccessException e) {
             // Should not happen.
-            Log.w("ApiDemos", "Unable to invoke method", e);
+            Log.w("ApiDemos", "Unable to invoke method IllegalAccess", e);
         }
     }
     
@@ -83,6 +86,7 @@ public class ForegroundService extends Service {
     void startForegroundCompat(int id, Notification notification) {
         // If we have the new startForeground API, then use it.
         if (mStartForeground != null) {
+            //noinspection UnnecessaryBoxing
             mStartForegroundArgs[0] = Integer.valueOf(id);
             mStartForegroundArgs[1] = notification;
             invokeMethod(mStartForeground, mStartForegroundArgs);
@@ -147,6 +151,7 @@ public class ForegroundService extends Service {
     // This is the old onStart method that will be called on the pre-2.0
     // platform.  On 2.0 or later we override onStartCommand() so this
     // method will not be called.
+    @SuppressWarnings("deprecation")
     @Override
     public void onStart(Intent intent, int startId) {
         handleCommand(intent);
@@ -159,7 +164,6 @@ public class ForegroundService extends Service {
         // stopped, so return sticky.
         return START_STICKY;
     }
-
 
     void handleCommand(Intent intent) {
         if (ACTION_FOREGROUND.equals(intent.getAction())) {

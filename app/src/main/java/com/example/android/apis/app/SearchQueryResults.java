@@ -18,6 +18,7 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
@@ -37,6 +38,7 @@ public class SearchQueryResults extends Activity
     *  After the typical activity setup code, we check to see if we were launched
     *  with the ACTION_SEARCH intent, and if so, we handle it.
     */
+    @SuppressLint("SetTextI18n")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +69,7 @@ public class SearchQueryResults extends Activity
      * 
      * @param newIntent The intent used to restart this activity
      */
+    @SuppressLint("SetTextI18n")
     @Override
     public void onNewIntent(final Intent newIntent) {
         super.onNewIntent(newIntent);
@@ -88,6 +91,7 @@ public class SearchQueryResults extends Activity
      * In a "real" application, you would use the query string to select results from
      * your data source, and present a list of those results to the user.
      */
+    @SuppressLint("SetTextI18n")
     private void doSearchQuery(final Intent queryIntent, final String entryPoint) {
         
         // The search query is provided as an "extra" string in the query intent

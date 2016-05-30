@@ -16,8 +16,10 @@
 
 package com.example.android.apis.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.print.PrintManager;
 import android.view.Menu;
@@ -39,6 +41,7 @@ import com.example.android.apis.R;
  * @see PrintManager
  * @see WebView
  */
+@TargetApi(Build.VERSION_CODES.KITKAT)
 public class PrintHtmlFromScreen extends Activity {
 
     private WebView mWebView;
@@ -88,6 +91,7 @@ public class PrintHtmlFromScreen extends Activity {
         PrintManager printManager = (PrintManager) getSystemService(
                 Context.PRINT_SERVICE);
         // Pass in the ViewView's document adapter.
+        //noinspection deprecation
         printManager.print("MotoGP stats", mWebView.createPrintDocumentAdapter(), null);
     }
 }

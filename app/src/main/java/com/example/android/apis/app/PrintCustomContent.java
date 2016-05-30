@@ -16,11 +16,13 @@
 
 package com.example.android.apis.app;
 
+import android.annotation.TargetApi;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.pdf.PdfDocument.Page;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.os.CancellationSignal.OnCancelListener;
@@ -76,6 +78,7 @@ import java.util.List;
  * @see PrintManager
  * @see PrintDocumentAdapter
  */
+@TargetApi(Build.VERSION_CODES.KITKAT)
 public class PrintCustomContent extends ListActivity {
 
     private static final int MILS_IN_INCH = 1000;
@@ -133,6 +136,7 @@ public class PrintCustomContent extends ListActivity {
                     // would change the layout and if so we will do a layout pass.
                     boolean layoutNeeded = false;
 
+                    @SuppressWarnings("ConstantConditions")
                     final int density = Math.max(newAttributes.getResolution().getHorizontalDpi(),
                             newAttributes.getResolution().getVerticalDpi());
 
@@ -147,10 +151,12 @@ public class PrintCustomContent extends ListActivity {
                     // The content width is equal to the page width minus the margins times
                     // the horizontal printer density. This way we get the maximal number
                     // of pixels the printer can put horizontally.
+                    @SuppressWarnings("ConstantConditions")
                     final int marginLeft = (int) (density * (float) newAttributes.getMinMargins()
                             .getLeftMils() / MILS_IN_INCH);
                     final int marginRight = (int) (density * (float) newAttributes.getMinMargins()
                             .getRightMils() / MILS_IN_INCH);
+                    @SuppressWarnings("ConstantConditions")
                     final int contentWidth = (int) (density * (float) newAttributes.getMediaSize()
                             .getWidthMils() / MILS_IN_INCH) - marginLeft - marginRight;
                     if (mRenderPageWidth != contentWidth) {
@@ -216,6 +222,7 @@ public class PrintCustomContent extends ListActivity {
                             mPrintAttributes = newAttributes;
                         }
 
+                        @SuppressWarnings("WrongThread")
                         @Override
                         protected PrintDocumentInfo doInBackground(Void... params) {
                             try {
@@ -328,6 +335,7 @@ public class PrintCustomContent extends ListActivity {
                             });
                         }
 
+                        @SuppressWarnings("WrongThread")
                         @Override
                         protected Void doInBackground(Void... params) {
                             // Go over all the pages and write only the requested ones.
@@ -386,6 +394,7 @@ public class PrintCustomContent extends ListActivity {
                                     }
                                     // If the page is requested, render it.
                                     if (containsPage(pages, currentPage)) {
+                                        //noinspection Range
                                         page = mPdfDocument.startPage(currentPage);
                                         page.getCanvas().scale(scale, scale);
                                         // Keep track which pages are written.
@@ -448,12 +457,13 @@ public class PrintCustomContent extends ListActivity {
                 }
 
                 private PageRange[] computeWrittenPageRanges(SparseIntArray writtenPages) {
-                    List<PageRange> pageRanges = new ArrayList<PageRange>();
+                    List<PageRange> pageRanges = new ArrayList<>();
 
                     int start = -1;
-                    int end = -1;
+                    int end;
                     final int writtenPageCount = writtenPages.size();
                     for (int i = 0; i < writtenPageCount; i++) {
+                        //noinspection ConstantConditions
                         if (start < 0) {
                             start = writtenPages.valueAt(i);
                         }
@@ -463,8 +473,9 @@ public class PrintCustomContent extends ListActivity {
                             end = writtenPages.valueAt(i);
                             i++;
                         }
-                        PageRange pageRange = new PageRange(start, end);
+                        @SuppressWarnings("Range") PageRange pageRange = new PageRange(start, end);
                         pageRanges.add(pageRange);
+                        //noinspection UnusedAssignment
                         start = end = -1;
                     }
 
@@ -474,10 +485,11 @@ public class PrintCustomContent extends ListActivity {
                 }
 
                 private boolean containsPage(PageRange[] pageRanges, int page) {
+                    @SuppressWarnings("unused")
                     final int pageRangeCount = pageRanges.length;
-                    for (int i = 0; i < pageRangeCount; i++) {
-                        if (pageRanges[i].getStart() <= page
-                                && pageRanges[i].getEnd() >= page) {
+                    for (PageRange pageRange : pageRanges) {
+                        if (pageRange.getStart() <= page
+                                && pageRange.getEnd() >= page) {
                             return true;
                         }
                     }
@@ -491,7 +503,7 @@ public class PrintCustomContent extends ListActivity {
         String[] champions = getResources().getStringArray(R.array.motogp_champions);
         String[] constructors = getResources().getStringArray(R.array.motogp_constructors);
 
-        List<MotoGpStatItem> items = new ArrayList<MotoGpStatItem>();
+        List<MotoGpStatItem> items = new ArrayList<>();
 
         final int itemCount = years.length;
         for (int i = 0; i < itemCount; i++) {
@@ -521,7 +533,7 @@ public class PrintCustomContent extends ListActivity {
         }
 
         public List<MotoGpStatItem> cloneItems() {
-            return new ArrayList<MotoGpStatItem>(mItems);
+            return new ArrayList<>(mItems);
         }
 
         @Override

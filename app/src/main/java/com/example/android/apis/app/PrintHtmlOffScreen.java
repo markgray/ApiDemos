@@ -16,8 +16,10 @@
 
 package com.example.android.apis.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.os.ParcelFileDescriptor;
@@ -44,6 +46,7 @@ import com.example.android.apis.R;
  * @see PrintManager
  * @see WebView
  */
+@TargetApi(Build.VERSION_CODES.KITKAT)
 public class PrintHtmlOffScreen extends Activity {
 
     private WebView mWebView;
@@ -94,6 +97,7 @@ public class PrintHtmlOffScreen extends Activity {
 
         // Create a wrapper PrintDocumentAdapter to clean up when done.
         PrintDocumentAdapter adapter = new PrintDocumentAdapter() {
+            @SuppressWarnings("deprecation")
             private final PrintDocumentAdapter mWrappedInstance =
                     mWebView.createPrintDocumentAdapter();
 
