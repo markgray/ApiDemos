@@ -16,6 +16,7 @@
 
 package com.example.android.apis.app;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Service;
 import android.content.ComponentName;
@@ -40,6 +41,7 @@ import com.example.android.apis.R;
 /**
  * This is an example if implementing a Service that uses android:isolatedProcess.
  */
+@SuppressLint("SetTextI18n")
 public class IsolatedService extends Service {
     /**
      * This is a list of callbacks that have been registered with the
@@ -47,8 +49,9 @@ public class IsolatedService extends Service {
      * that it can be accessed more efficiently from inner classes.
      */
     final RemoteCallbackList<IRemoteServiceCallback> mCallbacks
-            = new RemoteCallbackList<IRemoteServiceCallback>();
+            = new RemoteCallbackList<>();
     
+    @SuppressWarnings("unused")
     int mValue = 0;
     
     @Override
@@ -86,6 +89,7 @@ public class IsolatedService extends Service {
         stopSelf();
     }
 
+    @SuppressWarnings("unused")
     private void broadcastValue(int value) {
         // Broadcast to all clients the new value.
         final int N = mCallbacks.beginBroadcast();

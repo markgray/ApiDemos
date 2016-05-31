@@ -1,8 +1,6 @@
 package com.example.android.apis.app;
 
-import com.example.android.apis.R;
-import com.example.android.apis.app.LocalServiceActivities.Binding;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -20,6 +18,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.apis.R;
+
+@SuppressLint("SetTextI18n")
 public class MessengerServiceActivities {
     /**
      * Example of binding and unbinding to the remote service.
@@ -41,6 +42,7 @@ public class MessengerServiceActivities {
         /**
          * Handler of incoming messages from service.
          */
+        @SuppressLint("HandlerLeak")
         class IncomingHandler extends Handler {
             @Override
             public void handleMessage(Message msg) {
@@ -63,6 +65,7 @@ public class MessengerServiceActivities {
          * Class for interacting with the main interface of the service.
          */
         private ServiceConnection mConnection = new ServiceConnection() {
+            @Override
             public void onServiceConnected(ComponentName className,
                     IBinder service) {
                 // This is called when the connection with the service has been
@@ -97,6 +100,7 @@ public class MessengerServiceActivities {
                         Toast.LENGTH_SHORT).show();
             }
 
+            @Override
             public void onServiceDisconnected(ComponentName className) {
                 // This is called when the connection with the service has been
                 // unexpectedly disconnected -- that is, its process crashed.
@@ -164,12 +168,14 @@ public class MessengerServiceActivities {
         }
 
         private OnClickListener mBindListener = new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 doBindService();
             }
         };
 
         private OnClickListener mUnbindListener = new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 doUnbindService();
             }

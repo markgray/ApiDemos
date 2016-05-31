@@ -719,7 +719,7 @@ App
             Example of explicitly starting and stopping the local service. Starts 
             app.LocalService.java
 
-    App/Service/Messenger Service              -- all
+    App/Service/Messenger Service              -- all -> v16
         .app.MessengerServiceActivities$Binding
             This is an example of implementing an application service that uses the
             Messenger class for communicating with clients.  This allows for remote

@@ -89,11 +89,11 @@ public class LocalServiceActivities {
      */
     public static class Binding extends Activity {
         private boolean mIsBound;
-
-
+        @SuppressWarnings("unused")
         private LocalService mBoundService;
         
         private ServiceConnection mConnection = new ServiceConnection() {
+            @Override
             public void onServiceConnected(ComponentName className, IBinder service) {
                 // This is called when the connection with the service has been
                 // established, giving us the service object we can use to
@@ -107,6 +107,7 @@ public class LocalServiceActivities {
                         Toast.LENGTH_SHORT).show();
             }
 
+            @Override
             public void onServiceDisconnected(ComponentName className) {
                 // This is called when the connection with the service has been
                 // unexpectedly disconnected -- that is, its process crashed.
@@ -144,12 +145,14 @@ public class LocalServiceActivities {
 
 
         private OnClickListener mBindListener = new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 doBindService();
             }
         };
 
         private OnClickListener mUnbindListener = new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 doUnbindService();
             }

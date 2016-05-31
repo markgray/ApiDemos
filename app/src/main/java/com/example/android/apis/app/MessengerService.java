@@ -16,26 +16,28 @@
 
 package com.example.android.apis.app;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.util.Log;
 import android.widget.Toast;
+
+import com.example.android.apis.R;
+import com.example.android.apis.app.RemoteService.Controller;
 
 import java.util.ArrayList;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
-import com.example.android.apis.R;
-import com.example.android.apis.app.RemoteService.Controller;
 
 /**
  * This is an example of implementing an application service that uses the
@@ -48,12 +50,12 @@ import com.example.android.apis.app.RemoteService.Controller;
  * interact with the user, rather than doing something more disruptive such as
  * calling startActivity().
  */
-
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class MessengerService extends Service {
     /** For showing and hiding our notification. */
     NotificationManager mNM;
     /** Keeps track of all current registered clients. */
-    ArrayList<Messenger> mClients = new ArrayList<Messenger>();
+    ArrayList<Messenger> mClients = new ArrayList<>();
     /** Holds last value set by a client. */
     int mValue = 0;
     
@@ -81,6 +83,7 @@ public class MessengerService extends Service {
     /**
      * Handler of incoming messages from clients.
      */
+    @SuppressLint("HandlerLeak")
     class IncomingHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
