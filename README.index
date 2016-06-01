@@ -725,28 +725,28 @@ App
             Messenger class for communicating with clients.  This allows for remote
             interaction with a service, without needing to define an AIDL interface.
 
-    App/Service/Remote Service Binding         -- all Crashes Nexus 4, works froyo
+    App/Service/Remote Service Binding         -- all Crashes Nexus 4, works froyo -> v16
         .app.RemoteService$Binding                Service Intent must be explicit: line 364
             This is an example of implementing an application service that runs in a 
             different process than the application.  Because it can be in another
-             process, we must use IPC to interact with it.  The Controller and Binding 
-             classes show how to interact with the service.
+            process, we must use IPC to interact with it.  The Controller and Binding
+            classes show how to interact with the service.
 
-    App/Service/Remote Service Binding Options -- all crashes as above
+    App/Service/Remote Service Binding Options -- all crashes as above -> v16
         .app.RemoteService$BindingOptions
             Need to make explicit.
 
-    App/Service/Remote Service Controller      -- all crashes as above
+    App/Service/Remote Service Controller      -- all crashes as above -> v16
         .app.RemoteService$Controller
             Need to make explicit.
 
-    App/Service/Service Start Arguments Controller -- all
+    App/Service/Service Start Arguments Controller -- all -> v16
         .app.ServiceStartArguments$Controller
             Shows how to send arguments to the service you are starting by adding them 
             to the Intent you give to ContextWrapper.startService(Intent service) using
             Intent.putExtra
 
-    Implicit to Explicit conversion:
+    Implicit to Explicit conversion: TODO: implement this workaround in all crashing Service examples
     /***
      * Android L (lollipop, API 21) introduced a new problem when trying to invoke implicit intent,
      * "java.lang.IllegalArgumentException: Service Intent must be explicit"

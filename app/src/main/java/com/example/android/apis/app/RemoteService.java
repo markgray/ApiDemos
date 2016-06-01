@@ -16,6 +16,8 @@
 
 package com.example.android.apis.app;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -25,6 +27,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.Handler;
@@ -55,6 +58,8 @@ import com.example.android.apis.R;
  * running in its own process, the {@link LocalService} sample shows a much
  * simpler way to interact with it.
  */
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+@SuppressLint("SetTextI18n")
 public class RemoteService extends Service {
     /**
      * This is a list of callbacks that have been registered with the
@@ -62,7 +67,7 @@ public class RemoteService extends Service {
      * that it can be accessed more efficiently from inner classes.
      */
     final RemoteCallbackList<IRemoteServiceCallback> mCallbacks
-            = new RemoteCallbackList<IRemoteServiceCallback>();
+            = new RemoteCallbackList<>();
     
     int mValue = 0;
     NotificationManager mNM;
@@ -153,6 +158,7 @@ public class RemoteService extends Service {
      * Our Handler used to execute operations on the main thread.  This is used
      * to schedule increments of our value.
      */
+    @SuppressLint("HandlerLeak")
     private final Handler mHandler = new Handler() {
         @Override public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -175,7 +181,7 @@ public class RemoteService extends Service {
                     mCallbacks.finishBroadcast();
                     
                     // Repeat every 1 second.
-                    sendMessageDelayed(obtainMessage(REPORT_MSG), 1*1000);
+                    sendMessageDelayed(obtainMessage(REPORT_MSG), 1000);
                 } break;
                 default:
                     super.handleMessage(msg);
@@ -455,6 +461,7 @@ public class RemoteService extends Service {
         
         private static final int BUMP_MSG = 1;
         
+        @SuppressLint("HandlerLeak")
         private Handler mHandler = new Handler() {
             @Override public void handleMessage(Message msg) {
                 switch (msg.what) {

@@ -16,7 +16,9 @@
 
 package com.example.android.apis.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -51,6 +53,7 @@ public class TextToSpeechActivity extends Activity implements TextToSpeech.OnIni
     private TextToSpeech mTts;
     private Button mAgainButton;
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +65,7 @@ public class TextToSpeechActivity extends Activity implements TextToSpeech.OnIni
             this  // TextToSpeech.OnInitListener
             );
 
+        Log.i(TAG, "getMaxSpeechInputLength: " + TextToSpeech.getMaxSpeechInputLength());
         // The button is disabled in the layout.
         // It will be enabled upon initialization of the TTS engine.
         mAgainButton = (Button) findViewById(R.id.again_button);
@@ -95,7 +99,7 @@ public class TextToSpeechActivity extends Activity implements TextToSpeech.OnIni
             // int result mTts.setLanguage(Locale.FRANCE);
             if (result == TextToSpeech.LANG_MISSING_DATA ||
                 result == TextToSpeech.LANG_NOT_SUPPORTED) {
-               // Lanuage data is missing or the language is not supported.
+               // Language data is missing or the language is not supported.
                 Log.e(TAG, "Language is not available.");
             } else {
                 // Check the documentation for other possible result codes.
@@ -121,13 +125,18 @@ public class TextToSpeechActivity extends Activity implements TextToSpeech.OnIni
       "Greetings",
       "Howdy",
       "What's crack-a-lackin?",
-      "That explains the stench!"
+      "That explains the stench!",
+      "And God said, Behold, I have given you every herb bearing\n" +
+      "seed, which is upon the face of all the earth, and every tree,\n" +
+      "in the which is the fruit of a tree yielding seed; to you it\n" +
+      "shall be for meat."
     };
 
     private void sayHello() {
         // Select a random hello.
         int helloLength = HELLOS.length;
         String hello = HELLOS[RANDOM.nextInt(helloLength)];
+        //noinspection deprecation
         mTts.speak(hello,
             TextToSpeech.QUEUE_FLUSH,  // Drop all pending entries in the playback queue.
             null);

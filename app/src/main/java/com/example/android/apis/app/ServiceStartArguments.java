@@ -16,12 +16,14 @@
 
 package com.example.android.apis.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -51,8 +53,10 @@ import com.example.android.apis.R;
  * using the {@link android.app.IntentService} class, which takes care of all the
  * work of creating the extra thread and dispatching commands to it.
  */
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class ServiceStartArguments extends Service {
     private NotificationManager mNM;
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private Intent mInvokeIntent;
     private volatile Looper mServiceLooper;
     private volatile ServiceHandler mServiceHandler;
@@ -87,6 +91,7 @@ public class ServiceStartArguments extends Service {
                     try {
                         wait(endTime - System.currentTimeMillis());
                     } catch (Exception e) {
+                        Log.i("ServiceStartArg...", e.getLocalizedMessage());
                     }
                 }
             }
@@ -97,8 +102,8 @@ public class ServiceStartArguments extends Service {
             stopSelf(msg.arg1);
         }
 
-    };
-    
+    }
+
     @Override
     public void onCreate() {
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
