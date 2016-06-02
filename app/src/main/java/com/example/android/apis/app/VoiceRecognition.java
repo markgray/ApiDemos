@@ -18,6 +18,7 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -44,6 +45,7 @@ import java.util.List;
 /**
  * Sample code that invokes the speech recognition intent API.
  */
+@SuppressLint("SetTextI18n")
 public class VoiceRecognition extends Activity implements OnClickListener {
 
     private static final String TAG = "VoiceRecognition";
@@ -140,7 +142,7 @@ public class VoiceRecognition extends Activity implements OnClickListener {
             // Fill the list view with the strings the recognizer thought it could have heard
             ArrayList<String> matches = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS);
-            mList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
+            mList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
                     matches));
         }
 
@@ -200,6 +202,7 @@ public class VoiceRecognition extends Activity implements OnClickListener {
                 });
             }
 
+            //noinspection ConstantConditions
             if (extra.containsKey(RecognizerIntent.EXTRA_SUPPORTED_LANGUAGES)) {
                 mHandler.post(new Runnable() {
 
@@ -224,7 +227,7 @@ public class VoiceRecognition extends Activity implements OnClickListener {
         }
 
         private void showToast(String text) {
-            Toast.makeText(VoiceRecognition.this, text, 1000).show();
+            Toast.makeText(VoiceRecognition.this, text, Toast.LENGTH_LONG).show();
         }
     }
 }

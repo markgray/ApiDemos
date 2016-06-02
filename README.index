@@ -794,12 +794,14 @@ App
                 TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
             startActivity(installIntent);
             -------------------------------------------------
-            Shows how to use android.speech.tts.TextToSpeech class.
+       Shows how to use android.speech.tts.TextToSpeech class.
 
   Voice Recognition
     App/Voice Recognition                  all
         .app.VoiceRecognition
-            Sample code that invokes the speech recognition intent API.
+            Sample code that invokes the speech recognition intent API. Contains excellent example
+            of creating a Handler in the onCreate method for other threads to use to run code on
+            the UI thread.
 
 AskForPermission/Marshmallow
   Marshmallow
@@ -811,27 +813,28 @@ Content
   Assets
     Content/Assets/Read Asset              all
         .content.ReadAsset
-            Shows how to read a file contained in the app's apk using getAssets() to
-            get an AssetManager and AssetManager.open(String filename) to open the 
-            "file" as an InputStream.
+            Shows how to read a data file contained in the app's apk "assets" directory
+            using getAssets() to get an AssetManager and AssetManager.open(String filename)
+            to open the "file" as an InputStream.
 
   Clipboard
     Content/Clipboard/Data Types           v11 - newHtmlText, getHtmlText, coerceToStyledText,
     .content.ClipboardSample           coerceToHtmlText require v16
-    Shows how to copy to, and paste from the clipboard.
+    Shows how to copy to, and paste from the clipboard using the different conversion methods
+    available
 
-    Packages
+  Packages
     Content/Packages/Install Apk           v13 -- v14 needed for some fields and methods.
     .content.InstallApk
     Shows how to use Intent.ACTION_INSTALL_PACKAGE, and Intent.ACTION_UNINSTALL_PACKAGE
     to install and uninstall packages.
 
-    Process Text Intent
+  Process Text Intent
     Content/Process Text Intent
     .content.ProcessTextLauncher
     Shows how to handle text selection intents
 
-    Provider
+  Provider
     Content/Provider/Changed Contacts      all -- but LoaderManager.LoaderCallbacks<Cursor>
     .content.ChangedContacts                  requires v11, and some fields require v18
     Shows how to access the contacts database and list those that have changed or been 

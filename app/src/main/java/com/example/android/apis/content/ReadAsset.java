@@ -55,6 +55,7 @@ public class ReadAsset extends Activity
             
             // Read the entire asset into a local byte buffer.
             byte[] buffer = new byte[size];
+            //noinspection ResultOfMethodCallIgnored
             is.read(buffer);
             is.close();
             

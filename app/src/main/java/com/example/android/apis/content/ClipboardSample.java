@@ -16,24 +16,27 @@
 
 package com.example.android.apis.content;
 
-import com.example.android.apis.R;
-
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.ClipboardManager;
 import android.content.ClipData;
-import android.content.Context;
+import android.content.ClipboardManager;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemSelectedListener;
 
+import com.example.android.apis.R;
+
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+@SuppressLint("SetTextI18n")
 public class ClipboardSample extends Activity {
     ClipboardManager mClipboard;
 
