@@ -819,7 +819,7 @@ Content
 
   Clipboard
     Content/Clipboard/Data Types           v11 - newHtmlText, getHtmlText, coerceToStyledText,
-    .content.ClipboardSample           coerceToHtmlText require v16
+    .content.ClipboardSample               coerceToHtmlText requires v16
     Shows how to copy to, and paste from the clipboard using the different conversion methods
     available
 
@@ -829,16 +829,20 @@ Content
     Shows how to use Intent.ACTION_INSTALL_PACKAGE, and Intent.ACTION_UNINSTALL_PACKAGE
     to install and uninstall packages.
 
-  Process Text Intent
+  Process Text Intent                      v23 uses things not supported earlier.
     Content/Process Text Intent
     .content.ProcessTextLauncher
-    Shows how to handle text selection intents
+    Shows how to handle text selection intents, when text in .content.ProcessTextLauncher
+    is selected, Marshmallow and above allow you to send the selected text to the
+    .content.ProcessText Activity using the"android.intent.action.PROCESS_TEXT" action
 
   Provider
     Content/Provider/Changed Contacts      all -- but LoaderManager.LoaderCallbacks<Cursor>
-    .content.ChangedContacts                  requires v11, and some fields require v18
-    Shows how to access the contacts database and list those that have changed or been 
-    deleted since a certain time.
+    .content.ChangedContacts               requires v11, and some fields require v18
+            Shows how to access the contacts database and list those that have changed or been
+            deleted since a certain time. Layout is created by java code, includes instructive
+            use of a ListView to contain the results of the Cursor queries.
+            TODO: copy use of SharedPreferences in saveLastTimestamp to save last verse!
 
     Content/Provider/Pick Contact          all
         .content.PickContact
@@ -846,9 +850,10 @@ Content
             permission to read contacts, as that permission will be granted when the 
             selected contact is returned.
 
-    Content/Provider/Share Content
+    Content/Provider/Share Content         v16 required for setClipData v11 for newUri
         .content.ShareContent
-            Demonstrates the share content api
+            Demonstrates the share content api -> Crashes due to java.io.IOException:
+            write failed: EPIPE (Broken pipe) TODO: fix bug!
 
   Resources
     Content/Resources/Layout Reference     all

@@ -18,28 +18,23 @@ package com.example.android.apis.content;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
-import com.example.android.apis.R;
-
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.ContentProvider;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ContentProvider.PipeDataWriter;
-import android.content.res.AssetFileDescriptor;
-import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.apis.R;
+
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,9 +43,11 @@ import java.io.InputStream;
 /**
  * Demonstration of styled text resources.
  */
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class InstallApk extends Activity {
     static final int REQUEST_INSTALL = 1;
     static final int REQUEST_UNINSTALL = 2;
+    private static final String TAG = "InstallApk";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +115,7 @@ public class InstallApk extends Activity {
             intent.setData(Uri.fromFile(prepareApk("HelloActivity.apk")));
             intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
             intent.putExtra(Intent.EXTRA_RETURN_RESULT, true);
+            //noinspection deprecation
             intent.putExtra(Intent.EXTRA_ALLOW_REPLACE, true);
             intent.putExtra(Intent.EXTRA_INSTALLER_PACKAGE_NAME,
                     getApplicationInfo().packageName);
@@ -144,6 +142,7 @@ public class InstallApk extends Activity {
         }
     };
 
+    @SuppressLint("WorldReadableFiles")
     private File prepareApk(String assetName) {
         // Copy the given asset out into a file so that it can be installed.
         // Returns the path to the file.
@@ -152,6 +151,7 @@ public class InstallApk extends Activity {
         FileOutputStream fout = null;
         try {
             is = getAssets().open(assetName);
+            //noinspection deprecation
             fout = openFileOutput("tmp.apk", Context.MODE_WORLD_READABLE);
             int n;
             while ((n=is.read(buffer)) >= 0) {
@@ -165,12 +165,14 @@ public class InstallApk extends Activity {
                     is.close();
                 }
             } catch (IOException e) {
+                Log.i(TAG, e.getLocalizedMessage());
             }
             try {
                 if (fout != null) {
                     fout.close();
                 }
             } catch (IOException e) {
+                Log.i(TAG, e.getLocalizedMessage());
             }
         }
 

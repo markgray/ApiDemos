@@ -15,7 +15,9 @@
 -->
 
 <!-- Demonstrates selecting various types of contact data. -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:padding="4dip"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:padding="4dip"
     android:gravity="center_horizontal"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
@@ -23,7 +25,8 @@
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:layout_weight="0"
         android:paddingBottom="4dip"
-        android:text="@string/pick_contact_msg"/>
+        android:text="@string/pick_contact_msg"
+        tools:ignore="InefficientWeight" />
         
     <Button android:id="@+id/pick_contact"
         android:layout_width="wrap_content" android:layout_height="wrap_content" 

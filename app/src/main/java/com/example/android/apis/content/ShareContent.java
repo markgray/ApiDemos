@@ -30,6 +30,7 @@ import com.example.android.apis.R;
 /**
  * Example of sharing content from a private content provider.
  */
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class ShareContent extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +40,8 @@ public class ShareContent extends Activity {
 
         // Watch for button clicks.
         findViewById(R.id.share_image).setOnClickListener(new View.OnClickListener() {
-            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 Uri.Builder b = new Uri.Builder();

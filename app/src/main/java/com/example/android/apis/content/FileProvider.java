@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import android.annotation.TargetApi;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.ContentProvider.PipeDataWriter;
@@ -28,25 +29,30 @@ import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.provider.OpenableColumns;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 /**
  * A very simple content provider that can serve arbitrary asset files from
  * our .apk.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FileProvider extends ContentProvider
         implements PipeDataWriter<InputStream> {
+    private static final String TAG = "FileProvider";
+
     @Override
     public boolean onCreate() {
         return true;
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
-            String sortOrder) {
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
+                        String sortOrder) {
 
         // content providers that support open and openAssetFile should support queries for all
         // android.provider.OpenableColumns.
@@ -87,31 +93,31 @@ public class FileProvider extends ContentProvider
     }
 
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public Uri insert(@NonNull Uri uri, ContentValues values) {
         // Don't support inserts.
         return null;
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         // Don't support deletes.
         return 0;
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         // Don't support updates.
         return 0;
     }
 
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         // For this sample, assume all files are .apks.
-        return "application/vnd.android.package-archive";
+        return "image/jpeg";
     }
 
     @Override
-    public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
+    public ParcelFileDescriptor openFile(@NonNull Uri uri, @NonNull String mode) throws FileNotFoundException {
         // Try to open an asset with the given name.
         try {
             String path = uri.getPath();
@@ -121,18 +127,20 @@ public class FileProvider extends ContentProvider
             }
             int cookie = Integer.parseInt(path.substring(1, off));
             String assetPath = path.substring(off+1);
+            //noinspection ConstantConditions
             AssetFileDescriptor asset = getContext().getAssets().openNonAssetFd(cookie, assetPath);
-            return new ParcelFileDescriptor(openPipeHelper(uri, null, null,
+            return new ParcelFileDescriptor(openPipeHelper(uri, "image/jpeg", null,
                     asset.createInputStream(), this));
         } catch (IOException e) {
+            //noinspection UnnecessaryLocalVariable
             FileNotFoundException fnf = new FileNotFoundException("Unable to open " + uri);
             throw fnf;
         }
     }
 
     @Override
-    public void writeDataToPipe(ParcelFileDescriptor output, Uri uri, String mimeType,
-            Bundle opts, InputStream args) {
+    public void writeDataToPipe(@NonNull ParcelFileDescriptor output, @NonNull Uri uri, @NonNull String mimeType,
+                                Bundle opts, InputStream args) {
         // Transfer data from the asset to the pipe the client is reading.
         byte[] buffer = new byte[8192];
         int n;
@@ -147,10 +155,12 @@ public class FileProvider extends ContentProvider
             try {
                 args.close();
             } catch (IOException e) {
+                Log.i(TAG, e.getLocalizedMessage());
             }
             try {
                 fout.close();
             } catch (IOException e) {
+                Log.i(TAG, e.getLocalizedMessage());
             }
         }
     }

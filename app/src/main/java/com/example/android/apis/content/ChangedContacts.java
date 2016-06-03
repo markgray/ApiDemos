@@ -16,6 +16,8 @@
 
 package com.example.android.apis.content;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
@@ -27,6 +29,7 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.CursorWrapper;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
@@ -41,6 +44,7 @@ import android.widget.Toast;
 /**
  * Demonstrates selecting contacts that have changed since a certain time.
  */
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class ChangedContacts extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String CLASS = ChangedContacts.class.getSimpleName();
@@ -72,6 +76,7 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
     private Button mDeleteButton;
     private Button mChangeButton;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -198,6 +203,7 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
                 " desc");
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor data) {
         long timestamp = 0;

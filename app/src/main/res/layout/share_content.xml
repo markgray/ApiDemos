@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2015 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2015 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,20 +14,29 @@
 -->
 
 <!-- Demonstrates selecting various types of contact data. -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:padding="4dip"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:padding="4dip">
 
     <TextView
-        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:paddingBottom="8dip"
-        android:text="@string/share_content_msg"/>
+        android:text="@string/share_content_msg"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        tools:ignore="InefficientWeight" />
 
-    <Button android:id="@+id/share_image"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/share_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/share_image">
+
         <requestFocus />
     </Button>
 </LinearLayout>

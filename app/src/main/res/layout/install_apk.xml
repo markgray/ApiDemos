@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -17,40 +16,51 @@
 <!-- Demonstrates starting and stopping a local service.
      See corresponding Java code com.android.sdk.app.LocalSerice.java. -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:padding="4dip"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:padding="4dip"
+    tools:ignore="HardcodedText,InefficientWeight" >
 
     <TextView
-        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="0"
         android:paddingBottom="4dip"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Demonstrates using the INSTALL_PACKAGE Intent to install an application."/>
+        android:text="Demonstrates using the INSTALL_PACKAGE Intent to install an application."
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-    <Button android:id="@+id/unknown_source"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="Unknown Source">
-    </Button>
+    <Button
+        android:id="@+id/unknown_source"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unknown Source"/>
 
-    <Button android:id="@+id/my_source"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="My Source">
-    </Button>
+    <Button
+        android:id="@+id/my_source"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Source"/>
 
-    <Button android:id="@+id/replace"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="Replace">
-    </Button>
+    <Button
+        android:id="@+id/replace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Replace"/>
 
-    <Button android:id="@+id/uninstall"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="Uninstall">
-    </Button>
+    <Button
+        android:id="@+id/uninstall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Uninstall"/>
 
-    <Button android:id="@+id/uninstall_result"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="Uninstall w/Result">
-    </Button>
+    <Button
+        android:id="@+id/uninstall_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Uninstall w/Result"/>
 
 </LinearLayout>

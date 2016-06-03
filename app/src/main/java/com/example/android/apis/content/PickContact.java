@@ -18,24 +18,18 @@ package com.example.android.apis.content;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
-import com.example.android.apis.R;
-
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.SystemClock;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.provider.ContactsContract;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.Toast;
 
-import java.util.Calendar;
+import com.example.android.apis.R;
 
 /**
  * Demonstrates launching the contacts app to pick a contact.  Does not
@@ -70,16 +64,16 @@ public class PickContact extends Activity {
         setContentView(R.layout.pick_contact);
 
         // Watch for button clicks.
-        ((Button)findViewById(R.id.pick_contact)).setOnClickListener(
+        findViewById(R.id.pick_contact).setOnClickListener(
                 new ResultDisplayer("Selected contact",
                         ContactsContract.Contacts.CONTENT_ITEM_TYPE));
-        ((Button)findViewById(R.id.pick_person)).setOnClickListener(
+        findViewById(R.id.pick_person).setOnClickListener(
                 new ResultDisplayer("Selected person",
                         "vnd.android.cursor.item/person"));
-        ((Button)findViewById(R.id.pick_phone)).setOnClickListener(
+        findViewById(R.id.pick_phone).setOnClickListener(
                 new ResultDisplayer("Selected phone",
                         ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE));
-        ((Button)findViewById(R.id.pick_address)).setOnClickListener(
+        findViewById(R.id.pick_address).setOnClickListener(
                 new ResultDisplayer("Selected address",
                         ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE));
     }
