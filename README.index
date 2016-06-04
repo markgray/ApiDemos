@@ -858,21 +858,29 @@ Content
   Resources
     Content/Resources/Layout Reference     all
         .content.ResourcesLayoutReference
-            Shows how to write layout resource references, so that you can define 
-            multiple different configurations of a layout resource that refer to
-            one actual XML definition.
+            Shows how to write layout resource references in values-* directories,
+            so that you can define multiple different configurations of a layout
+            resource that refer to one actual XML definition. References are defined
+            in layout.xml files contained in res/values-xlarge and res/values-sw600dp
+            which point to @layout/resources_layout_reference_tablet and
+            @layout/resources_layout_reference_tablet respectively (uh... both same
+            file?) There is also a default resources_layout_reference.xml file in
+            res/layout/ which is used for other size screens.
 
     Content/Resources/Resources            all
         .content.ResourcesSample
             Shows how to fetch R.string.styled_text from values*/strings.xml as styled
             text using Context.getText (int resId), as a string stripped of its style
             using Context.getString(int resId), and as styled text again using this 
-            time Resources.getText (int id).
+            time Resources.getText (int id). The styled text uses html markup <b>, <i>,
+            and <b><i> surrounding the text to set the style used TODO: use this
 
     Content/Resources/Smallest Width       v13
         .content.ResourcesSmallestWidth
-            Layout file includes layouts from layout-sw***/ in order to create custom 
-            FrameLayout area.
+            Layout file <includes \> layouts from layout, and layout-sw***/ in order to create custom
+            FrameLayout area for different smallest width (sw480dp, sw600dp, and sw720dp). These in
+            turn <include\> other FrameLayout's also with different versions for the smallest width
+            (cute - huh?)
 
     Content/Resources/<i>Styled</i> <b>Text</b>  -- all
         .content.StyledText
@@ -882,13 +890,16 @@ Content
     Content/Resources/Width and Height     v13
         .content.ResourcesWidthAndHeight
             The layouts included by the FrameLayout use /layout-wNNNdp and /layout-hNNNdp
-            to select between different versions based on the size of the screen.
+            to select between different versions based on the size of the screen. The
+            layout-hNNNdp is <include\> first and the different layouts in turn <include\>
+            layouts from layout-hNNNdp (and default res/layout) as needes.
 
   Storage
    Documents
-    Content/Storage/Documents              v19 -- buildDocumentUriUsingTree, getTreeDocumentId, 
-        .content.DocumentsSample           buildChildDocumentsUriUsingTree, createDocument,
-            renameDocument require v21. Exercises the client side of the DocumentsContract api.
+    Content/Storage/Documents              v21
+        .content.DocumentsSample
+            Exercises the client side of the DocumentsContract api. Layout is created
+            programmatically.
 
    External Storage
     Content/Storage/External Storage       all

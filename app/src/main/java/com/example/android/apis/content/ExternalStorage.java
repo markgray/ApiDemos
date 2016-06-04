@@ -20,6 +20,7 @@ package com.example.android.apis.content;
 //class is in a sub-package.
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -124,7 +125,7 @@ public class ExternalStorage extends Activity {
         stopWatchingExternalStorage();
     }
 
-    void handleExternalStorageState(boolean available, boolean writeable) {
+    void handleExternalStorageState(@SuppressWarnings("UnusedParameters") boolean available, boolean writeable) {
         boolean has = hasExternalStoragePublicPicture();
         mExternalStoragePublicPicture.mCreate.setEnabled(writeable && !has);
         mExternalStoragePublicPicture.mDelete.setEnabled(writeable && has);
@@ -188,6 +189,7 @@ public class ExternalStorage extends Activity {
 
         try {
             // Make sure the Pictures directory exists.
+            //noinspection ResultOfMethodCallIgnored
             path.mkdirs();
 
             // Very simple code to copy a picture from the application's
@@ -195,9 +197,10 @@ public class ExternalStorage extends Activity {
             // no error checking, and assumes the picture is small (does not
             // try to copy it in chunks).  Note that if external storage is
             // not currently mounted this will silently fail.
-            InputStream is = getResources().openRawResource(R.drawable.balloons);
+            InputStream is = getResources().openRawResource(R.raw.balloons);
             OutputStream os = new FileOutputStream(file);
             byte[] data = new byte[is.available()];
+            //noinspection ResultOfMethodCallIgnored
             is.read(data);
             os.write(data);
             is.close();
@@ -227,6 +230,7 @@ public class ExternalStorage extends Activity {
         File path = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
         File file = new File(path, "DemoPicture.jpg");
+        //noinspection ResultOfMethodCallIgnored
         file.delete();
     }
 
@@ -259,9 +263,10 @@ public class ExternalStorage extends Activity {
             // no error checking, and assumes the picture is small (does not
             // try to copy it in chunks).  Note that if external storage is
             // not currently mounted this will silently fail.
-            InputStream is = getResources().openRawResource(R.drawable.balloons);
+            InputStream is = getResources().openRawResource(R.raw.balloons);
             OutputStream os = new FileOutputStream(file);
             byte[] data = new byte[is.available()];
+            //noinspection ResultOfMethodCallIgnored
             is.read(data);
             os.write(data);
             is.close();
@@ -291,6 +296,7 @@ public class ExternalStorage extends Activity {
         File path = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         if (path != null) {
             File file = new File(path, "DemoPicture.jpg");
+            //noinspection ResultOfMethodCallIgnored
             file.delete();
         }
     }
@@ -321,9 +327,10 @@ public class ExternalStorage extends Activity {
              // no error checking, and assumes the picture is small (does not
              // try to copy it in chunks).  Note that if external storage is
              // not currently mounted this will silently fail.
-             InputStream is = getResources().openRawResource(R.drawable.balloons);
+             InputStream is = getResources().openRawResource(R.raw.balloons);
              OutputStream os = new FileOutputStream(file);
              byte[] data = new byte[is.available()];
+             //noinspection ResultOfMethodCallIgnored
              is.read(data);
              os.write(data);
              is.close();
@@ -339,7 +346,9 @@ public class ExternalStorage extends Activity {
          // Get path for the file on external storage.  If external
          // storage is not currently mounted this will fail.
          File file = new File(getExternalFilesDir(null), "DemoFile.jpg");
+         //noinspection ConstantConditions
          if (file != null) {
+             //noinspection ResultOfMethodCallIgnored
              file.delete();
          }
      }
@@ -348,6 +357,7 @@ public class ExternalStorage extends Activity {
          // Get path for the file on external storage.  If external
          // storage is not currently mounted this will fail.
          File file = new File(getExternalFilesDir(null), "DemoFile.jpg");
+         //noinspection SimplifiableIfStatement,ConstantConditions
          if (file != null) {
              return file.exists();
          }
@@ -355,9 +365,10 @@ public class ExternalStorage extends Activity {
      }
 
 
+    @SuppressLint("InflateParams")
     Item createStorageControls(CharSequence label, File path,
-            View.OnClickListener createClick,
-            View.OnClickListener deleteClick) {
+                               View.OnClickListener createClick,
+                               View.OnClickListener deleteClick) {
         LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
         Item item = new Item();
         item.mRoot = inflater.inflate(R.layout.external_storage_item, null);

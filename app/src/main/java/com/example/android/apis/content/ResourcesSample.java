@@ -50,9 +50,9 @@ public class ResourcesSample extends Activity {
         CharSequence cs;
         String str;
 
-        // ====== Using the Context.getString() convenience method ===========
+        // ====== Using the Context.getText() convenience method ===========
 
-        // Using the getString() convenience method, retrieve a string
+        // Using the getText() convenience method, retrieve a string
         // resource that happens to have style information.  Note the use of
         // CharSequence instead of String so we don't lose the style info.
         cs = getText(R.string.styled_text);

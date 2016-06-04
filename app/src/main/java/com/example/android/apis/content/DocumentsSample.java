@@ -16,12 +16,15 @@
 
 package com.example.android.apis.content;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.DocumentsContract.Document;
@@ -42,6 +45,8 @@ import java.io.OutputStream;
 /**
  * Example that exercises client side of {@link DocumentsContract}.
  */
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+@SuppressLint("SetTextI18n")
 public class DocumentsSample extends Activity {
     private static final String TAG = "DocumentsSample";
 
@@ -277,6 +282,7 @@ public class DocumentsSample extends Activity {
             OutputStream os = null;
             try {
                 os = cr.openOutputStream(uri);
+                //noinspection ConstantConditions
                 os.write("THE COMPLETE WORKS OF SHAKESPEARE".getBytes());
                 log("wrote data");
             } catch (Exception e) {
@@ -293,6 +299,7 @@ public class DocumentsSample extends Activity {
             Cursor c = cr.query(child, new String[] {
                     Document.COLUMN_DISPLAY_NAME, Document.COLUMN_MIME_TYPE }, null, null, null);
             try {
+                //noinspection ConstantConditions
                 while (c.moveToNext()) {
                     log("found child=" + c.getString(0) + ", mime=" + c.getString(1));
                 }
@@ -313,6 +320,7 @@ public class DocumentsSample extends Activity {
             OutputStream os = null;
             try {
                 os = cr.openOutputStream(dirPic);
+                //noinspection ConstantConditions
                 os.write("THE COMPLETE WORKS OF SHAKESPEARE".getBytes());
                 log("wrote data");
             } catch (Exception e) {
