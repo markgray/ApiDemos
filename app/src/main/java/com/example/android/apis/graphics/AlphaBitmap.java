@@ -18,6 +18,7 @@ package com.example.android.apis.graphics;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.*;
 import android.os.Bundle;
@@ -61,7 +62,7 @@ public class AlphaBitmap extends GraphicsActivity {
             super(context);
             setFocusable(true);
 
-            InputStream is = context.getResources().openRawResource(R.drawable.app_sample_code);
+            InputStream is = context.getResources().openRawResource(R.raw.app_sample_code);
             mBitmap = BitmapFactory.decodeStream(is);
             mBitmap2 = mBitmap.extractAlpha();
             mBitmap3 = Bitmap.createBitmap(200, 200, Bitmap.Config.ALPHA_8);
@@ -75,7 +76,7 @@ public class AlphaBitmap extends GraphicsActivity {
         @Override protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.WHITE);
 
-            Paint p = new Paint();
+            @SuppressLint("DrawAllocation") Paint p = new Paint();
             float y = 10;
 
             p.setColor(Color.RED);

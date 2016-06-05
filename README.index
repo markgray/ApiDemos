@@ -905,7 +905,7 @@ Content
     Content/Storage/External Storage       all
         .content.ExternalStorage
             Shows how to use the external storage directory api for both public and 
-            app private directories.
+            app private directories. TODO: use to store notifications to Notifications directory
 
 Graphics
   AlphaBitmap
