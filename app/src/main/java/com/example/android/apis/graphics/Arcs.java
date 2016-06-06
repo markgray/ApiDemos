@@ -92,7 +92,8 @@ public class Arcs extends GraphicsActivity {
             canvas.drawArc(oval, mStart, mSweep, useCenter, paint);
         }
 
-        @Override protected void onDraw(Canvas canvas) {
+        @Override
+        protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.WHITE);
 
             drawArcs(canvas, mBigOval, mUseCenters[mBigIndex],

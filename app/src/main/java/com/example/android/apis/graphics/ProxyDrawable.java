@@ -34,6 +34,7 @@ public class ProxyDrawable extends Drawable {
         return mProxy;
     }
 
+    @SuppressWarnings("unused")
     public void setProxy(Drawable proxy) {
         if (proxy != this) {
             mProxy = proxy;
@@ -69,6 +70,7 @@ public class ProxyDrawable extends Drawable {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setDither(boolean dither) {
         if (mProxy != null) {

@@ -27,6 +27,7 @@ public class AnimateDrawable extends ProxyDrawable {
     private Animation mAnimation;
     private Transformation mTransformation = new Transformation();
 
+    @SuppressWarnings("unused")
     public AnimateDrawable(Drawable target) {
         super(target);
     }
@@ -44,10 +45,12 @@ public class AnimateDrawable extends ProxyDrawable {
         mAnimation = anim;
     }
 
+    @SuppressWarnings("unused")
     public boolean hasStarted() {
         return mAnimation != null && mAnimation.hasStarted();
     }
 
+    @SuppressWarnings("unused")
     public boolean hasEnded() {
         return mAnimation == null || mAnimation.hasEnded();
     }

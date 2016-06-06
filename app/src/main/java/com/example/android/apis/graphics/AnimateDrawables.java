@@ -43,7 +43,9 @@ public class AnimateDrawables extends GraphicsActivity {
             setFocusable(true);
             setFocusableInTouchMode(true);
 
+            //noinspection deprecation
             Drawable dr = context.getResources().getDrawable(R.drawable.beach);
+            //noinspection ConstantConditions
             dr.setBounds(0, 0, dr.getIntrinsicWidth(), dr.getIntrinsicHeight());
 
             Animation an = new TranslateAnimation(0, 100, 0, 200);

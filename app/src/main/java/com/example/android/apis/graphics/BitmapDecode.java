@@ -18,10 +18,12 @@ package com.example.android.apis.graphics;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.*;
 import android.graphics.drawable.*;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.*;
 
 import java.io.InputStream;
@@ -36,6 +38,7 @@ public class BitmapDecode extends GraphicsActivity {
     }
 
     private static class SampleView extends View {
+        private static final String TAG = "BitMapDecode";
         private Bitmap mBitmap;
         private Bitmap mBitmap2;
         private Bitmap mBitmap3;
@@ -57,6 +60,7 @@ public class BitmapDecode extends GraphicsActivity {
                     os.write(buffer, 0, len);
                 }
             } catch (java.io.IOException e) {
+                Log.i(TAG, e.getLocalizedMessage());
             }
             return os.toByteArray();
         }
@@ -66,12 +70,13 @@ public class BitmapDecode extends GraphicsActivity {
             setFocusable(true);
 
             java.io.InputStream is;
-            is = context.getResources().openRawResource(R.drawable.beach);
+            is = context.getResources().openRawResource(R.raw.beach);
 
             BitmapFactory.Options opts = new BitmapFactory.Options();
             Bitmap bm;
 
             opts.inJustDecodeBounds = true;
+            //noinspection UnusedAssignment
             bm = BitmapFactory.decodeStream(is, null, opts);
 
             // now opts.outWidth and opts.outHeight are the dimension of the
@@ -84,7 +89,7 @@ public class BitmapDecode extends GraphicsActivity {
             mBitmap = bm;
 
             // decode an image with transparency
-            is = context.getResources().openRawResource(R.drawable.frog);
+            is = context.getResources().openRawResource(R.raw.frog);
             mBitmap2 = BitmapFactory.decodeStream(is);
 
             // create a deep copy of it using getPixels() into different configs
@@ -97,10 +102,12 @@ public class BitmapDecode extends GraphicsActivity {
             mBitmap4 = Bitmap.createBitmap(pixels, 0, w, w, h,
                                            Bitmap.Config.ARGB_4444);
 
+            //noinspection deprecation
             mDrawable = context.getResources().getDrawable(R.drawable.button);
+            //noinspection ConstantConditions
             mDrawable.setBounds(150, 20, 300, 100);
 
-            is = context.getResources().openRawResource(R.drawable.animated_gif);
+            is = context.getResources().openRawResource(R.raw.animated_gif);
 
             if (DECODE_STREAM) {
                 mMovie = Movie.decodeStream(is);
@@ -114,7 +121,7 @@ public class BitmapDecode extends GraphicsActivity {
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(0xFFCCCCCC);
 
-            Paint p = new Paint();
+            @SuppressLint("DrawAllocation") Paint p = new Paint();
             p.setAntiAlias(true);
 
             canvas.drawBitmap(mBitmap, 10, 10, null);

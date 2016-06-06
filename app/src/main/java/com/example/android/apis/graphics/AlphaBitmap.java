@@ -73,7 +73,8 @@ public class AlphaBitmap extends GraphicsActivity {
                                          null, Shader.TileMode.MIRROR);
         }
 
-        @Override protected void onDraw(Canvas canvas) {
+        @Override
+        protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.WHITE);
 
             @SuppressLint("DrawAllocation") Paint p = new Paint();

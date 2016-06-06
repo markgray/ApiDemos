@@ -912,19 +912,41 @@ Graphics
     Graphics/AlphaBitmap                   all
         .graphics.AlphaBitmap
             Shows how to use alpha channel compositing in 2D graphics using PorterDuffXfermode
-            and Bitmap.extractAlpha
+            and Bitmap.extractAlpha -- also shows how to create your own View in code alone.
+            See: https://developer.android.com/reference/android/graphics/PorterDuff.Mode.html
+            for details of the graphic algebra performed with the different PorterDuff modes
+            You can use the key below to understand the algebra that the Android docs use to
+            describe the other modes (see the article for a fuller desription with similar terms).
+
+                Sa Source alpha
+                Sc Source color
+                Da Destination alpha
+                Dc Destination color
+
+            Where alpha is a value [0..1], and color is substituted once per channel (so use
+            the formula once for each of red, green and blue)
+
+            The resulting values are specified as a pair in square braces as follows.
+
+            [<alpha-value>,<color-value>]
+
+            Where alpha-value and color-value are formulas for generating the resulting
+            alpha chanel and each color chanel respectively.
+            TODO: Exercise all the other PorterDuff modes.
 
   AnimateDrawables
     Graphics/AnimateDrawables              all
         .graphics.AnimateDrawables
             Shows how to use the Animation api (in this case TranslateAnimation) in order 
-            to move a jpg around a Canvas
+            to move a jpg around a Canvas. Uses AnimateDrawable which extends ProxyDrawable
+            (A neat way to package the methods required when extending Drawable, overriding
+            only draw in AnimateDrawable)
 
   Arcs
     Graphics/Arcs                          all
         .graphics.Arcs
             Shows how to draw arcs and rectangles to a Canvas -- need to figure out what
-            slows down frame rate.
+            slows down frame rate -- I'm guessing something inside native_drawArc
 
   BitmapDecode
     Graphics/BitmapDecode                  all crashes LG-8.3, works: froyo, Nexus 7. Nexus 4, Nexus 9
