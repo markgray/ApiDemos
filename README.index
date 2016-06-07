@@ -960,7 +960,8 @@ Graphics
     Graphics/BitmapMesh                    all
         .graphics.BitmapMesh
             Uses android.graphics.Canvas method drawBitmapMesh to warp a bitmap near the 
-            area it is touched.
+            area it is touched. Very subtle effect on Nexus 6 and Nexus 6P -> Marshmallow
+            or just small high density screen?
 
   BitmapPixels
     Graphics/BitmapPixels                  all crashes lollipop, works froyo, jellybean
@@ -969,11 +970,13 @@ Graphics
             configurations of the same color ramp, but ever since KitKat Bitmap.createBitmap will return 
             a Bitmap.Config.ARGB_8888 bitmap instead of Bitmap.Config.ARGB_4444 bitmap, so the call to
             mBitmap3.copyPixelsFromBuffer(makeBuffer(data4444, N)); on line 147 will crash Lollipop.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) kludge to make it work on newer
+            versions. TODO: make kludge use ARGB_8888 instead?
 
   CameraPreview
     Graphics/CameraPreview                 all crashes froyo -- getNumberOfCameras() needs v9+
         .graphics.CameraPreview
-            Shows how to create a SurfaceView for the depricated Camera api (use android.hardware.camera2)
+            Shows how to create a SurfaceView for the deprecated Camera api (use android.hardware.camera2)
 
   Clipping
     Graphics/Clipping                      all
@@ -987,9 +990,8 @@ Graphics
             Applies a PorterDuffColorFilter to tint some button like drawables using several
             different colors, and both PorterDuff.Mode.SRC_ATOP, and PorterDuff.Mode.MULTIPLY
             PorterDuff modes to apply them. Oddly only froyo spaces the drawables properly 
-            probably due to the use of drawable-mdpi and drawable-hdpi versions or it could
-            be some difference in the treatment of the 9-patch button used as the first
-            drawable and is used to set the spacing.
+            probably due to the use of drawable-mdpi and drawable-hdpi versions. Checking
+            Drawable.getIntrinsicHeight() and modifying the spacing for hdpi fixes the problem.
 
   ColorMatrix
     Graphics/ColorMatrix                   all

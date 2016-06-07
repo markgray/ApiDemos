@@ -61,7 +61,8 @@ public class Clipping extends GraphicsActivity {
             canvas.drawText("Clipping", 100, 30, mPaint);
         }
 
-        @Override protected void onDraw(Canvas canvas) {
+        @Override
+        protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.GRAY);
 
             canvas.save();

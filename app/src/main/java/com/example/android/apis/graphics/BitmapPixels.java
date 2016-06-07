@@ -18,6 +18,7 @@ package com.example.android.apis.graphics;
 
 import android.content.Context;
 import android.graphics.*;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.*;
 
@@ -32,22 +33,23 @@ public class BitmapPixels extends GraphicsActivity {
         setContentView(new SampleView(this));
     }
 
+    @SuppressWarnings("PointlessBitwiseExpression")
     private static class SampleView extends View {
         private Bitmap mBitmap1;
         private Bitmap mBitmap2;
         private Bitmap mBitmap3;
 
-        // access the red component from a premultiplied color
+        // access the red component from a pre-multiplied color
         private static int getR32(int c) { return (c >>  0) & 0xFF; }
-        // access the red component from a premultiplied color
+        // access the red component from a pre-multiplied color
         private static int getG32(int c) { return (c >>  8) & 0xFF; }
-        // access the red component from a premultiplied color
+        // access the red component from a pre-multiplied color
         private static int getB32(int c) { return (c >> 16) & 0xFF; }
-        // access the red component from a premultiplied color
+        // access the red component from a pre-multiplied color
         private static int getA32(int c) { return (c >> 24) & 0xFF; }
 
         /**
-         * This takes components that are already in premultiplied form, and
+         * This takes components that are already in pre-multiplied form, and
          * packs them into an int in the correct device order.
          */
         private static int pack8888(int r, int g, int b, int a) {
@@ -68,7 +70,7 @@ public class BitmapPixels extends GraphicsActivity {
         }
 
         /**
-         * Turn a color int into a premultiplied device color
+         * Turn a color int into a pre-multiplied device color
          */
         private static int premultiplyColor(int c) {
             int r = Color.red(c);
@@ -90,7 +92,7 @@ public class BitmapPixels extends GraphicsActivity {
             int g = getG32(from) << 23;
             int b = getB32(from) << 23;
             int a = getA32(from) << 23;
-            // now compute our step amounts per componenet (biased by 23 bits)
+            // now compute our step amounts per component (biased by 23 bits)
             int dr = ((getR32(to) << 23) - r) / (n - 1);
             int dg = ((getG32(to) << 23) - g) / (n - 1);
             int db = ((getB32(to) << 23) - b) / (n - 1);
@@ -140,7 +142,11 @@ public class BitmapPixels extends GraphicsActivity {
 
             mBitmap1 = Bitmap.createBitmap(N, N, Bitmap.Config.ARGB_8888);
             mBitmap2 = Bitmap.createBitmap(N, N, Bitmap.Config.RGB_565);
-            mBitmap3 = Bitmap.createBitmap(N, N, Bitmap.Config.ARGB_4444);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                mBitmap3 = Bitmap.createBitmap(N, N, Bitmap.Config.RGB_565);
+            } else {
+                mBitmap3 = Bitmap.createBitmap(N, N, Bitmap.Config.ARGB_4444);
+            }
 
             mBitmap1.copyPixelsFromBuffer(makeBuffer(data8888, N));
             mBitmap2.copyPixelsFromBuffer(makeBuffer(data565, N));

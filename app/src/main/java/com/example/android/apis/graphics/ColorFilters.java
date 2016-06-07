@@ -18,14 +18,17 @@ package com.example.android.apis.graphics;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.*;
 import android.graphics.drawable.*;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.*;
 
 public class ColorFilters extends GraphicsActivity {
+    public static final String TAG = "ColorFilters";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,8 @@ public class ColorFilters extends GraphicsActivity {
 
     }
 
+    @SuppressLint("ViewConstructor")
+    @SuppressWarnings("deprecation")
     private static class SampleView extends View {
         private Activity mActivity;
         private Drawable mDrawable;
@@ -44,6 +49,7 @@ public class ColorFilters extends GraphicsActivity {
         private int[] mColors;
         private PorterDuff.Mode[] mModes;
         private int mModeIndex;
+        private int mHeightOffset;
 
         private static void addToTheRight(Drawable curr, Drawable prev) {
             Rect r = prev.getBounds();
@@ -58,10 +64,19 @@ public class ColorFilters extends GraphicsActivity {
         public SampleView(Activity activity) {
             super(activity);
             mActivity = activity;
+            @SuppressWarnings("UnnecessaryLocalVariable")
             Context context = activity;
             setFocusable(true);
 
             mDrawable = context.getResources().getDrawable(R.drawable.btn_default_normal);
+            mHeightOffset = 55;
+            //noinspection ConstantConditions
+            int heightOfDrawable = mDrawable.getIntrinsicHeight();
+            Log.i(TAG, "Height of drawabel" + heightOfDrawable);
+            if (heightOfDrawable > 55) {
+                mHeightOffset = heightOfDrawable + 5;
+            }
+            //noinspection ConstantConditions
             mDrawable.setBounds(0, 0, 150, 48);
             mDrawable.setDither(true);
 
@@ -140,6 +155,7 @@ public class ColorFilters extends GraphicsActivity {
             }
         }
 
+        @SuppressLint("DrawAllocation")
         @Override protected void onDraw(Canvas canvas) {
             canvas.drawColor(0xFFCCCCCC);
 
@@ -153,7 +169,7 @@ public class ColorFilters extends GraphicsActivity {
                                                        mModes[mModeIndex]);
                 }
                 drawSample(canvas, filter);
-                canvas.translate(0, 55);
+                canvas.translate(0, mHeightOffset);
             }
         }
 

@@ -16,12 +16,14 @@
 
 package com.example.android.apis.graphics;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Size;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -43,8 +45,10 @@ import com.example.android.apis.R;
 
 // ----------------------------------------------------------------------
 
+@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class CameraPreview extends Activity {
     private Preview mPreview;
+    @SuppressWarnings("deprecation")
     Camera mCamera;
     int numberOfCameras;
     int cameraCurrentlyLocked;
@@ -52,6 +56,7 @@ public class CameraPreview extends Activity {
     // The first rear facing camera
     int defaultCameraId;
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +76,7 @@ public class CameraPreview extends Activity {
         // Find the ID of the default camera
         CameraInfo cameraInfo = new CameraInfo();
             for (int i = 0; i < numberOfCameras; i++) {
+                //noinspection deprecation
                 Camera.getCameraInfo(i, cameraInfo);
                 if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
                     defaultCameraId = i;
@@ -78,6 +84,7 @@ public class CameraPreview extends Activity {
             }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onResume() {
         super.onResume();
@@ -110,6 +117,7 @@ public class CameraPreview extends Activity {
         return true;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -158,6 +166,7 @@ public class CameraPreview extends Activity {
  * to the surface. We need to center the SurfaceView because not all devices have cameras that
  * support preview sizes at the same aspect ratio as the device's display.
  */
+@SuppressWarnings("deprecation")
 class Preview extends ViewGroup implements SurfaceHolder.Callback {
     private final String TAG = "Preview";
 
@@ -272,6 +281,7 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
         Size optimalSize = null;
         double minDiff = Double.MAX_VALUE;
 
+        @SuppressWarnings("UnnecessaryLocalVariable")
         int targetHeight = h;
 
         // Try to find an size match aspect ratio and size

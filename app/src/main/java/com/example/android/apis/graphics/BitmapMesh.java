@@ -44,6 +44,7 @@ public class BitmapMesh extends GraphicsActivity {
         private final Matrix mInverse = new Matrix();
 
         private static void setXY(float[] array, int index, float x, float y) {
+            //noinspection PointlessArithmeticExpression
             array[index*2 + 0] = x;
             array[index*2 + 1] = y;
         }
@@ -86,6 +87,7 @@ public class BitmapMesh extends GraphicsActivity {
             float[] src = mOrig;
             float[] dst = mVerts;
             for (int i = 0; i < COUNT*2; i += 2) {
+                //noinspection PointlessArithmeticExpression
                 float x = src[i+0];
                 float y = src[i+1];
                 float dx = cx - x;
@@ -98,9 +100,11 @@ public class BitmapMesh extends GraphicsActivity {
              //   android.util.Log.d("skia", "index " + i + " dist=" + d + " pull=" + pull);
 
                 if (pull >= 1) {
+                    //noinspection PointlessArithmeticExpression
                     dst[i+0] = cx;
                     dst[i+1] = cy;
                 } else {
+                    //noinspection PointlessArithmeticExpression
                     dst[i+0] = x + dx * pull;
                     dst[i+1] = y + dy * pull;
                 }
