@@ -998,7 +998,9 @@ Graphics
         .graphics.ColorMatrixSample
             Uses ColorMatrixColorFilter's to create three different versions of a jpeg, 
             animating them through different "contrasts". One changes both scale and 
-            translate, one changes scale only, and one changes translate only.
+            translate, one changes scale only, and one changes translate only. (The original
+            is at top of left column, scale and translate to right of it, scale only second row,
+            and translate only is in the third row.)
 
   Compass
     Graphics/Compass                       all

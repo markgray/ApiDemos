@@ -56,8 +56,7 @@ public class CreateBitmap extends GraphicsActivity {
         private int[]    mColors;
         private Paint    mPaint;
 
-        private static Bitmap codec(Bitmap src, Bitmap.CompressFormat format,
-                                    int quality) {
+        private static Bitmap codec(Bitmap src, Bitmap.CompressFormat format, int quality) {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             src.compress(format, quality, os);
 
@@ -74,20 +73,14 @@ public class CreateBitmap extends GraphicsActivity {
 
             mBitmaps = new Bitmap[6];
             // these three are initialized with colors[]
-            mBitmaps[0] = Bitmap.createBitmap(colors, 0, STRIDE, WIDTH, HEIGHT,
-                                              Bitmap.Config.ARGB_8888);
-            mBitmaps[1] = Bitmap.createBitmap(colors, 0, STRIDE, WIDTH, HEIGHT,
-                                              Bitmap.Config.RGB_565);
-            mBitmaps[2] = Bitmap.createBitmap(colors, 0, STRIDE, WIDTH, HEIGHT,
-                                              Bitmap.Config.ARGB_4444);
+            mBitmaps[0] = Bitmap.createBitmap(colors, 0, STRIDE, WIDTH, HEIGHT, Bitmap.Config.ARGB_8888);
+            mBitmaps[1] = Bitmap.createBitmap(colors, 0, STRIDE, WIDTH, HEIGHT, Bitmap.Config.RGB_565);
+            mBitmaps[2] = Bitmap.createBitmap(colors, 0, STRIDE, WIDTH, HEIGHT, Bitmap.Config.ARGB_4444);
 
             // these three will have their colors set later
-            mBitmaps[3] = Bitmap.createBitmap(WIDTH, HEIGHT,
-                                              Bitmap.Config.ARGB_8888);
-            mBitmaps[4] = Bitmap.createBitmap(WIDTH, HEIGHT,
-                                              Bitmap.Config.RGB_565);
-            mBitmaps[5] = Bitmap.createBitmap(WIDTH, HEIGHT,
-                                              Bitmap.Config.ARGB_4444);
+            mBitmaps[3] = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888);
+            mBitmaps[4] = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.RGB_565);
+            mBitmaps[5] = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_4444);
             for (int i = 3; i <= 5; i++) {
                 mBitmaps[i].setPixels(colors, 0, STRIDE, 0, 0, WIDTH, HEIGHT);
             }
@@ -104,7 +97,8 @@ public class CreateBitmap extends GraphicsActivity {
             }
         }
 
-        @Override protected void onDraw(Canvas canvas) {
+        @Override
+        protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.WHITE);
 
             for (int i = 0; i < mBitmaps.length; i++) {
@@ -114,12 +108,12 @@ public class CreateBitmap extends GraphicsActivity {
                 canvas.translate(0, mBitmaps[i].getHeight());
             }
 
-            // draw the color array directly, w/o craeting a bitmap object
-            canvas.drawBitmap(mColors, 0, STRIDE, 0, 0, WIDTH, HEIGHT,
-                              true, null);
+            // draw the color array directly, w/o creating a bitmap object
+            //noinspection deprecation
+            canvas.drawBitmap(mColors, 0, STRIDE, 0, 0, WIDTH, HEIGHT, true, null);
             canvas.translate(0, HEIGHT);
-            canvas.drawBitmap(mColors, 0, STRIDE, 0, 0, WIDTH, HEIGHT,
-                              false, mPaint);
+            //noinspection deprecation
+            canvas.drawBitmap(mColors, 0, STRIDE, 0, 0, WIDTH, HEIGHT, false, mPaint);
         }
     }
 }

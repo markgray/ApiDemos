@@ -20,6 +20,7 @@ package com.example.android.apis.graphics;
 //class is in a sub-package.
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.graphics.BitmapFactory;
@@ -40,7 +41,9 @@ import android.util.Log;
  * This activity demonstrates various ways density can cause the scaling of
  * bitmaps and drawables.
  */
+@SuppressWarnings("deprecation")
 public class DensityActivity extends Activity {
+    @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,6 +142,7 @@ public class DensityActivity extends Activity {
 
         final BitmapDrawable d = new BitmapDrawable(getResources(), bitmap);
         if (!scale) d.setTargetDensity(getResources().getDisplayMetrics());
+        //noinspection deprecation
         view.setBackgroundDrawable(d);
 
         view.setLayoutParams(new LinearLayout.LayoutParams(d.getIntrinsicWidth(),
@@ -146,12 +150,14 @@ public class DensityActivity extends Activity {
         layout.addView(view);
     }
 
+    @SuppressWarnings("deprecation")
     private void addResourceDrawable(LinearLayout layout, int resource) {
         View view = new View(this);
 
         final Drawable d = getResources().getDrawable(resource);
         view.setBackgroundDrawable(d);
 
+        //noinspection ConstantConditions
         view.setLayoutParams(new LinearLayout.LayoutParams(d.getIntrinsicWidth(),
                 d.getIntrinsicHeight()));
         layout.addView(view);
@@ -174,6 +180,7 @@ public class DensityActivity extends Activity {
         final Drawable d = getResources().getDrawable(resource);
         view.setBackgroundDrawable(d);
 
+        //noinspection ConstantConditions
         Log.i("foo", "9-patch #" + Integer.toHexString(resource)
                 + " w=" + d.getIntrinsicWidth() + " h=" + d.getIntrinsicHeight());
         view.setLayoutParams(new LinearLayout.LayoutParams(

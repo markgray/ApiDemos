@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+@SuppressWarnings({"ConstantIfStatement", "ConstantConditions"})
 public class Compass extends GraphicsActivity {
 
     private static final String TAG = "Compass";
@@ -36,19 +37,22 @@ public class Compass extends GraphicsActivity {
     private float[] mValues;
 
     private final SensorEventListener mListener = new SensorEventListener() {
+        @Override
         public void onSensorChanged(SensorEvent event) {
-            if (false) Log.d(TAG,
-                    "sensorChanged (" + event.values[0] + ", " + event.values[1] + ", " + event.values[2] + ")");
+            if (false) {
+                Log.d(TAG, "sensorChanged (" + event.values[0] + ", " + event.values[1] + ", " + event.values[2] + ")");
+            }
             mValues = event.values;
             if (mView != null) {
                 mView.invalidate();
             }
         }
-
+        @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
         }
     };
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -64,8 +68,7 @@ public class Compass extends GraphicsActivity {
         if (false) Log.d(TAG, "onResume");
         super.onResume();
 
-        mSensorManager.registerListener(mListener, mSensor,
-                SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(mListener, mSensor, SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
@@ -92,7 +95,8 @@ public class Compass extends GraphicsActivity {
             mPath.close();
         }
 
-        @Override protected void onDraw(Canvas canvas) {
+        @Override
+        protected void onDraw(Canvas canvas) {
             Paint paint = mPaint;
 
             canvas.drawColor(Color.WHITE);
