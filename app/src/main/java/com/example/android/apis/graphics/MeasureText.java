@@ -33,6 +33,7 @@ public class MeasureText extends GraphicsActivity {
     private static final int HEIGHT = 50;
     private static final int STRIDE = 64;   // must be >= WIDTH
 
+    @SuppressWarnings("unused")
     private static int[] createColors() {
         int[] colors = new int[STRIDE * HEIGHT];
         for (int y = 0; y < HEIGHT; y++) {
@@ -65,12 +66,14 @@ public class MeasureText extends GraphicsActivity {
                                                Typeface.ITALIC));
         }
 
+        @SuppressWarnings("UnusedParameters")
         private void showText(Canvas canvas, String text, Paint.Align align) {
          //   mPaint.setTextAlign(align);
 
             Rect    bounds = new Rect();
             float[] widths = new float[text.length()];
 
+            mPaint.setTextSize((float) 100.0);
             int count = mPaint.getTextWidths(text, 0, text.length(), widths);
             float w = mPaint.measureText(text, 0, text.length());
             mPaint.getTextBounds(text, 0, text.length(), bounds);
@@ -103,9 +106,9 @@ public class MeasureText extends GraphicsActivity {
             canvas.translate(mOriginX, mOriginY);
 
             showText(canvas, "Measure", Paint.Align.LEFT);
-            canvas.translate(0, 80);
+            canvas.translate(0, 180);
             showText(canvas, "wiggy!", Paint.Align.CENTER);
-            canvas.translate(0, 80);
+            canvas.translate(0, 180);
             showText(canvas, "Text", Paint.Align.RIGHT);
         }
     }

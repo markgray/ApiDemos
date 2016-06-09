@@ -57,7 +57,9 @@ public class FingerPaint extends GraphicsActivity
 
     public class MyView extends View {
 
+        @SuppressWarnings("unused")
         private static final float MINP = 0.25f;
+        @SuppressWarnings("unused")
         private static final float MAXP = 0.75f;
 
         private Bitmap  mBitmap;
@@ -97,6 +99,7 @@ public class FingerPaint extends GraphicsActivity
             mX = x;
             mY = y;
         }
+
         private void touch_move(float x, float y) {
             float dx = Math.abs(x - mX);
             float dy = Math.abs(y - mY);
@@ -106,6 +109,7 @@ public class FingerPaint extends GraphicsActivity
                 mY = y;
             }
         }
+
         private void touch_up() {
             mPath.lineTo(mX, mY);
             // commit the path to our offscreen
@@ -194,12 +198,10 @@ public class FingerPaint extends GraphicsActivity
                 }
                 return true;
             case ERASE_MENU_ID:
-                mPaint.setXfermode(new PorterDuffXfermode(
-                                                        PorterDuff.Mode.CLEAR));
+                mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
                 return true;
             case SRCATOP_MENU_ID:
-                mPaint.setXfermode(new PorterDuffXfermode(
-                                                    PorterDuff.Mode.SRC_ATOP));
+                mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
                 mPaint.setAlpha(0x80);
                 return true;
         }

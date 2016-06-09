@@ -1030,11 +1030,13 @@ Graphics
     Graphics/Drawable/ShapeDrawable        all
         .graphics.ShapeDrawable1
             Drawing using the Drawable class methods, many of them usable in <shape> xml drawables.
+            TODO: Change size of Drawable's based on screen density (too small on Nexus 6)
 
   FingerPaint
     Graphics/FingerPaint                   all
         .graphics.FingerPaint
-            Shows off some Canvas drawing methods and View.onTouchEvent usage.
+            Shows off some Canvas drawing methods and View.onTouchEvent usage. ColorPickerDialog
+            produces a color wheel which is too small TODO: fix size of ColorPickerDialog
 
   Layers
     Graphics/Layers                        all
@@ -1048,8 +1050,9 @@ Graphics
             Shows how to use the text measurement methods: Paint.getTextWidths(), 
             Paint.measureText(), and Paint.getTextBounds() to determine what area
             each character in a string as well as the complete string will occupy 
-            were they to be drawn using:
-            Canvas.drawLine(float startX, float startY, float stopX, float stopY, Paint paint);
+            when they are drawn using Canvas.drawText, then draws a colored rectangle
+            around each string and a line under each at the baseline. Text was too
+            small so I modified it a bit.
 
   OpenGL ES
    Compressed Texture

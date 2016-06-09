@@ -16,6 +16,7 @@
 
 package com.example.android.apis.graphics;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.app.Dialog;
 import android.content.Context;
@@ -32,6 +33,7 @@ public class ColorPickerDialog extends Dialog {
     private OnColorChangedListener mListener;
     private int mInitialColor;
 
+    @SuppressLint("ViewConstructor")
     private static class ColorPickerView extends View {
         private Paint mPaint;
         private Paint mCenterPaint;
@@ -60,6 +62,7 @@ public class ColorPickerDialog extends Dialog {
         private boolean mTrackingCenter;
         private boolean mHighlightCenter;
 
+        @SuppressLint("DrawAllocation")
         @Override
         protected void onDraw(Canvas canvas) {
             float r = CENTER_X - mPaint.getStrokeWidth()*0.5f;
@@ -97,6 +100,7 @@ public class ColorPickerDialog extends Dialog {
         private static final int CENTER_RADIUS = 32;
 
         private int floatToByte(float x) {
+            //noinspection UnnecessaryLocalVariable
             int n = java.lang.Math.round(x);
             return n;
         }
@@ -136,6 +140,7 @@ public class ColorPickerDialog extends Dialog {
             return Color.argb(a, r, g, b);
         }
 
+        @SuppressWarnings("unused")
         private int rotateColor(int color, float rad) {
             float deg = rad * 180 / 3.1415927f;
             int r = Color.red(color);

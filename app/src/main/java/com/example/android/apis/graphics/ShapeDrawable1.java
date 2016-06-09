@@ -92,12 +92,9 @@ public class ShapeDrawable1 extends GraphicsActivity {
             mDrawables = new ShapeDrawable[7];
             mDrawables[0] = new ShapeDrawable(new RectShape());
             mDrawables[1] = new ShapeDrawable(new OvalShape());
-            mDrawables[2] = new ShapeDrawable(new RoundRectShape(outerR, null,
-                                                                 null));
-            mDrawables[3] = new ShapeDrawable(new RoundRectShape(outerR, inset,
-                                                                 null));
-            mDrawables[4] = new ShapeDrawable(new RoundRectShape(outerR, inset,
-                                                                 innerR));
+            mDrawables[2] = new ShapeDrawable(new RoundRectShape(outerR, null, null));
+            mDrawables[3] = new ShapeDrawable(new RoundRectShape(outerR, inset, null));
+            mDrawables[4] = new ShapeDrawable(new RoundRectShape(outerR, inset, innerR));
             mDrawables[5] = new ShapeDrawable(new PathShape(path, 100, 100));
             mDrawables[6] = new MyShapeDrawable(new ArcShape(45, -270));
 
@@ -111,8 +108,7 @@ public class ShapeDrawable1 extends GraphicsActivity {
 
             PathEffect pe = new DiscretePathEffect(10, 4);
             PathEffect pe2 = new CornerPathEffect(4);
-            mDrawables[3].getPaint().setPathEffect(
-                                                new ComposePathEffect(pe2, pe));
+            mDrawables[3].getPaint().setPathEffect(new ComposePathEffect(pe2, pe));
 
             MyShapeDrawable msd = (MyShapeDrawable)mDrawables[6];
             msd.getStrokePaint().setStrokeWidth(4);
