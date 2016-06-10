@@ -43,7 +43,7 @@ import com.example.android.apis.R;
  *
  */
 public class CompressedTextureActivity extends Activity {
-    private final static String TAG = "CompressedTextureActivity";
+    private final static String TAG = "C...dTextureAct...";
     /**
      * Choose between creating a compressed texture on the fly or
      * loading a compressed texture from a resource.

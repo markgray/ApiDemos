@@ -256,6 +256,7 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer{
             mIndexBuffer.position(0);
         }
 
+        @SuppressWarnings("UnusedParameters")
         public void draw(GL10 gl) {
             glFrontFace(GL_CCW);
             glVertexPointer(3, GL_FLOAT, 0, mFVertexBuffer);

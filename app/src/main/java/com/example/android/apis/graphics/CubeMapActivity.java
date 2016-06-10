@@ -16,20 +16,6 @@
 
 package com.example.android.apis.graphics;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.CharBuffer;
-import java.nio.FloatBuffer;
-
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL;
-import javax.microedition.khronos.opengles.GL10;
-import javax.microedition.khronos.opengles.GL11;
-import javax.microedition.khronos.opengles.GL11Ext;
-import javax.microedition.khronos.opengles.GL11ExtensionPack;
-
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,16 +27,31 @@ import android.util.Log;
 
 import com.example.android.apis.R;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.CharBuffer;
+import java.nio.FloatBuffer;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL;
+import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
+import javax.microedition.khronos.opengles.GL11ExtensionPack;
+
 /**
  * Demonstrate how to use the OES_texture_cube_map extension, available on some
  * high-end OpenGL ES 1.x GPUs.
  */
 public class CubeMapActivity extends Activity {
+    private static final String TAG = "CubeMapAct...";
     private GLSurfaceView mGLSurfaceView;
     private class Renderer implements GLSurfaceView.Renderer {
         private boolean mContextSupportsCubeMap;
         private Grid mGrid;
         private int mCubeMapTextureID;
+        @SuppressWarnings("unused")
         private boolean mUseTexGen = false;
         private float mAngle;
 
@@ -200,8 +201,8 @@ public class CubeMapActivity extends Activity {
         /**
          * This is not the fastest way to check for an extension, but fine if
          * we are only checking for a few extensions each time a context is created.
-         * @param gl
-         * @param extension
+         * @param gl GL interface
+         * @param extension extension to test for
          * @return true if the extension is present in the current context.
          */
         private boolean checkIfContextSupportsExtension(GL10 gl, String extension) {
@@ -212,6 +213,8 @@ public class CubeMapActivity extends Activity {
             // This means we can avoid special-case checks for the first or last
             // extension, as well as avoid special-case checks when an extension name
             // is the same as the first part of another extension name.
+            Log.i(TAG, "Supports: " + extensions);
+            //noinspection IndexOfReplaceableByContains
             return extensions.indexOf(" " + extension + " ") >= 0;
         }
     }
