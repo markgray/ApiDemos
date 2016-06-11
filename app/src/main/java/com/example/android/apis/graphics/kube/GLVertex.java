@@ -55,6 +55,7 @@ public class GLVertex {
 
     public void put(IntBuffer vertexBuffer, IntBuffer colorBuffer) {
         vertexBuffer.put(toFixed(x));
+        //noinspection SuspiciousNameCombination
         vertexBuffer.put(toFixed(y));
         vertexBuffer.put(toFixed(z));
         if (color == null) {
@@ -76,12 +77,14 @@ public class GLVertex {
 
         if (transform == null) {
             vertexBuffer.put(toFixed(x));
+            //noinspection SuspiciousNameCombination
             vertexBuffer.put(toFixed(y));
             vertexBuffer.put(toFixed(z));
         } else {
             GLVertex temp = new GLVertex();
             transform.multiply(this, temp);
             vertexBuffer.put(toFixed(temp.x));
+            //noinspection SuspiciousNameCombination
             vertexBuffer.put(toFixed(temp.y));
             vertexBuffer.put(toFixed(temp.z));
         }

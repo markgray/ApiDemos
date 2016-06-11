@@ -21,7 +21,6 @@ import android.opengl.GLSurfaceView;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-
 /**
  * Example of how to use OpenGL|ES in a custom view
  *
@@ -36,6 +35,7 @@ class KubeRenderer implements GLSurfaceView.Renderer {
         mCallback = callback;
     }
 
+    @Override
     public void onDrawFrame(GL10 gl) {
          if (mCallback != null) {
              mCallback.animate();
@@ -73,6 +73,7 @@ class KubeRenderer implements GLSurfaceView.Renderer {
         mWorld.draw(gl);
     }
 
+    @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         gl.glViewport(0, 0, width, height);
 
@@ -96,6 +97,7 @@ class KubeRenderer implements GLSurfaceView.Renderer {
         gl.glActiveTexture(GL10.GL_TEXTURE0);
     }
 
+    @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         // Nothing special, don't have any textures we need to recreate.
     }
@@ -112,5 +114,3 @@ class KubeRenderer implements GLSurfaceView.Renderer {
     private AnimationCallback mCallback;
     private float mAngle;
 }
-
-

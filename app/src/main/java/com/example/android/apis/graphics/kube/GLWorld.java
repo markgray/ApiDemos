@@ -46,12 +46,14 @@ public class GLWorld {
 	    mIndexBuffer = bb.asShortBuffer();
 
 		Iterator<GLVertex> iter2 = mVertexList.iterator();
+		//noinspection WhileLoopReplaceableByForEach
 		while (iter2.hasNext()) {
 			GLVertex vertex = iter2.next();
 			vertex.put(mVertexBuffer, mColorBuffer);
 		}
 
 		Iterator<GLShape> iter3 = mShapeList.iterator();
+		//noinspection WhileLoopReplaceableByForEach
 		while (iter3.hasNext()) {
 			GLShape shape = iter3.next();
 			shape.putIndices(mIndexBuffer);
@@ -69,8 +71,7 @@ public class GLWorld {
 	}
 
 	int count = 0;
-    public void draw(GL10 gl)
-    {
+    public void draw(GL10 gl) {
 		mColorBuffer.position(0);
 		mVertexBuffer.position(0);
 		mIndexBuffer.position(0);
@@ -83,12 +84,13 @@ public class GLWorld {
         count++;
     }
    
-    static public float toFloat(int x) {
+    @SuppressWarnings("unused")
+	static public float toFloat(int x) {
     	return x/65536.0f;
     }
 
-	private ArrayList<GLShape>	mShapeList = new ArrayList<GLShape>();	
-	private ArrayList<GLVertex>	mVertexList = new ArrayList<GLVertex>();
+	private ArrayList<GLShape>	mShapeList = new ArrayList<>();
+	private ArrayList<GLVertex>	mVertexList = new ArrayList<>();
 	
 	private int mIndexCount = 0;
 

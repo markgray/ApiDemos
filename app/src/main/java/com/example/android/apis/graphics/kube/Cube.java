@@ -22,7 +22,7 @@ public class Cube extends GLShape {
 	public Cube(GLWorld world, float left, float bottom, float back, float right, float top, float front) {
 		super(world);
        	GLVertex leftBottomBack = addVertex(left, bottom, back);
-       GLVertex rightBottomBack = addVertex(right, bottom, back);
+        GLVertex rightBottomBack = addVertex(right, bottom, back);
        	GLVertex leftTopBack = addVertex(left, top, back);
         GLVertex rightTopBack = addVertex(right, top, back);
        	GLVertex leftBottomFront = addVertex(left, bottom, front);

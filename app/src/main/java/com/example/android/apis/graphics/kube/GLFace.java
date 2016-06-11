@@ -23,11 +23,13 @@ import java.util.ArrayList;
 
 public class GLFace {
 
+	@SuppressWarnings("unused")
 	public GLFace() {
 		
 	}
 	
 	// for triangles
+	@SuppressWarnings("unused")
 	public GLFace(GLVertex v1, GLVertex v2, GLVertex v3) {
 		addVertex(v1);
 		addVertex(v2);
@@ -89,6 +91,6 @@ public class GLFace {
 		}
 	}
 	
-	private ArrayList<GLVertex> mVertexList = new ArrayList<GLVertex>();
+	private ArrayList<GLVertex> mVertexList = new ArrayList<>();
 	private GLColor mColor;
 }

@@ -26,8 +26,7 @@ import java.util.Random;
 
 public class Kube extends Activity implements KubeRenderer.AnimationCallback {
 
-    private GLWorld makeGLWorld()
-    {
+    private GLWorld makeGLWorld() {
         GLWorld world = new GLWorld();
 
         int one = 0x10000;
@@ -213,8 +212,7 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // We don't need a title either.
@@ -227,19 +225,18 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         mView.onResume();
     }
 
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
         mView.onPause();
     }
 
+    @Override
     public void animate() {
         // change our angle of view
         mRenderer.setAngle(mRenderer.getAngle() + 1.2f);
@@ -249,13 +246,16 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
             mCurrentLayer = mLayers[layerID];
             mCurrentLayerPermutation = mLayerPermutations[layerID];
             mCurrentLayer.startAnimation();
+            @SuppressWarnings("UnusedAssignment")
             boolean direction = mRandom.nextBoolean();
+            @SuppressWarnings("UnusedAssignment")
             int count = mRandom.nextInt(3) + 1;
 
             count = 1;
             direction = false;
             mCurrentAngle = 0;
-             if (direction) {
+            //noinspection ConstantConditions
+            if (direction) {
                 mAngleIncrement = (float)Math.PI / 50;
                    mEndAngle = mCurrentAngle + ((float)Math.PI * count) / 2f;
                } else {
@@ -312,8 +312,6 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
             // permutation for SIDE layer
             { 0, 1, 2, 21, 12, 3, 6, 7, 8, 9, 10, 11, 22, 13, 4, 15, 16, 17, 18, 19, 20, 23, 14, 5, 24, 25, 26 }
     };
-
-
 
     // current permutation of starting position
     int[] mPermutation;

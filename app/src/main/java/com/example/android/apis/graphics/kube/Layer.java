@@ -25,6 +25,7 @@ public class Layer {
 	}
 	
 	public void startAnimation() {
+		//noinspection ForLoopReplaceableByForEach
 		for (int i = 0; i < mShapes.length; i++) {
 			GLShape shape = mShapes[i];
 			if (shape != null) {
@@ -34,6 +35,7 @@ public class Layer {
 	}
 
 	public void endAnimation() {
+		//noinspection ForLoopReplaceableByForEach
 		for (int i = 0; i < mShapes.length; i++) {
 			GLShape shape = mShapes[i];
 			if (shape != null) {
@@ -79,7 +81,8 @@ public class Layer {
 				m[2][0] = m[2][1] = m[0][2] = m[1][2] = 0f;
 				break;
 		}
-		
+
+		//noinspection ForLoopReplaceableByForEach
 		for (int i = 0; i < mShapes.length; i++) {
 			GLShape shape = mShapes[i];
 			if (shape != null) {

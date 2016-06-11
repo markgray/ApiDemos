@@ -57,6 +57,7 @@ public class FrameBufferObjectActivity extends Activity {
          */
         private static final boolean DEBUG_RENDER_OFFSCREEN_ONSCREEN = false;
 
+        @Override
         public void onDrawFrame(GL10 gl) {
             checkGLError(gl);
             if (mContextSupportsFrameBufferObject) {
@@ -77,6 +78,7 @@ public class FrameBufferObjectActivity extends Activity {
             }
         }
 
+        @Override
         public void onSurfaceChanged(GL10 gl, int width, int height) {
             checkGLError(gl);
             mSurfaceWidth = width;
@@ -84,6 +86,7 @@ public class FrameBufferObjectActivity extends Activity {
             gl.glViewport(0, 0, width, height);
         }
 
+        @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             mContextSupportsFrameBufferObject = checkIfContextSupportsFrameBufferObject(gl);
             if (mContextSupportsFrameBufferObject) {
@@ -188,7 +191,7 @@ public class FrameBufferObjectActivity extends Activity {
                     GL10.GL_REPEAT);
             gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
                     GL10.GL_REPEAT);
-;            return texture;
+            return texture;
         }
 
         private int createFrameBuffer(GL10 gl, int width, int height, int targetTextureId) {
@@ -230,8 +233,8 @@ public class FrameBufferObjectActivity extends Activity {
         /**
          * This is not the fastest way to check for an extension, but fine if
          * we are only checking for a few extensions each time a context is created.
-         * @param gl
-         * @param extension
+         * @param gl the GL interface.
+         * @param extension extension to check for
          * @return true if the extension is present in the current context.
          */
         private boolean checkIfContextSupportsExtension(GL10 gl, String extension) {
@@ -242,7 +245,7 @@ public class FrameBufferObjectActivity extends Activity {
             // This means we can avoid special-case checks for the first or last
             // extension, as well as avoid special-case checks when an extension name
             // is the same as the first part of another extension name.
-            return extensions.indexOf(" " + extension + " ") >= 0;
+            return extensions.contains(" " + extension + " ");
         }
     }
 

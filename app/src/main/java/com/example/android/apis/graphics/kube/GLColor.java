@@ -23,6 +23,7 @@ public class GLColor {
     public final int blue;
     public final int alpha;
 
+    @SuppressWarnings("unused")
     public GLColor(int red, int green, int blue, int alpha) {
         this.red = red;
         this.green = green;

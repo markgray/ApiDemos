@@ -31,6 +31,7 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
         mCube = new Cube();
     }
 
+    @Override
     public void onDrawFrame(GL10 gl) {
         /*
          * Usually, the first thing one might want to do is to clear
@@ -63,6 +64,7 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
         mAngle += 1.2f;
     }
 
+    @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
          gl.glViewport(0, 0, width, height);
 
@@ -78,6 +80,7 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
          gl.glFrustumf(-ratio, ratio, -1, 1, 1, 10);
     }
 
+    @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         /*
          * By default, OpenGL enables features that improve quality
