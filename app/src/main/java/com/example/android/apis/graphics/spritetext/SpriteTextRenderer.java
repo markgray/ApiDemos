@@ -172,6 +172,7 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer{
         gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
                 GL10.GL_REPEAT);
 
+        //noinspection ConstantIfStatement,ConstantConditions
         if (false) {
             long time = SystemClock.uptimeMillis();
             if (mLastTime != 0) {

@@ -71,6 +71,7 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer{
         mTextureLoader = loader;
     }
 
+    @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         /*
          * By default, OpenGL enables features that improve quality
@@ -118,6 +119,7 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer{
         mTextureLoader.load(gl);
     }
 
+    @Override
     public void onDrawFrame(GL10 gl) {
         /*
          * By default, OpenGL enables features that improve quality
@@ -164,6 +166,7 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer{
         mTriangle.draw(gl);
     }
 
+    @Override
     public void onSurfaceChanged(GL10 gl, int w, int h) {
         glViewport(0, 0, w, h);
 
@@ -185,6 +188,7 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer{
     private TextureLoader mTextureLoader;
 
     private class RobotTextureLoader implements TextureLoader {
+        @Override
         public void load(GL10 gl) {
             InputStream is = mContext.getResources().openRawResource(
                     R.raw.robot);

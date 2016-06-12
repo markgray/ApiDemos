@@ -27,8 +27,9 @@ class MatrixGrabber {
     /**
      * Record the current modelView and projection matrix state.
      * Has the side effect of setting the current matrix state to GL_MODELVIEW
-     * @param gl
+     * @param gl the gl interface
      */
+    @SuppressWarnings("unused")
     public void getCurrentState(GL10 gl) {
         getCurrentProjection(gl);
         getCurrentModelView(gl);
@@ -37,7 +38,7 @@ class MatrixGrabber {
     /**
      * Record the current modelView matrix state. Has the side effect of
      * setting the current matrix state to GL_MODELVIEW
-     * @param gl
+     * @param gl the gl interface
      */
     public void getCurrentModelView(GL10 gl) {
         getMatrix(gl, GL10.GL_MODELVIEW, mModelView);
@@ -46,7 +47,7 @@ class MatrixGrabber {
     /**
      * Record the current projection matrix state. Has the side effect of
      * setting the current matrix state to GL_PROJECTION
-     * @param gl
+     * @param gl the gl interface
      */
     public void getCurrentProjection(GL10 gl) {
         getMatrix(gl, GL10.GL_PROJECTION, mProjection);

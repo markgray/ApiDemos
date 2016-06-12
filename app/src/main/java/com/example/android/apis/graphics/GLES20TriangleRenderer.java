@@ -203,6 +203,7 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
 
     private void checkGlError(String op) {
         int error;
+        //noinspection LoopStatementThatDoesntLoop
         while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
             Log.e(TAG, op + ": glError " + error);
             throw new RuntimeException(op + ": glError " + error);
@@ -213,6 +214,7 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
     private static final int TRIANGLE_VERTICES_DATA_STRIDE_BYTES = 5 * FLOAT_SIZE_BYTES;
     private static final int TRIANGLE_VERTICES_DATA_POS_OFFSET = 0;
     private static final int TRIANGLE_VERTICES_DATA_UV_OFFSET = 3;
+    @SuppressWarnings("FieldCanBeLocal")
     private final float[] mTriangleVerticesData = {
             // X, Y, Z, U, V
             -1.0f, -0.5f, 0, -0.5f, 0.0f,
@@ -221,6 +223,7 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
 
     private FloatBuffer mTriangleVertices;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final String mVertexShader =
         "uniform mat4 uMVPMatrix;\n" +
         "attribute vec4 aPosition;\n" +
@@ -231,6 +234,7 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
         "  vTextureCoord = aTextureCoord;\n" +
         "}\n";
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final String mFragmentShader =
         "precision mediump float;\n" +
         "varying vec2 vTextureCoord;\n" +

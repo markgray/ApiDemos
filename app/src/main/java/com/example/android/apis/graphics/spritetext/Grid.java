@@ -27,8 +27,10 @@ import javax.microedition.khronos.opengles.GL10;
  * A 2D rectangular mesh. Can be drawn textured or untextured.
  *
  */
+@SuppressWarnings("unused")
 class Grid {
 
+    @SuppressWarnings("unused")
     public Grid(int w, int h) {
         if (w < 0 || w >= 65536) {
             throw new IllegalArgumentException("w");
@@ -92,6 +94,7 @@ class Grid {
 
     }
 
+    @SuppressWarnings("unused")
     void set(int i, int j, float x, float y, float z, float u, float v) {
         if (i < 0 || i >= mW) {
             throw new IllegalArgumentException("i");

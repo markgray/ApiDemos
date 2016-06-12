@@ -29,6 +29,7 @@ public class MatrixStack {
         commonInit(DEFAULT_MAX_DEPTH);
     }
 
+    @SuppressWarnings("unused")
     public MatrixStack(int maxDepth) {
         commonInit(maxDepth);
     }
@@ -44,8 +45,9 @@ public class MatrixStack {
         Matrix.frustumM(mMatrix, mTop, left, right, bottom, top, near, far);
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public void glFrustumx(int left, int right, int bottom, int top, int near,
-            int far) {
+                           int far) {
         glFrustumf(fixedToFloat(left),fixedToFloat(right),
                 fixedToFloat(bottom), fixedToFloat(top),
                 fixedToFloat(near), fixedToFloat(far));
@@ -104,8 +106,9 @@ public class MatrixStack {
         Matrix.orthoM(mMatrix, mTop, left, right, bottom, top, near, far);
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public void glOrthox(int left, int right, int bottom, int top, int near,
-            int far) {
+                         int far) {
         glOrthof(fixedToFloat(left), fixedToFloat(right),
                 fixedToFloat(bottom), fixedToFloat(top),
                 fixedToFloat(near), fixedToFloat(far));
@@ -129,6 +132,7 @@ public class MatrixStack {
         Matrix.multiplyMM(mMatrix, mTop, mTemp, MATRIX_SIZE, mTemp, 0);
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public void glRotatex(int angle, int x, int y, int z) {
         glRotatef(angle, fixedToFloat(x), fixedToFloat(y), fixedToFloat(z));
     }
@@ -137,6 +141,7 @@ public class MatrixStack {
         Matrix.scaleM(mMatrix, mTop, x, y, z);
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public void glScalex(int x, int y, int z) {
         glScalef(fixedToFloat(x), fixedToFloat(y), fixedToFloat(z));
     }
@@ -145,6 +150,7 @@ public class MatrixStack {
         Matrix.translateM(mMatrix, mTop, x, y, z);
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public void glTranslatex(int x, int y, int z) {
         glTranslatef(fixedToFloat(x), fixedToFloat(y), fixedToFloat(z));
     }

@@ -56,7 +56,7 @@ class Projector {
     /**
      * Get the current projection matrix. Has the side-effect of
      * setting current matrix mode to GL_PROJECTION
-     * @param gl
+     * @param gl the gl interface
      */
     public void getCurrentProjection(GL10 gl) {
         mGrabber.getCurrentProjection(gl);
@@ -66,7 +66,7 @@ class Projector {
     /**
      * Get the current model view matrix. Has the side-effect of
      * setting current matrix mode to GL_MODELVIEW
-     * @param gl
+     * @param gl the gl interface
      */
     public void getCurrentModelView(GL10 gl) {
         mGrabber.getCurrentModelView(gl);

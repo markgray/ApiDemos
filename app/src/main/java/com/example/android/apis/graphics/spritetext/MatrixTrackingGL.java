@@ -280,6 +280,7 @@ class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
     }
 
     public int glGetError() {
+        @SuppressWarnings("UnnecessaryLocalVariable")
         int result = mgl.glGetError();
         return result;
     }
@@ -293,6 +294,7 @@ class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
     }
 
     public String glGetString(int name) {
+        @SuppressWarnings("UnnecessaryLocalVariable")
         String result = mgl.glGetString(name);
         return result;
     }
@@ -1037,6 +1039,7 @@ class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
      * Get the current matrix mode
      */
 
+    @SuppressWarnings("unused")
     public int getMatrixMode() {
         return mMatrixMode;
     }

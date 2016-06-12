@@ -75,7 +75,7 @@ public class LabelMaker {
      * Call to initialize the class.
      * Call whenever the surface has been created.
      *
-     * @param gl
+     * @param gl the gl interface
      */
     public void initialize(GL10 gl) {
         mState = STATE_INITIALIZED;
@@ -116,8 +116,9 @@ public class LabelMaker {
     /**
      * Call before adding labels. Clears out any existing labels.
      *
-     * @param gl
+     * @param gl the gl interface
      */
+    @SuppressWarnings("UnusedParameters")
     public void beginAdding(GL10 gl) {
         checkState(STATE_INITIALIZED, STATE_ADDING);
         mLabels.clear();
@@ -134,7 +135,7 @@ public class LabelMaker {
     /**
      * Call to add a label
      *
-     * @param gl
+     * @param gl the gl interface
      * @param text the text of the label
      * @param textPaint the paint of the label
      * @return the id of the label, used to measure and draw the label
@@ -146,7 +147,7 @@ public class LabelMaker {
     /**
      * Call to add a label
      *
-     * @param gl
+     * @param gl the gl interface
      * @param text the text of the label
      * @param textPaint the paint of the label
      * @return the id of the label, used to measure and draw the label
@@ -166,13 +167,14 @@ public class LabelMaker {
     /**
      * Call to add a label
      *
-     * @param gl
+     * @param gl the gl interface
      * @param text the text of the label
      * @param textPaint the paint of the label
      * @return the id of the label, used to measure and draw the label
      */
+    @SuppressWarnings("UnusedParameters")
     public int add(GL10 gl, Drawable background, String text, Paint textPaint,
-            int minWidth, int minHeight) {
+                   int minWidth, int minHeight) {
         checkState(STATE_ADDING, STATE_ADDING);
         boolean drawBackground = background != null;
         boolean drawText = (text != null) && (textPaint != null);
@@ -230,8 +232,10 @@ public class LabelMaker {
             throw new IllegalArgumentException("Out of texture space.");
         }
 
+        @SuppressWarnings("unused")
         int u2 = u + width;
         int vBase = v + ascent;
+        @SuppressWarnings("unused")
         int v2 = v + height;
 
         if (drawBackground) {
@@ -258,7 +262,7 @@ public class LabelMaker {
     /**
      * Call to end adding labels. Must be called before drawing starts.
      *
-     * @param gl
+     * @param gl the gl interface
      */
     public void endAdding(GL10 gl) {
         checkState(STATE_ADDING, STATE_INITIALIZED);
@@ -273,7 +277,7 @@ public class LabelMaker {
     /**
      * Get the width in pixels of a given label.
      *
-     * @param labelID
+     * @param labelID index of label
      * @return the width in pixels
      */
     public float getWidth(int labelID) {
@@ -283,7 +287,7 @@ public class LabelMaker {
     /**
      * Get the height in pixels of a given label.
      *
-     * @param labelID
+     * @param labelID index of label
      * @return the height in pixels
      */
     public float getHeight(int labelID) {
@@ -295,9 +299,10 @@ public class LabelMaker {
      * the label to the text baseline. (This is equivalent to the negative of
      * the label's paint's ascent.)
      *
-     * @param labelID
+     * @param labelID index of label
      * @return the baseline in pixels.
      */
+    @SuppressWarnings("unused")
     public float getBaseline(int labelID) {
         return mLabels.get(labelID).baseline;
     }
@@ -305,9 +310,9 @@ public class LabelMaker {
     /**
      * Begin drawing labels. Sets the OpenGL state for rapid drawing.
      *
-     * @param gl
-     * @param viewWidth
-     * @param viewHeight
+     * @param gl the gl interface
+     * @param viewWidth view width
+     * @param viewHeight view height
      */
     public void beginDrawing(GL10 gl, float viewWidth, float viewHeight) {
         checkState(STATE_INITIALIZED, STATE_DRAWING);
