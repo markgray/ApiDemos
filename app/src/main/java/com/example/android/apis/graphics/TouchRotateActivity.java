@@ -77,14 +77,16 @@ class TouchSurfaceView extends GLSurfaceView {
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
-    @Override public boolean onTrackballEvent(MotionEvent e) {
+    @Override
+    public boolean onTrackballEvent(MotionEvent e) {
         mRenderer.mAngleX += e.getX() * TRACKBALL_SCALE_FACTOR;
         mRenderer.mAngleY += e.getY() * TRACKBALL_SCALE_FACTOR;
         requestRender();
         return true;
     }
 
-    @Override public boolean onTouchEvent(MotionEvent e) {
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
         float x = e.getX();
         float y = e.getY();
         switch (e.getAction()) {
@@ -108,6 +110,7 @@ class TouchSurfaceView extends GLSurfaceView {
             mCube = new Cube();
         }
 
+        @Override
         public void onDrawFrame(GL10 gl) {
             /*
              * Usually, the first thing one might want to do is to clear
@@ -133,6 +136,7 @@ class TouchSurfaceView extends GLSurfaceView {
             mCube.draw(gl);
         }
 
+        @Override
         public void onSurfaceChanged(GL10 gl, int width, int height) {
              gl.glViewport(0, 0, width, height);
 
@@ -148,6 +152,7 @@ class TouchSurfaceView extends GLSurfaceView {
              gl.glFrustumf(-ratio, ratio, -1, 1, 1, 10);
         }
 
+        @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             /*
              * By default, OpenGL enables features that improve quality
@@ -174,11 +179,11 @@ class TouchSurfaceView extends GLSurfaceView {
         public float mAngleY;
     }
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
+    @SuppressWarnings("FieldCanBeLocal")
     private final float TRACKBALL_SCALE_FACTOR = 36.0f;
     private CubeRenderer mRenderer;
     private float mPreviousX;
     private float mPreviousY;
 }
-
-

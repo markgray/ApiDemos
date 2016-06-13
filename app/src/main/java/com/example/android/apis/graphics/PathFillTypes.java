@@ -21,8 +21,10 @@ package com.example.android.apis.graphics;
 //import com.example.android.apis.R;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.*;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 public class PathFillTypes extends GraphicsActivity {
@@ -33,25 +35,40 @@ public class PathFillTypes extends GraphicsActivity {
         setContentView(new SampleView(this));
     }
 
+    /**
+     * This method converts dp unit to equivalent pixels, depending on device density.
+     *
+     * @param dp A value in dp (density independent pixels) unit. Which we need to convert into pixels
+     * @param context Context to get resources and device specific display metrics
+     * @return A float value to represent px equivalent to dp depending on device density
+     */
+    public static float convertDpToPixel(float dp, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+
     private static class SampleView extends View {
         private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private Path mPath;
+        private float mPixelMultiplier;
 
         public SampleView(Context context) {
             super(context);
             setFocusable(true);
             setFocusableInTouchMode(true);
+            mPixelMultiplier = convertDpToPixel(1, context);
 
             mPath = new Path();
-            mPath.addCircle(40, 40, 45, Path.Direction.CCW);
-            mPath.addCircle(80, 80, 45, Path.Direction.CCW);
+            mPath.addCircle(40*mPixelMultiplier, 40*mPixelMultiplier, 45*mPixelMultiplier, Path.Direction.CCW);
+            mPath.addCircle(80*mPixelMultiplier, 80*mPixelMultiplier, 45*mPixelMultiplier, Path.Direction.CCW);
         }
 
         private void showPath(Canvas canvas, int x, int y, Path.FillType ft,
                               Paint paint) {
             canvas.save();
             canvas.translate(x, y);
-            canvas.clipRect(0, 0, 120, 120);
+            canvas.clipRect(0, 0, 120*mPixelMultiplier, 120*mPixelMultiplier);
             canvas.drawColor(Color.WHITE);
             mPath.setFillType(ft);
             canvas.drawPath(mPath, paint);
@@ -63,14 +80,15 @@ public class PathFillTypes extends GraphicsActivity {
 
             canvas.drawColor(0xFFCCCCCC);
 
-            canvas.translate(20, 20);
+            canvas.translate(20*mPixelMultiplier, 20*mPixelMultiplier);
 
             paint.setAntiAlias(true);
+            int m160 = Math.round(160*mPixelMultiplier);
 
             showPath(canvas, 0, 0, Path.FillType.WINDING, paint);
-            showPath(canvas, 160, 0, Path.FillType.EVEN_ODD, paint);
-            showPath(canvas, 0, 160, Path.FillType.INVERSE_WINDING, paint);
-            showPath(canvas, 160, 160, Path.FillType.INVERSE_EVEN_ODD, paint);
+            showPath(canvas, m160, 0, Path.FillType.EVEN_ODD, paint);
+            showPath(canvas, 0, m160, Path.FillType.INVERSE_WINDING, paint);
+            showPath(canvas, m160, m160, Path.FillType.INVERSE_EVEN_ODD, paint);
         }
     }
 }

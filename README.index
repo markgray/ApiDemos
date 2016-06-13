@@ -1131,7 +1131,7 @@ Graphics
     Graphics/OpenGL ES/Touch Rotate        all
         .graphics.TouchRotateActivity
             Shows how to redraw in response to user input. Draws a cube, and allows the
-            user to rotate it using their finger.
+            user to rotate it using their finger. TODO: Implement molecule demo.
 
    Translucent GLSurfaceView
     Graphics/OpenGL ES/Translucent GLSurfaceView  -- all
@@ -1143,7 +1143,7 @@ Graphics
     Graphics/PathEffects                   all
         .graphics.PathEffects
             Shows how to use the PathEffect classes to make animated dashed lines, and 
-            smoothed, rounded lines.
+            smoothed, rounded lines. TODO: scale lines for high dpi screens.
 
   PathFillTypes
     Graphics/PathFillTypes                 all
@@ -1152,6 +1152,7 @@ Graphics
             consists of two intersecting circles: 
             Path.FillType.WINDING, Path.FillType.EVEN_ODD, Path.FillType.INVERSE_WINDING, 
             and Path.FillType.INVERSE_EVEN_ODD.
+            TODO: See convertDpToPixel for example of converting pixels to dp and apply elsewhere
 
   Patterns
     Graphics/Patterns                      all

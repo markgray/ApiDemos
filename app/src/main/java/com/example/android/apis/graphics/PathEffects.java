@@ -16,6 +16,7 @@
 
 package com.example.android.apis.graphics;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.*;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ public class PathEffects extends GraphicsActivity {
         private int[] mColors;
         private float mPhase;
 
+        @SuppressWarnings("unused")
         private static PathEffect makeDash(float phase) {
             return new DashPathEffect(new float[] { 15, 5, 8, 5 }, phase);
         }
@@ -69,9 +71,11 @@ public class PathEffects extends GraphicsActivity {
                                 };
         }
 
-        @Override protected void onDraw(Canvas canvas) {
+        @Override
+        protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.WHITE);
 
+            @SuppressLint("DrawAllocation")
             RectF bounds = new RectF();
             mPath.computeBounds(bounds, false);
             canvas.translate(10 - bounds.left, 10 - bounds.top);
@@ -88,7 +92,8 @@ public class PathEffects extends GraphicsActivity {
             }
         }
 
-        @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
+        @Override
+        public boolean onKeyDown(int keyCode, KeyEvent event) {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_DPAD_CENTER:
                     mPath = makeFollowPath();
