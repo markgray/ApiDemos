@@ -16,6 +16,7 @@
 
 package com.example.android.apis.graphics;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
@@ -39,6 +40,7 @@ public class PurgeableBitmap extends GraphicsActivity {
     private PurgeableBitmapView mView;
     private final RefreshHandler mRedrawHandler = new RefreshHandler();
 
+    @SuppressLint("HandlerLeak")
     class RefreshHandler extends Handler {
 
         @Override
@@ -70,6 +72,7 @@ public class PurgeableBitmap extends GraphicsActivity {
 
     private boolean detectIfPurgeableRequest() {
         PackageManager pm = getPackageManager();
+        @SuppressWarnings("UnusedAssignment")
         CharSequence labelSeq = null;
         try {
           ActivityInfo info = pm.getActivityInfo(this.getComponentName(),
@@ -81,6 +84,7 @@ public class PurgeableBitmap extends GraphicsActivity {
         }
 
         String[] components = labelSeq.toString().split("/");
+        //noinspection RedundantIfStatement
         if (components[components.length - 1].equals("Purgeable")) {
             return true;
         } else {

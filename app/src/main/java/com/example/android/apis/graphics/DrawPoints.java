@@ -59,7 +59,8 @@ public class DrawPoints extends GraphicsActivity {
             buildPoints();
         }
 
-        @Override protected void onDraw(Canvas canvas) {
+        @Override
+        protected void onDraw(Canvas canvas) {
             Paint paint = mPaint;
 
             canvas.translate(10, 10);

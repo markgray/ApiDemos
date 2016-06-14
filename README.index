@@ -1185,6 +1185,7 @@ Graphics
         .graphics.DrawPoints
             Creates an array of points, draws RED lines between them using Canvas.drawLines()
             then draws the points by themselves in BLUE using Canvas.drawPoints().
+            TODO: resize for dp instead of px
 
   PolyToPoly
     Graphics/PolyToPoly                    all

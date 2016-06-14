@@ -83,7 +83,8 @@ public class Patterns extends GraphicsActivity {
             mPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
         }
 
-        @Override protected void onDraw(Canvas canvas) {
+        @Override
+        protected void onDraw(Canvas canvas) {
             canvas.setDrawFilter(mDF);
 
             mPaint.setShader(mShader1);

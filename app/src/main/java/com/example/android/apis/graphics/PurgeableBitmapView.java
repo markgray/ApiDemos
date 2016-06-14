@@ -16,6 +16,7 @@
 
 package com.example.android.apis.graphics;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -35,6 +36,7 @@ import java.io.ByteArrayOutputStream;
  * is invoked(), and its onDraw() draws the Bitmap and a number to screen.
  * The number is used to indicate the number of Bitmaps that has been decoded.
  */
+@SuppressLint("ViewConstructor")
 public class PurgeableBitmapView extends View {
     private final byte[] bitstream;
 
@@ -48,11 +50,13 @@ public class PurgeableBitmapView extends View {
     private int mDecodingCount = 0;
     private final Paint mPaint = new Paint();
     private final int textSize = 32;
+    @SuppressWarnings("FieldCanBeLocal")
     private static int delay = 100;
 
     public PurgeableBitmapView(Context context, boolean isPurgeable) {
         super(context);
         setFocusable(true);
+        //noinspection deprecation
         mOptions.inPurgeable = isPurgeable;
 
         int[] colors = createColors();

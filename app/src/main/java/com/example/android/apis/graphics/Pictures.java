@@ -16,6 +16,7 @@
 
 package com.example.android.apis.graphics;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
@@ -60,7 +61,9 @@ public class Pictures extends GraphicsActivity {
             mDrawable = new PictureDrawable(mPicture);
         }
 
-        @Override protected void onDraw(Canvas canvas) {
+        @SuppressLint("DrawAllocation")
+        @Override
+        protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.WHITE);
 
             canvas.drawPicture(mPicture);
@@ -71,9 +74,11 @@ public class Pictures extends GraphicsActivity {
             mDrawable.draw(canvas);
 
             ByteArrayOutputStream os = new ByteArrayOutputStream();
+            //noinspection deprecation
             mPicture.writeToStream(os);
             InputStream is = new ByteArrayInputStream(os.toByteArray());
             canvas.translate(0, 300);
+            //noinspection deprecation
             canvas.drawPicture(Picture.createFromStream(is));
         }
     }
