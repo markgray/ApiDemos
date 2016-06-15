@@ -19,7 +19,10 @@ package com.example.android.apis.graphics;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -28,6 +31,7 @@ import com.example.android.apis.R;
 
 import java.util.ArrayList;
 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ShadowCardStack extends Activity {
 
     private static final float X_SHIFT_DP = 1000;
@@ -42,6 +46,7 @@ public class ShadowCardStack extends Activity {
         return set;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,12 +60,12 @@ public class ShadowCardStack extends Activity {
         final float Y = Y_SHIFT_DP * density;
         final float Z = Z_LIFT_DP * density;
 
-        ArrayList<Animator> towardAnimators = new ArrayList<Animator>();
-        ArrayList<Animator> expandAnimators = new ArrayList<Animator>();
-        ArrayList<Animator> moveAwayAnimators = new ArrayList<Animator>();
-        ArrayList<Animator> moveBackAnimators = new ArrayList<Animator>();
-        ArrayList<Animator> awayAnimators = new ArrayList<Animator>();
-        ArrayList<Animator> collapseAnimators = new ArrayList<Animator>();
+        ArrayList<Animator> towardAnimators = new ArrayList<>();
+        ArrayList<Animator> expandAnimators = new ArrayList<>();
+        ArrayList<Animator> moveAwayAnimators = new ArrayList<>();
+        ArrayList<Animator> moveBackAnimators = new ArrayList<>();
+        ArrayList<Animator> awayAnimators = new ArrayList<>();
+        ArrayList<Animator> collapseAnimators = new ArrayList<>();
 
         final int max = cardParent.getChildCount();
         for (int i = 0; i < max; i++) {

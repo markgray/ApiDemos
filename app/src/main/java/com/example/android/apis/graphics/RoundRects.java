@@ -31,7 +31,9 @@ public class RoundRects extends GraphicsActivity {
     }
 
     private static class SampleView extends View {
+        @SuppressWarnings("unused")
         private Path    mPath;
+        @SuppressWarnings("unused")
         private Paint   mPaint;
         private Rect    mRect;
         private GradientDrawable mDrawable;
@@ -57,7 +59,8 @@ public class RoundRects extends GraphicsActivity {
                                                   r2, r2, r3, r3 });
         }
 
-        @Override protected void onDraw(Canvas canvas) {
+        @Override
+        protected void onDraw(Canvas canvas) {
 
             mDrawable.setBounds(mRect);
 

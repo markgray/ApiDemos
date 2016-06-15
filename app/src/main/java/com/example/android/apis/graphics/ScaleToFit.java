@@ -68,6 +68,7 @@ public class ScaleToFit extends GraphicsActivity {
         }
 
         private void setSrcR(int index) {
+            @SuppressWarnings("PointlessArithmeticExpression")
             int w = sSrcData[index*3 + 0];
             int h = sSrcData[index*3 + 1];
             mSrcR.set(0, 0, w, h);

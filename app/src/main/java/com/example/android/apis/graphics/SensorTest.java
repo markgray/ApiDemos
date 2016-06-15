@@ -27,13 +27,17 @@ import android.util.Log;
 import android.view.View;
 
 public class SensorTest extends GraphicsActivity {
+    @SuppressWarnings("FieldCanBeLocal")
     private final String TAG = "SensorTest";
 
     private SensorManager mSensorManager;
     private Sensor mSensor;
+    @SuppressWarnings("FieldCanBeLocal")
     private SampleView mView;
+    @SuppressWarnings({"unused", "MismatchedReadAndWriteOfArray"})
     private float[] mValues;
 
+    @SuppressWarnings("unused")
     private static class RunAve {
         private final float[] mWeights;
         private final float mWeightScale;
@@ -45,6 +49,7 @@ public class SensorTest extends GraphicsActivity {
             mWeights = weights;
 
             float sum = 0;
+            //noinspection ForLoopReplaceableByForEach
             for (int i = 0; i < weights.length; i++) {
                 sum += weights[i];
             }
@@ -73,7 +78,7 @@ public class SensorTest extends GraphicsActivity {
             }
             return sum * mWeightScale;
         }
-    };
+    }
 
     private final SensorEventListener mListener = new SensorEventListener() {
 
@@ -81,6 +86,7 @@ public class SensorTest extends GraphicsActivity {
         private float[] mPrev = new float[3];
         private long mLastGestureTime;
 
+        @Override
         public void onSensorChanged(SensorEvent event) {
             boolean show = false;
             float[] diff = new float[3];
@@ -130,6 +136,7 @@ public class SensorTest extends GraphicsActivity {
             }
         }
 
+        @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
         }
     };
@@ -141,6 +148,7 @@ public class SensorTest extends GraphicsActivity {
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mView = new SampleView(this);
         setContentView(mView);
+        //noinspection ConstantIfStatement,ConstantConditions
         if (false) Log.d(TAG, "create " + mSensorManager);
     }
 
@@ -148,6 +156,7 @@ public class SensorTest extends GraphicsActivity {
     protected void onResume() {
         super.onResume();
         mSensorManager.registerListener(mListener, mSensor, SensorManager.SENSOR_DELAY_FASTEST);
+        //noinspection ConstantIfStatement,ConstantConditions
         if (false) Log.d(TAG, "resume " + mSensorManager);
     }
 
@@ -155,6 +164,7 @@ public class SensorTest extends GraphicsActivity {
     protected void onStop() {
         mSensorManager.unregisterListener(mListener);
         super.onStop();
+        //noinspection ConstantIfStatement,ConstantConditions
         if (false) Log.d(TAG, "stop " + mSensorManager);
     }
 
@@ -199,6 +209,7 @@ public class SensorTest extends GraphicsActivity {
         @Override
         protected void onAttachedToWindow() {
             mAnimate = true;
+            //noinspection ConstantIfStatement,ConstantConditions
             if (false) Log.d(TAG, "onAttachedToWindow. mAnimate="+mAnimate);
             super.onAttachedToWindow();
         }
@@ -206,6 +217,7 @@ public class SensorTest extends GraphicsActivity {
         @Override
         protected void onDetachedFromWindow() {
             mAnimate = false;
+            //noinspection ConstantIfStatement,ConstantConditions
             if (false) Log.d(TAG, "onAttachedToWindow. mAnimate="+mAnimate);
             super.onDetachedFromWindow();
         }

@@ -1214,6 +1214,7 @@ Graphics
         .graphics.Regions
             Shows how to use the Region class to merge two or more Rectangle's in a 
             Region using Union, Xor, Difference, and Intersect operations.
+            TODO: desperately needs scaling for dpi.
 
   RoundRects
     Graphics/RoundRects                    all
@@ -1235,6 +1236,7 @@ Graphics
         .graphics.SensorTest
             This sample only draws a nice looking arrow, and logs sensor readings. No
             meaningful graphics lessons here?
+            TODO: update mValues from sensor readings.
 
   Shadow Card Drag
     Graphics/Shadow Card Drag              v21 (or crashes due to Outline.setConvexPath)
@@ -1249,7 +1251,8 @@ Graphics
             design" shadowing. The properties being animated are: translationY (expandAnimators), 
             translationZ (towardAnimators), rotationY and translationX (moveAwayAnimators), 
             rotationY and translationX (moveBackAnimators),  translationZ (awayAnimators), and
-            translationY (collapseAnimators).
+            translationY (collapseAnimators). Crashes for less than v21 due to AndroidManifest
+            android:theme="@android:style/Theme.Material.Light"
 
   Surface Window
     Graphics/Surface Window                v21 or crash

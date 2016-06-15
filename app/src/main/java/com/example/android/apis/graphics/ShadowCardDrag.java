@@ -17,6 +17,7 @@
 package com.example.android.apis.graphics;
 
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -29,6 +30,7 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RectShape;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.graphics.drawable.shapes.Shape;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -41,6 +43,7 @@ import com.example.android.apis.R;
 
 import java.util.ArrayList;
 
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class ShadowCardDrag extends Activity {
     private static final float MAX_Z_DP = 10;
     private static final float MOMENTUM_SCALE = 10;
@@ -132,13 +135,13 @@ public class ShadowCardDrag extends Activity {
         }
 
         @Override
-        public void getOutline(Outline outline) {
+        public void getOutline(@SuppressWarnings("NullableProblems") Outline outline) {
             outline.setConvexPath(mPath);
         }
     }
 
     private final ShapeDrawable mCardBackground = new ShapeDrawable();
-    private final ArrayList<Shape> mShapes = new ArrayList<Shape>();
+    private final ArrayList<Shape> mShapes = new ArrayList<>();
     private float mDensity;
     private View mCard;
 
