@@ -51,7 +51,8 @@ public class Sweep extends GraphicsActivity {
             mPaint.setShader(mShader);
         }
 
-        @Override protected void onDraw(Canvas canvas) {
+        @Override
+        protected void onDraw(Canvas canvas) {
             Paint paint = mPaint;
             float x = 160;
             float y = 100;
@@ -80,7 +81,8 @@ public class Sweep extends GraphicsActivity {
             }
         }
 
-        @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
+        @Override
+        public boolean onKeyDown(int keyCode, KeyEvent event) {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_D:
                     mPaint.setDither(!mPaint.isDither());

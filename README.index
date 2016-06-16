@@ -1259,7 +1259,9 @@ Graphics
         .graphics.WindowSurface            SurfaceHolder.Callback2 needs v9+
             Demonstrates how to take over the Surface from a window to do direct drawing
             to it (without going through the view hierarchy). Good example of how to use 
-            a background thread to do your drawing.
+            a background thread to do your drawing. Shows use of life cycle callbacks when
+            a thread is running in the background.
+            TODO: getWindow is a good starting place to better understand Android View implementation
 
   SurfaceView Overlay
     Graphics/SurfaceView Overlay           all
@@ -1273,6 +1275,7 @@ Graphics
         .graphics.Sweep
             Animates a SweepGradient Shader by rotating its setLocalMatrix(Matrix M),
             used to paint a circle.
+            TODO: Scale for high dpi screens, and add alternative input for keypad.
 
   Text Align
     Graphics/Text Align                    all

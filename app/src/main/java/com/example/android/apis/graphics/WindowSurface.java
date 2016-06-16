@@ -1,20 +1,22 @@
 package com.example.android.apis.graphics;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 /**
  * Demonstrates how to take over the Surface from a window to do direct
  * drawing to it (without going through the view hierarchy).
  */
+@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
-    DrawingThread mDrawingThread;
+    private static final String TAG = "WindowSurface";
+    public final DrawingThread mDrawingThread = new DrawingThread();
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,6 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
         getWindow().takeSurface(this);
         
         // This is the thread that will be drawing to our surface.
-        mDrawingThread = new DrawingThread();
         mDrawingThread.start();
     }
 
@@ -63,6 +64,7 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
         }
     }
 
+    @Override
     public void surfaceCreated(SurfaceHolder holder) {
         // Tell the drawing thread that a surface is available.
         synchronized (mDrawingThread) {
@@ -71,14 +73,17 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
         }
     }
 
+    @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         // Don't need to do anything here; the drawing thread will pick up
         // new sizes from the canvas.
     }
 
+    @Override
     public void surfaceRedrawNeeded(SurfaceHolder holder) {
     }
 
+    @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         // We need to tell the drawing thread to stop, and block until
         // it has done so.
@@ -197,6 +202,7 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
                         try {
                             wait();
                         } catch (InterruptedException e) {
+                            Log.i(TAG, e.getLocalizedMessage());
                         }
                     }
                     
