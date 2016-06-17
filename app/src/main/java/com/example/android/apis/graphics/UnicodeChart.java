@@ -88,6 +88,7 @@ public class UnicodeChart extends GraphicsActivity {
                 canvas.drawText(Integer.toHexString(unichar),
                                 computeX(i), computeY(i), mLabelPaint);
             }
+            //noinspection deprecation
             canvas.drawPosText(chars, 0, 256, mPos, mBigCharPaint);
         }
 

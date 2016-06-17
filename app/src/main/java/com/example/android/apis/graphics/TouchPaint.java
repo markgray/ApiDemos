@@ -16,6 +16,8 @@
 
 package com.example.android.apis.graphics;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -23,6 +25,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -60,6 +63,7 @@ import java.util.Random;
  * have a button, which we use to cycle through colors.
  * </p>
  */
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class TouchPaint extends GraphicsActivity {
     /** Used as a pulse to gradually fade the contents of the window. */
     private static final int MSG_FADE = 1;
@@ -194,6 +198,7 @@ public class TouchPaint extends GraphicsActivity {
         mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_FADE), FADE_DELAY);
     }
 
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -510,8 +515,9 @@ public class TouchPaint extends GraphicsActivity {
          *
          * Repeats the process until a masterpiece is born.
          */
+        @SuppressWarnings("UnusedParameters")
         private void drawSplat(Canvas canvas, float x, float y, float orientation,
-                float distance, float tilt, Paint paint) {
+                               float distance, float tilt, Paint paint) {
             float z = distance * 2 + 10;
 
             // Calculate the center of the spray.

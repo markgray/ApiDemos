@@ -57,6 +57,7 @@ public class TextAlign extends GraphicsActivity {
             float[] pos = new float[n * 2];
             float accumulatedX = 0;
             for (int i = 0; i < n; i++) {
+                //noinspection PointlessArithmeticExpression
                 pos[i*2 + 0] = accumulatedX;
                 pos[i*2 + 1] = y;
                 accumulatedX += widths[i];
@@ -116,20 +117,24 @@ public class TextAlign extends GraphicsActivity {
 
             p.setColor(0xBB00FF00);
             for (int i = 0; i < pos.length/2; i++) {
+                //noinspection PointlessArithmeticExpression
                 canvas.drawLine(pos[i*2+0], pos[i*2+1]-DY,
                                 pos[i*2+0], pos[i*2+1]+DY*2, p);
             }
             p.setColor(Color.BLACK);
 
             p.setTextAlign(Paint.Align.LEFT);
+            //noinspection deprecation
             canvas.drawPosText(POSTEXT, pos, p);
 
             canvas.translate(0, DY);
             p.setTextAlign(Paint.Align.CENTER);
+            //noinspection deprecation
             canvas.drawPosText(POSTEXT, pos, p);
 
             canvas.translate(0, DY);
             p.setTextAlign(Paint.Align.RIGHT);
+            //noinspection deprecation
             canvas.drawPosText(POSTEXT, pos, p);
 
             // now draw the text on path

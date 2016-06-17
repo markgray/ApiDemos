@@ -1282,6 +1282,7 @@ Graphics
         .graphics.TextAlign
             Shows how to position text drawn to a Canvas using Paint.setTextAlign, 
             Canvas.drawPosText, and along an arbitrary using Canvas.drawTextOnPath
+            TODO: resize text for dpi and fix deprecated methods warnings
 
   Touch Paint
     Graphics/Touch Paint                   all v14+ or crash
@@ -1300,13 +1301,15 @@ Graphics
         .graphics.UnicodeChart
             Draws a unicode chart, and if you had a dpad it would draw more than 
             one chart. Way too small on the newer devices (froyo OK).
+            TODO: resize for dpi.
 
   Vertices
     Graphics/Vertices                      all
         .graphics.Vertices
             Shows how to use Canvas.drawVertices with BitmapShader to draw warpable
             Bitmap's. The Canvas.translate before drawing the bottom version of the
-            two is not far enough away from the top so it overlaps it.
+            two is not far enough away from the top for high dpi so it overlaps it.
+            TODO: change spacing based on dpi
 
   Xfermodes
     Graphics/Xfermodes                     all

@@ -41,6 +41,7 @@ public class Vertices extends GraphicsActivity {
         private final Matrix mInverse = new Matrix();
 
         private static void setXY(float[] array, int index, float x, float y) {
+            //noinspection PointlessArithmeticExpression
             array[index*2 + 0] = x;
             array[index*2 + 1] = y;
         }
