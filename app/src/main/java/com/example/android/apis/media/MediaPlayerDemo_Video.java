@@ -32,6 +32,7 @@ import android.view.SurfaceView;
 import android.widget.Toast;
 
 
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class MediaPlayerDemo_Video extends Activity implements
         OnBufferingUpdateListener, OnCompletionListener,
         OnPreparedListener, OnVideoSizeChangedListener, SurfaceHolder.Callback {
@@ -64,6 +65,7 @@ public class MediaPlayerDemo_Video extends Activity implements
         mPreview = (SurfaceView) findViewById(R.id.surface);
         holder = mPreview.getHolder();
         holder.addCallback(this);
+        //noinspection deprecation
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         extras = getIntent().getExtras();
 
@@ -79,6 +81,7 @@ public class MediaPlayerDemo_Video extends Activity implements
                      * TODO: Set the path variable to a local media file path.
                      */
                     path = "";
+                    //noinspection StringEquality
                     if (path == "") {
                         // Tell the user to provide a media file URL.
                         Toast
@@ -102,6 +105,7 @@ public class MediaPlayerDemo_Video extends Activity implements
                      * 
                      */
                     path = "";
+                    //noinspection StringEquality
                     if (path == "") {
                         // Tell the user to provide a media file URL.
                         Toast
@@ -153,6 +157,7 @@ public class MediaPlayerDemo_Video extends Activity implements
         mIsVideoSizeKnown = true;
         mVideoWidth = width;
         mVideoHeight = height;
+        //noinspection ConstantConditions
         if (mIsVideoReadyToBePlayed && mIsVideoSizeKnown) {
             startVideoPlayback();
         }
@@ -161,6 +166,7 @@ public class MediaPlayerDemo_Video extends Activity implements
     public void onPrepared(MediaPlayer mediaplayer) {
         Log.d(TAG, "onPrepared called");
         mIsVideoReadyToBePlayed = true;
+        //noinspection ConstantConditions
         if (mIsVideoReadyToBePlayed && mIsVideoSizeKnown) {
             startVideoPlayback();
         }

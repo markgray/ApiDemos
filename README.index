@@ -1316,17 +1316,26 @@ Graphics
         .graphics.Xfermodes
             Shows the results of using different Xfermode's when drawing an overlapping 
             square and a circle to the same Canvas. Way too small on the newer devices
-            (froyo OK).
+            (froyo OK). TODO: scale for dpi
+
+Hardware
+    Hardware/Consumer IR                  all  -- but v19+ or crash
+        .hardware.ConsumerIr
+            App that transmits an IR code, demonstrates the android.hardware.ConsumerIrManager
+            android.hardware.ConsumerIrManager class. Unfortunately I have no devices with an
+            IR Emitter.
 
 Media
     Media/AudioFx                          all -- but v9+ or crash
         .media.AudioFxDemo
-            Nifty equalizer with simplified audio waveform display.
+            Nifty equalizer with simplified audio waveform display using onWaveFormDataCapture
+            callback of the Visualizer.OnDataCaptureListener interface.
 
     Media/MediaPlayer                      all
         .media.MediaPlayerDemo
             Shows how to use the MediaPlayer class to control playback of audio/video 
             files and streams.
+            TODO: Set the path variables to a local audio and video file path.
 
     Media/MediaProjection                  all -- v21 or crash
         .media.projection.MediaProjectionDemo

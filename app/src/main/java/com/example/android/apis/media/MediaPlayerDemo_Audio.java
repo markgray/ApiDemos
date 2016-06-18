@@ -16,6 +16,7 @@
 
 package com.example.android.apis.media;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.android.apis.R;
 
+@SuppressWarnings({"unused", "FieldCanBeLocal"})
 public class MediaPlayerDemo_Audio extends Activity {
 
     private static final String TAG = "MediaPlayerDemo";
@@ -48,6 +50,7 @@ public class MediaPlayerDemo_Audio extends Activity {
         playAudio(extras.getInt(MEDIA));
     }
 
+    @SuppressLint("SetTextI18n")
     private void playAudio(Integer media) {
         try {
             switch (media) {
@@ -56,6 +59,7 @@ public class MediaPlayerDemo_Audio extends Activity {
                      * TODO: Set the path variable to a local audio file path.
                      */
                     path = "";
+                    //noinspection StringEquality
                     if (path == "") {
                         // Tell the user to provide an audio file URL.
                         Toast

@@ -18,6 +18,7 @@ package com.example.android.apis.media.projection;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -43,6 +45,7 @@ import android.widget.ToggleButton;
 import java.util.ArrayList;
 import java.util.List;
 
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class MediaProjectionDemo extends Activity {
     private static final String TAG = "MediaProjectionDemo";
     private static final int PERMISSION_CODE = 1;
@@ -80,7 +83,7 @@ public class MediaProjectionDemo extends Activity {
         mProjectionManager =
             (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 
-        ArrayAdapter<Resolution> arrayAdapter = new ArrayAdapter<Resolution>(
+        ArrayAdapter<Resolution> arrayAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_list_item_1, RESOLUTIONS);
         Spinner s = (Spinner) findViewById(R.id.spinner);
         s.setAdapter(arrayAdapter);
@@ -162,6 +165,7 @@ public class MediaProjectionDemo extends Activity {
     }
 
     private class ResolutionSelector implements Spinner.OnItemSelectedListener {
+        @SuppressWarnings("SuspiciousNameCombination")
         @Override
         public void onItemSelected(AdapterView<?> parent, View v, int pos, long id) {
             Resolution r = (Resolution) parent.getItemAtPosition(pos);
@@ -191,6 +195,7 @@ public class MediaProjectionDemo extends Activity {
         }
     }
 
+    @SuppressWarnings("unused")
     private class SurfaceCallbacks implements SurfaceHolder.Callback {
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {

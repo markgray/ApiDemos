@@ -16,11 +16,10 @@
 
 package com.example.android.apis.media;
 
-import com.example.android.apis.R;
-
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -29,7 +28,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.Equalizer;
 import android.media.audiofx.Visualizer;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -39,8 +38,10 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.io.IOException;
+import com.example.android.apis.R;
 
+
+@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class AudioFxDemo extends Activity {
     private static final String TAG = "AudioFxDemo";
 
@@ -52,8 +53,10 @@ public class AudioFxDemo extends Activity {
 
     private LinearLayout mLinearLayout;
     private VisualizerView mVisualizerView;
+    @SuppressWarnings("FieldCanBeLocal")
     private TextView mStatusTextView;
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -92,6 +95,7 @@ public class AudioFxDemo extends Activity {
         mStatusTextView.setText("Playing audio...");
     }
 
+    @SuppressLint("SetTextI18n")
     private void setupEqualizerFxAndUI() {
         // Create the Equalizer object (an AudioEffect subclass) and attach it to our media player,
         // with a default priority (0).
@@ -112,7 +116,7 @@ public class AudioFxDemo extends Activity {
 
             TextView freqTextView = new TextView(this);
             freqTextView.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.FILL_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
             freqTextView.setGravity(Gravity.CENTER_HORIZONTAL);
             freqTextView.setText((mEqualizer.getCenterFreq(band) / 1000) + " Hz");
@@ -134,7 +138,7 @@ public class AudioFxDemo extends Activity {
             maxDbTextView.setText((maxEQLevel / 100) + " dB");
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.FILL_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.weight = 1;
             SeekBar bar = new SeekBar(this);
@@ -165,7 +169,7 @@ public class AudioFxDemo extends Activity {
         // wave form to a Canvas.
         mVisualizerView = new VisualizerView(this);
         mVisualizerView.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.FILL_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 (int)(VISUALIZER_HEIGHT_DIP * getResources().getDisplayMetrics().density)));
         mLinearLayout.addView(mVisualizerView);
 
@@ -173,11 +177,13 @@ public class AudioFxDemo extends Activity {
         mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
         mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
         mVisualizer.setDataCaptureListener(new Visualizer.OnDataCaptureListener() {
+            @Override
             public void onWaveFormDataCapture(Visualizer visualizer, byte[] bytes,
                     int samplingRate) {
                 mVisualizerView.updateVisualizer(bytes);
             }
 
+            @Override
             public void onFftDataCapture(Visualizer visualizer, byte[] bytes, int samplingRate) {}
         }, Visualizer.getMaxCaptureRate() / 2, true, false);
     }

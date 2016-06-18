@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class MediaPlayerDemo extends Activity {
     private Button mlocalvideo;
     private Button mresourcesvideo;
@@ -56,6 +57,7 @@ public class MediaPlayerDemo extends Activity {
     }
 
     private OnClickListener mLocalAudioListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             Intent intent =
                     new Intent(MediaPlayerDemo.this.getApplication(),
@@ -66,6 +68,7 @@ public class MediaPlayerDemo extends Activity {
         }
     };
     private OnClickListener mResourcesAudioListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             Intent intent =
                     new Intent(MediaPlayerDemo.this.getApplication(),
@@ -77,6 +80,7 @@ public class MediaPlayerDemo extends Activity {
     };
 
     private OnClickListener mLocalVideoListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             Intent intent =
                     new Intent(MediaPlayerDemo.this,
@@ -87,6 +91,7 @@ public class MediaPlayerDemo extends Activity {
         }
     };
     private OnClickListener mStreamVideoListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             Intent intent =
                     new Intent(MediaPlayerDemo.this,

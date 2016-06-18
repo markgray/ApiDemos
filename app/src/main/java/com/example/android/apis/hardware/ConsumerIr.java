@@ -19,8 +19,11 @@ package com.example.android.apis.hardware;
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.hardware.ConsumerIrManager;
 import android.view.View;
@@ -49,6 +52,7 @@ import com.example.android.apis.R;
  *         </tr>
  * </table>
  */
+@TargetApi(Build.VERSION_CODES.KITKAT)
 public class ConsumerIr extends Activity {
     private static final String TAG = "ConsumerIrTest";
     TextView mFreqsText;
@@ -99,6 +103,7 @@ public class ConsumerIr extends Activity {
     };
 
     View.OnClickListener mGetFreqsClickListener = new View.OnClickListener() {
+        @SuppressLint({"SetTextI18n", "DefaultLocale"})
         public void onClick(View v) {
             StringBuilder b = new StringBuilder();
 
