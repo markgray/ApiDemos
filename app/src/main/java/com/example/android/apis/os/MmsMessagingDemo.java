@@ -16,6 +16,34 @@
 
 package com.example.android.apis.os;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.PendingIntent;
+import android.app.PendingIntent.CanceledException;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.example.android.apis.R;
 import com.google.android.mms.ContentType;
 import com.google.android.mms.InvalidHeaderValueException;
 import com.google.android.mms.pdu.CharacterSets;
@@ -30,41 +58,14 @@ import com.google.android.mms.pdu.RetrieveConf;
 import com.google.android.mms.pdu.SendConf;
 import com.google.android.mms.pdu.SendReq;
 
-import android.app.Activity;
-import android.app.PendingIntent;
-import android.app.PendingIntent.CanceledException;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
-import android.telephony.PhoneNumberUtils;
-import android.telephony.SmsManager;
-import android.telephony.TelephonyManager;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import com.example.android.apis.R;
-
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class MmsMessagingDemo extends Activity {
     private static final String TAG = "MmsMessagingDemo";
 
@@ -186,6 +187,7 @@ public class MmsMessagingDemo extends Activity {
                         try {
                             writer.close();
                         } catch (IOException e) {
+                            Log.i(TAG, e.getLocalizedMessage());
                         }
                     }
                 }
@@ -233,6 +235,7 @@ public class MmsMessagingDemo extends Activity {
     }
 
     private void handleSentResult(int code, Intent intent) {
+        //noinspection ResultOfMethodCallIgnored
         mSendFile.delete();
         int status = R.string.mms_status_failed;
         if (code == Activity.RESULT_OK) {
@@ -273,6 +276,7 @@ public class MmsMessagingDemo extends Activity {
         }
     }
 
+    @SuppressWarnings("UnusedParameters")
     private void handleReceivedResult(Context context, int code, Intent intent) {
         int status = R.string.mms_status_failed;
         if (code == Activity.RESULT_OK) {
@@ -301,6 +305,7 @@ public class MmsMessagingDemo extends Activity {
             } catch (IOException e) {
                 Log.e(TAG, "MMS received, io exception", e);
             } finally {
+                //noinspection ResultOfMethodCallIgnored
                 mDownloadFile.delete();
             }
         } else {
@@ -369,7 +374,9 @@ public class MmsMessagingDemo extends Activity {
             req.setDeliveryReport(PduHeaders.VALUE_NO);
             // Read report
             req.setReadReport(PduHeaders.VALUE_NO);
-        } catch (InvalidHeaderValueException e) {}
+        } catch (InvalidHeaderValueException e) {
+            Log.i(TAG, e.getLocalizedMessage());
+        }
 
         return new PduComposer(context, req).make();
     }

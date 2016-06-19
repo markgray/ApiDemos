@@ -16,13 +16,13 @@
 
 package com.example.android.apis.media;
 
-import com.example.android.apis.R;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.MediaController;
-import android.widget.Toast;
 import android.widget.VideoView;
+
+import com.example.android.apis.R;
 
 public class VideoViewDemo extends Activity {
 
@@ -30,6 +30,7 @@ public class VideoViewDemo extends Activity {
      * TODO: Set the path variable to a streaming video URL or a local media
      * file path.
      */
+    @SuppressWarnings("FieldCanBeLocal")
     private VideoView mVideoView;
 
     @Override

@@ -18,12 +18,14 @@ package com.example.android.apis.nfc;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.widget.TextView;
 
+@SuppressLint("SetTextI18n")
 public class TechFilter extends Activity {
     private TextView mText;
     private int mCount = 0;

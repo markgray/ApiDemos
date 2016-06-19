@@ -1364,8 +1364,9 @@ NFC
             No idea, but nfc related somehow.
 
 OS
-    OS/MMS Messaging                       Needs api source to compile
+    OS/MMS Messaging                       v21 or crash
         .os.MmsMessagingDemo
+            Shows how to send and receive mms messaging (test using real phone)
 
     OS/Morse Code                          all
         .os.MorseCode

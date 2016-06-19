@@ -18,16 +18,22 @@ package com.example.android.apis.nfc;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
 
 /**
  * An example of how to use the NFC foreground NDEF push APIs.
  */
+@SuppressWarnings("FieldCanBeLocal")
+@SuppressLint("SetTextI18n")
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class ForegroundNdefPush extends Activity {
     private NfcAdapter mAdapter;
     private TextView mText;
