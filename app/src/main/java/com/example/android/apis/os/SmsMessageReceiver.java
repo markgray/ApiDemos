@@ -27,6 +27,7 @@ import android.telephony.SmsMessage;
 
 public class SmsMessageReceiver extends BroadcastReceiver {
     /** Tag string for our debug logs */
+    @SuppressWarnings("unused")
     private static final String TAG = "SmsMessageReceiver";
 
     @Override
@@ -37,7 +38,9 @@ public class SmsMessageReceiver extends BroadcastReceiver {
 
         Object[] pdus = (Object[]) extras.get("pdus");
 
+        //noinspection ForLoopReplaceableByForEach,LoopStatementThatDoesntLoop,ConstantConditions
         for (int i = 0; i < pdus.length; i++) {
+            @SuppressWarnings("deprecation")
             SmsMessage message = SmsMessage.createFromPdu((byte[]) pdus[i]);
             String fromAddress = message.getOriginatingAddress();
             String fromDisplayName = fromAddress;
@@ -68,6 +71,7 @@ public class SmsMessageReceiver extends BroadcastReceiver {
             di.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             di.putExtra(SmsReceivedDialog.SMS_FROM_ADDRESS_EXTRA, fromAddress);
             di.putExtra(SmsReceivedDialog.SMS_FROM_DISPLAY_NAME_EXTRA, fromDisplayName);
+            //noinspection RedundantStringToString
             di.putExtra(SmsReceivedDialog.SMS_MESSAGE_EXTRA, message.getMessageBody().toString());
             context.startActivity(di);
 

@@ -29,6 +29,7 @@ import android.widget.Toast;
 /**
  * Example that shows finding a preference from the hierarchy and a custom preference type.
  */
+@SuppressWarnings("deprecation")
 public class AdvancedPreferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
     public static final String KEY_MY_PREFERENCE = "my_preference";
     public static final String KEY_ADVANCED_CHECKBOX_PREFERENCE = "advanced_checkbox_preference";
@@ -40,6 +41,7 @@ public class AdvancedPreferences extends PreferenceActivity implements OnSharedP
      * This is a simple example of controlling a preference from code.
      */
     private Runnable mForceCheckBoxRunnable = new Runnable() {
+        @Override
         public void run() {
             if (mCheckBoxPreference != null) {
                 mCheckBoxPreference.setChecked(!mCheckBoxPreference.isChecked());
@@ -83,6 +85,7 @@ public class AdvancedPreferences extends PreferenceActivity implements OnSharedP
         mHandler.removeCallbacks(mForceCheckBoxRunnable);
     }
 
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         // Let's do something when my counter preference value changes
         if (key.equals(KEY_MY_PREFERENCE)) {

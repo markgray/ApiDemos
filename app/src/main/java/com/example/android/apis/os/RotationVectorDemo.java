@@ -21,12 +21,15 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
+import android.os.Build;
 import android.os.Bundle;
 
 /**
@@ -39,6 +42,7 @@ import android.os.Bundle;
  * @see SensorManager
  * 
  */
+@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class RotationVectorDemo extends Activity {
     private GLSurfaceView mGLSurfaceView;
     private SensorManager mSensorManager;
@@ -107,6 +111,7 @@ public class RotationVectorDemo extends Activity {
             mSensorManager.unregisterListener(this);
         }
 
+        @Override
         public void onSensorChanged(SensorEvent event) {
             // we received a sensor event. it is a good practice to check
             // that we received the proper event
@@ -119,6 +124,7 @@ public class RotationVectorDemo extends Activity {
             }
         }
 
+        @Override
         public void onDrawFrame(GL10 gl) {
             // clear screen
             gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -136,6 +142,7 @@ public class RotationVectorDemo extends Activity {
             mCube.draw(gl);
         }
 
+        @Override
         public void onSurfaceChanged(GL10 gl, int width, int height) {
             // set view-port
             gl.glViewport(0, 0, width, height);
@@ -146,6 +153,7 @@ public class RotationVectorDemo extends Activity {
             gl.glFrustumf(-ratio, ratio, -1, 1, 1, 10);
         }
 
+        @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             // dither is enabled by default, we don't need it
             gl.glDisable(GL10.GL_DITHER);
@@ -210,6 +218,7 @@ public class RotationVectorDemo extends Activity {
             }            
         }
 
+        @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
         }
     }

@@ -16,15 +16,17 @@
 
 package com.example.android.apis.os;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.view.View;
 import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.hardware.TriggerEvent;
 import android.hardware.TriggerEventListener;
-import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
+
 import com.example.android.apis.R;
 
 /**
@@ -46,6 +48,7 @@ OS / TriggerSensors
  */
 
 
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class TriggerListener extends TriggerEventListener {
     private Context mContext;
     private TextView mTextView;
@@ -65,6 +68,7 @@ class TriggerListener extends TriggerEventListener {
     }
 }
 
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class TriggerSensors extends Activity {
     private SensorManager mSensorManager;
     private Sensor mSigMotion;

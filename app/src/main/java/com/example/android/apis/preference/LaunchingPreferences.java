@@ -18,6 +18,7 @@ package com.example.android.apis.preference;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -69,12 +70,13 @@ public class LaunchingPreferences extends Activity implements OnClickListener {
         updateCounterText();
     }
 
+    @Override
     public void onClick(View v) {
 
         // When the button is clicked, launch an activity through this intent
         Intent launchPreferencesIntent = new Intent().setClass(this, AdvancedPreferences.class);
 
-        // Make it a subactivity so we know when it returns
+        // Make it a sub-activity so we know when it returns
         startActivityForResult(launchPreferencesIntent, REQUEST_CODE_PREFERENCES);
     }
 
@@ -90,6 +92,7 @@ public class LaunchingPreferences extends Activity implements OnClickListener {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateCounterText() {
         // Since we're in the same package, we can use this context to get
         // the default shared preferences

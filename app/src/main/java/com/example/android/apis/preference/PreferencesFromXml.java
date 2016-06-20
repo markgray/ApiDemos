@@ -21,6 +21,7 @@ import com.example.android.apis.R;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
+@SuppressWarnings("deprecation")
 public class PreferencesFromXml extends PreferenceActivity {
 
     @Override

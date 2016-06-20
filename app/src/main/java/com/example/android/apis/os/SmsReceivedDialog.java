@@ -30,6 +30,7 @@ import android.util.Log;
 
 import com.example.android.apis.R;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class SmsReceivedDialog extends Activity implements OnInitListener {
     private static final String TAG = "SmsReceivedDialog";
 
@@ -59,10 +60,12 @@ public class SmsReceivedDialog extends Activity implements OnInitListener {
                 mFromDisplayName,
                 mMessage);
 
+        //noinspection deprecation
         showDialog(DIALOG_SHOW_MESSAGE);
         mTts = new TextToSpeech(this, this);
     }
 
+    @Override
     public void onInit(int status) {
         if (status == TextToSpeech.SUCCESS) {
             int result = mTts.setLanguage(Locale.US);
@@ -70,6 +73,7 @@ public class SmsReceivedDialog extends Activity implements OnInitListener {
                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e(TAG, "TTS language is not available.");
             } else {
+                //noinspection deprecation
                 mTts.speak(mFullBodyString, TextToSpeech.QUEUE_ADD, null);
             }
         } else {
@@ -78,6 +82,7 @@ public class SmsReceivedDialog extends Activity implements OnInitListener {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {

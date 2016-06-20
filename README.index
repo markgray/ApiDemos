@@ -1375,12 +1375,12 @@ OS
 
     OS/Rotation Vector                     all -- v9+ or crash
         .os.RotationVectorDemo
-            Use Sensor.TYPE_ROTATION_VECTOR to change the rotation matrix of an openGL
-            Cube.
+            Use output from Sensor.TYPE_ROTATION_VECTOR to change the rotation matrix
+            of an openGL Cube.
 
     OS/SMS Messaging                       all
         .os.SmsMessagingDemo
-            Shows how to send and receive SMS messages.
+            Shows how to send and receive SMS messages. Nifty use of tts as well.
 
     OS/TriggerSensors                      all -- v18+ or crash
         .os.TriggerSensors
@@ -1396,7 +1396,7 @@ Preference
 
     Preference/2. Launching preferences    all
         .preference.LaunchingPreferences
-            Shows how to launch a seperate PreferenceActivity activity to collect user 
+            Shows how to launch a separate PreferenceActivity activity to collect user
             preference choices. Use PreferenceFragment instead.
 
     Preference/3. Preference dependencies  all

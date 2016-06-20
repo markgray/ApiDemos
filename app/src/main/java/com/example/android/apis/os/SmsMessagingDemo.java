@@ -60,7 +60,7 @@ public class SmsMessagingDemo extends Activity {
         if (getIntent().hasExtra(SMS_RECIPIENT_EXTRA)) {
             ((TextView) findViewById(R.id.sms_recipient)).setText(getIntent().getExtras()
                     .getString(SMS_RECIPIENT_EXTRA));
-            ((TextView) findViewById(R.id.sms_content)).requestFocus();
+            findViewById(R.id.sms_content).requestFocus();
         }
 
         // Enable or disable the broadcast receiver depending on the checked
