@@ -49,13 +49,14 @@ public class DefaultValues extends PreferenceActivity {
         super.onCreate(savedInstanceState);
 
         getPrefs(this);
+        //noinspection deprecation
         getPreferenceManager().setSharedPreferencesName(PREFS_NAME);
+        //noinspection deprecation
         addPreferencesFromResource(R.xml.default_values);
     }
 
     static SharedPreferences getPrefs(Context context) {
-        PreferenceManager.setDefaultValues(context, PREFS_NAME, MODE_PRIVATE,
-                R.xml.default_values, false);
+        PreferenceManager.setDefaultValues(context, PREFS_NAME, MODE_PRIVATE, R.xml.default_values, false);
         return context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
     }
 }

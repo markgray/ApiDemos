@@ -18,6 +18,9 @@ package com.example.android.apis.preference;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
@@ -32,6 +35,8 @@ import java.util.List;
  * panel with headers.
  */
 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("SetTextI18n")
 public class PreferenceWithHeaders extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +49,21 @@ public class PreferenceWithHeaders extends PreferenceActivity {
             setListFooter(button);
         }
     }
-    
+
+    /**
+     * Subclasses should override this method and verify that the given fragment is a valid type
+     * to be attached to this activity. The default implementation returns <code>true</code> for
+     * apps built for <code>android:targetSdkVersion</code> older than
+     * {@link Build.VERSION_CODES#KITKAT}. For later versions, it will throw an exception.
+     *
+     * @param fragmentName the class name of the Fragment about to be attached to this activity.
+     * @return true if the fragment class name is valid for this Activity and false otherwise.
+     */
+    @Override
+    protected boolean isValidFragment(String fragmentName) {
+        return true;
+    }
+
     /**
      * Populate the activity with the top-level headers.
      */
@@ -64,8 +83,7 @@ public class PreferenceWithHeaders extends PreferenceActivity {
             // Make sure default values are applied.  In a real app, you would
             // want this in a shared function that is used to retrieve the
             // SharedPreferences wherever they are needed.
-            PreferenceManager.setDefaultValues(getActivity(),
-                    R.xml.advanced_preferences, false);
+            PreferenceManager.setDefaultValues(getActivity(), R.xml.advanced_preferences, false);
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.fragmented_preferences);

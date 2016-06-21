@@ -18,7 +18,9 @@ package com.example.android.apis.preference;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
@@ -26,6 +28,7 @@ import android.preference.PreferenceFragment;
  * Demonstration of PreferenceFragment, showing a single fragment in an
  * activity.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentPreferences extends Activity {
 
     @Override
@@ -33,8 +36,9 @@ public class FragmentPreferences extends Activity {
         super.onCreate(savedInstanceState);
 
         // Display the fragment as the main content.
-        getFragmentManager().beginTransaction().replace(android.R.id.content,
-                new PrefsFragment()).commit();
+        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new PrefsFragment())
+                .commit();
     }
 
 

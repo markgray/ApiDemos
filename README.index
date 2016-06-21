@@ -1391,36 +1391,40 @@ Preference
     Preference/1. Preferences from XML     all
         .preference.PreferencesFromXml
             Uses deprecated method PreferenceActivity.addPreferencesFromResource to load 
-            preferences. Use PreferenceFragment and PreferenceFragment.addPreferencesFromResource
-            instead.
+            preferences. TODO: use PreferenceFragment and PreferenceFragment.addPreferencesFromResource
 
     Preference/2. Launching preferences    all
         .preference.LaunchingPreferences
             Shows how to launch a separate PreferenceActivity activity to collect user
-            preference choices. Use PreferenceFragment instead.
+            preference choices. TODO: Use PreferenceFragment instead.
 
     Preference/3. Preference dependencies  all
         .preference.PreferenceDependencies
             A primitive example showing how some preferences can depend on other preferences.
+            Uses android:dependency to point to key of another Preference that the Preference
+            will depend on. If the other Preference is not set or is off, the Preference will
+            be disabled. TODO: reimplement using fragment-based PreferenceActivity.
 
     Preference/4. Default values           all
         .preference.DefaultValues
             How to properly use default values when using a preference file. PreferenceActivity
-            is deprecated -- use PreferenceFragment instead.
+            is deprecated -- TODO: use PreferenceFragment instead.
 
     Preference/5. Preferences from code    all -- v14+ or crash
         .preference.PreferencesFromCode
             Shows how to fill a PreferenceScreen using java code.
+            TODO: use PreferenceFragment instead.
 
     Preference/6. Advanced preferences     all
         .preference.AdvancedPreferences
             Show how to impliment a OnSharedPreferenceChangeListener.
+            TODO: use PreferenceFragment instead.
 
     Preference/7. Fragment                 v11
         .preference.FragmentPreferences
             Shows how to use a PreferenceFragment instead of the deprecated PreferenceActivity.
 
-    Preference/8. Headers                  v11 -- need to Subclasses of PreferenceActivity must override isValidFragment or crash
+    Preference/8. Headers                  v11 -- need to override isValidFragment or crash
         .preference.PreferenceWithHeaders
             After override of isValidFragment {return true;} you have a top-level preference 
             panel with headers which when clicked on launch the PreferenceFragment's listed

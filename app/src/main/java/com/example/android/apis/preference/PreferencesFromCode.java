@@ -18,9 +18,11 @@ package com.example.android.apis.preference;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -30,6 +32,8 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
 
+@SuppressWarnings("deprecation")
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class PreferencesFromCode extends PreferenceActivity {
 
     private static final String PARENT_CHECKBOX_PREFERENCE = "parent_checkbox_preference";

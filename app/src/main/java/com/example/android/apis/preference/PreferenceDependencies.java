@@ -27,6 +27,7 @@ public class PreferenceDependencies extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //noinspection deprecation
         addPreferencesFromResource(R.xml.preference_dependencies);
     }
 

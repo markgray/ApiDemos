@@ -16,8 +16,8 @@
 
 <!-- This is a primitive example showing the different types of preferences available. -->
 
-<PreferenceScreen
-        xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
             android:title="@string/inline_preferences">
@@ -57,9 +57,12 @@
         <PreferenceScreen
                 android:fragment="com.example.android.apis.preference.PreferenceWithHeaders$Prefs1FragmentInner"
                 android:title="@string/title_fragment_preference"
-                android:summary="@string/summary_fragment_preference">
+                android:summary="@string/summary_fragment_preference"
+            tools:ignore="UnusedAttribute">
             <!-- Arbitrary key/value pairs can be included for fragment arguments -->
-            <extra android:name="someKey" android:value="somePrefValue" />
+            <extra
+                android:name="someKey"
+                android:value="somePrefValue" />
         </PreferenceScreen>
 
         <!-- This PreferenceScreen tag sends the user to a completely different

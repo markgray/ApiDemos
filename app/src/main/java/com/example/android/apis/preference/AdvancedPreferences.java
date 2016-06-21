@@ -60,8 +60,8 @@ public class AdvancedPreferences extends PreferenceActivity implements OnSharedP
         addPreferencesFromResource(R.xml.advanced_preferences);
 
         // Get a reference to the checkbox preference
-        mCheckBoxPreference = (CheckBoxPreference)getPreferenceScreen().findPreference(
-                KEY_ADVANCED_CHECKBOX_PREFERENCE);
+        mCheckBoxPreference = (CheckBoxPreference)getPreferenceScreen()
+                .findPreference(KEY_ADVANCED_CHECKBOX_PREFERENCE);
     }
 
     @Override
