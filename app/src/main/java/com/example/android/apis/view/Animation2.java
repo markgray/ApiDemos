@@ -49,36 +49,30 @@ public class Animation2 extends Activity implements
         s.setOnItemSelectedListener(this);
     }
 
+    @Override
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
         switch (position) {
 
         case 0:
-            mFlipper.setInAnimation(AnimationUtils.loadAnimation(this,
-                    R.anim.push_up_in));
-            mFlipper.setOutAnimation(AnimationUtils.loadAnimation(this,
-                    R.anim.push_up_out));
+            mFlipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_up_in));
+            mFlipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.push_up_out));
             break;
         case 1:
-            mFlipper.setInAnimation(AnimationUtils.loadAnimation(this,
-                    R.anim.push_left_in));
-            mFlipper.setOutAnimation(AnimationUtils.loadAnimation(this,
-                    R.anim.push_left_out));
+            mFlipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
+            mFlipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_out));
             break;
         case 2:
-            mFlipper.setInAnimation(AnimationUtils.loadAnimation(this,
-                    android.R.anim.fade_in));
-            mFlipper.setOutAnimation(AnimationUtils.loadAnimation(this,
-                    android.R.anim.fade_out));
+            mFlipper.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
+            mFlipper.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
             break;
         default:
-            mFlipper.setInAnimation(AnimationUtils.loadAnimation(this,
-                    R.anim.hyperspace_in));
-            mFlipper.setOutAnimation(AnimationUtils.loadAnimation(this,
-                    R.anim.hyperspace_out));
+            mFlipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.hyperspace_in));
+            mFlipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.hyperspace_out));
             break;
         }
     }
 
+    @Override
     public void onNothingSelected(AdapterView<?> parent) {
     }
 

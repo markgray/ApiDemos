@@ -16,12 +16,12 @@
 
 package com.example.android.apis.security;
 
-import com.example.android.apis.R;
-
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
@@ -30,18 +30,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.example.android.apis.R;
+
 import java.io.IOException;
-import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
@@ -59,8 +57,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-import javax.security.auth.x500.X500Principal;
-
+@TargetApi(Build.VERSION_CODES.M)
+@SuppressLint("SetTextI18n")
 public class KeyStoreUsage extends Activity {
     private static final String TAG = "AndroidKeyStoreUsage";
 
@@ -68,6 +66,7 @@ public class KeyStoreUsage extends Activity {
      * An instance of {@link java.security.KeyStore} through which this app
      * talks to the {@code AndroidKeyStore}.
      */
+    @SuppressWarnings("unused")
     KeyStore mKeyStore;
 
     /**
@@ -148,6 +147,7 @@ public class KeyStoreUsage extends Activity {
                  * check the alias isn't blank here.
                  */
                 final String alias = aliasInput.getText().toString();
+                //noinspection ConstantConditions
                 if (alias == null || alias.length() == 0) {
                     aliasInput.setError(getResources().getText(R.string.keystore_no_alias_error));
                 } else {
@@ -207,6 +207,7 @@ public class KeyStoreUsage extends Activity {
         mPlainText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                //noinspection deprecation
                 mPlainText.setTextColor(getResources().getColor(android.R.color.primary_text_dark));
             }
         });
@@ -215,8 +216,9 @@ public class KeyStoreUsage extends Activity {
         mCipherText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                mCipherText
-                        .setTextColor(getResources().getColor(android.R.color.primary_text_dark));
+                //noinspection deprecation
+                mCipherText.setTextColor(getResources()
+                           .getColor(android.R.color.primary_text_dark));
             }
         });
 
@@ -269,6 +271,7 @@ public class KeyStoreUsage extends Activity {
                  */
                 KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
                 ks.load(null);
+                @SuppressWarnings("UnnecessaryLocalVariable")
                 Enumeration<String> aliases = ks.aliases();
 
                 return aliases;
@@ -289,7 +292,7 @@ public class KeyStoreUsage extends Activity {
 
         @Override
         protected void onPostExecute(Enumeration<String> result) {
-            List<String> aliases = new ArrayList<String>();
+            List<String> aliases = new ArrayList<>();
             while (result.hasMoreElements()) {
                 aliases.add(result.nextElement());
             }
@@ -318,6 +321,7 @@ public class KeyStoreUsage extends Activity {
                             KeyProperties.DIGEST_SHA512)
                         .build());
 
+                @SuppressWarnings("unused")
                 KeyPair kp = kpg.generateKeyPair();
 
                 return true;
@@ -438,6 +442,7 @@ public class KeyStoreUsage extends Activity {
                 Signature s = Signature.getInstance("SHA256withECDSA");
                 s.initVerify(((PrivateKeyEntry) entry).getCertificate());
                 s.update(data);
+                @SuppressWarnings("UnnecessaryLocalVariable")
                 boolean valid = s.verify(signature);
 
                 return valid;
@@ -465,6 +470,7 @@ public class KeyStoreUsage extends Activity {
             }
         }
 
+        @SuppressWarnings("deprecation")
         @Override
         protected void onPostExecute(Boolean result) {
             if (result) {
@@ -475,6 +481,7 @@ public class KeyStoreUsage extends Activity {
             setKeyActionButtonsEnabled(true);
         }
 
+        @SuppressWarnings("deprecation")
         @Override
         protected void onCancelled() {
             mCipherText.setText("error!");
@@ -497,13 +504,7 @@ public class KeyStoreUsage extends Activity {
                 ks.load(null);
                 ks.deleteEntry(alias);
 
-            } catch (NoSuchAlgorithmException e) {
-                Log.w(TAG, "Could not generate key", e);
-            } catch (KeyStoreException e) {
-                Log.w(TAG, "Could not generate key", e);
-            } catch (CertificateException e) {
-                Log.w(TAG, "Could not generate key", e);
-            } catch (IOException e) {
+            } catch (NoSuchAlgorithmException | KeyStoreException | IOException | CertificateException e) {
                 Log.w(TAG, "Could not generate key", e);
             }
             return null;

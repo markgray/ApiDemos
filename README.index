@@ -1433,9 +1433,10 @@ Preference
     Preference/9. Switch                   v14
         .preference.SwitchPreference
             Shows how to use android.preference.SwitchPreference.
+            TODO: use PreferenceFragment instead.
 
 Security
-    Security/KeyStore                      all -- v18+ or crash
+    Security/KeyStore                      all -- v23+ or crash
         .security.KeyStoreUsage
             Shows how to use api to generate Key pairs, sign and verify.
 
@@ -1448,7 +1449,7 @@ Views
             and an ImageView. When the user clicks on an item in the list, it flips to
             show the item's picture. When the user clicks the picture, it flips to show 
             the list. The animation is made of two smaller animations: the first half 
-            rotatesthe list by 90 degrees on the Y axis and the second half rotates the 
+            rotates the list by 90 degrees on the Y axis and the second half rotates the
             picture by 90 degrees on the Y axis. When the first half finishes, the list
             is made invisible and the picture is set visible. (This would be good to use
             in my ClockSlice app!)

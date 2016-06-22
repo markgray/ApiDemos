@@ -61,8 +61,7 @@ public class Transition3d extends Activity implements
         mContainer = (ViewGroup) findViewById(R.id.container);
 
         // Prepare the ListView
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, PHOTOS_NAMES);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, PHOTOS_NAMES);
 
         mPhotosList.setAdapter(adapter);
         mPhotosList.setOnItemClickListener(this);
@@ -101,12 +100,14 @@ public class Transition3d extends Activity implements
         mContainer.startAnimation(rotation);
     }
 
+    @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         // Pre-load the image then start the animation
         mImageView.setImageResource(PHOTOS_RESOURCES[position]);
         applyRotation(position, 0, 90);
     }
 
+    @Override
     public void onClick(View v) {
         applyRotation(-1, 180, 90);
     }
@@ -123,13 +124,16 @@ public class Transition3d extends Activity implements
             mPosition = position;
         }
 
+        @Override
         public void onAnimationStart(Animation animation) {
         }
 
+        @Override
         public void onAnimationEnd(Animation animation) {
             mContainer.post(new SwapViews(mPosition));
         }
 
+        @Override
         public void onAnimationRepeat(Animation animation) {
         }
     }
@@ -145,6 +149,7 @@ public class Transition3d extends Activity implements
             mPosition = position;
         }
 
+        @Override
         public void run() {
             final float centerX = mContainer.getWidth() / 2.0f;
             final float centerY = mContainer.getHeight() / 2.0f;

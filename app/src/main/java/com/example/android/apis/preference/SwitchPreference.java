@@ -22,14 +22,14 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
+@SuppressWarnings("deprecation")
 public class SwitchPreference extends PreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        PreferenceManager.setDefaultValues(this, "switch", MODE_PRIVATE,
-                R.xml.default_values, false);
+        PreferenceManager.setDefaultValues(this, "switch", MODE_PRIVATE, R.xml.default_values, false);
 
         // Load the preferences from an XML resource
         getPreferenceManager().setSharedPreferencesName("switch");

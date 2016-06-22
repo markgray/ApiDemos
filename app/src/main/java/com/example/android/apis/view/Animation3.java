@@ -43,13 +43,13 @@ public class Animation3 extends Activity implements AdapterView.OnItemSelectedLi
         setContentView(R.layout.animation_3);
 
         Spinner s = (Spinner) findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, INTERPOLATORS);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, INTERPOLATORS);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s.setAdapter(adapter);
         s.setOnItemSelectedListener(this);
     }
 
+    @Override
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
         final View target = findViewById(R.id.target);
         final View targetParent = (View) target.getParent();
@@ -96,6 +96,7 @@ public class Animation3 extends Activity implements AdapterView.OnItemSelectedLi
         target.startAnimation(a);
     }
 
+    @Override
     public void onNothingSelected(AdapterView<?> parent) {
     }
 }
