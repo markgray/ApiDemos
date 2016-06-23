@@ -18,6 +18,7 @@ package com.example.android.apis.view;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -41,6 +42,7 @@ public class AutoComplete4 extends Activity {
         setContentView(R.layout.autocomplete_4);
 
         ContentResolver content = getContentResolver();
+        @SuppressLint("Recycle")
         Cursor cursor = content.query(Contacts.CONTENT_URI,
                 CONTACT_PROJECTION, null, null, null);
 
@@ -55,6 +57,7 @@ public class AutoComplete4 extends Activity {
     // to make compilation work
     public static class ContactListAdapter extends CursorAdapter implements Filterable {
         public ContactListAdapter(Context context, Cursor c) {
+            //noinspection deprecation
             super(context, c);
             mContent = context.getContentResolver();
         }

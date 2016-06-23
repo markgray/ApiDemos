@@ -18,6 +18,7 @@ package com.example.android.apis.view;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -32,13 +33,11 @@ public class AutoComplete5 extends Activity {
         setContentView(R.layout.autocomplete_5);
 
         ContentResolver content = getContentResolver();
-        Cursor cursor = content.query(Contacts.CONTENT_URI,
-                AutoComplete4.CONTACT_PROJECTION, null, null, null);
-        AutoComplete4.ContactListAdapter adapter =
-                new AutoComplete4.ContactListAdapter(this, cursor);
+        @SuppressLint("Recycle")
+        Cursor cursor = content.query(Contacts.CONTENT_URI, AutoComplete4.CONTACT_PROJECTION, null, null, null);
+        AutoComplete4.ContactListAdapter adapter = new AutoComplete4.ContactListAdapter(this, cursor);
 
-        AutoCompleteTextView textView = (AutoCompleteTextView)
-                findViewById(R.id.edit);
+        AutoCompleteTextView textView = (AutoCompleteTextView)findViewById(R.id.edit);
         textView.setAdapter(adapter);
     }
 }

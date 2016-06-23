@@ -1498,11 +1498,12 @@ Views
         .view.AutoComplete4
             Shows how to use the ContentResolver for the contacts database as the source
             of data for an auto complete lookup of a contract.
+            TODO: replace CursorAdapter constructor with LoaderManager with a CursorLoader
 
     Views/Auto Complete/5. Contacts with Hint -- all
         .view.AutoComplete5
             Shows how to use the ContentResolver for the contacts database as the source
-            of data for an auto complete lookup of a contract. It should show a hint in
+            of data for an auto complete lookup of a contact. It should show a hint in
             the EditText block, but does not for some reason.
 
     Views/Auto Complete/6. Multiple items  all
