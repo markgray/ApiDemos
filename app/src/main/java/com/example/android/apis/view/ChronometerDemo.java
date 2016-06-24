@@ -59,30 +59,35 @@ public class ChronometerDemo extends Activity {
     }
 
     View.OnClickListener mStartListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             mChronometer.start();
         }
     };
 
     View.OnClickListener mStopListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             mChronometer.stop();
         }
     };
 
     View.OnClickListener mResetListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             mChronometer.setBase(SystemClock.elapsedRealtime());
         }
     };
 
     View.OnClickListener mSetFormatListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             mChronometer.setFormat("Formatted time (%s)");
         }
     };
 
     View.OnClickListener mClearFormatListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             mChronometer.setFormat(null);
         }

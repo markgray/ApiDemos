@@ -1518,7 +1518,7 @@ Buttons
         .view.Buttons1
             Shows three different buttons, all totally defined in layout/buttons_1.xml:
             a default button, a small button using style="?android:attr/buttonStyleSmall",
-            and a ToggleButton.
+            and a ToggleButton. The small button is same size as normal button on M.
 
 Chronometer
     Views/Chronometer                      all
@@ -1577,7 +1577,7 @@ Custom
     Views/Custom                           all
         .view.CustomView1
             Demonstrates creating a Screen that uses custom views. This example uses
-            com.example.android.apis.view.LabelView.java -- the attributes is accepts
+            com.example.android.apis.view.LabelView.java -- the attributes it accepts
             are defined in the file values/attrs.xml
 
 Date Widgets

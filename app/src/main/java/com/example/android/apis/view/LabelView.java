@@ -42,7 +42,7 @@ public class LabelView extends View {
     /**
      * Constructor.  This version is only needed if you will be instantiating
      * the object manually (not from a layout XML file).
-     * @param context
+     * @param context context the view is running in
      */
     public LabelView(Context context) {
         super(context);
@@ -81,7 +81,7 @@ public class LabelView extends View {
         a.recycle();
     }
 
-    private final void initLabelView() {
+    private void initLabelView() {
         mTextPaint = new Paint();
         mTextPaint.setAntiAlias(true);
         // Must manually scale the desired text size to match screen density
@@ -135,7 +135,7 @@ public class LabelView extends View {
      * @return The width of the view, honoring constraints from measureSpec
      */
     private int measureWidth(int measureSpec) {
-        int result = 0;
+        int result;
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
 
@@ -161,7 +161,7 @@ public class LabelView extends View {
      * @return The height of the view, honoring constraints from measureSpec
      */
     private int measureHeight(int measureSpec) {
-        int result = 0;
+        int result;
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
 
