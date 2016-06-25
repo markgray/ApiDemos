@@ -1586,16 +1586,18 @@ Date Widgets
             Basic example of using date and time widgets, including android.app.TimePickerDialog
             and android.widget.DatePicker. Also provides a good example of using Activity#onCreateDialog,
             Activity#onPrepareDialog and Activity#showDialog to have the activity automatically
-            save and restore the state of the dialogs.
+            save and restore the state of the dialogs. Nifty TimePickerDialog on Nexus 6, lame one
+            on Jellybean
 
     Views/Date Widgets/2. Inline           all
         .view.DateWidgets2
-            Shows the use of an inline TimePicker.
+            Shows the use of an inline TimePicker. Neat on M lame on J
 
 Drag and Drop
     Views/Drag and Drop                    v11
         .view.DragAndDropDemo
-            Shows how to impliment draggable views.
+            Shows how to implement draggable views.
+
 
 Expandable Lists
     Views/Expandable Lists/1. Custom Adapter  -- all -- v17+ or crash
@@ -1606,6 +1608,7 @@ Expandable Lists
             "Cat Names", and "Fish Names". When clicked the groups expand to show the
             child lists, any child or group which is long-pressed will pop up a context
             menu with an "action button".
+            TODO: Scale TextSize and TextView for high dpi
 
     Views/Expandable Lists/2. Cursor (People) -- all -- crashes on froyo: null pointer
         .view.ExpandableList2

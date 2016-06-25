@@ -29,6 +29,7 @@ public class DateWidgets2 extends Activity {
     private TextView mTimeDisplay;
 
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +45,7 @@ public class DateWidgets2 extends Activity {
         updateDisplay(12, 15);
 
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-
+            @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                 updateDisplay(hourOfDay, minute);
             }

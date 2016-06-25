@@ -80,12 +80,15 @@ public class DateWidgets1 extends Activity {
     private void setDialogOnClickListener(int buttonId, final int dialogId) {
         Button b = (Button) findViewById(buttonId);
         b.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
+                //noinspection deprecation
                 showDialog(dialogId);
             }
         });
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
@@ -101,6 +104,7 @@ public class DateWidgets1 extends Activity {
         return null;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onPrepareDialog(int id, Dialog dialog) {
         switch (id) {
@@ -127,9 +131,8 @@ public class DateWidgets1 extends Activity {
 
     private DatePickerDialog.OnDateSetListener mDateSetListener =
             new DatePickerDialog.OnDateSetListener() {
-
-                public void onDateSet(DatePicker view, int year, int monthOfYear,
-                        int dayOfMonth) {
+                @Override
+                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                     mYear = year;
                     mMonth = monthOfYear;
                     mDay = dayOfMonth;
@@ -139,7 +142,7 @@ public class DateWidgets1 extends Activity {
 
     private TimePickerDialog.OnTimeSetListener mTimeSetListener =
             new TimePickerDialog.OnTimeSetListener() {
-
+                @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                     mHour = hourOfDay;
                     mMinute = minute;

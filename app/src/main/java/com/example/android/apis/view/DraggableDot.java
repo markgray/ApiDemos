@@ -18,10 +18,13 @@ package com.example.android.apis.view;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.*;
+import android.os.Build;
 import android.os.SystemClock;
 import android.text.TextPaint;
 import android.util.AttributeSet;
@@ -30,6 +33,7 @@ import android.view.DragEvent;
 import android.view.View;
 import android.widget.TextView;
 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class DraggableDot extends View {
     static final String TAG = "DraggableDot";
 
@@ -50,6 +54,7 @@ public class DraggableDot extends View {
     int mAnrType;
     CharSequence mLegend;
 
+    @SuppressWarnings("unused")
     static final int ANR_NONE = 0;
     static final int ANR_SHADOW = 1;
     static final int ANR_DROP = 2;
@@ -58,7 +63,11 @@ public class DraggableDot extends View {
         // hang forever; good for producing ANRs
         long start = SystemClock.uptimeMillis();
         do {
-            try { Thread.sleep(1000); } catch (InterruptedException e) {}
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                Log.i(TAG, e.getLocalizedMessage());
+            }
         } while (SystemClock.uptimeMillis() < start + 6000);
     }
 
@@ -104,6 +113,7 @@ public class DraggableDot extends View {
         mGlow.setStyle(Paint.Style.STROKE);
 
         // look up any layout-defined attributes
+        @SuppressLint("Recycle")
         TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.DraggableDot);
 
@@ -131,8 +141,8 @@ public class DraggableDot extends View {
         setOnLongClickListener(new View.OnLongClickListener() {
             public boolean onLongClick(View v) {
                 ClipData data = ClipData.newPlainText("dot", "Dot : " + v.toString());
-                v.startDrag(data, new ANRShadowBuilder(v, mAnrType == ANR_SHADOW),
-                        (Object)v, 0);
+                //noinspection RedundantCast
+                v.startDrag(data, new ANRShadowBuilder(v, mAnrType == ANR_SHADOW), (Object)v, 0);
                 return true;
             }
         });
@@ -193,6 +203,7 @@ public class DraggableDot extends View {
             mDragInProgress = true;
             mAcceptsDrag = result = true;
             // Redraw in the new visual state if we are a potential drop target
+            //noinspection ConstantConditions
             if (mAcceptsDrag) {
                 invalidate();
             }
@@ -251,6 +262,7 @@ public class DraggableDot extends View {
             Log.i(TAG, "Dropped item " + i + " : " + item);
             if (mReportView != null) {
                 String text = item.coerceToText(getContext()).toString();
+                //noinspection RedundantCast
                 if (event.getLocalState() == (Object) this) {
                     text += " : Dropped on self!";
                 }

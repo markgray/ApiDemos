@@ -16,8 +16,11 @@
 
 package com.example.android.apis.view;
 
+import android.annotation.TargetApi;
 import android.app.ExpandableListActivity;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -38,6 +41,7 @@ import com.example.android.apis.R;
  * Demonstrates expandable lists using a custom {@link ExpandableListAdapter}
  * from {@link BaseExpandableListAdapter}.
  */
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 public class ExpandableList1 extends ExpandableListActivity {
 
     ExpandableListAdapter mAdapter;
@@ -95,15 +99,18 @@ public class ExpandableList1 extends ExpandableListActivity {
                 { "Fluffy", "Snuggles" },
                 { "Goldy", "Bubbles" }
         };
-        
+
+        @Override
         public Object getChild(int groupPosition, int childPosition) {
             return children[groupPosition][childPosition];
         }
 
+        @Override
         public long getChildId(int groupPosition, int childPosition) {
             return childPosition;
         }
 
+        @Override
         public int getChildrenCount(int groupPosition) {
             return children[groupPosition].length;
         }
@@ -121,9 +128,11 @@ public class ExpandableList1 extends ExpandableListActivity {
             textView.setPaddingRelative(36, 0, 0, 0);
             // Set the text alignment
             textView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
             return textView;
         }
-        
+
+        @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
                 View convertView, ViewGroup parent) {
             TextView textView = getGenericView();
@@ -131,18 +140,22 @@ public class ExpandableList1 extends ExpandableListActivity {
             return textView;
         }
 
+        @Override
         public Object getGroup(int groupPosition) {
             return groups[groupPosition];
         }
 
+        @Override
         public int getGroupCount() {
             return groups.length;
         }
 
+        @Override
         public long getGroupId(int groupPosition) {
             return groupPosition;
         }
 
+        @Override
         public View getGroupView(int groupPosition, boolean isExpanded, View convertView,
                 ViewGroup parent) {
             TextView textView = getGenericView();
@@ -150,10 +163,12 @@ public class ExpandableList1 extends ExpandableListActivity {
             return textView;
         }
 
+        @Override
         public boolean isChildSelectable(int groupPosition, int childPosition) {
             return true;
         }
 
+        @Override
         public boolean hasStableIds() {
             return true;
         }

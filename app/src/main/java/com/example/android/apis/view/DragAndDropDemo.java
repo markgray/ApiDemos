@@ -18,12 +18,15 @@ package com.example.android.apis.view;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.DragEvent;
 import android.view.View;
 import android.widget.TextView;
 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class DragAndDropDemo extends Activity {
     TextView mResultText;
     DraggableDot mHiddenDot;
@@ -46,6 +49,7 @@ public class DragAndDropDemo extends Activity {
 
         mResultText = (TextView) findViewById(R.id.drag_result_text);
         mResultText.setOnDragListener(new View.OnDragListener() {
+            @Override
             public boolean onDrag(View v, DragEvent event) {
                 final int action = event.getAction();
                 switch (action) {
