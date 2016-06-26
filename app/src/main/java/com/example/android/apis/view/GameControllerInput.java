@@ -18,10 +18,12 @@ package com.example.android.apis.view;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.hardware.input.InputManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
@@ -42,7 +44,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * Demonstrates how to process input events received from game controllers.
  * It also shows how to detect when input devices are added, removed or reconfigured.
@@ -53,6 +54,7 @@ import java.util.List;
  * The game controller is also uses to control a very simple game.  See {@link GameView}
  * for the game itself.
  */
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class GameControllerInput extends Activity
         implements InputManager.InputDeviceListener {
     private static final String TAG = "GameControllerInput";
@@ -60,6 +62,7 @@ public class GameControllerInput extends Activity
     private InputManager mInputManager;
     private SparseArray<InputDeviceState> mInputDeviceStates;
     private GameView mGame;
+    @SuppressWarnings("FieldCanBeLocal")
     private ListView mSummaryList;
     private SummaryAdapter mSummaryAdapter;
 
@@ -69,7 +72,7 @@ public class GameControllerInput extends Activity
 
         mInputManager = (InputManager)getSystemService(Context.INPUT_SERVICE);
 
-        mInputDeviceStates = new SparseArray<InputDeviceState>();
+        mInputDeviceStates = new SparseArray<>();
         mSummaryAdapter = new SummaryAdapter(this, getResources());
 
         setContentView(R.layout.game_controller_input);
@@ -97,8 +100,8 @@ public class GameControllerInput extends Activity
         // Query all input devices.
         // We do this so that we can see them in the log as they are enumerated.
         int[] ids = mInputManager.getInputDeviceIds();
-        for (int i = 0; i < ids.length; i++) {
-            getInputDeviceState(ids[i]);
+        for (int id : ids) {
+            getInputDeviceState(id);
         }
     }
 
@@ -168,6 +171,7 @@ public class GameControllerInput extends Activity
     }
 
     // Implementation of InputManager.InputDeviceListener.onInputDeviceAdded()
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onInputDeviceAdded(int deviceId) {
         InputDeviceState state = getInputDeviceState(deviceId);
@@ -175,6 +179,7 @@ public class GameControllerInput extends Activity
     }
 
     // Implementation of InputManager.InputDeviceListener.onInputDeviceChanged()
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onInputDeviceChanged(int deviceId) {
         InputDeviceState state = mInputDeviceStates.get(deviceId);
@@ -338,8 +343,8 @@ public class GameControllerInput extends Activity
         private final Context mContext;
         private final Resources mResources;
 
-        private final SparseArray<Item> mDataItems = new SparseArray<Item>();
-        private final ArrayList<Item> mVisibleItems = new ArrayList<Item>();
+        private final SparseArray<Item> mDataItems = new SparseArray<>();
+        private final ArrayList<Item> mVisibleItems = new ArrayList<>();
 
         private final Heading mDeviceHeading;
         private final TextColumn mDeviceNameTextColumn;
@@ -349,6 +354,7 @@ public class GameControllerInput extends Activity
 
         private InputDeviceState mState;
 
+        @SuppressWarnings("PointlessBitwiseExpression")
         public SummaryAdapter(Context context, Resources resources) {
             mContext = context;
             mResources = resources;
@@ -364,6 +370,7 @@ public class GameControllerInput extends Activity
                     mResources.getString(R.string.game_controller_input_heading_keys));
         }
 
+        @SuppressWarnings("UnusedParameters")
         public void onItemClick(int position) {
             if (mState != null) {
                 Toast toast = Toast.makeText(
@@ -455,6 +462,7 @@ public class GameControllerInput extends Activity
                 return mItemId;
             }
 
+            @SuppressWarnings("UnusedParameters")
             public View getView(View convertView, ViewGroup parent) {
                 if (mView == null) {
                     LayoutInflater inflater = (LayoutInflater)

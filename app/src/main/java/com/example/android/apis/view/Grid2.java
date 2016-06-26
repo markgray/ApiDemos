@@ -48,18 +48,22 @@ public class Grid2 extends Activity {
             mContext = c;
         }
 
+        @Override
         public int getCount() {
             return mThumbIds.length;
         }
 
+        @Override
         public Object getItem(int position) {
             return position;
         }
 
+        @Override
         public long getItemId(int position) {
             return position;
         }
 
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ImageView imageView;
             if (convertView == null) {

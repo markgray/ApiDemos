@@ -17,10 +17,12 @@ package com.example.android.apis.view;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -38,6 +40,7 @@ import java.util.List;
 /**
  * This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection mode on GridView.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class Grid3 extends Activity {
 
     GridView mGrid;
@@ -68,6 +71,7 @@ public class Grid3 extends Activity {
         public AppsAdapter() {
         }
 
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             CheckableLayout l;
             ImageView i;
@@ -91,15 +95,17 @@ public class Grid3 extends Activity {
             return l;
         }
 
-
+        @Override
         public final int getCount() {
             return mApps.size();
         }
 
+        @Override
         public final Object getItem(int position) {
             return mApps.get(position);
         }
 
+        @Override
         public final long getItemId(int position) {
             return position;
         }
@@ -112,17 +118,21 @@ public class Grid3 extends Activity {
             super(context);
         }
 
+        @Override
         public void setChecked(boolean checked) {
             mChecked = checked;
+            //noinspection deprecation
             setBackgroundDrawable(checked ?
                     getResources().getDrawable(R.drawable.blue)
                     : null);
         }
 
+        @Override
         public boolean isChecked() {
             return mChecked;
         }
 
+        @Override
         public void toggle() {
             setChecked(!mChecked);
         }
@@ -130,23 +140,29 @@ public class Grid3 extends Activity {
     }
 
     public class MultiChoiceModeListener implements GridView.MultiChoiceModeListener {
+
+        @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.setTitle("Select Items");
             mode.setSubtitle("One item selected");
             return true;
         }
 
+        @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             return true;
         }
 
+        @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             return true;
         }
 
+        @Override
         public void onDestroyActionMode(ActionMode mode) {
         }
 
+        @Override
         public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
                 boolean checked) {
             int selectCount = mGrid.getCheckedItemCount();

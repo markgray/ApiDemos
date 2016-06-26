@@ -50,6 +50,7 @@ public class InternalSelectionView extends View {
 
     private int mNumRows = 5;
     private int mSelectedRow = 0;
+    @SuppressWarnings("FieldCanBeLocal")
     private final int mEstimatedPixelHeight = 10;
 
     private Integer mDesiredHeight = null;
@@ -79,14 +80,17 @@ public class InternalSelectionView extends View {
         mTextPaint.setColor(Color.WHITE);
     }
 
+    @SuppressWarnings("unused")
     public int getNumRows() {
         return mNumRows;
     }
 
+    @SuppressWarnings("unused")
     public int getSelectedRow() {
         return mSelectedRow;
     }
 
+    @SuppressWarnings("unused")
     public void setDesiredHeight(int desiredHeight) {
         mDesiredHeight = desiredHeight;
     }
@@ -152,7 +156,7 @@ public class InternalSelectionView extends View {
             mTempRect.set(rectLeft, rectTop, rectRight, rectTop + rowHeight);
             canvas.drawRect(mTempRect, mPainter);
 
-            // draw forground rect
+            // draw foreground rect
             if (i == mSelectedRow && hasFocus()) {
                 mPainter.setColor(Color.RED);
                 mPainter.setAlpha(0xF0);

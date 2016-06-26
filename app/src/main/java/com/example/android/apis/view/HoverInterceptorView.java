@@ -44,6 +44,7 @@ public class HoverInterceptorView extends LinearLayout {
         super(context, attrs);
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean onInterceptHoverEvent(MotionEvent event) {
         if (mInterceptHover) {

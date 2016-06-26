@@ -35,10 +35,12 @@ public class Focus3 extends Activity {
         mBottomButton = (Button) findViewById(R.id.bottom);
     }
 
+    @SuppressWarnings("unused")
     public Button getTopButton() {
         return mTopButton;
     }
 
+    @SuppressWarnings("unused")
     public Button getBottomButton() {
         return mBottomButton;
     }

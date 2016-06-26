@@ -16,11 +16,13 @@
 
 package com.example.android.apis.view;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Paint.Style;
+import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.Vibrator;
@@ -43,8 +45,11 @@ import java.util.Random;
  *
  * @see GameControllerInput
  */
+@SuppressWarnings("PointlessBitwiseExpression")
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class GameView extends View {
     private final long ANIMATION_TIME_STEP = 1000 / 60;
+    @SuppressWarnings("FieldCanBeLocal")
     private final int MAX_OBSTACLES = 12;
 
     private final Random mRandom;
@@ -84,8 +89,8 @@ public class GameView extends View {
         super(context, attrs);
 
         mRandom = new Random();
-        mBullets = new ArrayList<Bullet>();
-        mObstacles = new ArrayList<Obstacle>();
+        mBullets = new ArrayList<>();
+        mObstacles = new ArrayList<>();
 
         setFocusable(true);
         setFocusableInTouchMode(true);
@@ -663,6 +668,7 @@ public class GameView extends View {
             return mVelocityY + polarY(relativeSpeed);
         }
 
+        @SuppressWarnings("UnusedParameters")
         public void accelerate(float tau, float maxThrust, float maxSpeed) {
             final float thrust = mHeadingMagnitude * maxThrust;
             mVelocityX += polarX(thrust);
@@ -721,6 +727,7 @@ public class GameView extends View {
 
         @Override
         public boolean step(float tau) {
+            //noinspection SimplifiableIfStatement
             if (!super.step(tau)) {
                 return false;
             }

@@ -1646,7 +1646,7 @@ Focus
             work together to give a newly focused item a hint about the most interesting
             rectangle of the previously focused view.  The view taking focus can use this
             to set an internal selection more appropriate using this rect.
-            This Activity excercises that behavior using three adjacent InternalSelectionView
+            This Activity exercises that behavior using three adjacent InternalSelectionView
             that report interesting rects when giving up focus, and use interesting rects
             when taking focus to best select the internal row to show as selected.
             Were InternalSelectionView not to override android.view.View#getFocusedRect, or
@@ -1681,15 +1681,18 @@ Grid
         .view.Grid1
             Shows how to use a GridView to display a grid of ImageView's created from
             the app icons retrieved from the PackageManager
+            TODO: Scale for high dpi screens
 
     Views/Grid/2. Photo Grid               all
         .view.Grid2
             Shows how to use a GridView created from resource jpg's using 
             ImageView.setImageResource
+            TODO: Scale for high dpi screens
 
     Views/Grid/3. Selection Mode           all -- v11+ or crash
         .view.Grid3
-            Does not seem to do anything -- need to investigate on Excite10
+            Implements multi-selection mode on GridView - hard to select by touch though
+            TODO: Scale for high dpi screens
 
 Hover Events
     Views/Hover Events                     all -- v14+ or crash View.OnHoverListener()

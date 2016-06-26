@@ -41,7 +41,7 @@ public class Grid1 extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        loadApps(); // do this in onresume?
+        loadApps(); // do this in onResume?
 
         setContentView(R.layout.grid_1);
         mGrid = (GridView) findViewById(R.id.myGrid);
@@ -61,6 +61,7 @@ public class Grid1 extends Activity {
         public AppsAdapter() {
         }
 
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ImageView i;
 
@@ -78,15 +79,17 @@ public class Grid1 extends Activity {
             return i;
         }
 
-
+        @Override
         public final int getCount() {
             return mApps.size();
         }
 
+        @Override
         public final Object getItem(int position) {
             return mApps.get(position);
         }
 
+        @Override
         public final long getItemId(int position) {
             return position;
         }
