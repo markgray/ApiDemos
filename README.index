@@ -1720,12 +1720,14 @@ Layout Animation
     Views/Layout Animation/2. List Cascade all
         .view.LayoutAnimation2
             Shows how to use a LayoutAnimationController to animate the layout of a list
-            in a ListActivity
+            in a ListActivity Too fast on Nexus 6 to see effect
+            TODO: slow down animation for fast devices.
 
     Views/Layout Animation/3. Reverse Order  -- all
         .view.LayoutAnimation3
             Same as List Cascade above, only using reverse order as specified in
-            anim/layout_bottom_to_top_slide.xml using anim/slide_right
+            anim/layout_bottom_to_top_slide.xml using anim/slide_right instead of
+            implementing animation in code
 
     Views/Layout Animation/4. Randomize    all
         .view.LayoutAnimation4
@@ -1747,19 +1749,22 @@ Layout Animation
     Views/Layout Animation/7. Nested Animations  -- all
         .view.LayoutAnimation7
             Creates an animation of the layout of a TableLayout, with the layout of each 
-            TableRow animated as well.
+            TableRow animated as well. Way too fast to see effect well even on Excite 10
+            TODO: slow down animation to show effect.
 
 Layouts
   Baseline
     Views/Layouts/Baseline/1. Top          all
         .view.Baseline1
             Use default android:layout_gravity of LinearLayout to place widgets at top 
-            of window
+            of window -- the baseline of the text in the views of differently sized text
+            is used to align.
 
     Views/Layouts/Baseline/2. Bottom       all
         .view.Baseline2
             Uses android:layout_gravity="bottom" of LinearLayout to place widgets at 
-            bottom of window
+            bottom of window -- the baseline of the text in the views of differently sized
+            text is used to align.
 
     Views/Layouts/Baseline/3. Center       all
         .view.Baseline3

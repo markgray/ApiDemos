@@ -52,6 +52,7 @@ public class LayoutAnimation1 extends Activity {
     }
 
     public class AppsAdapter extends BaseAdapter {
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ImageView i = new ImageView(LayoutAnimation1.this);
 
@@ -64,15 +65,17 @@ public class LayoutAnimation1 extends Activity {
             return i;
         }
 
-
+        @Override
         public final int getCount() {
             return Math.min(32, mApps.size());
         }
 
+        @Override
         public final Object getItem(int position) {
             return mApps.get(position % mApps.size());
         }
 
+        @Override
         public final long getItemId(int position) {
             return position;
         }
