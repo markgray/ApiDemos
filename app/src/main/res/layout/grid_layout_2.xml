@@ -16,19 +16,20 @@
 
 <GridLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:useDefaultMargins="true"
     android:alignmentMode="alignBounds"
     android:columnOrderPreserved="false"
     android:columnCount="4"
-    >
+    tools:targetApi="ice_cream_sandwich"
+    tools:ignore="HardcodedText,SpUsage,TextFields">
     <TextView
         android:text="Email setup"
         android:textSize="32dip"
         android:layout_columnSpan="4"
-        android:layout_gravity="center_horizontal"
-    />
+        android:layout_gravity="center_horizontal" />
     <TextView
         android:text="You can configure email in a few simple steps:"
         android:textSize="16dip"

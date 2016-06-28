@@ -18,12 +18,14 @@ package com.example.android.apis.view;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+import android.annotation.TargetApi;
 import android.graphics.Rect;
 import com.example.android.apis.R;
 
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -35,6 +37,7 @@ import android.widget.RemoteViews;
  * layout manager that is relatively general, handling all layout cases.  You
  * can simplify it for more specific cases.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @RemoteViews.RemoteView
 public class CustomLayout extends ViewGroup {
     /** The amount of space used by children in the left gutter. */

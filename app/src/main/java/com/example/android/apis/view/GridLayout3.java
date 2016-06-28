@@ -16,9 +16,12 @@
 
 package com.example.android.apis.view;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
@@ -35,6 +38,8 @@ import static android.widget.GridLayout.LayoutParams;
  * This can either be done by separating rows or separating columns - but we don't need
  * to do both and may only have enough space to do one or the other.
  */
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+@SuppressLint("SetTextI18n")
 public class GridLayout3 extends Activity {
     public static View create(Context context) {
         GridLayout p = new GridLayout(context);
@@ -109,6 +114,7 @@ public class GridLayout3 extends Activity {
         return p;
     }
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(create(this));

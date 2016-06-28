@@ -1817,16 +1817,19 @@ Layouts
 
     Views/Layouts/GridLayout/2. Form (XML)  --all -- v14+ or crashes GridLayout
         .view.GridLayout2
-            A form, showing use of the GridLayout API from XML.
+            A form, showing use of the GridLayout API from XML, using a separate layout
+            for landscape mode defined in layout-land
 
     Views/Layouts/GridLayout/3. Form (Java)  --all -- v14+ or crashes GridLayout
         .view.GridLayout3
-            A form, showing use of the GridLayout API. Here we demonstrate use of the 
-            row/column order preserved property which allows rows and or columns to 
-            pass over each other when needed. The two buttons in the bottom right 
+            A form, showing use of the GridLayout API from java code. Here we demonstrate
+            use of the row/column order preserved property which allows rows and or
+            columns to pass over each other when needed. The two buttons in the bottom right
             corner need to be separated from the other UI elements. This can either 
             be done by separating rows or separating columns - but we don't need to 
-            do both and may only have enough space to do one or the other.
+            do both and may only have enough space to do one or the other. Uses
+            GridLayout.Spec spec(...) to specify the horizontal and/or vertical
+            characteristics of the cells.
 
   HorizontalScrollView
     Views/Layouts/HorizontalScrollView    all
