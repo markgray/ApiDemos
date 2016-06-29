@@ -21,6 +21,7 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@drawable/blue"
     android:layout_width="match_parent"
@@ -39,7 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/linear_layout_3_middle"/>
+        android:text="@string/linear_layout_3_middle"
+        tools:ignore="InefficientWeight" />
 
     <!-- view3 goes on the bottom -->
     <TextView

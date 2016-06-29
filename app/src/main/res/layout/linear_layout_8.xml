@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -19,35 +18,38 @@
     children stacked from the top.
     -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="30dip">
-  <LinearLayout
-      android:id="@+id/layout"
-      android:orientation="vertical"
-      android:background="@drawable/blue"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:padding="30dip">
 
-    <TextView
-	android:background="@drawable/box"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:text="@string/linear_layout_8_c"/>
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/blue"
+        android:orientation="vertical"
+        android:padding="30dip"
+        tools:ignore="UselessParent">
 
-    <TextView
-	android:background="@drawable/box"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:text="@string/linear_layout_8_b"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/box"
+            android:text="@string/linear_layout_8_c" />
 
-    <TextView
-	android:background="@drawable/box"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:text="@string/linear_layout_8_c"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/box"
+            android:text="@string/linear_layout_8_b" />
 
-  </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/box"
+            android:text="@string/linear_layout_8_c" />
+
+    </LinearLayout>
 
 </FrameLayout>

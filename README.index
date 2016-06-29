@@ -1834,7 +1834,8 @@ Layouts
   HorizontalScrollView
     Views/Layouts/HorizontalScrollView    all
         .view.HorizontalScrollView1
-            Demonstrates horizontal scrolling with a HorizontalScrollView.
+            Demonstrates horizontal scrolling with a HorizontalScrollView. Needed to set
+            android:textSize to see properly.
 
   LinearLayout
     Views/Layouts/LinearLayout/01. Vertical  --all
@@ -1860,28 +1861,36 @@ Layouts
 
     Views/Layouts/LinearLayout/05. Simple Form  --all
         .view.LinearLayout5
-            Demonstrates building a simple form with nested LinearLayouts.
+            Demonstrates building a simple form with nested LinearLayouts. It uses
+            a horizontal layout to hold the two buttons at the bottom and uses
+            layout_gravity="right". This means the whole horizontal LinearLayout is
+            right aligned, not the individual items within it. The horizontal
+            LinearLayout's width is set to wrap_content. (If it was match_parent
+            it would not have any room to slide to the right.)
 
     Views/Layouts/LinearLayout/06. Uniform Size  --all
         .view.LinearLayout6
             LinearLayout which uses a combination of wrap_content on itself and 
-            match_parent on its children to get every item to be the same width.
+            match_parent on all of its children to get every item to be the same width.
 
     Views/Layouts/LinearLayout/07. Fill Parent  --all
         .view.LinearLayout7
             Demonstrates a horizontal linear layout with equally sized columns. Some 
             columns force their height to match the parent. Does not work as is for some
-            reason.
+            reason. Changed the height of the longest text to android:layout_height="wrap_content"
+            and it works as advertised.
 
     Views/Layouts/LinearLayout/08. Gravity  --all
         .view.LinearLayout8
-            Demonstrates changing gravity of a LinearLayout using setOrientation(LinearLayout.*);
+            Demonstrates changing gravity of a LinearLayout programmatically using
+            setOrientation(LinearLayout.*) as dictated by options menu choice.
 
     Views/Layouts/LinearLayout/09. Layout Weight  --all
         .view.LinearLayout9
-            Demonstrates how the layout_weight attribute can shrink an element too big
-            to fit on screen -- OR -- Demonstrates a simple linear layout. The layout
-            fills the screen, with the children stacked from the top.
+            Demonstrates a simple linear layout. The layout fills the screen, with the
+            children stacked from the top. The ListView receives all the extra space due
+            to android:layout_weight="1.0", but because it is still larger than the screen
+            it is forced to enter scroll mode.
 
     Views/Layouts/LinearLayout/10. Background Image  --all
         .view.LinearLayout10
@@ -1889,12 +1898,15 @@ Layouts
             EditTexts, and buttons, -- OR -- Demonstrates using a LinearLayout
             background to group related TextViews, EditTexts, and Buttons.
             (EditText is hard to read because of background color -- please fix.)
+            TODO: Change background or text color so it can be read especially for Excite 10.
 
   RelativeLayout
     Views/Layouts/RelativeLayout/1. Vertical  --all
         .view.RelativeLayout1
             A simple layout which demonstrates stretching a view to fill the space
-            between two other views.
+            between two other views. This occurs oddly enough because even though all
+            three share the same default weight, the android:layout_height="0dip"
+            causes the center view to take the leftover space from the parent.
 
     Views/Layouts/RelativeLayout/2. Simple Form  --all
         .view.RelativeLayout2
