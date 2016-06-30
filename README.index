@@ -1919,7 +1919,8 @@ Layouts
 
     Views/Layouts/ScrollView/2. Long       all
         .view.ScrollView2
-            Demonstrates wrapping a LONG layout (Created programmatically) in a ScrollView.
+            Demonstrates wrapping a LONG LinearLayout in a ScrollView (All but the first
+            TextView and Button in the LinearLayout are Created and .addView'd programmatically)
 
     Views/Layouts/ScrollView/3. Internal Selection  --all
         .view.InternalSelectionScroll
@@ -1948,6 +1949,8 @@ Layouts
         .view.TableLayout3
             Rows have different number of columns and content doesn't fit on screen:
             column 4 of row 2 shrinks all of the other columns android:shrinkColumns="2, 3"
+            Oddly enough my test devices are too wide to need shrinking so it does not
+            actually show what it intends to show.
 
     Views/Layouts/TableLayout/04. Stretchable  --all
         .view.TableLayout4

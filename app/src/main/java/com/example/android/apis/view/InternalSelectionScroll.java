@@ -31,7 +31,7 @@ import android.widget.ScrollView;
  * each time its internal selection changes.
  *
  * {@link android.widget.ScrollView}, in turn, implements {@link android.view.View#requestRectangleOnScreen}
- * thereby acheiving the result.  Note that {@link android.widget.ListView} also implements the
+ * thereby achieving the result.  Note that {@link android.widget.ListView} also implements the
  * method, so views that call {@link android.view.View#requestRectangleOnScreen} that are embedded
  * within either {@link android.widget.ScrollView}s or {@link android.widget.ListView}s can
  * expect to keep their internal interesting rectangle visible.
@@ -52,6 +52,7 @@ public class InternalSelectionScroll extends Activity {
         sv.addView(ll);
 
         InternalSelectionView isv = new InternalSelectionView(this, 10);
+        @SuppressWarnings("deprecation")
         int screenHeight = getWindowManager().getDefaultDisplay().getHeight();
         LinearLayout.LayoutParams llLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,

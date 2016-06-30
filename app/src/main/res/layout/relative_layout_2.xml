@@ -17,6 +17,7 @@
 <!-- Demonstrates using a relative layout to create a form -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/blue"
@@ -38,7 +39,8 @@
         android:id="@+id/entry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/label"/>
+        android:layout_below="@id/label"
+        tools:ignore="TextFields" />
 
     <!--
         The OK button goes below the EditText field.

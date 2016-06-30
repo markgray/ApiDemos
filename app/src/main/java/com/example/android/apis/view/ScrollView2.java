@@ -18,6 +18,7 @@ package com.example.android.apis.view;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.LinearLayout;
@@ -29,6 +30,7 @@ import android.widget.Button;
  *
  */
 public class ScrollView2 extends Activity {
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
