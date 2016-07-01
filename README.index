@@ -1950,7 +1950,8 @@ Layouts
             Rows have different number of columns and content doesn't fit on screen:
             column 4 of row 2 shrinks all of the other columns android:shrinkColumns="2, 3"
             Oddly enough my test devices are too wide to need shrinking so it does not
-            actually show what it intends to show.
+            actually show what it intends to show. Not only that, but if the text is too long
+            it is wrapped and the row is increased in size to fit the entire text.
 
     Views/Layouts/TableLayout/04. Stretchable  --all
         .view.TableLayout4
@@ -1959,7 +1960,8 @@ Layouts
 
     Views/Layouts/TableLayout/05. Spanning and Stretchable  --all
         .view.TableLayout5
-            Uses android:stretchColumns="1" and has View divider line children along with TableRow's
+            Uses android:stretchColumns="1" and has View divider line children along with the
+            TableRow's
 
     Views/Layouts/TableLayout/06. More Spanning and Stretchable  --all
         .view.TableLayout6
@@ -1983,7 +1985,9 @@ Layouts
 
     Views/Layouts/TableLayout/10. Simple Form  --all
         .view.TableLayout10
-            Uses xml only to construct a form
+            Uses xml only to construct a form, too long of an entry in the EditText boxes does a
+            wierd thing -- it scrolls the buttons at the bottom off the screen!
+            TODO: Scroll the EditText boxes instead.
 
     Views/Layouts/TableLayout/11. Gravity  --all
         .view.TableLayout11
