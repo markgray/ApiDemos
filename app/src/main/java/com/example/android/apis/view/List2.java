@@ -27,6 +27,7 @@ import android.widget.SimpleCursorAdapter;
  * A list view example where the
  * data comes from a cursor.
  */
+@SuppressWarnings("deprecation")
 public class List2 extends ListActivity {
 
     @Override

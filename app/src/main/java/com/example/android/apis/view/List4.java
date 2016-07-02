@@ -58,6 +58,7 @@ public class List4 extends ListActivity {
          * 
          * @see android.widget.ListAdapter#getCount()
          */
+        @Override
         public int getCount() {
             return Shakespeare.TITLES.length;
         }
@@ -70,6 +71,7 @@ public class List4 extends ListActivity {
          * 
          * @see android.widget.ListAdapter#getItem(int)
          */
+        @Override
         public Object getItem(int position) {
             return position;
         }
@@ -79,6 +81,7 @@ public class List4 extends ListActivity {
          * 
          * @see android.widget.ListAdapter#getItemId(int)
          */
+        @Override
         public long getItemId(int position) {
             return position;
         }
@@ -89,6 +92,7 @@ public class List4 extends ListActivity {
          * @see android.widget.ListAdapter#getView(int, android.view.View,
          *      android.view.ViewGroup)
          */
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             SpeechView sv;
             if (convertView == null) {

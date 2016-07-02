@@ -36,6 +36,7 @@ import android.widget.TextView;
 /**
  * A list view example where the data comes from a cursor.
  */
+@SuppressWarnings("deprecation")
 public class List7 extends ListActivity implements OnItemSelectedListener {
 
     private TextView mPhone;

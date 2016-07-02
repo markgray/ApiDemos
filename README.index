@@ -1998,7 +1998,7 @@ Layouts
 
     Views/Layouts/TableLayout/12. Cell Spanning  --all
         .view.TableLayout12
-            Creates large multicolumn cells for several rows using android:layout_span=
+            Creates large multi-column cells for several rows using android:layout_span=
 
 Lists
     Views/Lists/01. Array                  all
@@ -2010,16 +2010,18 @@ Lists
             Builds a cursor using getContentResolver().query(...) of the Contacts provider for a
             projection of Contacts._ID, and Contacts.DISPLAY_NAME and sets it as the ListAdapter
             for the ListActivity's list
+            TODO: Switch to the new CursorLoader class with LoaderManager instead
 
     Views/Lists/03. Cursor (Phones)        all
         .view.List3
             A list view example where the data comes from a cursor, and a SimpleCursorListAdapter
             is used to map each item to a two-line display.
+            TODO: Switch to the new CursorLoader class with LoaderManager instead
 
     Views/Lists/04. ListAdapter            all
         .view.List4
             A list view example where the data comes from a custom ListAdapter which displays from
-            an array of strings using a custom view (reusing recylcled views when one is given to it.
+            an array of strings using a custom view (reusing recycled views when one is given to it.)
 
     Views/Lists/05. Separators             all
         .view.List5
@@ -2031,18 +2033,21 @@ Lists
             A list view example where the data comes from a custom ListAdapter, onListItemClick is
             overridden to "toggle" the view between two states: collapsed to a title, and expanded
             to a title and text for that title
+
     Views/Lists/07. Cursor (Phones)        all
         .view.List7
             A list view example where the data comes from a cursor. Original used the "selected"
             item in list to display the details of an item at the bottom of the string by implementing
             OnItemSelectedListener, I modified to do the same when onListItemClick is called since
             a touch interface cannot select.
+            TODO: Switch to the new CursorLoader class with LoaderManager instead
 
     Views/Lists/08. Photos                 all
         .view.List8
             A list view that demonstrates the use of setEmptyView. This example also uses a custom
             layout file that adds some extra buttons to the screen instead of using the ListActivity
             default layout.
+
     Views/Lists/09. Array (Overlay)        all
         .view.List9
             Another variation of the list of cheeses. In this case, we use

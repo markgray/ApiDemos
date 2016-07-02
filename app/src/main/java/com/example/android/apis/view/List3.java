@@ -30,6 +30,7 @@ import android.widget.TextView;
  * SimpleCursorListAdapter is used to map each item to a two-line
  * display.
  */
+@SuppressWarnings("deprecation")
 public class List3 extends ListActivity {
 
     @Override
@@ -51,6 +52,7 @@ public class List3 extends ListActivity {
                         new int[] { android.R.id.text1, android.R.id.text2 });
         //Used to display a readable string for the phone type
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+            @Override
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
                 //Let the adapter handle the binding if the column is not TYPE
                 if (columnIndex != COLUMN_TYPE) {
@@ -79,6 +81,6 @@ public class List3 extends ListActivity {
         Phone.NUMBER
     };
 
-    private static final int COLUMN_TYPE = 1;;
+    private static final int COLUMN_TYPE = 1;
     private static final int COLUMN_LABEL = 2;
 }

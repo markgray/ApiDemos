@@ -45,6 +45,7 @@ public class List5 extends ListActivity {
             mContext = context;
         }
 
+        @Override
         public int getCount() {
             return mStrings.length;
         }
@@ -59,14 +60,17 @@ public class List5 extends ListActivity {
             return !mStrings[position].startsWith("-");
         }
 
+        @Override
         public Object getItem(int position) {
             return position;
         }
 
+        @Override
         public long getItemId(int position) {
             return position;
         }
 
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView tv;
             if (convertView == null) {
