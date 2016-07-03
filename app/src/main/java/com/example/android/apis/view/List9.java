@@ -42,6 +42,7 @@ import android.widget.TextView;
 public class List9 extends ListActivity implements ListView.OnScrollListener {
 
     private final class RemoveWindow implements Runnable {
+        @Override
         public void run() {
             removeWindow();
         }
@@ -63,7 +64,7 @@ public class List9 extends ListActivity implements ListView.OnScrollListener {
         
         // Use an existing ListAdapter that will map an array
         // of strings to TextViews
-        setListAdapter(new ArrayAdapter<String>(this,
+        setListAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, mStrings));
         
         getListView().setOnScrollListener(this);
@@ -74,7 +75,7 @@ public class List9 extends ListActivity implements ListView.OnScrollListener {
         mDialogText.setVisibility(View.INVISIBLE);
         
         mHandler.post(new Runnable() {
-
+            @Override
             public void run() {
                 mReady = true;
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
@@ -108,9 +109,7 @@ public class List9 extends ListActivity implements ListView.OnScrollListener {
         mReady = false;
     }
 
-    
-   
-    
+    @Override
     public void onScroll(AbsListView view, int firstVisibleItem,
             int visibleItemCount, int totalItemCount) {
         if (mReady) {
@@ -127,8 +126,8 @@ public class List9 extends ListActivity implements ListView.OnScrollListener {
             mPrevLetter = firstLetter;
         }
     }
-    
 
+    @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
     }
     

@@ -2057,11 +2057,12 @@ Lists
             Handler thread to remove the dialog displaying the letter after 3000ms
             using postDelayed(mRemoveWindow, 3000); where mRemoveWindow is a pointer
             to a class RemoveWindow which implements Runnable. (Cute -- need to use this)
+            TODO: Make overlay more transparent
 
     Views/Lists/10. Single choice list     all
         .view.List10
             This example shows how to use choice mode on a list. This list is in
-            CHOICE_MODE_SINGLE mode, which means the items behave like radiobuttons.
+            CHOICE_MODE_SINGLE mode, which means the items behave like radio-buttons.
 
     Views/Lists/11. Multiple choice list   all
         .view.List11

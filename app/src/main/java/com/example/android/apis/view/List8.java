@@ -57,7 +57,7 @@ public class List8 extends ListActivity {
         // Wire up the clear button to remove all photos
         Button clear = (Button) findViewById(R.id.clear);
         clear.setOnClickListener(new View.OnClickListener() {
-
+            @Override
             public void onClick(View v) {
                 mAdapter.clearPhotos();
             } });
@@ -65,7 +65,7 @@ public class List8 extends ListActivity {
         // Wire up the add button to add a new photo
         Button add = (Button) findViewById(R.id.add);
         add.setOnClickListener(new View.OnClickListener() {
-
+            @Override
             public void onClick(View v) {
                 mAdapter.addPhotos();
             } });
@@ -84,24 +84,28 @@ public class List8 extends ListActivity {
                 R.drawable.sample_thumb_3, R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
                 R.drawable.sample_thumb_6, R.drawable.sample_thumb_7};
 
-        private ArrayList<Integer> mPhotos = new ArrayList<Integer>();
+        private ArrayList<Integer> mPhotos = new ArrayList<>();
         
         public PhotoAdapter(Context c) {
             mContext = c;
         }
 
+        @Override
         public int getCount() {
             return mPhotos.size();
         }
 
+        @Override
         public Object getItem(int position) {
             return position;
         }
 
+        @Override
         public long getItemId(int position) {
             return position;
         }
 
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             // Make an ImageView to show a photo
             ImageView i = new ImageView(mContext);

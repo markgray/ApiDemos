@@ -106,6 +106,7 @@ public class List7 extends ListActivity implements OnItemSelectedListener {
         mPhone.setText(text);
     }
 
+    @Override
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
         if (position >= 0) {
             //Get current cursor
@@ -124,6 +125,7 @@ public class List7 extends ListActivity implements OnItemSelectedListener {
         }
     }
 
+    @Override
     public void onNothingSelected(AdapterView<?> parent) {
     }
 }
