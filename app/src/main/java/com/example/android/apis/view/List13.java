@@ -16,6 +16,7 @@
 
 package com.example.android.apis.view;
 
+import android.annotation.SuppressLint;
 import android.app.ListActivity;
 import android.content.Context;
 import android.os.Bundle;
@@ -35,9 +36,10 @@ import com.example.android.apis.R;
  * Demonstrates how a list can avoid expensive operations during scrolls or flings. In this
  * case, we pretend that binding a view to its data is slow (even though it really isn't). When
  * a scroll/fling is happening, the adapter binds the view to temporary data. After the scroll/fling
- * has finished, the temporary data is replace with the actual data.
+ * has finished, the temporary data is replaced with the actual data.
  *
  */
+@SuppressLint("SetTextI18n")
 public class List13 extends ListActivity implements ListView.OnScrollListener {
 
     private TextView mStatus;
@@ -56,23 +58,25 @@ public class List13 extends ListActivity implements ListView.OnScrollListener {
         }
 
         /**
-         * The number of items in the list is determined by the number of speeches
+         * The number of items in the list is determined by the number of cheeses
          * in our array.
          * 
          * @see android.widget.ListAdapter#getCount()
          */
+        @Override
         public int getCount() {
             return mStrings.length;
         }
 
         /**
          * Since the data comes from an array, just returning the index is
-         * sufficent to get at the data. If we were using a more complex data
+         * sufficient to get at the data. If we were using a more complex data
          * structure, we would return whatever object represents one row in the
          * list.
          * 
          * @see android.widget.ListAdapter#getItem(int)
          */
+        @Override
         public Object getItem(int position) {
             return position;
         }
@@ -82,6 +86,7 @@ public class List13 extends ListActivity implements ListView.OnScrollListener {
          * 
          * @see android.widget.ListAdapter#getItemId(int)
          */
+        @Override
         public long getItemId(int position) {
             return position;
         }
@@ -92,6 +97,7 @@ public class List13 extends ListActivity implements ListView.OnScrollListener {
          * @see android.widget.ListAdapter#getView(int, android.view.View,
          *      android.view.ViewGroup)
          */
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView text;
             
@@ -129,12 +135,11 @@ public class List13 extends ListActivity implements ListView.OnScrollListener {
         getListView().setOnScrollListener(this);
     }
     
-    
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-            int totalItemCount) {
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
     }
-    
 
+    @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         switch (scrollState) {
         case OnScrollListener.SCROLL_STATE_IDLE:

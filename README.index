@@ -2096,6 +2096,9 @@ Lists
             The ViewHolder pattern consists in storing a data structure in the tag of the view
             returned by getView(). This data structure contains references to the views we want
             to bind data to, thus avoiding calls to findViewById() every time getView() is invoked.
+            Note: uses mInflater.inflate(R.layout.list_item_icon_text, parent, false) instead of
+            mInflater.inflate(R.layout.list_item_icon_text, null)
+            TODO: Fix all other inflate() with null rootview.
 
     Views/Lists/15. Selection Mode         all -- v11+ or crash
         .view.List15

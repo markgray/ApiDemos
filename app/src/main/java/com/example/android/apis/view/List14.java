@@ -18,15 +18,16 @@ package com.example.android.apis.view;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 import android.widget.ImageView;
-import android.graphics.BitmapFactory;
-import android.graphics.Bitmap;
+import android.widget.TextView;
+
 import com.example.android.apis.R;
 
 /**
@@ -58,23 +59,25 @@ public class List14 extends ListActivity {
         }
 
         /**
-         * The number of items in the list is determined by the number of speeches
+         * The number of items in the list is determined by the number of cheeses
          * in our array.
          *
          * @see android.widget.ListAdapter#getCount()
          */
+        @Override
         public int getCount() {
             return DATA.length;
         }
 
         /**
          * Since the data comes from an array, just returning the index is
-         * sufficent to get at the data. If we were using a more complex data
+         * sufficient to get at the data. If we were using a more complex data
          * structure, we would return whatever object represents one row in the
          * list.
          *
          * @see android.widget.ListAdapter#getItem(int)
          */
+        @Override
         public Object getItem(int position) {
             return position;
         }
@@ -84,6 +87,7 @@ public class List14 extends ListActivity {
          *
          * @see android.widget.ListAdapter#getItemId(int)
          */
+        @Override
         public long getItemId(int position) {
             return position;
         }
@@ -94,16 +98,17 @@ public class List14 extends ListActivity {
          * @see android.widget.ListAdapter#getView(int, android.view.View,
          *      android.view.ViewGroup)
          */
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            // A ViewHolder keeps references to children views to avoid unneccessary calls
+            // A ViewHolder keeps references to children views to avoid unnecessary calls
             // to findViewById() on each row.
             ViewHolder holder;
 
             // When convertView is not null, we can reuse it directly, there is no need
-            // to reinflate it. We only inflate a new View when the convertView supplied
+            // to re-inflate it. We only inflate a new View when the convertView supplied
             // by ListView is null.
             if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.list_item_icon_text, null);
+                convertView = mInflater.inflate(R.layout.list_item_icon_text, parent, false);
 
                 // Creates a ViewHolder and store references to the two children views
                 // we want to bind data to.
