@@ -30,6 +30,7 @@ import android.widget.Button;
  * and {@link Activity#showDialog} to ensure the dialogs will be properly saved
  * and restored.
  */
+@SuppressWarnings({"unused", "deprecation"})
 public class ProgressBar3 extends Activity {
 
     ProgressDialog mDialog1;

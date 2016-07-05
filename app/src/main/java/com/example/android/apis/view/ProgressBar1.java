@@ -46,6 +46,7 @@ public class ProgressBar1 extends Activity {
         
         Button button = (Button) findViewById(R.id.increase);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 progressHorizontal.incrementProgressBy(1);
                 // Title progress is in range 0..10000
@@ -55,6 +56,7 @@ public class ProgressBar1 extends Activity {
 
         button = (Button) findViewById(R.id.decrease);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 progressHorizontal.incrementProgressBy(-1);
                 // Title progress is in range 0..10000
@@ -64,6 +66,7 @@ public class ProgressBar1 extends Activity {
 
         button = (Button) findViewById(R.id.increase_secondary);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 progressHorizontal.incrementSecondaryProgressBy(1);
                 // Title progress is in range 0..10000
@@ -73,6 +76,7 @@ public class ProgressBar1 extends Activity {
 
         button = (Button) findViewById(R.id.decrease_secondary);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 progressHorizontal.incrementSecondaryProgressBy(-1);
                 // Title progress is in range 0..10000

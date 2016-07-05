@@ -57,6 +57,7 @@ public class List16 extends ListActivity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private class ModeCallback implements ListView.MultiChoiceModeListener {
 
+        @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.list_select_menu, menu);
@@ -64,10 +65,12 @@ public class List16 extends ListActivity {
             return true;
         }
 
+        @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             return true;
         }
 
+        @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
             case R.id.share:
@@ -83,9 +86,11 @@ public class List16 extends ListActivity {
             return true;
         }
 
+        @Override
         public void onDestroyActionMode(ActionMode mode) {
         }
 
+        @Override
         public void onItemCheckedStateChanged(ActionMode mode,
                 int position, long id, boolean checked) {
             final int checkedCount = getListView().getCheckedItemCount();

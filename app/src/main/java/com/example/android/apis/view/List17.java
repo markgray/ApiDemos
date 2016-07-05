@@ -37,7 +37,7 @@ public class List17 extends ListActivity {
         super.onCreate(savedInstanceState);
 
         // Use the built-in layout for showing a list item with a single
-        // line of text whose background is changes when activated.
+        // line of text whose background changes when activated.
         setListAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_activated_1, mStrings));
         getListView().setTextFilterEnabled(true);

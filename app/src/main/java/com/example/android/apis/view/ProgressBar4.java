@@ -42,6 +42,7 @@ public class ProgressBar4 extends Activity {
         
         Button button = (Button) findViewById(R.id.toggle);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 mToggleIndeterminate = !mToggleIndeterminate;
                 setProgressBarIndeterminateVisibility(mToggleIndeterminate);

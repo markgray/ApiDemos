@@ -44,6 +44,7 @@ public class PopupMenu1 extends Activity {
         popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Toast.makeText(PopupMenu1.this, "Clicked popup menu item " + item.getTitle(),
                         Toast.LENGTH_SHORT).show();

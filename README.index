@@ -2135,7 +2135,8 @@ Progress Bar
             android:max="100". It uses android:progress="50" to initialize the state of
             the default progress and android:secondaryProgress="75" to initialize the state
             of the secondary progress. Buttons below the ProgressBar decrement or increment
-            the two progresss states.
+            the two progresss states. In spite of the comments in the code, the progress bar
+            does not appear in the title bar, it appears at the top of the LinearLayout
 
     Views/Progress Bar/2. Smooth           all
         .view.ProgressBar2
@@ -2151,7 +2152,7 @@ Progress Bar
              restored. Buttons on the main Layout allow you to choose between one
              which sets the title using dialog.setTitle("Indeterminate") and one which
              has no title. (Direct use of showDialog is deprecated, use a DialogFragment
-             instead.
+             instead. TODO: convert to use DialogFragment
 
     Views/Progress Bar/4. In Title Bar     all -- does not work lollipop
         .view.ProgressBar4
