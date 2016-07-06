@@ -16,6 +16,7 @@
 
 package com.example.android.apis.view;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.RatingBar;
@@ -26,6 +27,7 @@ import com.example.android.apis.R;
 /**
  * Demonstrates how to use a rating bar
  */
+@SuppressLint("SetTextI18n")
 public class RatingBar1 extends Activity implements RatingBar.OnRatingBarChangeListener {
     RatingBar mSmallRatingBar;
     RatingBar mIndicatorRatingBar;
@@ -49,6 +51,7 @@ public class RatingBar1 extends Activity implements RatingBar.OnRatingBarChangeL
         ((RatingBar)findViewById(R.id.ratingbar2)).setOnRatingBarChangeListener(this);
     }
 
+    @Override
     public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromTouch) {
         final int numStars = ratingBar.getNumStars();
         mRatingText.setText( 

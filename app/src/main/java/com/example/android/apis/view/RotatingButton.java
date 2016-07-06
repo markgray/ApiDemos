@@ -44,15 +44,17 @@ public class RotatingButton extends Activity {
         seekBar = (SeekBar) findViewById(R.id.translationX);
         seekBar.setMax(400);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
 
+            @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-            public void onProgressChanged(SeekBar seekBar, int progress,
-                                          boolean fromUser) {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 rotatingButton.setTranslationX((float)progress);
             }
         });
@@ -60,15 +62,17 @@ public class RotatingButton extends Activity {
         seekBar.setMax(800);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
+            @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
 
+            @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-            public void onProgressChanged(SeekBar seekBar, int progress,
-                                          boolean fromUser) {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 rotatingButton.setTranslationY((float)progress);
             }
         });
@@ -77,15 +81,17 @@ public class RotatingButton extends Activity {
         seekBar.setProgress(10);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
+            @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
 
+            @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-            public void onProgressChanged(SeekBar seekBar, int progress,
-                                          boolean fromUser) {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 rotatingButton.setScaleX((float)progress/10f);
             }
         });
@@ -94,15 +100,17 @@ public class RotatingButton extends Activity {
         seekBar.setProgress(10);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
+            @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
 
+            @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-            public void onProgressChanged(SeekBar seekBar, int progress,
-                                          boolean fromUser) {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 rotatingButton.setScaleY((float)progress/10f);
             }
         });
@@ -110,15 +118,17 @@ public class RotatingButton extends Activity {
         seekBar.setMax(360);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
+            @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
 
+            @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-            public void onProgressChanged(SeekBar seekBar, int progress,
-                                          boolean fromUser) {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // prevent seeking on app creation
                 rotatingButton.setRotationX((float)progress);
             }
@@ -127,15 +137,17 @@ public class RotatingButton extends Activity {
         seekBar.setMax(360);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
+            @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
 
+            @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-            public void onProgressChanged(SeekBar seekBar, int progress,
-                                          boolean fromUser) {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // prevent seeking on app creation
                 rotatingButton.setRotationY((float)progress);
             }
@@ -144,15 +156,17 @@ public class RotatingButton extends Activity {
         seekBar.setMax(360);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
+            @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
 
+            @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-            public void onProgressChanged(SeekBar seekBar, int progress,
-                                          boolean fromUser) {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // prevent seeking on app creation
                 rotatingButton.setRotation((float)progress);
             }

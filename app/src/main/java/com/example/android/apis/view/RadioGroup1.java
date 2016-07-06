@@ -18,6 +18,7 @@ package com.example.android.apis.view;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,7 +28,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.LinearLayout;
 
-
+@SuppressLint("SetTextI18n")
 public class RadioGroup1 extends Activity implements RadioGroup.OnCheckedChangeListener,
         View.OnClickListener {
 
@@ -61,6 +62,7 @@ public class RadioGroup1 extends Activity implements RadioGroup.OnCheckedChangeL
         clearButton.setOnClickListener(this);
     }
 
+    @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         String selection = getString(R.string.radio_group_selection);
         String none = getString(R.string.radio_group_none);
@@ -68,6 +70,7 @@ public class RadioGroup1 extends Activity implements RadioGroup.OnCheckedChangeL
                 (checkedId == View.NO_ID ? none : checkedId));
     }
 
+    @Override
     public void onClick(View v) {
         mRadioGroup.clearCheck();
     }

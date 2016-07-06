@@ -2163,9 +2163,9 @@ Radio Group
     Views/Radio Group                      all
         .view.RadioGroup1
             Demonstrates RadioGroup, including adding a RadioButton to an xml defined
-            RadioGroup programmatically, retrieving the R.id.* of the RadioButton selected,
-            clearing all buttons, and the value View.NO_ID (=-1) returned when no RadioButton
-            is selected.
+            RadioGroup programmatically (the R.id.snack is created in the file values/ids.xml),
+            retrieving the R.id.* of the RadioButton selected, clearing all buttons, and the
+            value View.NO_ID (=-1) returned when no RadioButton is selected.
 
 Rating Bar
     Views/Rating Bar                       all
@@ -2183,7 +2183,8 @@ Rotating Button
             seek bars to set the various transform properties of the button. It sets the
             SeekBar.OnSeekBarChangeListener of each SeekBar to morph the button using
             setTranslationX, setTranslationY, setScaleX, setScaleY, setRotationX, setRotationY,
-            and setRotation.
+            and setRotation. Good demo of SeekBar.
+            TODO: fix crash that occurs if you rotate too much
 
 ScrollBars
     Views/ScrollBars/1. Basic              all
@@ -2197,12 +2198,15 @@ ScrollBars
             and android:scrollbarTrackVertical as set to colored drawables created in xml
             using <shape> and android:scrollbarSize="12dip" makes it wider than normal.
             http://developer.android.com/guide/topics/resources/drawable-resource.html#Shape
+            The drawable/scrollbar_vertical_thumb has <corners android:radius="6dp" /> which
+            gives a rounded look to the top and bottom of the scrollbar.
 
     Views/ScrollBars/3. Style              all
         .view.ScrollBar3
             Demonstrates scrolling with ScrollView's with android:scrollbarStyle set to
             outsideOverlay and outsideInset in the xml, and one set programmatically using
             setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET)
+            TODO: Scroll bars are too small to see clearly, scale them better
 
 Search View
     Views/Search View/Action Bar           v11+
