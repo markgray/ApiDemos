@@ -68,6 +68,7 @@ public class SearchViewFilterMode extends Activity implements SearchView.OnQuery
         mSearchView.setQueryHint(getString(R.string.cheese_hunt_hint));
     }
 
+    @Override
     public boolean onQueryTextChange(String newText) {
         if (TextUtils.isEmpty(newText)) {
             mListView.clearTextFilter();
@@ -77,6 +78,7 @@ public class SearchViewFilterMode extends Activity implements SearchView.OnQuery
         return true;
     }
 
+    @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
     }

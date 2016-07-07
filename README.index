@@ -2265,6 +2265,7 @@ Secure View
                flags to determine whether the window is obscured.  Here we use a touch listener but
                a custom view subclass could perform the filtering by overriding
                View#onFilterTouchEventForSecurity(MotionEvent).
+             TODO: Make first TextView secure_view_overlay.xml More visible.
 
 Seek Bar
     Views/Seek Bar                         all
@@ -2272,6 +2273,7 @@ Seek Bar
             Demonstrates how to use a seek bar. It implements SeekBar.OnSeekBarChangeListener which
             has the three call backs: onProgressChanged, onStartTrackingTouch, and onStopTrackingTouch
             displaying appropriate text based on the information passed it.
+            TODO: why do first two SeekBar's start out enabled in spite of android:enabled="false"
 
 Spinner
     Views/Spinner                          all

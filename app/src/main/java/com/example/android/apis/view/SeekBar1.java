@@ -60,15 +60,18 @@ public class SeekBar1 extends Activity implements SeekBar.OnSeekBarChangeListene
     }
 
     @SuppressLint("SetTextI18n")
+    @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch) {
         mProgressText.setText(progress + " " + 
                 getString(R.string.seekbar_from_touch) + "=" + fromTouch);
     }
 
+    @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
         mTrackingText.setText(getString(R.string.seekbar_tracking_on));
     }
 
+    @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         mTrackingText.setText(getString(R.string.seekbar_tracking_off));
     }

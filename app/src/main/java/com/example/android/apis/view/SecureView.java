@@ -81,6 +81,7 @@ public class SecureView extends Activity {
 
         Button toastButton = (Button) findViewById(R.id.secure_view_toast_button);
         toastButton.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 showOverlay();
             }
@@ -100,8 +101,9 @@ public class SecureView extends Activity {
     private void showOverlay() {
         // Generate a toast view with a special layout that will position itself right
         // on top of this view's interesting widgets.  Sneaky huh?
-        @SuppressLint("InflateParams") SecureViewOverlay overlay = (SecureViewOverlay)
-                getLayoutInflater().inflate(R.layout.secure_view_overlay, null);
+        @SuppressLint("InflateParams")
+        SecureViewOverlay overlay = (SecureViewOverlay) getLayoutInflater()
+                .inflate(R.layout.secure_view_overlay, null);
         overlay.setActivityToSpoof(this);
 
         Toast toast = new Toast(getApplicationContext());
@@ -112,6 +114,7 @@ public class SecureView extends Activity {
 
     private void setClickedAction(Button button) {
         button.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 String[] messages = getResources().getStringArray(R.array.secure_view_clicked);
                 String message = messages[mClickCount++ % messages.length];
@@ -129,6 +132,7 @@ public class SecureView extends Activity {
     private void setTouchFilter(Button button) {
         button.setOnTouchListener(new OnTouchListener() {
             @TargetApi(Build.VERSION_CODES.GINGERBREAD)
+            @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if ((event.getFlags() & MotionEvent.FLAG_WINDOW_IS_OBSCURED) != 0) {
                     if (event.getAction() == MotionEvent.ACTION_UP) {
