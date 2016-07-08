@@ -48,11 +48,12 @@ public class Spinner1 extends Activity {
         s1.setAdapter(adapter);
         s1.setOnItemSelectedListener(
                 new OnItemSelectedListener() {
+                    @Override
                     public void onItemSelected(
                             AdapterView<?> parent, View view, int position, long id) {
                         showToast("Spinner1: position=" + position + " id=" + id);
                     }
-
+                    @Override
                     public void onNothingSelected(AdapterView<?> parent) {
                         showToast("Spinner1: unselected");
                     }
@@ -65,11 +66,12 @@ public class Spinner1 extends Activity {
         s2.setAdapter(adapter);
         s2.setOnItemSelectedListener(
                 new OnItemSelectedListener() {
+                    @Override
                     public void onItemSelected(
                             AdapterView<?> parent, View view, int position, long id) {
                         showToast("Spinner2: position=" + position + " id=" + id);
                     }
-
+                    @Override
                     public void onNothingSelected(AdapterView<?> parent) {
                         showToast("Spinner2: unselected");
                     }

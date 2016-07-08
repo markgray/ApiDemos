@@ -52,6 +52,7 @@ public class SplitTouchView extends Activity {
     private int responseIndex = 0;
 
     private final OnItemClickListener itemClickListener = new OnItemClickListener() {
+        @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             String[] responses = getResources().getStringArray(R.array.cheese_responses);
             String response = responses[responseIndex++ % responses.length];

@@ -51,7 +51,8 @@
             android:text="Customized text"
             android:showText="true"
             android:textOff="NO"
-            android:textOn="YES" />
+            android:textOn="YES"
+            tools:targetApi="lollipop" />
 
         <Switch
             android:layout_width="300dip"

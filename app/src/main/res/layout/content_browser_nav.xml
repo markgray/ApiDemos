@@ -15,6 +15,7 @@
 -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent"
     >
     <view class="com.example.android.apis.view.ContentBrowserNavActivity$Content"
@@ -27,7 +28,7 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         android:animateLayoutChanges="true"
-        >
+        tools:targetApi="honeycomb">
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
@@ -39,7 +40,7 @@
             android:gravity="center"
             android:padding="16dp"
             android:text="A title goes here"
-            />
+            tools:ignore="HardcodedText" />
         <SeekBar
             android:id="@+id/seekbar"
             android:layout_width="match_parent"

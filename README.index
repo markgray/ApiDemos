@@ -2296,7 +2296,7 @@ Splitting Touches across Views
 Switches
     Views/Switches                         all - v14+ or crash in layout
         .view.Switches
-            Demonstrates the use of the toggle switch widget. Customized text removed for Lolipop
+            Demonstrates the use of the toggle switch widget. Customized text removed for Lollipop
             unless attribute android:showText="true" is added
 
 System UI Visibility

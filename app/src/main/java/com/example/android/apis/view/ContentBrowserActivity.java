@@ -73,7 +73,8 @@ public class ContentBrowserActivity extends Activity
         int mLastSystemUiVis;
 
         Runnable mNavHider = new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 setNavVisibility(false);
             }
         };
@@ -101,7 +102,8 @@ public class ContentBrowserActivity extends Activity
             setNavVisibility(true);
         }
 
-        @Override public void onSystemUiVisibilityChange(int visibility) {
+        @Override
+        public void onSystemUiVisibilityChange(int visibility) {
             // Detect when we go out of low-profile mode, to also go out
             // of full screen.  We only do this when the low profile mode
             // is changing from its last state, and turning off.
@@ -113,7 +115,8 @@ public class ContentBrowserActivity extends Activity
             }
         }
 
-        @Override protected void onWindowVisibilityChanged(int visibility) {
+        @Override
+        protected void onWindowVisibilityChanged(int visibility) {
             super.onWindowVisibilityChanged(visibility);
 
             // When we become visible, we show our navigation elements briefly
@@ -122,14 +125,16 @@ public class ContentBrowserActivity extends Activity
             getHandler().postDelayed(mNavHider, 2000);
         }
 
-        @Override protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+        @Override
+        protected void onScrollChanged(int l, int t, int oldl, int oldt) {
             super.onScrollChanged(l, t, oldl, oldt);
 
             // When the user scrolls, we hide navigation elements.
             setNavVisibility(false);
         }
 
-        @Override public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
             // When the user clicks, we toggle the visibility of navigation elements.
             int curVis = getSystemUiVisibility();
             setNavVisibility((curVis&SYSTEM_UI_FLAG_LOW_PROFILE) != 0);
@@ -146,7 +151,7 @@ public class ContentBrowserActivity extends Activity
             }
             final boolean changed = newVis == getSystemUiVisibility();
 
-            // Unschedule any pending event to hide navigation if we are
+            // Un-schedule any pending event to hide navigation if we are
             // changing the visibility, or making the UI visible.
             if (changed || visible) {
                 Handler h = getHandler();

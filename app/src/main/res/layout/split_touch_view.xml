@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:splitMotionEvents="true"
-        tools:ignore="DisableBaselineAlignment"
+        android:baselineAligned="false"
         tools:targetApi="honeycomb">
         <ListView android:id="@+id/list1"
                   android:layout_width="0dip"

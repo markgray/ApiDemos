@@ -49,7 +49,8 @@ public class GameActivity extends Activity {
         boolean mUpdateSystemUi;
 
         Runnable mFader = new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 fade();
                 if (mUpdateSystemUi) {
                     updateNavVisibility();
@@ -74,7 +75,8 @@ public class GameActivity extends Activity {
             setGamePaused(true);
         }
 
-        @Override public void onSystemUiVisibilityChange(int visibility) {
+        @Override
+        public void onSystemUiVisibilityChange(int visibility) {
             // Detect when we go out of nav-hidden mode, to reset back to having
             // it hidden; our game wants those elements to stay hidden as long
             // as it is being played and stay shown when paused.
@@ -89,7 +91,8 @@ public class GameActivity extends Activity {
             }
         }
 
-        @Override protected void onWindowVisibilityChanged(int visibility) {
+        @Override
+        protected void onWindowVisibilityChanged(int visibility) {
             super.onWindowVisibilityChanged(visibility);
 
             // When we become visible or invisible, play is paused.
@@ -109,7 +112,8 @@ public class GameActivity extends Activity {
             }
         }
 
-        @Override public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
             if (v == mPlayButton) {
                 // Clicking on the play/pause button toggles its state.
                 setGamePaused(!mPaused);
