@@ -56,23 +56,29 @@ import com.example.android.apis.R;
 @TargetApi(Build.VERSION_CODES.KITKAT)
 public class SystemUIModes extends Activity
         implements OnQueryTextListener, ActionBar.TabListener {
+
     public static class IV extends ImageView implements View.OnSystemUiVisibilityChangeListener {
         private SystemUIModes mActivity;
         private ActionMode mActionMode;
+
         public IV(Context context) {
             super(context);
         }
+
         public IV(Context context, AttributeSet attrs) {
             super(context, attrs);
         }
+
         public void setActivity(SystemUIModes act) {
             setOnSystemUiVisibilityChangeListener(this);
             mActivity = act;
         }
+
         @Override
         public void onSizeChanged(int w, int h, int oldw, int oldh) {
             mActivity.refreshSizes();
         }
+
         @Override
         public void onSystemUiVisibilityChange(int visibility) {
             mActivity.updateCheckControls();
@@ -81,7 +87,8 @@ public class SystemUIModes extends Activity
 
         private class MyActionModeCallback implements ActionMode.Callback {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-            @Override public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 mode.setTitle("My Action Mode!");
                 mode.setSubtitle(null);
                 mode.setTitleOptionalHint(false);
@@ -90,15 +97,18 @@ public class SystemUIModes extends Activity
                 return true;
             }
 
-            @Override public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                 return true;
             }
 
-            @Override public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 return true;
             }
 
-            @Override public void onDestroyActionMode(ActionMode mode) {
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
                 mActionMode = null;
                 mActivity.clearActionMode();
             }
@@ -174,12 +184,14 @@ public class SystemUIModes extends Activity
         DisplayMetrics dm = getResources().getDisplayMetrics();
         return String.format("DisplayMetrics = (%d x %d)", dm.widthPixels, dm.heightPixels);
     }
+
     @SuppressLint("DefaultLocale")
     private String getViewSize() {
         return String.format("View = (%d,%d - %d,%d)",
                 mImage.getLeft(), mImage.getTop(),
                 mImage.getRight(), mImage.getBottom());
     }
+
     @SuppressLint("SetTextI18n")
     void refreshSizes() {
         mMetricsText.setText(getDisplaySize() + " " + getViewSize());
@@ -210,7 +222,8 @@ public class SystemUIModes extends Activity
 
         CompoundButton.OnCheckedChangeListener checkChangeListener
                 = new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 updateSystemUi();
             }
         };

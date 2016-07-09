@@ -76,7 +76,8 @@ public class VideoPlayerActivity extends Activity
         int mLastSystemUiVis;
 
         Runnable mNavHider = new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 setNavVisibility(false);
             }
         };
@@ -99,7 +100,8 @@ public class VideoPlayerActivity extends Activity
             setPlayPaused(true);
         }
 
-        @Override protected void onAttachedToWindow() {
+        @Override
+        protected void onAttachedToWindow() {
             super.onAttachedToWindow();
             if (mActivity != null) {
                 mAddedMenuListener = true;
@@ -108,7 +110,8 @@ public class VideoPlayerActivity extends Activity
             }
         }
 
-        @Override protected void onDetachedFromWindow() {
+        @Override
+        protected void onDetachedFromWindow() {
             super.onDetachedFromWindow();
             if (mAddedMenuListener) {
                 //noinspection ConstantConditions
@@ -116,7 +119,8 @@ public class VideoPlayerActivity extends Activity
             }
         }
 
-        @Override public void onSystemUiVisibilityChange(int visibility) {
+        @Override
+        public void onSystemUiVisibilityChange(int visibility) {
             // Detect when we go out of nav-hidden mode, to clear our state
             // back to having the full UI chrome up.  Only do this when
             // the state is changing and nav is no longer hidden.
@@ -128,14 +132,16 @@ public class VideoPlayerActivity extends Activity
             }
         }
 
-        @Override protected void onWindowVisibilityChanged(int visibility) {
+        @Override
+        protected void onWindowVisibilityChanged(int visibility) {
             super.onWindowVisibilityChanged(visibility);
 
             // When we become visible or invisible, play is paused.
             setPlayPaused(true);
         }
 
-        @Override public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
             if (v == mPlayButton) {
                 // Clicking on the play/pause button toggles its state.
                 setPlayPaused(!mPaused);
@@ -145,7 +151,8 @@ public class VideoPlayerActivity extends Activity
             }
         }
 
-        @Override public void onMenuVisibilityChanged(boolean isVisible) {
+        @Override
+        public void onMenuVisibilityChanged(boolean isVisible) {
             mMenusOpen = isVisible;
             setNavVisibility(true);
         }

@@ -15,15 +15,17 @@
 -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="HardcodedText,SpUsage"
+    tools:targetApi="ice_cream_sandwich"    >
     <view class="com.example.android.apis.view.SystemUIModes$IV"
         android:id="@+id/image"
         android:src="@drawable/frantic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        />
+        android:scaleType="fitXY"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,8 +37,10 @@
             android:layout_marginRight="25dp"
             android:layout_marginBottom="25dp"
             android:layout_gravity="bottom|center"
-            android:background="#60000000">
-            <GridLayout android:layout_width="match_parent"
+            android:background="#60000000"
+            tools:ignore="UselessParent">
+            <GridLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:columnCount="@integer/system_ui_modes_cols">
@@ -48,15 +52,13 @@
                     android:textSize="16dp"
                     android:textStyle="bold"
                     android:gravity="left"
-                    android:text="Mode:"
-                    />
+                    android:text="Mode:" />
                 <CheckBox
                     android:id="@+id/modeFullscreen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#FFFFFFFF"
-                    android:text="FULLSCRN"
-                    />
+                    android:text="FULLSCRN" />
                 <CheckBox
                     android:id="@+id/modeLowProfile"
                     android:layout_width="wrap_content"
