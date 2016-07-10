@@ -31,6 +31,7 @@ import android.widget.Button;
 public class LogTextBox1 extends Activity {
     
     private LogTextBox mText;
+    public int lineNumber;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class LogTextBox1 extends Activity {
         addButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                mText.append("This is a test\n");
+                mText.append("This is a test " + lineNumber++ + "\n");
             } });
     }
 }

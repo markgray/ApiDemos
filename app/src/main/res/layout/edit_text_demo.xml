@@ -16,6 +16,7 @@
 -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -28,24 +29,28 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="EditText imeOptions=flagNoFullscreen" />
+            android:text="EditText imeOptions=flagNoFullscreen"
+            tools:ignore="HardcodedText" />
 
         <EditText
             android:id="@+id/edit0"
             android:imeOptions="flagNoFullscreen"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            tools:ignore="TextFields" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="EditText imeOptions=actionSearch" />
+            android:text="EditText imeOptions=actionSearch"
+            tools:ignore="HardcodedText" />
 
         <EditText
             android:id="@+id/edit1"
             android:imeOptions="actionSearch"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            tools:ignore="TextFields" />
 
     </LinearLayout>
 

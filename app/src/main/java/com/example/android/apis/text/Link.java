@@ -37,7 +37,7 @@ public class Link extends Activity {
         setContentView(R.layout.link);
 
         // text1 shows the android:autoLink property, which
-        // automatically linkifies things like URLs and phone numbers
+        // automatically creates links for things like URLs and phone numbers
         // found in the text.  No java code is needed to make this
         // work.
 

@@ -15,8 +15,10 @@
 -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:targetApi="honeycomb">
 
     <LinearLayout android:orientation="vertical"
                   android:layout_width="match_parent"
@@ -26,7 +28,7 @@
 
       <!-- Four TextView widgets, each one displaying text containing links. -->
 
-      <!-- text1 automatically linkifies things like URLs and phone numbers. -->
+      <!-- text1 automatically creates links for things like URLs and phone numbers. -->
       <TextView android:id="@+id/text1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

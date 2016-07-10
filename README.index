@@ -2365,7 +2365,7 @@ Tabs
             TabHost.TabSpec#setContent(android.widget.TabHost.TabContentFactory)
             It also demonstrates using an icon on one of the tabs via
             TabHost.TabSpec#setIndicator(CharSequence, android.graphics.drawable.Drawable)
-            but this does not work using the default Theme as of Ice Cream Sandwitch.
+            but this does not work using the default Theme as of Ice Cream Sandwich.
 
     Views/Tabs/3. Content By Intent        all
         .view.Tabs3
@@ -2390,7 +2390,8 @@ Tabs
 
     Views/Tabs/6. Right aligned            all
         .view.Tabs6
-            Uses a right gravity for the TabWidget. Does not seem to have any effect.
+            Uses a right gravity for the TabWidget. Does not seem to have any effect even
+            after changing AndroidManifest to android:theme="@android:style/Theme"
 
 Text
     Views/Text/EditText
@@ -2401,9 +2402,9 @@ Text
     Views/Text/Linkify                           all
         .text.Link
             Four different ways to generate html like links and styled text: text1 shows
-            the android:autoLink property, which automatically linkifies things like URLs
-            and phone numbers found in the text. No java code is needed to make this
-            work; text2 has links specified by putting <a> tags in the string resource.
+            the android:autoLink property, which automatically creates links for things
+            like URLs and phone numbers found in the text. No java code is needed to make
+            this work; text2 has links specified by putting <a> tags in the string resource.
             By default these links will appear but not respond to user input. To make
             them active, you need to call setMovementMethod() on the TextView object;
             text3 shows creating text with links from HTML in the Java code, rather than

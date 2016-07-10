@@ -18,6 +18,7 @@ package com.example.android.apis.view;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.app.TabActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 /**
  * Uses a right gravity for the TabWidget.
  */
+@SuppressWarnings("deprecation")
 public class Tabs6 extends TabActivity implements TabHost.TabContentFactory {
 
     @Override
@@ -47,6 +49,7 @@ public class Tabs6 extends TabActivity implements TabHost.TabContentFactory {
                 .setContent(this));
     }
 
+    @SuppressLint("SetTextI18n")
     public View createTabContent(String tag) {
         final TextView tv = new TextView(this);
         tv.setText("Content for tab with tag " + tag);

@@ -18,6 +18,7 @@ package com.example.android.apis.view;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.app.TabActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 /**
  * Demonstrates the Tab scrolling when too many tabs are displayed to fit in the screen.
  */
+@SuppressWarnings("deprecation")
 public class Tabs5 extends TabActivity implements TabHost.TabContentFactory {
 
     @Override
@@ -46,6 +48,7 @@ public class Tabs5 extends TabActivity implements TabHost.TabContentFactory {
     }
 
     /** {@inheritDoc} */
+    @SuppressLint("SetTextI18n")
     public View createTabContent(String tag) {
         final TextView tv = new TextView(this);
         tv.setText("Content for tab with tag " + tag);

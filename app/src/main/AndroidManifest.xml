@@ -2017,7 +2017,8 @@
         </activity>
         <activity
             android:name=".view.Tabs6"
-            android:label="Views/Tabs/6. Right aligned">
+            android:label="Views/Tabs/6. Right aligned"
+            android:theme="@android:style/Theme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
