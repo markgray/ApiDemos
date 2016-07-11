@@ -55,18 +55,21 @@ public class Visibility1 extends Activity {
     }
 
     OnClickListener mVisibleListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             mVictim.setVisibility(View.VISIBLE);
         }
     };
 
     OnClickListener mInvisibleListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             mVictim.setVisibility(View.INVISIBLE);
         }
     };
 
     OnClickListener mGoneListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             mVictim.setVisibility(View.GONE);
         }

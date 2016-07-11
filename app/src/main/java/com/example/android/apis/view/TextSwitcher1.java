@@ -62,6 +62,7 @@ public class TextSwitcher1 extends Activity implements ViewSwitcher.ViewFactory,
         updateCounter();
     }
 
+    @Override
     public void onClick(View v) {
         mCounter++;
         updateCounter();
@@ -71,6 +72,7 @@ public class TextSwitcher1 extends Activity implements ViewSwitcher.ViewFactory,
         mSwitcher.setText(String.valueOf(mCounter));
     }
 
+    @Override
     public View makeView() {
         TextView t = new TextView(this);
         t.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);

@@ -2444,7 +2444,7 @@ Text
             Demonstrates the android.widget.TextView widget. Shows different values for
             android:textAppearance: ?android:attr/textAppearanceSmall,
             ?android:attr/textAppearanceMedium, and ?android:attr/textAppearanceLarge,
-            as well as the effect of android:textIsSelectable="true" (needs keyboard),
+            as well as the effect of android:textIsSelectable="true",
             android:visibility="invisible", and android:background="#ff00ff00"
 
 Visibility

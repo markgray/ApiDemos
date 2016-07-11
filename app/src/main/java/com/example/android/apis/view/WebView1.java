@@ -39,6 +39,6 @@ public class WebView1 extends Activity {
         WebView wv;
         
         wv = (WebView) findViewById(R.id.wv1);
-        wv.loadData("<a href='x'>Hello World! - 1</a>", mimeType, null);
+        wv.loadData("<a href='http://www.google.com/'>Hello World! - 1</a>", mimeType, null);
     }
 }
