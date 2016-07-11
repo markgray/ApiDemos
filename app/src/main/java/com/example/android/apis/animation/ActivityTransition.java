@@ -32,7 +32,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Uses ActivityOptions.makeSceneTransitionAnimation to transition using a
+ * shared view as the epicenter of the transition.
  */
 public class ActivityTransition extends Activity {
 
@@ -76,14 +77,31 @@ public class ActivityTransition extends Activity {
             "woot",
     };
 
+    /**
+     * Passed a string name of an item returns the R.id.* for the thumbnail in the layout
+     *
+     * @param id String name of item
+     * @return Resource R.id.* of that item in layout
+     */
     public static int getIdForKey(String id) {
         return IDS[getIndexForKey(id)];
     }
 
+    /**
+     * Passed a string name of an item returns the R.drawable.* for the image
+     * @param id String name of item
+     * @return R.drawable.* for the image
+     */
     public static int getDrawableIdForKey(String id) {
         return DRAWABLES[getIndexForKey(id)];
     }
 
+    /**
+     * Searches the array of names of id string and returns the index number for that string
+     *
+     * @param id String name of an item
+     * @return Index in the arrays for it
+     */
     public static int getIndexForKey(String id) {
         for (int i = 0; i < NAMES.length; i++) {
             String name = NAMES[i];
@@ -97,8 +115,8 @@ public class ActivityTransition extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setBackgroundDrawable(new ColorDrawable(randomColor()));
         setContentView(R.layout.image_block);
+        getWindow().setBackgroundDrawable(new ColorDrawable(randomColor()));
         setupHero();
     }
 
@@ -128,6 +146,11 @@ public class ActivityTransition extends Activity {
         startActivity(intent, activityOptions.toBundle());
     }
 
+    /**
+     * Create a random color with maximum alpha and the three RGB colors <=128 intensity
+     *
+     * @return Random color
+     */
     private static int randomColor() {
         int red = (int)(Math.random() * 128);
         int green = (int)(Math.random() * 128);

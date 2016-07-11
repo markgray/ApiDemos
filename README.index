@@ -19,7 +19,11 @@ Animation (disabled for froyo)
     Animation/Details of a specific thingy v20+
         .animation.ActivityTransitionDetails
             Uses ActivityOptions.makeSceneTransitionAnimation to transition using
-            a shared view as the epicenter of the transition.
+            a shared view as the epicenter of the transition. The xml sets
+            android:onClick="clicked" to use for each thumbnail in the GridLayout
+            and clicked() creates an intent to launch ActivityTransitionDetails.class
+            using a bundle containing an ActivityOptions.makeSceneTransitionAnimation()
+            which causes the thumbnail to "expand" into the full screen version.
 
   Animation/Bouncing Balls v11+
         .animation.BouncingBalls
