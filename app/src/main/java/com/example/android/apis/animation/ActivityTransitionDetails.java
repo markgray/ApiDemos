@@ -63,7 +63,7 @@ public class ActivityTransitionDetails extends Activity {
             //noinspection deprecation
             drawable = getResources().getDrawable(mImageResourceId);
         } else {
-                drawable = getResources().getDrawable(mImageResourceId, null);
+            drawable = getResources().getDrawable(mImageResourceId, null);
         }
         return drawable;
     }
@@ -72,15 +72,14 @@ public class ActivityTransitionDetails extends Activity {
     public void clicked(View v) {
         Intent intent = new Intent(this, ActivityTransition.class);
         intent.putExtra(KEY_ID, mName);
-        ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(this,
-                v, "hero");
+        ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(this, v, "hero");
         startActivity(intent, activityOptions.toBundle());
     }
 
     private static int randomColor() {
-        int red = (int)(Math.random() * 128);
-        int green = (int)(Math.random() * 128);
-        int blue = (int)(Math.random() * 128);
+        int red = (int) (Math.random() * 128);
+        int green = (int) (Math.random() * 128);
+        int blue = (int) (Math.random() * 128);
         return 0xFF000000 | (red << 16) | (green << 8) | blue;
     }
 }

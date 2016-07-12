@@ -100,7 +100,7 @@ public class ActivityTransition extends Activity {
      * Searches the array of names of id string and returns the index number for that string
      *
      * @param id String name of an item
-     * @return Index in the arrays for it
+     * @return Index in the arrays for it (or "2" if not found)
      */
     public static int getIndexForKey(String id) {
         for (int i = 0; i < NAMES.length; i++) {
@@ -112,14 +112,29 @@ public class ActivityTransition extends Activity {
         return 2;
     }
 
+    /**
+     * Sets a random background color, Loads the activity layout and sets up the transition
+     * "hero" if the activity was launched by an clicked() return from ActivityTransitionDetails
+     * (If the back button was pushed instead, onCreate is not called again and the background color
+     * remains the same.)
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it most
+     *                           recently supplied in onSaveInstanceState(Bundle).
+     *                           Note: Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.image_block);
         getWindow().setBackgroundDrawable(new ColorDrawable(randomColor()));
+        setContentView(R.layout.image_block);
         setupHero();
     }
 
+    /**
+     * Sets up the SharedElementCallback for a clicked() return from ActivityTransitionDetails,
+     * does nothing on an initial launching.
+     */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setupHero() {
         String name = getIntent().getStringExtra(KEY_ID);
@@ -136,11 +151,19 @@ public class ActivityTransition extends Activity {
         }
     }
 
+    /**
+     * This is called by each ImageView in image_block.xml's GridView using android:onClick="clicked"
+     * The ImageView's contain an android:transitionName element naming the transitionName to be the
+     * same as the ImageView's drawable, and this is retrieved by v.getTransitionName()
+     *
+     * @param v View in the GridView which has been clicked
+     */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void clicked(View v) {
         mHero = (ImageView) v;
         Intent intent = new Intent(this, ActivityTransitionDetails.class);
-        intent.putExtra(KEY_ID, v.getTransitionName());
+        String transitionName = v.getTransitionName();
+        intent.putExtra(KEY_ID, transitionName);
         ActivityOptions activityOptions
                 = ActivityOptions.makeSceneTransitionAnimation(this, mHero, "hero");
         startActivity(intent, activityOptions.toBundle());
