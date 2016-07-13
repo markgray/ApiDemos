@@ -23,7 +23,11 @@ Animation (disabled for froyo)
             android:onClick="clicked" to use for each thumbnail in the GridLayout
             and clicked() creates an intent to launch ActivityTransitionDetails.class
             using a bundle containing an ActivityOptions.makeSceneTransitionAnimation()
-            which causes the thumbnail to "expand" into the full screen version.
+            which causes the thumbnail to "expand" into the image detail version. When the
+            ImageView in the image detail version is clicked, the reverse transition to
+            ActivityTransition activity occurs. The animation is set up using AndroidManifest
+            android:theme="@style/ActivityTransitionTheme" which contains elements which point
+            to files in res/transition
 
   Animation/Bouncing Balls v11+
         .animation.BouncingBalls
@@ -32,7 +36,7 @@ Animation (disabled for froyo)
             MotionEvent.ACTION_DOWN or MotionEvent.ACTION_MOVE a ball of random
             color is added at the events event.getX(), event.getY() coordinates.
             The ball motion and geometry is animated then an animator of the balls
-            alpha is play fading it out from an alpha of 1.0 to 0.0 in 250 milliseconds.
+            alpha is played fading it out from an alpha of 1.0 to 0.0 in 250 milliseconds.
             The onAnimationEnd callback of the fade animation is set to an
             AnimatorListenerAdapter which removes the ball when the animation is done.
 

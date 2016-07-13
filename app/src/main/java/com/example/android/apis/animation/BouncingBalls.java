@@ -35,6 +35,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -45,17 +46,43 @@ import com.example.android.apis.R;
 
 import java.util.ArrayList;
 
+/**
+ * Uses several different kinds of ObjectAnimator to animate bouncing color changing balls.
+ * When onTouchEvent is called with either a MotionEvent.ACTION_DOWN or MotionEvent.ACTION_MOVE
+ * a ball of random color is added at the events event.getX(), event.getY() coordinates.
+ * The ball motion and geometry is animated then an animator of the balls alpha is played
+ * fading it out from an alpha of 1.0 to 0.0 in 250 milliseconds The onAnimationEnd callback
+ * of the fade animation is set to an AnimatorListenerAdapter which removes the ball when
+ * the animation is done.
+ */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class BouncingBalls extends Activity {
-    /** Called when the activity is first created. */
+    String TAG = "BouncingBalls";
+
+    /**
+     * Sets the activity content to the layout R.layout.bouncing_balls, locates the LinearLayout
+     * within the layout using its id R.id.container and when adds a MyAnimationView View to it.
+     *
+     * @param savedInstanceState Always null since onSaveInstanceState is never called
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            Log.i(TAG, "savedInstanceState is not null!");
+        } else {
+            Log.i(TAG, "savedInstanceState is null as predicted");
+        }
         setContentView(R.layout.bouncing_balls);
         LinearLayout container = (LinearLayout) findViewById(R.id.container);
         container.addView(new MyAnimationView(this));
     }
 
+    /**
+     * This class does all the work of creating and  animating the bouncing balls. The balls
+     * are placed inside a .animation.ShapeHolder as they are created and an animation set is
+     * used to perform animation operations on that ShapeHolder.
+     */
     public class MyAnimationView extends View {
 
         private static final int RED = 0xffFF8080;

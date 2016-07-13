@@ -33,7 +33,9 @@ import java.util.Map;
 
 /**
  * Uses ActivityOptions.makeSceneTransitionAnimation to transition using a
- * shared view as the epicenter of the transition.
+ * shared view as the epicenter of the transition. The animation is set up using
+ * the AndroidManifest element android:theme="@style/ActivityTransitionTheme"
+ *
  */
 public class ActivityTransition extends Activity {
 
