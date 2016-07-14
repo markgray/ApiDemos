@@ -39,6 +39,9 @@ Animation (disabled for froyo)
             alpha is played fading it out from an alpha of 1.0 to 0.0 in 250 milliseconds.
             The onAnimationEnd callback of the fade animation is set to an
             AnimatorListenerAdapter which removes the ball when the animation is done.
+            The background color is also Animated. Note that setting the background color
+            will automatically invalidate the view, so that the animated color, and the
+            bouncing balls, get redisplayed on every frame of the background color animation.
 
   Animation/Cloning v11 
         .animation.AnimationCloning

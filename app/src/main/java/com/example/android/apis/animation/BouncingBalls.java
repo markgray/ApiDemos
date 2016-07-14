@@ -68,11 +68,6 @@ public class BouncingBalls extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            Log.i(TAG, "savedInstanceState is not null!");
-        } else {
-            Log.i(TAG, "savedInstanceState is null as predicted");
-        }
         setContentView(R.layout.bouncing_balls);
         LinearLayout container = (LinearLayout) findViewById(R.id.container);
         container.addView(new MyAnimationView(this));
@@ -110,6 +105,18 @@ public class BouncingBalls extends Activity {
             colorAnim.start();
         }
 
+        /**
+         * When a touch event occurs this routine is called to handle it. It handles only
+         * MotionEvent.ACTION_DOWN and MotionEvent.ACTION_MOVE events, checks for these and
+         * returns false (event not handled) if it is a different type of event. Otherwise it
+         * spawns a new ball in a ShapeHolder container at the .getX() and .getY() of the event
+         * and sets up a complex animation set (animatorSet) to be performed on the ShapeHolder
+         * which is then .start()'ed before returning 'true' to indicate the event has been
+         * handled.
+         *
+         * @param event The motion event.
+         * @return True if the event was handled, false otherwise.
+         */
         @Override
         public boolean onTouchEvent(MotionEvent event) {
             if (event.getAction() != MotionEvent.ACTION_DOWN &&
@@ -185,6 +192,19 @@ public class BouncingBalls extends Activity {
             return true;
         }
 
+        /**
+         * Add a ball to the list of ArrayList<ShapeHolder> balls at location (x, y).
+         *
+         * First create a ShapeDrawable of an OvalShape .resize()'d to 50px x 50px, create
+         * a ShapeHolder containing this ShapeDrawable and configure that ShapeHolder to locate
+         * it at (x, y), create a Paint with a random color, create a RadialGradient and install
+         * it in the Paint, then setPaint() the ShapeHolder with this paint. When done, add the
+         * new ball to the balls list, and return the ShapeHolder to the caller.
+         *
+         * @param x x coordinate of the new ball
+         * @param y y coordinate of the new ball
+         * @return a ShapeHolder containing a ball located at (x, y)
+         */
         private ShapeHolder addBall(float x, float y) {
             OvalShape circle = new OvalShape();
             circle.resize(50f, 50f);
