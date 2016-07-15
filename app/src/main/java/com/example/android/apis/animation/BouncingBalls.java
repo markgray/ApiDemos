@@ -226,6 +226,15 @@ public class BouncingBalls extends Activity {
             return shapeHolder;
         }
 
+        /**
+         * Does the drawing of each of of the balls every time the canvas in invalidated. It does
+         * this by first saving the current matrix and clip onto a private stack using canvas.save(),
+         * then it moves the canvas to the location of the current ball, calls the .draw(Canvas) of
+         * the ball's shape to draw it, and then restores the canvas from the stack (repeat for each
+         * ball in ArrayList<ShapeHolder> balls.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             for (int i = 0; i < balls.size(); ++i) {

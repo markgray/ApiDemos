@@ -34,13 +34,29 @@ public class ShapeHolder {
     private float alpha = 1f;
     private Paint paint;
 
+    /**
+     * Set the ShapeHolder Paint
+     *
+     * @param value Paint to use for this ShapeHolder
+     */
     public void setPaint(Paint value) {
         paint = value;
     }
+
+    /**
+     * Get the ShapeHolder Paint
+     *
+     * @return Paint used in this ShapeHolder
+     */
     public Paint getPaint() {
         return paint;
     }
 
+    /**
+     * Set the x value of this ShapeHolder
+     *
+     * @param value x value to use
+     */
     public void setX(float value) {
         x = value;
     }
