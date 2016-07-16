@@ -38,6 +38,17 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import java.util.ArrayList;
 
+/**
+ * Creates an ObjectAnimator to animate the y position of an object from 0 to the
+ * bottom of the View, .clones it and uses .setTarget to set it as the animation
+ * of a second View. Then it creates two ObjectAnimator's to: animate the y position
+ * of an object down, and a second to animate y position up again and creates an AnimatorSet
+ * to play them sequentially, clones this AnimatorSet and .setTarget's the clone as the
+ * AnimatorSet for a second object. Uses an AnimatorSet play the first two ObjectAnimator's
+ * and first AnimatorSet, requesting that they be run at the same time by calling
+ * playTogether(ObjectAnimator1,ObjectAnimator2,AnimatorSet1), and the second AnimatorSet
+ * to run after the first AnimatorSet by calling playSequentially(AnimatorSet1,AnimatorSet2).
+ */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class AnimationCloning extends Activity {
     /** Called when the activity is first created. */

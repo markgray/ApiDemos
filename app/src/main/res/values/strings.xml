@@ -1596,4 +1596,5 @@
     <string name="y">Y</string>
     <string name="z">Z</string>
     <string name="rotating_button">Rotating Button</string>
+    <string name="run">Run</string>
 </resources>

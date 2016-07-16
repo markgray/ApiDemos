@@ -35,7 +35,7 @@ Animation (disabled for froyo)
             color changing balls. When onTouchEvent is called with either a
             MotionEvent.ACTION_DOWN or MotionEvent.ACTION_MOVE a ball of random
             color is added at the events event.getX(), event.getY() coordinates.
-            The ball motion and geometry is animated then an animator of the balls
+            The ball motion and geometry is animated, then an animator of the balls
             alpha is played fading it out from an alpha of 1.0 to 0.0 in 250 milliseconds.
             The onAnimationEnd callback of the fade animation is set to an
             AnimatorListenerAdapter which removes the ball when the animation is done.
@@ -53,7 +53,7 @@ Animation (disabled for froyo)
             AnimatorSet for a second object. Uses an AnimatorSet play the first two ObjectAnimator's
             and first AnimatorSet, requesting that they be run at the same time by calling
             playTogether(ObjectAnimator1,ObjectAnimator2,AnimatorSet1), and the second AnimatorSet
-            to run after the first AnimatorSet by calling playSeqentially(AnimatorSet1,AnimatorSet2).
+            to run after the first AnimatorSet by calling playSequentially(AnimatorSet1,AnimatorSet2).
 
   Animation/Custom Evaluator v11 
         .animation.CustomEvaluator
