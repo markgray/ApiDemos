@@ -52,6 +52,14 @@ import java.util.ArrayList;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class AnimationCloning extends Activity {
     /** Called when the activity is first created. */
+    /**
+     * Loads the animation_cloning layout as the content view, finds the LinearLayout container
+     * for our animation, creates a MyAnimationView and addView's it the the container. Then it
+     * finds the startButton and setOnClickListener's a callback to startAnimation our
+     * MyAnimationView.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +70,7 @@ public class AnimationCloning extends Activity {
 
         Button starter = (Button) findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
-
+            @Override
             public void onClick(View v) {
                 animView.startAnimation();
             }
@@ -75,18 +83,39 @@ public class AnimationCloning extends Activity {
         AnimatorSet animation = null;
         private float mDensity;
 
-        @SuppressWarnings("unused")
+        /**
+         * Retrieves the logical density of the display and saves it to use for scaling the ball
+         * size, creates 4 balls and adds them to the ArrayList<ShapeHolder> balls
+         *
+         * @param context Context which in our case is derived from super of Activity
+         */
         public MyAnimationView(Context context) {
             super(context);
 
             mDensity = getContext().getResources().getDisplayMetrics().density;
 
-            ShapeHolder ball0 = addBall(50f, 25f);
-            ShapeHolder ball1 = addBall(150f, 25f);
-            ShapeHolder ball2 = addBall(250f, 25f);
-            ShapeHolder ball3 = addBall(350f, 25f);
+            // These variables are unused because addBall .add's each ball to balls List
+            @SuppressWarnings("unused") ShapeHolder ball0 = addBall(50f * mDensity, 25f * mDensity);
+            @SuppressWarnings("unused") ShapeHolder ball1 = addBall(150f * mDensity, 25f * mDensity);
+            @SuppressWarnings("unused") ShapeHolder ball2 = addBall(250f * mDensity, 25f * mDensity);
+            @SuppressWarnings("unused") ShapeHolder ball3 = addBall(350f * mDensity, 25f * mDensity);
         }
 
+        /**
+         * Creates the AnimatorSet animation. anim1 moves balls{0} y coordinate from 0f to the
+         * bottom of the View. anim2 is a clone of anim1 which is applied to balls{1}. anim1 has
+         * "this" added as a listener causing this.onAnimationUpdate to be called for every frame
+         * of this animation (simply calls invalidate() to cause redraw of the view). animDown is
+         * created to animate the y coordinate of balls{2} from 0f to the bottom of the View and
+         * has its interpolator set to an AccelerateInterpolator(). animUp is created to animate
+         * balls{2} y coordinate from the bottom of the View to 0f and has its interpolator set
+         * to an DecelerateInterpolator(). An AnimatorSet s1 is created to play animDown animUp
+         * using playSequentially(animDown, animUp). animDown and animUp have "this" added as a
+         * listener causing this.onAnimationUpdate to be called for every frame  of these animations.
+         * s1 is cloned to s2, and its target is set to be balls{3}. The master AnimatorSet
+         * animation is created and it has anim1, anim2, and s1 set to playTogether(), and s1 and s2
+         * are set to playSequentially()
+         */
         private void createAnimation() {
             if (animation == null) {
                 ObjectAnimator anim1 = ObjectAnimator.ofFloat(balls.get(0), "y",
@@ -152,6 +181,7 @@ public class AnimationCloning extends Activity {
             animation.start();
         }
 
+        @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             invalidate();
         }
