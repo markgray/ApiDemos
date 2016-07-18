@@ -51,7 +51,7 @@ import java.util.ArrayList;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class AnimationCloning extends Activity {
-    /** Called when the activity is first created. */
+
     /**
      * Loads the animation_cloning layout as the content view, finds the LinearLayout container
      * for our animation, creates a MyAnimationView and addView's it the the container. Then it
@@ -144,6 +144,18 @@ public class AnimationCloning extends Activity {
             }
         }
 
+        /**
+         * Adds a ball at coordinates x, y to the ArrayList<ShapeHolder> balls. The ball is
+         * constructed of an OvalShape resized to 50dp x 50dp, placed in a ShapeDrawable and
+         * that ShapeDrawable is used in creating a ShapeHolder to hold it. The ShapeHolder
+         * has its x and y coordinates set to the method's arguments x,y. Random colors and
+         * a RadialGradient are used to initialize a Paint and that Paint is stored in the
+         * ShapeHolder, and the ShapeHolder is then add'ed to the balls List.
+         *
+         * @param x x coordinate for new ball
+         * @param y y coordinate for new ball
+         * @return ShapeHolder containing the new ball
+         */
         private ShapeHolder addBall(float x, float y) {
             OvalShape circle = new OvalShape();
             circle.resize(50f * mDensity, 50f * mDensity);
@@ -165,6 +177,15 @@ public class AnimationCloning extends Activity {
             return shapeHolder;
         }
 
+        /**
+         * This callback draws the MyAnimationView after every invalidate() call. For each
+         * ShapeHolder in the balls List the current matrix and clip are saved onto a private
+         * stack, the current matrix is pre-concatenated with a translation to the coordinate
+         * x, y of the ShapeHolder, and the ShapeDrawable in the ShapeHolder is told to draw
+         * itself. Canvas.restore() then removes all modifications to the matrix/clip state.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             for (int i = 0; i < balls.size(); ++i) {
@@ -176,11 +197,26 @@ public class AnimationCloning extends Activity {
             }
         }
 
+        /**
+         * Called when the RUN button is clicked, it first creates the animation (if this is the
+         * first time the button is clicked), and then starts the animation running.
+         */
         public void startAnimation() {
             createAnimation();
             animation.start();
         }
 
+        /**
+         * This callback is called on the occurrence of another frame of an animation which has
+         * had addUpdateListener(this) called to add "this" as a listener to the set of listeners
+         * that are sent update events throughout the life of an animation. This method is called
+         * on all listeners for every frame of the animation, after the values for the animation
+         * have been calculated. It simply calls invalidate() to invalidate the whole view.
+         * If the view is visible, onDraw(android.graphics.Canvas) will be called at some point
+         * in the future.
+         *
+         * @param animation The animation which was
+         */
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             invalidate();

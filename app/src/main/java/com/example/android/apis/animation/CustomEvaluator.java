@@ -40,10 +40,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-
+/**
+ * Implements the TypeEvaluator interface to animate using a custom:
+ * "public Object evaluate(float fraction, Object startValue, Object endValue)"
+ * function. The x and y coordinates of an "animation.ShapeHolder ball" are
+ * animated by calling evaluate, and onAnimationUpdate is called which calls
+ * invalidate() which causes the onDraw method to be called.
+ */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class CustomEvaluator extends Activity {
 
+    /**
+     * Loads the animator_custom_evaluator layout as the content view, finds the LinearLayout
+     * container for our animation, creates a MyAnimationView and addView's it the the container.
+     * Then it finds the startButton and setOnClickListener's a callback to startAnimation our
+     * MyAnimationView.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,12 +68,16 @@ public class CustomEvaluator extends Activity {
 
         Button starter = (Button) findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 animView.startAnimation();
             }
         });
     }
 
+    /**
+     * Class used to hold x, y coordinates of an object to be animated
+     */
     public class XYHolder {
         private float mX;
         private float mY;
@@ -87,6 +105,7 @@ public class CustomEvaluator extends Activity {
     }
 
     public class XYEvaluator implements TypeEvaluator {
+        @Override
         public Object evaluate(float fraction, Object startValue, Object endValue) {
             XYHolder startXY = (XYHolder) startValue;
             XYHolder endXY = (XYHolder) endValue;
@@ -174,6 +193,7 @@ public class CustomEvaluator extends Activity {
             canvas.restore();
         }
 
+        @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             invalidate();
         }
