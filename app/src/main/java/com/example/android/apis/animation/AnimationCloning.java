@@ -215,7 +215,7 @@ public class AnimationCloning extends Activity {
          * If the view is visible, onDraw(android.graphics.Canvas) will be called at some point
          * in the future.
          *
-         * @param animation The animation which was
+         * @param animation The animation which has a new frame
          */
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
