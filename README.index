@@ -74,7 +74,7 @@ Animation (disabled for froyo)
         .animation.AnimatorEvents
             Supposed to show when the various Sequencer Events and Animator Events: 
             Start Repeat Cancel and End occur, but Repeat Events are not generated
-            for the Seqencer because the api does not support setRepeatCount on a
+            for the Sequencer because the api does not support setRepeatCount on a
             AnimatorSet.
 
   Animation/Hide-Show Animations v11

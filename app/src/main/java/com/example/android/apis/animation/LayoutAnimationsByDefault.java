@@ -28,13 +28,23 @@ import android.widget.Button;
 import android.widget.GridLayout;
 
 /**
- * This application demonstrates how to use the animateLayoutChanges tag in XML to automate
- * transition animations as items are removed from or added to a container.
+ * This application demonstrates how to use the animateLayoutChanges="true" attribute in XML
+ * to automate transition animations as items are removed from or added to a container.
  */
 public class LayoutAnimationsByDefault extends Activity {
 
     private int numButtons = 1;
 
+    /**
+     * Sets the content view to the layout layout_animations_by_default, finds the gridContainer
+     * GridView, finds the ADD BUTTON Button and sets the OnClickListener to create a new Button
+     * and add it to the GridView at the location min(1, number of children in GridView). The
+     * onClickListener of the new Button is set to remove the Button. The GridView attribute
+     * android:animateLayoutChanges="true" causes a default LayoutTransition object to be set
+     * on the ViewGroup container and default animations will run when layout changes occur.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -45,10 +55,12 @@ public class LayoutAnimationsByDefault extends Activity {
 
         Button addButton = (Button) findViewById(R.id.addNewButton);
         addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 Button newButton = new Button(LayoutAnimationsByDefault.this);
                 newButton.setText(String.valueOf(numButtons++));
                 newButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
                     public void onClick(View v) {
                         gridContainer.removeView(v);
                     }

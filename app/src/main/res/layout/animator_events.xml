@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2010 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,109 +13,110 @@
      limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/container"
-    >
+    android:orientation="vertical"
+    tools:ignore="HardcodedText,ButtonOrder">
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:orientation="horizontal">
+
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Play"
             android:id="@+id/startButton"
-            />
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel"
+            android:text="Play" />
+
+        <Button
             android:id="@+id/cancelButton"
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel" />
+
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="End"
             android:id="@+id/endButton"
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End" />
+
         <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="End Immediately"
             android:id="@+id/endCB"
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End Immediately" />
     </LinearLayout>
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sequencer Events:   "
-            />
+            android:text="Sequencer Events:   " />
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start   "
             android:id="@+id/startText"
-            />
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Repeat   "
+            android:text="Start   " />
+
+        <TextView
             android:id="@+id/repeatText"
-            />
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel   "
+            android:text="Repeat   " />
+
+        <TextView
             android:id="@+id/cancelText"
-            />
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="End"
+            android:text="Cancel   " />
+
+        <TextView
             android:id="@+id/endText"
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End" />
     </LinearLayout>
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Animator Events:   "
-            />
+            android:text="Animator Events:   " />
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start   "
             android:id="@+id/startTextAnimator"
-            />
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Repeat   "
+            android:text="Start   " />
+
+        <TextView
             android:id="@+id/repeatTextAnimator"
-            />
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel   "
+            android:text="Repeat   " />
+
+        <TextView
             android:id="@+id/cancelTextAnimator"
-            />
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="End"
+            android:text="Cancel   " />
+
+        <TextView
             android:id="@+id/endTextAnimator"
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End" />
     </LinearLayout>
 </LinearLayout>

@@ -53,6 +53,16 @@ public class AnimatorEvents extends Activity {
     TextView startText, repeatText, cancelText, endText;
     TextView startTextAnimator, repeatTextAnimator, cancelTextAnimator, endTextAnimator;
 
+    /**
+     * Sets the content view to animator_events layout, and addView's an instance of MyAnimationView
+     * to the layout. It then locates the TextView's used as output (start, repeat, cancel, and end
+     * for both Sequencer and Animator events) and applies setAlpha(.5f) to make them appear as not
+     * having occurred, the AnimatorListener callbacks will apply setAlpha(1.0f) to signify that
+     * the callback has been called. It then locates the control buttons (PLAY, CANCEL, END) and
+     * sets OnClickListener's to perform these actions
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +92,7 @@ public class AnimatorEvents extends Activity {
         Button starter = (Button) findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
 
+            @Override
             public void onClick(View v) {
                 animView.startAnimation(endCB.isChecked());
             }
@@ -90,6 +101,7 @@ public class AnimatorEvents extends Activity {
         Button canceler = (Button) findViewById(R.id.cancelButton);
         canceler.setOnClickListener(new View.OnClickListener() {
 
+            @Override
             public void onClick(View v) {
                 animView.cancelAnimation();
             }
@@ -98,6 +110,7 @@ public class AnimatorEvents extends Activity {
         Button ender = (Button) findViewById(R.id.endButton);
         ender.setOnClickListener(new View.OnClickListener() {
 
+            @Override
             public void onClick(View v) {
                 animView.endAnimation();
             }
@@ -106,7 +119,7 @@ public class AnimatorEvents extends Activity {
     }
 
     public class MyAnimationView extends View implements Animator.AnimatorListener,
-    ValueAnimator.AnimatorUpdateListener {
+            ValueAnimator.AnimatorUpdateListener {
 
         @SuppressWarnings("unused")
         public final ArrayList<ShapeHolder> balls = new ArrayList<>();
@@ -199,10 +212,12 @@ public class AnimatorEvents extends Activity {
             canvas.restore();
         }
 
+        @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             invalidate();
         }
 
+        @Override
         public void onAnimationStart(Animator animation) {
             if (animation instanceof AnimatorSet) {
                 startText.setAlpha(1f);
@@ -214,6 +229,7 @@ public class AnimatorEvents extends Activity {
             }
         }
 
+        @Override
         public void onAnimationEnd(Animator animation) {
             if (animation instanceof AnimatorSet) {
                 endText.setAlpha(1f);
@@ -222,6 +238,7 @@ public class AnimatorEvents extends Activity {
             }
         }
 
+        @Override
         public void onAnimationCancel(Animator animation) {
             if (animation instanceof AnimatorSet) {
                 cancelText.setAlpha(1f);
@@ -230,6 +247,7 @@ public class AnimatorEvents extends Activity {
             }
         }
 
+        @Override
         public void onAnimationRepeat(Animator animation) {
             if (animation instanceof AnimatorSet) {
                 repeatText.setAlpha(1f);
