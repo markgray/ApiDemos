@@ -88,10 +88,14 @@ public class AnimatorEvents extends Activity {
         endTextAnimator.setAlpha(.5f);
         final CheckBox endCB = (CheckBox) findViewById(R.id.endCB);
 
-
         Button starter = (Button) findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
-
+            /**
+             * Start the animation of MyAnimationView, passing the state of the end immediately
+             * checkbox as the parameter.
+             *
+             * @param v starter Button view which was clicked
+             */
             @Override
             public void onClick(View v) {
                 animView.startAnimation(endCB.isChecked());
@@ -100,7 +104,11 @@ public class AnimatorEvents extends Activity {
 
         Button canceler = (Button) findViewById(R.id.cancelButton);
         canceler.setOnClickListener(new View.OnClickListener() {
-
+            /**
+             * Cancel the animation of MyAnimationView
+             *
+             * @param v cancel Button which was clicked
+             */
             @Override
             public void onClick(View v) {
                 animView.cancelAnimation();
@@ -109,7 +117,11 @@ public class AnimatorEvents extends Activity {
 
         Button ender = (Button) findViewById(R.id.endButton);
         ender.setOnClickListener(new View.OnClickListener() {
-
+            /**
+             * End the animation of MyAnimationView
+             *
+             * @param v end button which was clicked
+             */
             @Override
             public void onClick(View v) {
                 animView.endAnimation();
@@ -118,6 +130,12 @@ public class AnimatorEvents extends Activity {
 
     }
 
+    /**
+     * This is the view containing our animated ball, which listens for notifications from an
+     * animation by implementing Animator.AnimatorListener. Notifications indicate animation
+     * related events, such as the end or the repetition of the animation. It also implements
+     * ValueAnimator.AnimatorUpdateListener receiving callbacks for every frame of the animation.
+     */
     public class MyAnimationView extends View implements Animator.AnimatorListener,
             ValueAnimator.AnimatorUpdateListener {
 
@@ -127,11 +145,20 @@ public class AnimatorEvents extends Activity {
         ShapeHolder ball = null;
         boolean endImmediately = false;
 
+        /**
+         * Initializes ball to be a 25px by 25px circle. See createBall(float, float)
+         *
+         * @param context context of the Application
+         */
         public MyAnimationView(Context context) {
             super(context);
             ball = createBall(25, 25);
         }
 
+        /**
+         * Creates the "Animator animation" for the "ShapeHolder ball". yAnim animates the "y"
+         * coordinate of the ball ShapeHolder
+         */
         private void createAnimation() {
             if (animation == null) {
                 ObjectAnimator yAnim = ObjectAnimator.ofFloat(ball, "y",
