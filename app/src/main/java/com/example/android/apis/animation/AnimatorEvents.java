@@ -157,7 +157,22 @@ public class AnimatorEvents extends Activity {
 
         /**
          * Creates the "Animator animation" for the "ShapeHolder ball". yAnim animates the "y"
-         * coordinate of the ball ShapeHolder
+         * coordinate of the ball ShapeHolder from the current position to the bottom minus 50px
+         * with a duration of 1500 milliseconds, with a repeat count of 2, a repeatMode of
+         * ValueAnimator.REVERSE using a factor of 2.0 AccelerateInterpolator (starts slow and
+         * ends fast). xAnim animates the "x" coordinate of the ball from the current position
+         * to the current position plus 300px with a duration of 1000 milliseconds, with a repeat
+         * count of 2, a repeatMode of ValueAnimator.REVERSE using a factor of 2.0
+         * AccelerateInterpolator (starts slow and ends fast). alphaAnim and alphaSeq are strange
+         * in that they are played during the creation of the "AnimatorSet animation" and do not
+         * participate with the event demonstration. Together they animate the alpha of the
+         * ShapeHolder ball from 1f to .5f with a duration of 1000 milliseconds. The finish of the
+         * process is to create the AnimatorSet animation, and use it to .playTogether yAnim, and
+         * xAnim. yAnim has its addUpdateListener set to "this" (causing this.onAnimationUpdate
+         * to be called and invalidate() the View) and addListener set to "this" (causing
+         * onAnimationStart, onAnimationEnd, onAnimationCancel, and onAnimationRepeat to be
+         * called when these events occur) and animation also has its addListener set to this
+         * (causing the same event callbacks to called).
          */
         private void createAnimation() {
             if (animation == null) {
