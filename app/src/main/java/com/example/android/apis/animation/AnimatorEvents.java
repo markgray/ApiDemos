@@ -202,6 +202,16 @@ public class AnimatorEvents extends Activity {
             }
         }
 
+        /**
+         * Sets the field endImmediately for later use by the callback onAnimationStart,
+         * sets the alpha of the text used to display the occurrence of events to .5f to
+         * signify that they have not occurred yet, calls createAnimation to create the
+         * Animator animation, and animation.start() to start the animation running.
+         *
+         * @param endImmediately used to set the field endImmediately for use by the callback
+         *        onAnimationStart (which will call animation.end() immediately ending the
+         *        animation.)
+         */
         public void startAnimation(boolean endImmediately) {
             this.endImmediately = endImmediately;
             startText.setAlpha(.5f);
@@ -216,16 +226,33 @@ public class AnimatorEvents extends Activity {
             animation.start();
         }
 
+        /**
+         * cancel the Animator animation (used by the CANCEL Button's onClick call back)
+         */
         public void cancelAnimation() {
             createAnimation();
             animation.cancel();
         }
 
+        /**
+         * end the Animator animation (used by the END Button's onClick call back)
+         */
         public void endAnimation() {
             createAnimation();
             animation.end();
         }
 
+        /**
+         * Creates a circle OvalShape of size 50px by 50px, creates a ShapeDrawable of that circle
+         * Shape and creates a ShapeHolder to hold that ShapeDrawable. The ShapeHolder has its x,y
+         * coordinates set to the method parameters. A random color is used to create a light and
+         * dark random color which is used to create a RadialGradient used as the shader for a Paint
+         * instance and the ShapeHolder has its Paint set to that Paint.
+         *
+         * @param x x coordinate of the ShapeHolder created
+         * @param y y coordinate of the ShapeHolder created
+         * @return ShapeHolder containing the created ball
+         */
         private ShapeHolder createBall(float x, float y) {
             OvalShape circle = new OvalShape();
             circle.resize(50f, 50f);
@@ -246,6 +273,15 @@ public class AnimatorEvents extends Activity {
             return shapeHolder;
         }
 
+        /**
+         * Does the drawing of the MyAnimationView every time invalidate() is called. It Saves
+         * the current matrix and clip onto a private stack, pre-concatenates the current matrix
+         * with a translation to the ShapeHolder ball's current x,y coordinates, instructs the
+         * ShapeHolder's ShapeDrawable to draw itself, and then restores the matrix/clip state
+         * to the state saved on the private stack.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.save();
@@ -254,11 +290,29 @@ public class AnimatorEvents extends Activity {
             canvas.restore();
         }
 
+        /**
+         * Part of the AnimatorUpdateListener interface which we implement, this callback is
+         * called to notify us of the occurrence of another frame of the animation. We simply
+         * invalidate the whole view which will cause our onDraw(Canvas) callback to be called
+         * to redraw our view using the new values set in the ShapeHolder by the animation.
+         *
+         * @param animation The animation which was has advanced by a frame.
+         */
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             invalidate();
         }
 
+        /**
+         * Part of the AnimatorListener interface which we implement, this callback is called to
+         * notify us of the start of the animation. We set the alpha of the text used to indicate
+         * the occurrence of the "Start" event to 1.0f, either startText for our AnimatorSet
+         * instance signaling the event, or else startTextAnimator for sequencer events caused by
+         * our yAnim ObjectAnimator. If the "End Immediately" checkbox is checked the animation is
+         * ended by calling animation.end().
+         *
+         * @param animation The started animation.
+         */
         @Override
         public void onAnimationStart(Animator animation) {
             if (animation instanceof AnimatorSet) {
@@ -271,6 +325,15 @@ public class AnimatorEvents extends Activity {
             }
         }
 
+        /**
+         * Part of the AnimatorListener interface which we implement, this callback is called to
+         * notify us of the end of the animation. We set the alpha of the text used to indicate
+         * the occurrence of the "End" event to 1.0f, either endText for our AnimatorSet
+         * instance signaling the event, or else endTextAnimator for sequencer events caused by
+         * our yAnim ObjectAnimator.
+         *
+         * @param animation The animation which reached its end.
+         */
         @Override
         public void onAnimationEnd(Animator animation) {
             if (animation instanceof AnimatorSet) {
@@ -280,6 +343,15 @@ public class AnimatorEvents extends Activity {
             }
         }
 
+        /**
+         * Part of the AnimatorListener interface which we implement, this callback is called to
+         * notify us of the cancellation of the animation. We set the alpha of the text used to indicate
+         * the occurrence of the "Cancel" event to 1.0f, either cancelText for our AnimatorSet
+         * instance signaling the event, or else cancelTextAnimator for sequencer events caused by
+         * our yAnim ObjectAnimator.
+         *
+         * @param animation The animation which has been canceled
+         */
         @Override
         public void onAnimationCancel(Animator animation) {
             if (animation instanceof AnimatorSet) {
@@ -289,6 +361,15 @@ public class AnimatorEvents extends Activity {
             }
         }
 
+        /**
+         * Part of the AnimatorListener interface which we implement, this callback is called to
+         * notify us of the repeat of the animation. We set the alpha of the text used to indicate
+         * the occurrence of the "Repeat" event to 1.0f, either repeatText for our AnimatorSet
+         * instance signaling the event, or else repeatTextAnimator for sequencer events caused by
+         * our yAnim ObjectAnimator.
+         *
+         * @param animation The animation which has been repeated
+         */
         @Override
         public void onAnimationRepeat(Animator animation) {
             if (animation instanceof AnimatorSet) {
