@@ -51,6 +51,15 @@ public class LayoutAnimationsHideShow extends Activity {
     private LayoutTransition mTransitioner;
 
     /** Called when the activity is first created. */
+    /**
+     * Set the content view to the Layout file layout_animations_hideshow, finds the hideGoneCB
+     * CheckBox in that layout to use later on. Creates a LinearLayout container programmatically
+     * and configures it. It then adds four Button's to that LinearLayout and sets the OnClickListener
+     * of each Button to change the visibility of the Button based on the state of the hideGoneCB
+     * CheckBox
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is never called
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +78,7 @@ public class LayoutAnimationsHideShow extends Activity {
             newButton.setText(String.valueOf(i));
             container.addView(newButton);
             newButton.setOnClickListener(new View.OnClickListener() {
+                @Override
                 public void onClick(View v) {
                     v.setVisibility(hideGoneCB.isChecked() ? View.GONE : View.INVISIBLE);
                 }
@@ -82,6 +92,7 @@ public class LayoutAnimationsHideShow extends Activity {
 
         Button addButton = (Button) findViewById(R.id.addNewButton);
         addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 for (int i = 0; i < container.getChildCount(); ++i) {
                     View view = container.getChildAt(i);
@@ -92,6 +103,7 @@ public class LayoutAnimationsHideShow extends Activity {
 
         CheckBox customAnimCB = (CheckBox) findViewById(R.id.customAnimCB);
         customAnimCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 long duration;
                 if (isChecked) {
@@ -133,6 +145,7 @@ public class LayoutAnimationsHideShow extends Activity {
         mTransitioner.setAnimator(LayoutTransition.CHANGE_APPEARING, changeIn);
         changeIn.addListener(new AnimatorListenerAdapter() {
             @SuppressWarnings("ConstantConditions")
+            @Override
             public void onAnimationEnd(Animator anim) {
                 View view = (View) ((ObjectAnimator) anim).getTarget();
                 view.setScaleX(1f);
@@ -152,6 +165,7 @@ public class LayoutAnimationsHideShow extends Activity {
         mTransitioner.setAnimator(LayoutTransition.CHANGE_DISAPPEARING, changeOut);
         changeOut.addListener(new AnimatorListenerAdapter() {
             @SuppressWarnings("ConstantConditions")
+            @Override
             public void onAnimationEnd(Animator anim) {
                 View view = (View) ((ObjectAnimator) anim).getTarget();
                 view.setRotation(0f);
@@ -164,6 +178,7 @@ public class LayoutAnimationsHideShow extends Activity {
         mTransitioner.setAnimator(LayoutTransition.APPEARING, animIn);
         animIn.addListener(new AnimatorListenerAdapter() {
             @SuppressWarnings("ConstantConditions")
+            @Override
             public void onAnimationEnd(Animator anim) {
                 View view = (View) ((ObjectAnimator) anim).getTarget();
                 view.setRotationY(0f);
@@ -176,6 +191,7 @@ public class LayoutAnimationsHideShow extends Activity {
         mTransitioner.setAnimator(LayoutTransition.DISAPPEARING, animOut);
         animOut.addListener(new AnimatorListenerAdapter() {
             @SuppressWarnings("ConstantConditions")
+            @Override
             public void onAnimationEnd(Animator anim) {
                 View view = (View) ((ObjectAnimator) anim).getTarget();
                 view.setRotationX(0f);
