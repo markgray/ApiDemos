@@ -53,12 +53,19 @@ public class LayoutAnimationsHideShow extends Activity {
     /** Called when the activity is first created. */
     /**
      * Set the content view to the Layout file layout_animations_hideshow, finds the hideGoneCB
-     * CheckBox in that layout to use later on. Creates a LinearLayout container programmatically
-     * and configures it. It then adds four Button's to that LinearLayout and sets the OnClickListener
-     * of each Button to change the visibility of the Button based on the state of the hideGoneCB
-     * CheckBox
+     * CheckBox in that layout to use later on in the creation of OnClickListener's. Creates a
+     * LinearLayout container programmatically and configures it. It then adds four Button's to
+     * that LinearLayout and sets the OnClickListener of each Button to change the visibility of
+     * the Button based on the state of the hideGoneCB CheckBox. If it is checked the View's
+     * visibility is changed to GONE, if unchecked it is changed to INVISIBLE. It creates a
+     * default LayoutTransition mTransitioner by calling resetTransition(). Next it finds
+     * the "Show Buttons" Button ("R.id.addNewButton") and sets its OnClickListener to set the
+     * visibility of the four Button's in the LinearLayout container to VISIBLE. It finds the
+     * "Custom Animations" CheckBox and sets its OnCheckedChangeListener to either create a
+     * custom LayoutTransition mTransitioner if the CheckBox is checked, or reset it to the default
+     * animation if unchecked.
      *
-     * @param savedInstanceState always null since onSaveInstanceState is never called
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +85,12 @@ public class LayoutAnimationsHideShow extends Activity {
             newButton.setText(String.valueOf(i));
             container.addView(newButton);
             newButton.setOnClickListener(new View.OnClickListener() {
+                /**
+                 * If the hideGoneCB is checked, the visibility of the Button clicked is
+                 * set to GONE, if not it is set to INVISIBLE.
+                 *
+                 * @param v View which was clicked
+                 */
                 @Override
                 public void onClick(View v) {
                     v.setVisibility(hideGoneCB.isChecked() ? View.GONE : View.INVISIBLE);
@@ -92,6 +105,12 @@ public class LayoutAnimationsHideShow extends Activity {
 
         Button addButton = (Button) findViewById(R.id.addNewButton);
         addButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Set the visibility of all four Button's in the LinearLayout container to
+             * VISIBLE.
+             *
+             * @param v Button which was clicked
+             */
             @Override
             public void onClick(View v) {
                 for (int i = 0; i < container.getChildCount(); ++i) {
@@ -103,6 +122,20 @@ public class LayoutAnimationsHideShow extends Activity {
 
         CheckBox customAnimCB = (CheckBox) findViewById(R.id.customAnimCB);
         customAnimCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            /**
+             * This callback either configures the LayoutTransition mTransitioner to perform
+             * a custom layout change animation, or resets it to a new LayoutTransition by
+             * calling resetTransition. The custom animation is created by first setting the
+             * stagger (delay between animations) of the CHANGE_APPEARING and CHANGE_DISAPPEARING
+             * layout transitions to 30 milliseconds. It then calls setupCustomAnimations() which
+             * puts together a rather complex combination of animations which it then sets in the
+             * LayoutTransition mTransitioner (see setupCustomAnimations) The duration of the
+             * custom animations if 500 milliseconds, while the default animations is set to
+             * 300 milliseconds.
+             *
+             * @param buttonView CheckBox customAnimCB whose state has changed
+             * @param isChecked whether the CheckBox has changed to "custom" (true) or been cleared
+             */
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 long duration;
@@ -120,6 +153,10 @@ public class LayoutAnimationsHideShow extends Activity {
         });
     }
 
+    /**
+     * Create a new default LayoutTransition and set the LinearLayout container to use
+     * this LayoutTransition
+     */
     private void resetTransition() {
         mTransitioner = new LayoutTransition();
         container.setLayoutTransition(mTransitioner);
