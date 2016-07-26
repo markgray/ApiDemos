@@ -162,6 +162,34 @@ public class LayoutAnimationsHideShow extends Activity {
         container.setLayoutTransition(mTransitioner);
     }
 
+    /**
+     * This method creates complex CHANGE_APPEARING, CHANGE_DISAPPEARING, APPEARING, and
+     * DISAPPEARING animations and configures the LayoutTransition mTransitioner to use them.
+     *
+     * For the CHANGE_APPEARING (Changing while Adding) part of the animation it defines property
+     * value holders to animate property "left" from 0 to 1, "top" from 0 to 1, "right" from 0 to 1,
+     * "bottom" from 0 to 1, "scaleX" from 1f to 0f to 1f, "scaleY" from 1f to 0f to 1f. It then
+     * creates an ObjectAnimator changeIn for these properties, sets its duration to use the
+     * same duration of the current LayoutTransition mTransitioner and sets changeIn to be the
+     * CHANGE_APPEARING animation of mTransitioner. It adds an AnimatorListenerAdapter to changeIn
+     * which overrides onAnimationEnd and scales the Button added to full size. This animation has
+     * has the appearance of a card flipping right to left from the back side to the front side.
+     * You can see this animation in action by clicking the SHOW BUTTONS Button after deleting
+     * Button's with the "Hide (GONE)" CheckBox checked.
+     *
+     * For the CHANGE_DISAPPEARING (Changing while Removing) part of the animation it defines an
+     * additional PropertyValueHolder for "rotation" constructed of three KeyFrame's (kf0 - a
+     * starting value of the rotation of 0f lasting 0f, kf1 - a rotation of 360f degrees lasting
+     * .9999f of the frame, and kf2 - an ending rotation of 0f degrees. It combines these in the
+     * "rotation" property value holder pvhRotation, then combines the "left", "top", "right", and
+     * "bottom" PropertyValuesHolder's used for the CHANGE_APPEARING animation to create the
+     * ObjectAnimator changeOut, sets the duration of changeOut to be the same as the current
+     * LayoutTransition mTransitioner, and sets changeOut to be the CHANGE_DISAPPEARING animation
+     * of mTransitioner. It adds an AnimatorListenerAdapter to changeOut which overrides
+     * onAnimationEnd to set the rotation of the Button to 0f degrees. It has the effect of rotating
+     * the Button's to the right of the Button removed clockwise when the "Hide (GONE)" CheckBox
+     * is checked while moving them into their new positions.
+     */
     private void setupCustomAnimations() {
         // Changing while Adding
         PropertyValuesHolder pvhLeft =
