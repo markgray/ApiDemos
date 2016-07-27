@@ -189,6 +189,24 @@ public class LayoutAnimationsHideShow extends Activity {
      * onAnimationEnd to set the rotation of the Button to 0f degrees. It has the effect of rotating
      * the Button's to the right of the Button removed clockwise when the "Hide (GONE)" CheckBox
      * is checked while moving them into their new positions.
+     *
+     * For the APPEARING (Adding) part of the animation it creates a simple "rotationY"
+     * ObjectAnimator animIn which rotates the Button from 90f degrees to 0f degrees, sets
+     * the duration of animIn to be the same as the current LayoutTransition mTransitioner, and
+     * sets animIn to be the APPEARING animation of mTransitioner. It add an AnimatorListenerAdapter
+     * to animIn which overrides onAnimationEnd to set the rotation of the Button to 0f degrees.
+     * It has the effect of rotating the appearing Button's about the y axis when the SHOW BUTTONS
+     * button is pressed (after removing a Button or two), starting from sticking directly out of
+     * the plane of the View, to flat.
+     *
+     * For the DISAPPEARING (Removing) part of the animation it creates a simple "rotationX"
+     * ObjectAnimator animOut which rotates the Button from 0f degrees (flat) to 90f degrees
+     * (sticking out of the plane), sets the duration of animOut to be the same as the current
+     * LayoutTransition mTransitioner, and sets animOut to be the DISAPPEARING animation of
+     * mTransitioner. It add an AnimatorListenerAdapter to animIn which overrides onAnimationEnd
+     * to set the rotation of the Button to 0f degrees. It has the effect of rotating the
+     * disappearing Button about the x axis when the Button is clicked starting from flat to
+     * sticking vertically out of the plane.
      */
     private void setupCustomAnimations() {
         // Changing while Adding
