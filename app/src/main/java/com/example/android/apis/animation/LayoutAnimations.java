@@ -54,6 +54,11 @@ public class LayoutAnimations extends Activity {
     Animator currentChangingAppearingAnim, currentChangingDisappearingAnim;
 
     /** Called when the activity is first created. */
+    /**
+     * 
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,12 +88,14 @@ public class LayoutAnimations extends Activity {
         parent.setClipChildren(false);
         Button addButton = (Button) findViewById(R.id.addNewButton);
         addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 Button newButton = new Button(LayoutAnimations.this);
                 newButton.setMinHeight(64);
                 newButton.setMinWidth(64);
                 newButton.setText(String.valueOf(numButtons++));
                 newButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
                     public void onClick(View v) {
                         container.removeView(v);
                     }
@@ -99,6 +106,7 @@ public class LayoutAnimations extends Activity {
 
         CheckBox customAnimCB = (CheckBox) findViewById(R.id.customAnimCB);
         customAnimCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 setupTransition(transitioner);
             }
@@ -107,24 +115,28 @@ public class LayoutAnimations extends Activity {
         // Check for disabled animations
         CheckBox appearingCB = (CheckBox) findViewById(R.id.appearingCB);
         appearingCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 setupTransition(transitioner);
             }
         });
         CheckBox disappearingCB = (CheckBox) findViewById(R.id.disappearingCB);
         disappearingCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 setupTransition(transitioner);
             }
         });
         CheckBox changingAppearingCB = (CheckBox) findViewById(R.id.changingAppearingCB);
         changingAppearingCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 setupTransition(transitioner);
             }
         });
         CheckBox changingDisappearingCB = (CheckBox) findViewById(R.id.changingDisappearingCB);
         changingDisappearingCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 setupTransition(transitioner);
             }
@@ -169,6 +181,7 @@ public class LayoutAnimations extends Activity {
                 setDuration(transition.getDuration(LayoutTransition.CHANGE_APPEARING));
         customChangingAppearingAnim.addListener(new AnimatorListenerAdapter() {
             @SuppressWarnings("ConstantConditions")
+            @Override
             public void onAnimationEnd(Animator anim) {
                 View view = (View) ((ObjectAnimator) anim).getTarget();
                 view.setScaleX(1f);
@@ -187,6 +200,7 @@ public class LayoutAnimations extends Activity {
                 setDuration(transition.getDuration(LayoutTransition.CHANGE_DISAPPEARING));
         customChangingDisappearingAnim.addListener(new AnimatorListenerAdapter() {
             @SuppressWarnings("ConstantConditions")
+            @Override
             public void onAnimationEnd(Animator anim) {
                 View view = (View) ((ObjectAnimator) anim).getTarget();
                 view.setRotation(0f);
@@ -198,6 +212,7 @@ public class LayoutAnimations extends Activity {
                 setDuration(transition.getDuration(LayoutTransition.APPEARING));
         customAppearingAnim.addListener(new AnimatorListenerAdapter() {
             @SuppressWarnings("ConstantConditions")
+            @Override
             public void onAnimationEnd(Animator anim) {
                 View view = (View) ((ObjectAnimator) anim).getTarget();
                 view.setRotationY(0f);
@@ -209,6 +224,7 @@ public class LayoutAnimations extends Activity {
                 setDuration(transition.getDuration(LayoutTransition.DISAPPEARING));
         customDisappearingAnim.addListener(new AnimatorListenerAdapter() {
             @SuppressWarnings("ConstantConditions")
+            @Override
             public void onAnimationEnd(Animator anim) {
                 View view = (View) ((ObjectAnimator) anim).getTarget();
                 view.setRotationX(0f);
