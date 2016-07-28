@@ -55,9 +55,10 @@ public class LayoutAnimations extends Activity {
 
     /** Called when the activity is first created. */
     /**
-     * Sets the content view to layout_animations. Creates a FixedGridLayout instance and configures
-     * its cell height, cell width, creates LayoutTransition transitioner with default animations,
-     * and squirrels away the default animations for later use.
+     * Sets the content view to layout_animations. Creates a FixedGridLayout container instance
+     * and configures its cell height, and cell width, creates LayoutTransition transitioner with
+     * default animations, sets it as the LayoutTransition for container, and squirrels away the
+     * default animations for later use.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
