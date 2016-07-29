@@ -28,6 +28,7 @@ import android.animation.LayoutTransition;
 import android.animation.PropertyValuesHolder;
 import android.annotation.TargetApi;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -44,6 +45,7 @@ import android.widget.Button;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class LayoutAnimations extends Activity {
 
+    private static final String TAG = "LayoutAnimations";
     private int numButtons = 1;
     ViewGroup container = null;
     Animator defaultAppearingAnim, defaultDisappearingAnim;
@@ -58,7 +60,9 @@ public class LayoutAnimations extends Activity {
      * Sets the content view to layout_animations. Creates a FixedGridLayout container instance
      * and configures its cell height, and cell width, creates LayoutTransition transitioner with
      * default animations, sets it as the LayoutTransition for container, and squirrels away the
-     * default animations for later use.
+     * default animations for later use. It then calls the method createCustomAnimations to create
+     * custom animations using its argument transitioner only to fetch the default value of the
+     * duration of the animations (see createCustomAnimations).
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
@@ -111,6 +115,7 @@ public class LayoutAnimations extends Activity {
         customAnimCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.i(TAG, "Custom Checkbox");
                 setupTransition(transitioner);
             }
         });
@@ -120,6 +125,7 @@ public class LayoutAnimations extends Activity {
         appearingCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.i(TAG, "Appearing Checkbox");
                 setupTransition(transitioner);
             }
         });
@@ -127,6 +133,7 @@ public class LayoutAnimations extends Activity {
         disappearingCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.i(TAG, "Disappearing Checkbox");
                 setupTransition(transitioner);
             }
         });
@@ -134,6 +141,7 @@ public class LayoutAnimations extends Activity {
         changingAppearingCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.i(TAG, "Changing Appearing Checkbox");
                 setupTransition(transitioner);
             }
         });
@@ -141,6 +149,7 @@ public class LayoutAnimations extends Activity {
         changingDisappearingCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.i(TAG, "Changing Disappearing Checkbox");
                 setupTransition(transitioner);
             }
         });
