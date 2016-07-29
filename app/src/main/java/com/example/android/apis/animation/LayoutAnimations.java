@@ -62,7 +62,12 @@ public class LayoutAnimations extends Activity {
      * default animations, sets it as the LayoutTransition for container, and squirrels away the
      * default animations for later use. It then calls the method createCustomAnimations to create
      * custom animations using its argument transitioner only to fetch the default value of the
-     * duration of the animations (see createCustomAnimations).
+     * duration of the animations (see createCustomAnimations). setupTransition() is used to
+     * switch LayoutTransition transitioner between the default and custom animations for the four
+     * different animations used in a layout transition based on the state of the CheckBox's and is
+     * only called when the state of one of the 5 CheckBox's changes (the CheckBox for choosing
+     * custom instead of default animations, as well as the 4 CheckBox's selecting "In", "Out",
+     * "Changing-In" and "Changing-Out" animations or disabling them if un-checked."
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
