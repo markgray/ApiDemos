@@ -100,6 +100,15 @@ public class LayoutAnimations extends Activity {
         parent.setClipChildren(false);
         Button addButton = (Button) findViewById(R.id.addNewButton);
         addButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Creates a new Button using this activity as its context, sets the minimum height
+             * to 64 pixels and minimum width to 64 pixels, sets the text displayed in the button
+             * to the number of buttons created and increments that number, sets the OnClickListener
+             * of the Button to remove itself when clicked. It then adds the Button to the ViewGroup
+             * (FixedGridLayout) container at position 1 (or 0 if no Button's have been created yet.
+             *
+             * @param v addButton View when it is clicked
+             */
             @Override
             public void onClick(View v) {
                 Button newButton = new Button(LayoutAnimations.this);
@@ -107,6 +116,11 @@ public class LayoutAnimations extends Activity {
                 newButton.setMinWidth(64);
                 newButton.setText(String.valueOf(numButtons++));
                 newButton.setOnClickListener(new View.OnClickListener() {
+                    /**
+                     * Removes the Button when it is clicked
+                     *
+                     * @param v Button View which was clicked
+                     */
                     @Override
                     public void onClick(View v) {
                         container.removeView(v);
