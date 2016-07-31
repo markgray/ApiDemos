@@ -203,7 +203,7 @@ public class LayoutAnimationsHideShow extends Activity {
      * ObjectAnimator animOut which rotates the Button from 0f degrees (flat) to 90f degrees
      * (sticking out of the plane), sets the duration of animOut to be the same as the current
      * LayoutTransition mTransitioner, and sets animOut to be the DISAPPEARING animation of
-     * mTransitioner. It add an AnimatorListenerAdapter to animIn which overrides onAnimationEnd
+     * mTransitioner. It add an AnimatorListenerAdapter to animOut which overrides onAnimationEnd
      * to set the rotation of the Button to 0f degrees. It has the effect of rotating the
      * disappearing Button about the x axis when the Button is clicked starting from flat to
      * sticking vertically out of the plane.

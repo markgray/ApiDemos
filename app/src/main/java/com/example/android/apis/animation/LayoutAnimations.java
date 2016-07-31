@@ -117,7 +117,7 @@ public class LayoutAnimations extends Activity {
                 newButton.setText(String.valueOf(numButtons++));
                 newButton.setOnClickListener(new View.OnClickListener() {
                     /**
-                     * Removes the Button when it is clicked
+                     * Removes itself when it is clicked
                      *
                      * @param v Button View which was clicked
                      */
@@ -132,6 +132,14 @@ public class LayoutAnimations extends Activity {
 
         CheckBox customAnimCB = (CheckBox) findViewById(R.id.customAnimCB);
         customAnimCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            /**
+             * Called when the checked state of the "Custom Animations" CheckBox has changed,
+             * it just calls setupTransition to change the LayoutTransition transitioner as
+             * needed.
+             *
+             * @param buttonView The compound button view whose state has changed.
+             * @param isChecked  The new checked state of buttonView.
+             */
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.i(TAG, "Custom Checkbox");
@@ -142,6 +150,14 @@ public class LayoutAnimations extends Activity {
         // Check for disabled animations
         CheckBox appearingCB = (CheckBox) findViewById(R.id.appearingCB);
         appearingCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            /**
+             * Called when the checked state of the "In" (appearing) CheckBox has changed,
+             * it just calls setupTransition to change the LayoutTransition transitioner as
+             * needed.
+             *
+             * @param buttonView The compound button view whose state has changed.
+             * @param isChecked  The new checked state of buttonView.
+             */
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.i(TAG, "Appearing Checkbox");
@@ -150,6 +166,14 @@ public class LayoutAnimations extends Activity {
         });
         CheckBox disappearingCB = (CheckBox) findViewById(R.id.disappearingCB);
         disappearingCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            /**
+             * Called when the checked state of the "Out" (disappearing) CheckBox has changed,
+             * it just calls setupTransition to change the LayoutTransition transitioner as
+             * needed.
+             *
+             * @param buttonView The compound button view whose state has changed.
+             * @param isChecked  The new checked state of buttonView.
+             */
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.i(TAG, "Disappearing Checkbox");
@@ -158,6 +182,14 @@ public class LayoutAnimations extends Activity {
         });
         CheckBox changingAppearingCB = (CheckBox) findViewById(R.id.changingAppearingCB);
         changingAppearingCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            /**
+             * Called when the checked state of the "Changing In" (CHANGING_APPEARING) CheckBox
+             * has changed, it just calls setupTransition to change the LayoutTransition
+             * transitioner as needed.
+             *
+             * @param buttonView The compound button view whose state has changed.
+             * @param isChecked  The new checked state of buttonView.
+             */
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.i(TAG, "Changing Appearing Checkbox");
@@ -166,6 +198,14 @@ public class LayoutAnimations extends Activity {
         });
         CheckBox changingDisappearingCB = (CheckBox) findViewById(R.id.changingDisappearingCB);
         changingDisappearingCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            /**
+             * Called when the checked state of the "Changing Out" (CHANGING_DISAPPEARING) CheckBox
+             * has changed, it just calls setupTransition to change the LayoutTransition
+             * transitioner as needed.
+             *
+             * @param buttonView The compound button view whose state has changed.
+             * @param isChecked  The new checked state of buttonView.
+             */
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.i(TAG, "Changing Disappearing Checkbox");
@@ -174,6 +214,18 @@ public class LayoutAnimations extends Activity {
         });
     }
 
+    /**
+     * This method sets the Animations used for the four different animation types used in a
+     * layout transition (APPEARING, DISAPPEARING, CHANGE_APPEARING, and CHANGE_DISAPPEARING)
+     * to be either the default animations, or the custom animations (created by the method
+     * createCustomAnimations) based on the state of the checkboxes at the moment. It is called
+     * only when one of the five checkboxes changes state. It first finds each of the checkboxes,
+     * then sets each of the four animation types by choosing animations (default or custom)
+     * using a double ternary operator which decides the animation to be used based on the
+     * isChecked() state of the relevant CheckBox's for that animation.
+     *
+     * @param transition LayoutTransition to be modified
+     */
     private void setupTransition(LayoutTransition transition) {
         CheckBox customAnimCB = (CheckBox) findViewById(R.id.customAnimCB);
         CheckBox appearingCB = (CheckBox) findViewById(R.id.appearingCB);
@@ -193,6 +245,58 @@ public class LayoutAnimations extends Activity {
                         defaultChangingDisappearingAnim) : null);
     }
 
+    /**
+     * This method creates the four different custom animations which can be selected to be used
+     * by when the appropriate CheckBox's are "checked"
+     *
+     * For the CHANGE_APPEARING (Changing while Adding) part of the animation it defines property
+     * value holders to animate property "left" from 0 to 1, "top" from 0 to 1, "right" from 0 to 1,
+     * "bottom" from 0 to 1, "scaleX" from 1f to 0f to 1f, "scaleY" from 1f to 0f to 1f. It then
+     * creates an ObjectAnimator customChangingAppearingAnim for these properties, sets its duration
+     * to use the same duration of the current LayoutTransition transition and sets
+     * customChangingAppearingAnim to be the CHANGE_APPEARING animation of transition. It adds an
+     * AnimatorListenerAdapter to customChangingAppearingAnim which overrides onAnimationEnd and
+     * scales the Button added to full size. This animation has has the appearance of a card
+     * flipping right to left from the back side to the front side. You can see this animation in
+     * action by clicking the ADD BUTTON Button when both the "Custom Animations" and "In"
+     * CheckBox are checked.
+     *
+     * For the CHANGE_DISAPPEARING (Changing while Removing) part of the animation it defines an
+     * additional PropertyValueHolder for "rotation" constructed of three KeyFrame's (kf0 - a
+     * starting value of the rotation of 0f lasting 0f, kf1 - a rotation of 360f degrees lasting
+     * .9999f of the frame, and kf2 - an ending rotation of 0f degrees. It combines these in the
+     * "rotation" property value holder pvhRotation, then combines the "left", "top", "right", and
+     * "bottom" PropertyValuesHolder's used for the CHANGE_APPEARING animation to create the
+     * ObjectAnimator customChangingDisappearingAnim, sets the duration of
+     * customChangingDisappearingAnim to be the same as the current LayoutTransition transition,
+     * and sets customChangingDisappearingAnim to be the CHANGE_DISAPPEARING animation of
+     * transition. It adds an AnimatorListenerAdapter to customChangingDisappearingAnim which
+     * overrides onAnimationEnd to set the rotation of the Button to 0f degrees. It has the
+     * effect of rotating the Button's to the right of the Button removed clockwise while moving
+     * them into their new positions when both the "Custom Animations" and "Out" CheckBox are checked.
+     *
+     * For the APPEARING (Adding) part of the animation it creates a simple "rotationY"
+     * ObjectAnimator customAppearingAnim which rotates the Button from 90f degrees to 0f degrees,
+     * sets the duration of customAppearingAnim to be the same as the current LayoutTransition
+     * transition, and sets customAppearingAnim to be the APPEARING animation of transition. It
+     * adds an AnimatorListenerAdapter to customAppearingAnim which overrides onAnimationEnd to
+     * set the rotation of the Button to 0f degrees. It has the effect of rotating the appearing
+     * Button's about the y axis when the ADD BUTTON button is pressed, starting from sticking
+     * directly out of the plane of the View, to flat when both the "Custom Animations" and
+     * "Changing In" CheckBox are checked.
+     *
+     * For the DISAPPEARING (Removing) part of the animation it creates a simple "rotationX"
+     * ObjectAnimator customDisappearingAnim which rotates the Button from 0f degrees (flat) to 90f degrees
+     * (sticking out of the plane), sets the duration of customDisappearingAnim to be the same as the current
+     * LayoutTransition transition, and sets customDisappearingAnim to be the DISAPPEARING animation of
+     * transition. It add an AnimatorListenerAdapter to customDisappearingAnim which overrides onAnimationEnd
+     * to set the rotation of the Button to 0f degrees. It has the effect of rotating the
+     * disappearing Button about the x axis when the Button is clicked starting from flat to
+     * sticking vertically out of the plane when both the "Custom Animations" and "Changing Out"
+     * CheckBox are checked..
+
+     * @param transition LayoutTransition which is to be modified
+     */
     private void createCustomAnimations(LayoutTransition transition) {
         // Changing while Adding
         PropertyValuesHolder pvhLeft =
