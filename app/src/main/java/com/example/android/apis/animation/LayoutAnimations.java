@@ -286,15 +286,15 @@ public class LayoutAnimations extends Activity {
      * "Changing In" CheckBox are checked.
      *
      * For the DISAPPEARING (Removing) part of the animation it creates a simple "rotationX"
-     * ObjectAnimator customDisappearingAnim which rotates the Button from 0f degrees (flat) to 90f degrees
-     * (sticking out of the plane), sets the duration of customDisappearingAnim to be the same as the current
-     * LayoutTransition transition, and sets customDisappearingAnim to be the DISAPPEARING animation of
-     * transition. It add an AnimatorListenerAdapter to customDisappearingAnim which overrides onAnimationEnd
-     * to set the rotation of the Button to 0f degrees. It has the effect of rotating the
-     * disappearing Button about the x axis when the Button is clicked starting from flat to
-     * sticking vertically out of the plane when both the "Custom Animations" and "Changing Out"
-     * CheckBox are checked..
-
+     * ObjectAnimator customDisappearingAnim which rotates the Button from 0f degrees (flat) to
+     * 90f degrees (sticking out of the plane), sets the duration of customDisappearingAnim to
+     * be the same as the current LayoutTransition transition, and sets customDisappearingAnim
+     * to be the DISAPPEARING animation of transition. It add an AnimatorListenerAdapter to
+     * customDisappearingAnim which overrides onAnimationEnd to set the rotation of the Button
+     * to 0f degrees. It has the effect of rotating the disappearing Button about the x axis
+     * when the Button is clicked starting from flat to sticking vertically out of the plane
+     * when both the "Custom Animations" and "Changing Out" CheckBox are checked.
+     *
      * @param transition LayoutTransition which is to be modified
      */
     private void createCustomAnimations(LayoutTransition transition) {

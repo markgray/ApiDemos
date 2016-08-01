@@ -36,20 +36,53 @@ public class FixedGridLayout extends ViewGroup {
     int mCellWidth;
     int mCellHeight;
 
+    /**
+     * Creates a FixedGridLayout with the Context context
+     *
+     * @param context Context of the activity creating the ViewGroup
+     */
     public FixedGridLayout(Context context) {
         super(context);
     }
 
+    /**
+     * Sets the mCellWidth field and schedules a layout pass of the view tree.
+     *
+     * @param px cell width in pixels
+     */
     public void setCellWidth(int px) {
         mCellWidth = px;
         requestLayout();
     }
 
+    /**
+     * Sets the mCellHeight field and schedules a layout pass of the view tree.
+     *
+     * @param px cell height in pixels
+     */
     public void setCellHeight(int px) {
         mCellHeight = px;
         requestLayout();
     }
 
+    /**
+     * Measure the view and its content to determine the measured width and the
+     * measured height. This method is invoked by {@link #measure(int, int)} and
+     * should be overridden by subclasses to provide accurate and efficient
+     * measurement of their contents. It first creates MeasureSpec's encoding
+     * mCellWidth and mCellHeight for the mode AT_MOST, it then tells each child
+     * View (Button's in our case) to measure itself given these two constraints.
+     * Finally it calls setMeasuredDimension telling it we will use the size our
+     * parents gave us, but default to a minimum size to avoid clipping transitioning
+     * children
+     *
+     * @param widthMeasureSpec horizontal space requirements as imposed by the parent.
+     *                         The requirements are encoded with
+     *                         {@link android.view.View.MeasureSpec}.
+     * @param heightMeasureSpec vertical space requirements as imposed by the parent.
+     *                         The requirements are encoded with
+     *                         {@link android.view.View.MeasureSpec}.
+     */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int cellWidthSpec = MeasureSpec.makeMeasureSpec(mCellWidth,
