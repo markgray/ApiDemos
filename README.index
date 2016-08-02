@@ -93,6 +93,7 @@ Animation (disabled for froyo)
             too small for the number on ub->htc_one, and i7->Nexus 5 I recall, but 
             perfect on quad->nexus 7, and i7->Excite 10, ub->Nexus 9, k7->LG G pad 8.3,
             and bizarre but true k7->Nexus 4. This problem is due to bug in FixedGridlayout?
+            TODO: Scale all use of pixels to dp
 
   Animation/Loading v11 -> v23 or higher required due to android:fraction="0"
         .animation.AnimationLoading

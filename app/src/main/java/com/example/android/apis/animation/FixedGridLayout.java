@@ -74,7 +74,10 @@ public class FixedGridLayout extends ViewGroup {
      * View (Button's in our case) to measure itself given these two constraints.
      * Finally it calls setMeasuredDimension telling it we will use the size our
      * parents gave us, but default to a minimum size to avoid clipping transitioning
-     * children
+     * children. It does this by calling resolveSize(int,int) for both width and
+     * height to decide between our desired size and the size imposed by our parent
+     * and using the returned MEASURED_SIZE_MASK for width and height in our call to
+     * setMeasuredDimension.
      *
      * @param widthMeasureSpec horizontal space requirements as imposed by the parent.
      *                         The requirements are encoded with
@@ -102,6 +105,24 @@ public class FixedGridLayout extends ViewGroup {
                 resolveSize(mCellHeight * minCount, heightMeasureSpec));
     }
 
+    /**
+     * Called from layout when this view should assign a size and position to each of
+     * its children. Given the positions l, t, r, and b (left, top, right and bottom)
+     * assigned to us by our parent we calculate left, top, right and bottom for each
+     * of our children and call View.layout() for each child to inform them (via their
+     * own onLayout callbacks) of their new positions. The calculation of the position
+     * of each child involves determining the number of columns we can create based on
+     * the space between our right and left position as allowed by our parent, and the
+     * cell width we are using. Then for each child we assign a column starting in column
+     * 0 and row 0 and advancing the row number, and resetting the column to 0 every time
+     * we fill all the columns in a row.
+     *
+     * @param changed This is a new size or position for this view
+     * @param l       Left position, relative to parent
+     * @param t       Top position, relative to parent
+     * @param r       Right position, relative to parent
+     * @param b       Bottom position, relative to parent
+     */
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int cellWidth = mCellWidth;

@@ -44,7 +44,19 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 /**
- * This application demonstrates loading Animator objects from XML resources.
+ * Loads animations from Xml files: R.animator.object_animator (animates ball[0] "y"
+ * from 0 to 200, and reverses), R.animator.animator (animates ball[1] alpha from 1 to
+ * 0 and reverses), R.animator.animator_set (an animator set which animates ball[2]'s
+ * "x" from 0 to 200, and "y" from 0 to 400), R.animator.color_animator (an animator
+ * which animates ball[3]'s color from #0f0 to #00ffff), R.animator.object_animator_pvh
+ * (an animator which animates ball[4]'s "x" from 0 to 400, and "y" from 0 to 200 using
+ * propertyValuesHolder's), R.animator.object_animator_pvh_kf (uses propertyValuesHolder
+ * to hold keyframe specs for x and y and uses the default linear interpolator on balls[5]
+ * uses the same animator on balls[6] with the addition of an alpha animation), and
+ * R.animator.object_animator_pvh_kf_interpolated (the animation used for balls[7] has an
+ * accelerate interpolator applied on each keyframe interval instead of the default used on
+ * balls[5], As these two animations use the exact same path, the effect of the per-keyframe
+ * interpolator has been made obvious.)
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class AnimationLoading extends Activity {
@@ -53,6 +65,13 @@ public class AnimationLoading extends Activity {
     private static final int DURATION = 1500;
 
     /** Called when the activity is first created. */
+    /**
+     * Set the content view to R.layout.animation_loading, finds the LinearLayout container
+     * which we will use for our View (R.id.container), creates an instance of MyAnimationView
+     * animView and .addView's it to container.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +82,8 @@ public class AnimationLoading extends Activity {
 
         Button starter = (Button) findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
-
                 animView.startAnimation();
             }
         });
@@ -101,6 +120,7 @@ public class AnimationLoading extends Activity {
                 ValueAnimator fader = (ValueAnimator) AnimatorInflater.
                         loadAnimator(appContext, R.animator.animator);
                 fader.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
                         balls.get(1).setAlpha((Float) animation.getAnimatedValue());
                     }
@@ -127,6 +147,7 @@ public class AnimationLoading extends Activity {
                 ValueAnimator faderKf = (ValueAnimator) AnimatorInflater.
                         loadAnimator(appContext, R.animator.value_animator_pvh_kf);
                 faderKf.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
                         balls.get(6).setAlpha((Float) animation.getAnimatedValue());
                     }
@@ -193,8 +214,8 @@ public class AnimationLoading extends Activity {
             }
         }
 
+        @Override
         public void onAnimationUpdate(ValueAnimator animation) {
-
             invalidate();
             ShapeHolder ball = balls.get(0);
             ball.setY((Float)animation.getAnimatedValue());
