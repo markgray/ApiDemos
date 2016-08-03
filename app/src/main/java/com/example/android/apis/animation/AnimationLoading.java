@@ -68,7 +68,8 @@ public class AnimationLoading extends Activity {
     /**
      * Set the content view to R.layout.animation_loading, finds the LinearLayout container
      * which we will use for our View (R.id.container), creates an instance of MyAnimationView
-     * animView and .addView's it to container.
+     * animView and .addView's it to container. Finds the RUN Button (R.id.startButton) and sets
+     * its OnClickListener to start the animation of animView.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
@@ -82,6 +83,11 @@ public class AnimationLoading extends Activity {
 
         Button starter = (Button) findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Start the MyAnimationView animView animation running
+             *
+             * @param v Button View which was clicked
+             */
             @Override
             public void onClick(View v) {
                 animView.startAnimation();
@@ -89,6 +95,9 @@ public class AnimationLoading extends Activity {
         });
     }
 
+    /**
+     * This is the custom View which contains our animation demonstration
+     */
     public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener {
 
         private static final float BALL_SIZE = 100f;
@@ -96,6 +105,13 @@ public class AnimationLoading extends Activity {
         public final ArrayList<ShapeHolder> balls = new ArrayList<>();
         Animator animation = null;
 
+        /**
+         * Creates the eight balls which are in our View. (Two of the balls (5 and 7) start in the
+         * same place)
+         *
+         * @param context The Context the view is running in, through which it can access the
+         *                current theme, resources, etc.
+         */
         public MyAnimationView(Context context) {
             super(context);
             addBall(50, 50);
@@ -108,6 +124,20 @@ public class AnimationLoading extends Activity {
             addBall(800, 50, Color.YELLOW);
         }
 
+        /**
+         * Loads, creates and configures the Animator animation used for the 8 balls. If this is
+         * the first time it is called (animation == null) it creates animators for the balls as
+         * follows:
+         *
+         * balls[0] (50,50)
+         * balls[1] (200,50)
+         * balls[2] (350,50)
+         * balls[3] (500,50) Color.GREEN
+         * balls[4] (650,50)
+         * balls[5] (800,50)
+         * balls[6] (950,50)
+         * balls[7] (800,50) Color.YELLOW
+         */
         private void createAnimation() {
             Context appContext = AnimationLoading.this;
 
