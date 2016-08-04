@@ -129,8 +129,18 @@ public class AnimationLoading extends Activity {
          * the first time it is called (animation == null) it creates animators for the balls as
          * follows:
          *
-         * balls[0] (50,50)
-         * balls[1] (200,50)
+         * balls[0] (50,50) Uses an ObjectAnimator anim created by loading the animation from
+         *          the file R.animator.object_animator which animates "y" from the starting point
+         *          to 200 with a repeat count of 1 and a repeatMode of "reverse", uses "this" as
+         *          the UpdateListener which causes our classes override of onAnimationUpdate to
+         *          be called which invalidates the View and sets the "y" value of the ShapeHolder
+         *          holding balls[0] to the current value of the animation.
+         * balls[1] (200,50) Uses a ValueAnimator fader which it creates by loading the file
+         *          R.animator.animator which animates a value from 1 to 0 with a repeat count
+         *          of 1 and a repeatMode of "reverse", and sets the UpdateListener to an
+         *          AnimatorUpdateListener which sets the alpha of the ShapeHolder holding
+         *          balls[1] to the current value of the animation (relying on the call to
+         *          invalidate() for balls[0] to trigger a re-draw of the View.)
          * balls[2] (350,50)
          * balls[3] (500,50) Color.GREEN
          * balls[4] (650,50)
