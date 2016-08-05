@@ -235,6 +235,11 @@ public class AnimationLoading extends Activity {
             }
         }
 
+        /**
+         * Calls createAnimation() to create the AnimatorSet animation (if it does not exist yet)
+         * then calls animation.start() to start the animation running. Called from the
+         * onClickListener for the "RUN" button.
+         */
         public void startAnimation() {
             createAnimation();
             animation.start();
