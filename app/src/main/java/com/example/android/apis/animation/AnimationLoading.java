@@ -51,9 +51,10 @@ import android.widget.LinearLayout;
  * which animates ball[3]'s color from #0f0 to #00ffff), R.animator.object_animator_pvh
  * (an animator which animates ball[4]'s "x" from 0 to 400, and "y" from 0 to 200 using
  * propertyValuesHolder's), R.animator.object_animator_pvh_kf (uses propertyValuesHolder
- * to hold keyframe specs for x and y and uses the default linear interpolator on balls[5]
- * uses the same animator on balls[6] with the addition of an alpha animation), and
- * R.animator.object_animator_pvh_kf_interpolated (the animation used for balls[7] has an
+ * to hold keyframe specs for x and y and uses the default linear interpolator on balls[5]),
+ * R.animator.value_animator_pvh_kf (uses propertyValuesHolder to hold keyframe specs
+ * for a value which balls[6] uses in an AnimatorUpdateListener for an alpha animation),
+ * and R.animator.object_animator_pvh_kf_interpolated (the animation used for balls[7] has an
  * accelerate interpolator applied on each keyframe interval instead of the default used on
  * balls[5], As these two animations use the exact same path, the effect of the per-keyframe
  * interpolator has been made obvious.)
@@ -141,12 +142,36 @@ public class AnimationLoading extends Activity {
          *          AnimatorUpdateListener which sets the alpha of the ShapeHolder holding
          *          balls[1] to the current value of the animation (relying on the call to
          *          invalidate() for balls[0] to trigger a re-draw of the View.)
-         * balls[2] (350,50)
-         * balls[3] (500,50) Color.GREEN
-         * balls[4] (650,50)
-         * balls[5] (800,50)
-         * balls[6] (950,50)
-         * balls[7] (800,50) Color.YELLOW
+         * balls[2] (350,50) Uses an AnimatorSet seq which it creates by loading the file
+         *          R.animator.animator_set which creates two objectAnimator's to animate the "x"
+         *          value from the current value to 200, and the "y" value from the current value
+         *          to 400 with a repeat count of 1 and a repeatMode of "reverse"
+         * balls[3] (500,50) Color.GREEN Uses an ObjectAnimator colorizer which it creates by
+         *          loading the file R.animator.color_animator which animates the value "color"
+         *          of the ShapeHolder holding balls[3] from "#0f0" to "#00ffff" with a repeat
+         *          count of 1 and a repeatMode of "reverse"
+         * balls[4] (650,50) Use an ObjectAnimator animPvh which it loads from the file
+         *          R.animator.object_animator_pvh which animates "x" from 0 to 400, and "y"
+         *          from 0 to 200 using propertyValuesHolder's
+         * balls[5] (800,50) Uses an ObjectAnimator animPvhKf which it creates by loading the file
+         *          R.animator.object_animator_pvh_kf which uses propertyValuesHolder to hold
+         *          keyframe specs for x and y and uses the default linear interpolator
+         * balls[6] (950,50) Uses a ValueAnimator faderKf which it loads from the file
+         *          R.animator.value_animator_pvh_kf which uses propertyValuesHolder to hold
+         *          keyframe specs for a value, it then sets the UpdateListener to an
+         *          AnimatorUpdateListener which sets the alpha of the ShapeHolder holding balls[6]
+         *          to the current animated value.
+         * balls[7] (800,50) Color.YELLOW Uses an ObjectAnimator animPvhKfInterpolated which
+         *          it loads from R.animator.object_animator_pvh_kf_interpolated which uses
+         *          propertyValuesHolder's to hold keyframe specs for "x" and "y" and has an
+         *          accelerate interpolator applied on each keyframe interval. In comparison,
+         *          the animation defined in R.anim.object_animator_pvh_kf for balls[5] uses
+         *          the default linear interpolator throughout the animation. As these two
+         *          animations use the exact same path, the effect of the per-keyframe interpolator
+         *          has been made obvious.
+         *
+         * It then creates the AnimatorSet animation configures it to playTogether the
+         * 8 Animator's created for the 8 balls.
          */
         private void createAnimation() {
             Context appContext = AnimationLoading.this;

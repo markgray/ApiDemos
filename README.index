@@ -104,9 +104,10 @@ Animation (disabled for froyo)
             which animates ball[3]'s color from #0f0 to #00ffff), R.animator.object_animator_pvh
             (an animator which animates ball[4]'s "x" from 0 to 400, and "y" from 0 to 200 using
             propertyValuesHolder's), R.animator.object_animator_pvh_kf (uses propertyValuesHolder
-            to hold keyframe specs for x and y and uses the default linear interpolator on balls[5]
-            uses the same animator on balls[6] with the addition of an alpha animation), and
-            R.animator.object_animator_pvh_kf_interpolated (the animation used for balls[7] has an
+            to hold keyframe specs for x and y and uses the default linear interpolator on balls[5]),
+            R.animator.value_animator_pvh_kf (uses propertyValuesHolder to hold keyframe specs
+            for a value which balls[6] uses in an AnimatorUpdateListener for an alpha animation),
+            and R.animator.object_animator_pvh_kf_interpolated (the animation used for balls[7] has an
             accelerate interpolator applied on each keyframe interval instead of the default used on
             balls[5], As these two animations use the exact same path, the effect of the per-keyframe
             interpolator has been made obvious.)
