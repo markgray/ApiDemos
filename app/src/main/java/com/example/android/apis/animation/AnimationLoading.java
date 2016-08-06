@@ -245,6 +245,16 @@ public class AnimationLoading extends Activity {
             animation.start();
         }
 
+        /**
+         * Creates a ball in a ShapeHolder. Creates an OvalShape circle, resize's it to be a 100x100
+         * circle, creates a ShapeDrawable drawable from "circle", creates a ShapeHolder shapeHolder
+         * containing "drawable", and sets the "x" and "y" coordinates of "shapeHolder" to the (x,y)
+         * arguments and returns "shapeHolder" to the caller.
+         *
+         * @param x x coordinate for ball
+         * @param y y coordinate for ball
+         * @return ShapeHolder containing ball at (x, y)
+         */
         private ShapeHolder createBall(float x, float y) {
             OvalShape circle = new OvalShape();
             circle.resize(BALL_SIZE, BALL_SIZE);
@@ -255,12 +265,33 @@ public class AnimationLoading extends Activity {
             return shapeHolder;
         }
 
+        /**
+         * Adds a new ball containing ShapeHolder to ArrayList<ShapeHolder> balls at location (x,y),
+         * and with Color color. It does this by creating a ball containing ShapeHolder shapeHolder
+         * at (x,y) by calling createBall(x, y), sets the color of "shapeHolder" to the "color"
+         * argument and the .add()'ing "shapeHolder" to "balls"
+         *
+         * @param x x coordinate for ball
+         * @param y y coordinate for ball
+         * @param color color of ball
+         */
         private void addBall(float x, float y, int color) {
             ShapeHolder shapeHolder = createBall(x, y);
             shapeHolder.setColor(color);
             balls.add(shapeHolder);
         }
 
+        /**
+         * Adds a new ball containing ShapeHolder to ArrayList<ShapeHolder> balls at location (x,y),
+         * with a random color. It does this by creating a ball containing ShapeHolder shapeHolder
+         * at (x,y) by calling createBall(x, y). The Paint instance "paint" is fetched from
+         * "shapeHolder" and Random colors and a RadialGradient created and are used to set the
+         * Shader used by the ShapeHolder's Paint instance, and the ShapeHolder is then add()'ed
+         * to the balls List.
+         *
+         * @param x x coordinate for ball
+         * @param y y coordinate for ball
+         */
         private void addBall(float x, float y) {
             ShapeHolder shapeHolder = createBall(x, y);
             int red = (int)(100 + Math.random() * 155);
@@ -275,6 +306,17 @@ public class AnimationLoading extends Activity {
             balls.add(shapeHolder);
         }
 
+        /**
+         * Called when the View needs to draw itself. For each of the ShapeHolder ball's in the
+         * ArrayList<ShapeHolder> balls the canvas has a translation to the current (x,y) ball
+         * location pre-concatenated to it (the x,y coordinates are fetched from the ShapeHolder),
+         * the Shape contained in the ShapeHolder is then fetched and instructed to draw itself.
+         * The canvas is then restored to its previous state by pre-concatenating a translation
+         * that is the inverse of the previous one that moved the canvas to the ball's (x,y)
+         * location.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             for (ShapeHolder ball : balls) {
@@ -284,6 +326,15 @@ public class AnimationLoading extends Activity {
             }
         }
 
+        /**
+         * This callback is called to notify us of the occurrence of another frame of an animation,
+         * and is called by the animation used for balls[0] because of the anim.addUpdateListener(this)
+         * included in the creation of the animation. First we invalidate() the View so that onDraw()
+         * will be called at some point in the future, then we fetch the ShapeHolder holding balls[0]
+         * and set the y coordinate to the current value specified by the ValueAnimator animation.
+         *
+         * @param animation animation which has moved to a new frame
+         */
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             invalidate();
