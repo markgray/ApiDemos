@@ -119,7 +119,7 @@ Animation (disabled for froyo)
             (animates y and alpha using an AccelerateInterpolator), whxyBouncer (animates width,
             height, x and y using PropertyValuesHolder's), and yxBouncer (animates y and x
             using Keyframe's to split the animation into three sections with a repeat count of
-            one and setRepeatMode(ValueAnimator.REVERSE)) which are set up in the method
+            one and setRepeatMode(ValueAnimator.REVERSE)), all of which are set up in the method
             createAnimation().
 
   Animation/Path Animations v11 -- uses android.util.Property crashes if < v14. Also 

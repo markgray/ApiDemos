@@ -42,15 +42,23 @@ import android.widget.LinearLayout;
 
 /**
  * Uses AnimatorSet.playTogether(Animator... items) to play four different
- * animations at once: yBouncer, yAlphaBouncer, whxyBouncer, and yxBouncer
- * which are set up in the method createAnimation().
- *
+ * animations at once: yBouncer, yAlphaBouncer, whxyBouncer, and yxBouncer,
+ * all of which are set up in the method createAnimation().
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class MultiPropertyAnimation extends Activity {
 
     private static final int DURATION = 1500;
 
+    /**
+     * Called when the activity is starting. Sets the content view to the layout file
+     * R.layout.animation_multi_property, locates the LinearLayout container with the
+     * id R.id.container, creates an instance of MyAnimationView animView, and .addView()'s
+     * it to container. Locates the RUN Button (Button starter at R.id.startButton) and sets
+     * the OnClickListener to start the animation running.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +69,12 @@ public class MultiPropertyAnimation extends Activity {
 
         Button starter = (Button) findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
-
+            /**
+             * When the RUN Button is clicked, start the animation of MyAnimationView animView.
+             *
+             * @param v Button View which was clicked
+             */
+            @Override
             public void onClick(View v) {
                 animView.startAnimation();
             }
@@ -69,6 +82,10 @@ public class MultiPropertyAnimation extends Activity {
 
     }
 
+    /**
+     * This is the View that the demo runs in. It consists of 4 balls with different animations
+     * assigned to each of them: yBouncer, yAlphaBouncer, whxyBouncer, and yxBouncer.
+     */
     public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener {
 
         private static final float BALL_SIZE = 100f;
