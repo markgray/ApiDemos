@@ -96,6 +96,11 @@ public class MultiPropertyAnimation extends Activity {
         @SuppressWarnings("unused")
         ShapeHolder ball = null;
 
+        /**
+         * Adds four balls to the ArrayList<ShapeHolder> balls.
+         *
+         * @param context the MultiPropertyAnimation Activity context
+         */
         public MyAnimationView(Context context) {
             super(context);
             addBall(50, 0);
@@ -104,6 +109,11 @@ public class MultiPropertyAnimation extends Activity {
             addBall(350, 0);
         }
 
+        /**
+         * Create the animations used for the four balls.
+         *
+         * balls[0] ObjectAnimator yBouncer is an ObjectAnimator of the 
+         */
         private void createAnimation() {
             if (bounceAnim == null) {
                 ShapeHolder ball;
