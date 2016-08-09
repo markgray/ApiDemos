@@ -112,7 +112,22 @@ public class MultiPropertyAnimation extends Activity {
         /**
          * Create the animations used for the four balls.
          *
-         * balls[0] ObjectAnimator yBouncer is an ObjectAnimator of the 
+         * balls[0] ObjectAnimator yBouncer is an ObjectAnimator of the "y" coordinate of the
+         *          ShapeHolder holding balls[0]. It uses a BounceInterpolator with a Duration
+         *          of "DURATION" (1500 milliseconds). It results in a ball which falls from
+         *          the top of the screen and bounces several times at the bottom of the screen.
+         *          The AnimatorUpdateListener is set to "this" and the overridden callback
+         *          this.onAnimationUpdate merely invalidates the View causing our onDraw callback
+         *          to be called for every frame of this animation in order to draw all four balls.
+         * balls[1] ObjectAnimator yAlphaBouncer is an ObjectAnimator constructed from two
+         *          PropertyValuesHolder's pvhY (animates "y" from the top to bottom of the View)
+         *          and pvhAlpha (animates "alpha" from 1.0f to 0.0f). Its duration is set to
+         *          "DURATION/2" (750 milliseconds), its TimeInterpolator is set to an instance
+         *          of AccelerateInterpolator, its repeat count is 1, and the repeat mode is REVERSE.
+         *          This results in a ball which drops from the top to the bottom while fading out
+         *          at the same time, then returning to the top while fading in.
+         * balls[2] ObjectAnimator whxyBouncer
+         *
          */
         private void createAnimation() {
             if (bounceAnim == null) {
