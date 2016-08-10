@@ -126,8 +126,25 @@ public class MultiPropertyAnimation extends Activity {
          *          of AccelerateInterpolator, its repeat count is 1, and the repeat mode is REVERSE.
          *          This results in a ball which drops from the top to the bottom while fading out
          *          at the same time, then returning to the top while fading in.
-         * balls[2] ObjectAnimator whxyBouncer
+         * balls[2] ObjectAnimator whxyBouncer is an ObjectAnimator created from 4 PropertyValuesHolder's
+         *          pvhW ("width"), pvhH ("height"), pvTX ("x"), and pvTY ("y") using the method
+         *          ObjectAnimator.ofPropertyValuesHolder with a duration of DURATION/2 (750
+         *          milliseconds), a repeat count of 1 and a repeat mode of REVERSE. It has the
+         *          effect of expanding the size of the ball then shrinking it back to the
+         *          original size without moving.
+         * balls[3] ObjectAnimator yxBouncer is an ObjectAnimator created from PropertyValuesHolder's
+         *          for "x" and "y" (pvhX and pvhY). pvhY animates "y" from the top to the bottom
+         *          of the View using the default linear animation, pvhX is a PropertyValuesHolder
+         *          created from three Keyframe's (kf0, kf1, and kf2) which divides the animation of
+         *          "x" into three segments moving the "x" coordinate of the ball's ShapeHolder from
+         *          the current position to 100f pixels to right, to 50f pixels to the right. The
+         *          duration of yxBouncer is set to DURATION/2 (750 milliseconds), the repeat count
+         *          is 1, and the repeat mode is REVERSE. The result is a ball which falls from the
+         *          top of the View to the bottom with a slight jog to the right, and then rises
+         *          back to the top using the same track.
          *
+         * Then the field bounceAnim is set to an instance of AnimatorSet with all four ball
+         * animations set up to play at the same time.
          */
         private void createAnimation() {
             if (bounceAnim == null) {
@@ -182,6 +199,10 @@ public class MultiPropertyAnimation extends Activity {
             }
         }
 
+        /**
+         * Called from the onClick of the RUN button, this method creates the animations (if this
+         * is the first time) and starts the animations running.
+         */
         public void startAnimation() {
             createAnimation();
             bounceAnim.start();
