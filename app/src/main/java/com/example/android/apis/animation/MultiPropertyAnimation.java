@@ -208,6 +208,15 @@ public class MultiPropertyAnimation extends Activity {
             bounceAnim.start();
         }
 
+        /**
+         * Creates a circle, and places it in a ShapeHolder that it configures with the (x,y)
+         * coordinates that it is called with and a random color, then adds that ShapeHolder
+         * to the ArrayList<ShapeHolder> balls, returning the new ShapeHolder to allow chaining.
+         *
+         * @param x x coordinate of ball
+         * @param y y coordinate of ball
+         * @return ShapeHolder containing a ball at (x,y) with a random color.
+         */
         private ShapeHolder addBall(float x, float y) {
             OvalShape circle = new OvalShape();
             circle.resize(BALL_SIZE, BALL_SIZE);
@@ -229,6 +238,17 @@ public class MultiPropertyAnimation extends Activity {
             return shapeHolder;
         }
 
+        /**
+         * Called when the View needs to draw itself. For each of the ShapeHolder ball's in the
+         * ArrayList<ShapeHolder> balls the canvas has a translation to the current (x,y) ball
+         * location pre-concatenated to it (the x,y coordinates are fetched from the ShapeHolder),
+         * the Shape contained in the ShapeHolder is then fetched and instructed to draw itself.
+         * The canvas is then restored to its previous state by pre-concatenating a translation
+         * that is the inverse of the previous one that moved the canvas to the ball's (x,y)
+         * location.
+         *
+         * @param canvas Canvas that we will draw our View on
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             for (ShapeHolder ball : balls) {
@@ -238,6 +258,14 @@ public class MultiPropertyAnimation extends Activity {
             }
         }
 
+        /**
+         * This callback is called to notify us of the occurrence of another frame of an animation,
+         * and is called by the animation used for balls[0] because of the anim.addUpdateListener(this)
+         * included in the creation of the animation. We merely invalidate() the View so that onDraw()
+         * will be called at some point in the future.
+         *
+         * @param animation animation which has moved to a new frame
+         */
         public void onAnimationUpdate(ValueAnimator animation) {
             invalidate();
         }

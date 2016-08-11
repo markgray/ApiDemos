@@ -43,6 +43,29 @@ import com.example.android.apis.R;
 
 /** This application demonstrates the use of Path animation. */
 
+/**
+ * Moves a frog around an android.graphics.Path using six different ways to move
+ * the View: named_components (Uses the named "x" and "y" properties for individual
+ * (x, y) coordinates of the Path and sets them on the view object. The setX(float)
+ * and setY(float) methods are called on view. An int version of this method also
+ * exists for animating int Properties), property_components (Use two Properties
+ * for individual (x, y) coordinates of the Path and set them on the view object.
+ * An int version of this method also exists for animating int Properties.),
+ * multi_int (Use a multi-int setter to animate along a Path. The method
+ * setCoordinates(int x, int y) is called on this during the animation. Either
+ * "setCoordinates" or "coordinates" are acceptable parameters because the "set"
+ * can be implied.), multi_float (Use a multi-float setter to animate along a Path.
+ * The method changeCoordinates(float x, float y) is called on this during the
+ * animation), named_setter (Use the named "point" property to animate along the Path.
+ * There must be a method setPoint(PointF) on the animated object. Because setPoint
+ * takes a PointF parameter, no TypeConverter is necessary. In this case, the animated
+ * object is PathAnimations.), and property_setter (Use the POINT_PROPERTY property
+ * to animate along the Path. POINT_PROPERTY takes a Point, not a PointF, so the
+ * TypeConverter PointFToPointConverter is necessary.). The radio buttons to choose
+ * which way to use need to be in an HorizontalScrollView not a ScrollView in order
+ * to be seen on narrow screens.
+ *
+ */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class PathAnimations extends Activity implements
         RadioGroup.OnCheckedChangeListener, View.OnLayoutChangeListener {
