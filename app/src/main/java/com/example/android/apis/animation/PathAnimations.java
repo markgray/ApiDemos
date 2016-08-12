@@ -64,7 +64,6 @@ import com.example.android.apis.R;
  * TypeConverter PointFToPointConverter is necessary.). The radio buttons to choose
  * which way to use need to be in an HorizontalScrollView not a ScrollView in order
  * to be seen on narrow screens.
- *
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class PathAnimations extends Activity implements
@@ -75,12 +74,25 @@ public class PathAnimations extends Activity implements
 
     final static Property<PathAnimations, Point> POINT_PROPERTY
             = new Property<PathAnimations, Point>(Point.class, "point") {
+        /**
+         * Returns the current value that this property represents on the given <code>object</code>.
+         *
+         * @param object the PathAnimations instance in question ("this" essentially)
+         * @return a Point containing the current (x,y) coordinates of the animation
+         */
         @Override
         public Point get(PathAnimations object) {
             View v = object.findViewById(R.id.moved_item);
             return new Point(Math.round(v.getX()), Math.round(v.getY()));
         }
-
+        /**
+         * Sets the value on <code>object</code> which this property represents. If the method is unable
+         * to set the value on the target object it will throw an {@link UnsupportedOperationException}
+         * exception.
+         *
+         * @param object the PathAnimations instance in question ("this" essentially)
+         * @param value a Point containing the (x,y) coordinates to set out animation to
+         */
         @Override
         public void set(PathAnimations object, Point value) {
             object.setCoordinates(value.x, value.y);
