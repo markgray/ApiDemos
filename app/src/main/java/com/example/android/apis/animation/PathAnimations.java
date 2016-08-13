@@ -86,8 +86,8 @@ public class PathAnimations extends Activity implements
             return new Point(Math.round(v.getX()), Math.round(v.getY()));
         }
         /**
-         * Sets the value on <code>object</code> which this property represents. If the method is unable
-         * to set the value on the target object it will throw an {@link UnsupportedOperationException}
+         * Sets the value on "object" which this property represents. If the method is unable to
+         * set the value on the target object it will throw an UnsupportedOperationException
          * exception.
          *
          * @param object the PathAnimations instance in question ("this" essentially)
@@ -128,6 +128,17 @@ public class PathAnimations extends Activity implements
     private ObjectAnimator mAnimator;
 
     /** Called when the activity is first created. */
+    /**
+     * Sets the content View to the layout R.layout.path_animations, locates the View our
+     * "CanvasView" will occupy (R.id.canvas) and stashes it away in "mCanvasView" and sets
+     * the OnLayoutChangeListener of mCanvasView to "this" (so our override of onLayoutChange
+     * will be called when the layout bounds of our view changes due to layout processing),
+     * locates the RadioGroup which selects one of six ways the frog is moved and sets the
+     * OnCheckedChangeListener to "this" (so our override of onCheckedChanged will be called
+     * when the user clicks a different RadioButton)
+     *
+     * @param savedInstanceState Always null since on onSaveInstanceState is not overridden
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
