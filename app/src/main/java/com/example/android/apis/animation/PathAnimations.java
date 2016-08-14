@@ -72,6 +72,9 @@ public class PathAnimations extends Activity implements
     final static Path sTraversalPath = new Path();
     final static float TRAVERSE_PATH_SIZE = 7.0f;
 
+    /**
+     * This static field is used for the animation when the "Property" RadioButton is selected.
+     */
     final static Property<PathAnimations, Point> POINT_PROPERTY
             = new Property<PathAnimations, Point>(Point.class, "point") {
         /**
@@ -148,10 +151,24 @@ public class PathAnimations extends Activity implements
         ((RadioGroup) findViewById(R.id.path_animation_type)).setOnCheckedChangeListener(this);
     }
 
+    /**
+     * Set the coordinates to the int (x,y) coordinates, used by the "Property" animation. It
+     * simply delegates this to changeCoordinates(float x, float y)
+     *
+     * @param x x coordinate
+     * @param y y coordinate
+     */
     public void setCoordinates(int x, int y) {
         changeCoordinates((float) x, (float) y);
     }
 
+    /**
+     * Used by both setPoint(PointF point), and setCoordinates(int x, int y), this method
+     * does the actual moving of the R.id.moved_item View.
+     *
+     * @param x x coordinate
+     * @param y y coordinate
+     */
     public void changeCoordinates(float x, float y) {
         View v = findViewById(R.id.moved_item);
         v.setX(x);
