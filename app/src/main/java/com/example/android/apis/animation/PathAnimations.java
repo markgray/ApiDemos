@@ -175,15 +175,43 @@ public class PathAnimations extends Activity implements
         v.setY(y);
     }
 
+    /**
+     * Used by the "Named Property" (R.id.named_setter) RadioButton
+     *
+     * @param point new position for moving View
+     */
     public void setPoint(PointF point) {
         changeCoordinates(point.x, point.y);
     }
 
+    /**
+     * Called when the checked radio button has changed, it uses the checkedId to change to
+     * the newly selected animation method by calling startAnimator(checkedId)
+     *
+     * @param group the group in which the checked radio button has changed
+     * @param checkedId the group in which the checked radio button has changed
+     */
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         startAnimator(checkedId);
     }
 
+    /**
+     * Called when the layout bounds of our view changes due to layout processing. It locates the
+     * RadioGroup containing the choice of animation type (R.id.path_animation_type), determines
+     * whether a RadioButton is already selected and if so, starts that animation by calling
+     * startAnimator(checkedId).
+     *
+     * @param v The view whose bounds have changed.
+     * @param left The new value of the view's left property.
+     * @param top The new value of the view's top property.
+     * @param right The new value of the view's right property.
+     * @param bottom The new value of the view's bottom property.
+     * @param oldLeft The previous value of the view's left property.
+     * @param oldTop The previous value of the view's top property.
+     * @param oldRight The previous value of the view's right property.
+     * @param oldBottom The previous value of the view's bottom property.
+     */
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft,
             int oldTop, int oldRight, int oldBottom) {
@@ -193,6 +221,18 @@ public class PathAnimations extends Activity implements
         }
     }
 
+    /**
+     * This method switches between path animation types whenever a different RadioButton is
+     * selected. It sets ObjectAnimator mAnimator one of six different types of ObjectAnimator
+     * based on a switch. It first cancels and "null's" any ObjectAnimator mAnimator which might
+     * be already running. It then locates the View of our moving ImageView (R.id.moved_item) and
+     * saves it for later. It fetches the Path path from our CanvasView mCanvasView, and if it is
+     * empty returns (it is not empty because the PathAnimations Activity has already initialized
+     * sTraversalPath when it is first instantiated, and our onLayout callback uses sTraversalPath
+     * to set mPath using the method sTraversalPath.transform(scale, mPath))
+     *
+     * @param checkedId RadioButton for animation type which is selected
+     */
     private void startAnimator(int checkedId) {
         if (mAnimator != null) {
             mAnimator.cancel();
