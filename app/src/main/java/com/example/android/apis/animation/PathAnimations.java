@@ -231,6 +231,39 @@ public class PathAnimations extends Activity implements
      * sTraversalPath when it is first instantiated, and our onLayout callback uses sTraversalPath
      * to set mPath using the method sTraversalPath.transform(scale, mPath))
      *
+     * Then comes the big switch:
+     * R.id.named_components: "Named Components" Uses the named "x" and "y" properties for
+     *     individual (x, y) coordinates of the Path and sets them on the view object. The
+     *     setX(float) and setY(float) methods are called on view. An int version of this
+     *     method also exists for animating int Properties. This is accomplished by creating
+     *     an ObjectAnimator mAnimator by calling the method:
+     *     ObjectAnimator.ofFloat (Object view, String xPropertyName, String yPropertyName, Path path)
+     *     that animates coordinates along Path path using the two properties. A Path animation
+     *     moves in two dimensions, animating coordinates (x, y) together to follow the line.
+     *     In this variation, the coordinates are floats that are set to separate properties
+     *     designated by xPropertyName and yPropertyName.
+     * R.id.property_components: "Property Components" Use two Properties for individual (x, y)
+     *     coordinates of the Path and sets them on the view object. An int version of this method
+     *     also exists for animating int Properties. This is accomplished by creating an
+     *     ObjectAnimator mAnimator by calling the method:
+     *     ObjectAnimator.ofFloat(T target, android.util.Property<T, java.lang.Float> xProperty,
+     *           android.util.Property<T, java.lang.Float> yProperty, android.graphics.Path path)
+     *     which returns an ObjectAnimator that animates coordinates of the target along a Path
+     *     using the two properties. A Path animation moves in two dimensions, animating coordinates
+     *     (x, y) together to follow the line. In this variation, the coordinates are floats that
+     *     are set to separate properties, xProperty and yProperty.
+     * R.id.multi_int: "Multi-int" Use a multi-int setter to animate along a Path. The method
+     *     setCoordinates(int x, int y) is called on this during the animation. Either
+     *     "setCoordinates" or "coordinates" are acceptable parameters because the "set" can
+     *     be implied. This is accomplished by creating an ObjectAnimator mAnimator by calling
+     *     the method:
+     *     ObjectAnimator.ofMultiInt (Object target, String propertyName, Path path)
+     *     which returns an ObjectAnimator that animates the target using a multi-int setter along
+     *     the given Path. A Path animation moves in two dimensions, animating coordinates (x, y)
+     *     together to follow the line. In this variation, the coordinates are integer x and y
+     *     coordinates used in the first and second parameter of the setter, respectively.
+     * 
+     *
      * @param checkedId RadioButton for animation type which is selected
      */
     private void startAnimator(int checkedId) {
