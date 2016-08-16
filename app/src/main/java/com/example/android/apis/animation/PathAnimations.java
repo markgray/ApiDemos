@@ -262,7 +262,36 @@ public class PathAnimations extends Activity implements
      *     the given Path. A Path animation moves in two dimensions, animating coordinates (x, y)
      *     together to follow the line. In this variation, the coordinates are integer x and y
      *     coordinates used in the first and second parameter of the setter, respectively.
-     * 
+     * R.id.multi_float: "Multi-float" Use a multi-float setter to animate along a Path. The method
+     *     changeCoordinates(float x, float y) is called on this during the animation. This is
+     *     accomplished by creating an ObjectAnimator mAnimator by calling the method:
+     *     ObjectAnimator.ofMultiFloat(Object target, String propertyName, Path path) which
+     *     returns an ObjectAnimator that animates the target using a multi-float setter along
+     *     the given Path. A Path animation moves in two dimensions, animating coordinates
+     *     (x, y) together to follow the line. In this variation, the coordinates are float x
+     *     and y coordinates used in the first and second parameter of the setter, respectively.
+     * R.id.named_setter: "Named Property" Use the named "point" property to animate along the
+     *     Path. There must be a method setPoint(PointF) on the animated object. Because setPoint
+     *     takes a PointF parameter, no TypeConverter is necessary. In this case, the animated
+     *     object is PathAnimations. This is accomplished by creating an ObjectAnimator mAnimator
+     *     by calling the method:
+     *     ObjectAnimator.ofObject(Object target, String propertyName, TypeConverter<PointF, ?> converter, Path path)
+     *     which returns an ObjectAnimator that animates the target using a PointF to follow
+     *     the Path. If the Property associated with propertyName uses a type other than PointF,
+     *     converter can be used to change from PointF to the type associated with the Property.
+     * R.id.property_setter: "Property" Use the POINT_PROPERTY property to animate along the Path.
+     *     POINT_PROPERTY takes a Point, not a PointF, so the TypeConverter PointFToPointConverter
+     *     is necessary. This is accomplished by creating an ObjectAnimator mAnimator  by calling
+     *     the method:
+     *     ObjectAnimator.ofObject(T target, Property<T, V> property, TypeConverter<PointF, V> converter, Path path)
+     *     which returns an ObjectAnimator that animates the target using a PointF to follow the
+     *     Path. Since property uses a type other than PointF, TypeConverter PointFToPointConverter
+     *     is used to change from PointF to the type Point associated with the Property.
+     *
+     * Having created an ObjectAnimator mAnimator of the desired type based on the RadioButton
+     * selected, we set the duration of mAnimator to 10000 milliseconds. the repeat mode to
+     * RESTART, the repeat count to INFINITE, and the Interpolator to an instance of
+     * LinearInterpolator then start the animation running.
      *
      * @param checkedId RadioButton for animation type which is selected
      */
