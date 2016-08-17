@@ -358,22 +358,46 @@ public class PathAnimations extends Activity implements
         mAnimator.start();
     }
 
+    /**
+     * This is the View which contains our demo.
+     */
     public static class CanvasView extends FrameLayout {
 
         Path mPath = new Path();
 
         Paint mPathPaint = new Paint();
 
+        /**
+         * Construct a new CanvasView and initialize it. (Not used since our CanvasView comes from
+         * the reference in xml not our code)
+         *
+         * @param context Context of our View
+         */
         public CanvasView(Context context) {
             super(context);
             init();
         }
 
+        /**
+         * Construct a new CanvasView and initialize it. This is the constructor which is used by
+         * the xml processor of our layout file path_animations.xml
+         *
+         * @param context Context of our View
+         * @param attrs   Attributes defined in xml
+         */
         public CanvasView(Context context, AttributeSet attrs) {
             super(context, attrs);
             init();
         }
 
+        /**
+         * Construct a new CanvasView and initialize it. This constructor is not used since our
+         * layout file does not specify an android:style attribute for our CanvasView
+         *
+         * @param context  Context of our View
+         * @param attrs    Attributes defined in xml
+         * @param defStyle android:style attribute
+         */
         public CanvasView(Context context, AttributeSet attrs, int defStyle) {
             super(context, attrs, defStyle);
             init();
