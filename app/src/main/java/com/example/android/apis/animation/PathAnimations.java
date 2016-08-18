@@ -403,6 +403,11 @@ public class PathAnimations extends Activity implements
             init();
         }
 
+        /**
+         * Initialize this instance of CanvasView. First call View.setWillNotDraw(false) to signal
+         * that we will handle our own drawing in our draw(Canvas) override, then set the color
+         * (red with and alpha of 0xFF), stroke width, and style of our Paint mPathPaint.
+         */
         private void init() {
             setWillNotDraw(false);
             mPathPaint.setColor(0xFFFF0000);
@@ -410,6 +415,18 @@ public class PathAnimations extends Activity implements
             mPathPaint.setStyle(Paint.Style.STROKE);
         }
 
+        /**
+         * Called from layout when this view should assign a size and position to each of
+         * its children. If the layout size or position has changed we calculate the scale
+         * of our Path sTraversalPath based on our new size and position and calculate a
+         * Matrix scale to scale by ou
+         *
+         * @param changed This is a new size or position for this view
+         * @param left Left position, relative to parent
+         * @param top Top position, relative to parent
+         * @param right Right position, relative to parent
+         * @param bottom Bottom position, relative to parent
+         */
         @Override
         protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
             super.onLayout(changed, left, top, right, bottom);
