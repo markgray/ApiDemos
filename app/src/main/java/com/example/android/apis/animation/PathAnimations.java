@@ -418,8 +418,9 @@ public class PathAnimations extends Activity implements
         /**
          * Called from layout when this view should assign a size and position to each of
          * its children. If the layout size or position has changed we calculate the scale
-         * of our Path sTraversalPath based on our new size and position and calculate a
-         * Matrix scale to scale by ou
+         * width and scale height to use to fit our demo in our assigned size. Then we create
+         * a transform matrix to scale our traversal path using Matrix.setScale, and
+         * Transform the points in this path by this matrix, and write the answer into mPath.
          *
          * @param changed This is a new size or position for this view
          * @param left Left position, relative to parent
@@ -439,10 +440,21 @@ public class PathAnimations extends Activity implements
             }
         }
 
+        /**
+         * Getter for our field Path mPath
+         *
+         * @return the value of the field Path mPath.
+         */
         public Path getPath() {
             return mPath;
         }
 
+        /**
+         * Draw our Path mPath using the Paint mPathPaint. The path will be filled or framed
+         * based on the Style in the paint, then call our super's version View.draw
+         *
+         * @param canvas The Canvas to which the View is rendered.
+         */
         @Override
         public void draw(Canvas canvas) {
             canvas.drawPath(mPath, mPathPaint);
@@ -450,13 +462,27 @@ public class PathAnimations extends Activity implements
         }
     }
 
+    /**
+     * Class used to provide a TypeConverter<PointF, Point> for our property setter ("Property")
+     * animation type.
+     */
     private static class PointFToPointConverter extends TypeConverter<PointF, Point> {
         Point mPoint = new Point();
 
+        /**
+         * Initialize this instance of PointFToPointConverter by calling our super's constructor
+         */
         public PointFToPointConverter() {
             super(PointF.class, Point.class);
         }
 
+        /**
+         * Converts a value from PointF to Point by rounding the float (x,y) coordinates of the
+         * PointF to int. Saves the value in the field Point mPoint and returns it.
+         *
+         * @param value The PointF Object to convert.
+         * @return A value of type Point, converted from PointF
+         */
         @Override
         public Point convert(PointF value) {
             mPoint.set(Math.round(value.x), Math.round(value.y));

@@ -40,9 +40,26 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+/**
+ * Demonstrates the use of android.animation.ValueAnimator.reverse() method to play an
+ * animation in "reverse".
+ */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ReversingAnimation extends Activity {
 
+    /**
+     * Called when the activity is starting. First we call through to the super class's
+     * implementation of this method, then we set our content view to our layout file
+     * R.layout.animation_reversing. We locate the LinearLayout container we will use
+     * for our demo View (R.id.container) and addView an instance of our custom view
+     * MyAnimationView. We locate our "Play" Button (R.id.startButton) and assign an
+     * OnClickListener which will start our animation playing. We locate our "Reverse"
+     * Button (R.id.reverseButton) and assign an OnClickListener which will call
+     * MyAnimationView.reverseAnimation to play the animation in reverse (whether it has
+     * run before to the end or not).
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not called
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +70,7 @@ public class ReversingAnimation extends Activity {
 
         Button starter = (Button) findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 animView.startAnimation();
             }
@@ -60,6 +78,7 @@ public class ReversingAnimation extends Activity {
 
         Button reverser = (Button) findViewById(R.id.reverseButton);
         reverser.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 animView.reverseAnimation();
             }
@@ -132,6 +151,7 @@ public class ReversingAnimation extends Activity {
             canvas.restore();
         }
 
+        @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             invalidate();
         }
