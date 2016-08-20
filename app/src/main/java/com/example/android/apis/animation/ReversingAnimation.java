@@ -70,6 +70,12 @@ public class ReversingAnimation extends Activity {
 
         Button starter = (Button) findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Starts our MyAnimationView animation running
+             * (creating it first if necessary)
+             *
+             * @param v Button View which was clicked
+             */
             @Override
             public void onClick(View v) {
                 animView.startAnimation();
@@ -78,6 +84,12 @@ public class ReversingAnimation extends Activity {
 
         Button reverser = (Button) findViewById(R.id.reverseButton);
         reverser.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Starts our MyAnimationView animation running in reverse
+             * (creating it first if necessary)
+             *
+             * @param v Button View which was clicked
+             */
             @Override
             public void onClick(View v) {
                 animView.reverseAnimation();
@@ -86,6 +98,12 @@ public class ReversingAnimation extends Activity {
 
     }
 
+    /**
+     * This custom View consists of a ball which has an AccelerateInterpolator to animate it.
+     * If MyAnimationView.startAnimation is called it falls from the top to the bottom of the View
+     * and stays there. If MyAnimationView.reverseAnimation is called it "falls" from the bottom
+     * to the top of the View (no matter where it starts) and stays there.
+     */
     public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener {
 
         @SuppressWarnings("unused")
@@ -93,6 +111,12 @@ public class ReversingAnimation extends Activity {
         ValueAnimator bounceAnim = null;
         ShapeHolder ball = null;
 
+        /**
+         * Initializes a new instance of MyAnimationView. First calls our super's constructor,
+         * then creates a ShapeHolder ball containing a 25px by 25px ball.
+         *
+         * @param context ReversingAnimation Activity Context
+         */
         public MyAnimationView(Context context) {
             super(context);
             ball = createBall(25, 25);
