@@ -122,6 +122,14 @@ public class ReversingAnimation extends Activity {
             ball = createBall(25, 25);
         }
 
+        /**
+         * If the ValueAnimator bounceAnim has not already been created, we create an ObjectAnimator
+         * that animates "y" from the current position to 50px from the bottom with a duration of
+         * 1500 milliseconds, and set the interpolator used to an AccelerateInterpolator with a
+         * factor of 2.0. We set the ValueAnimator.AnimatorUpdateListener to "this" so that our
+         * callback override of onAnimationUpdate is called for every frame of the animation.
+         * (It just invalidates the View causing it to be redrawn every frame.)
+         */
         private void createAnimation() {
             if (bounceAnim == null) {
                 bounceAnim = ObjectAnimator.ofFloat(ball, "y", ball.getY(), getHeight() - 50f).
@@ -131,22 +139,57 @@ public class ReversingAnimation extends Activity {
             }
         }
 
+        /**
+         * Create the animation bounceAnim (if necessary) and start it running.
+         */
         public void startAnimation() {
             createAnimation();
             bounceAnim.start();
         }
 
+        /**
+         * Create the animation bounceAnim (if necessary) and play the ValueAnimator in reverse.
+         * If the animation is already running, it will stop itself and play backwards from the
+         * point reached when reverse was called. If the animation is not currently running,
+         * then it will start from the end and play backwards. This behavior is only set for
+         * the current animation; future playing of the animation will use the default behavior
+         * of playing forward.
+         */
         public void reverseAnimation() {
             createAnimation();
             bounceAnim.reverse();
         }
 
+        /**
+         * Although unused, this method will create the animation bounceAnim (if necessary), and
+         * set the position of the animation to the specified point in time. This time should be
+         * between 0 and the total duration of the animation, including any repetition. If the
+         * animation has not yet been started, then it will not advance forward after it is set
+         * to this time; it will simply set the time to this value and perform any appropriate
+         * actions based on that time. If the animation is already running, then setCurrentPlayTime()
+         * will set the current playing time to this value and continue playing from that point.
+         *
+         * @param seekTime The time, in milliseconds, to which the animation is advanced or rewound.
+         */
         @SuppressWarnings("unused")
         public void seek(long seekTime) {
             createAnimation();
             bounceAnim.setCurrentPlayTime(seekTime);
         }
 
+        /**
+         * Creates and returns a ShapeHolder holding a "ball". First it creates an OvalShape circle,
+         * re-sizes it to be a 50px by 50px circle, creates a ShapeDrawable drawable from it, and
+         * places it in a ShapeHolder shapeHolder. It sets the (x,y) coordinates of the ShapeHolder
+         * to the calling parameters of the method, generates a random color and a dark version of
+         * that color and creates a RadialGradient gradient from them which it sets as the shader
+         * of the paint which it assigns to the ShapeHolder. It then returns the ShapeHolder it has
+         * created and initialized.
+         *
+         * @param x x coordinate of ball's ShapeHolder (offset by 25px)
+         * @param y y coordinate of ball's ShapeHolder (offset by 25px)
+         * @return ShapeHolder containing a ball
+         */
         private ShapeHolder createBall(float x, float y) {
             OvalShape circle = new OvalShape();
             circle.resize(50f, 50f);
