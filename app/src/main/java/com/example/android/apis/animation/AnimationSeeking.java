@@ -56,6 +56,15 @@ public class AnimationSeeking extends Activity {
     private SeekBar mSeekBar;
 
     /** Called when the activity is first created. */
+    /**
+     * First we call through to our super's implementation of onCreate, then we set the activity
+     * content to our layout file R.layout.animation_seeking, this file will be inflated, adding
+     * all top-level views to the activity. Then we locate the top level LinearLayout container
+     * (R.id.container) in our layout, we create an MyAnimationView animView (the custom View which
+     * contains our demo animation), and addView animView to our container.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +75,7 @@ public class AnimationSeeking extends Activity {
 
         Button starter = (Button) findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 animView.startAnimation();
             }
@@ -74,12 +84,15 @@ public class AnimationSeeking extends Activity {
         mSeekBar = (SeekBar) findViewById(R.id.seekBar);
         mSeekBar.setMax(DURATION);
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
 
+            @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
+            @Override
             public void onProgressChanged(SeekBar seekBar, int progress,
                     boolean fromUser) {
                 // prevent seeking on app creation
@@ -155,24 +168,29 @@ public class AnimationSeeking extends Activity {
             ball.getShape().draw(canvas);
         }
 
+        @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             invalidate();
             long playtime = bounceAnim.getCurrentPlayTime();
             //mSeekBar.setProgress((int)playtime);
         }
 
+        @Override
         public void onAnimationCancel(Animator animation) {
         }
 
+        @Override
         public void onAnimationEnd(Animator animation) {
             //noinspection SuspiciousMethodCalls
             balls.remove(((ObjectAnimator)animation).getTarget());
 
         }
 
+        @Override
         public void onAnimationRepeat(Animator animation) {
         }
 
+        @Override
         public void onAnimationStart(Animator animation) {
         }
     }
