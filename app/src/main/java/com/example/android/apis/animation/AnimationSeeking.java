@@ -61,7 +61,12 @@ public class AnimationSeeking extends Activity {
      * content to our layout file R.layout.animation_seeking, this file will be inflated, adding
      * all top-level views to the activity. Then we locate the top level LinearLayout container
      * (R.id.container) in our layout, we create an MyAnimationView animView (the custom View which
-     * contains our demo animation), and addView animView to our container.
+     * contains our demo animation), and addView animView to our container. Next we locate the "RUN"
+     * Button (R.id.startButton) and set the OnClickListener to an anonymous class which will start
+     * the animation of animView running. Finally we locate SeekBar mSeekBar (R.id.seekBar). We set
+     * the range of the progress bar to 0...DURATION, and set the OnSeekBarChangeListener to an
+     * anonymous class which will seek the animView animation to the setting of the SeekBar mSeekBar
+     * whenever the user changes the setting.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
@@ -75,6 +80,11 @@ public class AnimationSeeking extends Activity {
 
         Button starter = (Button) findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Starts the animation when Button is clicked.
+             *
+             * @param v RUN Button View that was clicked
+             */
             @Override
             public void onClick(View v) {
                 animView.startAnimation();
@@ -84,17 +94,39 @@ public class AnimationSeeking extends Activity {
         mSeekBar = (SeekBar) findViewById(R.id.seekBar);
         mSeekBar.setMax(DURATION);
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            /**
+             * Notification that the user has finished a touch gesture. Just overridden because
+             * the interface is abstract.
+             *
+             * @param seekBar The SeekBar in which the touch gesture began.
+             */
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
 
+            /**
+             * Notification that the user has started a touch gesture. Just overridden because
+             * the interface is abstract.
+             *
+             * @param seekBar The SeekBar in which the touch gesture began,
+             */
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
+            /**
+             * Notification that the progress level has changed. We first check to see if
+             * MyAnimationView animView has been drawn yet (otherwise we are seeking too
+             * soon), if it has been then we call the method MyAnimationView.seek to position
+             * the animation at the setting of the SeekBar.
+             *
+             * @param seekBar The SeekBar whose progress has changed
+             * @param progress The current progress level. This will be in the range 0..DURATION
+             *        where DURATION was set by ProgressBar.setMax(DURATION) above.
+             * @param fromUser True if the progress change was initiated by the user.
+             */
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress,
-                    boolean fromUser) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // prevent seeking on app creation
                 if (animView.getHeight() != 0) {
                     animView.seek(progress);
@@ -103,6 +135,11 @@ public class AnimationSeeking extends Activity {
         });
     }
 
+    /**
+     * This is the custom View for our demo. It holds a "ball" with an animation attached to it
+     * which causes the ball to fall from the top of the View to the bottom and bounce at the
+     * bottom.
+     */
     @SuppressWarnings("unused")
     public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener, Animator.AnimatorListener {
 
