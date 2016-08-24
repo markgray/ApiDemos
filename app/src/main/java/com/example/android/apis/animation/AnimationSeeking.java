@@ -154,11 +154,24 @@ public class AnimationSeeking extends Activity {
         ValueAnimator bounceAnim = null;
         ShapeHolder ball = null;
 
+        /**
+         * Call through to the super's constructor, then create a ShapeHolder ball located at (200,0)
+         *
+         * @param context AnimationSeeking Activity context
+         */
         public MyAnimationView(Context context) {
             super(context);
             ball = addBall(200, 0);
         }
 
+        /**
+         * Creates an ValueAnimator bounceAnim iff it is null at the moment. bounceAnim is an
+         * ObjectAnimator that animates the ShapeHolder ball's "y" field between float values
+         * starting at the current "y" position of the ball, and the bottom of our MyAnimationView
+         * (offset by the ball's size). The duration of the animation is 1500 milliseconds, and it
+         * uses a BounceInterpolator. Before returning we set the AnimatorUpdateListener to "this"
+         * so that our onAnimationUpdate override is called for every frame of the animation.
+         */
         private void createAnimation() {
             if (bounceAnim == null) {
                 bounceAnim = ObjectAnimator.ofFloat(ball, "y",
@@ -168,11 +181,22 @@ public class AnimationSeeking extends Activity {
             }
         }
 
+        /**
+         * First we create the ValueAnimator bounceAnim if need be, then start it running. We are
+         * called only from the onClick of the "RUN" Button.
+         */
         public void startAnimation() {
             createAnimation();
             bounceAnim.start();
         }
 
+        /**
+         * First we create the ValueAnimator bounceAnim if need be, then we set the position of
+         * bounceAnim to the specified point in time. Called only from the onProgressChanged
+         * callback of the SeekBar mSeekBar.
+         *
+         * @param seekTime The time, in milliseconds, to which the animation is advanced or rewound.
+         */
         public void seek(long seekTime) {
             createAnimation();
             bounceAnim.setCurrentPlayTime(seekTime);
