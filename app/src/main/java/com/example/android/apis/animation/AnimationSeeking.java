@@ -202,6 +202,20 @@ public class AnimationSeeking extends Activity {
             bounceAnim.setCurrentPlayTime(seekTime);
         }
 
+        /**
+         * Creates and returns a ShapeHolder holding a "ball". First it creates an OvalShape circle,
+         * re-sizes it to be a 50px by 50px circle, creates a ShapeDrawable drawable from it, and
+         * places it in a ShapeHolder shapeHolder. It sets the (x,y) coordinates of the ShapeHolder
+         * to the calling parameters of the method, generates a random color and a dark version of
+         * that color and creates a RadialGradient gradient from them which it sets as the shader
+         * of the paint which it assigns to the ShapeHolder. It then returns the ShapeHolder it has
+         * created and initialized. ArrayList<ShapeHolder> balls has this ShapeHolder add()'ed to
+         * it, but balls is not used in this demo (the method was copied from a multi-ball demo).
+         *
+         * @param x x coordinate for ShapeHolder
+         * @param y y coordinate for ShapeHolder
+         * @return ShapeHolder containing "ball" at (x,y)
+         */
         private ShapeHolder addBall(float x, float y) {
             OvalShape circle = new OvalShape();
             circle.resize(BALL_SIZE, BALL_SIZE);
