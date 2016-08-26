@@ -237,12 +237,25 @@ public class AnimationSeeking extends Activity {
             return shapeHolder;
         }
 
+        /**
+         * Called to do the drawing of our view. First we pre-concatenate the current matrix
+         * with a translation to the ball's ShapeHolder's current (x,y) position, then we instruct
+         * the ShapeDrawable (ball) in the ShapeHolder to draw itself.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.translate(ball.getX(), ball.getY());
             ball.getShape().draw(canvas);
         }
 
+        /**
+         * This is the callback for the interface AnimatorUpdateListener, it is called to notify
+         * us of the occurrence of another frame of the animation.
+         *
+         * @param animation The animation which has moved to a new frame
+         */
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             invalidate();

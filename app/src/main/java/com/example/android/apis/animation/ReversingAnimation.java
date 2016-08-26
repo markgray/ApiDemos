@@ -212,7 +212,7 @@ public class ReversingAnimation extends Activity {
 
         /**
          * Does the drawing of our MyAnimationView View. First we save the current matrix and
-         * clip of our Canvas onto a private stack, then we pre-concantanate the current matrix
+         * clip of our Canvas onto a private stack, then we pre-concatenate the current matrix
          * with a translation to the ball's ShapeHolder's current (x,y) position, then we instruct
          * the ShapeDrawable (ball) in the ShapeHolder to draw itself, and finally we remove our
          * modifications to the matrix/clip which moved the canvas to our ball's location.
