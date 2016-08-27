@@ -37,6 +37,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.widget.Button;
@@ -52,6 +53,7 @@ import android.widget.SeekBar;
 public class AnimationSeeking extends Activity {
 
     private static final int DURATION = 1500;
+    private static final String TAG = "AnimationSeeking";
     @SuppressWarnings("FieldCanBeLocal")
     private SeekBar mSeekBar;
 
@@ -178,6 +180,7 @@ public class AnimationSeeking extends Activity {
                         ball.getY(), getHeight() - BALL_SIZE).setDuration(1500);
                 bounceAnim.setInterpolator(new BounceInterpolator());
                 bounceAnim.addUpdateListener(this);
+                bounceAnim.addListener(this);
             }
         }
 
@@ -252,7 +255,11 @@ public class AnimationSeeking extends Activity {
 
         /**
          * This is the callback for the interface AnimatorUpdateListener, it is called to notify
-         * us of the occurrence of another frame of the animation.
+         * us of the occurrence of another frame of the animation. First we invalidate() the View
+         * ensuring that onDraw will be called at some point in the future, then we fetch the
+         * current position of the animation in time, which is equal to the current time minus
+         * the time that the animation started BUT do nothing with it (the commented out line
+         * would have set the SeekBar mSeekBar to this value.)
          *
          * @param animation The animation which has moved to a new frame
          */
@@ -263,23 +270,52 @@ public class AnimationSeeking extends Activity {
             //mSeekBar.setProgress((int)playtime);
         }
 
+        /**
+         * Part of the AnimatorListener interface. NOT CALLED without bounceAnim.addListener(this)
+         * Notifies the cancellation of the animation. This callback is not invoked for
+         * animations with repeat count set to INFINITE.
+         *
+         * @param animation The animation which was canceled
+         */
         @Override
         public void onAnimationCancel(Animator animation) {
         }
 
+        /**
+         * Part of the AnimatorListener interface. NOT CALLED without bounceAnim.addListener(this)
+         * Notifies the end of the animation. This callback is not invoked
+         * for animations with repeat count set to INFINITE.
+         * For no apparent reason we remove the ball whose animation has ended from the unused
+         * ArrayList<ShapeHolder> balls.
+         *
+         * @param animation The animation which reached its end.
+         */
         @Override
         public void onAnimationEnd(Animator animation) {
             //noinspection SuspiciousMethodCalls
-            balls.remove(((ObjectAnimator)animation).getTarget());
-
+            balls.remove(((ObjectAnimator)animation).getTarget()); // Useless relic of Cut and paste?
+            Log.i(TAG, "onAnimationEnd called");
         }
 
+        /**
+         * Part of the AnimatorListener interface. NOT CALLED without bounceAnim.addListener(this)
+         * Notifies the repetition of the animation.
+         *
+         * @param animation The animation which was repeated.
+         */
         @Override
         public void onAnimationRepeat(Animator animation) {
         }
 
+        /**
+         * Part of the AnimatorListener interface. NOT CALLED without bounceAnim.addListener(this)
+         * Notifies the start of the animation.
+         *
+         * @param animation The started animation.
+         */
         @Override
         public void onAnimationStart(Animator animation) {
+            Log.i(TAG, "onAnimationStart called");
         }
     }
 }
