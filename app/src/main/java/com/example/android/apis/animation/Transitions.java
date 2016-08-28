@@ -39,6 +39,21 @@ public class Transitions extends Activity {
     ViewGroup mSceneRoot;
     TransitionManager mTransitionManager;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation
+     * of onCreate, then we set our content view to our layout file (R.layout.transition). We
+     * locate the LinearLayout to be used for our demo (R.id.sceneRoot) and save it in the field
+     * ViewGroup mSceneRoot. We create a TransitionInflater inflater using "this" as the context.
+     * Next we load the Scene's mScene1, mScene2, mScene3 from layout files R.layout.transition_scene1,
+     * R.layout.transition_scene2, and R.layout.transition_scene3 using mSceneRoot as the root of
+     * the hierarchy in which scene changes and transitions will take place, and "this" as the
+     * context for the Scene's. Finally we initialize the field TransitionManager mTransitionManager
+     * with a TransitionManager object from a resource (R.transition.transitions_mgr) using the
+     * ViewGroup  mSceneRoot as the root of the hierarchy in which scene changes and transitions
+     * will take place.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

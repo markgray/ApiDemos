@@ -164,7 +164,7 @@ Animation (disabled for froyo)
             different layouts. scene4 is not an actual 'Scene', but rather a dynamic
             change in the UI, transitioned to using beginDelayedTransition() to tell
             the TransitionManager to get ready to run a transition at the next frame.
-            It merely resizes four of the views in whichever of the first three Scenes
+            It merely re-sizes four of the views in whichever of the first three Scenes
             happens to be displayed at that moment.
 
   Animation/View Flip v11
