@@ -75,6 +75,21 @@ public class Transitions extends Activity {
                 mSceneRoot);
     }
 
+    /**
+     * This method is set as the onClickListener using android:onClick="selectScene" for all four
+     * of the RadioButton's in the R.layout.transition layout used by this Activity. We decide
+     * which RadioButton by using a switch statement to branch based on the value of the id of the
+     * RadioButton View which has been clicked. For the first three RadioButton's we instruct our
+     * TransitionManager mTransitionManager to change to the specified scene (mScene1, mScene2, or
+     * mScene3) using the appropriate transition for the particular scene change as specified by
+     * our transitionManager file R.transition.transitions_mgr. For the fourth RadioButton scene4
+     * is not an actual 'Scene', but rather a dynamic change in the UI, transitioned to using
+     * beginDelayedTransition() to tell the TransitionManager to get ready to run a transition
+     * at the next frame. The change is a resizing of the four boxes in the corners of the three
+     * Scene layouts implemented by calling our method setNewSize.
+     *
+     * @param view View (RadioButton) which has been clicked
+     */
     public void selectScene(View view) {
         switch (view.getId()) {
             case R.id.scene1:
@@ -99,6 +114,17 @@ public class Transitions extends Activity {
         }
     }
 
+    /**
+     * This method resizes the width and height of the View specified by the resource id. First we
+     * find the view that is identified by the id attribute by calling findViewById. We get the
+     * LayoutParams associated with this view, and set the field ViewGroup.LayoutParams.width to
+     * the width requested, and ViewGroup.LayoutParams.height to the height requested, then we
+     * call view.setLayoutParams to update the layout parameters associated with the view.
+     *
+     * @param id View's id resource
+     * @param width new width of View
+     * @param height new height of View
+     */
     private void setNewSize(int id, int width, int height) {
         View view = findViewById(id);
         ViewGroup.LayoutParams params = view.getLayoutParams();

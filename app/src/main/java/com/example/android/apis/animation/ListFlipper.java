@@ -37,9 +37,10 @@ import android.widget.Button;
 import android.widget.SeekBar;
 
 /**
- * This application demonstrates the seeking capability of ValueAnimator. The SeekBar in the
- * UI allows you to set the position of the animation. Pressing the Run button will play from
- * the current position of the animation.
+ * Uses fancy custom ObjectAnimator to swap two list views occupying the same space in a LinearLayout,
+ * by setting one to android:visibility="gone" and the other to android:visibility="visible"
+ * when they are to be "flipped". The english list starts as the visible list as defined in the
+ * Layout xml file.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ListFlipper extends Activity {
@@ -70,6 +71,16 @@ public class ListFlipper extends Activity {
     ListView mFrenchList;
 
     /** Called when the activity is first created. */
+    /**
+     * First we call through to our super's implementation of onCreate, the we set our content
+     * view to our layout file R.layout.rotating_list. We set our fields ListView mEnglishList, and
+     * ListView mFrenchList to the respective ListView's R.id.list_en and R.id.list_fr. We create
+     * the Adapter's for our ListView's: ArrayAdapter<String> adapterEn, and ArrayAdapter<String>
+     * adapterFr from the String[]'s LIST_STRINGS_EN and LIST_STRINGS_FR, and setAdapter them to
+     * their ListView.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not called
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +102,7 @@ public class ListFlipper extends Activity {
 
         Button starter = (Button) findViewById(R.id.button);
         starter.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 flipit();
             }
