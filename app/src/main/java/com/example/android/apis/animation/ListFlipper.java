@@ -77,7 +77,10 @@ public class ListFlipper extends Activity {
      * ListView mFrenchList to the respective ListView's R.id.list_en and R.id.list_fr. We create
      * the Adapter's for our ListView's: ArrayAdapter<String> adapterEn, and ArrayAdapter<String>
      * adapterFr from the String[]'s LIST_STRINGS_EN and LIST_STRINGS_FR, and setAdapter them to
-     * their ListView.
+     * their ListView. Then we set the degrees that the mFrenchList ListView (currently GONE) is
+     * rotated around the vertical axis to -90f (face down). Finally we locate the "FLIP" Button
+     * in our layout (R.id.button) and set its OnClickListener to a callback which will call our
+     * method flipit() which will animate between the two ListView's.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not called
      */
@@ -102,6 +105,12 @@ public class ListFlipper extends Activity {
 
         Button starter = (Button) findViewById(R.id.button);
         starter.setOnClickListener(new View.OnClickListener() {
+            /**
+             * When the "FLIP" Button is clicked we call the method flipit() which runs an
+             * animation swapping the two ListView's mEnglishList and mFrenchList.
+             *
+             * @param v Button which has been clicked
+             */
             @Override
             public void onClick(View v) {
                 flipit();
@@ -111,6 +120,19 @@ public class ListFlipper extends Activity {
 
     private Interpolator accelerator = new AccelerateInterpolator();
     private Interpolator decelerator = new DecelerateInterpolator();
+    /**
+     * This method creates and start's the animation to flip between the two ListView's. First we
+     * determine which of our two ListView's (mEnglishList or mFrenchList) is currently GONE and
+     * which ListView is currently VISIBLE and set the variables ListView invisibleList and
+     * ListView visibleList accordingly. Then we create an ObjectAnimator visToInvis which
+     * animates the "rotationY" from 0f to 90f, set its duration to 500 milliseconds, and set its
+     * interpolator to an instance of AccelerateInterpolator. We then create an ObjectAnimator
+     * invisToVis which animates the "rotationY" from -90f to 0f, set its duration to 500
+     * milliseconds, and set its interpolator to an instance of DecelerateInterpolator. We add
+     * an AnimatorListenerAdapter to ObjectAnimator visToInvis which sets the visibility of
+     * visibleList to GONE, starts ObjectAnimator invisToVis, and set the visibility of
+     * invisibleList to VISIBLE. Finally we start ObjectAnimator visToInvis.
+     */
     private void flipit() {
         final ListView visibleList;
         final ListView invisibleList;
