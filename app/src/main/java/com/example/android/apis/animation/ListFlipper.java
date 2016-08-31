@@ -151,6 +151,13 @@ public class ListFlipper extends Activity {
         invisToVis.setDuration(500);
         invisToVis.setInterpolator(decelerator);
         visToInvis.addListener(new AnimatorListenerAdapter() {
+            /**
+             * Notifies the end of the animation. When the visToInvis animation ends we set the
+             * visibility of visibleList to GONE, start the invisToVis animation and set the
+             * visibility of invisibleList to VISIBLE.
+             *
+             * @param anim The animation which reached its end.
+             */
             @Override
             public void onAnimationEnd(Animator anim) {
                 visibleList.setVisibility(View.GONE);

@@ -33,6 +33,10 @@ import com.example.android.apis.R;
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 @SuppressLint("SetTextI18n")
 public class ActionBarNavigation extends Activity {
+    /**
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -25,12 +25,21 @@ import android.view.Window;
 import android.widget.Toast;
 
 /**
- * This demonstrates the basics of the Action Bar and how it interoperates with the
+ * This demonstrates the basics of the Action Bar and how it inter-operates with the
  * standard options menu. This demo is for informative purposes only; see ActionBarUsage for
  * an example of using the Action Bar in a more idiomatic manner.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ActionBarMechanics extends Activity {
+    /**
+     * Called when the activity is starting. We first call through to our super's implementation
+     * of onCreate, then we enable the extended screen feature Window.FEATURE_ACTION_BAR which
+     * is the flag for enabling the Action Bar. This is enabled by default for some devices.
+     * The Action Bar replaces the title bar and provides an alternate location for an on-screen
+     * menu button on some devices.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +54,21 @@ public class ActionBarMechanics extends Activity {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu. We first add a "Normal Item"
+     * to our menu using the default to never show in the action bar (it will instead appear in the
+     * Action overflow menu in a cascading menu). Next we add a "Action Button" to the menu and save
+     * the newly added menu item in MenuItem actionItem returned for later use. We call
+     * setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM) on MenuItem actionItem to set how this
+     * item should display in the presence of an Action Bar (Shows this item as a button in an
+     * Action Bar if the system decides there is room for it). actionItem.setIcon is called to
+     * set the icon associated with this item to android.R.drawable.ic_menu_share (the standard
+     * Android "share" icon.) Finally we return true so that the menu will be shown.
+     *
+     * @param menu The options menu in which you place your items.
+     * @return You must return true for the menu to be displayed;
+     * if you return false it will not be shown.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Menu items default to never show in the action bar. On most devices this means
@@ -68,6 +92,13 @@ public class ActionBarMechanics extends Activity {
         return true;
     }
 
+    /**
+     * This hook is called whenever an item in your options menu is selected. Here we simply toast
+     * current title of the item, then return true to indicate that we consumed the click.
+     *
+     * @param item The menu item that was selected.
+     * @return Return false to allow normal menu processing to proceed, true to consume it here.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Toast.makeText(this, "Selected Item: " + item.getTitle(), Toast.LENGTH_SHORT).show();
