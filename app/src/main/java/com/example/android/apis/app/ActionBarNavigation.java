@@ -29,11 +29,22 @@ import com.example.android.apis.R;
 
 /**
  * This demonstrates implementing common navigation flows with the action bar.
+ * It hows how to use "Up" button in Action Bar, new Document is created in a
+ * separate activity, so you have to use "recent" to switch to it, and then
+ * the "up" button works as "up", otherwise it works as "Back". Uses the
+ * attribute android:taskAffinity=":bar_navigation" to associate the activities.
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 @SuppressLint("SetTextI18n")
 public class ActionBarNavigation extends Activity {
     /**
+     * Called when the activity is starting. First we call through to our super's implementation
+     * of onCreate. Then we get a reference to this activity's ActionBar and set the display option
+     * DISPLAY_HOME_AS_UP. We set the content view to our layout file R.layout.action_bar_navigation,
+     * locate the TextView text (R.id.launchedfrom) for our message, and based on whether the
+     * category Intent.CATEGORY_SAMPLE_CODE exists in the intent that launched our activity we
+     * either set the text of "text" to "This was launched from ApiDemos" if it does or "This
+     * was created from up navigation" if it does not.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden.
      */
@@ -55,11 +66,28 @@ public class ActionBarNavigation extends Activity {
         }
     }
 
+    /**
+     * This is specified by the "New in-task activity" Button by the xml attribute
+     * android:onClick="onNewActivity" and is called if the Button is clicked.
+     * We create an Intent that will launch the Activity ActionBarNavigationTarget,
+     * and then we start this activity.
+     *
+     * @param button "New in-task activity" Button
+     */
     public void onNewActivity(View button) {
         Intent intent = new Intent(this, ActionBarNavigationTarget.class);
         startActivity(intent);
     }
 
+    /**
+     * This is specified by the "New document" Button by the xml attribute
+     * android:onClick="onNewDocument" and is called if the Button is clicked.
+     * We create an Intent that will launch the Activity ActionBarNavigationTarget,
+     * add the flag Intent.FLAG_ACTIVITY_NEW_DOCUMENT to the Intent and then we
+     * start this activity.
+     *
+     * @param button "New document" Button
+     */
     public void onNewDocument(View button) {
         Intent intent = new Intent(this, ActionBarNavigationTarget.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);

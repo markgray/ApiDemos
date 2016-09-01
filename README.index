@@ -185,7 +185,7 @@ App
         .app.ActionBarNavigation goes to:
         .app.ActionBarNavigationTarget
             Shows how to use "Up" button in Action Bar, new Document is created in a 
-            seperate activity, so you have to use "recents" to switch to it, and then
+            separate activity, so you have to use "recent" to switch to it, and then
             the "up" button works as "up", otherwise it works as "Back". Uses the
             attribute android:taskAffinity=":bar_navigation" to associate the activities.
 

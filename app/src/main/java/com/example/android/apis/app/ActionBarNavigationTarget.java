@@ -15,19 +15,30 @@
  */
 package com.example.android.apis.app;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.Window;
-import android.widget.Toast;
+
 import com.example.android.apis.R;
 
 /**
  * Target launch activity for demonstrations from {@link ActionBarNavigation}.
+ * It hows how to use "Up" button in Action Bar, new Document is created in a
+ * separate activity, so you have to use "recent" to switch to it, and then
+ * the "up" button works as "up", otherwise it works as "Back". Uses the
+ * attribute android:taskAffinity=":bar_navigation" to associate the activities.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ActionBarNavigationTarget extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation
+     * of onCreate. The content view is set to our layout file R.layout.action_bar_navigation_target.
+     * We fetch a reference to our ActionBar and set the display option DISPLAY_HOME_AS_UP.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +46,7 @@ public class ActionBarNavigationTarget extends Activity {
 
         // Turn on the up affordance.
         final ActionBar bar = getActionBar();
+        //noinspection ConstantConditions
         bar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP, ActionBar.DISPLAY_HOME_AS_UP);
     }
 }
