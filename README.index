@@ -192,7 +192,7 @@ App
     App/Action Bar/Action Bar Tabs v11
         .app.ActionBarTabs
             You need to toggle tab mode before tabs show in action bar. Crashes when rotated
-            because it needs a zero argument contructor. The text should be passed in a bundle.
+            because it needs a zero argument constructor. The text should be passed in a bundle.
             Working on doing this Right. Did so, but need to use retained fragments in order
             to keep tabs (TODO: add retained fragments to this)
 

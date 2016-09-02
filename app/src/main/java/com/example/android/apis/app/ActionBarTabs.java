@@ -36,11 +36,27 @@ import android.widget.Toast;
  * This demonstrates the use of action bar tabs and how they interact
  * with other action bar features.
  */
+
+/**
+ * You need to toggle tab mode before tabs show in action bar. Crashes when rotated
+ * because it needs a zero argument constructor. The text should be passed in a bundle.
+ * Working on doing this Right. Did so, but need to use retained fragments in order
+ * to keep tabs (TODO: add retained fragments to this)
+ */
 @SuppressWarnings("deprecation")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ActionBarTabs extends Activity {
 
     public boolean tabsMode = false;
+    /**
+     * Called when the activity is starting or restarting after being killed.
+     * First we check whether savedInstanceState is not null, and if so restore
+     * tabsMode to the value it had when onSaveInstanceState was called.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down (as happens when rotated) then this Bundle
+     *     contains the data it most recently supplied in onSaveInstanceState.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
