@@ -50,9 +50,10 @@ public class ActionBarTabs extends Activity {
     public boolean tabsMode = false;
     /**
      * Called when the activity is starting or restarting after being killed.
-     * First we check whether savedInstanceState is not null, and if so restore
-     * tabsMode to the value it had when onSaveInstanceState was called. Then we
-     * call through to our super's implementation of onCreate
+     * First we call through to our super's implementation of onCreate. Next
+     * we set our content view to our layout file R.layout.action_bar_tabs.
+     * Then we check whether savedInstanceState is not null, and if so restore
+     * tabsMode to the value it had when onSaveInstanceState was called.
      *
      * @param savedInstanceState If the activity is being re-initialized after
      *     previously being shut down (as happens when rotated) then this Bundle
@@ -60,11 +61,11 @@ public class ActionBarTabs extends Activity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.action_bar_tabs);
         if (savedInstanceState != null) {
             tabsMode = savedInstanceState.getBoolean("tabsMode");
         }
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.action_bar_tabs);
         if (tabsMode) {
             //noinspection ConstantConditions
             getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -107,9 +108,11 @@ public class ActionBarTabs extends Activity {
 
         //noinspection ConstantConditions
         if (bar.getNavigationMode() == ActionBar.NAVIGATION_MODE_TABS) {
+            tabsMode = false;
             bar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
             bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE, ActionBar.DISPLAY_SHOW_TITLE);
         } else {
+            tabsMode = true;
             bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
             bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
         }
