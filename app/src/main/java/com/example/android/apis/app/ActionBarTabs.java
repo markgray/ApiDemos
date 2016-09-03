@@ -51,7 +51,8 @@ public class ActionBarTabs extends Activity {
     /**
      * Called when the activity is starting or restarting after being killed.
      * First we check whether savedInstanceState is not null, and if so restore
-     * tabsMode to the value it had when onSaveInstanceState was called.
+     * tabsMode to the value it had when onSaveInstanceState was called. Then we
+     * call through to our super's implementation of onCreate
      *
      * @param savedInstanceState If the activity is being re-initialized after
      *     previously being shut down (as happens when rotated) then this Bundle
