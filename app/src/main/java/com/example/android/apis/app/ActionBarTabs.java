@@ -54,6 +54,7 @@ public class ActionBarTabs extends Activity {
      * we set our content view to our layout file R.layout.action_bar_tabs.
      * Then we check whether savedInstanceState is not null, and if so restore
      * tabsMode to the value it had when onSaveInstanceState was called.
+     * TODO: Restore contents of tabs, number of tabs and which is selected.
      *
      * @param savedInstanceState If the activity is being re-initialized after
      *     previously being shut down (as happens when rotated) then this Bundle
@@ -77,6 +78,14 @@ public class ActionBarTabs extends Activity {
         }
     }
 
+    /**
+     * Called to retrieve per-instance state from an activity before being killed
+     * so that the state can be restored in {@link #onCreate} or
+     * {@link #onRestoreInstanceState} (the {@link Bundle} populated by this method
+     * will be passed to both).
+     *
+     * @param outState Bundle in which to place your saved state.
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putBoolean("tabsMode", tabsMode);
