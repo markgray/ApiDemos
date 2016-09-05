@@ -84,6 +84,9 @@ public class ActionBarTabs extends Activity {
      * {@link #onRestoreInstanceState} (the {@link Bundle} populated by this method
      * will be passed to both).
      *
+     * We just store the value of the Boolean tabsMode under the key "tabsMode", then
+     * call through to our super's implementation of onSaveInstanceState.
+     *
      * @param outState Bundle in which to place your saved state.
      */
     @Override
@@ -92,6 +95,17 @@ public class ActionBarTabs extends Activity {
         super.onSaveInstanceState(outState);
     }
 
+    /**
+     * This is specified as the onClickListener for the R.id.btn_add_tab Button ("ADD NEW TAB")
+     * Button using android:onClick="onAddTab". First we set ActionBar bar to a reference to our
+     * activity's ActionBar. Then we set int tabCount to the number of tabs currently registered
+     * with the action bar. We create String text by appending tabCount to the String "Tab ". We
+     * create an instance of TabContentFragment fragment, addTab this to "bar", setText of the tab
+     * to "text", set the TabListener of the tab to the TabContentFragment fragment just addTab'ed,
+     * and finally set the text in the TabContentFragment fragment to "text".
+     *
+     * @param v Button "ADD NEW TAB" which was clicked
+     */
     public void onAddTab(View v) {
         final ActionBar bar = getActionBar();
         //noinspection ConstantConditions
@@ -104,6 +118,14 @@ public class ActionBarTabs extends Activity {
         fragment.putText(text);
     }
 
+    /**
+     * This is specified as the onClickListener for the R.id.btn_remove_tab ("REMOVE LAST TAB")
+     * Button using android:onClick="onRemoveTab". First we set ActionBar bar to a reference to
+     * our activity's ActionBar. Then if the number of tabs currently registered with the action
+     * bar is greater than 0 we removeTabAt the last tab position.
+     *
+     * @param v Button "REMOVE LAST TAB" which was clicked
+     */
     public void onRemoveTab(View v) {
         final ActionBar bar = getActionBar();
         //noinspection ConstantConditions
@@ -112,6 +134,17 @@ public class ActionBarTabs extends Activity {
         }
     }
 
+    /**
+     * This is specified as the onClickListener for the R.id.btn_toggle_tabs ("TOGGLE TAB MODE")
+     * Button using android:onClick="onToggleTabs". First we set ActionBar bar to a reference to
+     * our activity's ActionBar. Then if bar.getNavigationMode says that the ActionBar is in tabs
+     * mode, we toggle it by first setting our field tabsMode to false, then setNavigationMode to
+     * NAVIGATION_MODE_STANDARD, and we set setDisplayOptions to DISPLAY_SHOW_TITLE. If it is not
+     * in tabs mode we set our field tabsMode to true, setNavigationMode to NAVIGATION_MODE_TABS,
+     * and setDisplayOptions is used to clear DISPLAY_SHOW_TITLE.
+     *
+     * @param v Button "TOGGLE TAB MODE" which was clicked
+     */
     public void onToggleTabs(View v) {
         final ActionBar bar = getActionBar();
 
@@ -127,6 +160,13 @@ public class ActionBarTabs extends Activity {
         }
     }
 
+    /**
+     * This is specified as the onClickListener for the R.id.btn_remove_all_tabs ("REMOVE ALL TABS")
+     * Button using android:onClick="onRemoveAllTabs". We simply retrieve a reference to this
+     * activity's ActionBar and use it to invoke the method ActionBar,removeAllTabs()
+     *
+     * @param v Button "REMOVE ALL TABS" which was clicked
+     */
     public void onRemoveAllTabs(View v) {
         //noinspection ConstantConditions
         getActionBar().removeAllTabs();
