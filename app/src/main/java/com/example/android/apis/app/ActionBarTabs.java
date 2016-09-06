@@ -188,20 +188,53 @@ public class ActionBarTabs extends Activity {
     private class TabListener implements ActionBar.TabListener {
         private TabContentFragment mFragment;
 
+        /**
+         * Initializes our TabContentFragment mFragment which we use when FragmentTransaction.add'ing
+         * and FragmentTransaction.remove'ing when our tab is selected and unselected.
+         *
+         * @param fragment TabContentFragment which this tab will contain
+         */
         public TabListener(TabContentFragment fragment) {
             mFragment = fragment;
         }
 
+        /**
+         * Our tab has been selected, so FragmentTransaction.add our TabContentFragment mFragment
+         * so it will be displayed.
+         *
+         * @param tab The tab that was selected
+         * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
+         *        during a tab switch. The previous tab's unselected and this tab's selected will be
+         *        executed in a single transaction. This FragmentTransaction does not support
+         *        being added to the back stack.
+         */
         @Override
         public void onTabSelected(Tab tab, FragmentTransaction ft) {
             ft.add(R.id.fragment_content, mFragment, mFragment.getText());
         }
 
+        /**
+         * Our tab has been unselected, so FragmentTransaction.remove our TabContentFragment mFragment
+         *
+         * @param tab The tab that was unselected
+         * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
+         *        during a tab switch. This tab's unselected and the newly selected tab's select
+         *        will be executed in a single transaction. This FragmentTransaction does not
+         *        support being added to the back stack.
+         */
         @Override
         public void onTabUnselected(Tab tab, FragmentTransaction ft) {
             ft.remove(mFragment);
         }
 
+        /**
+         * Our tab has been reselected, we simply toast a message stating this.
+         *
+         * @param tab The tab that was reselected.
+         * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
+         *        once this method returns. This FragmentTransaction does not support
+         *        being added to the back stack.
+         */
         @Override
         public void onTabReselected(Tab tab, FragmentTransaction ft) {
             Toast.makeText(ActionBarTabs.this, "Reselected!", Toast.LENGTH_SHORT).show();
@@ -209,26 +242,61 @@ public class ActionBarTabs extends Activity {
 
     }
 
+    /**
+     * The Fragment we add to a tab
+     */
     @SuppressLint("ValidFragment")
     static public class TabContentFragment extends Fragment {
 
         private String mText = "new tab";
         private TextView textView;
 
+        /**
+         * Required zero argument constructor.
+         */
         public TabContentFragment() {
         }
 
+        /**
+         * Get function for our text content.
+         *
+         * @return Text this TabContentFragment is displaying
+         */
         public String getText() {
             return mText;
         }
 
+        /**
+         * Sets the text we display.
+         *
+         * @param text String to set our text content to
+         */
         public void putText(String text) {
             mText = text;
         }
 
+        /**
+         * Called to have the fragment instantiate its user interface view. First we use the
+         * parameter LayoutInflater inflater to inflate into View fragView our layout file
+         * R.layout.action_bar_tab_content. Then we determine if this fragment is being re-constructed
+         * from a previous saved state by checking if our parameter Bundle savedInstanceState is not
+         * null and if so we retrieve from savedInstanceState the text we stored under the key "mText"
+         * when our implementation of onSaveInstanceState was called. Next we find the TextView in
+         * our layout file which we use to display mText (R.id.text) and set the text to the contents
+         * of our field mText. Finally we return the View fragView which contains our UI.
+         *
+         * @param inflater The LayoutInflater object that can be used to inflate
+         * any views in the fragment,
+         * @param container If non-null, this is the parent view that the fragment's
+         * UI should be attached to.  The fragment should not add the view itself,
+         * but this can be used to generate the LayoutParams of the view.
+         * @param savedInstanceState If non-null, this fragment is being re-constructed
+         * from a previous saved state as given here.
+         *
+         * @return Return the View for the fragment's UI, or null.
+         */
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View fragView = inflater.inflate(R.layout.action_bar_tab_content, container, false);
 
             if (savedInstanceState != null) {
@@ -240,6 +308,14 @@ public class ActionBarTabs extends Activity {
             return fragView;
         }
 
+        /**
+         * Called to ask the fragment to save its current dynamic state, so it can later be
+         * reconstructed when a new instance of its process is restarted. Our only state consists
+         * of our field String mText which we store in the parameter Bundle outState under the key
+         * "mText". Then we call through to our super's implementation of onSaveInstanceState.
+         *
+         * @param outState Bundle in which to place your saved state.
+         */
         @Override
         public void onSaveInstanceState(Bundle outState) {
             outState.putString("mText", mText);

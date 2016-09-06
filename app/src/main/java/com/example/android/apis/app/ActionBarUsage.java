@@ -41,6 +41,11 @@ public class ActionBarUsage extends Activity implements OnQueryTextListener {
     TextView mSearchText;
     int mSortMode = -1;
 
+    /**
+     * Called when the activity is starting.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
