@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,11 +39,14 @@ import com.example.android.apis.R;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ActionBarUsage extends Activity implements OnQueryTextListener {
+    private static final String TAG = "ActionBarUsage";
     TextView mSearchText;
     int mSortMode = -1;
 
     /**
-     * Called when the activity is starting.
+     * Called when the activity is starting. First we call through to our super's implementation
+     * of onCreate, then we set our field TextView mSearchText to a new instance of TextView and
+     * set our content view to this TextView.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden.
      */
@@ -53,6 +57,19 @@ public class ActionBarUsage extends Activity implements OnQueryTextListener {
         setContentView(mSearchText);
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu.  You should place your
+     * menu items in the menu passed as a parameter. First we fetch to MenuInflater inflater a
+     * MenuInflater for this context, and use it to inflate our menu (R.menu.actions) into "menu".
+     * We locate our menu item R.id.action_search, and fetch the currently set action view for this
+     * menu item into SearchView searchView. We then set the SearchView.OnQueryTextListener of
+     * searchView to "this" (our Activity implements OnQueryTextListener). Finally we return true
+     * so that the menu is displayed.
+     *
+     * @param menu The options menu in which you place your items.
+     * @return You must return true for the menu to be displayed;
+     *         if you return false it will not be shown.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -62,9 +79,28 @@ public class ActionBarUsage extends Activity implements OnQueryTextListener {
         return true;
     }
 
+    /**
+     * Prepare the Screen's standard options menu to be displayed.  This is called right before
+     * the menu is shown, every time it is shown.  You can use this method to efficiently
+     * enable/disable items or otherwise dynamically modify the contents. Our field int mSortMode
+     * starts out as -1 and has its value set differently only when the R.id.action_sort item
+     * has been clicked -- which causes our method onSort to be called which will set mSortMode
+     * according to which item in the submenu is selected (defaulting to R.id.action_sort_size
+     * until one is selected), and finally onSort calls invalidateOptionsMenu which causes
+     * this callback to be called in order to change the icon of R.id.action_sort to which ever
+     * sort mode has been selected (the icon is actually displayed only when there is room in the
+     * ActionBar). Finally this callback returns the return value from our super's implementation
+     * of onPrepareOptionsMenu (which is assumed to be true).
+     *
+     * @param menu The options menu as last shown or first initialized by
+     *             onCreateOptionsMenu().
+     * @return You must return true for the menu to be displayed;
+     *         if you return false it will not be shown.
+     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (mSortMode != -1) {
+            Log.i(TAG, "mSortMode =" + mSortMode);
             Drawable icon = menu.findItem(mSortMode).getIcon();
             menu.findItem(R.id.action_sort).setIcon(icon);
         }
