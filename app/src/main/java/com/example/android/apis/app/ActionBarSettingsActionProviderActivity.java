@@ -43,7 +43,11 @@ import com.example.android.apis.R;
 public class ActionBarSettingsActionProviderActivity extends Activity {
 
     /**
-     * {@inheritDoc}
+     * 
+     *
+     * @param menu The options menu in which you place your items.
+     * @return You must return true for the menu to be displayed;
+     *         if you return false it will not be shown.
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

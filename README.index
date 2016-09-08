@@ -207,7 +207,7 @@ App
     App/Action Bar/Action Provider/Settings Action Provider v14
         .app.ActionBarSettingsActionProviderActivity
             demo creates an ActionProvider for launching the system settings and adds
-            a menu item with that provider, in this case it will lauch the system 
+            a menu item with that provider, in this case it will launch the system
             settings app. Demonstrates how to implement an android.view.ActionProvider
 
     App/Action Bar/Action Provider/Share Action Provider v14
