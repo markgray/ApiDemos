@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.ActionProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,10 +43,16 @@ import com.example.android.apis.R;
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class ActionBarSettingsActionProviderActivity extends Activity {
 
+    private static final String TAG = "ActionBarSettings";
+
     /**
-     * 
+     * Initialize the contents of the Activity's standard options menu. First we call through
+     * to our super's implementation of onCreateOptionsMenu. Then we fetch a MenuInflater
+     * and use it to inflate our menu from R.menu.action_bar_settings_action_provider into
+     * the Menu menu given us. Finally we return true so the menu will be displayed.
      *
      * @param menu The options menu in which you place your items.
+     *
      * @return You must return true for the menu to be displayed;
      *         if you return false it will not be shown.
      */
@@ -57,18 +64,33 @@ public class ActionBarSettingsActionProviderActivity extends Activity {
     }
 
     /**
-     * {@inheritDoc}
+     * This hook is called whenever an item in your options menu is selected. We simply toast the
+     * message "Handling in onOptionsItemSelected avoided" and return false and the class we specify
+     * by the android:actionProviderClass in the menu xml is used to call that class's implementation
+     * of onPerformDefaultAction. This callback is only called from the "Settings" item in the
+     * overflow menu, NOT from the icon shown (ifRoom) in the ActionBar, onPerformDefaultAction is
+     * just called.
+     *
+     * @param item The menu item that was selected.
+     *
+     * @return boolean Return false to allow normal menu processing to
+     *         proceed, true to consume it here.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // If this callback does not handle the item click, onPerformDefaultAction
         // of the ActionProvider is invoked. Hence, the provider encapsulates the
         // complete functionality of the menu item.
+        Log.i(TAG, "onOptionsItemSelected has been called");
         Toast.makeText(this, R.string.action_bar_settings_action_provider_no_handling,
                 Toast.LENGTH_SHORT).show();
         return false;
     }
 
+    /**
+     * This class is specified using the xml attribute android:actionProviderClass in our menu
+     * xml file. It extends the abstract class ActionProvider.
+     */
     public static class SettingsActionProvider extends ActionProvider {
 
         /** An intent for launching the system settings. */
