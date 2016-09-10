@@ -89,7 +89,8 @@ public class ActionBarSettingsActionProviderActivity extends Activity {
 
     /**
      * This class is specified using the xml attribute android:actionProviderClass in our menu
-     * xml file. It extends the abstract class ActionProvider.
+     * xml file. It extends the abstract class ActionProvider, implementing the abstract callbacks
+     * onCreateActionView and onPerformDefaultAction
      */
     public static class SettingsActionProvider extends ActionProvider {
 
@@ -100,7 +101,8 @@ public class ActionBarSettingsActionProviderActivity extends Activity {
         private final Context mContext;
 
         /**
-         * Creates a new instance.
+         * Creates a new instance. We first call through to our super's constructor, then save the
+         * Context passed us for use in onCreateActionView.
          *
          * @param context Context for accessing resources.
          */
@@ -110,16 +112,31 @@ public class ActionBarSettingsActionProviderActivity extends Activity {
         }
 
         /**
-         * {@inheritDoc}
+         * Factory method called by the Android framework to create new action views. First we fetch
+         * a LayoutInflater layoutInflater using the Context passed when creating this instance of
+         * the SettingsActionProvider Class and use this LayoutInflater to inflate View view from
+         * from our layout file R.layout.action_bar_settings_action_provider. We find in this view
+         * our ImageButton button (R.id.button) and set the OnClickListener of "button" to a callback
+         * which uses mContext to start the activity in the Intent sSettingsIntent (the system
+         * settings Activity specified using Settings.ACTION_SETTINGS). Finally we return our View.
+         *
+         * @return A new action view.
          */
         @Override
         public View onCreateActionView() {
             // Inflate the action view to be shown on the action bar.
             LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-            @SuppressLint("InflateParams") View view = layoutInflater.inflate(R.layout.action_bar_settings_action_provider, null);
+            @SuppressLint("InflateParams")
+            View view = layoutInflater.inflate(R.layout.action_bar_settings_action_provider, null);
             ImageButton button = (ImageButton) view.findViewById(R.id.button);
             // Attach a click listener for launching the system settings.
             button.setOnClickListener(new View.OnClickListener() {
+                /**
+                 * Called when a view has been clicked. When clicked we simply use our saved Context
+                 * mContext to start the system settings Activity.
+                 *
+                 * @param v Button which was clicked
+                 */
                 @Override
                 public void onClick(View v) {
                     mContext.startActivity(sSettingsIntent);
@@ -129,12 +146,17 @@ public class ActionBarSettingsActionProviderActivity extends Activity {
         }
 
         /**
-         * {@inheritDoc}
+         * Called only when the Action is in the overflow menu, not when it is in the ActionBar.
+         * We simply use our saved Context mContext to start the system settings Activity, then
+         * return true to denote that the action has been handled.
+         *
+         * @return true if the Action has been handled.
          */
         @Override
         public boolean onPerformDefaultAction() {
             // This is called if the host menu item placed in the overflow menu of the
             // action bar is clicked and the host activity did not handle the click.
+            Log.i(TAG, "onPerformDefaultAction has been called");
             mContext.startActivity(sSettingsIntent);
             return true;
         }
