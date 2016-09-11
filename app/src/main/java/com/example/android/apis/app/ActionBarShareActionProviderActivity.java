@@ -46,12 +46,42 @@ public class ActionBarShareActionProviderActivity extends Activity {
 
     private static final String SHARED_FILE_NAME = "shared.png";
 
+    /**
+     * Called when the activity is starting. First we call our super's implementation of onCreate,
+     * then we call our method copyPrivateRawResourceToPubliclyAccessibleFile which copies our
+     * demo photo from our private raw resource content to a publicly readable file so that the
+     * latter can be shared with other applications.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        copyPrivateRawResuorceToPubliclyAccessibleFile();
+        copyPrivateRawResourceToPubliclyAccessibleFile();
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu. You should place your
+     * menu items into <var>menu</var>. First we get a MenuInflater with this context and use it
+     * to inflate a menu hierarchy from our menu R.menu.action_bar_share_action_provider into the
+     * options "menu" passed us. Then we set MenuItem actionItem to the "Share with..." action
+     * found at R.id.menu_item_share_action_provider_action_bar in our menu. We fetch the action
+     * provider specified for actionItem into ShareActionProvider actionProvider, set the file
+     * name of the file for persisting the share history to DEFAULT_SHARE_HISTORY_FILE_NAME (the
+     * default name for storing share history), then use our method createShareIntent to create a
+     * sharing Intent and set the share Intent of ShareActionProvider actionProvider to this 
+     * Intent. Then we set MenuItem overflowItem to the "Share with..." action in the overflow menu
+     * found at R.id.menu_item_share_action_provider_overflow in our menu. We fetch the action
+     * provider specified for overflowItem into ShareActionProvider overflowProvider, set the file
+     * name of the file for persisting the share history to DEFAULT_SHARE_HISTORY_FILE_NAME (the
+     * default name for storing share history), then use our method createShareIntent to create a
+     * sharing Intent and set the share Intent of ShareActionProvider overflowProvider to this 
+     * Intent. Finally we return true so that our menu will be displayed.
+     *
+     * @param menu The options menu in which you place your items.
+     *
+     * @return You must return true for the menu to be displayed.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate your menu.
@@ -79,7 +109,11 @@ public class ActionBarShareActionProviderActivity extends Activity {
     }
 
     /**
-     * Creates a sharing {@link Intent}.
+     * Creates a sharing {@link Intent}. We first create the Intent shareIntent with the action
+     * ACTION_SEND, and we set an explicit MIME data type of "image/*". We create Uri uri for the
+     * file created by copyPrivateRawResourceToPubliclyAccessibleFile using the absolute path on
+     * the filesystem where the file was created, and add this Uri as extended data to the Intent
+     * shareIntent. Finally we return the Intent shareIntent.
      *
      * @return The sharing intent.
      */
@@ -96,7 +130,7 @@ public class ActionBarShareActionProviderActivity extends Activity {
      * file such that the latter can be shared with other applications.
      */
     @SuppressLint("WorldReadableFiles")
-    private void copyPrivateRawResuorceToPubliclyAccessibleFile() {
+    private void copyPrivateRawResourceToPubliclyAccessibleFile() {
         InputStream inputStream = null;
         FileOutputStream outputStream = null;
         try {
