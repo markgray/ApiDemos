@@ -126,8 +126,17 @@ public class ActionBarShareActionProviderActivity extends Activity {
     }
 
     /**
-     * Copies a private raw resource content to a publicly readable
-     * file such that the latter can be shared with other applications.
+     * Copies a private raw resource content to a publicly readable file such that the latter can
+     * be shared with other applications. First we initialize our variables InputStream inputStream
+     * and FileOutputStream outputStream to null, then wrapped in a try intended to catch a possible
+     * FileNotFoundException we open the data stream InputStream inputStream for reading the raw
+     * resource R.raw.robot, and open the private file SHARED_FILE_NAME ("shared.png") associated
+     * with this Context's application package for writing using FileOutputStream outputStream,
+     * (creating the file if it doesn't already exist). Then in a loop surrounded by a try intended
+     * to catch IOException we read up to 1024 bytes at a time from inputStream into "byte[] buffer"
+     * and write the bytes read to outputStream as long as InputStream.read returns > 0 bytes read.
+     * Our "finally" block for the outer try for catching FileNotFoundException closes inputStream
+     * and outputStream (both calls surrounded by their own try intended to catch IOException.
      */
     @SuppressLint("WorldReadableFiles")
     private void copyPrivateRawResourceToPubliclyAccessibleFile() {

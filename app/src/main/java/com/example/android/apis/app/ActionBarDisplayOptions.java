@@ -42,6 +42,24 @@ public class ActionBarDisplayOptions extends Activity implements View.OnClickLis
         ActionBar.TabListener, Spinner.OnItemSelectedListener, ActionBar.OnNavigationListener {
     private View mCustomView;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.action_bar_display_options.
+     * Then we locate all the buttons in our layout file and set their OnClickListener to "this",
+     * and we locate the Spinner (R.id.toggle_navigation) and set its OnItemSelectedListener to
+     * "this". We inflate into View mCustomView (our custom View) which consists of simply a Button
+     * from its layout file R.layout.action_bar_display_options_custom. Then we retrieve a reference
+     * to this activity's ActionBar into ActionBar bar. We use "bar" to set the custom view for the
+     * ActionBar to View mCustomView with layout parameters WRAP_CONTENT for width and WRAP_CONTENT
+     * for height. Then we add three tabs to the ActionBar, setting their ActionBar.TabListener to
+     * "this". We create an ArrayAdapter<String> adapter using "this" as its context and the system
+     * layout android.R.layout.simple_list_item_1 as its layout file which contains a TextView to
+     * use when instantiating views. We add three items ("Item 1", "Item 2", and "Item 3") to
+     * "adapter" then we the set adapter and navigation callback for list navigation mode to
+     * "adapter" and "this" respectively.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,12 +95,28 @@ public class ActionBarDisplayOptions extends Activity implements View.OnClickLis
         bar.setListNavigationCallbacks(adapter, this);
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu. We simply fetch a  MenuInflater
+     * with this context and use it to inflate our menu R.menu.display_options_actions into the
+     * options menu "Menu menu" passed to us.
+     *
+     * @param menu The options menu in which you place your items.
+     *
+     * @return You must return true for the menu to be displayed;
+     *         if you return false it will not be shown.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.display_options_actions, menu);
         return true;
     }
 
+    /**
+     * Called when a view has been clicked. This is called by all the Button's in our UI which have
+     * had their OnClickListener set to "this".
+     *
+     * @param v Button which was clicked
+     */
     @Override
     public void onClick(View v) {
         final ActionBar bar = getActionBar();
