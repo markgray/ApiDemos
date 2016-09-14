@@ -235,18 +235,69 @@ public class ActionBarDisplayOptions extends Activity implements View.OnClickLis
         bar.setDisplayOptions(change, flags);
     }
 
+    /**
+     * Callback interface invoked when a tab is focused, unfocused, added, or removed. Part of the
+     * ActionBar.TabListener interface we must implement to add a tab to the ActionBar.
+     *
+     * @param tab The tab that was selected
+     * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
+     *        during a tab switch. The previous tab's unselect and this tab's select will be
+     *        executed in a single transaction. This FragmentTransaction does not support
+     *        being added to the back stack.
+     */
     @Override
     public void onTabSelected(Tab tab, FragmentTransaction ft) {
     }
 
+    /**
+     * Called when a tab exits the selected state. Part of the ActionBar.TabListener interface
+     * we must implement to add a tab to the ActionBar.
+     *
+     * @param tab The tab that was unselected
+     * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
+     *        during a tab switch. This tab's unselect and the newly selected tab's select
+     *        will be executed in a single transaction. This FragmentTransaction does not
+     *        support being added to the back stack.
+     */
     @Override
     public void onTabUnselected(Tab tab, FragmentTransaction ft) {
     }
 
+    /**
+     * Called when a tab that is already selected is chosen again by the user.
+     * Some applications may use this action to return to the top level of a category.
+     * Part of the ActionBar.TabListener interface  we must implement to add a tab to the ActionBar.
+     *
+     * @param tab The tab that was reselected.
+     * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
+     *        once this method returns. This FragmentTransaction does not support
+     *        being added to the back stack.
+     */
     @Override
     public void onTabReselected(Tab tab, FragmentTransaction ft) {
     }
 
+    /**
+     * Callback method to be invoked when an item in this view has been
+     * selected. This callback is invoked only when the newly selected
+     * position is different from the previously selected position or if
+     * there was no selected item.
+     *
+     * Part of the Spinner.OnItemSelectedListener interface which is inherited from AbsSpinner,
+     * which is inherited from AdapterView<SpinnerAdapter>, we set the OnItemSelectedListener
+     * of the R.id.toggle_navigation Spinner to "this" and get called when an item in the Spinner
+     * list has been selected. First fetch a reference to the ActionBar into ActionBar bar, then
+     * we perform a switch (which might might as well be an "if") based on the id of the AdapterView
+     * which has had an item selected, and if the id is R.id.toggle_navigation, we switch on the
+     * position of the item in the adapter and set "int mode" to NAVIGATION_MODE_TABS,
+     * NAVIGATION_MODE_LIST, or NAVIGATION_MODE_STANDARD. Before returning we call
+     * ActionBar.setNavigationMode(mode) to set the current navigation mode to the mode selected.
+     *
+     * @param parent The AdapterView where the selection happened
+     * @param view The view within the AdapterView that was clicked
+     * @param position The position of the view in the adapter
+     * @param id The row id of the item that is selected
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         final ActionBar bar = getActionBar();
@@ -268,10 +319,30 @@ public class ActionBarDisplayOptions extends Activity implements View.OnClickLis
         }
     }
 
+    /**
+     * Callback method to be invoked when the selection disappears from this
+     * view. The selection can disappear for instance when touch is activated
+     * or when the adapter becomes empty.
+     *
+     * Part of the Spinner.OnItemSelectedListener interface which is inherited from AbsSpinner,
+     * which is inherited from AdapterView<SpinnerAdapter>, there is nothing we need do.
+     *
+     * @param parent The AdapterView that now contains no selected item.
+     */
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
     }
 
+    /**
+     * This method is called whenever a navigation item in your action bar
+     * is selected. Part of the ActionBar.OnNavigationListener interface which
+     * we implement, there is nothing we want to do, so we return false.
+     *
+     * @param itemPosition Position of the item clicked.
+     * @param itemId ID of the item clicked.
+     *
+     * @return True if the event was handled, false otherwise.
+     */
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
         return false;
