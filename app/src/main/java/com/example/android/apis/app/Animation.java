@@ -41,6 +41,45 @@ import android.widget.Button;
 public class Animation extends Activity {
     private static final String TAG = "Animation";
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation
+     * of onCreate, then we set our content view to our layout file R.layout.activity_animation.
+     *
+     * Now we set up the OnClickListener's for our Button's for all versions of android:
+     *
+     *     R.id.fade_animation ("Fade in") is set to mFadeListener which uses the animation
+     *         R.anim.fade (an animation of alpha from 0.0 to 1.0) which it specifies using
+     *         overridePendingTransition after the startActivity for the Activity we are
+     *         transitioning to.
+     *     R.id.zoom_animation ("Zoom in") is set to mZoomListener which uses the animation
+     *         R.anim.zoom_enter for the new Activity (uses a scale animation to scale from
+     *         2.0 to 1.0 around a centered pivot point), and R.anim.zoom_exit for the old
+     *         Activity (uses a scale animation to scale from 1.0 to 0.5 around a centered
+     *         pivot point, combined in a set with an alpha animation from 1.0 to 0.0) which
+     *         it specifies using overridePendingTransition after the startActivity for the
+     *         Activity we are transitioning to.
+     *
+     * The next 5 Button's are surrounded by an if/else statement. For devices with a version
+     * android.os.Build.VERSION.SDK_INT less than android.os.Build.VERSION_CODES.JELLY_BEAN
+     * 4 of them are disabled (the R.id.no_animation ("NO ANIMATION") Button should really
+     * be outside the if/else). For JELLY_BEAN and above:
+     *
+     *     R.id.modern_fade_animation ("Modern fade in") is set to mModernFadeListener which uses
+     *         an options bundle passed to startActivity containing the same animations used by
+     *         R.id.fade_animation above.
+     *     R.id.modern_zoom_animation ("Modern Zoom in") is set to  mModernZoomListener which uses
+     *         an options bundle passed to startActivity containing the same animations used by
+     *         R.id.zoom_animation above.
+     *     R.id.scale_up_animation ("SCALE UP") is set to mScaleUpListener which uses an options
+     *         bundle passed to startActivity that it creates using makeScaleUpAnimation
+     *     R.id.zoom_thumbnail_animation ("Thumbnail zoom") is set to mZoomThumbnailListener which
+     *         creates a zoom from the Button pressed to the new Activity using an options bundle
+     *         that it creates using makeThumbnailScaleUpAnimation
+     *     R.id.no_animation ("NO ANIMATION") uses overridePendingTransition after the startActivity
+     *         to set the animation used to 0 in and 0 out. Should be outside the if/else statement.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +110,11 @@ public class Animation extends Activity {
         }
     }
 
+    /**
+     * Activities cannot draw during the period that their windows are animating in. In order
+     * to know when it is safe to begin drawing they can override this method which will be
+     * called when the entering animation has completed.
+     */
     @Override
     public void onEnterAnimationComplete() {
         Log.i(TAG, "onEnterAnimationComplete");

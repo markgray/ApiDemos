@@ -242,8 +242,8 @@ App
             the "Zoom In" animation.
             The modern versions of these use ActivityOptions.makeCustomAnimation() and
             ActivityOptions.toBundle() to pass the animations to the startActivity function.
-            The "Scale Up" animation uses AcivityOptions.makeScaleUpAnimation and the 
-            "Thumbnail Scale Up" animation uses AcivityOptions.makeThumbnailScaleUpAnimation
+            The "Scale Up" animation uses ActivityOptions.makeScaleUpAnimation and the
+            "Thumbnail Scale Up" animation uses ActivityOptions.makeThumbnailScaleUpAnimation
             to create options to bundle with toBundle to pass to the startActivity function.
 
     App/Activity/Custom Dialog             all
