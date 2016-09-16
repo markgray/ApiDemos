@@ -121,6 +121,17 @@ public class Animation extends Activity {
     }
 
     private OnClickListener mFadeListener = new OnClickListener() {
+        /**
+         * Called when the R.id.fade_animation ("Fade in") Button is clicked. We start the
+         * Activity AlertDialogSamples, then call overridePendingTransition to specify an
+         * explicit transition animation to perform: R.anim.fade to use for the incoming
+         * Activity (an alpha animation from 0.0 to 1.0), and R.anim.hold for the outgoing
+         * Activity (a do-nothing animation of fromDeltaX from 0.0 to 0.0 for the same time
+         * duration as the incoming animation)
+         *
+         * @param v Button which was clicked
+         */
+        @Override
         public void onClick(View v) {
             Log.i(TAG, "Starting fade-in animation...");
             // Request the next activity transition (here starting a new one).
@@ -134,6 +145,18 @@ public class Animation extends Activity {
     };
 
     private OnClickListener mZoomListener = new OnClickListener() {
+        /**
+         * Called when the R.id.zoom_animation ("Zoom in") Button is clicked. We start the
+         * Activity AlertDialogSamples, then call overridePendingTransition to specify an
+         * explicit transition animation to perform: R.anim.zoom_enter to use for the incoming
+         * Activity (a scale animation from 2.0 to 1.0 around a centered pivot point), and
+         * R.anim.zoom_exit for the outgoing Activity (a scale animation to scale from 1.0 to 0.5
+         * around a centered pivot point, combined in a set with an alpha animation from 1.0 to
+         * 0.0)
+         *
+         * @param v Button which was clicked
+         */
+        @Override
         public void onClick(View v) {
             Log.i(TAG, "Starting zoom-in animation...");
             // Request the next activity transition (here starting a new one).
@@ -148,6 +171,17 @@ public class Animation extends Activity {
     };
 
     private OnClickListener mModernFadeListener = new OnClickListener() {
+        /**
+         * Called when the R.id.modern_fade_animation ("Modern fade in") Button is clicked. We
+         * create ActivityOptions opts using R.anim.fade as the fade in animation (an alpha
+         * animation from 0.0 to 1.0) and R.anim.hold as the fade out animation (a do-nothing
+         * animation of fromDeltaX from 0.0 to 0.0 for the same time duration as the incoming
+         * animation). Then we start the activity AlertDialogSamples using a Bundle created
+         * from "opts" to tell how to animate the transition to the new Activity.
+         *
+         * @param v Button which was clicked
+         */
+        @Override
         public void onClick(View v) {
             Log.i(TAG, "Starting modern-fade-in animation...");
             // Create the desired custom animation, involving transformations
@@ -163,6 +197,7 @@ public class Animation extends Activity {
     };
 
     private OnClickListener mModernZoomListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             Log.i(TAG, "Starting modern-zoom-in animation...");
             // Create a more complicated animation, involving transformations
@@ -178,6 +213,7 @@ public class Animation extends Activity {
     };
 
     private OnClickListener mScaleUpListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             Log.i(TAG, "Starting scale-up animation...");
             // Create a scale-up animation that originates at the button
@@ -190,6 +226,7 @@ public class Animation extends Activity {
     };
 
     private OnClickListener mZoomThumbnailListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             Log.i(TAG, "Starting thumbnail-zoom animation...");
             // Create a thumbnail animation.  We are going to build our thumbnail
@@ -212,6 +249,7 @@ public class Animation extends Activity {
     };
 
     private OnClickListener mNoAnimationListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             Log.i(TAG, "Starting no animation transition...");
             // Request the next activity transition (here starting a new one).
