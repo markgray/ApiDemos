@@ -197,6 +197,17 @@ public class Animation extends Activity {
     };
 
     private OnClickListener mModernZoomListener = new OnClickListener() {
+        /**
+         * Called when the R.id.modern_zoom_animation ("Modern Zoom in") Button is clicked. We
+         * create ActivityOptions opts using R.anim.zoom_enter as the animation to use for the
+         * incoming Activity (a scale animation from 2.0 to 1.0 around a centered  pivot point),
+         * and R.anim.zoom_exit for the outgoing Activity (a scale animation to scale from 1.0
+         * to 0.5 around a centered pivot point combined in a set with an alpha animation from
+         * 1.0 to 0.0) Then we start the activity AlertDialogSamples using a Bundle created
+         * from "opts" to tell how to animate the transition to the new Activity.
+         *
+         * @param v Button which was clicked
+         */
         @Override
         public void onClick(View v) {
             Log.i(TAG, "Starting modern-zoom-in animation...");
@@ -213,6 +224,15 @@ public class Animation extends Activity {
     };
 
     private OnClickListener mScaleUpListener = new OnClickListener() {
+        /**
+         * Called when the R.id.scale_up_animation ("SCALE UP") Button is clicked. We create
+         * ActivityOptions opts using makeScaleUpAnimation, which specifies an animation which
+         * scales up from the Button which was pressed. Then we start the activity
+         * AlertDialogSamples using a Bundle created from "opts" to tell how to animate the
+         * transition to the new Activity.
+         *
+         * @param v Button which was clicked
+         */
         @Override
         public void onClick(View v) {
             Log.i(TAG, "Starting scale-up animation...");
@@ -226,6 +246,22 @@ public class Animation extends Activity {
     };
 
     private OnClickListener mZoomThumbnailListener = new OnClickListener() {
+        /**
+         * Called when the R.id.zoom_thumbnail_animation ("Thumbnail zoom") is clicked. We create
+         * ActivityOptions opts using makeThumbnailScaleUpAnimation. To do this we call the method
+         * v.setDrawingCacheEnabled(true) to enable the drawing cache for the Button that was pressed,
+         * v.setPressed(false) to make sure the Button is not selected and v.refreshDrawableState()
+         * to make sure the Button is redrawn. We set "Bitmap bm" to the bitmap in which the View
+         * v's drawing is cached (Canvas c is unused), then we set ActivityOptions opts to an
+         * ActivityOptions specifying an animation where a thumbnail ("bm") is scaled from the
+         * position (0,0) to the new activity window that is being started by using the method
+         * ActivityOptions.makeThumbnailScaleUpAnimation. Then we start the activity
+         * AlertDialogSamples using a Bundle created from "opts" to tell how to animate the
+         * transition to the new Activity. Finally we call v.setDrawingCacheEnabled(false) to
+         * disable the drawing cache.
+         *
+         * @param v Button which was clicked
+         */
         @Override
         public void onClick(View v) {
             Log.i(TAG, "Starting thumbnail-zoom animation...");
@@ -249,6 +285,13 @@ public class Animation extends Activity {
     };
 
     private OnClickListener mNoAnimationListener = new OnClickListener() {
+        /**
+         * Called when the R.id.no_animation ("NO ANIMATION") Button is clicked. We use
+         * overridePendingTransition after the startActivity to set the animation used to 0 in
+         * and 0 out. I would argue that this should be outside the if/else statement.
+         *
+         * @param v Button which was clicked
+         */
         @Override
         public void onClick(View v) {
             Log.i(TAG, "Starting no animation transition...");
