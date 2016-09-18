@@ -50,11 +50,14 @@ App/Title/Custom Title
  * </table> 
  */
 public class CustomTitle extends Activity {
-    
     /**
-     * Initialization of the Activity after it is first created.  Must at least
-     * call {@link android.app.Activity#setContentView(int)} to
-     * describe what is to be displayed in the screen.
+     * Called when the activity is starting. First we call through to our super's implementation
+     * of onCreate. Then we request the window feature FEATURE_CUSTOM_TITLE, set our content view
+     * to our layout file R.layout.custom_title, retrieve the current Window for the activity and
+     * use it to set the value of the Window's FEATURE_CUSTOM_TITLE to the layout file we want it
+     * to use: R.layout.custom_title_1.
+     *
+     * @param savedInstanceState always null since we not override onSaveInstanceState
      */
     @Override
 	protected void onCreate(Bundle savedInstanceState) {

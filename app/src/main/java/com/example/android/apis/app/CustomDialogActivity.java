@@ -31,9 +31,19 @@ import android.os.Bundle;
  */
 public class CustomDialogActivity extends Activity {
     /**
-     * Initialization of the Activity after it is first created.  Must at least
-     * call {@link android.app.Activity#setContentView setContentView()} to
-     * describe what is to be displayed in the screen.
+     * Called when the activity is starting. First we call through to the super's implementation
+     * of onCreate, then we set our content view to our layout file R.layout.custom_dialog_activity.
+     * The demo is completely specified by xml files:
+     *
+     *     AndroidManifest.xml sets the theme using android:theme="@style/Theme.CustomDialog">
+     *     style/Theme.CustomDialog defined in the file values/styles.xml is derived from
+     *         parent="android:style/Theme.Dialog", and sets the background with
+     *         <item name="android:windowBackground">@drawable/filled_box</item>
+     *     drawable/filled_box.xml draws a box using a <shape> element to define a colored box
+     *         surrounded by a border of a different color
+     *     layout/custom_dialog_activity Layout file containing a TextView
+     *
+     * @param savedInstanceState always null since we do not override onSaveInstanceState
      */
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
