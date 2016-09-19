@@ -55,7 +55,22 @@ public class CustomTitle extends Activity {
      * of onCreate. Then we request the window feature FEATURE_CUSTOM_TITLE, set our content view
      * to our layout file R.layout.custom_title, retrieve the current Window for the activity and
      * use it to set the value of the Window's FEATURE_CUSTOM_TITLE to the layout file we want it
-     * to use: R.layout.custom_title_1.
+     * to use: R.layout.custom_title_1. Next we locate the input and output View's of our layout:
+     *
+     * TextView leftText (R.id.left_text) the left TextView of our custom title
+     * TextView rightText (R.id.right_text) the right TextView of our custom title
+     * EditText leftTextEdit (R.id.left_text_edit) the EditText for entering a new left TextView
+     *     for our custom title
+     * EditText rightTextEdit (R.id.right_text_edit) the EditText for entering a new right TextView
+     *     for our custom title
+     * Button leftButton (R.id.left_text_button) the Button used to set "leftText" to the contents
+     *     of "leftTextEdit"
+     * Button rightButton (R.id.right_text_button) the Button used to set "rightText" to the contents
+     *     of "rightTextEdit"
+     *
+     * Finally we set the onClickListener of "leftButton" to set the text of "leftText" to the
+     * contents of "leftTextEdit" when pressed, and "rightButton" to set the text of "rightText"
+     * to the contents of "rightTextEdit" when pressed.
      *
      * @param savedInstanceState always null since we not override onSaveInstanceState
      */

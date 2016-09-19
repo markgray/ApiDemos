@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2008 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2008 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -18,35 +17,53 @@
      See corresponding Java code com.android.sdk.app.DialogActivity.java. -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent" android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="4dp" android:gravity="center_horizontal">
-    
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="4dp"
+    tools:targetApi="honeycomb">
+
     <!-- Message to show to use. -->
-    <TextView android:id="@+id/text"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical|center_horizontal"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/dialog_activity_text"/>
-        
+        android:text="@string/dialog_activity_text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
     <!-- Container in which we are going to add and remove views, to demonstrate
          how the layout adjusts based on size. -->
-    <LinearLayout android:id="@+id/inner_content"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="4dp" android:paddingBottom="4dp">
-    </LinearLayout>
-    
+    <LinearLayout
+        android:id="@+id/inner_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp"/>
+
     <!-- Alert dialog style buttons along the bottom. -->
-    <LinearLayout style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:measureWithLargestChild="true">
-        <Button style="?android:attr/buttonBarButtonStyle" android:id="@+id/add"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
+
+        <Button
+            android:id="@+id/add"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/dialog_activity_add" />
-        <Button style="?android:attr/buttonBarButtonStyle" android:id="@+id/remove"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
+
+        <Button
+            android:id="@+id/remove"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/dialog_activity_remove" />
     </LinearLayout>

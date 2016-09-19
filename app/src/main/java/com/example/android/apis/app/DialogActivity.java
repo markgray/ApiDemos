@@ -37,9 +37,30 @@ import android.widget.LinearLayout;
  */
 public class DialogActivity extends Activity {
     /**
-     * Initialization of the Activity after it is first created.  Must at least
-     * call {@link android.app.Activity#setContentView setContentView()} to
-     * describe what is to be displayed in the screen.
+     * Called when the activity is starting. First we call through to our super's implementation
+     * of onCreate. Then we request the window feature FEATURE_LEFT_ICON (the flag for having an
+     * icon on the left side of the title bar). Then we set our content view to our layout file
+     * R.layout.dialog_activity. Our entry in AndroidManifest set the theme to be used for our
+     * layout using the attribute android:theme="@style/ThemeCurrentDialog", which is defined
+     * using a style style derived from a theme that is appropriate and available given the Api
+     * level: style/ThemeCurrentDialog is defined in each:
+     *
+     *     values/styles.xml uses android:Theme.Dialog
+     *     values-v11/styles.xml uses android:Theme.Holo.Dialog
+     *     values-v19/styles.xml uses android:Theme.Material.Dialog
+     *     values-v20/styles.xml uses android:Theme.Material.Light.Dialog
+     *
+     * Then we try to set the title to "This is just a test" but nothing happens?
+     *
+     * Next we set the value for a drawable feature of this window (FEATURE_LEFT_ICON), from a
+     * resource identifier (android.R.drawable.ic_dialog_alert). We find the Button R.id.add
+     * ("ADD CONTENT") and set its OnClickListener to OnClickListener mAddContentListener (which
+     * adds an icon to the LinearLayout R.id.inner_content) and find the Button R.id.remove
+     * ("REMOVE CONTENT") and set its OnClickListener to OnClickListener mRemoveContentListener
+     * (which removes the last icon added to the LinearLayout R.id.inner_content is there are any
+     * remaining.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +86,11 @@ public class DialogActivity extends Activity {
     }
 
     private OnClickListener mAddContentListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             LinearLayout layout = (LinearLayout)findViewById(R.id.inner_content);
             ImageView iv = new ImageView(DialogActivity.this);
+            //noinspection deprecation
             iv.setImageDrawable(getResources().getDrawable(R.drawable.icon48x48_1));
             iv.setPadding(4, 4, 4, 4);
             layout.addView(iv);
@@ -75,6 +98,7 @@ public class DialogActivity extends Activity {
     };
 
     private OnClickListener mRemoveContentListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             LinearLayout layout = (LinearLayout)findViewById(R.id.inner_content);
             int num = layout.getChildCount();
