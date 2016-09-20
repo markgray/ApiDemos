@@ -86,6 +86,15 @@ public class DialogActivity extends Activity {
     }
 
     private OnClickListener mAddContentListener = new OnClickListener() {
+        /**
+         * Called when the Button R.id.add ("ADD CONTENT") is clicked. First we locate the
+         * LinearLayout layout (R.id.inner_content) in which we will add our content to, then
+         * create ImageView iv and set drawable R.drawable.icon48x48_1 as the content of this
+         * ImageView, set the ImageView's padding to 4 pixels on each side, and finally add this
+         * ImageView as a child to LinearLayout layout.
+         *
+         * @param v Button which was clicked: (R.id.add "ADD CONTENT")
+         */
         @Override
         public void onClick(View v) {
             LinearLayout layout = (LinearLayout)findViewById(R.id.inner_content);
@@ -98,6 +107,14 @@ public class DialogActivity extends Activity {
     };
 
     private OnClickListener mRemoveContentListener = new OnClickListener() {
+        /**
+         * Called when the Button R.id.remove ("REMOVE CONTENT") is clicked. First we locate the
+         * LinearLayout layout (R.id.inner_content) which holds the icons which were added to our
+         * content, determine the number of children in the group, and if there are more than 0 we
+         * remove the last icon added (at getChildCount()-1 since the group position is zero based.
+         *
+         * @param v v Button which was clicked: R.id.remove ("REMOVE CONTENT")
+         */
         @Override
         public void onClick(View v) {
             LinearLayout layout = (LinearLayout)findViewById(R.id.inner_content);

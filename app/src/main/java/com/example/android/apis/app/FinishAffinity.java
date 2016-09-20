@@ -29,11 +29,21 @@ import android.widget.TextView;
 
 import com.example.android.apis.R;
 
+/**
+ * Show how to end a deeply nested stack of activities, returning to the activity at the very top.
+ * It does this by calling finishAffinity() which finishes this activity as well as all activities
+ * immediately below it in the current task that have the same affinity.
+ */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 @SuppressLint("SetTextI18n")
 public class FinishAffinity extends Activity {
     int mNesting;
+    /**
+     * OnClickListener for the R.id.nest ("Nest some more") Button, it starts another instance of
+     * this Activity when the Button is clicked.
+     */
     private OnClickListener mNestListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             Intent intent = new Intent(FinishAffinity.this, FinishAffinity.class);
             intent.putExtra("nesting", mNesting + 1);
@@ -41,6 +51,7 @@ public class FinishAffinity extends Activity {
         }
     };
     private OnClickListener mFinishListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             finishAffinity();
         }
