@@ -54,8 +54,14 @@ App/Activity/Receive Result
         </tr>
 </table>
  */
-public class Forwarding extends Activity
-{
+public class Forwarding extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.forwarding. We locate the
+     * Button goButton (R.id.go "GO") in our layout, then set its OnClickListener to mGoListener.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
 	protected void onCreate(Bundle savedInstanceState)
     {
@@ -68,10 +74,20 @@ public class Forwarding extends Activity
         goButton.setOnClickListener(mGoListener);
     }
 
+    /**
+     * Used as the OnClickListener for the Button R.id.go "GO"
+     */
     private OnClickListener mGoListener = new OnClickListener()
     {
-        public void onClick(View v)
-        {
+        /**
+         * First we create an Intent intent, then we set the component name of the Intent to our
+         * target Activity "ForwardTarget", we start that Activity by calling startActivity(intent),
+         * and finally call Activity.finish() to close this Activity.
+         *
+         * @param v Button R.id.go "GO" which was clicked.
+         */
+        @Override
+        public void onClick(View v) {
             // Here we start the next activity, and then call finish()
             // so that our own will stop running and be removed from the
             // history stack.

@@ -45,16 +45,19 @@ App/Activity/Hello World
  *         </tr>
  * </table> 
  */
-public class HelloWorld extends Activity
-{
+public class HelloWorld extends Activity {
     /**
      * Initialization of the Activity after it is first created.  Must at least
      * call {@link android.app.Activity#setContentView setContentView()} to
      * describe what is to be displayed in the screen.
+     *
+     * First we call through to our super's implementation of onCreate, then we set out content
+     * view to our layout file R.layout.hello_world
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden.
      */
     @Override
-	protected void onCreate(Bundle savedInstanceState)
-    {
+	protected void onCreate(Bundle savedInstanceState) {
         // Be sure to call the super class.
         super.onCreate(savedInstanceState);
 

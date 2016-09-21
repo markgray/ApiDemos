@@ -18,6 +18,14 @@ import android.widget.Button;
 
 /**
  * Example of various Intent flags to modify the activity stack.
+ * This activity demonstrates how to build a backstack of activities into an array of Intent[]
+ * and use it to replace the current backstack by using makeRestartActivityTask() to create
+ * Intent[0] with the flags set to re-launch ApiDemos task in its base state, Intent[1] to
+ * launch ApiDemos at the "Views" "com.example.android.apis.Path", Intent[2] to launch ApiDemos
+ * at the "Views/Lists" "com.example.android.apis.Path" and requesting to reset the back stack
+ * to these three "activities". It then launches these intents using startActivities() if the
+ * FLAG_ACTIVITY_CLEAR_TASK button is pressed, or putting them into a PendingIntent which it
+ * "later" calls using PendingIntent.send()
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class IntentActivityFlags extends Activity {

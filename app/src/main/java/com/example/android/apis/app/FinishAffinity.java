@@ -43,6 +43,13 @@ public class FinishAffinity extends Activity {
      * this Activity when the Button is clicked.
      */
     private OnClickListener mNestListener = new OnClickListener() {
+        /**
+         * We create Intent intent which will start another instance of this activity, then add one
+         * more than the current value of our field mNesting as an extra to the Intent under the
+         * name "nesting", and finally we start the new instance of this Activity.
+         *
+         * @param v Button which was clicked: R.id.nest ("Nest some more")
+         */
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(FinishAffinity.this, FinishAffinity.class);
@@ -50,13 +57,35 @@ public class FinishAffinity extends Activity {
             startActivity(intent);
         }
     };
+    /**
+     * OnClickListener for the R.id.finish ("FINISH") Button, it simply calls the method
+     * Activity.finishAffinity() which finishes this activity as well as all activities
+     * immediately below it in the current task that have the same affinity.
+     */
     private OnClickListener mFinishListener = new OnClickListener() {
+        /**
+         * Simply call Activity.finishAffinity() which finishes this activity as well as all
+         * activities immediately below it in the current task that have the same affinity.
+         *
+         * @param v Button which was clicked: R.id.finish ("FINISH")
+         */
         @Override
         public void onClick(View v) {
             finishAffinity();
         }
     };
 
+    /**
+     * Called when the activity is starting. First we call through to the super's implementation
+     * of onCreate, then we set our content view to our layout R.layout.activity_finish_affinity.
+     * Next we fetch the fetch the value of the int stored as an extra under the key "nesting" in
+     * the Intent what launched us (defaulting to the value "1" if unset) and store it in our field
+     * mNesting. Finally we locate the Button R.id.nest in our layout and set its OnClickListener to
+     * mNestListener, and find the Button R.id.finish and set its OnClickListener to mFinishListener.
+     *
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

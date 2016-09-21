@@ -30,9 +30,14 @@ import android.os.Bundle;
  */
 public class ForwardTarget extends Activity
 {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation
+     * of onCreate, then we set our content view to our layout file R.layout.forward_target.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
-	protected void onCreate(Bundle savedInstanceState)
-    {
+	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.forward_target);
