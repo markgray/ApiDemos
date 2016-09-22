@@ -29,6 +29,16 @@ import android.widget.Button;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class IntentActivityFlags extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.intent_activity_flags.
+     * Next we locate the Button R.id.flag_activity_clear_task ("FLAG_ACTIVITY_CLEAR_TASK") and set
+     * its OnClickListener to mFlagActivityClearTaskListener, and finally we locate the Button
+     * R.id.flag_activity_clear_task_pi ("FLAG_ACTIVITY_CLEAR_TASK (PI)") and set its OnClickListener
+     * to mFlagActivityClearTaskPIListener.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,10 +53,23 @@ public class IntentActivityFlags extends Activity {
     }
 
     /**
-     * This creates an array of Intent objects representing the back stack
-     * for a user going into the Views/Lists API demos.
+     * This creates an array of Intent objects representing the back stack for a user going into
+     * the Views/Lists API demos. First we create an array of three Intents[] intents:
+     *
+     *     intents[0] is an Intent that can be used to re-launch an application's task in its base
+     *                state using a component identifier for com.example.android.apis.ApiDemos as
+     *                the activity component that is the root of the task.
+     *     intents[1] is an Intent with the component name of com.example.android.apis.ApiDemos and
+     *                with the added extended date "Views" stored as "com.example.android.apis.Path"
+     *                (ApiDemos fetches this value to determine how to populate the List it displays)
+     *     intents[2] is an Intent with the component name of com.example.android.apis.ApiDemos and
+     *                with the added extended date "Views/Lists" stored as "com.example.android.apis.Path"
+     *                (ApiDemos fetches this value to determine how to populate the List it displays)
+     *
+     * Finally we return the Intent[] intents to the caller.
+     *
+     * @return an array of Intent's
      */
-
     private Intent[] buildIntentsToViewsLists() {
         // We are going to rebuild our task with a new back stack.  This will
         // be done by launching an array of Intents, representing the new
@@ -74,13 +97,36 @@ public class IntentActivityFlags extends Activity {
     }
 
 
+    /**
+     * OnClickListener for the R.id.flag_activity_clear_task ("FLAG_ACTIVITY_CLEAR_TASK") Button
+     */
     private OnClickListener mFlagActivityClearTaskListener = new OnClickListener() {
+        /**
+         * We create an Intent[] array with three Intents and then start this set of activities
+         * as a synthesized task stack.
+         *
+         * @param v R.id.flag_activity_clear_task ("FLAG_ACTIVITY_CLEAR_TASK") Button which was clicked
+         */
+        @Override
         public void onClick(View v) {
             startActivities(buildIntentsToViewsLists());
         }
     };
 
+    /**
+     * OnClickListener for the R.id.flag_activity_clear_task_pi ("FLAG_ACTIVITY_CLEAR_TASK (PI)")
+     * Button
+     */
     private OnClickListener mFlagActivityClearTaskPIListener = new OnClickListener() {
+        /**
+         * We create a PendingIntent using the same Intent[] array used for the "FLAG_ACTIVITY_CLEAR_TASK"
+         * Button, and then perform the operation associated with this PendingIntent. This causes the
+         * Intent[2] to be started again with the Intent[] array used as a synthesized task stack.
+         *
+         * @param v R.id.flag_activity_clear_task_pi ("FLAG_ACTIVITY_CLEAR_TASK (PI)") Button which
+         *          was clicked
+         */
+        @Override
         public void onClick(View v) {
             Context context = IntentActivityFlags.this;
 

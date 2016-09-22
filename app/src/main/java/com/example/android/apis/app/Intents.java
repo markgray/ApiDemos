@@ -23,7 +23,18 @@ import android.view.View;
 
 import com.example.android.apis.R;
 
+/**
+ * Uses Intent.createChooser(Intent, "title") to create a "chooser intent"  from three different
+ * mime types ("audio/*", "image/*", and "*&#47;*") of Intent.ACTION_GET_CONTENT Intents based on which
+ * button the user clicks, and it then hands the created "chooser Intent" to startActivity(Intent)
+ */
 public class Intents extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.intents.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
