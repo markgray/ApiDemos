@@ -42,18 +42,45 @@ public class Intents extends Activity {
         setContentView(R.layout.intents);
     }
 
+    /**
+     * Set as the OnClickListener for the R.id.get_music ("GET MUSIC") Button in the layout using
+     * the attribute android:onClick="onGetMusic". First we create an Intent intent with the
+     * action ACTION_GET_CONTENT, set the type of the Intent to "audio/*" and finally create an
+     * action chooser Intent with the title "Select music" from Intent intent, and start that chooser
+     * Activity using the chooser Intent.
+     *
+     * @param view R.id.get_music ("GET MUSIC") Button which was clicked
+     */
     public void onGetMusic(View view) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("audio/*");
         startActivity(Intent.createChooser(intent, "Select music"));
     }
 
+    /**
+     * Set as the OnClickListener for the R.id.get_image ("GET IMAGE") Button in the layout using
+     * the attribute android:onClick="onGetImage". First we create an Intent intent with the
+     * action ACTION_GET_CONTENT, set the type of the Intent to "image/*" and finally create an
+     * action chooser Intent with the title "Select image" from Intent intent, and start that chooser
+     * Activity using the chooser Intent.
+     *
+     * @param view R.id.get_image ("GET IMAGE") Button which was clicked
+     */
     public void onGetImage(View view) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         startActivity(Intent.createChooser(intent, "Select image"));
     }
 
+    /**
+     * Set as the OnClickListener for the R.id.get_stream ("GET STREAM") Button in the layout using
+     * the attribute android:onClick="onGetStream". First we create an Intent intent with the
+     * action ACTION_GET_CONTENT, set the type of the Intent to "*&#47;*" and finally create an
+     * action chooser Intent with the title "Select stream" from Intent intent, and start that chooser
+     * Activity using the chooser Intent.
+     *
+     * @param view R.id.get_stream ("GET STREAM") Button which was clicked
+     */
     public void onGetStream(View view) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");

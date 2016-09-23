@@ -63,13 +63,16 @@ import android.widget.TextView;
  * </table>
  *
  */
-public class PersistentState extends Activity
-{
+public class PersistentState extends Activity {
     /**
      * Initialization of the Activity after it is first created.  Here we use
      * {@link android.app.Activity#setContentView setContentView()} to set up
-     * the Activity's content, and retrieve the EditText widget whose state we
-     * will persistent.
+     * the Activity's content to our layout file R.layout.save_restore_state,
+     * set the TextView R.id.msg to the string R.string.persistent_msg, and
+     * retrieve the EditText widget (R.id.saved) whose state we will persistent
+     * and save a reference to it in our field EditText mSaved.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +94,16 @@ public class PersistentState extends Activity
     /**
      * Upon being resumed we can retrieve the current state.  This allows us
      * to update the state if it was changed at any time while paused.
+     *
+     * First we call through to the super's implementation of onResume, then we fetch a shared
+     * preferences Object with the mode MODE_PRIVATE (0) and save in in SharedPreferences prefs.
+     * Then we use "prefs" to retrieve the String restoredText which might have been stored in
+     * the SharedPreferences under the key "text" (defaulting to null). If there was a String
+     * stored there, we set the text of the EditText mSaved to restoredText setting its type
+     * to TextView.BufferType.EDITABLE (an editable text field). Then we fetch the int saved in
+     * "prefs" under the key "selection-start" to int selectionStart, and the int saved under
+     * the key "selection-end" to int selectionEnd (defaulting to -1 for both). If both of these
+     * are not -1, then we set the selection of "mSaved" to them.
      */
     @Override
     protected void onResume() {
