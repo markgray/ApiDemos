@@ -125,6 +125,15 @@ public class PersistentState extends Activity {
     /**
      * Any time we are paused we need to save away the current state, so it
      * will be restored correctly when we are resumed.
+     *
+     * First we call through to our super's implementation of onPause. Then we fetch an Editor
+     * for a shared preferences Object with the mode MODE_PRIVATE (0) and store a reference to
+     * it in SharedPreferences.Editor editor. We use "editor" to save a String value under the key
+     * "text" in the preferences editor containing the text we fetch from the EditText mSaved. We
+     * store the selection start of "mSaved" as an int under the key "selection-start" and the
+     * selection end under the key "selection-end". Finally we commit our preferences changes back
+     * from "editor" to the SharedPreferences object it is editing. This atomically performs
+     * the requested modifications, replacing whatever is currently in the SharedPreferences.
      */
     @Override
     protected void onPause() {

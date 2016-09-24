@@ -81,8 +81,9 @@ import com.example.android.apis.R;
  */
 @TargetApi(Build.VERSION_CODES.M)
 public class PresentationActivity extends Activity
-        implements OnCheckedChangeListener, OnClickListener, OnItemSelectedListener {
-    private final String TAG = "PresentationActivity";
+       implements OnCheckedChangeListener, OnClickListener, OnItemSelectedListener {
+
+    private final String TAG = "PresentationActivity"; // Used for logging
 
     // Key for storing saved instance state.
     private static final String PRESENTATION_KEY = "presentation";
@@ -95,12 +96,12 @@ public class PresentationActivity extends Activity
         R.drawable.sample_4,
     };
 
-    private DisplayManager mDisplayManager;
-    private DisplayListAdapter mDisplayListAdapter;
-    private CheckBox mShowAllDisplaysCheckbox;
+    private DisplayManager mDisplayManager; // Used to manage the properties of attached displays
+    private DisplayListAdapter mDisplayListAdapter; // An ArrayAdapter<Display> to list displays
+    private CheckBox mShowAllDisplaysCheckbox; // Checkbox in layout for displaying all displays
     @SuppressWarnings("FieldCanBeLocal")
-    private ListView mListView;
-    private int mNextImageNumber;
+    private ListView mListView; // ListView in layout
+    private int mNextImageNumber; // Used to cycle through the 8 photos displayed
 
     // List of presentation contents indexed by displayId.
     // This state persists so that we can restore the old presentation
@@ -115,6 +116,23 @@ public class PresentationActivity extends Activity
      * Initialization of the Activity after it is first created.  Must at least
      * call {@link android.app.Activity#setContentView setContentView()} to
      * describe what is to be displayed in the screen.
+     *
+     * First we call through to our super's implementation of onCreate. Then if savedInstanceState
+     * is not null (our Activity is being restarted after previously being shut down) we retrieve the
+     * value of SparseArray<DemoPresentation> mActivePresentations that we saved when our callback
+     * onSaveInstanceState was called, and if it is null we simply set mActivePresentations to a new
+     * instance of SparseArray<DemoPresentation>. Next we set our field DisplayManager mDisplayManager
+     * to the handle for the DISPLAY_SERVICE system-level service. We set our content view to our
+     * layout file R.layout.presentation_activity, find the CheckBox R.id.show_all_displays ("Show
+     * all displays") save a reference in the field CheckBox mShowAllDisplaysCheckbox and set its
+     * OnCheckedListener to "this". We set our field DisplayListAdapter mDisplayListAdapter to a new
+     * instance of our class DisplayListAdapter using "this" as its Context, find the ListView
+     * R.id.display_list in our layout, save a reference in our field ListView mListView, and set the
+     * adapter of mListView to mDisplayListAdapter.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +165,12 @@ public class PresentationActivity extends Activity
         mListView.setAdapter(mDisplayListAdapter);
     }
 
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or
+     * {@link #onPause}, for your activity to start interacting with the user.
+     *
+     * First we call through to our super's implementation of onResume.
+     */
     @Override
     protected void onResume() {
         // Be sure to call the super class.
