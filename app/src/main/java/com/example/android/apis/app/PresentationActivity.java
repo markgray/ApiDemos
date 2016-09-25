@@ -169,7 +169,17 @@ public class PresentationActivity extends Activity
      * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or
      * {@link #onPause}, for your activity to start interacting with the user.
      *
-     * First we call through to our super's implementation of onResume.
+     * First we call through to our super's implementation of onResume. Then we update the contents
+     * of the display list adapter to show information about all current displays by calling our
+     * method DisplayListAdapter.updateContents(). Then we restore presentations from before the
+     * activity was paused by first finding the number of Display's known to the mDisplayListAdapter
+     * adapter, then looping though those Display's, fetching the Display display from the adapter
+     * and using the display id to index into the SparseArray mSavedPresentationContents to fetch
+     * the DemoPresentationContents contents for that Display and if the "contents" is not null we
+     * shows that "contents" on the specified display. When done restoring the presentations we
+     * remove all key-value mappings from the SparseArray mSavedPresentationContents. Finally we
+     * register our display listener "DisplayManager.DisplayListener mDisplayListener" to receive
+     * notifications about when displays are added, removed or changed.
      */
     @Override
     protected void onResume() {
@@ -183,6 +193,7 @@ public class PresentationActivity extends Activity
         final int numDisplays = mDisplayListAdapter.getCount();
         for (int i = 0; i < numDisplays; i++) {
             final Display display = mDisplayListAdapter.getItem(i);
+            //noinspection ConstantConditions
             final DemoPresentationContents contents =
                     mSavedPresentationContents.get(display.getDisplayId());
             if (contents != null) {
@@ -195,6 +206,20 @@ public class PresentationActivity extends Activity
         mDisplayManager.registerDisplayListener(mDisplayListener, null);
     }
 
+    /**
+     * Called as part of the activity lifecycle when an activity is going into
+     * the background, but has not (yet) been killed.  The counterpart to
+     * {@link #onResume}.
+     *
+     * First we call through to our super's implementation of onPause. Then we unregister our
+     * display listener "DisplayManager.DisplayListener mDisplayListener". Then we loop through
+     * "SparseArray<DemoPresentation> mActivePresentations" (our list of all currently visible
+     * presentations indexed by display id) fetching the "DemoPresentation presentation" stored
+     * there and the "int displayId" it was stored under and use these to add a mapping from the
+     * "displayId" to "presentation". Then we call presentation.dismiss() to dismiss that
+     * presentation. When done saving all the presentations to "mSavedPresentationContents" and
+     * dissmissing them we remove all key-value mappings the SparseArray mActivePresentations.
+     */
     @Override
     protected void onPause() {
         // Be sure to call the super class.
@@ -394,11 +419,13 @@ public class PresentationActivity extends Activity
     private final class DisplayListAdapter extends ArrayAdapter<Display> {
         final Context mContext;
 
+        @SuppressWarnings("WeakerAccess")
         public DisplayListAdapter(Context context) {
             super(context, R.layout.presentation_list_item);
             mContext = context;
         }
 
+        @SuppressWarnings("NullableProblems")
         @SuppressLint({"InflateParams", "DefaultLocale"})
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -411,6 +438,7 @@ public class PresentationActivity extends Activity
             }
 
             final Display display = getItem(position);
+            //noinspection ConstantConditions
             final int displayId = display.getDisplayId();
 
             DemoPresentation presentation = mActivePresentations.get(displayId);
@@ -466,6 +494,7 @@ public class PresentationActivity extends Activity
          * Update the contents of the display list adapter to show
          * information about all current displays.
          */
+        @SuppressWarnings("WeakerAccess")
         public void updateContents() {
             clear();
 
@@ -496,8 +525,9 @@ public class PresentationActivity extends Activity
 
         final DemoPresentationContents mContents;
 
+        @SuppressWarnings("WeakerAccess")
         public DemoPresentation(Context context, Display display,
-                DemoPresentationContents contents) {
+                                DemoPresentationContents contents) {
             super(context, display);
             mContents = contents;
         }
@@ -505,9 +535,11 @@ public class PresentationActivity extends Activity
         /**
          * Sets the preferred display mode id for the presentation.
          */
+        @SuppressWarnings("WeakerAccess")
         public void setPreferredDisplayMode(int modeId) {
             mContents.displayModeId = modeId;
 
+            //noinspection ConstantConditions
             WindowManager.LayoutParams params = getWindow().getAttributes();
             params.preferredDisplayModeId = modeId;
             getWindow().setAttributes(params);
@@ -573,6 +605,7 @@ public class PresentationActivity extends Activity
             }
         };
 
+        @SuppressWarnings("WeakerAccess")
         public DemoPresentationContents(int photo) {
             this.photo = photo;
             colors = new int[] {
