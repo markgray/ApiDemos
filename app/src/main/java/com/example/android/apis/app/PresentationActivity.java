@@ -218,7 +218,7 @@ public class PresentationActivity extends Activity
      * there and the "int displayId" it was stored under and use these to add a mapping from the
      * "displayId" to "presentation". Then we call presentation.dismiss() to dismiss that
      * presentation. When done saving all the presentations to "mSavedPresentationContents" and
-     * dissmissing them we remove all key-value mappings the SparseArray mActivePresentations.
+     * dismissing them we remove all key-value mappings the SparseArray mActivePresentations.
      */
     @Override
     protected void onPause() {
@@ -239,6 +239,18 @@ public class PresentationActivity extends Activity
         mActivePresentations.clear();
     }
 
+    /**
+     * Called to retrieve per-instance state from an activity before being killed
+     * so that the state can be restored in {@link #onCreate} or
+     * {@link #onRestoreInstanceState} (the {@link Bundle} populated by this method
+     * will be passed to both).
+     *
+     * First we call through to our super's implementation of onSaveInstanceState, then we insert
+     * our SparseArray<DemoPresentationContents> mSavedPresentationContents into the mapping of
+     * the Bundle outState using the key PRESENTATION_KEY ("presentation").
+     *
+     * @param outState Bundle in which to place your saved state.
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         // Be sure to call the super class.
@@ -248,6 +260,17 @@ public class PresentationActivity extends Activity
 
     /**
      * Shows a {@link Presentation} on the specified display.
+     *
+     * First we retrieve the displayId from the Display display passed us, if there is already
+     * a DemoPresentation in mActivePresentations for that display we return having done nothing.
+     * Otherwise we create a DemoPresentation presentation for that Display display and
+     * DemoPresentationContents contents, show the presentation on that Display, set the
+     * OnDismissListener of the presentation to "mOnDismissListener", and finally add the
+     * presentation to our SparseArray<DemoPresentation> mActivePresentations under the key
+     * displayId.
+     *
+     * @param display Display to show the DemoPresentationContents contents on
+     * @param contents Information about the content we want to show in the presentation.
      */
     private void showPresentation(Display display, DemoPresentationContents contents) {
         final int displayId = display.getDisplayId();
@@ -266,6 +289,14 @@ public class PresentationActivity extends Activity
 
     /**
      * Hides a {@link Presentation} on the specified display.
+     *
+     * First we fetch the display Id of the Display display into displayId, then we retrieve the
+     * DemoPresentation presentation stored under the key displayId in SparseArray<DemoPresentation>
+     * mActivePresentations, and if there is no presentation recorded there we return having done
+     * nothing. If there is a presentation on that displayId we dismiss() it and delete the
+     * presentation stored under the key displayId in the mActivePresentations array.
+     *
+     * @param display Display whose presentation we want to hide.
      */
     private void hidePresentation(Display display) {
         final int displayId = display.getDisplayId();
@@ -283,6 +314,15 @@ public class PresentationActivity extends Activity
     /**
      * Sets the display mode of the {@link Presentation} on the specified display
      * if it is already shown.
+     *
+     * First we fetch the display Id from the Display display, and if there is no DemoPresentation
+     * presentation stored in SparseArray<DemoPresentation> mActivePresentations under that key we
+     * return having done nothing. Otherwise we call setPreferredDisplayMode to set the preferred
+     * display mode of the presentation being displayed on that screen to the "int displayModeId"
+     * passed to us.
+     *
+     * @param display Display to set the display mode on
+     * @param displayModeId display mode Id to set the display's Display.Mode to.
      */
     private void setPresentationDisplayMode(Display display, int displayModeId) {
         final int displayId = display.getDisplayId();
@@ -294,6 +334,14 @@ public class PresentationActivity extends Activity
         presentation.setPreferredDisplayMode(displayModeId);
     }
 
+    /**
+     * Returns the mNextImageNumber to use to index into the int PHOTOS[] array of resource id's
+     * in order choose a photo resource id to display, then performs a modular increment of
+     * mNextImageNumber modulus PHOTOS.length in order to wrap around to 0 when all photos have
+     * been used.
+     *
+     * @return index to int PHOTOS[] array of resource id's that is next to be displayed
+     */
     private int getNextPhoto() {
         final int photo = mNextImageNumber;
         mNextImageNumber = (mNextImageNumber + 1) % PHOTOS.length;
