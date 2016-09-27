@@ -349,8 +349,22 @@ public class PresentationActivity extends Activity
     }
 
     /**
-     * Called when the show all displays checkbox is toggled or when
-     * an item in the list of displays is checked or unchecked.
+     * Called when the show all displays checkbox is toggled or when an item in the list of
+     * displays is checked or unchecked.
+     *
+     * First we check if it was the "show all displays checkbox" and if it is we call
+     * mDisplayListAdapter.updateContents() to update the contents of the display list adapter
+     * to show information about all current displays. Otherwise one of the items in the list of
+     * displays has been clicked so we retrieve the CompoundButton buttonView's tag to Display
+     * display and if the checkbox is now checked (isChecked == true) we create a new
+     * DemoPresentationContents contents from the next photo due to be displayed and show this
+     * contents DemoPresentationContents on the Display display, and if it is not checked we hide
+     * the presentation on that display by calling hidePresentation(display). In either case we
+     * then call mDisplayListAdapter.updateContents() to update the contents of the display list
+     * adapter.
+     *
+     * @param buttonView The compound button view whose state has changed.
+     * @param isChecked The new checked state of buttonView.
      */
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -371,8 +385,17 @@ public class PresentationActivity extends Activity
     }
 
     /**
-     * Called when the Info button next to a display is clicked to show information
-     * about the display.
+     * Called when the Info button next to a display is clicked to show information about the
+     * display. First we retrieve the context of the Button clicked into Context context, then
+     * we create AlertDialog.Builder builder using this context. We retrieve the Display the
+     * Button is associated with to Display display by calling getTag() on the Button. We create
+     * a Resources instance for the application's package in Resources r. We then use our
+     * AlertDialog.Builder builder to create an AlertDialog alert with the title "Display #? Info"
+     * (with the ? replaced by the display Id), a message displaying the information returned by
+     * Display.toString(), and a neutral Button with the text "OK" which dismisses the AlertDialog
+     * when clicked. Finally we show this AlertDialog alert.
+     *
+     * @param v Button which was clicked
      */
     @Override
     public void onClick(View v) {
@@ -386,6 +409,14 @@ public class PresentationActivity extends Activity
                 .setMessage(display.toString())
                 .setNeutralButton(R.string.presentation_alert_dismiss_text,
                         new DialogInterface.OnClickListener() {
+                            /**
+                             * Called when the "OK" Button is clicked we simply dismiss the dialog.
+                             *
+                             * @param dialog The dialog that received the click.
+                             * @param which The button that was clicked (e.g.
+                             *              {@link DialogInterface#BUTTON1}) or
+                             *              the position of the item clicked.
+                             */
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -396,11 +427,19 @@ public class PresentationActivity extends Activity
     }
 
     /**
-     * Called when a display mode has been selected.
+     * Called when a display mode has been selected. We retrieve the tag from the AdapterView parent
+     * into Display display, retrieve the supported modes of this display into Display.Mode[] modes,
+     * then we set the display mode of the Presentation on the specified display (if it is already
+     * shown) to the mode[] of the position of the view in the adapter
+     *
+     * @param parent The AdapterView where the selection happened
+     * @param view The view within the AdapterView that was clicked
+     * @param position The position of the view in the adapter
+     * @param id The row id of the item that is selected
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        final Display display = (Display)parent.getTag();
+        final Display display = (Display)parent.getTag(); // TODO: why does this work? or does it?
         final Display.Mode[] modes = display.getSupportedModes();
         setPresentationDisplayMode(display, position >= 1 && position <= modes.length ?
                 modes[position - 1].getModeId() : 0);
@@ -411,7 +450,7 @@ public class PresentationActivity extends Activity
      */
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        final Display display = (Display)parent.getTag();
+        final Display display = (Display)parent.getTag(); // TODO: why does this work? or does it?
         setPresentationDisplayMode(display, 0);
     }
 
