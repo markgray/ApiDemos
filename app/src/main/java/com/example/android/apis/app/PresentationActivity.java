@@ -430,7 +430,8 @@ public class PresentationActivity extends Activity
      * Called when a display mode has been selected. We retrieve the tag from the AdapterView parent
      * into Display display, retrieve the supported modes of this display into Display.Mode[] modes,
      * then we set the display mode of the Presentation on the specified display (if it is already
-     * shown) to the mode[] of the position of the view in the adapter
+     * shown) to the mode[] of the position of the view in the adapter. (Only used for Display's that
+     * have more than one mode.)
      *
      * @param parent The AdapterView where the selection happened
      * @param view The view within the AdapterView that was clicked
@@ -439,18 +440,22 @@ public class PresentationActivity extends Activity
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        final Display display = (Display)parent.getTag(); // TODO: why does this work? or does it?
+        final Display display = (Display)parent.getTag();
         final Display.Mode[] modes = display.getSupportedModes();
         setPresentationDisplayMode(display, position >= 1 && position <= modes.length ?
                 modes[position - 1].getModeId() : 0);
     }
 
     /**
-     * Called when a display mode has been unselected.
+     * Called when a display mode has been unselected. We retrieve the tag from the AdapterView parent
+     * into Display display and set the display mode of the Display to 0 (no preference) (Only used
+     * for Display's that have more than one mode.)
+     *
+     * @param parent The AdapterView that now contains no selected item.
      */
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        final Display display = (Display)parent.getTag(); // TODO: why does this work? or does it?
+        final Display display = (Display)parent.getTag();
         setPresentationDisplayMode(display, 0);
     }
 
@@ -465,39 +470,73 @@ public class PresentationActivity extends Activity
      */
     private final DisplayManager.DisplayListener mDisplayListener =
             new DisplayManager.DisplayListener() {
-        @Override
-        public void onDisplayAdded(int displayId) {
-            Log.d(TAG, "Display #" + displayId + " added.");
-            mDisplayListAdapter.updateContents();
-        }
-
-        @Override
-        public void onDisplayChanged(int displayId) {
-            Log.d(TAG, "Display #" + displayId + " changed.");
-            mDisplayListAdapter.updateContents();
-        }
-
-        @Override
-        public void onDisplayRemoved(int displayId) {
-            Log.d(TAG, "Display #" + displayId + " removed.");
-            mDisplayListAdapter.updateContents();
-        }
-    };
+                /**
+                 * Called whenever a logical display has been added to the system.
+                 * Use {@link DisplayManager#getDisplay} to get more information about
+                 * the display.
+                 *
+                 * We simply instruct our DisplayListAdapter mDisplayListAdapter to update its
+                 * contents to show information about all current displays.
+                 *
+                 * @param displayId The id of the logical display that was added.
+                 */
+                @Override
+                public void onDisplayAdded(int displayId) {
+                    Log.d(TAG, "Display #" + displayId + " added.");
+                    mDisplayListAdapter.updateContents();
+                }
+                /**
+                 * Called whenever the properties of a logical display have changed.
+                 *
+                 * We simply instruct our DisplayListAdapter mDisplayListAdapter to update its
+                 * contents to show information about all current displays.
+                 *
+                 * @param displayId The id of the logical display that changed.
+                 */
+                @Override
+                public void onDisplayChanged(int displayId) {
+                    Log.d(TAG, "Display #" + displayId + " changed.");
+                    mDisplayListAdapter.updateContents();
+                }
+                /**
+                 * Called whenever a logical display has been removed from the system.
+                 *
+                 * We simply instruct our DisplayListAdapter mDisplayListAdapter to update its
+                 * contents to show information about all current displays.
+                 *
+                 * @param displayId The id of the logical display that was removed.
+                 */
+                @Override
+                public void onDisplayRemoved(int displayId) {
+                    Log.d(TAG, "Display #" + displayId + " removed.");
+                    mDisplayListAdapter.updateContents();
+                }
+            };
 
     /**
      * Listens for when presentations are dismissed.
      */
     private final DialogInterface.OnDismissListener mOnDismissListener =
             new DialogInterface.OnDismissListener() {
-        @Override
-        public void onDismiss(DialogInterface dialog) {
-            DemoPresentation presentation = (DemoPresentation)dialog;
-            int displayId = presentation.getDisplay().getDisplayId();
-            Log.d(TAG, "Presentation on display #" + displayId + " was dismissed.");
-            mActivePresentations.delete(displayId);
-            mDisplayListAdapter.notifyDataSetChanged();
-        }
-    };
+                /**
+                 * This method will be invoked when the dialog is dismissed. We cast our dialog
+                 * parameter to DemoPresentation presentation, retrieve the displayId from the
+                 * Display used for the DemoPresentation presentation, remove the displayId key
+                 * value from SparseArray<DemoPresentation> mActivePresentations, and then
+                 * notify our DisplayListAdapter mDisplayListAdapter that the underlying data has
+                 * been changed and any View reflecting the data set should refresh itself.
+                 *
+                 * @param dialog The dialog that was dismissed
+                 */
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    DemoPresentation presentation = (DemoPresentation) dialog;
+                    int displayId = presentation.getDisplay().getDisplayId();
+                    Log.d(TAG, "Presentation on display #" + displayId + " was dismissed.");
+                    mActivePresentations.delete(displayId);
+                    mDisplayListAdapter.notifyDataSetChanged();
+                }
+            };
 
     /**
      * List adapter.
@@ -506,12 +545,38 @@ public class PresentationActivity extends Activity
     private final class DisplayListAdapter extends ArrayAdapter<Display> {
         final Context mContext;
 
+        /**
+         * Initializes this instance of DisplayListAdapter by first calling through to our super's
+         * constructor using the layout file R.layout.presentation_list_item for it to use when
+         * instantiating views, and then we save our parameter context in our field Context mContext.
+         *
+         * @param context PresentationActivity Context ("this" in onCreate())
+         */
         @SuppressWarnings("WeakerAccess")
         public DisplayListAdapter(Context context) {
             super(context, R.layout.presentation_list_item);
             mContext = context;
         }
 
+        /**
+         * Get a View that displays the data at the specified position in the data set. You can either
+         * create a View manually or inflate it from an XML layout file. When the View is inflated, the
+         * parent View (GridView, ListView...) will apply default layout parameters unless you use
+         * {@link android.view.LayoutInflater#inflate(int, android.view.ViewGroup, boolean)}
+         * to specify a root view and to prevent attachment to the root.
+         *
+         * @param position The position of the item within the adapter's data set of the item whose
+         *                 view we want.
+         * @param convertView The old view to reuse, if possible. Note: You should check that this view
+         *        is non-null and of an appropriate type before using. If it is not possible to convert
+         *        this view to display the correct data, this method can create a new view.
+         *        Heterogeneous lists can specify their number of view types, so that this View is
+         *        always of the right type (see {@link #getViewTypeCount()} and
+         *        {@link #getItemViewType(int)}).
+         * @param parent The parent that this view will eventually be attached to
+         *
+         * @return A View corresponding to the data at the specified position.
+         */
         @SuppressWarnings("NullableProblems")
         @SuppressLint({"InflateParams", "DefaultLocale"})
         @Override
