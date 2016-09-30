@@ -414,8 +414,8 @@ public class PresentationActivity extends Activity
                              *
                              * @param dialog The dialog that received the click.
                              * @param which The button that was clicked (e.g.
-                             *              {@link DialogInterface#BUTTON1}) or
-                             *              the position of the item clicked.
+                             *        {@link DialogInterface#BUTTON1}) or
+                             *        the position of the item clicked.
                              */
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -565,8 +565,26 @@ public class PresentationActivity extends Activity
          * {@link android.view.LayoutInflater#inflate(int, android.view.ViewGroup, boolean)}
          * to specify a root view and to prevent attachment to the root.
          *
+         * First we check if the View convertView is null (View is not being recycled) and if so we
+         * inflate the layout file for our list item (R.layout.presentation_list_item) into View v,
+         * and if convertView is not null we set View v to convertView (to reuse the old recycled
+         * View). Next we call ArrayAdapter.getItem(position) to get the get the Display associated
+         * with the specified position in the data set and save it in Display display. We retrieve
+         * the display Id from "display" and save it as int displayId. We retrieve to our variable
+         * DemoPresentation presentation the DemoPresentation stored using the key displayId in our
+         * list of visible presentations SparseArray<DemoPresentation> mActivePresentations. If there
+         * is a DemoPresentation stored there (presentation != null) DemoPresentationContents contents
+         * is set to presentation.mContents, otherwise it is set to null. If "contents" has been set
+         * to null by the above statement, we set "contents" to the value of DemoPresentationContents
+         * stored under the displayId key in the list of persistent presentation contents (saved in
+         * onSaveInstanceState and restored in onCreate) SparseArray<DemoPresentationContents>
+         * mSavedPresentationContents. Next we locate the CheckBox R.id.checkbox_presentation in our
+         * item View v and save it in CheckBox cb. We set the tag of "cb" to Display display, set the
+         * OnCheckedChangeListener to "this", and set the checked state of "cd" if "contents" is not
+         * null, unchecked otherwise.
+         *
          * @param position The position of the item within the adapter's data set of the item whose
-         *                 view we want.
+         *        view we want.
          * @param convertView The old view to reuse, if possible. Note: You should check that this view
          *        is non-null and of an appropriate type before using. If it is not possible to convert
          *        this view to display the correct data, this method can create a new view.
