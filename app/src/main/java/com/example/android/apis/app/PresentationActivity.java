@@ -581,7 +581,21 @@ public class PresentationActivity extends Activity
          * mSavedPresentationContents. Next we locate the CheckBox R.id.checkbox_presentation in our
          * item View v and save it in CheckBox cb. We set the tag of "cb" to Display display, set the
          * OnCheckedChangeListener to "this", and set the checked state of "cd" if "contents" is not
-         * null, unchecked otherwise.
+         * null, unchecked otherwise. Next we find the TextView tv (R.id.display_id) and set its
+         * text to a formated String containing the displayId and the name of the Display. We locate
+         * Button b (R.id.info "INFO" Button), set its tag to Display display, and its OnClickListener
+         * to "this". We locate Spinner s (R.id.modes) and if there is no content, or the Display only
+         * has one mode we set the visibility of "s" to "GONE" and set the adapter of s to null.
+         * Otherwise we create ArrayAdapter<String> modeAdapter using mContext and the system layout
+         * file android.R.layout.simple_list_item_1, set the visibility of "s" to "VISIBLE", set the
+         * adapter of "s" to "modeAdapter", set the tag os "s" to Display display, and set "this" as
+         * the OnItemSelectedListener for "s". Then we load up modeAdapter with "<default mode>" as
+         * the 0'th entry, and every Display.Mode mode in the array of supported modes for the Display
+         * we fetched earlier to Display.Mode[] modes (using a formatted text String which contains
+         * the mode Id, physical width, physical height, and refresh rate for the mode). While adding
+         * the supported modes we check to see if the mode Id matches the mode Id of the current
+         * contents, and if so we set that mode in the adapter to be the selected one. Finally we
+         * return the View v we have created (or reused) and configured.
          *
          * @param position The position of the item within the adapter's data set of the item whose
          *        view we want.
@@ -661,8 +675,15 @@ public class PresentationActivity extends Activity
         }
 
         /**
-         * Update the contents of the display list adapter to show
-         * information about all current displays.
+         * Update the contents of the display list adapter to show information about all current
+         * displays. First we remove all elements from the current list by calling the method
+         * ArrayAdapter.clear(). Then we call our method getDisplayCategory() which checks whether
+         * the CheckBox mShowAllDisplaysCheckbox ("Show all displays") is checked and if so returns
+         * null which when getDisplays(null) is called all Display's will returned when to the array
+         * Display[] displays. If mShowAllDisplaysCheckbox is not checked getDisplayCategory will
+         * return the String DISPLAY_CATEGORY_PRESENTATION which will cause getDisplays to return
+         * only the presentation secondary Display's attached to Display[] displays. Finally we add
+         * all the Display's in Display[] displays to our ArrayAdapter.
          */
         @SuppressWarnings("WeakerAccess")
         public void updateContents() {
