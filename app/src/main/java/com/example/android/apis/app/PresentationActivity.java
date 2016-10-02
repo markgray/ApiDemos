@@ -699,6 +699,15 @@ public class PresentationActivity extends Activity
             }
         }
 
+        /**
+         * This method just checks whether the CheckBox mShowAllDisplaysCheckbox ("Show all displays")
+         * is checked, and if so returns null so that DisplayManager.getDisplays will return all
+         * Display's. If it is not checked it returns the String DISPLAY_CATEGORY_PRESENTATION so
+         * that getDisplays will return only attached presentation Display's,
+         *
+         * @return If the "Show all displays" checkbox is not checked we return the String
+         *         DISPLAY_CATEGORY_PRESENTATION, if checked we return null
+         */
         private String getDisplayCategory() {
             return mShowAllDisplaysCheckbox.isChecked() ? null :
                 DisplayManager.DISPLAY_CATEGORY_PRESENTATION;
@@ -716,6 +725,16 @@ public class PresentationActivity extends Activity
 
         final DemoPresentationContents mContents;
 
+        /**
+         * Initializes this instance by saving the parameter contents in our field
+         * DemoPresentationContents mContents
+         *
+         * @param context The context of the application that is showing the presentation. The
+         *        presentation will create its own context (see getContext()) based on this context
+         *        and information about the associated display.
+         * @param display The display to which the presentation should be attached.
+         * @param contents Information about the content we want to show in the presentation.
+         */
         @SuppressWarnings("WeakerAccess")
         public DemoPresentation(Context context, Display display,
                                 DemoPresentationContents contents) {
@@ -724,7 +743,16 @@ public class PresentationActivity extends Activity
         }
 
         /**
-         * Sets the preferred display mode id for the presentation.
+         * Sets the preferred display mode id for the presentation. First we store the parameter
+         * modeId in the displayModeId field of our field DemoPresentationContents mContents, then
+         * we retrieve the WindowManager.LayoutParams window attributes for the current window to
+         * WindowManager.LayoutParams params, set the field displayModeId of params to the modeId
+         * parameter passed us, and then set the window attributes for the current window to the
+         * modified WindowManager.LayoutParams params.
+         *
+         * @param modeId Id of the preferred display mode for the window. This must be one of the
+         *        supported modes obtained for the display(s) the window is on. A value of 0 means
+         *        no preference.
          */
         @SuppressWarnings("WeakerAccess")
         public void setPreferredDisplayMode(int modeId) {
@@ -736,6 +764,18 @@ public class PresentationActivity extends Activity
             getWindow().setAttributes(params);
         }
 
+        /**
+         * We initialize this instance of our DemoPresentation dialog in this method. First we call
+         * through to our super's implementation of onCreate, then we retrieve the resources for the
+         * context of the presentation to our variable Resources r, set our content view to our
+         * layout file R.layout.presentation_content, retrieve the Display that this presentation
+         * appears on to our variable Display display, int displayId is set to the display id of
+         * Display display, and int photo is set to the photo field of our field DemoPresentationContents
+         * mContents.
+         *
+         * @param savedInstanceState holds the result from the most recent call to
+         *        {@link #onSaveInstanceState}, or null if this is the first time.
+         */
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             // Be sure to call the super class.
