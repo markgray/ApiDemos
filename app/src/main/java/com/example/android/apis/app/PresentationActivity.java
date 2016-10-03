@@ -771,7 +771,17 @@ public class PresentationActivity extends Activity
          * layout file R.layout.presentation_content, retrieve the Display that this presentation
          * appears on to our variable Display display, int displayId is set to the display id of
          * Display display, and int photo is set to the photo field of our field DemoPresentationContents
-         * mContents.
+         * mContents. Next we locate TextView text in our layout (R.id.text) and set the text to a
+         * formatted String (R.string.presentation_photo_text) containing the photo number, display
+         * Id, and the Display name. We locate ImageView image in our layout (R.id.image) and set
+         * the ImageView to display the "photo" number in our int[] PHOTOS array of drawable resource
+         * id's. Then in order to set the background to a random gradient we create GradientDrawable
+         * drawable, set its shape to RECTANGLE, and set the type of gradient to RADIAL_GRADIENT.
+         * We create Point p and set it to the display size in pixels, then use it to set the radius
+         * of our GradientDrawable drawable to half of whichever dimension of the display was largest.
+         * We set the colors of "drawable" to the DemoPresentationContents mContents int[] colors
+         * array of random colors, and finally we set the background of the root element of our View
+         * (android.R.id.content) to GradientDrawable drawable.
          *
          * @param savedInstanceState holds the result from the most recent call to
          *        {@link #onSaveInstanceState}, or null if this is the first time.
@@ -819,23 +829,52 @@ public class PresentationActivity extends Activity
      * Information about the content we want to show in the presentation.
      */
     private final static class DemoPresentationContents implements Parcelable {
-        final int photo;
-        final int[] colors;
-        int displayModeId;
+        final int photo; // Index into int[] PHOTOS array of Drawable resource id's for our photo
+        final int[] colors; // Array of random colors used for the background
+        int displayModeId; // Display mode Id we are to use.
 
+        /**
+         * Interface that must be implemented and provided as a public CREATOR field that generates
+         * instances of your Parcelable class from a Parcel.
+         */
         public static final Creator<DemoPresentationContents> CREATOR =
                 new Creator<DemoPresentationContents>() {
-            @Override
-            public DemoPresentationContents createFromParcel(Parcel in) {
-                return new DemoPresentationContents(in);
-            }
+                    /**
+                     * Create a new instance of the Parcelable class, instantiating it
+                     * from the given Parcel whose data had previously been written by
+                     * {@link Parcelable#writeToParcel Parcelable.writeToParcel()}.
+                     *
+                     * We simply use the "Parcel in" to call our constructor that uses a Parcel
+                     * argument.
+                     *
+                     * @param in The Parcel to read the object's data from.
+                     * @return Returns a new instance of the Parcelable class DemoPresentationContents
+                     */
+                    @Override
+                    public DemoPresentationContents createFromParcel(Parcel in) {
+                        return new DemoPresentationContents(in);
+                    }
+                    /**
+                     * Create a new array of the Parcelable class DemoPresentationContents
+                     *
+                     * @param size Size of the array.
+                     *
+                     * @return Returns an array of the Parcelable class, with every entry
+                     *         initialized to null.
+                     */
+                    @Override
+                    public DemoPresentationContents[] newArray(int size) {
+                        return new DemoPresentationContents[size];
+                    }
+                };
 
-            @Override
-            public DemoPresentationContents[] newArray(int size) {
-                return new DemoPresentationContents[size];
-            }
-        };
-
+        /**
+         * Constructs a DemoPresentationContents instance using the parameter photo as its field
+         * "int photo", and initializes its "int [] colors" array to two random colors to be used
+         * when creating the background gradient for this instance.
+         *
+         * @param photo index into the int[] PHOTOS array of Drawable resource Ids
+         */
         @SuppressWarnings("WeakerAccess")
         public DemoPresentationContents(int photo) {
             this.photo = photo;
@@ -844,17 +883,40 @@ public class PresentationActivity extends Activity
                     ((int) (Math.random() * Integer.MAX_VALUE)) | 0xFF000000 };
         }
 
+        /**
+         * Constructs a DemoPresentationContents instance by reading the parameter Parcel in which
+         * was previously written to by writeToParcel. Our Parcel should consist of 4 ints which
+         * we read in order to set the values of our fields photo, colors[0], colors[1], and
+         * displayModeId.
+         *
+         * @param in The Parcel to read the object's data from.
+         */
         private DemoPresentationContents(Parcel in) {
             photo = in.readInt();
             colors = new int[] { in.readInt(), in.readInt() };
             displayModeId = in.readInt();
         }
 
+        /**
+         * Part of the Parcelable interface. Describe the kinds of special objects contained in this
+         * Parcelable's marshalled representation. We simply return 0.
+         *
+         * @return a bitmask indicating the set of special object types marshalled by the Parcelable.
+         */
         @Override
         public int describeContents() {
             return 0;
         }
 
+        /**
+         * Part of the Parcelable interface. Flatten this object into a Parcel. We simply write the
+         * four int's of our fields: photo, colors[0], colors[1], and displayModeId into the parcel
+         * "dest" at the current dataPosition(), growing dataCapacity() if needed.
+         *
+         * @param dest The Parcel in which the object should be written.
+         * @param flags Additional flags about how the object should be written.
+         *        May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+         */
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeInt(photo);

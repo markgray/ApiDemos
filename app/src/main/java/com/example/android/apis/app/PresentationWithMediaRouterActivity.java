@@ -264,6 +264,7 @@ public class PresentationWithMediaRouterActivity extends Activity {
     private final static class DemoPresentation extends Presentation {
         private GLSurfaceView mSurfaceView;
 
+        @SuppressWarnings("WeakerAccess")
         public DemoPresentation(Context context, Display display) {
             super(context, display);
         }
@@ -286,6 +287,7 @@ public class PresentationWithMediaRouterActivity extends Activity {
             mSurfaceView.setRenderer(new CubeRenderer(false));
         }
 
+        @SuppressWarnings("WeakerAccess")
         public GLSurfaceView getSurfaceView() {
             return mSurfaceView;
         }
