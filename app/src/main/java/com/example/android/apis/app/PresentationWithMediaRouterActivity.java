@@ -68,18 +68,24 @@ import android.widget.TextView;
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 public class PresentationWithMediaRouterActivity extends Activity {
-    private final String TAG = "PresentationWMRActivity";
+    private final String TAG = "PresentationWMRActivity"; // TAG for logging
 
-    private MediaRouter mMediaRouter;
-    private DemoPresentation mPresentation;
-    private GLSurfaceView mSurfaceView;
-    private TextView mInfoTextView;
-    private boolean mPaused;
+    private MediaRouter mMediaRouter; // MediaRouter we will use control the routing of media channels
+    private DemoPresentation mPresentation; // The presentation to show on the secondary display.
+    private GLSurfaceView mSurfaceView; // GLSurfaceView in our layout for our openGL demo
+    private TextView mInfoTextView; // text view where we will show information about what's happening.
+    private boolean mPaused; // Flag set in onPause to true, set to false in onResume so updateContents
+                             // knows to call onPause or onResume for the GLSurfaceView mSurfaceView.
 
     /**
      * Initialization of the Activity after it is first created.  Must at least
      * call {@link android.app.Activity#setContentView setContentView()} to
      * describe what is to be displayed in the screen.
+     *
+     * First we call through to our super's implementation of onCreate. Then we fetch the handle to
+     * the MediaRouter system-level service and save it in our field MediaRouter mMediaRouter.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
