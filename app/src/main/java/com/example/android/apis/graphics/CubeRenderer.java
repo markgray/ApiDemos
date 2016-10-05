@@ -20,12 +20,21 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 
 /**
  * Render a pair of tumbling cubes.
  */
-
 public class CubeRenderer implements GLSurfaceView.Renderer {
+    private static String TAG = "CubeRenderer";
+    private boolean mTranslucentBackground; // Flag to use a translucent background (glClearColor(0,0,0,0)
+    private Cube mCube; // an instance of a vertex shaded cube.
+    private float mAngle;
+    private float mLastAngle;
+    /**
+     *
+     * @param useTranslucentBackground use a translucent background (glClearColor(0,0,0,0)
+     */
     public CubeRenderer(boolean useTranslucentBackground) {
         mTranslucentBackground = useTranslucentBackground;
         mCube = new Cube();
@@ -62,6 +71,10 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
         mCube.draw(gl);
 
         mAngle += 1.2f;
+        if ((mAngle - mLastAngle) > 360.0f) {
+            Log.i(TAG, "mAngle =" + mAngle);
+            mLastAngle = mAngle;
+        }
     }
 
     @Override
@@ -105,7 +118,4 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
          gl.glShadeModel(GL10.GL_SMOOTH);
          gl.glEnable(GL10.GL_DEPTH_TEST);
     }
-    private boolean mTranslucentBackground;
-    private Cube mCube;
-    private float mAngle;
 }

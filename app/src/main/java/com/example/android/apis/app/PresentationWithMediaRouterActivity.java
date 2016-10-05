@@ -83,7 +83,12 @@ public class PresentationWithMediaRouterActivity extends Activity {
      * describe what is to be displayed in the screen.
      *
      * First we call through to our super's implementation of onCreate. Then we fetch the handle to
-     * the MediaRouter system-level service and save it in our field MediaRouter mMediaRouter.
+     * the MediaRouter system-level service and save it in our field MediaRouter mMediaRouter. We
+     * set our content view to our layout file R.layout.presentation_with_media_router_activity.
+     * We locate the GLSurfaceView in our layout (R.id.surface_view) and save it in our field
+     * GLSurfaceView mSurfaceView, then set the renderer associated with this view to a new instance
+     * of CubeRenderer, which also starts the thread that will call the renderer, which in turn
+     * causes the openGL rendering to start.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
