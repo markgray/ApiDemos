@@ -20,18 +20,22 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLSurfaceView;
-import android.util.Log;
+
+import static android.R.attr.width;
 
 /**
  * Render a pair of tumbling cubes.
  */
 public class CubeRenderer implements GLSurfaceView.Renderer {
-    private static String TAG = "CubeRenderer";
+//  private static String TAG = "CubeRenderer";
     private boolean mTranslucentBackground; // Flag to use a translucent background (glClearColor(0,0,0,0)
     private Cube mCube; // an instance of a vertex shaded cube.
-    private float mAngle;
-    private float mLastAngle;
+    private float mAngle; // ever increasing angle that is used to rotate the two cubes
+
     /**
+     * Constructor which is used to initialize our fields. After saving the value of the parameter
+     * boolean useTranslucentBackground to our field boolean mTranslucentBackground, we create
+     * a new instance of Cube and save it in our field Cube mCube.
      *
      * @param useTranslucentBackground use a translucent background (glClearColor(0,0,0,0)
      */
@@ -40,6 +44,24 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
         mCube = new Cube();
     }
 
+    /**
+     * Called to draw the current frame. First we clear buffers to preset values using glClear and
+     * the mask GL_COLOR_BUFFER_BIT (the buffers currently enabled for color writing) or'ed with
+     * GL_DEPTH_BUFFER_BIT (the depth buffer). Next we replace the current matrix with the identity
+     * matrix, translate the current matrix using a translation matrix using the xyz coordinates
+     * (0, 0, -3), rotate the current matrix using the current value of mAngle about the vector
+     * (0, 1, 0) (y axis rotation), rotate the current matrix using the value 0.25*mAngle about
+     * the vector (1, 0, 0) (x axis rotation). Next we enable the client-side capabilities
+     * GL_VERTEX_ARRAY (the vertex array is enabled for writing and used during rendering) and
+     * GL_COLOR_ARRAY (the color array is enabled for writing and used during rendering). Then we
+     * instruct our instance of Cube mCube to draw itself. Having drawn the first Cube, we now
+     * rotate the current matrix using the value 2.0*mAngle about the vector (0, 1, 1), translate
+     * the matrix using the xyz coordinates (0.5f, 0.5f, 0.5f), and instruct our Cube mCube to
+     * draw itself again using this matrix. Finally we increment mAngle by 1.2 degrees.
+     *
+     * @param gl the GL interface. Use <code>instanceof</code> to test if the interface supports
+     *           GL11 or higher interfaces.
+     */
     @Override
     public void onDrawFrame(GL10 gl) {
         /*
@@ -71,12 +93,16 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
         mCube.draw(gl);
 
         mAngle += 1.2f;
-        if ((mAngle - mLastAngle) > 360.0f) {
-            Log.i(TAG, "mAngle =" + mAngle);
-            mLastAngle = mAngle;
-        }
     }
 
+    /**
+     * Called after the surface is created and whenever the OpenGL ES surface size changes.
+     *
+     * @param gl the GL interface. Use <code>instanceof</code> to test if the interface supports
+     *           GL11 or higher interfaces.
+     * @param width width of the surface in pixels
+     * @param height height of the surface in pixels
+     */
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
          gl.glViewport(0, 0, width, height);
