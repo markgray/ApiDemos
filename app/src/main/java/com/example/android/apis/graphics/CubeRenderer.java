@@ -96,7 +96,14 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
     }
 
     /**
-     * Called after the surface is created and whenever the OpenGL ES surface size changes.
+     * Called after the surface is created and whenever the OpenGL ES surface size changes. First
+     * we calculate the "ratio" of the width to the height, set the target matrix stack to
+     * GL_PROJECTION to specify that subsequent matrix operations apply to the projection matrix
+     * stack, load the identity matrix into the projection matrix, and finally multiply the current
+     * matrix by a perspective matrix with the coordinates for the left and right vertical clipping
+     * planes set to -ratio and +ratio respectively, the coordinates for the bottom and top
+     * horizontal clipping planes set to -1 and +1 respectively, and the distances to the near and
+     * far depth clipping planes set to 1 and 10 respectively.
      *
      * @param gl the GL interface. Use <code>instanceof</code> to test if the interface supports
      *           GL11 or higher interfaces.
@@ -119,6 +126,36 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
          gl.glFrustumf(-ratio, ratio, -1, 1, 1, 10);
     }
 
+    /**
+     * Called when the surface is created or recreated. Part of the GLSurfaceView.Renderer interface.
+     *
+     * Called when the rendering thread starts and whenever the EGL context is lost. The EGL context
+     * will typically be lost when the Android device awakes after going to sleep.
+     * <p>
+     * Since this method is called at the beginning of rendering, as well as every time the EGL
+     * context is lost, this method is a convenient place to put code to create resources that
+     * need to be created when the rendering starts, and that need to be recreated when the EGL
+     * context is lost. Textures are an example of a resource that you might want to create here.
+     * <p>
+     * Note that when the EGL context is lost, all OpenGL resources associated with that context
+     * will be automatically deleted. You do not need to call the corresponding "glDelete" methods
+     * such as glDeleteTextures to manually delete these lost resources.
+     *
+     * First to improve performance we disable the GL_DITHER GL capability (dithers color components
+     * or indices before they are written to the color buffer). Next we specify implementation
+     * specific hint GL_PERSPECTIVE_CORRECTION_HINT (Indicates the quality of color and texture
+     * coordinate interpolation) with the mode GL_FASTEST (The most efficient option should be
+     * chosen). If this instance was created with useTranslucentBackground true we specify the clear
+     * value for the color buffers to be all 0, and if false we specify the clear value for the
+     * color buffers to be all 1. Next we enable the GL capability GL_CULL_FACE (cull polygons based
+     * on their winding in window coordinates), set the shade model to GL_SMOOTH (smooth shading),
+     * and finally enable the GL capability GL_DEPTH_TEST (do depth comparisons and update the depth
+     * buffer).
+     *
+     * @param gl the GL interface. Use <code>instanceof</code> to test if the interface supports
+     *           GL11 or higher interfaces.
+     * @param config the EGLConfig of the created surface. Can be used to create matching pbuffers.
+     */
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         /*
