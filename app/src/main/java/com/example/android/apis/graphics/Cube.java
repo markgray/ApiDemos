@@ -32,10 +32,17 @@ class Cube {
     private ByteBuffer  mIndexBuffer;
 
     /**
-     * Default constructor for our Cube.
+     * Default constructor for our Cube. We initialize IntBuffer mVertexBuffer with the values of
+     * the int vertices[] array, IntBuffer mColorBuffer with the values of the int colors[] array,
+     * and ByteBuffer mIndexBuffer with the values of the byte indices[] array for use in our draw
+     * method.
      */
     public Cube() {
-        int one = 0x10000;
+        int one = 0x10000; // Fixed point value to use for coordinates and rgba values
+
+        /**
+         * xyz coordinates of the eight corners of the cube
+         */
         int vertices[] = {
                 -one, -one, -one,
                 one, -one, -one,
@@ -47,6 +54,9 @@ class Cube {
                 -one,  one,  one,
         };
 
+        /**
+         * Colors for the eight vertices of the cube
+         */
         int colors[] = {
                 0,    0,    0,  one,
                 one,    0,    0,  one,
@@ -58,6 +68,9 @@ class Cube {
                 0,  one,  one,  one,
         };
 
+        /**
+         * Indexes to define the 12 triangles used to draw the cube
+         */
         byte indices[] = {
                 0, 4, 5,    0, 5, 1,
                 1, 5, 6,    1, 6, 2,
