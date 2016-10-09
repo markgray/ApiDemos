@@ -85,7 +85,7 @@ class Cube {
         // native heap where the garbage collector cannot
         // move them.
         //
-        // Buffers with multi-byte datatypes (e.g., short, int, float)
+        // Buffers with multi-byte data types (e.g., short, int, float)
         // must have their byte order set to native order
 
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length*4);
@@ -105,6 +105,21 @@ class Cube {
         mIndexBuffer.position(0);
     }
 
+    /**
+     * Called when we should draw our cube. First we specify the orientation of front-facing
+     * polygons to be GL_CW (clockwise winding). Next we call glVertexPointer to specify the
+     * location of vertex coordinates to use when rendering to be IntBuffer mVertexBuffer,
+     * using the size 3, type GL_FIXED, and stride of 0. We call glColorPointer to specify the
+     * location of color components to use when rendering to be IntBuffer mColorBuffer, with the
+     * size 4, type GL_FIXED, and stride 0. Finally we call glDrawElements to draw the primatives
+     * of our cube using GL_TRIANGLES as the primative type, 36 as the number of elements,
+     * GL_UNSIGNED_BYTE as the type of values used in our index buffer, and ByteBuffer mIndexBuffer
+     * for the vertex indexes to use for the 12 triangles. When the triangles are drawn each vertex
+     * references the colors for each vertex contained in IntBuffer mColorBuffer and the surface
+     * between the vertices is colored to morph smoothly from one vertex color to the other.
+     *
+     * @param gl the GL interface.
+     */
     public void draw(GL10 gl) {
         gl.glFrontFace(GL10.GL_CW);
         gl.glVertexPointer(3, GL10.GL_FIXED, 0, mVertexBuffer);

@@ -327,7 +327,6 @@ App
             media routes using a menu item.  When a presentation display is available,
             we stop showing content in the main activity and instead open up a  
             Presentation on the preferred presentation display.
-            TODO: Comment Cube.java
 
     App/Activity/QuickContactsDemo         all
         .app.QuickContactsDemo

@@ -88,7 +88,8 @@ public class PresentationWithMediaRouterActivity extends Activity {
      * We locate the GLSurfaceView in our layout (R.id.surface_view) and save it in our field
      * GLSurfaceView mSurfaceView, then set the renderer associated with this view to a new instance
      * of CubeRenderer, which also starts the thread that will call the renderer, which in turn
-     * causes the openGL rendering to start.
+     * causes the openGL rendering to start. Finally we locate the TextView R.id.info and save it
+     * in TextView mInfoTextView for later use.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
@@ -113,6 +114,15 @@ public class PresentationWithMediaRouterActivity extends Activity {
         mInfoTextView = (TextView)findViewById(R.id.info);
     }
 
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or
+     * {@link #onPause}, for your activity to start interacting with the user.
+     *
+     * First we call through to our super's implementation of onResume, then we add the callback
+     * MediaRouter.SimpleCallback mMediaRouterCallback to listen to events relating to
+     * ROUTE_TYPE_LIVE_VIDEO to our MediaRouter mMediaRouter. Finally we reset the mPaused flag
+     * to false and call updatePresentation to update the routing and the presentation contents.
+     */
     @Override
     protected void onResume() {
         // Be sure to call the super class.
@@ -126,6 +136,9 @@ public class PresentationWithMediaRouterActivity extends Activity {
         updatePresentation();
     }
 
+    /**
+     * 
+     */
     @Override
     protected void onPause() {
         // Be sure to call the super class.
