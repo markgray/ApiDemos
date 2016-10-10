@@ -137,7 +137,14 @@ public class PresentationWithMediaRouterActivity extends Activity {
     }
 
     /**
-     * 
+     * Called as part of the activity lifecycle when an activity is going into
+     * the background, but has not (yet) been killed.  The counterpart to
+     * {@link #onResume}.
+     *
+     * First we call through to the super's implementation of onPause, then we remove our media
+     * routing callback from MediaRouter mMediaRouter, set the mPaused flag to true and call
+     * updateContents to pause the rendering by calling onPause on the SurfaceView that is being
+     * rendered to.
      */
     @Override
     protected void onPause() {
@@ -152,6 +159,15 @@ public class PresentationWithMediaRouterActivity extends Activity {
         updateContents();
     }
 
+    /**
+     * Called when you are no longer visible to the user.  You will next
+     * receive either {@link #onRestart}, {@link #onDestroy}, or nothing,
+     * depending on later user activity.
+     *
+     * First we call through to our super's implementation of onStop. Then if we are rendering
+     * DemoPresentation mPresentation to a secondary display, we dismiss mPresentation, removing
+     * it from the screen and set mPresentation to null.
+     */
     @Override
     protected void onStop() {
         // Be sure to call the super class.
@@ -165,6 +181,19 @@ public class PresentationWithMediaRouterActivity extends Activity {
         }
     }
 
+    /**
+     * First we call through to our super's implementation of onCreateOptionsMenu. Then we inflate
+     * our menu layout into the Menu menu parameter. We locate the menu item R.id.menu_media_route
+     * and save it in MenuItem mediaRouteMenuItem, get the ActionProvider for mediaRouteMenuItem
+     * (android:actionProviderClass="android.app.MediaRouteActionProvider") and save it in
+     * MediaRouteActionProvider mediaRouteActionProvider, then set the types of routes that will
+     * be shown in the media route chooser dialog launched by this button to ROUTE_TYPE_LIVE_VIDEO
+     * (Route type flag for live video). Finally we return true to show the menu.
+     *
+     *
+     * @param menu The options menu in which we placed our items.
+     * @return true to show the menu
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Be sure to call the super class.
@@ -182,6 +211,13 @@ public class PresentationWithMediaRouterActivity extends Activity {
         return true;
     }
 
+    /**
+     * Update the routing for the demonstration. First we retrieve the the currently selected route
+     * for ROUTE_TYPE_LIVE_VIDEO to MediaRouter.RouteInfo route. Then if the route is not null, we
+     * set Display presentationDisplay to the Display that should is being used by the application,
+     * otherwise we set presentationDisplay to null.
+     *
+     */
     private void updatePresentation() {
         // Get the current route and its presentation display.
         MediaRouter.RouteInfo route = mMediaRouter.getSelectedRoute(
