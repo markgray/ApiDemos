@@ -190,7 +190,6 @@ public class PresentationWithMediaRouterActivity extends Activity {
      * be shown in the media route chooser dialog launched by this button to ROUTE_TYPE_LIVE_VIDEO
      * (Route type flag for live video). Finally we return true to show the menu.
      *
-     *
      * @param menu The options menu in which we placed our items.
      * @return true to show the menu
      */
@@ -214,9 +213,18 @@ public class PresentationWithMediaRouterActivity extends Activity {
     /**
      * Update the routing for the demonstration. First we retrieve the the currently selected route
      * for ROUTE_TYPE_LIVE_VIDEO to MediaRouter.RouteInfo route. Then if the route is not null, we
-     * set Display presentationDisplay to the Display that should is being used by the application,
-     * otherwise we set presentationDisplay to null.
-     *
+     * set Display presentationDisplay to the external Display that is being used by the application,
+     * otherwise we set presentationDisplay to null. If the display has changed (mPresentation is
+     * not null, and the display used by mPresentation is not the same as Display presentationDisplay
+     * we dismiss the old mPresentation and set mPresentation to null. Then if mPresentation is null
+     * and there is an external display available in presentationDisplay we create a new
+     * DemoPresentation mPresentation for presentationDisplay, set the DialogInterface.OnDismissListener
+     * of mPresentation to mOnDismissListener, and wrapped in a try block intended to catch
+     * WindowManager.InvalidDisplayException we instruct mPresentation to start the presentation and
+     * display it on the external display. If mPresentation.show() fails to connect to the Display
+     * it will throw WindowManager.InvalidDisplayException and we set mPresentation to null. Finally
+     * we call updateContents which will display our rotating cubes either in the main activity or
+     * on the external display and will display some text explaining what is happening.
      */
     private void updatePresentation() {
         // Get the current route and its presentation display.
@@ -250,6 +258,21 @@ public class PresentationWithMediaRouterActivity extends Activity {
         updateContents();
     }
 
+    /**
+     * Show either the content in the main activity or the content in the presentation along with
+     * some descriptive text about what is happening. If mPresentation is not null we are meant to
+     * display on an external display, so we set the text in the TextView mInfoTextView to a
+     * formatted string: "Now playing on secondary display" with the name of the external display
+     * added to it, we set the visibility of the GLSurfaceView mSurfaceView in the main view to
+     * invisible and call mSurfaceView's onPause callback. Then if the Activity has been paused
+     * (mPaused == true) we call the onPause callback of the SurfaceView being used by
+     * DemoPresentation mPresentation, otherwise we call its onResume callback. On the other hand
+     * if mPresentation is null we are to display on the main display so we set the text in the
+     * TextView mInfoTextView to a formatted string: "Now playing on main display" with the name of
+     * the default display added to it, we set the visibility of the GLSurfaceView mSurfaceView in
+     * the main view to VISIBLE, and if the Activity has been paused (mPaused == true) we call the
+     * onPause callback of the SurfaceView mSurfaceView, otherwise we call its onResume callback.
+     */
     private void updateContents() {
         // Show either the content in the main activity or the content in the presentation
         // along with some descriptive text about what is happening.
