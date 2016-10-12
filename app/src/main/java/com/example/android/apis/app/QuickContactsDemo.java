@@ -70,6 +70,7 @@ public class QuickContactsDemo extends ListActivity {
     }
 
     private final class ContactListItemAdapter extends ResourceCursorAdapter {
+        @SuppressWarnings("WeakerAccess")
         public ContactListItemAdapter(Context context, int layout, Cursor c) {
             //noinspection deprecation
             super(context, layout, c);
@@ -100,8 +101,11 @@ public class QuickContactsDemo extends ListActivity {
     }
 
     final static class ContactListItemCache {
+        @SuppressWarnings("WeakerAccess")
         public TextView nameView;
+        @SuppressWarnings("WeakerAccess")
         public QuickContactBadge photoView;
+        @SuppressWarnings("WeakerAccess")
         public CharArrayBuffer nameBuffer = new CharArrayBuffer(128);
     }
 }

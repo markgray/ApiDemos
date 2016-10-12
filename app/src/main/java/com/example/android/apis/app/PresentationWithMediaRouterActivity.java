@@ -300,41 +300,83 @@ public class PresentationWithMediaRouterActivity extends Activity {
         }
     }
 
+    /**
+     * Interface for receiving events about media routing changes. All methods of this interface
+     * will be called from the application's main thread. Added in onResume, removed in onPause.
+     */
     private final MediaRouter.SimpleCallback mMediaRouterCallback =
             new MediaRouter.SimpleCallback() {
-        @Override
-        public void onRouteSelected(MediaRouter router, int type, RouteInfo info) {
-            Log.d(TAG, "onRouteSelected: type=" + type + ", info=" + info);
-            updatePresentation();
-        }
 
-        @Override
-        public void onRouteUnselected(MediaRouter router, int type, RouteInfo info) {
-            Log.d(TAG, "onRouteUnselected: type=" + type + ", info=" + info);
-            updatePresentation();
-        }
+                /**
+                 * Called when the supplied route becomes selected as the active route
+                 * for the given route type. We simply call updatePresentation to update
+                 * the routing for the presentation.
+                 *
+                 * @param router the MediaRouter reporting the event
+                 * @param type Type flag set indicating the routes that have been selected
+                 * @param info Route that has been selected for the given route types
+                 */
+                @Override
+                public void onRouteSelected(MediaRouter router, int type, RouteInfo info) {
+                    Log.d(TAG, "onRouteSelected: type=" + type + ", info=" + info);
+                    updatePresentation();
+                }
 
-        @Override
-        public void onRoutePresentationDisplayChanged(MediaRouter router, RouteInfo info) {
-            Log.d(TAG, "onRoutePresentationDisplayChanged: info=" + info);
-            updatePresentation();
-        }
-    };
+                /**
+                 * Called when the supplied route becomes unselected as the active route
+                 * for the given route type. We simply call updatePresentation to update
+                 * the routing for the presentation.
+                 *
+                 * @param router the MediaRouter reporting the event
+                 * @param type Type flag set indicating the routes that have been unselected
+                 * @param info Route that has been unselected for the given route types
+                 */
+                @Override
+                public void onRouteUnselected(MediaRouter router, int type, RouteInfo info) {
+                    Log.d(TAG, "onRouteUnselected: type=" + type + ", info=" + info);
+                    updatePresentation();
+                }
+
+                /**
+                 * Called when a route's presentation display changes.
+                 * <p>
+                 * This method is called whenever the route's presentation display becomes
+                 * available, is removes or has changes to some of its properties (such as its size).
+                 * </p>
+                 * We simply call updatePresentation to update the routing for the presentation.
+                 *
+                 * @param router the MediaRouter reporting the event
+                 * @param info The route whose presentation display changed
+                 */
+                @Override
+                public void onRoutePresentationDisplayChanged(MediaRouter router, RouteInfo info) {
+                    Log.d(TAG, "onRoutePresentationDisplayChanged: info=" + info);
+                    updatePresentation();
+                }
+            };
 
     /**
-     * Listens for when presentations are dismissed.
+     * Listens for when presentations are dismissed. Used in updatePresentation()
      */
     private final DialogInterface.OnDismissListener mOnDismissListener =
             new DialogInterface.OnDismissListener() {
-        @Override
-        public void onDismiss(DialogInterface dialog) {
-            if (dialog == mPresentation) {
-                Log.i(TAG, "Presentation was dismissed.");
-                mPresentation = null;
-                updateContents();
-            }
-        }
-    };
+                /**
+                 * This method will be invoked when the dialog is dismissed. We check to make sure
+                 * the the dialog passed us is the current DemoPresentation mPresentation, and if so
+                 * we set mPresentation to null and call updateContents to show the demo on the main
+                 * display instead.
+                 *
+                 * @param dialog The dialog that was dismissed will be passed into the method.
+                 */
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    if (dialog == mPresentation) {
+                        Log.i(TAG, "Presentation was dismissed.");
+                        mPresentation = null;
+                        updateContents();
+                    }
+                }
+            };
 
     /**
      * The presentation to show on the secondary display.
@@ -345,13 +387,33 @@ public class PresentationWithMediaRouterActivity extends Activity {
      * </p>
      */
     private final static class DemoPresentation extends Presentation {
-        private GLSurfaceView mSurfaceView;
+        private GLSurfaceView mSurfaceView; // The GLSurfaceView in the presentation layout
 
+        /**
+         * Creates a new presentation that is attached to the specified display using the default theme.
+         *
+         * @param context The context of the application that is showing the presentation. The
+         *                presentation will create its own context (see getContext()) based on
+         *                this context and information about the associated display.
+         * @param display The display to which the presentation should be attached.
+         */
         @SuppressWarnings("WeakerAccess")
         public DemoPresentation(Context context, Display display) {
             super(context, display);
         }
 
+        /**
+         * Similar to {@link Activity#onCreate}, you should initialize your dialog
+         * in this method, including calling {@link #setContentView}.
+         *
+         * We set our content view to our layout file R.layout.presentation_with_media_router_content,
+         * locate the GLSurfaceView in that layout (R.id.surface_view) and save it in our field
+         * GLSurfaceView mSurfaceView, then set the renderer of mSurfaceView to a new instance of
+         * CubeRenderer which also starts the thread that will call the renderer, which in turn
+         * causes the rendering to start.
+         *
+         * @param savedInstanceState always null since onSaveInstanceState is not overridden
+         */
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             // Be sure to call the super class.
@@ -370,6 +432,11 @@ public class PresentationWithMediaRouterActivity extends Activity {
             mSurfaceView.setRenderer(new CubeRenderer(false));
         }
 
+        /**
+         * Getter method for our field GLSurfaceView mSurfaceView, used in updateContents().
+         *
+         * @return contents of our field GLSurfaceView mSurfaceView
+         */
         @SuppressWarnings("WeakerAccess")
         public GLSurfaceView getSurfaceView() {
             return mSurfaceView;
