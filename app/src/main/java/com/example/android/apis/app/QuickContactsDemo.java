@@ -30,8 +30,18 @@ import android.widget.QuickContactBadge;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 
+/**
+ * Shows how to query the contacts database using a cursor, and display the results in a
+ * ListActivity hosted ListView. It uses a deprecated api which queries the database on
+ * the UI thread -- it is better to use LoaderManager with a CursorLoader. See the
+ * documentation for LoaderManager for an example of how to do this.
+ * TODO: write LoaderManager version.
+ */
 @SuppressWarnings({"unused"})
 public class QuickContactsDemo extends ListActivity {
+    /**
+     * A list of which columns to return.
+     */
     static final String[] CONTACTS_SUMMARY_PROJECTION = new String[] {
             Contacts._ID, // 0
             Contacts.DISPLAY_NAME, // 1
@@ -43,6 +53,9 @@ public class QuickContactsDemo extends ListActivity {
             Contacts.HAS_PHONE_NUMBER, // 7
     };
 
+    /**
+     * Indexes to column in cursor returned. See CONTACTS_SUMMARY_PROJECTION above
+     */
     static final int SUMMARY_ID_COLUMN_INDEX = 0;
     static final int SUMMARY_NAME_COLUMN_INDEX = 1;
     static final int SUMMARY_STARRED_COLUMN_INDEX = 2;
@@ -52,7 +65,18 @@ public class QuickContactsDemo extends ListActivity {
     static final int SUMMARY_LOOKUP_KEY = 6;
     static final int SUMMARY_HAS_PHONE_COLUMN_INDEX = 7;
 
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation
+     * of onCreate. Then we create an SQL selection String select to use for our contacts table
+     * query specifying that the DISPLAY_NAME is not null, the contact HAS_PHONE_NUMBER is 1 and
+     * the DISPLAY_NAME is not the empty String. Next we query the contacts table requesting the
+     * CONTACTS_SUMMARY_PROJECTION columns, using our "select" selection to filter which rows to
+     * retrieve, a null for the selection arguments, and sorted by the DISPLAY_NAME. We use the
+     * Cursor c returned for that query to create ContactListItemAdapter adapter using our items
+     * layout R.layout.quick_contacts, and set the list adapter for this ListActivity to "adapter".
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +93,19 @@ public class QuickContactsDemo extends ListActivity {
 
     }
 
+    /**
+     * This is the class we use to display contact items in our ListActivity's List.
+     */
     private final class ContactListItemAdapter extends ResourceCursorAdapter {
+        /**
+         * Creates a ContactListItemAdapter.
+         *
+         * @param context The context where the ListView associated with this adapter is running
+         * @param layout resource identifier of a layout file that defines the views for this list
+         *               item. Unless you override them later, this will define both the item views
+         *               and the drop down views
+         * @param c Cursor
+         */
         @SuppressWarnings("WeakerAccess")
         public ContactListItemAdapter(Context context, int layout, Cursor c) {
             //noinspection deprecation
