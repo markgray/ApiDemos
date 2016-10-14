@@ -30,7 +30,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 /**
- * Shows how an activity can send data to its launching activity when done.y.
+ * Shows how an activity can send data to its launching activity when done.
  * <p>This can be used, for example, to implement a dialog allowing the user to
 pick an e-mail address or image -- the picking activity sends the selected
 data back to the originating activity when done.</p>
@@ -69,10 +69,23 @@ App/Activity/Receive Result
 
  */
 public class ReceiveResult extends Activity {
+
+    private TextView mResults; // TextView in our layout for displaying results
+
     /**
      * Initialization of the Activity after it is first created.  Must at least
      * call {@link android.app.Activity#setContentView setContentView()} to
      * describe what is to be displayed in the screen.
+     *
+     * First we call through to our super's implementation of onCreate. Then we set our content
+     * view to our layout file R.layout.receive_result. Then we set our field TextView mResults
+     * to the TextView in our layout for displaying results returned by the Activity SendResult
+     * (R.id.results). We set the text in mResults to the current contents of the TextView using
+     * the TextView.BufferType TextView.BufferType.EDITABLE so that the text buffer can be extended
+     * as we add more text. Finally we locate the Button R.id.get and set the OnClickListener for
+     * it to the OnClickListener mGetListener.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +159,5 @@ public class ReceiveResult extends Activity {
             startActivityForResult(intent, GET_CODE);
         }
     };
-
-    private TextView mResults;
 }
 

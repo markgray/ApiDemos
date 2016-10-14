@@ -112,6 +112,21 @@ public class QuickContactsDemo extends ListActivity {
             super(context, layout, c);
         }
 
+        /**
+         * Bind an existing view to the data pointed to by cursor. First we retrieve the Tag from
+         * the view passed us to the variable ContactListItemCache cache. Then we copy the name from
+         * the cursor (SUMMARY_NAME_COLUMN_INDEX) to the CharArrayBuffer nameBuffer in "cache". We
+         * set int size to the size of the copied name data, and set the text of the TextView
+         * nameView in "cache" to the characters copied to the char[] nameBuffer.data array. Finally
+         * we assign the contact uri that the QuickContactBadge photoView of the "cache" should be
+         * associated with based on the cursor values for SUMMARY_ID_COLUMN_INDEX (Contacts._ID)
+         * and SUMMARY_LOOKUP_KEY (Contacts.LOOKUP_KEY).
+         *
+         * @param view    Existing view, returned earlier by newView
+         * @param context Interface to application's global information
+         * @param cursor  The cursor from which to get the data. The cursor is already
+         *                moved to the correct position.
+         */
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
             final ContactListItemCache cache = (ContactListItemCache) view.getTag();
@@ -124,6 +139,20 @@ public class QuickContactsDemo extends ListActivity {
             cache.photoView.assignContactUri(Contacts.getLookupUri(contactId, lookupKey));
         }
 
+        /**
+         * Makes a new view to hold the data pointed to by cursor. First we call through to our
+         * super's implementation of newView, saving the returned view in our variable View view.
+         * Then we create a ContactListItemCache cache, locate the TextView R.id.name in "view"
+         * and set the nameView of "cache" to it, and locate the QuickContactBadge R.id.badge in
+         * "view" and set the photoView of "cache" to it. We then set the Tag of "view" to "cache"
+         * and return "view".
+         *
+         * @param context Interface to application's global information
+         * @param cursor The cursor from which to get the data. The cursor is already
+         *               moved to the correct position.
+         * @param parent The parent to which the new view is attached to
+         * @return the newly created view.
+         */
         @Override
         public View newView(Context context, Cursor cursor, ViewGroup parent) {
             View view = super.newView(context, cursor, parent);
@@ -136,6 +165,9 @@ public class QuickContactsDemo extends ListActivity {
         }
     }
 
+    /**
+     * Class used to hold contact information, set as the Tag of the View for the contact item.
+     */
     final static class ContactListItemCache {
         @SuppressWarnings("WeakerAccess")
         public TextView nameView;
