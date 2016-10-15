@@ -111,6 +111,14 @@ public class ReceiveResult extends Activity {
     /**
      * This method is called when the sending activity has finished, with the
      * result it supplied.
+     *
+     * First we check if the requestCode matches the one used to launch the sending activity (GET_CODE)
+     * and if not we do nothing. If it does match we create Editable text by casting the CharSequence
+     * returned from mResults.getText() to Editable (we can do this since we set the text with the
+     * option TextView.BufferType.EDITABLE). Then if the resultCode from the sending activity is
+     * RESULT_CANCELED we append the string (cancelled) to Editable text, otherwise we append to
+     * text the value of resultCode and the value of the action of the intent returned sandwiched
+     * between other text. This results in the update of the text displayed in the TextView mResults.
      * 
      * @param requestCode The original request code as given to
      *                    startActivity().
