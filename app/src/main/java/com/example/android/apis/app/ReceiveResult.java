@@ -119,7 +119,12 @@ public class ReceiveResult extends Activity {
      * RESULT_CANCELED we append the string (cancelled) to Editable text, otherwise we append to
      * text the value of resultCode and the value of the action of the intent returned sandwiched
      * between other text. This results in the update of the text displayed in the TextView mResults.
-     * 
+     *
+     * The result is something like this:
+     *
+     *     (okay -1) Corky!
+     *     (okay -1) Violet!
+     *
      * @param requestCode The original request code as given to
      *                    startActivity().
      * @param resultCode From sending activity as per setResult().
@@ -159,7 +164,21 @@ public class ReceiveResult extends Activity {
     // Definition of the one requestCode we use for receiving results.
     static final private int GET_CODE = 0;
 
+    /**
+     * Set as the OnClickListener for the Button "GET RESULT" is lauches the Activity SendResult
+     * using startActivityForResult and the result intent will be handled in the callback
+     * OnActivityResult
+     */
     private OnClickListener mGetListener = new OnClickListener() {
+        /**
+         * Called when the Button "GET RESULT" (R.id.get) is clicked. First we create an Intent to
+         * start the Activity SendResult, then we use that Intent to launch the Activity using
+         * startActivityForResult with the requestCode GET_CODE. SendResult will call setResult
+         * with an Intent containing the result of that Activity which we will receive in the
+         * callback onActivityResult.
+         *
+         * @param v The View of the Button "GET RESULT" (R.id.get)
+         */
         public void onClick(View v) {
             // Start the activity whose result we want to retrieve.  The
             // result will come back with request code GET_CODE.

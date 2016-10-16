@@ -29,18 +29,23 @@ import android.widget.Button;
 
 
 /**
- * Example of receiving a result from another activity.
+ * Example of sending a result back to another activity.
  */
-public class SendResult extends Activity
-{
+public class SendResult extends Activity {
     /**
      * Initialization of the Activity after it is first created.  Must at least
      * call {@link android.app.Activity#setContentView setContentView()} to
      * describe what is to be displayed in the screen.
+     *
+     * First we call through to our super's implementation of onCreate. Then we set our content
+     * view to our layout file R.layout.send_result. We locate the Button R.id.corky ("CORKY")
+     * and set its OnClickListener to OnClickListener mCorkyListener, and locate the Button
+     * R.id.violet ("VIOLET") and set its OnClickListener to OnClickListener mVioletListener.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
     @Override
-	protected void onCreate(Bundle savedInstanceState)
-    {
+	protected void onCreate(Bundle savedInstanceState) {
         // Be sure to call the super class.
         super.onCreate(savedInstanceState);
 
@@ -56,10 +61,17 @@ public class SendResult extends Activity
         button.setOnClickListener(mVioletListener);
     }
 
-    private OnClickListener mCorkyListener = new OnClickListener()
-    {
-        public void onClick(View v)
-        {
+    /**
+     * OnClickListener for the Button R.id.corky ("CORKY")
+     */
+    private OnClickListener mCorkyListener = new OnClickListener() {
+        /**
+         * When clicked we setResult to an Intent with the Action "Corky!" and finish the Activity
+         *
+         * @param v View of the Button that was clicked
+         */
+        @Override
+        public void onClick(View v) {
             // To send a result, simply call setResult() before your
             // activity is finished.
             setResult(RESULT_OK, (new Intent()).setAction("Corky!"));
@@ -67,10 +79,17 @@ public class SendResult extends Activity
         }
     };
 
-    private OnClickListener mVioletListener = new OnClickListener()
-    {
-        public void onClick(View v)
-        {
+    /**
+     * OnClickListener for the Button R.id.violet ("VIOLET")
+     */
+    private OnClickListener mVioletListener = new OnClickListener() {
+        /**
+         * When clicked we setResult to an Intent with the Action "Violet!" and finish the Activity
+         *
+         * @param v View of the Button that was clicked
+         */
+        @Override
+        public void onClick(View v) {
             // To send a result, simply call setResult() before your
             // activity is finished.
             setResult(RESULT_OK, (new Intent()).setAction("Violet!"));
