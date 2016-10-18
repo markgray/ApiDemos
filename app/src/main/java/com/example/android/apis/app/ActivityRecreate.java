@@ -89,6 +89,10 @@ public class ActivityRecreate extends Activity {
      * {@link #onRestoreInstanceState} (the {@link Bundle} populated by this method
      * will be passed to both).
      *
+     * First we call through to our super's implementation of onSaveInstanceState, then we insert
+     * the current value of mCurTheme using the key "theme" in the Bundle savedInstanceState passed
+     * us. It will be used in our onCreate method when the Activity is recreated.
+     *
      * @param savedInstanceState Bundle in which to place your saved state.
      */
     @Override
@@ -97,7 +101,18 @@ public class ActivityRecreate extends Activity {
         savedInstanceState.putInt("theme", mCurTheme);
     }
 
+    /**
+     * OnClickListener used the our "Recreate" Button (R.id.recreate) in our layout
+     */
     private OnClickListener mRecreateListener = new OnClickListener() {
+        /**
+         * Called when a view has been clicked. We simply call Activity.recreate() to cause this
+         * Activity to be recreated with a new instance. This results in essentially the same flow
+         * as when the Activity is created due to a configuration change -- the current instance
+         * will go through its lifecycle to onDestroy() and a new instance then created after it.
+         *
+         * @param v View of the Button that was clicked
+         */
         @Override
         public void onClick(View v) {
             recreate();

@@ -28,12 +28,27 @@ import android.widget.Button;
 import android.widget.TextView;
 
 /**
- * Entry into our redirection example, describing what will happen.
+ * Launched by a push of a Button in the Activity RedirectEnter we will immediately start
+ * RedirectGetter if there is no data stored in "RedirectData" yet, if there is data we
+ * will display it and give the user the options to either "Clear and Exit" back to
+ * RedirectEnter, or "New Text" which restarts RedirectGetter. RedirectMain uses the
+ * request codes INIT_TEXT_REQUEST, and NEW_TEXT_REQUEST that it sends in the Intent to
+ * RedirectGetter to determine what to do if the result code was RESULT_CANCELED,
+ * either finish() back to RedirectEnter, or just display the old text.
  */
 public class RedirectMain extends Activity {
-    static final int INIT_TEXT_REQUEST = 0;
-    static final int NEW_TEXT_REQUEST = 1;
+    static final int INIT_TEXT_REQUEST = 0; // Request code for initial run of Activity RedirectGetter
+    static final int NEW_TEXT_REQUEST = 1;  // Request code when new text Button is clicked
 
+    @SuppressWarnings("FieldCanBeLocal")
+    private String mTextPref; // String stored in shared preferences file by RedirectGetter
+
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, the we set our content view to our layout file R.layout.redirect_main
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not called
+     */
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +73,7 @@ public class RedirectMain extends Activity {
     }
 
     @Override
-	protected void onActivityResult(int requestCode, int resultCode,
-		Intent data) {
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == INIT_TEXT_REQUEST) {
 
             // If the request was cancelled, then we are cancelled as well.
@@ -103,6 +117,7 @@ public class RedirectMain extends Activity {
     }
 
     private OnClickListener mClearListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             // Erase the preferences and exit!
             SharedPreferences preferences = getSharedPreferences("RedirectData", 0);
@@ -112,13 +127,11 @@ public class RedirectMain extends Activity {
     };
 
     private OnClickListener mNewListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             // Retrieve new text preferences.
             Intent intent = new Intent(RedirectMain.this, RedirectGetter.class);
             startActivityForResult(intent, NEW_TEXT_REQUEST);
         }
     };
-
-    @SuppressWarnings("FieldCanBeLocal")
-    private String mTextPref;
 }

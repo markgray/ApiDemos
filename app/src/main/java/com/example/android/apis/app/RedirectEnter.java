@@ -30,12 +30,30 @@ import android.widget.Button;
 
 /**
  * Entry into our redirection example, describing what will happen.
+ *
+ * Consists of three activities: RedirectEnter, RedirectGetter, and RedirectMain.
+ * RedirectGetter stores user input in the shared preference file "RedirectData"
+ * RedirectEnter just describes what will happen, and when the "Go" button is
+ * clicked starts up RedirectMain, which immediately starts RedirectGetter if
+ * there is no data stored in "RedirectData" yet, if there is data it will display
+ * it and give the user the options to either "Clear and Exit" back to RedirectEnter,
+ * or "New Text" which restarts RedirectGetter. RedirectMain uses the request
+ * codes INIT_TEXT_REQUEST, and NEW_TEXT_REQUEST that it sends in the Intent to
+ * RedirectGetter to determine what to do if the result code was RESULT_CANCELED,
+ * either finish() back to RedirectEnter, or just display the old text.
+ *
  */
-public class RedirectEnter extends Activity
-{
+public class RedirectEnter extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation
+     * of onCreate, then we set our content view to our layout file R.layout.redirect_enter. Next
+     * we locate the Button goButton (R.id.go) and set its OnClickListener to the OnClickListener
+     * mGoListener.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
-	protected void onCreate(Bundle savedInstanceState)
-    {
+	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.redirect_enter);
@@ -45,10 +63,16 @@ public class RedirectEnter extends Activity
         goButton.setOnClickListener(mGoListener);
     }
 
-    private OnClickListener mGoListener = new OnClickListener()
-    {
-        public void onClick(View v)
-        {
+    private OnClickListener mGoListener = new OnClickListener() {
+        /**
+         * Called when a view has been clicked. We create an Intent intent intended to start the
+         * Activity RedirectMain, and then we startActivity that intent which will launch the
+         * Activity.
+         *
+         * @param v View of Button that was clicked
+         */
+        @Override
+        public void onClick(View v) {
             // Here we start up the main entry point of our redirection
             // example.
             Intent intent = new Intent(RedirectEnter.this, RedirectMain.class);
