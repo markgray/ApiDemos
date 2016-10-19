@@ -45,7 +45,14 @@ public class RedirectMain extends Activity {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, the we set our content view to our layout file R.layout.redirect_main
+     * onCreate, then we set our content view to our layout file R.layout.redirect_main. Next we
+     * locate the "Clear and exit" Button (R.id.clear) and set its OnClickListener to OnClickListener
+     * mClearListener. We then locate the "New text" Button (R.id.newView) and set its OnClickListener
+     * to OnClickListener mNewListener. We call our method loadPrefs() to read the "text" entry from
+     * our shared preference file, and if was there it returns true and we are done. If it returns
+     * false there was nothing stored under "text" in the shared preference file so we create an
+     * Intent intent to launch RedirectGetter and we startActivityForResult using that Intent with
+     * the requestCode of INIT_TEXT_REQUEST (0).
      *
      * @param savedInstanceState always null since onSaveInstanceState is not called
      */
@@ -72,6 +79,32 @@ public class RedirectMain extends Activity {
         }
     }
 
+    /**
+     * Called when an activity you launched exits, giving you the requestCode
+     * you started it with, the resultCode it returned, and any additional
+     * data from it.  The <var>resultCode</var> will be
+     * {@link #RESULT_CANCELED} if the activity explicitly returned that,
+     * didn't return any result, or crashed during its operation.
+     *
+     * <p>You will receive this call immediately before onResume() when your
+     * activity is re-starting.
+     *
+     * First we check to see if this result is from an INIT_TEXT_REQUEST requestCode. If is we
+     * check whether the resultCode was RESULT_CANCELED and if so we exit back to RedirectEnter,
+     * otherwise we call our method loadPrefs() which will load the "text" entry from our shared
+     * preference file and display it in our UI. If the result is from an NEW_TEXT_REQUEST we
+     * check to see if the resultCode was RESULT_CANCELED and if so do nothing leaving the text
+     * in our UI unchanged, otherwise we call our method loadPrefs() which will load the "text"
+     * entry from our shared preference file and update the text in our UI.
+     *
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from and what you requested of it.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras"). (Unused)
+     */
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == INIT_TEXT_REQUEST) {
@@ -98,8 +131,15 @@ public class RedirectMain extends Activity {
         }
     }
 
-    @SuppressWarnings("FinalPrivateMethod")
-    private final boolean loadPrefs() {
+    /**
+     * Reads the shared preference file "RedirectData" looking for a String stored under the key
+     * "text", and if it was there it updates the TextView text (R.id.text) in our layout to
+     * display what it found and returns true to the caller. If no "text" was found in the shared
+     * preference file it returns false.
+     *
+     * @return true if there was text stored under "text" in the shared preference file, false otherwise
+     */
+    private boolean loadPrefs() {
         // Retrieve the current redirect values.
         // NOTE: because this preference is shared between multiple
         // activities, you must be careful about when you read or write
@@ -116,7 +156,19 @@ public class RedirectMain extends Activity {
         return false;
     }
 
+    /**
+     * OnClickListener for the Button "Clear and exit" (R.id.clear)
+     */
     private OnClickListener mClearListener = new OnClickListener() {
+        /**
+         * Called when the "Clear and exit" Button is clicked. First we open the shared preference
+         * file "RedirectData" into SharedPreferences preferences, then we create an editor for
+         * <code>preferences</code>, use it to mark the key "text" for removal, and  commit the
+         * change back from the editor to the preferences file. Finally we finish() this Activity
+         * and return to RedirectEnter.
+         *
+         * @param v View of the Button that was clicked
+         */
         @Override
         public void onClick(View v) {
             // Erase the preferences and exit!
