@@ -178,7 +178,17 @@ public class RedirectMain extends Activity {
         }
     };
 
+    /**
+     * OnClickListener for the Button "New text" (R.id.newView)
+     */
     private OnClickListener mNewListener = new OnClickListener() {
+        /**
+         * Called when the "New Text" Button is clicked. We create an Intent to start the Activity
+         * RedirectGetter, then startActivityForResult that Activity using the requestCode
+         * NEW_TEXT_REQUEST (1)
+         *
+         * @param v View of the Button that was clicked
+         */
         @Override
         public void onClick(View v) {
             // Retrieve new text preferences.

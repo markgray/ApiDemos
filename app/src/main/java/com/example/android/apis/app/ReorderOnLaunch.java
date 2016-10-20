@@ -25,6 +25,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+/**
+ * ReorderOnLaunch is the first of a sequence of four Activities: ReorderTwo, ReorderThree, and
+ * ReorderFour follow.  A button on the fourth will use the Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+ * flag to bring the second of the activities to the front of the history stack. After that,
+ * proceeding back through the history should begin with the newly front most second reorder
+ * activity, then the fourth, the third, and finally the first.
+ */
 public class ReorderOnLaunch extends Activity {
     @Override
     protected void onCreate(Bundle savedState) {

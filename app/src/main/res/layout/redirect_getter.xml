@@ -36,8 +36,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:paddingBottom="4dip"
-        android:inputType="text">
+        android:inputType="text"
+        android:paddingBottom="4dip">
 
         <requestFocus />
     </EditText>
