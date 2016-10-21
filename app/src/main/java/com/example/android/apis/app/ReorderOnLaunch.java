@@ -33,6 +33,14 @@ import android.widget.Button;
  * activity, then the fourth, the third, and finally the first.
  */
 public class ReorderOnLaunch extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.reorder_on_launch. Then
+     * we locate the "Go to the second" Button (R.id.reorder_launch_two) and set its OnClickListener
+     * to OnClickListener mClickListener.
+     *
+     * @param savedState always null since onSaveInstanceState is not overridden
+     */
     @Override
     protected void onCreate(Bundle savedState) {
         super.onCreate(savedState);
@@ -43,7 +51,18 @@ public class ReorderOnLaunch extends Activity {
         twoButton.setOnClickListener(mClickListener);
     }
 
+    /**
+     * OnClickListener for the "Go to the second" Button (R.id.reorder_launch_two)
+     */
     private final OnClickListener mClickListener = new OnClickListener() {
+        /**
+         * Called when the "Go to the second" Button (R.id.reorder_launch_two) is clicked.
+         * We simply create an Intent to launch the ReorderTwo Activity and start that
+         * Activity.
+         *
+         * @param v View of the Button that was clicked
+         */
+        @Override
         public void onClick(View v) {
             startActivity(new Intent(ReorderOnLaunch.this, ReorderTwo.class));
         }

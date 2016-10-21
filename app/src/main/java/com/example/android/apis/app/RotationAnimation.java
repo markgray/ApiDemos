@@ -29,12 +29,24 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 
-
+/**
+ * Allows you to choose the animation that occurs when the screen is rotated: either
+ * ROTATION_ANIMATION_ROTATE, ROTATION_ANIMATION_CROSSFADE, or ROTATION_ANIMATION_JUMPCUT.
+ */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class RotationAnimation extends Activity {
 
+    /**
+     * Current rotationAnimation to use when setting WindowManager.LayoutParams.rotationAnimation
+     */
     private int mRotationAnimation = LayoutParams.ROTATION_ANIMATION_ROTATE;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.rotation_animation.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,34 +55,34 @@ public class RotationAnimation extends Activity {
 
         setContentView(R.layout.rotation_animation);
 
-        ((CheckBox)findViewById(R.id.windowFullscreen)).setOnCheckedChangeListener(
-            new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    setFullscreen(isChecked);
+        ((CheckBox) findViewById(R.id.windowFullscreen)).setOnCheckedChangeListener(
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        setFullscreen(isChecked);
+                    }
                 }
-            }
         );
 
-        ((RadioGroup)findViewById(R.id.rotation_radio_group)).setOnCheckedChangeListener(
-            new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    switch (checkedId) {
-                        default:
-                        case R.id.rotate:
-                            mRotationAnimation = LayoutParams.ROTATION_ANIMATION_ROTATE;
-                            break;
-                        case R.id.crossfade:
-                            mRotationAnimation = LayoutParams.ROTATION_ANIMATION_CROSSFADE;
-                            break;
-                        case R.id.jumpcut:
-                            mRotationAnimation = LayoutParams.ROTATION_ANIMATION_JUMPCUT;
-                            break;
+        ((RadioGroup) findViewById(R.id.rotation_radio_group)).setOnCheckedChangeListener(
+                new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        switch (checkedId) {
+                            default:
+                            case R.id.rotate:
+                                mRotationAnimation = LayoutParams.ROTATION_ANIMATION_ROTATE;
+                                break;
+                            case R.id.crossfade:
+                                mRotationAnimation = LayoutParams.ROTATION_ANIMATION_CROSSFADE;
+                                break;
+                            case R.id.jumpcut:
+                                mRotationAnimation = LayoutParams.ROTATION_ANIMATION_JUMPCUT;
+                                break;
+                        }
+                        setRotationAnimation(mRotationAnimation);
                     }
-                    setRotationAnimation(mRotationAnimation);
                 }
-            }
         );
     }
 
@@ -78,7 +90,7 @@ public class RotationAnimation extends Activity {
         Window win = getWindow();
         WindowManager.LayoutParams winParams = win.getAttributes();
         if (on) {
-            winParams.flags |=  WindowManager.LayoutParams.FLAG_FULLSCREEN;
+            winParams.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
         } else {
             winParams.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
         }
