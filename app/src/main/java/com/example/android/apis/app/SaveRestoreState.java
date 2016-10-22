@@ -59,8 +59,7 @@ import android.widget.TextView;
         </tr>
 </table>
  */
-public class SaveRestoreState extends Activity
-{
+public class SaveRestoreState extends Activity {
     /**
      * Initialization of the Activity after it is first created.  Here we use
      * {@link android.app.Activity#setContentView setContentView()} to set up

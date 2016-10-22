@@ -380,7 +380,7 @@ App
             ROTATION_ANIMATION_JUMPCUT.
 
     App/Activity/Save &amp; Restore State  all
-        .app.SaveRestoreState              Broken?
+        .app.SaveRestoreState              Broken? Or too much memory for a kill needed.
             Supposed to show that only EditText with an "id" assigned to the view will
             have its state preserved, but both EditText views remember text entered after
             switching to another app and back. However if you rotate screen then only the

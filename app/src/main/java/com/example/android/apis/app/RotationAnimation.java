@@ -43,7 +43,19 @@ public class RotationAnimation extends Activity {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, then we set our content view to our layout file R.layout.rotation_animation.
+     * onCreate, then we set our content view to our layout file R.layout.rotation_animation. Next
+     * we locate the CheckBox R.id.windowFullscreen and set its OnCheckChangedListener to an
+     * anonymous class which calls our method setFullscreen when the CheckBox changes state. Finally
+     * we locate the RadioGroup R.id.rotation_radio_group and set its RadioGroup.OnCheckedChangeListener
+     * to an anonymous class which chooses the value to set mRotationAnimation to based on the radio
+     * button which has been checked:
+     *
+     *       R.id.rotate     LayoutParams.ROTATION_ANIMATION_ROTATE
+     *       R.id.crossfade  LayoutParams.ROTATION_ANIMATION_CROSSFADE
+     *       R.id.jumpcut    LayoutParams.ROTATION_ANIMATION_JUMPCUT
+     *
+     * and then calls our method setRotationAnimation to change the window attributes using our
+     * RadioGroup choice for WindowManager.LayoutParams.rotationAnimation
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
@@ -57,6 +69,14 @@ public class RotationAnimation extends Activity {
 
         ((CheckBox) findViewById(R.id.windowFullscreen)).setOnCheckedChangeListener(
                 new CompoundButton.OnCheckedChangeListener() {
+                    /**
+                     * Called when the checked state of our R.id.windowFullscreen compound button
+                     * changed. We simply call our method setFullscreen with the isChecked parameter
+                     * passed us.
+                     *
+                     * @param buttonView The compound button view whose state has changed.
+                     * @param isChecked The new checked state of buttonView.
+                     */
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         setFullscreen(isChecked);
@@ -66,6 +86,21 @@ public class RotationAnimation extends Activity {
 
         ((RadioGroup) findViewById(R.id.rotation_radio_group)).setOnCheckedChangeListener(
                 new RadioGroup.OnCheckedChangeListener() {
+                    /**
+                     * Called when the checked radio button has changed. When the selection is
+                     * cleared, checkedId is -1. We switch on checkedId and set mRotationAnimation
+                     * to the appropriate value:
+                     *
+                     *       R.id.rotate     LayoutParams.ROTATION_ANIMATION_ROTATE
+                     *       R.id.crossfade  LayoutParams.ROTATION_ANIMATION_CROSSFADE
+                     *       R.id.jumpcut    LayoutParams.ROTATION_ANIMATION_JUMPCUT
+                     *
+                     * and then we call our method setRotationAnimation to change the window
+                     * attributes using this value for WindowManager.LayoutParams.rotationAnimation
+                     *
+                     * @param group the group in which the checked radio button has changed
+                     * @param checkedId the unique identifier of the newly checked radio button
+                     */
                     @Override
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         switch (checkedId) {
@@ -86,6 +121,12 @@ public class RotationAnimation extends Activity {
         );
     }
 
+    /**
+     * Called when the FULLSCREEN CheckBox changes state. We set or clear the Window Attributes
+     * WindowManager.LayoutParams.FLAG_FULLSCREEN bit according to the CheckBox state.
+     *
+     * @param on if true set the FLAG_FULLSCREEN bit or the window attributes, if false clear it.
+     */
     private void setFullscreen(boolean on) {
         Window win = getWindow();
         WindowManager.LayoutParams winParams = win.getAttributes();
@@ -97,6 +138,12 @@ public class RotationAnimation extends Activity {
         win.setAttributes(winParams);
     }
 
+    /**
+     * Set the window attributes value of WindowManager.LayoutParams.rotationAnimation to our
+     * parameter.
+     *
+     * @param rotationAnimation WindowManager.LayoutParams.rotationAnimation to use
+     */
     private void setRotationAnimation(int rotationAnimation) {
         Window win = getWindow();
         WindowManager.LayoutParams winParams = win.getAttributes();

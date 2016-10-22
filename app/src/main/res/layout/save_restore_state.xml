@@ -42,7 +42,6 @@
             android:text="@string/saves_state"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <!--suppress CheckTagEmptyBody -->
         <EditText
             android:id="@+id/saved"
             android:layout_width="match_parent"
@@ -50,9 +49,9 @@
             android:layout_weight="1"
             android:background="@drawable/green"
             android:freezesText="true"
+            android:inputType="text"
             android:text="@string/initial_text"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:inputType="text"></EditText>
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:layout_width="match_parent"
@@ -63,15 +62,14 @@
             android:text="@string/no_saves_state"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <!--suppress CheckTagEmptyBody -->
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/red"
+            android:inputType="text"
             android:text="@string/initial_text"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:inputType="text"></EditText>
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
 </ScrollView>

@@ -28,6 +28,7 @@ import android.util.Log;
  * class demonstrating instrumentation against one of this application's sample
  * activities.
  */
+@SuppressWarnings("WeakerAccess")
 public class LocalSampleInstrumentation extends Instrumentation {
     public abstract static class ActivityRunnable implements Runnable {
         public final Activity activity;
@@ -58,7 +59,7 @@ public class LocalSampleInstrumentation extends Instrumentation {
         SaveRestoreState activity = (SaveRestoreState)startActivitySync(intent);
 
         // This is the Activity object that was started, to do with as we want.
-        Log.i("LocalSampleInstrumentation",
+        Log.i("LocalSampleInstr...",
               "Initial text: " + activity.getSavedText());
 
         // Clear the text so we start fresh.
@@ -81,11 +82,11 @@ public class LocalSampleInstrumentation extends Instrumentation {
         waitForIdleSync();
 
         // Retrieve the text we should have written...
-        Log.i("LocalSampleInstrumentation",
+        Log.i("LocalSampleInstr...",
               "Final text: " + activity.getSavedText());
 
         // And we are done!
-        Log.i("ContactsFilterInstrumentation", "Done!");
+        Log.i("ContactsFilterInstru...", "Done!");
         finish(Activity.RESULT_OK, null);
     }
 }
