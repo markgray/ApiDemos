@@ -49,9 +49,13 @@ import android.view.WindowManager;
  */
 public class SecureWindowActivity extends Activity {
     /**
-     * Initialization of the Activity after it is first created.  Must at least
-     * call {@link android.app.Activity#setContentView setContentView()} to
-     * describe what is to be displayed in the screen.
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.secure_window_activity.
+     * Finally we set the WindowManager.LayoutParams.FLAG_SECURE flag of the window causing the
+     * system treat the content of the window as secure, preventing it from appearing in screenshots
+     * or from being viewed on non-secure displays.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

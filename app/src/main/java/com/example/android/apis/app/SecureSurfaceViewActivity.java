@@ -53,12 +53,17 @@ import com.example.android.apis.graphics.CubeRenderer;
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 public class SecureSurfaceViewActivity extends Activity {
-    private GLSurfaceView mSurfaceView;
+    private GLSurfaceView mSurfaceView; // GLSurfaceView in our layout
 
     /**
-     * Initialization of the Activity after it is first created.  Must at least
-     * call {@link android.app.Activity#setContentView setContentView()} to
-     * describe what is to be displayed in the screen.
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.secure_surface_view_activity.
+     * We initialize our field GLSurfaceView mSurfaceView by locating the GLSurfaceView in our layout
+     * (R.id.surface_view) and set the renderer associated with this view to a new instance of
+     * CubeRenderer (two rotating cubes) which also starts the thread that will call the renderer,
+     * which in turn causes the rendering to start. Finally we set the surface view to be secure.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not called
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +88,13 @@ public class SecureSurfaceViewActivity extends Activity {
         mSurfaceView.setSecure(true);
     }
 
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or
+     * {@link #onPause}, for your activity to start interacting with the user.
+     *
+     * First we call through to our super's implementation of onResume, then we call the onResume
+     * callback of our GLSurfaceView mSurfaceView.
+     */
     @Override
     protected void onResume() {
         // Be sure to call the super class.
@@ -92,6 +104,14 @@ public class SecureSurfaceViewActivity extends Activity {
         mSurfaceView.onResume();
     }
 
+    /**
+     * Called as part of the activity lifecycle when an activity is going into
+     * the background, but has not (yet) been killed.  The counterpart to
+     * {@link #onResume}.
+     *
+     * First we call through to our super's implementation of onPause, then we call the onPause
+     * callback of our GLSurfaceView mSurfaceView.
+     */
     @Override
     protected void onPause() {
         // Be sure to call the super class.

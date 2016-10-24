@@ -53,9 +53,13 @@ import android.widget.Button;
 public class SecureDialogActivity extends Activity
         implements View.OnClickListener {
     /**
-     * Initialization of the Activity after it is first created.  Must at least
-     * call {@link android.app.Activity#setContentView setContentView()} to
-     * describe what is to be displayed in the screen.
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.secure_dialog_activity.
+     * Finally we locate the "Show secure dialog" Button (R.id.show) and set its OnClickListener
+     * to "this" (we implement View.OnClickListener so our onClick method will be called when
+     * the Button is clicked).
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +77,13 @@ public class SecureDialogActivity extends Activity
     }
 
     /**
-     * Called when the button to show the dialog is clicked.
+     * Called when the button to show the dialog is clicked. First we create AlertDialog dialog using
+     * AlertDialog.Builder, then we set the WindowManager.LayoutParams.FLAG_SECURE flag of the dialog
+     * window which causes the system to treat the content of the window as secure, preventing it from
+     * appearing in screenshots or from being viewed on non-secure displays. Finally we call show to
+     * show the dialog.
+     *
+     * @param v View of the "Show secure dialog" Button (R.id.show)
      */
     @Override
     public void onClick(View v) {
