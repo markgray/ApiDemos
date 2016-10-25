@@ -49,7 +49,17 @@ public class SetWallpaperActivity extends Activity {
      * Called when the activity is starting. First we call through to our super's implementation of
      * onCreate, then we set our content view to our layout file R.layout.wallpaper_2. Next we set
      * our variable WallpaperManager wallpaperManager to an instance of WallpaperManager associated
-     * with the given our Activity's Context.
+     * with our Activity's Context. We use <code>wallpaperManager</code> to retrieve the current
+     * system wallpaper to our variable <code>Drawable wallpaperDrawable</code>. We set our variable
+     * <code>ImageView imageView</code> to the ImageView in our layout R.id.imageview, enable the
+     * drawing cache for imageView, and then set the drawable wallpaperDrawable as the content of
+     * imageView. Next we locate the Button "Randomize" (R.id.randomize) and set its OnClickListener
+     * to an anonymous class which sets a random color filter for wallpaperDrawable, sets the
+     * modified drawable as the new content of imageView and invalidates imageView causing it to
+     * redraw itself with the new content. Finally we locate the Button "Set Wallpaper"
+     * (R.id.setwallpaper) and set its OnClickListener to an anonymous class which instructs our
+     * instance of WallpaperManager wallpaperManager to change the current system wallpaper to the
+     * bitmap cached in <code>imageView</code>.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
@@ -70,6 +80,13 @@ public class SetWallpaperActivity extends Activity {
 
         Button randomize = (Button) findViewById(R.id.randomize);
         randomize.setOnClickListener(new OnClickListener() {
+            /**
+             * Called when the "Randomize" (R.id.randomize) Button is clicked. First we pick a
+             * random color from our <code>mColors</code> array of colors and set that color
+             * to be the color filter for the drawable <code>wallpaperDrawable</code>,
+             *
+             * @param view View of Button that was clicked
+             */
             @Override
             public void onClick(View view) {
                 int mColor = (int) Math.floor(Math.random() * mColors.length);
