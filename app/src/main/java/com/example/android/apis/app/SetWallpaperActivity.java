@@ -83,7 +83,10 @@ public class SetWallpaperActivity extends Activity {
             /**
              * Called when the "Randomize" (R.id.randomize) Button is clicked. First we pick a
              * random color from our <code>mColors</code> array of colors and set that color
-             * to be the color filter for the drawable <code>wallpaperDrawable</code>,
+             * to be the color filter for the drawable <code>wallpaperDrawable</code>, then we
+             * set the drawable wallpaperDrawable as the content of the ImageView imageView, and
+             * finally we invalidate imageView causing its onDraw method to be called sometime in
+             * the future.
              *
              * @param view View of Button that was clicked
              */
@@ -98,6 +101,14 @@ public class SetWallpaperActivity extends Activity {
 
         Button setWallpaper = (Button) findViewById(R.id.setwallpaper);
         setWallpaper.setOnClickListener(new OnClickListener() {
+            /**
+             * Called when the Button "Set Wallpaper" (R.id.setwallpaper) is clicked. Wrapped in a
+             * try intended to catch IOException we instruct WallpaperManager wallpaperManager to
+             * change the current system wallpaper to the bitmap we get from our imageView by
+             * calling getDrawingCache()
+             *
+             * @param view View of the Button that was clicked
+             */
             @Override
             public void onClick(View view) {
                 try {

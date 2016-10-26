@@ -14,15 +14,29 @@ import android.widget.Spinner;
 import com.example.android.apis.R;
 
 /**
- * Demonstrates how the various soft input modes impact window resizing.
+ * Demonstrates how the various soft input modes impact window resizing:
+ *
+ *  "Unspecified" (The system will try to pick one or the other depending
+ *                on the contents of the window);
+ *  "Resize" (allow the window to be resized when an input method is shown,
+ *                so that its contents are not covered by the input method);
+ *  "Pan" (window will pan when an input method is shown, so it doesn't need
+ *                to deal with resizing but is just panned by the framework
+ *                to ensure the current input focus is visible);
+ *  "Nothing" (window will not adjust for a shown input method. The window will
+ *                not be resized, and it will not be panned to make its focus
+ *                visible)
+ *
+ * effect the resizing of the UI windows when the IME is displayed. They are set
+ * with: getWindow().setSoftInputMode(mResizeModeValues[position])
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SoftInputModes extends Activity {
-    Spinner mResizeMode;
-    final CharSequence[] mResizeModeLabels = new CharSequence[] {
+    Spinner mResizeMode; // spinner used to select the soft input mode
+    final CharSequence[] mResizeModeLabels = new CharSequence[] { // labels used for Spinner
             "Unspecified", "Resize", "Pan", "Nothing"
     };
-    final int[] mResizeModeValues = new int[] {
+    final int[] mResizeModeValues = new int[] { // LayoutParams constants corresponding to labels
             WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED,
             WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE,
             WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN,
@@ -30,10 +44,14 @@ public class SoftInputModes extends Activity {
     };
     
     /**
-     * Initialization of the Activity after it is first created.  Here we use
-     * {@link android.app.Activity#setContentView setContentView()} to set up
-     * the Activity's content, and retrieve the EditText widget whose state we
-     * will persistent.
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.soft_input_modes. Next we
+     * locate the Spinner in our layout (R.id.resize_mode) and use it to initialize our field
+     * mResizeMode. We create ArrayAdapter<CharSequence> adapter using our field CharSequence[]
+     * mResizeModeLabels as the CharSequence objects used by android.R.layout.simple_spinner_item
+     * to populate the list
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
