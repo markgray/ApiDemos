@@ -18,6 +18,7 @@ package com.example.android.apis.app;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+
 import com.example.android.apis.R;
 
 import android.app.Activity;
@@ -25,9 +26,13 @@ import android.os.Bundle;
 
 /**
  * <h3>Translucent Activity</h3>
- * 
+ * <p>
  * <p>This demonstrates the how to write an activity that is translucent,
  * allowing windows underneath to show through.</p>
+ *
+ * Sets the theme on the window in AndroidManifest to @style/Theme.Translucent
+ * which is derived in styles.xml from android:style/Theme.Translucent, thereby
+ * causing the window to be composited over whatever is behind it.
  */
 public class TranslucentActivity extends Activity {
     /**
@@ -36,10 +41,10 @@ public class TranslucentActivity extends Activity {
      * describe what is to be displayed in the screen.
      */
     @Override
-	protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         // Be sure to call the super class.
         super.onCreate(savedInstanceState);
-        
+
         // See assets/res/any/layout/translucent_background.xml for this
         // view layout definition, which is being set here as
         // the content of our screen.
