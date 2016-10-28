@@ -20,6 +20,7 @@ package com.example.android.apis.app;
 // class is in a sub-package.
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -64,8 +65,19 @@ App/Service/Alarm Controller
 
  */
 public class AlarmController extends Activity {
-    Toast mToast;
+    Toast mToast; // Toast instance latest Toast
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.alarm_controller. Next we
+     * locate the three Button's in our layout and set their OnClickListener's as follows:
+     *
+     *   R.id.one_shot "ONE SHOT ALARM" is set to OnClickListener mOneShotListener
+     *   R.id.start_repeating "START REPEATING ALARM" is set to OnClickListener mStartRepeatingListener
+     *   R.id.stop_repeating "STOP REPEATING ALARM" is set to OnClickListener mStopRepeatingListener
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +93,17 @@ public class AlarmController extends Activity {
         button.setOnClickListener(mStopRepeatingListener);
     }
 
+    /**
+     * OnClickListener for Button R.id.one_shot "ONE SHOT ALARM"
+     */
     private OnClickListener mOneShotListener = new OnClickListener() {
+        /**
+         * Called when the R.id.one_shot Button is clicked. We create an Intent to launch our
+         * BroadcastReceiver OneShotAlarm
+         *
+         * @param v View of Button that was clicked.
+         */
+        @Override
         public void onClick(View v) {
             // When the alarm goes off, we want to broadcast an Intent to our
             // BroadcastReceiver.  Here we make an Intent with an explicit class
@@ -111,7 +133,12 @@ public class AlarmController extends Activity {
         }
     };
 
+    /**
+     * OnClickListener for Button R.id.start_repeating "START REPEATING ALARM"
+     */
     private OnClickListener mStartRepeatingListener = new OnClickListener() {
+        @SuppressLint("ShortAlarm")
+        @Override
         public void onClick(View v) {
             // When the alarm goes off, we want to broadcast an Intent to our
             // BroadcastReceiver.  Here we make an Intent with an explicit class
@@ -143,7 +170,11 @@ public class AlarmController extends Activity {
         }
     };
 
+    /**
+     * OnClickListener for Button R.id.stop_repeating "STOP REPEATING ALARM"
+     */
     private OnClickListener mStopRepeatingListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             // Create the same intent, and thus a matching IntentSender, for
             // the one that was scheduled.

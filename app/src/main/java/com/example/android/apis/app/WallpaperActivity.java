@@ -28,12 +28,19 @@ import android.os.Bundle;
  * 
  * <p>This demonstrates the how to write an activity that has the system
  * wallpaper behind it.</p>
+ *
+ * This is an app which has the system wallpaper behind it. It does this by setting the theme
+ * on the window in AndroidManifest to Theme.Wallpaper, which inherits from the system theme
+ * android:style/Theme.Wallpaper, which has android:windowShowWallpaper = "true".
+ *
+ * Our style/Theme.WallPaper also defines the element: <item name="android:colorForeground">#fff</item>
  */
 public class WallpaperActivity extends Activity {
     /**
-     * Initialization of the Activity after it is first created.  Must at least
-     * call {@link android.app.Activity#setContentView setContentView()} to
-     * describe what is to be displayed in the screen.
+     * Called when the activity is starting. First we call through to our super's implementation
+     * of onCreate, then we set our content view to our layout file R.layout.translucent_background.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

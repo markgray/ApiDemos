@@ -18,6 +18,7 @@ package com.example.android.apis.app;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+
 import com.example.android.apis.R;
 
 import android.app.Activity;
@@ -27,16 +28,25 @@ import android.view.WindowManager;
 
 /**
  * <h3>Fancy Blur Activity</h3>
- * 
+ * <p>
  * <p>This demonstrates the how to write an activity that is translucent,
  * allowing windows underneath to show through, with a fancy blur
  * compositing effect.</p>
+ *
+ * This is the same as .app.TranslucentActivity, with the background blurred on
+ * older api's - WindowManager.LayoutParams.FLAG_BLUR_BEHIND is no longer
+ * supported as of API level 14, and Lollipop+ does not blur at all so the result
+ * is just to leave the background even more visible than the foreground --
+ * TranslucentActivity has a much better look.
  */
 public class TranslucentBlurActivity extends Activity {
     /**
-     * Initialization of the Activity after it is first created.  Must at least
-     * call {@link android.app.Activity#setContentView setContentView()} to
-     * describe what is to be displayed in the screen.
+     * Initialization of the Activity after it is first created. First we call through to our
+     * super's implementation of onCreate, then we set the flag FLAG_BLUR_BEHIND of or our
+     * window (Blurring is no longer supported however, so the result is just to leave the
+     * background even more visible than the foreground.
+     *
+     * @param icicle always null since onSaveInstanceState is not overridden
      */
     @Override
     protected void onCreate(Bundle icicle) {
@@ -47,7 +57,7 @@ public class TranslucentBlurActivity extends Activity {
         //noinspection deprecation
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
                 WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-        
+
         // See assets/res/any/layout/translucent_background.xml for this
         // view layout definition, which is being set here as
         // the content of our screen.

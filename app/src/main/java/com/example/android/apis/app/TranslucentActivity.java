@@ -36,9 +36,11 @@ import android.os.Bundle;
  */
 public class TranslucentActivity extends Activity {
     /**
-     * Initialization of the Activity after it is first created.  Must at least
-     * call {@link android.app.Activity#setContentView setContentView()} to
-     * describe what is to be displayed in the screen.
+     * Initialization of the Activity after it is first created. First we call through
+     * to our super's     * implementation of onCreate, then we set our content view to
+     * our layout file R.layout.translucent_background.
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
