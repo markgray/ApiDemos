@@ -99,7 +99,16 @@ public class AlarmController extends Activity {
     private OnClickListener mOneShotListener = new OnClickListener() {
         /**
          * Called when the R.id.one_shot Button is clicked. We create an Intent to launch our
-         * BroadcastReceiver OneShotAlarm
+         * BroadcastReceiver OneShotAlarm. Then we create a PendingIntent sender that will perform
+         * a broadcast. We create a Calendar calendar, set its current time to the current time in
+         * milliseconds, and add 30 seconds to this calendar. Then we create an AlarmManager am, and
+         * use it to schedule an alarm of type RTC_WAKEUP which will wake up the device when it goes
+         * off, set to trigger at Calendar calendar, and using PendingIntent sender as the action to
+         * perform when the alarm goes off. Then we make sure any previous Toast mToast has been
+         * cancelled, and show a Toast mToast stating:
+         *
+         *   One-shot alarm will go off in 30 seconds based on the real time clock.
+         *   Try changing the current time before then!
          *
          * @param v View of Button that was clicked.
          */
@@ -136,8 +145,23 @@ public class AlarmController extends Activity {
     /**
      * OnClickListener for Button R.id.start_repeating "START REPEATING ALARM"
      */
+    @SuppressLint("ShortAlarm")
     private OnClickListener mStartRepeatingListener = new OnClickListener() {
-        @SuppressLint("ShortAlarm")
+        /**
+         * Called when the R.id.start_repeating Button is clicked. We create an Intent to launch our
+         * BroadcastReceiver RepeatingAlarm. Then we create a PendingIntent sender that will perform
+         * a broadcast. We fetch the milliseconds since boot, including time spent in sleep to our
+         * variable long firstTime and add 15 seconds to it. Then we create an AlarmManager am, and
+         * use it to schedule an alarm of type ELAPSED_REALTIME_WAKEUP (Alarm time to use is
+         * SystemClock.elapsedRealtime() (time since boot, including sleep), which will wake up the
+         * device when it goes off), set to trigger at firstTime and using PendingIntent sender as
+         * the action to perform when the alarm goes off. Then we make sure any previous Toast mToast
+         * has been cancelled, and show a Toast mToast stating:
+         *
+         *   
+         *
+         * @param v View of the Button that has been clicked.
+         */
         @Override
         public void onClick(View v) {
             // When the alarm goes off, we want to broadcast an Intent to our
