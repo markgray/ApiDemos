@@ -158,7 +158,8 @@ public class AlarmController extends Activity {
          * the action to perform when the alarm goes off. Then we make sure any previous Toast mToast
          * has been cancelled, and show a Toast mToast stating:
          *
-         *   
+         *        Repeating alarm will go off in 15 seconds and every
+         *        15 seconds after based on the elapsed realtime clock
          *
          * @param v View of the Button that has been clicked.
          */
@@ -198,6 +199,17 @@ public class AlarmController extends Activity {
      * OnClickListener for Button R.id.stop_repeating "STOP REPEATING ALARM"
      */
     private OnClickListener mStopRepeatingListener = new OnClickListener() {
+        /**
+         * Called when the R.id.stop_repeating Button is clicked. We create an Intent that is
+         * identical to the one used to start the repeating alarm, and a PendingIntent for a
+         * Broadcast of that Intent intent. Then we create an AlarmManager am, and use it to
+         * remove any alarms with an Intent matching PendingIntent sender. Then we make sure
+         * any previous Toast mToast has been cancelled, and show a Toast mToast stating:
+         *
+         *       Repeating alarm has been unscheduled
+         *
+         * @param v View of the Button that was clicked
+         */
         @Override
         public void onClick(View v) {
             // Create the same intent, and thus a matching IntentSender, for

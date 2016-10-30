@@ -37,20 +37,39 @@ import android.widget.Toast;
  * This demonstrates how you can schedule an alarm that causes a service to
  * be started.  This is useful when you want to schedule alarms that initiate
  * long-running operations, such as retrieving recent e-mails.
+ *
+ * Note: as of API 19, all repeating alarms are inexact. If your application needs
+ * precise delivery times then it must use one-time exact alarms, rescheduling each
+ * time. Legacy applications whose targetSdkVersion is earlier than API 19 will
+ * continue to have all of their alarms, including repeating alarms, treated as exact.
  */
 public class AlarmService extends Activity {
-    private PendingIntent mAlarmSender;
-    
+    private PendingIntent mAlarmSender; // IntentSender used to launch our service
+
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.alarm_service. Next we
+     * create PendingIntent mAlarmSender which is intended to launch Service AlarmService_Service
+     * which is declared to be a service in AndroidManifest.xml using the element:
+     *
+     *    <service
+     *        android:name=".app.AlarmService_Service"
+     *        android:process=":remote" />
+     *
+     *
+     *
+     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     */
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.alarm_service);
 
         // Create an IntentSender that will launch our service, to be scheduled
         // with the alarm manager.
         mAlarmSender = PendingIntent.getService(AlarmService.this,
                 0, new Intent(AlarmService.this, AlarmService_Service.class), 0);
-        
-        setContentView(R.layout.alarm_service);
+
 
         // Watch for button clicks.
         Button button = (Button)findViewById(R.id.start_alarm);
@@ -59,8 +78,9 @@ public class AlarmService extends Activity {
         button.setOnClickListener(mStopAlarmListener);
     }
 
+    @SuppressLint("ShortAlarm")
     private OnClickListener mStartAlarmListener = new OnClickListener() {
-        @SuppressLint("ShortAlarm")
+        @Override
         public void onClick(View v) {
             // We want the alarm to go off 30 seconds from now.
             long firstTime = SystemClock.elapsedRealtime();
@@ -77,6 +97,7 @@ public class AlarmService extends Activity {
     };
 
     private OnClickListener mStopAlarmListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             // And cancel the alarm.
             AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);

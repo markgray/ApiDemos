@@ -18,6 +18,7 @@ package com.example.android.apis.app;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+
 import com.example.android.apis.R;
 
 import android.content.Context;
@@ -29,11 +30,18 @@ import android.widget.Toast;
  * This is an example of implement an {@link BroadcastReceiver} for an alarm that
  * should occur once.
  */
-public class RepeatingAlarm extends BroadcastReceiver
-{
+public class RepeatingAlarm extends BroadcastReceiver {
+    /**
+     * This method is called when the BroadcastReceiver is receiving an Intent
+     * broadcast. We simply show a Toast stating:
+     *
+     *     The repeating alarm has gone off
+     *
+     * @param context The Context in which the receiver is running.
+     * @param intent The Intent being received.
+     */
     @Override
-    public void onReceive(Context context, Intent intent)
-    {
+    public void onReceive(Context context, Intent intent) {
         Toast.makeText(context, R.string.repeating_received, Toast.LENGTH_SHORT).show();
     }
 }
