@@ -43,6 +43,7 @@ import android.widget.Toast;
  * time. Legacy applications whose targetSdkVersion is earlier than API 19 will
  * continue to have all of their alarms, including repeating alarms, treated as exact.
  */
+@SuppressLint("ShortAlarm")
 public class AlarmService extends Activity {
     private PendingIntent mAlarmSender; // IntentSender used to launch our service
 
@@ -56,7 +57,10 @@ public class AlarmService extends Activity {
      *        android:name=".app.AlarmService_Service"
      *        android:process=":remote" />
      *
-     *
+     * Then we locate Button R.id.start_alarm ("Start Alarm Service") and set its OnClickListener to
+     * OnClickListener mStartAlarmListener which starts the alarm service when the Button is clicked,
+     * and locate the Button R.id.stop_alarm ("Stop Alarm Service") and set its OnClickListener to
+     * OnClickListener mStopAlarmListener which stops the alarm service when the Button is clicked.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
@@ -78,8 +82,27 @@ public class AlarmService extends Activity {
         button.setOnClickListener(mStopAlarmListener);
     }
 
-    @SuppressLint("ShortAlarm")
+    /**
+     * OnClickListener for Button R.id.start_alarm ("Start Alarm Service") starts the alarm service
+     */
     private OnClickListener mStartAlarmListener = new OnClickListener() {
+        /**
+         * Called when the Button R.id.start_alarm is clicked. We first fetch the milliseconds since
+         * boot, including time spent in sleep to our variable long firstTime. Then we get a handle
+         * to the AlarmManager system service in AlarmManager am, and use it to schedule a repeating
+         * alarm  of type ELAPSED_REALTIME_WAKEUP (which will wake up the device when it goes off),
+         * with the current milliseconds contained in firstTime as the time that the alarm should
+         * first go off, the interval in milliseconds between subsequent repeats of the alarm set to
+         * 30 seconds, and PendingIntent mAlarmSender as the action to perform when the alarm goes
+         * off. Finally we display a Toast stating:
+         *
+         *      Repeating alarm will go off in 15 seconds and every
+         *      15 seconds after based on the elapsed realtime clock
+         *
+         * The message is wrong of course, but who cares.
+         *
+         * @param v View of Button that was clicked
+         */
         @Override
         public void onClick(View v) {
             // We want the alarm to go off 30 seconds from now.
@@ -96,7 +119,19 @@ public class AlarmService extends Activity {
         }
     };
 
+    /**
+     * OnClickListener for Button R.id.stop_alarm ("Stop Alarm Service") stops the alarm service
+     */
     private OnClickListener mStopAlarmListener = new OnClickListener() {
+        /**
+         * Called when the Button R.id.stop_alarm is clicked. First we get a handle to the
+         * AlarmManager system service in AlarmManager am, and use it to cancel any alarms with
+         * an Intent matching PendingIntent mAlarmSender. Finally we show a Toast stating:
+         *
+         *        Repeating alarm has been unscheduled
+         *
+         * @param v View of Button that was clicked
+         */
         @Override
         public void onClick(View v) {
             // And cancel the alarm.

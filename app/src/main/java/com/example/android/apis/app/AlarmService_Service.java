@@ -18,6 +18,7 @@ package com.example.android.apis.app;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+
 import com.example.android.apis.R;
 
 import android.annotation.TargetApi;
@@ -38,17 +39,24 @@ import android.widget.Toast;
  * This is an example of implementing an application service that will run in
  * response to an alarm, allowing us to move long duration work out of an
  * intent receiver.
- * 
+ *
  * @see AlarmService
  * @see AlarmService_Service
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class AlarmService_Service extends Service {
-    NotificationManager mNM;
+    NotificationManager mNM; // Class used to notify the user of events that happen
 
+    /**
+     * Called by the system when the service is first created. First we initialize our field
+     * NotificationManager mNM with a handle to the NotificationManager system service. Next we
+     * show our icon in the status bar by calling our method showNotification. Then we create a
+     * new Thread thr to run our Runnable mTask with the name "AlarmService_Service". Finally we
+     * start Thread thr.
+     */
     @Override
     public void onCreate() {
-        mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         // show the icon in the status bar
         showNotification();
@@ -76,7 +84,7 @@ public class AlarmService_Service extends Service {
         public void run() {
             // Normally we would do some work here...  for our sample, we will
             // just sleep for 30 seconds.
-            long endTime = System.currentTimeMillis() + 15*1000;
+            long endTime = System.currentTimeMillis() + 15 * 1000;
             while (System.currentTimeMillis() < endTime) {
                 synchronized (mBinder) {
                     try {
@@ -129,8 +137,8 @@ public class AlarmService_Service extends Service {
      */
     private final IBinder mBinder = new Binder() {
         @Override
-		protected boolean onTransact(int code, Parcel data, Parcel reply,
-		        int flags) throws RemoteException {
+        protected boolean onTransact(int code, Parcel data, Parcel reply,
+                                     int flags) throws RemoteException {
             return super.onTransact(code, data, reply, flags);
         }
     };
