@@ -68,6 +68,17 @@ public class AlarmService_Service extends Service {
         thr.start();
     }
 
+    /**
+     * Called by the system to notify a Service that it is no longer used and is being removed. The
+     * service should clean up any resources it holds (threads, registered receivers, etc) at this
+     * point. Upon return, there will be no more calls in to this Service object and it is
+     * effectively dead. Do not call this method directly.
+     *
+     * We use our NotificationManager mNM to cancel our notification using the same identifier
+     * we used to start it in the method showNotification(), then we show a Toast stating:
+     *
+     *     The alarm service has finished running
+     */
     @Override
     public void onDestroy() {
         // Cancel the notification -- we use the same ID that we had used to start it
@@ -81,6 +92,17 @@ public class AlarmService_Service extends Service {
      * The function that runs in our worker thread
      */
     Runnable mTask = new Runnable() {
+        /**
+         * Starts executing the active part of the class' code. This method is
+         * called when a thread is started that has been created with a class which
+         * implements {@code Runnable}.
+         *
+         * We set our variable long endTime to the current time in milliseconds plus 15 seconds,
+         * then we loop until the current time is greater than or equal to endTime (15 seconds have
+         * elapsed). In the loop we call wait to wait that 15 seconds, but the loop is necessary
+         * just in case we are interrupted. After the wait is up we stop this service.
+         */
+        @Override
         public void run() {
             // Normally we would do some work here...  for our sample, we will
             // just sleep for 30 seconds.
@@ -100,6 +122,18 @@ public class AlarmService_Service extends Service {
         }
     };
 
+    /**
+     * Return the communication channel to the service.
+     *
+     * @param intent The Intent that was used to bind to this service,
+     *        as given to {@link android.content.Context#bindService
+     *        Context.bindService}.  Note that any extras that were
+     *        included with the Intent at that point will
+     *        <em>not</em> be seen here.
+     *
+     * @return Return an IBinder through which clients can call on to the
+     *         service.
+     */
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
