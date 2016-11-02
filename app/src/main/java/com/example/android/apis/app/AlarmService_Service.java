@@ -73,11 +73,11 @@ public class AlarmService_Service extends Service {
      * service should clean up any resources it holds (threads, registered receivers, etc) at this
      * point. Upon return, there will be no more calls in to this Service object and it is
      * effectively dead. Do not call this method directly.
-     *
+     * <p>
      * We use our NotificationManager mNM to cancel our notification using the same identifier
      * we used to start it in the method showNotification(), then we show a Toast stating:
-     *
-     *     The alarm service has finished running
+     * <p>
+     * The alarm service has finished running
      */
     @Override
     public void onDestroy() {
@@ -123,16 +123,16 @@ public class AlarmService_Service extends Service {
     };
 
     /**
-     * Return the communication channel to the service.
+     * Return the communication channel to the service. We simply return our minimalist
+     * <code>IBinder mBinder</code> field.
      *
      * @param intent The Intent that was used to bind to this service,
-     *        as given to {@link android.content.Context#bindService
-     *        Context.bindService}.  Note that any extras that were
-     *        included with the Intent at that point will
-     *        <em>not</em> be seen here.
-     *
+     *               as given to {@link android.content.Context#bindService
+     *               Context.bindService}.  Note that any extras that were
+     *               included with the Intent at that point will
+     *               <em>not</em> be seen here.
      * @return Return an IBinder through which clients can call on to the
-     *         service.
+     * service.
      */
     @Override
     public IBinder onBind(Intent intent) {
@@ -140,7 +140,19 @@ public class AlarmService_Service extends Service {
     }
 
     /**
-     * Show a notification while this service is running.
+     * Show a notification while this service is running. First we fetch the resource String
+     * R.string.alarm_service_started ("The alarm service has started running") into our
+     * variable {@code CharSequence text}, then we create <code>PendingIntent contentIntent</code>
+     * to start the Activity AlarmService (the Activity that launched us). Next we build our
+     * <code>Notification notification</code> using a method chain starting with a new instance
+     * of <code>Notification.Builder</code>. It consists of a small icon R.drawable.stat_sample,
+     * {@code CharSequence text} as the "ticker" text which is sent to accessibility services, a
+     * timestamp of the current time in milliseconds, a title of R.string.alarm_service_label
+     * ("Sample Alarm Service"), {@code CharSequence text} as the second line of text in the
+     * platform notification template, and <code>PendingIntent contentIntent</code></code> as the
+     * PendingIntent to be sent when the notification is clicked. Finally we post our notification
+     * to be shown in the status bar using an <code>int id</code> id consisting of our resource id
+     * R.string.alarm_service_started.
      */
     private void showNotification() {
         // In this sample, we'll use the same text for the ticker and the expanded notification
@@ -167,12 +179,31 @@ public class AlarmService_Service extends Service {
 
     /**
      * This is the object that receives interactions from clients.  See RemoteService
-     * for a more complete example.
+     * for a more complete example. We just implement <code>onTransact</code> to call
+     * through to our super's implementation of <code>onTransact</code>.
      */
     private final IBinder mBinder = new Binder() {
+        /**
+         * Default implementation is a stub that returns false. You will want to override this to do
+         * the appropriate unmarshalling of transactions. We simply return the return value of our
+         * super's implementation of onTransact
+         *
+         * @param code The action to perform. This should be a number between FIRST_CALL_TRANSACTION
+         *        and LAST_CALL_TRANSACTION.
+         * @param data  Marshalled data to send to the target. Must not be null. If you are not
+         *        sending any data, you must create an empty Parcel that is given here.
+         * @param reply Marshalled data to be received from the target. May be null if you are not
+         *        interested in the return value.
+         * @param flags Additional operation flags. Either 0 for a normal RPC, or FLAG_ONEWAY
+         *        for a one-way RPC.
+         *
+         * @return Our super's "reaction" to the request: true if code == INTERFACE_TRANSACTION or
+         *         code == DUMP_TRANSACTION, false otherwise.
+         *
+         * @throws RemoteException
+         */
         @Override
-        protected boolean onTransact(int code, Parcel data, Parcel reply,
-                                     int flags) throws RemoteException {
+        protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
             return super.onTransact(code, data, reply, flags);
         }
     };
