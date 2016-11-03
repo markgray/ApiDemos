@@ -62,7 +62,7 @@ import com.example.android.apis.R;
 @SuppressWarnings("deprecation")
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class AlertDialogSamples extends Activity {
-    private static final String TAG = "AlertDialogSamples";
+    private static final String TAG = "AlertDialogSamples"; // TAG used for logging
     private static final int DIALOG_YES_NO_MESSAGE = 1;
     private static final int DIALOG_YES_NO_LONG_MESSAGE = 2;
     private static final int DIALOG_LIST = 3;
@@ -86,7 +86,6 @@ public class AlertDialogSamples extends Activity {
     private int mProgress;
     static private Handler mProgressHandler;
 
-    @SuppressWarnings("deprecation")
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
@@ -94,15 +93,12 @@ public class AlertDialogSamples extends Activity {
                 return new AlertDialog.Builder(AlertDialogSamples.this)
                         .setTitle(R.string.alert_dialog_two_buttons_title)
                         .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                        /* User clicked OK so do some stuff */
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*OK*/}
                         })
                         .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                        /* User clicked Cancel so do some stuff */
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*Cancel*/
                             }
                         })
                         .create();
@@ -111,22 +107,16 @@ public class AlertDialogSamples extends Activity {
                         .setTitle(R.string.alert_dialog_two_buttons_msg)
                         .setMessage(R.string.alert_dialog_two_buttons2_msg)
                         .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                        /* User clicked OK so do some stuff */
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*OK*/}
                         })
                         .setNeutralButton(R.string.alert_dialog_something, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                        /* User clicked Something so do some stuff */
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*Something*/}
                         })
                         .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                        /* User clicked Cancel so do some stuff */
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*Cancel*/}
                         })
                         .create();
             case DIALOG_YES_NO_ULTRA_LONG_MESSAGE:
@@ -134,31 +124,25 @@ public class AlertDialogSamples extends Activity {
                         .setTitle(R.string.alert_dialog_two_buttons_msg)
                         .setMessage(R.string.alert_dialog_two_buttons2ultra_msg)
                         .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                        /* User clicked OK so do some stuff */
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*OK*/}
                         })
                         .setNeutralButton(R.string.alert_dialog_something, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                        /* User clicked Something so do some stuff */
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*Something*/}
                         })
                         .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                        /* User clicked Cancel so do some stuff */
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*Cancel*/}
                         })
                         .create();
             case DIALOG_LIST:
                 return new AlertDialog.Builder(AlertDialogSamples.this)
                         .setTitle(R.string.select_dialog)
                         .setItems(R.array.select_dialog_items, new DialogInterface.OnClickListener() {
+                            @Override
                             public void onClick(DialogInterface dialog, int which) {
-
-                        /* User clicked so do some stuff */
+                            /* User clicked so do some stuff */
                                 String[] items = getResources().getStringArray(R.array.select_dialog_items);
                                 new AlertDialog.Builder(AlertDialogSamples.this)
                                         .setMessage("You selected: " + which + " , " + items[which])
@@ -173,17 +157,13 @@ public class AlertDialogSamples extends Activity {
                 mProgressDialog.setMax(MAX_PROGRESS);
                 mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE,
                         getText(R.string.alert_dialog_hide), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                    /* User clicked Yes so do some stuff */
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*Yes*/}
                         });
                 mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
                         getText(R.string.alert_dialog_cancel), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                    /* User clicked No so do some stuff */
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*No*/}
                         });
                 return mProgressDialog;
             case DIALOG_PROGRESS_SPINNER:
@@ -195,22 +175,16 @@ public class AlertDialogSamples extends Activity {
                 return new AlertDialog.Builder(AlertDialogSamples.this)
                         .setTitle(R.string.alert_dialog_single_choice)
                         .setSingleChoiceItems(R.array.select_dialog_items2, 0, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                        /* User clicked on a radio button do some stuff */
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*radio button clicked*/}
                         })
                         .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                        /* User clicked Yes so do some stuff */
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*Yes*/}
                         })
                         .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                        /* User clicked No so do some stuff */
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*No*/}
                         })
                         .create();
             case DIALOG_MULTIPLE_CHOICE:
@@ -219,25 +193,18 @@ public class AlertDialogSamples extends Activity {
                         .setMultiChoiceItems(R.array.select_dialog_items3,
                                 new boolean[]{false, true, false, true, false, false, false},
                                 new DialogInterface.OnMultiChoiceClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton,
-                                                        boolean isChecked) {
-
-                                /* User clicked on a check box do some stuff */
-                                    }
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int whichButton, boolean isChecked) {/*check box clicked*/}
                                 })
                         .setPositiveButton(R.string.alert_dialog_ok,
                                 new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-
-                        /* User clicked Yes so do some stuff */
-                                    }
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int whichButton) {/*Yes*/}
                                 })
                         .setNegativeButton(R.string.alert_dialog_cancel,
                                 new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-
-                        /* User clicked No so do some stuff */
-                                    }
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int whichButton) {/*No*/}
                                 })
                         .create();
             case DIALOG_MULTIPLE_CHOICE_CURSOR:
@@ -254,8 +221,8 @@ public class AlertDialogSamples extends Activity {
                                 ContactsContract.Contacts.SEND_TO_VOICEMAIL,
                                 ContactsContract.Contacts.DISPLAY_NAME,
                                 new DialogInterface.OnMultiChoiceClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton,
-                                                        boolean isChecked) {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int whichButton, boolean isChecked) {
                                         Toast.makeText(AlertDialogSamples.this,
                                                 "Readonly Demo Only - Data will not be updated",
                                                 Toast.LENGTH_SHORT).show();
@@ -270,16 +237,12 @@ public class AlertDialogSamples extends Activity {
                         .setTitle(R.string.alert_dialog_text_entry)
                         .setView(textEntryView)
                         .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                        /* User clicked OK so do some stuff */
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*OK*/}
                         })
                         .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                        /* User clicked cancel so do some stuff */
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*cancel*/}
                         })
                         .create();
             case DIALOG_YES_NO_OLD_SCHOOL_MESSAGE:
@@ -287,12 +250,12 @@ public class AlertDialogSamples extends Activity {
                         .setIconAttribute(android.R.attr.alertDialogIcon)
                         .setTitle(R.string.alert_dialog_two_buttons_title)
                         .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*OK*/}
                         })
                         .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*Cancel*/}
                         })
                         .create();
             case DIALOG_YES_NO_HOLO_LIGHT_MESSAGE:
@@ -300,36 +263,36 @@ public class AlertDialogSamples extends Activity {
                         .setIconAttribute(android.R.attr.alertDialogIcon)
                         .setTitle(R.string.alert_dialog_two_buttons_title)
                         .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*Ok*/}
                         })
                         .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*cancel*/}
                         })
                         .create();
             case DIALOG_YES_NO_DEFAULT_LIGHT_MESSAGE:
                 return new AlertDialog.Builder(AlertDialogSamples.this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
                         .setTitle(R.string.alert_dialog_two_buttons_title)
                         .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*ok*/}
                         })
                         .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*cancel*/}
                         })
                         .create();
             case DIALOG_YES_NO_DEFAULT_DARK_MESSAGE:
                 return new AlertDialog.Builder(AlertDialogSamples.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
                         .setTitle(R.string.alert_dialog_two_buttons_title)
                         .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*ok*/}
                         })
                         .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {/*cancel*/}
                         })
                         .create();
         }
@@ -351,6 +314,7 @@ public class AlertDialogSamples extends Activity {
         /* Display a text message with yes/no buttons and handle each message as well as the cancel action */
         Button twoButtonsTitle = (Button) findViewById(R.id.two_buttons);
         twoButtonsTitle.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 showDialog(DIALOG_YES_NO_MESSAGE);
             }
@@ -359,6 +323,7 @@ public class AlertDialogSamples extends Activity {
         /* Display a long text message with yes/no buttons and handle each message as well as the cancel action */
         Button twoButtons2Title = (Button) findViewById(R.id.two_buttons2);
         twoButtons2Title.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 showDialog(DIALOG_YES_NO_LONG_MESSAGE);
             }
@@ -368,6 +333,7 @@ public class AlertDialogSamples extends Activity {
         /* Display an ultra long text message with yes/no buttons and handle each message as well as the cancel action */
         Button twoButtons2UltraTitle = (Button) findViewById(R.id.two_buttons2ultra);
         twoButtons2UltraTitle.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 showDialog(DIALOG_YES_NO_ULTRA_LONG_MESSAGE);
             }
@@ -377,6 +343,7 @@ public class AlertDialogSamples extends Activity {
         /* Display a list of items */
         Button selectButton = (Button) findViewById(R.id.select_button);
         selectButton.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 showDialog(DIALOG_LIST);
             }
@@ -385,6 +352,7 @@ public class AlertDialogSamples extends Activity {
         /* Display a custom progress bar */
         Button progressButton = (Button) findViewById(R.id.progress_button);
         progressButton.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 showDialog(DIALOG_PROGRESS);
                 mProgress = 0;
@@ -396,6 +364,7 @@ public class AlertDialogSamples extends Activity {
         /* Display a custom progress bar */
         Button progressSpinnerButton = (Button) findViewById(R.id.progress_spinner_button);
         progressSpinnerButton.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 showDialog(DIALOG_PROGRESS_SPINNER);
             }
@@ -404,6 +373,7 @@ public class AlertDialogSamples extends Activity {
         /* Display a radio button group */
         Button radioButton = (Button) findViewById(R.id.radio_button);
         radioButton.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 showDialog(DIALOG_SINGLE_CHOICE);
             }
@@ -412,6 +382,7 @@ public class AlertDialogSamples extends Activity {
         /* Display a list of checkboxes */
         Button checkBox = (Button) findViewById(R.id.checkbox_button);
         checkBox.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 showDialog(DIALOG_MULTIPLE_CHOICE);
             }
@@ -420,6 +391,7 @@ public class AlertDialogSamples extends Activity {
         /* Display a list of checkboxes, backed by a cursor */
         Button checkBox2 = (Button) findViewById(R.id.checkbox_button2);
         checkBox2.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 showDialog(DIALOG_MULTIPLE_CHOICE_CURSOR);
             }
@@ -428,6 +400,7 @@ public class AlertDialogSamples extends Activity {
         /* Display a text entry dialog */
         Button textEntry = (Button) findViewById(R.id.text_entry_button);
         textEntry.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 showDialog(DIALOG_TEXT_ENTRY);
             }
@@ -436,6 +409,7 @@ public class AlertDialogSamples extends Activity {
         /* Two points, in the traditional theme */
         Button twoButtonsOldSchoolTitle = (Button) findViewById(R.id.two_buttons_old_school);
         twoButtonsOldSchoolTitle.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 showDialog(DIALOG_YES_NO_OLD_SCHOOL_MESSAGE);
             }
@@ -444,6 +418,7 @@ public class AlertDialogSamples extends Activity {
         /* Two points, in the light holographic theme */
         Button twoButtonsHoloLightTitle = (Button) findViewById(R.id.two_buttons_holo_light);
         twoButtonsHoloLightTitle.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 showDialog(DIALOG_YES_NO_HOLO_LIGHT_MESSAGE);
             }
@@ -452,6 +427,7 @@ public class AlertDialogSamples extends Activity {
         /* Two points, in the light default theme */
         Button twoButtonsDefaultLightTitle = (Button) findViewById(R.id.two_buttons_default_light);
         twoButtonsDefaultLightTitle.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 showDialog(DIALOG_YES_NO_DEFAULT_LIGHT_MESSAGE);
             }
@@ -460,6 +436,7 @@ public class AlertDialogSamples extends Activity {
         /* Two points, in the dark default theme */
         Button twoButtonsDefaultDarkTitle = (Button) findViewById(R.id.two_buttons_default_dark);
         twoButtonsDefaultDarkTitle.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 showDialog(DIALOG_YES_NO_DEFAULT_DARK_MESSAGE);
             }

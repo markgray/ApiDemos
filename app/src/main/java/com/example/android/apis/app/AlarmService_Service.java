@@ -186,7 +186,7 @@ public class AlarmService_Service extends Service {
         /**
          * Default implementation is a stub that returns false. You will want to override this to do
          * the appropriate unmarshalling of transactions. We simply return the return value of our
-         * super's implementation of onTransact
+         * super's implementation of onTransact.
          *
          * @param code The action to perform. This should be a number between FIRST_CALL_TRANSACTION
          *        and LAST_CALL_TRANSACTION.
