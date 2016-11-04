@@ -63,33 +63,45 @@ import com.example.android.apis.R;
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class AlertDialogSamples extends Activity {
     private static final String TAG = "AlertDialogSamples"; // TAG used for logging
-    private static final int DIALOG_YES_NO_MESSAGE = 1;
-    private static final int DIALOG_YES_NO_LONG_MESSAGE = 2;
-    private static final int DIALOG_LIST = 3;
-    private static final int DIALOG_PROGRESS = 4;
-    private static final int DIALOG_SINGLE_CHOICE = 5;
-    private static final int DIALOG_MULTIPLE_CHOICE = 6;
-    private static final int DIALOG_TEXT_ENTRY = 7;
-    private static final int DIALOG_MULTIPLE_CHOICE_CURSOR = 8;
-    private static final int DIALOG_YES_NO_ULTRA_LONG_MESSAGE = 9;
-    private static final int DIALOG_YES_NO_OLD_SCHOOL_MESSAGE = 10;
-    private static final int DIALOG_YES_NO_HOLO_LIGHT_MESSAGE = 11;
-    private static final int DIALOG_YES_NO_DEFAULT_LIGHT_MESSAGE = 12;
-    private static final int DIALOG_YES_NO_DEFAULT_DARK_MESSAGE = 13;
-    private static final int DIALOG_PROGRESS_SPINNER = 14;
 
-    private static final int MAX_PROGRESS = 100;
+    private static final int DIALOG_YES_NO_MESSAGE = 1; // OK Cancel dialog with a message
+    private static final int DIALOG_YES_NO_LONG_MESSAGE = 2; // OK Cancel dialog with a long message
+    private static final int DIALOG_LIST = 3; // List dialog
+    private static final int DIALOG_PROGRESS = 4; // Progress bar dialog
+    private static final int DIALOG_SINGLE_CHOICE = 5; // Single choice list
+    private static final int DIALOG_MULTIPLE_CHOICE = 6; // Repeat alarm
+    private static final int DIALOG_TEXT_ENTRY = 7; // Text Entry dialog
+    private static final int DIALOG_MULTIPLE_CHOICE_CURSOR = 8; // Send Call to VoiceMail
+    private static final int DIALOG_YES_NO_ULTRA_LONG_MESSAGE = 9; // OK Cancel dialog with ultra long message
+    private static final int DIALOG_YES_NO_OLD_SCHOOL_MESSAGE = 10; // OK Cancel dialog with traditional theme
+    private static final int DIALOG_YES_NO_HOLO_LIGHT_MESSAGE = 11; // OK Cancel dialog with Holo Light theme
+    private static final int DIALOG_YES_NO_DEFAULT_LIGHT_MESSAGE = 12; // OK Cancel dialog with DeviceDefault Light theme
+    private static final int DIALOG_YES_NO_DEFAULT_DARK_MESSAGE = 13; // OK Cancel dialog with DeviceDefault theme
+    private static final int DIALOG_PROGRESS_SPINNER = 14; // Progress spinner dialog
+
+    private static final int MAX_PROGRESS = 100; // Value used for ProgressDialog.setMax call
 
     @SuppressWarnings("FieldCanBeLocal")
-    private ProgressDialog mProgressSpinnerDialog;
-    private ProgressDialog mProgressDialog;
-    private int mProgress;
-    static private Handler mProgressHandler;
+    private ProgressDialog mProgressSpinnerDialog; // ProgressDialog used for DIALOG_PROGRESS_SPINNER
+    private ProgressDialog mProgressDialog; // ProgressDialog used for DIALOG_PROGRESS
+    private int mProgress; // Count used by mProgressHandler for the two ProgressDialog's
+    static private Handler mProgressHandler; // Handler which "moves" the ProgressDialog progress setting
 
+    /**
+     * Callback for creating dialogs that are managed (saved and restored) for you by the activity.
+     * We switch based on the id passed us which is the int parameter that the onClickListener for
+     * the Button clicked in our layout gave when calling showDialog. In each case statement an
+     * AlertDialog.Builder is used to build a Dialog which it returns to the caller. If the int id
+     * is not among the ones defined above (DIALOG_*) we return null. See each case statement for
+     * comments about what is done.
+     *
+     * @param id The id of the dialog.
+     * @return The dialog. If you return null, the dialog will not be created.
+     */
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
-            case DIALOG_YES_NO_MESSAGE:
+            case DIALOG_YES_NO_MESSAGE: // OK Cancel dialog with a message
                 return new AlertDialog.Builder(AlertDialogSamples.this)
                         .setTitle(R.string.alert_dialog_two_buttons_title)
                         .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
@@ -98,8 +110,7 @@ public class AlertDialogSamples extends Activity {
                         })
                         .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int whichButton) {/*Cancel*/
-                            }
+                            public void onClick(DialogInterface dialog, int whichButton) {/*Cancel*/}
                         })
                         .create();
             case DIALOG_YES_NO_LONG_MESSAGE:
