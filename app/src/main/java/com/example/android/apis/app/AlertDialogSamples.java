@@ -113,7 +113,7 @@ public class AlertDialogSamples extends Activity {
                             public void onClick(DialogInterface dialog, int whichButton) {/*Cancel*/}
                         })
                         .create();
-            case DIALOG_YES_NO_LONG_MESSAGE:
+            case DIALOG_YES_NO_LONG_MESSAGE: // OK Cancel dialog with a long message (Note .setMessage and .setNeutralButton)
                 return new AlertDialog.Builder(AlertDialogSamples.this)
                         .setTitle(R.string.alert_dialog_two_buttons_msg)
                         .setMessage(R.string.alert_dialog_two_buttons2_msg)
@@ -130,7 +130,7 @@ public class AlertDialogSamples extends Activity {
                             public void onClick(DialogInterface dialog, int whichButton) {/*Cancel*/}
                         })
                         .create();
-            case DIALOG_YES_NO_ULTRA_LONG_MESSAGE:
+            case DIALOG_YES_NO_ULTRA_LONG_MESSAGE: // OK Cancel dialog with ultra long message
                 return new AlertDialog.Builder(AlertDialogSamples.this)
                         .setTitle(R.string.alert_dialog_two_buttons_msg)
                         .setMessage(R.string.alert_dialog_two_buttons2ultra_msg)
@@ -147,7 +147,7 @@ public class AlertDialogSamples extends Activity {
                             public void onClick(DialogInterface dialog, int whichButton) {/*Cancel*/}
                         })
                         .create();
-            case DIALOG_LIST:
+            case DIALOG_LIST: // List dialog
                 return new AlertDialog.Builder(AlertDialogSamples.this)
                         .setTitle(R.string.select_dialog)
                         .setItems(R.array.select_dialog_items, new DialogInterface.OnClickListener() {
@@ -161,7 +161,7 @@ public class AlertDialogSamples extends Activity {
                             }
                         })
                         .create();
-            case DIALOG_PROGRESS:
+            case DIALOG_PROGRESS: // Progress bar dialog
                 mProgressDialog = new ProgressDialog(AlertDialogSamples.this);
                 mProgressDialog.setTitle(R.string.select_dialog);
                 mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -177,12 +177,12 @@ public class AlertDialogSamples extends Activity {
                             public void onClick(DialogInterface dialog, int whichButton) {/*No*/}
                         });
                 return mProgressDialog;
-            case DIALOG_PROGRESS_SPINNER:
+            case DIALOG_PROGRESS_SPINNER: // Progress spinner dialog
                 mProgressSpinnerDialog = new ProgressDialog(AlertDialogSamples.this);
                 mProgressSpinnerDialog.setTitle(R.string.select_dialog);
                 mProgressSpinnerDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 return mProgressSpinnerDialog;
-            case DIALOG_SINGLE_CHOICE:
+            case DIALOG_SINGLE_CHOICE: // Single choice list
                 return new AlertDialog.Builder(AlertDialogSamples.this)
                         .setTitle(R.string.alert_dialog_single_choice)
                         .setSingleChoiceItems(R.array.select_dialog_items2, 0, new DialogInterface.OnClickListener() {
@@ -198,7 +198,7 @@ public class AlertDialogSamples extends Activity {
                             public void onClick(DialogInterface dialog, int whichButton) {/*No*/}
                         })
                         .create();
-            case DIALOG_MULTIPLE_CHOICE:
+            case DIALOG_MULTIPLE_CHOICE: // Repeat alarm
                 return new AlertDialog.Builder(AlertDialogSamples.this)
                         .setTitle(R.string.alert_dialog_multi_choice)
                         .setMultiChoiceItems(R.array.select_dialog_items3,
@@ -218,14 +218,13 @@ public class AlertDialogSamples extends Activity {
                                     public void onClick(DialogInterface dialog, int whichButton) {/*No*/}
                                 })
                         .create();
-            case DIALOG_MULTIPLE_CHOICE_CURSOR:
+            case DIALOG_MULTIPLE_CHOICE_CURSOR: // Send Call to VoiceMail
                 String[] projection = new String[]{
                         ContactsContract.Contacts._ID,
                         ContactsContract.Contacts.DISPLAY_NAME,
                         ContactsContract.Contacts.SEND_TO_VOICEMAIL
                 };
-                Cursor cursor = managedQuery(ContactsContract.Contacts.CONTENT_URI,
-                        projection, null, null, null);
+                Cursor cursor = managedQuery(ContactsContract.Contacts.CONTENT_URI, projection, null, null, null);
                 return new AlertDialog.Builder(AlertDialogSamples.this)
                         .setTitle(R.string.alert_dialog_multi_choice_cursor)
                         .setMultiChoiceItems(cursor,
@@ -240,10 +239,11 @@ public class AlertDialogSamples extends Activity {
                                     }
                                 })
                         .create();
-            case DIALOG_TEXT_ENTRY:
+            case DIALOG_TEXT_ENTRY: // Text Entry dialog
                 // This example shows how to add a custom layout to an AlertDialog
                 LayoutInflater factory = LayoutInflater.from(this);
-                @SuppressLint("InflateParams") final View textEntryView = factory.inflate(R.layout.alert_dialog_text_entry, null);
+                @SuppressLint("InflateParams")
+                final View textEntryView = factory.inflate(R.layout.alert_dialog_text_entry, null);
                 return new AlertDialog.Builder(AlertDialogSamples.this)
                         .setTitle(R.string.alert_dialog_text_entry)
                         .setView(textEntryView)

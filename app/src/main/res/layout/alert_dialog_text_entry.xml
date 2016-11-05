@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2008 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2008 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -17,45 +16,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="24dp"
+    android:orientation="vertical"
     android:paddingEnd="24dp"
-    android:orientation="vertical">
+    android:paddingStart="24dp">
 
-    <TextView 
+    <TextView
         android:id="@+id/username_view"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="@string/alert_dialog_username"
+        android:layout_height="wrap_content"
         android:gravity="left"
+        android:text="@string/alert_dialog_username"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-            
+
     <EditText
         android:id="@+id/username_edit"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:scrollHorizontally="true"
-        android:autoText="false"
-        android:capitalize="none"
+        android:layout_height="wrap_content"
+        android:inputType="text"
         android:gravity="fill_horizontal"
+        android:scrollHorizontally="true"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/password_view"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="@string/alert_dialog_password"
+        android:layout_height="wrap_content"
         android:gravity="left"
+        android:text="@string/alert_dialog_password"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-            
+
     <EditText
         android:id="@+id/password_edit"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:scrollHorizontally="true"
-        android:autoText="false"
-        android:capitalize="none"
+        android:layout_height="wrap_content"
         android:gravity="fill_horizontal"
-        android:password="true"
+        android:inputType="textPassword"
+        android:scrollHorizontally="true"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-        
+
 </LinearLayout>
