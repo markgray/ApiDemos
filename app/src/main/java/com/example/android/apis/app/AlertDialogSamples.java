@@ -31,6 +31,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 import android.database.Cursor;
@@ -86,6 +87,7 @@ public class AlertDialogSamples extends Activity {
     private ProgressDialog mProgressDialog; // ProgressDialog used for DIALOG_PROGRESS
     private int mProgress; // Count used by mProgressHandler for the two ProgressDialog's
     static private Handler mProgressHandler; // Handler which "moves" the ProgressDialog progress setting
+    ViewGroup mRoot;
 
     /**
      * Callback for creating dialogs that are managed (saved and restored) for you by the activity.
@@ -242,8 +244,7 @@ public class AlertDialogSamples extends Activity {
             case DIALOG_TEXT_ENTRY: // Text Entry dialog
                 // This example shows how to add a custom layout to an AlertDialog
                 LayoutInflater factory = LayoutInflater.from(this);
-                @SuppressLint("InflateParams")
-                final View textEntryView = factory.inflate(R.layout.alert_dialog_text_entry, null);
+                final View textEntryView = factory.inflate(R.layout.alert_dialog_text_entry, mRoot, false);
                 return new AlertDialog.Builder(AlertDialogSamples.this)
                         .setTitle(R.string.alert_dialog_text_entry)
                         .setView(textEntryView)
@@ -256,7 +257,7 @@ public class AlertDialogSamples extends Activity {
                             public void onClick(DialogInterface dialog, int whichButton) {/*cancel*/}
                         })
                         .create();
-            case DIALOG_YES_NO_OLD_SCHOOL_MESSAGE:
+            case DIALOG_YES_NO_OLD_SCHOOL_MESSAGE: // OK Cancel dialog with traditional theme
                 return new AlertDialog.Builder(AlertDialogSamples.this, AlertDialog.THEME_TRADITIONAL)
                         .setIconAttribute(android.R.attr.alertDialogIcon)
                         .setTitle(R.string.alert_dialog_two_buttons_title)
@@ -269,7 +270,7 @@ public class AlertDialogSamples extends Activity {
                             public void onClick(DialogInterface dialog, int whichButton) {/*Cancel*/}
                         })
                         .create();
-            case DIALOG_YES_NO_HOLO_LIGHT_MESSAGE:
+            case DIALOG_YES_NO_HOLO_LIGHT_MESSAGE: // OK Cancel dialog with Holo Light theme
                 return new AlertDialog.Builder(AlertDialogSamples.this, AlertDialog.THEME_HOLO_LIGHT)
                         .setIconAttribute(android.R.attr.alertDialogIcon)
                         .setTitle(R.string.alert_dialog_two_buttons_title)
@@ -282,7 +283,7 @@ public class AlertDialogSamples extends Activity {
                             public void onClick(DialogInterface dialog, int whichButton) {/*cancel*/}
                         })
                         .create();
-            case DIALOG_YES_NO_DEFAULT_LIGHT_MESSAGE:
+            case DIALOG_YES_NO_DEFAULT_LIGHT_MESSAGE: // OK Cancel dialog with DeviceDefault Light theme
                 return new AlertDialog.Builder(AlertDialogSamples.this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
                         .setTitle(R.string.alert_dialog_two_buttons_title)
                         .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
@@ -294,7 +295,7 @@ public class AlertDialogSamples extends Activity {
                             public void onClick(DialogInterface dialog, int whichButton) {/*cancel*/}
                         })
                         .create();
-            case DIALOG_YES_NO_DEFAULT_DARK_MESSAGE:
+            case DIALOG_YES_NO_DEFAULT_DARK_MESSAGE: // OK Cancel dialog with DeviceDefault theme
                 return new AlertDialog.Builder(AlertDialogSamples.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
                         .setTitle(R.string.alert_dialog_two_buttons_title)
                         .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
@@ -321,9 +322,10 @@ public class AlertDialogSamples extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.alert_dialog);
+        mRoot = (ViewGroup) findViewById(android.R.id.content); // In order to have a rootView for inflate
                 
         /* Display a text message with yes/no buttons and handle each message as well as the cancel action */
-        Button twoButtonsTitle = (Button) findViewById(R.id.two_buttons);
+        Button twoButtonsTitle = (Button) findViewById(R.id.two_buttons); // OK Cancel dialog with DeviceDefault theme
         twoButtonsTitle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -332,7 +334,7 @@ public class AlertDialogSamples extends Activity {
         });
         
         /* Display a long text message with yes/no buttons and handle each message as well as the cancel action */
-        Button twoButtons2Title = (Button) findViewById(R.id.two_buttons2);
+        Button twoButtons2Title = (Button) findViewById(R.id.two_buttons2); // OK Cancel dialog with a long message
         twoButtons2Title.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -342,7 +344,7 @@ public class AlertDialogSamples extends Activity {
         
         
         /* Display an ultra long text message with yes/no buttons and handle each message as well as the cancel action */
-        Button twoButtons2UltraTitle = (Button) findViewById(R.id.two_buttons2ultra);
+        Button twoButtons2UltraTitle = (Button) findViewById(R.id.two_buttons2ultra); // OK Cancel dialog with ultra long message
         twoButtons2UltraTitle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -352,7 +354,7 @@ public class AlertDialogSamples extends Activity {
 
 
         /* Display a list of items */
-        Button selectButton = (Button) findViewById(R.id.select_button);
+        Button selectButton = (Button) findViewById(R.id.select_button); // List dialog
         selectButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -361,7 +363,7 @@ public class AlertDialogSamples extends Activity {
         });
         
         /* Display a custom progress bar */
-        Button progressButton = (Button) findViewById(R.id.progress_button);
+        Button progressButton = (Button) findViewById(R.id.progress_button); // Progress bar dialog
         progressButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -373,7 +375,7 @@ public class AlertDialogSamples extends Activity {
         });
 
         /* Display a custom progress bar */
-        Button progressSpinnerButton = (Button) findViewById(R.id.progress_spinner_button);
+        Button progressSpinnerButton = (Button) findViewById(R.id.progress_spinner_button); // Progress spinner dialog
         progressSpinnerButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -382,7 +384,7 @@ public class AlertDialogSamples extends Activity {
         });
         
         /* Display a radio button group */
-        Button radioButton = (Button) findViewById(R.id.radio_button);
+        Button radioButton = (Button) findViewById(R.id.radio_button); // Single choice list
         radioButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -391,7 +393,7 @@ public class AlertDialogSamples extends Activity {
         });
         
         /* Display a list of checkboxes */
-        Button checkBox = (Button) findViewById(R.id.checkbox_button);
+        Button checkBox = (Button) findViewById(R.id.checkbox_button); // Repeat alarm
         checkBox.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -400,7 +402,7 @@ public class AlertDialogSamples extends Activity {
         });
         
         /* Display a list of checkboxes, backed by a cursor */
-        Button checkBox2 = (Button) findViewById(R.id.checkbox_button2);
+        Button checkBox2 = (Button) findViewById(R.id.checkbox_button2); // Send Call to VoiceMail
         checkBox2.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -409,7 +411,7 @@ public class AlertDialogSamples extends Activity {
         });
 
         /* Display a text entry dialog */
-        Button textEntry = (Button) findViewById(R.id.text_entry_button);
+        Button textEntry = (Button) findViewById(R.id.text_entry_button); // Text Entry dialog
         textEntry.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -418,7 +420,7 @@ public class AlertDialogSamples extends Activity {
         });
         
         /* Two points, in the traditional theme */
-        Button twoButtonsOldSchoolTitle = (Button) findViewById(R.id.two_buttons_old_school);
+        Button twoButtonsOldSchoolTitle = (Button) findViewById(R.id.two_buttons_old_school); // OK Cancel dialog with traditional theme
         twoButtonsOldSchoolTitle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -427,7 +429,7 @@ public class AlertDialogSamples extends Activity {
         });
         
         /* Two points, in the light holographic theme */
-        Button twoButtonsHoloLightTitle = (Button) findViewById(R.id.two_buttons_holo_light);
+        Button twoButtonsHoloLightTitle = (Button) findViewById(R.id.two_buttons_holo_light); // OK Cancel dialog with Holo Light theme
         twoButtonsHoloLightTitle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -436,7 +438,7 @@ public class AlertDialogSamples extends Activity {
         });
 
         /* Two points, in the light default theme */
-        Button twoButtonsDefaultLightTitle = (Button) findViewById(R.id.two_buttons_default_light);
+        Button twoButtonsDefaultLightTitle = (Button) findViewById(R.id.two_buttons_default_light); // OK Cancel dialog with DeviceDefault Light theme
         twoButtonsDefaultLightTitle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -445,7 +447,7 @@ public class AlertDialogSamples extends Activity {
         });
 
         /* Two points, in the dark default theme */
-        Button twoButtonsDefaultDarkTitle = (Button) findViewById(R.id.two_buttons_default_dark);
+        Button twoButtonsDefaultDarkTitle = (Button) findViewById(R.id.two_buttons_default_dark); // OK Cancel dialog with DeviceDefault theme
         twoButtonsDefaultDarkTitle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -453,7 +455,19 @@ public class AlertDialogSamples extends Activity {
             }
         });
 
+        /**
+         * Handler for background Thread which advances the Progress Bar in the Progress bar dialog.
+         */
         mProgressHandler = new Handler() {
+            /**
+             * Subclasses must implement this to receive messages. We advance the counter whenever
+             * we are called, whether by sendEmptyMessage(0) when the ProgressBar is started, or
+             * by sendEmptyMessageDelayed(0, 100) which we call after incrementing the ProgressBar
+             * to schedule the next increment for 100 milliseconds later
+             *
+             * @param msg Message sent us by sendEmptyMessage and sendEmptyMessageDelayed, the int
+             *            value given them is Bundle'd under the key "what".
+             */
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -468,6 +482,12 @@ public class AlertDialogSamples extends Activity {
         };
     }
 
+    /**
+     * Activities cannot draw during the period that their windows are animating in. In order
+     * to know when it is safe to begin drawing they can override this method which will be
+     * called when the entering animation has completed. Called after the Activity has finished
+     * onCreate and the content view has been rendered, but not called for the Dialog's.
+     */
     @Override
     public void onEnterAnimationComplete() {
         Log.i(TAG, "onEnterAnimationComplete");
