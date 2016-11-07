@@ -33,10 +33,25 @@ import android.widget.Button;
 import android.widget.TextView;
 
 /**
- * Demonstrates how to show an AlertDialog that is managed by a Fragment.
+ * Demonstrates how to show an AlertDialog that is managed by a Fragment. Uses DialogFragment
+ * as the base class and overrides onCreateDialog in which it builds the AlertDialog using an
+ * AlertDialog.Builder
  */
 public class FragmentAlertDialog extends Activity {
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.fragment_dialog. Then we
+     * find the <code>View tv</code> in the layout (R.id.text) and set its text to the String
+     * R.string.example_alert_dialogfragment:
+     *
+     *     "Example of displaying an alert dialog with a DialogFragment"
+     *
+     * Finally we locate the <code>Button button</code> R.id.show ("Show") and set its OnClickListener
+     * to an anonymous class which calls our method <code>showDialog()</code> to show our AlertDialog.
+     *
+     * @param savedInstanceState we do not override onSaveInstanceState so do not use this
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +63,13 @@ public class FragmentAlertDialog extends Activity {
         // Watch for button clicks.
         Button button = (Button)findViewById(R.id.show);
         button.setOnClickListener(new OnClickListener() {
+            /**
+             * Called when the Button R.id.show ("Show") is clicked. We simply call our method
+             * showDialog()
+             *
+             * @param v View of Button that was clicked
+             */
+            @Override
             public void onClick(View v) {
                 showDialog();
             }
@@ -94,6 +116,7 @@ public class FragmentAlertDialog extends Activity {
                     .setTitle(title)
                     .setPositiveButton(R.string.alert_dialog_ok,
                         new DialogInterface.OnClickListener() {
+                            @Override
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 ((FragmentAlertDialog)getActivity()).doPositiveClick();
                             }
@@ -101,6 +124,7 @@ public class FragmentAlertDialog extends Activity {
                     )
                     .setNegativeButton(R.string.alert_dialog_cancel,
                         new DialogInterface.OnClickListener() {
+                            @Override
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 ((FragmentAlertDialog)getActivity()).doNegativeClick();
                             }

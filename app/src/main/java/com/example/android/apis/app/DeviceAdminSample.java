@@ -80,8 +80,7 @@ public class DeviceAdminSample extends PreferenceActivity {
     private static final String KEY_TRUST_AGENT_COMPONENT = "key_trust_agent_component";
     private static final String KEY_TRUST_AGENT_FEATURES = "key_trust_agent_features";
     private static final String KEY_DISABLE_KEYGUARD_WIDGETS = "key_disable_keyguard_widgets";
-    private static final String KEY_DISABLE_KEYGUARD_SECURE_CAMERA
-            = "key_disable_keyguard_secure_camera";
+    private static final String KEY_DISABLE_KEYGUARD_SECURE_CAMERA = "key_disable_keyguard_secure_camera";
 
     private static final String KEY_CATEGORY_QUALITY = "key_category_quality";
     private static final String KEY_SET_PASSWORD = "key_set_password";

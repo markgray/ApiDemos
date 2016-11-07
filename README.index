@@ -493,7 +493,7 @@ App
     App/Device Admin                       Works only on newer versions(?) v23+ or crash
         .app.DeviceAdminSample
             Shows how to implement a comprehensive UI for exploring and operating the 
-            DevicePolicyManager api.
+            DevicePolicyManager api. TODO: work up enough courage to play around with this (lem?)
 
   Fragment                                 v11+ for all samples
     App/Fragment/Alert Dialog              v11
