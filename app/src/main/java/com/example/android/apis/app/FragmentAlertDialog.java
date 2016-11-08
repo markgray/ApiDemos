@@ -32,6 +32,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 /**
  * Demonstrates how to show an AlertDialog that is managed by a Fragment. Uses DialogFragment
  * as the base class and overrides onCreateDialog in which it builds the AlertDialog using an
@@ -76,29 +78,49 @@ public class FragmentAlertDialog extends Activity {
         });
     }
 
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    /**
+     * Create and show a MyAlertDialogFragment DialogFragment. We create a new instance of
+     * MyAlertDialogFragment by calling its method newInstance with the resource id for the
+     * nonsense String R.string.alert_dialog_two_buttons_title, and then invoke the method
+     * DialogFragment.show to show it.
+     */
     void showDialog() {
-        DialogFragment newFragment = MyAlertDialogFragment.newInstance(
-                R.string.alert_dialog_two_buttons_title);
+        DialogFragment newFragment = MyAlertDialogFragment.newInstance(R.string.alert_dialog_two_buttons_title);
         newFragment.show(getFragmentManager(), "dialog");
     }
 
+    /**
+     * OnClickListener Callback for when the positive Button of the MyAlertDialogFragment
+     */
     public void doPositiveClick() {
         // Do stuff here.
         Log.i("FragmentAlertDialog", "Positive click!");
     }
-    
+
+    /**
+     * OnClickListener Callback for when the negative Button of the MyAlertDialogFragment
+     */
     public void doNegativeClick() {
         // Do stuff here.
         Log.i("FragmentAlertDialog", "Negative click!");
     }
 
-    
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    /**
+     * Minimalist DialogFragment
+     */
     public static class MyAlertDialogFragment extends DialogFragment {
 
+        /**
+         * Factory method to create a new instance of MyAlertDialogFragment and set its arguments.
+         * First we create a new instance <code>MyAlertDialogFragment frag</code>, then we create
+         * a <code>Bundle args</code>, add our parameter <code>int title</code> to it under the
+         * key "title", and then set the argmuments of <code>frag</code> to our <code>Bundle args</code>.
+         * Finally we return <code>MyAlertDialogFragment frag</code> to the caller.
+         *
+         * @param title resource id for a String to use as the DialogFragment's title
+         *
+         * @return New instance of MyAlertDialogFragment with its arguments set to
+         */
         public static MyAlertDialogFragment newInstance(int title) {
             MyAlertDialogFragment frag = new MyAlertDialogFragment();
             Bundle args = new Bundle();
