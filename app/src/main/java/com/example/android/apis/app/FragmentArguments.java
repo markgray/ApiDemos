@@ -36,10 +36,25 @@ import android.widget.TextView;
  * Demonstrates a fragment that can be configured through both Bundle arguments
  * and layout attributes.
  */
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class FragmentArguments extends Activity {
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.fragment_arguments. If the
+     * parameter <code>Bundle savedInstanceState</code> is not null we are being recreated after an
+     * orientation change or other occurrence and need do nothing more. If it is null, this is the
+     * first time our activity is being started so we fetch the FragmentManager used for interacting
+     * with fragments associated with this activity and use it to begin fragment transactions using
+     * <code>FragmentTransaction ft</code>. We create an instance of MyFragment by calling its
+     * factory method <code>newInstance</code>, and call it <code>Fragment newFragment</code>, then
+     * we add <code>newFragment</code> to <code>FragmentTransaction ft</code> and finally schedule a
+     * commit of the <code>FragmentTransaction ft</code>.
+     *
+     * @param savedInstanceState if null we need to create our fragment and embed it in the activity.
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_arguments);
 
@@ -52,9 +67,9 @@ public class FragmentArguments extends Activity {
         }
     }
 
-
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    /**
+     * Skeleton Fragment which can be inserted in layouts using xml or java code.
+     */
     public static class MyFragment extends Fragment {
         CharSequence mLabel;
 
@@ -74,7 +89,8 @@ public class FragmentArguments extends Activity {
          * Parse attributes during inflation from a view hierarchy into the
          * arguments we handle.
          */
-        @Override public void onInflate(Context context, AttributeSet attrs,
+        @Override
+        public void onInflate(Context context, AttributeSet attrs,
                                         Bundle savedInstanceState) {
             super.onInflate(context, attrs, savedInstanceState);
 
@@ -88,8 +104,8 @@ public class FragmentArguments extends Activity {
          * During creation, if arguments have been supplied to the fragment
          * then parse those out.
          */
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
-        @Override public void onCreate(Bundle savedInstanceState) {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
             Bundle args = getArguments();
@@ -101,9 +117,8 @@ public class FragmentArguments extends Activity {
         /**
          * Create the view for this fragment, using the arguments given to it.
          */
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-        @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                           Bundle savedInstanceState) {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.hello_world, container, false);
             View tv = v.findViewById(R.id.text);
             ((TextView)tv).setText(mLabel != null ? mLabel : "(no label)");

@@ -27,8 +27,10 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -128,7 +130,37 @@ public class FragmentAlertDialog extends Activity {
             frag.setArguments(args);
             return frag;
         }
-        
+
+        /**
+         * Override to build your own custom Dialog container.  This is typically
+         * used to show an AlertDialog instead of a generic Dialog; when doing so,
+         * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)} does not need
+         * to be implemented since the AlertDialog takes care of its own content.
+         *
+         * <p>This method will be called after {@link #onCreate(Bundle)} and
+         * before {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.  The
+         * default implementation simply instantiates and returns a {@link Dialog}
+         * class.
+         *
+         * <p><em>Note: DialogFragment needs to use the {@link Dialog#setOnCancelListener
+         * Dialog.setOnCancelListener} and {@link Dialog#setOnDismissListener
+         * Dialog.setOnDismissListener} callbacks.  You must not set them yourself.</em>
+         * To find out about these events, override {@link #onCancel(DialogInterface)}
+         * and {@link #onDismiss(DialogInterface)}.</p>
+         *
+         * First we retrieve the <code>int title</code> String resource id from our arguments, then
+         * we use an AlertDialog.Builder to create a Dialog instance with the icon set to the
+         * resource R.drawable.alert_dialog_icon, the title set to <code>title</code>, the positive
+         * Button labeled using the String R.string.alert_dialog_ok ("OK") with an anonymous class
+         * DialogInterface.OnClickListener which calls our method doPositiveClick, and the negative
+         * Button labeled using the String R.string.alert_dialog_cancel ("Cancel") with an anonymous
+         * class DialogInterface.OnClickListener which calls our method doNegativeClick -- which
+         * we return to the caller.
+         *
+         * @param savedInstanceState we do not override onSaveInstanceState so do not use this
+         *
+         * @return Return a new Dialog instance to be displayed by the Fragment.
+         */
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             int title = getArguments().getInt("title");
