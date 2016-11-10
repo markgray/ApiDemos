@@ -71,11 +71,20 @@ public class FragmentArguments extends Activity {
      * Skeleton Fragment which can be inserted in layouts using xml or java code.
      */
     public static class MyFragment extends Fragment {
+        /**
+         *  text to display in fragment as read from xml attributes in onInflate or from arguments
+         *  Bundle during onCreate if we were created by newInstance.
+         */
         CharSequence mLabel;
 
         /**
-         * Create a new instance of MyFragment that will be initialized
-         * with the given arguments.
+         * Create a new instance of MyFragment that will be initialized with the given arguments.
+         * First we create a new instance of <code>MyFragment f</code>, then we create a Bundle b,
+         * store our parameter label in it under the key "label", and set the arguments of f to
+         * be b. Finally we return <code>MyFragment f</code> to the caller.
+         *
+         * @param label text to display in fragment
+         * @return MyFragment instance with arguments set to Bundle containing CharSequence label
          */
         static MyFragment newInstance(CharSequence label) {
             MyFragment f = new MyFragment();
@@ -86,16 +95,30 @@ public class FragmentArguments extends Activity {
         }
 
         /**
-         * Parse attributes during inflation from a view hierarchy into the
-         * arguments we handle.
+         * Called when a fragment is being created as part of a view layout inflation, typically
+         * from setting the content view of an activity. Here we will parse attributes during
+         * inflation of our layout file from a view hierarchy into the arguments we handle.
+         *
+         * First we call through to our super's implementation of onInflate. A declare-styleable
+         * element with the name="FragmentArguments" in the attrs.xml file declares the attribute
+         * <attr name="android:label" /> which is retrieved using obtainStyledAttributes into the
+         * <code>TypedArray a</code>. Then using the index generated from our styleable name and
+         * the name for our attribute: R.styleable.FragmentArguments_android_label we retrieve the
+         * value of this attribute -- android:label="@string/fragment_arguments_embedded" where
+         * the String pointed to is "From Attributes". Then we recycle the <code>TypedArray a</code>
+         * to be re-used by a later caller.
+         *
+         * @param context The Context that is inflating this fragment.
+         * @param attrs The attributes at the tag where the fragment is being created.
+         * @param savedInstanceState If the fragment is being re-created from a previous saved
+         *        state, this is the state, but since we do not override onSaveInstanceState
+         *        we do not use.
          */
         @Override
-        public void onInflate(Context context, AttributeSet attrs,
-                                        Bundle savedInstanceState) {
+        public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
             super.onInflate(context, attrs, savedInstanceState);
 
-            TypedArray a = context.obtainStyledAttributes(attrs,
-                    R.styleable.FragmentArguments);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FragmentArguments);
             mLabel = a.getText(R.styleable.FragmentArguments_android_label);
             a.recycle();
         }
