@@ -124,8 +124,14 @@ public class FragmentArguments extends Activity {
         }
 
         /**
-         * During creation, if arguments have been supplied to the fragment
-         * then parse those out.
+         * Called to do initial creation of a fragment. First we call through to our super's
+         * implementation of onCreate, then we fetch our arguments to <code>Bundle args</code>.
+         * If we are being created from xml this will be null and we are done. If we were created
+         * from java code in <code>newInstance</code> our arguments were set using setArguments
+         * so we initialize our field <code>CharSequence mLabel</code> to the value which was
+         * stored in our arguments using key "label".
+         *
+         * @param savedInstanceState we do not override onSaveInstanceState so do not use
          */
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -138,7 +144,21 @@ public class FragmentArguments extends Activity {
         }
 
         /**
-         * Create the view for this fragment, using the arguments given to it.
+         * Called to have the fragment instantiate its user interface view. First we inflate our
+         * layout file R.layout.hello_world into <code>View v</code>, then we locate our text field
+         * R.id.text in the layout set its text to our field mLabel (if it got initialized) and set
+         * its background to the system drawable android.R.drawable.gallery_thumb (although this is
+         * actually a selector so this might be an error). Finally we return <code>View v</code> to
+         * our caller.
+         *
+         * @param inflater The LayoutInflater object that can be used to inflate any views in the
+         *                 fragment,
+         * @param container If non-null, this is the parent view that the fragment's UI should be
+         *                  attached to.  The fragment should not add the view itself, but this can
+         *                  be used to generate the LayoutParams of the view.
+         * @param savedInstanceState since we do not override onSaveInstanceState we do not use
+         *
+         * @return Return the View for the fragment's UI, or null.
          */
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

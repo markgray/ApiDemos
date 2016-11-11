@@ -35,9 +35,9 @@ import com.example.android.apis.R;
 /**
  * Demonstration of displaying a context menu from a fragment.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentContextMenu extends Activity {
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +47,6 @@ public class FragmentContextMenu extends Activity {
         getFragmentManager().beginTransaction().add(android.R.id.content, content).commit();
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class ContextMenuFragment extends Fragment {
 
         @Override
