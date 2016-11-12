@@ -35,11 +35,21 @@ import android.widget.TextView;
 /**
  * Demonstrates the use of custom animations in a FragmentTransaction when
  * pushing and popping a stack.
+ *
+ * Uses FragmentTransaction.setCustomAnimations to cause animations to be used
+ * when replacing one fragment with the next. The "POP" button is not connected
+ * to anything, because this example reuses the layout for .app.FragmentStack,
+ * but the back button does take you back through the numbered fragments on the
+ * stack after you "Push" them, again using the same animation. onSaveInstanceState
+ * saves the mStackLevel in an int "level" which is used when the Activity is
+ * recreated to remember the stack level, mStackLevel is then used to set the
+ * int argument "num" passed to the new fragment when it is created.
  */
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+@SuppressLint("DefaultLocale")
 public class FragmentCustomAnimations extends Activity {
     int mStackLevel = 1;
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +58,7 @@ public class FragmentCustomAnimations extends Activity {
         // Watch for button clicks.
         Button button = (Button)findViewById(R.id.new_fragment);
         button.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 addFragmentToStack();
             }
@@ -69,8 +80,6 @@ public class FragmentCustomAnimations extends Activity {
         outState.putInt("level", mStackLevel);
     }
 
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     void addFragmentToStack() {
         mStackLevel++;
 
@@ -89,9 +98,6 @@ public class FragmentCustomAnimations extends Activity {
         ft.commit();
     }
 
-
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class CountingFragment extends Fragment {
         int mNum;
 
@@ -123,8 +129,6 @@ public class FragmentCustomAnimations extends Activity {
          * The Fragment's UI is just a simple text view showing its
          * instance number.
          */
-        @SuppressLint("DefaultLocale")
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
