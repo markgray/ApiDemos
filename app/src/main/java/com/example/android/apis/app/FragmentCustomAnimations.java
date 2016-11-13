@@ -48,8 +48,25 @@ import android.widget.TextView;
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 @SuppressLint("DefaultLocale")
 public class FragmentCustomAnimations extends Activity {
-    int mStackLevel = 1;
+    int mStackLevel = 1; // Stack level for the next fragment
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.fragment_stack. Next we
+     * locate <code>Button button</code> in our layout with id R.id.new_fragment ("Push"), and set
+     * its onClickListener to an anonymous class which calls our method addFragmentToStack when the
+     * Button is clicked. We locate the <code>Button</code> R.id.delete_fragment ("Pop") and set its
+     * OnClickListener to an anonymous class which invokes Activity.onBackPressed when clicked and
+     * "finishes" the Fragment thereby returning to the Fragment behind it. If our parameter
+     * savedInstanceState is null this is the first time we have been created so we create a new
+     * instance of CountingFragment with the initial stack level of mStackLevel = 1. If it is not
+     * null we are being recreated after an orientation change so we retrieve the value for our
+     * field <code>int mStackLevel</code> which was stored under the key "level" by our callback
+     * onSaveInstanceState.
+     *
+     * @param savedInstanceState if null it is first time, otherwise will contain the value of
+     *                           mStackLevel to use under the key "level"
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +81,14 @@ public class FragmentCustomAnimations extends Activity {
             }
         });
 
+        button = (Button) findViewById(R.id.delete_fragment);
+        button.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         if (savedInstanceState == null) {
             // Do first time initialization -- add initial fragment.
             Fragment newFragment = CountingFragment.newInstance(mStackLevel);
@@ -74,12 +99,30 @@ public class FragmentCustomAnimations extends Activity {
         }
     }
 
+    /**
+     * Called to retrieve per-instance state from an activity before being killed
+     * so that the state can be restored in {@link #onCreate} or
+     * {@link #onRestoreInstanceState} (the {@link Bundle} populated by this method
+     * will be passed to both).
+     *
+     * First we call through to our super's implementation of onSaveInstanceState, then we insert the
+     * value of mStackLevel into the mapping of our parameter <code>Bundle outState</code> using the
+     * key "level".
+     *
+     * @param outState Bundle in which to place your saved state.
+     */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("level", mStackLevel);
     }
 
+    /**
+     * This method adds a new fragment to the stack when the R.id.new_fragment ("Push") Button is
+     * clicked. First we increment the stack level <code>mStackLevel</code>, then we create a new
+     * instance of <code>CountingFragment</code> with this level: <code>Fragment newFragment</code>.
+     * Then we begin a series of fragment transactions: <code>FragmentTransaction ft</code>
+     */
     void addFragmentToStack() {
         mStackLevel++;
 
