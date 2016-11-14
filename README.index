@@ -515,13 +515,12 @@ App
     App/Fragment/Custom Animations         v11 -> v21 due to getDrawable call
         .app.FragmentCustomAnimations
             Uses FragmentTransaction.setCustomAnimations to cause animations to be used
-            when replacing one fragment with the next. The "POP" button is not connected
-            to anything, because this example reuses the layout for .app.FragmentStack,
-            but the back button does take you back through the numbered fragments on the
-            stack after you "Push" them, again using the same animation. onSaveInstanceState
-            saves the mStackLevel in an int "level" which is used when the Activity is
-            recreated to remember the stack level, mStackLevel is then used to set the int
-            argument "num" passed to the new fragment when it is created.
+            when replacing one fragment with the next. The "POP" button does the same thing
+            as the back button by calling onBackPressed, it takes you back through the numbered
+            fragments on the stack after you "Push" them, again using the same animation.
+            onSaveInstanceState saves the mStackLevel in an int "level" which is used when
+            the Activity is recreated to remember the stack level, mStackLevel is then used
+            to set the int argument "num" passed to the new fragment when it is created.
 
     App/Fragment/Dialog                    v11
         .app.FragmentDialog

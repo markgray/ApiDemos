@@ -37,13 +37,12 @@ import android.widget.TextView;
  * pushing and popping a stack.
  *
  * Uses FragmentTransaction.setCustomAnimations to cause animations to be used
- * when replacing one fragment with the next. The "POP" button is not connected
- * to anything, because this example reuses the layout for .app.FragmentStack,
- * but the back button does take you back through the numbered fragments on the
- * stack after you "Push" them, again using the same animation. onSaveInstanceState
- * saves the mStackLevel in an int "level" which is used when the Activity is
- * recreated to remember the stack level, mStackLevel is then used to set the
- * int argument "num" passed to the new fragment when it is created.
+ * when replacing one fragment with the next. The "POP" button does the same thing
+ * as the back button by calling onBackPressed, it takes you back through the numbered
+ * fragments on the stack after you "Push" them, again using the same animation.
+ * onSaveInstanceState saves the mStackLevel in an int "level" which is used when
+ * the Activity is recreated to remember the stack level, mStackLevel is then used
+ * to set the int argument "num" passed to the new fragment when it is created.
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 @SuppressLint("DefaultLocale")
@@ -59,10 +58,13 @@ public class FragmentCustomAnimations extends Activity {
      * OnClickListener to an anonymous class which invokes Activity.onBackPressed when clicked and
      * "finishes" the Fragment thereby returning to the Fragment behind it. If our parameter
      * savedInstanceState is null this is the first time we have been created so we create a new
-     * instance of CountingFragment with the initial stack level of mStackLevel = 1. If it is not
-     * null we are being recreated after an orientation change so we retrieve the value for our
-     * field <code>int mStackLevel</code> which was stored under the key "level" by our callback
-     * onSaveInstanceState.
+     * instance of CountingFragment with the initial stack level of mStackLevel = 1. Then we create
+     * a <code>FragmentTransaction ft</code> and begin a series of Fragment transactions using it
+     * by calling <code>getFragmentManager().beginTransaction()</code>. We add <code>newFragment</code>
+     * using the view id of the FrameLayout in our layout file: R.id.simple_fragment, and then commit
+     * <code>FragmentTransaction ft</code>. If it is not null we are being recreated after an
+     * orientation change so we retrieve the value for our field <code>int mStackLevel</code> which
+     * was stored under the key "level" by our callback onSaveInstanceState.
      *
      * @param savedInstanceState if null it is first time, otherwise will contain the value of
      *                           mStackLevel to use under the key "level"
@@ -121,7 +123,19 @@ public class FragmentCustomAnimations extends Activity {
      * This method adds a new fragment to the stack when the R.id.new_fragment ("Push") Button is
      * clicked. First we increment the stack level <code>mStackLevel</code>, then we create a new
      * instance of <code>CountingFragment</code> with this level: <code>Fragment newFragment</code>.
-     * Then we begin a series of fragment transactions: <code>FragmentTransaction ft</code>
+     * Then we begin a series of fragment transactions using <code>FragmentTransaction ft</code>
+     * which is created by calling <code>getFragmentManager().beginTransaction()</code>. The first
+     * transaction sets specific animation resources to run for the fragments that are entering and
+     * exiting in this transaction:
+     *
+     *     R.animator.fragment_slide_left_enter is used as a new fragment is entering (pushed)
+     *     R.animator.fragment_slide_left_exit when a fragment is exiting (being replaced)
+     *     R.animator.fragment_slide_right_enter when a fragment is returning from a stack pop
+     *     R.animator.fragment_slide_right_exit when a fragment is leaving because it was popped.
+     *
+     * The next transaction replaces the old fragment with <code>newFragment</code>, followed by
+     * one adding this transaction to the back stack, and finally we schedule a commit of this
+     * transaction.
      */
     void addFragmentToStack() {
         mStackLevel++;
@@ -141,12 +155,21 @@ public class FragmentCustomAnimations extends Activity {
         ft.commit();
     }
 
+    /**
+     * Simple Fragment which displays only the instance number in its UI.
+     */
     public static class CountingFragment extends Fragment {
-        int mNum;
+        int mNum; // Instance number of Fragment
 
         /**
-         * Create a new instance of CountingFragment, providing "num"
-         * as an argument.
+         * Create a new instance of CountingFragment, providing "num" as an argument. First we create
+         * a new instance of <code>CountingFragment f</code>, then we create a <code>Bundle args</code>,
+         * add our parameter num to the mapping of <code>args</code> using the key "num" and set the
+         * arguments of <code>CountingFragment f</code> to <code>args</code>. Finally we return
+         * <code>CountingFragment f</code> to our caller.
+         *
+         * @param num instance number to assign to this Fragment
+         * @return a new instance of CountingFragment
          */
         static CountingFragment newInstance(int num) {
             CountingFragment f = new CountingFragment();
@@ -160,7 +183,12 @@ public class FragmentCustomAnimations extends Activity {
         }
 
         /**
-         * When creating, retrieve this instance's number from its arguments.
+         * When creating, retrieve this instance's number from its arguments. First we call through
+         * to our super's implementation of onCreate, then if have arguments we set our field
+         * <code>int mNum</code> to the value stored in the arguments under the key "num", otherwise
+         * we set it to 1.
+         *
+         * @param savedInstanceState we do not use anything in here
          */
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -169,12 +197,24 @@ public class FragmentCustomAnimations extends Activity {
         }
 
         /**
-         * The Fragment's UI is just a simple text view showing its
-         * instance number.
+         * The Fragment's UI is just a simple text view showing its instance number. First we inflate
+         * our layout R.layout.hello_world into <code>View v</code>, set <code>View tv</code> to the
+         * <code>TextView</code> in our layout with id R.id.text, set the text of <code>tv</code> to
+         * the formatted String containing the value of this instance's instance number <code>mNum</code>,
+         * set the background of <code>tv</code>, and finally return <code>View v</code> to the
+         * caller.
+         *
+         * @param inflater The LayoutInflater object that can be used to inflate
+         * any views in the fragment,
+         * @param container If non-null, this is the parent view that the fragment's
+         * UI should be attached to, used to generate the LayoutParams of the view.
+         * @param savedInstanceState If non-null, this fragment is being re-constructed
+         * from a previous saved state as given here.
+         *
+         * @return Return the View for the fragment's UI
          */
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.hello_world, container, false);
             View tv = v.findViewById(R.id.text);
             ((TextView)tv).setText(String.format("%s%d", getString(R.string.fragment_number), mNum));

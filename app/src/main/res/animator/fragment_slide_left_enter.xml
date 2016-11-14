@@ -16,17 +16,20 @@
 ** limitations under the License.
 */
 -->
-<set xmlns:android="http://schemas.android.com/apk/res/android">
+<set xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <objectAnimator
         android:interpolator="@android:interpolator/decelerate_quint"
         android:valueFrom="100dp" android:valueTo="0dp"
         android:valueType="floatType"
         android:propertyName="translationX"
-        android:duration="@android:integer/config_mediumAnimTime" />
+        android:duration="@android:integer/config_mediumAnimTime"
+        tools:ignore="NewApi,UnusedAttribute" />
     <objectAnimator
         android:interpolator="@android:interpolator/decelerate_quint"
         android:valueFrom="0.0" android:valueTo="1.0"
         android:valueType="floatType"
         android:propertyName="alpha"
-        android:duration="@android:integer/config_mediumAnimTime" />
+        android:duration="@android:integer/config_mediumAnimTime"
+        tools:ignore="NewApi,UnusedAttribute" />
 </set>
