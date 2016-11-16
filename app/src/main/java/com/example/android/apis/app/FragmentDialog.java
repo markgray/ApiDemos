@@ -142,7 +142,15 @@ public class FragmentDialog extends Activity {
         newFragment.show(ft, "dialog");
     }
 
-
+    /**
+     * This method converts the value of mStackLevel currently being used to a String describing the
+     * the style and theme to display to the user. We simply use a switch statement to choose the
+     * String based on the value of num passed us 1-8, returning "STYLE_NORMAL" if outside those
+     * values.
+     *
+     * @param num mStackLevel for current style and theme
+     * @return String describing style and theme
+     */
     static String getNameForNum(int num) {
         switch (num) {
             case 1:
@@ -166,6 +174,10 @@ public class FragmentDialog extends Activity {
         return "STYLE_NORMAL";
     }
 
+    /**
+     * This DialogFragment displays a dialog with its style and theme configured by its arguments
+     * when created, using 8 styles and five themes.
+     */
     public static class MyDialogFragment extends DialogFragment {
         int mNum;
 
@@ -233,6 +245,8 @@ public class FragmentDialog extends Activity {
                 case 8:
                     theme = android.R.style.Theme_Holo_Light;
                     break;
+                default:
+                    theme = android.R.style.Theme_DeviceDefault_Dialog;
             }
             setStyle(style, theme);
         }
@@ -241,8 +255,7 @@ public class FragmentDialog extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.fragment_dialog, container, false);
             View tv = v.findViewById(R.id.text);
-            String dialogLabel = getString(R.string.dialog_number) + mNum + ": using style "
-                    + getNameForNum(mNum);
+            String dialogLabel = getString(R.string.dialog_number) + mNum + ": using style " + getNameForNum(mNum);
             ((TextView) tv).setText(dialogLabel);
 
             // Watch for button clicks.
