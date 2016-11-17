@@ -51,13 +51,13 @@ public class FragmentDialog extends Activity {
      * onCreate, then we set our content view to our layout file R.layout.fragment_dialog. Next we
      * locate the TextView in our layout (R.id.text) and set its text to the instructions for this
      * demo (R.string.dialog_fragment_example_instructions):
-     *
-     *     Example of displaying dialogs with a DialogFragment.
-     *     Press the show button below to see the first dialog;
-     *     pressing successive show buttons will display other
-     *     dialog styles as a stack, with dismissing or back
-     *     going to the previous dialog.
-     *
+     * <p>
+     * Example of displaying dialogs with a DialogFragment.
+     * Press the show button below to see the first dialog;
+     * pressing successive show buttons will display other
+     * dialog styles as a stack, with dismissing or back
+     * going to the previous dialog.
+     * <p>
      * We locate Button button in our layout (R.id.show "SHOW") and set its OnClickListener to an
      * anonymous class which calls our method showDialog() when the Button is clicked. Finally if
      * savedInstanceState is not null (we are being recreated after an orientation change or other
@@ -101,7 +101,7 @@ public class FragmentDialog extends Activity {
      * so that the state can be restored in {@link #onCreate} or
      * {@link #onRestoreInstanceState} (the {@link Bundle} populated by this method
      * will be passed to both).
-     *
+     * <p>
      * First we call through to our super's implementation of onCreate, then we store the value of
      * our field mStackLevel in the mapping of our parameter Bundle outState under the key "level".
      *
@@ -179,11 +179,17 @@ public class FragmentDialog extends Activity {
      * when created, using 8 styles and five themes.
      */
     public static class MyDialogFragment extends DialogFragment {
-        int mNum;
+        int mNum; // Which combination of styles and themes are being used for the dialog
 
         /**
-         * Create a new instance of MyDialogFragment, providing "num"
-         * as an argument.
+         * Create a new instance of MyDialogFragment, providing "num" as an argument. First we create
+         * a new instance of MyDialogFragment f, then we create a <code>Bundle args</code> and add
+         * our parameter num to its mapping using "num" as the key, and set <strong>args</strong> as the
+         * arguments for <code>f</code>. Finally we return <strong>f</strong> to the caller.
+         *
+         * @param num number of the style and theme combination to use
+         * @return a MyDialogFragment with arguments set to include <code>num</code> stored using the
+         * key "num"
          */
         static MyDialogFragment newInstance(int num) {
             MyDialogFragment f = new MyDialogFragment();
@@ -196,13 +202,25 @@ public class FragmentDialog extends Activity {
             return f;
         }
 
+        /**
+         * Called to do initial creation of a fragment. First we call through to our super's
+         * implementation of onCreate, then we fetch the value of our field <b>int mNum</b> which
+         * is contained in our arguments under the key "num". Next we set our variables
+         * <b>int style</b> and <b>int theme</b> based on the value of <b>mNum</b>, defaulting to
+         * <b>STYLE_NORMAL</b> for <b>style</b> and 0 for <b>theme</b> (causes the system to pick
+         * an appropriate theme (based on the style)). Finally we use <b>style</b> and <b>theme</b>
+         * to set the attributes for our dialog.
+         *
+         * @param savedInstanceState we do not override onSaveInstanceState so do not use
+         */
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             mNum = getArguments().getInt("num");
 
             // Pick a style based on the num.
-            int style = DialogFragment.STYLE_NORMAL, theme = 0;
+            int style = DialogFragment.STYLE_NORMAL;
+            int theme = 0;
             switch (mNum) {
                 case 1:
                     style = DialogFragment.STYLE_NO_TITLE;
@@ -245,8 +263,6 @@ public class FragmentDialog extends Activity {
                 case 8:
                     theme = android.R.style.Theme_Holo_Light;
                     break;
-                default:
-                    theme = android.R.style.Theme_DeviceDefault_Dialog;
             }
             setStyle(style, theme);
         }
