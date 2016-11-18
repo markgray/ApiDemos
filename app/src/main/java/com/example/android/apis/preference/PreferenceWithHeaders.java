@@ -52,8 +52,8 @@ public class PreferenceWithHeaders extends PreferenceActivity {
 
     /**
      * Subclasses should override this method and verify that the given fragment is a valid type
-     * to be attached to this activity. The default implementation returns <code>true</code> for
-     * apps built for <code>android:targetSdkVersion</code> older than
+     * to be attached to this activity. The default implementation returns <b>true</b> for
+     * apps built for <b>android:targetSdkVersion</b> older than
      * {@link Build.VERSION_CODES#KITKAT}. For later versions, it will throw an exception.
      *
      * @param fragmentName the class name of the Fragment about to be attached to this activity.

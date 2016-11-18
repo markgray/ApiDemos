@@ -69,7 +69,7 @@ public class RedirectGetter extends Activity {
      * keep from stepping on yourself.
      *
      * First we fetch an instance of SharedPreferences for our share preference file "RedirectData"
-     * into the variable <code>preferences</code>, then we use it to retrieve the String stored in
+     * into the variable <b>preferences</b>, then we use it to retrieve the String stored in
      * the file under the key "text" (defaulting to null if none is found) and use that value to
      * initialize our field mTextPref. If mTextPref is not null we set the text of our EditText
      * mText to its value, otherwise we set it to the empty String.
@@ -93,9 +93,9 @@ public class RedirectGetter extends Activity {
         /**
          * Called when the "APPLY" Button has been clicked. First we fetch an instance of
          * SharedPreferences for our share preference file "RedirectData" into the variable
-         * <code>preferences</code>, then we use <code>preferences</code> to create an instance
-         * of <code>SharedPreferences.Editor editor</code> which we use to putString the contents
-         * of the mText EditText under the key "text". Finally if the <code>editor.commit()</code>
+         * <b>preferences</b>, then we use <b>preferences</b> to create an instance
+         * of <b>SharedPreferences.Editor editor</b> which we use to putString the contents
+         * of the mText EditText under the key "text". Finally if the <b>editor.commit()</b>
          * of this change returns true (the new value was successfully written to persistent storage)
          * we set the result that our activity will return to its caller to RESULT_OK (operation
          * succeeded) and finish() this Activity.

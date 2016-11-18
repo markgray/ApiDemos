@@ -124,7 +124,7 @@ public class AlarmService_Service extends Service {
 
     /**
      * Return the communication channel to the service. We simply return our minimalist
-     * <code>IBinder mBinder</code> field.
+     * <b>IBinder mBinder</b> field.
      *
      * @param intent The Intent that was used to bind to this service,
      *               as given to {@link android.content.Context#bindService
@@ -142,16 +142,16 @@ public class AlarmService_Service extends Service {
     /**
      * Show a notification while this service is running. First we fetch the resource String
      * R.string.alarm_service_started ("The alarm service has started running") into our
-     * variable {@code CharSequence text}, then we create <code>PendingIntent contentIntent</code>
+     * variable {@code CharSequence text}, then we create <b>PendingIntent contentIntent</b>
      * to start the Activity AlarmService (the Activity that launched us). Next we build our
-     * <code>Notification notification</code> using a method chain starting with a new instance
-     * of <code>Notification.Builder</code>. It consists of a small icon R.drawable.stat_sample,
+     * <b>Notification notification</b> using a method chain starting with a new instance
+     * of <b>Notification.Builder</b>. It consists of a small icon R.drawable.stat_sample,
      * {@code CharSequence text} as the "ticker" text which is sent to accessibility services, a
      * timestamp of the current time in milliseconds, a title of R.string.alarm_service_label
      * ("Sample Alarm Service"), {@code CharSequence text} as the second line of text in the
-     * platform notification template, and <code>PendingIntent contentIntent</code></code> as the
+     * platform notification template, and <b>PendingIntent contentIntent</b></b> as the
      * PendingIntent to be sent when the notification is clicked. Finally we post our notification
-     * to be shown in the status bar using an <code>int id</code> id consisting of our resource id
+     * to be shown in the status bar using an <b>int id</b> id consisting of our resource id
      * R.string.alarm_service_started.
      */
     private void showNotification() {
@@ -179,8 +179,8 @@ public class AlarmService_Service extends Service {
 
     /**
      * This is the object that receives interactions from clients.  See RemoteService
-     * for a more complete example. We just implement <code>onTransact</code> to call
-     * through to our super's implementation of <code>onTransact</code>.
+     * for a more complete example. We just implement <b>onTransact</b> to call
+     * through to our super's implementation of <b>onTransact</b>.
      */
     private final IBinder mBinder = new Binder() {
         /**

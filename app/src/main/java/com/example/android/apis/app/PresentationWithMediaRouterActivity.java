@@ -54,7 +54,7 @@ import android.widget.TextView;
  * {@link Presentation} on the preferred presentation display.  When a presentation
  * display is removed, we revert to showing content in the main activity.
  * We also write information about displays and display-related events to
- * the Android log which you can read using <code>adb logcat</code>.
+ * the Android log which you can read using <b>adb logcat</b>.
  * </p><p>
  * You can try this out using an HDMI or Wifi display or by using the
  * "Simulate secondary displays" feature in Development Settings to create a few

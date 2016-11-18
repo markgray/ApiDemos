@@ -78,7 +78,7 @@ public class PathAnimations extends Activity implements
     final static Property<PathAnimations, Point> POINT_PROPERTY
             = new Property<PathAnimations, Point>(Point.class, "point") {
         /**
-         * Returns the current value that this property represents on the given <code>object</code>.
+         * Returns the current value that this property represents on the given <b>object</b>.
          *
          * @param object the PathAnimations instance in question ("this" essentially)
          * @return a Point containing the current (x,y) coordinates of the animation

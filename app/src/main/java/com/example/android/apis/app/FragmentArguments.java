@@ -42,14 +42,14 @@ public class FragmentArguments extends Activity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * onCreate, then we set our content view to our layout file R.layout.fragment_arguments. If the
-     * parameter <code>Bundle savedInstanceState</code> is not null we are being recreated after an
+     * parameter <b>Bundle savedInstanceState</b> is not null we are being recreated after an
      * orientation change or other occurrence and need do nothing more. If it is null, this is the
      * first time our activity is being started so we fetch the FragmentManager used for interacting
      * with fragments associated with this activity and use it to begin fragment transactions using
-     * <code>FragmentTransaction ft</code>. We create an instance of MyFragment by calling its
-     * factory method <code>newInstance</code>, and call it <code>Fragment newFragment</code>, then
-     * we add <code>newFragment</code> to <code>FragmentTransaction ft</code> and finally schedule a
-     * commit of the <code>FragmentTransaction ft</code>.
+     * <b>FragmentTransaction ft</b>. We create an instance of MyFragment by calling its
+     * factory method <b>newInstance</b>, and call it <b>Fragment newFragment</b>, then
+     * we add <b>newFragment</b> to <b>FragmentTransaction ft</b> and finally schedule a
+     * commit of the <b>FragmentTransaction ft</b>.
      *
      * @param savedInstanceState if null we need to create our fragment and embed it in the activity.
      */
@@ -79,9 +79,9 @@ public class FragmentArguments extends Activity {
 
         /**
          * Create a new instance of MyFragment that will be initialized with the given arguments.
-         * First we create a new instance of <code>MyFragment f</code>, then we create a Bundle b,
+         * First we create a new instance of <b>MyFragment f</b>, then we create a Bundle b,
          * store our parameter label in it under the key "label", and set the arguments of f to
-         * be b. Finally we return <code>MyFragment f</code> to the caller.
+         * be b. Finally we return <b>MyFragment f</b> to the caller.
          *
          * @param label text to display in fragment
          * @return MyFragment instance with arguments set to Bundle containing CharSequence label
@@ -102,10 +102,10 @@ public class FragmentArguments extends Activity {
          * First we call through to our super's implementation of onInflate. A declare-styleable
          * element with the name="FragmentArguments" in the attrs.xml file declares the attribute
          * <attr name="android:label" /> which is retrieved using obtainStyledAttributes into the
-         * <code>TypedArray a</code>. Then using the index generated from our styleable name and
+         * <b>TypedArray a</b>. Then using the index generated from our styleable name and
          * the name for our attribute: R.styleable.FragmentArguments_android_label we retrieve the
          * value of this attribute -- android:label="@string/fragment_arguments_embedded" where
-         * the String pointed to is "From Attributes". Then we recycle the <code>TypedArray a</code>
+         * the String pointed to is "From Attributes". Then we recycle the <b>TypedArray a</b>
          * to be re-used by a later caller.
          *
          * @param context The Context that is inflating this fragment.
@@ -125,10 +125,10 @@ public class FragmentArguments extends Activity {
 
         /**
          * Called to do initial creation of a fragment. First we call through to our super's
-         * implementation of onCreate, then we fetch our arguments to <code>Bundle args</code>.
+         * implementation of onCreate, then we fetch our arguments to <b>Bundle args</b>.
          * If we are being created from xml this will be null and we are done. If we were created
-         * from java code in <code>newInstance</code> our arguments were set using setArguments
-         * so we initialize our field <code>CharSequence mLabel</code> to the value which was
+         * from java code in <b>newInstance</b> our arguments were set using setArguments
+         * so we initialize our field <b>CharSequence mLabel</b> to the value which was
          * stored in our arguments using key "label".
          *
          * @param savedInstanceState we do not override onSaveInstanceState so do not use
@@ -145,10 +145,10 @@ public class FragmentArguments extends Activity {
 
         /**
          * Called to have the fragment instantiate its user interface view. First we inflate our
-         * layout file R.layout.hello_world into <code>View v</code>, then we locate our text field
+         * layout file R.layout.hello_world into <b>View v</b>, then we locate our text field
          * R.id.text in the layout set its text to our field mLabel (if it got initialized) and set
          * its background to the system drawable android.R.drawable.gallery_thumb (although this is
-         * actually a selector so this might be an error). Finally we return <code>View v</code> to
+         * actually a selector so this might be an error). Finally we return <b>View v</b> to
          * our caller.
          *
          * @param inflater The LayoutInflater object that can be used to inflate any views in the

@@ -68,8 +68,8 @@ public class ScreenOrientation extends Activity {
      * android.R.layout.simple_spinner_item. Then we set the layout resource to create the drop down
      * views to R.layout.simple_spinner_dropdown_item (the list displays the items using a different
      * layout from the single item layout specified in the constructor). We set the SpinnerAdapter
-     * used to provide the data which backs the Spinner mOrientation to <code>adapter</code>, and
-     * finally we we the OnItemSelectedListener of <code>mOrientation</code> to an anonymous class
+     * used to provide the data which backs the Spinner mOrientation to <b>adapter</b>, and
+     * finally we we the OnItemSelectedListener of <b>mOrientation</b> to an anonymous class
      * which calls setRequestedOrientation with the appropriate orientation constant for the item
      * selected in the Spinner.
      *

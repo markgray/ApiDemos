@@ -183,12 +183,12 @@ public class FragmentDialog extends Activity {
 
         /**
          * Create a new instance of MyDialogFragment, providing "num" as an argument. First we create
-         * a new instance of MyDialogFragment f, then we create a <code>Bundle args</code> and add
+         * a new instance of MyDialogFragment f, then we create a <b>Bundle args</b> and add
          * our parameter num to its mapping using "num" as the key, and set <strong>args</strong> as the
-         * arguments for <code>f</code>. Finally we return <strong>f</strong> to the caller.
+         * arguments for <b>f</b>. Finally we return <strong>f</strong> to the caller.
          *
          * @param num number of the style and theme combination to use
-         * @return a MyDialogFragment with arguments set to include <code>num</code> stored using the
+         * @return a MyDialogFragment with arguments set to include <b>num</b> stored using the
          * key "num"
          */
         static MyDialogFragment newInstance(int num) {

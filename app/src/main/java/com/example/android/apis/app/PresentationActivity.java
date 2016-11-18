@@ -67,7 +67,7 @@ import com.example.android.apis.R;
  * on that display.  We show a different photograph in each presentation
  * on a unique background along with a label describing the display.
  * We also write information about displays and display-related events to
- * the Android log which you can read using <code>adb logcat</code>.
+ * the Android log which you can read using <b>adb logcat</b>.
  * </p><p>
  * You can try this out using an HDMI or Wifi display or by using the
  * "Simulate secondary displays" feature in Development Settings to create a few

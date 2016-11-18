@@ -30,7 +30,7 @@ import android.widget.TextView;
 /**
  * Simple example of using persistent preferences to retain a screen's state.
  * <p>This can be used as an alternative to the normal
- * <code>onSaveInstanceState()</code> mechanism, if you
+ * <b>onSaveInstanceState()</b> mechanism, if you
  * wish the state to persist even after an activity is finished.</p>
  *
  * <p>Note that using this approach requires more care, since you are sharing

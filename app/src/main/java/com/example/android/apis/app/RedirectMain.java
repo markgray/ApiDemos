@@ -163,7 +163,7 @@ public class RedirectMain extends Activity {
         /**
          * Called when the "Clear and exit" Button is clicked. First we open the shared preference
          * file "RedirectData" into SharedPreferences preferences, then we create an editor for
-         * <code>preferences</code>, use it to mark the key "text" for removal, and  commit the
+         * <b>preferences</b>, use it to mark the key "text" for removal, and  commit the
          * change back from the editor to the preferences file. Finally we finish() this Activity
          * and return to RedirectEnter.
          *

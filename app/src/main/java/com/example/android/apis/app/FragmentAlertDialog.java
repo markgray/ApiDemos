@@ -46,13 +46,13 @@ public class FragmentAlertDialog extends Activity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * onCreate, then we set our content view to our layout file R.layout.fragment_dialog. Then we
-     * find the <code>View tv</code> in the layout (R.id.text) and set its text to the String
+     * find the <b>View tv</b> in the layout (R.id.text) and set its text to the String
      * R.string.example_alert_dialogfragment:
      *
      *     "Example of displaying an alert dialog with a DialogFragment"
      *
-     * Finally we locate the <code>Button button</code> R.id.show ("Show") and set its OnClickListener
-     * to an anonymous class which calls our method <code>showDialog()</code> to show our AlertDialog.
+     * Finally we locate the <b>Button button</b> R.id.show ("Show") and set its OnClickListener
+     * to an anonymous class which calls our method <b>showDialog()</b> to show our AlertDialog.
      *
      * @param savedInstanceState we do not override onSaveInstanceState so do not use this
      */
@@ -114,10 +114,10 @@ public class FragmentAlertDialog extends Activity {
 
         /**
          * Factory method to create a new instance of MyAlertDialogFragment and set its arguments.
-         * First we create a new instance <code>MyAlertDialogFragment frag</code>, then we create
-         * a <code>Bundle args</code>, add our parameter <code>int title</code> to it under the
-         * key "title", and then set the argmuments of <code>frag</code> to our <code>Bundle args</code>.
-         * Finally we return <code>MyAlertDialogFragment frag</code> to the caller.
+         * First we create a new instance <b>MyAlertDialogFragment frag</b>, then we create
+         * a <b>Bundle args</b>, add our parameter <b>int title</b> to it under the
+         * key "title", and then set the argmuments of <b>frag</b> to our <b>Bundle args</b>.
+         * Finally we return <b>MyAlertDialogFragment frag</b> to the caller.
          *
          * @param title resource id for a String to use as the DialogFragment's title
          *
@@ -148,9 +148,9 @@ public class FragmentAlertDialog extends Activity {
          * To find out about these events, override {@link #onCancel(DialogInterface)}
          * and {@link #onDismiss(DialogInterface)}.</p>
          *
-         * First we retrieve the <code>int title</code> String resource id from our arguments, then
+         * First we retrieve the <b>int title</b> String resource id from our arguments, then
          * we use an AlertDialog.Builder to create a Dialog instance with the icon set to the
-         * resource R.drawable.alert_dialog_icon, the title set to <code>title</code>, the positive
+         * resource R.drawable.alert_dialog_icon, the title set to <b>title</b>, the positive
          * Button labeled using the String R.string.alert_dialog_ok ("OK") with an anonymous class
          * DialogInterface.OnClickListener which calls our method doPositiveClick, and the negative
          * Button labeled using the String R.string.alert_dialog_cancel ("Cancel") with an anonymous

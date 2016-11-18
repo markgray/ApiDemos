@@ -40,12 +40,12 @@ public class FragmentContextMenu extends Activity {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, Then we create an instance of the Fragment <code>ContextMenuFragment content</code>.
+     * onCreate, Then we create an instance of the Fragment <b>ContextMenuFragment content</b>.
      * We use the FragmentManager for interacting with fragments associated with this activity to
      * start a series of edit operations on the Fragments associated with this FragmentManager and
-     * chaining on the <code>FragmentTransaction</code> returned by <code>beginTransaction</code>
-     * we add our <code>ContextMenuFragment content</code> to the Activity state, and finally, again
-     * chaining on the same <code>FragmentTransaction</code> returned we commit that transaction.
+     * chaining on the <b>FragmentTransaction</b> returned by <b>beginTransaction</b>
+     * we add our <b>ContextMenuFragment content</b> to the Activity state, and finally, again
+     * chaining on the same <b>FragmentTransaction</b> returned we commit that transaction.
      *
      * @param savedInstanceState we do not override onSaveInstanceState so do not use this
      */
@@ -66,12 +66,12 @@ public class FragmentContextMenu extends Activity {
 
         /**
          * Called to have the fragment instantiate its user interface view. First we use the parameter
-         * <code>LayoutInflater inflater</code> to inflate our layout file R.layout.fragment_context_menu
-         * into <code>View view</code>, then we register the View of the Button in the layout with the
+         * <b>LayoutInflater inflater</b> to inflate our layout file R.layout.fragment_context_menu
+         * into <b>View view</b>, then we register the View of the Button in the layout with the
          * id R.id.long_press ("Long press me") for a context menu to be shown. This will set the
          * View.OnCreateContextMenuListener on the view to this fragment, so that the callback
          * onCreateContextMenu(ContextMenu, View, ContextMenuInfo) will be called when it is time to
-         * show the context menu. Finally we return <code>View view</code> to the caller.
+         * show the context menu. Finally we return <b>View view</b> to the caller.
          *
          * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment,
          * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
@@ -122,10 +122,10 @@ public class FragmentContextMenu extends Activity {
          * Derived classes should call through to the base class for it to perform
          * the default menu handling.
          *
-         * We fetch the identifier for this <code>MenuItem item</code> and switch on the id
+         * We fetch the identifier for this <b>MenuItem item</b> and switch on the id
          * displaying a Toast depending on the id: R.id.a_item "Item 1a was chosen", or
          * R.id.b_item "Item 1b was chosen" then return true to indicate we have consumed the
-         * context menu selection. If the identifier of the <code>MenuItem item</code> matches
+         * context menu selection. If the identifier of the <b>MenuItem item</b> matches
          * neither of our id's then we return the value returned by our super's implementation of
          * onContextItemSelected (which returns false).
          *

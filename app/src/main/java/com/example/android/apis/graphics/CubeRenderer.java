@@ -59,7 +59,7 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
      * the matrix using the xyz coordinates (0.5f, 0.5f, 0.5f), and instruct our Cube mCube to
      * draw itself again using this matrix. Finally we increment mAngle by 1.2 degrees.
      *
-     * @param gl the GL interface. Use <code>instanceof</code> to test if the interface supports
+     * @param gl the GL interface. Use <b>instanceof</b> to test if the interface supports
      *           GL11 or higher interfaces.
      */
     @Override
@@ -105,7 +105,7 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
      * horizontal clipping planes set to -1 and +1 respectively, and the distances to the near and
      * far depth clipping planes set to 1 and 10 respectively.
      *
-     * @param gl the GL interface. Use <code>instanceof</code> to test if the interface supports
+     * @param gl the GL interface. Use <b>instanceof</b> to test if the interface supports
      *           GL11 or higher interfaces.
      * @param width width of the surface in pixels
      * @param height height of the surface in pixels
@@ -152,7 +152,7 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
      * and finally enable the GL capability GL_DEPTH_TEST (do depth comparisons and update the depth
      * buffer).
      *
-     * @param gl the GL interface. Use <code>instanceof</code> to test if the interface supports
+     * @param gl the GL interface. Use <b>instanceof</b> to test if the interface supports
      *           GL11 or higher interfaces.
      * @param config the EGLConfig of the created surface. Can be used to create matching pbuffers.
      */

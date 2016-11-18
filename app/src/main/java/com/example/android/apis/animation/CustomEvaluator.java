@@ -146,7 +146,7 @@ public class CustomEvaluator extends Activity {
          * @param startValue The start value.
          * @param endValue   The end value.
          * @return A linear interpolation between the start and end values, given the
-         *         <code>fraction</code> parameter.
+         *         <b>fraction</b> parameter.
          */
         @Override
         public Object evaluate(float fraction, Object startValue, Object endValue) {
