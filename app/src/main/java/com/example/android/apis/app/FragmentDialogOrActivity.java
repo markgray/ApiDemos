@@ -31,8 +31,11 @@ import android.widget.TextView;
 
 import com.example.android.apis.R;
 
+/**
+ * Shows how to show the same DialogFragment embedded in the activity layout, and as a dialog.
+ */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentDialogOrActivity extends Activity {
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,33 +52,31 @@ public class FragmentDialogOrActivity extends Activity {
         }
 
         // Watch for button clicks.
-        Button button = (Button)findViewById(R.id.show_dialog);
+        Button button = (Button) findViewById(R.id.show_dialog);
         button.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 showDialog();
             }
         });
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     void showDialog() {
         // Create the fragment and show it as a dialog.
         DialogFragment newFragment = MyDialogFragment.newInstance();
         newFragment.show(getFragmentManager(), "dialog");
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class MyDialogFragment extends DialogFragment {
         static MyDialogFragment newInstance() {
             return new MyDialogFragment();
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.hello_world, container, false);
             View tv = v.findViewById(R.id.text);
-            ((TextView)tv).setText(R.string.my_dialog_fragment_label);
+            ((TextView) tv).setText(R.string.my_dialog_fragment_label);
             return v;
         }
     }

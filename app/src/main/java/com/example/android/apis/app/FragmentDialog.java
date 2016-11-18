@@ -267,6 +267,25 @@ public class FragmentDialog extends Activity {
             setStyle(style, theme);
         }
 
+        /**
+         * Called to have the fragment instantiate its user interface view. First we inflate our
+         * layout file R.layout.fragment_dialog into <b>View v</b>, locate the <b>TextView</b> in
+         * our layout R.id.text and set its text to a <b>String dialogLabel</b> which we create to
+         * describe the style and theme we are using for the dialog. Next we locate the R.id.show
+         * ("Show") <b>Button button</b> in our layout and set its OnClickListener to an anonymous
+         * class which will call our method <b>showDialog()</b> to show the next styled and themed
+         * <b>MyDialogFragment</b> that follows this one. Finally we return <b>View v</b> to our
+         * caller.
+         *
+         * @param inflater           The LayoutInflater object that can be used to inflate
+         *                           any views in the fragment,
+         * @param container          If non-null, this is the parent view that the fragment's
+         *                           UI should be attached to.  The fragment should not add the view itself,
+         *                           but this can be used to generate the LayoutParams of the view.
+         * @param savedInstanceState If non-null, this fragment is being re-constructed
+         *                           from a previous saved state as given here.
+         * @return Return the View for the fragment's UI.
+         */
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.fragment_dialog, container, false);
@@ -277,6 +296,13 @@ public class FragmentDialog extends Activity {
             // Watch for button clicks.
             Button button = (Button) v.findViewById(R.id.show);
             button.setOnClickListener(new OnClickListener() {
+                /**
+                 * Called when the R.id.show ("Show") <b>Button</b> is clicked. We simply call our
+                 * method <b>showDialog()</b> which will show the <b>MyDialogFragment</b> which
+                 * follows this one.
+                 *
+                 * @param v View of Button that was clicked
+                 */
                 @Override
                 public void onClick(View v) {
                     // When button is clicked, call up to owning activity.
