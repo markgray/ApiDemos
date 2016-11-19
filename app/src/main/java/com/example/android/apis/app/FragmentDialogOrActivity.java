@@ -36,6 +36,25 @@ import com.example.android.apis.R;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentDialogOrActivity extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.fragment_dialog_or_activity.
+     * Next we check to see if our parameter <b>Bundle savedInstanceState</b> is null, which means
+     * this is our first time being called so we need to embed our Fragment in our layout ourselves
+     * rather than rely on the system to recreate it. If null then we create <b>FragmentTransaction ft</b>
+     * by using the FragmentManager for interacting with fragments associated with this activity to
+     * start a series of edit operations on the Fragments associated with this FragmentManager. We
+     * create an instance of <b>DialogFragment newFragment</b>, use <b>ft</b> to add <b>newFragment</b>
+     * in the <b>FrameLayout</b> R.id.embedded inside our layout, and then commit <b>ft</b>. Having
+     * taken care of our embedded Fragment we locate <b>Button button</b> R.id.show_dialog ("Show")
+     * in our layout file and set its OnClickListener to an anonymous class which will call our method
+     * <b>showDialog()</b> when the Button is clicked.
+     *
+     * @param savedInstanceState if the activity is being recreated after an orientation change this
+     *                           will contain information for the FragmentManager to use, otherwise
+     *                           it is null. We use this to decide whether it is the first time that
+     *                           onCreate has been called (it will be null)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +73,11 @@ public class FragmentDialogOrActivity extends Activity {
         // Watch for button clicks.
         Button button = (Button) findViewById(R.id.show_dialog);
         button.setOnClickListener(new OnClickListener() {
+            /**
+             * Called when a view has been clicked. We simply call our method <b>showDialog()</b>.
+             *
+             * @param v View of the Button that was clicked
+             */
             @Override
             public void onClick(View v) {
                 showDialog();
@@ -61,17 +85,47 @@ public class FragmentDialogOrActivity extends Activity {
         });
     }
 
+    /**
+     * Create the fragment and show it as a dialog.
+     */
     void showDialog() {
-        // Create the fragment and show it as a dialog.
         DialogFragment newFragment = MyDialogFragment.newInstance();
         newFragment.show(getFragmentManager(), "dialog");
     }
 
+    /**
+     * Simple <b>DialogFragment</b> which only displays a String in a <b>TextView</b>
+     */
     public static class MyDialogFragment extends DialogFragment {
+        /**
+         * Simply creates and returns a new instance of <b>MyDialogFragment</b>
+         *
+         * @return new instance of <b>MyDialogFragment</b>
+         */
         static MyDialogFragment newInstance() {
             return new MyDialogFragment();
         }
 
+        /**
+         * Called to have the fragment instantiate its user interface view. First we use our parameter
+         * <b>LayoutInflater inflater</b> to inflate our layout file R.layout.hello_world into the
+         * variable <b>View v</b>. Then we locate <b>View tv</b> R.id.text in <b>v</b>, and set the
+         * text in this <b>TextView</b> to the String R.string.my_dialog_fragment_label:
+         * <p>
+         * <center>This is an instance of MyDialogFragment</center>
+         * <p>
+         * Finally we return <b>View v</b> to the caller.
+         *
+         * @param inflater           The LayoutInflater object that can be used to inflate
+         *                           any views in the fragment,
+         * @param container          If non-null, this is the parent view that the fragment's
+         *                           UI should be attached to.  The fragment should not add the view itself,
+         *                           but this can be used to generate the LayoutParams of the view.
+         * @param savedInstanceState If non-null, this fragment is being re-constructed
+         *                           from a previous saved state as given here.
+         *
+         * @return Return the View for the fragment's UI
+         */
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.hello_world, container, false);

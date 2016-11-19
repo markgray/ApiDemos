@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2010 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -17,48 +16,54 @@
 <!-- Top-level content view for the simple fragment sample. -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:padding="4dip"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:padding="4dip">
 
     <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:gravity="top|center_horizontal"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/fragment_dialog_or_activity_msg" />
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_weight="0"
+        android:gravity="top|center_horizontal"
+        android:text="@string/fragment_dialog_or_activity_msg"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <Button android:id="@+id/show_dialog"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/show_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="0"
         android:text="@string/show">
+
         <requestFocus />
     </Button>
 
-    <View android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <TextView
-            android:id="@+id/inline_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/fragment_dialog_or_activity_inline" />
+        android:id="@+id/inline_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_weight="0"
+        android:text="@string/fragment_dialog_or_activity_inline"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <FrameLayout
-            android:id="@+id/embedded"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:padding="6dp"
-            android:background="#ff303030"
-            android:gravity="top|center_horizontal" />
+        android:id="@+id/embedded"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_weight="0"
+        android:background="#ff303030"
+        android:gravity="top|center_horizontal"
+        android:padding="6dp" />
 
 </LinearLayout>
