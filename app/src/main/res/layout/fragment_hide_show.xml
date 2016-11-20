@@ -51,8 +51,8 @@
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            tools:layout="@layout/labeled_text_edit"
-            tools:ignore="NestedWeights" />
+            tools:ignore="NestedWeights"
+            tools:layout="@layout/labeled_text_edit" />
 
     </LinearLayout>
 
@@ -77,8 +77,8 @@
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            tools:layout="@layout/labeled_text_edit"
-            tools:ignore="NestedWeights" />
+            tools:ignore="NestedWeights"
+            tools:layout="@layout/labeled_text_edit" />
 
     </LinearLayout>
 

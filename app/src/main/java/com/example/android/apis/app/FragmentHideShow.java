@@ -33,11 +33,20 @@ import android.widget.Button;
 import android.widget.TextView;
 
 /**
- * Demonstration of hiding and showing fragments.
+ * Demonstration of hiding and showing fragments while keeping fragment state using
+ * FragmentTransaction.hide(Fragment), and FragmentTransaction.show(Fragment).
+ * The Fragment's are created in the layout using the <fragment> xml element.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentHideShow extends Activity {
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.fragment_hide_show. We
+     * FragmentManager for interacting with fragments associated with this activity
+     *
+     * @param savedInstanceState we do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +62,7 @@ public class FragmentHideShow extends Activity {
     void addShowHideListener(int buttonId, final Fragment fragment) {
         final Button button = (Button)findViewById(buttonId);
         button.setOnClickListener(new OnClickListener() {
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+            @Override
             public void onClick(View v) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.setCustomAnimations(android.R.animator.fade_in,
@@ -70,13 +79,11 @@ public class FragmentHideShow extends Activity {
         });
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class FirstFragment extends Fragment {
         TextView mTextView;
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.labeled_text_edit, container, false);
             View tv = v.findViewById(R.id.msg);
             ((TextView)tv).setText(R.string.text_for_fragment_to_save);
@@ -98,7 +105,6 @@ public class FragmentHideShow extends Activity {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class SecondFragment extends Fragment {
 
         @Override
