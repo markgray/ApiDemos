@@ -43,7 +43,12 @@ public class FragmentHideShow extends Activity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * onCreate, then we set our content view to our layout file R.layout.fragment_hide_show. We
-     * FragmentManager for interacting with fragments associated with this activity
+     * fetch a handle to the FragmentManager for interacting with fragments associated with this
+     * activity and save it in <b>FragmentManager fm</b>. Then we use <b>fm</b> to locate the two
+     * fragments in our layout: R.id.fragment1 and R.id.fragment2 and pass these Fragment references
+     * to our method addShowHideListener in order to configure the OnClickListener's for the Button's
+     * R.id.frag1hide and R.id.frag2hide so that clicking those Button's will toggle whether the
+     * two Fragment's are shown or hidden.
      *
      * @param savedInstanceState we do not use
      */
@@ -59,14 +64,34 @@ public class FragmentHideShow extends Activity {
         addShowHideListener(R.id.frag2hide, fm.findFragmentById(R.id.fragment2));
     }
 
+    /**
+     * Adds an OnClickListener to the Button whose resource id is <b>buttonId</b> which creates a
+     * FragmentTransaction to toggle whether the <b>Fragment fragment</b> is shown or hidden. First
+     * we locate the <b>Button button</b> in our layout whose id is <b>buttonId</b>, then we set the
+     * OnClickListener of <b>button</b> to an anonymous class which will create a FragmentTransaction
+     * which will toggle whether the Fragment is shown or hidden.
+     *
+     * @param buttonId Resource id for the Button to add the OnClickListener for
+     * @param fragment Fragment whose show/hide will toggled
+     */
     void addShowHideListener(int buttonId, final Fragment fragment) {
-        final Button button = (Button)findViewById(buttonId);
+        final Button button = (Button) findViewById(buttonId);
         button.setOnClickListener(new OnClickListener() {
+            /**
+             * Called when <b>Button button</b> is clicked. First we create a <b>FragmentTransaction ft</b>
+             * by using the FragmentManager for interacting with fragments associated with this activity
+             * to start a series of edit operations on the Fragments associated with this FragmentManager.
+             * If the <b>Fragment fragment</b> is hidden we use <b>ft</b> to show the Fragment, and update
+             * the text of <b>Button button</b> to the String R.string.hide ("Hide"). Otherwise we use
+             * <b>ft</b> to hide the Fragment, and update the text of <b>Button button</b> to the String
+             * R.string.show ("Show"). Finally we schedule a commit of <b>FragmentTransaction ft</b>.
+             *
+             * @param v View of Button that was clicked
+             */
             @Override
             public void onClick(View v) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.setCustomAnimations(android.R.animator.fade_in,
-                        android.R.animator.fade_out);
+                ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
                 if (fragment.isHidden()) {
                     ft.show(fragment);
                     button.setText(R.string.hide);
@@ -79,17 +104,37 @@ public class FragmentHideShow extends Activity {
         });
     }
 
+    /**
+     * This is an example Fragment which saves the state of the EditText in its layout file using
+     * the callback OnSaveInstanceState, and is added to our main layout using a fragment element.
+     */
     public static class FirstFragment extends Fragment {
-        TextView mTextView;
+        TextView mTextView; // EditText R.id.msg in our layout file (R.layout.labeled_text_edit)
 
+        /**
+         * Called to have the fragment instantiate its user interface view. First we use
+         * <b>LayoutInflater inflater</b> to inflate our layout file R.layout.labeled_text_edit
+         * into <b>View v</b>. Then we locate the <b>EditText</b> R.id.msg in our layout file and
+         * save a reference to it in <b>View tv</b>
+         *
+         * @param inflater           The LayoutInflater object that can be used to inflate
+         *                           any views in the fragment,
+         * @param container          If non-null, this is the parent view that the fragment's
+         *                           UI should be attached to.  The fragment should not add the view itself,
+         *                           but this can be used to generate the LayoutParams of the view.
+         * @param savedInstanceState If non-null, this fragment is being re-constructed
+         *                           from a previous saved state as given here.
+         *
+         * @return Return the View for the fragment's UI.
+         */
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.labeled_text_edit, container, false);
             View tv = v.findViewById(R.id.msg);
-            ((TextView)tv).setText(R.string.text_for_fragment_to_save);
+            ((TextView) tv).setText(R.string.text_for_fragment_to_save);
 
             // Retrieve the text editor, and restore the last saved state if needed.
-            mTextView = (TextView)v.findViewById(R.id.saved);
+            mTextView = (TextView) v.findViewById(R.id.saved);
             if (savedInstanceState != null) {
                 mTextView.setText(savedInstanceState.getCharSequence("text"));
             }
@@ -109,10 +154,10 @@ public class FragmentHideShow extends Activity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                                 Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.labeled_text_edit, container, false);
             View tv = v.findViewById(R.id.msg);
-            ((TextView)tv).setText(R.string.textview_text_to_save);
+            ((TextView) tv).setText(R.string.textview_text_to_save);
 
             // Retrieve the text editor and tell it to save and restore its state.
             // Note that you will often set this in the layout XML, but since
