@@ -114,8 +114,14 @@ public class FragmentHideShow extends Activity {
         /**
          * Called to have the fragment instantiate its user interface view. First we use
          * <b>LayoutInflater inflater</b> to inflate our layout file R.layout.labeled_text_edit
-         * into <b>View v</b>. Then we locate the <b>EditText</b> R.id.msg in our layout file and
-         * save a reference to it in <b>View tv</b>
+         * into <b>View v</b>. Then we locate the label TextView R.id.msg in our layout file and
+         * save a reference to it in <b>View tv</b>. We use <b>tv</b> to set the text in the
+         * label <b>TextView</b> to the String R.string.text_for_fragment_to_save ("The fragment
+         * saves and restores this text."). Then we initialize our field <b>TextView mTextView</b>
+         * by finding the EditText in our layout R.id.saved. Then we check to see if our parameter
+         * <b>savedInstanceState</b> is not null (we are being restarted) and if so we retrieve the
+         * String we stored in our callback onSaveInstanceState under the key "text" and use it to
+         * set the text of <b>mTextView</b>. Finally we return <b>View v</b> to our caller.
          *
          * @param inflater           The LayoutInflater object that can be used to inflate
          *                           any views in the fragment,
@@ -141,6 +147,21 @@ public class FragmentHideShow extends Activity {
             return v;
         }
 
+        /**
+         * Called to ask the fragment to save its current dynamic state, so it can later be
+         * reconstructed in a new instance of its process is restarted.  If a new instance
+         * of the fragment later needs to be created, the data you place in the Bundle here
+         * will be available in the Bundle given to {@link #onCreate(Bundle)},
+         * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}, and
+         * {@link #onActivityCreated(Bundle)}.
+         * <p>
+         * First we call through to our super's implementation of onSaveInstanceState. Then we
+         * retrieve the text in our layout's EditText R.id.saved (a reference to it was used to
+         * initialize our field <b>TextView mTextView</b>) and store it in our parameter
+         * <b>Bundle outState</b> under the key "text".
+         *
+         * @param outState Bundle in which to place your saved state.
+         */
         @Override
         public void onSaveInstanceState(Bundle outState) {
             super.onSaveInstanceState(outState);
@@ -150,11 +171,36 @@ public class FragmentHideShow extends Activity {
         }
     }
 
+    /**
+     * This is an example Fragment which relies on the TextView to save and restore the state of the
+     * EditText in its layout file, and is added to our main layout using a fragment element.
+     */
     public static class SecondFragment extends Fragment {
 
+        /**
+         * Called to have the fragment instantiate its user interface view. First we use our parameter
+         * <b>LayoutInflater inflater</b> to inflate our layout file R.layout.labeled_text_edit into
+         * <b>View v</b>. Then we locate the TextView R.id.msg in <b>v</b> and save a reference to
+         * it in <b>View tv</b>. We use <b>tv</b> to set the text of the TextView to the String
+         * R.string.textview_text_to_save ("The TextView saves and restores this text."). We locate
+         * the EditText in our layout R.id.saved and call its method <b>setSaveEnabled(true)</b>
+         * which enables the saving of the EditText's state (that is, whether its onSaveInstanceState()
+         * method will be called). Note that even if freezing is enabled, the view still must have an
+         * id assigned to it (via setId(int)) for its state to be saved. Finally we return our inflated
+         * and configured layour <b>View v</b> to the caller.
+         *
+         * @param inflater           The LayoutInflater object that can be used to inflate
+         *                           any views in the fragment,
+         * @param container          If non-null, this is the parent view that the fragment's
+         *                           UI should be attached to.  The fragment should not add the view itself,
+         *                           but this can be used to generate the LayoutParams of the view.
+         * @param savedInstanceState If non-null, this fragment is being re-constructed
+         *                           from a previous saved state as given here.
+         *
+         * @return Return the View for the fragment's UI.
+         */
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.labeled_text_edit, container, false);
             View tv = v.findViewById(R.id.msg);
             ((TextView) tv).setText(R.string.textview_text_to_save);

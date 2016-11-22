@@ -40,18 +40,23 @@ import android.widget.TextView;
 /**
  * Demonstration of using fragments to implement different activity layouts.
  * This sample provides a different layout (and activity flow) when run in
- * landscape.
+ * landscape. It crashes as it was in landscape mode because of a reference
+ * to the non-existent containerViewId R.id.a_item in the call at line 156:
+ * <p>
+ * (FragmentTransaction) ft.replace(R.id.a_item, details)
+ * <p>
+ * This was obviously added by a runaway modification script, and the container
+ * id should be R.id.details
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentLayout extends Activity {
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         setContentView(R.layout.fragment_layout);
     }
-
 
     /**
      * This is a secondary activity, to show what the user has selected
@@ -60,7 +65,6 @@ public class FragmentLayout extends Activity {
 
     public static class DetailsActivity extends Activity {
 
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -82,14 +86,12 @@ public class FragmentLayout extends Activity {
         }
     }
 
-
     /**
      * This is the "top-level" fragment, showing a list of items that the
      * user can pick.  Upon picking an item, it takes care of displaying the
      * data to the user as appropriate based on the currrent UI layout.
      */
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class TitlesFragment extends ListFragment {
         boolean mDualPane;
         int mCurCheckPosition = 0;
@@ -174,13 +176,10 @@ public class FragmentLayout extends Activity {
         }
     }
 
-
     /**
      * This is the secondary fragment, displaying the details of a particular
      * item.
      */
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class DetailsFragment extends Fragment {
         /**
          * Create a new instance of DetailsFragment, initialized to
@@ -202,8 +201,7 @@ public class FragmentLayout extends Activity {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             if (container == null) {
                 // We have different layouts, and in one of them this
                 // fragment's containing frame doesn't exist.  The fragment
@@ -217,7 +215,7 @@ public class FragmentLayout extends Activity {
 
             ScrollView scroller = new ScrollView(getActivity());
             TextView text = new TextView(getActivity());
-            int padding = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+            int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     4, getActivity().getResources().getDisplayMetrics());
             text.setPadding(padding, padding, padding, padding);
             scroller.addView(text);
