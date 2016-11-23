@@ -543,6 +543,7 @@ App
             Demonstration of hiding and showing fragments while keeping fragment state
             using FragmentTransaction.hide(Fragment), and FragmentTransaction.show(Fragment).
             The Fragment's are created in the layout using the <fragment> xml element.
+            TODO: fix display of show/hide Button text after rotation.
 
     App/Fragment/Layout                    v11
         .app.FragmentLayout                CRASHES both Xcite and Nexus 7 (fixed)
