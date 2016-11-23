@@ -51,10 +51,16 @@ import android.widget.TextView;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentLayout extends Activity {
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.fragment_layout which is
+     * either layout-land/fragment_layout.xml or layout/fragment_layout depending on orientation.
+     *
+     * @param savedInstanceState we do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.fragment_layout);
     }
 
@@ -62,9 +68,26 @@ public class FragmentLayout extends Activity {
      * This is a secondary activity, to show what the user has selected
      * when the screen is not large enough to show it all in one activity.
      */
-
     public static class DetailsActivity extends Activity {
 
+        /**
+         * Called when the activity is starting. First we call through to our super's implementation
+         * of onCreate. Then using a Resources instance for the application's package we get the
+         * current configuration that is in effect for this resource object and check whether the
+         * orientation of the screen given by the field Configuration.orientation is currently set
+         * to Configuration.ORIENTATION_LANDSCAPE in which case this Activity is not needed since
+         * a dual pane version is in use, so we finish this Activity and return to caller. Otherwise
+         * we are in Configuration.ORIENTATION_PORTRAIT and are needed. If we are being recreated
+         * <b>savedInstanceState</b> is not null and the system will have taken care of restoring our
+         * Fragment so we are done. If it is null this is the first time and we need to add a new
+         * instance of our Fragment. To do this we first create a new instance of the Fragment
+         * <b>DetailsFragment details</b>, set its arguments to a map of the extras added to the
+         * Intent which launched this Activity, and finally using the FragmentManager for interacting
+         * with fragments associated with this activity we create a FragmentTransaction, use it to
+         * add <b>details</b> to the activity state, and then commit that FragmentTransaction.
+         *
+         * @param savedInstanceState if null, first time initializations are needed
+         */
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -89,13 +112,30 @@ public class FragmentLayout extends Activity {
     /**
      * This is the "top-level" fragment, showing a list of items that the
      * user can pick.  Upon picking an item, it takes care of displaying the
-     * data to the user as appropriate based on the currrent UI layout.
+     * data to the user as appropriate based on the current UI layout.
      */
-
     public static class TitlesFragment extends ListFragment {
-        boolean mDualPane;
-        int mCurCheckPosition = 0;
+        boolean mDualPane; // Flag to indicate whether we are in ORIENTATION_LANDSCAPE dual pane mode
+        int mCurCheckPosition = 0; // Currently selected title to be displayed
 
+        /**
+         * Called when the fragment's activity has been created and this fragment's view hierarchy
+         * instantiated. First we call through to our super's implementation of onActivityCreated.
+         * Next we set the cursor for the list view of this ListFragment to an <b>ArrayAdapter</b>
+         * consisting of the String[] array Shakespeare.TITLES. Then we determine whether we are
+         * in ORIENTATION_LANDSCAPE (dual pane mode) by searching our Activity's content view for
+         * a view with the id R.id.details, saving a reference to it in <b>View detailsFrame</b>.
+         * If <b>detailsFrame</b> is not null and the View is VISIBLE we set our field <b>mDualPane</b>
+         * to true. If <b>savedInstanceState</b> is not null we use it to retrieve the value of our
+         * field mCurCheckPosition which our callback onSaveInstanceState saved under the key
+         * "curChoice". If we have determined that we are in dual pane mode (ORIENTATION_LANDSCAPE)
+         * we set the choice mode for our ListView to CHOICE_MODE_SINGLE so that the currently
+         * selected item is highlighted, and then call our method <b>showDetails(mCurCheckPosition)</b>
+         * to display the details of the selected item in the other pane.
+         *
+         * @param savedInstanceState If not null it contains mCurCheckPosition saved by our callback
+         *                           onSaveInstanceState under the key "curChoice"
+         */
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
