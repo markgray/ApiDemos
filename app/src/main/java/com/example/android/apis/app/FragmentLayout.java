@@ -162,21 +162,58 @@ public class FragmentLayout extends Activity {
             }
         }
 
+        /**
+         * Called to ask the fragment to save its current dynamic state, so it
+         * can later be reconstructed in a new instance of its process is
+         * restarted.  If a new instance of the fragment later needs to be
+         * created, the data you place in the Bundle here will be available
+         * in the Bundle given to {@link #onCreate(Bundle)},
+         * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}, and
+         * {@link #onActivityCreated(Bundle)}.
+         *
+         * <p>This corresponds to {@link Activity#onSaveInstanceState(Bundle)
+         * Activity.onSaveInstanceState(Bundle)} and most of the discussion there
+         * applies here as well.  Note however: <em>this method may be called
+         * at any time before {@link #onDestroy()}</em>.  There are many situations
+         * where a fragment may be mostly torn down (such as when placed on the
+         * back stack with no UI showing), but its state will not be saved until
+         * its owning activity actually needs to save its state.
+         *
+         * First we call through to our super's implementation of onSaveInstanceState, then we
+         * insert the value of our field <b>int mCurCheckPosition</b> into the mapping of the
+         * <b>Bundle outState</b> parameter under the key "curChoice".
+         *
+         * @param outState Bundle in which to place your saved state.
+         */
         @Override
         public void onSaveInstanceState(Bundle outState) {
             super.onSaveInstanceState(outState);
             outState.putInt("curChoice", mCurCheckPosition);
         }
 
+        /**
+         * This method will be called when an item in the list is selected. We simply call our method
+         * <b>showDetails</b> using the position of the view in the list that was selected as the
+         * index to the String[] Shakespeare.DIALOGUE array we wish to have displayed.
+         *
+         * @param l The ListView where the click happened
+         * @param v The view that was clicked within the ListView
+         * @param position The position of the view in the list
+         * @param id The row id of the item that was clicked
+         */
         @Override
         public void onListItemClick(ListView l, View v, int position, long id) {
             showDetails(position);
         }
 
         /**
-         * Helper function to show the details of a selected item, either by
-         * displaying a fragment in-place in the current UI, or starting a
-         * whole new activity in which it is displayed.
+         * Helper function to show the details of a selected item, either by displaying a fragment
+         * in-place in the current UI if we are in dual pane landscape mode, or starting a whole
+         * new activity in which it is displayed for portrait mode.
+         *
+         * First we save our parameter <b>int index</b> in our field <b>int mCurCheckPosition</b>.
+         *
+         * @param index index into the String[] Shakespeare.DIALOGUE we wish to have displayed
          */
         void showDetails(int index) {
             mCurCheckPosition = index;
@@ -217,8 +254,7 @@ public class FragmentLayout extends Activity {
     }
 
     /**
-     * This is the secondary fragment, displaying the details of a particular
-     * item.
+     * This is the secondary fragment, displaying the details of a particular item.
      */
     public static class DetailsFragment extends Fragment {
         /**
