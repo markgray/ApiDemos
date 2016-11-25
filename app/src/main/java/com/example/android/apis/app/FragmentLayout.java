@@ -170,7 +170,7 @@ public class FragmentLayout extends Activity {
          * in the Bundle given to {@link #onCreate(Bundle)},
          * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}, and
          * {@link #onActivityCreated(Bundle)}.
-         *
+         * <p>
          * <p>This corresponds to {@link Activity#onSaveInstanceState(Bundle)
          * Activity.onSaveInstanceState(Bundle)} and most of the discussion there
          * applies here as well.  Note however: <em>this method may be called
@@ -178,7 +178,7 @@ public class FragmentLayout extends Activity {
          * where a fragment may be mostly torn down (such as when placed on the
          * back stack with no UI showing), but its state will not be saved until
          * its owning activity actually needs to save its state.
-         *
+         * <p>
          * First we call through to our super's implementation of onSaveInstanceState, then we
          * insert the value of our field <b>int mCurCheckPosition</b> into the mapping of the
          * <b>Bundle outState</b> parameter under the key "curChoice".
@@ -196,10 +196,10 @@ public class FragmentLayout extends Activity {
          * <b>showDetails</b> using the position of the view in the list that was selected as the
          * index to the String[] Shakespeare.DIALOGUE array we wish to have displayed.
          *
-         * @param l The ListView where the click happened
-         * @param v The view that was clicked within the ListView
+         * @param l        The ListView where the click happened
+         * @param v        The view that was clicked within the ListView
          * @param position The position of the view in the list
-         * @param id The row id of the item that was clicked
+         * @param id       The row id of the item that was clicked
          */
         @Override
         public void onListItemClick(ListView l, View v, int position, long id) {
@@ -210,8 +210,24 @@ public class FragmentLayout extends Activity {
          * Helper function to show the details of a selected item, either by displaying a fragment
          * in-place in the current UI if we are in dual pane landscape mode, or starting a whole
          * new activity in which it is displayed for portrait mode.
-         *
+         * <p>
          * First we save our parameter <b>int index</b> in our field <b>int mCurCheckPosition</b>.
+         * Then if we are in dual pane mode (<b>boolean mDualPane</b> is true: device is using
+         * layout-land/fragment_layout.xml) we set the checked state of the specified position
+         * <b>index</b>, then we use the FragmentManager to search for a fragment with the id
+         * R.id.details (the id we use when adding DetailFragment), and if no Fragment with that id
+         * is found, or the method DetailsFragment.getShownIndex() returns an index different from
+         * the one just selected we need to add a DetailsFragment for the new <b>index</b>. To do
+         * this we first create a new instance of DetailsFragment with the new index into the
+         * String[] Shakespeare.DIALOGUE array, use the FragmentManager for interacting with
+         * fragments associated with this fragment's activity to begin <b>FragmentTransaction ft</b>
+         * then use <b>ft</b> to replace the existing fragment with id R.id.details (if any) with
+         * our new <b>DetailsFragment details</b>, set a transition animation of TRANSIT_FRAGMENT_FADE,
+         * and finally commit the FragmentTransaction. If we are not in dual pane mode (i.e.
+         * <b>boolean mDualPane</b> is false: device is using layout/fragment_layout.xml) we create
+         * an <b>Intent intent</b>, set its class to DetailsActivity.class, add extended data for the
+         * parameter <b>int index</b> under the key "index" to the intent, and start that Intent as
+         * a new Activity.
          *
          * @param index index into the String[] Shakespeare.DIALOGUE we wish to have displayed
          */
@@ -258,8 +274,12 @@ public class FragmentLayout extends Activity {
      */
     public static class DetailsFragment extends Fragment {
         /**
-         * Create a new instance of DetailsFragment, initialized to
-         * show the text at 'index'.
+         * Create a new instance of DetailsFragment, initialized to show the text at 'index'.
+         *
+         * @param index index into the String[] Shakespeare.DIALOGUE array to display
+         *              
+         * @return a new instance of DetailsFragment with its arguments set to include the value of
+         *         <b>int index</b> stored under the key "index".
          */
         public static DetailsFragment newInstance(int index) {
             DetailsFragment f = new DetailsFragment();
