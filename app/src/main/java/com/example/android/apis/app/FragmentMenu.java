@@ -33,7 +33,8 @@ import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 
 /**
- * Demonstrates how fragments can participate in the options menu.
+ * Demonstrates how fragments can participate in the options menu. Builds menus from two fragments,
+ * allowing you to hide them to remove them.
  */
 public class FragmentMenu extends Activity {
     Fragment mFragment1;
@@ -53,7 +54,7 @@ public class FragmentMenu extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_menu);
-        
+
         // Make sure the two menu fragments are created.
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
@@ -68,13 +69,13 @@ public class FragmentMenu extends Activity {
             ft.add(mFragment2, "f2");
         }
         ft.commit();
-        
+
         // Watch check box clicks.
-        mCheckBox1 = (CheckBox)findViewById(R.id.menu1);
+        mCheckBox1 = (CheckBox) findViewById(R.id.menu1);
         mCheckBox1.setOnClickListener(mClickListener);
-        mCheckBox2 = (CheckBox)findViewById(R.id.menu2);
+        mCheckBox2 = (CheckBox) findViewById(R.id.menu2);
         mCheckBox2.setOnClickListener(mClickListener);
-        
+
         // Make sure fragments start out with correct visibility.
         updateFragmentVisibility();
     }

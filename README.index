@@ -557,10 +557,12 @@ App
 
     App/Fragment/List Array                v11
         .app.FragmentListArray
-            Uses a ListFragment as the sole content of the activities window, using
-            setListAdapter to set the list to display an array created using:
+            Uses a ListFragment as the sole content of the activities window, using setListAdapter to
+            configure the list to display an array by constructing an ArrayAdapter<String> using that
+            array (Shakespeare.TITLES) as its data:
+
             ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, Shakespeare.TITLES));
-                                 Context        Layout file TextField to display in   Array of Strings
+
             It overrides onListItemClick simply to log the id of the item clicked.
 
     App/Fragment/Menu                      v11
