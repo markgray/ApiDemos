@@ -29,12 +29,25 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 /**
- * Demonstration of using ListFragment to show a list of items
- * from a canned array.
+ * Demonstration of using ListFragment to show a list of items from a canned array.
+ * <p>
+ * Uses a ListFragment as the sole content of the activities window, using setListAdapter to set the
+ * list to display an array created using:
+ * <p>
+ * ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, Shakespeare.TITLES));
+ * <p>
+ * It overrides onListItemClick simply to log the id of the item clicked.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentListArray extends Activity {
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate. Then we use the FragmentManager to see if there is not already a Fragment using the
+     * id we use (android.R.id.content), and if there is we do nothing. If there is not (findFragmentById
+     * returns null) it is the first time we are
+     *
+     * @param savedInstanceState we do not override onSaveInstanceState so do not use this
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,14 +59,12 @@ public class FragmentListArray extends Activity {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class ArrayListFragment extends ListFragment {
 
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-            setListAdapter(new ArrayAdapter<>(getActivity(),
-                    android.R.layout.simple_list_item_1, Shakespeare.TITLES));
+            setListAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, Shakespeare.TITLES));
         }
 
         @Override

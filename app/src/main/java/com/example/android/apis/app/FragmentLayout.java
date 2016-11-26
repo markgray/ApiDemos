@@ -274,10 +274,13 @@ public class FragmentLayout extends Activity {
      */
     public static class DetailsFragment extends Fragment {
         /**
-         * Create a new instance of DetailsFragment, initialized to show the text at 'index'.
+         * Create a new instance of DetailsFragment, initialized to show the text at 'index'. First
+         * we create a new instance of <b>DetailsFragment f</b>, then we create a <b>Bundle args</b>
+         * and add our parameter <b>int index</b> to it using the key "index". We set the arguments
+         * of <b>f</b> to <b>args</b> and return <b>f</b> to the caller.
          *
          * @param index index into the String[] Shakespeare.DIALOGUE array to display
-         *              
+         *
          * @return a new instance of DetailsFragment with its arguments set to include the value of
          *         <b>int index</b> stored under the key "index".
          */
@@ -292,10 +295,36 @@ public class FragmentLayout extends Activity {
             return f;
         }
 
+        /**
+         * Return the <b>int</b> argument supplied to setArguments(Bundle), (if any) which were
+         * stored under the key "index".
+         *
+         * @return integer argument which was stored under the key "index" or 0
+         */
         public int getShownIndex() {
             return getArguments().getInt("index", 0);
         }
 
+        /**
+         * Called to have the fragment instantiate its user interface view. First we check to see if
+         * we have a containing frame, and if we do not it means we do not need to inflate our View
+         * because in the present layout (portrait orientation) we would not be displayed, so we just
+         * return null to the caller. Otherwise we create a <b>ScrollView scroller</b>, create a
+         * <b>TextView text</b> to place inside <b>scroller</b>, configure the padding of <b>text</b>,
+         * add the <b>TextView text</b> to <b>ScrollView scroller</b>, set the text of <b>text</b> to
+         * the element of the <b>String[] Shakespeare.DIALOGUE</b> selected by our arguments when we
+         * were created, and finally we return <b>ScrollView scroller</b> to the caller.
+         *
+         * @param inflater The LayoutInflater object that can be used to inflate
+         * any views in the fragment,
+         * @param container If non-null, this is the parent view that the fragment's
+         * UI should be attached to.  The fragment should not add the view itself,
+         * but this can be used to generate the LayoutParams of the view.
+         * @param savedInstanceState If non-null, this fragment is being re-constructed
+         * from a previous saved state as given here.
+         *
+         * @return Return the View for the fragment's UI, or null
+         */
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             if (container == null) {
