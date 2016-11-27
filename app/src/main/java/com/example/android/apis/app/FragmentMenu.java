@@ -36,20 +36,37 @@ import android.widget.CheckBox;
  * Demonstrates how fragments can participate in the options menu. Builds menus from two fragments,
  * allowing you to hide them to remove them.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentMenu extends Activity {
-    Fragment mFragment1;
-    Fragment mFragment2;
-    CheckBox mCheckBox1;
-    CheckBox mCheckBox2;
+    Fragment mFragment1; // MenuFragment instance for our app
+    Fragment mFragment2; // Menu2Fragment instance for our app
+    CheckBox mCheckBox1; // CheckBox in layout used to show/hide mFragment1
+    CheckBox mCheckBox2; // CheckBox in layout used to show/hide mFragment2
 
     // Update fragment visibility when check boxes are changed.
     final OnClickListener mClickListener = new OnClickListener() {
+        /**
+         * This is used for both of the CheckBox's in our layout, We simply call our method
+         * <b>updateFragmentVisibility()</b> to update our menu given the new state of the two
+         * CheckBox's.
+         *
+         * @param v View of CheckBox which was clicked
+         */
+        @Override
         public void onClick(View v) {
             updateFragmentVisibility();
         }
     };
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.fragment_menu. Next we get
+     * a handle to the FragmentManager for interacting with fragments associated with this activity
+     * <b>FragmentManager fm</b>. We then use <b>fm</b> to start a new series of FragmentTransaction's
+     * <b>FragmentTransaction ft</b>.
+     *
+     * @param savedInstanceState we do not override onSaveInstanceState so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +105,6 @@ public class FragmentMenu extends Activity {
     }
 
     // Update fragment visibility based on current check box state.
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     void updateFragmentVisibility() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         if (mCheckBox1.isChecked()) ft.show(mFragment1);
@@ -103,7 +119,6 @@ public class FragmentMenu extends Activity {
      * have a UI (it does not implement onCreateView), but it could also
      * have one if it wanted.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class MenuFragment extends Fragment {
 
         @Override
@@ -122,7 +137,6 @@ public class FragmentMenu extends Activity {
     /**
      * Second fragment with a menu.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class Menu2Fragment extends Fragment {
 
         @Override

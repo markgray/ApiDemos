@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2010 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,32 +14,32 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:padding="8dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/fragment_menu_msg" />
+        android:text="@string/fragment_menu_msg"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <CheckBox android:id="@+id/menu1"
+    <CheckBox
+        android:id="@+id/menu1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:checked="true"
-        android:text="@string/fragment1menu">
-    </CheckBox>
-    
-    <CheckBox android:id="@+id/menu2"
+        android:text="@string/fragment1menu" />
+
+    <CheckBox
+        android:id="@+id/menu2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:checked="true"
-        android:text="@string/fragment2menu">
-    </CheckBox>
-    
+        android:text="@string/fragment2menu" />
+
 </LinearLayout>
