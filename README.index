@@ -574,7 +574,7 @@ App
             Uses tabs in the ActionBar to select between other activities in App/Fragment:
             FragmentMenuFragment.java, FragmentArgumentsFragment.java, FragmentStackFragment.java,
             FragmentTabsFragment.java. Uses FragmentManager.enableDebugLogging(true) to produce
-            debugging info from  the FragmentManager (very useful)
+            debugging info from the FragmentManager (very useful)
 
     App/Fragment/Receive Result            v11
         .app.FragmentReceiveResult

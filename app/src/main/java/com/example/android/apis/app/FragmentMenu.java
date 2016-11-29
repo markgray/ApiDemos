@@ -25,11 +25,13 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 
 /**
@@ -148,8 +150,11 @@ public class FragmentMenu extends Activity {
     /**
      * Update fragment visibility based on current check box state. First we use  the FragmentManager
      * for interacting with fragments associated with this activity to begin a new series of fragment
-     * transactions: <b>FragmentTransaction ft</b>.
-     *
+     * transactions: <b>FragmentTransaction ft</b>. If <b>CheckBox mCheckBox1</b> is checked we use
+     * <b>ft</b> to show <b>MenuFragment mFragment1</b>, if it is not checked we hide the Fragment.
+     * If <b>CheckBox mCheckBox2</b> is checked we use <b>ft</b> to show <b>Menu2Fragment mFragment2</b>,
+     * if it is not checked we hide the Fragment. Finally we schedule <b>FragmentTransaction ft</b>
+     * to be committed.
      */
     void updateFragmentVisibility() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -167,18 +172,47 @@ public class FragmentMenu extends Activity {
     }
 
     /**
-     * A fragment that displays a menu.  This fragment happens to not
-     * have a UI (it does not implement onCreateView), but it could also
-     * have one if it wanted.
+     * A fragment that displays a menu.  This fragment happens to not have a UI (it does not implement
+     * onCreateView), but it could also have one if it wanted. Its entire effect when added to the
+     * Activity is caused by the overriding of <b>onCreateOptionsMenu</b>
      */
     public static class MenuFragment extends Fragment {
 
+        /**
+         * Called to do initial creation of a fragment.  This is called after
+         * {@link #onAttach(Activity)} and before
+         * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+         * <p>
+         *  Note that this can be called while the fragment's activity is
+         * still in the process of being created.  As such, you can not rely
+         * on things like the activity's content view hierarchy being initialized
+         * at this point.  If you want to do work once the activity itself is
+         * created, see {@link #onActivityCreated(Bundle)}.
+         * <p>
+         * First we call through to our super's implementation of onCreate, and then we report that
+         * this fragment would like to participate in populating the options menu by receiving a
+         * call to onCreateOptionsMenu(Menu, MenuInflater) and related methods.
+         *
+         * @param savedInstanceState we do not override onSaveInstanceState so do not use
+         */
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setHasOptionsMenu(true);
         }
 
+        /**
+         * Initialize the contents of the Activity's standard options menu.  You
+         * should place your menu items in to <var>menu</var>.
+         *
+         * First we add a menu item with the title "Menu 1a" to the menu, and set how the menu should
+         * be displayed to SHOW_AS_ACTION_IF_ROOM (Show this item as a button in an Action Bar if the
+         * system decides there is room for it). Then we add a menu item with the title "Menu 1b" to
+         * the menu, and also set how the menu should be displayed to SHOW_AS_ACTION_IF_ROOM
+         *
+         * @param menu The options menu in which you place your items.
+         * @param inflater could be used to instantiate menu XML files into Menu objects.
+         */
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             menu.add("Menu 1a").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
@@ -191,12 +225,40 @@ public class FragmentMenu extends Activity {
      */
     public static class Menu2Fragment extends Fragment {
 
+        /**
+         * Called to do initial creation of a fragment.  This is called after
+         * {@link #onAttach(Activity)} and before
+         * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+         * <p>
+         *  Note that this can be called while the fragment's activity is
+         * still in the process of being created.  As such, you can not rely
+         * on things like the activity's content view hierarchy being initialized
+         * at this point.  If you want to do work once the activity itself is
+         * created, see {@link #onActivityCreated(Bundle)}.
+         * <p>
+         * First we call through to our super's implementation of onCreate, and then we report that
+         * this fragment would like to participate in populating the options menu by receiving a
+         * call to onCreateOptionsMenu(Menu, MenuInflater) and related methods.
+         *
+         * @param savedInstanceState we do not override onSaveInstanceState so do not use
+         */
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setHasOptionsMenu(true);
         }
 
+        /**
+         * Initialize the contents of the Activity's standard options menu.  You
+         * should place your menu items in to <var>menu</var>.
+         *
+         * We add a menu item with the title "Menu 2" to the menu, and set how the menu should be
+         * displayed to SHOW_AS_ACTION_IF_ROOM (Show this item as a button in an Action Bar if the
+         * system decides there is room for it).
+         *
+         * @param menu The options menu in which you place your items.
+         * @param inflater could be used to instantiate menu XML files into Menu objects.
+         */
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             menu.add("Menu 2").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
