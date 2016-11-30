@@ -32,8 +32,17 @@ import android.widget.Toast;
  * with other action bar features.
  */
 @SuppressWarnings("deprecation")
+@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 public class FragmentNestingTabs extends Activity {
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+
+    /**
+     * Called when the activity is starting. First we turn on the framework's internal fragment manager
+     * debugging logs, then we call through to our super's implementation of onCreate.
+     *
+     * @param savedInstanceState if we are being recreated after an orientation change this will
+     *                           include the selected navigation item which was saved by our override
+     *                           of onSaveInstanceState under the key "tab".
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FragmentManager.enableDebugLogging(true);
@@ -79,7 +88,6 @@ public class FragmentNestingTabs extends Activity {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -87,7 +95,6 @@ public class FragmentNestingTabs extends Activity {
         outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
         private final Activity mActivity;
         private final String mTag;
@@ -95,12 +102,11 @@ public class FragmentNestingTabs extends Activity {
         private final Bundle mArgs;
         private Fragment mFragment;
 
-        public TabListener(Activity activity, String tag, Class<T> clz) {
+        TabListener(Activity activity, String tag, Class<T> clz) {
             this(activity, tag, clz, null);
         }
 
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-        public TabListener(Activity activity, String tag, Class<T> clz, Bundle args) {
+        TabListener(Activity activity, String tag, Class<T> clz, Bundle args) {
             mActivity = activity;
             mTag = tag;
             mClass = clz;
@@ -117,7 +123,6 @@ public class FragmentNestingTabs extends Activity {
             }
         }
 
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
         public void onTabSelected(Tab tab, FragmentTransaction ft) {
             if (mFragment == null) {
                 mFragment = Fragment.instantiate(mActivity, mClass.getName(), mArgs);
@@ -127,7 +132,6 @@ public class FragmentNestingTabs extends Activity {
             }
         }
 
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
         public void onTabUnselected(Tab tab, FragmentTransaction ft) {
             if (mFragment != null) {
                 ft.detach(mFragment);
