@@ -37,7 +37,30 @@ public class FragmentNestingTabs extends Activity {
 
     /**
      * Called when the activity is starting. First we turn on the framework's internal fragment manager
-     * debugging logs, then we call through to our super's implementation of onCreate.
+     * debugging logs, then we call through to our super's implementation of onCreate. Next we set
+     * our local variable <b>ActionBar bar</b> to a reference to this activity's ActionBar. Because
+     * <b>getActionBar()</b> will return null if there is no ActionBar we are careful to wrap each
+     * of the following uses of <b>bar</b> in an "if" test to avoid using a null value:
+     * <p>
+     * 1. We set the current navigation mode of the ActionBar to NAVIGATION_MODE_TABS
+     * <p>
+     * 2. We disable the DISPLAY_SHOW_TITLE display option
+     * <p>
+     * 3. We add a Tab with title "Menus" and a TabListener which will load the Fragment
+     * FragmentMenuFragment when the tab is selected.
+     * <p>
+     * 4. We add a Tab with title "Args" and a TabListener which will load the Fragment
+     * FragmentArgumentsFragment when the tab is selected.
+     * <p>
+     * 5. We add a Tab with title "Stack" and a TabListener which will load the Fragment
+     * FragmentStackFragment when the tab is selected.
+     * <p>
+     * 6. We add a Tab with title "tabs" and a TabListener which will load the Fragment
+     * FragmentTabsFragment when the tab is selected.
+     * <p>
+     * Finally if <b>savedInstanceState</b> is not null (we are being recreated after an orientation
+     * change) we set the selected navigation item to the value that was saved by our override of
+     * onSaveInstanceState under the key "tab".
      *
      * @param savedInstanceState if we are being recreated after an orientation change this will
      *                           include the selected navigation item which was saved by our override
