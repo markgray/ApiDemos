@@ -111,6 +111,18 @@ public class FragmentNestingTabs extends Activity {
         }
     }
 
+    /**
+     * Called to retrieve per-instance state from an activity before being killed
+     * so that the state can be restored in {@link #onCreate} or
+     * {@link #onRestoreInstanceState} (the {@link Bundle} populated by this method
+     * will be passed to both).
+     * <p>
+     * First we call through to our super's implementation of onSaveInstanceState, then we save the
+     * position of the selected navigation item of our ActionBar's tabs in <b>Bundle outState</b>
+     * using the key "tab".
+     *
+     * @param outState Bundle in which to place your saved state.
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -118,12 +130,19 @@ public class FragmentNestingTabs extends Activity {
         outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
     }
 
+    /**
+     * This subclass of <b>ActionBar.TabListener</b> will create (or re-attach) a <b>Fragment</b>
+     * specified by the arguments passed to its constructors.
+     *
+     * @param <T> A subclass of <b>Fragment</b> which we will create when the tab we are "listening"
+     *           to is selected.
+     */
     public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
-        private final Activity mActivity;
-        private final String mTag;
-        private final Class<T> mClass;
-        private final Bundle mArgs;
-        private Fragment mFragment;
+        private final Activity mActivity; // FragmentNestingTabs Activity passed as this to constructors
+        private final String mTag; // tag to use as name of fragment for later use by findFragmentByTag
+        private final Class<T> mClass; // Class<T> clz from constructor (java Fragment subclass we create)
+        private final Bundle mArgs; // Bundle of arguments to be passed to Fragement we create
+        private Fragment mFragment; // Fragment instance we create (or find if already created)
 
         TabListener(Activity activity, String tag, Class<T> clz) {
             this(activity, tag, clz, null);
@@ -146,6 +165,7 @@ public class FragmentNestingTabs extends Activity {
             }
         }
 
+        @Override
         public void onTabSelected(Tab tab, FragmentTransaction ft) {
             if (mFragment == null) {
                 mFragment = Fragment.instantiate(mActivity, mClass.getName(), mArgs);
@@ -155,12 +175,14 @@ public class FragmentNestingTabs extends Activity {
             }
         }
 
+        @Override
         public void onTabUnselected(Tab tab, FragmentTransaction ft) {
             if (mFragment != null) {
                 ft.detach(mFragment);
             }
         }
 
+        @Override
         public void onTabReselected(Tab tab, FragmentTransaction ft) {
             Toast.makeText(mActivity, "Reselected!", Toast.LENGTH_SHORT).show();
         }
