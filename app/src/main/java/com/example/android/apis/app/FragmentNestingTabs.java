@@ -141,9 +141,18 @@ public class FragmentNestingTabs extends Activity {
         private final Activity mActivity; // FragmentNestingTabs Activity passed as this to constructors
         private final String mTag; // tag to use as name of fragment for later use by findFragmentByTag
         private final Class<T> mClass; // Class<T> clz from constructor (java Fragment subclass we create)
-        private final Bundle mArgs; // Bundle of arguments to be passed to Fragement we create
+        private final Bundle mArgs; // Bundle of arguments to be passed to Fragment we create
         private Fragment mFragment; // Fragment instance we create (or find if already created)
 
+        /**
+         * This constructor merely hands off to the TabListener(Activity, String, Class, Bundle)
+         * constructor using null as the Bundle that will be used to initialize our field
+         * <b>Bundle mArgs</b>.
+         *
+         * @param activity the Activity FragmentNestingTabs onCreate override calls using "this"
+         * @param tag Tag we wish to have the FragmentManager to use for this Fragment
+         * @param clz Class of the Fragment to instantiate in our tab
+         */
         TabListener(Activity activity, String tag, Class<T> clz) {
             this(activity, tag, clz, null);
         }
