@@ -157,6 +157,20 @@ public class FragmentNestingTabs extends Activity {
             this(activity, tag, clz, null);
         }
 
+        /**
+         * Constructor for a new instance of TabListener. First we use our parameters to initialize
+         * our fields <b>Activity mActivity</b>, <b>String mTag</b>, <b>Class mClass</b>, and
+         * <b>Bundle mArgs</b>. Then we search for a pre-existing Fragment for the tab by using the
+         * FragmentManager associated with <b>Activity mActivity</b> to look for a Fragment that
+         * used <b>tag</b> as its tag when it was added. If there is already a Fragment with that
+         * tag, and it is not currently detached, we begin a <b>FragmentTransaction ft</b> which
+         * we use to detach that Fragment, and commit the transaction.
+         *
+         * @param activity the FragmentNestingTabs Activity in our case
+         * @param tag name for this Fragment to later find the Fragment using <b>findFragmentByTag</b>
+         * @param clz Fragment subclass class that we want to instantiate
+         * @param args argument Bundle to pass to the new Fragment when it is instantiated.
+         */
         TabListener(Activity activity, String tag, Class<T> clz, Bundle args) {
             mActivity = activity;
             mTag = tag;
