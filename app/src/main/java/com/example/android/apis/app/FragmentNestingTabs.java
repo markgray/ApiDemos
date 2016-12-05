@@ -188,6 +188,16 @@ public class FragmentNestingTabs extends Activity {
             }
         }
 
+        /**
+         * Called when a tab enters the selected state. If this is the first time this tab has been
+         * selected (our field <b>mFragment</b> is null), we instantiate 
+         *
+         * @param tab The tab that was selected
+         * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
+         *        during a tab switch. The previous tab's un-select and this tab's select will be
+         *        executed in a single transaction. This FragmentTransaction does not support
+         *        being added to the back stack.
+         */
         @Override
         public void onTabSelected(Tab tab, FragmentTransaction ft) {
             if (mFragment == null) {
