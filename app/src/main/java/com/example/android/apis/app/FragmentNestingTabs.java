@@ -190,7 +190,15 @@ public class FragmentNestingTabs extends Activity {
 
         /**
          * Called when a tab enters the selected state. If this is the first time this tab has been
-         * selected (our field <b>mFragment</b> is null), we instantiate 
+         * selected (our field <b>mFragment</b> is null), we instantiate a Fragment using the class
+         * specified in our field <b>Class mClass</b> and using the <b>Bundle mArgs</b> field to
+         * supply the argument <b>Bundle</b> for the Fragment (if any), and  we use our argument
+         * <b>FragmentTransaction ft</b> to add the Fragment to the Activity state. On the other
+         * hand if our field <b>mFragment</b> is not null, then we already have an existing Fragment
+         * so all have to do is use our argument <b>FragmentTransaction ft</b> to re-attach that
+         * <b>Fragment mFragment</b> which had been detached from the UI with detach(Fragment). T
+         * his causes its view hierarchy to be re-created, attached to the UI, and displayed when
+         * the <b>FragmentTransaction ft</b> is eventually "committed.
          *
          * @param tab The tab that was selected
          * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
