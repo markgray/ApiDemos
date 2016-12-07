@@ -25,6 +25,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -34,6 +35,7 @@ import android.widget.Toast;
 @SuppressWarnings("deprecation")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 public class FragmentNestingTabs extends Activity {
+    final static String TAG = "FragmentNestingTabs";
 
     /**
      * Called when the activity is starting. First we turn on the framework's internal fragment manager
@@ -216,10 +218,23 @@ public class FragmentNestingTabs extends Activity {
             }
         }
 
+        /**
+         * Called when a tab exits the selected state. If our field <b>Fragment mFragment</b> is not
+         * null, we use our parameter <b>FragmentTransaction ft</b> to detach it. If <b>mFragment</b>
+         * is null we do nothing, although I cannot think of a reason why it would be null.
+         *
+         * @param tab The tab that was unselected
+         * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
+         *        during a tab switch. This tab's un-select and the newly selected tab's select
+         *        will be executed in a single transaction. This FragmentTransaction does not
+         *        support being added to the back stack.
+         */
         @Override
         public void onTabUnselected(Tab tab, FragmentTransaction ft) {
             if (mFragment != null) {
                 ft.detach(mFragment);
+            } else {
+                Log.i(TAG, "un-select occurred with a null mFragment");
             }
         }
 
