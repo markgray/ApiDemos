@@ -137,7 +137,7 @@ public class FragmentNestingTabs extends Activity {
      * specified by the arguments passed to its constructors.
      *
      * @param <T> A subclass of <b>Fragment</b> which we will create when the tab we are "listening"
-     *           to is selected.
+     *            to is selected.
      */
     public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
         private final Activity mActivity; // FragmentNestingTabs Activity passed as this to constructors
@@ -152,8 +152,8 @@ public class FragmentNestingTabs extends Activity {
          * <b>Bundle mArgs</b>.
          *
          * @param activity the Activity FragmentNestingTabs onCreate override calls using "this"
-         * @param tag Tag we wish to have the FragmentManager to use for this Fragment
-         * @param clz Class of the Fragment to instantiate in our tab
+         * @param tag      Tag we wish to have the FragmentManager to use for this Fragment
+         * @param clz      Class of the Fragment to instantiate in our tab
          */
         TabListener(Activity activity, String tag, Class<T> clz) {
             this(activity, tag, clz, null);
@@ -169,9 +169,9 @@ public class FragmentNestingTabs extends Activity {
          * we use to detach that Fragment, and commit the transaction.
          *
          * @param activity the FragmentNestingTabs Activity in our case
-         * @param tag name for this Fragment to later find the Fragment using <b>findFragmentByTag</b>
-         * @param clz Fragment subclass class that we want to instantiate
-         * @param args argument Bundle to pass to the new Fragment when it is instantiated.
+         * @param tag      name for this Fragment to later find the Fragment using <b>findFragmentByTag</b>
+         * @param clz      Fragment subclass class that we want to instantiate
+         * @param args     argument Bundle to pass to the new Fragment when it is instantiated.
          */
         TabListener(Activity activity, String tag, Class<T> clz, Bundle args) {
             mActivity = activity;
@@ -203,10 +203,10 @@ public class FragmentNestingTabs extends Activity {
          * the <b>FragmentTransaction ft</b> is eventually "committed.
          *
          * @param tab The tab that was selected
-         * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
-         *        during a tab switch. The previous tab's un-select and this tab's select will be
-         *        executed in a single transaction. This FragmentTransaction does not support
-         *        being added to the back stack.
+         * @param ft  A {@link FragmentTransaction} for queuing fragment operations to execute
+         *            during a tab switch. The previous tab's un-select and this tab's select will be
+         *            executed in a single transaction. This FragmentTransaction does not support
+         *            being added to the back stack.
          */
         @Override
         public void onTabSelected(Tab tab, FragmentTransaction ft) {
@@ -224,10 +224,10 @@ public class FragmentNestingTabs extends Activity {
          * is null we do nothing, although I cannot think of a reason why it would be null.
          *
          * @param tab The tab that was unselected
-         * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
-         *        during a tab switch. This tab's un-select and the newly selected tab's select
-         *        will be executed in a single transaction. This FragmentTransaction does not
-         *        support being added to the back stack.
+         * @param ft  A {@link FragmentTransaction} for queuing fragment operations to execute
+         *            during a tab switch. This tab's un-select and the newly selected tab's select
+         *            will be executed in a single transaction. This FragmentTransaction does not
+         *            support being added to the back stack.
          */
         @Override
         public void onTabUnselected(Tab tab, FragmentTransaction ft) {
@@ -238,6 +238,17 @@ public class FragmentNestingTabs extends Activity {
             }
         }
 
+        /**
+         * Called when a tab that is already selected is chosen again by the user.
+         * Some applications may use this action to return to the top level of a category.
+         * <p>
+         * We do nothing but "Toast" about this event.
+         *
+         * @param tab The tab that was reselected.
+         * @param ft  A {@link FragmentTransaction} for queuing fragment operations to execute
+         *            once this method returns. This FragmentTransaction does not support
+         *            being added to the back stack.
+         */
         @Override
         public void onTabReselected(Tab tab, FragmentTransaction ft) {
             Toast.makeText(mActivity, "Reselected!", Toast.LENGTH_SHORT).show();
