@@ -42,7 +42,7 @@ public class SendResult extends Activity {
      * and set its OnClickListener to OnClickListener mCorkyListener, and locate the Button
      * R.id.violet ("VIOLET") and set its OnClickListener to OnClickListener mVioletListener.
      *
-     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     * @param savedInstanceState onSaveInstanceState is not overridden so we do not use
      */
     @Override
 	protected void onCreate(Bundle savedInstanceState) {

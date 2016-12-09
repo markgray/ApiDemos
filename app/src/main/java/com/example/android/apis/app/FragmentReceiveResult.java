@@ -45,7 +45,7 @@ import android.widget.TextView;
  *  it to the Editable TextView id R.id.results contained in the layout R.layout.receive_result.
  */
 public class FragmentReceiveResult extends Activity {
-    static final String TAG = "FragmentReceiveResult";
+    static final String TAG = "FragmentReceiveResult"; // TAG for logging
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -59,7 +59,7 @@ public class FragmentReceiveResult extends Activity {
      * we commit the <b>FragmentTransaction</b>. If <b>savedInstanceState</b> is not null then we are
      * being recreated after an orientation change and the framework will take care of restoring the
      * Fragment contained in our content view because its view has an id, but that Fragment will need
-     * to do something about restoring its own view.
+     * to do something about restoring its own view using onSaveInstanceState
      *
      * @param savedInstanceState If the activity is being re-initialized after previously being shut
      *                           down then this Bundle contains the data it most recently supplied
@@ -85,13 +85,27 @@ public class FragmentReceiveResult extends Activity {
         }
     }
 
+    /**
+     * Fragment that launches the SendResult Activity using startActivityForResult, then retrieves and
+     * displays the results returned by SendResult
+     */
     public static class ReceiveResultFragment extends Fragment {
-        // Definition of the one requestCode we use for receiving results.
-        static final private int GET_CODE = 0;
 
-        private TextView mResults;
+        static final private int GET_CODE = 0; // Definition of the one requestCode we use for receiving results.
+        private TextView mResults; // TextView we use to write results to (R.id.results)
+        private String mLastString = ""; // String saved and restored
 
+        /**
+         * OnClickListener used for the Button R.id.get, launches the SendResult Activity for a result.
+         */
         private OnClickListener mGetListener = new OnClickListener() {
+            /**
+             * Called when the Button R.id.get is clicked.  We create an <b>Intent intent</b> designed
+             * to start the Activity SendResult, then call startActivityForResult(Intent, int) from
+             * the fragment's containing Activity using the request code GET_CODE.
+             *
+             * @param v View of the Button that was clicked.
+             */
             @Override
             public void onClick(View v) {
                 // Start the activity whose result we want to retrieve.  The
@@ -104,23 +118,27 @@ public class FragmentReceiveResult extends Activity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            if (savedInstanceState != null) {
+                mLastString = savedInstanceState.getString("savedText");
+            }
         }
 
         @Override
         public void onSaveInstanceState(Bundle outState) {
             super.onSaveInstanceState(outState);
+            mLastString = mResults.getText().toString();
+            outState.putString("savedText", mLastString);
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.receive_result, container, false);
             
             // Retrieve the TextView widget that will display results.
             mResults = (TextView)v.findViewById(R.id.results);
 
             // This allows us to later extend the text buffer.
-            mResults.setText(mResults.getText(), TextView.BufferType.EDITABLE);
+            mResults.setText(mLastString, TextView.BufferType.EDITABLE);
 
             // Watch for button clicks.
             Button getButton = (Button)v.findViewById(R.id.get);
