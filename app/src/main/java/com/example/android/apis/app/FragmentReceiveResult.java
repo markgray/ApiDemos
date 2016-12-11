@@ -115,6 +115,15 @@ public class FragmentReceiveResult extends Activity {
             }
         };
 
+        /**
+         * Called to do initial creation of a fragment. First we call through to our super's implementation
+         * of onCreate, and then if our parameter <b>Bundle savedInstanceState</b> is not null we retrieve
+         * the value of <b>String mLastString</b> that our onSaveInstanceState saved under the key "savedText"
+         *
+         * @param savedInstanceState if not null we are being recreated after an orientation change
+         *                           so we retrieve the value of <b>String mLastString</b> that our
+         *                           onSaveInstanceState saved under the key "savedText"
+         */
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
