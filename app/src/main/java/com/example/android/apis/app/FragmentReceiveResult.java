@@ -132,6 +132,22 @@ public class FragmentReceiveResult extends Activity {
             }
         }
 
+        /**
+         * Called to ask the fragment to save its current dynamic state, so it
+         * can later be reconstructed in a new instance of its process is
+         * restarted.  If a new instance of the fragment later needs to be
+         * created, the data you place in the Bundle here will be available
+         * in the Bundle given to {@link #onCreate(Bundle)},
+         * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}, and
+         * {@link #onActivityCreated(Bundle)}.
+         *
+         * First we call through to our super's implementation of onSaveInstanceState, then we retrieve
+         * the text currently being displayed in our output <b>TextView mResults</b> to our field
+         * <b>String mLastString</b> and then we insert this String value into the mapping of  the
+         * <b>Bundle outState</b>.
+         *
+         * @param outState Bundle in which to place your saved state.
+         */
         @Override
         public void onSaveInstanceState(Bundle outState) {
             super.onSaveInstanceState(outState);
