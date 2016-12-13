@@ -140,7 +140,7 @@ public class FragmentReceiveResult extends Activity {
          * in the Bundle given to {@link #onCreate(Bundle)},
          * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}, and
          * {@link #onActivityCreated(Bundle)}.
-         *
+         * <p>
          * First we call through to our super's implementation of onSaveInstanceState, then we retrieve
          * the text currently being displayed in our output <b>TextView mResults</b> to our field
          * <b>String mLastString</b> and then we insert this String value into the mapping of  the
@@ -155,26 +155,51 @@ public class FragmentReceiveResult extends Activity {
             outState.putString("savedText", mLastString);
         }
 
+        /**
+         * Called to have the fragment instantiate its user interface view. First we inflate our
+         * layout file R.layout.receive_result into <b>View v</b>. Then we initialize our field
+         * <b>TextView mResults</b> to the TextView in our layout with the id R.id.results, and we
+         * set the text of this TextView to our field <b>String mLastString</b> with the BufferType
+         * EDITABLE so that we can extend the contents later. Next we locate <b>Button getButton</b>
+         * with id R.id.get and set its OnClickListener to our field <b>OnClickListener mGetListener</b>.
+         * Finally we return our inflated layout <b>View v</b>.
+         *
+         * @param inflater           The LayoutInflater object that can be used to inflate
+         *                           any views in the fragment,
+         * @param container          If non-null, this is the parent view that the fragment's
+         *                           UI should be attached to.  The fragment should not add the view itself,
+         *                           but this can be used to generate the LayoutParams of the view.
+         * @param savedInstanceState We do not use in this method.
+         * @return Return the View for the fragment's UI, or null.
+         */
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.receive_result, container, false);
-            
+
             // Retrieve the TextView widget that will display results.
-            mResults = (TextView)v.findViewById(R.id.results);
+            mResults = (TextView) v.findViewById(R.id.results);
 
             // This allows us to later extend the text buffer.
             mResults.setText(mLastString, TextView.BufferType.EDITABLE);
 
             // Watch for button clicks.
-            Button getButton = (Button)v.findViewById(R.id.get);
+            Button getButton = (Button) v.findViewById(R.id.get);
             getButton.setOnClickListener(mGetListener);
-            
+
             return v;
         }
 
         /**
          * This method is called when the sending activity has finished, with the
-         * result it supplied.
+         * result it supplied. 
+         *
+         * @param requestCode The integer request code originally supplied to
+         *                    startActivityForResult(), allowing you to identify who this
+         *                    result came from. (Should be GET_CODE in our case.)
+         * @param resultCode  The integer result code returned by the child activity
+         *                    through its setResult().
+         * @param data        An Intent, which can return result data to the caller
+         *                    (various data can be attached to Intent "extras").
          */
         @Override
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -184,7 +209,7 @@ public class FragmentReceiveResult extends Activity {
             if (requestCode == GET_CODE) {
 
                 // We will be adding to our text.
-                Editable text = (Editable)mResults.getText();
+                Editable text = (Editable) mResults.getText();
 
                 // This is a standard resultCode that is sent back if the
                 // activity doesn't supply an explicit result.  It will also
@@ -192,8 +217,8 @@ public class FragmentReceiveResult extends Activity {
                 if (resultCode == RESULT_CANCELED) {
                     text.append("(cancelled)");
 
-                // Our protocol with the sending activity is that it will send
-                // text in 'data' as its result.
+                    // Our protocol with the sending activity is that it will send
+                    // text in 'data' as its result.
                 } else {
                     text.append("(okay ");
                     text.append(Integer.toString(resultCode));
