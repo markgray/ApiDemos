@@ -191,7 +191,21 @@ public class FragmentReceiveResult extends Activity {
 
         /**
          * This method is called when the sending activity has finished, with the
-         * result it supplied. 
+         * result it supplied. First we check to see if the result is for the request
+         * we sent (requestCode == GET_CODE), and if not we do nothing. (This is merely
+         * a formality which is only necessary when an Activity makes multiple kinds of
+         * requests.) If it is the result from a GET_CODE request, we retrieve an Editable
+         * reference to the current text in our results <b>TextView mResults</b>. If the
+         * resultCode == RESULT_CANCELED (the back button was pressed instead of an "answer"
+         * Button), we append the String "(cancelled)" to the text being displayed, otherwise
+         * we append the String "(okay " followed by the value of <b>resultCode</b>, followed
+         * by ") ", followed by the value that the <b>SendResult</b> Activity returned as the
+         * action of the result using Intent.setAction(String) (with the String being either
+         * "Corky!" or "Violet!" depending on the Button pressed by the user. (We are careful
+         * to check whether the <b>Intent data</b> returned to us is not null before calling
+         * <b>getAction</b> on it, but only an unforeseen bug would cause it to be null in our
+         * case.) Finally we append a newline to the end of <b>text</b> for both cases of
+         * <b>resultCode</b> we consider.
          *
          * @param requestCode The integer request code originally supplied to
          *                    startActivityForResult(), allowing you to identify who this

@@ -32,17 +32,18 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 /**
- * This example shows how you can use a Fragment to easily propagate state
- * (such as threads) across activity instances when an activity needs to be
- * restarted due to, for example, a configuration change.  This is a lot
- * easier than using the raw Activity.onRetainNonConfigurationInstance() API.
+ * Work fragment/thread calls setRetainInstance(true) in its onCreate callback,
+ * causing it and the thread it is running to be retained when the device configuration
+ * changes. Shows how you can use a Fragment to easily propagate state (such as
+ * threads) across activity instances when an activity needs to be restarted. This is
+ * a lot easier than using the raw Activity.onRetainNonConfigurationInstance() API.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentRetainInstance extends Activity {
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         // First time init, create the UI.
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction().add(android.R.id.content,
@@ -54,17 +55,16 @@ public class FragmentRetainInstance extends Activity {
      * This is a fragment showing UI that will be updated from work done
      * in the retained fragment.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class UiFragment extends Fragment {
         RetainedFragment mWorkFragment;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                                 Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.fragment_retain_instance, container, false);
 
             // Watch for button clicks.
-            Button button = (Button)v.findViewById(R.id.restart);
+            Button button = (Button) v.findViewById(R.id.restart);
             button.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
                     mWorkFragment.restart();
@@ -81,7 +81,7 @@ public class FragmentRetainInstance extends Activity {
             FragmentManager fm = getFragmentManager();
 
             // Check to see if we have retained the worker fragment.
-            mWorkFragment = (RetainedFragment)fm.findFragmentByTag("work");
+            mWorkFragment = (RetainedFragment) fm.findFragmentByTag("work");
 
             // If not retained (or first time running), we need to create it.
             if (mWorkFragment == null) {
@@ -99,7 +99,6 @@ public class FragmentRetainInstance extends Activity {
      * activity instances.  It represents some ongoing work, here a thread
      * we have that sits around incrementing a progress indicator.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class RetainedFragment extends Fragment {
         ProgressBar mProgressBar;
         int mPosition;
@@ -162,11 +161,11 @@ public class FragmentRetainInstance extends Activity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            
+
             // Tell the framework to try to keep this fragment around
             // during a configuration change.
             setRetainInstance(true);
-            
+
             // Start up the worker thread.
             mThread.start();
         }
@@ -180,10 +179,10 @@ public class FragmentRetainInstance extends Activity {
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-            
+
             // Retrieve the progress bar from the target's view hierarchy.
             //noinspection ConstantConditions
-            mProgressBar =  (ProgressBar)getTargetFragment().getView().findViewById(
+            mProgressBar = (ProgressBar) getTargetFragment().getView().findViewById(
                     R.id.progress_horizontal);
 
             // We are ready for our thread to go.
@@ -205,7 +204,7 @@ public class FragmentRetainInstance extends Activity {
                 mQuiting = true;
                 mThread.notify();
             }
-            
+
             super.onDestroy();
         }
 
@@ -223,7 +222,7 @@ public class FragmentRetainInstance extends Activity {
                 mReady = false;
                 mThread.notify();
             }
-            
+
             super.onDetach();
         }
 
