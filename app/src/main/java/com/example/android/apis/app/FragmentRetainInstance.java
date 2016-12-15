@@ -40,14 +40,28 @@ import android.widget.ProgressBar;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentRetainInstance extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then if <b>savedInstanceState</b> is null (first time init) we use a handle to the
+     * FragmentManager for interacting with fragments associated with this activity to create a
+     * <b>FragmentTransaction</b> which we use to add a new instance of <b>UiFragment</b> fragment
+     * to the activity state using android.R.id.content (the ViewGroup of the entire  content area
+     * of the Activity) as the container the fragment is to be placed in, and finally we commit this
+     * FragmentTransaction.
+     *
+     * @param savedInstanceState the Framework uses this when the Activity is being recreated after
+     *                           an orientation change but we only use it as a flag since the first
+     *                           time onCreate is called it will be null
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // First time init, create the UI.
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction().add(android.R.id.content,
-                    new UiFragment()).commit();
+            getFragmentManager().beginTransaction()
+                    .add(android.R.id.content, new UiFragment())
+                    .commit();
         }
     }
 
@@ -56,16 +70,40 @@ public class FragmentRetainInstance extends Activity {
      * in the retained fragment.
      */
     public static class UiFragment extends Fragment {
-        RetainedFragment mWorkFragment;
+        RetainedFragment mWorkFragment; // Reference to the retained background fragment doing the work
 
+        /**
+         * Called to have the fragment instantiate its user interface view. First we inflate our
+         * layout file R.layout.fragment_retain_instance into <b>View v</b>. Then we locate the
+         * <b>Button button</b> in <b>v</b> with ID R.id.restart ("RESTART") and set its OnClickListener
+         * to an anonymous class which will call <b>mWorkFragment.restart()</b> when the Button is
+         * clicked, and finally we return <b>v</b> to the caller.
+         *
+         * @param inflater           The LayoutInflater object that can be used to inflate any views
+         *                           in the fragment,
+         * @param container          If non-null, this is the parent view that the fragment's UI
+         *                           should be attached to.  The fragment should not add the view
+         *                           itself, but this can be used to generate the LayoutParams of
+         *                           the view.
+         * @param savedInstanceState If non-null, this fragment is being re-constructed from a
+         *                           previous saved state as given here.
+         *
+         * @return Return the View for the fragment's UI, or null.
+         */
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.fragment_retain_instance, container, false);
 
             // Watch for button clicks.
             Button button = (Button) v.findViewById(R.id.restart);
             button.setOnClickListener(new OnClickListener() {
+                /**
+                 * When the "RESTART" Button is clicked we simply call the method <b>mWorkFragment.restart()</b>
+                 * to start the "work" back to the beginning again.
+                 *
+                 * @param v View of the Button that was clicked.
+                 */
+                @Override
                 public void onClick(View v) {
                     mWorkFragment.restart();
                 }
