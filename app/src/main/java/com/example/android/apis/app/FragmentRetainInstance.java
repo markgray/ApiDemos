@@ -87,7 +87,6 @@ public class FragmentRetainInstance extends Activity {
          *                           the view.
          * @param savedInstanceState If non-null, this fragment is being re-constructed from a
          *                           previous saved state as given here.
-         *
          * @return Return the View for the fragment's UI, or null.
          */
         @Override
@@ -112,6 +111,32 @@ public class FragmentRetainInstance extends Activity {
             return v;
         }
 
+        /**
+         * Called when the fragment's activity has been created and this
+         * fragment's view hierarchy instantiated.  It can be used to do final
+         * initialization once these pieces are in place, such as retrieving
+         * views or restoring state.  It is also useful for fragments that use
+         * {@link #setRetainInstance(boolean)} to retain their instance,
+         * as this callback tells the fragment when it is fully associated with
+         * the new activity instance.  This is called after {@link #onCreateView}
+         * and before {@link #onViewStateRestored(Bundle)}.
+         *
+         * First we call through to our super's implementation of onActivityCreated, then we fetch a
+         * handle to the FragmentManager for interacting with fragments associated with this fragment's
+         * activity into {@code FragmentManager fm}. We use <b>fm</b> to search for a fragment with
+         * the tag "work" (the tag we use for our retained work fragment) and save the reference in
+         * our field {@code RetainedFragment mWorkFragment}. If the FragmentManager failed to find
+         * this fragment (findFragmentByTag returned null) we create a new {@code RetainedFragment}
+         * for {@code RetainedFragment mWorkFragment}, and set its target fragment to this with a
+         * request code of 0 (this establishes a caller/called relationship which the called Fragment
+         * can use to send results back using a direct call to getTargetFragment().onActivityResult.)
+         * Then we use {@code FragmentManager fm} to create a {@code FragmentTransaction} which we
+         * use to add {@code mWorkFragment} with the tag "work", and we then commit the
+         * FragmentTransaction.
+         *
+         * @param savedInstanceState If the fragment is being re-created from
+         *                           a previous saved state, this is the state.
+         */
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
