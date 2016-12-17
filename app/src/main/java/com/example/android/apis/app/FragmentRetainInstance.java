@@ -163,9 +163,22 @@ public class FragmentRetainInstance extends Activity {
      * we have that sits around incrementing a progress indicator.
      */
     public static class RetainedFragment extends Fragment {
-        ProgressBar mProgressBar;
-        int mPosition;
+        ProgressBar mProgressBar; // ProgressBar we are incrementing
+        int mPosition; // Current position of the ProgressBar 0-500 (maximum is set in layout xml)
+
+        /**
+         * Flag to indicate UI thread is ready for us to run. It is set to true and mThread.notify()
+         * is called in our {@code onActivityCreated} callback, and we block on {@code wait()} until
+         * this occurs. It is set back to false in {@code onDetach} to prevent us from accessing
+         * activity state until we are reattached and in {@code onDestroy} in order to prompt us to
+         * check the value of {@code mQuiting} to see if we need to exit by returning.
+         */
         boolean mReady = false;
+
+        /**
+         * Flag to indicate we are being destroyed and need to end the thread by returning, it is
+         * set to true in our {@code onDestroy} callback.
+         */
         boolean mQuiting = false;
 
         /**
@@ -173,6 +186,18 @@ public class FragmentRetainInstance extends Activity {
          * the progress up until it has reached the top, then stops and waits.
          */
         final Thread mThread = new Thread() {
+            /**
+             * When this Thread is start()'ed it loops executing two synchronized blocks in a row.
+             * <p>
+             * The first block will wait() until the UI is ready for it (checking to see if it needs
+             * to exit when the mQuiting flag is set to true, and it will also wait when the max
+             * setting of the ProgressBar is reached. If the UI is ready and we have not yet reached
+             * the max setting of the ProgressBar we increment the position of the ProgressBar
+             * ({@code mPosition}), update the value of the max setting of the ProgressBar ({@code max})
+             * and set the current progress of the ProgressBar to {@code mPosition}.
+             * <p>
+             * The second block just wait()'s for 50 milliseconds before continuing the loop.
+             */
             @Override
             public void run() {
                 // We'll figure the real value out later.
