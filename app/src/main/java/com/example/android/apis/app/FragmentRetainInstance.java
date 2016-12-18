@@ -243,8 +243,23 @@ public class FragmentRetainInstance extends Activity {
         };
 
         /**
-         * Fragment initialization.  We way we want to be retained and
-         * start our thread.
+         * Fragment initialization. First we call through to our super's implementation of onCreate,
+         * then we call {@code setRetainInstance(true)} to specify that this fragment instance is to
+         * be retained across Activity re-creation (such as from a configuration change). This can
+         * only be used with fragments not in the back stack.  If set, the fragment lifecycle will
+         * be slightly different when an activity is recreated:
+         * <ul>
+         * <li> {@link #onDestroy()} will not be called (but {@link #onDetach()} still
+         * will be, because the fragment is being detached from its current activity).
+         * <li> {@link #onCreate(Bundle)} will not be called since the fragment
+         * is not being re-created.
+         * <li> {@link #onAttach(Activity)} and {@link #onActivityCreated(Bundle)} <b>will</b>
+         * still be called.
+         * </ul>
+         *
+         * Finally we start our worker thread {@code Thread mThread} running.
+         *
+         * @param savedInstanceState we do not override onSaveInstanceState to we do not use
          */
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -270,8 +285,9 @@ public class FragmentRetainInstance extends Activity {
 
             // Retrieve the progress bar from the target's view hierarchy.
             //noinspection ConstantConditions
-            mProgressBar = (ProgressBar) getTargetFragment().getView().findViewById(
-                    R.id.progress_horizontal);
+            mProgressBar = (ProgressBar) getTargetFragment()
+                    .getView()
+                    .findViewById(R.id.progress_horizontal);
 
             // We are ready for our thread to go.
             synchronized (mThread) {
