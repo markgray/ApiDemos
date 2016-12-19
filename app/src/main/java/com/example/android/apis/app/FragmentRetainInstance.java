@@ -245,17 +245,7 @@ public class FragmentRetainInstance extends Activity {
         /**
          * Fragment initialization. First we call through to our super's implementation of onCreate,
          * then we call {@code setRetainInstance(true)} to specify that this fragment instance is to
-         * be retained across Activity re-creation (such as from a configuration change). This can
-         * only be used with fragments not in the back stack.  If set, the fragment lifecycle will
-         * be slightly different when an activity is recreated:
-         * <ul>
-         * <li> {@link #onDestroy()} will not be called (but {@link #onDetach()} still
-         * will be, because the fragment is being detached from its current activity).
-         * <li> {@link #onCreate(Bundle)} will not be called since the fragment
-         * is not being re-created.
-         * <li> {@link #onAttach(Activity)} and {@link #onActivityCreated(Bundle)} <b>will</b>
-         * still be called.
-         * </ul>
+         * be retained across Activity re-creation (such as from a configuration change).
          *
          * Finally we start our worker thread {@code Thread mThread} running.
          *
@@ -274,10 +264,21 @@ public class FragmentRetainInstance extends Activity {
         }
 
         /**
-         * This is called when the Fragment's Activity is ready to go, after
-         * its content view has been installed; it is called both after
-         * the initial fragment creation and after the fragment is re-attached
-         * to a new activity.
+         * This is called when the Fragment's Activity is ready to go, after its content view has
+         * been installed; it is called both after the initial fragment creation and after the
+         * fragment is re-attached to a new activity.
+         *
+         * First we call through to our super's implementation of onActivityCreated, then we use
+         * {@code getTargetFragment} to retrieve the UIFragment instance which was set as our
+         * target fragment using {@code mWorkFragment.setTargetFragment(this, 0)}, and use that
+         * reference to retrieve the root view for that fragment's layout (the one returned by
+         * onCreateView(LayoutInflater, ViewGroup, Bundle)), which we search in order to find
+         * the {@code ProgressBar} with the ID R.id.progress_horizontal and we save a reference to
+         * this ProgressBar in our field {@code ProgressBar mProgressBar}. Then in a block
+         * synchronized on our worker thread {@code mThread} we set our field {@code boolean mReady}
+         * to true and notify the worker thread that it should stop waiting and run for a bit.
+         *
+         * @param savedInstanceState we do not override onSaveInstanceState to we do not use
          */
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
