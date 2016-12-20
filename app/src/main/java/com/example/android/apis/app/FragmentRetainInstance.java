@@ -120,7 +120,7 @@ public class FragmentRetainInstance extends Activity {
          * as this callback tells the fragment when it is fully associated with
          * the new activity instance.  This is called after {@link #onCreateView}
          * and before {@link #onViewStateRestored(Bundle)}.
-         *
+         * <p>
          * First we call through to our super's implementation of onActivityCreated, then we fetch a
          * handle to the FragmentManager for interacting with fragments associated with this fragment's
          * activity into {@code FragmentManager fm}. We use <b>fm</b> to search for a fragment with
@@ -176,8 +176,8 @@ public class FragmentRetainInstance extends Activity {
         boolean mReady = false;
 
         /**
-         * Flag to indicate we are being destroyed and need to end the thread by returning, it is
-         * set to true in our {@code onDestroy} callback.
+         * Flag to indicate we are being destroyed and need to have the thread end itself by
+         * returning, it is set to true in our {@code onDestroy} callback.
          */
         boolean mQuiting = false;
 
@@ -246,7 +246,7 @@ public class FragmentRetainInstance extends Activity {
          * Fragment initialization. First we call through to our super's implementation of onCreate,
          * then we call {@code setRetainInstance(true)} to specify that this fragment instance is to
          * be retained across Activity re-creation (such as from a configuration change).
-         *
+         * <p>
          * Finally we start our worker thread {@code Thread mThread} running.
          *
          * @param savedInstanceState we do not override onSaveInstanceState to we do not use
@@ -267,7 +267,7 @@ public class FragmentRetainInstance extends Activity {
          * This is called when the Fragment's Activity is ready to go, after its content view has
          * been installed; it is called both after the initial fragment creation and after the
          * fragment is re-attached to a new activity.
-         *
+         * <p>
          * First we call through to our super's implementation of onActivityCreated, then we use
          * {@code getTargetFragment} to retrieve the UIFragment instance which was set as our
          * target fragment using {@code mWorkFragment.setTargetFragment(this, 0)}, and use that
@@ -300,6 +300,19 @@ public class FragmentRetainInstance extends Activity {
         /**
          * This is called when the fragment is going away.  It is NOT called
          * when the fragment is being propagated between activity instances.
+         * <p>
+         * In a block synchronized on {@code Thread mThread} we set our field {@code boolean mReady}
+         * to false, and our field {@code boolean mQuiting} to true. Then we wake up our worker
+         * thread {@code mThread} if it is currently waiting for us to release our lock on
+         * {@code mThread} either by attempting to synchronize on "this" or by using the method
+         * {@code wait} inside of a synchronized block of its own. The worker thread will not start
+         * running again until we exit the synchronized block, allowing it to either become the
+         * owner of the lock or regain ownership respectively. (If the worker thread is not currently
+         * waiting for the lock the notify() is not necessary (or harmful) because eventually the
+         * worker thread will acquire the lock in a synchronized block and check our flag fields
+         * anyway.)
+         * <p>
+         * Finally we call our super's implementation of {@code onDestroy}.
          */
         @Override
         public void onDestroy() {
