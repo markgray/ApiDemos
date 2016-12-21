@@ -329,6 +329,13 @@ public class FragmentRetainInstance extends Activity {
         /**
          * This is called right before the fragment is detached from its
          * current activity instance.
+         *
+         * Wrapped in a synchronized block we throw away our reference to the {@code ProgressBar},
+         * set our flag {@code boolean mReady} to false and notify our worker thread that it should
+         * wait until {@code mReady} is set to true before touching our {@code ProgressBar mProgressBar}
+         * again.
+         *
+         * Finally we call through to our super's implementation of {@code onDetach()}.
          */
         @Override
         public void onDetach() {
@@ -345,7 +352,10 @@ public class FragmentRetainInstance extends Activity {
         }
 
         /**
-         * API for our UI to restart the progress thread.
+         * API for our UI to restart the progress thread. This is called when the R.id.restart
+         * ("Restart") {@code Button} is clicked. Wrapped in a synchronized block we set the value
+         * of our field {@code int mPosition} to 0, and then notify any thread waiting to obtain the
+         * lock on {@code Thread mThread}.
          */
         public void restart() {
             synchronized (mThread) {
