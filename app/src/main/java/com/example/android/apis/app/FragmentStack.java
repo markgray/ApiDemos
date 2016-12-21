@@ -32,10 +32,17 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+/**
+ * Shows how to push and pop fragments using the system backstack.
+ * FragmentTransaction.addToBackStack() adds the fragement to the backstack, and
+ * getFragmentManager().popBackStack() (or simply pressing "back" button) goes back
+ * one fragment, using a fancy animation for push and pop. (Not really visible on
+ * Nexus 6 Marshmallow, but striking on Excite 10.)
+ */
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class FragmentStack extends Activity {
-    int mStackLevel = 1;
+    int mStackLevel = 1; // stack level of next {@code CountingFragment} to add to back stack
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +57,7 @@ public class FragmentStack extends Activity {
         });
         button = (Button)findViewById(R.id.delete_fragment);
         button.setOnClickListener(new OnClickListener() {
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+            @Override
             public void onClick(View v) {
                 getFragmentManager().popBackStack();
             }
@@ -72,8 +79,6 @@ public class FragmentStack extends Activity {
         outState.putInt("level", mStackLevel);
     }
 
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     void addFragmentToStack() {
         mStackLevel++;
 
@@ -89,9 +94,6 @@ public class FragmentStack extends Activity {
         ft.commit();
     }
 
-
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class CountingFragment extends Fragment {
         int mNum;
 
@@ -124,7 +126,6 @@ public class FragmentStack extends Activity {
          * instance number.
          */
         @SuppressWarnings("deprecation")
-        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         @SuppressLint("DefaultLocale")
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
