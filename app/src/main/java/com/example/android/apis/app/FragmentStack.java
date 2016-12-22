@@ -43,20 +43,61 @@ import android.widget.TextView;
 public class FragmentStack extends Activity {
     int mStackLevel = 1; // stack level of next {@code CountingFragment} to add to back stack
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we set our content view to our layout file R.layout.fragment_stack. Next we
+     * find the {@code Button} R.id.new_fragment ("PUSH") and set its {@code OnClickListener} to an
+     * anonymous class which calls our method {@code addFragmentToStack()} when the Button is
+     * clicked, and we locate the {@code Button} R.id.delete_fragment ("POP") and set its
+     * {@code OnClickListener} to an anonymous class which uses the FragmentManager for interacting
+     * with fragments associated with this activity Pop the top state off the back stack. This
+     * function is asynchronous -- it enqueues the request to pop, but the action will not be
+     * performed until the application returns to its event loop.
+     * <p>
+     * Then if our parameter {@code Bundle savedInstanceState} is null we need to do first time
+     * initialization, so we create {@code Fragment newFragment} by calling {@code CountingFragment}'s
+     * {@code newInstance} method, use the FragmentManager for interacting with fragments associated
+     * with this activity to start {@code FragmentTransaction ft} which we use to add the fragment
+     * {@code newFragment} to the activity state and commit the FragmentTransaction.
+     * <p>
+     * If our parameter {@code Bundle savedInstanceState} is not null, we are being recreated, so
+     * we retrieve the value of our field {@code int mStackLevel} (which was saved by our override of
+     * onSaveInstanceState using the key "level") from {@code savedInstanceState}.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut
+     *                           down then this Bundle contains the data it most recently supplied
+     *                           in {@link #onSaveInstanceState}.
+     *                           <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_stack);
-        
+
         // Watch for button clicks.
-        Button button = (Button)findViewById(R.id.new_fragment);
+        Button button = (Button) findViewById(R.id.new_fragment);
         button.setOnClickListener(new OnClickListener() {
+            /**
+             * When the "PUSH" Button is clicked we simply call our method {@code addFragmentToStack()}
+             * which will create a new instance of {@code CountingFragment}, replace the current
+             * Fragment with it and add the whole {@code FragmentTransaction} used to do this to the
+             * back stack.
+             *
+             * @param v View of Button that was clicked
+             */
+            @Override
             public void onClick(View v) {
                 addFragmentToStack();
             }
         });
-        button = (Button)findViewById(R.id.delete_fragment);
+        button = (Button) findViewById(R.id.delete_fragment);
         button.setOnClickListener(new OnClickListener() {
+            /**
+             * When the "POP" Button is clicked we simply use he FragmentManager for interacting
+             * with fragments associated with this activity to Pop the top state off the back stack.
+             *
+             * @param v View of Button that was clicked.
+             */
             @Override
             public void onClick(View v) {
                 getFragmentManager().popBackStack();
@@ -73,12 +114,28 @@ public class FragmentStack extends Activity {
         }
     }
 
+    /**
+     * Called to retrieve per-instance state from an activity before being killed so that the state
+     * can be restored in {@link #onCreate} or {@link #onRestoreInstanceState} (the {@link Bundle}
+     * populated by this method will be passed to both).
+     *
+     * First we call through to our super's implementation of {@code onSaveInstanceState}, then we
+     * insert the value of our field {@code int mStackLevel} into the mapping of our parameter
+     * {@code Bundle outState}, using the key "level".
+     *
+     * @param outState Bundle in which to place your saved state.
+     */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("level", mStackLevel);
     }
 
+    /**
+     * Create a new instance of {@code CountingFragment} and use it to replace the current Fragment
+     * while adding the whole {@code FragmentTransaction} used to do this to the back stack so that
+     * it may later be reversed by calling {@code FragmentManager.popBackStack()}.
+     */
     void addFragmentToStack() {
         mStackLevel++;
 
@@ -129,10 +186,10 @@ public class FragmentStack extends Activity {
         @SuppressLint("DefaultLocale")
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                                 Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.hello_world, container, false);
             View tv = v.findViewById(R.id.text);
-            ((TextView)tv).setText(String.format("%s%d", getString(R.string.fragment_num), mNum));
+            ((TextView) tv).setText(String.format("%s%d", getString(R.string.fragment_num), mNum));
             tv.setBackground(getResources().getDrawable(android.R.drawable.gallery_thumb));
             return v;
         }
