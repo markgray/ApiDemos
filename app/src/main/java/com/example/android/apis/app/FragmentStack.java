@@ -118,7 +118,7 @@ public class FragmentStack extends Activity {
      * Called to retrieve per-instance state from an activity before being killed so that the state
      * can be restored in {@link #onCreate} or {@link #onRestoreInstanceState} (the {@link Bundle}
      * populated by this method will be passed to both).
-     *
+     * <p>
      * First we call through to our super's implementation of {@code onSaveInstanceState}, then we
      * insert the value of our field {@code int mStackLevel} into the mapping of our parameter
      * {@code Bundle outState}, using the key "level".
@@ -134,7 +134,14 @@ public class FragmentStack extends Activity {
     /**
      * Create a new instance of {@code CountingFragment} and use it to replace the current Fragment
      * while adding the whole {@code FragmentTransaction} used to do this to the back stack so that
-     * it may later be reversed by calling {@code FragmentManager.popBackStack()}.
+     * it may later be reversed by calling {@code FragmentManager.popBackStack()}. First we increment
+     * our field {@code int mStackLevel} (stack level of next {@code CountingFragment} to add to back
+     * stack), then we create a new instance of {@code CountingFragment} {@code Fragment newFragment}
+     * using {@code mStackLevel} as its level. We use the FragmentManager for interacting with
+     * fragments associated with this activity to start a {@code FragmentTransaction ft} which we use
+     * to replace the current fragment occupying view R.id.simple_fragment with {@code newFragment},
+     * specify a transition of TRANSIT_FRAGMENT_OPEN for the transaction, add the transaction to the
+     * back stack and finally commit the {@code FragmentTransaction}.
      */
     void addFragmentToStack() {
         mStackLevel++;
@@ -151,12 +158,25 @@ public class FragmentStack extends Activity {
         ft.commit();
     }
 
+    /**
+     * This is a minimalist Fragment whose only UI consists of a {@code TextView} displaying the
+     * formatted stack level number passed to its factory method {@code newInstance}.
+     */
     public static class CountingFragment extends Fragment {
         int mNum;
 
         /**
-         * Create a new instance of CountingFragment, providing "num"
-         * as an argument.
+         * Create a new instance of CountingFragment, providing "num" as an argument. First we create
+         * a new instance of {@code CountingFragment f}, then we create a {@code Bundle args} and
+         * then we insert our parameter {@code int num} into the mapping of this Bundle under the key
+         * "num", we set the arguments of {@code CountingFragment f} to {@code args} and return the
+         * configured {@code CountingFragment} instance {@code f} to the caller.
+         *
+         * @param num Stack level number to pass as argument to new instance of
+         *            {@code CountingFragment} we create.
+         * @return New instance of {@code CountingFragment} with the argument
+         * Bundle containing our parameter {@code int num} stored using the key
+         * "num"
          */
         static CountingFragment newInstance(int num) {
             CountingFragment f = new CountingFragment();
@@ -170,7 +190,13 @@ public class FragmentStack extends Activity {
         }
 
         /**
-         * When creating, retrieve this instance's number from its arguments.
+         * When creating, retrieve this instance's number from its arguments. First we call through
+         * to our super's implementation of onCreate, then if arguments have been passed us using
+         * {@code setArguments} we retrieve the int stored in the argument {@code Bundle} under the
+         * key "num" to set our field {@code int mNum}, and if no arguments were passed we default
+         * to 1.
+         *
+         * @param savedInstanceState since we do not override onSaveInstanceState we do not use
          */
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -179,14 +205,29 @@ public class FragmentStack extends Activity {
         }
 
         /**
-         * The Fragment's UI is just a simple text view showing its
-         * instance number.
+         * Called to have the fragment instantiate its user interface view. The Fragment's UI is
+         * just a simple text view showing its instance number.
+         * <p>
+         * First we use our parameter {@code LayoutInflater inflater} to inflate our layout file
+         * R.layout.hello_world into {@code View v}, locate the {@code TextView} R.id.text in {@code v}
+         * to set {@code View tv}, set the text of {@code tv} to a formatted String containing our
+         * field {@code int mNum} (the stack level we represent), and set the background of {@code tv}
+         * to the {@code Drawable} android.R.drawable.gallery_thumb. Finally we return {@code View v}
+         * to our caller.
+         *
+         * @param inflater           The LayoutInflater object that can be used to inflate
+         *                           any views in the fragment,
+         * @param container          If non-null, this is the parent view that the fragment's
+         *                           UI should be attached to.  The fragment should not add the view itself,
+         *                           but this can be used to generate the LayoutParams of the view.
+         * @param savedInstanceState If non-null, this fragment is being re-constructed
+         *                           from a previous saved state as given here.
+         * @return Return the View for the fragment's UI, or null.
          */
         @SuppressWarnings("deprecation")
         @SuppressLint("DefaultLocale")
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.hello_world, container, false);
             View tv = v.findViewById(R.id.text);
             ((TextView) tv).setText(String.format("%s%d", getString(R.string.fragment_num), mNum));

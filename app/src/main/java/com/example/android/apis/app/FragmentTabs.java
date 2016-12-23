@@ -26,12 +26,14 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 /**
- * This demonstrates the use of action bar tabs and how they interact
- * with other action bar features.
+ * This demonstrates the use of action bar tabs and how they interact with other action bar features.
+ * The Activities chosen to populate the tabs all have their own uses for the action bar, and they
+ * are switched in and out by a class which implements:
+ * {@code ActionBar.TabListener (TabListener<T extends Fragment>)}
  */
 @SuppressWarnings("deprecation")
+@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 public class FragmentTabs extends Activity {
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +65,6 @@ public class FragmentTabs extends Activity {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -71,7 +72,7 @@ public class FragmentTabs extends Activity {
         outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @SuppressWarnings("WeakerAccess")
     public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
         private final Activity mActivity;
         private final String mTag;
@@ -83,7 +84,6 @@ public class FragmentTabs extends Activity {
             this(activity, tag, clz, null);
         }
 
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
         public TabListener(Activity activity, String tag, Class<T> clz, Bundle args) {
             mActivity = activity;
             mTag = tag;
@@ -101,7 +101,7 @@ public class FragmentTabs extends Activity {
             }
         }
 
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+        @Override
         public void onTabSelected(Tab tab, FragmentTransaction ft) {
             if (mFragment == null) {
                 mFragment = Fragment.instantiate(mActivity, mClass.getName(), mArgs);
@@ -111,13 +111,14 @@ public class FragmentTabs extends Activity {
             }
         }
 
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+        @Override
         public void onTabUnselected(Tab tab, FragmentTransaction ft) {
             if (mFragment != null) {
                 ft.detach(mFragment);
             }
         }
 
+        @Override
         public void onTabReselected(Tab tab, FragmentTransaction ft) {
             Toast.makeText(mActivity, "Reselected!", Toast.LENGTH_SHORT).show();
         }
