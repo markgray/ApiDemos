@@ -28,12 +28,37 @@ import android.widget.Toast;
 /**
  * This demonstrates the use of action bar tabs and how they interact with other action bar features.
  * The Activities chosen to populate the tabs all have their own uses for the action bar, and they
- * are switched in and out by a class which implements:
- * {@code ActionBar.TabListener (TabListener<T extends Fragment>)}
+ * are switched in and out by a class which implements the interface {@code ActionBar.TabListener}
+ * <p>
+ * {@code TabListener<T extends Fragment> implements ActionBar.TabListener}
  */
 @SuppressWarnings("deprecation")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 public class FragmentTabs extends Activity {
+
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we retrieve a reference to this activity's ActionBar to initialize our variable
+     * {@code ActionBar bar}. We set the navigation mode of {@code bar} to NAVIGATION_MODE_TABS, and
+     * clear the DISPLAY_SHOW_TITLE display option of the {@code ActionBar} to make more room for our
+     * UI. Next we add 4 tabs configured to launch 4 different {@code Fragment} classes. In each case
+     * our procedure consists of using {@code bar.newTab()} to create a new ActionBar.Tab, set the
+     * text of the new tab to a title appropriate for the {@code Fragment} the tab will control, set
+     * the {@code TabListener} of the tab to a new instance of our class {@code TabListener<>} with
+     * the arguments to the constructor of the {@code TabListener<>} chosen to give a unique tag
+     * String and {@code Fragment} class, and then we add the tab to the {@code ActionBar bar} (the
+     * tab is not included in the action bar until it is added). (The code for adding the 4 tabs is
+     * identical except for the arguments passed to the methods used so I will spare you the details.)
+     * <p>
+     * Finally, if our parameter {@code Bundle savedInstanceState} is not null, we are being recreated
+     * from a previous run so we retrieve the {@code int} that our override of {@code onSaveInstanceState}
+     * saved in the {@code Bundle} under the key "tab" and use it to set the selected navigation item
+     * of our tabbed {@code ActionBar}.
+     *
+     * @param savedInstanceState If not null we are being recreated so we retrieve the selected
+     *                           navigation item number which was stored in our override of
+     *                           onSaveInstanceState under the key "tab".
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +90,18 @@ public class FragmentTabs extends Activity {
         }
     }
 
+    /**
+     * Called to retrieve per-instance state from an activity before being killed
+     * so that the state can be restored in {@link #onCreate} or
+     * {@link #onRestoreInstanceState} (the {@link Bundle} populated by this method
+     * will be passed to both).
+     * <p>
+     * First we call through to our super's implementation of onCreate, then we retrieve a reference
+     * to this activity's ActionBar, and use it to get the position of the selected navigation item
+     * in the ActionBar, which we save in our parameter {@code Bundle outState} using the key "tab".
+     *
+     * @param outState Bundle in which to place your saved state.
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -72,6 +109,10 @@ public class FragmentTabs extends Activity {
         outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
     }
 
+    /**
+     *
+     * @param <T> Class type we create when our tab is selected.
+     */
     @SuppressWarnings("WeakerAccess")
     public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
         private final Activity mActivity;
