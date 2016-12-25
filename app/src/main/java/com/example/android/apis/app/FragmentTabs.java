@@ -110,21 +110,52 @@ public class FragmentTabs extends Activity {
     }
 
     /**
+     * A {@code TabListener} instance is created for each tab in the {@code ActionBar} in order to
+     * handle switching to and from the tab. When its {@code onTabSelected} override is called it will
+     * instantiate or reattach the {@code Fragment} class it was constructed for, when its
+     * {@code onTabUnselected} override is called it will detach its {@code Fragment}.
      *
      * @param <T> Class type we create when our tab is selected.
      */
     @SuppressWarnings("WeakerAccess")
     public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
-        private final Activity mActivity;
-        private final String mTag;
-        private final Class<T> mClass;
-        private final Bundle mArgs;
-        private Fragment mFragment;
+        private final Activity mActivity; // Activity passed to our constructor used when Context is needed, "this" from FragmentTabs onCreate
+        private final String mTag; // tag passed to our constructor used as tag name for the Fragment we add
+        private final Class<T> mClass; // Class of the Fragment we control
+        private final Bundle mArgs; // Arguments Bundle for the Fragment we instantiate (we do not use this feature, all Fragment's are created without arguments
+        private Fragment mFragment; // Reference to Fragment instance we have created
 
+        /**
+         * Constructor for a Fragment which does not require an argument Bundle. We simply call the
+         * constructor for a Fragment which requires an argument Bundle using null as that Bundle.
+         *
+         * @param activity used for Context in various places
+         * @param tag tag name to use when adding our Fragment
+         * @param clz Class name of the Fragment instance we create and control
+         */
         public TabListener(Activity activity, String tag, Class<T> clz) {
             this(activity, tag, clz, null);
         }
 
+        /**
+         * Constructor for a Fragment which requires an argument Bundle. We first use our parameters
+         * to initialize our fields {@code Activity mActivity}, {@code String mTag},
+         * {@code Class<T> mClass}, and {@code Bundle mArgs} respectively. Then we use the
+         * FragmentManager for interacting with fragments associated with this activity to search for
+         * a {@code Fragment mFragment} identified with our tag {@code String mTag}. If one is found
+         * and it is not already explicitly detached from the UI we need to detach it from the UI (
+         * This only happens when an orientation change occurs while our Fragment has control of the
+         * UI, and it needs to be recreated for the new orientation.) To do this we use the
+         * FragmentManager for interacting with fragments associated with thisactivity to being a
+         * new {@code FragmentTransaction ft}, use {@code ft} to detach {@code Fragment mFragment},
+         * and commit the transaction.
+         *
+         *
+         * @param activity used for Context in various places
+         * @param tag tag name to use when adding our Fragment
+         * @param clz Class name of the Fragment instance we create and control
+         * @param args Bundle of arguments which will be passed to our Fragment when we instantiate it
+         */
         public TabListener(Activity activity, String tag, Class<T> clz, Bundle args) {
             mActivity = activity;
             mTag = tag;
@@ -142,6 +173,15 @@ public class FragmentTabs extends Activity {
             }
         }
 
+        /**
+         * Called when our tab enters the selected state.
+         *
+         * @param tab The tab that was selected
+         * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
+         *        during a tab switch. The previous tab's unselect and this tab's select will be
+         *        executed in a single transaction. This FragmentTransaction does not support
+         *        being added to the back stack.
+         */
         @Override
         public void onTabSelected(Tab tab, FragmentTransaction ft) {
             if (mFragment == null) {
