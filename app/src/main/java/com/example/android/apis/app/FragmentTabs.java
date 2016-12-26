@@ -23,6 +23,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -35,6 +36,7 @@ import android.widget.Toast;
 @SuppressWarnings("deprecation")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 public class FragmentTabs extends Activity {
+    final static String TAG = "FragmentTabs"; // TAG for logging
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -130,8 +132,8 @@ public class FragmentTabs extends Activity {
          * constructor for a Fragment which requires an argument Bundle using null as that Bundle.
          *
          * @param activity used for Context in various places
-         * @param tag tag name to use when adding our Fragment
-         * @param clz Class name of the Fragment instance we create and control
+         * @param tag      tag name to use when adding our Fragment
+         * @param clz      Class name of the Fragment instance we create and control
          */
         public TabListener(Activity activity, String tag, Class<T> clz) {
             this(activity, tag, clz, null);
@@ -150,11 +152,10 @@ public class FragmentTabs extends Activity {
          * new {@code FragmentTransaction ft}, use {@code ft} to detach {@code Fragment mFragment},
          * and commit the transaction.
          *
-         *
          * @param activity used for Context in various places
-         * @param tag tag name to use when adding our Fragment
-         * @param clz Class name of the Fragment instance we create and control
-         * @param args Bundle of arguments which will be passed to our Fragment when we instantiate it
+         * @param tag      tag name to use when adding our Fragment
+         * @param clz      Class name of the Fragment instance we create and control
+         * @param args     Bundle of arguments which will be passed to our Fragment when we instantiate it
          */
         public TabListener(Activity activity, String tag, Class<T> clz, Bundle args) {
             mActivity = activity;
@@ -174,13 +175,19 @@ public class FragmentTabs extends Activity {
         }
 
         /**
-         * Called when our tab enters the selected state.
+         * Called when our tab enters the selected state. If this is the first time our tab has been
+         * selected (mFragment == null) we initialize {@code Fragment mFragment} with a new instance
+         * of the {@code Fragment} class our tab contains, and use our parameter {@code FragmentTransaction ft}
+         * to add this fragment to the activity state into the Activity's content view using the tag
+         * {@code String mTag}. If we have previously been selected our {@code Fragment mFragment} is
+         * intact but detached, so we use our parameter {@code FragmentTransaction ft} to re-attach
+         * our {@code Fragment mFragment}.
          *
          * @param tab The tab that was selected
-         * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
-         *        during a tab switch. The previous tab's unselect and this tab's select will be
-         *        executed in a single transaction. This FragmentTransaction does not support
-         *        being added to the back stack.
+         * @param ft  A {@link FragmentTransaction} for queuing fragment operations to execute
+         *            during a tab switch. The previous tab's un-select and this tab's select will be
+         *            executed in a single transaction. This FragmentTransaction does not support
+         *            being added to the back stack.
          */
         @Override
         public void onTabSelected(Tab tab, FragmentTransaction ft) {
@@ -192,13 +199,37 @@ public class FragmentTabs extends Activity {
             }
         }
 
+        /**
+         * Called when the tab exits the selected state. To be safe we first test that we do have
+         * an existing {@code Fragment mFragment}, and if so we proceed to use our parameter
+         * {@code FragmentTransaction ft} to detach our {@code Fragment} from the UI.
+         *
+         * @param tab The tab that was unselected
+         * @param ft  A {@link FragmentTransaction} for queuing fragment operations to execute
+         *            during a tab switch. This tab's unselect and the newly selected tab's select
+         *            will be executed in a single transaction. This FragmentTransaction does not
+         *            support being added to the back stack.
+         */
         @Override
         public void onTabUnselected(Tab tab, FragmentTransaction ft) {
             if (mFragment != null) {
                 ft.detach(mFragment);
+            } else {
+                Log.i(TAG, "mFragment was null when unselected -- how odd!");
             }
         }
 
+        /**
+         * Called when a tab that is already selected is chosen again by the user.
+         * Some applications may use this action to return to the top level of a category.
+         * <p>
+         * We simply Toast the fact that we were reselected.
+         *
+         * @param tab The tab that was reselected.
+         * @param ft  A {@link FragmentTransaction} for queuing fragment operations to execute
+         *            once this method returns. This FragmentTransaction does not support
+         *            being added to the back stack.
+         */
         @Override
         public void onTabReselected(Tab tab, FragmentTransaction ft) {
             Toast.makeText(mActivity, "Reselected!", Toast.LENGTH_SHORT).show();

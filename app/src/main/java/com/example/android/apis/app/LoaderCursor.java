@@ -42,12 +42,29 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.SearchView.OnQueryTextListener;
 
 /**
- * Demonstration of the use of a CursorLoader to load and display contacts
- * data in a fragment.
+ * Demonstration of the use of a CursorLoader to load and display contacts data in a fragment.
+ * Creates a custom class CursorLoaderListFragment which extends ListFragment, with the necessary
+ * callbacks to serve as a CursorLoader to load and display contacts data in the ListFragment.
+ * Includes the use of a SearchView which might come in handy for MarkovChain
  */
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class LoaderCursor extends Activity {
+    final static String TAG = "LoaderCursor";
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, then we initialize {@code FragmentManager fm} with a reference to the FragmentManager
+     * for interacting with fragments associated with this activity. We check whether this is the
+     * first time we are being created by using {@code fm} to search for a Fragment with the container
+     * view ID android.R.id.content (our root view) and if it does not find one we create an instance
+     * of {@code CursorLoaderListFragment list} and use {@code fm} begin a {@code FragmentTransaction}
+     * to add the fragment {@code list} to the Activity's state using the container view
+     * android.R.id.content, and commit the {@code FragmentTransaction}. If there was already a
+     * Fragment occupying android.R.id.content we are being recreated after an orientation change and
+     * do not need to do anything.
+     *
+     * @param savedInstanceState we do not override onSaveInstanceState so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +75,11 @@ public class LoaderCursor extends Activity {
         if (fm.findFragmentById(android.R.id.content) == null) {
             CursorLoaderListFragment list = new CursorLoaderListFragment();
             fm.beginTransaction().add(android.R.id.content, list).commit();
+        } else {
+            Log.i(TAG, "There is already a Fragment occupying our root view");
         }
     }
 
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class CursorLoaderListFragment extends ListFragment
             implements OnQueryTextListener, OnCloseListener,
             LoaderManager.LoaderCallbacks<Cursor> {
@@ -76,8 +93,8 @@ public class LoaderCursor extends Activity {
         // If non-null, this is the current filter the user has provided.
         String mCurFilter;
 
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-        @Override public void onActivityCreated(Bundle savedInstanceState) {
+        @Override
+        public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
 
             // Give some text to display if there is no data.  In a real
@@ -90,8 +107,8 @@ public class LoaderCursor extends Activity {
             // Create an empty adapter we will use to display the loaded data.
             mAdapter = new SimpleCursorAdapter(getActivity(),
                     android.R.layout.simple_list_item_2, null,
-                    new String[] { Contacts.DISPLAY_NAME, Contacts.CONTACT_STATUS },
-                    new int[] { android.R.id.text1, android.R.id.text2 }, 0);
+                    new String[]{Contacts.DISPLAY_NAME, Contacts.CONTACT_STATUS},
+                    new int[]{android.R.id.text1, android.R.id.text2}, 0);
             setListAdapter(mAdapter);
 
             // Start out with a progress indicator.
@@ -102,7 +119,6 @@ public class LoaderCursor extends Activity {
             getLoaderManager().initLoader(0, null, this);
         }
 
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         public static class MySearchView extends SearchView {
             public MySearchView(Context context) {
                 super(context);
@@ -117,8 +133,8 @@ public class LoaderCursor extends Activity {
             }
         }
 
-        @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-        @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        @Override
+        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             // Place an action bar item for searching.
             MenuItem item = menu.add("Search");
             item.setIcon(android.R.drawable.ic_menu_search);
@@ -131,7 +147,7 @@ public class LoaderCursor extends Activity {
             item.setActionView(mSearchView);
         }
 
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        @Override
         public boolean onQueryTextChange(String newText) {
             // Called when the action bar search text has changed.  Update
             // the search filter, and restart the loader to do a new query
@@ -150,12 +166,12 @@ public class LoaderCursor extends Activity {
             return true;
         }
 
-        @Override public boolean onQueryTextSubmit(String query) {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
             // Don't care about this.
             return true;
         }
 
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         @Override
         public boolean onClose() {
             if (!TextUtils.isEmpty(mSearchView.getQuery())) {
@@ -164,22 +180,23 @@ public class LoaderCursor extends Activity {
             return true;
         }
 
-        @Override public void onListItemClick(ListView l, View v, int position, long id) {
+        @Override
+        public void onListItemClick(ListView l, View v, int position, long id) {
             // Insert desired behavior here.
             Log.i("FragmentComplexList", "Item clicked: " + id);
         }
 
         // These are the Contacts rows that we will retrieve.
-        static final String[] CONTACTS_SUMMARY_PROJECTION = new String[] {
-            Contacts._ID,
-            Contacts.DISPLAY_NAME,
-            Contacts.CONTACT_STATUS,
-            Contacts.CONTACT_PRESENCE,
-            Contacts.PHOTO_ID,
-            Contacts.LOOKUP_KEY,
+        static final String[] CONTACTS_SUMMARY_PROJECTION = new String[]{
+                Contacts._ID,
+                Contacts.DISPLAY_NAME,
+                Contacts.CONTACT_STATUS,
+                Contacts.CONTACT_PRESENCE,
+                Contacts.PHOTO_ID,
+                Contacts.LOOKUP_KEY,
         };
 
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             // This is called when a new Loader needs to be created.  This
             // sample only has one Loader, so we don't care about the ID.
@@ -203,7 +220,7 @@ public class LoaderCursor extends Activity {
                     Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
         }
 
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             // Swap the new cursor in.  (The framework will take care of closing the
             // old cursor once we return.)
@@ -217,7 +234,7 @@ public class LoaderCursor extends Activity {
             }
         }
 
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        @Override
         public void onLoaderReset(Loader<Cursor> loader) {
             // This is called when the last Cursor provided to onLoadFinished()
             // above is about to be closed.  We need to make sure we are no
