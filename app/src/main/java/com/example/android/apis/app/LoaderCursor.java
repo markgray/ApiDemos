@@ -80,6 +80,9 @@ public class LoaderCursor extends Activity {
         }
     }
 
+    /**
+     * This {@code ListFragment} fills its {@code List} with data returned from a {@code SimpleCursorAdapter}
+     */
     public static class CursorLoaderListFragment extends ListFragment
             implements OnQueryTextListener, OnCloseListener,
             LoaderManager.LoaderCallbacks<Cursor> {
@@ -93,6 +96,13 @@ public class LoaderCursor extends Activity {
         // If non-null, this is the current filter the user has provided.
         String mCurFilter;
 
+        /**
+         * Called when the fragment's activity has been created and this fragment's view hierarchy
+         * instantiated. First we call through to our super's implementaton of {@code onActivityCreated},
+         *
+         *
+         * @param savedInstanceState we do not override onSaveInstanceState so do not use
+         */
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
