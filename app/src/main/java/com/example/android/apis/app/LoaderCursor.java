@@ -99,7 +99,16 @@ public class LoaderCursor extends Activity {
         /**
          * Called when the fragment's activity has been created and this fragment's view hierarchy
          * instantiated. First we call through to our super's implementaton of {@code onActivityCreated},
-         *
+         * Then we set the text for the {@code TextView} of the default content for our {@code ListFragment}
+         * to the String "No phone numbers". Then we report that this fragment would like to participate
+         * in populating the options menu by receiving a call to onCreateOptionsMenu(Menu, MenuInflater)
+         * and related methods. Next we create an instance of {@code SimpleCursorAdapter} with a null
+         * cursor (we will set the cursor for the adapter later) and save a reference to it in our
+         * field {@code SimpleCursorAdapter mAdapter}, which we then use to set our ListView's adapter.
+         * We call {@code setListShown(false)} so that a indeterminate progress bar will be displayed
+         * while we wait fot our Adapter to have data available for the List. Finally we start a
+         * loader (or reconnect) specifying {@code this} as the {@code LoaderManager.LoaderCallbacks<Cursor>}
+         * interface provider.
          *
          * @param savedInstanceState we do not override onSaveInstanceState so do not use
          */
@@ -129,6 +138,10 @@ public class LoaderCursor extends Activity {
             getLoaderManager().initLoader(0, null, this);
         }
 
+        /**
+         * Custom {@code SearchView} which clears the search text when the {@code SearchView} is
+         * collapsed by the user.
+         */
         public static class MySearchView extends SearchView {
             public MySearchView(Context context) {
                 super(context);
