@@ -143,12 +143,26 @@ public class LoaderCursor extends Activity {
          * collapsed by the user.
          */
         public static class MySearchView extends SearchView {
+            /**
+             * Constructor which simply calls our super's constructor.
+             *
+             * @param context Context used by super ({@code getActivity()} called from menu of our
+             *                {@code CursorLoaderListFragment} would return {@code LoaderCurstor}
+             *                as the Activity Context in our case)
+             */
             public MySearchView(Context context) {
                 super(context);
             }
 
-            // The normal SearchView doesn't clear its search text when
-            // collapsed, so we will do this for it.
+            /**
+             * Called when this view is collapsed as an action view.
+             * See {@link MenuItem#collapseActionView()}.
+             * <p>
+             * The normal SearchView doesn't clear its search text when collapsed, so we will do
+             * this for it. We simply call {@code setQuery} with an empty String, and false to
+             * prevent it being looked up. Finally we call through to our super's implementation
+             * of {@code onActionViewCollapsed}.
+             */
             @Override
             public void onActionViewCollapsed() {
                 setQuery("", false);
@@ -156,6 +170,34 @@ public class LoaderCursor extends Activity {
             }
         }
 
+        /**
+         * Initialize the contents of the Activity's standard options menu.  You
+         * should place your menu items in to <var>menu</var>.  For this method
+         * to be called, you must have first called {@link #setHasOptionsMenu}.  See
+         * {@link Activity#onCreateOptionsMenu(Menu) Activity.onCreateOptionsMenu}
+         * for more information.
+         * <p>
+         * First we add a new {@code MenuItem item} to {@code Menu menu} with the title "Search", we
+         * set the icon for {@code item} to the android system drawable ic_menu_search, set the options
+         * for {@code item} to SHOW_AS_ACTION_IF_ROOM and SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW (the
+         * items action view will collapse to a normal menu item).
+         * <p>
+         * Next we initialize our field {@code SearchView mSearchView} with a new instance of
+         * {@code MySearchView}, set its {@code SearchView.OnQueryTextListener} to "this", set its
+         * {@code SearchView.OnCloseListener} to this, and set the default or resting state of the
+         * search field to iconified (a single search icon is shown by default and expands to show
+         * the text field and other buttons when pressed. Also, if the default state is iconified,
+         * then it collapses to that state when the close button is pressed.
+         * <p>
+         * Finally we set the action view of {@code MenuItem item} to {@code mSearchView}.
+         *
+         * @param menu     The options menu in which you place your items.
+         * @param inflater could be used to instantiate menu XML files into Menu objects, but we do
+         *                 not use
+         * @see #setHasOptionsMenu
+         * @see #onPrepareOptionsMenu
+         * @see #onOptionsItemSelected
+         */
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             // Place an action bar item for searching.
@@ -170,6 +212,13 @@ public class LoaderCursor extends Activity {
             item.setActionView(mSearchView);
         }
 
+        /**
+         * Called when the query text is changed by the user.
+         *
+         * @param newText the new content of the query text field.
+         * @return false if the SearchView should perform the default action of showing any
+         * suggestions if available, true if the action was handled by the listener.
+         */
         @Override
         public boolean onQueryTextChange(String newText) {
             // Called when the action bar search text has changed.  Update
