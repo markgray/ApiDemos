@@ -213,11 +213,21 @@ public class LoaderCursor extends Activity {
         }
 
         /**
-         * Called when the query text is changed by the user.
+         * Called when the query text is changed by the user. If the new text is not empty we set
+         * {@code String newFilter} to it otherwise we set it to null. If both {@code newFilter}
+         * and our current filter {@code String mCurFilter} are null we do nothing and return true
+         * to the caller. If {@code mCurFilter} is not null and {@code newFilter} is equal to it
+         * we also do nothing and return true to the caller.
+         * <p>
+         * If we get this far, the user has changed the filter that we should be using, so we set
+         * {@code mCurFilter} to {@code newFilter}, and use the {@code LoaderManager} for this
+         * Fragment to restart our loader (which eventually will result in our override of
+         * {@code onCreateLoader} being called). Finally we return true to the caller.
          *
          * @param newText the new content of the query text field.
          * @return false if the SearchView should perform the default action of showing any
-         * suggestions if available, true if the action was handled by the listener.
+         * suggestions if available, true if the action was handled by the listener. We always
+         * return true.
          */
         @Override
         public boolean onQueryTextChange(String newText) {
@@ -238,12 +248,29 @@ public class LoaderCursor extends Activity {
             return true;
         }
 
+        /**
+         * Called when the user submits the query. We do not use this feature so we just return true
+         * to the caller to signify that we have "handled" the query.
+         *
+         * @param query the query text that is to be submitted
+         * @return true if the query has been handled by the listener, false to let the
+         * SearchView perform the default action.
+         */
         @Override
         public boolean onQueryTextSubmit(String query) {
             // Don't care about this.
             return true;
         }
 
+        /**
+         * The user is attempting to close the SearchView. We check to see if there are currently any
+         * characters in the text field of our {@code SearchView mSearchView} and if there are we
+         * set the query of {@code SearchView mSearchView} to null and submit the query. Finally we
+         * return true to the caller (since we wanted to override the default behavior)
+         *
+         * @return true if the listener wants to override the default behavior of clearing the
+         * text field and dismissing it, false otherwise.
+         */
         @Override
         public boolean onClose() {
             if (!TextUtils.isEmpty(mSearchView.getQuery())) {
