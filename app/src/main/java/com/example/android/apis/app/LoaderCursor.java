@@ -266,7 +266,7 @@ public class LoaderCursor extends Activity {
          * The user is attempting to close the SearchView. We check to see if there are currently any
          * characters in the text field of our {@code SearchView mSearchView} and if there are we
          * set the query of {@code SearchView mSearchView} to null and submit the query. Finally we
-         * return true to the caller (since we wanted to override the default behavior)
+         * return true to the caller (since we wanted to override the default behavior).
          *
          * @return true if the listener wants to override the default behavior of clearing the
          * text field and dismissing it, false otherwise.
@@ -279,22 +279,45 @@ public class LoaderCursor extends Activity {
             return true;
         }
 
+        /**
+         * This method will be called when an item in the list is selected.
+         * Subclasses should override. Subclasses can call
+         * getListView().getItemAtPosition(position) if they need to access the
+         * data associated with the selected item.
+         *
+         * Since we are not an actual application, we do not do anything when a list item is clicked.
+         *
+         * @param l The ListView where the click happened
+         * @param v The view that was clicked within the ListView
+         * @param position The position of the view in the list
+         * @param id The row id of the item that was clicked
+         */
         @Override
         public void onListItemClick(ListView l, View v, int position, long id) {
             // Insert desired behavior here.
             Log.i("FragmentComplexList", "Item clicked: " + id);
         }
 
-        // These are the Contacts rows that we will retrieve.
+        /**
+         * These are the Contacts rows that we will retrieve.
+         */
         static final String[] CONTACTS_SUMMARY_PROJECTION = new String[]{
-                Contacts._ID,
-                Contacts.DISPLAY_NAME,
-                Contacts.CONTACT_STATUS,
-                Contacts.CONTACT_PRESENCE,
-                Contacts.PHOTO_ID,
-                Contacts.LOOKUP_KEY,
+                Contacts._ID,              // The unique ID for a row
+                Contacts.DISPLAY_NAME,     // The display name for the contact
+                Contacts.CONTACT_STATUS,   // Contact's latest status updat
+                Contacts.CONTACT_PRESENCE, // Contact presence status
+                Contacts.PHOTO_ID,         // Reference to the row in the data table holding the photo
+                Contacts.LOOKUP_KEY,       // An opaque value that contains hints on how to find the contact
         };
 
+        /**
+         * Instantiate and return a new Loader for the given ID. Part of the {@code LoaderCallbacks<D>}
+         *  interface.
+         *
+         * @param id The ID whose loader is to be created.
+         * @param args Any arguments supplied by the caller.
+         * @return Return a new Loader instance that is ready to start loading.
+         */
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             // This is called when a new Loader needs to be created.  This
