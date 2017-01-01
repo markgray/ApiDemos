@@ -284,13 +284,13 @@ public class LoaderCursor extends Activity {
          * Subclasses should override. Subclasses can call
          * getListView().getItemAtPosition(position) if they need to access the
          * data associated with the selected item.
-         *
+         * <p>
          * Since we are not an actual application, we do not do anything when a list item is clicked.
          *
-         * @param l The ListView where the click happened
-         * @param v The view that was clicked within the ListView
+         * @param l        The ListView where the click happened
+         * @param v        The view that was clicked within the ListView
          * @param position The position of the view in the list
-         * @param id The row id of the item that was clicked
+         * @param id       The row id of the item that was clicked
          */
         @Override
         public void onListItemClick(ListView l, View v, int position, long id) {
@@ -312,9 +312,29 @@ public class LoaderCursor extends Activity {
 
         /**
          * Instantiate and return a new Loader for the given ID. Part of the {@code LoaderCallbacks<D>}
-         *  interface.
+         * interface. First we construct the {@code Uri baseUri} that will be used to query the
+         * contacts database: if we have a filter defined by user use of our {@code SearchView} we
+         * create a {@code Uri baseUri} that uses an appended path of an encoding of our filter
+         * {@code String mCurFilter}
+         * <ul>
+         * (ala content://com.android.contacts/contacts/filter/<b>{@code value of mCurFilter}</b>
+         * </ul>
+         * If there is no filter at present {@code Uri baseUri} is
+         * <ul>
+         * content://com.android.contacts/contacts
+         * </ul>
+         * Then we construct {@code String select}, the filter declaring which rows to return,
+         * formatted as an SQL WHERE clause (excluding the WHERE itself) which consists of:
+         * <ul>
+         * ((display_name NOTNULL) AND (has_phone_number=1) AND (display_name != '' ))
+         * </ul>
+         * Finally we return an instance of {@code CursorLoader} constructed using the {@code Uri baseUri}
+         * we calculated for the content to retrieve, our {@code String[] CONTACTS_SUMMARY_PROJECTION}
+         * as the projection (list of columns to return), {@code String select} as the selection (rows
+         * which match the selection will be returned), null for the selection arguments, and the
+         * {@code String} "display_name COLLATE LOCALIZED ASC" as the sort order for the rows.
          *
-         * @param id The ID whose loader is to be created.
+         * @param id   The ID whose loader is to be created.
          * @param args Any arguments supplied by the caller.
          * @return Return a new Loader instance that is ready to start loading.
          */
@@ -342,6 +362,45 @@ public class LoaderCursor extends Activity {
                     Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
         }
 
+        /**
+         * Called when a previously created loader has finished its load.  Note
+         * that normally an application is <em>not</em> allowed to commit fragment
+         * transactions while in this call, since it can happen after an
+         * activity's state is saved.  See {@link FragmentManager#beginTransaction()
+         * FragmentManager.openTransaction()} for further discussion on this.
+         *
+         * <p>This function is guaranteed to be called prior to the release of
+         * the last data that was supplied for this Loader.  At this point
+         * you should remove all use of the old data (since it will be released
+         * soon), but should not do your own release of the data since its Loader
+         * owns it and will take care of that.  The Loader will take care of
+         * management of its data so you don't have to.  In particular:
+         *
+         * <ul>
+         * <li> <p>The Loader will monitor for changes to the data, and report
+         * them to you through new calls here.  You should not monitor the
+         * data yourself.  For example, if the data is a {@link android.database.Cursor}
+         * and you place it in a {@link android.widget.CursorAdapter}, use
+         * the {@link android.widget.CursorAdapter#CursorAdapter(android.content.Context,
+         * android.database.Cursor, int)} constructor <em>without</em> passing
+         * in either {@link android.widget.CursorAdapter#FLAG_AUTO_REQUERY}
+         * or {@link android.widget.CursorAdapter#FLAG_REGISTER_CONTENT_OBSERVER}
+         * (that is, use 0 for the flags argument).  This prevents the CursorAdapter
+         * from doing its own observing of the Cursor, which is not needed since
+         * when a change happens you will get a new Cursor throw another call
+         * here.
+         * <li> The Loader will release the data once it knows the application
+         * is no longer using it.  For example, if the data is
+         * a {@link android.database.Cursor} from a {@link android.content.CursorLoader},
+         * you should not call close() on it yourself.  If the Cursor is being placed in a
+         * {@link android.widget.CursorAdapter}, you should use the
+         * {@link android.widget.CursorAdapter#swapCursor(android.database.Cursor)}
+         * method so that the old Cursor is not closed.
+         * </ul>
+         *
+         * @param loader The Loader that has finished.
+         * @param data The data generated by the Loader.
+         */
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             // Swap the new cursor in.  (The framework will take care of closing the
