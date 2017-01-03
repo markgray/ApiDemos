@@ -35,6 +35,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,11 +62,22 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Demonstration of the implementation of a custom Loader.
+ * Demonstration of the implementation of a custom Loader. Shows how to implement a custom
+ * AsyncTaskLoader, it uses the system function PackageManager.getInstalledApplications to
+ * retrieve a {@code List<ApplicationInfo>} containing the AndroidManifest information for
+ * all the installed apps.
  */
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class LoaderCustom extends Activity {
+    String TAG = "LoaderCustom";
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * onCreate, Then we retrieve a handle for the FragmentManager for interacting with fragments
+     * associated with this activity to {@code FragmentManager fm}
+     *
+     * @param savedInstanceState we do not override onSaveInstanceState so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +88,8 @@ public class LoaderCustom extends Activity {
         if (fm.findFragmentById(android.R.id.content) == null) {
             AppListFragment list = new AppListFragment();
             fm.beginTransaction().add(android.R.id.content, list).commit();
+        } else {
+            Log.i(TAG, "There is already an android.R.id.content Fragment");
         }
     }
 
@@ -83,6 +97,7 @@ public class LoaderCustom extends Activity {
     /**
      * This class holds the per-item data in our Loader.
      */
+    @SuppressWarnings("WeakerAccess")
     public static class AppEntry {
         public AppEntry(AppListLoader loader, ApplicationInfo info) {
             mLoader = loader;
@@ -124,7 +139,8 @@ public class LoaderCustom extends Activity {
                     android.R.drawable.sym_def_app_icon);
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return mLabel;
         }
 
@@ -211,6 +227,7 @@ public class LoaderCustom extends Activity {
     /**
      * A custom Loader that loads all of the installed applications.
      */
+    @SuppressWarnings("WeakerAccess")
     public static class AppListLoader extends AsyncTaskLoader<List<AppEntry>> {
         final InterestingConfigChanges mLastConfig = new InterestingConfigChanges();
         final PackageManager mPm;
@@ -375,6 +392,7 @@ public class LoaderCustom extends Activity {
 
 
 
+    @SuppressWarnings("WeakerAccess")
     public static class AppListAdapter extends ArrayAdapter<AppEntry> {
         private final LayoutInflater mInflater;
 
@@ -393,8 +411,9 @@ public class LoaderCustom extends Activity {
         /**
          * Populate new items in the list.
          */
+        @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             View view;
 
             if (convertView == null) {
@@ -404,6 +423,7 @@ public class LoaderCustom extends Activity {
             }
 
             AppEntry item = getItem(position);
+            //noinspection ConstantConditions
             ((ImageView)view.findViewById(R.id.icon)).setImageDrawable(item.getIcon());
             ((TextView)view.findViewById(R.id.text)).setText(item.getLabel());
 
