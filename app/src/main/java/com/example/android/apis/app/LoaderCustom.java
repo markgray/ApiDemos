@@ -104,12 +104,12 @@ public class LoaderCustom extends Activity {
      */
     @SuppressWarnings("WeakerAccess")
     public static class AppEntry {
-        private final AppListLoader mLoader;
-        private final ApplicationInfo mInfo;
-        private final File mApkFile;
-        private String mLabel;
-        private Drawable mIcon;
-        private boolean mMounted;
+        private final AppListLoader mLoader; // AppListLoader which created us using "this"
+        private final ApplicationInfo mInfo; // ApplicationInfo for package we are assigned to
+        private final File mApkFile; // Full path to the base APK for the package
+        private String mLabel; // Application label as discovered by the method loadLabel
+        private Drawable mIcon; // Icon loaded from application apk by the method getIcon
+        private boolean mMounted; // Flag indicating whether we found an apk for the package
 
         public AppEntry(AppListLoader loader, ApplicationInfo info) {
             mLoader = loader;
@@ -175,6 +175,7 @@ public class LoaderCustom extends Activity {
      */
     public static final Comparator<AppEntry> ALPHA_COMPARATOR = new Comparator<AppEntry>() {
         private final Collator sCollator = Collator.getInstance();
+
         @Override
         public int compare(AppEntry object1, AppEntry object2) {
             return sCollator.compare(object1.getLabel(), object2.getLabel());
@@ -192,8 +193,8 @@ public class LoaderCustom extends Activity {
         boolean applyNewConfig(Resources res) {
             int configChanges = mLastConfiguration.updateFrom(res.getConfiguration());
             boolean densityChanged = mLastDensity != res.getDisplayMetrics().densityDpi;
-            if (densityChanged || (configChanges&(ActivityInfo.CONFIG_LOCALE
-                    |ActivityInfo.CONFIG_UI_MODE|ActivityInfo.CONFIG_SCREEN_LAYOUT)) != 0) {
+            if (densityChanged || (configChanges & (ActivityInfo.CONFIG_LOCALE
+                    | ActivityInfo.CONFIG_UI_MODE | ActivityInfo.CONFIG_SCREEN_LAYOUT)) != 0) {
                 mLastDensity = res.getDisplayMetrics().densityDpi;
                 return true;
             }
@@ -260,7 +261,7 @@ public class LoaderCustom extends Activity {
             //noinspection WrongConstant
             List<ApplicationInfo> apps = mPm.getInstalledApplications(
                     PackageManager.GET_UNINSTALLED_PACKAGES |
-                    PackageManager.GET_DISABLED_COMPONENTS);
+                            PackageManager.GET_DISABLED_COMPONENTS);
             if (apps == null) {
                 apps = new ArrayList<>();
             }
@@ -269,7 +270,7 @@ public class LoaderCustom extends Activity {
 
             // Create corresponding array of entries and load their labels.
             List<AppEntry> entries = new ArrayList<>(apps.size());
-            for (int i=0; i<apps.size(); i++) {
+            for (int i = 0; i < apps.size(); i++) {
                 AppEntry entry = new AppEntry(this, apps.get(i));
                 entry.loadLabel(context);
                 entries.add(entry);
@@ -397,14 +398,13 @@ public class LoaderCustom extends Activity {
     }
 
 
-
     @SuppressWarnings("WeakerAccess")
     public static class AppListAdapter extends ArrayAdapter<AppEntry> {
         private final LayoutInflater mInflater;
 
         public AppListAdapter(Context context) {
             super(context, android.R.layout.simple_list_item_2);
-            mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
         public void setData(List<AppEntry> data) {
@@ -430,8 +430,8 @@ public class LoaderCustom extends Activity {
 
             AppEntry item = getItem(position);
             //noinspection ConstantConditions
-            ((ImageView)view.findViewById(R.id.icon)).setImageDrawable(item.getIcon());
-            ((TextView)view.findViewById(R.id.text)).setText(item.getLabel());
+            ((ImageView) view.findViewById(R.id.icon)).setImageDrawable(item.getIcon());
+            ((TextView) view.findViewById(R.id.text)).setText(item.getLabel());
 
             return view;
         }
