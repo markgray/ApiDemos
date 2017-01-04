@@ -74,7 +74,13 @@ public class LoaderCustom extends Activity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * onCreate, Then we retrieve a handle for the FragmentManager for interacting with fragments
-     * associated with this activity to {@code FragmentManager fm}
+     * associated with this activity to {@code FragmentManager fm}. Then if when using {@code fm} to
+     * find a Fragment with the ID android.R.id.content we find none (first time running), we create
+     * a new instance of our Fragment {@code AppListFragment list}, use {@code fm} to start a new
+     * {@code FragmentTransaction} which we use to add {@code list} to the activity state with the
+     * ID android.R.id.content, and then commit the {@code FragmentTransaction}. If {@code fm} did
+     * find a Fragment with ID android.R.id.content then we are being recreated after an orientation
+     * change and need do nothing.
      *
      * @param savedInstanceState we do not override onSaveInstanceState so do not use
      */
@@ -93,12 +99,18 @@ public class LoaderCustom extends Activity {
         }
     }
 
-
     /**
      * This class holds the per-item data in our Loader.
      */
     @SuppressWarnings("WeakerAccess")
     public static class AppEntry {
+        private final AppListLoader mLoader;
+        private final ApplicationInfo mInfo;
+        private final File mApkFile;
+        private String mLabel;
+        private Drawable mIcon;
+        private boolean mMounted;
+
         public AppEntry(AppListLoader loader, ApplicationInfo info) {
             mLoader = loader;
             mInfo = info;
@@ -156,13 +168,6 @@ public class LoaderCustom extends Activity {
                 }
             }
         }
-
-        private final AppListLoader mLoader;
-        private final ApplicationInfo mInfo;
-        private final File mApkFile;
-        private String mLabel;
-        private Drawable mIcon;
-        private boolean mMounted;
     }
 
     /**
@@ -252,7 +257,8 @@ public class LoaderCustom extends Activity {
         @Override
         public List<AppEntry> loadInBackground() {
             // Retrieve all known applications.
-            @SuppressWarnings("WrongConstant") List<ApplicationInfo> apps = mPm.getInstalledApplications(
+            //noinspection WrongConstant
+            List<ApplicationInfo> apps = mPm.getInstalledApplications(
                     PackageManager.GET_UNINSTALLED_PACKAGES |
                     PackageManager.GET_DISABLED_COMPONENTS);
             if (apps == null) {
