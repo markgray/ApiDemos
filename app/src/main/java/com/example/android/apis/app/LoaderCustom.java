@@ -111,21 +111,49 @@ public class LoaderCustom extends Activity {
         private Drawable mIcon; // Icon loaded from application apk by the method getIcon
         private boolean mMounted; // Flag indicating whether we found an apk for the package
 
+        /**
+         * Constructor for an instance holding {@code ApplicationInfo info} describing a particular
+         * package. We initialize our field {@code AppListLoader mLoader} with the value of our
+         * parameter {@code AppListLoader loader}, and our field {@code ApplicationInfo mInfo} with
+         * the value of our parameter {@code ApplicationInfo info}. Finally we initialize our field
+         * {@code File mApkFile} with a new {@code File} instance derived from the pathname given in
+         * the field {@code info.sourceDir} (full path to the base APK for the application).
+         *
+         * @param loader "this" when called in our {@code AppListLoader} background thread
+         * @param info   one of the {@code ApplicationInfo} instances of the list that is returned
+         *               from the call to {@code PackageManager.getInstalledApplications}
+         */
         public AppEntry(AppListLoader loader, ApplicationInfo info) {
             mLoader = loader;
             mInfo = info;
             mApkFile = new File(info.sourceDir);
         }
 
+        /**
+         * Getter method for our field {@code ApplicationInfo mInfo}, simply returns {@code mInfo}.
+         *
+         * @return contents of our field {@code ApplicationInfo mInfo}
+         */
         @SuppressWarnings("unused")
         public ApplicationInfo getApplicationInfo() {
             return mInfo;
         }
 
+        /**
+         * Getter method for our field {@code String mLabel}, simply returns {@code mLabel}.
+         *
+         * @return contents of our field {@code String mLabel}
+         */
         public String getLabel() {
             return mLabel;
         }
 
+        /**
+         * Getter method for our field {@code Drawable mIcon}
+         *
+         * @return either the contents of our field {@code Drawable mIcon} or the system default app
+         * icon android.R.drawable.sym_def_app_icon
+         */
         public Drawable getIcon() {
             if (mIcon == null) {
                 if (mApkFile.exists()) {
@@ -147,8 +175,9 @@ public class LoaderCustom extends Activity {
             }
 
             //noinspection deprecation
-            return mLoader.getContext().getResources().getDrawable(
-                    android.R.drawable.sym_def_app_icon);
+            return mLoader.getContext()
+                    .getResources()
+                    .getDrawable(android.R.drawable.sym_def_app_icon);
         }
 
         @Override
