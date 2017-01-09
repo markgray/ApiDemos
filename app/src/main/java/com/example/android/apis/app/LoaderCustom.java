@@ -149,7 +149,26 @@ public class LoaderCustom extends Activity {
         }
 
         /**
-         * Getter method for our field {@code Drawable mIcon}
+         * Getter method for our field {@code Drawable mIcon} (loading it from the apk or supplying
+         * a default icon if necessary.)
+         * <p>
+         * If the current value of {{@code Drawable mIcon}} is null (our first time being called, or
+         * the apk was not found to load an Icon from) we check to see if our {@code File mApkFile}
+         * exists, and if it does we set {@code mIcon} to the drawable returned by calling the method
+         * {@code loadIcon} using our instance of {@code ApplicationInfo mInfo} and return
+         * {@code  Drawable mIcon} to the caller. If the {@code File mApkFile} does not exist we set
+         * our flag {@code boolean mMounted} to false and fall through to return the system drawable
+         * android.R.drawable.sym_def_app_icon. (Never setting {@code mIcon} notice, so the same code
+         * path will likely be followed again -- might be more efficient to set {@code mIcon} to the
+         * default icon for the next time, or does this logic allow for an apk file to suddenly
+         * appear between calls to this method?)
+         * <p>
+         * If {@code mIcon} is not null, we check to see if our flag {@code boolean mMounted} is false
+         * and if so we check to see if our {@code File mApkFile} exists, and if it does we set our
+         * flag {@code boolean mMounted} to true, set  {@code mIcon} to the drawable returned by
+         * calling the method {@code loadIcon} using our instance of {@code ApplicationInfo mInfo}
+         * and return {@code  Drawable mIcon} to the caller. If {@code mMounted} was true we simply
+         * return {@code mIcon} to the caller.
          *
          * @return either the contents of our field {@code Drawable mIcon} or the system default app
          * icon android.R.drawable.sym_def_app_icon
@@ -180,6 +199,7 @@ public class LoaderCustom extends Activity {
                     .getDrawable(android.R.drawable.sym_def_app_icon);
         }
 
+        
         @Override
         public String toString() {
             return mLabel;
