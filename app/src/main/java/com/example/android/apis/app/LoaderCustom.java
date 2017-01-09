@@ -199,12 +199,27 @@ public class LoaderCustom extends Activity {
                     .getDrawable(android.R.drawable.sym_def_app_icon);
         }
 
-        
+        /**
+         * Returns a string containing a concise, human-readable description of this object, which
+         * in our case is the field {@code String mLabel} which is set by our method {@code loadLabel}.
+         *
+         * @return a printable representation of this object, in our case the field {@code String mLabel}
+         * which is the current textual label associated with the application we describe, or the
+         * packageName if none could be loaded.
+         */
         @Override
         public String toString() {
             return mLabel;
         }
 
+        /**
+         * Makes sure our field {@code String mLabel} is loaded, either from the apk, or the contents
+         * of the field {@code packageName} of our field {@code ApplicationInfo mInfo}.
+         *
+         * @param context traces back to the an application context retrieved from the Context
+         *                passed to the constructor, which is called with {@code getActivity()} in
+         *                our case
+         */
         void loadLabel(Context context) {
             if (mLabel == null || !mMounted) {
                 if (!mApkFile.exists()) {
