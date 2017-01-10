@@ -215,6 +215,18 @@ public class LoaderCustom extends Activity {
         /**
          * Makes sure our field {@code String mLabel} is loaded, either from the apk, or the contents
          * of the field {@code packageName} of our field {@code ApplicationInfo mInfo}.
+         * <p>
+         * If {@code String mLabel} is currently null, or the apk has not been mounted (our flag
+         * {@code boolean mMounted} is false) we check to see if the {@code File mApkFile} exists
+         * and if it does not we set {@code mMounted} to false and set {@code mLabel} to the contents
+         * of the {@code packageName} field our our field {@code ApplicationInfo mInfo}. If the apk
+         * file does exist we set {@code mMounted} to true and try to load the {@code CharSequence label}
+         * from the apk. If successful we set {@code mLabel} to the String value of {@code label},
+         * otherwise we set {@code mLabel} to the contents of the {@code packageName} field our our
+         * field {@code ApplicationInfo mInfo}.
+         * <p>
+         * If {@code String mLabel} is currently not null, and the apk has been mounted (our flag
+         * {@code boolean mMounted} is true) we do nothing.
          *
          * @param context traces back to the an application context retrieved from the Context
          *                passed to the constructor, which is called with {@code getActivity()} in
@@ -235,11 +247,37 @@ public class LoaderCustom extends Activity {
     }
 
     /**
-     * Perform alphabetical comparison of application entry objects.
+     * Perform alphabetical comparison of application {@code AppEntry} objects.
      */
     public static final Comparator<AppEntry> ALPHA_COMPARATOR = new Comparator<AppEntry>() {
+        /**
+         *  Collator object for the default locale. 
+         */
         private final Collator sCollator = Collator.getInstance();
 
+        /**
+         * Compares the two specified {@code AppEntry} Objects to determine their relative ordering.
+         * The ordering implied by the return value of this method for all possible pairs of
+         * {@code (object1, object2)} should form an <i>equivalence relation</i>.
+         * This means that
+         * <ul>
+         * <li>{@code compare(a,a)} returns zero for all {@code a}</li>
+         * <li>the sign of {@code compare(a,b)} must be the opposite of the sign of {@code compare(b,a)}
+         * for all pairs of (a,b)</li>
+         * <li>From {@code compare(a,b) > 0} and {@code compare(b,c) > 0} it must follow
+         * {@code compare(a,c) > 0} for all possible combinations of {@code (a,b,c)}</li>
+         * </ul>
+         *
+         * We simply return the results of applying our {@code Collator sCollator} to the labels
+         * fetched from {@code object1} and {@code object2} respectively, thereby defining an
+         * alphabetical ordering or {@code AppEntry} Objects.
+         *
+         * @param object1 an {@code AppEntry}.
+         * @param object2 a second {@code AppEntry} to compare with {@code object1}.
+         * @return an integer < 0 if {@code object1} is less than {@code object2}, 0 if they are
+         *         equal, and > 0 if {@code object1} is greater than {@code object2}.
+         * @throws ClassCastException if objects are not of the correct type.
+         */
         @Override
         public int compare(AppEntry object1, AppEntry object2) {
             return sCollator.compare(object1.getLabel(), object2.getLabel());
