@@ -270,7 +270,8 @@ public class LoaderCustom extends Activity {
          *
          * We simply return the results of applying our {@code Collator sCollator} to the labels
          * fetched from {@code object1} and {@code object2} respectively, thereby defining an
-         * alphabetical ordering or {@code AppEntry} Objects.
+         * alphabetical ordering or {@code AppEntry} Objects based on the alphabetical ordering of
+         * their labels as fetched from their field {@code String mLabel}.
          *
          * @param object1 an {@code AppEntry}.
          * @param object2 a second {@code AppEntry} to compare with {@code object1}.
