@@ -286,11 +286,27 @@ public class LoaderCustom extends Activity {
     };
 
     /**
-     * Helper for determining if the configuration has changed in an interesting
-     * way so we need to rebuild the app list.
+     * Helper for determining if the configuration has changed in an interesting way so we need to
+     * rebuild the app list. To use this class one creates an instance of this class when your loader
+     * class is instantiated such as is done in our {@code AppListLoader} class:
+     * <ul>{@code InterestingConfigChanges mLastConfig}</ul>
+     * Then when you need to decide whether a configuration change has necessitated a reload of your
+     * data, call {@code mLastConfig.applyNewConfig(getContext().getResources())}, and if the result
+     * returned is true, a change has occurred in screen density, or the {@code Configuration} fields
+     * for CONFIG_LOCALE, CONFIG_UI_MODE, and/or CONFIG_SCREEN_LAYOUT have changed since last updated.
+     * If the result is false, no interesting Configuration changes have occurred.
      */
     public static class InterestingConfigChanges {
+        /**
+         * Starts out as an invalid {@code Configuration} and is updated using the current
+         * {@code Resources} by our method {@code applyNewConfig}
+         */
         final Configuration mLastConfiguration = new Configuration();
+        
+        /**
+         * The screen density expressed as dots-per-inch. May be either DENSITY_LOW, DENSITY_MEDIUM,
+         * or DENSITY_HIGH.
+         */
         int mLastDensity;
 
         boolean applyNewConfig(Resources res) {
