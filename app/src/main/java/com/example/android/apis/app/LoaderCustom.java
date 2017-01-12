@@ -302,13 +302,24 @@ public class LoaderCustom extends Activity {
          * {@code Resources} by our method {@code applyNewConfig}
          */
         final Configuration mLastConfiguration = new Configuration();
-        
+
         /**
          * The screen density expressed as dots-per-inch. May be either DENSITY_LOW, DENSITY_MEDIUM,
          * or DENSITY_HIGH.
          */
         int mLastDensity;
 
+        /**
+         * Called to update our field {@code Configuration mLastConfiguration} with the latest values
+         * of application resources, and to determine if any changes in the configuration necessitate
+         * action on the part of the caller.
+         *
+         * @param res Class for accessing an application's resources, it is acquired by calling
+         *            {@code getContext().getResources()} in the {@code onStartLoading} callback of
+         *            {@code AppListLoader} (our custom {@code AsyncTaskLoader<List<AppEntry>>}
+         * @return true if a change has occurred which requires us to reload our list of application
+         * entries.
+         */
         boolean applyNewConfig(Resources res) {
             int configChanges = mLastConfiguration.updateFrom(res.getConfiguration());
             boolean densityChanged = mLastDensity != res.getDisplayMetrics().densityDpi;
