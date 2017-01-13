@@ -312,7 +312,15 @@ public class LoaderCustom extends Activity {
         /**
          * Called to update our field {@code Configuration mLastConfiguration} with the latest values
          * of application resources, and to determine if any changes in the configuration necessitate
-         * action on the part of the caller.
+         * action on the part of the caller. First we update our field containing the previous values
+         * of configuration {@code Configuration mLastConfiguration}, saving the bit mask of changed
+         * fields in {@code int configChanges}. Then we fetch the current display metrics for screen
+         * density in dpi, and compare it with the previous value stored {@code int mLastDensity} to
+         * set the flag {@code boolean densityChanged}. Then we check whether the density changed, or
+         * whether the bit fields for CONFIG_LOCALE, CONFIG_UI_MODE, and/or CONFIG_SCREEN_LAYOUT are
+         * set in {@code configChanges} and if so we update {@code mLastDensity} and return true to
+         * the caller in order to indicate that an "interesting config change" has occurred. Otherwise
+         * we return false to indicate that no change of interest has occurred.
          *
          * @param res Class for accessing an application's resources, it is acquired by calling
          *            {@code getContext().getResources()} in the {@code onStartLoading} callback of
@@ -333,8 +341,18 @@ public class LoaderCustom extends Activity {
     }
 
     /**
-     * Helper class to look for interesting changes to the installed apps
-     * so that the loader can be updated.
+     * Helper class to look for interesting changes to the installed apps so that the loader can be
+     * updated. It does this by registering itself as a {@code BroadcastReceiver} for the various
+     * package change broadcast {@code Intent}'s using {@code IntentFilter}'s for the actions:
+     * <ul>
+     *     <li>{@code Intent.ACTION_PACKAGE_ADDED}</li>
+     *     <li>{@code Intent.ACTION_PACKAGE_REMOVED}</li>
+     *     <li>{@code Intent.ACTION_PACKAGE_CHANGED}</li>
+     *     <li>{@code Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE}</li>
+     *     <li>{@code Intent.ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE}</li>
+     * </ul>
+     * Then it calls the {@code AppListLoader mLoader} method {@code onContentChanged} when it
+     * receives one of these {@code Intent}'s in its {@code onReceive} override.
      */
     public static class PackageIntentReceiver extends BroadcastReceiver {
         final AppListLoader mLoader;
