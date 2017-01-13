@@ -345,18 +345,27 @@ public class LoaderCustom extends Activity {
      * updated. It does this by registering itself as a {@code BroadcastReceiver} for the various
      * package change broadcast {@code Intent}'s using {@code IntentFilter}'s for the actions:
      * <ul>
-     *     <li>{@code Intent.ACTION_PACKAGE_ADDED}</li>
-     *     <li>{@code Intent.ACTION_PACKAGE_REMOVED}</li>
-     *     <li>{@code Intent.ACTION_PACKAGE_CHANGED}</li>
-     *     <li>{@code Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE}</li>
-     *     <li>{@code Intent.ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE}</li>
+     * <li>{@code Intent.ACTION_PACKAGE_ADDED}</li>
+     * <li>{@code Intent.ACTION_PACKAGE_REMOVED}</li>
+     * <li>{@code Intent.ACTION_PACKAGE_CHANGED}</li>
+     * <li>{@code Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE}</li>
+     * <li>{@code Intent.ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE}</li>
      * </ul>
      * Then it calls the {@code AppListLoader mLoader} method {@code onContentChanged} when it
      * receives one of these {@code Intent}'s in its {@code onReceive} override.
      */
     public static class PackageIntentReceiver extends BroadcastReceiver {
-        final AppListLoader mLoader;
+        final AppListLoader mLoader; // Loader that is interested in changes made to installed apps.
 
+        /**
+         * Constructor that initializes our field {@code AppListLoader mLoader} with the parameter
+         * passed it, and registers itself to receive the broadcast {@code Intent}'s we are interested
+         * in.
+         *
+         * @param loader used to obtain {@code Context} where needed and to call the callback method
+         *               {@code onContentChanged} when the {@code AppListLoader} needs to reload its
+         *               data.
+         */
         public PackageIntentReceiver(AppListLoader loader) {
             mLoader = loader;
             IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
