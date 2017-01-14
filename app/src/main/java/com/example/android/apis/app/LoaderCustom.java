@@ -351,8 +351,9 @@ public class LoaderCustom extends Activity {
      * <li>{@code Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE}</li>
      * <li>{@code Intent.ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE}</li>
      * </ul>
-     * Then it calls the {@code AppListLoader mLoader} method {@code onContentChanged} when it
-     * receives one of these {@code Intent}'s in its {@code onReceive} override.
+     * Then it calls the {@code AppListLoader mLoader} method {@code onContentChanged} (which it
+     * inherits unchanged from its superclass {@code AsyncTaskLoader}) when it receives one of these
+     * {@code Intent}'s in its {@code onReceive} override.
      */
     public static class PackageIntentReceiver extends BroadcastReceiver {
         final AppListLoader mLoader; // Loader that is interested in changes made to installed apps.
@@ -360,10 +361,20 @@ public class LoaderCustom extends Activity {
         /**
          * Constructor that initializes our field {@code AppListLoader mLoader} with the parameter
          * passed it, and registers itself to receive the broadcast {@code Intent}'s we are interested
-         * in.
+         * in. First we save our parameter {@code AppListLoader loader} which we will use later on
+         * in our field {@code AppListLoader mLoader}. Then we create {@code IntentFilter filter} for
+         * the action ACTION_PACKAGE_ADDED, then add the additional actions ACTION_PACKAGE_REMOVED,
+         * and ACTION_PACKAGE_CHANGED to {@code filter}. We use our field {@code AppListLoader mLoader}
+         * to obtain its {@code Context} which we use to register "this" as a {@code BroadcastReceiver}
+         * for the actions in {@code filter}. We create an empty filter {@code IntentFilter sdFilter}
+         * and add to this empty filter the actions ACTION_EXTERNAL_APPLICATIONS_AVAILABLE and
+         * ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE. We use our field {@code AppListLoader mLoader}
+         * to obtain its {@code Context} which we use to register "this" as a {@code BroadcastReceiver}
+         * for the actions in {@code sdFilter}.
          *
          * @param loader used to obtain {@code Context} where needed and to call the callback method
-         *               {@code onContentChanged} when the {@code AppListLoader} needs to reload its
+         *               {@code onContentChanged} (which it  inherits unchanged from its superclass
+         *               {@code AsyncTaskLoader}) when the {@code AppListLoader} needs to reload its
          *               data.
          */
         public PackageIntentReceiver(AppListLoader loader) {
@@ -380,6 +391,15 @@ public class LoaderCustom extends Activity {
             mLoader.getContext().registerReceiver(this, sdFilter);
         }
 
+        /**
+         * This method is called when the BroadcastReceiver is receiving an Intent broadcast.
+         * We merely inform {@code AppListLoader mLoader} that the data it is handling may have
+         * changed by calling its callback method {@code onContentChanged} (which it inherits
+         * unchanged from its superclass {@code AsyncTaskLoader}).
+         *
+         * @param context The Context in which the receiver is running.
+         * @param intent The Intent being received.
+         */
         @Override
         public void onReceive(Context context, Intent intent) {
             // Tell the loader about the change.
@@ -392,10 +412,27 @@ public class LoaderCustom extends Activity {
      */
     @SuppressWarnings("WeakerAccess")
     public static class AppListLoader extends AsyncTaskLoader<List<AppEntry>> {
+        /**
+         * Helper for determining if the configuration has changed in a way that may require us
+         * to redisplay it.
+         */
         final InterestingConfigChanges mLastConfig = new InterestingConfigChanges();
+        /**
+         * {@code PackageManager} instance we use to retrieve package information for the installed
+         * packages.
+         */
         final PackageManager mPm;
-
+        /**
+         * Our list of {@code AppEntry} Objects describing the installed applications which we supply
+         * to those using us as a {@code Loader}.
+         */
         List<AppEntry> mApps;
+        /**
+         * Helper class to look for interesting changes to the installed apps so that the loader can be
+         * updated, it registers itself for package changing broadcast Intents and calls our super's
+         * method {@code onContentChanged} when it receives on in its {@code onReceive} method.
+         *
+         */
         PackageIntentReceiver mPackageObserver;
 
         public AppListLoader(Context context) {
