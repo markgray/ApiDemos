@@ -35,6 +35,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.OperationCanceledException;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -412,29 +413,40 @@ public class LoaderCustom extends Activity {
      */
     @SuppressWarnings("WeakerAccess")
     public static class AppListLoader extends AsyncTaskLoader<List<AppEntry>> {
+
         /**
          * Helper for determining if the configuration has changed in a way that may require us
          * to redisplay it.
          */
         final InterestingConfigChanges mLastConfig = new InterestingConfigChanges();
+
         /**
          * {@code PackageManager} instance we use to retrieve package information for the installed
          * packages.
          */
         final PackageManager mPm;
+
         /**
          * Our list of {@code AppEntry} Objects describing the installed applications which we supply
          * to those using us as a {@code Loader}.
          */
         List<AppEntry> mApps;
+
         /**
          * Helper class to look for interesting changes to the installed apps so that the loader can be
          * updated, it registers itself for package changing broadcast Intents and calls our super's
-         * method {@code onContentChanged} when it receives on in its {@code onReceive} method.
-         *
+         * method {@code onContentChanged} when it receives one in its {@code onReceive} method.
+         * (The super then arranges for new data to be loaded by calling {@code onForceLoad} which
+         * creates a new {@code LoadTask} and executes it.)
          */
         PackageIntentReceiver mPackageObserver;
 
+        /**
+         * Constructor which initializes our field {@code PackageManager mPm} with an
+         * {@code PackageManager} instance.
+         *
+         * @param context used only to pass on to our super's constructor
+         */
         public AppListLoader(Context context) {
             super(context);
 
@@ -445,9 +457,14 @@ public class LoaderCustom extends Activity {
         }
 
         /**
+         * Called on a worker thread to perform the actual load and to return
+         * the result of the load operation.
+         *
          * This is where the bulk of our work is done.  This function is
          * called in a background thread and should generate a new set of
          * data to be published by the loader.
+         *
+         * @return The result of the load operation.
          */
         @Override
         public List<AppEntry> loadInBackground() {
