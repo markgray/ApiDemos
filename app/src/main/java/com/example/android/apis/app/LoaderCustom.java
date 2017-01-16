@@ -35,7 +35,6 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.OperationCanceledException;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -399,7 +398,7 @@ public class LoaderCustom extends Activity {
          * unchanged from its superclass {@code AsyncTaskLoader}).
          *
          * @param context The Context in which the receiver is running.
-         * @param intent The Intent being received.
+         * @param intent  The Intent being received.
          */
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -457,12 +456,16 @@ public class LoaderCustom extends Activity {
         }
 
         /**
-         * Called on a worker thread to perform the actual load and to return
-         * the result of the load operation.
-         *
-         * This is where the bulk of our work is done.  This function is
-         * called in a background thread and should generate a new set of
-         * data to be published by the loader.
+         * This is where the bulk of our work is done.  This function is called in a background
+         * thread and should generate a new set of data to be published by the loader. First we
+         * use our {@code PackageManager mPm} to retrieve all known applications to our variable
+         * {@code List<ApplicationInfo> apps}. If no apps are returned (result is null) we allocate
+         * an empty {@code ArrayList<>} for {@code apps}. We initialize {@code Context context} with
+         * an application context retrieved from the Context passed to the constructor. We create
+         * our return list {@code List<AppEntry> entries}, and populate it with an {@code AppEntry}
+         * for each of the {@code ApplicationInfo} instances in {@code List<ApplicationInfo> apps}.
+         * When done we sort {@code entries} using our {@code Comparator<AppEntry> ALPHA_COMPARATOR}.
+         * Finally we return {@code entries} to the caller.
          *
          * @return The result of the load operation.
          */
@@ -495,9 +498,25 @@ public class LoaderCustom extends Activity {
         }
 
         /**
-         * Called when there is new data to deliver to the client.  The
-         * super class will take care of delivering it; the implementation
-         * here just adds a little more logic.
+         * Called when there is new data to deliver to the client.  The super class will take care
+         * of delivering it; the implementation here just adds a little more logic. Must be called
+         * from the process's main thread.
+         * <p>
+         * First we check whether this load has been reset. That is, either the loader has not yet
+         * been started for the first time, or its reset() has been called. If so, we call our method
+         * {@code onReleaseResources(apps)} if {@code apps} is currently holding data we do not need.
+         * (Since we are using only a {@code List}, {@code onReleaseResources} does nothing, but in
+         * an app using a cursor it would close the cursor.)
+         * <p>
+         * We save our field {@code List<AppEntry> mApps} in {@code List<AppEntry> oldApps} and set
+         * {@code mApps} to the value of our parameter {@code List<AppEntry> apps}. If our load has
+         * been started (i.e. startLoading() has been called and no calls to stopLoading() or reset()
+         * have yet been made) we call our super's implementation of {@code deliverResult} to do the
+         * actual delivering of the data in {@code List<AppEntry> apps} to the client. Finally if
+         * {@code oldApps} is not null, we call our method {@code onReleaseResources(oldApps)} to
+         * release resources (again, not needed in our case).
+         *
+         * @param apps the result of the load
          */
         @Override
         public void deliverResult(List<AppEntry> apps) {
@@ -508,6 +527,7 @@ public class LoaderCustom extends Activity {
                     onReleaseResources(apps);
                 }
             }
+
             List<AppEntry> oldApps = mApps;
             mApps = apps;
 
@@ -526,7 +546,10 @@ public class LoaderCustom extends Activity {
         }
 
         /**
-         * Handles a request to start the Loader.
+         * Handles a request to start the Loader. Subclasses of {@code Loader} (via our extension
+         * of {@code AsyncTaskLoader}) must implement this to take care of loading their data, as
+         * per {@link #startLoading()}. This is not called by clients directly, but as a result of
+         * a call to {@link #startLoading()}.
          */
         @Override
         protected void onStartLoading() {
