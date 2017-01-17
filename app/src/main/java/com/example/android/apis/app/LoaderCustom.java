@@ -35,6 +35,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.OperationCanceledException;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -61,6 +62,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static android.util.Log.i;
+
 /**
  * Demonstration of the implementation of a custom Loader. Shows how to implement a custom
  * AsyncTaskLoader, it uses the system function PackageManager.getInstalledApplications to
@@ -69,7 +72,7 @@ import java.util.List;
  */
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class LoaderCustom extends Activity {
-    String TAG = "LoaderCustom";
+    static String TAG = "LoaderCustom";
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -95,7 +98,7 @@ public class LoaderCustom extends Activity {
             AppListFragment list = new AppListFragment();
             fm.beginTransaction().add(android.R.id.content, list).commit();
         } else {
-            Log.i(TAG, "There is already an android.R.id.content Fragment");
+            i(TAG, "There is already an android.R.id.content Fragment");
         }
     }
 
@@ -550,6 +553,20 @@ public class LoaderCustom extends Activity {
          * of {@code AsyncTaskLoader}) must implement this to take care of loading their data, as
          * per {@link #startLoading()}. This is not called by clients directly, but as a result of
          * a call to {@link #startLoading()}.
+         * <p>
+         * If we currently have a result available, we deliver it immediately by calling our override
+         * of  {@code deliverResult(mApps)}. Then if it is currently null, we create an instance of
+         * {@code PackageIntentReceiver mPackageObserver} which will register us for broadcast Intents
+         * for changes in the installed packages which will (probably) invalidate our results thereby
+         * necessitating a forced reload. Then we check whether configuration changes might have
+         * occurred which would require our data to be redisplayed and save the result in the flag
+         * {@code boolean configChange}.
+         * <p>
+         * Finally based on whether the current flag indicating whether the loader's content had
+         * changed while it was stopped is set, or {@code mApps} is still null, or {@code configChange}
+         * is true we force an asynchronous load by calling {@code forceLoad()}. This will ignore a
+         * previously loaded data set and load a new one. It does this by calling through to the
+         * implementation's {@code onForceLoad()}.
          */
         @Override
         protected void onStartLoading() {
@@ -576,15 +593,28 @@ public class LoaderCustom extends Activity {
         }
 
         /**
-         * Handles a request to stop the Loader.
+         * Subclasses of {@code Loader} must implement this to take care of stopping their loader,
+         * as per {@link #stopLoading()}.  This is not called by clients directly, but as a result
+         * of a call to {@link #stopLoading()}. This will always be called from the process's main
+         * thread. We simply call the method {@code cancelLoad()}
          */
         @Override
         protected void onStopLoading() {
             // Attempt to cancel the current load task if possible.
-            cancelLoad();
+            if (cancelLoad()) {
+                Log.i(TAG, "cancelLoad() returned true");
+            } else {
+                Log.i(TAG, "cancelLoad() returned false");
+            }
+
         }
 
         /**
+         * Called if the task was canceled before it was completed.  Gives the class a chance
+         * to clean up post-cancellation and to properly dispose of the result.
+         *
+         * @param apps The value that was returned by {@link #loadInBackground}, or null
+         * if the task threw {@link OperationCanceledException}.
          * Handles a request to cancel a load.
          */
         @Override
@@ -761,7 +791,7 @@ public class LoaderCustom extends Activity {
         @Override
         public void onListItemClick(ListView l, View v, int position, long id) {
             // Insert desired behavior here.
-            Log.i("LoaderCustom", "Item clicked: " + id);
+            i("LoaderCustom", "Item clicked: " + id);
         }
 
         @Override
