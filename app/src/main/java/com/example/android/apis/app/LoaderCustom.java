@@ -611,11 +611,13 @@ public class LoaderCustom extends Activity {
 
         /**
          * Called if the task was canceled before it was completed.  Gives the class a chance
-         * to clean up post-cancellation and to properly dispose of the result.
+         * to clean up post-cancellation and to properly dispose of the result. First we call
+         * through to our super's implementation of {@code onCanceled}, then we call our method
+         * {@code onReleaseResources} (which does nothing, but serves as an example in case the
+         * code is reused in an application which has resources which need to released.)
          *
          * @param apps The value that was returned by {@link #loadInBackground}, or null
-         * if the task threw {@link OperationCanceledException}.
-         * Handles a request to cancel a load.
+         *             if the task threw {@link OperationCanceledException}.
          */
         @Override
         public void onCanceled(List<AppEntry> apps) {
@@ -627,7 +629,13 @@ public class LoaderCustom extends Activity {
         }
 
         /**
-         * Handles a request to completely reset the Loader.
+         * Handles a request to completely reset the Loader. First we call through to our super's
+         * implementation of {@code onReset}, then we call our override of {@code onStopLoading} to
+         * cancel the load, then we call our method {@code onReleaseResources} (which does nothing,
+         * but serves as an example in case the code is reused in an application which has resources
+         * which need to released.) Finally if {@code PackageIntentReceiver mPackageObserver} is
+         * listening for package change broadcasts, we unregister {@code mPackageObserver} and set
+         * it to null.
          */
         @Override
         protected void onReset() {
@@ -651,8 +659,9 @@ public class LoaderCustom extends Activity {
         }
 
         /**
-         * Helper function to take care of releasing resources associated
-         * with an actively loaded data set.
+         * Helper function to take care of releasing resources associated with an actively loaded
+         * data set. For a simple {@code List<>} there is nothing to do, so we do nothing.  For
+         * something like a Cursor, we would close it here.
          */
         @SuppressWarnings("UnusedParameters")
         protected void onReleaseResources(List<AppEntry> apps) {
@@ -661,7 +670,10 @@ public class LoaderCustom extends Activity {
         }
     }
 
-
+    /**
+     * {@code ListAdapter} used as cursor to populate the {@code ListFragment}'s list of our Fragment
+     * {@code AppListFragment}
+     */
     @SuppressWarnings("WeakerAccess")
     public static class AppListAdapter extends ArrayAdapter<AppEntry> {
         private final LayoutInflater mInflater;
