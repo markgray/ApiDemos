@@ -676,8 +676,22 @@ public class LoaderCustom extends Activity {
      */
     @SuppressWarnings("WeakerAccess")
     public static class AppListAdapter extends ArrayAdapter<AppEntry> {
+
+        /**
+         * {@code LayoutInflater} created in constructor using the {@code Context} passed it to get
+         * the handle to the system-level service LAYOUT_INFLATER_SERVICE which returns a
+         * {@code LayoutInflater} for inflating layout resources in this context. {@code mInflater}
+         * is then used in our {@code getView} override when it needs to inflate the layout file
+         * for a {@code List} item {@code View}.
+         */
         private final LayoutInflater mInflater;
 
+        /**
+         * Constructor for a new instance of {@code AppListAdapter}.
+         *
+         * @param context This is the {@code Context} to use, in our case it is the {@code Activity}
+         *                returned by {@code getActivity()}
+         */
         public AppListAdapter(Context context) {
             super(context, android.R.layout.simple_list_item_2);
             mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
