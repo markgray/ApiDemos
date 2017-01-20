@@ -687,7 +687,11 @@ public class LoaderCustom extends Activity {
         private final LayoutInflater mInflater;
 
         /**
-         * Constructor for a new instance of {@code AppListAdapter}.
+         * Constructor for a new instance of {@code AppListAdapter}. First we call through to our super's
+         * constructor supplying a stock system layout for a {@code TwoLineListItem} (for no apparent
+         * reason since we use our own layout file for our list item Views), and then we initialize our
+         * field {@code LayoutInflater mInflater} with the {@code LayoutInflater} returned from the
+         * system-level service LAYOUT_INFLATER_SERVICE.
          *
          * @param context This is the {@code Context} to use, in our case it is the {@code Activity}
          *                returned by {@code getActivity()}
@@ -697,6 +701,14 @@ public class LoaderCustom extends Activity {
             mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
+        /**
+         * Sets the contents of our {@code ArrayAdapter}. First we remove all elements from our list,
+         * and then if our parameter {@code List<AppEntry> data} is not null, we add all the elements
+         * in {@code data} to the end of our {@code ArrayAdapter}.
+         *
+         * @param data list of package information returned from package manager by our background
+         *             loader (or null if it is being invalidated after a loader reset.)
+         */
         public void setData(List<AppEntry> data) {
             clear();
             if (data != null) {
@@ -705,7 +717,20 @@ public class LoaderCustom extends Activity {
         }
 
         /**
-         * Populate new items in the list.
+         * Get a View that displays the data at the specified position in the data set. First we declare
+         * a {@code View view}, and if the {@code View convertView} passed us is null we use our field
+         * {@code LayoutInflater mInflater} to inflate list item layout file R.layout.list_item_icon_text
+         * into {@code view}. If {@code convertView} is not null we recycle it by setting {@code view} to
+         * it. Next we fetch the item at {@code int position} to {@code AppEntry item}, set the
+         * {@code ImageView} at R.id.icon in {@code view} to the icon associated with the data in
+         * {@code item} and set the text of the {@code TextView} R.id.text in {@code view} to the
+         * label associated with {@code item}. Finally we return {@code view} to the caller.
+         *
+         * @param position    The position of the item within the adapter's data set of the item
+         *                    whose view we want.
+         * @param convertView The old view to reuse, if possible.
+         * @param parent      The parent that this view will eventually be attached to
+         * @return A View corresponding to the data at the specified position.
          */
         @NonNull
         @Override
@@ -727,19 +752,35 @@ public class LoaderCustom extends Activity {
         }
     }
 
+    /**
+     * The {@code ListFragment} which displays the data from our custom {@code AppListAdapter} in
+     * its list.
+     */
     public static class AppListFragment extends ListFragment
             implements OnQueryTextListener, OnCloseListener,
             LoaderManager.LoaderCallbacks<List<AppEntry>> {
 
-        // This is the Adapter being used to display the list's data.
+        /**
+         * This is the Adapter being used to display the list's data.
+         */
         AppListAdapter mAdapter;
 
-        // The SearchView for doing filtering.
+        /**
+         * The SearchView for doing filtering.
+         */
         SearchView mSearchView;
 
-        // If non-null, this is the current filter the user has provided.
+        /**
+         * If non-null, this is the current filter the user has provided.
+         */
         String mCurFilter;
 
+        /**
+         * Called when the fragment's activity has been created and this fragment's view hierarchy
+         * instantiated. First we call through to our super's implementation of {@code onActivityCreated}.
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+         */
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
