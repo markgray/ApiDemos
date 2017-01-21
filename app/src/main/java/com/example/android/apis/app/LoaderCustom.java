@@ -778,6 +778,16 @@ public class LoaderCustom extends Activity {
         /**
          * Called when the fragment's activity has been created and this fragment's view hierarchy
          * instantiated. First we call through to our super's implementation of {@code onActivityCreated}.
+         * then we set the empty text to be shown in our {@code ListView} if we are unable to load
+         * any data. Then we report that this fragment would like to participate in populating the options
+         * menu by receiving a call to {@code onCreateOptionsMenu(Menu, MenuInflater)} and related
+         * methods. We initialize our field {@code AppListAdapter mAdapter} with an instance of our
+         * custom adapter {@code AppListAdapter} using the {@code Activity} our Fragment is associated
+         * with as the {@code Context}. and set our list adapter to {@code mAdapter}. We set our
+         * {@code ListView} to display an indeterminate progress indicator while we wait for our
+         * loader to finish loading its data. Then we initialize the loader using "this" for the
+         * {@code LoaderManager.LoaderCallbacks} parameter (so our methods {@code onCreateLoader},
+         * {@code onLoadFinished} and {@code onLoaderReset} will be called.)
          *
          * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
          */
