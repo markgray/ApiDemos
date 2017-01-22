@@ -814,13 +814,29 @@ public class LoaderCustom extends Activity {
             getLoaderManager().initLoader(0, null, this);
         }
 
+        /**
+         * Custom {@code SearchView} which clears its search text when it is collapsed.
+         */
         public static class MySearchView extends SearchView {
+
+            /**
+             * Simple constructor, just calls super's constructor.
+             *
+             * @param context Activity returned from {@code getActivity} in our case.
+             */
             public MySearchView(Context context) {
                 super(context);
             }
 
-            // The normal SearchView doesn't clear its search text when
-            // collapsed, so we will do this for it.
+            /**
+             * Called when this view is collapsed as an action view.
+             * See {@link MenuItem#collapseActionView()}.
+             *
+             * The normal SearchView doesn't clear its search text when collapsed,
+             * so we will do this for it. We set the query string in the text field
+             * to the empty String (passing false to not submit it), and then call
+             * our super's implementation of {@code onActionViewCollapsed}.
+             */
             @Override
             public void onActionViewCollapsed() {
                 setQuery("", false);
@@ -828,6 +844,24 @@ public class LoaderCustom extends Activity {
             }
         }
 
+        /**
+         * Initialize the contents of the Activity's standard options menu.  You
+         * should place your menu items in to <var>menu</var>.  For this method
+         * to be called, you must have first called {@link #setHasOptionsMenu}.  See
+         * {@link Activity#onCreateOptionsMenu(Menu) Activity.onCreateOptionsMenu}
+         * for more information.
+         *
+         * First we create a {@code MenuItem item} by adding a {@code MenuItem} with the title
+         * "search" to our {@code Menu menu} parameter. We set the ICON of {@code item} to the
+         * system drawable ic_menu_search, and set the show as action flags SHOW_AS_ACTION_IF_ROOM
+         * and SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW. We initialize our field {@code SearchView mSearchView}
+         * with a new instance of {@code MySearchView}, set its {@code OnQueryTextListener} to "this",
+         * set its {@code OnCloseListener} to "this", and set its iconified by default to true. Finally
+         * we set the action view of {@code MenuItem item} to our {@code mSearchView}.
+         *
+         * @param menu The options menu in which you place your items.
+         * @param inflater Inflater to use to inflate xml layout file (unused)
+         */
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             // Place an action bar item for searching.
