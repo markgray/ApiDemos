@@ -43,11 +43,17 @@ import android.widget.SimpleCursorAdapter;
 
 /**
  * Demonstration of the use of a CursorLoader to load and display contacts
- * data in a fragment.
+ * data in a fragment. Shows how to retain a ListFragment by calling
+ * setRetainInstance(true) in the onActivityCreated callback.
  */
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class LoaderRetained extends Activity {
 
+    /**
+     * Called when the activity is starting.
+     *
+     * @param savedInstanceState we do not override onSaveInstanceState so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +81,8 @@ public class LoaderRetained extends Activity {
         // If non-null, this is the current filter the user has provided.
         String mCurFilter;
 
-        @Override public void onActivityCreated(Bundle savedInstanceState) {
+        @Override
+        public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
 
             // In this sample we are going to use a retained fragment.
@@ -91,8 +98,8 @@ public class LoaderRetained extends Activity {
             // Create an empty adapter we will use to display the loaded data.
             mAdapter = new SimpleCursorAdapter(getActivity(),
                     android.R.layout.simple_list_item_2, null,
-                    new String[] { Contacts.DISPLAY_NAME, Contacts.CONTACT_STATUS },
-                    new int[] { android.R.id.text1, android.R.id.text2 }, 0);
+                    new String[]{Contacts.DISPLAY_NAME, Contacts.CONTACT_STATUS},
+                    new int[]{android.R.id.text1, android.R.id.text2}, 0);
             setListAdapter(mAdapter);
 
             // Start out with a progress indicator.
@@ -117,7 +124,8 @@ public class LoaderRetained extends Activity {
             }
         }
 
-        @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        @Override
+        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             // Place an action bar item for searching.
             MenuItem item = menu.add("Search");
             item.setIcon(android.R.drawable.ic_menu_search);
@@ -130,6 +138,7 @@ public class LoaderRetained extends Activity {
             item.setActionView(mSearchView);
         }
 
+        @Override
         public boolean onQueryTextChange(String newText) {
             // Called when the action bar search text has changed.  Update
             // the search filter, and restart the loader to do a new query
@@ -148,7 +157,8 @@ public class LoaderRetained extends Activity {
             return true;
         }
 
-        @Override public boolean onQueryTextSubmit(String query) {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
             // Don't care about this.
             return true;
         }
@@ -161,21 +171,23 @@ public class LoaderRetained extends Activity {
             return true;
         }
 
-        @Override public void onListItemClick(ListView l, View v, int position, long id) {
+        @Override
+        public void onListItemClick(ListView l, View v, int position, long id) {
             // Insert desired behavior here.
             Log.i("FragmentComplexList", "Item clicked: " + id);
         }
 
         // These are the Contacts rows that we will retrieve.
-        static final String[] CONTACTS_SUMMARY_PROJECTION = new String[] {
-            Contacts._ID,
-            Contacts.DISPLAY_NAME,
-            Contacts.CONTACT_STATUS,
-            Contacts.CONTACT_PRESENCE,
-            Contacts.PHOTO_ID,
-            Contacts.LOOKUP_KEY,
+        static final String[] CONTACTS_SUMMARY_PROJECTION = new String[]{
+                Contacts._ID,
+                Contacts.DISPLAY_NAME,
+                Contacts.CONTACT_STATUS,
+                Contacts.CONTACT_PRESENCE,
+                Contacts.PHOTO_ID,
+                Contacts.LOOKUP_KEY,
         };
 
+        @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             // This is called when a new Loader needs to be created.  This
             // sample only has one Loader, so we don't care about the ID.
@@ -199,6 +211,7 @@ public class LoaderRetained extends Activity {
                     Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
         }
 
+        @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             // Swap the new cursor in.  (The framework will take care of closing the
             // old cursor once we return.)
@@ -212,6 +225,7 @@ public class LoaderRetained extends Activity {
             }
         }
 
+        @Override
         public void onLoaderReset(Loader<Cursor> loader) {
             // This is called when the last Cursor provided to onLoadFinished()
             // above is about to be closed.  We need to make sure we are no

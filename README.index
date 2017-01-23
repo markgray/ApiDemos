@@ -632,8 +632,9 @@ App
 
     App/Loader/Retained                    v11 -> v14
         .app.LoaderRetained
-            Shows how to retain a ListFragment by calling setRetainInstance(true) in the
-            onActivityCreated callback.
+             Demonstration of the use of a CursorLoader to load and display contacts
+             data in a fragment. Shows how to retain a ListFragment by calling
+             setRetainInstance(true) in the onActivityCreated callback.
 
     App/Loader/Throttle                    v11
         .app.LoaderThrottle

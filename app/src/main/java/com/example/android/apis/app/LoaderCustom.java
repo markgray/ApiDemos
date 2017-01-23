@@ -831,7 +831,7 @@ public class LoaderCustom extends Activity {
             /**
              * Called when this view is collapsed as an action view.
              * See {@link MenuItem#collapseActionView()}.
-             *
+             * <p>
              * The normal SearchView doesn't clear its search text when collapsed,
              * so we will do this for it. We set the query string in the text field
              * to the empty String (passing false to not submit it), and then call
@@ -850,7 +850,7 @@ public class LoaderCustom extends Activity {
          * to be called, you must have first called {@link #setHasOptionsMenu}.  See
          * {@link Activity#onCreateOptionsMenu(Menu) Activity.onCreateOptionsMenu}
          * for more information.
-         *
+         * <p>
          * First we create a {@code MenuItem item} by adding a {@code MenuItem} with the title
          * "search" to our {@code Menu menu} parameter. We set the ICON of {@code item} to the
          * system drawable ic_menu_search, and set the show as action flags SHOW_AS_ACTION_IF_ROOM
@@ -859,7 +859,7 @@ public class LoaderCustom extends Activity {
          * set its {@code OnCloseListener} to "this", and set its iconified by default to true. Finally
          * we set the action view of {@code MenuItem item} to our {@code mSearchView}.
          *
-         * @param menu The options menu in which you place your items.
+         * @param menu     The options menu in which you place your items.
          * @param inflater Inflater to use to inflate xml layout file (unused)
          */
         @Override
@@ -876,6 +876,19 @@ public class LoaderCustom extends Activity {
             item.setActionView(mSearchView);
         }
 
+        /**
+         * Called when the query text is changed by the user. If the {@code newText} entered by the
+         * user is not empty, we set our field {@code String mCurFilter} to it, otherwise we set
+         * {@code mCurFilter} to null. We get a {@code Filter} for our {@code AppListAdapter mAdapter}
+         * and then use it to start an asynchronous filtering operation using {@code mCurFilter}
+         * (canceling all previous non-executed filtering requests and posting a new filtering
+         * request that will be executed later.) Finally we return true to indicate that the action
+         * was handled by us.
+         *
+         * @param newText the new content of the query text field.
+         * @return false if the SearchView should perform the default action of showing any
+         * suggestions if available, true if the action was handled by the listener.
+         */
         @Override
         public boolean onQueryTextChange(String newText) {
             // Called when the action bar search text has changed.  Since this
@@ -885,12 +898,33 @@ public class LoaderCustom extends Activity {
             return true;
         }
 
+        /**
+         * Called when the user submits the query. This could be due to a key press on the
+         * keyboard or due to pressing a submit button.
+         * The listener can override the standard behavior by returning true
+         * to indicate that it has handled the submit request. Otherwise return false to
+         * let the SearchView handle the submission by launching any associated intent.
+         * <p>
+         * We don't care about this.
+         *
+         * @param query the query text that is to be submitted
+         * @return true if the query has been handled by the listener, false to let the
+         * SearchView perform the default action.
+         */
         @Override
         public boolean onQueryTextSubmit(String query) {
             // Don't care about this.
             return true;
         }
 
+        /**
+         * The user is attempting to close the SearchView. If the query in {@code SearchView mSearchView}
+         * is not empty, we set the query to null and submit it. Finally we return true to indicate we
+         * have consumed the event.
+         *
+         * @return true if the listener wants to override the default behavior of clearing the
+         * text field and dismissing it, false otherwise.
+         */
         @Override
         public boolean onClose() {
             if (!TextUtils.isEmpty(mSearchView.getQuery())) {
@@ -899,12 +933,33 @@ public class LoaderCustom extends Activity {
             return true;
         }
 
+        /**
+         * This method will be called when an item in the list is selected.
+         * Subclasses should override. Subclasses can call
+         * getListView().getItemAtPosition(position) if they need to access the
+         * data associated with the selected item.
+         * <p>
+         * We just log the event having happened.
+         *
+         * @param l        The ListView where the click happened
+         * @param v        The view that was clicked within the ListView
+         * @param position The position of the view in the list
+         * @param id       The row id of the item that was clicked
+         */
         @Override
         public void onListItemClick(ListView l, View v, int position, long id) {
             // Insert desired behavior here.
             i("LoaderCustom", "Item clicked: " + id);
         }
 
+        /**
+         * Instantiate and return a new Loader for the given ID. We just return an {@code AppListLoader}
+         * created using the {@code LoaderCustom Activity} as its {@code Context}.
+         *
+         * @param id   The ID whose loader is to be created.
+         * @param args Any arguments supplied by the caller.
+         * @return Return a new Loader instance that is ready to start loading.
+         */
         @Override
         public Loader<List<AppEntry>> onCreateLoader(int id, Bundle args) {
             // This is called when a new Loader needs to be created.  This
@@ -912,6 +967,16 @@ public class LoaderCustom extends Activity {
             return new AppListLoader(getActivity());
         }
 
+        /**
+         * Called when a previously created loader has finished its load. We set the data of our
+         * {@code AppListAdapter mAdapter} to the {@code List<AppEntry> data}. If our Fragment is
+         * in the {@code Resumed} state (newly created) we set our {@code List} to be shown, otherwise
+         * (an orientation change has occurred) we set our {@code List} to be shown without the
+         * animation from the previous state (don't know why, because the animation looks nifty).
+         *
+         * @param loader The Loader that has finished.
+         * @param data   The data generated by the Loader.
+         */
         @Override
         public void onLoadFinished(Loader<List<AppEntry>> loader, List<AppEntry> data) {
             // Set the new data in the adapter.
@@ -925,6 +990,15 @@ public class LoaderCustom extends Activity {
             }
         }
 
+        /**
+         * Called when a previously created loader is being reset, and thus
+         * making its data unavailable.  The application should at this point
+         * remove any references it has to the Loader's data.
+         * <p>
+         * We simply set the data of our {@code AppListAdapter mAdapter} to null.
+         *
+         * @param loader The Loader that is being reset.
+         */
         @Override
         public void onLoaderReset(Loader<List<AppEntry>> loader) {
             // Clear the data in the adapter.
