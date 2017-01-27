@@ -50,7 +50,13 @@ import android.widget.SimpleCursorAdapter;
 public class LoaderRetained extends Activity {
 
     /**
-     * Called when the activity is starting.
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set {@code FragmentManager fm} to the FragmentManager used for
+     * interacting with fragments associated with this activity. We use {@code fm} to search for
+     * the Fragment with ID android.R.id.content and if it has not been added yet we create
+     * {@code CursorLoaderListFragment list} and use {@code fm} to begin a {@code FragmentTransaction}
+     * which we use to add {@code list} to the activity state using ID android.R.id.content and then
+     * commit the {@code FragmentTransaction}.
      *
      * @param savedInstanceState we do not override onSaveInstanceState so do not use
      */
@@ -68,19 +74,36 @@ public class LoaderRetained extends Activity {
     }
 
 
+    /**
+     * A simple {@code ListFragment} for displaying the contacts database.
+     */
     public static class CursorLoaderListFragment extends ListFragment
             implements OnQueryTextListener, OnCloseListener,
             LoaderManager.LoaderCallbacks<Cursor> {
 
-        // This is the Adapter being used to display the list's data.
+        /**
+         * This is the Adapter being used to display the list's data.
+         */
         SimpleCursorAdapter mAdapter;
 
-        // The SearchView for doing filtering.
+        /**
+         * The SearchView for doing filtering.
+         */
         SearchView mSearchView;
 
-        // If non-null, this is the current filter the user has provided.
+        /**
+         * If non-null, this is the current filter the user has provided.
+         */
         String mCurFilter;
 
+        /**
+         * Called when the fragment's activity has been created and this fragment's view hierarchy
+         * instantiated. First we call through to our super's implementation of onActivityCreated,
+         * and then we set the retain instance state flag of our Fragment to true. We set the empty
+         * text of our List that will be shown if there is no data to "No phone numbers".
+         *
+         * @param savedInstanceState We do not override {@code onSaveInstanceState} so do not use.
+         */
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
