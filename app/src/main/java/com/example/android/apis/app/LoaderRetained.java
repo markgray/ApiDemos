@@ -100,7 +100,13 @@ public class LoaderRetained extends Activity {
          * Called when the fragment's activity has been created and this fragment's view hierarchy
          * instantiated. First we call through to our super's implementation of onActivityCreated,
          * and then we set the retain instance state flag of our Fragment to true. We set the empty
-         * text of our List that will be shown if there is no data to "No phone numbers".
+         * text of our List that will be shown if there is no data to "No phone numbers". We report
+         * that this fragment would like to participate in populating the options menu (system will
+         * now call {@code onCreateOptionsMenu(Menu, MenuInflater)} and related methods). We initialize
+         * our field {@code SimpleCursorAdapter mAdapter} with an empty {@code SimpleCursorAdapter},
+         * and set our list's adapter to {@code mAdapter}. We set the list to not be displayed while
+         * the data is being loaded so the indefinite progress bar will be displayed to start with.
+         * Then we make sure a loader is initialized and connected to us.
          *
          * @param savedInstanceState We do not override {@code onSaveInstanceState} so do not use.
          */
@@ -133,13 +139,29 @@ public class LoaderRetained extends Activity {
             getLoaderManager().initLoader(0, null, this);
         }
 
+        /**
+         * Customized {@code SearchView} which clears the search text when the {@code SearchView} is
+         * collapsed.
+         */
         public static class MySearchView extends SearchView {
+
+            /**
+             * Constructor which simply calls through to our super's constructor.
+             *
+             * @param context in our case the {@code Activity} returned by {@code getActivity()}.
+             */
             public MySearchView(Context context) {
                 super(context);
             }
 
             // The normal SearchView doesn't clear its search text when
             // collapsed, so we will do this for it.
+
+            /**
+             * Called when this view is collapsed as an action view. We set the query to the empty
+             * String, without performing the search, then call through to our super's implementation
+             * of {@code onActionViewCollapsed}.
+             */
             @Override
             public void onActionViewCollapsed() {
                 setQuery("", false);
