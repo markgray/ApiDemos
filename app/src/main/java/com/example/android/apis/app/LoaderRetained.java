@@ -169,6 +169,20 @@ public class LoaderRetained extends Activity {
             }
         }
 
+        /**
+         * Initialize the contents of the Activity's standard options menu. First we {@code add} a
+         * {@code MenuItem item} to {@code menu} with the title "Search". We set the icon for
+         * {@code item} to the system icon android.R.drawable.ic_menu_search, set its flags
+         * SHOW_AS_ACTION_IF_ROOM and SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW. We initialize our field
+         * {@code SearchView mSearchView} with a new instance of {@code MySearchView} using the
+         * {@code Activity} this fragment is currently associated with as the {@code Context}, set
+         * the {@code OnQueryTextListener} of {@code mSearchView} to "this", and also set its
+         * {@code OnCloseListener} to "this". We set {@code mSearchView} to be iconified by default,
+         * and finally set the action view of {@code item} to be {@code mSearchView}.
+         *
+         * @param menu     The options menu in which you place your items.
+         * @param inflater inflater you can use to inflate compiled xml files into {@code menu}
+         */
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             // Place an action bar item for searching.
@@ -183,6 +197,18 @@ public class LoaderRetained extends Activity {
             item.setActionView(mSearchView);
         }
 
+        /**
+         * Called when the query text is changed by the user. If {@code newText} is not the empty
+         * String we set {@code String newFilter} to {@code newText}, otherwise we set it to null.
+         * If the current filter in our field {@code String mCurFilter} and {@code newText} are both
+         * null we immediately return true to the caller. If {@code mCurFilter} is not null and it
+         * is equal to {@code newFilter} we return true to the caller. Otherwise we set
+         * {@code mCurFilter} to {@code newText}, instruct the {@code LoaderManager} to restart the
+         * loader, and then return true to the caller.
+         *
+         * @param newText the new content of the query text field.
+         * @return true since the action is completely handled by this listener.
+         */
         @Override
         public boolean onQueryTextChange(String newText) {
             // Called when the action bar search text has changed.  Update
@@ -202,6 +228,12 @@ public class LoaderRetained extends Activity {
             return true;
         }
 
+        /**
+         * Called when the user submits the query. We ignore this and just return true to the caller.
+         *
+         * @param query the query text that is to be submitted
+         * @return true since the query has been handled by the listener
+         */
         @Override
         public boolean onQueryTextSubmit(String query) {
             // Don't care about this.
