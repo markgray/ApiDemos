@@ -240,6 +240,14 @@ public class LoaderRetained extends Activity {
             return true;
         }
 
+        /**
+         * The user is attempting to close the SearchView. If the {@code SearchView mSearchView}
+         * query has text in it, we set it to null and instruct it to submit the search. We then
+         * return true to the caller indicating that we do not require it to do anything more.
+         *
+         * @return true since the listener wants to override the default behavior of clearing the
+         * text field and dismissing it.
+         */
         @Override
         public boolean onClose() {
             if (!TextUtils.isEmpty(mSearchView.getQuery())) {
@@ -248,13 +256,24 @@ public class LoaderRetained extends Activity {
             return true;
         }
 
+        /**
+         * This method will be called when an item in the list is selected. We simply log the id of
+         * the item clicked.
+         *
+         * @param l The ListView where the click happened
+         * @param v The view that was clicked within the ListView
+         * @param position The position of the view in the list
+         * @param id The row id of the item that was clicked
+         */
         @Override
         public void onListItemClick(ListView l, View v, int position, long id) {
             // Insert desired behavior here.
             Log.i("FragmentComplexList", "Item clicked: " + id);
         }
 
-        // These are the Contacts rows that we will retrieve.
+        /**
+         * These are the Contacts columns that we will retrieve.
+         */
         static final String[] CONTACTS_SUMMARY_PROJECTION = new String[]{
                 Contacts._ID,
                 Contacts.DISPLAY_NAME,
@@ -264,6 +283,24 @@ public class LoaderRetained extends Activity {
                 Contacts.LOOKUP_KEY,
         };
 
+        /**
+         * Instantiate and return a new Loader for the given ID. First we create {@code Uri baseUri}
+         * using just {@code Contacts.CONTENT_URI} as the Uri if there is no filter specified by our
+         * {@code SearchView}, or creating Uri by encoding the special characters and then appending
+         * the filter in {@code String mCurFilter} to the base Uri {@code Contacts.CONTENT_FILTER_URI}.
+         * We then create a {@code String selection} filter declaring which rows to return, formatted
+         * as an SQL WHERE clause (excluding the WHERE itself). The {@code selection} specifies that
+         * DISPLAY_NAME is not null, HAS_PHONE_NUMBER is equal to 1 (contact has at least one phone
+         * number), and the DISPLAY_NAME is not the empty string. Finally we create and return a
+         * {@code CursorLoader} constructed using {@code baseUri}. specifying the columns listed in
+         * {@code String[] CONTACTS_SUMMARY_PROJECTION}, the rows selected by {@code String select},
+         * with null selection arguments, and specifying that the results be sorted using the SQL
+         * "ORDER BY" clause: Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC".
+         *
+         * @param id The ID whose loader is to be created.
+         * @param args Any arguments supplied by the caller.
+         * @return Return a new Loader instance that is ready to start loading.
+         */
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             // This is called when a new Loader needs to be created.  This
