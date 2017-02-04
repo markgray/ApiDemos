@@ -632,14 +632,17 @@ App
 
     App/Loader/Retained                    v11 -> v14
         .app.LoaderRetained
-             Demonstration of the use of a CursorLoader to load and display contacts
-             data in a fragment. Shows how to retain a ListFragment by calling
-             setRetainInstance(true) in the onActivityCreated callback.
+            Demonstration of the use of a CursorLoader to load and display contacts
+            data in a fragment. Shows how to retain a ListFragment by calling
+            setRetainInstance(true) in the onActivityCreated callback.
 
     App/Loader/Throttle                    v11
         .app.LoaderThrottle
-            Implements a custom CursorLoader which pretends to be a SQLite database, and
-            simulates a slow provider of data LoaderThrottle$SimpleProvider
+            Demonstration of bottom to top implementation of a content provider holding
+            structured data through displaying it in the UI, using throttling to reduce
+            the number of queries done when its data changes. Implements a custom CursorLoader
+            which pretends to be a SQLite database, and simulates a slow provider of data
+            LoaderThrottle$SimpleProvider
 
   Menu
     App/Menu/Inflate from XML              all -> v14
