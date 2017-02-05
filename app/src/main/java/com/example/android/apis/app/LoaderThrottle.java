@@ -76,7 +76,9 @@ public class LoaderThrottle extends Activity {
     @SuppressWarnings("WeakerAccess")
     public static final class MainTable implements BaseColumns {
 
-        // This class cannot be instantiated
+        /**
+         * private so that this class cannot be instantiated
+         */
         private MainTable() {
         }
 
@@ -125,9 +127,22 @@ public class LoaderThrottle extends Activity {
      */
     static class DatabaseHelper extends SQLiteOpenHelper {
 
+        /**
+         * name of the database file.
+         */
         private static final String DATABASE_NAME = "loader_throttle.db";
+
+        /**
+         * Version number of the database
+         */
         private static final int DATABASE_VERSION = 2;
 
+        /**
+         * Constructor which simply calls the super's constructor to create an {@code SQLiteOpenHelper}
+         * using our DATABASE_NAME, DATABASE_VERSION, and requesting the default cursor factory.
+         *
+         * @param context Context the {@code ContentProvider} {@code SimpleProvider} is running in
+         */
         DatabaseHelper(Context context) {
 
             // calls the super constructor, requesting the default cursor factory.
@@ -135,8 +150,19 @@ public class LoaderThrottle extends Activity {
         }
 
         /**
+         * Called when the database is created for the first time. This is where the
+         * creation of tables and the initial population of the tables should happen.
          * Creates the underlying database with table name and column names taken from the
-         * NotePad class.
+         * NotePad class. We simply use our parameter {@code SQLiteDatabase db} to execute the
+         * single SQL statement which uses the "CREATE TABLE" command to create a new table in our
+         * SQLite database {@code db}, with the name given by MainTable.TABLE_NAME ("main"), the
+         * columns given by:
+         * <ul>
+         * <li>MainTable._ID ("_id") an INTEGER PRIMARY KEY column</li>
+         * <li>MainTable.COLUMN_NAME_DATA ("TEXT") a TEXT column</li>
+         * </ul>
+         *
+         * @param db The database.
          */
         @Override
         public void onCreate(SQLiteDatabase db) {
@@ -148,7 +174,7 @@ public class LoaderThrottle extends Activity {
 
         /**
          * Demonstrates that the provider must consider what happens when the
-         * underlying datastore is changed. In this sample, the database is upgraded the database
+         * underlying data store is changed. In this sample, the database is upgraded the database
          * by destroying the existing data.
          * A real application should upgrade the database in place.
          */
