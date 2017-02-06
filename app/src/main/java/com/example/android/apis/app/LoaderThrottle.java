@@ -173,10 +173,34 @@ public class LoaderThrottle extends Activity {
         }
 
         /**
-         * Demonstrates that the provider must consider what happens when the
-         * underlying data store is changed. In this sample, the database is upgraded the database
-         * by destroying the existing data.
-         * A real application should upgrade the database in place.
+         * Called when the database needs to be upgraded. The implementation
+         * should use this method to drop tables, add tables, or do anything else it
+         * needs to upgrade to the new schema version.
+         * <p>
+         * The SQLite ALTER TABLE documentation can be found
+         * <a href="http://sqlite.org/lang_altertable.html">here</a>. If you add new columns
+         * you can use ALTER TABLE to insert them into a live table. If you rename or remove columns
+         * you can use ALTER TABLE to rename the old table, then create the new table and then
+         * populate the new table with the contents of the old table.
+         * <p>
+         * This method executes within a transaction.  If an exception is thrown, all changes
+         * will automatically be rolled back.
+         *
+         * Our implementation demonstrates that the provider must consider what happens when the
+         * underlying data store is changed. In this sample, the database is upgraded by destroying
+         * the existing data then calling {@code onCreate}. A real application should upgrade the
+         * database in place.
+         *
+         * First we execute the SQL command "DROP TABLE IF EXISTS notes", which removes the table
+         * "notes" added with the CREATE TABLE statement. The dropped table is completely removed
+         * from the database schema and the disk file. The table can not be recovered. All indices
+         * and triggers associated with the table are also deleted. The optional IF EXISTS clause
+         * suppresses the error that would normally result if the table does not exist. Then we call
+         * our callback {@code onCreate} which recreates the table
+         *
+         * @param db         The database.
+         * @param oldVersion The old database version.
+         * @param newVersion The new database version.
          */
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
