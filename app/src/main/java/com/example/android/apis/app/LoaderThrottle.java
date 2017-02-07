@@ -221,17 +221,29 @@ public class LoaderThrottle extends Activity {
      * A very simple implementation of a content provider.
      */
     public static class SimpleProvider extends ContentProvider {
-        // A projection map used to select columns from the database
+        /**
+         * A projection map used to select columns from the database
+          */
         private final HashMap<String, String> mNotesProjectionMap;
-        // Uri matcher to decode incoming URIs.
+
+        /**
+         * Uri matcher to decode incoming URIs.
+         */
         private final UriMatcher mUriMatcher;
 
-        // The incoming URI matches the main table URI pattern
+        /**
+         * The incoming URI matches the main table URI pattern
+         */
         private static final int MAIN = 1;
-        // The incoming URI matches the main table row ID URI pattern
+
+        /**
+         * The incoming URI matches the main table row ID URI pattern
+         */
         private static final int MAIN_ID = 2;
 
-        // Handle to a new DatabaseHelper.
+        /**
+         * Handle to a new DatabaseHelper.
+         */
         private DatabaseHelper mOpenHelper;
 
         /**
