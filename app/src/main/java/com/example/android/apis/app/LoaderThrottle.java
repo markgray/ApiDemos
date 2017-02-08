@@ -185,12 +185,12 @@ public class LoaderThrottle extends Activity {
          * <p>
          * This method executes within a transaction.  If an exception is thrown, all changes
          * will automatically be rolled back.
-         *
+         * <p>
          * Our implementation demonstrates that the provider must consider what happens when the
          * underlying data store is changed. In this sample, the database is upgraded by destroying
          * the existing data then calling {@code onCreate}. A real application should upgrade the
          * database in place.
-         *
+         * <p>
          * First we execute the SQL command "DROP TABLE IF EXISTS notes", which removes the table
          * "notes" added with the CREATE TABLE statement. The dropped table is completely removed
          * from the database schema and the disk file. The table can not be recovered. All indices
@@ -223,7 +223,7 @@ public class LoaderThrottle extends Activity {
     public static class SimpleProvider extends ContentProvider {
         /**
          * A projection map used to select columns from the database
-          */
+         */
         private final HashMap<String, String> mNotesProjectionMap;
 
         /**
@@ -247,7 +247,14 @@ public class LoaderThrottle extends Activity {
         private DatabaseHelper mOpenHelper;
 
         /**
-         * Global provider initialization.
+         * Global provider initialization. We initialize our field {@code UriMatcher mUriMatcher} with
+         * a new instance of {@code UriMatcher} with the code to match for the root URI specified as
+         * UriMatcher.NO_MATCH (a code to specify that a Uri can not match the root), and we add a Uri
+         * to {@code mUriMatcher} to match TABLE_NAME ("main"), with MAIN (1) the code that is returned
+         * when a URI matches, and a Uri to match "main/#", with MAIN_ID (2) the code that is returned
+         * when a URI matches it. We initialize our field {@code HashMap<String, String> mNotesProjectionMap}
+         * with an empty {@code HashMap<>}, then put the String MainTable._ID to map to itself, and
+         * the String MainTable.COLUMN_NAME_DATA to map to itself.
          */
         public SimpleProvider() {
             // Create and initialize URI matcher.
@@ -263,7 +270,15 @@ public class LoaderThrottle extends Activity {
         }
 
         /**
-         * Perform provider creation.
+         * Initialize our content provider on startup. This method is called for all registered
+         * content providers on the application main thread at application launch time.  It must
+         * not perform lengthy operations, or application startup will be delayed.
+         * <p>
+         * We simply initialize our field {@code DatabaseHelper mOpenHelper} with a new instance of
+         * {@code DatabaseHelper} using the Context this provider is running in as the {@code Context},
+         * and return true to our caller.
+         *
+         * @return true if the provider was successfully loaded, false otherwise
          */
         @Override
         public boolean onCreate() {
