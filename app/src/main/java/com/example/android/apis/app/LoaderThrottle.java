@@ -288,7 +288,9 @@ public class LoaderThrottle extends Activity {
         }
 
         /**
-         * Handle query incoming requests from clients.
+         * Handle incoming query requests from clients. First we create a new {@code SQLiteQueryBuilder qb}
+         * and set the list of tables to query to {@code MainTable.TABLE_NAME} ("main" the only table in
+         * our pretend database).
          *
          * @param uri           The URI to query. This will be the full URI sent by the client; if
          *                      the client is requesting a specific record, the URI will end in a
