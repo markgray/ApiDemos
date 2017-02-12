@@ -218,7 +218,30 @@ public class LoaderThrottle extends Activity {
     }
 
     /**
-     * A very simple implementation of a content provider.
+     * A very simple implementation of a content provider. It is specified in AndroidManifest.xml
+     * using the {@code <provider>} element, and the attributes:
+     * <ul>
+     * <li>
+     * android:name=".app.LoaderThrottle$SimpleProvider" The name of the class that implements the
+     * content provider, a subclass of {@code ContentProvider}. This should be a fully qualified
+     * class name, however, as a shorthand, if the first character of the name is a period, it is
+     * appended to the package name specified in the {@code <manifest>} element.
+     * </li>
+     * <li>
+     * android:authorities="com.example.android.apis.app.LoaderThrottle" A list of one or more
+     * URI authorities that identify data offered by the content provider. Multiple authorities
+     * are listed by separating their names with a semicolon. To avoid conflicts, authority
+     * names should use a Java-style naming convention (such as com.example.provider.cartoonprovider).
+     * Typically, it's the name of the ContentProvider subclass that implements the provider.
+     * There is no default. At least one authority must be specified. It is used by our
+     * {@code CursorLoader} to connect to this provider.
+     * </li>
+     * <li>
+     * android:enabled="@bool/atLeastHoneycomb" Whether or not the content provider can be
+     * instantiated by the system — "true" if it can be, and "false" if not. This makes the
+     * provider available only on Android versions Honeycomb and newer.
+     * </li>
+     * </ul>
      */
     public static class SimpleProvider extends ContentProvider {
         /**
@@ -250,8 +273,9 @@ public class LoaderThrottle extends Activity {
          * Global provider initialization. We initialize our field {@code UriMatcher mUriMatcher} with
          * a new instance of {@code UriMatcher} with the code to match for the root URI specified as
          * UriMatcher.NO_MATCH (a code to specify that a Uri can not match the root), and we add a Uri
-         * to {@code mUriMatcher} to match TABLE_NAME ("main"), with MAIN (1) the code that is returned
-         * when a URI matches, and a Uri to match "main/#", with MAIN_ID (2) the code that is returned
+         * to {@code mUriMatcher} to match the authority AUTHORITY ("com.example.android.apis.app.LoaderThrottle"),
+         * TABLE_NAME ("main"), with MAIN (1) the code that is returned when a URI matches, and a Uri
+         * to match the authority AUTHORITY for table "main/#", with MAIN_ID (2) the code that is returned
          * when a URI matches it. We initialize our field {@code HashMap<String, String> mNotesProjectionMap}
          * with an empty {@code HashMap<>}, then put the String MainTable._ID to map to itself, and
          * the String MainTable.COLUMN_NAME_DATA to map to itself.
@@ -292,8 +316,8 @@ public class LoaderThrottle extends Activity {
          * {@code CursorLoader} created in {@code ThrottledLoaderListFragment} based on the AUTHORITY
          * "com.example.android.apis.app.LoaderThrottle" which the AndroidManifest.xml attribute
          * android:authorities points to in the provider element for android:name=".app.LoaderThrottle$SimpleProvider" which mentions our class
-         * {@code ThrottledLoaderListFragment} uses that {@code CursorLoader} 
-         *
+         * {@code ThrottledLoaderListFragment} uses that {@code CursorLoader}
+         * <p>
          * First we create a new {@code SQLiteQueryBuilder qb}
          * and set the list of tables to query to {@code MainTable.TABLE_NAME} ("main" the only table in
          * our pretend database). Then we switch based on the return value of our {@code UriMatcher mUriMatcher}
