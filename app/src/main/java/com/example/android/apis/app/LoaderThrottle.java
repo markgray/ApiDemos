@@ -88,13 +88,15 @@ public class LoaderThrottle extends Activity {
         public static final String TABLE_NAME = "main";
 
         /**
-         * The content:// style URL for this table
+         * The content:// style URL for this table:
+         * "content://com.example.android.apis.app.LoaderThrottle/main"
          */
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/main");
 
         /**
          * The content URI base for a single row of data. Callers must
-         * append a numeric row id to this Uri to retrieve a row
+         * append a numeric row id to this Uri to retrieve a row:
+         * "content://com.example.android.apis.app.LoaderThrottle/main/"
          */
         public static final Uri CONTENT_ID_URI_BASE
                 = Uri.parse("content://" + AUTHORITY + "/main/");
@@ -325,7 +327,25 @@ public class LoaderThrottle extends Activity {
          * {@code MainTable.TABLE_NAME} ("main" the only table in our pretend database). Then we switch
          * based on the return value of our {@code UriMatcher mUriMatcher} when matching the parameter
          * {@code Uri uri} (our app only uses the MAIN Uri, but the MAIN_ID option is included for
-         * completeness (probably because all this code was pasted from another app))
+         * completeness (probably because all this code was pasted from another app)). In the "MAIN"
+         * case we call {@code setProjectionMap} on our {@code SQLiteQueryBuilder qb} to set the
+         * projection map for the query to {@code HashMap<String, String> mNotesProjectionMap}. The
+         * projection map maps from column names that the caller passes into query to database column
+         * names. This is useful for renaming columns as well as disambiguating column names when
+         * doing joins. For example you could map "name" to "people.name". If a projection map is set
+         * it must contain all column names the user may request, even if the key and value are the
+         * same, and in our case there are two entries MainTable._ID and MainTable.COLUMN_NAME_DATA
+         * and both entries point to themselves (more code pasting?). In the MAIN_ID case we also set
+         * the projection map to {@code mNotesProjectionMap}, then we append the chunk:
+         * MainTable._ID + "=?"  to the WHERE clause of the query, and append the last path segment
+         * of the {@code Uri uri} to the parameter {@code String[] selectionArgs}. (But since the
+         * MAIN_ID case never occurs in our app, this is all just academic IMO). In either case we
+         * continue by setting the {@code sortOrder} to MainTable.DEFAULT_SORT_ORDER if it was empty,
+         * we use our field {@code DatabaseHelper mOpenHelper} to open the readable database
+         * {@code SQLiteDatabase db}, create a {@code Cursor c} which performs a query of our
+         * {@code SQLiteDatabase db} and Register to watch the content {@code URI uri} for changes.
+         * (This can be the URI of a specific data row (for example, "content://my_provider_type/23"),
+         * or a a generic URI for a content type.) Finally we return {@code Cursor c} to the caller.
          *
          * @param uri           The URI to query. This will be the full URI sent by the client; if
          *                      the client is requesting a specific record, the URI will end in a
