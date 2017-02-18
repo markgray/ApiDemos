@@ -419,7 +419,13 @@ public class LoaderThrottle extends Activity {
         }
 
         /**
-         * Handler inserting new data.
+         * Handler inserting new data. ***** called from ContentResolver.insert which is called from
+         * our background data generating thread which is started using the "populate" button on
+         * the menu. See:
+         * <ul>
+         *     <li>https://developer.android.com/reference/android/content/ContentResolver.html</li>
+         *     <li>https://developer.android.com/reference/android/content/ContentValues.html</li>
+         * </ul>
          */
         @Override
         public Uri insert(@NonNull Uri uri, ContentValues initialValues) {
