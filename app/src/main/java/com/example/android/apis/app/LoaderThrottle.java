@@ -321,7 +321,7 @@ public class LoaderThrottle extends Activity {
          * the attribute android:name=".app.LoaderThrottle$SimpleProvider" (which is this class) refers
          * the {@code CursorLoader} to call this method when requesting more data.
          * {@code ThrottledLoaderListFragment} returns the {@code CursorLoader} it creates from its
-         * {@code onCreateLoader} callback, and it is then used by the system to fill its {@code ListView}.
+         * {@code onCreateLoader} callback, and it is then used by the system to fill our {@code ListView}.
          * <p>
          * First we create a new {@code SQLiteQueryBuilder qb} and set the list of tables to query to
          * {@code MainTable.TABLE_NAME} ("main" the only table in our pretend database). Then we switch
@@ -404,7 +404,21 @@ public class LoaderThrottle extends Activity {
         }
 
         /**
-         * Return the MIME type for an known URI in the provider.
+         * Implement this to handle requests for the MIME type of the data at the
+         * given URI.  The returned MIME type should start with
+         * <code>vnd.android.cursor.item</code> for a single record,
+         * or <code>vnd.android.cursor.dir/</code> for multiple items.
+         * <p>
+         * Based on the matching or the {@code Uri uri} using our {@code UriMatcher mUriMatcher} we
+         * return:
+         * <ul>
+         * <li>MAIN - MainTable.CONTENT_TYPE ("vnd.android.cursor.dir/vnd.example.api-demos-throttle"</li>
+         * <li>MAIN_ID - MainTable.CONTENT_ITEM_TYPE ("vnd.android.cursor.item/vnd.example.api-demos-throttle")</li>
+         * <li>no match throws an {@code IllegalArgumentException}</li>
+         * </ul>
+         *
+         * @param uri the URI to query.
+         * @return a MIME type string, or {@code null} if there is no type.
          */
         @Override
         public String getType(@NonNull Uri uri) {
@@ -423,9 +437,31 @@ public class LoaderThrottle extends Activity {
          * our background data generating thread which is started using the "populate" button on
          * the menu. See:
          * <ul>
-         *     <li>https://developer.android.com/reference/android/content/ContentResolver.html</li>
-         *     <li>https://developer.android.com/reference/android/content/ContentValues.html</li>
+         * <li>https://developer.android.com/reference/android/content/ContentResolver.html</li>
+         * <li>https://developer.android.com/reference/android/content/ContentValues.html</li>
          * </ul>
+         */
+
+        /**
+         * Implement this to handle requests to insert a new row.
+         * As a courtesy, call {@link ContentResolver#notifyChange(android.net.Uri, android.database.ContentObserver) notifyChange()}
+         * after inserting.
+         *
+         * Called from {@code ContentResolver.insert} which is called from our background data
+         * generating thread which is started using the "populate" button on the menu. See:
+         * <ul>
+         * <li>https://developer.android.com/reference/android/content/ContentResolver.html</li>
+         * <li>https://developer.android.com/reference/android/content/ContentValues.html</li>
+         * </ul>
+         * First we check to make sure that our parameter {@code Uri uri} is of the correct type
+         * (our {@code UriMatcher mUriMatcher} matches it to MAIN (its AUTHORITY is
+         * "com.example.android.apis.app.LoaderThrottle" and its path is "main"). If it is not a
+         * reference to our main URI we throw an IllegalArgumentException.
+         *
+         * @param uri           The content:// URI of the insertion request. This must not be {@code null}.
+         * @param initialValues A set of column_name/value pairs to add to the database.
+         *                      This must not be {@code null}.
+         * @return The URI for the newly inserted item.
          */
         @Override
         public Uri insert(@NonNull Uri uri, ContentValues initialValues) {
