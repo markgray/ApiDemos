@@ -433,30 +433,39 @@ public class LoaderThrottle extends Activity {
         }
 
         /**
-         * Handler inserting new data. ***** called from ContentResolver.insert which is called from
-         * our background data generating thread which is started using the "populate" button on
-         * the menu. See:
-         * <ul>
-         * <li>https://developer.android.com/reference/android/content/ContentResolver.html</li>
-         * <li>https://developer.android.com/reference/android/content/ContentValues.html</li>
-         * </ul>
-         */
-
-        /**
          * Implement this to handle requests to insert a new row.
          * As a courtesy, call {@link ContentResolver#notifyChange(android.net.Uri, android.database.ContentObserver) notifyChange()}
          * after inserting.
-         *
+         * <p>
          * Called from {@code ContentResolver.insert} which is called from our background data
-         * generating thread which is started using the "populate" button on the menu. See:
-         * <ul>
-         * <li>https://developer.android.com/reference/android/content/ContentResolver.html</li>
-         * <li>https://developer.android.com/reference/android/content/ContentValues.html</li>
-         * </ul>
+         * generating thread which is started using the "populate" button on the menu.
+         * <p>
          * First we check to make sure that our parameter {@code Uri uri} is of the correct type
          * (our {@code UriMatcher mUriMatcher} matches it to MAIN (its AUTHORITY is
-         * "com.example.android.apis.app.LoaderThrottle" and its path is "main"). If it is not a
+         * "com.example.android.apis.app.LoaderThrottle" and its path is "main")). If it is not a
          * reference to our main URI we throw an IllegalArgumentException.
+         * <p>
+         * Next we initialize the variable {@code ContentValues values}, either with the value of our
+         * parameter {@code ContentValues initialValues}, or an ,new empty set of values if
+         * {@code initialValues} is null (it is never null in our app BTW).
+         * <p>
+         * If {@code values} does NOT contain a column with the key COLUMN_NAME_DATA ("data") we put
+         * the empty String in {@code values} under that key (another probable legacy from code pasting
+         * as it never lacks a value for that column key in our app).
+         * <p>
+         * We then open (or create) {@code SQLiteDatabase db}, and try to insert the row that {@code values}
+         * contains into {@code db} saving the row ID of the newly inserted row (or -1 if an error occurred)
+         * in our variable {@code long rowId}. If no error occurred ({@code rowId > 0}) we create
+         * {@code Uri noteUri} by appending {@code rowId} to our content URI base for a single row of data
+         * (MainTable.CONTENT_ID_URI_BASE), notify registered observers that a row was updated and attempt
+         * to sync changes to the network, and finally return {@code noteUri} to the caller. If an error
+         * had occurred ({@code rowId == -1}) we throw an {@code SQLException} with an appropriate message.
+         * <p>
+         * See:
+         * <ul>
+         * <li>https://developer.android.com/reference/android/content/ContentProvider.html</li>
+         * <li>https://developer.android.com/reference/android/content/ContentValues.html</li>
+         * </ul>
          *
          * @param uri           The content:// URI of the insertion request. This must not be {@code null}.
          * @param initialValues A set of column_name/value pairs to add to the database.
