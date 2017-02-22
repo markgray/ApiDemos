@@ -507,7 +507,56 @@ public class LoaderThrottle extends Activity {
         }
 
         /**
-         * Handle deleting data.
+         * Implement this to handle requests to delete one or more rows.
+         * The implementation should apply the selection clause when performing
+         * deletion, allowing the operation to affect multiple rows in a directory.
+         * As a courtesy, call {@link ContentResolver#notifyChange(android.net.Uri, android.database.ContentObserver) notifyChange()}
+         * after deleting.
+         * <p>
+         * The implementation is responsible for parsing out a row ID at the end
+         * of the URI, if a specific row is being deleted. That is, the client would
+         * pass in {@code content://contacts/people/22} and the implementation is
+         * responsible for parsing the record number (22) when creating a SQL statement.
+         * <p>
+         * First we open {@code SQLiteDatabase db}, then we allocate local variables {@code String finalWhere}
+         * (used for Uri's containing a row ID (case MAIN_ID:), it is a SQL where clause we build
+         * which includes the ID in with the parameter {@code String where} passed us), and {@code int count}
+         * (used to save the return value of {@code SQLiteDatabase.delete} so we can return it to the
+         * caller).
+         * <p>
+         * Next we branch based on the matching of {@code Uri uri} using our field {@code UriMatcher mUriMatcher}:
+         * <ul>
+         * <li>
+         * MAIN - we call the {@code delete} method of our {@code SQLiteDatabase db} for the
+         * table TABLE_NAME ("main") and passing in the parameters {@code where} and {@code whereArgs}
+         * unchanged. We save the return value from {@code delete} (the number of rows affected)
+         * in {@code count} to later return to the caller. Note: in our app both {@code where}
+         * and {@code whereArgs} are always null, so all rows in our database are deleted.
+         * </li>
+         * <li>
+         * MAIN_ID - never used in our app, but included due to code pasting I guess. We create
+         * the {@code String finalWhere} SQL command using the row ID parsed from our {@code Uri uri}
+         * and call the {@code delete} method of our {@code SQLiteDatabase db} for the table
+         * TABLE_NAME ("main"), using {@code finalWhere} as the WHERE parameter, and the
+         * unmodified {@code whereArgs}. We save the return value from {@code delete} (the
+         * number of rows affected) in {@code count} to later return to the caller.
+         * </li>
+         * <li>
+         * default - We throw an {@code IllegalArgumentException}.
+         * </li>
+         * </ul>
+         * Then before we return, we notify registered observers that a row was updated and attempt
+         * to sync changes to the network. Finally we return {@code count} (the number of rows deleted)
+         * to the caller.
+         *
+         * @param uri       The full URI to query, including a row ID (if a specific record is requested).
+         * @param where     An optional restriction to apply to rows when deleting.
+         * @param whereArgs You may include ?s in selection, which will be replaced by the values
+         *                  from selectionArgs, in order that they appear in the selection. The
+         *                  values will be bound as Strings.
+         * @return The number of rows affected.
+         * @throws IllegalArgumentException
+         * @throws SQLException
          */
         @Override
         public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
