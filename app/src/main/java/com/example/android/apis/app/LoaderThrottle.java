@@ -71,6 +71,31 @@ public class LoaderThrottle extends Activity {
     public static final String AUTHORITY = "com.example.android.apis.app.LoaderThrottle";
 
     /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. We fetch a handle to the FragmentManager for interacting with fragments
+     * associated with this activity to {@code FragmentManager fm}. Then we use {@code fm} to search
+     * for a fragment with the ID android.R.id.content and if one is found to already exist, we do
+     * nothing and return. If the result of the search was null however, we create a new instance
+     * of {@code ThrottledLoaderListFragment list} and use {@code fm} to start a {@code FragmentTransaction}
+     * which we use to add {@code list} to the activity state using the ID android.R.id.content and
+     * commit the transaction.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use this
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        FragmentManager fm = getFragmentManager();
+
+        // Create the list fragment and add it as our sole content.
+        if (fm.findFragmentById(android.R.id.content) == null) {
+            ThrottledLoaderListFragment list = new ThrottledLoaderListFragment();
+            fm.beginTransaction().add(android.R.id.content, list).commit();
+        }
+    }
+
+    /**
      * Definition of the contract for the main table of our provider.
      */
     @SuppressWarnings("WeakerAccess")
@@ -552,7 +577,7 @@ public class LoaderThrottle extends Activity {
          * @param uri       The full URI to query, including a row ID (if a specific record is requested).
          * @param where     An optional restriction to apply to rows when deleting.
          * @param whereArgs You may include ?s in selection, which will be replaced by the values
-         *                  from selectionArgs, in order that they appear in the selection. The
+         *                  from whereArgs, in order that they appear in the selection. The
          *                  values will be bound as Strings.
          * @return The number of rows affected.
          * @throws IllegalArgumentException
@@ -593,7 +618,47 @@ public class LoaderThrottle extends Activity {
         }
 
         /**
-         * Handle updating data.
+         * Implement this to handle requests to update one or more rows. (This is never called in our
+         * app but for completeness  we will comment it.) The implementation should update all rows
+         * matching the selection to set the columns according to the provided values map.
+         * As a courtesy, call {@link ContentResolver#notifyChange(android.net.Uri, android.database.ContentObserver) notifyChange()}
+         * after updating.
+         * <p>
+         * First we allocate space for our variables {@code int count} (used to return the number of
+         * rows affected by the call), and {@code String finalWhere} (used to construct a WHERE SQL
+         * statement when a single row is specified in the parameter {@code Uri uri}).
+         * Next we branch based on the matching of {@code Uri uri} using our field {@code UriMatcher mUriMatcher}:
+         * <ul>
+         * <li>
+         * MAIN - we call the {@code update} method of our {@code SQLiteDatabase db} for the
+         * table TABLE_NAME ("main") and passing in the parameters {@code where} and {@code whereArgs}
+         * unchanged. We save the return value from {@code update} (the number of rows affected) in
+         * {@code count}.
+         * </li>
+         * <li>
+         * MAIN_ID - We create the {@code String finalWhere} SQL command using the row ID parsed from
+         * our {@code Uri uri} and call the {@code update} method of our {@code SQLiteDatabase db}
+         * for the table TABLE_NAME ("main"), using {@code finalWhere} as the WHERE parameter, and the
+         * unmodified {@code whereArgs}. We save the return value from {@code update} (the
+         * number of rows affected) in {@code count} to later return to the caller.
+         * </li>
+         * <li>
+         * default - We throw an {@code IllegalArgumentException}.
+         * </li>
+         * </ul>
+         * Then before we return, we notify registered observers that a row was updated and attempt
+         * to sync changes to the network. Finally we return {@code count} (the number of rows deleted)
+         * to the caller.
+         *
+         * @param uri       The URI to query. This can potentially have a record ID if this
+         *                  is an update request for a specific record.
+         * @param values    A set of column_name/value pairs to update in the database.
+         *                  This must not be {@code null}.
+         * @param where     An optional filter to match rows to update.
+         * @param whereArgs You may include ?s in where, which will be replaced by the values
+         *                  from whereArgs, in order that they appear in the selection. The
+         *                  values will be bound as Strings.
+         * @return the number of rows affected.
          */
         @Override
         public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
@@ -626,34 +691,36 @@ public class LoaderThrottle extends Activity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        FragmentManager fm = getFragmentManager();
-
-        // Create the list fragment and add it as our sole content.
-        if (fm.findFragmentById(android.R.id.content) == null) {
-            ThrottledLoaderListFragment list = new ThrottledLoaderListFragment();
-            fm.beginTransaction().add(android.R.id.content, list).commit();
-        }
-    }
-
+    /**
+     * This is our content fragment which does all the UI work.
+     */
     public static class ThrottledLoaderListFragment extends ListFragment
             implements LoaderManager.LoaderCallbacks<Cursor> {
 
         // Menu identifiers
+        /**
+         * Convenience constant for locating the "Populate" menu item
+         */
         static final int POPULATE_ID = Menu.FIRST;
+        /**
+         * Convenience constant for locating the "Clear" menu item
+         */
         static final int CLEAR_ID = Menu.FIRST + 1;
 
-        // This is the Adapter being used to display the list's data.
+        /**
+         * This is the Adapter being used to display the list's data.
+         */
         SimpleCursorAdapter mAdapter;
 
-        // If non-null, this is the current filter the user has provided.
+        /**
+         * If non-null, this is the current filter the user has provided. (unused legacy of code pasting
+         */
         @SuppressWarnings("unused")
         String mCurFilter;
 
-        // Task we have running to populate the database.
+        /**
+         * Task we have running to populate the database.
+         */
         AsyncTask<Void, Void, Void> mPopulatingTask;
 
         @Override
