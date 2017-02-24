@@ -723,6 +723,32 @@ public class LoaderThrottle extends Activity {
          */
         AsyncTask<Void, Void, Void> mPopulatingTask;
 
+        /**
+         * Called when the fragment's activity has been created and this fragment's view hierarchy
+         * instantiated. First we call through to our super's implementation of {@code onActivityCreated},
+         * then we set the text of our empty text {@code TextView} to some instructions on how to fill
+         * our {@code ListView} with data, and report that this fragment would like to participate in
+         * populating the options menu by receiving a call to onCreateOptionsMenu(Menu, MenuInflater)
+         * and related methods.
+         * <p>
+         * Next we initialize our field {@code SimpleCursorAdapter mAdapter} with a new instance of
+         * {@code SimpleCursorAdapter} (an empty adapter we will use to display the loaded data).
+         * We use the Activity this fragment is currently associated with as the {@code Context},
+         * the system layout file android.R.layout.simple_list_item_1 for the item layout, null for
+         * the {@code Cursor} (since we will create an assign the cursor later), the single column
+         * MainTable.COLUMN_NAME_DATA for the list of column names representing the data to bind to
+         * the UI, and the single resource ID android.R.id.text1 for the view that the data in the
+         * column should be displayed in. Having created {@code mAdapter} we use it to provide the
+         * cursor for our {@code ListView}.
+         * <p>
+         * We call {@code setListShown(false)} in order to start out with a progress indicator.
+         * <p>
+         * Finally we retrieve the LoaderManager for this fragment, (creating it if needed) and use
+         * it to ensure a loader is initialized and active with the ID 0, no arguments, and using
+         * this for its {@code LoaderCallbacks} callbacks.
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use this
+         */
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
@@ -745,6 +771,20 @@ public class LoaderThrottle extends Activity {
             getLoaderManager().initLoader(0, null, this);
         }
 
+        /**
+         * Initialize the contents of the Activity's standard options menu. First we add a
+         * {@code MenuItem} for the "Populate" function, specifying NONE for its groupId,
+         * POPULATE_ID (Menu.FIRST) for its itemId, 0 for its order, and "Populate" for its
+         * title (text to display for the item). We then add a {@code MenuItem} for the "Clear"
+         * function, specifying NONE for its groupId, CLEAR_ID (2) for its itemId, 0 for its
+         * order, and "Clear" for its title. After adding each {@code MenuItem} set set their
+         * flag SHOW_AS_ACTION_IF_ROOM (show this item as a button in an Action Bar if the system
+         * decides there is room for it.
+         *
+         * @param menu     The options menu in which you place your items.
+         * @param inflater an inflater you can use to instantiate menu XML files into Menu objects.
+         *                 (we do not use it, since we build the menu using code).
+         */
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             menu.add(Menu.NONE, POPULATE_ID, 0, "Populate")
@@ -753,6 +793,14 @@ public class LoaderThrottle extends Activity {
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         }
 
+        /**
+         * This hook is called whenever an item in your options menu is selected.
+         *
+         * @param item The menu item that was selected.
+         *
+         * @return boolean Return false to allow normal menu processing to
+         *         proceed, true to consume it here. (We always return true)
+         */
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             final ContentResolver cr = getActivity().getContentResolver();
