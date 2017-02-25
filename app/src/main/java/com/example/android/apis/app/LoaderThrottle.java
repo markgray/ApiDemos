@@ -794,12 +794,40 @@ public class LoaderThrottle extends Activity {
         }
 
         /**
-         * This hook is called whenever an item in your options menu is selected.
+         * This hook is called whenever an item in your options menu is selected. First we get a
+         * ContentResolver instance for application's package: {@code ContentResolver cr}. Then we
+         * switch based on the item ID of the {@code MenuItem item} selected:
+         * <ul>
+         * <li>
+         * POPULATE_ID - ("POPULATE" {@code MenuItem}) If there is already an existing
+         * {@code AsyncTask<Void, Void, Void> mPopulatingTask} running, we cancel that task
+         * specifying that it not be interrupted. Then we create a new {@code mPopulatingTask}
+         * with the {@code doInBackground} override using {@code ContentResolver cr} to insert
+         * the letters 'Z' to 'A' into our MainTable.CONTENT_URI with a 250 millisecond sleep
+         * between characters. We instruct {@code mPopulatingTask} to execute using the
+         * AsyncTask.THREAD_POOL_EXECUTOR (allows multiple tasks to run in parallel). Finally
+         * we return true to the caller to indicate that we consumed the {@code MenuItem}
+         * click here.
+         * </li>
+         * <li>
+         * CLEAR_ID ("CLEAR" {@code MenuItem}) If there is already an existing
+         * {@code AsyncTask<Void, Void, Void> mPopulatingTask} running, we cancel that task
+         * specifying that it not be interrupted, then set {@code mPopulatingTask} to null.
+         * Then we create {@code AsyncTask<Void, Void, Void> task} with the {@code doInBackground}
+         * override using {@code ContentResolver cr} to delete the entire contents of the
+         * MainTable.CONTENT_URI database. We start {@code task} executing in the background
+         * and return true to the caller to indicate that we consumed the {@code MenuItem}
+         * click here.
+         * </li>
+         * <li>
+         * default - We return the result returned by our super's implementation of
+         * {@code onOptionsItemSelected(item)}.
+         * </li>
+         * </ul>
          *
          * @param item The menu item that was selected.
-         *
          * @return boolean Return false to allow normal menu processing to
-         *         proceed, true to consume it here. (We always return true)
+         * proceed, true to consume it here. (We always return true)
          */
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
@@ -811,6 +839,17 @@ public class LoaderThrottle extends Activity {
                         mPopulatingTask.cancel(false);
                     }
                     mPopulatingTask = new AsyncTask<Void, Void, Void>() {
+                        /**
+                         * Override this method to perform a computation on a background thread. Our for
+                         * loop goes through the characters of the alphabet from 'Z' to 'A', first checking
+                         * to see if our task has been canceled and if so we break from the for loop
+                         * (this happens if the "POPULATE" {@code MenuItem} is selected again while this
+                         * task is running, or the "CLEAR" {@code MenuItem} is selected).
+                         *
+                         * @param params The parameters of the task (We have no parameters, thus Void)
+                         *
+                         * @return A result, defined by the subclass of this task (We return no result so Void)
+                         */
                         @Override
                         protected Void doInBackground(Void... params) {
                             for (char c = 'Z'; c >= 'A'; c--) {
