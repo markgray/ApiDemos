@@ -846,6 +846,17 @@ public class LoaderThrottle extends Activity {
                          * (this happens if the "POPULATE" {@code MenuItem} is selected again while this
                          * task is running, or the "CLEAR" {@code MenuItem} is selected).
                          *
+                         * We create a {@code StringBuilder builder} with its contents initialized to
+                         * the String "Data ", then we append the current {@code char c} to it. We create
+                         * {@code ContentValues values} and put the String from {@code builder} in it
+                         * using the key COLUMN_NAME_DATA ("data"). We then use our {@code ContentResolver cr}
+                         * to insert our new data into the database controlled by the provider of
+                         * MainTable.CONTENT_URI ("content://com.example.android.apis.app.LoaderThrottle/main")
+                         * (which is the class LoaderThrottle$SimpleProvider). After doing this we pause
+                         * for 250 milliseconds (unless we receive an InterruptedException). Finally
+                         * when we have generated a line for each character in the alphabet, we return
+                         * null to the caller.
+                         *
                          * @param params The parameters of the task (We have no parameters, thus Void)
                          *
                          * @return A result, defined by the subclass of this task (We return no result so Void)
@@ -882,6 +893,18 @@ public class LoaderThrottle extends Activity {
                         mPopulatingTask = null;
                     }
                     AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                        /**
+                         * This method runs on a background thread when {@code execute} is called.
+                         * We use our {@code ContentResolver cr} to delete all the data in the
+                         * database controlled by the provider of MainTable.CONTENT_URI
+                         * ("content://com.example.android.apis.app.LoaderThrottle/main")
+                         * (which is the class LoaderThrottle$SimpleProvider), and return null to the
+                         * caller.
+                         *
+                         * @param params The parameters of the task (we have no parameters so Void
+                         *               is used
+                         * @return we have nothing to return, so return null here
+                         */
                         @Override
                         protected Void doInBackground(Void... params) {
                             cr.delete(MainTable.CONTENT_URI, null, null);
@@ -896,25 +919,56 @@ public class LoaderThrottle extends Activity {
             }
         }
 
+        /**
+         * This method is called when an item in the list is selected. We simply log the {@code long id}
+         * of the row that was clicked.
+         *
+         * @param l        The ListView where the click happened
+         * @param v        The view that was clicked within the ListView
+         * @param position The position of the view in the list
+         * @param id       The row id of the item that was clicked
+         */
         @Override
         public void onListItemClick(ListView l, View v, int position, long id) {
             // Insert desired behavior here.
             Log.i(TAG, "Item clicked: " + id);
         }
 
-        // These are the rows that we will retrieve.
+        /**
+         * These are the rows that we will retrieve.
+         */
         static final String[] PROJECTION = new String[]{
                 MainTable._ID,
                 MainTable.COLUMN_NAME_DATA,
         };
 
+        /**
+         * Instantiate and return a new Loader for the given ID. We create a fully specified cursor
+         * loader {@code CursorLoader cl} for the {@code Uri MainTable.CONTENT_URI}, set the amount
+         * to throttle updates to 2000 milliseconds, and return it to the caller.
+         *
+         * @param id   The ID whose loader is to be created. (We only use one, so ignore this)
+         * @param args Any arguments supplied by the caller. (We do not use arguments)
+         * @return Return a new Loader instance that is ready to start loading.
+         */
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            CursorLoader cl = new CursorLoader(getActivity(), MainTable.CONTENT_URI,
-                    PROJECTION, null, null, null);
+            CursorLoader cl = new CursorLoader(getActivity(),
+                    MainTable.CONTENT_URI,
+                    PROJECTION,
+                    null,
+                    null,
+                    null);
             cl.setUpdateThrottle(2000); // update at most every 2 seconds.
             return cl;
         }
 
+        /**
+         * Called when a previously created loader has finished its load. We swap in the new Cursor,
+         * then cause our {@code ListView} to be shown
+         *
+         * @param loader The Loader that has finished.
+         * @param data   The data generated by the Loader.
+         */
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             mAdapter.swapCursor(data);
 
