@@ -79,6 +79,33 @@ public class MenuInflateFromXml extends Activity {
      */
     private Menu mMenu;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we create {@code LinearLayout layout}, and set its orientation to VERTICAL.
+     *
+     * In order to create the {@code Spinner mSpinner} we first create {@code ArrayAdapter<String> adapter}
+     * using the system layout file android.R.layout.simple_spinner_item as the layout file for each
+     * item, and {@code String sMenuExampleNames[]} for the {@code Object}'s to represent in the
+     * {@code ListView} of the {@code Spinner}. We set the layout resource to create the drop down
+     * views. of the {@code adapter} to the {@code CheckedTextView} contained in the system layout
+     * file android.R.layout.simple_spinner_dropdown_item. Next we initialize our field {@code Spinner mSpinner}
+     * with a new instance of {@code Spinner}, set its ID to R.id.spinner (so the system will automatically
+     * save its instance state), set the Adapter for {@code mSpinner} to {@code adapter}, and set its
+     * {@code OnItemSelectedListener} to simply invalidates our options menu whenever the {@code onItemSelected}
+     * callback is called. Having completely configured our {@code Spinner mSpinner} we add the {@code Spinner}
+     * to our {@code LinearLayout layout} using the LayoutParams MATCH_PARENT and WRAP_CONTENT.
+     *
+     * Next we create the help text for our field {@code TextView mInstructionsText} by creating a new
+     * instance of {@code TextView}, setting its text to our resource R.string.menu_from_xml_instructions_press_menu
+     * ("Select a menu resource and press the menu key"). We create {@code LinearLayout.LayoutParams lp} with
+     * the {@code LayoutParams} MATCH_PARENT and WRAP_CONTENT, set its left, top, bottom and right margins to 10
+     * pixels, and then add {@code mInstructionsText} to our {@code LinearLayout layout} using {@code lp}
+     * as its {@code LayoutParams}.
+     *
+     * Finally we set the content view for our activity to {@code LinearLayout layout}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use this
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
