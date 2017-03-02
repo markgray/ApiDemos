@@ -82,7 +82,7 @@ public class MenuInflateFromXml extends Activity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we create {@code LinearLayout layout}, and set its orientation to VERTICAL.
-     *
+     * <p>
      * In order to create the {@code Spinner mSpinner} we first create {@code ArrayAdapter<String> adapter}
      * using the system layout file android.R.layout.simple_spinner_item as the layout file for each
      * item, and {@code String sMenuExampleNames[]} for the {@code Object}'s to represent in the
@@ -94,14 +94,14 @@ public class MenuInflateFromXml extends Activity {
      * {@code OnItemSelectedListener} to simply invalidates our options menu whenever the {@code onItemSelected}
      * callback is called. Having completely configured our {@code Spinner mSpinner} we add the {@code Spinner}
      * to our {@code LinearLayout layout} using the LayoutParams MATCH_PARENT and WRAP_CONTENT.
-     *
+     * <p>
      * Next we create the help text for our field {@code TextView mInstructionsText} by creating a new
      * instance of {@code TextView}, setting its text to our resource R.string.menu_from_xml_instructions_press_menu
      * ("Select a menu resource and press the menu key"). We create {@code LinearLayout.LayoutParams lp} with
      * the {@code LayoutParams} MATCH_PARENT and WRAP_CONTENT, set its left, top, bottom and right margins to 10
      * pixels, and then add {@code mInstructionsText} to our {@code LinearLayout layout} using {@code lp}
      * as its {@code LayoutParams}.
-     *
+     * <p>
      * Finally we set the content view for our activity to {@code LinearLayout layout}.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use this
@@ -124,11 +124,29 @@ public class MenuInflateFromXml extends Activity {
         mSpinner.setId(R.id.spinner);
         mSpinner.setAdapter(adapter);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            /**
+             * Callback method to be invoked when an item in this view has been selected. We simply
+             * invalidate the current options menu by declaring that the options menu has changed,
+             * so should be recreated. The {@code onCreateOptionsMenu(Menu)} method will be called
+             * the next time it needs to be displayed.
+             *
+             * @param parent The AdapterView where the selection happened (Unused)
+             * @param view The view within the AdapterView that was clicked (Unused)
+             * @param position The position of the view in the adapter (Unused)
+             * @param id The row id of the item that is selected (Unused)
+             */
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 invalidateOptionsMenu();
             }
 
+            /**
+             * Callback method to be invoked when the selection disappears from this
+             * view. The selection can disappear for instance when touch is activated
+             * or when the adapter becomes empty. We do nothing.
+             *
+             * @param parent The AdapterView that now contains no selected item. (Unused)
+             */
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
@@ -156,6 +174,23 @@ public class MenuInflateFromXml extends Activity {
         setContentView(layout);
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu. First we save a reference to
+     * the {@code Menu menu} that we will be filling in our field {@code Menu mMenu} (we will need it
+     * in our {@code onOptionsItemSelected} override). Next we get a menu inflater for this context
+     * {@code MenuInflater inflater} and use it to inflate one of the different example menu resources
+     * in the array {@code int sMenuExampleResources[]} based on which menu type is currently selected
+     * by the {@code Spinner mSpinner} into our {@code Menu menu} parameter. We change the instructions
+     * in our {@code TextView mInstructionsText} to read: "If you want to choose another menu resource,
+     * go back and re-run this activity." (Rerunning the activity is not really necessary because of
+     * the use of an {@code invalidateOptionsMenu()} call in the {@code Spinner}'s {@code onItemSelected}
+     * override - simply choosing a different menu resource will change the menu correctly.) Finally
+     * we return true so that the menu will be displayed.
+     *
+     * @param menu The options menu in which we place our items.
+     * @return You must return true for the menu to be displayed;
+     * if you return false it will not be shown.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Hold on to this
@@ -166,12 +201,44 @@ public class MenuInflateFromXml extends Activity {
         inflater.inflate(sMenuExampleResources[mSpinner.getSelectedItemPosition()], menu);
 
         // Change instructions
-        mInstructionsText.setText(getResources().getString(
-                R.string.menu_from_xml_instructions_go_back));
+        mInstructionsText.setText(getResources().getString(R.string.menu_from_xml_instructions_go_back));
 
         return true;
     }
 
+    /**
+     * This hook is called whenever an item in your options menu is selected. We switch based on the
+     * item ID of the {@code MenuItem item} that was selected:
+     * <ul>
+     * <li>
+     * R.id.jump - we toast the message "Jump up in the air!", invalidate the options menu
+     * (for some unknown reason) and return true to indicate that we consumed the event
+     * </li>
+     * <li>
+     * R.id.dive - we toast the message "Dive into the water!" and return true to indicate
+     * that we consumed the event
+     * </li>
+     * <li>
+     * R.id.browser_visibility - we toggle the visibility of the R.id.browser menu item group
+     * (contained in the menu/groups.xml menu resource, which is selected by the "Groups" item
+     * in the menu type selection {@code Spinner}.
+     * </li>
+     * <li>
+     * R.id.email_visibility - we toggle the visibility of the R.id.email menu item group
+     * (contained in the menu/groups.xml menu resource, which is selected by the "Groups" item
+     * in the menu type selection {@code Spinner}.
+     * </li>
+     * <li>
+     * default - catch all for all other menu item selections - if the {@code MenuItem item}
+     * is a sub-menu we do nothing and return false to allow normal menu processing to
+     * proceed, otherwise we retrieve the title for the {@code MenuItem item} and toast it.
+     * </li>
+     * </ul>
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return false to allow normal menu processing to
+     * proceed, true to consume it here.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -187,7 +254,7 @@ public class MenuInflateFromXml extends Activity {
                 return true;
 
             // For "Groups": Toggle visibility of grouped menu items with
-            //               nongrouped menu items
+            //               non-grouped menu items
             case R.id.browser_visibility:
                 // The refresh item is part of the browser group
                 final boolean shouldShowBrowser = !mMenu.findItem(R.id.refresh).isVisible();
