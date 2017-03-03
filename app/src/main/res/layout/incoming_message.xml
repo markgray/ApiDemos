@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,36 +14,41 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="8dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:text="Display a notification that will switch to the app in a new activity stack."
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Display a notification that will switch to the app in a new activity stack." />
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/notify_app"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Show App Notification" />
+        android:text="Show App Notification"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingTop="16dp"
+        android:text="Display a notification that will go to a dedicated interstitial activity."
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Display a notification that will go to a dedicated interstitial activity." />
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/notify_interstitial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Show Interstitial Notification" />
+        android:text="Show Interstitial Notification"
+        tools:ignore="HardcodedText" />
 
 </LinearLayout>

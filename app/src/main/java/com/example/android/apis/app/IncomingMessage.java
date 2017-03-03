@@ -34,10 +34,25 @@ import android.view.View;
 import android.widget.Button;
 
 /**
- * UI for posting an example notification.
+ * UI for posting an example notification. Allows you to choose between a regular app notification,
+ * and an interstitial notification and shows how to launch {@code IncomingMessageView} from either
+ * type of notification. The interstitial choice launches {@code IncomingMessageInterstitial} which
+ * on clicking the "Switch to App" button uses the same function as the non-interstitial notification
+ * to launch {@code IncomingMessageView}.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class IncomingMessage extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.incoming_message.
+     * We locate the {@code Button} R.id.notify_app to initialize {@code Button button}, then set
+     * its {@code OnClickListener} to an anonymous class which calls the method {@code showAppNotification()}
+     * when the {@code Button} is clicked. Then we locate the {@code Button} R.id.notify_interstitial
+     * and set its {@code OnClickListener} to an anonymous class which calls the method
+     * {@code showInterstitialNotification()}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +61,12 @@ public class IncomingMessage extends Activity {
 
         Button button = (Button) findViewById(R.id.notify_app);
         button.setOnClickListener(new Button.OnClickListener() {
+            /**
+             * Called when the {@code Button} is clicked, we simply call the method
+             * {@code showAppNotification()}.
+             *
+             * @param v {@code View} of the {@code Button} that was clicked
+             */
             @Override
             public void onClick(View v) {
                 showAppNotification();
@@ -54,6 +75,12 @@ public class IncomingMessage extends Activity {
 
         button = (Button) findViewById(R.id.notify_interstitial);
         button.setOnClickListener(new Button.OnClickListener() {
+            /**
+             * Called when the {@code Button} is clicked, we simply call the method
+             * {@code showInterstitialNotification()}.
+             *
+             * @param v {@code View} of the {@code Button} that was clicked
+             */
             @Override
             public void onClick(View v) {
                 showInterstitialNotification();
@@ -63,12 +90,17 @@ public class IncomingMessage extends Activity {
 
 
     /**
-     * This method creates an array of Intent objects representing the
-     * activity stack for the incoming message details state that the
-     * application should be in when launching it from a notification.
+     * This method creates an array of Intent objects representing the activity stack for the
+     * incoming message details state that the application should be in when launching it from
+     * a notification. It is used to Supply a PendingIntent to be sent when the notification is clicked.
+     *
+     * @param context "this" when called from either {@code IncomingMessage} or {@code IncomingMessageInterstitial},
+     *                it is the {@code Context} of the {@code Activity} it is called from.
+     * @param from Who sent the message
+     * @param msg the message content
+     * @return a properly configured back stack for launching the {@code Activity} {@code IncomingMessageView}
      */
-    static Intent[] makeMessageIntentStack(Context context, CharSequence from,
-                                           CharSequence msg) {
+    static Intent[] makeMessageIntentStack(Context context, CharSequence from, CharSequence msg) {
         // A typical convention for notifications is to launch the user deeply
         // into an application representing the data in the notification; to
         // accomplish this, we can build an array of intents to insert the back
