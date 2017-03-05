@@ -92,7 +92,10 @@ public class IncomingMessage extends Activity {
     /**
      * This method creates an array of Intent objects representing the activity stack for the
      * incoming message details state that the application should be in when launching it from
-     * a notification. It is used to Supply a PendingIntent to be sent when the notification is clicked.
+     * a notification. It is used to Supply a PendingIntent to be sent when the notification is
+     * clicked, both in {@code IncomingMessage.showAppNotification} as well as in
+     * {@code IncomingMessageInterstitial.switchToApp}. First we create an array to hold 4 Intents
+     * {@code Intent[] intents}
      *
      * @param context "this" when called from either {@code IncomingMessage} or {@code IncomingMessageInterstitial},
      *                it is the {@code Context} of the {@code Activity} it is called from.
