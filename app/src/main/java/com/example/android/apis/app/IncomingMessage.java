@@ -94,13 +94,34 @@ public class IncomingMessage extends Activity {
      * incoming message details state that the application should be in when launching it from
      * a notification. It is used to Supply a PendingIntent to be sent when the notification is
      * clicked, both in {@code IncomingMessage.showAppNotification} as well as in
-     * {@code IncomingMessageInterstitial.switchToApp}. First we create an array to hold 4 Intents
-     * {@code Intent[] intents}
+     * {@code IncomingMessageInterstitial.switchToApp}.
+     * <p>
+     * First we create an array to hold 4 Intents {@code Intent[] intents}. The 0'th {@code Intent}
+     * in {@code intents} is set to an {@code Intent} that can be used to re-launch the root activity
+     * ({@code ApiDemos}) in its base state. The next {@code Intent} in {@code intents} is set to an
+     * {@code Intent} to launch {@code ApiDemos} with extra data specifying that {@code ApiDemos}
+     * should use "App" as the path when displaying its {@code ListView} of choices, and
+     * {@code intents[2]} is set to an {@code Intent} to launch {@code ApiDemos} with extra data
+     * specifying that {@code ApiDemos} should use "App/Notification" as the path when displaying its
+     * {@code ListView} of choices.
+     * <p>
+     * The last {@code Intent} in {@code intents} is set to an {@code Intent} which will launch the
+     * {@code Activity IncomingMessageView}, with our parameter {@code CharSequence from} stored as
+     * an extra under the key KEY_FROM ("from"), and our parameter {@code CharSequence msg} stored
+     * as an extra under the key KEY_MESSAGE ("message"). Finally we return {@code intents} to the
+     * callers who use it as the argument to {@code startActivities(stack)}.
+     * <p>
+     * Note: {@code startActivities(stack)}, will Launch multiple new activities. This is generally
+     * the same as calling startActivity(Intent) for the first Intent in the array, that activity
+     * during its creation calling startActivity(Intent) for the second entry, etc. Note that unlike
+     * that approach, generally none of the activities except the last in the array will be created
+     * at this point, but rather will be created when the user first visits them (due to pressing
+     * back from the activity on top).
      *
      * @param context "this" when called from either {@code IncomingMessage} or {@code IncomingMessageInterstitial},
      *                it is the {@code Context} of the {@code Activity} it is called from.
-     * @param from Who sent the message
-     * @param msg the message content
+     * @param from    Who sent the message
+     * @param msg     the message content
      * @return a properly configured back stack for launching the {@code Activity} {@code IncomingMessageView}
      */
     static Intent[] makeMessageIntentStack(Context context, CharSequence from, CharSequence msg) {
@@ -161,7 +182,8 @@ public class IncomingMessage extends Activity {
         // is already an active matching pending intent, cancel it and replace
         // it with the new array of Intents.
         PendingIntent contentIntent = PendingIntent.getActivities(this, 0,
-                makeMessageIntentStack(this, from, message), PendingIntent.FLAG_CANCEL_CURRENT);
+                makeMessageIntentStack(this, from, message),
+                PendingIntent.FLAG_CANCEL_CURRENT);
 
         // The ticker text, this uses a formatted string so our message could be localized
         String tickerText = getString(R.string.imcoming_message_ticker_text, message);
