@@ -155,8 +155,11 @@ public class IncomingMessage extends Activity {
 
 
     /**
-     * The notification is the icon and associated expanded entry in the
-     * status bar.
+     * Shows a notification in the status bar, consisting of our icon and associated expanded entry.
+     * First we fetch a handle to the system-level service NOTIFICATION_SERVICE and save it in our
+     * variable {@code NotificationManager nm}. We create a fake message to receive consisting of
+     * a {@code CharSequence from} and a random {@code CharSequence message}. Next we create a
+     * {@code PendingIntent contentIntent} which will be launched when our notification is clicked.
      */
     void showAppNotification() {
         // look up the notification manager service
