@@ -156,10 +156,43 @@ public class IncomingMessage extends Activity {
 
     /**
      * Shows a notification in the status bar, consisting of our icon and associated expanded entry.
+     * We are called when the {@code Button} R.id.notify_app ("Show App Notification") is clicked.
      * First we fetch a handle to the system-level service NOTIFICATION_SERVICE and save it in our
      * variable {@code NotificationManager nm}. We create a fake message to receive consisting of
      * a {@code CharSequence from} and a random {@code CharSequence message}. Next we create a
      * {@code PendingIntent contentIntent} which will be launched when our notification is clicked.
+     * It consists of a back stack of Intents created by our method {@code makeMessageIntentStack}
+     * and the flag FLAG_CANCEL_CURRENT (Flag indicating that if the described PendingIntent already
+     * exists, the current one should be canceled before generating a new one).
+     * <p>
+     * We initialize the String {@code String tickerText} by using our resource string
+     * R.string.imcoming_message_ticker_text as the format for our {@code message}. We create a
+     * {@code Notification.Builder notifBuilder} and chain together methods which:
+     * <ul>
+     * <li>
+     * Set the small icon to R.drawable.stat_sample
+     * </li>
+     * <li>
+     * Set the "ticker" text which is sent to accessibility services to {@code tickerText}
+     * </li>
+     * <li>
+     * Add a timestamp pertaining to the notification to be the current time in milliseconds
+     * </li>
+     * <li>
+     * Set the first line of text in the platform notification template to be {@code from}
+     * </li>
+     * <li>
+     * Set the second line of text in the platform notification template to be {@code message}
+     * </li>
+     * <li>
+     * Supply {@code contentIntent} as the PendingIntent to be sent when the notification is clicked
+     * </li>
+     * </ul>
+     * We set which notification properties will be inherited from system defaults to be DEFAULT_ALL
+     * (all the default values).
+     * <p>
+     * Finally we use {@code NotificationManager nm} to post the notification built from
+     * {@code notifBuilder} in the status bar.
      */
     void showAppNotification() {
         // look up the notification manager service
