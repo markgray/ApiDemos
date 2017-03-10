@@ -248,8 +248,9 @@ public class IncomingMessage extends Activity {
 
 
     /**
-     * The notification is the icon and associated expanded entry in the
-     * status bar.
+     * Builds a notification which will launch the {@code IncomingMessageInterstitial} activity when
+     * it is clicked on. First we fetch a handle to the system wide service NOTIFICATION_SERVICE to
+     * initialize {@code NotificationManager nm}.  
      */
     void showInterstitialNotification() {
         // look up the notification manager service
