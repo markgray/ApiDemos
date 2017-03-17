@@ -250,7 +250,43 @@ public class IncomingMessage extends Activity {
     /**
      * Builds a notification which will launch the {@code IncomingMessageInterstitial} activity when
      * it is clicked on. First we fetch a handle to the system wide service NOTIFICATION_SERVICE to
-     * initialize {@code NotificationManager nm}.  
+     * initialize {@code NotificationManager nm}. We create a fake message to receive consisting of
+     * a {@code CharSequence from} and a random {@code CharSequence message}. Next we create a
+     * {@code Intent intent} which will launch the Activity {@code IncomingMessageInterstitial} when
+     * our notification is clicked. We store our {@code from} as an extra in the Intent using the key
+     * KEY_FROM, and {@code message} as an extra using the key KEY_MESSAGE. We set the flags of the
+     * Intent for FLAG_ACTIVITY_NEW_TASK and FLAG_ACTIVITY_CLEAR_TASK. Next we create a new instance
+     * of {@code PendingIntent contentIntent} which will launch the {@code intent} we just created
+     * and configured,
+     *
+     * We initialize the String {@code String tickerText} by using our resource string
+     * R.string.imcoming_message_ticker_text as the format for our {@code message}. We create a
+     * {@code Notification.Builder notifBuilder} and chain together methods which:
+     * <ul>
+     * <li>
+     * Set the small icon to R.drawable.stat_sample
+     * </li>
+     * <li>
+     * Set the "ticker" text which is sent to accessibility services to {@code tickerText}
+     * </li>
+     * <li>
+     * Add a timestamp pertaining to the notification to be the current time in milliseconds
+     * </li>
+     * <li>
+     * Set the first line of text in the platform notification template to be {@code from}
+     * </li>
+     * <li>
+     * Set the second line of text in the platform notification template to be {@code message}
+     * </li>
+     * <li>
+     * Supply {@code contentIntent} as the PendingIntent to be sent when the notification is clicked
+     * </li>
+     * </ul>
+     * We set which notification properties will be inherited from system defaults to be DEFAULT_ALL
+     * (all the default values).
+     * <p>
+     * Finally we use {@code NotificationManager nm} to post the notification built from
+     * {@code notifBuilder} in the status bar.
      */
     void showInterstitialNotification() {
         // look up the notification manager service

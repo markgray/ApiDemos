@@ -24,9 +24,9 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 /**
- * This activity is run as the click activity for {@link IncomingMessage}.
- * When it comes up, it also clears the notification, because the "message"
- * has been "read."
+ * This activity is run as the click activity for {@link IncomingMessage}, and also
+ * {@link IncomingMessageInterstitial}. When it comes up, it also clears the notification, because
+ * the "message" has been "read."
  */
 public class IncomingMessageView extends Activity {
     /**
@@ -38,6 +38,17 @@ public class IncomingMessageView extends Activity {
      */
     static final public String KEY_MESSAGE = "message";
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.incoming_message_view.
+     * We locate the {@code TextView} in the layout with ID R.id.from and set its text to the String
+     * stored as an extra in the Intent that launched us under the key KEY_FROM and the text of
+     * R.id.message to that stored under the key KEY_MESSAGE. We fetch a handle to the system service
+     * NOTIFICATION_SERVICE for {@code NotificationManager nm} and use it to cancel the notification
+     * which was originally posted by {@code IncomingMessage}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
