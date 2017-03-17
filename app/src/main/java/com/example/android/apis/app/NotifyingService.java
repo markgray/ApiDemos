@@ -34,17 +34,21 @@ import android.os.Parcel;
 import android.os.RemoteException;
 
 /**
- * This is an example of service that will update its status bar balloon 
- * every 5 seconds for a minute.
- * 
+ * Updates a notification every 5 seconds from a background thread for a minute. Note use of
+ * a {@code ConditionVariable} to implement the condition variable locking paradigm, blocking
+ * for 5*1000 miliseconds after every notification (very useful approach).
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class NotifyingService extends Service {
-    
-    // Use a layout id for a unique identifier
+
+    /**
+     * Use a layout id for a unique identifier
+     */
     private static int MOOD_NOTIFICATIONS = R.layout.status_bar_notifications;
 
-    // variable which controls the notification thread 
+    /**
+     * variable which controls the notification thread
+     */
     private ConditionVariable mCondition;
  
     @Override
