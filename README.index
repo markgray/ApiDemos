@@ -664,10 +664,11 @@ App
             non-interstitial notification to launch IncomingMessageView.
 
     App/Notification/Notifying Service Controller  -- all -> v16
+        .app.NotifyingController controls:
         .app.NotifyingService
             Updates a notification every 5 seconds from a background thread. Note use of
             ConditionVariable to implement the condition variable locking paradigm, blocking
-            for 5*1000 miliseconds after every notification (very useful approach).
+            for 5*1000 milliseconds after every notification (very useful approach).
 
 
     App/Notification/NotifyWithText        all

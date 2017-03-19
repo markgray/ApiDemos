@@ -36,7 +36,7 @@ import android.os.RemoteException;
 /**
  * Updates a notification every 5 seconds from a background thread for a minute. Note use of
  * a {@code ConditionVariable} to implement the condition variable locking paradigm, blocking
- * for 5*1000 miliseconds after every notification (very useful approach).
+ * for 5*1000 milliseconds after every notification (very useful approach).
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class NotifyingService extends Service {
@@ -50,7 +50,20 @@ public class NotifyingService extends Service {
      * variable which controls the notification thread
      */
     private ConditionVariable mCondition;
- 
+
+    /**
+     * Handle to the system level service NOTIFICATION_SERVICE
+     */
+    private NotificationManager mNM;
+
+    /**
+     * Called by the system when the service is first created. First we initialize our field
+     * {@code NotificationManager mNM} with a handle to the system level service NOTIFICATION_SERVICE.
+     * Next we create {@code Thread notifyingThread} to run our {@code Runnable mTask} using the name
+     * "NotifyingService". We initialize our field {@code ConditionVariable mCondition} to an instance
+     * of an initially closed {@code ConditionVariable}. Finally we start {@code notifyingThread}
+     * running.
+     */
     @Override
     public void onCreate() {
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -72,6 +85,7 @@ public class NotifyingService extends Service {
     }
 
     private Runnable mTask = new Runnable() {
+        @Override
         public void run() {
             for (int i = 0; i < 4; ++i) {
                 showNotification(R.drawable.stat_happy,
@@ -133,6 +147,4 @@ public class NotifyingService extends Service {
             return super.onTransact(code, data, reply, flags);
         }
     };
-
-    private NotificationManager mNM;
 }
