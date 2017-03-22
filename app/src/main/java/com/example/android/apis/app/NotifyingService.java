@@ -18,6 +18,7 @@ package com.example.android.apis.app;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+
 import com.example.android.apis.R;
 
 import android.annotation.TargetApi;
@@ -76,6 +77,13 @@ public class NotifyingService extends Service {
         notifyingThread.start();
     }
 
+    /**
+     * Called by the system to notify a Service that it is no longer used and is being removed. First
+     * we call the {@code cancel} method of the {@code NotificationManager} to remove our notification
+     * from the status bar, then we open our {@code ConditionVariable mCondition} which will cause
+     * our background task's {@code Runnable mTask} to "break" out of its "for" loop and terminate
+     * before its 4 iterations are completed.
+     */
     @Override
     public void onDestroy() {
         // Cancel the persistent notification.
@@ -84,22 +92,26 @@ public class NotifyingService extends Service {
         mCondition.open();
     }
 
+    /**
+     * The task that is being run in the background thread {@code Thread notifyingThread}. It loops
+     * through 3 different notifications 4 times, pausing 5 seconds between each notification. This
+     * happens only so long as the {@code ConditionVariable mCondition} remains closed -- if it is
+     * opened (as happens in the {@code onDestroy} callback) it breaks out of the loop and stops
+     * immediately.
+     */
     private Runnable mTask = new Runnable() {
         @Override
         public void run() {
             for (int i = 0; i < 4; ++i) {
                 showNotification(R.drawable.stat_happy,
                         R.string.status_bar_notifications_happy_message);
-                if (mCondition.block(5 * 1000)) 
-                    break;
+                if (mCondition.block(5 * 1000)) break;
                 showNotification(R.drawable.stat_neutral,
                         R.string.status_bar_notifications_ok_message);
-                if (mCondition.block(5 * 1000)) 
-                    break;
+                if (mCondition.block(5 * 1000)) break;
                 showNotification(R.drawable.stat_sad,
                         R.string.status_bar_notifications_sad_message);
-                if (mCondition.block(5 * 1000)) 
-                    break;
+                if (mCondition.block(5 * 1000)) break;
             }
             // Done with our work...  stop the service!
             NotifyingService.this.stopSelf();
@@ -142,8 +154,8 @@ public class NotifyingService extends Service {
     // RemoteService for a more complete example.
     private final IBinder mBinder = new Binder() {
         @Override
-        protected boolean onTransact(int code, Parcel data, Parcel reply,
-                int flags) throws RemoteException {
+        protected boolean onTransact(int code, Parcel data, Parcel reply, int flags)
+                throws RemoteException {
             return super.onTransact(code, data, reply, flags);
         }
     };

@@ -68,8 +68,7 @@ public class NotifyingController extends Activity {
          */
         @Override
         public void onClick(View v) {
-            startService(new Intent(NotifyingController.this,
-                    NotifyingService.class));
+            startService(new Intent(NotifyingController.this, NotifyingService.class));
         }
     };
 
@@ -86,8 +85,7 @@ public class NotifyingController extends Activity {
          */
         @Override
         public void onClick(View v) {
-            stopService(new Intent(NotifyingController.this,
-                    NotifyingService.class));
+            stopService(new Intent(NotifyingController.this, NotifyingService.class));
         }
     };
 }
