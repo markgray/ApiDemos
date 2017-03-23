@@ -25,8 +25,7 @@ import android.view.View;
 import android.widget.Toast;
 
 /**
- * When you push the button on this Activity, it creates a {@link Toast} object and
- * using the Toast method.
+ * When you push the button on this Activity, it creates a {@link Toast} object and shows it.
  * @see Toast
  * @see Toast#makeText(android.content.Context,int,int)
  * @see Toast#makeText(android.content.Context,java.lang.CharSequence,int)
@@ -34,6 +33,12 @@ import android.widget.Toast;
  * @see Toast#LENGTH_LONG
  */
 public class NotifyWithText extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.notify_with_text.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +50,7 @@ public class NotifyWithText extends Activity {
         // short notification
         button = (Button) findViewById(R.id.short_notify);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 // Note that we create the Toast object and call the show() method
                 // on it all on one line.  Most uses look like this, but there
@@ -66,15 +72,11 @@ public class NotifyWithText extends Activity {
         // to read.
         button = (Button) findViewById(R.id.long_notify);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 Toast.makeText(NotifyWithText.this, R.string.long_notification_text,
                     Toast.LENGTH_LONG).show();
             }
         });
-
-
-
-
-
     }
 }

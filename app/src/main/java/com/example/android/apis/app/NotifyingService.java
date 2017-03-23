@@ -19,8 +19,6 @@ package com.example.android.apis.app;
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
-import com.example.android.apis.R;
-
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -33,6 +31,8 @@ import android.os.ConditionVariable;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
+
+import com.example.android.apis.R;
 
 /**
  * Updates a notification every 5 seconds from a background thread for a minute. Note use of
@@ -100,6 +100,14 @@ public class NotifyingService extends Service {
      * immediately.
      */
     private Runnable mTask = new Runnable() {
+        /**
+         * Starts executing the active part of the class' code. We loop 4 times, calling our method
+         * {@code showNotification} to show three different notifications, pausing after each call
+         * to block on the {@code ConditionVariable mCondition} for 5 seconds, and if we return from
+         * {@code block} before the 5 seconds are over ({@code mCondition} is opened causing a "true"
+         * return), we break out of the for loop prematurely. Whether we execute all four iterations
+         * or break out of the for loop we stop the service using the method {@code stopSelf}.
+         */
         @Override
         public void run() {
             for (int i = 0; i < 4; ++i) {
@@ -118,11 +126,33 @@ public class NotifyingService extends Service {
         }
     };
 
+    /**
+     * Return the communication channel to the service. We simply return our stub {@code IBinder mBinder}
+     * to the caller.
+     *
+     * @param intent The Intent that was used to bind to this service.
+     *
+     * @return an IBinder through which clients can call on to the service.
+     */
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
     }
 
+    /**
+     * Builds and posts a notification using resource ID for the icon and the contents String. First
+     * we fetch {@code CharSequence text} for the resource ID {@code textID}. Next we create a
+     * {@code PendingIntent contentIntent} which will launch the Activity {@code NotifyingController}
+     * if the {@code Notification} we post is selected by the user. We use a {@code Notification.Builder}
+     * to build {@code Notification notification} using our parameter {@code moodId} as the small icon,
+     * the current system time as the timestamp, the String "Mood ring" as the title, {@code text}
+     * as the contents, and {@code contentIntent} as the {@code PendingIntent} to be sent when the
+     * notification is clicked. Finally we post {@code notification} to be shown in the status bar.
+     *
+     * @param moodId Resource ID for small icon of the notification
+     * @param textId Resource ID for String to use for second line of text in the platform
+     *               notification template
+     */
     private void showNotification(int moodId, int textId) {
         // In this sample, we'll use the same text for the ticker and the expanded notification
         CharSequence text = getText(textId);
@@ -152,6 +182,8 @@ public class NotifyingService extends Service {
 
     // This is the object that receives interactions from clients.  See
     // RemoteService for a more complete example.
+    // Does not appear to be used(?) so could just as well be null?
+    // TODO: study aidl example in the Remote Service applications first
     private final IBinder mBinder = new Binder() {
         @Override
         protected boolean onTransact(int code, Parcel data, Parcel reply, int flags)
