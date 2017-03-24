@@ -36,6 +36,12 @@ public class NotifyWithText extends Activity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.notify_with_text.
+     * We declare {@code Button button}, then locate the Button R.id.short_notify in our the layout
+     * and set its {@code OnClickListener} to an anonymous class which makes a {@code Toast} with
+     * the text R.string.short_notification_text ("Short notification") and shows it. Next we locate
+     * the Button R.id.long_notify in our layout and set its {@code OnClickListener} to an anonymous
+     * class which makes a {@code Toast} with the text R.string.long_notification_text ("This is a
+     * long notification. See, you might need a second more to read it.")
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
      */
@@ -50,6 +56,11 @@ public class NotifyWithText extends Activity {
         // short notification
         button = (Button) findViewById(R.id.short_notify);
         button.setOnClickListener(new Button.OnClickListener() {
+            /**
+             * Show the toast "Short notification"
+             *
+             * @param v View of the Button that was clicked
+             */
             @Override
             public void onClick(View v) {
                 // Note that we create the Toast object and call the show() method
@@ -72,6 +83,11 @@ public class NotifyWithText extends Activity {
         // to read.
         button = (Button) findViewById(R.id.long_notify);
         button.setOnClickListener(new Button.OnClickListener() {
+            /**
+             * Shows the toast "This is a long notification. See, you might need a second more to read it."
+             *
+             * @param v View of the Button that was clicked
+             */
             @Override
             public void onClick(View v) {
                 Toast.makeText(NotifyWithText.this, R.string.long_notification_text,

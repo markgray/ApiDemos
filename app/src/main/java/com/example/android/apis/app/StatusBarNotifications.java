@@ -32,16 +32,38 @@ import android.widget.Button;
 import android.widget.RemoteViews;
 
 /**
- * Demonstrates adding notifications to the status bar
+ * Demonstrates adding notifications to the status bar. Displays icon, and text when
+ * buttons pressed. Marquee does not work lollipop.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class StatusBarNotifications extends Activity {
 
+    /**
+     * Our Handle to the {@code NotificationManager} system-level service
+     */
     private NotificationManager mNotificationManager;
 
-    // Use our layout id for a unique identifier
+    /**
+     * Use our layout id for a unique identifier for our notifications
+     */
     private static int MOOD_NOTIFICATIONS = R.layout.status_bar_notifications;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.status_bar_notifications.
+     * We declare {@code Button button} for later use, and fetch a handle to the {@code NotificationManager}
+     * system-level service to initialize our field {@code NotificationManager mNotificationManager}.
+     * Next we locate each of the {@code Button}'s in our layout and set their {@code OnClickListener}
+     * to an anonymous class which will call one or another of our methods with parameters set to
+     * accomplish their purpose:
+     * <ul>
+     * <li>
+     * R.id.happy
+     * </li>
+     * </ul>
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,22 +77,23 @@ public class StatusBarNotifications extends Activity {
 
         button = (Button) findViewById(R.id.happy);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
-                setMood(R.drawable.stat_happy, R.string.status_bar_notifications_happy_message,
-                        false);
+                setMood(R.drawable.stat_happy, R.string.status_bar_notifications_happy_message, false);
             }
         });
 
         button = (Button) findViewById(R.id.neutral);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
-                setMood(R.drawable.stat_neutral, R.string.status_bar_notifications_ok_message,
-                        false);
+                setMood(R.drawable.stat_neutral, R.string.status_bar_notifications_ok_message, false);
             }
         });
 
         button = (Button) findViewById(R.id.sad);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 setMood(R.drawable.stat_sad, R.string.status_bar_notifications_sad_message, false);
             }
@@ -78,14 +101,15 @@ public class StatusBarNotifications extends Activity {
 
         button = (Button) findViewById(R.id.happyMarquee);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
-                setMood(R.drawable.stat_happy, R.string.status_bar_notifications_happy_message,
-                        true);
+                setMood(R.drawable.stat_happy, R.string.status_bar_notifications_happy_message, true);
             }
         });
 
         button = (Button) findViewById(R.id.neutralMarquee);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 setMood(R.drawable.stat_neutral, R.string.status_bar_notifications_ok_message, true);
             }
@@ -93,6 +117,7 @@ public class StatusBarNotifications extends Activity {
 
         button = (Button) findViewById(R.id.sadMarquee);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 setMood(R.drawable.stat_sad, R.string.status_bar_notifications_sad_message, true);
             }
@@ -100,6 +125,7 @@ public class StatusBarNotifications extends Activity {
 
         button = (Button) findViewById(R.id.happyViews);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 setMoodView(R.drawable.stat_happy, R.string.status_bar_notifications_happy_message);
             }
@@ -107,6 +133,7 @@ public class StatusBarNotifications extends Activity {
 
         button = (Button) findViewById(R.id.neutralViews);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 setMoodView(R.drawable.stat_neutral, R.string.status_bar_notifications_ok_message);
             }
@@ -114,34 +141,39 @@ public class StatusBarNotifications extends Activity {
 
         button = (Button) findViewById(R.id.sadViews);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 setMoodView(R.drawable.stat_sad, R.string.status_bar_notifications_sad_message);
             }
         });
-        
+
         button = (Button) findViewById(R.id.defaultSound);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 setDefault(Notification.DEFAULT_SOUND);
             }
         });
-        
+
         button = (Button) findViewById(R.id.defaultVibrate);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 setDefault(Notification.DEFAULT_VIBRATE);
             }
         });
-        
+
         button = (Button) findViewById(R.id.defaultAll);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 setDefault(Notification.DEFAULT_ALL);
             }
         });
-        
+
         button = (Button) findViewById(R.id.clear);
         button.setOnClickListener(new Button.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 mNotificationManager.cancel(R.layout.status_bar_notifications);
             }
@@ -193,6 +225,16 @@ public class StatusBarNotifications extends Activity {
         return contentIntent;
     }
 
+    /**
+     * Builds and posts a notification using resource ID's for the small icon and the second line of
+     * text in the platform notification template. If the parameter {@code boolean showTicker} is true
+     * it sets the "ticker" text which is sent to accessibility services to the same text it uses for
+     * the notification's second line.
+     *
+     * @param moodId     Resource ID for the small icon of the notification
+     * @param textId     Resource ID for the text of the notification
+     * @param showTicker true to set the "ticker" text which is sent to accessibility services.
+     */
     private void setMood(int moodId, int textId, boolean showTicker) {
         // In this sample, we'll use the same text for the ticker and the expanded notification
         CharSequence text = getText(textId);
@@ -201,7 +243,7 @@ public class StatusBarNotifications extends Activity {
         CharSequence title = getText(R.string.status_bar_notifications_mood_title);
 
         // Set the info for the views that show in the notification panel.
-        Notification.Builder notifBuidler = new Notification.Builder(this) // the context to use
+        Notification.Builder notifBuilder = new Notification.Builder(this) // the context to use
                 .setSmallIcon(moodId)  // the status icon
                 .setWhen(System.currentTimeMillis())  // the timestamp for the notification
                 .setContentTitle(title)  // the title for the notification
@@ -210,12 +252,12 @@ public class StatusBarNotifications extends Activity {
 
         if (showTicker) {
             // include the ticker text
-            notifBuidler.setTicker(getString(textId));
+            notifBuilder.setTicker(getString(textId));
         }
 
         // Send the notification.
         // We use a layout id because it is a unique number.  We use it later to cancel.
-        mNotificationManager.notify(MOOD_NOTIFICATIONS, notifBuidler.build());
+        mNotificationManager.notify(MOOD_NOTIFICATIONS, notifBuilder.build());
     }
 
     private void setMoodView(int moodId, int textId) {
@@ -246,7 +288,7 @@ public class StatusBarNotifications extends Activity {
         // notification
         mNotificationManager.notify(MOOD_NOTIFICATIONS, notif);
     }
-    
+
     private void setDefault(int defaults) {
 
         // This is who should be launched if the user selects our notification.
@@ -271,7 +313,7 @@ public class StatusBarNotifications extends Activity {
 
         mNotificationManager.notify(
                 MOOD_NOTIFICATIONS, // we use a string id because it is a unique
-                                    // number.  we use it later to cancel the notification
+                // number.  we use it later to cancel the notification
                 notification);
-    }    
+    }
 }
