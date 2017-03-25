@@ -34,18 +34,25 @@ import android.widget.RelativeLayout;
  */
 public class NotificationDisplay extends Activity implements View.OnClickListener {
     /**
-     * Initialization of the Activity after it is first created.  Must at least
-     * call {@link android.app.Activity#setContentView setContentView()} to
-     * describe what is to be displayed in the screen.
+     * Initialization of the Activity after it is first created. First we call through to our super's
+     * implementation of {@code onCreate}. Then we set the flag FLAG_DIM_BEHIND to dim any windows
+     * behind our window. We create {@code RelativeLayout container}, create {@code ImageButton button}
+     * set its image to the resource ID sent us as an extra in our {@code Intent} using the key
+     * "moodimg", and set the {@code OnClickListener} of {@code button} to "this". We create
+     * {@code RelativeLayout.LayoutParams lp} to have WRAP_CONTENT as its x and y dimensions, and
+     * add the layout rule CENTER_IN_PARENT to it. We add {@code button} to {@code container} using
+     * {@code lp} as its layout parameters, and finally set our content view to {@code container}.
+     *
+     * @param icicle We do not override {@code onSaveInstanceState} so do not use
      */
     @Override
     protected void onCreate(Bundle icicle) {
         // Be sure to call the super class.
         super.onCreate(icicle);
 
-        // Have the system blur any windows behind this one.
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
-                WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+        // Have the system dim any windows behind this one.
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,
+                WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         
         RelativeLayout container = new RelativeLayout(this);
         
@@ -63,6 +70,17 @@ public class NotificationDisplay extends Activity implements View.OnClickListene
         setContentView(container);
     }
 
+    /**
+     * Called when the user clicks on us. First we cancel the notification, then we create an
+     * {@code Intent intent} to launch {@code StatusBarNotifications}, set the action to ACTION_MAIN
+     * to start it as a main entry point, (does not expect to receive data), set the flag
+     * FLAG_ACTIVITY_NEW_TASK (since task is already running for the {@code StatusBarNotifications}
+     * activity a new activity will not be started; instead, the current task will simply be brought to
+     * the front of the screen with the state it was last in), and we start the activity using
+     * {@code intent}. Finally we call {@code finish()} to close our own activity.
+     *
+     * @param v View that was clicked on.
+     */
     public void onClick(View v) {
         // The user has confirmed this notification, so remove it.
         ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))

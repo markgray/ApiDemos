@@ -58,7 +58,53 @@ public class StatusBarNotifications extends Activity {
      * accomplish their purpose:
      * <ul>
      * <li>
-     * R.id.happy
+     * R.id.happy - calls {@code setMood} to use icon R.drawable.stat_happy, the text
+     * R.string.status_bar_notifications_happy_message, and false so it will not display the marquee
+     * ticker text.
+     * </li>
+     * <li>
+     * R.id.neutral - calls {@code setMood} to use icon R.drawable.stat_neutral, the text
+     * R.string.status_bar_notifications_ok_message, and false so it will not display the marquee
+     * ticker text.
+     * </li>
+     * <li>
+     * R.id.sad - calls {@code setMood} to use icon R.drawable.stat_sad, the text
+     * R.string.status_bar_notifications_sad_message, and false so it will not display the marquee
+     * </li>
+     * <li>
+     * R.id.happyMarquee - same as R.id.happy except it passes true to display the marquee ticker text
+     * </li>
+     * <li>
+     * R.id.neutralMarquee - same as R.id.neutral except it passes true to display the marquee ticker text
+     * </li>
+     * <li>
+     * R.id.sadMarquee - same as R.id.sad except it passes true to display the marquee ticker text
+     * </li>
+     * <li>
+     * R.id.happyViews - calls {@code setMoodView} to display the icon R.drawable.stat_happy, and the
+     * text R.string.status_bar_notifications_happy_message
+     * </li>
+     * <li>
+     * R.id.neutralViews - calls {@code setMoodView} to display the icon R.drawable.stat_neutral
+     * and the text R.string.status_bar_notifications_ok_message
+     * </li>
+     * <li>
+     * R.id.sadViews - calls {@code setMoodView} to display the icon R.drawable.stat_sad and the
+     * text R.string.status_bar_notifications_sad_message
+     * </li>
+     * <li>
+     * R.id.defaultSound - calls our method {@code setDefault} which adds the default notification
+     * sound to its notification
+     * </li>
+     * <li>
+     * R.id.defaultVibrate - calls our method {@code setDefault} which adds vibrate to its notification
+     * </li>
+     * <li>
+     * R.id.defaultAll - calls our method {@code setDefault} which adds both vibrate and the
+     * default notification sound to its notification
+     * </li>
+     * <li>
+     * R.id.clear - clears any notification we have posted to the status bar.
      * </li>
      * </ul>
      *
@@ -180,6 +226,13 @@ public class StatusBarNotifications extends Activity {
         });
     }
 
+    /**
+     * Create a {@code PendingIntent} to launch {@code NotificationDisplay}, instructing if to display
+     * the icon with the resource ID {@code moodId}.
+     *
+     * @param moodId resource ID of icon to send as an extra in the {@code PendingIntent} we create
+     * @return {@code PendingIntent} to launch the activity {@code NotificationDisplay}
+     */
     private PendingIntent makeMoodIntent(int moodId) {
         // The PendingIntent to launch our activity if the user selects this
         // notification.  Note the use of FLAG_UPDATE_CURRENT so that if there
@@ -229,7 +282,18 @@ public class StatusBarNotifications extends Activity {
      * Builds and posts a notification using resource ID's for the small icon and the second line of
      * text in the platform notification template. If the parameter {@code boolean showTicker} is true
      * it sets the "ticker" text which is sent to accessibility services to the same text it uses for
-     * the notification's second line.
+     * the notification's second line. First we retrieve {@code CharSequence text} from the resource
+     * ID specified by our parameter {@code textId}, then we retrieve {@code CharSequence title} from
+     * resource ID R.string.status_bar_notifications_mood_title ("Mood ring"). We construct and configure
+     * {@code Notification.Builder notifBuilder} to use our parameter {@code moodId} as the resource
+     * ID for the small icon of a notification, the current time as the timestamp, {@code title} for
+     * the first line "title" of the notification, {@code text}, {@code text} as the second line "details"
+     * of the notification, and the {@code PendingIntent} returned by our method {@code makeMoodIntent}
+     * for the {@code Intent} to be fired when our notification is clicked. If our parameter
+     * {@code showTicker} is true we set the "ticker" text which is sent to accessibility services to
+     * use the resource ID {@code textId}. Finally we use our field {@code NotificationManager mNotificationManager}
+     * to post the notification we {@code build()} from {@code notifBuilder} using MOOD_NOTIFICATIONS
+     * as the ID.
      *
      * @param moodId     Resource ID for the small icon of the notification
      * @param textId     Resource ID for the text of the notification
