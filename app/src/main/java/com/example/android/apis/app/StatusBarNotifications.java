@@ -227,8 +227,8 @@ public class StatusBarNotifications extends Activity {
     }
 
     /**
-     * Create a {@code PendingIntent} to launch {@code NotificationDisplay}, instructing if to display
-     * the icon with the resource ID {@code moodId}.
+     * Create a {@code PendingIntent} to launch {@code NotificationDisplay}, instructing it to display
+     * the icon with the resource ID {@code moodId} by including it as an extra under the key "moodimg"
      *
      * @param moodId resource ID of icon to send as an extra in the {@code PendingIntent} we create
      * @return {@code PendingIntent} to launch the activity {@code NotificationDisplay}
@@ -245,6 +245,23 @@ public class StatusBarNotifications extends Activity {
         return contentIntent;
     }
 
+    /**
+     * Creates a {@code PendingIntent} which contains {@code Intent}'s representing a back stack
+     * history. First we create an array to hold 4 Intents {@code Intent[] intents}. The 0'th
+     * {@code Intent} in {@code intents} is set to an {@code Intent} that can be used to re-launch
+     * the root activity ({@code ApiDemos}) in its base state. The next {@code Intent} in
+     * {@code intents} is set to an {@code Intent} to launch {@code ApiDemos} with extra data
+     * specifying that {@code ApiDemos} should use "App" as the path when displaying its
+     * {@code ListView} of choices, and {@code intents[2]} is set to an {@code Intent} to launch
+     * {@code ApiDemos} with extra data specifying that {@code ApiDemos} should use "App/Notification"
+     * as the path when displaying its {@code ListView} of choices.
+     * <p>
+     * The last {@code Intent} in {@code intents} is set to an {@code Intent} which will launch the
+     * present activity {@code StatusBarNotifications}. We then use these {@code Intent}'s to create
+     * a {@code PendingIntent contentIntent} which we return to the caller.
+     *
+     * @return a back stack of 4 {@code Intent}'s with the last one launching this activity
+     */
     private PendingIntent makeDefaultIntent() {
         // A typical convention for notifications is to launch the user deeply
         // into an application representing the data in the notification; to
@@ -324,6 +341,22 @@ public class StatusBarNotifications extends Activity {
         mNotificationManager.notify(MOOD_NOTIFICATIONS, notifBuilder.build());
     }
 
+    /**
+     * Builds a {@code Notification} manually using a custom {@code RemoteViews} to display the icon
+     * and text passed us. First we create an empty {@code Notification notif}, set its field
+     * {@code contentIntent} (the {@code PendingIntent} that should be launched if our notification
+     * is clicked) to that returned by our method {@code makeMoodIntent(moodId)}. We retrieve
+     * {@code CharSequence text} from the resource string with ID {@code textId}, and set the field
+     * {@code notif.tickerText} to it. We set the field {@code notif.icon} to {@code moodId}. We
+     * create {@code RemoteViews contentView} using our layout file R.layout.status_bar_balloon, and
+     * set its text to {@code text}, and its icon to {@code moodId}. We then set the field
+     * {@code notif.contentView} to {@code contentView}. Finally we use our handle to the system
+     * level NotificationManager service {@code NotificationManager mNotificationManager} to post the
+     * {@code Notification notif} using the id MOOD_NOTIFICATIONS.
+     *
+     * @param moodId resource ID for the icon to use in notification
+     * @param textId resource ID for the text to use in notification
+     */
     private void setMoodView(int moodId, int textId) {
         // Instead of the normal constructor, we're going to use the one with no args and fill
         // in all of the data ourselves.  The normal one uses the default layout for notifications.
@@ -353,6 +386,26 @@ public class StatusBarNotifications extends Activity {
         mNotificationManager.notify(MOOD_NOTIFICATIONS, notif);
     }
 
+    /**
+     * Builds and posts a notification with the addition of a call to {@code setDefaults} when
+     * building it in order to dictate which notification properties will be inherited from system
+     * defaults: DEFAULT_SOUND, DEFAULT_VIBRATE, or DEFAULT_ALL. First we use our method
+     * {@code makeDefaultIntent} to create {@code PendingIntent contentIntent} (it is composed of
+     * a new back stack for a relaunch of our {@code StatusBarNotifications} activity when our
+     * notification is clicked). We fetch {@code CharSequence text} from our resource ID
+     * R.string.status_bar_notifications_happy_message, and {@code CharSequence title} from
+     * R.string.status_bar_notifications_mood_title. Then we use a {@code Notification.Builder} to
+     * build {@code Notification notification} setting the small icon to R.drawable.stat_happy,
+     * the ticker text to {@code text}, the timestamp to the current time, the first line of the
+     * notification to to {@code title}, the second line to {@code text}, we use {@code contentIntent}
+     * as the PendingIntent to be sent when the notification is clicked, set which notification
+     * properties will be inherited from system defaults to our parameter {@code defaults} and build
+     * the notification. Finally we use our handle to the system level NotificationManager service
+     * {@code NotificationManager mNotificationManager} to post the {@code Notification notification}
+     * using the id MOOD_NOTIFICATIONS.
+     *
+     * @param defaults which notification properties will be inherited from system defaults
+     */
     private void setDefault(int defaults) {
 
         // This is who should be launched if the user selects our notification.

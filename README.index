@@ -657,6 +657,7 @@ App
   Notification
     App/Notification/IncomingMessage       all -> v16
         .app.IncomingMessage               interstitial crashes froyo startActivities()
+        .app.IncomingMessageView
             Allows you to choose between a regular app notification, and an interstitial
             notification and shows how to launch IncomingMessageView from either type of
             notification. The interstitial choice launches IncomingMessageInterstitial 
@@ -677,6 +678,7 @@ App
 
     App/Notification/Status Bar            all -> v16
         .app.StatusBarNotifications
+        .app.NotificationDisplay
             froyo crash -- sound/vibrate/all calls: Intent.makeRestartActivityTask() 
             and PendingIntent.getActivities() -> v11+ only. Displays icon, and text when
             buttons pressed. Marquee does not work lollipop.

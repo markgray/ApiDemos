@@ -35,6 +35,9 @@ import com.example.android.apis.R;
  * menu. When the user chooses to print a helper class from the support
  * library is used to print the image.
  * </p>
+ * Shows how to print a Bitmap. Uses ImageView.getDrawable()).getBitmap(); to
+ * retrieve a bitmap of the drawable used in the screen, then to print it uses:
+ * PrintHelper.printBitmap("Print Bitmap", bitmap);
  *
  * @see PrintManager
  * @see WebView
