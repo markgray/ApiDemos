@@ -46,6 +46,14 @@ public class PrintBitmap extends Activity {
 
     private ImageView mImageView;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.print_bitmap.
+     * Finally we initialize our field {@code ImageView mImageView} by locating the view R.id.image
+     * in our layout.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +61,17 @@ public class PrintBitmap extends Activity {
         mImageView = (ImageView) findViewById(R.id.image);
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu. First we call through to our
+     * super's implementation of {@code onCreateOptionsMenu}, then we retrieve a {@code MenuInflater}
+     * with this context and use it to inflate the menu hierarchy from our menu resource
+     * R.menu.print_custom_content into our parameter <var>menu</var>. We return true so that the
+     * menu will be shown.
+     *
+     * @param menu The options menu in which you place your items.
+     * @return You must return true for the menu to be displayed;
+     * if you return false it will not be shown.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -60,6 +79,16 @@ public class PrintBitmap extends Activity {
         return true;
     }
 
+    /**
+     * This hook is called whenever an item in your options menu is selected. First we check to see
+     * if the <var>item</var> selected has the ID R.id.menu_print and if so we call our method
+     * {@code print()} then return true to consume the click here. Otherwise we return the result
+     * returned by calling through to our super's implementation of {@code onOptionsItemSelected}.
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return false to allow normal menu processing to
+     * proceed, true to consume it here.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_print) {
@@ -69,6 +98,14 @@ public class PrintBitmap extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Prints the image displayed in our layout. First we retrieve a handle for the PrintHelper that
+     * can be used to print images to {@code PrintHelper printHelper}. Then we select SCALE_MODE_FIT
+     * for {@code printHelper} (image will be scaled but leave white space). We retrieve the drawable
+     * from our {@code ImageView mImageView} and use the bitmap used by this drawable to set the variable
+     * {@code Bitmap bitmap}. Finally we use {@code printHelper} to print {@code bitmap} using the
+     * job name "Print Bitmap".
+     */
     private void print() {
         // Get the print manager.
         PrintHelper printHelper = new PrintHelper(this);
