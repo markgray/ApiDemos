@@ -84,13 +84,31 @@ public class PrintCustomContent extends ListActivity {
      */
     private static final int MILS_IN_INCH = 1000;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set the cursor for our {@code ListView} to an instance of
+     * {@code MotoGpStatAdapter}, which extends {@code BaseAdapter} and is a very simple adapter
+     * that feeds items from the {@code List<PrintCustomContent.MotoGpStatItem>}'s returned by the
+     * method {@code loadMotoGpStats()} used in its constructor.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setListAdapter(new MotoGpStatAdapter(loadMotoGpStats(),
-                getLayoutInflater()));
+        setListAdapter(new MotoGpStatAdapter(loadMotoGpStats(), getLayoutInflater()));
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu by inflating a menu resource
+     * xml file into <var>menu</var> using a {@code MenuInflater}. First we call through to our
+     * super's implementation of {@code onCreateOptionsMenu}, then we use a {@code MenuInflater}
+     * to inflate our menu xml file R.menu.print_custom_content into {@code Menu menu}. Finally we
+     * return true so that the menu will be displayed.
+     *
+     * @param menu The options menu in which you place your items.
+     * @return You must return true for the menu to be displayed.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -98,6 +116,16 @@ public class PrintCustomContent extends ListActivity {
         return true;
     }
 
+    /**
+     * This hook is called whenever an item in your options menu is selected. If the item ID is
+     * R.id.menu_print we call our method {@code print()} and return true to consume the item click
+     * here. Otherwise we return the return value of our super's implementation of
+     * {@code onOptionsItemSelected}.
+     *
+     * @param item The menu item that was selected.
+     *
+     * @return boolean Return true to consume item selection here.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_print) {
@@ -107,9 +135,11 @@ public class PrintCustomContent extends ListActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Prints the contents of our {@code ListView}.
+     */
     private void print() {
-        PrintManager printManager = (PrintManager) getSystemService(
-                Context.PRINT_SERVICE);
+        PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
 
         printManager.print("MotoGP stats",
                 new PrintDocumentAdapter() {
@@ -229,9 +259,8 @@ public class PrintCustomContent extends ListActivity {
                                 try {
                                     // Create an adapter with the stats and an inflater
                                     // to load resources for the printer density.
-                                    MotoGpStatAdapter adapter = new MotoGpStatAdapter(items,
-                                            (LayoutInflater) mPrintContext.getSystemService(
-                                                    Context.LAYOUT_INFLATER_SERVICE));
+                                    LayoutInflater inflater = (LayoutInflater) mPrintContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                    MotoGpStatAdapter adapter = new MotoGpStatAdapter(items, inflater);
 
                                     int currentPage = 0;
                                     int pageContentHeight = 0;
