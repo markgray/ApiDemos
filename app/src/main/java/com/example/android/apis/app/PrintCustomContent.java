@@ -20,7 +20,6 @@ import android.annotation.TargetApi;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.pdf.PdfDocument;
 import android.graphics.pdf.PdfDocument.Page;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -139,8 +138,8 @@ public class PrintCustomContent extends ListActivity {
     /**
      * Prints the contents of our {@code ListView}. First we initialize {@code PrintManager printManager}
      * with a handle to the PRINT_SERVICE system wide service. Then we request it to create a print job
-     * with the job name "MotoGP stats", an {@code PrintMotoGPAdapter} class instance, and null for
-     * the {@code PrintAttributes}.
+     * with the job name "MotoGP stats", an {@code PrintMotoGPAdapter} {@code PrintDocumentAdapter}
+     * class instance to emit the document to print, and null for the {@code PrintAttributes}.
      */
     private void print() {
         PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
@@ -148,6 +147,19 @@ public class PrintCustomContent extends ListActivity {
         printManager.print("MotoGP stats", new PrintMotoGPAdapter(), null);
     }
 
+    /**
+     * Reads in string-array resources containing the years, champions, and constructors for the MotoGP
+     * winners then creates a list of {@code MotoGpStatItem}'s from the three. First we read in
+     * {@code String[] years} from the string-array R.array.motogp_years, {@code String[] champions}
+     * from the string-array R.array.motogp_champions and  {@code String[] years} from the string-array
+     * R.array.motogp_constructors. We allocate an {@code ArrayList<>} for {@code List<MotoGpStatItem> items}.
+     * Then for every entry in our three string-array's we allocate a {@code MotoGpStatItem item}  set the
+     * fields of {@code item} to the respective entry in the arrays {@code years, champions, and constructors}.
+     * We then add the {@code MotoGpStatItem item} to {@code List<MotoGpStatItem> items}. Finally we
+     * return {@code items} to the caller.
+     *
+     * @return list of {@code MotoGpStatItem}'s as read from our string-array resources
+     */
     private List<MotoGpStatItem> loadMotoGpStats() {
         String[] years = getResources().getStringArray(R.array.motogp_years);
         String[] champions = getResources().getStringArray(R.array.motogp_champions);
