@@ -179,37 +179,82 @@ public class PrintCustomContent extends ListActivity {
         return items;
     }
 
+    /**
+     * Class that contains String fields for each MotoGp winner: year, champion, and constructor.
+     */
     private static final class MotoGpStatItem {
         String year;
         String champion;
         String constructor;
     }
 
+    /**
+     * {@code ListAdapter} used to hold the List of {@code MotoGpStatItem}'s for display in our
+     * {@code ListView} and to for {@code PrintMotoGPAdapter} to use to supply information when it
+     * is acting as a {@code PrintDocumentAdapter}
+     */
     private class MotoGpStatAdapter extends BaseAdapter {
+        /**
+         * {@code List} of data Objects for MotoGp winners initialized in constructor
+         */
         private final List<MotoGpStatItem> mItems;
+        /**
+         * {@code LayoutInflater} to use in {@code getView} override to inflate our xml layout file
+         * R.layout.motogp_stat_item
+         */
         private final LayoutInflater mInflater;
 
+        /**
+         * Constructor that initializes our fields {@code List<MotoGpStatItem> mItems}, and
+         * {@code LayoutInflater mInflater} to our parameters {@code items} and {@code inflater}
+         * respectively.
+         *
+         * @param items {@code List} of {@code MotoGpStatItem} data items for MotoGp winners
+         * @param inflater {@code LayoutInflater} to use in {@code getView} override
+         */
         @SuppressWarnings("WeakerAccess")
         public MotoGpStatAdapter(List<MotoGpStatItem> items, LayoutInflater inflater) {
             mItems = items;
             mInflater = inflater;
         }
 
+        /**
+         * Returns a clone of the MotoGp winner data items in our field {@code List<MotoGpStatItem> mItems}.
+         *
+         * @return list containing the elements of our field {@code List<MotoGpStatItem> mItems}
+         */
         @SuppressWarnings("WeakerAccess")
         public List<MotoGpStatItem> cloneItems() {
             return new ArrayList<>(mItems);
         }
 
+        /**
+         * How many items are in the data set represented by this Adapter.
+         *
+         * @return Count of items.
+         */
         @Override
         public int getCount() {
             return mItems.size();
         }
 
+        /**
+         * Get the data item associated with the specified position in the data set.
+         *
+         * @param position Position of the item whose data we want within the adapter's data set.
+         * @return The data at the specified position.
+         */
         @Override
         public Object getItem(int position) {
             return mItems.get(position);
         }
 
+        /**
+         * Get the row id associated with the specified position in the list.
+         *
+         * @param position The position of the item within the adapter's data set whose row id we want.
+         * @return The id of the item at the specified position.
+         */
         @Override
         public long getItemId(int position) {
             return position;
