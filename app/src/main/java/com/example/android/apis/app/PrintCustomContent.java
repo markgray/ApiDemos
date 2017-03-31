@@ -123,7 +123,6 @@ public class PrintCustomContent extends ListActivity {
      * {@code onOptionsItemSelected}.
      *
      * @param item The menu item that was selected.
-     *
      * @return boolean Return true to consume item selection here.
      */
     @Override
@@ -209,7 +208,7 @@ public class PrintCustomContent extends ListActivity {
          * {@code LayoutInflater mInflater} to our parameters {@code items} and {@code inflater}
          * respectively.
          *
-         * @param items {@code List} of {@code MotoGpStatItem} data items for MotoGp winners
+         * @param items    {@code List} of {@code MotoGpStatItem} data items for MotoGp winners
          * @param inflater {@code LayoutInflater} to use in {@code getView} override
          */
         @SuppressWarnings("WeakerAccess")
@@ -250,7 +249,8 @@ public class PrintCustomContent extends ListActivity {
         }
 
         /**
-         * Get the row id associated with the specified position in the list.
+         * Get the row id associated with the specified position in the list. Our row id is the same
+         * as th position.
          *
          * @param position The position of the item within the adapter's data set whose row id we want.
          * @return The id of the item at the specified position.
@@ -260,6 +260,36 @@ public class PrintCustomContent extends ListActivity {
             return position;
         }
 
+        /**
+         * Get a View that displays the data at the specified position in the data set. You can either
+         * create a View manually or inflate it from an XML layout file. When the View is inflated, the
+         * parent View (GridView, ListView...) will apply default layout parameters unless you use
+         * {@link android.view.LayoutInflater#inflate(int, android.view.ViewGroup, boolean)}
+         * to specify a root view and to prevent attachment to the root.
+         * <p>
+         * First we check to see if there is a {@code View convertView} we can reuse, and if not we
+         * use our field {@code LayoutInflater mInflater} to set {@code convertView} to our inflated
+         * layout file R.layout.motogp_stat_item, using {@code ViewGroup parent} for layout parameters
+         * but not attaching it to that root. Then we fetch the {@code MotoGpStatItem item} at the
+         * position {@code position}. We locate {@code TextView yearView} at ID R.id.year in our
+         * layout {@code convertView} and set its text to the {@code year} field of {@code item},
+         * locate {@code TextView championView} at ID R.id.champion in our layout {@code convertView}
+         * and set its text to the {@code champion} field of {@code item}, and locate
+         * {@code TextView constructorView} at ID R.id.constructor in our layout {@code convertView}
+         * and set its text to the {@code year} field of {@code constructor}. Finally we return
+         * {@code convertView} to the caller.
+         *
+         * @param position    The position of the item within the adapter's data set of the item whose view
+         *                    we want.
+         * @param convertView The old view to reuse, if possible. Note: You should check that this view
+         *                    is non-null and of an appropriate type before using. If it is not possible to convert
+         *                    this view to display the correct data, this method can create a new view.
+         *                    Heterogeneous lists can specify their number of view types, so that this View is
+         *                    always of the right type (see {@link #getViewTypeCount()} and
+         *                    {@link #getItemViewType(int)}).
+         * @param parent      The parent that this view will eventually be attached to
+         * @return A View corresponding to the data at the specified position.
+         */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
@@ -281,6 +311,10 @@ public class PrintCustomContent extends ListActivity {
         }
     }
 
+    /**
+     * This is an implementation of a {@code PrintDocumentAdapter} which will print the contents of
+     * the {@code MotoGpStatAdapter} Adapter populating our {@code ListView}.
+     */
     private class PrintMotoGPAdapter extends PrintDocumentAdapter {
         private int mRenderPageWidth;
         private int mRenderPageHeight;
