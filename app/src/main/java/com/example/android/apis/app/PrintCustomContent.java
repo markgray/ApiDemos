@@ -316,13 +316,116 @@ public class PrintCustomContent extends ListActivity {
      * the {@code MotoGpStatAdapter} Adapter populating our {@code ListView}.
      */
     private class PrintMotoGPAdapter extends PrintDocumentAdapter {
+        /**
+         * Width of page to be printed, it is the maximum width the printer will print
+         */
         private int mRenderPageWidth;
+        /**
+         * Height of page to be printed, it is the maximum height the printer will print
+         */
         private int mRenderPageHeight;
 
+        /**
+         * Copy of {@code PrintAttributes newAttributes} parameter to {@code onLayout} which we stash
+         * for later use in background thread which does the actual printing.
+         */
         private PrintAttributes mPrintAttributes;
+        /**
+         * {@code PrintDocumentInfo info} returned from AsyncTask launched by {@code onLayout}, used
+         * in call to {@code LayoutResultCallback callback.onLayoutFinished}
+         */
         private PrintDocumentInfo mDocumentInfo;
+        /**
+         * {@code Context} for resources at printer density created in {@code onLayout} using a
+         * {@code Configuration} whose field {@code densityDpi} is set to a density calculated
+         * for the maximum size for printer layout, and whose theme is set to the system theme
+         * android.R.style.Theme_Holo_Light
+         */
         private Context mPrintContext;
 
+        /**
+         * Called when the print attributes (page size, density, etc) changed
+         * giving you a chance to layout the content such that it matches the
+         * new constraints. This method is invoked on the main thread.
+         * <p>
+         * After you are done laying out, you <strong>must</strong> invoke: {@link
+         * LayoutResultCallback#onLayoutFinished(PrintDocumentInfo, boolean)} with
+         * the last argument <code>true</code> or <code>false</code> depending on
+         * whether the layout changed the content or not, respectively; or {@link
+         * LayoutResultCallback#onLayoutFailed(CharSequence)}, if an error occurred;
+         * or {@link LayoutResultCallback#onLayoutCancelled()} if layout was
+         * cancelled in a response to a cancellation request via the passed in
+         * {@link CancellationSignal}. Note that you <strong>must</strong> call one of
+         * the methods of the given callback for this method to be considered complete
+         * which is you will not receive any calls to this adapter until the current
+         * layout operation is complete by invoking a method on the callback instance.
+         * The callback methods can be invoked from an arbitrary thread.
+         * <p>
+         * One of the arguments passed to this method is a {@link CancellationSignal}
+         * which is used to propagate requests from the system to your application for
+         * canceling the current layout operation. For example, a cancellation may be
+         * requested if the user changes a print option that may affect layout while
+         * you are performing a layout operation. In such a case the system will make
+         * an attempt to cancel the current layout as another one will have to be performed.
+         * Typically, you should register a cancellation callback in the cancellation
+         * signal. The cancellation callback <strong>will not</strong> be made on the
+         * main thread and can be registered as follows:
+         * <p>
+         * <pre>
+         * cancellationSignal.setOnCancelListener(new OnCancelListener() {
+         *     &#064;Override
+         *     public void onCancel() {
+         *         // Cancel layout
+         *     }
+         * });
+         * </pre>
+         * <p>
+         * <strong>Note:</strong> If the content is large and a layout will be
+         * performed, it is a good practice to schedule the work on a dedicated
+         * thread and register an observer in the provided {@link
+         * CancellationSignal} upon invocation of which you should stop the
+         * layout.
+         * <p>
+         * First we check whether we have already been canceled by calling
+         * {@code CancellationSignal cancellationSignal.isCanceled()}, and if so we just call the
+         * callback {@code LayoutResultCallback callback.onLayoutCancelled()} and return having
+         * done nothing.
+         * <p>
+         * Next we set a flag {@code boolean layoutNeeded} to false, assuming that we will not need
+         * to do a layout after all. Next we compute the value {@code int density} based on the max
+         * of the Horizontal DPI and Vertical DPI of our parameter {@code PrintAttributes newAttributes}.
+         * We use this to calculate the {@code marginLeft}, {@code marginRight} and {@code contentWidth}
+         * we are to use based on the Media size specified in {@code newAttributes}. If the value
+         * stashed in our field {@code int mRenderPageWidth} is not equal to {@code contextWidth},
+         * we set it to {@code contextWidth} and set our {@code layoutNeeded} flag to true. In a similar
+         * way we calculate the Content height given {@code newAttributes} for {@code int contentHeight},
+         * and if the value stashed in our field {@code int mRenderPageHeight} is not the same we set
+         * {@code mRenderPageHeight} to {@code contentHeight} and set our {@code layoutNeeded} flag to
+         * true.
+         * <p>
+         * Next if we have yet to set {@code Context mPrintContext}, or the DPI it uses is different
+         * from the {@code density} we calculated above we create {@code Configuration configuration},
+         * set its field {@code densityDpi} to {@code density}, set {@code mPrintContext} to a
+         * {@code Context} created from {@code configuration} and set its theme to the system theme
+         * android.R.style.Theme_Holo_Light.
+         * <p>
+         * Now if our flag {@code layoutNeeded} is still false, we call the callback
+         * {@code callback.onLayoutFinished(mDocumentInfo, false)} and return.
+         * <p>
+         * Otherwise we have work to do, we clone the contents of our {@code ListAdapter} into
+         * {@code List<MotoGpStatItem> items} so that a background thread can access it,
+         * then launch an anonymous  {@code AsyncTask<Void, Void, PrintDocumentInfo>} to do all
+         * the work for us.
+         *
+         * @param oldAttributes      The old print attributes.
+         * @param newAttributes      The new print attributes.
+         * @param cancellationSignal Signal for observing cancel layout requests.
+         * @param callback           Callback to inform the system for the layout result.
+         * @param metadata           Additional information about how to layout the content. Unused
+         * @see LayoutResultCallback
+         * @see CancellationSignal
+         * @see #EXTRA_PRINT_PREVIEW
+         */
         @Override
         public void onLayout(final PrintAttributes oldAttributes,
                              final PrintAttributes newAttributes,
