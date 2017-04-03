@@ -414,8 +414,8 @@ public class PrintCustomContent extends ListActivity {
          * <p>
          * Otherwise we have work to do, we clone the contents of our {@code ListAdapter} into
          * {@code List<MotoGpStatItem> items} so that a background thread can access it,
-         * then launch an anonymous  {@code AsyncTask<Void, Void, PrintDocumentInfo>} to do all
-         * the work for us.
+         * then launch an anonymous {@code MotoGpOnLayoutAsyncTask} which is an
+         * {@code AsyncTask<Void, Void, PrintDocumentInfo>} to do all the work for us.
          *
          * @param oldAttributes      The old print attributes.
          * @param newAttributes      The new print attributes.
@@ -515,98 +515,8 @@ public class PrintCustomContent extends ListActivity {
             final List<MotoGpStatItem> items = ((MotoGpStatAdapter)
                     getListAdapter()).cloneItems();
 
-            new AsyncTask<Void, Void, PrintDocumentInfo>() {
-                @Override
-                protected void onPreExecute() {
-                    // First register for cancellation requests.
-                    cancellationSignal.setOnCancelListener(new OnCancelListener() {
-                        @Override
-                        public void onCancel() {
-                            cancel(true);
-                        }
-                    });
-                    // Stash the attributes as we will need them for rendering.
-                    mPrintAttributes = newAttributes;
-                }
-
-                @SuppressWarnings("WrongThread")
-                @Override
-                protected PrintDocumentInfo doInBackground(Void... params) {
-                    try {
-                        // Create an adapter with the stats and an inflater
-                        // to load resources for the printer density.
-                        LayoutInflater inflater = (LayoutInflater) mPrintContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        MotoGpStatAdapter adapter = new MotoGpStatAdapter(items, inflater);
-
-                        int currentPage = 0;
-                        int pageContentHeight = 0;
-                        int viewType = -1;
-                        View view = null;
-                        LinearLayout dummyParent = new LinearLayout(mPrintContext);
-                        dummyParent.setOrientation(LinearLayout.VERTICAL);
-
-                        final int itemCount = adapter.getCount();
-                        for (int i = 0; i < itemCount; i++) {
-                            // Be nice and respond to cancellation.
-                            if (isCancelled()) {
-                                return null;
-                            }
-
-                            // Get the next view.
-                            final int nextViewType = adapter.getItemViewType(i);
-                            if (viewType == nextViewType) {
-                                view = adapter.getView(i, view, dummyParent);
-                            } else {
-                                view = adapter.getView(i, null, dummyParent);
-                            }
-                            viewType = nextViewType;
-
-                            // Measure the next view
-                            measureView(view);
-
-                            // Add the height but if the view crosses the page
-                            // boundary we will put it to the next page.
-                            pageContentHeight += view.getMeasuredHeight();
-                            if (pageContentHeight > mRenderPageHeight) {
-                                pageContentHeight = view.getMeasuredHeight();
-                                currentPage++;
-                            }
-                        }
-
-                        // Create a document info describing the result.
-                        PrintDocumentInfo info = new PrintDocumentInfo
-                                .Builder("MotoGP_stats.pdf")
-                                .setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
-                                .setPageCount(currentPage + 1)
-                                .build();
-
-                        // We completed the layout as a result of print attributes
-                        // change. Hence, if we are here the content changed for
-                        // sure which is why we pass true as the second argument.
-                        callback.onLayoutFinished(info, true);
-                        return info;
-                    } catch (Exception e) {
-                        // An unexpected error, report that we failed and
-                        // one may pass in a human readable localized text
-                        // for what the error is if known.
-                        callback.onLayoutFailed(null);
-                        throw new RuntimeException(e);
-                    }
-                }
-
-                @Override
-                protected void onPostExecute(PrintDocumentInfo result) {
-                    // Update the cached info to send it over if the next
-                    // layout pass does not result in a content change.
-                    mDocumentInfo = result;
-                }
-
-                @Override
-                protected void onCancelled(PrintDocumentInfo result) {
-                    // Task was cancelled, report that.
-                    callback.onLayoutCancelled();
-                }
-            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[]) null);
+            new MotoGpOnLayoutAsyncTask(cancellationSignal, newAttributes, items, callback)
+                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[]) null);
         }
 
         @Override
@@ -625,131 +535,8 @@ public class PrintCustomContent extends ListActivity {
             final List<MotoGpStatItem> items = ((MotoGpStatAdapter)
                     getListAdapter()).cloneItems();
 
-            new AsyncTask<Void, Void, Void>() {
-                private final SparseIntArray mWrittenPages = new SparseIntArray();
-                private final PrintedPdfDocument mPdfDocument = new PrintedPdfDocument(
-                        PrintCustomContent.this, mPrintAttributes);
-
-                @Override
-                protected void onPreExecute() {
-                    // First register for cancellation requests.
-                    cancellationSignal.setOnCancelListener(new OnCancelListener() {
-                        @Override
-                        public void onCancel() {
-                            cancel(true);
-                        }
-                    });
-                }
-
-                @SuppressWarnings("WrongThread")
-                @Override
-                protected Void doInBackground(Void... params) {
-                    // Go over all the pages and write only the requested ones.
-                    // Create an adapter with the stats and an inflater
-                    // to load resources for the printer density.
-                    MotoGpStatAdapter adapter = new MotoGpStatAdapter(items,
-                            (LayoutInflater) mPrintContext.getSystemService(
-                                    Context.LAYOUT_INFLATER_SERVICE));
-
-                    int currentPage = -1;
-                    int pageContentHeight = 0;
-                    int viewType = -1;
-                    View view = null;
-                    Page page = null;
-                    LinearLayout dummyParent = new LinearLayout(mPrintContext);
-                    dummyParent.setOrientation(LinearLayout.VERTICAL);
-
-                    // The content is laid out and rendered in screen pixels with
-                    // the width and height of the paper size times the print
-                    // density but the PDF canvas size is in points which are 1/72",
-                    // so we will scale down the content.
-                    final float scale = Math.min(
-                            (float) mPdfDocument.getPageContentRect().width()
-                                    / mRenderPageWidth,
-                            (float) mPdfDocument.getPageContentRect().height()
-                                    / mRenderPageHeight);
-
-                    final int itemCount = adapter.getCount();
-                    for (int i = 0; i < itemCount; i++) {
-                        // Be nice and respond to cancellation.
-                        if (isCancelled()) {
-                            return null;
-                        }
-
-                        // Get the next view.
-                        final int nextViewType = adapter.getItemViewType(i);
-                        if (viewType == nextViewType) {
-                            view = adapter.getView(i, view, dummyParent);
-                        } else {
-                            view = adapter.getView(i, null, dummyParent);
-                        }
-                        viewType = nextViewType;
-
-                        // Measure the next view
-                        measureView(view);
-
-                        // Add the height but if the view crosses the page
-                        // boundary we will put it to the next one.
-                        pageContentHeight += view.getMeasuredHeight();
-                        if (currentPage < 0 || pageContentHeight > mRenderPageHeight) {
-                            pageContentHeight = view.getMeasuredHeight();
-                            currentPage++;
-                            // Done with the current page - finish it.
-                            if (page != null) {
-                                mPdfDocument.finishPage(page);
-                            }
-                            // If the page is requested, render it.
-                            if (containsPage(pages, currentPage)) {
-                                //noinspection Range
-                                page = mPdfDocument.startPage(currentPage);
-                                page.getCanvas().scale(scale, scale);
-                                // Keep track which pages are written.
-                                mWrittenPages.append(mWrittenPages.size(), currentPage);
-                            } else {
-                                page = null;
-                            }
-                        }
-
-                        // If the current view is on a requested page, render it.
-                        if (page != null) {
-                            // Layout an render the content.
-                            view.layout(0, 0, view.getMeasuredWidth(),
-                                    view.getMeasuredHeight());
-                            view.draw(page.getCanvas());
-                            // Move the canvas for the next view.
-                            page.getCanvas().translate(0, view.getHeight());
-                        }
-                    }
-
-                    // Done with the last page.
-                    if (page != null) {
-                        mPdfDocument.finishPage(page);
-                    }
-
-                    // Write the data and return success or failure.
-                    try {
-                        mPdfDocument.writeTo(new FileOutputStream(
-                                destination.getFileDescriptor()));
-                        // Compute which page ranges were written based on
-                        // the bookkeeping we maintained.
-                        PageRange[] pageRanges = computeWrittenPageRanges(mWrittenPages);
-                        callback.onWriteFinished(pageRanges);
-                    } catch (IOException ioe) {
-                        callback.onWriteFailed(null);
-                    } finally {
-                        mPdfDocument.close();
-                    }
-
-                    return null;
-                }
-
-                @Override
-                protected void onCancelled(Void result) {
-                    // Task was cancelled, report that.
-                    callback.onWriteCancelled();
-                    mPdfDocument.close();
-                }
-            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[]) null);
+            new MotoGpOnWriteAsyncTask(cancellationSignal, items, pages, destination, callback)
+                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[]) null);
         }
 
         private void measureView(View view) {
@@ -800,6 +587,258 @@ public class PrintCustomContent extends ListActivity {
                 }
             }
             return false;
+        }
+
+        private class MotoGpOnLayoutAsyncTask extends AsyncTask<Void, Void, PrintDocumentInfo> {
+            private final CancellationSignal cancellationSignal;
+            private final PrintAttributes newAttributes;
+            private final List<MotoGpStatItem> items;
+            private final LayoutResultCallback callback;
+
+            @SuppressWarnings("WeakerAccess")
+            public MotoGpOnLayoutAsyncTask(CancellationSignal cancellationSignal, PrintAttributes newAttributes, List<MotoGpStatItem> items, LayoutResultCallback callback) {
+                this.cancellationSignal = cancellationSignal;
+                this.newAttributes = newAttributes;
+                this.items = items;
+                this.callback = callback;
+            }
+
+            @Override
+            protected void onPreExecute() {
+                // First register for cancellation requests.
+                cancellationSignal.setOnCancelListener(new OnCancelListener() {
+                    @Override
+                    public void onCancel() {
+                        cancel(true);
+                    }
+                });
+                // Stash the attributes as we will need them for rendering.
+                mPrintAttributes = newAttributes;
+            }
+
+            @SuppressWarnings("WrongThread")
+            @Override
+            protected PrintDocumentInfo doInBackground(Void... params) {
+                try {
+                    // Create an adapter with the stats and an inflater
+                    // to load resources for the printer density.
+                    LayoutInflater inflater = (LayoutInflater) mPrintContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    MotoGpStatAdapter adapter = new MotoGpStatAdapter(items, inflater);
+
+                    int currentPage = 0;
+                    int pageContentHeight = 0;
+                    int viewType = -1;
+                    View view = null;
+                    LinearLayout dummyParent = new LinearLayout(mPrintContext);
+                    dummyParent.setOrientation(LinearLayout.VERTICAL);
+
+                    final int itemCount = adapter.getCount();
+                    for (int i = 0; i < itemCount; i++) {
+                        // Be nice and respond to cancellation.
+                        if (isCancelled()) {
+                            return null;
+                        }
+
+                        // Get the next view.
+                        final int nextViewType = adapter.getItemViewType(i);
+                        if (viewType == nextViewType) {
+                            view = adapter.getView(i, view, dummyParent);
+                        } else {
+                            view = adapter.getView(i, null, dummyParent);
+                        }
+                        viewType = nextViewType;
+
+                        // Measure the next view
+                        measureView(view);
+
+                        // Add the height but if the view crosses the page
+                        // boundary we will put it to the next page.
+                        pageContentHeight += view.getMeasuredHeight();
+                        if (pageContentHeight > mRenderPageHeight) {
+                            pageContentHeight = view.getMeasuredHeight();
+                            currentPage++;
+                        }
+                    }
+
+                    // Create a document info describing the result.
+                    PrintDocumentInfo info = new PrintDocumentInfo
+                            .Builder("MotoGP_stats.pdf")
+                            .setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
+                            .setPageCount(currentPage + 1)
+                            .build();
+
+                    // We completed the layout as a result of print attributes
+                    // change. Hence, if we are here the content changed for
+                    // sure which is why we pass true as the second argument.
+                    callback.onLayoutFinished(info, true);
+                    return info;
+                } catch (Exception e) {
+                    // An unexpected error, report that we failed and
+                    // one may pass in a human readable localized text
+                    // for what the error is if known.
+                    callback.onLayoutFailed(null);
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            protected void onPostExecute(PrintDocumentInfo result) {
+                // Update the cached info to send it over if the next
+                // layout pass does not result in a content change.
+                mDocumentInfo = result;
+            }
+
+            @Override
+            protected void onCancelled(PrintDocumentInfo result) {
+                // Task was cancelled, report that.
+                callback.onLayoutCancelled();
+            }
+        }
+
+        private class MotoGpOnWriteAsyncTask extends AsyncTask<Void, Void, Void> {
+            private final SparseIntArray mWrittenPages;
+            private final PrintedPdfDocument mPdfDocument;
+            private final CancellationSignal cancellationSignal;
+            private final List<MotoGpStatItem> items;
+            private final PageRange[] pages;
+            private final ParcelFileDescriptor destination;
+            private final WriteResultCallback callback;
+
+            @SuppressWarnings("WeakerAccess")
+            public MotoGpOnWriteAsyncTask(CancellationSignal cancellationSignal,
+                                          List<MotoGpStatItem> items,
+                                          PageRange[] pages,
+                                          ParcelFileDescriptor destination,
+                                          WriteResultCallback callback) {
+                this.cancellationSignal = cancellationSignal;
+                this.items = items;
+                this.pages = pages;
+                this.destination = destination;
+                this.callback = callback;
+                mWrittenPages = new SparseIntArray();
+                mPdfDocument = new PrintedPdfDocument(
+                        PrintCustomContent.this, mPrintAttributes);
+            }
+
+            @Override
+            protected void onPreExecute() {
+                // First register for cancellation requests.
+                cancellationSignal.setOnCancelListener(new OnCancelListener() {
+                    @Override
+                    public void onCancel() {
+                        cancel(true);
+                    }
+                });
+            }
+
+            @SuppressWarnings("WrongThread")
+            @Override
+            protected Void doInBackground(Void... params) {
+                // Go over all the pages and write only the requested ones.
+                // Create an adapter with the stats and an inflater
+                // to load resources for the printer density.
+                MotoGpStatAdapter adapter = new MotoGpStatAdapter(items,
+                        (LayoutInflater) mPrintContext.getSystemService(
+                                Context.LAYOUT_INFLATER_SERVICE));
+
+                int currentPage = -1;
+                int pageContentHeight = 0;
+                int viewType = -1;
+                View view = null;
+                Page page = null;
+                LinearLayout dummyParent = new LinearLayout(mPrintContext);
+                dummyParent.setOrientation(LinearLayout.VERTICAL);
+
+                // The content is laid out and rendered in screen pixels with
+                // the width and height of the paper size times the print
+                // density but the PDF canvas size is in points which are 1/72",
+                // so we will scale down the content.
+                final float scale = Math.min(
+                        (float) mPdfDocument.getPageContentRect().width()
+                                / mRenderPageWidth,
+                        (float) mPdfDocument.getPageContentRect().height()
+                                / mRenderPageHeight);
+
+                final int itemCount = adapter.getCount();
+                for (int i = 0; i < itemCount; i++) {
+                    // Be nice and respond to cancellation.
+                    if (isCancelled()) {
+                        return null;
+                    }
+
+                    // Get the next view.
+                    final int nextViewType = adapter.getItemViewType(i);
+                    if (viewType == nextViewType) {
+                        view = adapter.getView(i, view, dummyParent);
+                    } else {
+                        view = adapter.getView(i, null, dummyParent);
+                    }
+                    viewType = nextViewType;
+
+                    // Measure the next view
+                    measureView(view);
+
+                    // Add the height but if the view crosses the page
+                    // boundary we will put it to the next one.
+                    pageContentHeight += view.getMeasuredHeight();
+                    if (currentPage < 0 || pageContentHeight > mRenderPageHeight) {
+                        pageContentHeight = view.getMeasuredHeight();
+                        currentPage++;
+                        // Done with the current page - finish it.
+                        if (page != null) {
+                            mPdfDocument.finishPage(page);
+                        }
+                        // If the page is requested, render it.
+                        if (containsPage(pages, currentPage)) {
+                            //noinspection Range
+                            page = mPdfDocument.startPage(currentPage);
+                            page.getCanvas().scale(scale, scale);
+                            // Keep track which pages are written.
+                            mWrittenPages.append(mWrittenPages.size(), currentPage);
+                        } else {
+                            page = null;
+                        }
+                    }
+
+                    // If the current view is on a requested page, render it.
+                    if (page != null) {
+                        // Layout an render the content.
+                        view.layout(0, 0, view.getMeasuredWidth(),
+                                view.getMeasuredHeight());
+                        view.draw(page.getCanvas());
+                        // Move the canvas for the next view.
+                        page.getCanvas().translate(0, view.getHeight());
+                    }
+                }
+
+                // Done with the last page.
+                if (page != null) {
+                    mPdfDocument.finishPage(page);
+                }
+
+                // Write the data and return success or failure.
+                try {
+                    mPdfDocument.writeTo(new FileOutputStream(
+                            destination.getFileDescriptor()));
+                    // Compute which page ranges were written based on
+                    // the bookkeeping we maintained.
+                    PageRange[] pageRanges = computeWrittenPageRanges(mWrittenPages);
+                    callback.onWriteFinished(pageRanges);
+                } catch (IOException ioe) {
+                    callback.onWriteFailed(null);
+                } finally {
+                    mPdfDocument.close();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onCancelled(Void result) {
+                // Task was cancelled, report that.
+                callback.onWriteCancelled();
+                mPdfDocument.close();
+            }
         }
     }
 }
