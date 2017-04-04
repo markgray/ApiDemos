@@ -54,7 +54,7 @@ import java.util.List;
 /**
  * This class demonstrates how to implement custom printing support.
  * <p>
- * This activity shows the list of the MotoGP champions by year and
+ * This activity shows the list of the MotoGp champions by year and
  * brand. The print option in the overflow menu allows the user to
  * print the content. The list of items is laid out to that it fits
  * the options selected by the user from the UI such as page size.
@@ -137,17 +137,17 @@ public class PrintCustomContent extends ListActivity {
     /**
      * Prints the contents of our {@code ListView}. First we initialize {@code PrintManager printManager}
      * with a handle to the PRINT_SERVICE system wide service. Then we request it to create a print job
-     * with the job name "MotoGP stats", an {@code PrintMotoGPAdapter} {@code PrintDocumentAdapter}
+     * with the job name "MotoGp stats", an {@code PrintMotoGpAdapter} {@code PrintDocumentAdapter}
      * class instance to emit the document to print, and null for the {@code PrintAttributes}.
      */
     private void print() {
         PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
 
-        printManager.print("MotoGP stats", new PrintMotoGPAdapter(), null);
+        printManager.print("MotoGp stats", new PrintMotoGpAdapter(), null);
     }
 
     /**
-     * Reads in string-array resources containing the years, champions, and constructors for the MotoGP
+     * Reads in string-array resources containing the years, champions, and constructors for the MotoGp
      * winners then creates a list of {@code MotoGpStatItem}'s from the three. First we read in
      * {@code String[] years} from the string-array R.array.motogp_years, {@code String[] champions}
      * from the string-array R.array.motogp_champions and  {@code String[] years} from the string-array
@@ -189,7 +189,7 @@ public class PrintCustomContent extends ListActivity {
 
     /**
      * {@code ListAdapter} used to hold the List of {@code MotoGpStatItem}'s for display in our
-     * {@code ListView} and to for {@code PrintMotoGPAdapter} to use to supply information when it
+     * {@code ListView} and to for {@code PrintMotoGpAdapter} to use to supply information when it
      * is acting as a {@code PrintDocumentAdapter}
      */
     private class MotoGpStatAdapter extends BaseAdapter {
@@ -315,7 +315,7 @@ public class PrintCustomContent extends ListActivity {
      * This is an implementation of a {@code PrintDocumentAdapter} which will print the contents of
      * the {@code MotoGpStatAdapter} Adapter populating our {@code ListView}.
      */
-    private class PrintMotoGPAdapter extends PrintDocumentAdapter {
+    private class PrintMotoGpAdapter extends PrintDocumentAdapter {
         /**
          * Width of page to be printed, it is the maximum width the printer will print
          */
@@ -597,16 +597,46 @@ public class PrintCustomContent extends ListActivity {
                     .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[]) null);
         }
 
+        /**
+         * Provides the printer page dimensions {@code mRenderPageWidth} and {@code mRenderPageHeight}
+         * to the {@code View view} as constraint information for its width and height dimensions.
+         * First we create an {@code int widthMeasureSpec} MeasureSpec integer, specifying the
+         * requirements for this view to be EXACTLY {@code mRenderPageWidth}, with 0 padding, and
+         * however big the child wants to be in the width dimension. Then we create an
+         * {@code int heightMeasureSpec} MeasureSpec integer, specifying the  requirements for this
+         * view to be EXACTLY {@code mRenderPageHeight}, with 0 padding, and however big the child
+         * wants to be in the height dimension. Finally we pass these two values as constraints to
+         * the {@code View view}'s measure method. This configures the {@code View} for later calls
+         * to {@code getMeasuredHeight} by {@code onLayout}, and to render itself to the canvas it
+         * is given by {@code onWrite} when the time comes. Note that we only use this to measure
+         * all the item views fetched from {@code MotoGpStatAdapter}.
+         *
+         * @param view {@code View} that needs to determine its measurement based on the printer
+         *             sizes {@code mRenderPageWidth} and {@code mRenderPageHeight}
+         */
         private void measureView(View view) {
             final int widthMeasureSpec = ViewGroup.getChildMeasureSpec(
-                    MeasureSpec.makeMeasureSpec(mRenderPageWidth,
-                            MeasureSpec.EXACTLY), 0, view.getLayoutParams().width);
+                    MeasureSpec.makeMeasureSpec(mRenderPageWidth, MeasureSpec.EXACTLY),
+                    0,
+                    view.getLayoutParams().width);
             final int heightMeasureSpec = ViewGroup.getChildMeasureSpec(
-                    MeasureSpec.makeMeasureSpec(mRenderPageHeight,
-                            MeasureSpec.EXACTLY), 0, view.getLayoutParams().height);
+                    MeasureSpec.makeMeasureSpec(mRenderPageHeight, MeasureSpec.EXACTLY),
+                    0,
+                    view.getLayoutParams().height);
             view.measure(widthMeasureSpec, heightMeasureSpec);
         }
 
+        /**
+         * Used to calculate the {@code PageRange[]} array returned to {@code onWriteFinished}, it
+         * parses all the page numbers printed that are adjacent in its parameter
+         * {@code SparseIntArray writtenPages} into different {@code PageRange} structures which it
+         * stores in {@code List<PageRange> pageRanges} one by one. When done with its input it
+         * converts {@code List<PageRange> pageRanges} to {@code PageRange[] pageRangesArray} which
+         * it returns to the caller.
+         *
+         * @param writtenPages pages that were printed in a {@code SparseIntArray}
+         * @return Range of pages printed
+         */
         private PageRange[] computeWrittenPageRanges(SparseIntArray writtenPages) {
             List<PageRange> pageRanges = new ArrayList<>();
 
