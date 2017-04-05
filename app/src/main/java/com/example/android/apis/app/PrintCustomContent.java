@@ -634,15 +634,33 @@ public class PrintCustomContent extends ListActivity {
          * converts {@code List<PageRange> pageRanges} to {@code PageRange[] pageRangesArray} which
          * it returns to the caller.
          *
-         * @param writtenPages pages that were printed in a {@code SparseIntArray}
+         * To do this we first allocate {@code List<PageRange> pageRanges}, initialize our {@code start}
+         * of {@code PageRange} to -1, allocate {@code end} of {@code PageRange}, and initialize
+         * {@code int writtenPageCount} to the size of our parameter {@code SparseIntArray writtenPages}
+         *
+         *
+         * @param writtenPages pages that were printed stored in a {@code SparseIntArray}
          * @return Range of pages printed
          */
         private PageRange[] computeWrittenPageRanges(SparseIntArray writtenPages) {
+            /**
+             * List of {@code PageRange} structures we parse the {@code writtenPages} into.
+             */
             List<PageRange> pageRanges = new ArrayList<>();
 
+            /**
+             * Current start of the range of pages
+             */
             int start = -1;
+            /**
+             * Current end of the range of pages
+             */
             int end;
+            /**
+             * Size of the {@code writtenPages} array, number of pages stored in it.
+             */
             final int writtenPageCount = writtenPages.size();
+
             for (int i = 0; i < writtenPageCount; i++) {
                 //noinspection ConstantConditions
                 if (start < 0) {
