@@ -689,9 +689,18 @@ public class PrintCustomContent extends ListActivity {
             return pageRangesArray;
         }
 
+        /**
+         * Looks through {@code PageRange[] pageRanges} to see if the page {@code page} is included
+         * somewhere in the page ranges. For each {@code PageRange pageRange} in {@code pageRanges}
+         * we check to see if {@code pageRange} "contains" {@code page} between its start and end,
+         * and if so we return true. If none of the {@code pageRanges} contain {@code page} we return
+         * false.
+         *
+         * @param pageRanges array of {@code PageRange} objects to search
+         * @param page page number to search for
+         * @return true if page is found, false if not
+         */
         private boolean containsPage(PageRange[] pageRanges, int page) {
-            @SuppressWarnings("unused")
-            final int pageRangeCount = pageRanges.length;
             for (PageRange pageRange : pageRanges) {
                 if (pageRange.getStart() <= page
                         && pageRange.getEnd() >= page) {
@@ -701,14 +710,50 @@ public class PrintCustomContent extends ListActivity {
             return false;
         }
 
+        /**
+         * Background task to perform all the layouts required by the {@code onLayout} callback in
+         * order to calculate a {@code PrintDocumentInfo} for the {@code PrintDocumentAdapter}.
+         */
         private class MotoGpOnLayoutAsyncTask extends AsyncTask<Void, Void, PrintDocumentInfo> {
+            /**
+             * This is a copy of the {@code CancellationSignal} passed to {@code onLayout} which allows
+             * us to be canceled by setting a {@code OnCancelListener} on it.
+             */
             private final CancellationSignal cancellationSignal;
+            /**
+             * This is a copy of the {@code PrintAttributes} passed to {@code onLayout} which
+             * represents the attributes of the print job. These attributes describe how the printed
+             * content should be laid out.
+             */
             private final PrintAttributes newAttributes;
+            /**
+             * List of {@code MotoGpStatItem}'s which we display in our ListView and want to print.
+             */
             private final List<MotoGpStatItem> items;
+            /**
+             * Provides access to the three callbacks we need to return our result when we are done:
+             * <ul>
+             *     <li>
+             *         {@code onLayoutFinished} - layout was successful, returns a {@code PrintDocumentInfo}
+             *         which contains the information our layout determined.
+             *     </li>
+             *     <li>
+             *         {@code onLayoutCancelled} - Notifies that layout was cancelled as a result of a
+             *         cancellation request.
+             *     </li>
+             *     <li>
+             *         {@code onLayoutFailed} - Notifies that an error occurred while laying out the
+             *         document, the argument is a {@code CharSequence} describing the error.
+             *     </li>
+             * </ul>
+             */
             private final LayoutResultCallback callback;
 
             @SuppressWarnings("WeakerAccess")
-            public MotoGpOnLayoutAsyncTask(CancellationSignal cancellationSignal, PrintAttributes newAttributes, List<MotoGpStatItem> items, LayoutResultCallback callback) {
+            public MotoGpOnLayoutAsyncTask(CancellationSignal cancellationSignal,
+                                           PrintAttributes newAttributes,
+                                           List<MotoGpStatItem> items,
+                                           LayoutResultCallback callback) {
                 this.cancellationSignal = cancellationSignal;
                 this.newAttributes = newAttributes;
                 this.items = items;
