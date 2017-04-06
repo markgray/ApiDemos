@@ -633,49 +633,55 @@ public class PrintCustomContent extends ListActivity {
          * stores in {@code List<PageRange> pageRanges} one by one. When done with its input it
          * converts {@code List<PageRange> pageRanges} to {@code PageRange[] pageRangesArray} which
          * it returns to the caller.
-         *
-         * To do this we first allocate {@code List<PageRange> pageRanges}, initialize our {@code start}
-         * of {@code PageRange} to -1, allocate {@code end} of {@code PageRange}, and initialize
-         * {@code int writtenPageCount} to the size of our parameter {@code SparseIntArray writtenPages}
-         *
+         * <p>
+         * To do this we first allocate an {@code ArrayList} for {@code List<PageRange> pageRanges},
+         * allocate the {@code start} of PageRange variable, allocate the {@code end} of PageRange
+         * variable, and initialize {@code int writtenPageCount} to the number of pages contained in
+         * our parameter {@code SparseIntArray writtenPages}.
+         * <p>
+         * Now we loop through all the pages in {@code writtenPages} one by one using the index
+         * {@code i}. We fetch the page number contained in the {@code i}'th entry in {@code writtenPages}
+         * and use it to set {@code start}, {@code oldEnd} and {@code end}. Then while the next page
+         * number fetched from {@code writtenPages} is less than 1 greater than the previous page
+         * ({@code (end - oldEnd) <= 1}), we set {@code oldEnd} to {@code end}, fetch the next page
+         * number from {@code writtenPages} to set {@code end}, and increment the index {@code i}.
+         * We continue the while loop as long as the pages are adjacent, when there is a skip of a
+         * page (or more) or we run out of pages ({@code i >= writtenPageCount}), we exit the while
+         * loop, construct a {@code PageRange pageRange} that runs from {@code start} to {@code end}
+         * and add it to {@code List<PageRange> pageRanges}.
+         * <p>
+         * Once all pages in {@code writtenPages} have been processed in this manner, we allocate
+         * {@code PageRange[] pageRangesArray} to be the size of {@code pageRanges}, load the contents
+         * of {@code pageRanges} into {@code pageRangesArray} and return {@code pageRangesArray} to
+         * the caller.
          *
          * @param writtenPages pages that were printed stored in a {@code SparseIntArray}
          * @return Range of pages printed
          */
         private PageRange[] computeWrittenPageRanges(SparseIntArray writtenPages) {
-            /**
-             * List of {@code PageRange} structures we parse the {@code writtenPages} into.
-             */
+
+            // List of {@code PageRange} structures we parse the {@code writtenPages} into.
             List<PageRange> pageRanges = new ArrayList<>();
 
-            /**
-             * Current start of the range of pages
-             */
-            int start = -1;
-            /**
-             * Current end of the range of pages
-             */
+            // Current start of the range of pages
+            int start;
+
+            // Current end of the range of pages
             int end;
-            /**
-             * Size of the {@code writtenPages} array, number of pages stored in it.
-             */
+
+            // Size of the {@code writtenPages} array, number of pages stored in it.
             final int writtenPageCount = writtenPages.size();
 
             for (int i = 0; i < writtenPageCount; i++) {
-                //noinspection ConstantConditions
-                if (start < 0) {
-                    start = writtenPages.valueAt(i);
-                }
+                start = writtenPages.valueAt(i);
                 int oldEnd = end = start;
                 while (i < writtenPageCount && (end - oldEnd) <= 1) {
                     oldEnd = end;
                     end = writtenPages.valueAt(i);
                     i++;
                 }
-                @SuppressWarnings("Range") PageRange pageRange = new PageRange(start, end);
+                PageRange pageRange = new PageRange(start, end);
                 pageRanges.add(pageRange);
-                //noinspection UnusedAssignment
-                start = end = -1;
             }
 
             PageRange[] pageRangesArray = new PageRange[pageRanges.size()];
