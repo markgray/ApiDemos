@@ -697,7 +697,7 @@ public class PrintCustomContent extends ListActivity {
          * false.
          *
          * @param pageRanges array of {@code PageRange} objects to search
-         * @param page page number to search for
+         * @param page       page number to search for
          * @return true if page is found, false if not
          */
         private boolean containsPage(PageRange[] pageRanges, int page) {
@@ -733,33 +733,48 @@ public class PrintCustomContent extends ListActivity {
             /**
              * Provides access to the three callbacks we need to return our result when we are done:
              * <ul>
-             *     <li>
-             *         {@code onLayoutFinished} - layout was successful, returns a {@code PrintDocumentInfo}
-             *         which contains the information our layout determined.
-             *     </li>
-             *     <li>
-             *         {@code onLayoutCancelled} - Notifies that layout was cancelled as a result of a
-             *         cancellation request.
-             *     </li>
-             *     <li>
-             *         {@code onLayoutFailed} - Notifies that an error occurred while laying out the
-             *         document, the argument is a {@code CharSequence} describing the error.
-             *     </li>
+             * <li>
+             * {@code onLayoutFinished} - layout was successful, returns a {@code PrintDocumentInfo}
+             * which contains the information our layout determined.
+             * </li>
+             * <li>
+             * {@code onLayoutCancelled} - Notifies that layout was cancelled as a result of a
+             * cancellation request.
+             * </li>
+             * <li>
+             * {@code onLayoutFailed} - Notifies that an error occurred while laying out the
+             * document, the argument is a {@code CharSequence} describing the error.
+             * </li>
              * </ul>
              */
             private final LayoutResultCallback callback;
 
-            @SuppressWarnings("WeakerAccess")
-            public MotoGpOnLayoutAsyncTask(CancellationSignal cancellationSignal,
-                                           PrintAttributes newAttributes,
-                                           List<MotoGpStatItem> items,
-                                           LayoutResultCallback callback) {
+            /**
+             * Constructor which initializes our fields with its parameters of the same name.
+             *
+             * @param cancellationSignal Signal for observing cancel layout requests passed to {@code onLayout}
+             * @param newAttributes The new print attributes passed to {@code onLayout}
+             * @param items A clone of the List of {@code MotoGpStatItem}'s displayed by our UI
+             * @param callback Callback to inform the system for the layout result passed to {@code onLayout}
+             */
+            MotoGpOnLayoutAsyncTask(CancellationSignal cancellationSignal,
+                                    PrintAttributes newAttributes,
+                                    List<MotoGpStatItem> items,
+                                    LayoutResultCallback callback) {
                 this.cancellationSignal = cancellationSignal;
                 this.newAttributes = newAttributes;
                 this.items = items;
                 this.callback = callback;
             }
 
+            /**
+             * Runs on the UI thread before {@link #doInBackground}. First we set the {@code OnCancelListener}
+             * of our field {@code CancellationSignal cancellationSignal} to an anonymous class which
+             * calls {@code AsyncTask.cancel(true)} to cancel this {@code MotoGpOnLayoutAsyncTask}
+             * when the print job signals that it has been canceled, and then we stash a copy of
+             * our field {@code newAttributes} in our field {@code PrintAttributes mPrintAttributes}.
+             * TODO: figure out if this stashing is necessary after our refactoring
+             */
             @Override
             protected void onPreExecute() {
                 // First register for cancellation requests.
