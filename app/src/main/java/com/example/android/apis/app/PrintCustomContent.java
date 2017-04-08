@@ -753,9 +753,9 @@ public class PrintCustomContent extends ListActivity {
              * Constructor which initializes our fields with its parameters of the same name.
              *
              * @param cancellationSignal Signal for observing cancel layout requests passed to {@code onLayout}
-             * @param newAttributes The new print attributes passed to {@code onLayout}
-             * @param items A clone of the List of {@code MotoGpStatItem}'s displayed by our UI
-             * @param callback Callback to inform the system for the layout result passed to {@code onLayout}
+             * @param newAttributes      The new print attributes passed to {@code onLayout}
+             * @param items              A clone of the List of {@code MotoGpStatItem}'s displayed by our UI
+             * @param callback           Callback to inform the system for the layout result passed to {@code onLayout}
              */
             MotoGpOnLayoutAsyncTask(CancellationSignal cancellationSignal,
                                     PrintAttributes newAttributes,
@@ -788,6 +788,26 @@ public class PrintCustomContent extends ListActivity {
                 mPrintAttributes = newAttributes;
             }
 
+            /**
+             * This background thread does a trial layout of our document in order to determine how
+             * many pages the document will be, which it returns wrapped in a {@code PrintDocumentInfo}
+             * object. Wrapped in a try block, we initialize our variables and loop through every
+             * items View that our {@code MotoGpStatAdapter} contains, inflate it, measure it, and
+             * add that measurement to our running count of the size of the current page:
+             * {@code pageContentHeight}. When {@code pageContentHeight} exceeds {@code mRenderPageHeight}
+             * (the height of a printed page), we advance our page count {@code currentPage} and "place"
+             * the last View laid out on a new page. When we are done measuring all the Views we build
+             * a {@code PrintDocumentInfo info} containing the page count, we call the callback
+             * {@code LayoutResultCallback.onLayoutFinished} with {@code info} and the flag for reporting
+             * a layout change set to true. Finally we return {@code info} to the caller. If our try
+             * block encounters an exception, we call the callback {@code LayoutResultCallback.onLayoutFailed}
+             * and throw a runtime exception.
+             *
+             * @param params we do not use any parameters
+             * @return information about our document for printing purposes contains the document name
+             * "MotoGP_stats.pdf", the content type CONTENT_TYPE_DOCUMENT, and the total number of
+             * pages in our document.
+             */
             @SuppressWarnings("WrongThread")
             @Override
             protected PrintDocumentInfo doInBackground(Void... params) {
@@ -797,14 +817,15 @@ public class PrintCustomContent extends ListActivity {
                     LayoutInflater inflater = (LayoutInflater) mPrintContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     MotoGpStatAdapter adapter = new MotoGpStatAdapter(items, inflater);
 
-                    int currentPage = 0;
-                    int pageContentHeight = 0;
-                    int viewType = -1;
-                    View view = null;
+                    int currentPage = 0; // Page count, which is advanced every time pageContentHeight > mRenderPageHeight
+                    int pageContentHeight = 0; // Height of the current page being laid out
+                    int viewType = -1; // view type of the last View processed
+                    View view = null; // View containing current item that is being processed
+                    // This is used to provide layout parameters when calling MotoGpStatAdapter.getView
                     LinearLayout dummyParent = new LinearLayout(mPrintContext);
                     dummyParent.setOrientation(LinearLayout.VERTICAL);
 
-                    final int itemCount = adapter.getCount();
+                    final int itemCount = adapter.getCount(); // Total number of items displayed by our MotoGpStatAdapter
                     for (int i = 0; i < itemCount; i++) {
                         // Be nice and respond to cancellation.
                         if (isCancelled()) {
@@ -853,6 +874,14 @@ public class PrintCustomContent extends ListActivity {
                 }
             }
 
+            /**
+             * Runs on the UI thread after {@link #doInBackground}. The specified result is the value
+             * returned by {@link #doInBackground}. We simply cache the {@code PrintDocumentInfo} in
+             * our field {@code PrintDocumentInfo mDocumentInfo} in order to send it over if the next
+             * layout pass does not result in a content change.
+             *
+             * @param result the {@code PrintDocumentInfo} calculated by our override of {@code doInBackground}
+             */
             @Override
             protected void onPostExecute(PrintDocumentInfo result) {
                 // Update the cached info to send it over if the next
@@ -860,6 +889,13 @@ public class PrintCustomContent extends ListActivity {
                 mDocumentInfo = result;
             }
 
+            /**
+             * Runs on the UI thread after {@link #cancel(boolean)} is invoked and
+             * {@link #doInBackground(Object[])} has finished. We simply call the callback
+             * {@code LayoutResultCallback.onLayoutCancelled}.
+             *
+             * @param result ignored
+             */
             @Override
             protected void onCancelled(PrintDocumentInfo result) {
                 // Task was cancelled, report that.
