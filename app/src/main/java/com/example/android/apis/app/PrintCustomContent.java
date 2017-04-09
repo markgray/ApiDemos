@@ -963,7 +963,20 @@ public class PrintCustomContent extends ListActivity {
 
             /**
              * Started by our {@code onWrite} callback to render, draw and write pdf using our field
-             * {@code PrintedPdfDocument mPdfDocument} on a background thread.
+             * {@code PrintedPdfDocument mPdfDocument} on a background thread. First we create an
+             * {@code MotoGpStatAdapter adapter} using our clone of the UI's content data list
+             * {@code List<MotoGpStatItem> items}, and a {@code LayoutInflater} retrieved from the
+             * system. We set the current page number {@code currentPage} to -1, and the height of
+             * the page we are working on {@code pageContentHeight} to 0. We set {@code viewType} to
+             * -1 to indicate that we do not currently have a {@code View view} or the correct type
+             * for our {@code adapter} to reuse and need to request one when calling {@code getView}.
+             * We initialize the data item View that we will be using for each of the data items
+             * ({@code View view}) to null, and the {@code Page page} whose canvas we are currently
+             * drawing to for the current page to null. We create {@code LinearLayout dummyParent} in
+             * order to use it for LayoutParams when calling {@code adapter.getView}, and set its
+             * orientation to VERTICAL.
+             *
+             * TODO: fix "WrongThread" warning
              *
              * @param params we have no parameters
              * @return we return null
@@ -975,14 +988,15 @@ public class PrintCustomContent extends ListActivity {
                 // Create an adapter with the stats and an inflater
                 // to load resources for the printer density.
                 MotoGpStatAdapter adapter = new MotoGpStatAdapter(items,
-                        (LayoutInflater) mPrintContext.getSystemService(
-                                Context.LAYOUT_INFLATER_SERVICE));
+                        (LayoutInflater) mPrintContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE));
 
-                int currentPage = -1;
-                int pageContentHeight = 0;
-                int viewType = -1;
-                View view = null;
-                Page page = null;
+                int currentPage = -1; // Current page number that we are working on
+                int pageContentHeight = 0; // Height of the current page so far
+                int viewType = -1; // Set to -1 so we only request a new View the first time (getItemViewType returns > 0)
+                View view = null; // View for item that we are laying out, then drawing to the pdf Canvas
+                Page page = null; // Page of the pdf that we are drawing to.
+
+                // This dummy LinearLayout is used to provide LayoutParams for rendering the data item View
                 LinearLayout dummyParent = new LinearLayout(mPrintContext);
                 dummyParent.setOrientation(LinearLayout.VERTICAL);
 
