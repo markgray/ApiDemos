@@ -590,8 +590,7 @@ public class PrintCustomContent extends ListActivity {
             }
 
             // Store the data as we will layout off the main thread.
-            final List<MotoGpStatItem> items = ((MotoGpStatAdapter)
-                    getListAdapter()).cloneItems();
+            final List<MotoGpStatItem> items = ((MotoGpStatAdapter) getListAdapter()).cloneItems();
 
             new MotoGpOnWriteAsyncTask(cancellationSignal, items, pages, destination, callback)
                     .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[]) null);
@@ -903,6 +902,11 @@ public class PrintCustomContent extends ListActivity {
             }
         }
 
+        /**
+         * Background task launched from {@code PrintDocumentAdapter.onWrite} callback which is
+         * called when specific pages of the content should be written in the form of a PDF file to
+         * the given file descriptor {@code ParcelFileDescriptor destination}.
+         */
         private class MotoGpOnWriteAsyncTask extends AsyncTask<Void, Void, Void> {
             private final SparseIntArray mWrittenPages;
             private final PrintedPdfDocument mPdfDocument;
@@ -912,26 +916,44 @@ public class PrintCustomContent extends ListActivity {
             private final ParcelFileDescriptor destination;
             private final WriteResultCallback callback;
 
-            @SuppressWarnings("WeakerAccess")
-            public MotoGpOnWriteAsyncTask(CancellationSignal cancellationSignal,
-                                          List<MotoGpStatItem> items,
-                                          PageRange[] pages,
-                                          ParcelFileDescriptor destination,
-                                          WriteResultCallback callback) {
+            /**
+             * Constructs our {@code MotoGpOnWriteAsyncTask} by storing its arguments in the fields
+             * of the same names, allocating for the field {@code SparseIntArray mWrittenPages}, and
+             * initializing {@code PrintedPdfDocument mPdfDocument} with a {@code PrintedPdfDocument}
+             * using print attributes {@code PrintAttributes mPrintAttributes}.
+             *
+             * @param cancellationSignal Signal for observing cancel writing requests.
+             * @param items              a clone of the {@code List<MotoGpStatItem>}'s that are displayed in our UI
+             * @param pages              The pages whose content to print - non-overlapping in ascending order.
+             * @param destination        The destination file descriptor to which to write.
+             * @param callback           Callback to inform the system for the write result.
+             */
+            MotoGpOnWriteAsyncTask(CancellationSignal cancellationSignal,
+                                   List<MotoGpStatItem> items,
+                                   PageRange[] pages,
+                                   ParcelFileDescriptor destination,
+                                   WriteResultCallback callback) {
                 this.cancellationSignal = cancellationSignal;
                 this.items = items;
                 this.pages = pages;
                 this.destination = destination;
                 this.callback = callback;
                 mWrittenPages = new SparseIntArray();
-                mPdfDocument = new PrintedPdfDocument(
-                        PrintCustomContent.this, mPrintAttributes);
+                mPdfDocument = new PrintedPdfDocument(PrintCustomContent.this, mPrintAttributes);
             }
 
+            /**
+             * Runs on the UI thread before {@link #doInBackground}. We simply set the
+             * {@code OnCancelListener} of our field {@code CancellationSignal cancellationSignal}
+             * to an anonymous class which cancels our AsyncTask, interrupting our thread if needed.
+             */
             @Override
             protected void onPreExecute() {
                 // First register for cancellation requests.
                 cancellationSignal.setOnCancelListener(new OnCancelListener() {
+                    /**
+                     * Call {@code AsyncTask.cancel} to cancel our task, interrupting if necessary.
+                     */
                     @Override
                     public void onCancel() {
                         cancel(true);
@@ -939,6 +961,13 @@ public class PrintCustomContent extends ListActivity {
                 });
             }
 
+            /**
+             * Started by our {@code onWrite} callback to render, draw and write pdf using our field
+             * {@code PrintedPdfDocument mPdfDocument} on a background thread.
+             *
+             * @param params we have no parameters
+             * @return we return null
+             */
             @SuppressWarnings("WrongThread")
             @Override
             protected Void doInBackground(Void... params) {
@@ -1010,9 +1039,8 @@ public class PrintCustomContent extends ListActivity {
 
                     // If the current view is on a requested page, render it.
                     if (page != null) {
-                        // Layout an render the content.
-                        view.layout(0, 0, view.getMeasuredWidth(),
-                                view.getMeasuredHeight());
+                        // Layout and render the content.
+                        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
                         view.draw(page.getCanvas());
                         // Move the canvas for the next view.
                         page.getCanvas().translate(0, view.getHeight());
@@ -1026,8 +1054,7 @@ public class PrintCustomContent extends ListActivity {
 
                 // Write the data and return success or failure.
                 try {
-                    mPdfDocument.writeTo(new FileOutputStream(
-                            destination.getFileDescriptor()));
+                    mPdfDocument.writeTo(new FileOutputStream(destination.getFileDescriptor()));
                     // Compute which page ranges were written based on
                     // the bookkeeping we maintained.
                     PageRange[] pageRanges = computeWrittenPageRanges(mWrittenPages);
