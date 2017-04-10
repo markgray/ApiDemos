@@ -974,7 +974,50 @@ public class PrintCustomContent extends ListActivity {
              * ({@code View view}) to null, and the {@code Page page} whose canvas we are currently
              * drawing to for the current page to null. We create {@code LinearLayout dummyParent} in
              * order to use it for LayoutParams when calling {@code adapter.getView}, and set its
-             * orientation to VERTICAL.
+             * orientation to VERTICAL. We compute a scaling factor {@code float scale} in order to
+             * convert our layout and rendering which is done in pixels to points (1/72") which is
+             * used by the PDF canvas. We set {@code int itemCount} to the total number of data items
+             * contained in our {@code MotoGpStatAdapter adapter} and then loop for each of these using
+             * {@code i} as the index.
+             *
+             * After making sure we have not been canceled first, for each item {@code i} contained
+             * in {@code adapter} we fetch the type of the view to {@code nextViewType}, and if it
+             * is the same as {@code viewType} (the type of the current {@code View view}) we pass
+             * {@code view} to {@code adapter.getView} to be recycled when requesting it to render
+             * the item {@code i} into {@code View view}, otherwise we pass null so that it will
+             * allocate and layout a new {@code View} before rendering item {@code i}. We set
+             * {@code viewType} to {@code newViewType} to cause the {@code View} to be recycled for
+             * the next pass. We then call our method {@code measureView} to instruct {@code view}
+             * to measure itself based on the printer page dimensions, and add the measured height
+             * of the {@code View view} to {@code pageContentHeight}.
+             *
+             * Then if this is the first time through the loop ({@code currentPage} < 0) or the size
+             * of the current page is greater than the size of the printer page
+             * ({@code pageContentHeight > mRenderPageHeight}) we set {@code pageContentHeight} to
+             * the height of the {@code View view}, increment {@code currentPage}, and if we have
+             * a page ready to print (not the first time through the loop, and the last page was
+             * among those requested to be printed) we finish the {@code Page page} we have been
+             * working on in {@code PrintedPdfDocument mPdfDocument}.
+             *
+             * We look through the {@code PageRanges[] pages} for the {@code currentPage} using our
+             * method {@code containsPage}, and if it is a wanted page number we start a new
+             * {@code Page page}, fetch its {@code Canvas} in order to scale it using our pixels to
+             * points scaling factor {@code scale} and append {@code currentPage} to our list of
+             * written pages {@code SparseIntArray mWrittenPages}. If it is not a wanted page we
+             * set {@code page} to null.
+             *
+             * Then if {@code page} is not null, we layout {@code View view} and instruct it to draw
+             * itself into the {@code Canvas} of {@code page}. Then we translate the {@code Canvas}
+             * of {@code page} to get ready for the next view.
+             *
+             * Once done with all the items in our {@code adapter}, if {@code page} is not null we
+             * finish that page.
+             *
+             * Once done rendering the {@code PrintedPdfDocument mPdfDocument}, wrapped in a try block
+             * we instruct {@code mPdfDocument} to write itself to a {@code FileOutputStream} created
+             * from the {@code FileDescriptor} or {@code ParcelFileDescriptor destination}. If we
+             * catch an IOException we call {@code callback.onWriteFailed}. We close {@code mPdfDocument}
+             * in a finally block and return null to our caller.
              *
              * TODO: fix "WrongThread" warning
              *
@@ -1082,6 +1125,13 @@ public class PrintCustomContent extends ListActivity {
                 return null;
             }
 
+            /**
+             * Runs on the UI thread after {@link #cancel(boolean)} is invoked and
+             * {@link #doInBackground(Object[])} has finished. We call {@code callback.onWriteCancelled}
+             * and close {@code PrintedPdfDocument mPdfDocument}
+             *
+             * @param result no result used
+             */
             @Override
             protected void onCancelled(Void result) {
                 // Task was cancelled, report that.
