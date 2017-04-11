@@ -49,14 +49,29 @@ import com.example.android.apis.R;
 @TargetApi(Build.VERSION_CODES.KITKAT)
 public class PrintHtmlOffScreen extends Activity {
 
-    private WebView mWebView;
+    private WebView mWebView; // WebView we load our HTML file into and print
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.print_html_off_screen.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.print_html_off_screen);
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu. First we call through to our
+     * super's implementation of {@code onCreateOptionsMenu}, then we fetch a {@code MenuInflater} and
+     * use it to inflate our menu resource file R.menu.print_custom_content into {@code menu}. We
+     * return true so that the menu will be displayed.
+     *
+     * @param menu Menu to inflate our menu xml file into.
+     * @return true to display the menu.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -64,6 +79,18 @@ public class PrintHtmlOffScreen extends Activity {
         return true;
     }
 
+    /**
+     * This hook is called whenever an item in our options menu is selected. First we check to see
+     * if the ID of {@code MenuItem item} is the same as our R.id.menu_print and if it is we call
+     * our method {@code print()} and return true to the caller (to indicate that we consumed the
+     * selection here). If it is not our {@code MenuItem} we return the value returned by our super's
+     * implementation of onOptionsItemSelected.
+     *
+     * @param item The menu item that was selected.
+     * @return boolean we return true to consume the menu item selection here if it is our "Print"
+     * menu item, otherwise we return the value returned by our super's implementation of
+     * onOptionsItemSelected.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_print) {
@@ -73,6 +100,13 @@ public class PrintHtmlOffScreen extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Called when our "Print" menu item is clicked, it causes our HTML file to be loaded and printed.
+     * First we create a {@code WebView} for our field {@code WebView mWebView}. Then we set the
+     * {@code WebViewClient} of {@code mWebView} to an anonymous class which calls our {@code doPrint}
+     * method only when the load of the HTML file completes. Finally we instruct {@code mWebView} to
+     * load our HTML file "file:///android_res/raw/motogp_stats.html"
+     */
     private void print() {
         // Create a WebView and hold on to it as the printing will start when
         // load completes and we do not want the WbeView to be garbage collected.
@@ -80,9 +114,16 @@ public class PrintHtmlOffScreen extends Activity {
 
         // Important: Only after the page is loaded we will do the print.
         mWebView.setWebViewClient(new WebViewClient() {
+            /**
+             * Notifies us that a page has finished loading. We simply call our method {@code doPrint}
+             * when the page has loaded.
+             *
+             * @param view The WebView that is initiating the callback.
+             * @param url The url of the page.
+             */
             @Override
             public void onPageFinished(WebView view, String url) {
-              doPrint();
+                doPrint();
             }
         });
 
@@ -90,6 +131,9 @@ public class PrintHtmlOffScreen extends Activity {
         mWebView.loadUrl("file:///android_res/raw/motogp_stats.html");
     }
 
+    /**
+     * Causes our field {@code WebView mWebView} to print its contents.
+     */
     private void doPrint() {
         // Get the print manager.
         PrintManager printManager = (PrintManager) getSystemService(
@@ -108,15 +152,15 @@ public class PrintHtmlOffScreen extends Activity {
 
             @Override
             public void onLayout(PrintAttributes oldAttributes, PrintAttributes newAttributes,
-                    CancellationSignal cancellationSignal, LayoutResultCallback callback,
-                    Bundle extras) {
+                                 CancellationSignal cancellationSignal, LayoutResultCallback callback,
+                                 Bundle extras) {
                 mWrappedInstance.onLayout(oldAttributes, newAttributes, cancellationSignal,
                         callback, extras);
             }
 
             @Override
             public void onWrite(PageRange[] pages, ParcelFileDescriptor destination,
-                    CancellationSignal cancellationSignal, WriteResultCallback callback) {
+                                CancellationSignal cancellationSignal, WriteResultCallback callback) {
                 mWrappedInstance.onWrite(pages, destination, cancellationSignal, callback);
             }
 
