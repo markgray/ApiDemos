@@ -34,26 +34,29 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 
+/**
+ * This activity shows a few different ways to invoke search, and inserts context-specific data for
+ * use by the search activity.
+ */
 public class SearchInvoke extends Activity
 {  
         // UI elements
-    Button mStartSearch;
-    Spinner mMenuMode;
-    EditText mQueryPrefill;
-    EditText mQueryAppData;
+    Button mStartSearch; // Button used to start search - Without a keyboard, you need to press this to get a soft keyboard to use.
+    Spinner mMenuMode; // Spinner used to select between "Search Key", "Menu Item", "Type-To-Search" or "Disabled"
+    EditText mQueryPrefill; // Used to enter text to prefill the search
+    EditText mQueryAppData; // context specific data to include in a Bundle under the key "demo_key" it will be returned in search Intents
     
         // Menu mode spinner choices
         // This list must match the list found in samples/ApiDemos/res/values/arrays.xml
-    final static int MENUMODE_SEARCH_KEY = 0;
-    final static int MENUMODE_MENU_ITEM = 1;
-    final static int MENUMODE_TYPE_TO_SEARCH = 2;
-    final static int MENUMODE_DISABLED = 3;
+    final static int MENUMODE_SEARCH_KEY = 0; // "Search Key" Uses the search key to launch searches (Needs keyboard)
+    final static int MENUMODE_MENU_ITEM = 1;  // "Menu Item" Uses the menu item itself to launch searches
+    final static int MENUMODE_TYPE_TO_SEARCH = 2; // "Type-To-Search" unhandled keystrokes will start an application-defined search (needs keyboard)
+    final static int MENUMODE_DISABLED = 3; // "Disabled" Search is disabled
     
     /** 
      * Called with the activity is first created.
-     * 
-     *  We aren't doing anything special in this implementation, other than
-     *  the usual activity setup code. 
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {

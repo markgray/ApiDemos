@@ -132,38 +132,73 @@ public class PrintHtmlOffScreen extends Activity {
     }
 
     /**
-     * Causes our field {@code WebView mWebView} to print its contents.
+     * Causes our field {@code WebView mWebView} to print its contents. First we get a handle to the
+     * system level PRINT_SERVICE for {@code PrintManager printManager}, then we create an instance
+     * of {@code PrintDocumentAdapter adapter} which "wraps" around the {@code PrintDocumentAdapter}
+     * created by our {@code WebView mWebView}. The wrapping allows us to add code to the {@code onFinish}
+     * callback to destroy {@code mWebView}, and set it to null. All other callbacks simply call through
+     * to the {@code PrintDocumentAdapter mWrappedInstance} created by {@code mWebView}. Finally we
+     * pass the wrapper {@code adapter} to {@code printManager} to print the HTML in {@code mWebView}.
      */
     private void doPrint() {
         // Get the print manager.
-        PrintManager printManager = (PrintManager) getSystemService(
-                Context.PRINT_SERVICE);
+        PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
 
         // Create a wrapper PrintDocumentAdapter to clean up when done.
         PrintDocumentAdapter adapter = new PrintDocumentAdapter() {
             @SuppressWarnings("deprecation")
-            private final PrintDocumentAdapter mWrappedInstance =
-                    mWebView.createPrintDocumentAdapter();
+            private final PrintDocumentAdapter mWrappedInstance = mWebView.createPrintDocumentAdapter();
 
+            /**
+             * Called when printing starts. This method is invoked on the main thread. We simply pass
+             * the call on through to {@code mWrappedInstance}.
+             */
             @Override
             public void onStart() {
                 mWrappedInstance.onStart();
             }
 
+            /**
+             * Called when the print attributes (page size, density, etc) changed giving you a
+             * chance to layout the content such that it matches the new constraints. This method
+             * is invoked on the main thread. We simply pass the call on through to
+             * {@code mWrappedInstance}.
+             *
+             * @param oldAttributes The old print attributes.
+             * @param newAttributes The new print attributes.
+             * @param cancellationSignal Signal for observing cancel layout requests.
+             * @param callback Callback to inform the system for the layout result.
+             * @param extras Additional information about how to layout the content.
+             */
             @Override
             public void onLayout(PrintAttributes oldAttributes, PrintAttributes newAttributes,
                                  CancellationSignal cancellationSignal, LayoutResultCallback callback,
                                  Bundle extras) {
-                mWrappedInstance.onLayout(oldAttributes, newAttributes, cancellationSignal,
-                        callback, extras);
+                mWrappedInstance.onLayout(oldAttributes, newAttributes, cancellationSignal, callback, extras);
             }
 
+            /**
+             * Called when specific pages of the content should be written in the
+             * form of a PDF file to the given file descriptor. This method is invoked
+             * on the main thread. We simply pass the call on through to {@code mWrappedInstance}.
+             *
+             * @param pages The pages whose content to print - non-overlapping in ascending order.
+             * @param destination The destination file descriptor to which to write.
+             * @param cancellationSignal Signal for observing cancel writing requests.
+             * @param callback Callback to inform the system for the write result.
+             */
             @Override
             public void onWrite(PageRange[] pages, ParcelFileDescriptor destination,
                                 CancellationSignal cancellationSignal, WriteResultCallback callback) {
                 mWrappedInstance.onWrite(pages, destination, cancellationSignal, callback);
             }
 
+            /**
+             * Called when printing finishes. You can use this callback to release resources
+             * acquired in {@link #onStart()}. This method is invoked on the main thread.
+             * We call through to {@code mWrappedInstance}, destroy the internal state of our
+             * {@code WdbView mWebView}, and set it to null.
+             */
             @Override
             public void onFinish() {
                 mWrappedInstance.onFinish();
