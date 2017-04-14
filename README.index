@@ -710,8 +710,16 @@ App
   Search
     App/Search/Invoke Search               all
         .app.SearchInvoke
-            This activity shows a few different ways to invoke search, and inserts 
-            context-specific data for use by the search activity.
+        .app.SearchQueryResults
+        .app.SearchSuggestionSampleProvider (A provider specified in AndroidManifest.xml)
+            This activity shows a few different ways to invoke search, and inserts context-specific
+            data for use by the search activity The search activity  is defined in AndroidManifest.xml
+            using a meta-data element added to our activity parent component which has the attributes:
+            android:name="android.app.default_searchable" and android:value=".app.SearchQueryResults"
+            This specifies .app.SearchQueryResults to be our searchable activity (it performs searches).
+            The definition of android.app.default_searchable is more typically handled at the
+            applications level, where it can serve as a default for all of your activities.
+
 
     App/Search/Query Search Results        all
         .app.SearchQueryResults

@@ -36,7 +36,15 @@ import android.widget.AdapterView.OnItemSelectedListener;
 
 /**
  * This activity shows a few different ways to invoke search, and inserts context-specific data for
- * use by the search activity.
+ * use by the search activity. The search activity is defined in AndroidManifest.xml using a meta-data
+ * element added to our {@code <activity>} parent component which has the attributes:
+ * <ul>
+ * <li>android:name="android.app.default_searchable"</li>
+ * <li>android:value=".app.SearchQueryResults"</li>
+ * </ul>
+ * This specifies .app.SearchQueryResults to be our searchable activity (it performs searches).
+ * The definition of android.app.default_searchable is more typically handled at the application
+ * level, where it can serve as a default for all of your activities.
  */
 public class SearchInvoke extends Activity {
     // UI elements
@@ -174,11 +182,21 @@ public class SearchInvoke extends Activity {
     }
 
     /**
-     * This hook is called whenever an item in our options menu is selected.
+     * This hook is called whenever an item in our options menu is selected. First we switch based on
+     * the item ID that was selected, if it is item 1 we then call our method {@code clearSearchHistory}
+     * to clear the suggestions that are provided by our provider {@code SearchSuggestionSampleProvider}
+     * via the {@code SearchQueryResults} search activity. If it is item 0, we then switch based on
+     * the selection of {@code Spinner mMenuMode}:
+     * <ul>
+     *     <li>MENUMODE_SEARCH_KEY - we pop up a dialog instructing the user to dismiss the dialog and use the search key</li>
+     *     <li>MENUMODE_MENU_ITEM - immediately calls our override of {@code onSearchRequested}</li>
+     *     <li>MENUMODE_TYPE_TO_SEARCH - we pop up a dialog instructing the user to dismiss the dialog and start typing</li>
+     *     <li>MENUMODE_DISABLED - we pop up a dialog instructing the user that they have disabled search</li>
+     * </ul>
+     * After either of these menu items we return the super's implementation of {@code onOptionsItemSelected} to the caller.
      *
      * @param item The menu item that was selected.
-     * @param item
-     * @return
+     * @return true to consume the item here.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -221,9 +239,20 @@ public class SearchInvoke extends Activity {
     }
 
     /**
-     * This hook is called when the user signals the desire to start a search.
-     * <p>
-     * By overriding this hook we can insert local or context-specific data.
+     * This hook is called when the user signals the desire to start a search. By overriding this
+     * hook we can insert local or context-specific data. First we check to see if MENUMODE_DISABLED
+     * is selected in our {@code Spinner mMenuMode}, and if so we return false having done nothing.
+     * (false is an indication to the caller that our activity blocks search). Next we fetch the
+     * contents of {@code EditText mQueryPrefill} to {@code String queryPrefill} (the String the
+     * user has typed in to prefill the search box). Next we declare {@code Bundle appDataBundle},
+     * fetch the contents of {@code EditText mQueryAppData} to {@code String queryAppDataString} (the
+     * String the user has entered to be used for context-specific search data), and if it is not
+     * null we allocate a new {@code Bundle} for {@code appDataBundle} and store {@code queryAppDataString}
+     * in it using the key "demo_key". Next we call the {@code Activity} member function {@code startSearch}
+     * using {@code queryPrefill} as the initial query, the flag false so that the query is not preselected,
+     * {@code appDataBundle} as the application-specific context, and false to flag that it should
+     * only launch the search that has been specifically defined by the application. Finally we return
+     * true to indicate to the caller that a search has been launched.
      *
      * @return Returns true if search launched, false if activity blocks it
      */
@@ -272,6 +301,12 @@ public class SearchInvoke extends Activity {
      * <p>
      * In this sample app we call this method from a "Clear History" menu item.  You could also
      * implement the UI in your preferences, or any other logical place in your UI.
+     *
+     * First we create an instance of {@code SearchRecentSuggestions suggestions} configured to
+     * use {@code SearchSuggestionSampleProvider.AUTHORITY} ("com.example.android.apis.SuggestionProvider"),
+     * and SearchSuggestionSampleProvider.MODE (DATABASE_MODE_QUERIES - configures the database to record
+     * recent queries - required). Then we instruct {@code suggestions} to perform a clear history
+     * operation.
      */
     private void clearSearchHistory() {
         SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
