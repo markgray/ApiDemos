@@ -727,6 +727,8 @@ App
             full implementation, you would use the query string to select results from
             your data source, and present a list of those results to the user. Does not
             actually do anything unless the device has a "Search Key" like Froyo does.
+            Note: that although this is intended to only be called by SearchInvoke it also can be
+            launched using the "App/Search/Query Search Results" path of the ApiDemos app.
 
   Service
     App/Service/Foreground Service Controller  -- all -> v19

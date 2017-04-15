@@ -33,6 +33,8 @@ import android.widget.TextView;
  * and {@code <category>} android:name="android.intent.category.DEFAULT", as well as a meta-data
  * element with attributes android:name="android.app.searchable" and android:resource="@xml/searchable".
  * xml/searchable is a search configuration file with a {@code <searchable>} root element.
+ * Note: that although this is intended to only be called by {@code SearchInvoke} it also can be
+ * launched using the "App/Search/Query Search Results" path of the {@code ApiDemos} app.
  */
 public class SearchQueryResults extends Activity {
     // UI elements
@@ -41,10 +43,17 @@ public class SearchQueryResults extends Activity {
     TextView mDeliveredByText; // TextView we will use to inform user whether we were started by a search or by launching.
 
     /**
-     * Called with the activity is first created.
-     * <p>
-     * After the typical activity setup code, we check to see if we were launched
-     * with the ACTION_SEARCH intent, and if so, we handle it.
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.search_query_results.
+     * We initialize our field {@code TextView mQueryText} to the View R.id.txt_query in our layout
+     * file, {@code TextView mAppDataText} to the View R.id.txt_appdata, and {@code TextView mDeliveredByText}
+     * to the View R.id.txt_deliveredby. Then we fetch the intent that started this activity to set
+     * {@code Intent queryIntent}, retrieve the general action to be performed to set {@code String queryAction}
+     * and we check to see if we were launched with the ACTION_SEARCH intent, and if so, we handle it
+     * by calling our method {@code doSearchQuery}, otherwise we just set the text of {@code mDeliveredByText}
+     * to "onCreate(), but no ACTION_SEARCH intent".
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @SuppressLint("SetTextI18n")
     @Override
@@ -70,9 +79,12 @@ public class SearchQueryResults extends Activity {
     }
 
     /**
-     * Called when new intent is delivered.
-     * <p>
-     * This is where we check the incoming intent for a query string.
+     * Called when new intent is delivered. First we call through to our super's implementation of
+     * {@code onNewIntent}. Then we fetch the intent that started this activity to set {@code Intent queryIntent},
+     * retrieve the general action to be performed to set {@code String queryAction} and we check to see if we
+     * were launched with the ACTION_SEARCH intent, and if so, we handle it by calling our method
+     * {@code doSearchQuery}, otherwise we just set the text of {@code mDeliveredByText} to "onNewIntent(),
+     * but no ACTION_SEARCH intent".
      *
      * @param newIntent The intent used to restart this activity
      */
@@ -92,10 +104,24 @@ public class SearchQueryResults extends Activity {
     }
 
     /**
-     * Generic search handler.
-     * <p>
-     * In a "real" application, you would use the query string to select results from
-     * your data source, and present a list of those results to the user.
+     * Generic search handler. In a "real" application, you would use the query string to select
+     * results from your data source, and present a list of those results to the user. First we
+     * retrieve {@code String queryString} which is stored in our parameter {@code queryIntent}
+     * as extended data using the key SearchManager.QUERY, and use it to set the text of
+     * {@code TextView mQueryText}. We create an instance {@code SearchRecentSuggestions suggestions}
+     * constructed using the authority SearchSuggestionSampleProvider.AUTHORITY, and the mode
+     * {@code SearchSuggestionSampleProvider.MODE} and use it to add {@code queryString} to the recent
+     * queries list. We retrieve {@code Bundle appData} from {@code queryIntent} using the key
+     * SearchManager.APP_DATA. If {@code appData} is null we set the text of {@code TextView mAppDataText}
+     * to "<no app data bundle>", and if it is not null we retrieve {@code String testStr} from
+     * {@code appData} using the key "demo_key" and if {@code testStr} is null set the text of
+     * {@code TextView mAppDataText} to "<no app data>", otherwise we set it to the contents of
+     * {@code testStr}. Finally we set the text of {@code TextView mDeliveredByText} to the contents
+     * of our parameter {@code String entryPoint}.
+     *
+     * @param queryIntent Intent used to launch our Activity
+     * @param entryPoint String identifying how our Activity was launched to display to user in our
+     *                   {@code TextView mDeliveredByText}
      */
     @SuppressLint("SetTextI18n")
     private void doSearchQuery(final Intent queryIntent, final String entryPoint) {
