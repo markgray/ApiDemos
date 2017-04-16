@@ -45,28 +45,76 @@ import com.example.android.apis.R;
  * to the original APIs.  Yes: you can take this exact code, compile it
  * against the Android 2.0 SDK, and it will against everything down to
  * Android 1.0.
+ * <p>
+ * Note: Since {@code setForeground} has been turned into a no-op we no longer support below KITKAT
  */
 @TargetApi(Build.VERSION_CODES.KITKAT)
 public class ForegroundService extends Service {
+    /**
+     * Action used in {@code Intent} to start our service running in the foreground, it is used
+     * when the "Start Service Foreground" {@code Button} R.id.start_foreground is clicked
+     */
     static final String ACTION_FOREGROUND = "com.example.android.apis.FOREGROUND";
+    /**
+     * Action used in {@code Intent} to start our service running in the background, it is used
+     * when the "Start Service Background" {@code Button} R.id.start_background is clicked
+     */
     static final String ACTION_BACKGROUND = "com.example.android.apis.BACKGROUND";
-    
 
-    private static final Class<?>[] mSetForegroundSignature = new Class[] {
-        boolean.class};
-    private static final Class<?>[] mStartForegroundSignature = new Class[] {
-        int.class, Notification.class};
-    private static final Class<?>[] mStopForegroundSignature = new Class[] {
-        boolean.class};
-    
+    /**
+     * List of parameters used to retrieve the {@code Method} "setForeground" using {@code getMethod},
+     * and initializing {@code Method mSetForeground}. This is not actually used since we no longer
+     * support lower than KITKAT
+     */
+    private static final Class<?>[] mSetForegroundSignature = new Class[]{
+            boolean.class
+    };
+    /**
+     * List of parameters used to retrieve the {@code Method} "startForeground" using {@code getMethod},
+     * and initializing {@code Method mStartForeground}.
+     */
+    private static final Class<?>[] mStartForegroundSignature = new Class[]{
+            int.class,
+            Notification.class
+    };
+    /**
+     * List of parameters used to retrieve the {@code Method} "stopForeground" using {@code getMethod},
+     * and initializing {@code Method mStopForeground}.
+     */
+    private static final Class<?>[] mStopForegroundSignature = new Class[]{
+            boolean.class
+    };
+
+    /**
+     * A handle to the system wide Service NOTIFICATION_SERVICE.
+     */
     private NotificationManager mNM;
+    /**
+     * {@code Method} used to invoke the method {@code void setForeground(boolean isForeground)} on
+     * older APIs (Note: we do not use this)
+     */
     private Method mSetForeground;
+    /**
+     * {@code Method} used to invoke the method {@code startForeground(int id, Notification notification)}
+     */
     private Method mStartForeground;
+    /**
+     * {@code Method} used to invoke the method {@code stopForeground(boolean removeNotification)}
+     */
     private Method mStopForeground;
+    /**
+     * Argument array used to invoke the method {@code void setForeground(boolean isForeground)}
+     */
     private Object[] mSetForegroundArgs = new Object[1];
+    /**
+     * Argument array used to invoke the method {@code startForeground(int id, Notification notification)}
+     */
     private Object[] mStartForegroundArgs = new Object[2];
+    /**
+     * Argument array used to invoke the method {@code stopForeground(boolean removeNotification)}
+     */
     private Object[] mStopForegroundArgs = new Object[1];
-    
+
     void invokeMethod(Method method, Object[] args) {
         try {
             method.invoke(this, args);
@@ -78,7 +126,7 @@ public class ForegroundService extends Service {
             Log.w("ApiDemos", "Unable to invoke method IllegalAccess", e);
         }
     }
-    
+
     /**
      * This is a wrapper around the new startForeground method, using the older
      * APIs if it is not available.
@@ -92,13 +140,13 @@ public class ForegroundService extends Service {
             invokeMethod(mStartForeground, mStartForegroundArgs);
             return;
         }
-        
+
         // Fall back on the old API.
         mSetForegroundArgs[0] = Boolean.TRUE;
         invokeMethod(mSetForeground, mSetForegroundArgs);
         mNM.notify(id, notification);
     }
-    
+
     /**
      * This is a wrapper around the new stopForeground method, using the older
      * APIs if it is not available.
@@ -110,33 +158,29 @@ public class ForegroundService extends Service {
             invokeMethod(mStopForeground, mStopForegroundArgs);
             return;
         }
-        
+
         // Fall back on the old API.  Note to cancel BEFORE changing the
         // foreground state, since we could be killed at that point.
         mNM.cancel(id);
         mSetForegroundArgs[0] = Boolean.FALSE;
         invokeMethod(mSetForeground, mSetForegroundArgs);
     }
-    
+
     @Override
     public void onCreate() {
-        mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         try {
-            mStartForeground = getClass().getMethod("startForeground",
-                    mStartForegroundSignature);
-            mStopForeground = getClass().getMethod("stopForeground",
-                    mStopForegroundSignature);
+            mStartForeground = getClass().getMethod("startForeground", mStartForegroundSignature);
+            mStopForeground = getClass().getMethod("stopForeground", mStopForegroundSignature);
             return;
         } catch (NoSuchMethodException e) {
             // Running on an older platform.
             mStartForeground = mStopForeground = null;
         }
         try {
-            mSetForeground = getClass().getMethod("setForeground",
-                    mSetForegroundSignature);
+            mSetForeground = getClass().getMethod("setForeground", mSetForegroundSignature);
         } catch (NoSuchMethodException e) {
-            throw new IllegalStateException(
-                    "OS doesn't have Service.startForeground OR Service.setForeground!");
+            throw new IllegalStateException("OS doesn't have Service.startForeground OR Service.setForeground!");
         }
     }
 
@@ -145,7 +189,6 @@ public class ForegroundService extends Service {
         // Make sure our notification is gone.
         stopForegroundCompat(R.string.foreground_service_started);
     }
-
 
 
     // This is the old onStart method that will be called on the pre-2.0
@@ -184,22 +227,22 @@ public class ForegroundService extends Service {
                     .build();
 
             startForegroundCompat(R.string.foreground_service_started, notification);
-            
+
         } else if (ACTION_BACKGROUND.equals(intent.getAction())) {
             stopForegroundCompat(R.string.foreground_service_started);
         }
     }
-    
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-    
+
     // ----------------------------------------------------------------------
 
     /**
      * <p>Example of explicitly starting and stopping the {@link ForegroundService}.
-     * 
+     * <p>
      * <p>Note that this is implemented as an inner class only keep the sample
      * all together; typically this code would appear in some separate class.
      */
@@ -211,11 +254,11 @@ public class ForegroundService extends Service {
             setContentView(R.layout.foreground_service_controller);
 
             // Watch for button clicks.
-            Button button = (Button)findViewById(R.id.start_foreground);
+            Button button = (Button) findViewById(R.id.start_foreground);
             button.setOnClickListener(mForegroundListener);
-            button = (Button)findViewById(R.id.start_background);
+            button = (Button) findViewById(R.id.start_background);
             button.setOnClickListener(mBackgroundListener);
-            button = (Button)findViewById(R.id.stop);
+            button = (Button) findViewById(R.id.stop);
             button.setOnClickListener(mStopListener);
         }
 
