@@ -115,6 +115,13 @@ public class ForegroundService extends Service {
      */
     private Object[] mStopForegroundArgs = new Object[1];
 
+    /**
+     * Wraps a try block around a call to {@code method.invoke(this, args)}, logging warning messages
+     * if it catches either InvocationTargetException or IllegalAccessException.
+     *
+     * @param method {@code Method} to invoke
+     * @param args   argument array to pass to the method
+     */
     void invokeMethod(Method method, Object[] args) {
         try {
             method.invoke(this, args);
@@ -128,8 +135,30 @@ public class ForegroundService extends Service {
     }
 
     /**
-     * This is a wrapper around the new startForeground method, using the older
-     * APIs if it is not available.
+     * This is a wrapper around the new startForeground method, using the older APIs if it is not
+     * available. Note: the older APIs are not available since we are targeting KITKAT and above, so
+     * the new APIs are always used.
+     * <p>
+     * Make this service run in the foreground, supplying the ongoing
+     * notification to be shown to the user while in this state.
+     * By default services are background, meaning that if the system needs to
+     * kill them to reclaim more memory (such as to display a large page in a
+     * web browser), they can be killed without too much harm.  You can set this
+     * flag if killing your service would be disruptive to the user, such as
+     * if your service is performing background music playback, so the user
+     * would notice if their music stopped playing.
+     * <p>
+     * First we check to see if {@code Method mStartForeground} is not null (new APIs - always used
+     * now so check is unneeded) and if so we load {@code Object[] mStartForegroundArgs} with our
+     * two parameters, call our method {@code invokeMethod} to run {@code mStartForeground} with these
+     * parameters, and return. If {@code Method mStartForeground} was null we used to store true in
+     * {@code Object[] mSetForegroundArgs}, invoke {@code Method mSetForeground} using that parameter,
+     * and post the {@code Notification notification} using {@code id} as its ID.
+     *
+     * @param id           The identifier for this notification as per
+     *                     {@link NotificationManager#notify(int, Notification)
+     *                     NotificationManager.notify(int, Notification)}; must not be 0.
+     * @param notification The Notification to be displayed.
      */
     void startForegroundCompat(int id, Notification notification) {
         // If we have the new startForeground API, then use it.
@@ -148,8 +177,18 @@ public class ForegroundService extends Service {
     }
 
     /**
-     * This is a wrapper around the new stopForeground method, using the older
-     * APIs if it is not available.
+     * This is a wrapper around the new stopForeground method, using the older APIs if it is not
+     * available. Note: since we target KITKAT and above, the new APIs are always used.
+     * <p>
+     * Remove this service from foreground state, allowing it to be killed if more memory is needed.
+     * First we check to see if {@code Method mStopForeground} is not null (it is never null in our
+     * case) and if so we load {@code Object[] mStopForegroundArgs} with true, and use it as the
+     * parameters when we invoke {@code mStopForeground}. We then return to the caller. If it was
+     * null (never) we used to cancel the notification with ID {@code id}, load the parameter array
+     * {@code Object[] mSetForegroundArgs} with false, and invoke {@code Method mSetForeground}
+     * with it as the parameter list.
+     *
+     * @param id ID of the notification posted by {@code startForegroundCompat}
      */
     void stopForegroundCompat(int id) {
         // If we have the new stopForeground API, then use it.
@@ -166,6 +205,25 @@ public class ForegroundService extends Service {
         invokeMethod(mSetForeground, mSetForegroundArgs);
     }
 
+    /**
+     * Called by the system when the service is first created. First we fetch a handle to the system
+     * level service NOTIFICATION_SERVICE to {@code NotificationManager mNM}. Then wrapped in a try
+     * block we attempt to use reflection to initialize {@code Method mStartForeground} to the method
+     * {@code startForeground} that uses the list of parameters specified by the array
+     * {@code Class<?>[] mStartForegroundSignature} (int, Notification), {@code Method mStopForeground}
+     * to the method {@code stopForeground} that uses the list of parameters specified by the array
+     * {@code Class<?>[] mStopForegroundSignature} (boolean). If these reflections both succeed we
+     * return.
+     * <p>
+     * If we catch NoSuchMethodException we set both {@code mStartForeground} and {@code mStopForeground}
+     * to null and wrapped in another try block we attempt to use reflection to initialize
+     * {@code Method mSetForeground} to the method {@code setForeground} that has the parameter list
+     * specified by the array {@code Class<?>[] mSetForegroundSignature} (boolean). If we catch
+     * NoSuchMethodException we throw an IllegalStateException complaining "OS doesn't have
+     * Service.startForeground OR Service.setForeground!" Note: the first try block will always
+     * succeed so this try block will never executed (assuming Android does not remove or change
+     * the API for foreground services).
+     */
     @Override
     public void onCreate() {
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -184,22 +242,63 @@ public class ForegroundService extends Service {
         }
     }
 
+    /**
+     * Called by the system to notify a Service that it is no longer used and is being removed. We
+     * simply call our method {@code stopForegroundCompat} using the same ID for the notification that
+     * we used for {@code startForegroundCompat}.
+     */
     @Override
     public void onDestroy() {
         // Make sure our notification is gone.
         stopForegroundCompat(R.string.foreground_service_started);
     }
 
-
-    // This is the old onStart method that will be called on the pre-2.0
-    // platform.  On 2.0 or later we override onStartCommand() so this
-    // method will not be called.
+    /**
+     * This is the old onStart method that will be called on the pre-2.0 platform. On 2.0 or later
+     * we override onStartCommand() so this method will not be called. We simply call our method
+     * {@code handleCommand} with the {@code Intent intent} parameter passed us. (The method
+     * {@code handleCommand} is also used by our override of {@code onStartCommand})
+     *
+     * @param intent  The Intent supplied to {@link android.content.Context#startService},
+     *                as given.  This may be null if the service is being restarted after
+     *                its process has gone away, and it had previously returned anything
+     *                except {@link #START_STICKY_COMPATIBILITY}.
+     * @param startId A unique integer representing this specific request to start.
+     */
     @SuppressWarnings("deprecation")
     @Override
     public void onStart(Intent intent, int startId) {
         handleCommand(intent);
     }
 
+    /**
+     * Called by the system every time a client explicitly starts the service by calling
+     * {@link android.content.Context#startService}, providing the arguments it supplied and a
+     * unique integer token representing the start request. We simply pass the {@code Intent intent}
+     * parameter to our method {@code handleCommand} and return START_STICKY to the caller.
+     * <p>
+     * (START_STICKY means that if this service's process is killed while it is started (after
+     * returning from onStartCommand(Intent, int, int)), then leave it in the started state but
+     * don't retain this delivered intent. Later the system will try to re-create the service.
+     * Because it is in the started state, it will guarantee to call onStartCommand(Intent, int, int)
+     * after creating the new service instance; if there are not any pending start commands to be
+     * delivered to the service, it will be called with a null intent object, so you must take care
+     * to check for this. This mode makes sense for things that will be explicitly started and
+     * stopped to run for arbitrary periods of time, such as a service performing background music
+     * playback.
+     *
+     * @param intent  The Intent supplied to {@link android.content.Context#startService},
+     *                as given.  This may be null if the service is being restarted after
+     *                its process has gone away, and it had previously returned anything
+     *                except {@link #START_STICKY_COMPATIBILITY}.
+     * @param flags   Additional data about this start request.  Currently either
+     *                0, {@link #START_FLAG_REDELIVERY}, or {@link #START_FLAG_RETRY}.
+     * @param startId A unique integer representing this specific request to
+     *                start.  Use with {@link #stopSelfResult(int)}.
+     * @return The return value indicates what semantics the system should
+     * use for the service's current started state.  It may be one of the
+     * constants associated with the {@link #START_CONTINUATION_MASK} bits.
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         handleCommand(intent);
@@ -208,13 +307,35 @@ public class ForegroundService extends Service {
         return START_STICKY;
     }
 
+    /**
+     * Handles the command (Action) contained in the {@code Intent intent} that was used to start
+     * us. If the action of the {@code Intent intent} is ACTION_FOREGROUND, we initialize
+     * {@code CharSequence text} with the resource String R.string.foreground_service_started
+     * ("Service is in the foreground"), create {@code PendingIntent contentIntent} which will start
+     * our inner {@code Activity} class {@code Controller} (which started us in the first place!)
+     * Then we build {@code Notification notification} using R.drawable.stat_sample as the small icon,
+     * {@code text} as the "ticker" text, the current time as the timestamp, R.string.alarm_service_label
+     * as the first line of text, {@code text} as the second line of text, and {@code contentIntent}
+     * as the PendingIntent to be sent when the notification is clicked. We then call our method
+     * {@code startForegroundCompat} with {@code notification} as the {@code Notification} to be
+     * displayed while we run in the foreground, and R.string.foreground_service_started as the
+     * ID for our {@code Notification}.
+     * <p>
+     * If the action of the {@code Intent intent} is ACTION_BACKGROUND, we call our method
+     * {@code stopForegroundCompat} with R.string.foreground_service_started as the ID of the
+     * {@code Notification} to be canceled.
+     *
+     * @param intent The Intent supplied to {@link android.content.Context#startService},
+     *               as given.  This may be null if the service is being restarted after
+     *               its process has gone away, and it had previously returned anything
+     *               except {@link #START_STICKY_COMPATIBILITY}.
+     */
     void handleCommand(Intent intent) {
         if (ACTION_FOREGROUND.equals(intent.getAction())) {
             // In this sample, we'll use the same text for the ticker and the expanded notification
             CharSequence text = getText(R.string.foreground_service_started);
 
-            PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                    new Intent(this, Controller.class), 0);
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, Controller.class), 0);
 
             // Set the info for the views that show in the notification panel.
             Notification notification = new Notification.Builder(this)
@@ -233,6 +354,17 @@ public class ForegroundService extends Service {
         }
     }
 
+    /**
+     * Return the communication channel to the service.  May return null if  clients can not bind to
+     * the service, and we do return null.
+     *
+     * @param intent The Intent that was used to bind to this service,
+     *               as given to {@link android.content.Context#bindService
+     *               Context.bindService}.  Note that any extras that were included with
+     *               the Intent at that point will <em>not</em> be seen here.
+     * @return Return an IBinder through which clients can call on to the
+     * service.
+     */
     @Override
     public IBinder onBind(Intent intent) {
         return null;
