@@ -19,7 +19,7 @@ package com.example.android.apis.app;
 /**
  * Example of a secondary interface associated with a service.  (Note that
  * the interface itself doesn't impact, it is just a matter of how you
- * retrieve it from the service.)
+ * retrieve it from the service.) Used in RemoteService.java
  */
 interface ISecondary {
     /**

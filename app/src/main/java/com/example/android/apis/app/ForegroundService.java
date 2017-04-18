@@ -379,6 +379,17 @@ public class ForegroundService extends Service {
      * all together; typically this code would appear in some separate class.
      */
     public static class Controller extends Activity {
+        /**
+         * Called when the activity is starting. First we call through to our super's implementation
+         * of {@code onCreate}, then we set our content view to our layout resource file
+         * R.layout.foreground_service_controller. We locate the {@code Button} R.id.start_foreground
+         * and set its {@code OnClickListener} to {@code OnClickListener mForegroundListener}, locate
+         * the {@code Button} R.id.start_background and set its {@code OnClickListener} to
+         * {@code OnClickListener mBackgroundListener}, and locate the {@code Button} R.id.stop
+         * and set its {@code OnClickListener} to {@code OnClickListener mStopListener}.
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+         */
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -394,7 +405,14 @@ public class ForegroundService extends Service {
             button.setOnClickListener(mStopListener);
         }
 
+        /**
+         * {@code OnClickListener} for the {@code Button} R.id.start_foreground, it creates an
+         * {@code Intent} with the action ForegroundService.ACTION_FOREGROUND, sets the component
+         * to handle the intent to the class name of ForegroundService.class, and uses the Intent
+         * to start the service.
+         */
         private OnClickListener mForegroundListener = new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ForegroundService.ACTION_FOREGROUND);
                 intent.setClass(Controller.this, ForegroundService.class);
@@ -402,7 +420,14 @@ public class ForegroundService extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the {@code Button} R.id.start_background, it creates an
+         * {@code Intent} with the action ForegroundService.ACTION_BACKGROUND, sets the component
+         * to handle the intent to the class name of ForegroundService.class, and uses the Intent
+         * to start the service.
+         */
         private OnClickListener mBackgroundListener = new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ForegroundService.ACTION_BACKGROUND);
                 intent.setClass(Controller.this, ForegroundService.class);
@@ -410,10 +435,15 @@ public class ForegroundService extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the {@code Button} R.id.stop, it creates an {@code Intent}
+         * for the ForegroundService.class and uses it to request that the application service be
+         * stopped.
+         */
         private OnClickListener mStopListener = new OnClickListener() {
+            @Override
             public void onClick(View v) {
-                stopService(new Intent(Controller.this,
-                        ForegroundService.class));
+                stopService(new Intent(Controller.this, ForegroundService.class));
             }
         };
     }

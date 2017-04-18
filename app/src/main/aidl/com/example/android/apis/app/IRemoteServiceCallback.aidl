@@ -21,9 +21,9 @@ package com.example.android.apis.app;
  * synchronous notifications back to its clients.  Note that this is a
  * one-way interface so the server does not block waiting for the client.
  */
-oneway interface IRemoteServiceCallback {
+interface IRemoteServiceCallback {
     /**
      * Called when the service has a new value for you.
      */
-    void valueChanged(int value);
+    oneway void valueChanged(int value);
 }
