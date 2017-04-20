@@ -741,9 +741,11 @@ App
             Show how to use android:isolatedProcess="true" AndroidManifest option for
             a service -- the "two" services .app.IsolatedService and .app.IsolatedService2
             do absolutely nothing so there is no way to tell.
+            TODO: Make this example service actually do something
 
     App/Service/Local Service Binding          -- all
         .app.LocalServiceActivities$Binding
+        .app.LocalService
             This demonstrates the implementation of a service that runs in the same 
             process as the rest of the application, which is explicitly started and 
             stopped as desired. Binds to app.LocalService.java

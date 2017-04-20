@@ -16,20 +16,22 @@
 
 package com.example.android.apis.app;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.android.apis.R;
+
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
-import com.example.android.apis.R;
 
 /**
  * This is an example of implementing an application service that runs locally
@@ -42,7 +44,7 @@ import com.example.android.apis.R;
  * interact with the user, rather than doing something more disruptive such as
  * calling startActivity().
  */
-
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class LocalService extends Service {
     private NotificationManager mNM;
 
@@ -55,6 +57,7 @@ public class LocalService extends Service {
      * runs in the same process as its clients, we don't need to deal with
      * IPC.
      */
+    @SuppressWarnings("WeakerAccess")
     public class LocalBinder extends Binder {
         LocalService getService() {
             return LocalService.this;
@@ -73,6 +76,10 @@ public class LocalService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("LocalService", "Received start id " + startId + ": " + intent);
         return START_NOT_STICKY;
+    }
+
+    public void doSomeThing() {
+        Toast.makeText(this, "I AM doing something", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -101,8 +108,8 @@ public class LocalService extends Service {
         CharSequence text = getText(R.string.local_service_started);
 
         // The PendingIntent to launch our activity if the user selects this notification
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, LocalServiceActivities.Controller.class), 0);
+        final Intent intent = new Intent(this, LocalServiceActivities.Controller.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
         // Set the info for the views that show in the notification panel.
         Notification notification = new Notification.Builder(this)

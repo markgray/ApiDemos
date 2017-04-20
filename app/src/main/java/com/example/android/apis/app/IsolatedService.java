@@ -269,7 +269,25 @@ public class IsolatedService extends Service {
                 }
             };
 
+            /**
+             * {@code ServiceConnection} created and bound to when the "bind" {@code CheckBox} gets checked,
+             * and disconnected from when it gets unchecked.
+             */
             private ServiceConnection mConnection = new ServiceConnection() {
+                /**
+                 * Called when a connection to the Service has been established, with
+                 * the {@link android.os.IBinder} of the communication channel to the
+                 * Service. Called on the main thread.
+                 *
+                 * We initialize our field {@code IRemoteService mService} from
+                 * the {@code IBinder service} passed us, If our {@code mServiceBound} flag is
+                 * true we set the text of our {@code TextView mStatus} to "CONNECTED".
+                 *
+                 * @param className The concrete component name of the service that has
+                 * been connected.
+                 * @param service The IBinder of the Service's communication channel,
+                 * which you can now make calls on.
+                 */
                 @Override
                 public void onServiceConnected(ComponentName className, IBinder service) {
                     mService = IRemoteService.Stub.asInterface(service);
@@ -278,7 +296,21 @@ public class IsolatedService extends Service {
                     }
                 }
 
-                @Override
+                /**
+                 * Called when a connection to the Service has been lost.  This typically
+                 * happens when the process hosting the service has crashed or been killed.
+                 * This does <em>not</em> remove the ServiceConnection itself -- this
+                 * binding to the service will remain active, and you will receive a call
+                 * to {@link #onServiceConnected} when the Service is next running.
+                 *
+                 * We set our field {@code IRemoteService mService} to null, and if our flag
+                 * {@code mServiceBound} is true we set the text of our {@code TextView mStatus}
+                 * to "DISCONNECTED".
+                 *
+                 * @param className The concrete component name of the service whose
+                 * connection has been lost.
+                 */
+                 @Override
                 public void onServiceDisconnected(ComponentName className) {
                     // This is called when the connection with the service has been
                     // unexpectedly disconnected -- that is, its process crashed.
@@ -290,9 +322,25 @@ public class IsolatedService extends Service {
             };
         }
 
+        /**
+         * Holds the service information for our service {@code IsolatedService}
+         */
         ServiceInfo mService1;
+        /**
+         * Holds the service information for our service {@code IsolatedService2}
+         */
         ServiceInfo mService2;
 
+        /**
+         * Called when the activity is starting. First we call through to our super's implementation
+         * of {@code onCreate}, then we set our content view to our layout file
+         * R.layout.isolated_service_controller. We create {@code ServiceInfo} instances to initialize
+         * our fields {@code ServiceInfo mService1}, and {@code ServiceInfo mService2}. The constructor
+         * not only initializes fields, it also sets the {@code OnClickListener} for the various widgets
+         * in our UI based on the resource IDs passed it.
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+         */
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
