@@ -752,11 +752,13 @@ App
 
     App/Service/Local Service Controller       -- all
         .app.LocalServiceActivities$Controller
+        .app.LocalService.java
             Example of explicitly starting and stopping the local service. Starts 
             app.LocalService.java
 
     App/Service/Messenger Service              -- all -> v16
         .app.MessengerServiceActivities$Binding
+        .app.MessengerService --> service we bind to
             This is an example of implementing an application service that uses the
             Messenger class for communicating with clients.  This allows for remote
             interaction with a service, without needing to define an AIDL interface.

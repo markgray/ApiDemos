@@ -38,7 +38,7 @@ import com.example.android.apis.R;
  * in the same process as the application.  The {@link LocalServiceActivities.Controller}
  * and {@link LocalServiceActivities.Binding} classes show how to interact with the
  * service.
- *
+ * <p>
  * <p>Notice the use of the {@link NotificationManager} when interesting things
  * happen in the service.  This is generally how background services should
  * interact with the user, rather than doing something more disruptive such as
@@ -46,7 +46,7 @@ import com.example.android.apis.R;
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class LocalService extends Service {
-    private NotificationManager mNM;
+    private NotificationManager mNM; // handle to the system level NOTIFICATION_SERVICE service
 
     // Unique Identification Number for the Notification.
     // We use it on Notification start, and to cancel it.
@@ -63,25 +63,66 @@ public class LocalService extends Service {
             return LocalService.this;
         }
     }
-    
+
+    /**
+     * Called by the system when the service is first created. First we initialize {@code NotificationManager mNM}
+     * with a handle to the system level NOTIFICATION_SERVICE service, then we call our method {@code showNotification}
+     * to display the notification that we are running
+     */
     @Override
     public void onCreate() {
-        mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         // Display a notification about us starting.  We put an icon in the status bar.
         showNotification();
     }
 
+    /**
+     * Called by the system every time a client explicitly starts the service by calling
+     * {@link android.content.Context#startService}, providing the arguments it supplied and a
+     * unique integer token representing the start request. Note that the system calls this on your
+     * service's main thread. A service's main thread is the same thread where UI operations take
+     * place for Activities running in the same process. You should always avoid stalling the main
+     * thread's event loop.  When doing long-running operations, network calls, or heavy disk I/O,
+     * you should kick off a new thread, or use {@link android.os.AsyncTask}.
+     * <p>
+     * We simply log the start intent, and return START_NOT_STICKY (if this service's process is
+     * killed while it is started (after returning from onStartCommand(Intent, int, int)), and
+     * there are no new start intents to deliver to it, then take the service out of the started
+     * state and don't recreate until a future explicit call to Context.startService(Intent).)
+     *
+     * @param intent  The Intent supplied to {@link android.content.Context#startService},
+     *                as given.  This may be null if the service is being restarted after
+     *                its process has gone away, and it had previously returned anything
+     *                except {@link #START_STICKY_COMPATIBILITY}.
+     * @param flags   Additional data about this start request.  Currently either
+     *                0, {@link #START_FLAG_REDELIVERY}, or {@link #START_FLAG_RETRY}.
+     * @param startId A unique integer representing this specific request to
+     *                start.  Use with {@link #stopSelfResult(int)}.
+     * @return The return value indicates what semantics the system should
+     * use for the service's current started state.  It may be one of the
+     * constants associated with the {@link #START_CONTINUATION_MASK} bits.
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("LocalService", "Received start id " + startId + ": " + intent);
         return START_NOT_STICKY;
     }
 
+    /**
+     * Our only service, which is accessible using the LocalService.this reference returned from
+     * {@code LocalBinder.getservice()}. We just toast a message to show we can be used to do
+     * something.
+     */
     public void doSomeThing() {
         Toast.makeText(this, "I AM doing something", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Called by the system to notify a Service that it is no longer used and is being removed. First
+     * we cancel the notification that we are running, then we toast a message: "Local service has stopped"
+     * to inform the user.
+     */
     @Override
     public void onDestroy() {
         // Cancel the persistent notification.
@@ -91,6 +132,17 @@ public class LocalService extends Service {
         Toast.makeText(this, R.string.local_service_stopped, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Return the communication channel to the service. We return {@code IBinder mBinder} which
+     * is an instance of {@code LocalBinder}, which contains a single method {@code getService}
+     * which returns a reference to the instance of {@code LocalService} which is running. That
+     * reference can then be used to call methods and access fields of {@code LocalService} since
+     * it is running in the same process.
+     *
+     * @param intent The Intent that was used to bind to this service.
+     * @return Return an IBinder through which clients can call on to the
+     *         service.
+     */
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
@@ -101,7 +153,16 @@ public class LocalService extends Service {
     private final IBinder mBinder = new LocalBinder();
 
     /**
-     * Show a notification while this service is running.
+     * Show a notification while this service is running. First we fetch the resource String with ID
+     * R.string.local_service_started ("Local service has started") to initialize {@code CharSequence text},
+     * then we create {@code Intent intent} which will launch {@code LocalServiceActivities.Controller},
+     * and use it to make {@code PendingIntent contentIntent}. We build {@code Notification notification}
+     * using R.drawable.stat_sample as the icon, {@code text} as the ticker text, set the timestamp to
+     * the current system time, set the first line of text to R.string.local_service_label ("Sample
+     * Local Service"), set the second line of text to {@code text}, and set the {@code PendingIntent}
+     * to be sent when the notification is clicked to {@code contentIntent}. We then use
+     * {@code NotificationManager mNM} to post the notification using NOTIFICATION as the ID (so that
+     * we can later use it to cancel the notification.)
      */
     private void showNotification() {
         // In this sample, we'll use the same text for the ticker and the expanded notification

@@ -23,12 +23,10 @@ import com.example.android.apis.R;
 @SuppressLint("SetTextI18n")
 public class MessengerServiceActivities {
     /**
-     * Example of binding and unbinding to the remote service.
-     * This demonstrates the implementation of a service which the client will
-     * bind to, interacting with it through an aidl interface.</p>
-     * 
-     * <p>Note that this is implemented as an inner class only keep the sample
-     * all together; typically this code would appear in some separate class.
+     * This is an example of implementing an application service that uses the Messenger class for
+     * communicating with clients. This allows for remote interaction with a service, without
+     * needing to define an AIDL interface. Uses {@code MessengerService.java} as the service we
+     * bind to.
      */
     public static class Binding extends Activity {
 
@@ -66,8 +64,7 @@ public class MessengerServiceActivities {
          */
         private ServiceConnection mConnection = new ServiceConnection() {
             @Override
-            public void onServiceConnected(ComponentName className,
-                    IBinder service) {
+            public void onServiceConnected(ComponentName className, IBinder service) {
                 // This is called when the connection with the service has been
                 // established, giving us the service object we can use to
                 // interact with the service.  We are communicating with our
@@ -79,14 +76,12 @@ public class MessengerServiceActivities {
                 // We want to monitor the service for as long as we are
                 // connected to it.
                 try {
-                    Message msg = Message.obtain(null,
-                            MessengerService.MSG_REGISTER_CLIENT);
+                    Message msg = Message.obtain(null, MessengerService.MSG_REGISTER_CLIENT);
                     msg.replyTo = mMessenger;
                     mService.send(msg);
                     
                     // Give it some value as an example.
-                    msg = Message.obtain(null,
-                            MessengerService.MSG_SET_VALUE, this.hashCode(), 0);
+                    msg = Message.obtain(null, MessengerService.MSG_SET_VALUE, this.hashCode(), 0);
                     mService.send(msg);
                 } catch (RemoteException e) {
                     // In this case the service has crashed before we could even
@@ -96,8 +91,7 @@ public class MessengerServiceActivities {
                 }
                 
                 // As part of the sample, tell the user what happened.
-                Toast.makeText(Binding.this, R.string.remote_service_connected,
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(Binding.this, R.string.remote_service_connected, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -108,8 +102,7 @@ public class MessengerServiceActivities {
                 mCallbackText.setText("Disconnected.");
 
                 // As part of the sample, tell the user what happened.
-                Toast.makeText(Binding.this, R.string.remote_service_disconnected,
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(Binding.this, R.string.remote_service_disconnected, Toast.LENGTH_SHORT).show();
             }
         };
         
@@ -117,8 +110,7 @@ public class MessengerServiceActivities {
             // Establish a connection with the service.  We use an explicit
             // class name because there is no reason to be able to let other
             // applications replace our component.
-            bindService(new Intent(Binding.this, 
-                    MessengerService.class), mConnection, Context.BIND_AUTO_CREATE);
+            bindService(new Intent(Binding.this, MessengerService.class), mConnection, Context.BIND_AUTO_CREATE);
             mIsBound = true;
             mCallbackText.setText("Binding.");
         }
@@ -129,8 +121,7 @@ public class MessengerServiceActivities {
                 // it, then now is the time to unregister.
                 if (mService != null) {
                     try {
-                        Message msg = Message.obtain(null,
-                                MessengerService.MSG_UNREGISTER_CLIENT);
+                        Message msg = Message.obtain(null, MessengerService.MSG_UNREGISTER_CLIENT);
                         msg.replyTo = mMessenger;
                         mService.send(msg);
                     } catch (RemoteException e) {

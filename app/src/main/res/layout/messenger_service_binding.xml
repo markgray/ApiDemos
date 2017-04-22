@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2010 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,34 +14,46 @@
 -->
 
 <!-- Demonstrates starting and stopping a local service.
-     See corresponding Java code com.android.sdk.app.LocalSerice.java. -->
+     See corresponding Java code com.android.sdk.app.MessengerServiceActivities.java. -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:padding="4dip"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:padding="4dip">
 
     <TextView
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:layout_weight="0" android:paddingBottom="4dip"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/messenger_service_binding"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:paddingBottom="4dip"
+        android:text="@string/messenger_service_binding"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <Button android:id="@+id/bind"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" 
+    <Button
+        android:id="@+id/bind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/bind_service">
+
         <requestFocus />
     </Button>
 
-    <Button android:id="@+id/unbind"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" 
-        android:text="@string/unbind_service">
-    </Button>
+    <Button
+        android:id="@+id/unbind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/unbind_service" />
 
-    <TextView android:id="@+id/callback"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
+    <TextView
+        android:id="@+id/callback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:gravity="center_horizontal" android:paddingTop="4dip"/>
+        android:gravity="center_horizontal"
+        android:paddingTop="4dip"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>
 
