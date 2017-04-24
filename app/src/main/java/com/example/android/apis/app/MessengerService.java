@@ -31,61 +31,93 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.widget.Toast;
 
-import com.example.android.apis.R;
-import com.example.android.apis.app.RemoteService.Controller;
-
 import java.util.ArrayList;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+import com.example.android.apis.R;
+import com.example.android.apis.app.RemoteService.Controller;
 
 /**
  * This is an example of implementing an application service that uses the
  * {@link Messenger} class for communicating with clients.  This allows for
  * remote interaction with a service, without needing to define an AIDL
  * interface.
- *
- * <p>Notice the use of the {@link NotificationManager} when interesting things
+ * <p>
+ * Notice the use of the {@link NotificationManager} when interesting things
  * happen in the service.  This is generally how background services should
  * interact with the user, rather than doing something more disruptive such as
  * calling startActivity().
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class MessengerService extends Service {
-    /** For showing and hiding our notification. */
+    /**
+     * For showing and hiding our notification.
+     */
     NotificationManager mNM;
-    /** Keeps track of all current registered clients. */
+    /**
+     * Keeps track of all current registered clients.
+     */
     ArrayList<Messenger> mClients = new ArrayList<>();
-    /** Holds last value set by a client. */
+    /**
+     * Holds last value set by a client.
+     */
     int mValue = 0;
-    
+
     /**
      * Command to the service to register a client, receiving callbacks
      * from the service.  The Message's replyTo field must be a Messenger of
      * the client where callbacks should be sent.
      */
     static final int MSG_REGISTER_CLIENT = 1;
-    
+
     /**
      * Command to the service to unregister a client, ot stop receiving callbacks
      * from the service.  The Message's replyTo field must be a Messenger of
      * the client as previously given with MSG_REGISTER_CLIENT.
      */
     static final int MSG_UNREGISTER_CLIENT = 2;
-    
+
     /**
      * Command to service to set a new value.  This can be sent to the
      * service to supply a new value, and will be sent by the service to
      * any registered clients with the new value.
      */
     static final int MSG_SET_VALUE = 3;
-    
+
     /**
      * Handler of incoming messages from clients.
      */
     @SuppressWarnings("WeakerAccess")
     @SuppressLint("HandlerLeak")
     class IncomingHandler extends Handler {
+        /**
+         * Subclasses must implement this to receive messages. We switch based on the {@code what}
+         * field of the {@code Message msg} we have received:
+         * <ul>
+         * <li>
+         * MSG_REGISTER_CLIENT - we add the value contained in the {@code replyTo} field to the
+         * list of clients we maintain in {@code ArrayList<Messenger> mClients}
+         * </li>
+         * <li>
+         * MSG_UNREGISTER_CLIENT - we remove the value contained in the {@code replyTo} field from
+         * the list of clients we maintain in {@code ArrayList<Messenger> mClients}
+         * </li>
+         * <li>
+         * MSG_SET_VALUE - we store the value sent in the field {@code arg1} of {@code Message msg}
+         * in our field {@code int mValue}, then looping backwards through all the clients
+         * in {@code ArrayList<Messenger> mClients} we try to send a message with the {@code what}
+         * field set to MSG_SET_VALUE, and {@code arg1} field set to {@code mValue}. If we
+         * catch a RemoteException we remove that client from {@code mClients} (safe because
+         * we are going through the list in backwards order).
+         * </li>
+         * <li>
+         * default - we pass the {@code msg} on to our super's implementation of {@code handleMessage}.
+         * </li>
+         * </ul>
+         *
+         * @param msg {@code Message} received by the {@code Messenger} we are the {@code Handler} for
+         */
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -97,7 +129,7 @@ public class MessengerService extends Service {
                     break;
                 case MSG_SET_VALUE:
                     mValue = msg.arg1;
-                    for (int i=mClients.size()-1; i>=0; i--) {
+                    for (int i = mClients.size() - 1; i >= 0; i--) {
                         try {
                             mClients.get(i).send(Message.obtain(null, MSG_SET_VALUE, mValue, 0));
                         } catch (RemoteException e) {
@@ -113,20 +145,29 @@ public class MessengerService extends Service {
             }
         }
     }
-    
+
     /**
      * Target we publish for clients to send messages to IncomingHandler.
      */
     final Messenger mMessenger = new Messenger(new IncomingHandler());
-    
+
+    /**
+     * Called by the system when the service is first created. We initialize our field
+     * {@code NotificationManager mNM} with a handle to the system level service NOTIFICATION_SERVICE
+     * and call our method {@code showNotification} to display the notification that we are running.
+     */
     @Override
     public void onCreate() {
-        mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         // Display a notification about us starting.
         showNotification();
     }
 
+    /**
+     * Called by the system to notify a Service that it is no longer used and is being removed. We
+     * cancel our notification, and toast the message "Remote service has stopped".
+     */
     @Override
     public void onDestroy() {
         // Cancel the persistent notification.
@@ -135,10 +176,18 @@ public class MessengerService extends Service {
         // Tell the user we stopped.
         Toast.makeText(this, R.string.remote_service_stopped, Toast.LENGTH_SHORT).show();
     }
-    
+
     /**
-     * When binding to the service, we return an interface to our messenger
-     * for sending messages to the service.
+     * Return the communication channel to the service. When a client binds to our service, we return
+     * the {@code IBinder} interface to our {@code Messenger mMessenger} for sending messages to this
+     * service.
+     *
+     * @param intent The Intent that was used to bind to this service,
+     *               as given to {@link android.content.Context#bindService
+     *               Context.bindService}.  Note that any extras that were included with
+     *               the Intent at that point will <em>not</em> be seen here.
+     * @return Return an IBinder through which clients can call on to the
+     * service.
      */
     @Override
     public IBinder onBind(Intent intent) {
@@ -146,15 +195,24 @@ public class MessengerService extends Service {
     }
 
     /**
-     * Show a notification while this service is running.
+     * Show a notification while this service is running. First we initialize {@code CharSequence text}
+     * with the resource String "Remote service has started". The we create {@code PendingIntent contentIntent}
+     * with a target Intent for {@code Controller.class} (NOTE: This was a mistake caused by code pasting,
+     * my version uses {@code MessengerServiceActivities.Binding} instead.)
+     * <p>
+     * We then build {@code Notification notification} using R.drawable.stat_sample as the small icon,
+     * {@code text} as the "ticker" text, the current system time as the timestamp, the resource String
+     * "Sample Local Service" as the first line of text, {@code text} as the second line of text, and
+     * {@code contentIntent} as the {@code PendingIntent} to be sent when the notification is clicked.
+     * Finally we use {@code NotificationManager mNM} to post the notification using R.string.remote_service_started
+     * as the ID.
      */
     private void showNotification() {
         // In this sample, we'll use the same text for the ticker and the expanded notification
         CharSequence text = getText(R.string.remote_service_started);
 
         // The PendingIntent to launch our activity if the user selects this notification
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, Controller.class), 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MessengerServiceActivities.Binding.class), 0);
 
         // Set the info for the views that show in the notification panel.
         Notification notification = new Notification.Builder(this)

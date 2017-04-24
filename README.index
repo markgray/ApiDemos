@@ -763,19 +763,22 @@ App
             Messenger class for communicating with clients.  This allows for remote
             interaction with a service, without needing to define an AIDL interface.
 
-    App/Service/Remote Service Binding         -- all Crashes Nexus 4, works froyo -> v16
-        .app.RemoteService$Binding                Service Intent must be explicit: line 364
+    App/Service/Remote Service Binding         -- all -> v16
+        .app.RemoteService$Binding
+        Uses the aidl files IRemoteServiceCallback.aidl and ISecondary.aidl
             This is an example of implementing an application service that runs in a 
             different process than the application.  Because it can be in another
-            process, we must use IPC to interact with it.  The Controller and Binding
-            classes show how to interact with the service.
+            process, we must use IPC to interact with it.  The Controller, Binding and
+            BindingOptions classes show how to interact with the service.
 
-    App/Service/Remote Service Binding Options -- all crashes as above -> v16
+    App/Service/Remote Service Binding Options -- all -> v16
         .app.RemoteService$BindingOptions
-            Need to make explicit.
+        Uses the aidl files IRemoteServiceCallback.aidl and ISecondary.aidl
+            TODO: Above option Intent Needs to be made explicit.
 
-    App/Service/Remote Service Controller      -- all crashes as above -> v16
+    App/Service/Remote Service Controller      -- all -> v16
         .app.RemoteService$Controller
+        Uses the aidl files IRemoteServiceCallback.aidl and ISecondary.aidl
             Need to make explicit.
 
     App/Service/Service Start Arguments Controller -- all -> v16

@@ -197,6 +197,20 @@ public class MessengerServiceActivities {
             mCallbackText.setText("Binding.");
         }
 
+        /**
+         * Disconnect from the {@code MessengerService} service. First we check our flag {@code mIsBound}
+         * to see if we have tried to connect yet, and if so we check to see if our {@code onServiceConnected}
+         * callback has been called (that is where our communication channel {@code Messenger mService}
+         * is created from the {@code IBinder service} passed to it). It that is true, wrapped in a
+         * try block intended to catch RemoteException, we create {@code Message msg} with the {@code what}
+         * field set to MSG_UNREGISTER_CLIENT, set the {@code replyTo} to {@code Messenger mMessenger} and
+         * send the message to {@code MessengerService} using {@code mService}. We then disconnect from
+         * {@code ServiceConnection mConnection}, set our {@code mIsBound} flag to false and set the text
+         * of {@code TextView mCallbackText} to "Unbinding."
+         * <p>
+         * This is called in {@code OnClickListener mUnbindListener} which is invoked when the R.id.unbind
+         * ("Unbind Service") Button is clicked.
+         */
         void doUnbindService() {
             if (mIsBound) {
                 // If we have received the service, and hence registered with
@@ -219,10 +233,17 @@ public class MessengerServiceActivities {
             }
         }
 
-
         /**
-         * Standard initialization of this activity.  Set up the UI, then wait
-         * for the user to poke it before doing anything.
+         * Called when the activity is starting. First we call through to our super's implementation
+         * of {@code onCreate}, then we set our content view to our layout file
+         * R.layout.messenger_service_binding. We locate the Button R.id.bind ("Bind Service") and set
+         * its {@code OnClickListener} to {@code OnClickListener mBindListener} (calls our method
+         * {@code doBindService}), locate the Button R.id.unbind ("Unbind Service") and set its
+         * {@code OnClickListener} to {@code OnClickListener mUnbindListener} (calls our method
+         * {@code doUnbindService}, and finally locate the TextView R.id.callback to initialize our
+         * field {@code TextView mCallbackText}, and set its text to "Not attached".
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
          */
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -240,6 +261,10 @@ public class MessengerServiceActivities {
             mCallbackText.setText("Not attached.");
         }
 
+        /**
+         * {@code OnClickListener} for the R.id.bind ("Bind Service") Button, it calls our method
+         * {@code doBindService} when clicked.
+         */
         private OnClickListener mBindListener = new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -247,6 +272,10 @@ public class MessengerServiceActivities {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the R.id.unbind ("Unbind Service") Button, it calls our method
+         * {@code doUnbindService} when clicked.
+         */
         private OnClickListener mUnbindListener = new OnClickListener() {
             @Override
             public void onClick(View v) {
