@@ -92,11 +92,42 @@ public class RemoteService extends Service {
         // number.  Send the first message that is used to perform the
         // increment.
         mHandler.sendEmptyMessage(REPORT_MSG);
+        android.os.Debug.waitForDebugger();
     }
 
+    /**
+     * Called by the system every time a client explicitly starts the service by calling
+     * {@link android.content.Context#startService}, providing the arguments it supplied and a
+     * unique integer token representing the start request.
+     *
+     * Note that the system calls this on your service's main thread. We simply log the fact that
+     * we have been started by an explicit call to {@code startService}, toast a message to the
+     * same effect, and return START_NOT_STICKY (if this service's process is killed while it is
+     * started (after returning from onStartCommand(Intent, int, int)), and there are no new start
+     * intents to deliver to it, then take the service out of the started state and don't recreate
+     * until a future explicit call to Context.startService(Intent). The service will not receive a
+     * onStartCommand(Intent, int, int) call with a null Intent because it will not be re-started
+     * if there are no pending Intents to deliver.)
+     *
+     * @param intent The Intent supplied to {@link android.content.Context#startService},
+     * as given.  This may be null if the service is being restarted after
+     * its process has gone away, and it had previously returned anything
+     * except {@link #START_STICKY_COMPATIBILITY}.
+     * @param flags Additional data about this start request.  Currently either
+     * 0, {@link #START_FLAG_REDELIVERY}, or {@link #START_FLAG_RETRY}.
+     * @param startId A unique integer representing this specific request to
+     * start.  Use with {@link #stopSelfResult(int)}.
+     *
+     * @return The return value indicates what semantics the system should
+     * use for the service's current started state.  It may be one of the
+     * constants associated with the {@link #START_CONTINUATION_MASK} bits.
+     *
+     * @see #stopSelfResult(int)
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("LocalService", "Received start id " + startId + ": " + intent);
+        Toast.makeText(this, "onStartCommand has been called", Toast.LENGTH_LONG).show();
         return START_NOT_STICKY;
     }
 
@@ -163,6 +194,7 @@ public class RemoteService extends Service {
         Toast.makeText(this, "Task removed: " + rootIntent, Toast.LENGTH_LONG).show();
     }
 
+    /** Used as {@code what} field of message sent to {@code mHandler} causes {@code mValue} to be incremented and broadcast */
     private static final int REPORT_MSG = 1;
 
     /**
@@ -231,15 +263,25 @@ public class RemoteService extends Service {
     // ----------------------------------------------------------------------
 
     /**
-     * <p>Example of explicitly starting and stopping the remove service.
+     * Example of explicitly starting and stopping the remove service.
      * This demonstrates the implementation of a service that runs in a different
      * process than the rest of the application, which is explicitly started and stopped
-     * as desired.</p>
+     * as desired.
      * <p>
-     * <p>Note that this is implemented as an inner class only keep the sample
+     * Note that this is implemented as an inner class only to keep the sample
      * all together; typically this code would appear in some separate class.
      */
     public static class Controller extends Activity {
+        /**
+         * Called when the activity is starting. First we call through to our super's implementation
+         * of {@code onCreate}, then we set our content view to our layout file R.layout.remote_service_controller.
+         * We locate the Button R.id.start ("Start Service") and set its {@code OnClickListener} to
+         * {@code OnClickListener mStartListener} (will call {@code startService} when clicked), and
+         * locate the Button R.id.stop ("Stop Service") and set its {@code OnClickListener} to
+         * {@code OnClickListener mStopListener} (will call {@code stopService} when clicked.)
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+         */
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -253,18 +295,35 @@ public class RemoteService extends Service {
             button.setOnClickListener(mStopListener);
         }
 
+        /**
+         * {@code OnClickListener} for the R.id.start Button ("Start Service") it starts the
+         * {@code RemoteService} service when clicked.
+         */
         private OnClickListener mStartListener = new OnClickListener() {
+            /**
+             * Called when a view has been clicked. We simply create an {@code Intent} for
+             * {@code RemoteService.class} and use it to call the method {@code startService}
+             *
+             * @param v view of Button that was clicked
+             */
             public void onClick(View v) {
                 // Make sure the service is started.  It will continue running
                 // until someone calls stopService().
-                // We use an action code here, instead of explicitly supplying
-                // the component name, so that other packages can replace
-                // the service.
                 startService(new Intent(Controller.this, RemoteService.class));
             }
         };
 
+        /**
+         * {@code OnClickListener} for the R.id.stop Button ("Stop Service") it stops the
+         * {@code RemoteService} service when clicked.
+         */
         private OnClickListener mStopListener = new OnClickListener() {
+            /**
+             * Called when a view has been clicked. We simply create an {@code Intent} for
+             * {@code RemoteService.class} and use it to call the method {@code stopService}
+             *
+             * @param v view of Button that was clicked
+             */
             public void onClick(View v) {
                 // Cancel a previous call to startService().  Note that the
                 // service will not actually stop at this point if there are
@@ -472,6 +531,7 @@ public class RemoteService extends Service {
             }
         };
 
+        /** Message {@code what} field for receiving a new value from the service, value will be in {@code arg1} */
         private static final int BUMP_MSG = 1;
 
         @SuppressLint("HandlerLeak")
@@ -496,7 +556,6 @@ public class RemoteService extends Service {
     /**
      * Examples of behavior of different bind flags.</p>
      */
-
     public static class BindingOptions extends Activity {
         ServiceConnection mCurConnection;
         TextView mCallbackText;
@@ -607,7 +666,7 @@ public class RemoteService extends Service {
                 }
                 ServiceConnection conn = new MyServiceConnection();
                 final int flags = Context.BIND_AUTO_CREATE | Context.BIND_ABOVE_CLIENT;
-                if (bindService(new Intent(IRemoteService.class.getName()), conn, flags)) {
+                if (bindService(mBindIntent, conn, flags)) {
                     mCurConnection = conn;
                 }
             }
