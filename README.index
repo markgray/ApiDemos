@@ -765,7 +765,7 @@ App
 
     App/Service/Remote Service Binding         -- all -> v16
         .app.RemoteService$Binding
-        Uses the aidl files IRemoteServiceCallback.aidl and ISecondary.aidl
+        Uses the aidl files  IRemoteService.aidl, IRemoteServiceCallback.aidl and ISecondary.aidl
             This is an example of implementing an application service that runs in a 
             different process than the application.  Because it can be in another
             process, we must use IPC to interact with it.  The Controller, Binding and

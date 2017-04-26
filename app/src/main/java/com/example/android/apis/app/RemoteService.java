@@ -51,8 +51,8 @@ import com.example.android.apis.R;
  * different process than the application.  Because it can be in another
  * process, we must use IPC to interact with it.  The
  * {@link Controller} and {@link Binding} classes
- * show how to interact with the service. Uses the aidl files IRemoteServiceCallback.aidl
- * and ISecondary.aidl
+ * show how to interact with the service. Uses the aidl files  IRemoteService.aidl,
+ * IRemoteServiceCallback.aidl and ISecondary.aidl
  * <p>
  * Note that most applications <strong>do not</strong> need to deal with
  * the complexity shown here.  If your application simply has a service
@@ -69,9 +69,13 @@ public class RemoteService extends Service {
      */
     final RemoteCallbackList<IRemoteServiceCallback> mCallbacks = new RemoteCallbackList<>();
 
-    /** Value that we increment and send to our clients */
+    /**
+     * Value that we increment and send to our clients
+     */
     int mValue = 0;
-    /** Handle to the system level NOTIFICATION_SERVICE service */
+    /**
+     * Handle to the system level NOTIFICATION_SERVICE service
+     */
     NotificationManager mNM;
 
     /**
@@ -98,30 +102,29 @@ public class RemoteService extends Service {
     /**
      * Called by the system every time a client explicitly starts the service by calling
      * {@link android.content.Context#startService}, providing the arguments it supplied and a
-     * unique integer token representing the start request.
+     * unique integer token representing the start request. Note that the system calls this on
+     * your service's main thread. This callback is NOT  called if the service is started by a
+     * call to {@code bindService}.
+     * <p>
+     * We simply log the fact that we have been started by an explicit call to {@code startService},
+     * toast a message to the same effect, and return START_NOT_STICKY (Means: if this service's
+     * process is killed while it is started (after returning from onStartCommand(Intent, int, int)),
+     * and there are no new start intents to deliver to it, then take the service out of the started
+     * state and don't recreate until a future explicit call to Context.startService(Intent). The
+     * service will not receive a onStartCommand(Intent, int, int) call with a null Intent because
+     * it will not be re-started if there are no pending Intents to deliver.)
      *
-     * Note that the system calls this on your service's main thread. We simply log the fact that
-     * we have been started by an explicit call to {@code startService}, toast a message to the
-     * same effect, and return START_NOT_STICKY (if this service's process is killed while it is
-     * started (after returning from onStartCommand(Intent, int, int)), and there are no new start
-     * intents to deliver to it, then take the service out of the started state and don't recreate
-     * until a future explicit call to Context.startService(Intent). The service will not receive a
-     * onStartCommand(Intent, int, int) call with a null Intent because it will not be re-started
-     * if there are no pending Intents to deliver.)
-     *
-     * @param intent The Intent supplied to {@link android.content.Context#startService},
-     * as given.  This may be null if the service is being restarted after
-     * its process has gone away, and it had previously returned anything
-     * except {@link #START_STICKY_COMPATIBILITY}.
-     * @param flags Additional data about this start request.  Currently either
-     * 0, {@link #START_FLAG_REDELIVERY}, or {@link #START_FLAG_RETRY}.
+     * @param intent  The Intent supplied to {@link android.content.Context#startService},
+     *                as given.  This may be null if the service is being restarted after
+     *                its process has gone away, and it had previously returned anything
+     *                except {@link #START_STICKY_COMPATIBILITY}.
+     * @param flags   Additional data about this start request.  Currently either
+     *                0, {@link #START_FLAG_REDELIVERY}, or {@link #START_FLAG_RETRY}.
      * @param startId A unique integer representing this specific request to
-     * start.  Use with {@link #stopSelfResult(int)}.
-     *
+     *                start.  Use with {@link #stopSelfResult(int)}.
      * @return The return value indicates what semantics the system should
      * use for the service's current started state.  It may be one of the
      * constants associated with the {@link #START_CONTINUATION_MASK} bits.
-     *
      * @see #stopSelfResult(int)
      */
     @Override
@@ -131,6 +134,14 @@ public class RemoteService extends Service {
         return START_NOT_STICKY;
     }
 
+    /**
+     * Called by the system to notify a Service that it is no longer used and is being removed. We
+     * cancel our notification, toast a message "Remote service has stopped", disable the callback
+     * list {@code RemoteCallbackList<IRemoteServiceCallback> mCallbacks} (all registered callbacks
+     * are unregistered, and the list is disabled so that future calls to register(E) will fail),
+     * finally we remove any pending posts of messages with code 'what' set to REPORT_MSG that are
+     * in the message queue.
+     */
     @Override
     public void onDestroy() {
         // Cancel the persistent notification.
@@ -147,7 +158,22 @@ public class RemoteService extends Service {
         mHandler.removeMessages(REPORT_MSG);
     }
 
-
+    /**
+     * Return the communication channel to the service. We check the action contained in the
+     * {@code Intent intent} that was used to bind to us and if it is:
+     * <ul>
+     *     <li>IRemoteService - we return our field {@code IRemoteService.Stub mBinder}</li>
+     *     <li>ISecondary - we return our field {@code ISecondary.Stub mSecondaryBinder}</li>
+     * </ul>
+     * Otherwise we return null.
+     *
+     * @param intent The Intent that was used to bind to this service,
+     *               as given to {@link android.content.Context#bindService
+     *               Context.bindService}.  Note that any extras that were included with
+     *               the Intent at that point will <em>not</em> be seen here.
+     * @return Return an IBinder through which clients can call on to the
+     * service.
+     */
     @Override
     public IBinder onBind(Intent intent) {
         // Select the interface to return.  If your service only implements
@@ -163,7 +189,9 @@ public class RemoteService extends Service {
     }
 
     /**
-     * The IRemoteInterface is defined through IDL
+     * The IRemoteInterface is defined through the IDL file {@code IRemoteService.aidl}, it defines
+     * two methods {@code registerCallback} (adds the {@code IRemoteServiceCallback cb} parameter to
+     * our {@code RemoteCallbackList<IRemoteServiceCallback> mCallbacks} by
      */
     private final IRemoteService.Stub mBinder = new IRemoteService.Stub() {
         public void registerCallback(IRemoteServiceCallback cb) {
@@ -194,7 +222,9 @@ public class RemoteService extends Service {
         Toast.makeText(this, "Task removed: " + rootIntent, Toast.LENGTH_LONG).show();
     }
 
-    /** Used as {@code what} field of message sent to {@code mHandler} causes {@code mValue} to be incremented and broadcast */
+    /**
+     * Used as {@code what} field of message sent to {@code mHandler} causes {@code mValue} to be incremented and broadcast
+     */
     private static final int REPORT_MSG = 1;
 
     /**
@@ -531,7 +561,9 @@ public class RemoteService extends Service {
             }
         };
 
-        /** Message {@code what} field for receiving a new value from the service, value will be in {@code arg1} */
+        /**
+         * Message {@code what} field for receiving a new value from the service, value will be in {@code arg1}
+         */
         private static final int BUMP_MSG = 1;
 
         @SuppressLint("HandlerLeak")
