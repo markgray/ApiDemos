@@ -162,8 +162,8 @@ public class RemoteService extends Service {
      * Return the communication channel to the service. We check the action contained in the
      * {@code Intent intent} that was used to bind to us and if it is:
      * <ul>
-     *     <li>IRemoteService - we return our field {@code IRemoteService.Stub mBinder}</li>
-     *     <li>ISecondary - we return our field {@code ISecondary.Stub mSecondaryBinder}</li>
+     * <li>IRemoteService - we return our field {@code IRemoteService.Stub mBinder}</li>
+     * <li>ISecondary - we return our field {@code ISecondary.Stub mSecondaryBinder}</li>
      * </ul>
      * Otherwise we return null.
      *
@@ -189,9 +189,15 @@ public class RemoteService extends Service {
     }
 
     /**
-     * The IRemoteInterface is defined through the IDL file {@code IRemoteService.aidl}, it defines
-     * two methods {@code registerCallback} (adds the {@code IRemoteServiceCallback cb} parameter to
-     * our {@code RemoteCallbackList<IRemoteServiceCallback> mCallbacks} by
+     * The {@code IRemoteService} interface is defined through the IDL file {@code IRemoteService.aidl},
+     * it defines two methods {@code registerCallback} (adds the {@code IRemoteServiceCallback cb}
+     * parameter to our {@code RemoteCallbackList<IRemoteServiceCallback> mCallbacks} by calling its
+     * method {@code register}, and {@code unregisterCallback} which removes the {@code IRemoteServiceCallback cb}
+     * from {@code mCallbacks}, and we implement them here. The bound client then accesses them using
+     * its {@code IRemoteService mService} which is initialized in its {@code onServiceConnected}
+     * callback from the {@code IBinder service} passed it by the service (uses the method
+     * {@code IRemoteService.Stub.asInterface(service)} to convert the {@code IBinder} to an instance
+     * of {@link IRemoteService})
      */
     private final IRemoteService.Stub mBinder = new IRemoteService.Stub() {
         public void registerCallback(IRemoteServiceCallback cb) {
@@ -204,19 +210,47 @@ public class RemoteService extends Service {
     };
 
     /**
-     * A secondary interface to the service.
+     * A secondary interface to the service is defined through the IDL file {@code ISecondary.aidl},
+     * and consists of two methods which are accessible in much the same way as the methods in
+     * the {@code IRemoteService.Stub mBinder}
      */
     private final ISecondary.Stub mSecondaryBinder = new ISecondary.Stub() {
+        /**
+         * Request the PID of this service, to do evil things with it.
+         *
+         * @return PID of this {@code RemoteService} process, it is used by the "Kill" Button
+         */
         public int getPid() {
             return Process.myPid();
         }
 
+        /**
+         * This demonstrates the basic types that you can use as parameters
+         * and return values in AIDL.
+         *
+         * @param anInt unused
+         * @param aLong unused
+         * @param aBoolean unused
+         * @param aFloat unused
+         * @param aDouble unused
+         * @param aString unused
+         */
         public void basicTypes(int anInt, long aLong, boolean aBoolean,
                                float aFloat, double aDouble, String aString) {
         }
     };
 
 
+    /**
+     * This is called if the service is currently running and the user has
+     * removed a task that comes from the service's application.  If you have
+     * set {@link android.content.pm.ServiceInfo#FLAG_STOP_WITH_TASK ServiceInfo.FLAG_STOP_WITH_TASK}
+     * then you will not receive this callback; instead, the service will simply
+     * be stopped.
+     *
+     * @param rootIntent The original root Intent that was used to launch
+     *                   the task that is being removed.
+     */
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         Toast.makeText(this, "Task removed: " + rootIntent, Toast.LENGTH_LONG).show();
@@ -233,6 +267,24 @@ public class RemoteService extends Service {
      */
     @SuppressLint("HandlerLeak")
     private final Handler mHandler = new Handler() {
+        /**
+         * Subclasses of {@link Handler} must implement this to receive messages. We switch based on
+         * the field {@code what} of our parameter {@code Message msg} and if it is not REPORT_MSG,
+         * we pass it on to our super's implementation of {@code handleMessage}. If it is REPORT_MSG
+         * we increment our field {@code mValue} while saving a copy in {@code value}, then we
+         * prepare to start making calls to the currently registered callbacks in our field
+         * {@code RemoteCallbackList<IRemoteServiceCallback> mCallbacks} (initializing {@code N} to
+         * the number of callbacks in the broadcast) (Note: {@code mCallbacks} has been filled by
+         * clients calling the {@code registerCallback} method of our interface {@code IRemoteService}).
+         * Then we proceed to loop through all the {@code IRemoteServiceCallback}'s retrieved from
+         * {@code mCallbacks} and call their method {@code valueChanged(value)} (Note that we have
+         * to try/catch RemoteException in case one of the callbacks has gone away). After looping
+         * through all the callbacks we clean up the state of the broadcast by calling the method
+         * {@code finishBroadcast}. Finally we enqueue a new REPORT_MSG message into the message
+         * queue with a delay of 1000 milliseconds.
+         *
+         * @param msg {@code Message} sent to us, we only use REPORT_MSG
+         */
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {

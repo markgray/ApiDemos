@@ -95,7 +95,7 @@ public class IsolatedService extends Service {
     }
 
     /**
-     * The IRemoteInterface is defined through IDL in the file IRemoteService.aidl
+     * The {@code IRemoteService} interface is defined through IDL in the file IRemoteService.aidl
      */
     private final IRemoteService.Stub mBinder = new IRemoteService.Stub() {
         @Override
