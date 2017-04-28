@@ -96,7 +96,7 @@ public class RemoteService extends Service {
         // number.  Send the first message that is used to perform the
         // increment.
         mHandler.sendEmptyMessage(REPORT_MSG);
-        android.os.Debug.waitForDebugger();
+//        android.os.Debug.waitForDebugger(); // wait for the debugger to attach
     }
 
     /**
@@ -317,15 +317,21 @@ public class RemoteService extends Service {
     };
 
     /**
-     * Show a notification while this service is running.
+     * Show a notification while this service is running. First we fetch the resource String "Remote
+     * service has started" to initialize {@code CharSequence text}, then we create a PendingIntent
+     * to launch the activity {@code Controller} for {@code PendingIntent contentIntent}. We build
+     * a {@code Notification notification} using R.drawable.stat_sample as the small icon, {@code text}
+     * for the ticker text, the current system time as the time stamp, "Sample Remote Service" as the
+     * first line of the notification, {@code text} as the second line, and {@code contentIntent} as
+     * the PendingIntent to be sent when the notification is clicked. Finally we use
+     * {@code NotificationManager mNM} to post the notification.
      */
     private void showNotification() {
         // In this sample, we'll use the same text for the ticker and the expanded notification
         CharSequence text = getText(R.string.remote_service_started);
 
         // The PendingIntent to launch our activity if the user selects this notification
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, Controller.class), 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, Controller.class), 0);
 
         // Set the info for the views that show in the notification panel.
         Notification notification = new Notification.Builder(this)
@@ -420,12 +426,11 @@ public class RemoteService extends Service {
     /**
      * Example of binding and unbinding to the remote service.
      * This demonstrates the implementation of a service which the client will
-     * bind to, interacting with it through an aidl interface.</p>
+     * bind to, interacting with it through an aidl interface.
      * <p>
-     * <p>Note that this is implemented as an inner class only keep the sample
+     * Note that this is implemented as an inner class only keep the sample
      * all together; typically this code would appear in some separate class.
      */
-
     public static class Binding extends Activity {
         /**
          * The primary interface we will be calling on the service.
@@ -436,14 +441,34 @@ public class RemoteService extends Service {
          */
         ISecondary mSecondaryService = null;
 
+        /**
+         * Button in our UI which kills the service process when clicked
+         */
         Button mKillButton;
+        /**
+         * TextView we use to display status information
+         */
         TextView mCallbackText;
 
+        /**
+         * Flag to keep track of whether we are bound to the service or not
+         */
         private boolean mIsBound;
 
         /**
-         * Standard initialization of this activity.  Set up the UI, then wait
-         * for the user to poke it before doing anything.
+         * Standard initialization of this activity. First we call through to our super's implementation
+         * of {@code onCreate}, then we set our content view to our layout file R.layout.remote_service_binding.
+         * We locate the Button R.id.bind ("Bind Service") and set its {@code OnClickListener} to
+         * {@code OnClickListener mBindListener} (binds us to the service when clicked), locate the
+         * Button R.id.unbind ("Unbind Service") and set its {@code OnClickListener} to
+         * {@code OnClickListener mUnbindListener} (unbinds us from the service when clicked), and
+         * locate the Button R.id.kill ("Kill Process") and set its {@code OnClickListener} to
+         * {@code OnClickListener mKillListener} (uses the service method {@code getPid()} to
+         * obtain the service PID, and issues a {@code killProcess} request). Finally we locate
+         * the {@code TextView} R.id.callback to initialize {@code TextView mCallbackText} and set
+         * its text to ("Not attached.").
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
          */
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -465,9 +490,35 @@ public class RemoteService extends Service {
         }
 
         /**
-         * Class for interacting with the main interface of the service.
+         * Class for interacting with the main interface of the service. Implements the two methods
+         * {@code onServiceConnected} and {@code onServiceDisconnected} of the {@code ServiceConnection}
+         * interface.
          */
         private ServiceConnection mConnection = new ServiceConnection() {
+            /**
+             * Called when a connection to the Service has been established, with the
+             * {@link android.os.IBinder} of the communication channel to the Service.
+             * <p>
+             * First we use the IDL helper method {@code IRemoteService.Stub.asInterface} to cast
+             * the {@code IBinder service} object passed to us into an com.example.android.apis.app.IRemoteService
+             * interface, generating a proxy if needed. Then we enable the {@code Button mKillButton}
+             * ("Kill Process") and set the text of {@code TextView mCallbackText} to "Attached.".
+             * <p>
+             * Wrapped in a try block intended to catch RemoteException (if the service has crashed
+             * already), we call the method {@code registerCallback} of the {@code IRemoteService}
+             * we cast the {@code IBinder service} to, thereby registering {@code IRemoteServiceCallback mCallback}
+             * as a callback interface for the service to use. {@code mCallback} has a {@code valueChanged}
+             * method which the service will call when there is a new value to display (every 1000 milliseconds).
+             * {@code valueChanged} formats and sends a Message to our {@code Handler mHandler} which
+             * will in turn display this new value on the UI thread.
+             *
+             * Finally we toast the message: "Connected to remote service".
+             *
+             * @param className The concrete component name of the service that has
+             *                  been connected.
+             * @param service   The IBinder of the Service's communication channel,
+             *                  which you can now make calls on.
+             */
             public void onServiceConnected(ComponentName className, IBinder service) {
                 // This is called when the connection with the service has been
                 // established, giving us the service object we can use to
@@ -493,6 +544,23 @@ public class RemoteService extends Service {
                 Toast.makeText(Binding.this, R.string.remote_service_connected, Toast.LENGTH_SHORT).show();
             }
 
+            /**
+             * Called when a connection to the Service has been lost.  This typically
+             * happens when the process hosting the service has crashed or been killed.
+             * This does <em>not</em> remove the ServiceConnection itself -- this
+             * binding to the service will remain active, and you will receive a call
+             * to {@link #onServiceConnected} when the Service is next running. And indeed
+             * this is what happens when you kill the service process - it is restarted and
+             * your binding continues to exist, and {@code onServiceConnected} is called
+             * again.
+             * <p>
+             * We set {@code IRemoteService mService} to null, disable {@code Button mKillButton},
+             * set the text of {@code TextView mCallbackText} to "Disconnected.", and toast the
+             * message "Disconnected from remote service".
+             *
+             * @param className The concrete component name of the service whose
+             *                  connection has been lost.
+             */
             public void onServiceDisconnected(ComponentName className) {
                 // This is called when the connection with the service has been
                 // unexpectedly disconnected -- that is, its process crashed.
@@ -509,6 +577,20 @@ public class RemoteService extends Service {
          * Class for interacting with the secondary interface of the service.
          */
         private ServiceConnection mSecondaryConnection = new ServiceConnection() {
+            /**
+             * Called when a connection to the Service has been established, with the
+             * {@link android.os.IBinder} of the communication channel to the Service.
+             * <p>
+             * First we use the IDL helper method {@code ISecondary.Stub.asInterface} to cast
+             * the {@code IBinder service} object passed to us into an com.example.android.apis.app.ISecondary
+             * interface, generating a proxy if needed. Then we enable the {@code Button mKillButton}
+             * ("Kill Process").
+             *
+             * @param className The concrete component name of the service that has
+             *                  been connected.
+             * @param service   The IBinder of the Service's communication channel,
+             *                  which you can now make calls on.
+             */
             public void onServiceConnected(ComponentName className, IBinder service) {
                 // Connecting to a secondary interface is the same as any
                 // other interface.
@@ -516,13 +598,51 @@ public class RemoteService extends Service {
                 mKillButton.setEnabled(true);
             }
 
+            /**
+             * Called when a connection to the Service has been lost.  This typically
+             * happens when the process hosting the service has crashed or been killed.
+             * This does <em>not</em> remove the ServiceConnection itself -- this
+             * binding to the service will remain active, and you will receive a call
+             * to {@link #onServiceConnected} when the Service is next running. And indeed
+             * this is what happens when you kill the service process - it is restarted and
+             * your binding continues to exist, and {@code onServiceConnected} is called
+             * again.
+             * <p>
+             * We set {@code ISecondary mSecondaryService} to null, and disable {@code Button mKillButton}.
+             *
+             * @param className The concrete component name of the service whose
+             *                  connection has been lost.
+             */
             public void onServiceDisconnected(ComponentName className) {
                 mSecondaryService = null;
                 mKillButton.setEnabled(false);
             }
         };
 
+        /**
+         * {@code OnClickListener} for the R.id.bind ("Bind Service") {@code Button}
+         */
         private OnClickListener mBindListener = new OnClickListener() {
+            /**
+             * Called when the R.id.bind ("Bind Service") {@code Button} is clicked. First we create
+             * {@code Intent intent} targeting {@code RemoteService.class}. We set the action of
+             * {@code intent} to the class name {@code IRemoteService}, then we use the intent to
+             * bind to the service with the flag BIND_AUTO_CREATE (automatically create the service
+             * as long as the binding exists), and using {@code ServiceConnection mConnection} as the
+             * {@code ServiceConnection} object to receive callbacks when the service connects
+             * ({@code onServiceConnected}) or disconnects ({@code onServiceDisconnected}).
+             * <p>
+             * We then set the action of {@code intent} to the class name {@code ISecondary} and use
+             * the intent to bind to the service with the flag BIND_AUTO_CREATE (automatically create
+             * the service as long as the binding exists), and using {@code ServiceConnection mSecondaryConnection}
+             * as the {@code ServiceConnection} object to receive callbacks when the service connects
+             * ({@code onServiceConnected}) or disconnects ({@code onServiceDisconnected}).
+             * <p>
+             * We then set our flag {@code mIsBound} to true and set the text of {@code TextView mCallbackText}
+             * to "Binding."
+             *
+             * @param v View of the Button that was clicked
+             */
             public void onClick(View v) {
                 // Establish a couple connections with the service, binding
                 // by interface names.  This allows other applications to be
@@ -538,7 +658,23 @@ public class RemoteService extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the R.id.unbind ("Unbind Service") {@code Button}
+         */
         private OnClickListener mUnbindListener = new OnClickListener() {
+            /**
+             * Called when the R.id.unbind ("Unbind Service") {@code Button} is clicked. If our flag
+             * {@code mIsBound} is true, we check to see if our {@code onServiceConnected} has been
+             * called and initialized {@code IRemoteService mService} with the {@code IBinder service}
+             * sent from the service, and if so we use {@code mService} to access the server method
+             * {@code unregisterCallback} to unregister our {@code IRemoteServiceCallback mCallback}
+             * we previously registered using {@code mService.registerCallback}. Then we unbind our
+             * {@code ServiceConnection mConnection} and {@code ServiceConnection mSecondaryConnection},
+             * set our flag {@code mIsBound} to false, and set the text of {@code TextView mCallbackText}
+             * to "Unbinding."
+             *
+             * @param v View of the Button that was clicked
+             */
             public void onClick(View v) {
                 if (mIsBound) {
                     // If we have received the service, and hence registered with
