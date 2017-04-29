@@ -698,7 +698,20 @@ public class RemoteService extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the R.id.kill ("Kill Process") {@code Button}
+         */
         private OnClickListener mKillListener = new OnClickListener() {
+            /**
+             * Called when the R.id.kill ("Kill Process") {@code Button} is clicked. First we make sure
+             * that our interface to the remote service {@code ISecondary mSecondaryService} is not null,
+             * then wrapped in a try block intended to catch RemoteException we use the service method
+             * {@code mSecondaryService.getPid()} to fetch the PID of the service to {@code int pid}.
+             * We use {@code pid} in a call to {@code Process.killProcess(pid)} to kill the PID of the
+             * service, and finally we set the text of {@code TextView mCallbackText} to "Killed service process."
+             *
+             * @param v View of Button that was clicked
+             */
             public void onClick(View v) {
                 // To kill the process hosting our service, we need to know its
                 // PID.  Conveniently our service has a call that will return
@@ -717,12 +730,9 @@ public class RemoteService extends Service {
                         Process.killProcess(pid);
                         mCallbackText.setText("Killed service process.");
                     } catch (RemoteException ex) {
-                        // Recover gracefully from the process hosting the
-                        // server dying.
+                        // Recover gracefully from the process hosting the server dying.
                         // Just for purposes of the sample, put up a notification.
-                        Toast.makeText(Binding.this,
-                                R.string.remote_call_failed,
-                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Binding.this, R.string.remote_call_failed, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -739,10 +749,17 @@ public class RemoteService extends Service {
         private IRemoteServiceCallback mCallback = new IRemoteServiceCallback.Stub() {
             /**
              * This is called by the remote service regularly to tell us about
-             * new values.  Note that IPC calls are dispatched through a thread
+             * new values. Note that IPC calls are dispatched through a thread
              * pool running in each process, so the code executing here will
              * NOT be running in our main thread like most other things -- so,
              * to update the UI, we need to use a Handler to hop over there.
+             * We send that {@code Handler mHandler} a message with the {@code what}
+             * field set to BUMP_MSG, and {@code value} as the {@code arg1} field.
+             *
+             * @param value Value that the service increments once a second, and broadcasts to all
+             *              registered callbacks (including this one, once we register it in our
+             *              {@code onServiceConnected} callback using the method
+             *              {@code IRemoteService.registerCallback})
              */
             public void valueChanged(int value) {
                 mHandler.sendMessage(mHandler.obtainMessage(BUMP_MSG, value, 0));
@@ -754,8 +771,21 @@ public class RemoteService extends Service {
          */
         private static final int BUMP_MSG = 1;
 
+        /**
+         * {@code Handler} running on the UI thread which other threads can use to post text into
+         * the {@code TextView mCallbackText}.
+         */
         @SuppressLint("HandlerLeak")
         private Handler mHandler = new Handler() {
+            /**
+             * Subclasses must implement this to receive messages. We switch on the {@code what} field
+             * of the {@code Message msg} parameter, defaulting to passing {@code msg} on to our super's
+             * implementation of {@code handleMessage}. If {@code what} contained BUMP_MSG, we set the
+             * text of {@code TextView mCallbackText} to "Received from service: ", with the value of
+             * field {@code msg.arg1} concatenated to the end.
+             *
+             * @param msg Message sent us by {@code mHandler.sendMessage}
+             */
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
@@ -777,23 +807,60 @@ public class RemoteService extends Service {
      * Examples of behavior of different bind flags.</p>
      */
     public static class BindingOptions extends Activity {
+        /**
+         * {@code ServiceConnection} we use to receive information as the service is started and stopped after calling {@code bindService}
+         */
         ServiceConnection mCurConnection;
+        /**
+         * {@code TextView} used to display status information about our connection
+         */
         TextView mCallbackText;
+        /**
+         * {@code Intent} used to Bind to the {@code RemoteService} service
+         */
         Intent mBindIntent;
 
+        /**
+         * Contains our implementation of the {@code ServiceConnection} interface, consisting of the
+         * two methods {@code onServiceConnected} and {@code onServiceDisconnected}.
+         */
         class MyServiceConnection implements ServiceConnection {
+            /**
+             * Flag used to unbind in {@code onServiceDisconnected} when true (set to true for option BIND_WAIVE_PRIORITY
+             */
             final boolean mUnbindOnDisconnect;
 
+            /**
+             * Default constructor, sets {@code mUnbindOnDisconnect} flag to false
+             */
             @SuppressWarnings("WeakerAccess")
             public MyServiceConnection() {
                 mUnbindOnDisconnect = false;
             }
 
+            /**
+             * This version of the constructor is only called for option BIND_WAIVE_PRIORITY, and there
+             * the value of {@code mUnbindOnDisconnect} is specified to be set to true.
+             *
+             * @param unbindOnDisconnect value to set {@code mUnbindOnDisconnect} to
+             */
             @SuppressWarnings("WeakerAccess")
             public MyServiceConnection(boolean unbindOnDisconnect) {
                 mUnbindOnDisconnect = unbindOnDisconnect;
             }
 
+            /**
+             * Called when a connection to the Service has been established, with
+             * the {@link android.os.IBinder} of the communication channel to the
+             * Service. For some unknown reason, if the current {@code ServiceConnection mCurConnection}
+             * is not equal to "this" we return having done nothing. Otherwise we set the text of
+             * {@code TextView mCallbackText} to "Attached.", and toast the message "Connected to remote service".
+             *
+             * @param className The concrete component name of the service that has
+             *                  been connected.
+             * @param service   The IBinder of the Service's communication channel,
+             *                  which you can now make calls on.
+             */
             public void onServiceConnected(ComponentName className, IBinder service) {
                 if (mCurConnection != this) {
                     return;
@@ -802,6 +869,23 @@ public class RemoteService extends Service {
                 Toast.makeText(BindingOptions.this, R.string.remote_service_connected, Toast.LENGTH_SHORT).show();
             }
 
+            /**
+             * Called when a connection to the Service has been lost.  This typically
+             * happens when the process hosting the service has crashed or been killed.
+             * This does <em>not</em> remove the ServiceConnection itself -- this
+             * binding to the service will remain active, and you will receive a call
+             * to {@link #onServiceConnected} when the Service is next running.
+             *
+             * For some unknown reason, if the current {@code ServiceConnection mCurConnection}
+             * is not equal to "this" we return having done nothing. Otherwise we set the text of
+             * {@code TextView mCallbackText} to "Disconnected.", toast the message "Disconnected
+             * from remote service". Then only if {@code mUnbindOnDisconnect} is true, we unbind from
+             * the service, set {@code ServiceConnection mCurConnection} to null and toast the message
+             * "Unbinding due to disconnect"
+             *
+             * @param className The concrete component name of the service whose
+             *                  connection has been lost.
+             */
             public void onServiceDisconnected(ComponentName className) {
                 if (mCurConnection != this) {
                     return;
