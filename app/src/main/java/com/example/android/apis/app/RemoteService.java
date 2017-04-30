@@ -901,8 +901,25 @@ public class RemoteService extends Service {
         }
 
         /**
-         * Standard initialization of this activity.  Set up the UI, then wait
-         * for the user to poke it before doing anything.
+         * Called when the activity is starting. First we call through to our super's implementation
+         * of {@code onCreate}, then we set our content view to our layout file R.layout.remote_binding_options.
+         * We locate the {@code Button}'s in our layout file and set their {@code OnClickListener} as
+         * follows:
+         * <ul>
+         *     <li>R.id.bind_normal "Normal" - {@code mBindNormalListener}</li>
+         *     <li>R.id.bind_not_foreground "Not Foreground" - {@code mBindNotForegroundListener}</li>
+         *     <li>R.id.bind_above_client "Above Client" {@code mBindAboveClientListener}</li>
+         *     <li>R.id.bind_allow_oom "Allow OOM Management" {@code mBindAllowOomListener}</li>
+         *     <li>R.id.bind_waive_priority "Waive Priority" {@code mBindWaivePriorityListener}</li>
+         *     <li>R.id.bind_important "Important" {@code mBindImportantListener}</li>
+         *     <li>R.id.bind_with_activity "Adjust With Activity" {@code mBindWithActivityListener}</li>
+         *     <li>R.id.unbind "Unbind Service" {@code mUnbindListener}</li>
+         * </ul>
+         * Then we locate the {@code TextView mCallbackText} R.id.callback and set its text to "Not attached.".
+         * create {@code Intent mBindIntent} to target {@code RemoteService.class}, and set its action
+         * to {@code IRemoteService}.
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
          */
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -935,7 +952,20 @@ public class RemoteService extends Service {
             mBindIntent.setAction(IRemoteService.class.getName());
         }
 
+        /**
+         * {@code OnClickListener} for the R.id.bind_normal "Normal" {@code Button}
+         */
         private OnClickListener mBindNormalListener = new OnClickListener() {
+            /**
+             * When clicked we check to see if we {@code ServiceConnection mCurConnection} is connected,
+             * and if so disconnect {@code mCurConnection} and set it to null. Then we create a new
+             * instance of {@code MyServiceConnection conn}, use it for the callback when we Bind to the
+             * service specified by {@code Intent mBindIntent} ({@code RemoteService} with the action
+             * {@code IRemoteService} in our case) using the flag BIND_AUTO_CREATE, and if we succeed
+             * in binding we set {@code ServiceConnection mCurConnection} to {@code conn}.
+             *
+             * @param v View of Button that was clicked
+             */
             public void onClick(View v) {
                 if (mCurConnection != null) {
                     unbindService(mCurConnection);
@@ -948,7 +978,21 @@ public class RemoteService extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the R.id.bind_not_foreground "Not Foreground" {@code Button}
+         */
         private OnClickListener mBindNotForegroundListener = new OnClickListener() {
+            /**
+             * When clicked we check to see if we {@code ServiceConnection mCurConnection} is connected,
+             * and if so disconnect {@code mCurConnection} and set it to null. Then we create a new
+             * instance of {@code MyServiceConnection conn}, use it for the callback when we Bind to the
+             * service specified by {@code Intent mBindIntent} ({@code RemoteService} with the action
+             * {@code IRemoteService} in our case) using the flag BIND_AUTO_CREATE and BIND_NOT_FOREGROUND,
+             * and if we succeed in binding we set {@code ServiceConnection mCurConnection} to
+             * {@code conn}.
+             *
+             * @param v View of Button that was clicked
+             */
             public void onClick(View v) {
                 if (mCurConnection != null) {
                     unbindService(mCurConnection);
@@ -962,7 +1006,21 @@ public class RemoteService extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the R.id.bind_above_client "Above Client" {@code Button}
+         */
         private OnClickListener mBindAboveClientListener = new OnClickListener() {
+            /**
+             * When clicked we check to see if we {@code ServiceConnection mCurConnection} is connected,
+             * and if so disconnect {@code mCurConnection} and set it to null. Then we create a new
+             * instance of {@code MyServiceConnection conn}, use it for the callback when we Bind to the
+             * service specified by {@code Intent mBindIntent} ({@code RemoteService} with the action
+             * {@code IRemoteService} in our case) using the flag BIND_AUTO_CREATE and BIND_ABOVE_CLIENT,
+             * and if we succeed in binding we set {@code ServiceConnection mCurConnection} to
+             * {@code conn}.
+             *
+             * @param v View of Button that was clicked
+             */
             public void onClick(View v) {
                 if (mCurConnection != null) {
                     unbindService(mCurConnection);
@@ -976,7 +1034,21 @@ public class RemoteService extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the R.id.bind_allow_oom "Allow OOM Management" {@code Button}
+         */
         private OnClickListener mBindAllowOomListener = new OnClickListener() {
+            /**
+             * When clicked we check to see if we {@code ServiceConnection mCurConnection} is connected,
+             * and if so disconnect {@code mCurConnection} and set it to null. Then we create a new
+             * instance of {@code MyServiceConnection conn}, use it for the callback when we Bind to the
+             * service specified by {@code Intent mBindIntent} ({@code RemoteService} with the action
+             * {@code IRemoteService} in our case) using the flag BIND_AUTO_CREATE and BIND_ALLOW_OOM_MANAGEMENT,
+             * and if we succeed in binding we set {@code ServiceConnection mCurConnection} to
+             * {@code conn}.
+             *
+             * @param v View of Button that was clicked
+             */
             public void onClick(View v) {
                 if (mCurConnection != null) {
                     unbindService(mCurConnection);
@@ -990,7 +1062,22 @@ public class RemoteService extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the R.id.bind_waive_priority "Waive Priority" {@code Button}
+         */
         private OnClickListener mBindWaivePriorityListener = new OnClickListener() {
+            /**
+             * When clicked we check to see if we {@code ServiceConnection mCurConnection} is connected,
+             * and if so disconnect {@code mCurConnection} and set it to null. Then we create a new
+             * instance of {@code MyServiceConnection conn} specifying that we should unbind if disconnected,
+             * (it sets the flag {@code mUnbindOnDisconnect} to true in the constructor) use it for the
+             * callback when we Bind to the service specified by {@code Intent mBindIntent}
+             * ({@code RemoteService} with the action {@code IRemoteService} in our case) using the
+             * flag BIND_AUTO_CREATE and BIND_WAIVE_PRIORITY, and if we succeed in binding we set
+             * {@code ServiceConnection mCurConnection} to {@code conn}.
+             *
+             * @param v View of Button that was clicked
+             */
             public void onClick(View v) {
                 if (mCurConnection != null) {
                     unbindService(mCurConnection);
@@ -1004,7 +1091,21 @@ public class RemoteService extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the R.id.bind_important "Important" {@code Button}
+         */
         private OnClickListener mBindImportantListener = new OnClickListener() {
+            /**
+             * When clicked we check to see if we {@code ServiceConnection mCurConnection} is connected,
+             * and if so disconnect {@code mCurConnection} and set it to null. Then we create a new
+             * instance of {@code MyServiceConnection conn}, use it for the callback when we Bind to the
+             * service specified by {@code Intent mBindIntent} ({@code RemoteService} with the action
+             * {@code IRemoteService} in our case) using the flag BIND_AUTO_CREATE and BIND_IMPORTANT,
+             * and if we succeed in binding we set {@code ServiceConnection mCurConnection} to
+             * {@code conn}.
+             *
+             * @param v View of Button that was clicked
+             */
             public void onClick(View v) {
                 if (mCurConnection != null) {
                     unbindService(mCurConnection);
@@ -1018,7 +1119,21 @@ public class RemoteService extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the R.id.bind_with_activity "Adjust With Activity" {@code Button}
+         */
         private OnClickListener mBindWithActivityListener = new OnClickListener() {
+            /**
+             * When clicked we check to see if we {@code ServiceConnection mCurConnection} is connected,
+             * and if so disconnect {@code mCurConnection} and set it to null. Then we create a new
+             * instance of {@code MyServiceConnection conn}, use it for the callback when we Bind to the
+             * service specified by {@code Intent mBindIntent} ({@code RemoteService} with the action
+             * {@code IRemoteService} in our case) using the flag BIND_AUTO_CREATE, BIND_ADJUST_WITH_ACTIVITY,
+             * and BIND_WAIVE_PRIORITY, and if we succeed in binding we set
+             * {@code ServiceConnection mCurConnection} to {@code conn}.
+             *
+             * @param v View of Button that was clicked
+             */
             public void onClick(View v) {
                 if (mCurConnection != null) {
                     unbindService(mCurConnection);
@@ -1034,7 +1149,16 @@ public class RemoteService extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the R.id.unbind "Unbind Service" {@code Button}
+         */
         private OnClickListener mUnbindListener = new OnClickListener() {
+            /**
+             * If {@code ServiceConnection mCurConnection} is connected to the service, we unbind
+             * {@code mCurConnection} and set it to null.
+             *
+             * @param v View of the Button that was clicked
+             */
             public void onClick(View v) {
                 if (mCurConnection != null) {
                     unbindService(mCurConnection);

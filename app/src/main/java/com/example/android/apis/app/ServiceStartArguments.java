@@ -42,63 +42,91 @@ import com.example.android.apis.R;
 /**
  * This is an example of implementing an application service that runs locally
  * in the same process as the application.  The {@link Controller}
- * class shows how to interact with the service. 
- *
- * <p>Notice the use of the {@link NotificationManager} when interesting things
+ * class shows how to interact with the service.
+ * <p>
+ * Notice the use of the {@link NotificationManager} when interesting things
  * happen in the service.  This is generally how background services should
  * interact with the user, rather than doing something more disruptive such as
  * calling startActivity().
- * 
- * <p>For applications targeting Android 1.5 or beyond, you may want consider
+ * <p>
+ * For applications targeting Android 1.5 or beyond, you may want consider
  * using the {@link android.app.IntentService} class, which takes care of all the
  * work of creating the extra thread and dispatching commands to it.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class ServiceStartArguments extends Service {
+    /** TAG for logging */
+    final static String TAG = "ServiceStartArguments";
+    /** Handle to the system level {@code NotificationManager} service */
     private NotificationManager mNM;
-    @SuppressWarnings({"FieldCanBeLocal", "unused"})
-    private Intent mInvokeIntent;
+    /** {@code Looper} for the {@code HandlerThread} background thread we create to run our service in */
     private volatile Looper mServiceLooper;
+    /** {@code Handler} for messages sent to our service thread */
     private volatile ServiceHandler mServiceHandler;
-    
+
+    /**
+     * This is a {@code Handler} class which is used to receive messages sent to the thread that is
+     * running our service.
+     */
+    @SuppressWarnings("WeakerAccess")
     private final class ServiceHandler extends Handler {
+        /**
+         * We just pass our parameter through to our super's constructor so that it uses this
+         * {@code Looper} instead of the default one.
+         *
+         * @param looper {@code Looper} for {@code HandlerThread} that is running our service
+         */
         public ServiceHandler(Looper looper) {
             super(looper);
         }
-        
+
+        /**
+         * Subclasses must implement this to receive messages. First we retrieve {@code Bundle arguments}
+         * from the {@code Object obj} of our {@code Message msg} parameter. Then we extract {@code String txt}
+         * which is stored in {@code arguments} under the key "name", and {@code boolean redeliver} which
+         * is stored under the key "redeliver" (if set, otherwise we default to false). We then log the
+         * {@code msg} we have received. If {@code redeliver} is false we prepend "New cmd #" to txt,
+         * otherwise we prepend "Re-delivered #". We call our method {@code showNotification} to display
+         * a notification containing {@code txt}.
+         *
+         * Then we wait for 5 seconds before calling our method {@code hideNotification} to dismiss our
+         * notification, log a message "Done with #", and stop ourselves.
+         *
+         * @param msg A {@link android.os.Message Message} object
+         */
         @Override
         public void handleMessage(Message msg) {
-            Bundle arguments = (Bundle)msg.obj;
-        
+            Bundle arguments = (Bundle) msg.obj;
+
             String txt = arguments.getString("name");
-            
-            Log.i("ServiceStartArguments", "Message: " + msg + ", "
-                    + arguments.getString("name"));
-        
-            if ((msg.arg2&Service.START_FLAG_REDELIVERY) == 0) {
+            boolean redeliver = arguments.getBoolean("redeliver", false);
+
+            Log.i(TAG, "Message: " + msg + ", " + arguments.getString("name"));
+
+            if (!redeliver) {
                 txt = "New cmd #" + msg.arg1 + ": " + txt;
             } else {
                 txt = "Re-delivered #" + msg.arg1 + ": " + txt;
             }
-            
+
             showNotification(txt);
-        
+
             // Normally we would do some work here...  for our sample, we will
             // just sleep for 5 seconds.
-            long endTime = System.currentTimeMillis() + 5*1000;
+            long endTime = System.currentTimeMillis() + 5 * 1000;
             while (System.currentTimeMillis() < endTime) {
                 synchronized (this) {
                     try {
                         wait(endTime - System.currentTimeMillis());
                     } catch (Exception e) {
-                        Log.i("ServiceStartArg...", e.getLocalizedMessage());
+                        Log.i(TAG, e.getLocalizedMessage());
                     }
                 }
             }
-        
+
             hideNotification();
-            
-            Log.i("ServiceStartArguments", "Done with #" + msg.arg1);
+
+            Log.i(TAG, "Done with #" + msg.arg1);
             stopSelf(msg.arg1);
         }
 
@@ -106,51 +134,44 @@ public class ServiceStartArguments extends Service {
 
     @Override
     public void onCreate() {
-        mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        Toast.makeText(this, R.string.service_created,
-                Toast.LENGTH_SHORT).show();
-        
-        // This is who should be launched if the user selects our persistent
-        // notification.
-        mInvokeIntent = new Intent(this, Controller.class);
+        Toast.makeText(this, R.string.service_created, Toast.LENGTH_SHORT).show();
 
         // Start up the thread running the service.  Note that we create a
         // separate thread because the service normally runs in the process's
         // main thread, which we don't want to block.  We also make it
         // background priority so CPU-intensive work will not disrupt our UI.
-        HandlerThread thread = new HandlerThread("ServiceStartArguments",
-                Process.THREAD_PRIORITY_BACKGROUND);
+        HandlerThread thread = new HandlerThread(TAG, Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
-        
+
         mServiceLooper = thread.getLooper();
         mServiceHandler = new ServiceHandler(mServiceLooper);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("ServiceStartArguments",
-                "Starting #" + startId + ": " + intent.getExtras());
+        Log.i(TAG, "Starting #" + startId + ": " + intent.getExtras());
         Message msg = mServiceHandler.obtainMessage();
         msg.arg1 = startId;
         msg.arg2 = flags;
         msg.obj = intent.getExtras();
         mServiceHandler.sendMessage(msg);
-        Log.i("ServiceStartArguments", "Sending: " + msg);
-        
+        Log.i(TAG, "Sending: " + msg);
+
         // For the start fail button, we will simulate the process dying
         // for some reason in onStartCommand().
         if (intent.getBooleanExtra("fail", false)) {
             // Don't do this if we are in a retry... the system will
             // eventually give up if we keep crashing.
-            if ((flags&START_FLAG_RETRY) == 0) {
+            if ((flags & START_FLAG_RETRY) == 0) {
                 // Since the process hasn't finished handling the command,
                 // it will be restarted with the command again, regardless of
                 // whether we return START_REDELIVER_INTENT.
                 Process.killProcess(Process.myPid());
             }
         }
-        
+
         // Normally we would consistently return one kind of result...
         // however, here we will select between these two, so you can see
         // how they impact the behavior.  Try killing the process while it
@@ -166,8 +187,7 @@ public class ServiceStartArguments extends Service {
         hideNotification();
 
         // Tell the user we stopped.
-        Toast.makeText(ServiceStartArguments.this, R.string.service_destroyed,
-                Toast.LENGTH_SHORT).show();
+        Toast.makeText(ServiceStartArguments.this, R.string.service_destroyed, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -180,8 +200,7 @@ public class ServiceStartArguments extends Service {
      */
     private void showNotification(String text) {
         // The PendingIntent to launch our activity if the user selects this notification
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, Controller.class), 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, Controller.class), 0);
 
         // Set the info for the views that show in the notification panel.
         Notification.Builder noteBuilder = new Notification.Builder(this)
@@ -194,21 +213,21 @@ public class ServiceStartArguments extends Service {
 
         // We show this for as long as our service is processing a command.
         noteBuilder.setOngoing(true);
-        
+
         // Send the notification.
         // We use a string id because it is a unique number.  We use it later to cancel.
         mNM.notify(R.string.service_created, noteBuilder.build());
     }
-    
+
     private void hideNotification() {
         mNM.cancel(R.string.service_created);
     }
-    
+
     // ----------------------------------------------------------------------
 
     /**
      * Example of explicitly starting the {@link ServiceStartArguments}.
-     * 
+     * <p>
      * <p>Note that this is implemented as an inner class only keep the sample
      * all together; typically this code would appear in some separate class.
      */
@@ -220,53 +239,54 @@ public class ServiceStartArguments extends Service {
             setContentView(R.layout.service_start_arguments_controller);
 
             // Watch for button clicks.
-            Button button = (Button)findViewById(R.id.start1);
+            Button button = (Button) findViewById(R.id.start1);
             button.setOnClickListener(mStart1Listener);
-            button = (Button)findViewById(R.id.start2);
+            button = (Button) findViewById(R.id.start2);
             button.setOnClickListener(mStart2Listener);
-            button = (Button)findViewById(R.id.start3);
+            button = (Button) findViewById(R.id.start3);
             button.setOnClickListener(mStart3Listener);
-            button = (Button)findViewById(R.id.startfail);
+            button = (Button) findViewById(R.id.startfail);
             button.setOnClickListener(mStartFailListener);
-            button = (Button)findViewById(R.id.kill);
+            button = (Button) findViewById(R.id.kill);
             button.setOnClickListener(mKillListener);
         }
 
         private OnClickListener mStart1Listener = new OnClickListener() {
+            @Override
             public void onClick(View v) {
-                startService(new Intent(Controller.this,
-                        ServiceStartArguments.class)
-                                .putExtra("name", "One"));
+                startService(new Intent(Controller.this, ServiceStartArguments.class)
+                        .putExtra("name", "One"));
             }
         };
 
         private OnClickListener mStart2Listener = new OnClickListener() {
+            @Override
             public void onClick(View v) {
-                startService(new Intent(Controller.this,
-                        ServiceStartArguments.class)
-                                .putExtra("name", "Two"));
+                startService(new Intent(Controller.this, ServiceStartArguments.class)
+                        .putExtra("name", "Two"));
             }
         };
 
         private OnClickListener mStart3Listener = new OnClickListener() {
+            @Override
             public void onClick(View v) {
-                startService(new Intent(Controller.this,
-                        ServiceStartArguments.class)
-                                .putExtra("name", "Three")
-                                .putExtra("redeliver", true));
+                startService(new Intent(Controller.this, ServiceStartArguments.class)
+                        .putExtra("name", "Three")
+                        .putExtra("redeliver", true));
             }
         };
 
         private OnClickListener mStartFailListener = new OnClickListener() {
+            @Override
             public void onClick(View v) {
-                startService(new Intent(Controller.this,
-                        ServiceStartArguments.class)
-                                .putExtra("name", "Failure")
-                                .putExtra("fail", true));
+                startService(new Intent(Controller.this, ServiceStartArguments.class)
+                        .putExtra("name", "Failure")
+                        .putExtra("fail", true));
             }
         };
 
         private OnClickListener mKillListener = new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 // This is to simulate the service being killed while it is
                 // running in the background.
