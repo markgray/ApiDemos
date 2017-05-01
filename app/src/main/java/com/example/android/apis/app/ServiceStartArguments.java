@@ -55,13 +55,21 @@ import com.example.android.apis.R;
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class ServiceStartArguments extends Service {
-    /** TAG for logging */
+    /**
+     * TAG for logging
+     */
     final static String TAG = "ServiceStartArguments";
-    /** Handle to the system level {@code NotificationManager} service */
+    /**
+     * Handle to the system level {@code NotificationManager} service
+     */
     private NotificationManager mNM;
-    /** {@code Looper} for the {@code HandlerThread} background thread we create to run our service in */
+    /**
+     * {@code Looper} for the {@code HandlerThread} background thread we create to run our service in
+     */
     private volatile Looper mServiceLooper;
-    /** {@code Handler} for messages sent to our service thread */
+    /**
+     * {@code Handler} for messages sent to our service thread
+     */
     private volatile ServiceHandler mServiceHandler;
 
     /**
@@ -88,7 +96,7 @@ public class ServiceStartArguments extends Service {
          * {@code msg} we have received. If {@code redeliver} is false we prepend "New cmd #" to txt,
          * otherwise we prepend "Re-delivered #". We call our method {@code showNotification} to display
          * a notification containing {@code txt}.
-         *
+         * <p>
          * Then we wait for 5 seconds before calling our method {@code hideNotification} to dismiss our
          * notification, log a message "Done with #", and stop ourselves.
          *
@@ -132,6 +140,15 @@ public class ServiceStartArguments extends Service {
 
     }
 
+    /**
+     * Called by the system when the service is first created. First we initialize our field
+     * {@code NotificationManager mNM} with a handle to the NOTIFICATION_SERVICE system level
+     * service, then we display a toast with the message "Service created." We next create
+     * {@code HandlerThread thread} with the thread name "ServiceStartArgumentsBackground", and
+     * the priority THREAD_PRIORITY_BACKGROUND. We start the {@code thread} running, then retrieve
+     * the {@code Looper mServiceLooper} of the thread and use it to construct an instance of
+     * {@code ServiceHandler} for {@code ServiceHandler mServiceHandler}.
+     */
     @Override
     public void onCreate() {
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -142,13 +159,51 @@ public class ServiceStartArguments extends Service {
         // separate thread because the service normally runs in the process's
         // main thread, which we don't want to block.  We also make it
         // background priority so CPU-intensive work will not disrupt our UI.
-        HandlerThread thread = new HandlerThread(TAG, Process.THREAD_PRIORITY_BACKGROUND);
+        HandlerThread thread = new HandlerThread("ServiceStartArgumentsBackground", Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
 
         mServiceLooper = thread.getLooper();
         mServiceHandler = new ServiceHandler(mServiceLooper);
     }
 
+    /**
+     * Called by the system every time a client explicitly starts the service by calling
+     * {@link android.content.Context#startService}, providing the arguments it supplied and a
+     * unique integer token representing the start request. Note that the system calls this on your
+     * service's main thread. First we log a message informing the user that we are "Starting #",
+     * with the {@code startId} request number, and the contents of the extras included in the
+     * {@code Intent intent} that started us. We obtain {@code Message msg} from our background
+     * {@code ServiceHandler mServiceHandler}, set field {@code arg1} to {@code startId}, field
+     * {@code arg2} to {@code flags} and field {@code obj} to the extras in {@code intent}. We then
+     * push {@code msg} onto the end of the message queue for {@code mServiceHandler} after all
+     * pending messages before the current time. It will be received in handleMessage(Message), in
+     * the thread attached to this handler. Then we log as message "Sending: " with {@code msg}
+     * appended to it.
+     * <p>
+     * Then we check to see if we were started using the "Start Failed Delivery" {@code Button}, and
+     * if so we kill our process to simulate a failed delivery (but only if this is not a retry
+     * call to {@code onStartCommand} as indicated by {@code flags} having the START_FLAG_RETRY bits
+     * set.)
+     * <p>
+     * Finally if the extras contain a "redeliver" flag set to true we return START_REDELIVER_INTENT
+     * (if this service's process is killed while it is started, it will be scheduled for a restart
+     * and the last delivered Intent re-delivered to it again), otherwise we return START_NOT_STICKY
+     * (if this service's process is killed while it is started and there are no new start intents
+     * to deliver to it, then take the service out of the started state and don't recreate until a
+     * future explicit call).
+     *
+     * @param intent  The Intent supplied to {@link android.content.Context#startService},
+     *                as given.  This may be null if the service is being restarted after
+     *                its process has gone away, and it had previously returned anything
+     *                except {@link #START_STICKY_COMPATIBILITY}.
+     * @param flags   Additional data about this start request.  Currently either
+     *                0, {@link #START_FLAG_REDELIVERY}, or {@link #START_FLAG_RETRY}.
+     * @param startId A unique integer representing this specific request to
+     *                start.  Use with {@link #stopSelfResult(int)}.
+     * @return The return value indicates what semantics the system should
+     * use for the service's current started state.  It may be one of the
+     * constants associated with the {@link #START_CONTINUATION_MASK} bits.
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "Starting #" + startId + ": " + intent.getExtras());
