@@ -31,8 +31,7 @@ import java.util.Locale;
 import java.util.Random;
 
 /**
- * <p>Demonstrates text-to-speech (TTS). Please note the following steps:</p>
- *
+ * Demonstrates text-to-speech (TTS). Please note the following steps:
  * <ol>
  * <li>Construct the TextToSpeech object.</li>
  * <li>Handle initialization callback in the onInit method.
@@ -40,20 +39,39 @@ import java.util.Random;
  * <li>Call TextToSpeech.speak to synthesize speech.</li>
  * <li>Shutdown TextToSpeech in onDestroy.</li>
  * </ol>
- *
- * <p>Documentation:
+ * Documentation:
  * http://developer.android.com/reference/android/speech/tts/package-summary.html
- * </p>
- * <ul>
  */
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class TextToSpeechActivity extends Activity implements TextToSpeech.OnInitListener {
 
+    /**
+     * TAG for logging
+     */
     private static final String TAG = "TextToSpeechDemo";
 
+    /**
+     * {@code TextToSpeech} instance we use to read our text aloud.
+     */
     private TextToSpeech mTts;
+    /**
+     * R.id.again_button  Button in our layout, says a random phrase when clicked
+     */
     private Button mAgainButton;
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.text_to_speech.
+     * We create an instance of {@code TextToSpeech} for {@code TextToSpeech mTts} using "this" as
+     * the context and "this" as the {@code TextToSpeech.OnInitListener}. We log the maximum string
+     * length supported by the TTS engine.
+     *
+     * Finally we locate the R.id.again_button ("Again") Button in our layout in order to initialize
+     * our field {@code Button mAgainButton}, and we set its {@code OnClickListener} to an anonymous
+     * class which calls our method {@code sayHello} when the Button is clicked.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -235,6 +235,12 @@ public class ServiceStartArguments extends Service {
                 ? START_REDELIVER_INTENT : START_NOT_STICKY;
     }
 
+    /**
+     * Called by the system to notify a Service that it is no longer used and is being removed. First
+     * we tell our {@code Looper mServiceLooper} which is receiving messages to terminate without
+     * processing any more messages in the message queue. Then we call our method {@code hideNotification}
+     * which cancels our notification, and toast the message "Service destroyed."
+     */
     @Override
     public void onDestroy() {
         mServiceLooper.quit();
@@ -245,13 +251,29 @@ public class ServiceStartArguments extends Service {
         Toast.makeText(ServiceStartArguments.this, R.string.service_destroyed, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Return the communication channel to the service.  May return null if
+     * clients can not bind to the service, and that is what we do.
+     *
+     * @param intent The Intent that was used to bind to this service.
+     * @return Return an IBinder through which clients can call on to the
+     * service.
+     */
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
     /**
-     * Show a notification while this service is running.
+     * Show a notification while this service is running. First we create {@code PendingIntent contentIntent}
+     * which will launch {@code Controller}. We then construct {@code Notification.Builder noteBuilder},
+     * setting its small icon to R.drawable.stat_sample, its ticker text to {@code text}, its timestamp
+     * to the current system time, its label to "Sample Service Start Arguments", its text to {@code text},
+     * and {@code contentIntent} as the {@code PendingIntent} to be sent when the notification is clicked.
+     * We set the ongoing flag to true so that it cannot be dismissed by the user, then build and post
+     * the notification with the ID R.string.service_created.
+     *
+     * @param text text to display in our notification
      */
     private void showNotification(String text) {
         // The PendingIntent to launch our activity if the user selects this notification
@@ -274,6 +296,9 @@ public class ServiceStartArguments extends Service {
         mNM.notify(R.string.service_created, noteBuilder.build());
     }
 
+    /**
+     * Cancels the notification with ID R.string.service_created,
+     */
     private void hideNotification() {
         mNM.cancel(R.string.service_created);
     }
@@ -282,11 +307,26 @@ public class ServiceStartArguments extends Service {
 
     /**
      * Example of explicitly starting the {@link ServiceStartArguments}.
-     * <p>
-     * <p>Note that this is implemented as an inner class only keep the sample
+     * Note that this is implemented as an inner class only keep the sample
      * all together; typically this code would appear in some separate class.
      */
     public static class Controller extends Activity {
+        /**
+         * Called when the activity is starting. First we call through to our super's implementation
+         * of {@code onCreate}, then we set our content view to our layout file
+         * R.layout.service_start_arguments_controller.
+         * <p>
+         * We locate the {@code Button}'s in our layout and set their {@code OnClickListener}'s:
+         * <ul>
+         * <li>R.id.start1 "Start One no redeliver" {@code mStart1Listener}</li>
+         * <li>R.id.start2 "Start Two no redeliver" {@code mStart2Listener}</li>
+         * <li>R.id.start3 "Start Three w/redeliver" {@code mStart3Listener}</li>
+         * <li>R.id.startfail "Start failed delivery" {@code mStartFailListener}</li>
+         * <li>R.id.kill "Kill Process" {@code mKillListener}</li>
+         * </ul>
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+         */
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -306,6 +346,9 @@ public class ServiceStartArguments extends Service {
             button.setOnClickListener(mKillListener);
         }
 
+        /**
+         * {@code OnClickListener} for the R.id.start1 "Start One no redeliver" Button
+         */
         private OnClickListener mStart1Listener = new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -314,6 +357,9 @@ public class ServiceStartArguments extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the R.id.start2 "Start Two no redeliver" Button
+         */
         private OnClickListener mStart2Listener = new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -322,6 +368,9 @@ public class ServiceStartArguments extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the R.id.start3 "Start Three w/redeliver" Button
+         */
         private OnClickListener mStart3Listener = new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -331,6 +380,9 @@ public class ServiceStartArguments extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the R.id.startfail "Start failed delivery" Button
+         */
         private OnClickListener mStartFailListener = new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -340,6 +392,9 @@ public class ServiceStartArguments extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the R.id.kill "Kill Process" Button
+         */
         private OnClickListener mKillListener = new OnClickListener() {
             @Override
             public void onClick(View v) {
