@@ -95,6 +95,12 @@ public class TextToSpeechActivity extends Activity implements TextToSpeech.OnIni
         });
     }
 
+    /**
+     * Perform any final cleanup before our activity is destroyed. If we have allocated an instance
+     * for {@code TextToSpeech mTts}, we interrupt the current utterance and discard other utterances
+     * in the queue, then release the resources used by the TextToSpeech engine. Finally we call our
+     * super's implementation of {@code onDestroy}.
+     */
     @Override
     public void onDestroy() {
         // Don't forget to shutdown!
@@ -107,6 +113,18 @@ public class TextToSpeechActivity extends Activity implements TextToSpeech.OnIni
     }
 
     // Implements TextToSpeech.OnInitListener.
+
+    /**
+     * Called to signal the completion of the TextToSpeech engine initialization, it is the only
+     * method in the interface {@code TextToSpeech.OnInitListener}. If the {@code status} is not
+     * SUCCESS, we log the message "Could not initialize TextToSpeech". If it is SUCCESS we try to
+     * set the text-to-speech language to Locale.US, and if the result of the call is either
+     * LANG_MISSING_DATA or LANG_NOT_SUPPORTED we log the error. Otherwise we enable the
+     * {@code Button mAgainButton}, and call our method {@code sayHello()} to utter the first
+     * random utterance.
+     *
+     * @param status {@link TextToSpeech#SUCCESS} or {@link TextToSpeech#ERROR}.
+     */
     public void onInit(int status) {
         // status can be either TextToSpeech.SUCCESS or TextToSpeech.ERROR.
         if (status == TextToSpeech.SUCCESS) {
@@ -136,7 +154,13 @@ public class TextToSpeechActivity extends Activity implements TextToSpeech.OnIni
         }
     }
 
+    /**
+     * random number generator used to select random phrase to utter
+     */
     private static final Random RANDOM = new Random();
+    /**
+     * Text strings used by {@code sayHello} to {@code speak}
+     */
     private static final String[] HELLOS = {
       "Hello",
       "Salutations",
@@ -150,6 +174,14 @@ public class TextToSpeechActivity extends Activity implements TextToSpeech.OnIni
       "shall be for meat."
     };
 
+    /**
+     * Use the TextToSpeech engine to speak a random sentence. First we initialize {@code helloLength}
+     * to the number of Strings in our {@code String[] HELLOS}, and then use it along with our random
+     * number generator {@code Random RANDOM} to pick a String from {@code HELLOS[]} for
+     * {@code String hello}, which we then pass to {@code speak} method of {@code TextToSpeech mTts},
+     * using the flag QUEUE_FLUSH to tell it to drop all currently pending entries in it queue.
+     *
+     */
     private void sayHello() {
         // Select a random hello.
         int helloLength = HELLOS.length;

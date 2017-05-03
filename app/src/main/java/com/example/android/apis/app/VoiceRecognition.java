@@ -47,19 +47,34 @@ import java.util.List;
  */
 @SuppressLint("SetTextI18n")
 public class VoiceRecognition extends Activity implements OnClickListener {
-
+    /**
+     * TAG for logging
+     */
     private static final String TAG = "VoiceRecognition";
-
+    /**
+     * Request code used when the Intent for the {@code RecognizerIntent.ACTION_RECOGNIZE_SPEECH}
+     * Activity is started using {@code startActivityForResult}, it is returned in the call to
+     * the callback {@code onActivityResult} when the voice recognition completes.
+     */
     private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
-
+    /**
+     * {@code ListView} used to display the different strings the recognizer thought it could have
+     * heard.
+     */
     private ListView mList;
-
+    /**
+     * {@code Handler} running on the UI thread, which other threads can post a {@code Runnable} to.
+     */
     private Handler mHandler;
-
+    /**
+     * {@code Spinner} in the UI which allows one to choose the language used by the recognizer.
+     */
     private Spinner mSupportedLanguageView;
 
     /**
      * Called with the activity is first created.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,8 +93,7 @@ public class VoiceRecognition extends Activity implements OnClickListener {
 
         // Check to see if a recognition activity is present
         PackageManager pm = getPackageManager();
-        List<ResolveInfo> activities = pm.queryIntentActivities(
-                new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+        List<ResolveInfo> activities = pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
         if (activities.size() != 0) {
             speakButton.setOnClickListener(this);
         } else {
@@ -115,8 +129,7 @@ public class VoiceRecognition extends Activity implements OnClickListener {
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speech recognition demo");
 
         // Given an hint to the recognizer about what the user is going to say
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
 
         // Specify how many results you want to receive. The results will be sorted
         // where the first result is the one with higher confidence.
@@ -126,8 +139,7 @@ public class VoiceRecognition extends Activity implements OnClickListener {
         // recognition has to be done in a specific language and not the default one (i.e., the
         // system locale). Most of the applications do not have to set this parameter.
         if (!mSupportedLanguageView.getSelectedItem().toString().equals("Default")) {
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,
-                    mSupportedLanguageView.getSelectedItem().toString());
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, mSupportedLanguageView.getSelectedItem().toString());
         }
 
         startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
@@ -140,10 +152,8 @@ public class VoiceRecognition extends Activity implements OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
             // Fill the list view with the strings the recognizer thought it could have heard
-            ArrayList<String> matches = data.getStringArrayListExtra(
-                    RecognizerIntent.EXTRA_RESULTS);
-            mList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
-                    matches));
+            ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            mList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, matches));
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -160,8 +170,8 @@ public class VoiceRecognition extends Activity implements OnClickListener {
         languages.add(0, "Default");
 
         SpinnerAdapter adapter = new ArrayAdapter<CharSequence>(this,
-                android.R.layout.simple_spinner_item, languages.toArray(
-                        new String[languages.size()]));
+                android.R.layout.simple_spinner_item,
+                languages.toArray(new String[languages.size()]));
         mSupportedLanguageView.setAdapter(adapter);
     }
 
@@ -172,7 +182,7 @@ public class VoiceRecognition extends Activity implements OnClickListener {
 
     /**
      * Handles the response of the broadcast request about the recognizer supported languages.
-     *
+     * <p>
      * The receiver is required only if the application wants to do recognition in a specific
      * language.
      */
@@ -205,22 +215,18 @@ public class VoiceRecognition extends Activity implements OnClickListener {
             //noinspection ConstantConditions
             if (extra.containsKey(RecognizerIntent.EXTRA_SUPPORTED_LANGUAGES)) {
                 mHandler.post(new Runnable() {
-
                     @Override
                     public void run() {
-                        updateSupportedLanguages(extra.getStringArrayList(
-                                RecognizerIntent.EXTRA_SUPPORTED_LANGUAGES));
+                        updateSupportedLanguages(extra.getStringArrayList(RecognizerIntent.EXTRA_SUPPORTED_LANGUAGES));
                     }
                 });
             }
 
             if (extra.containsKey(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE)) {
                 mHandler.post(new Runnable() {
-
                     @Override
                     public void run() {
-                        updateLanguagePreference(
-                                extra.getString(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE));
+                        updateLanguagePreference(extra.getString(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE));
                     }
                 });
             }
