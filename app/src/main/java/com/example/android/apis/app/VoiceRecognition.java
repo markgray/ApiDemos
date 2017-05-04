@@ -72,7 +72,25 @@ public class VoiceRecognition extends Activity implements OnClickListener {
     private Spinner mSupportedLanguageView;
 
     /**
-     * Called with the activity is first created.
+     * Called with the activity is first created. First we call through to our super's implementation
+     * of {@code onCreate}, then we initialize our field {@code Handler mHandler} with a {@code Handler}
+     * which is associated with the Looper for the current (UI) thread for other threads to use for
+     * posting Runnable's to. Next we set our content view to our layout file R.layout.voice_recognition,
+     * locate the R.id.btn_speak ("Speak") {@code Button} to set {@code Button speakButton}, initialize
+     * our field {@code ListView mList} with the location of our output {@code ListView} R.id.list,
+     * and initialize our field {@code Spinner mSupportedLanguageView} with the location of our
+     * selected language {@code Spinner} R.id.supported_languages.
+     * <p>
+     * Next we set {@code PackageManager pm} PackageManager instance to find global package information,
+     * and use it to create {@code List<ResolveInfo> activities} containing all activities that can be
+     * performed for the intent RecognizerIntent.ACTION_RECOGNIZE_SPEECH. If there are one or more
+     * activities available we set the {@code OnClickListener} of {@code Button speakButton} to "this",
+     * otherwise we disable that Button and set its text to "Recognizer not present".
+     * <p>
+     * Finally we call our method {@code refreshVoiceSettings()} which sends a broadcast intent to
+     * retrieve the languages supported by the recognizer which we then use to fill the UI widget
+     * {@code Spinner mSupportedLanguageView} (When the results are returned to the {@code onReceive}
+     * override in {@code SupportedLanguageBroadcastReceiver}).
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
@@ -108,7 +126,10 @@ public class VoiceRecognition extends Activity implements OnClickListener {
     }
 
     /**
-     * Handle the click on the start recognition button.
+     * Handle the click on the start recognition button. If the ID of the View clicked was R.id.btn_speak
+     * (Our "Speak!" Button) we call our method {@code startVoiceRecognitionActivity()}.
+     *
+     * @param v View of the Button that was clicked
      */
     public void onClick(View v) {
         if (v.getId() == R.id.btn_speak) {
@@ -117,7 +138,17 @@ public class VoiceRecognition extends Activity implements OnClickListener {
     }
 
     /**
-     * Fire an intent to start the speech recognition activity.
+     * Fire an intent to start the speech recognition activity. First we create {@code Intent intent}
+     * with the action ACTION_RECOGNIZE_SPEECH, add an extra for EXTRA_CALLING_PACKAGE with our package
+     * name, add an extra for EXTRA_PROMPT "Speech recognition demo" (will be shown to the user when
+     * requesting him to speak), add an extra for EXTRA_LANGUAGE_MODEL -- LANGUAGE_MODEL_FREE_FORM
+     * (Use a language model based on free-form speech recognition), add an extra for EXTRA_MAX_RESULTS
+     * "5" (limit on the maximum number of results to return), and if the language selected by the
+     * {@code Spinner mSupportedLanguageView} is not "Default" we add an extra for EXTRA_LANGUAGE using
+     * the language we retrieve from {@code mSupportedLanguageView}
+     * <p>
+     * Finally we call {@code startActivityForResult} to launch our {@code Intent intent} using
+     * VOICE_RECOGNITION_REQUEST_CODE as the request code to be returned to {@code onActivityResult}.
      */
     private void startVoiceRecognitionActivity() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -146,7 +177,21 @@ public class VoiceRecognition extends Activity implements OnClickListener {
     }
 
     /**
-     * Handle the results from the recognition activity.
+     * Handle the results from the recognition activity. First we make sure that the result is for our
+     * request code VOICE_RECOGNITION_REQUEST_CODE, and the result code is RESULT_OK (if not we do nothing).
+     * If this is our result we then fetch {@code ArrayList<String> matches} from {@code Intent data}
+     * using the key EXTRA_RESULTS, and set the adapter of {@code ListView mList} to an {@code ArrayAdapter}
+     * created using {@code matches}.
+     *
+     * Finally we call through to our super's implementation of {@code onActivityResult}.
+     *
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode  The integer result code returned by the child activity
+     *                    through its setResult().
+     * @param data        An Intent, which can return result data to the caller
+     *                    (various data can be attached to Intent "extras").
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -159,6 +204,11 @@ public class VoiceRecognition extends Activity implements OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * Sends a broadcast {@code Intent} intended to receive details from the package that implements
+     * voice search using an instance of {@code SupportedLanguageBroadcastReceiver} as the
+     * {@code BroadcastReceiver} to receive the results of the broadcast.
+     */
     private void refreshVoiceSettings() {
         Log.i(TAG, "Sending broadcast");
         sendOrderedBroadcast(RecognizerIntent.getVoiceDetailsIntent(this), null,
