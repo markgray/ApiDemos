@@ -27,24 +27,23 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.io.InputStream;
 
-
 /**
- * Demonstration of styled text resources.
+ * Shows how to read a data file contained in the app's apk "assets" directory using getAssets() to
+ * get an AssetManager and AssetManager.open(String filename) to open the "file" as an InputStream.
+ * Then wrapped in a try block intended to catch IOException
  */
-public class ReadAsset extends Activity
-{
+public class ReadAsset extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.read_asset.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
-	protected void onCreate(Bundle savedInstanceState)
-    {
+	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // See assets/res/any/layout/styled_text.xml for this
-        // view layout definition.
         setContentView(R.layout.read_asset);
 
-        // Programmatically load text from an asset and place it into the
-        // text view.  Note that the text we are loading is ASCII, so we
-        // need to convert it to UTF-16.
         try {
             InputStream is = getAssets().open("read_asset.txt");
             

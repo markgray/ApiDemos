@@ -182,7 +182,7 @@ public class VoiceRecognition extends Activity implements OnClickListener {
      * If this is our result we then fetch {@code ArrayList<String> matches} from {@code Intent data}
      * using the key EXTRA_RESULTS, and set the adapter of {@code ListView mList} to an {@code ArrayAdapter}
      * created using {@code matches}.
-     *
+     * <p>
      * Finally we call through to our super's implementation of {@code onActivityResult}.
      *
      * @param requestCode The integer request code originally supplied to
@@ -205,7 +205,7 @@ public class VoiceRecognition extends Activity implements OnClickListener {
     }
 
     /**
-     * Sends a broadcast {@code Intent} intended to receive details from the package that implements
+     * Sends a broadcast {@code Intent} asking to receive details from the package that implements
      * voice search using an instance of {@code SupportedLanguageBroadcastReceiver} as the
      * {@code BroadcastReceiver} to receive the results of the broadcast.
      */
@@ -215,6 +215,24 @@ public class VoiceRecognition extends Activity implements OnClickListener {
                 new SupportedLanguageBroadcastReceiver(), null, Activity.RESULT_OK, null, null);
     }
 
+    /**
+     * Called from our {@code SupportedLanguageBroadcastReceiver} override of {@code onReceive} when
+     * the extra Bundle in the broadcast returned from {@code getResultExtras(false)} contains a value
+     * stored under the key EXTRA_SUPPORTED_LANGUAGES. We first add the String "Default" to the
+     * beginning of our parameter {@code List<String> languages} to simulate the default language,
+     * then we create {@code SpinnerAdapter adapter} from an {@code ArrayAdapter<CharSequence>}
+     * constructed using the system layout file android.R.layout.simple_spinner_item for the TextView
+     * to use when instantiating views, and an array of Objects (Strings) created from
+     * {@code List<String> languages} to represent in the adapter. Finally we set the adapter of
+     * {@code Spinner mSupportedLanguageView} to {@code SpinnerAdapter adapter}.
+     *
+     * @param languages the string array list that is stored under the key EXTRA_SUPPORTED_LANGUAGES
+     *                  in the result extra Bundle returned to {@code SupportedLanguageBroadcastReceiver}
+     *                  from the speech recognizer activity, (The key to the extra in the Bundle
+     *                  returned by ACTION_GET_LANGUAGE_DETAILS which is an ArrayList of Strings that
+     *                  represents the languages supported by this implementation of voice recognition,
+     *                  a list of strings like "en-US", "cmn-Hans-CN", etc.)
+     */
     private void updateSupportedLanguages(List<String> languages) {
         // We add "Default" at the beginning of the list to simulate default language.
         languages.add(0, "Default");
@@ -225,6 +243,16 @@ public class VoiceRecognition extends Activity implements OnClickListener {
         mSupportedLanguageView.setAdapter(adapter);
     }
 
+    /**
+     * Called from our {@code SupportedLanguageBroadcastReceiver} override of {@code onReceive} when
+     * the extra Bundle in the broadcast returned from {@code getResultExtras(false)} contains a value
+     * stored under the key EXTRA_LANGUAGE_PREFERENCE. We locate the {@code TextView textView} with
+     * ID R.id.language_preference, and set its text to our parameter {@code String language}.
+     *
+     * @param language String stored under the key EXTRA_LANGUAGE_PREFERENCE in the result extra
+     *                 Bundle returned to {@code SupportedLanguageBroadcastReceiver} from the speech
+     *                 recognizer activity,
+     */
     private void updateLanguagePreference(String language) {
         TextView textView = (TextView) findViewById(R.id.language_preference);
         textView.setText(language);
@@ -237,7 +265,32 @@ public class VoiceRecognition extends Activity implements OnClickListener {
      * language.
      */
     private class SupportedLanguageBroadcastReceiver extends BroadcastReceiver {
-
+        /**
+         * This method is called when the BroadcastReceiver is receiving an Intent broadcast.
+         * During this time you can use the other methods of BroadcastReceiver to view/modify
+         * the current result values. This method is always called within the main thread of
+         * its process, unless you explicitly asked for it to be scheduled on a different thread
+         * using {@code registerReceiver(BroadcastReceiver, IntentFilter, String, android.os.Handler)}.
+         * <p>
+         * First we retrieve the current result extra data, as set by the previous receiver into
+         * {@code Bundle extra}. Then if the current result code, as set by the previous receiver is
+         * not RESULT_OK we post a {@code Runnable} which will toast the message "Error code:" with
+         * the current result code, as set by the previous receiver appended to it. If {@code extra}
+         * is null we post a {@code Runnable} which will toast the message "No extra". (We probably
+         * should return at this point because the next two checks expect a non-null {@code extra}).
+         * <p>
+         * Next we check if the recognizer returned data stored in the {@code Bundle extra} under the
+         * key EXTRA_SUPPORTED_LANGUAGES, and if so we post a {@code Runnable} which calls our method
+         * {@code updateSupportedLanguages} with the {@code ArrayList<String>} which is stored under
+         * that key.
+         * <p>
+         * If the recognizer returned data stored in the {@code Bundle extra} under the key
+         * EXTRA_LANGUAGE_PREFERENCE, we post a {@code Runnable} which calls our method
+         * {@code updateLanguagePreference} with the String stored under that key.
+         *
+         * @param context The Context in which the receiver is running.
+         * @param intent  The Intent being received.
+         */
         @Override
         public void onReceive(Context context, final Intent intent) {
             Log.i(TAG, "Receiving broadcast " + intent);
@@ -282,6 +335,11 @@ public class VoiceRecognition extends Activity implements OnClickListener {
             }
         }
 
+        /**
+         * Toasts its argument to the display.
+         *
+         * @param text {@code String} to toast
+         */
         private void showToast(String text) {
             Toast.makeText(VoiceRecognition.this, text, Toast.LENGTH_LONG).show();
         }
