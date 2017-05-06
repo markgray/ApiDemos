@@ -30,12 +30,22 @@ import java.io.InputStream;
 /**
  * Shows how to read a data file contained in the app's apk "assets" directory using getAssets() to
  * get an AssetManager and AssetManager.open(String filename) to open the "file" as an InputStream.
- * Then wrapped in a try block intended to catch IOException
  */
 public class ReadAsset extends Activity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.read_asset.
+     *
+     * Wrapped in a try block intended to catch IOException we open {@code InputStream is} by
+     * obtaining an AssetManager instance for the application's package and using it to {@code open}
+     * the asset "read_asset.txt" using ACCESS_STREAMING mode (the {@code AssetManager.open} method
+     * provides access to files that have been bundled with an application as assets -- that is,
+     * files placed in to the "assets" directory). We set {@code int size} to an estimate of the
+     * number of bytes that can be read (or skipped over) the input stream {@code is} without
+     * blocking by the next invocation of a method for this input stream. We use {@code size} to
+     * allocate {@code byte[] buffer}, read the entire contents of {@code is} into {@code buffer}
+     * and then close {@code is}. We convert {@code buffer} to {@code String text}, locate the
+     * {@code TextView tv} in our layout with ID R.id.text, and set its text to {@code text}.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */

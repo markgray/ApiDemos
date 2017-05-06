@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2010, The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,22 +35,52 @@ import android.widget.TextView;
 
 import com.example.android.apis.R;
 
+/**
+ * Shows how to copy to, and paste from the clipboard using the different conversion methods available
+ */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 @SuppressLint("SetTextI18n")
 public class ClipboardSample extends Activity {
+    /**
+     * Handle to the CLIPBOARD_SERVICE system-level service (Interface to the clipboard service,
+     * for placing and retrieving text in the global clipboard)
+     */
     ClipboardManager mClipboard;
 
+    /**
+     * {@code Spinner} in our UI with ID R.id.clip_type, it is filled from the string array resource
+     * R.array.clip_data_types and allows the user to choose options as to how to deal with the
+     * contents of the clipboard.
+     */
     Spinner mSpinner;
+    /**
+     * Mime types describing the current primary clip on the clipboard
+     */
     TextView mMimeTypes;
+    /**
+     * Output {@code TextView} for displaying the contents of the clipboard as coerced by the selection
+     * in the {@code Spinner mSpinner}.
+     */
     TextView mDataText;
 
+    /**
+     * {@code CharSequence} used to hold the styled text resource String R.string.styled_text
+     * ("{@code Plain, <b>bold</b>, <i>italic</i>, <b><i>bold-italic</i></b>}")
+     */
     CharSequence mStyledText;
+    /**
+     * {@code String} containing the result of converting {@code CharSequence mStyledText} to a
+     * plain text string using {@code toString}.
+     */
     String mPlainText;
+    /**
+     * The constant HTML String {@code "<b>Link:</b> <a href=\"http://www.android.com\">Android</a>"}
+     */
     String mHtmlText;
     String mHtmlPlainText;
 
-    ClipboardManager.OnPrimaryClipChangedListener mPrimaryChangeListener
-            = new ClipboardManager.OnPrimaryClipChangedListener() {
+    ClipboardManager.OnPrimaryClipChangedListener mPrimaryChangeListener = new ClipboardManager.OnPrimaryClipChangedListener() {
+        @Override
         public void onPrimaryClipChanged() {
             updateClipData(true);
         }
@@ -59,11 +89,9 @@ public class ClipboardSample extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.clipboard);
 
         mClipboard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
-
-        // See res/any/layout/resources.xml for this view layout definition.
-        setContentView(R.layout.clipboard);
 
         TextView tv;
 
@@ -87,10 +115,11 @@ public class ClipboardSample extends Activity {
         mSpinner.setAdapter(adapter);
         mSpinner.setOnItemSelectedListener(
                 new OnItemSelectedListener() {
-                    public void onItemSelected(
-                            AdapterView<?> parent, View view, int position, long id) {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         updateClipData(false);
                     }
+                    @Override
                     public void onNothingSelected(AdapterView<?> parent) {
                     }
                 });
