@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -22,10 +21,14 @@
 -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    <LinearLayout android:layout_width="match_parent"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText">
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -34,8 +37,10 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button android:id="@+id/copy_styled_text"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
+            <Button
+                android:id="@+id/copy_styled_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:onClick="pasteStyledText"
                 android:text="@string/copy_text" />
 
@@ -52,8 +57,10 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button android:id="@+id/copy_plain_text"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
+            <Button
+                android:id="@+id/copy_plain_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:onClick="pastePlainText"
                 android:text="@string/copy_text" />
 
@@ -70,8 +77,10 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button android:id="@+id/copy_html_text"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
+            <Button
+                android:id="@+id/copy_html_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:onClick="pasteHtmlText"
                 android:text="@string/copy_text" />
 
@@ -88,13 +97,17 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button android:id="@+id/copy_intent"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
+            <Button
+                android:id="@+id/copy_intent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:onClick="pasteIntent"
                 android:text="@string/copy_intent" />
 
-            <Button android:id="@+id/copy_uri"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
+            <Button
+                android:id="@+id/copy_uri"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:onClick="pasteUri"
                 android:text="@string/copy_uri" />
 
@@ -109,15 +122,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Data type: " />
+                android:text="Data type: "
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <Spinner android:id="@+id/clip_type"
+            <Spinner
+                android:id="@+id/clip_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawSelectorOnTop="true"
-                android:prompt="@string/clip_type_prompt"
-            />
+                android:prompt="@string/clip_type_prompt" />
 
         </LinearLayout>
 
@@ -130,27 +143,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="MIME types: " />
+                android:text="MIME types: "
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
                 android:id="@+id/clip_mime_types"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:background="#ff303030"
                 android:padding="4dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                />
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            </LinearLayout>
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Data content:" />
+            android:text="Data content:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/clip_text"
@@ -158,8 +170,7 @@
             android:layout_height="wrap_content"
             android:background="#ff303030"
             android:padding="4dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
 </ScrollView>
