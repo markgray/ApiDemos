@@ -183,7 +183,9 @@ public class ClipboardSample extends Activity {
     }
 
     /**
-     * 
+     * Perform any final cleanup before an activity is destroyed. First we call through to our super's
+     * implementation of {@code onDestroy}, then we remove our {@code OnPrimaryClipChangedListener}
+     * from {@code ClipboardManager mClipboard}.
      */
     @Override
     protected void onDestroy() {
@@ -191,27 +193,94 @@ public class ClipboardSample extends Activity {
         mClipboard.removePrimaryClipChangedListener(mPrimaryChangeListener);
     }
 
+    /**
+     * The {@code Button} with the ID "copy_styled_text" specifies this method to be its
+     * {@code OnClickListener} using the attribute android:onClick="pasteStyledText".
+     * It creates a {@code ClipData} holding data of the type MIMETYPE_TEXT_PLAIN, with
+     * the user-visible label for the clip data "Styled Text" out of our field
+     * {@code CharSequence mStyledText}, and sets the current primary clip on the clipboard
+     * to it.
+     *
+     * @param button View of the button that was clicked.
+     */
     public void pasteStyledText(View button) {
         mClipboard.setPrimaryClip(ClipData.newPlainText("Styled Text", mStyledText));
     }
 
+    /**
+     * The {@code Button} with the ID "copy_plain_text" specifies this method to be its
+     * {@code OnClickListener} using the attribute android:onClick="pastePlainText".
+     * It creates a {@code ClipData} holding data of the type MIMETYPE_TEXT_PLAIN, with
+     * the user-visible label for the clip data "Styled Text" out of our field
+     * {@code CharSequence mPlainText}, and sets the current primary clip on the clipboard
+     * to it.
+     *
+     * @param button View of the button that was clicked.
+     */
     public void pastePlainText(View button) {
         mClipboard.setPrimaryClip(ClipData.newPlainText("Styled Text", mPlainText));
     }
 
+    /**
+     * The {@code Button} with the ID "copy_html_text" specifies this method to be its
+     * {@code OnClickListener} using the attribute android:onClick="pasteHtmlText".
+     * It creates a {@code ClipData} holding data of the type MIMETYPE_TEXT_HTML, with
+     * the user-visible label for the clip data "HTML Text" out of our field
+     * {@code CharSequence mHtmlPlainText} (for the plain text version for receivers that
+     * don't handle html) and our field {@code String mHtmlText} (the actual HTML text in
+     * the clip) and sets the current primary clip on the clipboard to it.
+     *
+     * @param button View of the button that was clicked.
+     */
     public void pasteHtmlText(View button) {
         mClipboard.setPrimaryClip(ClipData.newHtmlText("HTML Text", mHtmlPlainText, mHtmlText));
     }
 
+    /**
+     * The {@code Button} with the ID "copy_intent" specifies this method to be its
+     * {@code OnClickListener} using the attribute android:onClick="pasteIntent".
+     * It creates an {@code Intent intent} with the action ACTION_VIEW and the Intent data uri
+     * "http://www.android.com/". It then creates a {@code ClipData} holding data of the
+     * type MIMETYPE_TEXT_INTENT, with the user-visible label for the clip data "VIEW intent",
+     * and this {@code Intent intent} and sets the current primary clip on the clipboard to it.
+     *
+     * @param button View of the button that was clicked.
+     */
     public void pasteIntent(View button) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.android.com/"));
         mClipboard.setPrimaryClip(ClipData.newIntent("VIEW intent", intent));
     }
 
+    /**
+     * The {@code Button} with the ID "copy_uri" specifies this method to be its
+     * {@code OnClickListener} using the attribute android:onClick="pasteUri".
+     * It creates a {@code ClipData} holding data of the type  MIMETYPE_TEXT_URILIST, with
+     * the user-visible label for the clip data "URI" with a {@code Uri} created from the
+     * String "http://www.android.com/", and sets the current primary clip on the clipboard
+     * to it.
+     *
+     * @param button View of the button that was clicked.
+     */
     public void pasteUri(View button) {
         mClipboard.setPrimaryClip(ClipData.newRawUri("URI", Uri.parse("http://www.android.com/")));
     }
 
+    /**
+     * Called to update our UI to reflect the current contents of the clipboard and the selection
+     * chosen in the {@code Spinner mSpinner}. It is called from the callback {@code onPrimaryClipChanged}
+     * with {@code updateType} set to true when the primary clipboard contents changes, from the
+     * {@code onItemSelected} callback of the {@code Spinner mSpinner} with {@code updateType} set to
+     * false when an item in the Spinner is selected, and from the {@code onCreate} callback with
+     * {@code updateType} set to true when the activity is first created.
+     *
+     * First we set {@code ClipData clip} to the current primary clip on the clipboard. Then if {@code clip}
+     * is not null we set {@code String[] mimeTypes} to all the mime types in the clip, otherwise we set
+     * {@code mimeTypes} to null. Then if {@code mimeTypes} is not null we append all the mime types
+     * Strings to the {@code TextView mMimeTypes} (otherwise we set it to the String "NULL".
+     *
+     * @param updateType if true it will update the selection of {@code Spinner mSpinner} to point to
+     *                   the type of the current clipboard contents.
+     */
     void updateClipData(boolean updateType) {
         ClipData clip = mClipboard.getPrimaryClip();
         String[] mimeTypes = clip != null ? clip.getDescription().filterMimeTypes("*/*") : null;
@@ -259,10 +328,20 @@ public class ClipboardSample extends Activity {
                     mDataText.setText(item.getHtmlText());
                     break;
                 case 3: // Intent clip
-                    mDataText.setText(item.getIntent().toUri(0));
+                    final Intent itemIntent = item.getIntent();
+                    if (itemIntent != null) {
+                        mDataText.setText(itemIntent.toUri(0));
+                    } else {
+                        mDataText.setText("(No Intent)");
+                    }
                     break;
                 case 4: // Uri clip
-                    mDataText.setText(item.getUri().toString());
+                    final Uri itemUri = item.getUri();
+                    if (itemUri != null) {
+                        mDataText.setText(itemUri.toString());
+                    } else {
+                        mDataText.setText("(No URI)");
+                    }
                     break;
                 case 5: // Coerce to text
                     mDataText.setText(item.coerceToText(this));
