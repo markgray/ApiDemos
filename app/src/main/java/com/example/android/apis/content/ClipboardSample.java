@@ -272,11 +272,43 @@ public class ClipboardSample extends Activity {
      * {@code onItemSelected} callback of the {@code Spinner mSpinner} with {@code updateType} set to
      * false when an item in the Spinner is selected, and from the {@code onCreate} callback with
      * {@code updateType} set to true when the activity is first created.
-     *
+     * <p>
      * First we set {@code ClipData clip} to the current primary clip on the clipboard. Then if {@code clip}
      * is not null we set {@code String[] mimeTypes} to all the mime types in the clip, otherwise we set
      * {@code mimeTypes} to null. Then if {@code mimeTypes} is not null we append all the mime types
      * Strings to the {@code TextView mMimeTypes} (otherwise we set it to the String "NULL".
+     * <p>
+     * Next we check if {@code updateType} is true indicating that the caller wants us to update the
+     * selection of {@code Spinner mSpinner} based on the contents of {@code ClipData clip}. If so, and
+     * {@code clip} is not null, we fetch the first item inside the clip data to {@code ClipData.Item}
+     * and set the selection as follows:
+     * <ul>
+     * <li>{@code getHtmlText} is not null -- 2 "HTML Text clip"</li>
+     * <li>{@code getText} is not null -- 1 "Text clip"</li>
+     * <li>{@code getIntent} is not null -- 3 "Intent clip"</li>
+     * <li>{@code getUri} is not null -- 4 "Uri clip"</li>
+     * <li>Otherwise we set it to 0 "No data in clipboard"</li>
+     * </ul>
+     * Then if {@code ClipData clip} is not null we fetch the contents of the first item inside the
+     * clip data to {@code ClipData.Item} and display it in {@code TextView mDataText} based on the
+     * selection of {@code Spinner mSpinner} as follows:
+     * <ul>
+     * <li>0: No data in clipboard -- "(No data)"</li>
+     * <li>1: Text clip -- the value returned by {@code getText}</li>
+     * <li>2: HTML Text clip -- the value returned by {@code getHtmlText}</li>
+     * <li>3: Intent clip -- the value returned by {@code getIntent} converted to a URI if not null, "(No Intent)" if null</li>
+     * <li>4: Uri clip -- the value returned by {@code getUri} converted to a string if not null, "(No URI)" if null</li>
+     * <li>5: Coerce to text -- the value returned by {@code coerceToText}</li>
+     * <li>6: Coerce to styled text -- the value returned by {@code coerceToStyledText}</li>
+     * <li>7: Coerce to HTML text -- the value returned by {@code coerceToHtmlText}</li>
+     * <li>Otherwise we display "Unknown option: " with the selection number appended</li>
+     * </ul>
+     * If {@code clip} is null we display "(NULL clip)".
+     * <p>
+     * Finally if the device has a keyboard, we set the movement method (arrow key handler) to be
+     * used for {@code TextView mDataText} to an instance of {@code LinkMovementMethod} (A movement
+     * method that traverses links in the text buffer and scrolls if necessary. Supports clicking
+     * on links with DPad Center or Enter.)
      *
      * @param updateType if true it will update the selection of {@code Spinner mSpinner} to point to
      *                   the type of the current clipboard contents.

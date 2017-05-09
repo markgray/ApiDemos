@@ -18,6 +18,7 @@ package com.example.android.apis.content;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -41,14 +42,42 @@ import java.io.InputStream;
 
 
 /**
- * Demonstration of styled text resources.
+ * Shows how to use Intent.ACTION_INSTALL_PACKAGE, and Intent.ACTION_UNINSTALL_PACKAGE to install
+ * and uninstall packages.
  */
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class InstallApk extends Activity {
+    /**
+     * Request code used for {@code startActivityForResult} when starting the {@code Intent} with
+     * the action ACTION_INSTALL_PACKAGE, and checked for in {@code onActivityResult} when the
+     * activity is completed.
+     */
     static final int REQUEST_INSTALL = 1;
+    /**
+     * Request code used for {@code startActivityForResult} when starting the {@code Intent} with
+     * the action ACTION_UNINSTALL_PACKAGE, and checked for in {@code onActivityResult} when the
+     * activity is completed.
+     */
     static final int REQUEST_UNINSTALL = 2;
+    /**
+     * TAG used for logging
+     */
     private static final String TAG = "InstallApk";
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.install_apk. Next
+     * we locate the {@code Button}'s in our layout and set their {@code OnClickListener} as follows:
+     * <ul>
+     * <li>R.id.unknown_source "UNKNOWN SOURCE" -- {@code mUnknownSourceListener}</li>
+     * <li>R.id.my_source "MY SOURCE" -- {@code mMySourceListener}</li>
+     * <li>R.id.replace "REPLACE" -- {@code mReplaceListener}</li>
+     * <li>R.id.uninstall "UNINSTALL" -- {@code mUninstallListener}</li>
+     * <li>R.id.uninstall_result "UNINSTALL W/RESULT" -- {@code mUninstallResultListener}</li>
+     * </ul>
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,18 +85,51 @@ public class InstallApk extends Activity {
         setContentView(R.layout.install_apk);
 
         // Watch for button clicks.
-        Button button = (Button)findViewById(R.id.unknown_source);
+        Button button = (Button) findViewById(R.id.unknown_source);
         button.setOnClickListener(mUnknownSourceListener);
-        button = (Button)findViewById(R.id.my_source);
+        button = (Button) findViewById(R.id.my_source);
         button.setOnClickListener(mMySourceListener);
-        button = (Button)findViewById(R.id.replace);
+        button = (Button) findViewById(R.id.replace);
         button.setOnClickListener(mReplaceListener);
-        button = (Button)findViewById(R.id.uninstall);
+        button = (Button) findViewById(R.id.uninstall);
         button.setOnClickListener(mUninstallListener);
-        button = (Button)findViewById(R.id.uninstall_result);
+        button = (Button) findViewById(R.id.uninstall_result);
         button.setOnClickListener(mUninstallResultListener);
     }
 
+    /**
+     * Called when an activity you launched exits, giving you the requestCode
+     * you started it with, the resultCode it returned, and any additional
+     * data from it.  The <var>resultCode</var> will be
+     * {@link #RESULT_CANCELED} if the activity explicitly returned that,
+     * didn't return any result, or crashed during its operation.
+     * <p>
+     * You will receive this call immediately before onResume() when your
+     * activity is re-starting.
+     *
+     * If the {@code requestCode} request code the child was launched with was REQUEST_INSTALL we
+     * branch based on the value of {@code resultCode}:
+     * <ul>
+     *     <li>RESULT_OK -- we toast "Install succeeded!"</li>
+     *     <li>RESULT_CANCELED -- we toast "Install canceled!"</li>
+     *     <li>otherwise we toast "Install Failed!"</li>
+     * </ul>
+     * Likewise if the {@code requestCode} request code the child was launched with was REQUEST_UNINSTALL
+     * we branch based on the value of {@code resultCode}:
+     * <ul>
+     *     <li>RESULT_OK -- we toast "Uninstall succeeded!"</li>
+     *     <li>RESULT_CANCELED -- we toast "Uninstall canceled!"</li>
+     *     <li>otherwise we toast "Uninstall Failed!"</li>
+     * </ul>
+     *
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode  The integer result code returned by the child activity
+     *                    through its setResult().
+     * @param intent      An Intent, which can return result data to the caller
+     *                    (various data can be attached to Intent "extras").
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == REQUEST_INSTALL) {
@@ -89,7 +151,11 @@ public class InstallApk extends Activity {
         }
     }
 
+    /**
+     * {@code OnClickListener} for the Button with ID R.id.unknown_source "UNKNOWN SOURCE"
+     */
     private OnClickListener mUnknownSourceListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
             intent.setData(Uri.fromFile(prepareApk("HelloActivity.apk")));
@@ -98,18 +164,19 @@ public class InstallApk extends Activity {
     };
 
     private OnClickListener mMySourceListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
             intent.setData(Uri.fromFile(prepareApk("HelloActivity.apk")));
             intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
             intent.putExtra(Intent.EXTRA_RETURN_RESULT, true);
-            intent.putExtra(Intent.EXTRA_INSTALLER_PACKAGE_NAME,
-                    getApplicationInfo().packageName);
+            intent.putExtra(Intent.EXTRA_INSTALLER_PACKAGE_NAME, getApplicationInfo().packageName);
             startActivityForResult(intent, REQUEST_INSTALL);
         }
     };
 
     private OnClickListener mReplaceListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
             intent.setData(Uri.fromFile(prepareApk("HelloActivity.apk")));
@@ -117,26 +184,25 @@ public class InstallApk extends Activity {
             intent.putExtra(Intent.EXTRA_RETURN_RESULT, true);
             //noinspection deprecation
             intent.putExtra(Intent.EXTRA_ALLOW_REPLACE, true);
-            intent.putExtra(Intent.EXTRA_INSTALLER_PACKAGE_NAME,
-                    getApplicationInfo().packageName);
+            intent.putExtra(Intent.EXTRA_INSTALLER_PACKAGE_NAME, getApplicationInfo().packageName);
             startActivityForResult(intent, REQUEST_INSTALL);
         }
     };
 
     private OnClickListener mUninstallListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             Intent intent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE);
-            intent.setData(Uri.parse(
-                    "package:com.example.android.helloactivity"));
+            intent.setData(Uri.parse("package:com.example.android.helloactivity"));
             startActivity(intent);
         }
     };
 
     private OnClickListener mUninstallResultListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             Intent intent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE);
-            intent.setData(Uri.parse(
-                    "package:com.example.android.helloactivity"));
+            intent.setData(Uri.parse("package:com.example.android.helloactivity"));
             intent.putExtra(Intent.EXTRA_RETURN_RESULT, true);
             startActivityForResult(intent, REQUEST_UNINSTALL);
         }
@@ -154,7 +220,7 @@ public class InstallApk extends Activity {
             //noinspection deprecation
             fout = openFileOutput("tmp.apk", Context.MODE_WORLD_READABLE);
             int n;
-            while ((n=is.read(buffer)) >= 0) {
+            while ((n = is.read(buffer)) >= 0) {
                 fout.write(buffer, 0, n);
             }
         } catch (IOException e) {
