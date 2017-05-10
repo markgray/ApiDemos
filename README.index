@@ -872,6 +872,7 @@ Content
   Process Text Intent                      v23 uses things not supported earlier.
     Content/Process Text Intent
     .content.ProcessTextLauncher
+    .content.ProcessText
     Shows how to handle text selection intents, when text in .content.ProcessTextLauncher
     is selected, Marshmallow and above allow you to send the selected text to the
     .content.ProcessText Activity using the"android.intent.action.PROCESS_TEXT" action

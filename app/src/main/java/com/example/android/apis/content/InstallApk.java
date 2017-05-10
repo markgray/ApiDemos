@@ -106,20 +106,20 @@ public class InstallApk extends Activity {
      * <p>
      * You will receive this call immediately before onResume() when your
      * activity is re-starting.
-     *
+     * <p>
      * If the {@code requestCode} request code the child was launched with was REQUEST_INSTALL we
      * branch based on the value of {@code resultCode}:
      * <ul>
-     *     <li>RESULT_OK -- we toast "Install succeeded!"</li>
-     *     <li>RESULT_CANCELED -- we toast "Install canceled!"</li>
-     *     <li>otherwise we toast "Install Failed!"</li>
+     * <li>RESULT_OK -- we toast "Install succeeded!"</li>
+     * <li>RESULT_CANCELED -- we toast "Install canceled!"</li>
+     * <li>otherwise we toast "Install Failed!"</li>
      * </ul>
      * Likewise if the {@code requestCode} request code the child was launched with was REQUEST_UNINSTALL
      * we branch based on the value of {@code resultCode}:
      * <ul>
-     *     <li>RESULT_OK -- we toast "Uninstall succeeded!"</li>
-     *     <li>RESULT_CANCELED -- we toast "Uninstall canceled!"</li>
-     *     <li>otherwise we toast "Uninstall Failed!"</li>
+     * <li>RESULT_OK -- we toast "Uninstall succeeded!"</li>
+     * <li>RESULT_CANCELED -- we toast "Uninstall canceled!"</li>
+     * <li>otherwise we toast "Uninstall Failed!"</li>
      * </ul>
      *
      * @param requestCode The integer request code originally supplied to
@@ -152,7 +152,13 @@ public class InstallApk extends Activity {
     }
 
     /**
-     * {@code OnClickListener} for the Button with ID R.id.unknown_source "UNKNOWN SOURCE"
+     * {@code OnClickListener} for the Button with ID R.id.unknown_source "UNKNOWN SOURCE". When
+     * clicked it creates an {@code Intent intent} with the action ACTION_INSTALL_PACKAGE, calls our
+     * method {@code prepareApk("HelloActivity.apk")} to create a file "tmp.apk" from our asset
+     * file "HelloActivity.apk", and return a {@code File} referencing this file, which the
+     * method {@code Uri.fromFile} converts to a "file:///" URI, which we can then use to set the
+     * data that {@code Intent intent} is operating on. Finally it uses {@code intent} to launch
+     * the activity requested.
      */
     private OnClickListener mUnknownSourceListener = new OnClickListener() {
         @Override
@@ -163,6 +169,22 @@ public class InstallApk extends Activity {
         }
     };
 
+    /**
+     * {@code OnClickListener} for the Button with ID R.id.my_source "MY SOURCE". When
+     * clicked it creates an {@code Intent intent} with the action ACTION_INSTALL_PACKAGE, calls our
+     * method {@code prepareApk("HelloActivity.apk")} to create a file "tmp.apk" from our asset
+     * file "HelloActivity.apk", and return a {@code File} referencing this file, which the
+     * method {@code Uri.fromFile} converts to a "file:///" URI, which we can then use to set the
+     * data that {@code Intent intent} is operating on. Next it adds the extra EXTRA_NOT_UNKNOWN_SOURCE
+     * set to true (Specifies that the application being installed should not be treated as coming
+     * from an unknown source, but as coming from the app invoking the Intent), adds the extra
+     * EXTRA_RETURN_RESULT set to true (specifies that the installer UI should return to the application
+     * the result code of the install/uninstall. The returned result code will be RESULT_OK on success
+     * or RESULT_FIRST_USER on failure), adds the package name of the app under the key
+     * EXTRA_INSTALLER_PACKAGE_NAME (Specifies the installer package name; this package will receive
+     * the ACTION_APP_ERROR intent), and finally it uses {@code intent} to launch the activity requested
+     * asking for it to return a result.
+     */
     private OnClickListener mMySourceListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -175,6 +197,24 @@ public class InstallApk extends Activity {
         }
     };
 
+    /**
+     * {@code OnClickListener} for the Button with ID R.id.replace "REPLACE". When
+     * clicked it creates an {@code Intent intent} with the action ACTION_INSTALL_PACKAGE, calls our
+     * method {@code prepareApk("HelloActivity.apk")} to create a file "tmp.apk" from our asset
+     * file "HelloActivity.apk", and return a {@code File} referencing this file, which the
+     * method {@code Uri.fromFile} converts to a "file:///" URI, which we can then use to set the
+     * data that {@code Intent intent} is operating on. Next it adds the extra EXTRA_NOT_UNKNOWN_SOURCE
+     * set to true (Specifies that the application being installed should not be treated as coming
+     * from an unknown source, but as coming from the app invoking the Intent), adds the extra
+     * EXTRA_RETURN_RESULT set to true (specifies that the installer UI should return to the application
+     * the result code of the install/uninstall. The returned result code will be RESULT_OK on success
+     * or RESULT_FIRST_USER on failure), adds the extra EXTRA_ALLOW_REPLACE set to true (tells the
+     * installer UI to skip the confirmation with the user if the .apk is replacing an existing one),
+     * adds the package name of the app under the key EXTRA_INSTALLER_PACKAGE_NAME (Specifies the
+     * installer package name; this package will receive the ACTION_APP_ERROR intent), and finally
+     * it uses {@code intent} to launch the activity requested asking for it to return a result and
+     * specifying the request code to be REQUEST_UNINSTALL.
+     */
     private OnClickListener mReplaceListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -189,6 +229,13 @@ public class InstallApk extends Activity {
         }
     };
 
+    /**
+     * {@code OnClickListener} for the Button with ID R.id.uninstall "UNINSTALL". When
+     * clicked it creates an {@code Intent intent} with the action ACTION_UNINSTALL_PACKAGE, sets the
+     * data that {@code Intent intent} is operating on to the URI formed from the String
+     * "package:com.example.android.helloactivity". Finally it uses {@code intent} to launch
+     * the activity requested.
+     */
     private OnClickListener mUninstallListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -198,6 +245,16 @@ public class InstallApk extends Activity {
         }
     };
 
+    /**
+     * {@code OnClickListener} for the Button with ID R.id.uninstall_result "UNINSTALL W/RESULT". When
+     * clicked it creates an {@code Intent intent} with the action ACTION_UNINSTALL_PACKAGE, sets the
+     * data that {@code Intent intent} is operating on to the URI formed from the String
+     * "package:com.example.android.helloactivity", adds the extra EXTRA_RETURN_RESULT set to true
+     * (specifies that the installer UI should return to the application the result code of the
+     * install/uninstall. The returned result code will be RESULT_OK on success or RESULT_FIRST_USER
+     * on failure). Finally it uses {@code intent} to launch the activity requested asking for it to
+     * return a result and specifying the request code to be REQUEST_UNINSTALL.
+     */
     private OnClickListener mUninstallResultListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -208,6 +265,24 @@ public class InstallApk extends Activity {
         }
     };
 
+    /**
+     * Copies the asset file with the name {@code String assetName} to the file system so that the
+     * installer UI can install it, and returning a {@code File} containing the absolute path on the
+     * filesystem where our assets file was copied to.
+     * <p>
+     * First we allocate {@code byte[] buffer} to read into and write out of, set {@code InputStream is}
+     * and {@code FileOutputStream fout} both to null prior to opening them. Then wrapped in a try
+     * block intended to catch IOException we open the asset {@code assetName} using ACCESS_STREAMING
+     * mode for {@code is}, and open the output file "tmp.apk" for {@code fout}. We proceed to copy
+     * every byte of {@code is} to {@code fout} until the EOF of {@code is}. In the finally block
+     * of our try block we close both {@code is} and {@code fout}.
+     * <p>
+     * Finally we return the absolute path on the filesystem where the file "tmp.apk" was created by
+     * the above code.
+     *
+     * @param assetName name of the file in our assets directory we wish to install
+     * @return the absolute path on the filesystem where our assets file was copied to
+     */
     @SuppressLint("WorldReadableFiles")
     private File prepareApk(String assetName) {
         // Copy the given asset out into a file so that it can be installed.
