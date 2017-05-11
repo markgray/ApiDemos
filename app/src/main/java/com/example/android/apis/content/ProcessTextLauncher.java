@@ -19,13 +19,26 @@ import com.example.android.apis.R;
  * android:mimeType="text/plain".
  */
 public class ProcessTextLauncher extends Activity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.process_text_send
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.process_text_send);
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu. We disable the menu by
+     * returning false.
+     *
+     * @param menu The options menu in which you place your items.
+     * @return You must return true for the menu to be displayed;
+     * if you return false it will not be shown.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return false;

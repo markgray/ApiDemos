@@ -42,16 +42,33 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * Demonstrates selecting contacts that have changed since a certain time.
+ * Shows how to access the contacts database and list those that have changed or been deleted since
+ * a certain time. Layout is created by java code, includes instructive use of a ListView to contain
+ * the results of the Cursor queries.
  */
+@SuppressWarnings("WeakerAccess")
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class ChangedContacts extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    /**
+     * Used for the preferences file 'name' when accessing shared preferences
+     */
     private static final String CLASS = ChangedContacts.class.getSimpleName();
 
+    /**
+     * Preference file key for the timestamp of the latest change to the contact database (Starts at 0)
+     * and is updated when the database is read for the first time
+     */
     private static final String PREF_KEY_CHANGE = "timestamp_change";
+    /**
+     * Preference file key for the timestamp of the latest delete from the contact database (Starts at 0)
+     * and is updated when the database is read for the first time
+     */
     private static final String PREF_KEY_DELETE = "timestamp_delete";
 
+    /**
+     * ID for the {@code CursorLoader} used to feed data about changed contacts
+     */
     private static final int ID_CHANGE_LOADER = 1;
     private static final int ID_DELETE_LOADER = 2;
 
@@ -113,8 +130,8 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
         main.addView(mDisplayView);
 
         mList = new ListView(this);
-        mList.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+        final int WRAP = ViewGroup.LayoutParams.WRAP_CONTENT;
+        mList.setLayoutParams(new LinearLayout.LayoutParams(WRAP, WRAP, 1f));
         main.addView(mList);
 
         setContentView(main);
@@ -160,9 +177,21 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
         return pref.getLong(key, time);
     }
 
+    /**
+     * Instantiate and return a new Loader for the given ID. We switch on the {@code id} parameter
+     * and return the {@code CursorLoader} created by the appropriate method:
+     * <ul>
+     * <li>ID_CHANGE_LOADER -- {@code getChangeLoader()}</li>
+     * <li>ID_DELETE_LOADER -- {@code getDeleteLoader()}</li>
+     * </ul>
+     *
+     * @param id   The ID whose loader is to be created.
+     * @param args Any arguments supplied by the caller.
+     * @return Return a new Loader instance that is ready to start loading.
+     */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch(id) {
+        switch (id) {
             case ID_CHANGE_LOADER:
                 return getChangeLoader();
             case ID_DELETE_LOADER:
@@ -218,8 +247,7 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
                 // Save the largest timestamp returned.  Only need the first one due to the sort
                 // order.
                 if (data.moveToNext()) {
-                    timestamp = data.getLong(data.getColumnIndex(
-                            ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP));
+                    timestamp = data.getLong(data.getColumnIndex(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP));
                     data.moveToPrevious();
                 }
                 if (timestamp > 0) {
@@ -232,8 +260,7 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
                 mList.setAdapter(mDeleteAdapter);
                 mDeleteAdapter.swapCursor(new DeleteCursorWrapper(data));
                 if (data.moveToNext()) {
-                    timestamp = data.getLong(data.getColumnIndex(
-                            ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP));
+                    timestamp = data.getLong(data.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP));
                     data.moveToPrevious();
                 }
                 if (timestamp > 0) {
@@ -297,10 +324,8 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
             LinearLayout item = (LinearLayout) view;
-            String id = cursor.getString(cursor.getColumnIndex(
-                    ContactsContract.DeletedContacts.CONTACT_ID));
-            String timestamp = cursor.getString(cursor.getColumnIndex(
-                    ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP));
+            String id = cursor.getString(cursor.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_ID));
+            String timestamp = cursor.getString(cursor.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP));
 
             setText(item.getChildAt(0), id);
             setText(item.getChildAt(1), timestamp);
@@ -330,10 +355,8 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
             LinearLayout item = (LinearLayout) view;
 
             String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Data.CONTACT_ID));
-            String name = cursor.getString(cursor.getColumnIndex(
-                    ContactsContract.Data.DISPLAY_NAME));
-            String timestamp = cursor.getString(cursor.getColumnIndex(
-                    ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP));
+            String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Data.DISPLAY_NAME));
+            String timestamp = cursor.getString(cursor.getColumnIndex(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP));
 
             setText(item.getChildAt(0), id);
             setText(item.getChildAt(1), name);

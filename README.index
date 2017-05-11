@@ -860,22 +860,29 @@ Content
   Clipboard
     Content/Clipboard/Data Types           v11 - newHtmlText, getHtmlText, coerceToStyledText,
     .content.ClipboardSample               coerceToHtmlText requires v16
-    Shows how to copy to, and paste from the clipboard using the different conversion methods
-    available
+            Shows how to copy to, and paste from the clipboard using the different conversion methods
+            available
 
   Packages
     Content/Packages/Install Apk           v13 -- v14 needed for some fields and methods.
     .content.InstallApk
-    Shows how to use Intent.ACTION_INSTALL_PACKAGE, and Intent.ACTION_UNINSTALL_PACKAGE
-    to install and uninstall packages.
+            Shows how to use Intent.ACTION_INSTALL_PACKAGE, and Intent.ACTION_UNINSTALL_PACKAGE
+            to install and uninstall packages.
 
   Process Text Intent                      v23 uses things not supported earlier.
     Content/Process Text Intent
     .content.ProcessTextLauncher
     .content.ProcessText
-    Shows how to handle text selection intents, when text in .content.ProcessTextLauncher
-    is selected, Marshmallow and above allow you to send the selected text to the
-    .content.ProcessText Activity using the"android.intent.action.PROCESS_TEXT" action
+            Shows how to handle text selection intents, when text in .content.ProcessTextLauncher
+            is selected, Marshmallow and above allow you to send the selected text to the
+            .content.ProcessText Activity using the"android.intent.action.PROCESS_TEXT" action.
+            ProcessText is specified to be the recipient in AndroidManifest.xml by this:
+
+            <intent-filter>
+                <action android:name="android.intent.action.PROCESS_TEXT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
 
   Provider
     Content/Provider/Changed Contacts      all -- but LoaderManager.LoaderCallbacks<Cursor>
@@ -883,7 +890,6 @@ Content
             Shows how to access the contacts database and list those that have changed or been
             deleted since a certain time. Layout is created by java code, includes instructive
             use of a ListView to contain the results of the Cursor queries.
-            TODO: copy use of SharedPreferences in saveLastTimestamp to save last verse!
 
     Content/Provider/Pick Contact          all
         .content.PickContact
