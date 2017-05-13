@@ -112,13 +112,68 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
      * and getLastTimestamp.
      */
     private long mSearchTime;
+    /**
+     * {@code TextView} used to display number of contact changes or number of contact deletes since
+     * {@code mSearchTime}
+     */
     private TextView mDisplayView;
+    /**
+     * {@code ListView} used to display changed or deleted contacts retrieved by the
+     * {@code ChangeAdapter mChangeAdapter} or {@code DeleteAdapter mDeleteAdapter}
+     */
     private ListView mList;
+    /**
+     * {@code Button} used to search the contacts database for deleted contacts
+     */
     private Button mDeleteButton;
+    /**
+     * {@code Button} used to search the contacts database for changed contacts
+     */
     private Button mChangeButton;
+    /**
+     * {@code Button} used to reset PREF_KEY_CHANGE, and PREF_KEY_DELETE timestamps in the preferences
+     * data base to 0
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private Button mClearPreferences;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we initialize our fields {@code DeleteAdapter mDeleteAdapter} and
+     * {@code ChangeAdapter mChangeAdapter} with new instances of their respective {@code CursorAdapter}
+     * subclasses.
+     *
+     * Next we create {@code LinearLayout main} and set its orientation to VERTICAL.
+     *
+     * We initialize our field {@code Button mChangeButton}, setting its text to "Changed since" with
+     * the value of the timestamp stored in our preference file under the key PREF_KEY_CHANGE appended
+     * to it, and then set its {@code OnClickListener} to an anonymous function which calls our method
+     * {@code changeClick()}.
+     *
+     * We initialize our field {@code Button mDeleteButton}, setting its text to "Deleted since" with
+     * the value of the timestamp stored in our preference file under the key PREF_KEY_DELETE appended
+     * to it, and then set its {@code OnClickListener} to an anonymous function which calls our method
+     * {@code deleteClick()}.
+     *
+     * We initialize our field {@code Button mClearPreferences}, setting its text to "Clear Preferences",
+     * and then set its {@code OnClickListener} to an anonymous function which resets both PREF_KEY_CHANGE
+     * and PREF_KEY_DELETE to zero and updates the text contained in {@code mChangeButton} and
+     * {@code mDeleteButton} to reflect this.
+     *
+     * We now add {@code mChangeButton}, {@code mDeleteButton} and {@code mClearPreferences} to the
+     * {@code LinearLayout main}.
+     *
+     * We create a new {@code TextView} for our field {@code TextView mDisplayView}, configure the
+     * padding to have 5 pixels around its sides, and add it to {@code LinearLayout main}.
+     *
+     * We create a new {@code ListView} for our field {@code ListView mList}, set its layout params
+     * to be WRAP_CONTENT for both width and height, with its weight set to 1.0, and add it to
+     * {@code LinearLayout main}.
+     *
+     * Finally we set our content view to {@code LinearLayout main}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -176,6 +231,16 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
         setContentView(main);
     }
 
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or
+     * {@link #onPause}, for your activity to start interacting with the user.
+     * This is a good place to begin animations, open exclusive-access devices
+     * (such as the camera), etc.
+     *
+     * First we call through to our super's implementation of {@code onResume}. Then we create
+     * {@code IntentFilter filter}, set its action to CONTACTS_DATABASE_CREATED and register our
+     * {@code BroadcastReceiver mReceiver} field to receive broadcasts that match {@code filter}.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -184,12 +249,24 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
         registerReceiver(mReceiver, filter);
     }
 
+    /**
+     * Called as part of the activity lifecycle when an activity is going into
+     * the background, but has not (yet) been killed. The counterpart to
+     * {@link #onResume}.
+     *
+     * First we call through to our super's implementation of {@code onPause}, then we unregister
+     * our field {@code BroadcastReceiver mReceiver} as a broadcast receiver.
+     */
     @Override
     protected void onPause() {
         super.onPause();
         unregisterReceiver(mReceiver);
     }
 
+    /**
+     * {@code OnClickListener} for the {@code Button mChangeButton}, it causes the ID_CHANGE_LOADER
+     * {@code CursorLoader} to re-fetch its data using the latest timestamp.
+     */
     private void changeClick() {
         mChangeAdapter.swapCursor(null);
         LoaderManager manager = getLoaderManager();
@@ -197,8 +274,12 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
         manager.restartLoader(ID_CHANGE_LOADER, null, this);
     }
 
+    /**
+     * {@code OnClickListener} for the {@code Button mDeleteButton}, it causes the ID_DELETE_LOADER
+     * {@code CursorLoader} to re-fetch its data using the latest timestamp.
+     */
     private void deleteClick() {
-        mChangeAdapter.swapCursor(null);
+        mDeleteAdapter.swapCursor(null);
         LoaderManager manager = getLoaderManager();
         manager.destroyLoader(ID_CHANGE_LOADER);
         manager.restartLoader(ID_DELETE_LOADER, null, this);
@@ -225,7 +306,7 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
      * </ul>
      * This is called by the {@code LoaderManager} for this activity as a callback as a result of
      * a call to {@code restartLoader} (start a new or restarts an existing Loader, register the
-     * callbacks -- "this" in our case)
+     * callbacks -- "this" in our case. See {@code changeClick} and {@code deleteClick}.)
      *
      * @param id   The ID whose loader is to be created.
      * @param args Any arguments supplied by the caller.
