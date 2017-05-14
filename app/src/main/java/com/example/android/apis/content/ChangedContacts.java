@@ -142,34 +142,34 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
      * {@code onCreate}, then we initialize our fields {@code DeleteAdapter mDeleteAdapter} and
      * {@code ChangeAdapter mChangeAdapter} with new instances of their respective {@code CursorAdapter}
      * subclasses.
-     *
+     * <p>
      * Next we create {@code LinearLayout main} and set its orientation to VERTICAL.
-     *
+     * <p>
      * We initialize our field {@code Button mChangeButton}, setting its text to "Changed since" with
      * the value of the timestamp stored in our preference file under the key PREF_KEY_CHANGE appended
      * to it, and then set its {@code OnClickListener} to an anonymous function which calls our method
      * {@code changeClick()}.
-     *
+     * <p>
      * We initialize our field {@code Button mDeleteButton}, setting its text to "Deleted since" with
      * the value of the timestamp stored in our preference file under the key PREF_KEY_DELETE appended
      * to it, and then set its {@code OnClickListener} to an anonymous function which calls our method
      * {@code deleteClick()}.
-     *
+     * <p>
      * We initialize our field {@code Button mClearPreferences}, setting its text to "Clear Preferences",
      * and then set its {@code OnClickListener} to an anonymous function which resets both PREF_KEY_CHANGE
      * and PREF_KEY_DELETE to zero and updates the text contained in {@code mChangeButton} and
      * {@code mDeleteButton} to reflect this.
-     *
+     * <p>
      * We now add {@code mChangeButton}, {@code mDeleteButton} and {@code mClearPreferences} to the
      * {@code LinearLayout main}.
-     *
+     * <p>
      * We create a new {@code TextView} for our field {@code TextView mDisplayView}, configure the
      * padding to have 5 pixels around its sides, and add it to {@code LinearLayout main}.
-     *
+     * <p>
      * We create a new {@code ListView} for our field {@code ListView mList}, set its layout params
      * to be WRAP_CONTENT for both width and height, with its weight set to 1.0, and add it to
      * {@code LinearLayout main}.
-     *
+     * <p>
      * Finally we set our content view to {@code LinearLayout main}.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
@@ -236,7 +236,7 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
      * {@link #onPause}, for your activity to start interacting with the user.
      * This is a good place to begin animations, open exclusive-access devices
      * (such as the camera), etc.
-     *
+     * <p>
      * First we call through to our super's implementation of {@code onResume}. Then we create
      * {@code IntentFilter filter}, set its action to CONTACTS_DATABASE_CREATED and register our
      * {@code BroadcastReceiver mReceiver} field to receive broadcasts that match {@code filter}.
@@ -253,7 +253,7 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
      * Called as part of the activity lifecycle when an activity is going into
      * the background, but has not (yet) been killed. The counterpart to
      * {@link #onResume}.
-     *
+     * <p>
      * First we call through to our super's implementation of {@code onPause}, then we unregister
      * our field {@code BroadcastReceiver mReceiver} as a broadcast receiver.
      */
@@ -285,6 +285,16 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
         manager.restartLoader(ID_DELETE_LOADER, null, this);
     }
 
+    /**
+     * Saves a timestamp {@code long time} in the shared preferences file under the key {@code String key}
+     * (PREF_KEY_CHANGE or PREF_KEY_DELETE in our case). First we retrieve a {@code SharedPreferences pref}
+     * for our CLASS name ("ChangedContacts"), and we create an {@code SharedPreferences.Editor editor}
+     * for {@code pref}. We use {@code editor} to store our parameter {@code time} under the key {@code key}
+     * and commit the change to the preference file.
+     *
+     * @param time timestamp to save in shared preferences file
+     * @param key  key to save the timestamp under
+     */
     private void saveLastTimestamp(long time, String key) {
         SharedPreferences pref = getSharedPreferences(CLASS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
@@ -292,6 +302,16 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
         editor.commit();
     }
 
+    /**
+     * Retrieves a timestamp {@code long time} from the shared preferences file that was stored under the
+     * key {@code String key} (PREF_KEY_CHANGE or PREF_KEY_DELETE in our case). First we retrieve a
+     * {@code SharedPreferences pref} for our CLASS name ("ChangedContacts"), and we use it to retrieve
+     * and return the value stored under the key {@code key} (defaulting to our parameter {@code time}
+     * if none was stored yet.)
+     *
+     * @param time timestamp to save in shared preferences file
+     * @param key  key to save the timestamp under
+     */
     private long getLastTimestamp(long time, String key) {
         SharedPreferences pref = getSharedPreferences(CLASS, Context.MODE_PRIVATE);
         return pref.getLong(key, time);
@@ -323,6 +343,19 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
         return null;
     }
 
+    /**
+     * Creates a {@code CursorLoader} configured to retrieve contacts from the contacts provider which
+     * have been changed after the timestamp {@code mSearchTime}. First we create {@code String[] projection}
+     * containing the names of the columns we want to retrieve: _ID, CONTACT_ID, DISPLAY_NAME and
+     * CONTACT_LAST_UPDATED_TIMESTAMP. Then we fetch {@code mSearchTime} from the value stored in the
+     * preferences file under the key PREF_KEY_CHANGE. We create {@code String selection} as the selection
+     * query string, requesting that the CONTACT_LAST_UPDATED_TIMESTAMP be greater than the value supplied
+     * by the selection arguments {@code String[] bindArgs} ({@code mSearchTime} formatted as a String).
+     * Finally we return a {@code CursorLoader} configured for this selection criteria, and sorted
+     * in descending order based on the CONTACT_LAST_UPDATED_TIMESTAMP, and CONTACT_ID columns.
+     *
+     * @return {@code CursorLoader} configured to retrieve selected contacts from the contacts provider
+     */
     private CursorLoader getChangeLoader() {
         String[] projection = new String[]{
                 ContactsContract.Data._ID,
@@ -340,6 +373,20 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
                 + " desc, " + ContactsContract.Data.CONTACT_ID + " desc");
     }
 
+    /**
+     * Creates a {@code CursorLoader} configured to retrieve contacts from the contacts provider deleted
+     * contact table which have been deleted after the timestamp {@code mSearchTime}. First we create
+     * {@code String[] projection} containing the names of the columns we want to retrieve: _ID, and
+     * CONTACT_DELETED_TIMESTAMP. Then we fetch {@code mSearchTime} from the value stored in the
+     * preferences file under the key PREF_KEY_DELETE. We create {@code String selection} as the selection
+     * query string, requesting that the CONTACT_DELETED_TIMESTAMP be greater than the value supplied
+     * by the selection arguments {@code String[] bindArgs} ({@code mSearchTime} formatted as a String).
+     * Finally we return a {@code CursorLoader} configured for this selection criteria, and sorted
+     * in descending order based on the CONTACT_DELETED_TIMESTAMP column.
+     *
+     * @return {@code CursorLoader} configured to retrieve selected contacts from the contacts provider
+     * deleted contact table. (This table holds a log of deleted contacts.)
+     */
     private CursorLoader getDeleteLoader() {
         String[] projection = new String[]{
                 ContactsContract.DeletedContacts.CONTACT_ID,
@@ -359,7 +406,7 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
      * Called when a previously created loader has finished its load.
      *
      * @param cursorLoader The Loader that has finished.
-     * @param data The data generated by the Loader.
+     * @param data         The data generated by the Loader.
      */
     @SuppressLint("SetTextI18n")
     @Override
