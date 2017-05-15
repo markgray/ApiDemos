@@ -18,6 +18,7 @@ package com.example.android.apis.content;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -40,15 +41,17 @@ public class PickContact extends Activity {
     Toast mToast;
     ResultDisplayer mPendingResult;
 
+    @SuppressWarnings("WeakerAccess")
     class ResultDisplayer implements OnClickListener {
         String mMsg;
         String mMimeType;
-        
+
         ResultDisplayer(String msg, String mimeType) {
             mMsg = msg;
             mMimeType = mimeType;
         }
-        
+
+        @Override
         public void onClick(View v) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType(mMimeType);
@@ -56,7 +59,7 @@ public class PickContact extends Activity {
             startActivityForResult(intent, 1);
         }
     }
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,18 +67,15 @@ public class PickContact extends Activity {
         setContentView(R.layout.pick_contact);
 
         // Watch for button clicks.
-        findViewById(R.id.pick_contact).setOnClickListener(
-                new ResultDisplayer("Selected contact",
-                        ContactsContract.Contacts.CONTENT_ITEM_TYPE));
-        findViewById(R.id.pick_person).setOnClickListener(
-                new ResultDisplayer("Selected person",
-                        "vnd.android.cursor.item/person"));
-        findViewById(R.id.pick_phone).setOnClickListener(
-                new ResultDisplayer("Selected phone",
-                        ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE));
-        findViewById(R.id.pick_address).setOnClickListener(
-                new ResultDisplayer("Selected address",
-                        ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE));
+        ResultDisplayer l;
+        l = new ResultDisplayer("Selected contact", ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+        findViewById(R.id.pick_contact).setOnClickListener(l);
+        l = new ResultDisplayer("Selected person", "vnd.android.cursor.item/person");
+        findViewById(R.id.pick_person).setOnClickListener(l);
+        l = new ResultDisplayer("Selected phone", ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+        findViewById(R.id.pick_phone).setOnClickListener(l);
+        l = new ResultDisplayer("Selected address", ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE);
+        findViewById(R.id.pick_address).setOnClickListener(l);
     }
 
     @Override
@@ -85,8 +85,7 @@ public class PickContact extends Activity {
             if (uri != null) {
                 Cursor c = null;
                 try {
-                    c = getContentResolver().query(uri, new String[] { BaseColumns._ID },
-                            null, null, null);
+                    c = getContentResolver().query(uri, new String[]{BaseColumns._ID}, null, null, null);
                     if (c != null && c.moveToFirst()) {
                         int id = c.getInt(0);
                         if (mToast != null) {
