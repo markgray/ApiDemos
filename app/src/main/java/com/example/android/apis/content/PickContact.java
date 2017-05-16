@@ -38,7 +38,37 @@ import com.example.android.apis.R;
  * when the selected contact is returned.
  */
 public class PickContact extends Activity {
+    /**
+     * The MIME type of a CONTENT_URI subdirectory of a single person.
+     * Constant Value: "vnd.android.cursor.item/contact"
+     */
+    final String CONTACT = ContactsContract.Contacts.CONTENT_ITEM_TYPE;
+    /**
+     * The MIME type of a CONTENT_URI subdirectory of a single person.
+     * Constant Value: "vnd.android.cursor.item/person"
+     */
+    final String PERSON = "vnd.android.cursor.item/person";
+    /**
+     * A data kind representing a telephone number. MIME type used when storing this in data table.
+     * Constant Value: "vnd.android.cursor.item/phone_v2"
+     */
+    final String PHONE = ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE;
+    /**
+     * A data kind representing a postal addresses and MIME type used when storing this in data table.
+     * Constant Value: "vnd.android.cursor.item/postal-address_v2"
+     */
+    final String POSTAL = ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE;
+    /**
+     * Toast we will toast the contact data base query result in
+     */
     Toast mToast;
+    /**
+     * {@code ResultDisplayer} instance that launched contact data base query, it is set to "this"
+     * in the {@code onClick} override when the Button using "this" {@code ResultDisplayer} as its
+     * {@code OnClickListener} is clicked, and used in our {@code onActivityResult} when the
+     * {@code Intent} launched returns a result in order to access the field {@code ResultDisplayer.mMsg}
+     * to use in the toast.
+     */
     ResultDisplayer mPendingResult;
 
     @SuppressWarnings("WeakerAccess")
@@ -67,15 +97,10 @@ public class PickContact extends Activity {
         setContentView(R.layout.pick_contact);
 
         // Watch for button clicks.
-        ResultDisplayer l;
-        l = new ResultDisplayer("Selected contact", ContactsContract.Contacts.CONTENT_ITEM_TYPE);
-        findViewById(R.id.pick_contact).setOnClickListener(l);
-        l = new ResultDisplayer("Selected person", "vnd.android.cursor.item/person");
-        findViewById(R.id.pick_person).setOnClickListener(l);
-        l = new ResultDisplayer("Selected phone", ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-        findViewById(R.id.pick_phone).setOnClickListener(l);
-        l = new ResultDisplayer("Selected address", ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE);
-        findViewById(R.id.pick_address).setOnClickListener(l);
+        findViewById(R.id.pick_contact).setOnClickListener(new ResultDisplayer("Selected contact", CONTACT));
+        findViewById(R.id.pick_person).setOnClickListener(new ResultDisplayer("Selected person", PERSON));
+        findViewById(R.id.pick_phone).setOnClickListener(new ResultDisplayer("Selected phone", PHONE));
+        findViewById(R.id.pick_address).setOnClickListener(new ResultDisplayer("Selected address", POSTAL));
     }
 
     @Override
