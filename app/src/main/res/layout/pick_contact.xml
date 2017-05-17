@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2010 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -17,35 +16,44 @@
 <!-- Demonstrates selecting various types of contact data. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:padding="4dip"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:padding="4dip">
 
     <TextView
-        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="0"
         android:paddingBottom="4dip"
         android:text="@string/pick_contact_msg"
         tools:ignore="InefficientWeight" />
-        
-    <Button android:id="@+id/pick_contact"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" 
+
+    <Button
+        android:id="@+id/pick_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/pick_contact">
+
         <requestFocus />
     </Button>
 
-    <Button android:id="@+id/pick_person"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" 
-        android:text="@string/pick_person">
-    </Button>
+    <Button
+        android:id="@+id/pick_person"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pick_person" />
 
-    <Button android:id="@+id/pick_phone"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" 
-        android:text="@string/pick_phone">
-    </Button>
+    <Button
+        android:id="@+id/pick_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pick_phone" />
 
-    <Button android:id="@+id/pick_address"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" 
-        android:text="@string/pick_address">
-    </Button>
+    <Button
+        android:id="@+id/pick_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pick_address" />
 </LinearLayout>
