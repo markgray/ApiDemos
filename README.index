@@ -899,7 +899,10 @@ Content
 
     Content/Provider/Share Content         v16 required for setClipData v11 for newUri
         .content.ShareContent
-            Demonstrates the share content api -> Crashes due to java.io.IOException:
+        .content.FileProvider
+            Demonstrates the share content api, use the <provider> ".content.FileProvider" to
+            pipe the image/jpeg to the app the user selects to handle it.
+            -> fails writing to gmail due to java.io.IOException:
             write failed: EPIPE (Broken pipe) TODO: fix bug!
 
   Resources

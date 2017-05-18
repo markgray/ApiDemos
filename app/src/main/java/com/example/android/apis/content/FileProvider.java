@@ -41,8 +41,7 @@ import android.util.Log;
  * our .apk.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class FileProvider extends ContentProvider
-        implements PipeDataWriter<InputStream> {
+public class FileProvider extends ContentProvider implements PipeDataWriter<InputStream> {
     private static final String TAG = "FileProvider";
 
     @Override
@@ -51,8 +50,7 @@ public class FileProvider extends ContentProvider
     }
 
     @Override
-    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
-                        String sortOrder) {
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
         // content providers that support open and openAssetFile should support queries for all
         // android.provider.OpenableColumns.
@@ -112,7 +110,7 @@ public class FileProvider extends ContentProvider
 
     @Override
     public String getType(@NonNull Uri uri) {
-        // For this sample, assume all files are .apks.
+        // For this sample, assume all files are JPEGs.
         return "image/jpeg";
     }
 
@@ -129,8 +127,7 @@ public class FileProvider extends ContentProvider
             String assetPath = path.substring(off+1);
             //noinspection ConstantConditions
             AssetFileDescriptor asset = getContext().getAssets().openNonAssetFd(cookie, assetPath);
-            return new ParcelFileDescriptor(openPipeHelper(uri, "image/jpeg", null,
-                    asset.createInputStream(), this));
+            return new ParcelFileDescriptor(openPipeHelper(uri, "image/jpeg", null, asset.createInputStream(), this));
         } catch (IOException e) {
             //noinspection UnnecessaryLocalVariable
             FileNotFoundException fnf = new FileNotFoundException("Unable to open " + uri);
@@ -139,8 +136,11 @@ public class FileProvider extends ContentProvider
     }
 
     @Override
-    public void writeDataToPipe(@NonNull ParcelFileDescriptor output, @NonNull Uri uri, @NonNull String mimeType,
-                                Bundle opts, InputStream args) {
+    public void writeDataToPipe(@NonNull ParcelFileDescriptor output,
+                                @NonNull Uri uri,
+                                @NonNull String mimeType,
+                                Bundle opts,
+                                InputStream args) {
         // Transfer data from the asset to the pipe the client is reading.
         byte[] buffer = new byte[8192];
         int n;
@@ -150,7 +150,7 @@ public class FileProvider extends ContentProvider
                 fout.write(buffer, 0, n);
             }
         } catch (IOException e) {
-            Log.i("InstallApk", "Failed transferring", e);
+            Log.i(TAG, "Failed transferring", e);
         } finally {
             try {
                 args.close();
