@@ -42,13 +42,41 @@ import android.util.Log;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FileProvider extends ContentProvider implements PipeDataWriter<InputStream> {
+    /**
+     * TAG for logging
+     */
     private static final String TAG = "FileProvider";
 
+    /**
+     * Implement this to initialize your content provider on startup, we simply return true
+     *
+     * @return true -- the provider was successfully loaded,
+     */
     @Override
     public boolean onCreate() {
         return true;
     }
 
+    /**
+     * Implement this to handle query requests from clients. This appears to be cut and paste code used
+     * to implement the {@code ContentProvider} required {@code query} method, and is not used at all
+     * in the present demo activity so I will not waste time analyzing and commenting it.
+     *
+     * @param uri           The URI to query. This will be the full URI sent by the client;
+     *                      if the client is requesting a specific record, the URI will end in a record number
+     *                      that the implementation should parse and add to a WHERE or HAVING clause, specifying
+     *                      that _id value.
+     * @param projection    The list of columns to put into the cursor. If
+     *                      {@code null} all columns are included.
+     * @param selection     A selection criteria to apply when filtering rows.
+     *                      If {@code null} then all rows are included.
+     * @param selectionArgs You may include ?s in selection, which will be replaced by
+     *                      the values from selectionArgs, in order that they appear in the selection.
+     *                      The values will be bound as Strings.
+     * @param sortOrder     How the rows in the cursor should be sorted.
+     *                      If {@code null} then the provider is free to define the sort order.
+     * @return a Cursor or {@code null}.
+     */
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
@@ -60,7 +88,7 @@ public class FileProvider extends ContentProvider implements PipeDataWriter<Inpu
 
         // If projection is null, return all columns.
         if (projection == null) {
-            projection = new String[] {
+            projection = new String[]{
                     OpenableColumns.DISPLAY_NAME,
                     OpenableColumns.SIZE};
         }
@@ -120,11 +148,11 @@ public class FileProvider extends ContentProvider implements PipeDataWriter<Inpu
         try {
             String path = uri.getPath();
             int off = path.indexOf('/', 1);
-            if (off < 0 || off >= (path.length()-1)) {
+            if (off < 0 || off >= (path.length() - 1)) {
                 throw new FileNotFoundException("Unable to open " + uri);
             }
             int cookie = Integer.parseInt(path.substring(1, off));
-            String assetPath = path.substring(off+1);
+            String assetPath = path.substring(off + 1);
             //noinspection ConstantConditions
             AssetFileDescriptor asset = getContext().getAssets().openNonAssetFd(cookie, assetPath);
             return new ParcelFileDescriptor(openPipeHelper(uri, "image/jpeg", null, asset.createInputStream(), this));
@@ -146,7 +174,7 @@ public class FileProvider extends ContentProvider implements PipeDataWriter<Inpu
         int n;
         FileOutputStream fout = new FileOutputStream(output.getFileDescriptor());
         try {
-            while ((n=args.read(buffer)) >= 0) {
+            while ((n = args.read(buffer)) >= 0) {
                 fout.write(buffer, 0, n);
             }
         } catch (IOException e) {
