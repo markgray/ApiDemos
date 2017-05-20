@@ -58,9 +58,7 @@ public class FileProvider extends ContentProvider implements PipeDataWriter<Inpu
     }
 
     /**
-     * Implement this to handle query requests from clients. This appears to be cut and paste code used
-     * to implement the {@code ContentProvider} required {@code query} method, and is not used at all
-     * in the present demo activity so I will not waste time analyzing and commenting it.
+     * Implement this to handle query requests from clients.
      *
      * @param uri           The URI to query. This will be the full URI sent by the client;
      *                      if the client is requesting a specific record, the URI will end in a record number
@@ -110,7 +108,7 @@ public class FileProvider extends ContentProvider implements PipeDataWriter<Inpu
                 result[i] = uri.getPath();
             }
             if (i == sizeIndex) {
-                result[i] = null; // Size is unknown, so null, if it was known, it would go here.
+                result[i] = 42L; // Size is unknown, so let us pretend it is 42 and surprise, it works!
             }
         }
 
