@@ -58,7 +58,19 @@ public class FileProvider extends ContentProvider implements PipeDataWriter<Inpu
     }
 
     /**
-     * Implement this to handle query requests from clients.
+     * Implement this to handle query requests from clients. We initialize {@code displayNameIndex}
+     * and {@code sizeIndex} to -1. If our parameter {@code String[] projection} is null we create
+     * a {@code projection} consisting of both of our columns: DISPLAY_NAME and SIZE. We go through
+     * the String entries in {@code projection} one by one indexed by {@code i}: if the current one
+     * matches DISPLAY_NAME we set the variable {@code displayNameIndex} to the index value {@code i},
+     * and if it matches SIZE we set the variable {@code sizeIndex} to {@code i}. We create a new
+     * {@code MatrixCursor cursor} using {@code String[] projection} for the column names, and an
+     * {@code Object[] result} to hold the row for {@code cursor} which we will build. We build this
+     * row by going through the columns needed to build a row and if the index of the column matches
+     * {@code displayNameIndex} we store the decoded path of the {@code Uri uri} in that column, and
+     * if the index of the column matches {@code sizeIndex} we store the arbitrary value 42L in that
+     * column (the size of the file being piped is unknown, but gmail needs it.) Then we add the row
+     * {@code result} to {@code cursor} and return it to the caller.
      *
      * @param uri           The URI to query. This will be the full URI sent by the client;
      *                      if the client is requesting a specific record, the URI will end in a record number
@@ -116,30 +128,77 @@ public class FileProvider extends ContentProvider implements PipeDataWriter<Inpu
         return cursor;
     }
 
+    /**
+     * Implement this to handle requests to insert a new row. We return null, having done nothing.
+     *
+     * @param uri    The content:// URI of the insertion request. This must not be {@code null}.
+     * @param values A set of column_name/value pairs to add to the database.
+     *               This must not be {@code null}.
+     * @return The URI for the newly inserted item.
+     */
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         // Don't support inserts.
         return null;
     }
 
+    /**
+     * Implement this to handle requests to delete one or more rows. We return 0, having done nothing.
+     *
+     * @param uri       The full URI to query, including a row ID (if a specific record is requested).
+     * @param selection An optional restriction to apply to rows when deleting.
+     * @return The number of rows affected.
+     */
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         // Don't support deletes.
         return 0;
     }
 
+    /**
+     * Implement this to handle requests to update one or more rows. We return 0, having done nothing.
+     *
+     * @param uri       The URI to query. This can potentially have a record ID if this
+     *                  is an update request for a specific record.
+     * @param values    A set of column_name/value pairs to update in the database.
+     *                  This must not be {@code null}.
+     * @param selection An optional filter to match rows to update.
+     * @return the number of rows affected.
+     */
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         // Don't support updates.
         return 0;
     }
 
+    /**
+     * Implement this to handle requests for the MIME type of the data at the given URI. We always
+     * return the String "image/jpeg" for this demo.
+     *
+     * @param uri the URI to query.
+     * @return a MIME type string, or {@code null} if there is no type.
+     */
     @Override
     public String getType(@NonNull Uri uri) {
         // For this sample, assume all files are JPEGs.
         return "image/jpeg";
     }
 
+    /**
+     * Override this to handle requests to open a file blob. Wrapped in a try block intended to catch
+     * IOException, we set {@code String path} to the decoded path of {@code Uri uri}
+     *
+     * @param uri  The URI whose file is to be opened.
+     * @param mode Access mode for the file.  May be "r" for read-only access,
+     *             "rw" for read and write access, or "rwt" for read and write access
+     *             that truncates any existing file.
+     * @return Returns a new ParcelFileDescriptor which you can use to access
+     * the file.
+     * @throws FileNotFoundException Throws FileNotFoundException if there is
+     *                               no file associated with the given URI or the mode is invalid.
+     * @throws SecurityException     Throws SecurityException if the caller does
+     *                               not have permission to access the file.
+     */
     @Override
     public ParcelFileDescriptor openFile(@NonNull Uri uri, @NonNull String mode) throws FileNotFoundException {
         // Try to open an asset with the given name.
@@ -155,9 +214,7 @@ public class FileProvider extends ContentProvider implements PipeDataWriter<Inpu
             AssetFileDescriptor asset = getContext().getAssets().openNonAssetFd(cookie, assetPath);
             return new ParcelFileDescriptor(openPipeHelper(uri, "image/jpeg", null, asset.createInputStream(), this));
         } catch (IOException e) {
-            //noinspection UnnecessaryLocalVariable
-            FileNotFoundException fnf = new FileNotFoundException("Unable to open " + uri);
-            throw fnf;
+            throw new FileNotFoundException("Unable to open " + uri);
         }
     }
 

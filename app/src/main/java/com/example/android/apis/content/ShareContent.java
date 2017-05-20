@@ -30,9 +30,7 @@ import com.example.android.apis.R;
 
 /**
  * Example of sharing content from a private content provider. Uses the <provider>
- * ".content.FileProvider" to pipe the image/jpeg to the app the user selects to handle it.
- * -> fails writing to gmail due to java.io.IOException: write failed: EPIPE (Broken pipe)
- * TODO: fix bug!
+ * ".content.FileProvider" to pipe the image/jpeg to the app that the user selects to handle it.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class ShareContent extends Activity {
