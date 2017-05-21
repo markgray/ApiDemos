@@ -187,6 +187,24 @@ public class FileProvider extends ContentProvider implements PipeDataWriter<Inpu
     /**
      * Override this to handle requests to open a file blob. Wrapped in a try block intended to catch
      * IOException, we set {@code String path} to the decoded path of {@code Uri uri}
+     * (Since {@code uri} is "content://com.example.android.apis.content.FileProvider/2/res/drawable-nodpi-v4/jellies.jpg"
+     * "/2/res/drawable-nodpi-v4/jellies.jpg" in our case), locate the index of the '/' character
+     * following the cookie to set {@code off} and if we don't find it where we expect it we throw
+     * FileNotFoundException. We extract the cookie substring ("2" in our case) and convert it to
+     * {@code int cookie}, and set {@code String assetPath} to the rest of the {@code path} following
+     * the '/' character that terminated the cookie part of the path. ("res/drawable-nodpi-v4/jellies.jpg"
+     * in our case).
+     * <p>
+     * We create {@code AssetFileDescriptor asset} by getting the context this provider is running in,
+     * using it to get an {@code AssetManager} instance for the application's package, which we in
+     * turn use to open a non-asset file descriptor using {@code cookie} and {@code assetPath}.
+     * <p>
+     * We then create and return a {@code ParcelFileDescriptor} constructed using the {@code ParcelFileDescriptor}
+     * returned by {@code openPipeHelper} which it builds using {@code uri} as the URI whose data is to be written,
+     * a mime type of "image/jpeg", a null option Bundle, a {@code FileInputStream} created from {@code asset}
+     * as the arguments to the function that will actually stream the data, and "this" as the
+     * {@code PipeDataWriter<InputStream>} that will actually stream the data from the {@code FileInputStream}
+     * argument.
      *
      * @param uri  The URI whose file is to be opened.
      * @param mode Access mode for the file.  May be "r" for read-only access,
@@ -218,6 +236,30 @@ public class FileProvider extends ContentProvider implements PipeDataWriter<Inpu
         }
     }
 
+    /**
+     * Called from a background thread to stream data out to a pipe. Note that the pipe is blocking,
+     * so this thread can block on writes for an arbitrary amount of time if the client is slow
+     * at reading.
+     * <p>
+     * First we allocate 8192 bytes for {@code byte[] buffer}, declare an {@code int n} to hold the
+     * number of bytes read for each read attempt, and create {@code FileOutputStream fout} using
+     * the actual FileDescriptor associated with our parameter {@code ParcelFileDescriptor output}.
+     * <p>
+     * Then wrapped in a try block intended to catch IOException we read from {@code InputStream args}
+     * into {@code buffer} capturing the number of bytes read in {@code n} and for as long as
+     * {@code n} is greater than or equal to 0, we write the {@code n} bytes in {@code buffer} to
+     * {@code FileOutputStream fout}. When we are at the end of file of {@code args}, {@code n}
+     * will be -1 and we fall through to the finally block where we close both {@code args} and
+     * {@code fout}.
+     *
+     * @param output   The pipe where data should be written.  This will be
+     *                 closed for you upon returning from this function.
+     * @param uri      The URI whose data is to be written.
+     * @param mimeType The desired type of data to be written.
+     * @param opts     Options supplied by caller.
+     * @param args     Our own custom arguments, the {@code InputStream} we will use to read our resource
+     *                 file from.
+     */
     @Override
     public void writeDataToPipe(@NonNull ParcelFileDescriptor output,
                                 @NonNull Uri uri,
