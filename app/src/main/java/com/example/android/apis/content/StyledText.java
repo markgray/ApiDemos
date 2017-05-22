@@ -31,8 +31,7 @@ import android.widget.TextView;
 public class StyledText extends Activity
 {
     @Override
-	protected void onCreate(Bundle savedInstanceState)
-    {
+	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // See assets/res/any/layout/styled_text.xml for this

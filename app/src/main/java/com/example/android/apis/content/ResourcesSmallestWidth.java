@@ -21,7 +21,32 @@ import com.example.android.apis.R;
 import android.app.Activity;
 import android.os.Bundle;
 
+/**
+ * Layout file {@code <includes \> layouts from layout, and layout-sw**} in order to create custom
+ * FrameLayout area for different smallest width (sw480dp, sw600dp, and sw720dp). These in turn
+ * {@code <include\>} other FrameLayout's also with different versions for the smallest width
+ * (cute - huh?)
+ */
 public class ResourcesSmallestWidth extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.resources_smallest_width.
+     * The layout contains the line {@code <include layout="@layout/resources_smallest_width_inner" />}
+     * and Android chooses between four different versions of this included layout file based on the
+     * smallest width:
+     * <ul>
+     *     <li>Default res/layout/resources_smallest_width_inner.xml</li>
+     *     <li>Smallest width 480dpi res/layout-sw480dp/resources_smallest_width_inner.xml</li>
+     *     <li>Smallest width 600dpi res/layout-sw600dp/resources_smallest_width_inner.xml</li>
+     *     <li>Smallest width 720dpi res/layout-sw720dp/resources_smallest_width_inner.xml</li>
+     * </ul>
+     * Each of these has lines for {@code <include layout="@layout/resources_smallest_width_row" />}
+     * which Android again chooses from between four different versions based on the same smallest
+     * screen width (located in the same directories as the resources_smallest_width_inner.xml
+     * which includes them of course).
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
