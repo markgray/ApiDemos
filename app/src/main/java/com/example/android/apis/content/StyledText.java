@@ -26,10 +26,20 @@ import android.widget.TextView;
 
 
 /**
- * Demonstration of styled text resources.
+ * Demonstration of styled text resources. Shows a resource string being used directly in the layout,
+ * and by being retrieved and assigned programmatically.
  */
-public class StyledText extends Activity
-{
+public class StyledText extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.styled_text which
+     * contains an android:text="@string/styled_text" attribute for one of its {@code TextView}'s.
+     * We now fetch {@code CharSequence str} from our resource for that same stylized String
+     * R.string.styled_text, locate the {@code TextView tv} at R.id.text and set its text to
+     * {@code str}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

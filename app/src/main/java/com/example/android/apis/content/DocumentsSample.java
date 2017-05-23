@@ -43,13 +43,24 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Example that exercises client side of {@link DocumentsContract}.
+ * Example that exercises client side of {@link DocumentsContract}. Layout is created programmatically.
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 @SuppressLint("SetTextI18n")
 public class DocumentsSample extends Activity {
+    /**
+     * TAG used for logging
+     */
     private static final String TAG = "DocumentsSample";
 
+    /**
+     * Request code used when calling {@code startActivityForResult} when the Buttons with labels
+     * "OPEN_DOC <b>mimetype</b>" and "GET_CONTENT". In our {@code onActivityResult} override we
+     * use it to branch to an area of code which requests FLAG_GRANT_READ_URI_PERMISSION of the
+     * Uri returned in the {@code Intent data} result, opens that Uri, calls our method
+     * {@code readFullyNoClose} to read the contents of the file into a {@code byte[]} array, which
+     * we use only to determine the length which we then display in our UI.
+     */
     private static final int CODE_READ = 42;
     private static final int CODE_WRITE = 43;
     private static final int CODE_TREE = 44;
@@ -142,8 +153,8 @@ public class DocumentsSample extends Activity {
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("*/*");
-                intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] {
-                        "text/plain", "application/msword" });
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{
+                        "text/plain", "application/msword"});
                 if (multiple.isChecked()) {
                     intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 }
@@ -296,8 +307,8 @@ public class DocumentsSample extends Activity {
                     DocumentsContract.getTreeDocumentId(uri));
             Uri child = DocumentsContract.buildChildDocumentsUriUsingTree(uri,
                     DocumentsContract.getTreeDocumentId(uri));
-            Cursor c = cr.query(child, new String[] {
-                    Document.COLUMN_DISPLAY_NAME, Document.COLUMN_MIME_TYPE }, null, null, null);
+            Cursor c = cr.query(child, new String[]{
+                    Document.COLUMN_DISPLAY_NAME, Document.COLUMN_MIME_TYPE}, null, null, null);
             try {
                 //noinspection ConstantConditions
                 while (c.moveToNext()) {

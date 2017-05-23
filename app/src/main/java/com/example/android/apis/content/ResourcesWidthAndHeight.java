@@ -21,7 +21,23 @@ import com.example.android.apis.R;
 import android.app.Activity;
 import android.os.Bundle;
 
+/**
+ * The layouts included by the {@code FrameLayout} inside R.layout.resources_width_and_height use
+ * layout-wNNNdp and layout-hNNNdp to select between different versions based on the size of the
+ * screen. Those from layout-hNNNdp are included first using @layout/resources_height and these
+ * different layouts in turn include layouts from layout-hNNNdp by asking for @layout/resources_width.
+ */
 public class ResourcesWidthAndHeight extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to R.layout.resources_width_and_height (our
+     * layout file which includes the layout @layout/resources_height which is in fact a different
+     * layout for devices with screen heights. The different @layout/resources_height layouts in turn
+     * include the layout @layout/resources_width which is a different layout file for different
+     * screen widths.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
