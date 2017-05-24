@@ -55,19 +55,62 @@ public class DocumentsSample extends Activity {
 
     /**
      * Request code used when calling {@code startActivityForResult} when the Buttons with labels
-     * "OPEN_DOC <b>mimetype</b>" and "GET_CONTENT". In our {@code onActivityResult} override we
-     * use it to branch to an area of code which requests FLAG_GRANT_READ_URI_PERMISSION of the
-     * Uri returned in the {@code Intent data} result, opens that Uri, calls our method
-     * {@code readFullyNoClose} to read the contents of the file into a {@code byte[]} array, which
-     * we use only to determine the length which we then display in our UI.
+     * "OPEN_DOC <b>&#42;/&#42;</b>" (as well as the mime types "image/&#42;", "audio/ogg",
+     * "text/plain, application/msword" and "GET_CONTENT <b>&#42;/&#42;</b>". In our
+     * {@code onActivityResult} override we use it to branch to an area of code which requests
+     * FLAG_GRANT_READ_URI_PERMISSION for the Uri returned in the {@code Intent data} result,
+     * opens that Uri, calls our method {@code readFullyNoClose} to read the contents of the file
+     * into a {@code byte[]} array, which we use only to determine the number of bytes read which
+     * we then display in our UI.
      */
     private static final int CODE_READ = 42;
+    /**
+     * Request code used when calling {@code startActivityForResult} when the Buttons with label
+     * "CREATE_DOC <b>&#42;/&#42;</b>". In our {@code onActivityResult} override we use it to branch
+     * to an area of code which requests FLAG_GRANT_WRITE_URI_PERMISSION for the Uri returned in the
+     * {@code Intent data} result, and writes the String "THE COMPLETE WORKS OF SHAKESPEARE" to
+     * the URI.
+     */
     private static final int CODE_WRITE = 43;
+    /**
+     * Request code used when calling {@code startActivityForResult} when the Buttons with label
+     * "OPEN_DOC_TREE". In our {@code onActivityResult} override we use it to branch to an area of
+     * code which reads through a directory tree, creates a directory and some files then deletes
+     * one of the files.
+     */
     private static final int CODE_TREE = 44;
+    /**
+     * Request code used when calling {@code startActivityForResult} when the Buttons with label
+     * "OPEN_DOC <b>&#42;/&#42;</b> for rename". In our {@code onActivityResult} override we use it to
+     * branch to an area of code which renames the Uri returned in the {@code Intent data} result to
+     * "MEOW.TEST", then opens and tries to read using the new name.
+     */
     private static final int CODE_RENAME = 45;
 
+    /**
+     * {@code TextView} used to display information concerning the results of our actions using our
+     * {@code log} method.
+     */
     private TextView mResult;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we save the {@code Context context} of "this" for later use. We create
+     * a {@code LinearLayout view} and set its orientation to VERTICAL. We initialize our field
+     * {@code TextView mResult} with an instance of {@code TextView} and add it to {@code view}. We
+     * create a {@code CheckBox multiple}, set its text to "ALLOW_MULTIPLE" and add it to {@code view}.
+     * We create a {@code CheckBox localOnly}, set its text to "LOCAL_ONLY" and add it to {@code view}.
+     *
+     * Now we create nine Buttons and set their {@code OnClickListener}'s to exercise various aspects
+     * of the DocumentsContract api:
+     * <ul>
+     *     <li>
+     *         "OPEN_DOC <b>&#42;/&#42;</b>" 
+     *     </li>
+     * </ul>
+     *
+     * @param icicle we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
