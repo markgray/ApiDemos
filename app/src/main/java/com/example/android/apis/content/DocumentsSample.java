@@ -504,6 +504,56 @@ public class DocumentsSample extends Activity {
     /**
      * Called when an activity you launched exits, giving you the requestCode you started it with,
      * the resultCode it returned, and any additional data from it.
+     * <p>
+     * First we set {@code ContentResolver cr} to a ContentResolver instance for our application's
+     * package. We call our method {@code clearLog} to clear the text from our result reporting
+     * {@code TextView mResult}. Next we use our method {@code log} to display the result code and
+     * the String representation of the {@code Intent data} (Which will be an URI which looks like:
+     * "Intent {dat=content://com.android.providers.media.documents/* }". If {@code data} is not
+     * null we set {@code Uri uri} to the URI data this intent is carrying (which would look like:
+     * content://com.android.providers.media.documents/document/image%3A603) If {@code uri} is not
+     * null we log boolean result of a test of {@code uri} to see if the given URI represents a
+     * {@code DocumentsContract.Document} backed by a {@code DocumentsProvider}.
+     * <p>
+     * Next we branch on the value of the request code {@code requestCode} used to launch the
+     * activity whose results we have received:
+     * <ul>
+     * <li>
+     * CODE_READ - wrapped in try block intended to catch SecurityException, we use
+     * {@code ContentResolver cr} to take the persistable URI permission grant
+     * FLAG_GRANT_READ_URI_PERMISSION that has been offered for {@code uri} (Once taken,
+     * the permission grant will be remembered across device reboots. Only URI permissions
+     * granted with FLAG_GRANT_PERSISTABLE_URI_PERMISSION can be persisted.) We then declare
+     * {@code InputStream is} as null, and wrapped in try block intended to catch any Exception,
+     * we use {@code cr} to open the input stream {@code is} using the content associated with
+     * content URI {@code uri}, and then call our method {@code readFullyNoClose} to read the
+     * entire contents of {@code is} into a {@code byte[]} array which we use only to display
+     * the length. In our finally block we call our method {@code closeQuietly} to close
+     * {@code is}.
+     * </li>
+     * <li>
+     * CODE_WRITE - wrapped in try block intended to catch SecurityException, we use
+     * {@code ContentResolver cr} to take the persistable URI permission grant
+     * FLAG_GRANT_WRITE_URI_PERMISSION that has been  offered for {@code uri} (Once taken,
+     * the permission grant will be remembered across device reboots. Only URI permissions
+     * granted with FLAG_GRANT_PERSISTABLE_URI_PERMISSION can be persisted.) We then declare
+     * {@code OutputStream os} as null, and wrapped in try block intended to catch any Exception,
+     * we use {@code cr} to open the output stream {@code os} using the content associated with
+     * content URI {@code uri}. We write the String "THE COMPLETE WORKS OF SHAKESPEARE" to
+     * {@code os}. In our finally block we call our method {@code closeQuietly} to close
+     * {@code os}.
+     * </li>
+     * <li>
+     * CODE_TREE - We build {@code Uri doc} to be an URI representing COLUMN_DOCUMENT_ID from
+     * the {@code Uri uri} (This can then be used to access documents under a user-selected
+     * directory tree, since it doesn't require the user to separately confirm each new
+     * document access.) We build {@code Uri child} to be an URI representing the children
+     * of the target directory {@code Uri uri}. We create {@code String[] projection} to target
+     * Document.COLUMN_DISPLAY_NAME, and Document.COLUMN_MIME_TYPE and use {@code ContentResolver cr}
+     * to query the content provider for {@code child} using {@code projection} to create a
+     * {@code Cursor c} referencing the contents or the target directory.
+     * </li>
+     * </ul>
      *
      * @param requestCode The integer request code originally supplied to
      *                    startActivityForResult(), allowing you to identify who this
@@ -564,12 +614,10 @@ public class DocumentsSample extends Activity {
             }
         } else if (requestCode == CODE_TREE) {
             // Find existing docs
-            Uri doc = DocumentsContract.buildDocumentUriUsingTree(uri,
-                    DocumentsContract.getTreeDocumentId(uri));
-            Uri child = DocumentsContract.buildChildDocumentsUriUsingTree(uri,
-                    DocumentsContract.getTreeDocumentId(uri));
-            Cursor c = cr.query(child, new String[]{
-                    Document.COLUMN_DISPLAY_NAME, Document.COLUMN_MIME_TYPE}, null, null, null);
+            Uri doc = DocumentsContract.buildDocumentUriUsingTree(uri, DocumentsContract.getTreeDocumentId(uri));
+            Uri child = DocumentsContract.buildChildDocumentsUriUsingTree(uri, DocumentsContract.getTreeDocumentId(uri));
+            final String[] projection = {Document.COLUMN_DISPLAY_NAME, Document.COLUMN_MIME_TYPE};
+            Cursor c = cr.query(child, projection, null, null, null);
             try {
                 //noinspection ConstantConditions
                 while (c.moveToNext()) {
