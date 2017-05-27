@@ -551,7 +551,22 @@ public class DocumentsSample extends Activity {
      * of the target directory {@code Uri uri}. We create {@code String[] projection} to target
      * Document.COLUMN_DISPLAY_NAME, and Document.COLUMN_MIME_TYPE and use {@code ContentResolver cr}
      * to query the content provider for {@code child} using {@code projection} to create a
-     * {@code Cursor c} referencing the contents or the target directory.
+     * {@code Cursor c} referencing the contents or the target directory. We then move the cursor
+     * from row to row, using our method {@code log} to display the value of column 0 and column 1
+     * of the {@code c} (COLUMN_DISPLAY_NAME and COLUMN_MIME_TYPE based on the projection requested).
+     * We then call our method {@code closeQuietly} to close {@code c}. Next we proceed to create
+     * a "image/png" file ("pic.png") inside of {@code Uri doc}, a directory "my dir" inside of
+     * {@code doc}, then using the {@code Uri dir} for "my dir" we create a "image/png" file
+     * ("pic2.png") inside of that new subdirectory. We display messages informing the user of our
+     * actions and the {@code Uri} for these new documents. Then we open and write the string
+     * "THE COMPLETE WORKS OF SHAKESPEARE" to the file  "pic2.png", display a message to this effect,
+     * and finally delete the empty file "pic.png" also displaying a message to this effect.
+     * </li>
+     * <li>
+     * CODE_RENAME - We use the {@code ContentResolver cr} to resolve and rename the {@code Uri uri}
+     * selected by the user to "MEOW.TEST", then use the {@code Uri newUri} returned from this operation
+     * to open an {@code InputStream is} for this renamed file which we attempt to read using our
+     * method {@code readFullyNoClose}, displaying only the number of bytes read if this is successful.
      * </li>
      * </ul>
      *
@@ -671,19 +686,49 @@ public class DocumentsSample extends Activity {
         }
     }
 
+    /**
+     * Sets the text of {@code TextView mResult} to null
+     */
     private void clearLog() {
         mResult.setText(null);
     }
 
+    /**
+     * Displays the {@code String msg} in {@code TextView mResult}. We just call our method
+     * {@code log(String msg, Throwable t)} with null for {@code t}.
+     *
+     * @param msg String to display in {@code TextView mResult}
+     */
     private void log(String msg) {
         log(msg, null);
     }
 
+    /**
+     * Calls {@code Log.d} to log our parameters, and also displays the {@code String msg} in
+     * {@code TextView mResult}.
+     *
+     * @param msg String to {@code Log.d} and display in {@code TextView mResult}
+     * @param t   An exception to log
+     */
     private void log(String msg, Throwable t) {
         Log.d(TAG, msg, t);
         mResult.setText(mResult.getText() + "\n" + msg);
     }
 
+    /**
+     * Reads the entire contents of the parameter {@code InputStream in} into a {@code ByteArrayOutputStream}
+     * then converts that to a {@code byte[]} array which it returns. First we create a new instance
+     * of {@code ByteArrayOutputStream bytes}, allocate 1024 bytes for {@code byte[] buffer}, and
+     * declare the variable {@code int count}. Then while the {@code count} of bytes read from our
+     * parameter {@code InputStream in} into {@code buffer} is not -1, we write those {@code count}
+     * bytes to {@code bytes}. When end of file is reached we return a newly allocated byte array
+     * created from the content of {@code bytes}.
+     *
+     * @param in {@code InputStream} to read
+     * @return a {@code byte[]} array of the data read
+     * @throws IOException if first byte cannot be read for any reason other than the end of the file,
+     *                     if the input stream has been closed, or if some other I/O error occurs.
+     */
     public static byte[] readFullyNoClose(InputStream in) throws IOException {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
@@ -694,6 +739,14 @@ public class DocumentsSample extends Activity {
         return bytes.toByteArray();
     }
 
+    /**
+     * Closes the Stream (input or output) passed to it, ignoring any Exception thrown (except for
+     * RuntimeException, which it re-throws). If our parameter is not null we attempt to close our
+     * parameter {@code AutoCloseable closeable}. This is wrapped in a try block which catches then
+     * rethrows RuntimeException, but ignores all other Exception's.
+     *
+     * @param closeable stream to close ({@code InputStream} or {@code OutputStream}
+     */
     public static void closeQuietly(AutoCloseable closeable) {
         if (closeable != null) {
             try {

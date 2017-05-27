@@ -45,31 +45,62 @@ import java.io.OutputStream;
 
 
 /**
-* Demonstration of styled text resources.
+* Shows how to use the external storage directory api for both public and app private directories.
 */
 public class ExternalStorage extends Activity {
+    /**
+     * The {@code LinearLayout} R.id.layout inside of our layout file R.layout.external_storage into
+     * which we add the three "storage controls" (inflated and configured instances of the layout file
+     * R.layout.external_storage_item) which we use to exercise the external storage directory api.
+     */
     ViewGroup mLayout;
 
+    /**
+     * Class which is used to hold references to the three important Views (the root view itself, and
+     * the two control {@code Button}'s: CREATE and DELETE) contained in each of our three "storage
+     * controls": {@code mExternalStoragePublicPicture}, {@code mExternalStoragePrivatePicture} and
+     * {@code mExternalStoragePrivateFile}.
+     */
     static class Item {
         View mRoot;
         Button mCreate;
         Button mDelete;
     }
 
+    /**
+     * Storage control used to create and delete a picture in the DIRECTORY_PICTURES of the public
+     * storage of the device.
+     */
     Item mExternalStoragePublicPicture;
+    /**
+     * Storage control used to create and delete a picture in the DIRECTORY_PICTURES of the private
+     * storage of the device (internal to the application, and not visible to the user).
+     */
     Item mExternalStoragePrivatePicture;
+    /**
+     * Storage control used to create and delete a picture in the root directory of the private
+     * storage of the device (internal to the application, and not visible to the user).
+     */
     Item mExternalStoragePrivateFile;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to R.layout.external_storage (our layout file).
+     * We initialize our field {@code ViewGroup mLayout} by locating the {@code LinearLayout} in our
+     * UI with ID R.id.layout (this is {@code ViewGroup} into which we will place our three "storage
+     * controls").
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.external_storage);
         mLayout = (ViewGroup)findViewById(R.id.layout);
+
         mExternalStoragePublicPicture = createStorageControls(
                 "Picture: getExternalStoragePublicDirectory",
-                Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES),
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
                 new View.OnClickListener() {
                     public void onClick(View v) {
                         createExternalStoragePublicPicture();
@@ -83,6 +114,7 @@ public class ExternalStorage extends Activity {
                     }
                 });
         mLayout.addView(mExternalStoragePublicPicture.mRoot);
+
         mExternalStoragePrivatePicture = createStorageControls(
                 "Picture getExternalFilesDir",
                 getExternalFilesDir(Environment.DIRECTORY_PICTURES),
@@ -99,6 +131,7 @@ public class ExternalStorage extends Activity {
                     }
                 });
         mLayout.addView(mExternalStoragePrivatePicture.mRoot);
+
         mExternalStoragePrivateFile = createStorageControls(
                 "File getExternalFilesDir",
                 getExternalFilesDir(null),
