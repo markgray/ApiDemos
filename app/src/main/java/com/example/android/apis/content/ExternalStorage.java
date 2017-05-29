@@ -215,7 +215,17 @@ public class ExternalStorage extends Activity {
     /**
      * We are called only from our method {@code updateExternalStorageState} to update the state of
      * the {@code Button}'s in our three "storage controls" to be enabled or disabled based on the
-     * state of the storage system. 
+     * state of the storage system. First we call our method {@code hasExternalStoragePublicPicture}
+     * which checks to see if the file we want to write to in the external storage public picture
+     * directory already exists and returns true if it does to set {@code boolean has}. Then we
+     * enable the "CREATE" Button of the "Picture getExternalPublicDirectory" controls if the file
+     * system is {@code writeable} and there is no picture already there ({@code !has}), and then
+     * we enable the "DELETE" Button if the file system is {@code writeable} and there <b>is</b> a
+     * picture already there.
+     * <p>
+     * We do much the same thing for the other two "storage controls", except for them we set
+     * {@code boolean has} by calling the methods {@code hasExternalStoragePrivatePicture} and
+     * {@code hasExternalStoragePrivateFile} respectively.
      *
      * @param available Unused
      * @param writeable True if we have permission to write to external storage ie. the system method
@@ -233,8 +243,17 @@ public class ExternalStorage extends Activity {
         mExternalStoragePrivateFile.mDelete.setEnabled(writeable && has);
     }
 
-
+    /**
+     * {@code BroadcastReceiver} for the actions ACTION_MEDIA_MOUNTED, and ACTION_MEDIA_REMOVED, it
+     * just calls our method {@code updateExternalStorageState}
+     */
     BroadcastReceiver mExternalStorageReceiver;
+    /**
+     * Set to true in our method {@code updateExternalStorageState} if the current state of the
+     * primary shared/external storage media returned by {@code getExternalStorageState} is either
+     * MEDIA_MOUNTED or MEDIA_MOUNTED_READ_ONLY. (Otherwise false). Used only as the argument to a
+     * call to our method {@code handleExternalStorageState}
+     */
     boolean mExternalStorageAvailable = false;
     boolean mExternalStorageWriteable = false;
 
