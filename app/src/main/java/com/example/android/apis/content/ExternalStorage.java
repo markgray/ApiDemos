@@ -249,14 +249,27 @@ public class ExternalStorage extends Activity {
      */
     BroadcastReceiver mExternalStorageReceiver;
     /**
-     * Set to true in our method {@code updateExternalStorageState} if the current state of the
-     * primary shared/external storage media returned by {@code getExternalStorageState} is either
-     * MEDIA_MOUNTED or MEDIA_MOUNTED_READ_ONLY. (Otherwise false). Used only as the argument to a
-     * call to our method {@code handleExternalStorageState}
+     * External storage is present (but not necessarily writeable). Set to true in our method
+     * {@code updateExternalStorageState} if the current state of the primary shared/external
+     * storage media returned by {@code getExternalStorageState} is either MEDIA_MOUNTED or
+     * MEDIA_MOUNTED_READ_ONLY. (Otherwise false). Used only as the argument to a call to our
+     * method {@code handleExternalStorageState}
      */
     boolean mExternalStorageAvailable = false;
+    /**
+     * External storage is present and writeable. Set to true in our method
+     * {@code updateExternalStorageState} if the current state of the primary shared/external
+     * storage media returned by {@code getExternalStorageState} is MEDIA_MOUNTED. (Otherwise
+     * false). Used only as the argument to a call to our method {@code handleExternalStorageState}
+     */
     boolean mExternalStorageWriteable = false;
 
+    /**
+     * Queries the current state of the primary shared/external storage media, setting our fields
+     * {@code boolean mExternalStorageAvailable}, and {@code boolean mExternalStorageWriteable} to
+     * reflect that state and then calling our method {@code handleExternalStorageState} to update
+     * the enabled/disabled state of the three "storage controls" in our UI.
+     */
     void updateExternalStorageState() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -270,6 +283,15 @@ public class ExternalStorage extends Activity {
         handleExternalStorageState(mExternalStorageAvailable, mExternalStorageWriteable);
     }
 
+    /**
+     * Called from {@code onCreate}, we initialize our field {@code BroadcastReceiver mExternalStorageReceiver}
+     * with an anonymous class whose {@code onReceive} override calls our method {@code updateExternalStorageState}
+     * whenever it receives a broadcast intent. We create an {@code IntentFilter filter}, add the actions
+     * ACTION_MEDIA_MOUNTED, and ACTION_MEDIA_REMOVED to {@code filter} and then register {@code mExternalStorageReceiver}
+     * to be run in the main activity thread and called with any broadcast Intent that matches {@code filter}.
+     * Finally we call our method {@code updateExternalStorageState} to update the enabled/disabled state
+     * of our "storage controls" Buttons based on the state of the external storage.
+     */
     void startWatchingExternalStorage() {
         mExternalStorageReceiver = new BroadcastReceiver() {
             @Override
@@ -285,17 +307,41 @@ public class ExternalStorage extends Activity {
         updateExternalStorageState();
     }
 
+    /**
+     * Called from our {@code onDestroy} override as part of the cleanup before our activity is
+     * destroyed, we just unregister our previously registered {@code BroadcastReceiver mExternalStorageReceiver}.
+     * All filters that have been registered for this {@code BroadcastReceiver} will be removed.
+     */
     void stopWatchingExternalStorage() {
         unregisterReceiver(mExternalStorageReceiver);
     }
 
-
+    /**
+     * Called when the "CREATE" Button of the "Picture: getExternalStoragePublicDirectory" "storage
+     * control" is clicked, it creates a "DemoPicture.jpg" in the standard directory in which to
+     * place pictures that are available to the user: DIRECTORY_PICTURES. First we set {@code File path}
+     * to the top-level shared/external storage directory for placing files of the type DIRECTORY_PICTURES
+     * (/storage/emulated/0/Pictures on my Nexus 6). Then we create a {@code File file} using {@code path}
+     * as the directory path, and "DemoPicture.jpg" as the name of the file.
+     * <p>
+     * Next, wrapped in a try block intended to catch IOException we use {@code path}'s method {@code mkdirs()}
+     * to create the directory named by this abstract pathname (if necessary), including any necessary
+     * but nonexistent parent directories. Then we create {@code InputStream is} opening a data stream for
+     * reading the raw resource R.raw.balloons located in our apk. Now we create {@code OutputStream os},
+     * a file output stream to write to the file represented by the specified {@code File file} object,
+     * allocate {@code byte[] data} to have room for the number of bytes that can be read that can be read
+     * from {@code is}, read all of {@code is} into {@code data}, write all of {@code data} to {@code os}
+     * and then close both {@code is} and {@code os}.
+     * <p>
+     * Finally we call {@code MediaScannerConnection.scanFile} to Tell the media scanner about the
+     * new file so that it is immediately available to the user.
+     */
     void createExternalStoragePublicPicture() {
         // Create a path where we will place our picture in the user's
         // public pictures directory.  Note that you should be careful about
         // what you place here, since the user often manages these files.  For
         // pictures and other media owned by the application, consider
-        // Context.getExternalMediaDir().
+        // Context.getExternalMediaDirs().
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File file = new File(path, "DemoPicture.jpg");
 
@@ -323,6 +369,17 @@ public class ExternalStorage extends Activity {
             MediaScannerConnection.scanFile(this,
                     new String[]{file.toString()}, null,
                     new MediaScannerConnection.OnScanCompletedListener() {
+                        /**
+                         * Called to notify the client when the media scanner has finished
+                         * scanning a file. We simply log the information contained in our
+                         * parameters.
+                         *
+                         * @param path the path to the file that has been scanned.
+                         * @param uri  the Uri for the file if the scanning operation succeeded
+                         *             and the file was added to the media database, or null if
+                         *             scanning failed.
+                         */
+                        @Override
                         public void onScanCompleted(String path, Uri uri) {
                             Log.i("ExternalStorage", "Scanned " + path + ":");
                             Log.i("ExternalStorage", "-> uri=" + uri);
