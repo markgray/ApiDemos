@@ -16,23 +16,22 @@
 
 package com.example.android.apis.content;
 
-import com.example.android.apis.R;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.android.apis.R;
 
 /**
  * Simple example of using an UndoManager for editing text in a TextView.
  */
+@SuppressLint("SetTextI18n")
 public class TextUndoActivity extends Activity {
     // Characters allowed as input in the credit card field.
     private static final String CREDIT_CARD_CHARS = "0123456789 ";
@@ -48,19 +47,19 @@ public class TextUndoActivity extends Activity {
         setContentView(R.layout.text_undo);
 
         mDefaultText = (EditText) findViewById(R.id.default_text);
-        ((Button) findViewById(R.id.set_text)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.set_text).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDefaultText.setText("some text");
             }
         });
-        ((Button) findViewById(R.id.append_text)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.append_text).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDefaultText.append(" append");
             }
         });
-        ((Button) findViewById(R.id.insert_text)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.insert_text).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Editable editable = mDefaultText.getText();

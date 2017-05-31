@@ -956,6 +956,12 @@ Content
             Shows how to use the external storage directory api for both public and 
             app private directories.
 
+  Undo
+    Content/Undo
+        .content.TextUndoActivity
+            Simple example of using an UndoManager for editing text in a TextView.
+
+
 Graphics
   AlphaBitmap
     Graphics/AlphaBitmap                   all

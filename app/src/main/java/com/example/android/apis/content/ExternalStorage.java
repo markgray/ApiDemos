@@ -19,9 +19,6 @@ package com.example.android.apis.content;
 //Need the following import to get access to the app resources, since this
 //class is in a sub-package.
 
-import com.example.android.apis.R;
-
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -37,6 +34,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.android.apis.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -392,6 +391,15 @@ public class ExternalStorage extends Activity {
         }
     }
 
+    /**
+     * Called when the "DELETE" Button of the "Picture: getExternalStoragePublicDirectory" "storage
+     * control" is clicked, it deletes "DemoPicture.jpg" from the standard directory in which to
+     * place pictures that are available to the user: DIRECTORY_PICTURES. First we set {@code File path}
+     * to the top-level shared/external storage directory for placing files of the type DIRECTORY_PICTURES
+     * (/storage/emulated/0/Pictures on my Nexus 6). Then we create a {@code File file} using {@code path}
+     * as the directory path, and "DemoPicture.jpg" as the name of the file. Finally we delete the file
+     * denoted by the pathname {@code File file}.
+     */
     void deleteExternalStoragePublicPicture() {
         // Create a path where we will place our picture in the user's
         // public pictures directory and delete the file.  If external
@@ -402,6 +410,18 @@ public class ExternalStorage extends Activity {
         file.delete();
     }
 
+    /**
+     * Called from our {@code handleExternalStorageState} method to determine whether the file we want
+     * our "Picture: getExternalStoragePublicDirectory" storage control "CREATE" Button to create
+     * already exists, and if so the "CREATE" Button will be disabled and the "DELETE" Button enabled.
+     * First we set {@code File path} to the top-level shared/external storage directory for placing
+     * files of the type DIRECTORY_PICTURES (/storage/emulated/0/Pictures on my Nexus 6). Then we
+     * create a {@code File file} using {@code path} as the directory path, and "DemoPicture.jpg"
+     * as the name of the file. Finally we return true if and only if the file or directory denoted
+     * by abstract pathname {@code file} exists; false otherwise.
+     *
+     * @return true if the file "DemoPicture.jpg" exists already in the user's public pictures directory
+     */
     boolean hasExternalStoragePublicPicture() {
         // Create a path where we will place our picture in the user's
         // public pictures directory and check if the file exists.  If
@@ -412,7 +432,28 @@ public class ExternalStorage extends Activity {
         return file.exists();
     }
 
-
+    /**
+     * Called when the "CREATE" Button of the "Picture getExternalFilesDir" storage control is clicked,
+     * it creates a "DemoPicture.jpg" in the directory where the application can place persistent files
+     * of type DIRECTORY_PICTURES that it owns. These files are internal to the application.
+     * First we set {@code File path} to the path to the directory on the primary shared/external
+     * storage device where the application can place persistent files it owns of type DIRECTORY_PICTURES
+     * ("/storage/emulated/0/Android/data/com.example.android.apis/files/Pictures" on my Nexus 6).
+     * Then we create a {@code File file} using {@code path} as the directory path, and "DemoPicture.jpg"
+     * as the name of the file.
+     * <p>
+     * Next, wrapped in a try block intended to catch IOException we use {@code path}'s method {@code mkdirs()}
+     * to create the directory named by this abstract pathname (if necessary), including any necessary
+     * but nonexistent parent directories. Then we create {@code InputStream is} opening a data stream for
+     * reading the raw resource R.raw.balloons located in our apk. Now we create {@code OutputStream os},
+     * a file output stream to write to the file represented by the specified {@code File file} object,
+     * allocate {@code byte[] data} to have room for the number of bytes that can be read that can be read
+     * from {@code is}, read all of {@code is} into {@code data}, write all of {@code data} to {@code os}
+     * and then close both {@code is} and {@code os}.
+     * <p>
+     * Finally we call {@code MediaScannerConnection.scanFile} to Tell the media scanner about the
+     * new file so that it is immediately available to the user.
+     */
     void createExternalStoragePrivatePicture() {
         // Create a path where we will place our picture in our own private
         // pictures directory.  Note that we don't really need to place a
@@ -443,6 +484,17 @@ public class ExternalStorage extends Activity {
             MediaScannerConnection.scanFile(this,
                     new String[]{file.toString()}, null,
                     new MediaScannerConnection.OnScanCompletedListener() {
+                        /**
+                         * Called to notify the client when the media scanner has finished
+                         * scanning a file. We simply log the information contained in our
+                         * parameters.
+                         *
+                         * @param path the path to the file that has been scanned.
+                         * @param uri  the Uri for the file if the scanning operation succeeded
+                         *             and the file was added to the media database, or null if
+                         *             scanning failed.
+                         */
+                        @Override
                         public void onScanCompleted(String path, Uri uri) {
                             Log.i("ExternalStorage", "Scanned " + path + ":");
                             Log.i("ExternalStorage", "-> uri=" + uri);
@@ -455,6 +507,15 @@ public class ExternalStorage extends Activity {
         }
     }
 
+    /**
+     * Called when the "DELETE" Button of the "Picture getExternalFilesDir" storage control is clicked,
+     * it deletes "DemoPicture.jpg" from the directory where the application can place persistent files
+     * of type DIRECTORY_PICTURES that it owns. First we set {@code File path} to the path to the
+     * directory where the application can place persistent files it owns of type DIRECTORY_PICTURES
+     * ("/storage/emulated/0/Android/data/com.example.android.apis/files/Pictures" on my Nexus 6).
+     * Then we create a {@code File file} using {@code path} as the directory path, and "DemoPicture.jpg"
+     * as the name of the file. Finally we delete the file denoted by the pathname {@code File file}.
+     */
     void deleteExternalStoragePrivatePicture() {
         // Create a path where we will place our picture in the user's
         // public pictures directory and delete the file.  If external
@@ -467,6 +528,19 @@ public class ExternalStorage extends Activity {
         }
     }
 
+    /**
+     * Called from our {@code handleExternalStorageState} method to determine whether the file we want
+     * our "Picture getExternalFilesDir" storage control "CREATE" Button to create already exists, and
+     * if so the "CREATE" Button will be disabled and the "DELETE" Button enabled. First we set
+     * {@code File path} the directory where the application can place persistent files it owns of
+     * type DIRECTORY_PICTURES ("/storage/emulated/0/Android/data/com.example.android.apis/files/Pictures"
+     * on my Nexus 6). Then we create a {@code File file} using {@code path} as the directory path, and
+     * "DemoPicture.jpg" as the name of the file. Finally we return true if and only if the file or directory
+     * denoted by abstract pathname {@code file} exists; false otherwise.
+     *
+     * @return true if the file "DemoPicture.jpg" exists already in the applications persistent directory
+     * for files of type DIRECTORY_PICTURES
+     */
     boolean hasExternalStoragePrivatePicture() {
         // Create a path where we will place our picture in the user's
         // public pictures directory and check if the file exists.  If
@@ -480,7 +554,23 @@ public class ExternalStorage extends Activity {
         return false;
     }
 
-
+    /**
+     * Called when the "CREATE" Button of the "File getExternalFilesDir" storage control is clicked,
+     * it creates a "DemoPicture.jpg" in the base directory where the application can place persistent
+     * files that it owns. These files are internal to the application. First we create a
+     * {@code File file} using the absolute path to the directory on the primary shared/external
+     * storage device where the application can place persistent files it owns as the directory path,
+     * ("/storage/emulated/0/Android/data/com.example.android.apis/files" on my Nexus 6) and
+     * "DemoPicture.jpg" as the name of the file.
+     * <p>
+     * Next, wrapped in a try block intended to catch IOException, we create {@code InputStream is}
+     * opening a data stream for reading the raw resource R.raw.balloons located in our apk. Now we
+     * create {@code OutputStream os}, a file output stream to write to the file represented by the
+     * specified {@code File file} object, allocate {@code byte[] data} to have room for the number
+     * of bytes that can be read that can be read from {@code is}, read all of {@code is} into
+     * {@code data}, write all of {@code data} to {@code os} and then close both {@code is} and
+     * {@code os}.
+     */
     void createExternalStoragePrivateFile() {
         // Create a path where we will place our private file on external
         // storage.
@@ -507,6 +597,15 @@ public class ExternalStorage extends Activity {
         }
     }
 
+    /**
+     * Called when the "DELETE" Button of the "File getExternalFilesDir" storage control is clicked,
+     * it deletes "DemoPicture.jpg" from the directory where the application can place persistent files
+     * that it owns. First we create a {@code File file} using the absolute path to the directory on
+     * the primary shared/external storage device where the application can place persistent files it
+     * owns as the directory path, ("/storage/emulated/0/Android/data/com.example.android.apis/files"
+     * on my Nexus 6) and "DemoPicture.jpg" as the name of the file. Finally we delete the file denoted
+     * by the pathname {@code File file}.
+     */
     void deleteExternalStoragePrivateFile() {
         // Get path for the file on external storage.  If external
         // storage is not currently mounted this will fail.
@@ -518,6 +617,19 @@ public class ExternalStorage extends Activity {
         }
     }
 
+    /**
+     * Called from our {@code handleExternalStorageState} method to determine whether the file we want
+     * our "File getExternalFilesDir" storage control "CREATE" Button to create already exists, and
+     * if so the "CREATE" Button will be disabled and the "DELETE" Button enabled. First we create a
+     * {@code File file} using the absolute path to the directory on the primary shared/external storage
+     * device where the application can place persistent files it owns as the directory path,
+     * ("/storage/emulated/0/Android/data/com.example.android.apis/files" on my Nexus 6) and
+     * "DemoPicture.jpg" as the name of the file. Finally we return true if and only if the file or
+     * directory denoted by abstract pathname {@code file} exists; false otherwise.
+     *
+     * @return true if the file "DemoPicture.jpg" exists already in the applications persistent directory
+     * for files
+     */
     boolean hasExternalStoragePrivateFile() {
         // Get path for the file on external storage.  If external
         // storage is not currently mounted this will fail.
@@ -529,14 +641,36 @@ public class ExternalStorage extends Activity {
         return false;
     }
 
-
-    @SuppressLint("InflateParams")
+    /**
+     * Inflates the layout file R.layout.external_storage_item, configures that {@code View}, then
+     * creates and returns an {@code Item} instance containing references to the important {@code View}'s
+     * in that {@code View}. First we fetch a handle to the system level service LAYOUT_INFLATER_SERVICE
+     * to initialize {@code LayoutInflater inflater}. We create a new instance of {@code Item item},
+     * and set its field {@code mRoot} to the {@code View} that results when we inflate the layout file
+     * R.layout.external_storage_item. We locate the {@code TextView tv} with ID R.id.label in the {@code View}
+     * {@code item.mRoot} and set its text to our parameter {@code CharSequence label}, and if {@code path}
+     * is not null, we locate the {@code TextView} with ID R.id.path and set its text to the pathname string
+     * of our parameter {@code File path}. We set the field {@code item.mCreate} to the Button with ID
+     * R.id.create, and set its {@code OnClickListener} to our parameter {@code View.OnClickListener createClick}.
+     * We set the field {@code item.mDelete} to the Button with ID R.id.delete, and set its {@code OnClickListener}
+     * to our parameter {@code View.OnClickListener deleteClick}. Finally we return {@code Item item} to the
+     * caller.
+     *
+     * @param label       String to use for the label of the R.id.label {@code TextView} of the layout
+     * @param path        File to convert to a String to display in the R.id.path {@code TextView} of the layout
+     * @param createClick {@code OnClickListener} for the "CREATE" Button
+     * @param deleteClick {@code OnClickListener} for the "DELETE" Button
+     * @return An {@code Item} instance containing references to the {@code View} inflated from the
+     * layout file R.layout.external_storage_item (field {@code mRoot}), the "CREATE" Button R.id.create
+     * in the View {@code mRoot} (field {@code mCreate}), and the "DELETE" Button R.id.delete in the View
+     * {@code mRoot} (field {@code mDelete}).
+     */
     Item createStorageControls(CharSequence label, File path,
                                View.OnClickListener createClick,
                                View.OnClickListener deleteClick) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         Item item = new Item();
-        item.mRoot = inflater.inflate(R.layout.external_storage_item, null);
+        item.mRoot = inflater.inflate(R.layout.external_storage_item, mLayout, false);
         TextView tv = (TextView) item.mRoot.findViewById(R.id.label);
         tv.setText(label);
         if (path != null) {
