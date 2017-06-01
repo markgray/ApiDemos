@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2013 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2013 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -17,96 +16,117 @@
 <!-- Demonstrates undo/redo behavior on a text field. -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
-    <LinearLayout android:orientation="vertical" android:padding="4dip"
-        android:layout_width="match_parent" android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-        <TextView android:id="@+id/default_edit_msg"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:layout_weight="0" android:textAppearance="?android:attr/textAppearanceMedium"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="4dip">
+
+        <TextView
+            android:id="@+id/default_edit_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
             android:paddingBottom="8dip"
-            android:text="@string/text_undo_default_edit_msg" />
+            android:text="@string/text_undo_default_edit_msg"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <EditText android:id="@+id/default_text"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
+        <EditText
+            android:id="@+id/default_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:freezesText="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:freezesText="true">
-        </EditText>
+            tools:ignore="TextFields" />
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:orientation="horizontal"
             android:paddingTop="8dip">
+
             <Button
                 android:id="@+id/set_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/text_undo_set_text"
-                android:layout_gravity="bottom" />                
+                android:layout_gravity="bottom"
+                android:text="@string/text_undo_set_text" />
+
             <Button
                 android:id="@+id/append_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/text_undo_append_text"
-                android:layout_gravity="bottom" />
+                android:layout_gravity="bottom"
+                android:text="@string/text_undo_append_text" />
+
             <Button
                 android:id="@+id/insert_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/text_undo_insert_text"
-                android:layout_gravity="bottom" />
+                android:layout_gravity="bottom"
+                android:text="@string/text_undo_insert_text" />
         </LinearLayout>
 
-        <TextView android:id="@+id/undo_disabled_msg"
+        <TextView
+            android:id="@+id/undo_disabled_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:paddingBottom="8dip"
-            android:text="@string/text_undo_undo_disabled_msg" />
+            android:text="@string/text_undo_undo_disabled_msg"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <EditText android:id="@+id/undo_disabled_text"
+        <EditText
+            android:id="@+id/undo_disabled_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:allowUndo="false"
             android:freezesText="true"
-            android:allowUndo="false">
-        </EditText>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            tools:ignore="TextFields"
+            tools:targetApi="m" />
 
-        <TextView android:id="@+id/length_limit_msg"
+        <TextView
+            android:id="@+id/length_limit_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:paddingBottom="8dip"
-            android:text="@string/text_undo_length_limit_msg" />
+            android:text="@string/text_undo_length_limit_msg"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <EditText android:id="@+id/length_limit_text"
+        <EditText
+            android:id="@+id/length_limit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:freezesText="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:freezesText="true">
-        </EditText>
+            tools:ignore="TextFields" />
 
-        <TextView android:id="@+id/credit_card_msg"
+        <TextView
+            android:id="@+id/credit_card_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:paddingBottom="8dip"
-            android:text="@string/text_undo_credit_card_msg" />
+            android:text="@string/text_undo_credit_card_msg"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <EditText android:id="@+id/credit_card_text"
+        <EditText
+            android:id="@+id/credit_card_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:freezesText="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:freezesText="true">
-        </EditText>
+            tools:ignore="TextFields" />
 
     </LinearLayout>
 </ScrollView>

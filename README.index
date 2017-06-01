@@ -957,10 +957,9 @@ Content
             app private directories.
 
   Undo
-    Content/Undo
+    Content/Undo                           android:allowUndo="false" requires v23 ("m")
         .content.TextUndoActivity
             Simple example of using an UndoManager for editing text in a TextView.
-
 
 Graphics
   AlphaBitmap
