@@ -21,6 +21,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * Wrapper around {@code Activity} which optionally places the {@code View} that is passed to
+ * {@code setContentView} from the {@code onCreate} override in a class that extends this class
+ * inside an instance of {@code PictureLayout} if TEST_PICTURE is true. {@code PictureLayout} is
+ * a {@code ViewGroup} which displays its one and only child in the four corners of the display.
+ */
 class GraphicsActivity extends Activity {
     // set to true to test Picture
     private static final boolean TEST_PICTURE = false;

@@ -163,7 +163,7 @@ public class TextUndoActivity extends Activity {
          * this callback, but be careful not to get yourself into an infinite
          * loop, because any changes you make will cause this method to be
          * called again recursively.
-         *
+         * <p>
          * First we set {@code String original} to the String version of {@code Editable s}. Then we
          * use our method {@code getNumbers} to extract only the numbers from {@code original} and
          * pass this {@code CharSequence} to our method {@code addSpaces} to place a space character
@@ -210,6 +210,13 @@ public class TextUndoActivity extends Activity {
         }
 
         /**
+         * Returns a String consisting only of the digits contained in its input parameter. First we
+         * create a {@code StringBuilder sb} with an initial capacity of 16 characters. Then starting
+         * from character 0, for the length of our input parameter {@code CharSequence cc} we fetch
+         * {@code char c} from the next character in {@code cc} and if our method {@code isNumber}
+         * determines that it is a digit, we append {@code c} to {@code sb}. Finally we return a
+         * string representing the data in {@code StringBuilder sb}.
+         *
          * @return Returns a string containing only the digits from a character sequence.
          */
         private static String getNumbers(CharSequence cc) {
@@ -223,6 +230,12 @@ public class TextUndoActivity extends Activity {
             return sb.toString();
         }
 
+        /**
+         * Returns true if the {@code char c} lies in the range of characters 0-9, false otherwise.
+         *
+         * @param c character to check wheter it is a digit or not
+         * @return true if the {@code char c} lies in the range of characters 0-9, false otherwise
+         */
         private static boolean isNumber(char c) {
             return c >= '0' && c <= '9';
         }

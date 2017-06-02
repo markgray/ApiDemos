@@ -16,6 +16,8 @@
 
 package com.example.android.apis.os;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.telephony.SmsManager;
 
 /**
@@ -28,6 +30,7 @@ public class PduParserUtil {
      *
      * @return true if supported, false otherwise
      */
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static boolean shouldParseContentDisposition() {
         return SmsManager
                 .getDefault()
