@@ -89,16 +89,47 @@ public class AlphaBitmap extends GraphicsActivity {
          * using {@code Canvas.drawCircle} and {@code Canvas.drawText}.
          */
         private Bitmap mBitmap3;
+        /**
+         * {@code LinearGradient} {@code Shader} used to draw {@code mBitmap3}
+         */
         private Shader mShader;
+        /**
+         * {@code Paint} instance used in call to {@code drawBitmap} for all the Bitmaps
+         */
         private Paint p;
 
+        /**
+         * Draws a circle and text into the {@code Bitmap} it is passed. We fetch the width of our
+         * {@code Bitmap bm} to {@code float x}, and the height to {@code float y}. We construct a
+         * {@code Canvas c} that will use {@code bm} to draw into, and allocate a new instance of
+         * {@code Paint p}.
+         * <p>
+         * We set the ANTI_ALIAS_FLAG of {@code Paint p} to true, and set the alpha component of the
+         * paint's color to 0x80 (1/2) and draw a circle into the {@code Canvas c} centered in the
+         * middle with radius of half the width of the {@code Bitmap bm} using {@code p} as the
+         * {@code Paint}.
+         * <p>
+         * Then we set the alpha component of {@code p} to 0x30, set the xfermode object of {@code p}
+         * to the porter-duff mode SRC ([Sa, Sc] -- source alpha, and source color, the source pixels
+         * replace the destination pixels.)
+         * See: https://developer.android.com/reference/android/graphics/PorterDuff.Mode.html
+         * Then we set the text size of {@code p} to 60, paint's text alignment to CENTER. Next we
+         * use {@code Paint p} to allocate a new {@code FontMetrics} object for {@code Paint.FontMetrics fm},
+         * getFontMetrics(fm) is called by this version of the constructor, which returns the font's recommended
+         * interline spacing to {@code fm}, given the Paint's settings for typeface, textSize, etc. We use {@code fm.ascent}
+         * (the recommended distance above the baseline for singled spaced text) to calculate how far
+         * down we have to move our {@code y} in order to center the text in the {@code Bitmap bm} when
+         * we call {@code Canvas.drawText} to write the string "Alpha" using the {@code Paint p}.
+         *
+         * @param bm mutable {@code Bitmap} whose {@code Canvas} we want to draw into
+         */
         private static void drawIntoBitmap(Bitmap bm) {
             float x = bm.getWidth();
             float y = bm.getHeight();
             Canvas c = new Canvas(bm);
             Paint p = new Paint();
-            p.setAntiAlias(true);
 
+            p.setAntiAlias(true);
             p.setAlpha(0x80);
             c.drawCircle(x / 2, y / 2, x / 2, p);
 
@@ -110,22 +141,50 @@ public class AlphaBitmap extends GraphicsActivity {
             c.drawText("Alpha", x / 2, (y - fm.ascent) / 2, p);
         }
 
+        /**
+         * Initializes the fields contained in this instance of {@code SampleView}. First we call
+         * through to our super's constructor, then we set our {@code View} to be focusable. We
+         * initialize our field {@code Shader mShader} to be a {@code LinearGradient} shader that
+         * draws a linear gradient along the line {@code (0,0)->(100,70)}, using the colors RED,
+         * GREEN, and BLUE distributed evenly along the gradient line, using the tile mode MIRROR
+         * (repeating the shader's image horizontally and vertically, alternating mirror images so
+         * that adjacent images always seam). We initialize our field {@code Paint p} with a new
+         * instance.
+         *
+         * Next we open {@code InputStream is} to read our raw resource file R.raw.app_sample_code,
+         * and use {@code BitmapFactory.decodeStream} to read and decode {@code is} into our field
+         * {@code Bitmap mBitmap}. We extract only the Alpha channel from {@code mBitmap} to initialize
+         * our field {@code Bitmap mBitmap2}.
+         *
+         * Now we create an empty 200x200 {@code Bitmap} using Bitmap.Config.ALPHA_8 as the
+         * {@code Bitmap.Config} (Each pixel is stored as a single translucency (alpha) channel.
+         * no color information is stored. With this configuration, each pixel requires 1 byte of
+         * memory), and set our field {@code Bitmap mBitmap3} to it, Finally we call our method
+         * {@code drawIntoBitmap} to use {@code mBitmap3} for the canvas to draw its circle and text
+         * into.
+         *
+         * @param context {@code Context} to use to fetch resources
+         */
         public SampleView(Context context) {
             super(context);
             setFocusable(true);
+            mShader = new LinearGradient(0, 0, 100, 70, new int[]{
+                    Color.RED, Color.GREEN, Color.BLUE},
+                    null, Shader.TileMode.MIRROR);
+            p = new Paint();
 
             InputStream is = context.getResources().openRawResource(R.raw.app_sample_code);
             mBitmap = BitmapFactory.decodeStream(is);
             mBitmap2 = mBitmap.extractAlpha();
             mBitmap3 = Bitmap.createBitmap(200, 200, Bitmap.Config.ALPHA_8);
             drawIntoBitmap(mBitmap3);
-
-            mShader = new LinearGradient(0, 0, 100, 70, new int[]{
-                    Color.RED, Color.GREEN, Color.BLUE},
-                    null, Shader.TileMode.MIRROR);
-            p = new Paint();
         }
 
+        /**
+         * Implement this to do your drawing.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.WHITE);
