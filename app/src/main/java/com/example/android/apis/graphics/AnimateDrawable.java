@@ -18,10 +18,18 @@ package com.example.android.apis.graphics;
 
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
 
+/**
+ * Used by the {@code AnimateDrawables} demo which:
+ * Shows how to use the Animation api (in this case TranslateAnimation) in order  to move a jpg
+ * around a Canvas. Uses AnimateDrawable which extends ProxyDrawable (A neat way to package the
+ * methods required when extending Drawable, overriding only draw in AnimateDrawable)
+ */
+@SuppressWarnings("WeakerAccess")
 public class AnimateDrawable extends ProxyDrawable {
 
     private Animation mAnimation;
@@ -56,15 +64,15 @@ public class AnimateDrawable extends ProxyDrawable {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(@NonNull Canvas canvas) {
         Drawable dr = getProxy();
         if (dr != null) {
             int sc = canvas.save();
             Animation anim = mAnimation;
             if (anim != null) {
                 anim.getTransformation(
-                                    AnimationUtils.currentAnimationTimeMillis(),
-                                    mTransformation);
+                        AnimationUtils.currentAnimationTimeMillis(),
+                        mTransformation);
                 canvas.concat(mTransformation.getMatrix());
             }
             dr.draw(canvas);

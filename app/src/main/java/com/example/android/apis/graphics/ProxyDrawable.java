@@ -20,7 +20,14 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 
+/**
+ * Only used by {@code AnimateDrawable}, which extends us. We implement all the methods required by
+ * the {@code Drawable} abstract class, allowing a subclass to only override the methods it needs
+ * to customize.
+ */
+@SuppressWarnings("WeakerAccess")
 public class ProxyDrawable extends Drawable {
 
     private Drawable mProxy;
@@ -42,7 +49,7 @@ public class ProxyDrawable extends Drawable {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(@NonNull Canvas canvas) {
         if (mProxy != null) {
             mProxy.draw(canvas);
         }
@@ -92,6 +99,7 @@ public class ProxyDrawable extends Drawable {
         }
     }
 
+    @NonNull
     @Override
     public Drawable mutate() {
         if (mProxy != null && !mMutated && super.mutate() == this) {

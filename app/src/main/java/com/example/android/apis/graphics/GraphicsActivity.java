@@ -31,11 +31,28 @@ class GraphicsActivity extends Activity {
     // set to true to test Picture
     private static final boolean TEST_PICTURE = false;
 
+    /**
+     * Called when the activity is starting. We simply call through to our super's implementation of
+     * {@code onCreate}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Set the activity content to an explicit view. If our debug flag TEST_PICTURE is true, we create
+     * an instance of {@code PictureLayout} {@code ViewGroup vg} and add our parameter {@code View view}
+     * to it. {@code PictureLayout} extends {@code ViewGroup} to mirror any single {@code View} added to
+     * it in the four corners of its canvas. We then set {@code view} to {@code vg}.
+     * <p>
+     * Finally we call our super's implementation of {@code setContentView} with {@code view} (modified or
+     * not).
+     *
+     * @param view The desired content to display.
+     */
     @Override
     public void setContentView(View view) {
         if (TEST_PICTURE) {

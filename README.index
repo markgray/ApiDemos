@@ -972,7 +972,7 @@ Graphics
             See: https://developer.android.com/reference/android/graphics/PorterDuff.Mode.html
             for details of the graphic algebra performed with the different PorterDuff modes
             You can use the key below to understand the algebra that the Android docs use to
-            describe the other modes (see the article for a fuller desription with similar terms).
+            describe the other modes (see the article for a fuller description with similar terms).
 
                 Sa Source alpha
                 Sc Source color

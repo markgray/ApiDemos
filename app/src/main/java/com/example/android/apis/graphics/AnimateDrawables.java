@@ -27,6 +27,11 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
+/**
+ * Shows how to use the Animation api (in this case TranslateAnimation) in order  to move a jpg
+ * around a Canvas. Uses AnimateDrawable which extends ProxyDrawable (A neat way to package the
+ * methods required when extending Drawable, overriding only draw in AnimateDrawable)
+ */
 public class AnimateDrawables extends GraphicsActivity {
 
     @Override

@@ -150,12 +150,12 @@ public class AlphaBitmap extends GraphicsActivity {
          * (repeating the shader's image horizontally and vertically, alternating mirror images so
          * that adjacent images always seam). We initialize our field {@code Paint p} with a new
          * instance.
-         *
+         * <p>
          * Next we open {@code InputStream is} to read our raw resource file R.raw.app_sample_code,
          * and use {@code BitmapFactory.decodeStream} to read and decode {@code is} into our field
          * {@code Bitmap mBitmap}. We extract only the Alpha channel from {@code mBitmap} to initialize
          * our field {@code Bitmap mBitmap2}.
-         *
+         * <p>
          * Now we create an empty 200x200 {@code Bitmap} using Bitmap.Config.ALPHA_8 as the
          * {@code Bitmap.Config} (Each pixel is stored as a single translucency (alpha) channel.
          * no color information is stored. With this configuration, each pixel requires 1 byte of
@@ -181,7 +181,31 @@ public class AlphaBitmap extends GraphicsActivity {
         }
 
         /**
-         * Implement this to do your drawing.
+         * Implement this to do your drawing. First we fill the entire canvas' bitmap with the color
+         * WHITE, then we initialize our variable {@code float y} to 10 (we will use this as the y
+         * pixel dimension within the {@code Canvas canvas} at which we draw the next {@code Bitmap}
+         * to be drawn.)
+         * <p>
+         * Then we set the color of {@code Paint p} to RED and draw {@code Bitmap mBitmap}
+         * at location (10,y) in {@code Canvas canvas} using {@code p} as the {@code Paint}. We advance
+         * {@code y} by the height of {@code mBitmap + 10}, set color of {@code Paint p} to GREEN and
+         * draw {@code Bitmap mBitmap} at location (10,y) in {@code Canvas canvas} using {@code p} as
+         * the {@code Paint}. This demonstrates that the colors in the {@code Bitmap} override the
+         * color of the {@code Paint} used to draw it.
+         * <p>
+         * We now advance {@code y} by the height of {@code mBitmap + 10}, and draw {@code Bitmap mBitmap2}
+         * at location (10,y) in {@code Canvas canvas} using {@code p} as the {@code Paint}. Because
+         * {@code mBitmap2} consists only of the alpha channel copied from {@code mBitmap} the image
+         * drawn will be drawn in the GREEN color setting of {@code Paint p}.
+         * <p>
+         * We now advance {@code y} by the height of {@code mBitmap2 + 10}, set the {@code Shader} of
+         * {@code Paint p} to {@code Shader mShader} and draw {@code Bitmap mBitmap3} at location (10,y)
+         * in {@code Canvas canvas} using {@code p} as the {@code Paint}.
+         * <p>
+         * To demonstrate the the {@code Shader} of a {@code Paint} overrides the color, we advance
+         * {@code y} by the height of {@code mBitmap3 + 10}, set the color of {@code Paint p} to RED
+         * again and draw {@code Bitmap mBitmap3} at location (10,y) in {@code Canvas canvas} using
+         * {@code p} as the {@code Paint}. The image is identical to the one above it.
          *
          * @param canvas the canvas on which the background will be drawn
          */
@@ -192,14 +216,18 @@ public class AlphaBitmap extends GraphicsActivity {
 
             p.setColor(Color.RED);
             canvas.drawBitmap(mBitmap, 10, y, p);
+
             y += mBitmap.getHeight() + 10;
             p.setColor(Color.GREEN);
             canvas.drawBitmap(mBitmap, 10, y, p);
+
             y += mBitmap.getHeight() + 10;
             canvas.drawBitmap(mBitmap2, 10, y, p);
+
             y += mBitmap2.getHeight() + 10;
             p.setShader(mShader);
             canvas.drawBitmap(mBitmap3, 10, y, p);
+
             y += mBitmap3.getHeight() + 10;
             p.setColor(Color.RED);
             canvas.drawBitmap(mBitmap3, 10, y, p);

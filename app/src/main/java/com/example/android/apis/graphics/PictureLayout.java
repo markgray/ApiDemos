@@ -26,7 +26,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+/**
+ * Extends {@code ViewGroup} to mirror any single {@code View} added to it in the four corners of its
+ * {@code Canvas}. Actually a disabled test of the {@code Picture} class.
+ */
 public class PictureLayout extends ViewGroup {
+    /**
+     *
+     */
     private final Picture mPicture = new Picture();
 
     public PictureLayout(Context context) {
