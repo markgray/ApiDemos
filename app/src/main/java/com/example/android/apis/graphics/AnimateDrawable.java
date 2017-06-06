@@ -25,39 +25,82 @@ import android.view.animation.Transformation;
 
 /**
  * Used by the {@code AnimateDrawables} demo which:
- * Shows how to use the Animation api (in this case TranslateAnimation) in order  to move a jpg
+ * Shows how to use the Animation api (in this case TranslateAnimation) in order to move a jpg
  * around a Canvas. Uses AnimateDrawable which extends ProxyDrawable (A neat way to package the
  * methods required when extending Drawable, overriding only draw in AnimateDrawable)
  */
 @SuppressWarnings("WeakerAccess")
 public class AnimateDrawable extends ProxyDrawable {
 
+    /**
+     * Animation we are to use to move our {@code Drawable} around the {@code Canvas} passed to our
+     * {@code draw} method.
+     */
     private Animation mAnimation;
+    /**
+     * Transformation which we modify for each animation step then use to modify the matrix of the
+     * {@code Canvas} passed to our {@code draw} method.
+     */
     private Transformation mTransformation = new Transformation();
 
+    /**
+     * Unused constructor which simply passes its parameter {@code Drawable target} to our super's
+     * constructor.
+     *
+     * @param target {@code Drawable} we are to proxy for
+     */
     @SuppressWarnings("unused")
     public AnimateDrawable(Drawable target) {
         super(target);
     }
 
+    /**
+     * We pass our parameter {@code Drawable target} to our super's constructor, then save our
+     * parameter {@code Animation animation} in our field {@code Animation mAnimation}.
+     *
+     * @param target    {@code Drawable} we are to proxy for
+     * @param animation {@code Animation} we are to apply to our proxy {@code Drawable}
+     */
     public AnimateDrawable(Drawable target, Animation animation) {
         super(target);
         mAnimation = animation;
     }
 
+    /**
+     * A getter method for our field {@code Animation mAnimation}.
+     *
+     * @return the {@code Animation} instance reference we have saved in our field {@code Animation mAnimation}.
+     */
     public Animation getAnimation() {
         return mAnimation;
     }
 
+    /**
+     * A setter method for our field {@code Animation mAnimation}.
+     *
+     * @param anim {@code Animation} instance reference to save in our field {@code Animation mAnimation}.
+     */
     public void setAnimation(Animation anim) {
         mAnimation = anim;
     }
 
+    /**
+     * Indicates whether the {@code Animation mAnimation} has started or not. If {@code mAnimation}
+     * is not null, we pass the call through to it. Unused.
+     *
+     * @return true if the animation has started, false otherwise
+     */
     @SuppressWarnings("unused")
     public boolean hasStarted() {
         return mAnimation != null && mAnimation.hasStarted();
     }
 
+    /**
+     * Indicates whether the {@code Animation mAnimation} has ended or not. If {@code mAnimation}
+     * is not null, we pass the call through to it. Unused.
+     *
+     * @return true if the animation has ended, false otherwise
+     */
     @SuppressWarnings("unused")
     public boolean hasEnded() {
         return mAnimation == null || mAnimation.hasEnded();

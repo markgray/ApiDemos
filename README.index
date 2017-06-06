@@ -993,6 +993,8 @@ Graphics
   AnimateDrawables
     Graphics/AnimateDrawables              all
         .graphics.AnimateDrawables
+        .graphics.AnimateDrawable
+        .graphics.ProxyDrawable
             Shows how to use the Animation api (in this case TranslateAnimation) in order 
             to move a jpg around a Canvas. Uses AnimateDrawable which extends ProxyDrawable
             (A neat way to package the methods required when extending Drawable, overriding
