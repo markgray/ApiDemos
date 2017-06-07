@@ -25,16 +25,38 @@ import android.graphics.*;
 import android.os.Bundle;
 import android.view.View;
 
+/**
+ * Shows how to draw arcs and rectangles to a Canvas -- need to figure out what slows down
+ * frame rate -- I'm guessing something inside native_drawArc
+ */
 public class Arcs extends GraphicsActivity {
 
+    /**
+     * Called when the activity is staring. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to an instance of {@code SampleView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new SampleView(this));
     }
 
+    /**
+     * Subclass of View which consists of one big circle inside a rectangle, and four little circles
+     * inside rectangles. Rotating arcs are drawn inside each of these circles, with four different
+     * paints and "use centers" arguments used for the small circles, and a rotation of those four
+     * combos for the big circle which changes every 360 degrees.
+     */
     private static class SampleView extends View {
+        /**
+         * The four {@code Paint} objects used for the small circles, and cycled through for the big one
+         */
         private Paint[] mPaints;
+        /**
+         * {@code Paint} used for the rectangle drawn around the 5 circles.
+         */
         private Paint mFramePaint;
         private boolean[] mUseCenters;
         private RectF[] mOvals;
@@ -75,8 +97,8 @@ public class Arcs extends GraphicsActivity {
 
             mBigOval = new RectF(40, 10, 280, 250);
 
-            mOvals[0] = new RectF( 10, 270,  70, 330);
-            mOvals[1] = new RectF( 90, 270, 150, 330);
+            mOvals[0] = new RectF(10, 270, 70, 330);
+            mOvals[1] = new RectF(90, 270, 150, 330);
             mOvals[2] = new RectF(170, 270, 230, 330);
             mOvals[3] = new RectF(250, 270, 310, 330);
 
@@ -86,8 +108,7 @@ public class Arcs extends GraphicsActivity {
             mFramePaint.setStrokeWidth(0);
         }
 
-        private void drawArcs(Canvas canvas, RectF oval, boolean useCenter,
-                              Paint paint) {
+        private void drawArcs(Canvas canvas, RectF oval, boolean useCenter, Paint paint) {
             canvas.drawRect(oval, mFramePaint);
             canvas.drawArc(oval, mStart, mSweep, useCenter, paint);
         }
@@ -96,8 +117,7 @@ public class Arcs extends GraphicsActivity {
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.WHITE);
 
-            drawArcs(canvas, mBigOval, mUseCenters[mBigIndex],
-                     mPaints[mBigIndex]);
+            drawArcs(canvas, mBigOval, mUseCenters[mBigIndex], mPaints[mBigIndex]);
 
             for (int i = 0; i < 4; i++) {
                 drawArcs(canvas, mOvals[i], mUseCenters[i], mPaints[i]);

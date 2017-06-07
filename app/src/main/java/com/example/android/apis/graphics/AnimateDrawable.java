@@ -106,6 +106,34 @@ public class AnimateDrawable extends ProxyDrawable {
         return mAnimation == null || mAnimation.hasEnded();
     }
 
+    /**
+     * Called when we are required to draw our drawable into our parameter {@code Canvas canvas}.
+     * First we call our super to retrieve the {@code Drawable dr} that we (and it) were constructed
+     * with and if {@code dr} is not null we:
+     * <ul>
+     * <li>
+     * Save the current matrix and clip onto a private stack, saving the value to pass to
+     * {@code restoreToCount()} to balance this {@code save()} in {@code int sc}.
+     * </li>
+     * <li>
+     * Copy a reference to our field {@code Animation mAnimation} to {@code Animation anim} (Why?)
+     * </li>
+     * <li>
+     * If {@code anim} is not null, we get the transformation to apply for the current animation
+     * time in milliseconds to our field {@code Transformation mTransformation}, and pre-concatenate
+     * the 3x3 Matrix representing the transformation to apply to the coordinates of the object
+     * being animated to the current matrix of {@code Canvas canvas}.
+     * </li>
+     * <li>
+     * We instruct our {@code Drawable dr} to draw itself
+     * </li>
+     * <li>
+     * Finally we restore the state of the {@code Canvas canvas} to the one we saved in {@code sc}.
+     * </li>
+     * </ul>
+     *
+     * @param canvas The canvas to draw into
+     */
     @Override
     public void draw(@NonNull Canvas canvas) {
         Drawable dr = getProxy();
