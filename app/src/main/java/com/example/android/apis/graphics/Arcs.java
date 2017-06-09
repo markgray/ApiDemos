@@ -193,7 +193,18 @@ public class Arcs extends GraphicsActivity {
 
         /**
          * We implement this to do our drawing. First we fill the entire {@code Canvas canvas} passed
-         * us with the color WHITE
+         * us with the color WHITE. Next we call our method {@code drawArcs} to draw the big circle in
+         * a rectangle {@code RectF[] mOvals} using the {@code mUseCenters} and {@code mPaints} for
+         * the current value of {@code mBigIndex} (cycles every 360 degrees through the values used
+         * by the small circles described by {@code RectF[] mOvals}). Next we call our method
+         * {@code drawArcs} to draw each of the four small circles in rectangles using the values
+         * of {@code mUseCenters} and {@code mPaints} assigned to each. Then we increment the value
+         * of {@code mSweep} (the end value of the arcs drawn) by {@code SWEEP_INC}, and if it is
+         * greater than 360 degrees we subtract 360 from it, and increment {@code mStart} (the start
+         * angle of the arcs drawn) by {@code START_INC}, and if it is greater than 360 degrees we
+         * subtract 360 from it. The we increment {@code mBigIndex} (the value of small circle parameters
+         * used by the big circle) modulo 4. Finally we invalidate our {@code View} so that our
+         * {@code onDraw} method will be called again in the sweet by and by.
          *
          * @param canvas {@code Canvas} of our View to draw to
          */

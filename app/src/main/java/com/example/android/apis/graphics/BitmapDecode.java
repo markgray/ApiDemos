@@ -26,31 +26,82 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
 
+/**
+ * Shows how to decode various image file formats into displayable bitmaps: drawable/beach.jpg,
+ * drawable/frog.gif (creates also an Bitmap.Config.ARGB_8888 bitmap, and a Bitmap.Config.ARGB_4444
+ * bitmap from that bitmap), drawable/button.9.png, and drawable/animated_gif.gif which it animates
+ * using android.graphics.Movie.java
+ */
 public class BitmapDecode extends GraphicsActivity {
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to a new instance of {@code SampleView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new SampleView(this));
     }
 
+    /**
+     * Custom View which draws 4 {@code Bitmap}'s, one {@code Drawable}, and an animated gif in a
+     * {@code Movie} instance.
+     */
     private static class SampleView extends View {
+        /**
+         * TAG for logging
+         */
         private static final String TAG = "BitMapDecode";
+        /**
+         * Decoded R.raw.beach jpg, scaled down by 4
+         */
         private Bitmap mBitmap;
+        /**
+         * Decoded R.raw.frog gif
+         */
         private Bitmap mBitmap2;
+        /**
+         * Deep copy of the pixels of {@code mBitmap2} using the Bitmap.Config ARGB_8888
+         */
         private Bitmap mBitmap3;
+        /**
+         * Deep copy of the pixels of {@code mBitmap2} using the Bitmap.Config ARGB_4444
+         */
         private Bitmap mBitmap4;
+        /**
+         * R.drawable.button.9.png {@code Drawable}
+         */
         private Drawable mDrawable;
 
+        /**
+         * {@code Movie} used to play the animated gif R.raw.animated_gif
+         */
         private Movie mMovie;
+        /**
+         * Start time in milliseconds of the {@code Movie} animation, used to calculate the relative
+         * time of the animation before asking {@code mMovie} to draw the frame that is scheduled for
+         * that relative time.
+         */
         private long mMovieStart;
 
-        //Set to false to use decodeByteArray
+        /**
+         * Set to false to use {@code Movie.decodeByteArray} instead of {@code Movie.decodeStream}
+         */
         private static final boolean DECODE_STREAM = true;
 
+        /**
+         * Used to read an {@code InputStream} into a {@code byte[]} array.
+         *
+         * @param is {@code InputStream} to read bytes from
+         * @return a {@code byte[]} array containing the raw data from {@code is}
+         */
         private static byte[] streamToBytes(InputStream is) {
             ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
             byte[] buffer = new byte[1024];
@@ -84,6 +135,11 @@ public class BitmapDecode extends GraphicsActivity {
 
             opts.inJustDecodeBounds = false;    // this will request the bm
             opts.inSampleSize = 4;             // scaled down by 4
+            try {
+                is.reset(); // Need to rewind is in order to read it again.
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             bm = BitmapFactory.decodeStream(is, null, opts);
 
             mBitmap = bm;
@@ -97,10 +153,8 @@ public class BitmapDecode extends GraphicsActivity {
             int h = mBitmap2.getHeight();
             int[] pixels = new int[w*h];
             mBitmap2.getPixels(pixels, 0, w, 0, 0, w, h);
-            mBitmap3 = Bitmap.createBitmap(pixels, 0, w, w, h,
-                                           Bitmap.Config.ARGB_8888);
-            mBitmap4 = Bitmap.createBitmap(pixels, 0, w, w, h,
-                                           Bitmap.Config.ARGB_4444);
+            mBitmap3 = Bitmap.createBitmap(pixels, 0, w, w, h, Bitmap.Config.ARGB_8888);
+            mBitmap4 = Bitmap.createBitmap(pixels, 0, w, w, h, Bitmap.Config.ARGB_4444);
 
             //noinspection deprecation
             mDrawable = context.getResources().getDrawable(R.drawable.button);
@@ -124,7 +178,9 @@ public class BitmapDecode extends GraphicsActivity {
             @SuppressLint("DrawAllocation") Paint p = new Paint();
             p.setAntiAlias(true);
 
-            canvas.drawBitmap(mBitmap, 10, 10, null);
+            if (mBitmap != null) {
+                canvas.drawBitmap(mBitmap, 10, 10, null);
+            }
             canvas.drawBitmap(mBitmap2, 10, 170, null);
             canvas.drawBitmap(mBitmap3, 110, 170, null);
             canvas.drawBitmap(mBitmap4, 210, 170, null);
@@ -142,8 +198,7 @@ public class BitmapDecode extends GraphicsActivity {
                 }
                 int relTime = (int)((now - mMovieStart) % dur);
                 mMovie.setTime(relTime);
-                mMovie.draw(canvas, getWidth() - mMovie.width(),
-                            getHeight() - mMovie.height());
+                mMovie.draw(canvas, getWidth() - mMovie.width(), getHeight() - mMovie.height());
                 invalidate();
             }
         }
