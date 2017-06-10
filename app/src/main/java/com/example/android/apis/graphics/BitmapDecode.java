@@ -97,7 +97,13 @@ public class BitmapDecode extends GraphicsActivity {
         private static final boolean DECODE_STREAM = true;
 
         /**
-         * Used to read an {@code InputStream} into a {@code byte[]} array.
+         * Used to read an {@code InputStream} into a {@code byte[]} array. First we allocate a
+         * {@code ByteArrayOutputStream os} with an initial buffer capacity of 1024, and a
+         * {@code byte[] buffer} with a capacity of 1024. Then wrapped in a try block intended to
+         * catch IOException we read up to 1024 bytes at a time from {@code is} into {@code buffer}
+         * and write them to {@code os}, stopping when the read from {@code is} is less than 0 (end
+         * of file). Finally we return the current contents of the output stream {@code os}, in a
+         * newly allocated byte array as returned by {@code ByteArrayOutputStream.toByteArray()}.
          *
          * @param is {@code InputStream} to read bytes from
          * @return a {@code byte[]} array containing the raw data from {@code is}
@@ -116,6 +122,13 @@ public class BitmapDecode extends GraphicsActivity {
             return os.toByteArray();
         }
 
+        /**
+         * Constructs and initializes an instance of {@code SampleView}. First we call through to our
+         * super's constructor, then we enable this View to receive focus.
+         *
+         * @param context {@code Context} to use to fetch resources, "this" when called from our
+         *                {@code onCreate} override
+         */
         public SampleView(Context context) {
             super(context);
             setFocusable(true);
@@ -151,7 +164,7 @@ public class BitmapDecode extends GraphicsActivity {
             // create a deep copy of it using getPixels() into different configs
             int w = mBitmap2.getWidth();
             int h = mBitmap2.getHeight();
-            int[] pixels = new int[w*h];
+            int[] pixels = new int[w * h];
             mBitmap2.getPixels(pixels, 0, w, 0, 0, w, h);
             mBitmap3 = Bitmap.createBitmap(pixels, 0, w, w, h, Bitmap.Config.ARGB_8888);
             mBitmap4 = Bitmap.createBitmap(pixels, 0, w, w, h, Bitmap.Config.ARGB_4444);
@@ -196,7 +209,7 @@ public class BitmapDecode extends GraphicsActivity {
                 if (dur == 0) {
                     dur = 1000;
                 }
-                int relTime = (int)((now - mMovieStart) % dur);
+                int relTime = (int) ((now - mMovieStart) % dur);
                 mMovie.setTime(relTime);
                 mMovie.draw(canvas, getWidth() - mMovie.width(), getHeight() - mMovie.height());
                 invalidate();
