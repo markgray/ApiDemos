@@ -16,19 +16,21 @@
 
 package com.example.android.apis.graphics;
 
-import com.example.android.apis.R;
-
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.*;
-import android.graphics.drawable.*;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Movie;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.*;
+import android.view.View;
 
+import com.example.android.apis.R;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ByteArrayOutputStream;
 
 /**
  * Shows how to decode various image file formats into displayable bitmaps: drawable/beach.jpg,
@@ -124,7 +126,29 @@ public class BitmapDecode extends GraphicsActivity {
 
         /**
          * Constructs and initializes an instance of {@code SampleView}. First we call through to our
-         * super's constructor, then we enable this View to receive focus.
+         * super's constructor, then we enable this View to receive focus. We declare {@code InputStream is}
+         * and use it to open the resource jpg R.raw.beach. We create {@code BitmapFactory.Options opts},
+         * and declare {@code Bitmap bm}. We set the {@code inJustDecodeBounds} field of {@code opts} to
+         * true (the decoder will return null (no bitmap), but the out... fields will still be set,
+         * allowing the caller to query the bitmap without having to allocate the memory for its pixels),
+         * and use it as the {@code Options} parameter when we call {@code decodeStream} on {@code is}
+         * after which the fields {@code opts.outWidth} and {@code opts.outHeight} contain the dimensions
+         * of the bitmap that would be created from {@code is} (null is returned instead of a bitmap).
+         * We now set the {@code opts.inJustDecodeBounds} field to false, and {@code opts.inSampleSize}
+         * to 4, rewind {@code is} and decode it again this time into our {@code Bitmap bm}. This results
+         * in a bitmap version of {@code is} scaled down by 4. We set our field {@code Bitmap mBitmap} to
+         * {@code bm}.
+         * <p>
+         * Now we use {@code is} to open our resource gif R.raw.frog, and decode it into our field
+         * {@code Bitmap mBitmap2}. We fetch the width of {@code mBitmap2} to {@code int w} and the
+         * height to {@code int h} and allocate {@code int[] pixels} to contain {@code w*h} ints.
+         * We copy all of the pixels from {@code Bitmap2} into {@code pixels}, then use {@code pixels}
+         * to create {@code Bitmap mBitmap3} using a config of ARGB_8888, and create {@code Bitmap mBitmap4}
+         * using a config of ARGB_4444. Then we load {@code Drawable mDrawable} from our resource file
+         * R.drawable.button and set its bounds to (150, 20, 300, 100) (left,top,right,bottom). We open
+         * our resource animated gif file R.raw.animated_gif using {@code is}, and decode this stream
+         * into {@code Movie mMovie} (If DECODE_STREAM is true that is, otherwise we read the raw bytes
+         * of {@code is} into {@code byte[] array} and decode that byte array into {@code Movie mMovie}).
          *
          * @param context {@code Context} to use to fetch resources, "this" when called from our
          *                {@code onCreate} override
@@ -184,12 +208,30 @@ public class BitmapDecode extends GraphicsActivity {
             }
         }
 
+        /**
+         * We implement this to do our drawing when requested to do so. First we set the entire
+         * {@code Canvas canvas} to the color 0xFFCCCCCC (a darkish gray). Then if {@code Bitmap mBitmap}
+         * is not null we draw it at location (10,10) on the {@code Canvas canvas}, and draw
+         * {@code Bitmap mBitmap2} at (10,170), {@code Bitmap mBitmap3} at (110,170), and
+         * {@code Bitmap mBitmap4} at (210,170). We draw {@code Drawable mDrawable} to {@code canvas}
+         * (its bounds already position is correctly).
+         *
+         * Next we fetch the current system time to {@code long now}, and if our field {@code long mMovieStart}
+         * is zero (first time we are called) we set {@code mMovieStart} to {@code now}. If {@code Movie mMovie}
+         * is not null, we fetch the duration of {@code mMovie} to {@code int dur} (1000 for our gif), making
+         * sure it is 1000 if {@code Movie.duration} returned zero. We calculate {@code int relTime} to be
+         * modulo {@code dur} of the time in milliseconds since {@code mMovieStart}, set the time of {@code mMovie}
+         * to {@code relTime} and instruct it to draw the current frame of the animated gif at the
+         * bottom right corner of {@code Canvas canvas}.
+         *
+         * Finally we invalidate our {@code View} which will schedule us to run again for the next refresh
+         * of the screen.
+         *
+         * @param canvas {@code Canvas} to draw our {@code View} onto
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(0xFFCCCCCC);
-
-            @SuppressLint("DrawAllocation") Paint p = new Paint();
-            p.setAntiAlias(true);
 
             if (mBitmap != null) {
                 canvas.drawBitmap(mBitmap, 10, 10, null);
