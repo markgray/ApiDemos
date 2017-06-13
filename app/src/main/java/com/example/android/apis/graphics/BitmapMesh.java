@@ -91,8 +91,8 @@ public class BitmapMesh extends GraphicsActivity {
          *
          * @param array Vertices array
          * @param index address of vertex to set the (x,y) coordinates of
-         * @param x x coordinate
-         * @param y y coordinate
+         * @param x     x coordinate
+         * @param y     y coordinate
          */
         private static void setXY(float[] array, int index, float x, float y) {
             //noinspection PointlessArithmeticExpression
@@ -100,6 +100,25 @@ public class BitmapMesh extends GraphicsActivity {
             array[index * 2 + 1] = y;
         }
 
+        /**
+         * Basic constructor that initializes the {@code View} and fields used by this instance of
+         * {@code SampleView}. First we call through to our super's constructor, then we enable our
+         * {@code View} to receive focus. Next we initialize our field {@code Bitmap mBitmap} by
+         * decoding the jpg resource file R.drawable.beach.
+         * <p>
+         * We fetch the width of {@code mBitmap} to {@code float w} and the height to {@code float h}.
+         * Then starting from {@code int index} of 0 we proceed to fill our two Bitmap mesh vertex
+         * arrays {@code float[] mVerts} and {@code float[] mOrig} with (x,y) vertex coordinates by
+         * looping through the HEIGHT y dimension values (each y value being y/HEIGHT of the height
+         * of the {@code Bitmap mBitmap}), and for each of these values calculating the WIDTH x
+         * values possible (each x value being x/WIDTH of the width of the {@code Bitmap mBitmap}).
+         * <p>
+         * Then we initialize our field {@code Matrix mMatrix} with a matrix to translate the canvas
+         * to (10,10), and initialize {@code Matrix mInverse} to be the inverse of this.
+         *
+         * @param context {@code Context} of {@code View} to use to fetch resources, "this" called from
+         *                {@code onCreate} override of the activity in our case
+         */
         public SampleView(Context context) {
             super(context);
             setFocusable(true);
@@ -124,6 +143,14 @@ public class BitmapMesh extends GraphicsActivity {
             mMatrix.invert(mInverse);
         }
 
+        /**
+         * We implement this to do our drawing. First we set the color of the entire {@code Canvas canvas}
+         * to 0xFFCCCCCC (a darkish gray). Then we pre-concatenate {@code Matrix mMatrix} to the current
+         * {@code Matrix} of {@code canvas} and draw the bitmap {@code mBitmap} through the mesh
+         * {@code float[] mVerts}.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(0xFFCCCCCC);
@@ -132,6 +159,34 @@ public class BitmapMesh extends GraphicsActivity {
             canvas.drawBitmapMesh(mBitmap, WIDTH, HEIGHT, mVerts, 0, null, 0, null);
         }
 
+        /**
+         * Creates a warped bitmap mesh version {@code float[] mVerts} of the un-warped bitmap mesh
+         * {@code float[] mOrig} with the vertices closest to the point (cx,cy) being "pulled" hardest
+         * towards that point.
+         * <p>
+         * First we declare a "gravitational constant" {@code float K}, and then for notational
+         * cleanliness we copy the reference {@code float[] mOrig} to {@code float[] src}, and
+         * {@code float[] mVerts} to {@code float[] dst}.
+         * <p>
+         * Then we loop through each of the vertex coordinates in {@code src}, fetching the x coordinate
+         * to {@code float x} and the y coordinate to {@code float y}, determine the x distance
+         * {@code float dx} of this point from {@code cx}, and the y distance {@code float dy} of
+         * this point from {@code cy}, set {@code float dd} to the sum of the squares of {@code dx}
+         * and {@code dy}, and set {@code float d} to the square root (distance) of {@code dd}.
+         * <p>
+         * The pull {@code float pull} on the point is then {@code K/(dd+0.000001f)} (with
+         * the 0.000001f added to avoid possible divide by zero) with this divided again by
+         * {@code (d + 0.000001f)} to allow multiplication by {@code dx} and {@code dy} later.
+         * <p>
+         * Then if the {@code pull} is greater than or equal to 1 we are very close to the point
+         * {@code (cx,cy)} so we set the vertex of the {@code dst} bitmap mesh to {@code (cx,cy)},
+         * otherwise we set the x coordinate to the {@code x} of the original plus {@code pull} times
+         * the {@code dx} distance from {@code cx}, and the y coordinate to the {@code y} of the original
+         * plus {@code pull} times the {@code dy} distance from {@code cy}.
+         *
+         * @param cx x coordinate of the point we are space warping around
+         * @param cy y coordinate of the point we are space warping around
+         */
         private void warp(float cx, float cy) {
             final float K = 10000;
             float[] src = mOrig;
@@ -161,7 +216,7 @@ public class BitmapMesh extends GraphicsActivity {
             }
         }
 
-        private int mLastWarpX = -9999; // don't match a touch coordinate
+        private int mLastWarpX = -9999; // don't match a valid touch coordinate to start with
         private int mLastWarpY;
 
         @Override
