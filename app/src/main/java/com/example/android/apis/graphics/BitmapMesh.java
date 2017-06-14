@@ -216,9 +216,32 @@ public class BitmapMesh extends GraphicsActivity {
             }
         }
 
+        /**
+         * x coordinate of last touch event that we warped the bitmap mesh for
+         */
         private int mLastWarpX = -9999; // don't match a valid touch coordinate to start with
+        /**
+         * y coordinate of last touch event that we warped the bitmap mesh for
+         */
         private int mLastWarpY;
 
+        /**
+         * We implement this method to handle touch screen motion events. First we fetch the x and
+         * y coordinates of the {@code MotionEvent event} to initialize {@code float[] pt}, then we
+         * use {@code Matrix mInverse} to translate this point from the {@code Canvas} coordinate
+         * system to the coordinate system of the {@code Bitmap mBitmap} (which is translated to
+         * (10,10) by the {@code Matrix mMatrix}). We cast the x coordinate of {@code pt} to an int
+         * in order to set {@code int x}, and the y coordinate of {@code pt} to an int in order to
+         * set {@code int y}, then compare {@code x} and {@code y} to {@code mLastWarpX} and
+         * {@code mLastWarpY} to see if the touch has moved, and if it has we set {@code mLastWarpX}
+         * to {@code x} and {@code mLastWarpY} to {@code y}, call our method {@code warp} to "warp"
+         * the bitmap mesh {@code float[] mVerts} around {@code pt} and finally invalidate our view
+         * so that our {@code onDraw} method will be called to render our bitmap through our warped
+         * bitmap mesh.
+         *
+         * @param event The motion event.
+         * @return True if the event was handled, false otherwise. (We always return true)
+         */
         @Override
         public boolean onTouchEvent(MotionEvent event) {
             float[] pt = {event.getX(), event.getY()};
