@@ -131,7 +131,7 @@ public class BitmapPixels extends GraphicsActivity {
          *
          * @param c color value (0-255)
          * @param a alpha value (0-255)
-         * @return color value scaled by alpha (pre-multiplied if your would)
+         * @return color value scaled by alpha (pre-multiplied if you would)
          */
         private static int mul255(int c, int a) {
             int prod = c * a + 128;
@@ -139,7 +139,12 @@ public class BitmapPixels extends GraphicsActivity {
         }
 
         /**
-         * Turn a color int into a pre-multiplied device color
+         * Turn a color int into a pre-multiplied device color. Does nothing in our case since it is
+         * only called with the values Color.RED, and Color.GREEN where the alpha is 255 and the
+         * red and green color components are 255 as well, but what the hay.
+         *
+         * @param c color value
+         * @return color with each color component pre-multiplied by the alpha value
          */
         private static int premultiplyColor(int c) {
             int r = Color.red(c);
@@ -154,6 +159,28 @@ public class BitmapPixels extends GraphicsActivity {
             return pack8888(r, g, b, a);
         }
 
+        /**
+         * Produces arrays containing smooth color transitions from a starting color to an ending
+         * color for the three different color formats: ARGB_8888, RGB_565, and ARGB_4444. First we
+         * extract the four components {@code r, g, b, and a} of the {@code from} color and multiply
+         * them by 2**23, we do the same for the components of the {@code to} color, subtract the
+         * {@code from} component and divide by {@code n-1} to create the "color steps" to use:
+         * {@code dr, dg, db, and da}.
+         * <p>
+         * Then we loop for the {@code n} colors in our ramps, filling our output arrays {@code ramp8888},
+         * {@code ramp565} and {@code ramp4444} filling them with the ARGB_8888, RGB_565, and ARGB_4444
+         * color format value produced using our methods {@code pack8888}, {@code pack565}, and
+         * {@code pack4444} from the current values of {@code r, g, b, and a}, rounded and normalized
+         * by dividing by 2**23. We then advance {@code r, g, b, and a} by {@code dr, dg, db, and da}
+         * to get ready for the next pass through the loop.
+         *
+         * @param from     start color of the ramp
+         * @param to       end color of the ramp
+         * @param n        number of colors in the ramp
+         * @param ramp8888 ARGB_8888 color format ramp
+         * @param ramp565  RGB_565 color format ramp
+         * @param ramp4444 ARGB_4444 color format ramp
+         */
         private static void makeRamp(int from, int to, int n,
                                      int[] ramp8888, short[] ramp565,
                                      short[] ramp4444) {
@@ -178,6 +205,18 @@ public class BitmapPixels extends GraphicsActivity {
             }
         }
 
+        /**
+         * Creates and returns an {@code IntBuffer} consisting of {@code n} copies of its parameter
+         * {@code int[] src} (in our case, {@code n} rows of our ARGB_8888 color ramp). First we
+         * allocate {@code IntBuffer dst} with a capacity of {@code n*n}. Then we loop for {@code n}
+         * rows "bulk putting" our parameter {@code int[] src}}. We rewind {@code dst} and
+         * return it to the caller.
+         *
+         * @param src array of ARGB_8888 colors to make buffer from
+         * @param n   Number of colors in the {@code src} array, and number of times to write that array
+         *            to the {@code IntBuffer} we return
+         * @return an {@code IntBuffer} consisting of {@code n} copies of our parameter {@code int[] src}.
+         */
         private static IntBuffer makeBuffer(int[] src, int n) {
             IntBuffer dst = IntBuffer.allocate(n * n);
             for (int i = 0; i < n; i++) {
@@ -187,6 +226,18 @@ public class BitmapPixels extends GraphicsActivity {
             return dst;
         }
 
+        /**
+         * Creates and returns an {@code ShortBuffer} consisting of {@code n} copies of its parameter
+         * {@code short[] src} (in our case, {@code n} rows of our RGB_565 or ARGB_4444 color ramps).
+         * First we allocate {@code ShortBuffer dst} with a capacity of {@code n*n}. Then we loop for
+         * {@code n} rows "bulk putting" our parameter {@code short[] src}}. We rewind {@code dst} and
+         * return it to the caller.
+         *
+         * @param src array of RGB_565 or ARGB_4444 colors to make buffer from
+         * @param n   Number of colors in the {@code src} array, and number of times to write that array
+         *            to the {@code ShortBuffer} we return
+         * @return a {@code ShortBuffer} consisting of {@code n} copies of our parameter {@code short[] src}.
+         */
         private static ShortBuffer makeBuffer(short[] src, int n) {
             ShortBuffer dst = ShortBuffer.allocate(n * n);
             for (int i = 0; i < n; i++) {
@@ -196,6 +247,26 @@ public class BitmapPixels extends GraphicsActivity {
             return dst;
         }
 
+        /**
+         * Constructs an instance of our custom View. First we call through to our super's constructor,
+         * then we enable our view to receive focus. We initialize {@code int N} to be 100, and allocate
+         * {@code N} entries for each of our color ramp arrays: {@code int[] data8888}, {@code short[] data565}
+         * and {@code short[] data4444}, then we call our method {@code makeRamp} to produce smooth
+         * color ramps from RED to GREEN in them. We initialize our field {@code Bitmap mBitmap1} with
+         * an {@code N by N} ARGB_8888 {@code Bitmap}, {@code Bitmap mBitmap2} with an {@code N by N}
+         * RGB_565 {@code Bitmap}, and {@code Bitmap mBitmap3} with an {@code N by N} ARGB_4444
+         * {@code Bitmap} for versions before KITKAT, and RGB_565 for KITKAT and later versions.
+         * <p>
+         * Then we fill {@code mBitmap1} with a {@code Bitmap} created from the {@code IntBuffer}
+         * created by our method {@code makeBuffer} from the {@code data8888} color ramp,
+         * {@code mBitmap2} with a {@code Bitmap} created from the {@code ShortBuffer} created by our
+         * method {@code makeBuffer} from the {@code data565} color ramp, and for versions KITKAT or
+         * newer {@code mBitmap3} with a {@code Bitmap} created from the {@code ShortBuffer} created
+         * by our method {@code makeBuffer} from the {@code data565} color ramp, and for versions
+         * before KITKAT we use the {@code data4444} color ramp.
+         *
+         * @param context {@code Context} to use to retrieve resources.
+         */
         public SampleView(Context context) {
             super(context);
             setFocusable(true);
@@ -225,6 +296,15 @@ public class BitmapPixels extends GraphicsActivity {
             }
         }
 
+        /**
+         * We implement this to do our drawing. First we set our entire canvas to 0xFFCCCCCC (a darkish
+         * gray). We initialize the {@code y} coordinate we use to draw our bitmaps to 10, then draw
+         * {@code Bitmap mBitmap1} on the {@code Canvas canvas} at (10,y), increment {@code y} by 10
+         * and draw {@code Bitmap mBitmap2} at (10,y), and increment {@code y} by 10 and draw
+         * {@code Bitmap mBitmap3} at (10,y).
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(0xFFCCCCCC);

@@ -45,6 +45,9 @@ import com.example.android.apis.R;
 
 // ----------------------------------------------------------------------
 
+/**
+ * Shows how to create a SurfaceView for the deprecated Camera api (use android.hardware.camera2)
+ */
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class CameraPreview extends Activity {
     private Preview mPreview;
@@ -75,13 +78,13 @@ public class CameraPreview extends Activity {
 
         // Find the ID of the default camera
         CameraInfo cameraInfo = new CameraInfo();
-            for (int i = 0; i < numberOfCameras; i++) {
-                //noinspection deprecation
-                Camera.getCameraInfo(i, cameraInfo);
-                if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
-                    defaultCameraId = i;
-                }
+        for (int i = 0; i < numberOfCameras; i++) {
+            //noinspection deprecation
+            Camera.getCameraInfo(i, cameraInfo);
+            if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
+                defaultCameraId = i;
             }
+        }
     }
 
     @SuppressWarnings("deprecation")
@@ -122,39 +125,39 @@ public class CameraPreview extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-        case R.id.switch_cam:
-            // check for availability of multiple cameras
-            if (numberOfCameras == 1) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage(this.getString(R.string.camera_alert))
-                       .setNeutralButton("Close", null);
-                AlertDialog alert = builder.create();
-                alert.show();
+            case R.id.switch_cam:
+                // check for availability of multiple cameras
+                if (numberOfCameras == 1) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage(this.getString(R.string.camera_alert))
+                            .setNeutralButton("Close", null);
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                    return true;
+                }
+
+                // OK, we have multiple cameras.
+                // Release this camera -> cameraCurrentlyLocked
+                if (mCamera != null) {
+                    mCamera.stopPreview();
+                    mPreview.setCamera(null);
+                    mCamera.release();
+                    mCamera = null;
+                }
+
+                // Acquire the next camera and request Preview to reconfigure
+                // parameters.
+                mCamera = Camera
+                        .open((cameraCurrentlyLocked + 1) % numberOfCameras);
+                cameraCurrentlyLocked = (cameraCurrentlyLocked + 1)
+                        % numberOfCameras;
+                mPreview.switchCamera(mCamera);
+
+                // Start the preview
+                mCamera.startPreview();
                 return true;
-            }
-
-            // OK, we have multiple cameras.
-            // Release this camera -> cameraCurrentlyLocked
-            if (mCamera != null) {
-                mCamera.stopPreview();
-                mPreview.setCamera(null);
-                mCamera.release();
-                mCamera = null;
-            }
-
-            // Acquire the next camera and request Preview to reconfigure
-            // parameters.
-            mCamera = Camera
-                    .open((cameraCurrentlyLocked + 1) % numberOfCameras);
-            cameraCurrentlyLocked = (cameraCurrentlyLocked + 1)
-                    % numberOfCameras;
-            mPreview.switchCamera(mCamera);
-
-            // Start the preview
-            mCamera.startPreview();
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }
@@ -198,17 +201,17 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
     }
 
     public void switchCamera(Camera camera) {
-       setCamera(camera);
-       try {
-           camera.setPreviewDisplay(mHolder);
-       } catch (IOException exception) {
-           Log.e(TAG, "IOException caused by setPreviewDisplay()", exception);
-       }
-       Camera.Parameters parameters = camera.getParameters();
-       parameters.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
-       requestLayout();
+        setCamera(camera);
+        try {
+            camera.setPreviewDisplay(mHolder);
+        } catch (IOException exception) {
+            Log.e(TAG, "IOException caused by setPreviewDisplay()", exception);
+        }
+        Camera.Parameters parameters = camera.getParameters();
+        parameters.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
+        requestLayout();
 
-       camera.setParameters(parameters);
+        camera.setParameters(parameters);
     }
 
     @Override
