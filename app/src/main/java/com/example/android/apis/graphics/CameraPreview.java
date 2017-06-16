@@ -50,16 +50,43 @@ import com.example.android.apis.R;
  */
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class CameraPreview extends Activity {
+    /**
+     * Our instance of our class {@code Preview}
+     */
     private Preview mPreview;
+    /**
+     * Our instance of the {@code Camera} class
+     */
     @SuppressWarnings("deprecation")
     Camera mCamera;
+    /**
+     * The number of physical cameras available on this device
+     */
     int numberOfCameras;
+    /**
+     * Physical camera number that we currently have open
+     */
     int cameraCurrentlyLocked;
 
-    // The first rear facing camera
+    /**
+     * The first rear facing camera
+     */
     int defaultCameraId;
 
-    @SuppressWarnings("deprecation")
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we request the FEATURE_NO_TITLE feature for our window, and add
+     * FLAG_FULLSCREEN to its flags so that we have full use of the screen (apart from the navigation
+     * bar at the bottom of the screen). Next we initialize our field {@code Preview mPreview} with
+     * a new instance of {@code Preview} and set it as our content view. We initialize our field
+     * {@code int numberOfCameras} with the number of physical cameras available on this device. We
+     * create an instance of {@code CameraInfo cameraInfo} and loop through the number of cameras of
+     * the device retrieving the camera information for each camera in turn to {@code cameraInfo},
+     * and if the camera is a CAMERA_FACING_BACK type we save its id to our field
+     * {@code int defaultCameraId}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState}, so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,25 +101,39 @@ public class CameraPreview extends Activity {
         setContentView(mPreview);
 
         // Find the total number of cameras available
+        //noinspection deprecation
         numberOfCameras = Camera.getNumberOfCameras();
 
         // Find the ID of the default camera
+        @SuppressWarnings("deprecation")
         CameraInfo cameraInfo = new CameraInfo();
         for (int i = 0; i < numberOfCameras; i++) {
             //noinspection deprecation
             Camera.getCameraInfo(i, cameraInfo);
+            //noinspection deprecation
             if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
                 defaultCameraId = i;
             }
         }
     }
 
-    @SuppressWarnings("deprecation")
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or
+     * {@link #onPause}, for your activity to start interacting with the user.
+     * This is a good place to begin animations, open exclusive-access devices
+     * (such as the camera), etc.
+     * <p>
+     * First we call through to our super's implementation of {@code onResume} then we set our field
+     * {@code Camera mCamera} to the first rear facing (default) camera, set our field
+     * {@code int cameraCurrentlyLocked} to the value of our field {@code int defaultCameraId},
+     * and instruct our {@code Preview mPreview} to set the camera it is displaying to {@code mCamera}.
+     */
     @Override
     protected void onResume() {
         super.onResume();
 
         // Open the default i.e. the first rear facing camera.
+        //noinspection deprecation
         mCamera = Camera.open();
         cameraCurrentlyLocked = defaultCameraId;
         mPreview.setCamera(mCamera);
@@ -120,7 +161,6 @@ public class CameraPreview extends Activity {
         return true;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -147,10 +187,9 @@ public class CameraPreview extends Activity {
 
                 // Acquire the next camera and request Preview to reconfigure
                 // parameters.
-                mCamera = Camera
-                        .open((cameraCurrentlyLocked + 1) % numberOfCameras);
-                cameraCurrentlyLocked = (cameraCurrentlyLocked + 1)
-                        % numberOfCameras;
+                //noinspection deprecation
+                mCamera = Camera.open((cameraCurrentlyLocked + 1) % numberOfCameras);
+                cameraCurrentlyLocked = (cameraCurrentlyLocked + 1) % numberOfCameras;
                 mPreview.switchCamera(mCamera);
 
                 // Start the preview
@@ -246,16 +285,15 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
             // Center the child SurfaceView within the parent.
             if (width * previewHeight > height * previewWidth) {
                 final int scaledChildWidth = previewWidth * height / previewHeight;
-                child.layout((width - scaledChildWidth) / 2, 0,
-                        (width + scaledChildWidth) / 2, height);
+                child.layout((width - scaledChildWidth) / 2, 0, (width + scaledChildWidth) / 2, height);
             } else {
                 final int scaledChildHeight = previewHeight * width / previewWidth;
-                child.layout(0, (height - scaledChildHeight) / 2,
-                        width, (height + scaledChildHeight) / 2);
+                child.layout(0, (height - scaledChildHeight) / 2, width, (height + scaledChildHeight) / 2);
             }
         }
     }
 
+    @Override
     public void surfaceCreated(SurfaceHolder holder) {
         // The Surface has been created, acquire the camera and tell it where
         // to draw.
@@ -268,6 +306,7 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
         }
     }
 
+    @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         // Surface will be destroyed when we return, so stop the preview.
         if (mCamera != null) {
@@ -310,6 +349,7 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
         return optimalSize;
     }
 
+    @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
         // Now that the size is known, set up the camera parameters and begin
         // the preview.
