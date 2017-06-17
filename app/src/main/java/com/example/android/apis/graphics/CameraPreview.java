@@ -139,6 +139,18 @@ public class CameraPreview extends Activity {
         mPreview.setCamera(mCamera);
     }
 
+    /**
+     * Called as part of the activity lifecycle when an activity is going into
+     * the background, but has not (yet) been killed.  The counterpart to
+     * {@link #onResume}.
+     * <p>
+     * First we call through to our super's implementation of {@code onPause}, then if we have a
+     * {@code Camera mCamera} in use we instruct our {@code Preview mPreview} to display a null
+     * image in place of the camera preview it has been showing and to set its own field
+     * {@code Camera mCamera} to null (Do not be confused by the fact that we use the same name for
+     * our field {@code Camera mCamera}!) Then we disconnect and release the {@code Camera mCamera}
+     * resources and set the field to null.
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -152,6 +164,17 @@ public class CameraPreview extends Activity {
         }
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu.  You
+     * should place your menu items in to <var>menu</var>.
+     * <p>
+     * We fetch a {@code MenuInflater inflater} for this context, and use it to inflate our menu
+     * layout file R.menu.camera_menu into our parameter {@code Menu menu}, and we return true to
+     * the caller so that our menu will be displayed.
+     *
+     * @param menu The options menu in which we place our items.
+     * @return You must return true for the menu to be displayed.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -161,6 +184,22 @@ public class CameraPreview extends Activity {
         return true;
     }
 
+    /**
+     * This hook is called whenever an item in our options menu is selected. We switch based on the
+     * identifier for the {@code MenuItem item}, and if it is our R.id.switch_cam menu item we first
+     * check to see if the device has only one camera and if so we display an {@code AlertDialog}
+     * stating "Device has only one camera!" and return true to consume the menu selection. If we do
+     * have more than one camera, we first check to see if we are already connected to a camera via
+     * {@code Camera mCamera} and if so we instruct it to stop its preview, instruct our
+     * {@code Preview mPreview} to set its camera displayed to null, release {@code mCamera} and set
+     * it to null. We now open the next camera in numerical order modulo {@code numberOfCameras} to
+     * set {@code mCamera}, store this camera number in {@code cameraCurrentlyLocked}, and instruct
+     * {@code Preview mPreview} to switch to this camera and start its preview display. Finally we
+     * return true to consume the menu selection here.
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return false to allow normal menu processing to proceed, true to consume it here.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -169,8 +208,7 @@ public class CameraPreview extends Activity {
                 // check for availability of multiple cameras
                 if (numberOfCameras == 1) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setMessage(this.getString(R.string.camera_alert))
-                            .setNeutralButton("Close", null);
+                    builder.setMessage(this.getString(R.string.camera_alert)).setNeutralButton("Close", null);
                     AlertDialog alert = builder.create();
                     alert.show();
                     return true;
@@ -210,12 +248,36 @@ public class CameraPreview extends Activity {
  */
 @SuppressWarnings("deprecation")
 class Preview extends ViewGroup implements SurfaceHolder.Callback {
+    /**
+     * TAG for logging
+     */
     private final String TAG = "Preview";
 
+    /**
+     * {@code SurfaceView} we create in our constructor, and the only view in our {@code ViewGroup}.
+     *
+     */
     SurfaceView mSurfaceView;
+    /**
+     * {@code SurfaceHolder} of our {@code SurfaceView mSurfaceView}, we use it to set the preview
+     * display of our {@code Camera mCamera}
+     */
     SurfaceHolder mHolder;
+    /**
+     * Optimal preview size chosen from amongst the supported preview sizes of the camera
+     * {@code List<Size> mSupportedPreviewSizes} by our method {@code getOptimalPreviewSize}
+     * based on the sizes passed to our {@code onMeasure} override.
+     */
     Size mPreviewSize;
+    /**
+     * List of supported preview sizes for our current {@code Camera mCamera} as returned by the
+     * call to the method {@code getSupportedPreviewSizes} on the {@code Camera.Parameters} for
+     * the current camera returned by the method {@code getParameters}
+     */
     List<Size> mSupportedPreviewSizes;
+    /**
+     * Current {@code Camera} instance whose preview we are displaying
+     */
     Camera mCamera;
 
     Preview(Context context) {
