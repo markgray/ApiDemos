@@ -255,7 +255,6 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
 
     /**
      * {@code SurfaceView} we create in our constructor, and the only view in our {@code ViewGroup}.
-     *
      */
     SurfaceView mSurfaceView;
     /**
@@ -280,6 +279,18 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
      */
     Camera mCamera;
 
+    /**
+     * Initializes our {@code ViewGroup}. First we call through to our super's constructor. Next we
+     * initialize our field {@code SurfaceView mSurfaceView} with an instance of {@code SurfaceView}
+     * and add it to our {@code ViewGroup}. We initialize our field {@code SurfaceHolder mHolder} by
+     * fetching the {@code SurfaceHolder} providing access and control over {@code mSurfaceView}'s
+     * underlying surface, add "this" as the {@code SurfaceHolder.Callback} for {@code mHolder} (our
+     * overrides of {@code surfaceCreated}, {@code surfaceDestroyed}, and {@code surfaceChanged} will
+     * be called). Finally we set the type of {@code mHolder} to SURFACE_TYPE_PUSH_BUFFERS (This is
+     * ignored, and is deprecated as of API 11!)
+     *
+     * @param context {@code Context} of application "this" when called from {@code onCreate}
+     */
     Preview(Context context) {
         super(context);
 
@@ -293,6 +304,15 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
+    /**
+     * Sets the {@code Camera} instance we are associated with. First we set our field
+     * {@code Camera mCamera} to our parameter {@code Camera camera}, then if it is not null,
+     * we fetch the list of preview sizes supported by {@code mCamera} to our field
+     * {@code List<Size> mSupportedPreviewSizes} and request that a layout pass of the view tree
+     * be scheduled.
+     *
+     * @param camera {@code Camera} we are to use
+     */
     public void setCamera(Camera camera) {
         mCamera = camera;
         if (mCamera != null) {
@@ -301,6 +321,12 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
         }
     }
 
+    /**
+     * Called when the user selects the "Switch Camera" menu item, But we do not have a menu bar!!!
+     * so I guess I won't waste any time on this ({@code Camera2} is where it's at anyhow.)
+     *
+     * @param camera new {@code Camera} to show the preview of
+     */
     public void switchCamera(Camera camera) {
         setCamera(camera);
         try {
@@ -315,6 +341,27 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
         camera.setParameters(parameters);
     }
 
+    /**
+     * Measure the view and its content to determine the measured width and the
+     * measured height. This method is invoked by {@link #measure(int, int)} and
+     * should be overridden by subclasses to provide accurate and efficient
+     * measurement of their contents.
+     * <p>
+     * First we set {@code int width} to the size resolved from our view's suggested minimum width
+     * as constrained by {@code widthMeasureSpec}, and {@code int height} to the size resolved from
+     * our view's suggested minimum height as constrained by {@code heightMeasureSpec}. Then we call
+     * {@code setMeasuredDimension(width,height)} to store the measured width and measured height.
+     * Finally, if our list of the camera's supported preview sizes {@code List<Size> mSupportedPreviewSizes}
+     * is not null, we call our method {@code getOptimalPreviewSize} to determine the optimal preview
+     * size for our width and height in order to set {@code Size mPreviewSize}.
+     *
+     * @param widthMeasureSpec  horizontal space requirements as imposed by the parent.
+     *                          The requirements are encoded with
+     *                          {@link android.view.View.MeasureSpec}.
+     * @param heightMeasureSpec vertical space requirements as imposed by the parent.
+     *                          The requirements are encoded with
+     *                          {@link android.view.View.MeasureSpec}.
+     */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         // We purposely disregard child measurements because act as a
@@ -329,6 +376,25 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
         }
     }
 
+    /**
+     * Called from layout when this view should assign a size and position to each of its children.
+     * We do nothing unless the {@code changed} flag passed us is true, and we have at least 1 child
+     * {@code View}. If we do need to do something, we first fetch a reference to our 1 and only child
+     * to {@code View child}, calculate the {@code int width}, and {@code int height} allowed us by
+     * our parent using the right, left, bottom and top positions of our view relative to our parent.
+     * We set {@code int previewWidth} to this {@code width}, and {@code int previewHeight} to this
+     * {@code height}, then if {@code Size mPreviewSize} is not null we reset {@code previewWidth}
+     * to the field {@code mPreviewSize.width} and {@code previewHeight} to the field
+     * {@code mPreviewSize.height} instead. Then we calculate the coordinates necessary to center
+     * our child {@code SurfaceView} within our View and instruct our {@code child} to layout itself
+     * using these coordinates.
+     *
+     * @param changed This is a new size or position for this view
+     * @param l       Left position, relative to parent
+     * @param t       Top position, relative to parent
+     * @param r       Right position, relative to parent
+     * @param b       Bottom position, relative to parent
+     */
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         if (changed && getChildCount() > 0) {
@@ -355,6 +421,11 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
         }
     }
 
+    /**
+     * This is called immediately after the surface is first created.
+     *
+     * @param holder The {@code SurfaceHolder} whose surface is being created.
+     */
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         // The Surface has been created, acquire the camera and tell it where
