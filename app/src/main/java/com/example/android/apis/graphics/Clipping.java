@@ -21,18 +21,48 @@ import android.graphics.*;
 import android.os.Bundle;
 import android.view.View;
 
+/**
+ * Shows how to use android.graphics.Canvas methods clipPath and clipRect, as well as some other
+ * Canvas drawing methods.
+ */
 public class Clipping extends GraphicsActivity {
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to a new instance of {@code SampleView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new SampleView(this));
     }
 
+    /**
+     * Custom View which draws the same scene 6 times using different clip settings for the
+     * {@code Canvas} it is drawing to.
+     */
     private static class SampleView extends View {
+        /**
+         * {@code Paint} we use to draw to the {@code Canvas}
+         */
         private Paint mPaint;
+        /**
+         * {@code Path} we create for a clip, and set on our {@code Canvas} using {@code Canvas.clipPath}
+         */
         private Path mPath;
 
+        /**
+         * Basic constructor for our class. First we call our super's constructor, then we enable our
+         * view to receive focus. We allocate an instance of {@code Paint} for our field {@code Paint mPaint},
+         * set the ANTI_ALIAS_FLAG to true to enable antialiasing, set the stroke width to 6, the text
+         * size to 16, and set the text alignment to be Paint.Align.RIGHT. Finally we allocate a new
+         * instance of {@code Path} to initialize our field {@code Path mPath}.
+         *
+         * @param context the {@code Context} to use to retrieve resources, "this" when called from
+         *                {@code onCreate} override of our activity.
+         */
         public SampleView(Context context) {
             super(context);
             setFocusable(true);

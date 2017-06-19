@@ -422,7 +422,10 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
     }
 
     /**
-     * This is called immediately after the surface is first created.
+     * This is called immediately after the surface is first created. Wrapped in a try block intended
+     * to catch IOException, we test to make sure our field {@code Camera mCamera} is not null first
+     * and then instruct it to set the {@code Surface} it will use for live preview to our parameter
+     * {@code SurfaceHolder holder}.
      *
      * @param holder The {@code SurfaceHolder} whose surface is being created.
      */
@@ -439,6 +442,13 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
         }
     }
 
+    /**
+     * This is called immediately before a surface is being destroyed. If our field {@code Camera mCamera}
+     * is not null we instruct it to stop capturing and drawing preview frames to the surface, and reset
+     * the camera for a future call to {@code startPreview()}.
+     *
+     * @param holder The {@code SurfaceHolder} whose surface is being destroyed
+     */
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         // Surface will be destroyed when we return, so stop the preview.
@@ -447,11 +457,41 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
         }
     }
 
-
+    /**
+     * Calculates and returns the size from the list of supported preview sizes for this camera which
+     * will make optimal use of the screen space we have available. If our parameter {@code sizes} is
+     * null, we return having done nothing. Otherwise we define ASPECT_TOLERANCE to be 0.1, this is
+     * used to search the supported preview sizes for a size whose aspect ratio is closest to that
+     * defined by our parameters {@code w} and {@code h}. We calculate this target aspect ratio
+     * {@code double targetRatio} to be {@code w/h}. We initialize {@code Size optimalSize} to null,
+     * {@code double minDiff} to be the largest positive finite value of type double, and set our
+     * variable {@code int targetHeight} to our parameter {@code h}.
+     * <p>
+     * Now in order to find a {@code Size} in {@code List<Size> sizes} which most closely matches our
+     * window's aspect ratio, we loop through all the {@code Size size}'s in {@code List<Size> sizes},
+     * calculate its {@code double ratio} aspect ratio by dividing its {@code size.width} field by its
+     * {@code size.height} field, and if the absolute difference between {@code ratio} and
+     * {@code targetRatio} is greater than ASPECT_TOLERANCE we skip it. Otherwise is the absolute
+     * difference between the {@code size.height} and our {@code targetHeight} is less than the current
+     * value of {@code minDiff} we set {@code optimalSize} to {@code size} and update {@code minDiff}
+     * to be the absolute difference between the {@code size.height} and our {@code targetHeight}.
+     * <p>
+     * If this loop failed to find a best match for the aspect ratio ({@code optimalSize} is still
+     * null) we search {@code List<Size> sizes} for a {@code Size} whose field {@code height} is
+     * closest to {@code targetHeight} and set {@code optimalSize} to it.
+     * <p>
+     * In either case we return {@code optimalSize} to the caller.
+     *
+     * @param sizes list of supported preview sizes of our {@code Camera}
+     * @param w     width of the window we will use to display the preview in
+     * @param h     height of the window we will use to display the preview in
+     * @return best {@code Size} from the list of supported preview sizes passed us.
+     */
     private Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {
+        if (sizes == null) return null;
+
         final double ASPECT_TOLERANCE = 0.1;
         double targetRatio = (double) w / h;
-        if (sizes == null) return null;
 
         Size optimalSize = null;
         double minDiff = Double.MAX_VALUE;
@@ -482,6 +522,21 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
         return optimalSize;
     }
 
+    /**
+     * This is called immediately after any structural changes (format or size) have been made to the
+     * surface. You should at this point update the imagery in the surface.
+     * <p>
+     * First we fetch the current settings for the Camera service we have open in {@code Camera mCamera}
+     * to {@code Camera.Parameters parameters}, we set the preview size of {@code parameters} to the
+     * optimal size we want as contained in {@code Size mPreviewSize}, request that a layout pass be
+     * scheduled, set the parameters of {@code mCamera} to the modified {@code parameters}, and instruct
+     * {@code mCamera} to start capturing and drawing preview frames to the screen.
+     *
+     * @param holder The SurfaceHolder whose surface has changed.
+     * @param format The new PixelFormat of the surface.
+     * @param w      The new width of the surface.
+     * @param h      The new height of the surface.
+     */
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
         // Now that the size is known, set up the camera parameters and begin
