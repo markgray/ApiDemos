@@ -76,6 +76,29 @@ public class Clipping extends GraphicsActivity {
             mPath = new Path();
         }
 
+        /**
+         * Draws a "scene" consisting of a red line, a green circle, and the blue text "Clipping".
+         * First we intersect the current clip of our parameter {@code Canvas canvas} with the
+         * rectangle (0,0,100,100) ((left,top,right,bottom) -- this is relative to the already
+         * translated {@code Canvas canvas} passed us and will prevent all drawing instructions
+         * outside of this rectangle from having any effect, and will respect the "no draw" regions
+         * of {@code canvas} specified by its current clip.) Then fill the entire canvas' bitmap
+         * (restricted to the current clip) with the color white, using source over Porter-Duff mode.
+         *
+         * We set the color of our field {@code Paint mPaint} to red, and use it to draw a line on
+         * {@code canvas} from (0,0) to (100,100).
+         *
+         * We set the color of {@code mPaint} to green and use it to draw a circle on {@code canvas}
+         * centered at (30,70) with radius 30.
+         *
+         * Finally we set the color of {@code mPaint} to blue and use it to write the text "Clipping"
+         * to {@code canvas} starting at (100,30). The origin is interpreted based on the Align
+         * setting in the paint which in our case is Paint.Align.RIGHT, so the end of the text is
+         * at (100,30) not the beginning.
+         *
+         * @param canvas {@code Canvas} to draw our "scene" to, already translated to correct spot,
+         *               and clipped for the clip instructions to be demonstrated.
+         */
         private void drawScene(Canvas canvas) {
             canvas.clipRect(0, 0, 100, 100);
 
@@ -91,6 +114,58 @@ public class Clipping extends GraphicsActivity {
             canvas.drawText("Clipping", 100, 30, mPaint);
         }
 
+        /**
+         * We implement this to do our drawing. We call our method {@code drawScene} to draw the same
+         * "scene" 6 times using different matrix and clip states applied to the {@code Canvas canvas}
+         * passed us.
+         *
+         * First we set the entire {@code Canvas canvas} to the color GRAY. Then surrounded by matching
+         * {@code Canvas.save} and {@code Canvas.restore} calls (which save the matrix and clips states
+         * then restore them afterwards), we translate the {@code Canvas canvas} to the position we
+         * want drawing to be directed to, apply all the clip state modifications (relative to the new
+         * position) and call our method {@code drawScene} to draw to the translated and clipped
+         * {@code Canvas canvas} restoring it to the untranslated un-clipped state on return. The six
+         * "scenes" positions and clip states are:
+         * <ul>
+         *     <li>
+         *         (10,10) No clipping added (apart from the clip rectangle used in {@code drawScene}
+         *     </li>
+         *     <li>
+         *         (160,10) We start with a clip rectangle excluding areas outside of (10,10,90,90)
+         *         then we add a clip rectangle which excludes areas inside of (30,30,70,70) (The
+         *         {@code Region.Op.DIFFERENCE} parameter to {@code clipRectangle} subtracts the
+         *         inside of the rectangle from the drawable canvas instead of the outside)
+         *     </li>
+         *     <li>
+         *         (10,160) We clear any lines and curves from {@code Path mPath}, making it empty,
+         *         and use it to empty the clip path of {@code Canvas canvas}. We add a circle centered
+         *         at (50,50), of radius 50 and direction Counter clock wise to {@code mPath}, then use
+         *         it to REPLACE the clip path of {@code canvas}. Since the circle was drawn in the
+         *         counter clockwise direction the clip will exclude areas outside of the circle from
+         *         the drawable canvas.
+         *     </li>
+         *     <li>
+         *         (160,160) We add a clip rectangle that excludes areas outside of (0,0,60,60), and
+         *         then we add a rectangle excluding areas outside of (40,40,100,100) using the
+         *         Region.Op.UNION. This results in the drawable area of the Canvas being constrained
+         *         to points inside of either of the two rectangles.
+         *     </li>
+         *     <li>
+         *         (10,310) We add a clip rectangle that excludes areas outside of (0,0,60,60), and
+         *         then we add a rectangle excluding areas outside of (40,40,100,100) using the
+         *         Region.Op.XOR. This results in the drawable area of the Canvas being constrained
+         *         to points inside one or the other of the two rectangles, but not both.
+         *     </li>
+         *     <li>
+         *         (160,310) We add a clip rectangle that excludes areas outside of (0,0,60,60), and
+         *         then we add a rectangle excluding areas outside of (40,40,100,100) using the
+         *         Region.Op.REVERSE_DIFFERENCE. This causes the second rectangle to subtract off
+         *         its interior from any drawable areas of the canvas that it is over.
+         *     </li>
+         * </ul>
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.GRAY);

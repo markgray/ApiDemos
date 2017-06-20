@@ -27,6 +27,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
 
+/**
+ * Applies a PorterDuffColorFilter to tint some button like drawables using several
+ * different colors, and both PorterDuff.Mode.SRC_ATOP, and PorterDuff.Mode.MULTIPLY
+ * PorterDuff modes to apply them. Oddly only froyo spaces the drawables properly
+ * probably due to the use of drawable-mdpi and drawable-hdpi versions. Checking
+ * Drawable.getIntrinsicHeight() and modifying the spacing for hdpi fixes the problem.
+ */
 public class ColorFilters extends GraphicsActivity {
     public static final String TAG = "ColorFilters";
 
