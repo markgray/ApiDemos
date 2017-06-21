@@ -35,27 +35,82 @@ import android.view.*;
  * Drawable.getIntrinsicHeight() and modifying the spacing for hdpi fixes the problem.
  */
 public class ColorFilters extends GraphicsActivity {
+    /**
+     * TAG used for logging
+     */
     public static final String TAG = "ColorFilters";
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to a new instance of {@code SampleView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new SampleView(this));
-
     }
 
-    @SuppressLint("ViewConstructor")
-    @SuppressWarnings("deprecation")
+    /**
+     * View that displays 7 rows of the same 4 buttons, with each row using different Porter-Duff
+     * color filters
+     */
     private static class SampleView extends View {
+        /**
+         * {@code Activity} used to construct us, we use it to set the title bar of its window
+         */
         private Activity mActivity;
+        /**
+         * The resource button R.drawable.btn_default_normal
+         */
         private Drawable mDrawable;
+        /**
+         * The three resource buttons R.drawable.btn_circle_normal, R.drawable.btn_check_off, and
+         * R.drawable.btn_check_on
+         */
         private Drawable[] mDrawables;
+        /**
+         * {@code Paint} used to draw the text "Label" inside the button {@code Drawable mDrawable},
+         * it alternates between 0xFF000000 (Black) and 0xFFFFFFFF (White), and is used in conjunction
+         * with its opposite color {@code Paint mPaint2} with {@code mPaint2} being drawn first offset
+         * by (1,1) and {@code mPaint} being drawn second.
+         */
         private Paint mPaint;
+        /**
+         * {@code Paint} used to draw the text "Label" inside the button {@code Drawable mDrawable},
+         * it alternates between 0xFF000000 (Black) and 0xFFFFFFFF (White), and is used in conjunction
+         * with its opposite color {@code Paint mPaint} with {@code mPaint2} being drawn first offset
+         * by (1,1) and {@code mPaint} being drawn second.
+         */
         private Paint mPaint2;
+        /**
+         * 1/2 of the sum of the ascent and descent of the FontMetrics of text at size 16, it is used
+         * to position the text "Label" when drawing it into {@code Drawable mDrawable}.
+         */
         private float mPaintTextOffset;
+        /**
+         * An array containing the colors 0, 0xCC0000FF, 0x880000FF, 0x440000FF, 0xFFCCCCFF, 0xFF8888FF,
+         * and 0xFF4444FF. They are used as an argument to construct a {@code PorterDuffColorFilter}
+         * used for each of the 7 different rows. The other argument is from {@code PorterDuff.Mode[] mModes}
+         */
         private int[] mColors;
+        /**
+         * The two PortDuff modes PorterDuff.Mode.SRC_ATOP, and PorterDuff.Mode.MULTIPLY, They are
+         * used as an argument to construct the {@code PorterDuffColorFilter} for all the rows of
+         * buttons displayed except the one using the color 0 (the first row which uses null as the
+         * color filter). The mode alternates every second touch event based on {@code mModeIndex}.
+         */
         private PorterDuff.Mode[] mModes;
+        /**
+         * Index into {@code PorterDuff.Mode[] mModes} used to choose which Porter-Duff mode to use
+         * it is incremented modulo the length of {@code mModes} every second time the canvas is
+         * touched.
+         */
         private int mModeIndex;
+        /**
+         * The height of each row of buttons, used to translate the canvas to the row to be drawn
+         */
         private int mHeightOffset;
 
         private static void addToTheRight(Drawable curr, Drawable prev) {
@@ -75,27 +130,31 @@ public class ColorFilters extends GraphicsActivity {
             Context context = activity;
             setFocusable(true);
 
+            //noinspection deprecation
             mDrawable = context.getResources().getDrawable(R.drawable.btn_default_normal);
             mHeightOffset = 55;
             //noinspection ConstantConditions
             int heightOfDrawable = mDrawable.getIntrinsicHeight();
-            Log.i(TAG, "Height of drawabel" + heightOfDrawable);
+            Log.i(TAG, "Height of drawable: " + heightOfDrawable);
             if (heightOfDrawable > 55) {
                 mHeightOffset = heightOfDrawable + 5;
             }
             //noinspection ConstantConditions
             mDrawable.setBounds(0, 0, 150, 48);
+            //noinspection deprecation
             mDrawable.setDither(true);
 
-            int[] resIDs = new int[] {
-                R.drawable.btn_circle_normal,
-                R.drawable.btn_check_off,
-                R.drawable.btn_check_on
+            int[] resIDs = new int[]{
+                    R.drawable.btn_circle_normal,
+                    R.drawable.btn_check_off,
+                    R.drawable.btn_check_on
             };
             mDrawables = new Drawable[resIDs.length];
             Drawable prev = mDrawable;
             for (int i = 0; i < resIDs.length; i++) {
+                //noinspection deprecation
                 mDrawables[i] = context.getResources().getDrawable(resIDs[i]);
+                //noinspection deprecation
                 mDrawables[i].setDither(true);
                 addToTheRight(mDrawables[i], prev);
                 prev = mDrawables[i];
@@ -112,19 +171,19 @@ public class ColorFilters extends GraphicsActivity {
             Paint.FontMetrics fm = mPaint.getFontMetrics();
             mPaintTextOffset = (fm.descent + fm.ascent) * 0.5f;
 
-            mColors = new int[] {
-                0,
-                0xCC0000FF,
-                0x880000FF,
-                0x440000FF,
-                0xFFCCCCFF,
-                0xFF8888FF,
-                0xFF4444FF,
+            mColors = new int[]{
+                    0,
+                    0xCC0000FF,
+                    0x880000FF,
+                    0x440000FF,
+                    0xFFCCCCFF,
+                    0xFF8888FF,
+                    0xFF4444FF,
             };
 
-            mModes = new PorterDuff.Mode[] {
-                PorterDuff.Mode.SRC_ATOP,
-                PorterDuff.Mode.MULTIPLY,
+            mModes = new PorterDuff.Mode[]{
+                    PorterDuff.Mode.SRC_ATOP,
+                    PorterDuff.Mode.MULTIPLY,
             };
             mModeIndex = 0;
 
@@ -153,7 +212,7 @@ public class ColorFilters extends GraphicsActivity {
 
             mDrawable.setColorFilter(filter);
             mDrawable.draw(canvas);
-            canvas.drawText("Label", x+1, y+1, mPaint2);
+            canvas.drawText("Label", x + 1, y + 1, mPaint2);
             canvas.drawText("Label", x, y, mPaint);
 
             for (Drawable dr : mDrawables) {
@@ -163,17 +222,17 @@ public class ColorFilters extends GraphicsActivity {
         }
 
         @SuppressLint("DrawAllocation")
-        @Override protected void onDraw(Canvas canvas) {
+        @Override
+        protected void onDraw(Canvas canvas) {
             canvas.drawColor(0xFFCCCCCC);
 
-            canvas.translate(8, 12);
+            canvas.translate(8, mHeightOffset);
             for (int color : mColors) {
                 ColorFilter filter;
                 if (color == 0) {
                     filter = null;
                 } else {
-                    filter = new PorterDuffColorFilter(color,
-                                                       mModes[mModeIndex]);
+                    filter = new PorterDuffColorFilter(color, mModes[mModeIndex]);
                 }
                 drawSample(canvas, filter);
                 canvas.translate(0, mHeightOffset);
