@@ -113,6 +113,21 @@ public class ColorFilters extends GraphicsActivity {
          */
         private int mHeightOffset;
 
+        /**
+         * Specify a bounding rectangle for the {@code Drawable curr} to the right of {@code Drawable prev}.
+         * This is where the drawable will draw when its draw() method is called. First we fetch the
+         * bounding rectangle for {@code prev} to {@code Rect r}. We calculate {@code int x} to be
+         * 12 pixels further to the right from {@code r.right} of {@code prev}'s bounding rectangle. We
+         * calculate {@code int center} midway between the top and bottom of {@code prev}'s bounding rectangle.
+         * We fetch the intrinsic height of {@code curr} to {@code int h}, and then calculate the {@code int y}
+         * position we want to use for the top of {@code curr}'s bounding rectangle to be half of {@code h}
+         * higher than {@code center}. Finally we set the bounding rectangle for {@code curr} to be
+         * (x,y,x+(intrinsic width of {@code curr},y+h) (left,top,right,bottom)
+         *
+         * @param curr {@code Drawable} we will set the bounds for
+         * @param prev the {@code Drawable} that was positioned previously, used as the starting point
+         *             for placing {@code curr}
+         */
         private static void addToTheRight(Drawable curr, Drawable prev) {
             Rect r = prev.getBounds();
             int x = r.right + 12;
@@ -123,6 +138,15 @@ public class ColorFilters extends GraphicsActivity {
             curr.setBounds(x, y, x + curr.getIntrinsicWidth(), y + h);
         }
 
+        /**
+         * Constructs and initializes an instance of {@code SampleView}. First we call through to our
+         * super's constructor. Then we initialize our field {@code Activity mActivity} with our
+         * parameter {@code Activity activity}, and (for no good reason) we also set our variable
+         * {@code Context context} to it. We enable our view to receive focus.
+         *
+         * @param activity used for the {@code Context} when fetching resources, "this" when called
+         *                 from {@code onCreate} of our activity.
+         */
         public SampleView(Activity activity) {
             super(activity);
             mActivity = activity;
