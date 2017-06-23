@@ -143,6 +143,38 @@ public class ColorFilters extends GraphicsActivity {
          * super's constructor. Then we initialize our field {@code Activity mActivity} with our
          * parameter {@code Activity activity}, and (for no good reason) we also set our variable
          * {@code Context context} to it. We enable our view to receive focus.
+         * <p>
+         * We initialize our field {@code Drawable mDrawable} with the drawable from the resource file
+         * R.drawable.btn_default_normal. We initialize our field {@code int mHeightOffset} to 55 and
+         * if the intrinsic height {@code heightOfDrawable} of {@code mDrawable} is greater than 55,
+         * we set {@code mHeightOffset} to {@code heightOfDrawable + 5}. We set the bounding rectangle
+         * of {@code mDrawable} to (0,0,150,48) (the left,top,right,bottom location it will draw in
+         * when its {@code draw()} method is called), and set its dither flag to true (This is ignored
+         * but what the hey!)
+         * <p>
+         * We initialize {@code int[] resIDs} with an array containing the resource IDs for our three
+         * other buttons: R.drawable.btn_circle_normal, R.drawable.btn_check_off, and R.drawable.btn_check_on,
+         * then initialize our field {@code Drawable[] mDrawables} with an array large enough to hold
+         * them when fetch them. We then initialize {@code Drawable prev} to {@code mDrawable} and loop
+         * through the resource IDs in {@code resIDs} first fetching each {@code Drawable} from our
+         * resources to the appropriate position ifn {@code mDrawables}, setting its dither flag to
+         * true (ignored of course, but why not?) and calling our method {@code addToTheRight} to add
+         * the present {@code mDrawables} to the right of {@code prev}, after which we set {@code prev}
+         * to the present {@code mDrawables} to get ready for the next pass through the loop.
+         * <p>
+         * We initialize our field {@code Paint mPaint} with a new instance, set its antialias flag
+         * to true, its text size to 16, and its text alignment to CENTER. We create a copy of
+         * {@code paint} to initialize {@code Paint mPaint2}, and set its alpha channel to 64. We
+         * fetch the font metrics of {@code mPaint} to {@code Paint.FontMetrics fm}, and calculate
+         * the value of our field {@code float mPaintTextOffset} to be 1/2 of the sum of the ascent
+         * and descent of {@code fm}. We allocate an array of int for our field {@code int[] mColors}
+         * and initialize it with the colors: 0, 0xCC0000FF, 0x880000FF, 0x440000FF, 0xFFCCCCFF,
+         * 0xFF8888FF, and 0xFF4444FF.
+         * <p>
+         * We initialize our field {@code PorterDuff.Mode[] mModes} with an array containing the
+         * modes PorterDuff.Mode.SRC_ATOP, and PorterDuff.Mode.MULTIPLY and set the index into that
+         * array {@code int mModeIndex} to 0. Finally we call our method {@code updateTitle()} to
+         * set the text of our activity's title bar to the string value of SRC_ATOP.
          *
          * @param activity used for the {@code Context} when fetching resources, "this" when called
          *                 from {@code onCreate} of our activity.
@@ -214,6 +246,13 @@ public class ColorFilters extends GraphicsActivity {
             updateTitle();
         }
 
+        /**
+         * This method swaps the colors used by our fields {@code Paint mPaint} and {@code Paint mPaint2}.
+         * If the color of {@code mPaint} is currently 0xFF000000 (Black), we set it to 0xFFFFFFFF
+         * (White) and set the color of {@code mPaint2} to 0xFF000000 (Black). Otherwise we set the
+         * color of {@code mPaint} to 0xFF000000 (Black) and {@code mPaint2} to 0xFFFFFFFF (White).
+         * Finally we set the alpha channel of {@code mPaint2} to 64.
+         */
         private void swapPaintColors() {
             if (mPaint.getColor() == 0xFF000000) {
                 mPaint.setColor(0xFFFFFFFF);
@@ -225,10 +264,31 @@ public class ColorFilters extends GraphicsActivity {
             mPaint2.setAlpha(64);
         }
 
+        /**
+         * This is a convenience function to set the title bar of the activity to the string representation
+         * of the currently selected {@code PorterDuff.Mode[] mModes}, {@code mModes[mModeIndex]}.
+         */
         private void updateTitle() {
             mActivity.setTitle(mModes[mModeIndex].toString());
         }
 
+        /**
+         * Draws a row of our four buttons starting at the position the {@code Canvas canvas} has been
+         * translated to, using the {@code ColorFilter filter} requested for this row. First we fetch
+         * the bounding rectangle of {@code Drawable mDrawable} to {@code Rect r} and use it to calculate
+         * the {@code float x} and {@code float y} location inside of {@code mDrawable} that we will use
+         * to draw the text "Label". We set the Porter-Duff color filter of {@code mDrawable} to our
+         * parameter {@code ColorFilter filter} and instruct {@code mDrawable} to draw itself. Then we
+         * draw the text "Label" using {@code Paint mPaint2} offset one pixel to the right and down
+         * from (x,y), and draw the same text using {@code Paint mPaint} at (x,y). This causes the text
+         * to have a white or black "shadow" (but it is impossible to see on high density screens).
+         * <p>
+         * Finally for all the {@code Drawable dr} in {@code Drawable[] mDrawables} we set the color
+         * filter of {@code dr} to {@code filter} and instruct {@code dr} to draw itself.
+         *
+         * @param canvas translated canvas we are to draw our 4 buttons to
+         * @param filter Porter-Duff color filter we are to use for our drawings
+         */
         private void drawSample(Canvas canvas, ColorFilter filter) {
             Rect r = mDrawable.getBounds();
             float x = (r.left + r.right) * 0.5f;
@@ -245,6 +305,20 @@ public class ColorFilters extends GraphicsActivity {
             }
         }
 
+        /**
+         * We implement this to do our drawing. First we set the color of the entire {@code Canvas canvas}
+         * to 0xFFCCCCCC (a darkish gray). The we Pre-concatenate the current matrix with the translation
+         * to (8,mHeightOffset). Then for each of the 7 {@code int color} in {@code int[] mColors}
+         * we define {@code ColorFilter filter}, and if the current {@code color} is 0 we set it to
+         * null, otherwise we set it to a {@code new PorterDuffColorFilter(color, mModes[mModeIndex])}
+         * which creates a Porter-Duff color filter using {@code color} and the current Porter-Duff
+         * mode {@code mModes[mModeIndex]} (either PorterDuff.Mode.SRC_ATOP, or PorterDuff.Mode.MULTIPLY).
+         * Then we call our method {@code drawSample} to draw a row of our 4 buttons on {@code canvas}
+         * using {@code filter} as the color filter. Finally we translate {@code canvas} down by
+         * {@code mHeightOffset} to get ready for the next row.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @SuppressLint("DrawAllocation")
         @Override
         protected void onDraw(Canvas canvas) {
