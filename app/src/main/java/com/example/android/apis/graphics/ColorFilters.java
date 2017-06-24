@@ -337,6 +337,30 @@ public class ColorFilters extends GraphicsActivity {
             }
         }
 
+        /**
+         * We implement this method to handle touch screen motion events. We switch based on the action
+         * reported in the {@code MotionEvent event}:
+         * <ul>
+         * <li>
+         * ACTION_DOWN - ignore, but return true to consume it
+         * </li>
+         * <li>
+         * ACTION_MOVE - ignore, but return true to consume it
+         * </li>
+         * <li>
+         * ACTION_UP - we want to update the Porter-Duff mode every other time we change
+         * paint colors, so we check to see if the current color of {@code Paint mPaint}
+         * is 0xFFFFFFFF (White) and if so we increment {@code mModeIndex} modulo the length
+         * of {@code PorterDuff.Mode[] mModes} and call our method {@code updateTitle()} to
+         * change the title bar to show the new mode. In either case we call our method
+         * {@code swapPaintColors()} to swap the colors of {@code Paint mPaint} and
+         * {@code Paint mPaint2}, then return true to consume the event.
+         * </li>
+         * </ul>
+         *
+         * @param event The motion event.
+         * @return True to indicate the event was handled
+         */
         @Override
         public boolean onTouchEvent(MotionEvent event) {
             switch (event.getAction()) {

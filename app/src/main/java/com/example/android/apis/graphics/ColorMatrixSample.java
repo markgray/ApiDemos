@@ -24,19 +24,56 @@ import android.graphics.*;
 import android.os.Bundle;
 import android.view.View;
 
+/**
+ * Uses ColorMatrixColorFilter's to create three different versions of a jpeg, animating them
+ * through different "contrasts". One changes both scale and translate, one changes scale only,
+ * and one changes translate only. (The original is at top of left column, scale and translate
+ * to right of it, scale only second row, and translate only is in the third row.)
+ */
 public class ColorMatrixSample extends GraphicsActivity {
 
+    /**
+     * First we call through to our super's implementation of {@code onCreate}, then we set our
+     * content view to a new instance of {@code SampleView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new SampleView(this));
     }
 
+    /**
+     * Custom {@code View} class which displays the same jpg (R.drawable.balloons) four different ways,
+     * one without any animation of the {@code ColorMatrix} used to draw it, and three with the
+     * {@code ColorMatrix} used to draw it animated in different ways.
+     */
     private static class SampleView extends View {
+        /**
+         * Apparently created to prevent "draw allocation" warning, but warning is issued for the
+         * allocation of {@code ColorMatrixColorFilter} any way? Used only in {@code draw} method
+         * and then only after copying it to {@code Paint paint}.
+         */
         private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        /**
+         * {@code Bitmap} of our resource jpg R.drawable.balloons
+         */
         private Bitmap mBitmap;
+        /**
+         * Animated angle [0...180] incremented in steps of 2 degrees round robin every time {@code draw}
+         * is called. It is used to create a contrast value of [0..1], which is used as an argument to our
+         * methods {@code setContrast}, {@code setContrastScaleOnly}. and {@code setContrastTranslateOnly}
+         * which use it to modify the {@code ColorMatrixColorFilter} they are passed as their second argument.
+         */
         private float mAngle;
 
+        /**
+         * Our constructor, it simply calls our super's constructor, then initializes our field
+         * {@code Bitmap mBitmap} with a {@code Bitmap} decoded from our resource jpg R.drawable.balloons.
+         *
+         * @param context {@code Context} to use to fetch resources
+         */
         public SampleView(Context context) {
             super(context);
 
