@@ -23,16 +23,35 @@ import android.view.*;
 
 import java.io.ByteArrayOutputStream;
 
+/**
+ * Shows how to create bitmaps programmatically, how to compress them to JPG and PNG formats, and
+ * shows how JPG looses information while PNG is loss-less.
+ */
 public class CreateBitmap extends GraphicsActivity {
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to a new instance of {@code SampleView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new SampleView(this));
     }
 
+    /**
+     * Width of the {@code Bitmap}'s being created and displayed
+     */
     private static final int WIDTH = 50;
+    /**
+     * Height of the {@code Bitmap}'s being created and displayed
+     */
     private static final int HEIGHT = 50;
+    /**
+     * Number of colors in the array between rows (must be >= width or <= -width).
+     */
     private static final int STRIDE = 64;   // must be >= WIDTH
 
     private static int[] createColors() {

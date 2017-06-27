@@ -97,7 +97,11 @@ public class Compass extends GraphicsActivity {
     };
 
     /**
-     * Called when the activity is starting.
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we initialize our field {@code SensorManager mSensorManager} with a
+     * handle to an instance of the system service SENSOR_SERVICE, and our field {@code Sensor mSensor}
+     * with the default sensor for the type TYPE_ORIENTATION. We initialize our field {@code SampleView mView}
+     * with an instance of our view subclass {@code SampleView} and set our content view to it.
      *
      * @param icicle We do not override {@code onSaveInstanceState} so do not use
      */
@@ -111,6 +115,14 @@ public class Compass extends GraphicsActivity {
         setContentView(mView);
     }
 
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or
+     * {@link #onPause}, for your activity to start interacting with the user.
+     * <p>
+     * First we call through to our  super's implementation of {@code onResume}, then we register
+     * our {@code SensorEventListener mListener} as a listener for the {@code Sensor mSensor} with
+     * SENSOR_DELAY_GAME as the rate to deliver sensor at.
+     */
     @Override
     protected void onResume() {
         if (false) Log.d(TAG, "onResume");
@@ -119,6 +131,14 @@ public class Compass extends GraphicsActivity {
         mSensorManager.registerListener(mListener, mSensor, SensorManager.SENSOR_DELAY_GAME);
     }
 
+    /**
+     * Called when you are no longer visible to the user.  You will next
+     * receive either {@link #onRestart}, {@link #onDestroy}, or nothing,
+     * depending on later user activity.
+     * <p>
+     * We unregister our {@code SensorEventListener mListener} as a listener, and call through to our
+     * super's implementation of {@code onStop}.
+     */
     @Override
     protected void onStop() {
         if (false) Log.d(TAG, "onStop");
@@ -126,11 +146,31 @@ public class Compass extends GraphicsActivity {
         super.onStop();
     }
 
+    /**
+     * Custom view which displays our compass pointer.
+     */
     private class SampleView extends View {
+        /**
+         * {@code Paint} instance we use in our {@code onDraw} method
+         */
         private Paint mPaint = new Paint();
+        /**
+         * {@code Path} containing a wedge-shaped path which is used as our compass pointer
+         */
         private Path mPath = new Path();
+        /**
+         * Boolean flag which is set to true in {@code onAttachedToWindow} and to false in
+         * {@code onDetachedFromWindow} which we do not actually use for anything?
+         */
         private boolean mAnimate;
 
+        /**
+         * Constructs and initializes our {@code View}. First we call our super's constructor, then
+         * we initialize our field {@code Path mPath} using {@code Path} methods to draw a wedge-shaped
+         * path which we will use as our compass pointer.
+         *
+         * @param context Activity {@code Context} of "this" when called from {@code onCreate}
+         */
         public SampleView(Context context) {
             super(context);
 
@@ -142,6 +182,23 @@ public class Compass extends GraphicsActivity {
             mPath.close();
         }
 
+        /**
+         * We implement this to do our drawing. We copy the reference to the {@code Paint mPaint} to
+         * {@code Paint paint} (for no good reason I can discern?), we set the color of the entire
+         * {@code Canvas canvas} to WHITE, set the antialias flag for {@code paint}, set its color
+         * to BLACK and set its style to FILL. We fetch the width of {@code canvas} to {@code int w}
+         * and the height to {@code int h} and calculate the center point of {@code canvas} (cx,cy)
+         * and translate the {@code Canvas} to that point. If our field {@code float[] mValues} is
+         * not null (we have received an orientation reading already) we rotate the canvas by the
+         * value of {@code -mValues[0]} (which is the Azimuth, angle between the magnetic north
+         * direction and the y-axis, around the z-axis (0 to 359). 0=North, 90=East, 180=South,
+         * 270=West)
+         * <p>
+         * Finally we instruct the {@code Canvas canvas} to draw the path {@code Path mPath} using
+         * {@code Paint mPaint} as the paint.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             Paint paint = mPaint;
@@ -164,6 +221,16 @@ public class Compass extends GraphicsActivity {
             canvas.drawPath(mPath, mPaint);
         }
 
+        /**
+         * This is called when the view is attached to a window.  At this point it
+         * has a Surface and will start drawing.  Note that this function is
+         * guaranteed to be called before {@link #onDraw(android.graphics.Canvas)},
+         * however it may be called any time before the first onDraw -- including
+         * before or after {@link #onMeasure(int, int)}.
+         * <p>
+         * We simply set our (unused) flag {@code boolean mAnimate} to true and call through to our
+         * super's implementation of {@code onAttachedToWindow}.
+         */
         @Override
         protected void onAttachedToWindow() {
             mAnimate = true;
@@ -171,6 +238,13 @@ public class Compass extends GraphicsActivity {
             super.onAttachedToWindow();
         }
 
+        /**
+         * This is called when the view is detached from a window.  At this point it
+         * no longer has a surface for drawing.
+         * <p>
+         * We simply set our (unused) flag {@code boolean mAnimate} to false and call through to our
+         * super's implementation of {@code onDetachedFromWindow}
+         */
         @Override
         protected void onDetachedFromWindow() {
             mAnimate = false;

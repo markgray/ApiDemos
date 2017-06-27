@@ -1071,7 +1071,7 @@ Graphics
     Graphics/CreateBitmap                  all
         .graphics.CreateBitmap
             Shows how to create bitmaps programmatically, how to compress them to JPG and PNG
-            formats, and shows how JPG looses information while PNG is lossless.
+            formats, and shows how JPG looses information while PNG is loss-less.
 
   Density
     Graphics/Density                       all
