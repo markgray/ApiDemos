@@ -18,6 +18,7 @@ package com.example.android.apis.graphics;
 
 //Need the following import to get access to the app resources, since this
 //class is in a sub-package.
+
 import com.example.android.apis.R;
 
 import android.annotation.SuppressLint;
@@ -39,7 +40,8 @@ import android.util.Log;
 
 /**
  * This activity demonstrates various ways density can cause the scaling of
- * bitmaps and drawables.
+ * bitmaps and drawables. Includes sample code for different ways to get
+ * drawables onto the different dpi screens.
  */
 @SuppressWarnings("deprecation")
 public class DensityActivity extends Activity {
@@ -48,7 +50,7 @@ public class DensityActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final LayoutInflater li = (LayoutInflater)getSystemService(
+        final LayoutInflater li = (LayoutInflater) getSystemService(
                 LAYOUT_INFLATER_SERVICE);
 
         this.setTitle(R.string.density_title);
@@ -59,28 +61,28 @@ public class DensityActivity extends Activity {
         addBitmapDrawable(layout, R.drawable.logo120dpi, true);
         addBitmapDrawable(layout, R.drawable.logo160dpi, true);
         addBitmapDrawable(layout, R.drawable.logo240dpi, true);
-        addLabelToRoot(root, "Prescaled bitmap in drawable");
+        addLabelToRoot(root, "Pre-scaled bitmap in drawable");
         addChildToRoot(root, layout);
 
         layout = new LinearLayout(this);
         addBitmapDrawable(layout, R.drawable.logo120dpi, false);
         addBitmapDrawable(layout, R.drawable.logo160dpi, false);
         addBitmapDrawable(layout, R.drawable.logo240dpi, false);
-        addLabelToRoot(root, "Autoscaled bitmap in drawable");
+        addLabelToRoot(root, "Auto-scaled bitmap in drawable");
         addChildToRoot(root, layout);
 
         layout = new LinearLayout(this);
         addResourceDrawable(layout, R.drawable.logo120dpi);
         addResourceDrawable(layout, R.drawable.logo160dpi);
         addResourceDrawable(layout, R.drawable.logo240dpi);
-        addLabelToRoot(root, "Prescaled resource drawable");
+        addLabelToRoot(root, "Pre-scaled resource drawable");
         addChildToRoot(root, layout);
 
-        layout = (LinearLayout)li.inflate(R.layout.density_image_views, null);
+        layout = (LinearLayout) li.inflate(R.layout.density_image_views, null);
         addLabelToRoot(root, "Inflated layout");
         addChildToRoot(root, layout);
 
-        layout = (LinearLayout)li.inflate(R.layout.density_styled_image_views, null);
+        layout = (LinearLayout) li.inflate(R.layout.density_styled_image_views, null);
         addLabelToRoot(root, "Inflated styled layout");
         addChildToRoot(root, layout);
 
@@ -88,14 +90,14 @@ public class DensityActivity extends Activity {
         addCanvasBitmap(layout, R.drawable.logo120dpi, true);
         addCanvasBitmap(layout, R.drawable.logo160dpi, true);
         addCanvasBitmap(layout, R.drawable.logo240dpi, true);
-        addLabelToRoot(root, "Prescaled bitmap");
+        addLabelToRoot(root, "Pre-scaled bitmap");
         addChildToRoot(root, layout);
 
         layout = new LinearLayout(this);
         addCanvasBitmap(layout, R.drawable.logo120dpi, false);
         addCanvasBitmap(layout, R.drawable.logo160dpi, false);
         addCanvasBitmap(layout, R.drawable.logo240dpi, false);
-        addLabelToRoot(root, "Autoscaled bitmap");
+        addLabelToRoot(root, "Auto-scaled bitmap");
         addChildToRoot(root, layout);
 
         layout = new LinearLayout(this);
@@ -109,7 +111,7 @@ public class DensityActivity extends Activity {
         addNinePatchResourceDrawable(layout, R.drawable.smlnpatch120dpi);
         addNinePatchResourceDrawable(layout, R.drawable.smlnpatch160dpi);
         addNinePatchResourceDrawable(layout, R.drawable.smlnpatch240dpi);
-        addLabelToRoot(root, "Prescaled 9-patch resource drawable");
+        addLabelToRoot(root, "Pre-scaled 9-patch resource drawable");
         addChildToRoot(root, layout);
 
         setContentView(scrollWrap(root));
@@ -145,8 +147,7 @@ public class DensityActivity extends Activity {
         //noinspection deprecation
         view.setBackgroundDrawable(d);
 
-        view.setLayoutParams(new LinearLayout.LayoutParams(d.getIntrinsicWidth(),
-                d.getIntrinsicHeight()));
+        view.setLayoutParams(new LinearLayout.LayoutParams(d.getIntrinsicWidth(), d.getIntrinsicHeight()));
         layout.addView(view);
     }
 
@@ -158,8 +159,7 @@ public class DensityActivity extends Activity {
         view.setBackgroundDrawable(d);
 
         //noinspection ConstantConditions
-        view.setLayoutParams(new LinearLayout.LayoutParams(d.getIntrinsicWidth(),
-                d.getIntrinsicHeight()));
+        view.setLayoutParams(new LinearLayout.LayoutParams(d.getIntrinsicWidth(), d.getIntrinsicHeight()));
         layout.addView(view);
     }
 
@@ -183,8 +183,7 @@ public class DensityActivity extends Activity {
         //noinspection ConstantConditions
         Log.i("foo", "9-patch #" + Integer.toHexString(resource)
                 + " w=" + d.getIntrinsicWidth() + " h=" + d.getIntrinsicHeight());
-        view.setLayoutParams(new LinearLayout.LayoutParams(
-                d.getIntrinsicWidth()*2, d.getIntrinsicHeight()*2));
+        view.setLayoutParams(new LinearLayout.LayoutParams(d.getIntrinsicWidth() * 2, d.getIntrinsicHeight() * 2));
         layout.addView(view);
     }
 
