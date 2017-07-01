@@ -211,6 +211,9 @@ public class DensityActivity extends Activity {
 
     /**
      * Adds a {@code TextView} displaying the text {@code String text} to the {@code LinearLayout root}.
+     * First we create a new instance of {@code TextView label}, set the text of {@code label} to
+     * {@code String text} and add {@code label} to {@code LinearLayout root} using MATCH_PARENT for
+     * the width, and WRAP_CONTENT for the height {@code LayoutParams}.
      *
      * @param root The {@code LinearLayout} we are to add a label to
      * @param text The text for the {@code TextView} we will add to {@code root}
@@ -237,7 +240,14 @@ public class DensityActivity extends Activity {
 
     /**
      * Adds a {@code Bitmap} decoded from resource ID {@code resource} to {@code LinearLayout layout},
-     * optionally using scaling if the flag {@code boolean scale} is true.
+     * optionally using scaling if the flag {@code boolean scale} is true. First we declare the
+     * variable {@code Bitmap bitmap}, then we use our method {@code loadAndPrintDpi} to load the
+     * resource image with resource ID {@code resource} using the flag {@code scale} to determine
+     * whether the image should be decoded using the no scaling option. We create {@code View view}
+     * create {@code BitmapDrawable d} from {@code bitmap}, and if scale is false (no scaling) we
+     * set the density scale that it should be rendered at to the current display metrics. We set the
+     * background of {@code view} to {@code BitmapDrawable d}, set the layout parameters of {@code view}
+     * to the intrinsic height and width of {@code d}, and finally add {@code view} to {@code layout}.
      *
      * @param layout   {@code LinearLayout} we are to add the resource {@code Drawable} to
      * @param resource resource ID of a {@code Drawable} to read and use from our resources
@@ -282,7 +292,7 @@ public class DensityActivity extends Activity {
 
     /**
      * Adds a {@code ScaledBitmapView} to our parameter {@code LinearLayout layout}, created using a
-     * {@code Bitmap} loaded rom the resource image given by the resource ID {@code resource}, and
+     * {@code Bitmap} loaded from the resource image given by the resource ID {@code resource}, and
      * optionally scaled first if {@code scale} is true.
      *
      * @param layout   {@code LinearLayout} we are to add the {@code Bitmap} we load from the resource
@@ -326,7 +336,7 @@ public class DensityActivity extends Activity {
 
     /**
      * Decodes the resource image with the resource ID {@code id} into a {@code Bitmap} which it returns,
-     * optionally applying scaling if {@code boolean scale} is true.
+     * optionally applying scaling when decoding it if {@code boolean scale} is true.
      *
      * @param id    resource ID of an image to load into the {@code Bitmap} we return
      * @param scale if true we allow {@code decodeResource} to scale the image, false if we want it unscaled

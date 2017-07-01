@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,10 +14,16 @@
 -->
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#FF0000FF"/>
-    <stroke android:width="4dp" android:color="#FFFFFFFF"
-            android:dashWidth="1dp" android:dashGap="2dp" />
-    <padding android:left="7dp" android:top="7dp"
-            android:right="7dp" android:bottom="7dp" />
+    <solid android:color="#FF0000FF" />
+    <stroke
+        android:width="4dp"
+        android:color="#FFFFFFFF"
+        android:dashGap="2dp"
+        android:dashWidth="1dp" />
+    <padding
+        android:bottom="7dp"
+        android:left="7dp"
+        android:right="7dp"
+        android:top="7dp" />
     <corners android:radius="4dp" />
 </shape>

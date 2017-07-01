@@ -24,51 +24,66 @@ import android.graphics.drawable.shapes.*;
 import android.os.Bundle;
 import android.view.*;
 
+/**
+ * Drawing using the Drawable class methods, many of them usable in {@code <shape>} xml drawables.
+ */
 public class ShapeDrawable1 extends GraphicsActivity {
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to a new instance of our class {@code SampleView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new SampleView(this));
     }
 
+    /**
+     * Custom view which holds and draws our 7 {@code ShapeDrawable} examples.
+     */
     private static class SampleView extends View {
         private ShapeDrawable[] mDrawables;
 
         private static Shader makeSweep() {
             return new SweepGradient(150, 25,
-                new int[] { 0xFFFF0000, 0xFF00FF00, 0xFF0000FF, 0xFFFF0000 },
-                null);
+                    new int[]{0xFFFF0000, 0xFF00FF00, 0xFF0000FF, 0xFFFF0000},
+                    null);
         }
 
         private static Shader makeLinear() {
             return new LinearGradient(0, 0, 50, 50,
-                              new int[] { 0xFFFF0000, 0xFF00FF00, 0xFF0000FF },
-                              null, Shader.TileMode.MIRROR);
+                    new int[]{0xFFFF0000, 0xFF00FF00, 0xFF0000FF},
+                    null, Shader.TileMode.MIRROR);
         }
 
         private static Shader makeTiling() {
-            int[] pixels = new int[] { 0xFFFF0000, 0xFF00FF00, 0xFF0000FF, 0};
+            int[] pixels = new int[]{0xFFFF0000, 0xFF00FF00, 0xFF0000FF, 0};
             Bitmap bm = Bitmap.createBitmap(pixels, 2, 2,
-                                            Bitmap.Config.ARGB_8888);
+                    Bitmap.Config.ARGB_8888);
 
             return new BitmapShader(bm, Shader.TileMode.REPEAT,
-                                        Shader.TileMode.REPEAT);
+                    Shader.TileMode.REPEAT);
         }
 
         private static class MyShapeDrawable extends ShapeDrawable {
             private Paint mStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
+            @SuppressWarnings("WeakerAccess")
             public MyShapeDrawable(Shape s) {
                 super(s);
                 mStrokePaint.setStyle(Paint.Style.STROKE);
             }
 
+            @SuppressWarnings("WeakerAccess")
             public Paint getStrokePaint() {
                 return mStrokePaint;
             }
 
-            @Override protected void onDraw(Shape s, Canvas c, Paint p) {
+            @Override
+            protected void onDraw(Shape s, Canvas c, Paint p) {
                 s.draw(c, p);
                 s.draw(c, mStrokePaint);
             }
@@ -78,9 +93,9 @@ public class ShapeDrawable1 extends GraphicsActivity {
             super(context);
             setFocusable(true);
 
-            float[] outerR = new float[] { 12, 12, 12, 12, 0, 0, 0, 0 };
-            RectF   inset = new RectF(6, 6, 6, 6);
-            float[] innerR = new float[] { 12, 12, 0, 0, 12, 12, 0, 0 };
+            float[] outerR = new float[]{12, 12, 12, 12, 0, 0, 0, 0};
+            RectF inset = new RectF(6, 6, 6, 6);
+            float[] innerR = new float[]{12, 12, 0, 0, 12, 12, 0, 0};
 
             Path path = new Path();
             path.moveTo(50, 0);
@@ -110,12 +125,12 @@ public class ShapeDrawable1 extends GraphicsActivity {
             PathEffect pe2 = new CornerPathEffect(4);
             mDrawables[3].getPaint().setPathEffect(new ComposePathEffect(pe2, pe));
 
-            MyShapeDrawable msd = (MyShapeDrawable)mDrawables[6];
+            MyShapeDrawable msd = (MyShapeDrawable) mDrawables[6];
             msd.getStrokePaint().setStrokeWidth(4);
         }
 
-        @Override protected void onDraw(Canvas canvas) {
-
+        @Override
+        protected void onDraw(Canvas canvas) {
             int x = 10;
             int y = 10;
             int width = 300;
