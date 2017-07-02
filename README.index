@@ -1088,7 +1088,6 @@ Graphics
     Graphics/Drawable/ShapeDrawable        all
         .graphics.ShapeDrawable1
             Drawing using the Drawable class methods, many of them usable in <shape> xml drawables.
-            TODO: Change size of Drawable's based on screen density (too small on Nexus 6)
 
   FingerPaint
     Graphics/FingerPaint                   all
