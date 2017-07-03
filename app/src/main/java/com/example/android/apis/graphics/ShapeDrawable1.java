@@ -155,7 +155,78 @@ public class ShapeDrawable1 extends GraphicsActivity {
         }
 
         /**
-         * Constructor for our {@code SampleView}.
+         * Constructor for our {@code SampleView}. First we call through to our super's constructor,
+         * and then we enable our {@code View} to receive focus. Then we allocate and initialize 3
+         * arrays we use later for defining {@code RoundRectShape}'s:
+         * <ul>
+         *     <li>
+         *         {@code float[] outerR} is an array  of 8 radius values, for the outer round rect.
+         *         The first two floats are for the top-left corner (remaining pairs correspond
+         *         clockwise).
+         *     </li>
+         *     <li>
+         *         {@code RectF inset} A RectF that specifies the distance from the inner rect to
+         *         each side of the outer rect. For no inner, we pass null.
+         *     </li>
+         *     <li>
+         *         {@code float[] innerR} An array of 8 radius values, for the inner round rect. The
+         *         first two floats are for the top-left corner (remaining pairs correspond clockwise).
+         *         For no rounded corners on the inner rectangle, we pass null. If inset parameter is
+         *         null, this parameter is ignored.
+         *     </li>
+         * </ul>
+         * Next we define {@code Path path} to be a diamond shaped rectangle which we will later use
+         * for the {@code PathShape} used for {@code mDrawables[5]}.
+         *
+         * We initialize our field {@code ShapeDrawable[] mDrawables} by allocating 7 {@code ShapeDrawable}'s.
+         * Then we initialize each of these:
+         * <ul>
+         *     <li>
+         *         {@code mDrawables[0]} is a new instance of {@code RectShape}, we will later set the
+         *         color of its {@code Paint} to Red.
+         *     </li>
+         *     <li>
+         *         {@code mDrawables[1]} is a new instance of {@code OvalShape}, we will later set the
+         *         color of its {@code Paint} to Blue.
+         *     </li>
+         *     <li>
+         *         {@code mDrawables[2]} is a new instance of {@code RoundRectShape} defined using only
+         *         {@code outerR} as the outer round rect, we will later set the color of its {@code Paint}
+         *         to Green.
+         *     </li>
+         *     <li>
+         *         {@code mDrawables[3]} is a new instance of {@code RoundRectShape} defined using
+         *         {@code outerR} as the outer round rect, and {@code inset} as the {@code RectF}
+         *         that specifies the distance from the inner rect to each side of the outer rect.
+         *         We will later set its {@code Shader} to a {@code SweepGradient Shader} created by
+         *         our method {@code makeSweep}.
+         *     </li>
+         *     <li>
+         *         {@code mDrawables[4]} is a new instance of {@code RoundRectShape} defined using
+         *         {@code outerR} as the outer round rect, {@code inset} as the {@code RectF} that
+         *         specifies the distance from the inner rect to each side of the outer rect, and
+         *         {@code innerR} as the inner round rect. We will later set its {@code Shader} to a
+         *         {@code LinearGradient Shader} created by our method {@code makeLinear}
+         *     </li>
+         *     <li>
+         *         {@code mDrawables[5]} is a {@code PathShape} using {@code Path path} as its {@code Path}
+         *         and 100 for both the standard width and standard height. We will later set its
+         *         {@code Shader} to a {@code BitmapShader Shader} created by our method {@code makeTiling}.
+         *     </li>
+         *     <li>
+         *         {@code mDrawables[6]} is a custom {@code MyShapeDrawable} wrapping an {@code ArcShape}
+         *         spanning 45 degrees to -270 degrees. We later set the color of its {@code Paint} to
+         *         0x88FF8844 (A Brown), and set the stroke width of the private {@code Paint} used to
+         *         draw the {@code ArcShape} a second time after the native {@code Paint} is used to 4.
+         *     </li>
+         * </ul>
+         * For {@code mDrawables[3]} we create {@code PathEffect pe} (a {@code DiscretePathEffect} which
+         * chops the path into lines of 10, randomly deviating from the original path by 4) and
+         * {@code PathEffect pe2} (a {@code CornerPathEffect} which transforms geometries that are
+         * drawn (either STROKE or FILL styles) by replacing any sharp angles between line segments
+         * into rounded angles of the specified radius 4). We then set the {@code PathEffect} of
+         * {@code mDrawables[3]}'s {@code Paint} to a {@code PathEffect} constructed from {@code pe2}
+         * and {@code pe} whose effect is to apply first {@code pe} and then {@code pe2} when drawing.
          *
          * @param context {@code Context} to use for resources, "this" {@code ShapeDrawable1} activity
          *                when called from {@code onCreate} in our case.
@@ -164,10 +235,23 @@ public class ShapeDrawable1 extends GraphicsActivity {
             super(context);
             setFocusable(true);
 
+            /*
+             * Outer round rectangle for {@code RoundRectShape}
+             */
             float[] outerR = new float[]{12, 12, 12, 12, 0, 0, 0, 0};
+            /*
+             * {@code RectF} that specifies the distance from the inner rect to each side of the
+             * outer rect when used for {@code RoundRectShape}
+             */
             RectF inset = new RectF(6, 6, 6, 6);
+            /*
+             * An array of 8 radius values, for the inner round rectangle used for {@code RoundRectShape}
+             */
             float[] innerR = new float[]{12, 12, 0, 0, 12, 12, 0, 0};
 
+            /*
+             * Diamond shaped path used for the {@code PathShape} used for {@code mDrawables[5]}
+             */
             Path path = new Path();
             path.moveTo(50, 0);
             path.lineTo(0, 50);
