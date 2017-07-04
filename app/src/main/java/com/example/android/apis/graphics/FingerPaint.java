@@ -24,9 +24,42 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
+/**
+ * Shows off some Canvas drawing methods and {@code View.onTouchEvent} usage.
+ * {@code ColorPickerDialog} produces a color wheel which is too small
+ * TODO: fix size of ColorPickerDialog
+ */
 public class FingerPaint extends GraphicsActivity
         implements ColorPickerDialog.OnColorChangedListener {
+    /**
+     * Current {@code Paint} to use for drawing loci of finger movements.
+     */
+    private Paint mPaint;
+    /**
+     * An {@code EmbossMaskFilter} which can be added to {@code mPaint} using the options menu,
+     * applies a shadow like effect to the line being drawn.
+     */
+    private MaskFilter mEmboss;
+    /**
+     * A {@code BlurMaskFilter} which can be added to {@code mPaint} using the options menu,
+     * applies a blur effect to the line being drawn.
+     */
+    private MaskFilter mBlur;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to an instance of {@code MyView}. Next we
+     * allocate a {@code Paint mPaint}, set its antialias flag, set its dither flag, set its color
+     * to RED, set the style to STROKE, set the stroke join to ROUND, set its stroke cap to ROUND,
+     * and set its stroke width to 12. We initialize {@code MaskFilter mEmboss} with an instance of
+     * {@code EmbossMaskFilter} configured to use a light source direction of (1,1,1), ambient light
+     * value of 0.4f,coefficient for specular highlights of 6.0, and blur before lighting of 3.5f.
+     * <p>
+     * Finally we initialize our field {@code MaskFilter mBlur} with a {@code BlurMaskFilter} configured
+     * to use a blur radius of 8.0f, and a blur type of NORMAL.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,20 +74,26 @@ public class FingerPaint extends GraphicsActivity
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeWidth(12);
 
-        mEmboss = new EmbossMaskFilter(new float[] { 1, 1, 1 },
-                                       0.4f, 6, 3.5f);
+        mEmboss = new EmbossMaskFilter(new float[]{1, 1, 1},
+                0.4f, 6, 3.5f);
 
         mBlur = new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL);
     }
 
-    private Paint       mPaint;
-    private MaskFilter  mEmboss;
-    private MaskFilter  mBlur;
-
+    /**
+     * This method will be called when the user has chosen a new color using {@code ColorPickerDialog}.
+     * We simply set the color of {@code Paint mPaint} to the {@code color} the user chose using the
+     * dialog.
+     *
+     * @param color new color chosen by user using {@code ColorPickerDialog}
+     */
     public void colorChanged(int color) {
         mPaint.setColor(color);
     }
 
+    /**
+     * Custom View which displays the loci drawn by the user's finger.
+     */
     public class MyView extends View {
 
         @SuppressWarnings("unused")
@@ -62,10 +101,24 @@ public class FingerPaint extends GraphicsActivity
         @SuppressWarnings("unused")
         private static final float MAXP = 0.75f;
 
-        private Bitmap  mBitmap;
-        private Canvas  mCanvas;
-        private Path    mPath;
-        private Paint   mBitmapPaint;
+        /**
+         * {@code Bitmap} which is used to save all lines drawn. It is updated with the latest
+         * {@code Path mPath} in method {@code touch_up} every time we receive the event
+         * MotionEvent.ACTION_UP by drawing to {@code Canvas mCanvas} (which is a {@code Canvas}
+         * created from {@code mBitmap}) and used in our {@code onDraw} override to draw the old
+         * lines before drawing the current {@code Path mPath}.
+         */
+        private Bitmap mBitmap;
+        /**
+         * {@code Canvas} for the {@code Bitmap mBitmap} created in {@code onSizeChanged} that allows
+         * us to draw into {@code mBitmap}
+         */
+        private Canvas mCanvas;
+        /**
+         * 
+         */
+        private Path mPath;
+        private Paint mBitmapPaint;
 
         public MyView(Context c) {
             super(c);
@@ -104,7 +157,7 @@ public class FingerPaint extends GraphicsActivity
             float dx = Math.abs(x - mX);
             float dy = Math.abs(y - mY);
             if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
-                mPath.quadTo(mX, mY, (x + mX)/2, (y + mY)/2);
+                mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
                 mX = x;
                 mY = y;
             }
@@ -157,14 +210,14 @@ public class FingerPaint extends GraphicsActivity
         menu.add(0, ERASE_MENU_ID, 0, "Erase").setShortcut('5', 'z');
         menu.add(0, SRCATOP_MENU_ID, 0, "SrcATop").setShortcut('5', 'z');
 
-        /****   Is this the mechanism to extend with filter effects?
+        /*   Is this the mechanism to extend with filter effects?
         Intent intent = new Intent(null, getIntent().getData());
         intent.addCategory(Intent.CATEGORY_ALTERNATIVE);
         menu.addIntentOptions(
                               Menu.ALTERNATIVE, 0,
                               new ComponentName(this, NotesList.class),
                               null, intent, 0, null);
-        *****/
+        */
         return true;
     }
 

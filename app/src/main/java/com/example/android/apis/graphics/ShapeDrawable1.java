@@ -159,66 +159,66 @@ public class ShapeDrawable1 extends GraphicsActivity {
          * and then we enable our {@code View} to receive focus. Then we allocate and initialize 3
          * arrays we use later for defining {@code RoundRectShape}'s:
          * <ul>
-         *     <li>
-         *         {@code float[] outerR} is an array  of 8 radius values, for the outer round rect.
-         *         The first two floats are for the top-left corner (remaining pairs correspond
-         *         clockwise).
-         *     </li>
-         *     <li>
-         *         {@code RectF inset} A RectF that specifies the distance from the inner rect to
-         *         each side of the outer rect. For no inner, we pass null.
-         *     </li>
-         *     <li>
-         *         {@code float[] innerR} An array of 8 radius values, for the inner round rect. The
-         *         first two floats are for the top-left corner (remaining pairs correspond clockwise).
-         *         For no rounded corners on the inner rectangle, we pass null. If inset parameter is
-         *         null, this parameter is ignored.
-         *     </li>
+         * <li>
+         * {@code float[] outerR} is an array  of 8 radius values, for the outer round rect.
+         * The first two floats are for the top-left corner (remaining pairs correspond
+         * clockwise).
+         * </li>
+         * <li>
+         * {@code RectF inset} A RectF that specifies the distance from the inner rect to
+         * each side of the outer rect. For no inner, we pass null.
+         * </li>
+         * <li>
+         * {@code float[] innerR} An array of 8 radius values, for the inner round rect. The
+         * first two floats are for the top-left corner (remaining pairs correspond clockwise).
+         * For no rounded corners on the inner rectangle, we pass null. If inset parameter is
+         * null, this parameter is ignored.
+         * </li>
          * </ul>
          * Next we define {@code Path path} to be a diamond shaped rectangle which we will later use
          * for the {@code PathShape} used for {@code mDrawables[5]}.
-         *
+         * <p>
          * We initialize our field {@code ShapeDrawable[] mDrawables} by allocating 7 {@code ShapeDrawable}'s.
          * Then we initialize each of these:
          * <ul>
-         *     <li>
-         *         {@code mDrawables[0]} is a new instance of {@code RectShape}, we will later set the
-         *         color of its {@code Paint} to Red.
-         *     </li>
-         *     <li>
-         *         {@code mDrawables[1]} is a new instance of {@code OvalShape}, we will later set the
-         *         color of its {@code Paint} to Blue.
-         *     </li>
-         *     <li>
-         *         {@code mDrawables[2]} is a new instance of {@code RoundRectShape} defined using only
-         *         {@code outerR} as the outer round rect, we will later set the color of its {@code Paint}
-         *         to Green.
-         *     </li>
-         *     <li>
-         *         {@code mDrawables[3]} is a new instance of {@code RoundRectShape} defined using
-         *         {@code outerR} as the outer round rect, and {@code inset} as the {@code RectF}
-         *         that specifies the distance from the inner rect to each side of the outer rect.
-         *         We will later set its {@code Shader} to a {@code SweepGradient Shader} created by
-         *         our method {@code makeSweep}.
-         *     </li>
-         *     <li>
-         *         {@code mDrawables[4]} is a new instance of {@code RoundRectShape} defined using
-         *         {@code outerR} as the outer round rect, {@code inset} as the {@code RectF} that
-         *         specifies the distance from the inner rect to each side of the outer rect, and
-         *         {@code innerR} as the inner round rect. We will later set its {@code Shader} to a
-         *         {@code LinearGradient Shader} created by our method {@code makeLinear}
-         *     </li>
-         *     <li>
-         *         {@code mDrawables[5]} is a {@code PathShape} using {@code Path path} as its {@code Path}
-         *         and 100 for both the standard width and standard height. We will later set its
-         *         {@code Shader} to a {@code BitmapShader Shader} created by our method {@code makeTiling}.
-         *     </li>
-         *     <li>
-         *         {@code mDrawables[6]} is a custom {@code MyShapeDrawable} wrapping an {@code ArcShape}
-         *         spanning 45 degrees to -270 degrees. We later set the color of its {@code Paint} to
-         *         0x88FF8844 (A Brown), and set the stroke width of the private {@code Paint} used to
-         *         draw the {@code ArcShape} a second time after the native {@code Paint} is used to 4.
-         *     </li>
+         * <li>
+         * {@code mDrawables[0]} is a new instance of {@code RectShape}, we will later set the
+         * color of its {@code Paint} to Red.
+         * </li>
+         * <li>
+         * {@code mDrawables[1]} is a new instance of {@code OvalShape}, we will later set the
+         * color of its {@code Paint} to Blue.
+         * </li>
+         * <li>
+         * {@code mDrawables[2]} is a new instance of {@code RoundRectShape} defined using only
+         * {@code outerR} as the outer round rect, we will later set the color of its {@code Paint}
+         * to Green.
+         * </li>
+         * <li>
+         * {@code mDrawables[3]} is a new instance of {@code RoundRectShape} defined using
+         * {@code outerR} as the outer round rect, and {@code inset} as the {@code RectF}
+         * that specifies the distance from the inner rect to each side of the outer rect.
+         * We will later set its {@code Shader} to a {@code SweepGradient Shader} created by
+         * our method {@code makeSweep}.
+         * </li>
+         * <li>
+         * {@code mDrawables[4]} is a new instance of {@code RoundRectShape} defined using
+         * {@code outerR} as the outer round rect, {@code inset} as the {@code RectF} that
+         * specifies the distance from the inner rect to each side of the outer rect, and
+         * {@code innerR} as the inner round rect. We will later set its {@code Shader} to a
+         * {@code LinearGradient Shader} created by our method {@code makeLinear}
+         * </li>
+         * <li>
+         * {@code mDrawables[5]} is a {@code PathShape} using {@code Path path} as its {@code Path}
+         * and 100 for both the standard width and standard height. We will later set its
+         * {@code Shader} to a {@code BitmapShader Shader} created by our method {@code makeTiling}.
+         * </li>
+         * <li>
+         * {@code mDrawables[6]} is a custom {@code MyShapeDrawable} wrapping an {@code ArcShape}
+         * spanning 45 degrees to -270 degrees. We later set the color of its {@code Paint} to
+         * 0x88FF8844 (A Brown), and set the stroke width of the private {@code Paint} used to
+         * draw the {@code ArcShape} a second time after the native {@code Paint} is used to 4.
+         * </li>
          * </ul>
          * For {@code mDrawables[3]} we create {@code PathEffect pe} (a {@code DiscretePathEffect} which
          * chops the path into lines of 10, randomly deviating from the original path by 4) and
@@ -284,6 +284,25 @@ public class ShapeDrawable1 extends GraphicsActivity {
             msd.getStrokePaint().setStrokeWidth(4);
         }
 
+        /**
+         * We implement this to do our drawing. First we fetch the logical density of the display from
+         * the current display metrics that are in effect for the resources associated with this view
+         * into {@code float scale}. This is a rough conversion factor which can used to convert dp
+         * measurements to pixels. We initialize {@code int x} (the x coordinate to use for each
+         * {@code ShapeDrawable}) to 10 dp scaled by {@code scale} into pixels, and {@code int y}
+         * (the y coordinate to use for the next {@code ShapeDrawable}) to 10 dp scaled by {@code scale}
+         * into pixels. We initialize {@code int width} (the width of our {@code ShapeDrawable}) to
+         * 300 dp scaled by {@code scale} into pixels, and {@code int height} (the height of our
+         * {@code ShapeDrawable}) to 50 dp scaled by {@code scale} into pixels.
+         * <p>
+         * Then for each of the {@code Drawable dr} in {@code ShapeDrawable[] mDrawables} we set the
+         * bounds of {@code dr} to {@code (x,y,x+width,y+height)} ((left,top,right,bottom) positions
+         * of the bounding rectangle for {@code dr}). We instruct {@code dr} to draw itself on the
+         * {@code Canvas canvas} and then advance {@code y} by the {@code height} and 5 dp for padding
+         * between {@code Drawable}'s in order to get ready for the next pass through the loop.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             final float scale = getResources().getDisplayMetrics().density;
