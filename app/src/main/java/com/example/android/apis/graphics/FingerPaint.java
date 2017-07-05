@@ -115,11 +115,24 @@ public class FingerPaint extends GraphicsActivity
          */
         private Canvas mCanvas;
         /**
-         * 
+         * {@code Path} traced by user's finger, collected from {@code MotionEvent}'s received in our
+         * {@code MyView.onTouchEvent} method.
          */
         private Path mPath;
+        /**
+         * {@code Paint} used to draw {@code Bitmap mBitmap} (the accumulated finger loci tracing)
+         * used in our {@code onDraw} override.
+         */
         private Paint mBitmapPaint;
 
+        /**
+         * Basic constructor for {@code MyView}, first we call through to our super's constructor,
+         * then we initialize our field {@code Path mPath} with a new instance of {@code Path}, and
+         * our field {@code Paint mBitmapPaint} with a {@code Paint} with the DITHER_FLAG set.
+         *
+         * @param c {@code Context} to use for resources, "this" {@code FingerPaint} activity when
+         *          called from {@code onCreate} in our case
+         */
         public MyView(Context c) {
             super(c);
 
@@ -127,6 +140,21 @@ public class FingerPaint extends GraphicsActivity
             mBitmapPaint = new Paint(Paint.DITHER_FLAG);
         }
 
+        /**
+         * This is called during layout when the size of this view has changed. If
+         * you were just added to the view hierarchy, you're called with the old
+         * values of 0.
+         *
+         * First we call through to our super's implementation of {@code onSizeChanged}, then we set
+         * out field {@code Bitmap mBitmap} to a w by h {@code Bitmap} with a config of ARGB_8888.
+         * Finally we set our field {@code Canvas mCanvas} to a canvas that can be used to draw into
+         * the bitmap {@code mBitmap}.
+         *
+         * @param w Current width of this view.
+         * @param h Current height of this view.
+         * @param oldw Old width of this view.
+         * @param oldh Old height of this view.
+         */
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             super.onSizeChanged(w, h, oldw, oldh);
@@ -134,6 +162,14 @@ public class FingerPaint extends GraphicsActivity
             mCanvas = new Canvas(mBitmap);
         }
 
+        /**
+         * We implement this to do our drawing. First we fill the entire {@code Canvas canvas} with
+         * the color 0xFFAAAAAA (a light gray), then we draw {@code Bitmap mBitmap} (our accumulated
+         * finger tracing lines) using {@code Paint mBitmapPaint}, and finally we draw the current
+         * finger loci being built in {@code Path mPath} using {@code Paint mPaint}.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(0xFFAAAAAA);
@@ -143,9 +179,21 @@ public class FingerPaint extends GraphicsActivity
             canvas.drawPath(mPath, mPaint);
         }
 
+        /**
+         * Current location of the finger
+         */
         private float mX, mY;
+        /**
+         * Finger movements below this value are ignored.
+         */
         private static final float TOUCH_TOLERANCE = 4;
 
+        /**
+         * Called when our {@code onTouchEvent} override receives a ACTION_DOWN motion event.
+         *
+         * @param x x coordinate of the {@code MotionEvent}
+         * @param y y coordinate of the {@code MotionEvent}
+         */
         private void touch_start(float x, float y) {
             mPath.reset();
             mPath.moveTo(x, y);
