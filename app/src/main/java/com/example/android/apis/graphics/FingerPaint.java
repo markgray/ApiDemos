@@ -144,14 +144,14 @@ public class FingerPaint extends GraphicsActivity
          * This is called during layout when the size of this view has changed. If
          * you were just added to the view hierarchy, you're called with the old
          * values of 0.
-         *
+         * <p>
          * First we call through to our super's implementation of {@code onSizeChanged}, then we set
          * out field {@code Bitmap mBitmap} to a w by h {@code Bitmap} with a config of ARGB_8888.
          * Finally we set our field {@code Canvas mCanvas} to a canvas that can be used to draw into
          * the bitmap {@code mBitmap}.
          *
-         * @param w Current width of this view.
-         * @param h Current height of this view.
+         * @param w    Current width of this view.
+         * @param h    Current height of this view.
          * @param oldw Old width of this view.
          * @param oldh Old height of this view.
          */
@@ -189,7 +189,10 @@ public class FingerPaint extends GraphicsActivity
         private static final float TOUCH_TOLERANCE = 4;
 
         /**
-         * Called when our {@code onTouchEvent} override receives a ACTION_DOWN motion event.
+         * Called when our {@code onTouchEvent} override receives a ACTION_DOWN motion event. First
+         * we clear all lines and curves from our current finger loci {@code Path mPath} making it
+         * empty. Then we set the beginning of the next contour of {@code mPath} to (x,y), and save
+         * the position in our fields {@code mX} and {@code mY}.
          *
          * @param x x coordinate of the {@code MotionEvent}
          * @param y y coordinate of the {@code MotionEvent}
@@ -201,6 +204,17 @@ public class FingerPaint extends GraphicsActivity
             mY = y;
         }
 
+        /**
+         * Called when our {@code onTouchEvent} override receives a ACTION_MOVE motion event. First
+         * we calculate how far the motion event moved {@code dx} from {@code mX} in the x direction
+         * and {@code dy} fro {@code mY} in the y direction and if either of these is greater than
+         * or equal to TOUCH_TOLERANCE we add a quadratic bezier from the last point {@code mPath}
+         * was moved to, approaching control point (mX,mY), and ending at the point given by
+         * [(x+mX)/2, (y+mY)/2]. We then save (x,y) in our fields mX and mY respectively.
+         *
+         * @param x x coordinate of the {@code MotionEvent}
+         * @param y y coordinate of the {@code MotionEvent}
+         */
         private void touch_move(float x, float y) {
             float dx = Math.abs(x - mX);
             float dy = Math.abs(y - mY);
@@ -211,6 +225,13 @@ public class FingerPaint extends GraphicsActivity
             }
         }
 
+        /**
+         * Called when our {@code onTouchEvent} override receives an ACTION_UP motion event. First we
+         * add a line to {@code Path mPath} from the last point to the point (mX,mY), then we commit
+         * the {@code Path mPath} to our offscreen {@code Bitmap mBitmap} by writing to it using
+         * {@code Canvas mCanvas}, then we clear all lines and curves from our current finger loci
+         * {@code Path mPath} making it empty.
+         */
         private void touch_up() {
             mPath.lineTo(mX, mY);
             // commit the path to our offscreen
@@ -219,6 +240,35 @@ public class FingerPaint extends GraphicsActivity
             mPath.reset();
         }
 
+        /**
+         * We implement this method to handle touch screen motion events. First we fetch the x
+         * coordinate of the {@code MotionEvent event} to {@code float x} and the y coordinate of
+         * the {@code MotionEvent event} to {@code float y}. Then we switch based on the action
+         * that is being reported in {@code event}:
+         * <ul>
+         * <li>
+         * ACTION_DOWN - we call our method {@code touch_start} with the coordinate (x,y) in
+         * order to begin recording a new loci of finger tracings, then call {@code invalidate}
+         * to request that our view be redrawn.
+         * </li>
+         * <li>
+         * ACTION_MOVE - we call our method {@code touch_move} with the coordinate (x,y) in
+         * order to draw a bezier curve from the last location to this new location, then
+         * call {@code invalidate} to request that our view be redrawn.
+         * </li>
+         * <li>
+         * ACTION_UP - we call our method {@code touch_up} which finishes {@code Path mPath}
+         * by drawing a line to our last point at (mX,mY), commits {@code mPath} to our
+         * offscreen accumulated finger tracings contained in {@code Bitmap mBitmap} and
+         * empties {@code mPath}, then call {@code invalidate} to request that our view be
+         * redrawn.
+         * </li>
+         * </ul>
+         * Finally we return true to the caller to indicate that we have consumed the {@code MotionEvent}.
+         *
+         * @param event The motion event.
+         * @return True if the event was handled, false otherwise.
+         */
         @Override
         public boolean onTouchEvent(MotionEvent event) {
             float x = event.getX();
@@ -242,12 +292,35 @@ public class FingerPaint extends GraphicsActivity
         }
     }
 
+    /**
+     * Menu ID for our "Color" option
+     */
     private static final int COLOR_MENU_ID = Menu.FIRST;
+    /**
+     * Menu ID for our "Emboss" option
+     */
     private static final int EMBOSS_MENU_ID = Menu.FIRST + 1;
+    /**
+     * Menu ID for our "Blur" option
+     */
     private static final int BLUR_MENU_ID = Menu.FIRST + 2;
+    /**
+     * Menu ID for our "Erase" option
+     */
     private static final int ERASE_MENU_ID = Menu.FIRST + 3;
+    /**
+     * Menu ID for our "SrcATop" option
+     */
     private static final int SRCATOP_MENU_ID = Menu.FIRST + 4;
 
+    /**
+     * Initialize the contents of the Activity's standard options menu. First we call through to our
+     * super's implementation of {@code onCreateOptionsMenu}
+     *
+     * @param menu The options menu in which you place your items.
+     * @return You must return true for the menu to be displayed;
+     * if you return false it will not be shown
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
