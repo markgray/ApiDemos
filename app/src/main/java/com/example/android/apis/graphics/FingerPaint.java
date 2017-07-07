@@ -315,7 +315,26 @@ public class FingerPaint extends GraphicsActivity
 
     /**
      * Initialize the contents of the Activity's standard options menu. First we call through to our
-     * super's implementation of {@code onCreateOptionsMenu}
+     * super's implementation of {@code onCreateOptionsMenu}. Then we add our menu options to
+     * {@code Menu menu}:
+     * <ul>
+     * <li>
+     * COLOR_MENU_ID - "Color" allows the user to select a color
+     * </li>
+     * <li>
+     * EMBOSS_MENU_ID - "Emboss" allows you to toggle the usage of the {@code EmbossMaskFilter}
+     * </li>
+     * <li>
+     * BLUR_MENU_ID - "Blur" allows you to toggle the usage of the {@code BlurMaskFilter}
+     * </li>
+     * <li>
+     * ERASE_MENU_ID - "Erase" sets the Porter-Duff transfer mode to CLEAR
+     * </li>
+     * <li>
+     * SRCATOP_MENU_ID - "SrcATop" sets the Porter-Duff transfer mode to SRC_ATOP
+     * </li>
+     * </ul>
+     * Finally we return true so the menu will be displayed.
      *
      * @param menu The options menu in which you place your items.
      * @return You must return true for the menu to be displayed;
@@ -342,12 +361,63 @@ public class FingerPaint extends GraphicsActivity
         return true;
     }
 
+    /**
+     * Prepare the Screen's standard options menu to be displayed.  This is
+     * called right before the menu is shown, every time it is shown.  You can
+     * use this method to efficiently enable/disable items or otherwise
+     * dynamically modify the contents.
+     * <p>
+     * We simply call through to our super's implementation of {@code onPrepareOptionsMenu} and return
+     * true so the menu will be displayed
+     *
+     * @param menu The options menu as last shown or first initialized by
+     *             onCreateOptionsMenu().
+     * @return You must return true for the menu to be displayed;
+     * if you return false it will not be shown.
+     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         return true;
     }
 
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     * The default implementation simply returns false to have the normal
+     * processing happen (calling the item's Runnable or sending a message to
+     * its Handler as appropriate).  You can use this method for any items
+     * for which you would like to do processing without those other
+     * facilities.
+     * <p>
+     * First we clear the previous Porter-Duff transfer mode of {@code Paint mPaint}, and set the
+     * alpha to its max. Then we switch on the item ID of {@code MenuItem item}:
+     * <ul>
+     * <li>
+     * COLOR_MENU_ID - "Color" allows the user to select a color. We create and {@code show} an
+     * instance of {@code ColorPickerDialog} which will allow the user to select a new color using
+     * a "color wheel" and upon selection our method {@code colorChanged} will be called with that
+     * selection which it will use to set the color of {@code Paint mPaint}.
+     * </li>
+     * <li>
+     * EMBOSS_MENU_ID - "Emboss" allows you to toggle the usage of the {@code EmbossMaskFilter}
+     * </li>
+     * <li>
+     * BLUR_MENU_ID - "Blur" allows you to toggle the usage of the {@code BlurMaskFilter}
+     * </li>
+     * <li>
+     * ERASE_MENU_ID - "Erase" sets the Porter-Duff transfer mode to CLEAR
+     * </li>
+     * <li>
+     * SRCATOP_MENU_ID - "SrcATop" sets the Porter-Duff transfer mode to SRC_ATOP
+     * </li>
+     * </ul>
+     * Finally we return the value returned by our super's implementation of {@code onOptionsItemSelected}
+     * to the caller
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return false to allow normal menu processing to
+     * proceed, true to consume it here.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         mPaint.setXfermode(null);
