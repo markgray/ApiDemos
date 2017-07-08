@@ -399,16 +399,21 @@ public class FingerPaint extends GraphicsActivity
      * selection which it will use to set the color of {@code Paint mPaint}.
      * </li>
      * <li>
-     * EMBOSS_MENU_ID - "Emboss" allows you to toggle the usage of the {@code EmbossMaskFilter}
+     * EMBOSS_MENU_ID - "Emboss" allows you to toggle the usage of the {@code EmbossMaskFilter}. If
+     * the current {@code MaskFilter} for {@code Paint mPaint} is not {@code MaskFilter mEmboss} we
+     * set the {@code MaskFilter} to {@code mEmboss}, and if it is we set it to null.
      * </li>
      * <li>
-     * BLUR_MENU_ID - "Blur" allows you to toggle the usage of the {@code BlurMaskFilter}
+     * BLUR_MENU_ID - "Blur" allows you to toggle the usage of the {@code BlurMaskFilter}. If
+     * the current {@code MaskFilter} for {@code Paint mPaint} is not {@code MaskFilter mBlur} we
+     * set the {@code MaskFilter} to {@code mBlur}, and if it is we set it to null.
      * </li>
      * <li>
      * ERASE_MENU_ID - "Erase" sets the Porter-Duff transfer mode to CLEAR
      * </li>
      * <li>
-     * SRCATOP_MENU_ID - "SrcATop" sets the Porter-Duff transfer mode to SRC_ATOP
+     * SRCATOP_MENU_ID - "SrcATop" sets the Porter-Duff transfer mode to SRC_ATOP, and sets the
+     * alpha component to the max value.
      * </li>
      * </ul>
      * Finally we return the value returned by our super's implementation of {@code onOptionsItemSelected}

@@ -27,8 +27,13 @@ import android.view.View;
 /**
  * Custom {@code Dialog} to pick colors, used only by {@code FingerPaint}
  */
+@SuppressWarnings("WeakerAccess")
 public class ColorPickerDialog extends Dialog {
 
+    /**
+     * This interface defines the method {@code colorChanged} which we will call when the user has
+     * chosen a new color
+     */
     public interface OnColorChangedListener {
         void colorChanged(int color);
     }
