@@ -38,7 +38,15 @@ public class ColorPickerDialog extends Dialog {
         void colorChanged(int color);
     }
 
+    /**
+     * Set in constructor of {@code ColorPickerDialog}, and called in {@code ColorPickerView} when
+     * the user has selected a color. Do not confuse with {@code ColorPickerView.mListener} which
+     * is an anonymous class which calls {@code ColorPickerDialog.mListener.colorChanged}
+     */
     private OnColorChangedListener mListener;
+    /**
+     * The current color being used by {@code FingerPaint}, passed to us as a constructor argument.
+     */
     private int mInitialColor;
 
     @SuppressLint("ViewConstructor")
@@ -52,8 +60,8 @@ public class ColorPickerDialog extends Dialog {
             super(c);
             mListener = l;
             mColors = new int[]{
-                    0xFFFF0000, 0xFFFF00FF, 0xFF0000FF, 0xFF00FFFF, 0xFF00FF00,
-                    0xFFFFFF00, 0xFFFF0000
+                    0xFFFF0000, 0xFFFF00FF, 0xFF0000FF, 0xFF00FFFF,
+                    0xFF00FF00, 0xFFFFFF00, 0xFFFF0000
             };
             Shader s = new SweepGradient(0, 0, mColors, null);
 
