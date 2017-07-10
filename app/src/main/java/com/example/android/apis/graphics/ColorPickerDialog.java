@@ -49,8 +49,16 @@ public class ColorPickerDialog extends Dialog {
      */
     private int mInitialColor;
 
-    @SuppressLint("ViewConstructor")
+    /**
+     * Custom View that draws a color wheel that the user can choose a color from.
+     */
     private static class ColorPickerView extends View {
+        /**
+         * {@code Paint} with a {@code SweepGradient} shader used to draw a color spectrum circular
+         * oval. Any user finger movement reported to our {@code onTouchEvent} callback that is found
+         * to be located on that oval selects the color underneath the finger to be the new color for
+         * {@code Paint mCenterPaint}.
+         */
         private Paint mPaint;
         private Paint mCenterPaint;
         private final int[] mColors;
@@ -97,9 +105,7 @@ public class ColorPickerDialog extends Dialog {
                 } else {
                     mCenterPaint.setAlpha(0x80);
                 }
-                canvas.drawCircle(0, 0,
-                        CENTER_RADIUS + mCenterPaint.getStrokeWidth(),
-                        mCenterPaint);
+                canvas.drawCircle(0, 0, CENTER_RADIUS + mCenterPaint.getStrokeWidth(), mCenterPaint);
 
                 mCenterPaint.setStyle(Paint.Style.FILL);
                 mCenterPaint.setColor(c);
