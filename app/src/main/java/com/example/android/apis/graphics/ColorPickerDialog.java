@@ -60,10 +60,34 @@ public class ColorPickerDialog extends Dialog {
          * {@code Paint mCenterPaint}.
          */
         private Paint mPaint;
+        /**
+         * Paint used to draw the "select color and dismiss" circle at the center of the color wheel.
+         * It is set to the current color, either the one we are constructed with, or the one the user
+         * has selected on the color wheel.
+         */
         private Paint mCenterPaint;
+        /**
+         * Colors used to construct the {@code SweepGradient} that is used as the shader for
+         * {@code Paint mPaint}, which is used to draw the color wheel.
+         */
         private final int[] mColors;
+        /**
+         * The {@code OnColorChangedListener} we were constructed with, its {@code colorChanged} method
+         * will be called once the user the has clicked "select color and dismiss" circle at the center
+         * of the color wheel. Do not confuse with {@code ColorPickerDialog.mListener}.
+         */
         private OnColorChangedListener mListener;
 
+        /**
+         * Constructor for our {@code ColorPickerView} instance.
+         *
+         * @param c     {@code Context} to use for resources, in our case the results of a call in
+         *              {@code onCreate} of {@code ColorPickerView} to the method {@code getContext}
+         *              to fetch the Context the Dialog is running in.
+         * @param l     The {@code OnColorChangedListener} whose {@code colorChanged} method we are
+         *              to call when done.
+         * @param color Color currently being used in {@code FingerPaint}
+         */
         ColorPickerView(Context c, OnColorChangedListener l, int color) {
             super(c);
             mListener = l;
