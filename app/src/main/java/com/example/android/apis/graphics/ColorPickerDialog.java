@@ -50,6 +50,51 @@ public class ColorPickerDialog extends Dialog {
     private int mInitialColor;
 
     /**
+     * Constructor for our {@code ColorPickerDialog} instance. First we call through to our super's
+     * constructor, then we save our parameter {@code OnColorChangedListener listener} in our field
+     * {@code OnColorChangedListener mListener}, and {@code int initialColor} in our field
+     * {@code int mInitialColor}.
+     *
+     * @param context      {@code Context} to use for resources, in our case "this" when called from
+     *                     {@code FingerPaint}'s {@code onOptionsItemSelected} override
+     * @param listener     {@code OnColorChangedListener} whose {@code colorChanged} method we should
+     *                     call when user has selected a color, in our case "this" when called from
+     *                     {@code FingerPaint}'s {@code onOptionsItemSelected} override
+     * @param initialColor initial color currently being used by {@code FingerPaint}
+     */
+    public ColorPickerDialog(Context context, OnColorChangedListener listener, int initialColor) {
+        super(context);
+
+        mListener = listener;
+        mInitialColor = initialColor;
+    }
+
+    /**
+     * Called when the {@code Dialog} is starting. First we call through to our super's implementation
+     * of {@code onCreate}. Next we create an anonymous class {@code OnColorChangedListener l} which
+     * will call the {@code OnColorChangedListener.colorChanged} method in {@code FingerPaint} when
+     * its own {@code colorChanged} method is called, then {@code dismiss} the {@code ColorPickerDialog}.
+     * It then sets the content view of our dialog to a new instance of {@code ColorPickerView} created
+     * using the {@code Context} this dialog is running in, {@code OnColorChangedListener l}, and our
+     * field {@code int mInitialColor}. Finally we set our title to "Pick a Color".
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        OnColorChangedListener l = new OnColorChangedListener() {
+            public void colorChanged(int color) {
+                mListener.colorChanged(color);
+                dismiss();
+            }
+        };
+
+        setContentView(new ColorPickerView(getContext(), l, mInitialColor));
+        setTitle("Pick a Color");
+    }
+
+    /**
      * Custom View that draws a color wheel that the user can choose a color from.
      */
     private static class ColorPickerView extends View {
@@ -79,7 +124,16 @@ public class ColorPickerDialog extends Dialog {
         private OnColorChangedListener mListener;
 
         /**
-         * Constructor for our {@code ColorPickerView} instance.
+         * Constructor for our {@code ColorPickerView} instance. First we call through to our super's
+         * constructor, then we save our parameter {@code OnColorChangedListener l} in our field
+         * {@code OnColorChangedListener mListener}. We initialize our field {@code int[] mColors}
+         * with an array of colors which will describe a color wheel spectrum when we create the
+         * {@code SweepGradient} for {@code Shader s}. We allocate an instance of {@code Paint} with
+         * the anti-alias flag set to initialize our field {@code Paint mPaint}, set its Shader to
+         * {@code Shader s}, set the style to STROKE, and set the stroke width to 32.  We allocate
+         * an instance of {@code Paint} with the anti-alias flag set to initialize our field
+         * {@code Paint mCenterPaint}, set its color to our parameter {@code color}, and set the
+         * stroke width to 5.
          *
          * @param c     {@code Context} to use for resources, in our case the results of a call in
          *              {@code onCreate} of {@code ColorPickerView} to the method {@code getContext}
@@ -107,8 +161,24 @@ public class ColorPickerDialog extends Dialog {
             mCenterPaint.setStrokeWidth(5);
         }
 
+        /**
+         * Flag indicating whether the finger's last ACTION_DOWN {@code MotionEvent} was in the center
+         * circle used to "select the current color" and is used to keep track of the finger movement
+         * while waiting for an ACTION_UP also in the center circle to indicate the selection is
+         * complete. This allows the user to move his finger out of the center circle if he changes
+         * his mind and wishes to continue the search for a color.
+         */
         private boolean mTrackingCenter;
+        /**
+         * Flag indicating that a halo should be drawn around the center circle.
+         */
         private boolean mHighlightCenter;
+
+        private static final int CENTER_X = 100;
+        private static final int CENTER_Y = 100;
+        private static final int CENTER_RADIUS = 32;
+
+        private static final float PI = 3.1415926f;
 
         @SuppressLint("DrawAllocation")
         @Override
@@ -141,9 +211,49 @@ public class ColorPickerDialog extends Dialog {
             setMeasuredDimension(CENTER_X * 2, CENTER_Y * 2);
         }
 
-        private static final int CENTER_X = 100;
-        private static final int CENTER_Y = 100;
-        private static final int CENTER_RADIUS = 32;
+        @Override
+        public boolean onTouchEvent(MotionEvent event) {
+            float x = event.getX() - CENTER_X;
+            float y = event.getY() - CENTER_Y;
+            boolean inCenter = java.lang.Math.hypot(x, y) <= CENTER_RADIUS;
+
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    mTrackingCenter = inCenter;
+                    if (inCenter) {
+                        mHighlightCenter = true;
+                        invalidate();
+                        break;
+                    }
+                case MotionEvent.ACTION_MOVE:
+                    if (mTrackingCenter) {
+                        if (mHighlightCenter != inCenter) {
+                            mHighlightCenter = inCenter;
+                            invalidate();
+                        }
+                    } else {
+                        float angle = (float) java.lang.Math.atan2(y, x);
+                        // need to turn angle [-PI ... PI] into unit [0....1]
+                        float unit = angle / (2 * PI);
+                        if (unit < 0) {
+                            unit += 1;
+                        }
+                        mCenterPaint.setColor(interpColor(mColors, unit));
+                        invalidate();
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    if (mTrackingCenter) {
+                        if (inCenter) {
+                            mListener.colorChanged(mCenterPaint.getColor());
+                        }
+                        mTrackingCenter = false;    // so we draw w/o halo
+                        invalidate();
+                    }
+                    break;
+            }
+            return true;
+        }
 
         private int floatToByte(float x) {
             //noinspection UnnecessaryLocalVariable
@@ -213,73 +323,5 @@ public class ColorPickerDialog extends Dialog {
                     pinToByte(ig), pinToByte(ib));
         }
 
-        private static final float PI = 3.1415926f;
-
-        @Override
-        public boolean onTouchEvent(MotionEvent event) {
-            float x = event.getX() - CENTER_X;
-            float y = event.getY() - CENTER_Y;
-            boolean inCenter = java.lang.Math.hypot(x, y) <= CENTER_RADIUS;
-
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    mTrackingCenter = inCenter;
-                    if (inCenter) {
-                        mHighlightCenter = true;
-                        invalidate();
-                        break;
-                    }
-                case MotionEvent.ACTION_MOVE:
-                    if (mTrackingCenter) {
-                        if (mHighlightCenter != inCenter) {
-                            mHighlightCenter = inCenter;
-                            invalidate();
-                        }
-                    } else {
-                        float angle = (float) java.lang.Math.atan2(y, x);
-                        // need to turn angle [-PI ... PI] into unit [0....1]
-                        float unit = angle / (2 * PI);
-                        if (unit < 0) {
-                            unit += 1;
-                        }
-                        mCenterPaint.setColor(interpColor(mColors, unit));
-                        invalidate();
-                    }
-                    break;
-                case MotionEvent.ACTION_UP:
-                    if (mTrackingCenter) {
-                        if (inCenter) {
-                            mListener.colorChanged(mCenterPaint.getColor());
-                        }
-                        mTrackingCenter = false;    // so we draw w/o halo
-                        invalidate();
-                    }
-                    break;
-            }
-            return true;
-        }
-    }
-
-    public ColorPickerDialog(Context context,
-                             OnColorChangedListener listener,
-                             int initialColor) {
-        super(context);
-
-        mListener = listener;
-        mInitialColor = initialColor;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        OnColorChangedListener l = new OnColorChangedListener() {
-            public void colorChanged(int color) {
-                mListener.colorChanged(color);
-                dismiss();
-            }
-        };
-
-        setContentView(new ColorPickerView(getContext(), l, mInitialColor));
-        setTitle("Pick a Color");
     }
 }
