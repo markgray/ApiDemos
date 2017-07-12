@@ -170,16 +170,41 @@ public class ColorPickerDialog extends Dialog {
          */
         private boolean mTrackingCenter;
         /**
-         * Flag indicating that a halo should be drawn around the center circle.
+         * Flag indicating that a halo should be drawn around the center circle, it is set to the
+         * value {@code boolean inCenter} (a flag indicating the location is in the center circle)
+         * when an ACTION_DOWN event occurs, and set to false if an ACTION_UP event occurs outside
+         * the center circle (the finger has moved on)
          */
         private boolean mHighlightCenter;
 
+        /**
+         * x coordinate of the center of the center circle
+         */
         private static final int CENTER_X = 100;
+        /**
+         * y coordinate of the center of the center circle
+         */
         private static final int CENTER_Y = 100;
+        /**
+         * radius of the center circle
+         */
         private static final int CENTER_RADIUS = 32;
 
+        /**
+         * constant pi value used for circle calculations when a color on the wheel is being selected
+         */
         private static final float PI = 3.1415926f;
 
+        /**
+         * We implement this to do our drawing. First we calculate the radius {@code float r} of the
+         * color spectrum circle, move the {@code Canvas canvas} to the center of our view as given
+         * by (CENTER_X, CENTER_X), draw our color spectrum circle using {@code Paint mPaint}, and
+         * draw the center "select and dismiss" circle using {@code Paint mCenterPaint}. Then if our
+         * flag {@code boolean mTrackingCenter} is true (the last ACTION_DOWN event was in the center
+         * circle), we first save the current color of {@code Paint mCenterPaint} in {@code int c}
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @SuppressLint("DrawAllocation")
         @Override
         protected void onDraw(Canvas canvas) {
