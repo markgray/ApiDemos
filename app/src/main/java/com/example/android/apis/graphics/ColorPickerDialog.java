@@ -201,7 +201,13 @@ public class ColorPickerDialog extends Dialog {
          * by (CENTER_X, CENTER_X), draw our color spectrum circle using {@code Paint mPaint}, and
          * draw the center "select and dismiss" circle using {@code Paint mCenterPaint}. Then if our
          * flag {@code boolean mTrackingCenter} is true (the last ACTION_DOWN event was in the center
-         * circle), we first save the current color of {@code Paint mCenterPaint} in {@code int c}
+         * circle), we first save the current color of {@code Paint mCenterPaint} in {@code int c},
+         * then we set its style to STROKE, and if the {@code boolean mHighlightCenter} flag is true
+         * (which it is after an ACTION_DOWN in the center circle, until an ACTION_MOVE outside the
+         * circle) we set the alpha to the max 0xFF, otherwise we set it to 0x80 (this has the effect
+         * of lightening the "halo" if the finger moves outside the center). We then draw the center
+         * circle "halo" using {@code Paint mCenterPaint}. Finally we reset the style of {@code mCenterPaint}
+         * to FILL, and the color to the saved color {@code c}.
          *
          * @param canvas the canvas on which the background will be drawn
          */
@@ -231,11 +237,69 @@ public class ColorPickerDialog extends Dialog {
             }
         }
 
+        /**
+         * Measure the view and its content to determine the measured width and the
+         * measured height. This method is invoked by {@link #measure(int, int)} and
+         * should be overridden by subclasses to provide accurate and efficient
+         * measurement of their contents.
+         * <p>
+         * We simply call {@code setMeasuredDimension} with a width of twice {@code CENTER_X}, and
+         * a height of twice {@code CENTER_Y}/
+         *
+         * @param widthMeasureSpec  horizontal space requirements as imposed by the parent.
+         *                          The requirements are encoded with
+         *                          {@link android.view.View.MeasureSpec}.
+         * @param heightMeasureSpec vertical space requirements as imposed by the parent.
+         *                          The requirements are encoded with
+         *                          {@link android.view.View.MeasureSpec}.
+         */
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             setMeasuredDimension(CENTER_X * 2, CENTER_Y * 2);
         }
 
+        /**
+         * We Implement this method to handle touch screen motion events. We first fetch {@code float x}
+         * (the x coordinate) and {@code float y} (the y coordinate) from the {@code MotionEvent event}.
+         * We set the flag {@code boolean inCenter} based on a geometric calculation to determine if
+         * the event occurred inside the center "select and dismiss" circle. We then switch based on
+         * the action of the {@code MotionEvent event}:
+         * <ul>
+         *     <li>
+         *         ACTION_DOWN - we set our flag {@code boolean mTrackingCenter} to the value of
+         *         {@code boolean inCenter}, and if the event occurred in the center circle we set
+         *         {@code boolean mHighlightCenter} to true and invalidate our view so it will be
+         *         redrawn (this time with a "halo") and we break. If it was not in the center circle
+         *         we fall through to the code for the ACTION_MOVE case.
+         *     </li>
+         *     <li>
+         *         ACTION_MOVE - if {@code boolean mTrackingCenter} is true (the last ACTION_DOWN occurred
+         *         in the center circle) we check to see if {@code boolean mHighlightCenter} is not equal
+         *         to {@code boolean inCenter} (the finger has moved in or out of the center circle) and if
+         *         they are not we set {@code mHighlightCenter} to {@code inCenter} and invalidate the view
+         *         so it will be redrawn with the new "halo" setting. If {@code mTrackingCenter} is false
+         *         the last ACTION_DOWN was outside the center circle and the movement is intended to select
+         *         a color from the color spectrum circle, so we determine the angle on the spectrum circle
+         *         based on the x and y coordinate, convert that angle to a {@code float unit} between 0 and
+         *         1, then set the color of {@code Paint mCenterPaint} to the color calculated by our method
+         *         {@code interpColor} and invalidate our view causing it to be redrawn with the new color
+         *         for the center circle.
+         *     </li>
+         *     <li>
+         *         ACTION_UP - If our flag {@code boolean mTrackingCenter} is true (the last ACTION_DOWN
+         *         occurred in the center circle) we check to see if the current event occurred still in
+         *         the circle and if so we call our {@code OnColorChangedListener mListener} callback to
+         *         select the current color and dismiss the dialog. If the finger is now outside the
+         *         center circle (the user changed his mind), we set {@code boolean mTrackingCenter}
+         *         to false (the center circle will be drawn without the "halo") and invalidate our view
+         *         causing it to be redrawn.
+         *     </li>
+         * </ul>
+         * Finally we return true to indicate that we have handled the {@code MotionEvent event}.
+         *
+         * @param event The motion event.
+         * @return True if the event was handled, false otherwise.
+         */
         @Override
         public boolean onTouchEvent(MotionEvent event) {
             float x = event.getX() - CENTER_X;
@@ -280,6 +344,12 @@ public class ColorPickerDialog extends Dialog {
             return true;
         }
 
+        /**
+         * 
+         *
+         * @param x float value to round to a byte
+         * @return rounded int version of {@code x}
+         */
         private int floatToByte(float x) {
             //noinspection UnnecessaryLocalVariable
             int n = java.lang.Math.round(x);
