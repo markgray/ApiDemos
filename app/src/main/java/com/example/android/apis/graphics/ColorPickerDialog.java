@@ -345,7 +345,8 @@ public class ColorPickerDialog extends Dialog {
         }
 
         /**
-         * 
+         * Converts a floating point Red, Green or Blue color value to a rounded {@code int}. It is
+         * only used in the unused method {@code rotateColor} so it is itself unused in actuality.
          *
          * @param x float value to round to a byte
          * @return rounded int version of {@code x}
@@ -356,6 +357,13 @@ public class ColorPickerDialog extends Dialog {
             return n;
         }
 
+        /**
+         * Clamps the argument to the byte range 0 to 255. It is only used in the unused method
+         * {@code rotateColor} so it is itself unused in actuality.
+         *
+         * @param n {@code int} value to be "clamped" to the byte range 0 to 255.
+         * @return {@code n} clamped to the range 0 to 255
+         */
         private int pinToByte(int n) {
             if (n < 0) {
                 n = 0;
