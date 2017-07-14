@@ -21,6 +21,10 @@ import android.graphics.*;
 import android.os.Bundle;
 import android.view.*;
 
+/**
+ * Shows the use of Canvas.saveLayerAlpha() and Canvas.restore() to save and restore
+ * Canvas settings while doing some drawing in an off screen buffer.
+ */
 public class Layers extends GraphicsActivity {
 
     @Override

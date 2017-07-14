@@ -265,35 +265,35 @@ public class ColorPickerDialog extends Dialog {
          * the event occurred inside the center "select and dismiss" circle. We then switch based on
          * the action of the {@code MotionEvent event}:
          * <ul>
-         *     <li>
-         *         ACTION_DOWN - we set our flag {@code boolean mTrackingCenter} to the value of
-         *         {@code boolean inCenter}, and if the event occurred in the center circle we set
-         *         {@code boolean mHighlightCenter} to true and invalidate our view so it will be
-         *         redrawn (this time with a "halo") and we break. If it was not in the center circle
-         *         we fall through to the code for the ACTION_MOVE case.
-         *     </li>
-         *     <li>
-         *         ACTION_MOVE - if {@code boolean mTrackingCenter} is true (the last ACTION_DOWN occurred
-         *         in the center circle) we check to see if {@code boolean mHighlightCenter} is not equal
-         *         to {@code boolean inCenter} (the finger has moved in or out of the center circle) and if
-         *         they are not we set {@code mHighlightCenter} to {@code inCenter} and invalidate the view
-         *         so it will be redrawn with the new "halo" setting. If {@code mTrackingCenter} is false
-         *         the last ACTION_DOWN was outside the center circle and the movement is intended to select
-         *         a color from the color spectrum circle, so we determine the angle on the spectrum circle
-         *         based on the x and y coordinate, convert that angle to a {@code float unit} between 0 and
-         *         1, then set the color of {@code Paint mCenterPaint} to the color calculated by our method
-         *         {@code interpColor} and invalidate our view causing it to be redrawn with the new color
-         *         for the center circle.
-         *     </li>
-         *     <li>
-         *         ACTION_UP - If our flag {@code boolean mTrackingCenter} is true (the last ACTION_DOWN
-         *         occurred in the center circle) we check to see if the current event occurred still in
-         *         the circle and if so we call our {@code OnColorChangedListener mListener} callback to
-         *         select the current color and dismiss the dialog. If the finger is now outside the
-         *         center circle (the user changed his mind), we set {@code boolean mTrackingCenter}
-         *         to false (the center circle will be drawn without the "halo") and invalidate our view
-         *         causing it to be redrawn.
-         *     </li>
+         * <li>
+         * ACTION_DOWN - we set our flag {@code boolean mTrackingCenter} to the value of
+         * {@code boolean inCenter}, and if the event occurred in the center circle we set
+         * {@code boolean mHighlightCenter} to true and invalidate our view so it will be
+         * redrawn (this time with a "halo") and we break. If it was not in the center circle
+         * we fall through to the code for the ACTION_MOVE case.
+         * </li>
+         * <li>
+         * ACTION_MOVE - if {@code boolean mTrackingCenter} is true (the last ACTION_DOWN occurred
+         * in the center circle) we check to see if {@code boolean mHighlightCenter} is not equal
+         * to {@code boolean inCenter} (the finger has moved in or out of the center circle) and if
+         * they are not we set {@code mHighlightCenter} to {@code inCenter} and invalidate the view
+         * so it will be redrawn with the new "halo" setting. If {@code mTrackingCenter} is false
+         * the last ACTION_DOWN was outside the center circle and the movement is intended to select
+         * a color from the color spectrum circle, so we determine the angle on the spectrum circle
+         * based on the x and y coordinate, convert that angle to a {@code float unit} between 0 and
+         * 1, then set the color of {@code Paint mCenterPaint} to the color calculated by our method
+         * {@code interpColor} and invalidate our view causing it to be redrawn with the new color
+         * for the center circle.
+         * </li>
+         * <li>
+         * ACTION_UP - If our flag {@code boolean mTrackingCenter} is true (the last ACTION_DOWN
+         * occurred in the center circle) we check to see if the current event occurred still in
+         * the circle and if so we call our {@code OnColorChangedListener mListener} callback to
+         * select the current color and dismiss the dialog. If the finger is now outside the
+         * center circle (the user changed his mind), we set {@code boolean mTrackingCenter}
+         * to false (the center circle will be drawn without the "halo") and invalidate our view
+         * causing it to be redrawn.
+         * </li>
          * </ul>
          * Finally we return true to indicate that we have handled the {@code MotionEvent event}.
          *
@@ -373,10 +373,26 @@ public class ColorPickerDialog extends Dialog {
             return n;
         }
 
+        /**
+         * Interpolates between two different color channel values based on the [0..1) factor
+         * {@code float p}.
+         *
+         * @param s First alpha, red, green, or blue color value 0-255
+         * @param d Second alpha, red, green, or blue  color value 0-255
+         * @param p location [0..1) between {@code s} and {@code d}
+         * @return a color channel value 0-255 interpolated between {@code s} and {@code d}
+         */
         private int ave(int s, int d, float p) {
             return s + java.lang.Math.round(p * (d - s));
         }
 
+        /**
+         * Converts a position on the color spectrum circle to the color that is at that position.
+         *
+         * @param colors array of color spectrum colors to interpolate between
+         * @param unit   where within the color wheel we are to choose a color
+         * @return the color chosen by the user's finger location
+         */
         private int interpColor(int colors[], float unit) {
             if (unit <= 0) {
                 return colors[0];
@@ -400,6 +416,13 @@ public class ColorPickerDialog extends Dialog {
             return Color.argb(a, r, g, b);
         }
 
+        /**
+         * Unused, so I will skip commenting it.
+         *
+         * @param color color to be rotated
+         * @param rad   angle to rotate the color
+         * @return color rotated by the angle {@code float rad}
+         */
         @SuppressWarnings("unused")
         private int rotateColor(int color, float rad) {
             float deg = rad * 180 / 3.1415927f;
