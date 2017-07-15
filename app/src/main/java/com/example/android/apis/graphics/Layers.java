@@ -27,21 +27,63 @@ import android.view.*;
  */
 public class Layers extends GraphicsActivity {
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to a new instance of {@code SampleView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new SampleView(this));
     }
 
+    /**
+     * This custom {@code View} consists solely of a BLUE circle drawn slightly offset on top of a
+     * RED circle. The drawing is done to an offscreen bitmap allocated and redirected to by the
+     * method {@code saveLayerAlpha}, then displayed onscreen by {@code restore}.
+     */
     private static class SampleView extends View {
+        /**
+         * Which layers {@code saveLayerAlpha} will save to be later restored:
+         * <ul>
+         * <li>
+         * MATRIX_SAVE_FLAG - Restore the current matrix when restore() is called.
+         * </li>
+         * <li>
+         * CLIP_SAVE_FLAG - Restore the current clip when restore() is called.
+         * </li>
+         * <li>
+         * HAS_ALPHA_LAYER_SAVE_FLAG - The layer requires a per-pixel alpha channel.
+         * </li>
+         * <li>
+         * FULL_COLOR_LAYER_SAVE_FLAG - The layer requires full 8-bit precision for each color channel.
+         * </li>
+         * <li>
+         * CLIP_TO_LAYER_SAVE_FLAG - Clip drawing to the bounds of the offscreen layer, omit at your own peril.
+         * </li>
+         * </ul>
+         */
         private static final int LAYER_FLAGS = Canvas.MATRIX_SAVE_FLAG |
-                                               Canvas.CLIP_SAVE_FLAG |
-                                               Canvas.HAS_ALPHA_LAYER_SAVE_FLAG |
-                                               Canvas.FULL_COLOR_LAYER_SAVE_FLAG |
-                                               Canvas.CLIP_TO_LAYER_SAVE_FLAG;
+                Canvas.CLIP_SAVE_FLAG |
+                Canvas.HAS_ALPHA_LAYER_SAVE_FLAG |
+                Canvas.FULL_COLOR_LAYER_SAVE_FLAG |
+                Canvas.CLIP_TO_LAYER_SAVE_FLAG;
 
+        /**
+         * {@code Paint} used to draw in our {@code onDraw} method
+         */
         private Paint mPaint;
 
+        /**
+         * Our constructor. First we call through to our super's constructor, then we enable focus for
+         * our view, allocate a new instance of {@code Paint} for our field {@code Paint mPaint} and
+         * set its antialias flag to true.
+         *
+         * @param context "this" {@code Layers} activity when called from {@code onCreate}, used for
+         *                resources.
+         */
         public SampleView(Context context) {
             super(context);
             setFocusable(true);
@@ -50,12 +92,19 @@ public class Layers extends GraphicsActivity {
             mPaint.setAntiAlias(true);
         }
 
+        /**
+         * We implement this to do our drawing. First we set the entire {@code Canvas canvas} to
+         * WHITE, then we move the canvas to the location (10,10).
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.WHITE);
 
             canvas.translate(10, 10);
 
+            // Saves future drawing commands to offscreen bitmap buffer
             canvas.saveLayerAlpha(0, 0, 200, 200, 0x88, LAYER_FLAGS);
 
             mPaint.setColor(Color.RED);
@@ -63,6 +112,7 @@ public class Layers extends GraphicsActivity {
             mPaint.setColor(Color.BLUE);
             canvas.drawCircle(125, 125, 75, mPaint);
 
+            // Transfers offscreen buffer to screen
             canvas.restore();
         }
     }
