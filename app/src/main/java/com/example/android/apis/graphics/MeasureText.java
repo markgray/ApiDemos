@@ -21,6 +21,14 @@ import android.graphics.*;
 import android.os.Bundle;
 import android.view.*;
 
+/**
+ * Shows how to use the text measurement methods: Paint.getTextWidths(),
+ * Paint.measureText(), and Paint.getTextBounds() to determine what area
+ * each character in a string as well as the complete string will occupy
+ * when they are drawn using Canvas.drawText, then draws a colored rectangle
+ * around each string and a line under each at the baseline. Text was too
+ * small so I modified it a bit.
+ */
 public class MeasureText extends GraphicsActivity {
 
     @Override

@@ -94,7 +94,19 @@ public class Layers extends GraphicsActivity {
 
         /**
          * We implement this to do our drawing. First we set the entire {@code Canvas canvas} to
-         * WHITE, then we move the canvas to the location (10,10).
+         * WHITE, then we move the canvas to the location (10,10). We call {@code saveLayerAlpha}
+         * to allocate and redirect drawing instructions sent to {@code Canvas canvas} to an offscreen
+         * bitmap until the matching restore displays that bitmap and restores the canvas to its
+         * original settings. The bitmap is 200x200 with 0x88 specified as the alpha value to be used
+         * when {@code restore} draws the bitmap to the {@code Canvas canvas}, and LAYER_FLAGS detailing
+         * what information is to be restored when {@code restore} is called.
+         * <p>
+         * We then set the color of {@code Paint mPaint} to RED and use it to draw a circle of radius
+         * 75 pixels centered at the point (75,75), set the color of {@code mPaint} to BLUE and use
+         * it to draw a circle of radius 75 pixels centered at the point (125,125). Both of these
+         * {@code drawCircle} commands have been done to the offscreen bitmap that {@code canvas} is
+         * redirecting commands to, and this bitmap is now transferred to {@code Canvas canvas} and
+         * the settings saved by {@code saveLayerAlpha} are restored by a call to {@code canvas.restore}.
          *
          * @param canvas the canvas on which the background will be drawn
          */
