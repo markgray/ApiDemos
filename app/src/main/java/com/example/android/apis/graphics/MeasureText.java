@@ -31,16 +31,36 @@ import android.view.*;
  */
 public class MeasureText extends GraphicsActivity {
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to a new instance of {@code SampleView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new SampleView(this));
     }
 
+    /**
+     * Only used in {@code createColors} so unused
+     */
     private static final int WIDTH = 50;
+    /**
+     * Only used in {@code createColors} so unused
+     */
     private static final int HEIGHT = 50;
+    /**
+     * Only used in {@code createColors} so unused
+     */
     private static final int STRIDE = 64;   // must be >= WIDTH
 
+    /**
+     * Unused, so who cares.
+     *
+     * @return an array of colors
+     */
     @SuppressWarnings("unused")
     private static int[] createColors() {
         int[] colors = new int[STRIDE * HEIGHT];
@@ -57,9 +77,9 @@ public class MeasureText extends GraphicsActivity {
     }
 
     private static class SampleView extends View {
-        private Paint   mPaint;
-        private float   mOriginX = 10;
-        private float   mOriginY = 80;
+        private Paint mPaint;
+        private float mOriginX = 10;
+        private float mOriginY = 80;
 
         public SampleView(Context context) {
             super(context);
@@ -71,14 +91,14 @@ public class MeasureText extends GraphicsActivity {
             mPaint.setStrokeCap(Paint.Cap.ROUND);
             mPaint.setTextSize(64);
             mPaint.setTypeface(Typeface.create(Typeface.SERIF,
-                                               Typeface.ITALIC));
+                    Typeface.ITALIC));
         }
 
         @SuppressWarnings("UnusedParameters")
         private void showText(Canvas canvas, String text, Paint.Align align) {
-         //   mPaint.setTextAlign(align);
+            //   mPaint.setTextAlign(align);
 
-            Rect    bounds = new Rect();
+            Rect bounds = new Rect();
             float[] widths = new float[text.length()];
 
             mPaint.setTextSize((float) 100.0);
@@ -91,15 +111,15 @@ public class MeasureText extends GraphicsActivity {
             mPaint.setColor(Color.BLACK);
             canvas.drawText(text, 0, 0, mPaint);
 
-            float[] pts = new float[2 + count*2];
+            float[] pts = new float[2 + count * 2];
             float x = 0;
             float y = 0;
             pts[0] = x;
             pts[1] = y;
             for (int i = 0; i < count; i++) {
                 x += widths[i];
-                pts[2 + i*2] = x;
-                pts[2 + i*2 + 1] = y;
+                pts[2 + i * 2] = x;
+                pts[2 + i * 2 + 1] = y;
             }
             mPaint.setColor(Color.RED);
             mPaint.setStrokeWidth(0);
@@ -108,7 +128,8 @@ public class MeasureText extends GraphicsActivity {
             canvas.drawPoints(pts, 0, (count + 1) << 1, mPaint);
         }
 
-        @Override protected void onDraw(Canvas canvas) {
+        @Override
+        protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.WHITE);
 
             canvas.translate(mOriginX, mOriginY);
