@@ -76,11 +76,34 @@ public class MeasureText extends GraphicsActivity {
         return colors;
     }
 
+    /**
+     * Custom view which displays three lines of text, and using the text measuring methods draws a
+     * tight, light green rectangle around the text, and a RED line at the baseline of the text.
+     */
     private static class SampleView extends View {
+        /**
+         * {@code Paint} used to draw with in the method {@code showText} (called from {@code onDraw}.
+         */
         private Paint mPaint;
+        /**
+         * Starting x coordinate for our {@code onDraw} to draw to its Canvas
+         */
         private float mOriginX = 10;
+        /**
+         * Starting y coordinate for our {@code onDraw} to draw to its Canvas
+         */
         private float mOriginY = 80;
 
+        /**
+         * Constructor for our View. First we call our super's constructor, then we enable our view
+         * to receive focus. We allocate a new {@code Paint} for our field {@code Paint mPaint}, set
+         * its antialias flag to true, set the stroke width to 5, set the line cap style to ROUND,
+         * text size to 64, and finally set its typeface to a typeface object of the SERIF family,
+         * and ITALIC style
+         *
+         * @param context {@code Context} used for resources, this {@code MeasureText} activity when
+         *                called from our {@code onCreate} override.
+         */
         public SampleView(Context context) {
             super(context);
             setFocusable(true);
@@ -90,10 +113,21 @@ public class MeasureText extends GraphicsActivity {
             mPaint.setStrokeWidth(5);
             mPaint.setStrokeCap(Paint.Cap.ROUND);
             mPaint.setTextSize(64);
-            mPaint.setTypeface(Typeface.create(Typeface.SERIF,
-                    Typeface.ITALIC));
+            mPaint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.ITALIC));
         }
 
+        /**
+         * Convenience method to measure the {@code String text}, draw a light green rectangle of
+         * that size, draw the {@code text}, and draw a RED horizontal line across the baseline of
+         * the text. First we allocate {@code Rect bounds} which we will use to hold the rectangle
+         * that encloses all of {@code String text}, and {@code float[] widths} which will hold the
+         * widths of each of the corresponding characters in {@code text}. We set the text size of
+         * {@code Paint mPaint} to 100.
+         *
+         * @param canvas {@code Canvas} we are to draw to
+         * @param text text string we are to draw
+         * @param align not used
+         */
         @SuppressWarnings("UnusedParameters")
         private void showText(Canvas canvas, String text, Paint.Align align) {
             //   mPaint.setTextAlign(align);
