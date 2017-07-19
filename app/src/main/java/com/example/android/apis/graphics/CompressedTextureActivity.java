@@ -40,9 +40,11 @@ import com.example.android.apis.R;
  * This sample can be recompiled to use either resource-based
  * textures (compressed offline using the etc1tool), or
  * textures created on the fly by compressing images.
- *
  */
 public class CompressedTextureActivity extends Activity {
+    /**
+     * TAG used for logging
+     */
     private final static String TAG = "C...dTextureAct...";
     /**
      * Choose between creating a compressed texture on the fly or
@@ -55,6 +57,18 @@ public class CompressedTextureActivity extends Activity {
      */
     private final static boolean USE_STREAM_IO = false;
 
+    /**
+     * {@code GLSurfaceView} used to display our demo
+     */
+    private GLSurfaceView mGLView;
+
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we initialize our field {@code GLSurfaceView mGLView} with a new instance
+     * of {@code GLSurfaceView} using "this" activity as the context for resources.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,9 +98,9 @@ public class CompressedTextureActivity extends Activity {
 
     /**
      * Demonstrate how to load a compressed texture from an APK resource.
-     *
      */
     private class CompressedTextureLoader implements StaticTriangleRenderer.TextureLoader {
+        @Override
         public void load(GL10 gl) {
             Log.w(TAG, "ETC1 texture support: " + ETC1Util.isETC1Supported());
             InputStream input = getResources().openRawResource(R.raw.androids);
@@ -109,6 +123,7 @@ public class CompressedTextureActivity extends Activity {
      * Demonstrate how to create a compressed texture on the fly.
      */
     private class SyntheticCompressedTextureLoader implements StaticTriangleRenderer.TextureLoader {
+        @Override
         public void load(GL10 gl) {
             int width = 128;
             int height = 128;
@@ -134,16 +149,16 @@ public class CompressedTextureActivity extends Activity {
         private Buffer createImage(int width, int height) {
             int stride = 3 * width;
             ByteBuffer image = ByteBuffer.allocateDirect(height * stride)
-                .order(ByteOrder.nativeOrder());
+                    .order(ByteOrder.nativeOrder());
 
             // Fill with a pretty "munching squares" pattern:
             for (int t = 0; t < height; t++) {
-                byte red = (byte)(255-2*t);
-                byte green = (byte)(2*t);
+                byte red = (byte) (255 - 2 * t);
+                byte green = (byte) (2 * t);
                 byte blue = 0;
                 for (int x = 0; x < width; x++) {
                     int y = x ^ t;
-                    image.position(stride*y+x*3);
+                    image.position(stride * y + x * 3);
                     image.put(red);
                     image.put(green);
                     image.put(blue);
@@ -153,5 +168,4 @@ public class CompressedTextureActivity extends Activity {
             return image;
         }
     }
-    private GLSurfaceView mGLView;
 }

@@ -122,11 +122,31 @@ public class MeasureText extends GraphicsActivity {
          * the text. First we allocate {@code Rect bounds} which we will use to hold the rectangle
          * that encloses all of {@code String text}, and {@code float[] widths} which will hold the
          * widths of each of the corresponding characters in {@code text}. We set the text size of
-         * {@code Paint mPaint} to 100.
+         * {@code Paint mPaint} to 100, use the method {@code mPaint.getTextWidths} to load the array
+         * {@code widths} with the widths of each of the characters in {@code text} and setting
+         * {@code int count} to the number of code units in the text. We use {@code mPaint.measureText}
+         * to set {@code float w} to the width of {@code text}, and we use {@code mPaint.getTextBounds}
+         * to initialize {@code Rect bounds} to the smallest rectangle that encloses all of the
+         * characters, with an implied origin at (0,0).
+         * <p>
+         * Having retrieved all the measurements of {@code text} we proceed to set the color of
+         * {@code mPaint} to a shade of green, use it to draw a rectangle on {@code Canvas canvas}
+         * using {@code bounds} as the rectangle shape. We then change the color of {@code mPaint}
+         * to BLACK and use it to draw the text {@code text} to the {@code Canvas canvas}.
+         * <p>
+         * In order to draw the line at the baseline, we allocate {@code float[] pts} to be twice
+         * as long as {@code count} plus 2 entries for the starting point of (0,0) and loop through
+         * {@code widths} accumulating the widths of the characters in {@code text} for the starting
+         * x coordinate of each character with the y coordinate 0. After this {@code pts} thus contains
+         * the (x,y) location of each character in the string {@code text}. We then set the color of
+         * {@code mPaint} to RED, the stroke width to 0 (hairline mode) and draw a line across the
+         * entire width of the text. We then set the stroke width of {@code mPaint} to 5 and draw
+         * largish points at each of the (x,y) starting locations for the characters in {@code text}
+         * which we have stored in {@code pts}.
          *
          * @param canvas {@code Canvas} we are to draw to
-         * @param text text string we are to draw
-         * @param align not used
+         * @param text   text string we are to draw
+         * @param align  not used
          */
         @SuppressWarnings("UnusedParameters")
         private void showText(Canvas canvas, String text, Paint.Align align) {
@@ -162,6 +182,16 @@ public class MeasureText extends GraphicsActivity {
             canvas.drawPoints(pts, 0, (count + 1) << 1, mPaint);
         }
 
+        /**
+         * We implement this to do our drawing. First we set the entire {@code Canvas canvas} to
+         * WHITE, then we move it to our starting point (mOriginX, mOriginY) (10,10) in our case.
+         * We call our method {@code showText} to measure and display the text "Measure", move the
+         * canvas down 180 pixels and call {@code showText} to measure and display the text "wiggy!"
+         * and finally move the canvas down a further 180 pixels and call {@code showText} to measure
+         * and display the text "Text".
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.WHITE);

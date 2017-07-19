@@ -1116,6 +1116,7 @@ Graphics
    Compressed Texture
     Graphics/OpenGL ES/Compressed Texture  all
         .graphics.CompressedTextureActivity
+        .graphics.StaticTriangleRenderer
             Demonstrate how to use ETC1 format compressed textures. This sample can be
             recompiled to use either resource-based textures (compressed offline using
             the etc1tool), or textures created on the fly by compressing images.
