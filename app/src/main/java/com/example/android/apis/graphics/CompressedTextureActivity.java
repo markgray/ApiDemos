@@ -65,7 +65,15 @@ public class CompressedTextureActivity extends Activity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we initialize our field {@code GLSurfaceView mGLView} with a new instance
-     * of {@code GLSurfaceView} using "this" activity as the context for resources.
+     * of {@code GLSurfaceView} using "this" activity as the context for resources. Then we call
+     * {@code setEGLConfigChooser} to install a config chooser which will choose a config as close
+     * to 16-bit RGB as possible with the value false so that there is no depth buffer. We declare
+     * {@code StaticTriangleRenderer.TextureLoader loader}, and if value of the compile time switch
+     * TEST_CREATE_TEXTURE is true we set it to an instance of {@code SyntheticCompressedTextureLoader},
+     * and if false we set it to an instance of {@code CompressedTextureLoader}. We set the renderer
+     * of {@code mGLView} to a new instance of {@code StaticTriangleRenderer} using "this"
+     * {@code CompressedTextureActivity} activity for context, and {@code loader} as the
+     * {@code TextureLoader} to use, and finally we set our content view to {@code mGLView}.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
      */
@@ -84,12 +92,27 @@ public class CompressedTextureActivity extends Activity {
         setContentView(mGLView);
     }
 
+    /**
+     * Called as part of the activity lifecycle when an activity is going into
+     * the background, but has not (yet) been killed.  The counterpart to
+     * {@link #onResume}. First we call through to our super's implementation of
+     * {@code onPause}, then we inform the {@code GLSurfaceView mGLView} view that
+     * the activity is paused.
+     */
     @Override
     protected void onPause() {
         super.onPause();
         mGLView.onPause();
     }
 
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or
+     * {@link #onPause}, for your activity to start interacting with the user.
+     * First we call through to our super's implementation of {@code onResume},
+     * then we inform the {@code GLSurfaceView mGLView} view that the activity
+     * is resumed (calling this method will recreate the OpenGL display and resume
+     * the rendering thread.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -100,6 +123,13 @@ public class CompressedTextureActivity extends Activity {
      * Demonstrate how to load a compressed texture from an APK resource.
      */
     private class CompressedTextureLoader implements StaticTriangleRenderer.TextureLoader {
+        /**
+         * Called to load the compressed texture, it is called in the {@code onSurfaceCreated}
+         * override of {@code StaticTriangleRenderer} if TEST_CREATE_TEXTURE is false.
+         *
+         * @param gl the GL interface. Use <code>instanceof</code> to test if the interface supports
+         *           GL11 or higher interfaces. UNUSED.
+         */
         @Override
         public void load(GL10 gl) {
             Log.w(TAG, "ETC1 texture support: " + ETC1Util.isETC1Supported());
