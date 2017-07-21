@@ -125,7 +125,11 @@ public class CompressedTextureActivity extends Activity {
     private class CompressedTextureLoader implements StaticTriangleRenderer.TextureLoader {
         /**
          * Called to load the compressed texture, it is called in the {@code onSurfaceCreated}
-         * override of {@code StaticTriangleRenderer} if TEST_CREATE_TEXTURE is false.
+         * override of {@code StaticTriangleRenderer} if TEST_CREATE_TEXTURE is false. First we
+         * open a data stream {@code InputStream input} for reading the raw resource R.raw.androids
+         * (raw/androids.pkm), then we use the method {@code ETC1Util.loadTexture} to load the ETC1
+         * texture contained in that file. (The rest is just boilerplate to catch exceptions that
+         * might occur.)
          *
          * @param gl the GL interface. Use <code>instanceof</code> to test if the interface supports
          *           GL11 or higher interfaces. UNUSED.
@@ -153,10 +157,27 @@ public class CompressedTextureActivity extends Activity {
      * Demonstrate how to create a compressed texture on the fly.
      */
     private class SyntheticCompressedTextureLoader implements StaticTriangleRenderer.TextureLoader {
+        /**
+         * Called to create and load the compressed texture, it is called in the {@code onSurfaceCreated}
+         * override of {@code StaticTriangleRenderer} if TEST_CREATE_TEXTURE is true. We declare the
+         * constants {@code width} and {@code height} to be 128, then we call our method {@code createImage}
+         * to create a {@code ByteBuffer} holding a 128x128 colored pattern to use as our texture and
+         * save that in {@code Buffer image}. We use the method {@code ETC1Util.compressTexture} to
+         * create {@code ETC1Util.ETC1Texture etc1Texture} from {@code Buffer image}. If the compile
+         * time flag USE_STREAM_IO is true we write {@code etc1Texture} to a {@code ByteArrayOutputStream},
+         * convert that {@code ByteArrayOutputStream} to a {@code byte[]} array, and open a
+         * {@code ByteArrayInputStream bis} from that array which we then use in a call to the method
+         * {@code ETC1Util.loadTexture} to load the texture to the active openGL context. If USE_STREAM_IO
+         * is false we simply call the method {@code ETC1Util.loadTexture} to directly load the texture
+         * to the active openGL context.
+         *
+         * @param gl the GL interface. Use <code>instanceof</code> to test if the interface supports
+         *           GL11 or higher interfaces. UNUSED.
+         */
         @Override
         public void load(GL10 gl) {
-            int width = 128;
-            int height = 128;
+            final int width = 128;
+            final int height = 128;
             Buffer image = createImage(width, height);
             ETC1Util.ETC1Texture etc1Texture = ETC1Util.compressTexture(image, width, height, 3, 3 * width);
             if (USE_STREAM_IO) {
@@ -176,6 +197,14 @@ public class CompressedTextureActivity extends Activity {
             }
         }
 
+        /**
+         * Fills a {@code ByteBuffer} with a width X height colored image to use as a texture.
+         *
+         * @param width width of the image to create
+         * @param height height of the image to create
+         * @return {@code Buffer} (actually a {@code ByteBuffer}) containing an image to be used as a
+         * texture.
+         */
         private Buffer createImage(int width, int height) {
             int stride = 3 * width;
             ByteBuffer image = ByteBuffer.allocateDirect(height * stride)
