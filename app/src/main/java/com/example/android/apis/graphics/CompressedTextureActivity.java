@@ -198,7 +198,12 @@ public class CompressedTextureActivity extends Activity {
         }
 
         /**
-         * Fills a {@code ByteBuffer} with a width X height colored image to use as a texture.
+         * Fills a {@code ByteBuffer} with a width X height colored image to use as a texture. First
+         * we calculate {@code int stride} to be 3*width (three bytes per pixel RGB), then we allocate
+         * {@code ByteBuffer image} to be a height*stride {@code ByteBuffer} using native byte order.
+         * Then we loop through every row in {@code image}, calculating a "munching squares" pattern
+         * for each pixel and appending them to {@code image}. When done we reset the position of
+         * {@code image} to the beginning and return it to the caller.
          *
          * @param width width of the image to create
          * @param height height of the image to create

@@ -39,28 +39,53 @@ import android.os.SystemClock;
 import com.example.android.apis.R;
 
 /**
- * A GLSurfaceView.Renderer that uses the Android-specific
- * android.opengl.GLESXXX static OpenGL ES APIs. The static APIs
- * expose more of the OpenGL ES features than the
- * javax.microedition.khronos.opengles APIs, and also
- * provide a programming model that is closer to the C OpenGL ES APIs, which
- * may make it easier to reuse code and documentation written for the
- * C OpenGL ES APIs.
- *
+ * A GLSurfaceView.Renderer that uses the Android-specific android.opengl.GLESXXX
+ * static OpenGL ES APIs. The static APIs expose more of the OpenGL ES features than
+ * the javax.microedition.khronos.opengles APIs, and also provide a programming model
+ * that is closer to the C OpenGL ES APIs, which may make it easier to reuse code and
+ * documentation written for the C OpenGL ES APIs.
  */
-public class StaticTriangleRenderer implements GLSurfaceView.Renderer{
+@SuppressWarnings("WeakerAccess")
+public class StaticTriangleRenderer implements GLSurfaceView.Renderer {
 
+    /**
+     * Our constructor needs to be provided with an implementation of this. We call its {@code load}
+     * in our {@code onSurfaceCreated} callback to load the appropriate texture into our OpenGL
+     * context.
+     */
     public interface TextureLoader {
         /**
          * Load a texture into the currently bound OpenGL texture.
+         *
+         * @param gl OpenGL interface UNUSED
          */
         void load(GL10 gl);
     }
 
+    /**
+     * Constructor that uses our own default {@code RobotTextureLoader} as the {@code TextureLoader},
+     * (which loads R.raw.robot image as our texture). It is used in {@code TriangleActivity}. We
+     * simply call our method {@code init} with our parameter {@code Context context} and a new
+     * instance of {@code RobotTextureLoader} to use as its {@code CompressedTextureActivity}.
+     *
+     * @param context Context to use for resources, "this" {@code TriangleActivity} when called from
+     *                the {@code onCreate} override of the {@code TriangleActivity} demo
+     */
     public StaticTriangleRenderer(Context context) {
         init(context, new RobotTextureLoader());
     }
 
+    /**
+     * Constructor that uses {@code TextureLoader loader} as its {@code TextureLoader}. It is used
+     * in {@code CompressedTextureActivity}. We simply call our method {@code init} with our parameter
+     * {@code Context context} to use for the context and {@code TextureLoader loader} to use as the
+     * {@code TextureLoader}.
+     *
+     * @param context Context to use for resources, "this" {@code CompressedTextureActivity} when
+     *                called from the {@code onCreate} override of the {@code CompressedTextureActivity}
+     *                demo.
+     * @param loader  Class implementing the {@code TextureLoader} interface
+     */
     public StaticTriangleRenderer(Context context, TextureLoader loader) {
         init(context, loader);
     }
@@ -71,6 +96,19 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer{
         mTextureLoader = loader;
     }
 
+    /**
+     * Called when the surface is created or recreated. Called when the rendering thread starts and
+     * whenever the EGL context is lost. The EGL context will typically be lost when the Android
+     * device awakes after going to sleep.
+     *
+     * First we disable dithering, then we use the method {@code glHint} to set the implementation
+     * specific hint GL_PERSPECTIVE_CORRECTION_HINT to GL_FASTEST.
+     *
+     * @param gl     the GL interface. Use <code>instanceof</code> to
+     *               test if the interface supports GL11 or higher interfaces.
+     * @param config the EGLConfig of the created surface. Can be used
+     *               to create matching pbuffers.
+     */
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         /*
@@ -84,8 +122,7 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer{
          * Some one-time OpenGL initialization can be made here
          * probably based on features of this particular context
          */
-        glHint(GL_PERSPECTIVE_CORRECTION_HINT,
-                GL_FASTEST);
+        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
 
         glClearColor(.5f, .5f, .5f, 1);
         glShadeModel(GL_SMOOTH);
@@ -190,8 +227,7 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer{
     private class RobotTextureLoader implements TextureLoader {
         @Override
         public void load(GL10 gl) {
-            InputStream is = mContext.getResources().openRawResource(
-                    R.raw.robot);
+            InputStream is = mContext.getResources().openRawResource(R.raw.robot);
             Bitmap bitmap;
             try {
                 bitmap = BitmapFactory.decodeStream(is);
@@ -208,6 +244,7 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer{
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     static class Triangle {
         public Triangle() {
 
@@ -216,7 +253,7 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer{
             // native heap where the garbage collector cannot
             // move them.
             //
-            // Buffers with multi-byte datatypes (e.g., short, int, float)
+            // Buffers with multi-byte data types (e.g., short, int, float)
             // must have their byte order set to native order
 
             ByteBuffer vbb = ByteBuffer.allocateDirect(VERTS * 3 * 4);
@@ -235,23 +272,23 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer{
             float[] coords = {
                     // X, Y, Z
                     -0.5f, -0.25f, 0,
-                     0.5f, -0.25f, 0,
-                     0.0f,  0.559016994f, 0
+                    0.5f, -0.25f, 0,
+                    0.0f, 0.559016994f, 0
             };
 
             for (int i = 0; i < VERTS; i++) {
-                for(int j = 0; j < 3; j++) {
-                    mFVertexBuffer.put(coords[i*3+j] * 2.0f);
+                for (int j = 0; j < 3; j++) {
+                    mFVertexBuffer.put(coords[i * 3 + j] * 2.0f);
                 }
             }
 
             for (int i = 0; i < VERTS; i++) {
-                for(int j = 0; j < 2; j++) {
-                    mTexBuffer.put(coords[i*3+j] * 2.0f + 0.5f);
+                for (int j = 0; j < 2; j++) {
+                    mTexBuffer.put(coords[i * 3 + j] * 2.0f + 0.5f);
                 }
             }
 
-            for(int i = 0; i < VERTS; i++) {
+            for (int i = 0; i < VERTS; i++) {
                 mIndexBuffer.put((short) i);
             }
 
