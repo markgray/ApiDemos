@@ -102,7 +102,16 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer {
      * device awakes after going to sleep.
      *
      * First we disable dithering, then we use the method {@code glHint} to set the implementation
-     * specific hint GL_PERSPECTIVE_CORRECTION_HINT to GL_FASTEST.
+     * specific hint GL_PERSPECTIVE_CORRECTION_HINT to GL_FASTEST. We set the red, green, blue, and
+     * alpha values used when the color buffers are cleared to (0.5,0.5,0.5,1.0) (GRAY), set the
+     * shade model to GL_SMOOTH (causes the computed colors of vertices to be interpolated as the
+     * primitive is rasterized, typically assigning different colors to each resulting pixel), we
+     * enable GL_DEPTH_TEST (the depth value from the fragment being rendered is compared to the
+     * depth value from the matching sample currently in the framebuffer and if it fails it is
+     * discarded), and we enable GL_TEXTURE_2D (Images in our texture all are 2-dimensional. They
+     * have width and height, but no depth).
+     *
+     * Now we create our texture.
      *
      * @param gl     the GL interface. Use <code>instanceof</code> to
      *               test if the interface supports GL11 or higher interfaces.
