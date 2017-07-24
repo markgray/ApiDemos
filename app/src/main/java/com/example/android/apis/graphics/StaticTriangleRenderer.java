@@ -100,7 +100,7 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer {
      * Called when the surface is created or recreated. Called when the rendering thread starts and
      * whenever the EGL context is lost. The EGL context will typically be lost when the Android
      * device awakes after going to sleep.
-     *
+     * <p>
      * First we disable dithering, then we use the method {@code glHint} to set the implementation
      * specific hint GL_PERSPECTIVE_CORRECTION_HINT to GL_FASTEST. We set the red, green, blue, and
      * alpha values used when the color buffers are cleared to (0.5,0.5,0.5,1.0) (GRAY), set the
@@ -110,8 +110,42 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer {
      * depth value from the matching sample currently in the framebuffer and if it fails it is
      * discarded), and we enable GL_TEXTURE_2D (Images in our texture all are 2-dimensional. They
      * have width and height, but no depth).
-     *
-     * Now we create our texture.
+     * <p>
+     * Now we create our texture. First we generate 1 texture name in our array {@code int[] textures},
+     * and we store the texture name created in our field {@code int mTextureID}, then we bind that
+     * texture to the texturing target GL_TEXTURE_2D (While a texture is bound, GL operations on the
+     * target to which it is bound affect the bound texture, and queries of the target to which it
+     * is bound return state from the bound texture. In effect, the texture targets become aliases
+     * for the textures currently bound to them, and the texture name zero refers to the default
+     * textures that were bound to them at initialization.)
+     * <p>
+     * Now we set the texture parameters for GL_TEXTURE_2D:
+     * <ul>
+     * <li>
+     * GL_TEXTURE_MIN_FILTER set to GL_NEAREST (The texture minifying function used whenever
+     * the level-of-detail function used when sampling from the texture determines that the
+     * texture should be minified: GL_NEAREST Returns the value of the texture element that
+     * is nearest (in Manhattan distance) to the specified texture coordinates.)
+     * </li>
+     * <li>
+     * GL_TEXTURE_MAG_FILTER set to GL_LINEAR (The texture magnification function is used
+     * whenever the level-of-detail function used when sampling from the texture determines
+     * that the texture should be magnified: GL_LINEAR Returns the weighted average of the
+     * texture elements that are closest to the specified texture coordinates.)
+     * </li>
+     * <li>
+     * GL_TEXTURE_WRAP_S set to GL_CLAMP_TO_EDGE (Sets the wrap parameter for texture coordinate s to
+     * GL_CLAMP_TO_EDGE: causes s coordinates to be clamped to the range [1/2N,1−1/2N], where N is
+     * the size of the texture in the direction of clamping)
+     * </li>
+     * <li>
+     * GL_TEXTURE_WRAP_T set to GL_CLAMP_TO_EDGE (Sets the wrap parameter for texture coordinate t to
+     * GL_CLAMP_TO_EDGE: see the discussion under GL_TEXTURE_WRAP_S)
+     * </li>
+     * </ul>
+     * Then we set the target texture environment GL_TEXTURE_ENV texture environment parameter
+     * GL_TEXTURE_ENV_MODE to the texture function GL_REPLACE. Finally we call the {@code load}
+     * method of our field {@code TextureLoader mTextureLoader} to load the texture image.
      *
      * @param gl     the GL interface. Use <code>instanceof</code> to
      *               test if the interface supports GL11 or higher interfaces.
@@ -149,19 +183,13 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer {
         mTextureID = textures[0];
         glBindTexture(GL_TEXTURE_2D, mTextureID);
 
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                GL_NEAREST);
-        glTexParameterf(GL_TEXTURE_2D,
-                GL_TEXTURE_MAG_FILTER,
-                GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
-                GL_CLAMP_TO_EDGE);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
-                GL_CLAMP_TO_EDGE);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,
-                GL_REPLACE);
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
         mTextureLoader.load(gl);
     }
 
