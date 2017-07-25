@@ -193,6 +193,43 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer {
         mTextureLoader.load(gl);
     }
 
+    /**
+     * Called to draw the current frame. First we disable dithering, then we set the target texture
+     * environment GL_TEXTURE_ENV texture environment parameter GL_TEXTURE_ENV_MODE to the texture
+     * function GL_MODULATE, and then we clear the screen by calling {@code glClear} to clear both
+     * the color buffer (GL_COLOR_BUFFER_BIT) and depth buffer (GL_DEPTH_BUFFER_BIT).
+     * <p>
+     * Now we are ready to draw some 3D objects. We set the matrix stack GL_MODELVIEW to be the target
+     * for subsequent matrix operations (The modelview matrix defines how your objects are transformed
+     * (meaning translation, rotation and scaling) in your world coordinate frame), and load it with
+     * the identity matrix. We call the utility function {@code GLU.gluLookAt} to:
+     * <ul>
+     * <li>specify the position of the eye point to be (0,0,5)</li>
+     * <li>specify the position of the reference point to be (0f, 0f, 0f)</li>
+     * <li>specify the direction of the up vector to be (0f, 1.0f, 0.0f)</li>
+     * </ul>
+     * This creates a viewing matrix derived from the eye point, the reference point indicating the
+     * center of the scene, and the UP vector.
+     * <p>
+     * We then enable the client-side capability GL_VERTEX_ARRAY (the vertex array is enabled for
+     * writing and used during rendering when glArrayElement, glDrawArrays, glDrawElements,
+     * glDrawRangeElements glMultiDrawArrays, or glMultiDrawElements is called), and the capability
+     * GL_TEXTURE_COORD_ARRAY (the texture coordinate array is enabled for writing and used during
+     * rendering when glArrayElement, glDrawArrays, glDrawElements, glDrawRangeElements
+     * glMultiDrawArrays, or glMultiDrawElements is called).
+     * <p>
+     * Now we specify that the GL_TEXTURE0 texture unit is active, and bind the texture ID stored in
+     * our field {@code mTextureID} to GL_TEXTURE_2D. We set the texture parameters for GL_TEXTURE_2D
+     * GL_TEXTURE_WRAP_S and GL_TEXTURE_WRAP_T both to GL_REPEAT (when the coordinate falls outside
+     * (0..1) the integer part of the coordinate will be ignored and a repeating pattern is formed).
+     * <p>
+     * Now we calculate the {@code float angle} we want to use to rotate our triangle (using an
+     * arbitrary function of the system uptime), and rotate our modelview matrix by that angle.
+     * Finally we instruct our {@code Triangle mTriangle} to draw itself.
+     *
+     * @param gl the GL interface. Use <code>instanceof</code> to
+     *           test if the interface supports GL11 or higher interfaces.
+     */
     @Override
     public void onDrawFrame(GL10 gl) {
         /*
@@ -202,8 +239,7 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer {
          */
         glDisable(GL_DITHER);
 
-        glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,
-                GL_MODULATE);
+        glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
         /*
          * Usually, the first thing one might want to do is to clear
@@ -227,10 +263,8 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer {
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, mTextureID);
-        glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
-                GL_REPEAT);
-        glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
-                GL_REPEAT);
+        glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
         long time = SystemClock.uptimeMillis() % 4000L;
         float angle = 0.090f * ((int) time);
