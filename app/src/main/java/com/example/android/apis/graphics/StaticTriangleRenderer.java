@@ -49,6 +49,34 @@ import com.example.android.apis.R;
 public class StaticTriangleRenderer implements GLSurfaceView.Renderer {
 
     /**
+     * Context used to retrieve resources, set in {@code init} method from one of its parameters. The
+     * method {@code init} is called from both our {@code StaticTriangleRenderer} constructors and is
+     * "this" {@code TriangleActivity} when called from the {@code onCreate} override of the
+     * {@code TriangleActivity} demo, and "this" {@code CompressedTextureActivity} when called from
+     * the {@code onCreate} override of the {@code CompressedTextureActivity} demo.
+     */
+    private Context mContext;
+    /**
+     * Set to a new instance of {@code Triangle} in our {@code init} method, whose {@code draw} method
+     * is called to draw the triangular shape we are animating.
+     */
+    private Triangle mTriangle;
+    /**
+     * The texture ID of the texture we are using, it is bound to the texturing target GL_TEXTURE_2D,
+     * and all code uses GL_TEXTURE_2D to reference it.
+     */
+    private int mTextureID;
+    /**
+     * {@code TextureLoader} whose {@code load} method is called to load the texture image we are to
+     * use, it is set to one of the parameters to our method {@code init}. It is our own default
+     * {@code RobotTextureLoader} as the {@code TextureLoader} when we are used by the activity
+     * {@code TriangleActivity}, and depending on the compile time switch TEST_CREATE_TEXTURE either
+     * {@code CompressedTextureLoader}, or {@code SyntheticCompressedTextureLoader} when we are used
+     * by the activity {@code CompressedTextureActivity}
+     */
+    private TextureLoader mTextureLoader;
+
+    /**
      * Our constructor needs to be provided with an implementation of this. We call its {@code load}
      * in our {@code onSurfaceCreated} callback to load the appropriate texture into our OpenGL
      * context.
@@ -274,6 +302,28 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer {
         mTriangle.draw(gl);
     }
 
+    /**
+     * Called when the surface changed size. Called after the surface is created and whenever the
+     * OpenGL ES surface size changes.
+     * <p>
+     * First we calculate the ratio of {@code w/h} which we will use to specify the coordinates for
+     * the left and right vertical clipping planes. We set the matrix stack GL_PROJECTION to be the
+     * for subsequent matrix operations (the projection matrix defines the properties of the camera
+     * that views the objects in the world coordinate frame. Here you typically set the zoom factor,
+     * aspect ratio and the near and far clipping planes), and load it with the identity matrix. Then
+     * we call the method {@code glFrustumf} to multiply the current matrix by a perspective matrix
+     * built using {@code -ratio} as the left vertical clipping plane, {@code ratio} as the right
+     * vertical clipping plane, {@code -1} for the bottom clipping plane, {@code 1} for the top
+     * clipping plane, {@code 3} for the near clipping plane, and {@code 7} for the far clipping
+     * plane. ((left, bottom, -near) and (right, top, -near) specify the points on the near clipping
+     * plane that are mapped to the lower left and upper right corners of the window, assuming that
+     * the eye is located at (0, 0, 0). -far specifies the location of the far clipping plane.)
+     *
+     * @param gl the GL interface. Use <code>instanceof</code> to
+     *           test if the interface supports GL11 or higher interfaces.
+     * @param w  new width of surface
+     * @param h  new height of surface
+     */
     @Override
     public void onSurfaceChanged(GL10 gl, int w, int h) {
         glViewport(0, 0, w, h);
@@ -290,11 +340,10 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer {
         glFrustumf(-ratio, ratio, -1, 1, 3, 7);
     }
 
-    private Context mContext;
-    private Triangle mTriangle;
-    private int mTextureID;
-    private TextureLoader mTextureLoader;
-
+    /**
+     * Default {@code TextureLoader} class we use when we are used by the activity {@code TriangleActivity},
+     * it consists of the png image R.raw.robot stored in our resources.
+     */
     private class RobotTextureLoader implements TextureLoader {
         @Override
         public void load(GL10 gl) {
@@ -317,6 +366,12 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer {
 
     @SuppressWarnings("WeakerAccess")
     static class Triangle {
+        private final static int VERTS = 3;
+
+        private FloatBuffer mFVertexBuffer;
+        private FloatBuffer mTexBuffer;
+        private ShortBuffer mIndexBuffer;
+
         public Triangle() {
 
             // Buffers to be passed to gl*Pointer() functions
@@ -374,14 +429,7 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer {
             glVertexPointer(3, GL_FLOAT, 0, mFVertexBuffer);
             glEnable(GL_TEXTURE_2D);
             glTexCoordPointer(2, GL_FLOAT, 0, mTexBuffer);
-            glDrawElements(GL_TRIANGLE_STRIP, VERTS,
-                    GL_UNSIGNED_SHORT, mIndexBuffer);
+            glDrawElements(GL_TRIANGLE_STRIP, VERTS, GL_UNSIGNED_SHORT, mIndexBuffer);
         }
-
-        private final static int VERTS = 3;
-
-        private FloatBuffer mFVertexBuffer;
-        private FloatBuffer mTexBuffer;
-        private ShortBuffer mIndexBuffer;
     }
 }
