@@ -345,6 +345,16 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer {
      * it consists of the png image R.raw.robot stored in our resources.
      */
     private class RobotTextureLoader implements TextureLoader {
+        /**
+         * Loads the png image R.raw.robot as the two-dimensional texture image to be used in the
+         * current context into GL_TEXTURE_2D. First we open a data stream {@code InputStream is}
+         * for reading the raw resource png image R.raw.robot. We declare {@code Bitmap bitmap} and
+         * read and decode {@code is} into it. We use the utility method {@code GLUtils.texImage2D}
+         * to set specify {@code bitmap} as the two-dimensional texture image used by GL_TEXTURE_2D,
+         * and finally free the native object associated with {@code bitmap}.
+         *
+         * @param gl OpenGL interface UNUSED
+         */
         @Override
         public void load(GL10 gl) {
             InputStream is = mContext.getResources().openRawResource(R.raw.robot);
@@ -364,14 +374,69 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer {
         }
     }
 
+    /**
+     * Class used to draw a triangle.
+     */
     @SuppressWarnings("WeakerAccess")
     static class Triangle {
+        /**
+         * Number of vertices.
+         */
         private final static int VERTS = 3;
 
+        /**
+         * {@code FloatBuffer} loaded with the vertex coordinates of a unit-sided equilateral
+         * triangle centered on the origin. It is used in our {@code draw} method in a call to
+         * {@code glVertexPointer} in order to specify the location and data format of the array
+         * of vertex coordinates to use when rendering.
+         */
         private FloatBuffer mFVertexBuffer;
+        /**
+         * {@code FloatBuffer} loaded with the x,y coordinates of a unit-sided equilateral triangle
+         * centered on the origin. It is used in our {@code draw} method in a call to the method
+         * {@code glTexCoordPointer} in order to specify the location and data format of an array
+         * of texture coordinates to use when rendering.
+         */
         private FloatBuffer mTexBuffer;
+        /**
+         * {@code ShortBuffer} loaded with the three indices 0, 1, and 2. It is used in our
+         * {@code draw} method in the call to {@code glDrawElements} to specify the indices
+         * which it uses to construct a sequence of geometric primitives that are drawn using
+         * the vertices loaded from {@code mFVertexBuffer} and texture vertices loaded from
+         * {@code mTexBuffer}
+         */
         private ShortBuffer mIndexBuffer;
 
+        /**
+         * Constructor for our class, it allocates and initializes the content of the three fields
+         * we use to draw a triangle: {@code FloatBuffer mFVertexBuffer}, {@code FloatBuffer mTexBuffer},
+         * and {@code ShortBuffer mIndexBuffer}.
+         * <p>
+         * First: we allocate a direct byte buffer on the native heap for {@code ByteBuffer vbb}, and
+         * set its byte order to native order. We use {@code vbb} to create a view of this byte
+         * buffer as a float buffer which we store in the field {@code FloatBuffer mFVertexBuffer}.
+         * <p>
+         * Second: we allocate a direct byte buffer on the native heap for {@code ByteBuffer tbb}, and
+         * set its byte order to native order. We use {@code tbb} to create a view of this byte
+         * buffer as a float buffer which we store in the field {@code FloatBuffer mTexBuffer}.
+         * <p>
+         * Third: we allocate a direct byte buffer on the native heap for {@code ByteBuffer ibb}, and
+         * set its byte order to native order. We use {@code ibb} to create a view of this byte
+         * buffer as a short buffer which we store in the field {@code ShortBuffer mIndexBuffer}.
+         * <p>
+         * In {@code float[] coords} we declare the coordinates of a unit-sided equilateral triangle
+         * centered on the origin.
+         * <p>
+         * We load each of the three, three dimensional points in {@code float[] coords} into
+         * {@code FloatBuffer mFVertexBuffer} (each coordinate scaled by 2.0 for some reason).
+         * We load the x and y coordinates of each of the three points in {@code float[] coords} into
+         * {@code FloatBuffer mTexBuffer} (each coordinate scaled by 2.0 and offset by 0.5 for some
+         * reason). And we load the three indices 0, 1, and 2 into {@code ShortBuffer mIndexBuffer}.
+         * <p>
+         * Finally we set each of the buffers {@code mFVertexBuffer}, {@code mTexBuffer} and
+         * {@code mIndexBuffer} position to 0, so that the {@code gl*Pointer()} functions can read
+         * them from the beginning.
+         */
         public Triangle() {
 
             // Buffers to be passed to gl*Pointer() functions
@@ -423,6 +488,30 @@ public class StaticTriangleRenderer implements GLSurfaceView.Renderer {
             mIndexBuffer.position(0);
         }
 
+        /**
+         * Called when we are meant to draw our triangle. First we specify the orientation of front
+         * facing polygons to be GL_CCW (counter clockwise). Then we call {@code glVertexPointer} to
+         * specify the location and data format of the array of vertex coordinates to use when
+         * rendering (3 coordinates per vertex, GL_FLOAT as the data type of each coordinate, 0 as
+         * the stride between vertices (no extra data contained between vertices), and
+         * {@code FloatBuffer mFVertexBuffer} as the pointer to the first coordinate of the first
+         * vertex in the array.
+         * <p>
+         * Next we enable the GL_TEXTURE_2D server-side GL capability (If enabled and no fragment
+         * shader is active, two-dimensional texturing is performed (unless three-dimensional or
+         * cube-mapped texturing is also enabled), and we use {@code glTexCoordPointer} to define an
+         * array of texture coordinates with 2 coordinates per array element, GL_FLOAT as the data
+         * type, 0 as the byte offset between consecutive texture coordinate sets. and
+         * {@code FloatBuffer mTexBuffer} as the pointer to the first coordinate of the first
+         * vertex in the array.
+         * <p>
+         * Finally we call {@code glDrawElements} to render primitives from our array data, using
+         * the primitive type GL_TRIANGLE_STRIP, VERTS (3) elements to be rendered, GL_UNSIGNED_SHORT
+         * as the type of the values in our indices buffer, and {@code ShortBuffer mIndexBuffer} as
+         * the pointer to the location where the indices are stored.
+         *
+         * @param gl OpenGL interface UNUSED
+         */
         @SuppressWarnings("UnusedParameters")
         public void draw(GL10 gl) {
             glFrontFace(GL_CCW);

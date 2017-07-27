@@ -42,9 +42,13 @@ import javax.microedition.khronos.opengles.GL11ExtensionPack;
 
 /**
  * Demonstrate how to use the OES_texture_cube_map extension, available on some
- * high-end OpenGL ES 1.x GPUs.
+ * high-end OpenGL ES 1.x GPUs. Shows how to load and use GL_TEXTURE_CUBE_MAP
+ * textures to animate a gyrating Torus.
  */
 public class CubeMapActivity extends Activity {
+    /**
+     * TAG used for logging.
+     */
     private static final String TAG = "CubeMapAct...";
     private GLSurfaceView mGLSurfaceView;
     private class Renderer implements GLSurfaceView.Renderer {
