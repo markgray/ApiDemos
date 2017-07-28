@@ -254,6 +254,7 @@ public class CubeMapActivity extends Activity {
      *
      */
 
+    @SuppressWarnings("WeakerAccess")
     private static class Grid {
         // Size of vertex data elements in bytes:
         final static int FLOAT_SIZE = 4;
