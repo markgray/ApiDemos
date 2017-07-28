@@ -50,15 +50,33 @@ public class CubeMapActivity extends Activity {
      * TAG used for logging.
      */
     private static final String TAG = "CubeMapAct...";
+    /**
+     * {@code GLSurfaceView} we use as our content view, allocated, configured to use our class
+     * {@code Renderer} as its {@code GLSurfaceView.Renderer}, and then set as our content view
+     * in our {@code onCreate} method.
+     */
     private GLSurfaceView mGLSurfaceView;
+
+    /**
+     * {@code GLSurfaceView.Renderer} that generates and draws the gyrating, cube map textured torus
+     * for our demo.
+     */
     private class Renderer implements GLSurfaceView.Renderer {
+        /**
+         * Flag that indicates (if true) that our context supports the GL_OES_texture_cube_map according
+         * to the string describing the current connection for the GL10.GL_EXTENSIONS token.
+         */
         private boolean mContextSupportsCubeMap;
+        /**
+         * Topologically rectangular array of vertices describing our torus.
+         */
         private Grid mGrid;
         private int mCubeMapTextureID;
         @SuppressWarnings("unused")
         private boolean mUseTexGen = false;
         private float mAngle;
 
+        @Override
         public void onDrawFrame(GL10 gl) {
             checkGLError(gl);
             if (mContextSupportsCubeMap) {
@@ -109,6 +127,7 @@ public class CubeMapActivity extends Activity {
             mAngle += 1.2f;
         }
 
+        @Override
         public void onSurfaceChanged(GL10 gl, int width, int height) {
             checkGLError(gl);
             gl.glViewport(0, 0, width, height);
@@ -119,6 +138,7 @@ public class CubeMapActivity extends Activity {
             checkGLError(gl);
         }
 
+        @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             checkGLError(gl);
             // This test needs to be done each time a context is created,
