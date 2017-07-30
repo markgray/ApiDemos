@@ -87,7 +87,40 @@ public class CubeMapActivity extends Activity {
         /**
          * Called to draw the current frame. First we call our method {@code checkGLError} which
          * calls {@code glGetError} to get any error conditions and throws a {@code RuntimeException}
-         * if any error other than GL_NO_ERROR is returned.
+         * if any error other than GL_NO_ERROR is returned. If {@code boolean mContextSupportsCubeMap}
+         * is true we set our clear color to blue, otherwise we set it to red. We proceed then to
+         * clear both the color buffer and the depth buffer, enable depth test, select the model view
+         * as our current matrix and initialize it with the identity matrix. We define our viewing
+         * transformation with the eye at (0,0,-5), the center at (0,0,0), and (0.0, 1.0, 0.0) as the
+         * up vector. We rotate our model {@code float mAngle} degrees around the y axis, and by
+         * {@code mAngle*0.25} degrees around the x axis. Next we enable the client side capability
+         * GL_VERTEX_ARRAY (If enabled, the vertex array is enabled for writing and used during
+         * rendering when glArrayElement, glDrawArrays, glDrawElements, glDrawRangeElements
+         * glMultiDrawArrays, or glMultiDrawElements is called). We again call {@code checkGLError}
+         * to catch any errors that may have occurred up to this point.
+         * <p>
+         * Now is our flag {@code mContextSupportsCubeMap} is true, we set the active texture to
+         * GL_TEXTURE0, then call {@code checkGLError} to catch an error that may have occurred.
+         * Enable the GL_TEXTURE_CUBE_MAP server-side GL capability, then call {@code checkGLError}
+         * to catch an error that may have occurred. We bind the texture GL_TEXTURE_CUBE_MAP to our
+         * texture ID {@code mCubeMapTextureID} then call {@code checkGLError} to catch an error
+         * that may have occurred. We cast {@code gl} to an instance of {@code GL11ExtensionPack} to
+         * initialize {@code GL11ExtensionPack gl11ep}. We call {@code gl11ep.glTexGeni} to control
+         * the generation of texture coordinates for texture coordinate GL_TEXTURE_GEN_STR, to be
+         * texture-coordinate generation function GL_TEXTURE_GEN_MODE, with the texture generation
+         * parameter GL_REFLECTION_MAP (used to create a realistically reflective surface). And once
+         * again we call {@code checkGLError} to catch any errors that may have occurred. We enable
+         * the GL_TEXTURE_GEN_STR server-side GL capability (texture coordinates with be generated),
+         * then call {@code checkGLError} to catch an error that may have occurred. And now we call
+         * {@code glTexEnvx} to set the GL_TEXTURE_ENV environment parameter GL_TEXTURE_ENV_MODE to
+         * the value GL_DECAL (a decal overlay effect is used).
+         * <p>
+         * In either case, once again we call {@code checkGLError} to catch any errors, then instruct
+         * {@code Grid mGrid} to draw itself. Then if {@code mContextSupportsCubeMap} is true, we
+         * disable the server side capability GL_TEXTURE_GEN_STR, and call {@code checkGLError} to
+         * catch any errors in both cases.
+         * <p>
+         * Finally we advance {@code float mAngle} by 1.2 degrees and return to caller.
          *
          * @param gl the GL interface.
          */
@@ -95,11 +128,11 @@ public class CubeMapActivity extends Activity {
         public void onDrawFrame(GL10 gl) {
             checkGLError(gl);
             if (mContextSupportsCubeMap) {
-                gl.glClearColor(0,0,1,0);
+                gl.glClearColor(0, 0, 1, 0);
             } else {
                 // Current context doesn't support cube maps.
                 // Indicate this by drawing a red background.
-                gl.glClearColor(1,0,0,0);
+                gl.glClearColor(1, 0, 0, 0);
             }
             gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
             gl.glEnable(GL10.GL_DEPTH_TEST);
@@ -107,8 +140,8 @@ public class CubeMapActivity extends Activity {
             gl.glLoadIdentity();
 
             GLU.gluLookAt(gl, 0, 0, -5, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
-            gl.glRotatef(mAngle,        0, 1, 0);
-            gl.glRotatef(mAngle*0.25f,  1, 0, 0);
+            gl.glRotatef(mAngle, 0, 1, 0);
+            gl.glRotatef(mAngle * 0.25f, 1, 0, 0);
 
             gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
@@ -142,6 +175,15 @@ public class CubeMapActivity extends Activity {
             mAngle += 1.2f;
         }
 
+        /**
+         * Called when the surface changed size. Called after the surface is created and whenever
+         * the OpenGL ES surface size changes.
+         *
+         * @param gl     the GL interface. Use <code>instanceof</code> to
+         *               test if the interface supports GL11 or higher interfaces.
+         * @param width  width of new surface
+         * @param height height of new surface
+         */
         @Override
         public void onSurfaceChanged(GL10 gl, int width, int height) {
             checkGLError(gl);
@@ -190,7 +232,7 @@ public class CubeMapActivity extends Activity {
                 } finally {
                     try {
                         is.close();
-                    } catch(IOException e) {
+                    } catch (IOException e) {
                         Log.e("CubeMap", "Could not decode texture for face " + Integer.toString(face));
                     }
                 }
@@ -212,16 +254,16 @@ public class CubeMapActivity extends Activity {
                     double angleU = Math.PI * 2 * i / uSteps;
                     float cosU = (float) Math.cos(angleU);
                     float sinU = (float) Math.sin(angleU);
-                    float d = majorRadius+minorRadius*cosU;
-                    float x = d*cosV;
-                    float y = d*(-sinV);
+                    float d = majorRadius + minorRadius * cosU;
+                    float x = d * cosV;
+                    float y = d * (-sinV);
                     float z = minorRadius * sinU;
 
                     float nx = cosV * cosU;
                     float ny = -sinV * cosU;
                     float nz = sinU;
 
-                    float length = (float) Math.sqrt(nx*nx + ny*ny + nz*nz);
+                    float length = (float) Math.sqrt(nx * nx + ny * ny + nz * nz);
                     nx /= length;
                     ny /= length;
                     nz /= length;
@@ -240,7 +282,8 @@ public class CubeMapActivity extends Activity {
         /**
          * This is not the fastest way to check for an extension, but fine if
          * we are only checking for a few extensions each time a context is created.
-         * @param gl GL interface
+         *
+         * @param gl        GL interface
          * @param extension extension to test for
          * @return true if the extension is present in the current context.
          */
@@ -258,15 +301,15 @@ public class CubeMapActivity extends Activity {
         }
     }
 
-    /** A grid is a topologically rectangular array of vertices.
-     *
+    /**
+     * A grid is a topologically rectangular array of vertices.
+     * <p>
      * This grid class is customized for the vertex data required for this
      * example.
-     *
+     * <p>
      * The vertex and index data are held in VBO objects because on most
      * GPUs VBO objects are the fastest way of rendering static vertex
      * and index data.
-     *
      */
 
     @SuppressWarnings("WeakerAccess")
@@ -313,7 +356,7 @@ public class CubeMapActivity extends Activity {
             int size = w * h;
 
             mVertexByteBuffer = ByteBuffer.allocateDirect(VERTEX_SIZE * size)
-            .order(ByteOrder.nativeOrder());
+                    .order(ByteOrder.nativeOrder());
             mVertexBuffer = mVertexByteBuffer.asFloatBuffer();
 
             int quadW = mW - 1;
@@ -322,7 +365,7 @@ public class CubeMapActivity extends Activity {
             int indexCount = quadCount * 6;
             mIndexCount = indexCount;
             mIndexBuffer = ByteBuffer.allocateDirect(CHAR_SIZE * indexCount)
-            .order(ByteOrder.nativeOrder()).asCharBuffer();
+                    .order(ByteOrder.nativeOrder()).asCharBuffer();
 
             /*
              * Initialize triangle list mesh.
