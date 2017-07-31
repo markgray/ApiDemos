@@ -177,7 +177,16 @@ public class CubeMapActivity extends Activity {
 
         /**
          * Called when the surface changed size. Called after the surface is created and whenever
-         * the OpenGL ES surface size changes.
+         * the OpenGL ES surface size changes. First we call our method {@code checkGLError} to
+         * catch any errors that may have occurred. Then we call glViewport to set the viewport with
+         * the lower left corner at (0,0), {@code width} as the width of the viewport, and
+         * {@code height} as the height of the viewport. We calculate the aspect ratio
+         * {@code float ratio} to be {@code width/height}, set the the current matrix to the projection
+         * matrix, load it with the identity matrix, and call {@code glFrustumf} to multiply that
+         * matrix by the projection matrix created with the left vertical clipping plane {@code -ratio},
+         * right vertical clipping plane {@code +ratio}, the bottom clipping plane of -1, top clipping
+         * plane of 1, near clipping plane of 1, and far clipping plane of 10. Finally we call our
+         * method {@code checkGLError} to catch any errors that may have occurred.
          *
          * @param gl     the GL interface. Use <code>instanceof</code> to
          *               test if the interface supports GL11 or higher interfaces.
@@ -195,6 +204,27 @@ public class CubeMapActivity extends Activity {
             checkGLError(gl);
         }
 
+        /**
+         * Called when the surface is created or recreated. Called when the rendering thread starts
+         * and whenever the EGL context is lost. The EGL context will typically be lost when the
+         * Android device awakes after going to sleep. First we call our method {@code checkGLError}
+         * to catch any errors that may have occurred. The we check whether the current context
+         * supports the cube map extension and set our field {@code boolean mContextSupportsCubeMap}
+         * accordingly. We call our method {@code generateTorusGrid} to create a {@code Grid mGrid}
+         * defining our torus. If the current context supports the cube map extension (i.e. our field
+         * {@code mContextSupportsCubeMap} is true) we initialize {@code int[] cubeMapResourceIds}
+         * with the resource ID's of the six jpg raw resources we will use for the six sides of the
+         * cube: R.raw.skycubemap0, R.raw.skycubemap1, R.raw.skycubemap2, R.raw.skycubemap3,
+         * R.raw.skycubemap4, and R.raw.skycubemap5. Then we set our field {@code int mCubeMapTextureID}
+         * to the texture ID returned from our method {@code generateCubeMap} after it turns these
+         * jpg images into a cube map texture. Finally we call our  method {@code checkGLError} to
+         * catch any errors that may have occurred.
+         *
+         * @param gl     the GL interface. Use <code>instanceof</code> to
+         *               test if the interface supports GL11 or higher interfaces.
+         * @param config the EGLConfig of the created surface. Can be used
+         *               to create matching pbuffers.
+         */
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             checkGLError(gl);
@@ -213,16 +243,43 @@ public class CubeMapActivity extends Activity {
             checkGLError(gl);
         }
 
+        /**
+         * Configures the cube map texture for use, and loads the 6 jpeg's with the resource IDs in
+         * the array {@code int[] resourceIds} into the 6 cube map texture images (one for each face
+         * of the cube). First we call our method {@code checkGLError} to catch any errors that may
+         * have occurred. Next we allocate {@code int[] ids} and fill it with one texture ID generated
+         * by {@code glGenTextures} which we assign to {@code int cubeMapTextureId}. We bind the texture
+         * ID to GL_TEXTURE_CUBE_MAP. We set the parameter GL_TEXTURE_MIN_FILTER (The texture minifying
+         * function is used whenever the level-of-detail function used when sampling from the texture
+         * determines that the texture should be minified) of GL_TEXTURE_CUBE_MAP to GL_LINEAR (uses
+         * the weighted average of the four texture elements that are closest to the specified texture
+         * coordinates), and the parameter GL_TEXTURE_MAG_FILTER (The texture magnification function is
+         * used whenever the level-of-detail function used when sampling from the texture determines
+         * that the texture should be magnified) to GL_LINEAR as well.
+         * <p>
+         * Then we loop through the six images in {@code int[] resourceIds}, open each raw resource
+         * using {@code InputStream is}, decode that image into {@code Bitmap bitmap}, specify that
+         * {@code bitmap} for the face of the six sided cube map texture it is meant for (one of
+         * GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+         * GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, GL_TEXTURE_CUBE_MAP_POSITIVE_Z, and GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+         * The code relies on the fact that they happen to have sequential ID numbers), and then we
+         * recycle the {@code Bitmap bitmap}.
+         * <p>
+         * Finally we call our method {@code checkGLError} to catch any errors that may have occurred
+         * and return {@code cubeMapTextureId} to the caller.
+         *
+         * @param gl          the GL interface.
+         * @param resourceIds the resource IDs of the six jpeg's to be used for the cube map texture
+         * @return texture ID of the cube map texture we create
+         */
         private int generateCubeMap(GL10 gl, int[] resourceIds) {
             checkGLError(gl);
             int[] ids = new int[1];
             gl.glGenTextures(1, ids, 0);
             int cubeMapTextureId = ids[0];
             gl.glBindTexture(GL11ExtensionPack.GL_TEXTURE_CUBE_MAP, cubeMapTextureId);
-            gl.glTexParameterf(GL11ExtensionPack.GL_TEXTURE_CUBE_MAP,
-                    GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
-            gl.glTexParameterf(GL11ExtensionPack.GL_TEXTURE_CUBE_MAP,
-                    GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
+            gl.glTexParameterf(GL11ExtensionPack.GL_TEXTURE_CUBE_MAP, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
+            gl.glTexParameterf(GL11ExtensionPack.GL_TEXTURE_CUBE_MAP, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 
             for (int face = 0; face < 6; face++) {
                 InputStream is = getResources().openRawResource(resourceIds[face]);
@@ -236,14 +293,23 @@ public class CubeMapActivity extends Activity {
                         Log.e("CubeMap", "Could not decode texture for face " + Integer.toString(face));
                     }
                 }
-                GLUtils.texImage2D(GL11ExtensionPack.GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0,
-                        bitmap, 0);
+                GLUtils.texImage2D(GL11ExtensionPack.GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, bitmap, 0);
                 bitmap.recycle();
             }
             checkGLError(gl);
             return cubeMapTextureId;
         }
 
+        /**
+         * Generates a {@code Grid} describing our torus.
+         *
+         * @param gl the GL interface.
+         * @param uSteps number of steps for u dimension
+         * @param vSteps number of steps for v dimension
+         * @param majorRadius Radius of torus donut
+         * @param minorRadius Radius of body of torus
+         * @return {@code Grid} describing our torus
+         */
         private Grid generateTorusGrid(GL gl, int uSteps, int vSteps, float majorRadius, float minorRadius) {
             Grid grid = new Grid(uSteps + 1, vSteps + 1);
             for (int j = 0; j <= vSteps; j++) {
