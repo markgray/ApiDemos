@@ -301,13 +301,25 @@ public class CubeMapActivity extends Activity {
         }
 
         /**
-         * Generates a {@code Grid} describing our torus.
+         * Generates a {@code Grid} describing our torus. First we allocate a new {@code Grid grid}
+         * sized to hold (uSteps+1)*(vSteps+1) vertices. Next we loop using {@code double angleV} to
+         * divide the outside radius of the torus into {@code vSteps} segments, calculating the cos
+         * {@code cosV} of {@code angleV} and sin {@code sinV} of {@code angleV}. In the inner loop
+         * we loop using {@code double angleU} to divide the body of the torus into {@code uSteps}
+         * segments, calculating the cos {@code cosU} of {@code angleU} and sin {@code sinU} of
+         * {@code angleU}. Using these values we are able to calculate the (x,y,z) location of the
+         * vertex, and the normal vector of the vertex (nx,ny,nz) and we call {@code grid.set} to
+         * store these in their appropriate (i,j) places in the Grid's vertex buffer.
+         * <p>
+         * When done loading the vertex buffer of {@code Grid grid} we call {@code grid.createBufferObjects}
+         * to load the buffer objects describing our torus into the openGL engine and return {@code grid}
+         * to the caller.
          *
-         * @param gl the GL interface.
-         * @param uSteps number of steps for u dimension
-         * @param vSteps number of steps for v dimension
-         * @param majorRadius Radius of torus donut
-         * @param minorRadius Radius of body of torus
+         * @param gl          the GL interface.
+         * @param uSteps      number of steps for u dimension (width) 60 in our case
+         * @param vSteps      number of steps for v dimension (height) 60 in our case
+         * @param majorRadius Outer radius of torus donut 3.0f in our case
+         * @param minorRadius Radius of body of torus 0.75f in our case
          * @return {@code Grid} describing our torus
          */
         private Grid generateTorusGrid(GL gl, int uSteps, int vSteps, float majorRadius, float minorRadius) {
@@ -341,13 +353,24 @@ public class CubeMapActivity extends Activity {
             return grid;
         }
 
+        /**
+         * Convenience function to call {@code checkIfContextSupportsExtension} to check whether the
+         * "GL_OES_texture_cube_map" extension is present in the current context.
+         *
+         * @param gl GL interface
+         * @return true if the "GL_OES_texture_cube_map" extension is present in the current context.
+         */
         private boolean checkIfContextSupportsCubeMap(GL10 gl) {
             return checkIfContextSupportsExtension(gl, "GL_OES_texture_cube_map");
         }
 
         /**
-         * This is not the fastest way to check for an extension, but fine if
-         * we are only checking for a few extensions each time a context is created.
+         * This is not the fastest way to check for an extension, but fine if we are only checking
+         * for a few extensions each time a context is created. We add spaces at the beginning and
+         * end of the the string returned by {@code glGetString} for the GL_EXTENSIONS string
+         * (which returns the extension string supported by the implementation). Then we use
+         * {@code indexOf} to search withing that string for our parameter {@code String extension},
+         * and return true if it is found, false if not.
          *
          * @param gl        GL interface
          * @param extension extension to test for
@@ -377,11 +400,15 @@ public class CubeMapActivity extends Activity {
      * GPUs VBO objects are the fastest way of rendering static vertex
      * and index data.
      */
-
     @SuppressWarnings("WeakerAccess")
     private static class Grid {
-        // Size of vertex data elements in bytes:
+        /**
+         * Size of vertex data float elements in bytes:
+         */
         final static int FLOAT_SIZE = 4;
+        /**
+         * Size of index data char elements in bytes:
+         */
         final static int CHAR_SIZE = 2;
 
         // Vertex structure:
