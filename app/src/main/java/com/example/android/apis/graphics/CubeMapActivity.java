@@ -391,14 +391,10 @@ public class CubeMapActivity extends Activity {
     }
 
     /**
-     * A grid is a topologically rectangular array of vertices.
-     * <p>
-     * This grid class is customized for the vertex data required for this
-     * example.
-     * <p>
-     * The vertex and index data are held in VBO objects because on most
-     * GPUs VBO objects are the fastest way of rendering static vertex
-     * and index data.
+     * A grid is a topologically rectangular array of vertices. This grid class is customized for
+     * the vertex data required for this example. The vertex and index data are held in VBO objects
+     * (Vertex buffer objects) because on most GPUs VBO objects are the fastest way of rendering
+     * static vertex and index data.
      */
     @SuppressWarnings("WeakerAccess")
     private static class Grid {
@@ -415,18 +411,39 @@ public class CubeMapActivity extends Activity {
         // float x, y, z;
         // float nx, ny, nx;
 
+        /**
+         * 6 floats are used for each vertex, 3 for the (x,y.z) coordinate, and 3 for the normal vector
+         */
         final static int VERTEX_SIZE = 6 * FLOAT_SIZE;
+        /**
+         * Offset to the normal vector in a vertex data point.
+         */
         final static int VERTEX_NORMAL_BUFFER_INDEX_OFFSET = 3;
 
+        /**
+         * Buffer object name that we upload our vertex buffer {@code ByteBuffer mVertexByteBuffer} to
+         */
         private int mVertexBufferObjectId;
+        /**
+         * Buffer object name that we upload our index buffer {@code CharBuffer mIndexBuffer} to
+         */
         private int mElementBufferObjectId;
 
         // These buffers are used to hold the vertex and index data while
         // constructing the grid. Once createBufferObjects() is called
         // the buffers are nulled out to save memory.
 
+        /**
+         * {@code ByteBuffer} we use to build our vertex and normal vector data in
+         */
         private ByteBuffer mVertexByteBuffer;
+        /**
+         * a view of {@code ByteBuffer mVertexByteBuffer} as a float buffer
+         */
         private FloatBuffer mVertexBuffer;
+        /**
+         * {@code CharBuffer} we use to build our index data array
+         */
         private CharBuffer mIndexBuffer;
 
         private int mW;
@@ -448,8 +465,7 @@ public class CubeMapActivity extends Activity {
             mH = h;
             int size = w * h;
 
-            mVertexByteBuffer = ByteBuffer.allocateDirect(VERTEX_SIZE * size)
-                    .order(ByteOrder.nativeOrder());
+            mVertexByteBuffer = ByteBuffer.allocateDirect(VERTEX_SIZE * size).order(ByteOrder.nativeOrder());
             mVertexBuffer = mVertexByteBuffer.asFloatBuffer();
 
             int quadW = mW - 1;
@@ -457,8 +473,7 @@ public class CubeMapActivity extends Activity {
             int quadCount = quadW * quadH;
             int indexCount = quadCount * 6;
             mIndexCount = indexCount;
-            mIndexBuffer = ByteBuffer.allocateDirect(CHAR_SIZE * indexCount)
-                    .order(ByteOrder.nativeOrder()).asCharBuffer();
+            mIndexBuffer = ByteBuffer.allocateDirect(CHAR_SIZE * indexCount).order(ByteOrder.nativeOrder()).asCharBuffer();
 
             /*
              * Initialize triangle list mesh.
