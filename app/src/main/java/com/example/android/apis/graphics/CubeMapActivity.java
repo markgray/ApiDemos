@@ -446,10 +446,39 @@ public class CubeMapActivity extends Activity {
          */
         private CharBuffer mIndexBuffer;
 
+        /**
+         * Width of our {@code Grid} (vertices in one row)
+         */
         private int mW;
+        /**
+         * Height of our {@code Grid} (number of rows of vertices)
+         */
         private int mH;
+        /**
+         * Number of entries in our index buffer {@code CharBuffer mIndexBuffer}
+         */
         private int mIndexCount;
 
+        /**
+         * Allocates storage to build our {@code Grid} in and initializes the contents of the index
+         * data array {@code CharBuffer mIndexBuffer} (a triangle list mesh). First we check to make
+         * sure our arguments are within the limitations imposed on us by the size of {@code char}
+         * values, and if not we throw IllegalArgumentException. We initialize our field {@code int mW}
+         * with our argument {@code int w}, and our field {@code int mH} with our argument {@code int h}.
+         * We calculate the total number of vertices to be {@code int size = w*h}. We allocate a native
+         * byte order {@code ByteBuffer} capable of holding {@code size} vertices to initialize our field
+         * {@code ByteBuffer mVertexByteBuffer}, and set our field {@code FloatBuffer mVertexBuffer}
+         * to a view of {@code mVertexByteBuffer} as a {@code FloatBuffer}. We calculate the total
+         * number of indices we will need {@code int mIndexCount}, and then initialize our field
+         * {@code CharBuffer mIndexBuffer} with a native byte order {@code ByteBuffer} of the correct
+         * size, viewed as a {@code CharBuffer}.
+         *
+         * Next we loop through all the index values in {@code mIndexBuffer}, setting them to index
+         * values in groups
+         *
+         * @param w Width of the {@code Grid} (vertices in one row)
+         * @param h Height of the {@code Grid} (number of rows of vertices)
+         */
         public Grid(int w, int h) {
             if (w < 0 || w >= 65536) {
                 throw new IllegalArgumentException("w");
