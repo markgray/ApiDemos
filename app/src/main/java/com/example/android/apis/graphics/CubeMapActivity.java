@@ -472,9 +472,41 @@ public class CubeMapActivity extends Activity {
          * number of indices we will need {@code int mIndexCount}, and then initialize our field
          * {@code CharBuffer mIndexBuffer} with a native byte order {@code ByteBuffer} of the correct
          * size, viewed as a {@code CharBuffer}.
-         *
+         * <p>
          * Next we loop through all the index values in {@code mIndexBuffer}, setting them to index
-         * values in groups
+         * values in groups of two triangles, with three indices for each triangle. The indices for
+         * a triangle are assigned in counter clockwise order so that the normal points out of the
+         * screen. The result is a {@code w} by {@code h} two dimensional rectangle divided into
+         * equal triangles. The magic occurs when each vertex corresponding to an index value is
+         * assigned a three dimensional coordinate by the code in our method {@code generateTorusGrid}.
+         * <p>
+         * The six indices for the two triangle group are set from the row {@code y} and the column
+         * {@code x} as follows:
+         * <p>
+         * First triangle
+         * <ul>
+         * <li>
+         * (y*mW + x) top left corner (a)
+         * </li>
+         * <li>
+         * ((y+1)*mW + x) bottom left corner (c)
+         * </li>
+         * <li>
+         * (y*mW + x + 1) top right corner (b)
+         * </li>
+         * </ul>
+         * Second triangle
+         * <ul>
+         * <li>
+         * (y*mW + x + 1) top right corner (b)
+         * </li>
+         * <li>
+         * ((y+1)*mW + x) bottom left corner (c)
+         * </li>
+         * <li>
+         * ((y+1)*mW + x + 1) bottom right corner (d)
+         * </li>
+         * </ul>
          *
          * @param w Width of the {@code Grid} (vertices in one row)
          * @param h Height of the {@code Grid} (number of rows of vertices)
@@ -537,6 +569,24 @@ public class CubeMapActivity extends Activity {
             }
         }
 
+        /**
+         * Stores the vertex coordinate values in the proper places in our {@code FloatBuffer mVertexBuffer}
+         * vertex buffer. After making sure our address arguments {@code i} and {@code j} are in range
+         * (throwing IllegalArgumentException if they are not), we calculate the {@code int index} that
+         * {@code i} and {@code j} point to ({@code mW*j + i}) and position {@code FloatBuffer mVertexBuffer}
+         * to that position ({@code index*VERTEX_SIZE/FLOAT_SIZE}), and proceed to deposit the rest of
+         * our arguments ({@code x, y, z, nx, ny, nz}) into {@code FloatBuffer mVertexBuffer} one after
+         * the other.
+         *
+         * @param i column to set
+         * @param j row to set
+         * @param x x coordinate
+         * @param y y coordinate
+         * @param z z coordinate
+         * @param nx x coordinate of normal vector
+         * @param ny y coordinate of normal vector
+         * @param nz z coordinate of normal vector
+         */
         public void set(int i, int j, float x, float y, float z, float nx, float ny, float nz) {
             if (i < 0 || i >= mW) {
                 throw new IllegalArgumentException("i");
@@ -556,6 +606,13 @@ public class CubeMapActivity extends Activity {
             mVertexBuffer.put(nz);
         }
 
+        /**
+         * Transfers our {@code FloatBuffer mVertexBuffer} to the hardware GL_ARRAY_BUFFER, and our
+         * {@code CharBuffer mIndexBuffer} to the hardware GL_ELEMENT_ARRAY_BUFFER. First we call our
+         * method {@code checkGLError} to catch any errors that may have occurred.
+         *
+         * @param gl the GL interface.
+         */
         public void createBufferObjects(GL gl) {
             checkGLError(gl);
             // Generate a the vertex and element buffer IDs
