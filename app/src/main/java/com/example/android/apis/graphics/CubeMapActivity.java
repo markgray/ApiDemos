@@ -40,6 +40,8 @@ import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 import javax.microedition.khronos.opengles.GL11ExtensionPack;
 
+import static com.example.android.apis.graphics.FrameBufferObjectActivity.checkGLError;
+
 /**
  * Demonstrate how to use the OES_texture_cube_map extension, available on some
  * high-end OpenGL ES 1.x GPUs. Shows how to load and use GL_TEXTURE_CUBE_MAP
@@ -578,11 +580,11 @@ public class CubeMapActivity extends Activity {
          * our arguments ({@code x, y, z, nx, ny, nz}) into {@code FloatBuffer mVertexBuffer} one after
          * the other.
          *
-         * @param i column to set
-         * @param j row to set
-         * @param x x coordinate
-         * @param y y coordinate
-         * @param z z coordinate
+         * @param i  column to set
+         * @param j  row to set
+         * @param x  x coordinate
+         * @param y  y coordinate
+         * @param z  z coordinate
          * @param nx x coordinate of normal vector
          * @param ny y coordinate of normal vector
          * @param nz z coordinate of normal vector
@@ -609,7 +611,28 @@ public class CubeMapActivity extends Activity {
         /**
          * Transfers our {@code FloatBuffer mVertexBuffer} to the hardware GL_ARRAY_BUFFER, and our
          * {@code CharBuffer mIndexBuffer} to the hardware GL_ELEMENT_ARRAY_BUFFER. First we call our
-         * method {@code checkGLError} to catch any errors that may have occurred.
+         * method {@code checkGLError} to catch any errors that may have occurred. Next we allocate
+         * 2 ints for {@code int[] vboIds}, cast our argument {@code GL gl} to set {@code GL11 gl11},
+         * and generate two buffer object names in {@code vboIds}, the first we save in our field
+         * {@code int mVertexBufferObjectId}, and the second in {@code int mElementBufferObjectId}.
+         * <p>
+         * To upload the vertex data we bind {@code mVertexBufferObjectId} to GL_ARRAY_BUFFER, position
+         * {@code mVertexByteBuffer} to its beginning, and call {@code gl11.glBufferData} to create
+         * and initialize the GL_ARRAY_BUFFER buffer object's data store from {@code mVertexByteBuffer}
+         * with the usage hint of GL_STATIC_DRAW (The data store contents will be modified once and
+         * used many times, and the data store contents are modified by the application, and used as
+         * the source for GL drawing and image specification commands).
+         * <p>
+         * To upload the index data we bind {@code mElementBufferObjectId} to GL_ELEMENT_ARRAY_BUFFER,
+         * position {@code mIndexBuffer} to its beginning, and call {@code gl11.glBufferData} to create
+         * and initialize the GL_ELEMENT_ARRAY_BUFFER buffer object's data store from {@code mIndexBuffer}
+         * with the usage hint of GL_STATIC_DRAW (The data store contents will be modified once and
+         * used many times, and the data store contents are modified by the application, and used as
+         * the source for GL drawing and image specification commands).
+         * <p>
+         * Since we no longer need the in-memory data we set {@code mVertexBuffer} and {@code mIndexBuffer}
+         * to null so they can be garbage collected, and call our method {@code checkGLError} to catch
+         * any errors that may have occurred.
          *
          * @param gl the GL interface.
          */
@@ -638,6 +661,35 @@ public class CubeMapActivity extends Activity {
             checkGLError(gl);
         }
 
+        /**
+         * Called from {@code Renderer.onDrawFrame} to draw our torus when it is called to draw the
+         * current frame. First we call our method {@code checkGLError} to catch any errors that may
+         * have occurred, and the we cast our argument {@code GL10 gl} to set {@code GL11 gl11}. We
+         * enable the client-side capability GL_VERTEX_ARRAY (the vertex array is enabled for writing
+         * and used during rendering when glArrayElement, glDrawArrays, glDrawElements, glDrawRangeElements
+         * glMultiDrawArrays, or glMultiDrawElements is called). Then we bind our buffer object
+         * {@code mVertexBufferObjectId} to the target GL_ARRAY_BUFFER, and then define an array of
+         * vertex data with 3 coordinate per vertex, float data type, a stride of VERTEX_SIZE (since
+         * the normal vector is interleaved with the vertex coordinates), and the pointer set to the
+         * first vertex (0). Next we enable the client-side capability GL_NORMAL_ARRAY (the normal
+         * array is enabled for writing and used during rendering when glArrayElement, glDrawArrays,
+         * glDrawElements, glDrawRangeElements glMultiDrawArrays, or glMultiDrawElements is called).
+         * Then we define an array of normals, or float type, stride VERTEX_SIZE (since the normals
+         * are interleaved with the vertex coordinates), and a starting pointer that advances us past
+         * the first vertex coordinate: VERTEX_NORMAL_BUFFER_INDEX_OFFSET * FLOAT_SIZE (3 floats).
+         * <p>
+         * We bind our buffer object {@code int mElementBufferObjectId} to GL_ELEMENT_ARRAY_BUFFER,
+         * and call the method {@code glDrawElements} to draw GL_TRIANGLES (the primitive to render),
+         * with {@code mIndexCount} number of elements to be rendered, with type of the values or
+         * our indices being GL_UNSIGNED_SHORT, and an initial pointer of 0 to start at the first
+         * index value.
+         * <p>
+         * Having drawn our torus we now disable the client-side capability GL_VERTEX_ARRAY and
+         * GL_NORMAL_ARRAY, and unbind the targets GL_ARRAY_BUFFER, and GL_ELEMENT_ARRAY_BUFFER.
+         * Finally we call our method {@code checkGLError} to catch any errors that may have occurred.
+         *
+         * @param gl the GL interface.
+         */
         public void draw(GL10 gl) {
             checkGLError(gl);
             GL11 gl11 = (GL11) gl;
@@ -652,6 +704,7 @@ public class CubeMapActivity extends Activity {
 
             gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, mElementBufferObjectId);
             gl11.glDrawElements(GL10.GL_TRIANGLES, mIndexCount, GL10.GL_UNSIGNED_SHORT, 0);
+
             gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
             gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
             gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
@@ -660,6 +713,12 @@ public class CubeMapActivity extends Activity {
         }
     }
 
+    /**
+     * Calls {@code glGetError} to get the value of the error flag, and if it is not GL_NO_ERROR (0),
+     * throws a RuntimeException.
+     *
+     * @param gl the GL interface.
+     */
     static void checkGLError(GL gl) {
         int error = ((GL10) gl).glGetError();
         if (error != GL10.GL_NO_ERROR) {
@@ -667,6 +726,14 @@ public class CubeMapActivity extends Activity {
         }
     }
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. Then we initialize our field {@code GLSurfaceView mGLSurfaceView} with a
+     * new instance of {@code GLSurfaceView}, set its renderer to a new instance of {@code Renderer},
+     * and finally set our content view to {@code mGLSurfaceView}.
+     *
+     * @param savedInstanceState We do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -678,6 +745,12 @@ public class CubeMapActivity extends Activity {
         setContentView(mGLSurfaceView);
     }
 
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or {@link #onPause}, for
+     * your activity to start interacting with the user. First we call through to our super's
+     * implementation of {@code onResume}, then we call our field's {@code GLSurfaceView mGLSurfaceView}
+     * implementation of {@code onResume}.
+     */
     @Override
     protected void onResume() {
         // Ideally a game should implement onResume() and onPause()
@@ -686,6 +759,12 @@ public class CubeMapActivity extends Activity {
         mGLSurfaceView.onResume();
     }
 
+    /**
+     * Called as part of the activity lifecycle when an activity is going into the background, but
+     * has not (yet) been killed.  The counterpart to {@link #onResume}. First we call through to our
+     * super's implementation of {@code onPause}, then we call our field's {@code mGLSurfaceView}
+     * implementation of {@code onPause}.
+     */
     @Override
     protected void onPause() {
         // Ideally a game should implement onResume() and onPause()
