@@ -1131,6 +1131,8 @@ Graphics
    Frame Buffer Object
     Graphics/OpenGL ES/Frame Buffer Object all
         .graphics.FrameBufferObjectActivity
+        .graphics.TriangleRenderer.Triangle
+        .graphics.Cube
             Demonstrate the Frame Buffer Object OpenGL ES extension. This sample renders
             a scene into an offscreen frame buffer, and then uses the resulting image as
             a texture to render an onscreen scene.

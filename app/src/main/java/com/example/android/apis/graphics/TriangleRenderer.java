@@ -229,8 +229,7 @@ class Triangle {
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mFVertexBuffer);
         gl.glEnable(GL10.GL_TEXTURE_2D);
         gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTexBuffer);
-        gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, VERTS,
-                GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
+        gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, VERTS, GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
     }
 
     private final static int VERTS = 3;

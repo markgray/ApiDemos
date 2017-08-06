@@ -32,19 +32,74 @@ import android.os.SystemClock;
  * offscreen frame buffer, and then uses the resulting image as a texture to render an onscreen scene.
  */
 public class FrameBufferObjectActivity extends Activity {
+    /**
+     * {@code GLSurfaceView} containing our demo, its {@code GLSurfaceView.Renderer} is our class
+     * {@code Renderer} and it is our entire content view.
+     */
     private GLSurfaceView mGLSurfaceView;
 
+    /**
+     * {@code GLSurfaceView.Renderer} which draws our demo, it consists of two rotating {@code Cube}
+     * objects used as the texture for a rotating {@code Triangle}
+     */
     private class Renderer implements GLSurfaceView.Renderer {
+        /**
+         * Flag indicating whether the current GL context supports the extension GL_OES_framebuffer_object
+         */
         private boolean mContextSupportsFrameBufferObject;
+        /**
+         * Texture ID of the texture we use for our demo, it is bound to GL_TEXTURE_2D in our method
+         * {@code drawOnscreen} which is called by our override of {@code onDrawFrame}.
+         */
         private int mTargetTexture;
+        /**
+         * Framebuffer object name we use to draw our offscreen texture to, it is bound to
+         * GL11ExtensionPack.GL_FRAMEBUFFER_OES in {@code onDrawFrame}
+         */
         private int mFramebuffer;
+        /**
+         * Width of the Framebuffer object, it is used in our method {@code createTargetTexture} to
+         * specify the width of the two-dimensional texture image for the GL_TEXTURE_2D target (which
+         * is bound to our {@code mTargetTexture}, as well as by our method {@code createFrameBuffer}
+         * to specify the width of the renderbuffer object's image that is bound to GL_RENDERBUFFER_OES
+         * (which is our {@code mFramebuffer}).
+         */
         private int mFramebufferWidth = 256;
+        /**
+         * Height of the Framebuffer object, it is used in our method {@code createTargetTexture} to
+         * specify the height of the two-dimensional texture image for the GL_TEXTURE_2D target (which
+         * is bound to our {@code mTargetTexture}, as well as by our method {@code createFrameBuffer}
+         * to specify the height of the renderbuffer object's image that is bound to GL_RENDERBUFFER_OES
+         * (which is our {@code mFramebuffer}).
+         */
         private int mFramebufferHeight = 256;
+        /**
+         * Width of our {@code SurfaceView} which is set in our {@code onSurfaceChanged} callback
+         */
         private int mSurfaceWidth;
+        /**
+         * Height of our {@code SurfaceView} which is set in our {@code onSurfaceChanged} callback
+         */
         private int mSurfaceHeight;
 
+        /**
+         * {@code Triangle} instance which we draw in our method {@code drawOnscreen} every time our
+         * callback {@code onDrawFrame} is called, it is rotated by a function of the system time
+         * by rotating the {@code GLSurfaceView} using {@code glRotatef}, and the texture is supplied
+         * by {@code mTargetTexture} (which consists of our off screen frame buffer which has two
+         * rotating {@code Cube} objects being drawn into it).
+         */
         private Triangle mTriangle;
+        /**
+         * {@code Cube} instance that we use twice to produce the texture used by our {@code Triangle}
+         * instance (the second rotated around the (y,z) axis by twice the angle the first is rotated
+         * by, and translated by (0.5, 0.5, 0.5))
+         */
         private Cube mCube;
+        /**
+         * Angle used to draw the two {@code Cube} objects we use as our texture, it is advanced by
+         * 1.2 degrees every frame.
+         */
         private float mAngle;
         /**
          * Setting this to true will change the behavior  of this sample. It
@@ -55,6 +110,11 @@ public class FrameBufferObjectActivity extends Activity {
          */
         private static final boolean DEBUG_RENDER_OFFSCREEN_ONSCREEN = false;
 
+        /**
+         * Called to draw the current frame.
+         *
+         * @param gl the GL interface.
+         */
         @Override
         public void onDrawFrame(GL10 gl) {
             checkGLError(gl);
@@ -107,8 +167,7 @@ public class FrameBufferObjectActivity extends Activity {
             gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
             gl.glBindTexture(GL10.GL_TEXTURE_2D, mTargetTexture);
 
-            gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
-                    GL10.GL_REPLACE);
+            gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE);
 
             gl.glMatrixMode(GL10.GL_MODELVIEW);
             gl.glLoadIdentity();
