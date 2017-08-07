@@ -111,7 +111,17 @@ public class FrameBufferObjectActivity extends Activity {
         private static final boolean DEBUG_RENDER_OFFSCREEN_ONSCREEN = false;
 
         /**
-         * Called to draw the current frame.
+         * Called to draw the current frame. First we call our method {@code checkGLError} to catch
+         * any errors that may have occurred. Then if {@code mContextSupportsFrameBufferObject} (the
+         * current context supports frame buffer objects) we cast our parameter {@code GL10 gl} to
+         * {@code GL11ExtensionPack gl11ep} and if we are debugging we immediately call our method
+         * {@code drawOffscreenImage} which will draw the two rotating {@code Cube} that we use as
+         * our texture directly to the {@code GLSurfaceView} window system provided framebuffer,
+         * if we are not debugging we bind our frame buffer object name {@code mFramebuffer} to the
+         * target GL_FRAMEBUFFER_OES, then call our method {@code drawOffscreenImage}, unbind the
+         * target GL_FRAMEBUFFER_OES, and call our method {@code drawOnscreen}. If the current
+         * context doesn't support frame buffer objects we set our clear color to red, and clear the
+         * color buffer and depth buffer with it.
          *
          * @param gl the GL interface.
          */
@@ -131,11 +141,23 @@ public class FrameBufferObjectActivity extends Activity {
             } else {
                 // Current context doesn't support frame buffer objects.
                 // Indicate this by drawing a red background.
-                gl.glClearColor(1,0,0,0);
+                gl.glClearColor(1, 0, 0, 0);
                 gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
             }
         }
 
+        /**
+         * Called when the surface changed size. Called after the surface is created and whenever
+         * the OpenGL ES surface size changes. First we call our method {@code checkGLError} to
+         * catch any error that may have occurred, then we save {@code width} in our field
+         * {@code mSurfaceWidth} and height in our field {@code mSurfaceHeight} then set the viewport
+         * to have the lower left corner at (0,0) and a width of {@code width} and a height of
+         * {@code height}.
+         *
+         * @param gl     the GL interface.
+         * @param width  width of surface
+         * @param height height of surface
+         */
         @Override
         public void onSurfaceChanged(GL10 gl, int width, int height) {
             checkGLError(gl);
@@ -144,6 +166,24 @@ public class FrameBufferObjectActivity extends Activity {
             gl.glViewport(0, 0, width, height);
         }
 
+        /**
+         * Called when the surface is created or recreated. Called when the rendering thread starts
+         * and whenever the EGL context is lost. The EGL context will typically be lost when the
+         * Android device awakes after going to sleep. First we check to see if the current context
+         * supports the capability GL_OES_framebuffer_object (has frame buffer objects) and set our
+         * field {@code mContextSupportsFrameBufferObject} to true if it does. Then if it does support
+         * frame buffer objects, we call our method {@code createTargetTexture} and initialize our
+         * field {@code mTargetTexture} with the texture name bound to GL_TEXTURE_2D and configured
+         * appropriately which it we returns. We call our method {@code createFrameBuffer} and
+         * initialize our field {@code mFramebuffer} with the framebuffer object name which has our
+         * {@code mTargetTexture} attached to it and which is configured appropriately which it
+         * returns. Finally we initialize our field {@code Cube mCube} with a new instance of
+         * {@code Cube}, and our field {@code Triangle mTriangle} with a new instance of
+         * {@code Triangle}.
+         *
+         * @param gl     the GL interface.
+         * @param config the EGLConfig of the created surface. Unused.
+         */
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             mContextSupportsFrameBufferObject = checkIfContextSupportsFrameBufferObject(gl);
@@ -156,6 +196,40 @@ public class FrameBufferObjectActivity extends Activity {
             }
         }
 
+        /**
+         * Called from our implementation of {@code onDrawFrame} to draw our triangle. First we set
+         * the viewport to have the lower left corner at (0,0) and a width of {@code width} and a
+         * height of {@code height}. Then we calculate the aspect ratio {@code float ratio} to be
+         * {@code width/height}, then we set the GL_PROJECTION matrix to be the current matrix, load
+         * it with the identity matrix and call {@code glFrustumf} to multiply the matrix by the
+         * perspective matrix with the left clipping plane at {@code -ratio}, the right clipping
+         * plane at {@code +ratio}, the bottom clipping plane at -1, the top clipping plane at 1,
+         * the near clipping plane at 3 and the far clipping plane at 7.
+         * <p>
+         * We set the clear color to the color blue, and clear the color buffer and the depth buffer.
+         * Then we bind our {@code mTargetTexture} to the target texture GL_TEXTURE_2D.
+         * <p>
+         * We set the GL_TEXTURE_ENV_MODE texture environment parameter of the texture environment
+         * GL_TEXTURE_ENV to the texture function GL_REPLACE (the texture replaces the current color).
+         * <p>
+         * Next we set the GL_MODELVIEW matrix to be the current matrix, load it with the identity
+         * matrix and call {@code GLU.gluLookAt} to specify the viewing transformation to have the
+         * eye point at (0,0,-5), the center reference point at (0,0,0) and the up vector (0,1,0).
+         * <p>
+         * We enable the client-side capability GL_VERTEX_ARRAY and GL_TEXTURE_COORD_ARRAY then select
+         * GL_TEXTURE0 to be the active texture unit.
+         * <p>
+         * We calculate {@code float angle} using the current milliseconds since boot and rotate the
+         * GL_MODELVIEW matrix by {@code angle} around the vector (0,0,1). Then we instruct our
+         * {@code Triangle mTriangle} to draw itself.
+         * <p>
+         * To clean up we unbind the texture GL_TEXTURE_2D, and disable the client-side capabilities
+         * GL_VERTEX_ARRAY and GL_TEXTURE_COORD_ARRAY.
+         *
+         * @param gl     the GL interface.
+         * @param width  width of our surface view {@code mSurfaceWidth} in our case.
+         * @param height height of our surface view {@code mSurfaceHeight} in our case.
+         */
         private void drawOnscreen(GL10 gl, int width, int height) {
             gl.glViewport(0, 0, width, height);
             float ratio = (float) width / height;
@@ -163,7 +237,7 @@ public class FrameBufferObjectActivity extends Activity {
             gl.glLoadIdentity();
             gl.glFrustumf(-ratio, ratio, -1, 1, 3, 7);
 
-            gl.glClearColor(0,0,1,0);
+            gl.glClearColor(0, 0, 1, 0);
             gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
             gl.glBindTexture(GL10.GL_TEXTURE_2D, mTargetTexture);
 
@@ -193,6 +267,15 @@ public class FrameBufferObjectActivity extends Activity {
             gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
         }
 
+        /**
+         * Draws our {@code Cube mCube} twice to the currently selected framebuffer (either the
+         * window system provided default framebuffer it we are debugging our texture, or the offscreen
+         * {@code mFramebuffer} which is bound to the target GL_FRAMEBUFFER_OES.
+         *
+         * @param gl the GL interface.
+         * @param width width of our texture
+         * @param height height of our texture
+         */
         private void drawOffscreenImage(GL10 gl, int width, int height) {
             gl.glViewport(0, 0, width, height);
             float ratio = (float) width / height;
@@ -203,20 +286,20 @@ public class FrameBufferObjectActivity extends Activity {
             gl.glEnable(GL10.GL_CULL_FACE);
             gl.glEnable(GL10.GL_DEPTH_TEST);
 
-            gl.glClearColor(0,0.5f,1,0);
+            gl.glClearColor(0, 0.5f, 1, 0);
             gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
             gl.glMatrixMode(GL10.GL_MODELVIEW);
             gl.glLoadIdentity();
             gl.glTranslatef(0, 0, -3.0f);
-            gl.glRotatef(mAngle,        0, 1, 0);
-            gl.glRotatef(mAngle*0.25f,  1, 0, 0);
+            gl.glRotatef(mAngle, 0, 1, 0);
+            gl.glRotatef(mAngle * 0.25f, 1, 0, 0);
 
             gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
             gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
 
             mCube.draw(gl);
 
-            gl.glRotatef(mAngle*2.0f, 0, 1, 1);
+            gl.glRotatef(mAngle * 2.0f, 0, 1, 1);
             gl.glTranslatef(0.5f, 0.5f, 0.5f);
 
             mCube.draw(gl);
@@ -237,17 +320,11 @@ public class FrameBufferObjectActivity extends Activity {
             gl.glGenTextures(1, textures, 0);
             texture = textures[0];
             gl.glBindTexture(GL10.GL_TEXTURE_2D, texture);
-            gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA, width, height, 0,
-                    GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, null);
-            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
-                    GL10.GL_NEAREST);
-            gl.glTexParameterf(GL10.GL_TEXTURE_2D,
-                    GL10.GL_TEXTURE_MAG_FILTER,
-                    GL10.GL_LINEAR);
-            gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
-                    GL10.GL_REPEAT);
-            gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
-                    GL10.GL_REPEAT);
+            gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA, width, height, 0, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, null);
+            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
+            gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
+            gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
             return texture;
         }
 
@@ -290,7 +367,8 @@ public class FrameBufferObjectActivity extends Activity {
         /**
          * This is not the fastest way to check for an extension, but fine if
          * we are only checking for a few extensions each time a context is created.
-         * @param gl the GL interface.
+         *
+         * @param gl        the GL interface.
          * @param extension extension to check for
          * @return true if the extension is present in the current context.
          */
