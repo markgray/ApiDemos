@@ -268,12 +268,38 @@ public class FrameBufferObjectActivity extends Activity {
         }
 
         /**
-         * Draws our {@code Cube mCube} twice to the currently selected framebuffer (either the
-         * window system provided default framebuffer it we are debugging our texture, or the offscreen
-         * {@code mFramebuffer} which is bound to the target GL_FRAMEBUFFER_OES.
+         * Called from our {@code onDrawFrame} implementation, this Draws our {@code Cube mCube}
+         * twice to the currently selected framebuffer (either the window system provided default
+         * framebuffer it we are debugging our texture, or the offscreen {@code mFramebuffer} which
+         * is bound to the target GL_FRAMEBUFFER_OES). First we set the viewport to have the lower
+         * left corner at (0,0) and a width of {@code width} and a height of {@code height}. Then we
+         * calculate the aspect ratio {@code float ratio} to be {@code width/height}, then we set
+         * the GL_PROJECTION matrix to be the current matrix, load it with the identity matrix and
+         * call {@code glFrustumf} to multiply the matrix by the perspective matrix with the left
+         * clipping plane at {@code -ratio}, the right clipping plane at {@code +ratio}, the bottom
+         * clipping plane at -1, the top clipping plane at 1, the near clipping plane at 1 and the
+         * far clipping plane at 10.
+         * <p>
+         * We enable the server-side GL capabilities GL_CULL_FACE (cull polygons based on their
+         * winding in window coordinates) and GL_DEPTH_TEST (do depth comparisons and update the
+         * depth buffer). We set the clear color to (0, 0.5, 1.0) (a light blue) and clear the color
+         * buffer and the depth buffer. Next we set the GL_MODELVIEW matrix to be the current matrix,
+         * load it with the identity matrix, translate it to (0, 0, -3), rotate it by {@code mAngle}
+         * around the vector (0, 1, 0), and rotate it by {@code mAngle*0.25} around the vector (1,0,0).
+         * <p>
+         * We enable the client-side capability GL_VERTEX_ARRAY (the vertex array is enabled for
+         * writing and used during rendering) and GL_COLOR_ARRAY (the color array is enabled for
+         * writing and used during rendering), and then we instruct our field {@code Cube mCube} to
+         * draw itself. We then rotate the GL_MODELVIEW matrix by {@code mAngle*2.0} around the
+         * vector (0, 1, 1), translate it to (0.5f, 0.5f, 0.5f) and instruct our field {@code Cube mCube}
+         * to draw itself again.
+         * <p>
+         * We increment {@code mAngle} by 1.2 degrees for the next time we are executed, disable the
+         * server-side GL capabilities GL_CULL_FACE and GL_DEPTH_TEST, and disable the client-side
+         * capabilities GL_VERTEX_ARRAY, and GL_COLOR_ARRAY so the other renderer is not affected..
          *
-         * @param gl the GL interface.
-         * @param width width of our texture
+         * @param gl     the GL interface.
+         * @param width  width of our texture
          * @param height height of our texture
          */
         private void drawOffscreenImage(GL10 gl, int width, int height) {
@@ -314,11 +340,49 @@ public class FrameBufferObjectActivity extends Activity {
             gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
         }
 
+        /**
+         * Generates a texture name, binds it to GL_TEXTURE_2D, configures it, then returns the
+         * texture name to the caller. Called from our implementation of {@code onSurfaceCreated} it
+         * is used to initialize the field {@code int mTargetTexture}. We allocate {@code int texture}
+         * and {@code int[] textures}, call {@code glGenTextures} to generate 1 texture name in
+         * {@code textures} which we then use to initialize {@code texture}. We then bind {@code texture}
+         * to GL_TEXTURE_2D, call {@code glTexImage2D} to specify a two-dimensional texture image for
+         * GL_TEXTURE_2D with a level-of-detail number of Level 0 (the base image level), an internal
+         * format of GL_RGBA, {@code width} for its width, {@code height} for its height, 0 for its
+         * border (must be 0 according to docs), GL_RGBA as the format of the texel data, GL_UNSIGNED_BYTE
+         * as the data type of the texel data, and 0 to point to the beginning of the data in memory.
+         * <p>
+         * New we set texture parameter GL_TEXTURE_MIN_FILTER for the target GL_TEXTURE_2D to GL_NEAREST
+         * (the value of the texture element that is nearest (in Manhattan distance) to the center of
+         * the pixel being textured is used whenever the pixel being textured maps to an area greater
+         * than one texture element).
+         * <p>
+         * We set texture parameter GL_TEXTURE_MAG_FILTER for the target GL_TEXTURE_2D to GL_LINEAR
+         * (the weighted average of the four texture elements that are closest to the center of the
+         * pixel being textured is used when the pixel being textured maps to an area less than or
+         * equal to one texture element).
+         * <p>
+         * We call {@code glTexParameterx} to set texture parameter GL_TEXTURE_WRAP_S for the target
+         * GL_TEXTURE_2D to GL_REPEAT (causes the integer part of the s coordinate to be ignored;
+         * the GL uses only the fractional part, thereby creating a repeating pattern).
+         * <p>
+         * We call {@code glTexParameterx} to set texture parameter GL_TEXTURE_WRAP_T for the target
+         * GL_TEXTURE_2D to GL_REPEAT (causes the integer part of the t coordinate to be ignored;
+         * the GL uses only the fractional part, thereby creating a repeating pattern).
+         * <p>
+         * Finally we return {@code texture} to the caller.
+         *
+         * @param gl     the GL interface.
+         * @param width  width of our texture
+         * @param height height of our texture
+         * @return a texture name bound to GL_TEXTURE_2D and configured as we wish it
+         */
         private int createTargetTexture(GL10 gl, int width, int height) {
             int texture;
             int[] textures = new int[1];
             gl.glGenTextures(1, textures, 0);
             texture = textures[0];
+
             gl.glBindTexture(GL10.GL_TEXTURE_2D, texture);
             gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA, width, height, 0, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, null);
             gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
@@ -328,6 +392,16 @@ public class FrameBufferObjectActivity extends Activity {
             return texture;
         }
 
+        /**
+         * 
+         *
+         * @param gl              the GL interface.
+         * @param width           width of our framebuffer
+         * @param height          height of our framebuffer
+         * @param targetTextureId a texture name bound to GL_TEXTURE_2D, {@code int mTargetTexture}
+         *                        in our case.
+         * @return a framebuffer object name bound to GL_RENDERBUFFER_OES and configured as we wish it.
+         */
         private int createFrameBuffer(GL10 gl, int width, int height, int targetTextureId) {
             GL11ExtensionPack gl11ep = (GL11ExtensionPack) gl;
             int framebuffer;
