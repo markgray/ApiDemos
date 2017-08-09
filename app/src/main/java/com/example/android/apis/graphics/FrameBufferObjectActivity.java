@@ -393,7 +393,32 @@ public class FrameBufferObjectActivity extends Activity {
         }
 
         /**
-         * 
+         * Generates a framebuffer object name, binds it to GL_FRAMEBUFFER_OES, configures it to our
+         * wishing, attaches the texture image {@code targetTextureId} to that framebuffer object and
+         * returns the framebuffer object name to the caller. Used to initialize our field
+         * {@code mFramebuffer}.
+         * <p>
+         * First we cast our argument {@code GL10 gl} to {@code GL11ExtensionPack gl11ep}, then we
+         * allocate {@code int framebuffer} and {@code int[] framebuffers}, fill {@code framebuffers}
+         * with 1 framebuffer object name which we use to set {@code framebuffer}. We then bind
+         * {@code framebuffer} to GL_FRAMEBUFFER_OES.
+         * <p>
+         * Next we allocate {@code int depthbuffer} and {@code int[] renderbuffers}, fill
+         * {@code renderbuffers} with 1 renderbuffer object name which we use to set {@code depthbuffer}.
+         * We then bind {@code depthbuffer} to the target GL_RENDERBUFFER_OES, establish data storage,
+         * format and dimensions of the renderbuffer object's image to use GL_DEPTH_COMPONENT16 as its
+         * internal format, a width of {@code width}, and a height of {@code height}. We next attach
+         * the renderbuffer object {@code depthbuffer} to the target GL_FRAMEBUFFER_OES, to the
+         * attachment point GL_DEPTH_ATTACHMENT_OES, specifying the renderbuffer target GL_RENDERBUFFER_OES.
+         * <p>
+         * We attach the texture image {@code targetTextureId} to the framebuffer object GL_FRAMEBUFFER_OES
+         * using the attachment point GL_COLOR_ATTACHMENT0_OES, texture target GL_TEXTURE_2D, and 0
+         * as the mipmap level of the texture image to be attached, which must be 0.
+         * <p>
+         * We now retrieve the framebuffer completeness status of the framebuffer object GL_FRAMEBUFFER_OES
+         * to set {@code int status}, and if it is not GL_FRAMEBUFFER_COMPLETE_OES we throw a runtime
+         * exception. Otherwise we unbind the framebuffer GL_FRAMEBUFFER_OES and return {@code framebuffer}
+         * to the caller.
          *
          * @param gl              the GL interface.
          * @param width           width of our framebuffer
@@ -434,6 +459,13 @@ public class FrameBufferObjectActivity extends Activity {
             return framebuffer;
         }
 
+        /**
+         * Convenience function that calls our method {@code checkIfContextSupportsExtension} with the
+         * string GL_OES_framebuffer_object.
+         *
+         * @param gl the GL interface.
+         * @return true if the context supports the extension GL_OES_framebuffer_object
+         */
         private boolean checkIfContextSupportsFrameBufferObject(GL10 gl) {
             return checkIfContextSupportsExtension(gl, "GL_OES_framebuffer_object");
         }
