@@ -36,6 +36,9 @@ import android.os.SystemClock;
 
 import com.example.android.apis.R;
 
+/**
+ * Draws a triangle
+ */
 public class TriangleRenderer implements GLSurfaceView.Renderer{
 
     public TriangleRenderer(Context context) {

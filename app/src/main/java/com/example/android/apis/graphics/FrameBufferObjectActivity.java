@@ -471,8 +471,11 @@ public class FrameBufferObjectActivity extends Activity {
         }
 
         /**
-         * This is not the fastest way to check for an extension, but fine if
-         * we are only checking for a few extensions each time a context is created.
+         * This is not the fastest way to check for an extension, but fine if we are only checking
+         * for a few extensions each time a context is created. We append spaces to the beginning
+         * and end of the GL_EXTENSIONS string describing the current GL connection (the space
+         * separated list of supported extensions to GL), and we return the results of searching
+         * that string for our argument {@code String extension} (true if found).
          *
          * @param gl        the GL interface.
          * @param extension extension to check for
@@ -490,6 +493,12 @@ public class FrameBufferObjectActivity extends Activity {
         }
     }
 
+    /**
+     * We call {@code glGetError} to fetch error information to {@code int error} and if the result
+     * is not GL_NO_ERROR we through a RuntimeException.
+     *
+     * @param gl the GL interface.
+     */
     static void checkGLError(GL gl) {
         int error = ((GL10) gl).glGetError();
         if (error != GL10.GL_NO_ERROR) {
@@ -497,6 +506,14 @@ public class FrameBufferObjectActivity extends Activity {
         }
     }
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. Then we initialize our field {@code GLSurfaceView mGLSurfaceView} with a new
+     * instance of {@code GLSurfaceView}, set its renderer to a new instance of {@code Renderer} and
+     * set our content view to {@code GLSurfaceView mGLSurfaceView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -508,6 +525,12 @@ public class FrameBufferObjectActivity extends Activity {
         setContentView(mGLSurfaceView);
     }
 
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or {@link #onPause}, for
+     * your activity to start interacting with the user. First we call through to our super's
+     * implementation of {@code onResume}, then we pass the call on to the {@code onResume} method
+     * of our field {@code GLSurfaceView mGLSurfaceView}.
+     */
     @Override
     protected void onResume() {
         // Ideally a game should implement onResume() and onPause()
@@ -516,6 +539,12 @@ public class FrameBufferObjectActivity extends Activity {
         mGLSurfaceView.onResume();
     }
 
+    /**
+     * Called as part of the activity lifecycle when an activity is going into the background, but
+     * has not (yet) been killed. The counterpart to {@link #onResume}. First we call through to our super's
+     * implementation of {@code onPause}, then we pass the call on to the {@code onPause} method
+     * of our field {@code GLSurfaceView mGLSurfaceView}.
+     */
     @Override
     protected void onPause() {
         // Ideally a game should implement onResume() and onPause()

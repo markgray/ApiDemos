@@ -25,10 +25,24 @@ import javax.microedition.khronos.opengles.GL10;
 /**
  * A vertex shaded cube.
  */
+@SuppressWarnings("WeakerAccess")
 class Cube {
 
+    /**
+     * {@code VertexBuffer} for the eight corners of our cube.
+     */
     private IntBuffer   mVertexBuffer;
+    /**
+     * Array of colors used to draw our cube's surface, one for each vertex. {@code glDrawElements}
+     * will smoothly morph between the color at a vertex to the color of each connected vertex when
+     * drawing the surface of the triangle defined by three vertices.
+     */
     private IntBuffer   mColorBuffer;
+    /**
+     * Array of indices pointing to {@code mVertexBuffer} vertices with three indices per triangle
+     * specified in a counter clockwise manner so that the normal points out of the triangle. There
+     * are a total of 12 triangles used to draw the faces of our cube.
+     */
     private ByteBuffer  mIndexBuffer;
 
     /**
@@ -40,7 +54,7 @@ class Cube {
     public Cube() {
         int one = 0x10000; // Fixed point value to use for coordinates and rgba values
 
-        /**
+        /*
          * xyz coordinates of the eight corners of the cube
          */
         int vertices[] = {
@@ -54,7 +68,7 @@ class Cube {
                 -one,  one,  one,
         };
 
-        /**
+        /*
          * Colors for the eight vertices of the cube
          */
         int colors[] = {
@@ -68,7 +82,7 @@ class Cube {
                 0,  one,  one,  one,
         };
 
-        /**
+        /*
          * Indexes to define the 12 triangles used to draw the cube
          */
         byte indices[] = {
@@ -111,8 +125,8 @@ class Cube {
      * location of vertex coordinates to use when rendering to be IntBuffer mVertexBuffer,
      * using the size 3, type GL_FIXED, and stride of 0. We call glColorPointer to specify the
      * location of color components to use when rendering to be IntBuffer mColorBuffer, with the
-     * size 4, type GL_FIXED, and stride 0. Finally we call glDrawElements to draw the primatives
-     * of our cube using GL_TRIANGLES as the primative type, 36 as the number of elements,
+     * size 4, type GL_FIXED, and stride 0. Finally we call glDrawElements to draw the primitives
+     * of our cube using GL_TRIANGLES as the primitive type, 36 as the number of elements,
      * GL_UNSIGNED_BYTE as the type of values used in our index buffer, and ByteBuffer mIndexBuffer
      * for the vertex indexes to use for the 12 triangles. When the triangles are drawn each vertex
      * references the colors for each vertex contained in IntBuffer mColorBuffer and the surface
