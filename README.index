@@ -1131,7 +1131,7 @@ Graphics
    Frame Buffer Object
     Graphics/OpenGL ES/Frame Buffer Object all
         .graphics.FrameBufferObjectActivity
-        .graphics.TriangleRenderer.Triangle
+        .graphics.TriangleRenderer.Triangle (the file TriangleRenderer.java contains it)
         .graphics.Cube
             Demonstrate the Frame Buffer Object OpenGL ES extension. This sample renders
             a scene into an offscreen frame buffer, and then uses the resulting image as
@@ -1140,6 +1140,8 @@ Graphics
    GLSurfaceView
     Graphics/OpenGL ES/GLSurfaceView       all
         .graphics.GLSurfaceViewActivity
+        .graphics.CubeRenderer
+        .graphics.Cube
             Wrapper activity demonstrating the use of GLSurfaceView, a view that uses OpenGL
             drawing into a dedicated surface. Uses CubeRenderer to render a pair of tumbling
             cubes created and draw(n) by Cube.java

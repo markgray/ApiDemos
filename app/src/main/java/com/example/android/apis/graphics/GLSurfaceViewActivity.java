@@ -21,10 +21,25 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
 /**
- * Wrapper activity demonstrating the use of {@link GLSurfaceView}, a view
- * that uses OpenGL drawing into a dedicated surface.
+ * Wrapper activity demonstrating the use of {@link GLSurfaceView}, a view that uses OpenGL drawing
+ * into a dedicated surface. Uses CubeRenderer to render a pair of tumbling cubes created and
+ * drawn by Cube.java
  */
 public class GLSurfaceViewActivity extends Activity {
+    /**
+     * {@code GLSurfaceView} we do our drawing to.
+     */
+    private GLSurfaceView mGLSurfaceView;
+
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. We initialize our field {@code GLSurfaceView mGLSurfaceView} with a new
+     * instance of {@code GLSurfaceView}, set its renderer to a new instance of {@code CubeRenderer}
+     * specifying that it not use a translucent background, and set our content view to
+     * {@code GLSurfaceView mGLSurfaceView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,5 +67,4 @@ public class GLSurfaceViewActivity extends Activity {
         mGLSurfaceView.onPause();
     }
 
-    private GLSurfaceView mGLSurfaceView;
 }

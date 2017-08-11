@@ -37,9 +37,10 @@ import android.os.SystemClock;
 import com.example.android.apis.R;
 
 /**
- * Draws a triangle
+ * Draws a {@code Triangle} using OpenGL ES 1.x-compatible renderer.
  */
-public class TriangleRenderer implements GLSurfaceView.Renderer{
+@SuppressWarnings("WeakerAccess")
+public class TriangleRenderer implements GLSurfaceView.Renderer {
 
     public TriangleRenderer(Context context) {
         mContext = context;
@@ -58,8 +59,7 @@ public class TriangleRenderer implements GLSurfaceView.Renderer{
          * Some one-time OpenGL initialization can be made here
          * probably based on features of this particular context
          */
-        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT,
-                GL10.GL_FASTEST);
+        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
 
         gl.glClearColor(.5f, .5f, .5f, 1);
         gl.glShadeModel(GL10.GL_SMOOTH);
@@ -77,29 +77,22 @@ public class TriangleRenderer implements GLSurfaceView.Renderer{
         mTextureID = textures[0];
         gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID);
 
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
-                GL10.GL_NEAREST);
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D,
-                GL10.GL_TEXTURE_MAG_FILTER,
-                GL10.GL_LINEAR);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
-                GL10.GL_CLAMP_TO_EDGE);
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
-                GL10.GL_CLAMP_TO_EDGE);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
 
-        gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
-                GL10.GL_REPLACE);
+        gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE);
 
-        InputStream is = mContext.getResources()
-                .openRawResource(R.raw.robot);
+        InputStream is = mContext.getResources().openRawResource(R.raw.robot);
         Bitmap bitmap;
         try {
             bitmap = BitmapFactory.decodeStream(is);
         } finally {
             try {
                 is.close();
-            } catch(IOException e) {
+            } catch (IOException e) {
                 // Ignore.
             }
         }
@@ -175,7 +168,48 @@ public class TriangleRenderer implements GLSurfaceView.Renderer{
     private int mTextureID;
 }
 
+/**
+ * Draws a triangle, used both by {@code TriangleRenderer} an {@code FrameBufferObjectActivity}.
+ */
+@SuppressWarnings("WeakerAccess")
 class Triangle {
+    /**
+     * Number of vertices in our triangle
+     */
+    private final static int VERTS = 3;
+
+    /**
+     * Vertex Buffer loaded with (x,y,z) coordinates of our triangle
+     */
+    private FloatBuffer mFVertexBuffer;
+    /**
+     * Texture buffer loaded with (x,y,z) coordinates of our triangle offset by 0.5 so that
+     * the texture is centered.
+     */
+    private FloatBuffer mTexBuffer;
+    /**
+     * Indices of the triangle (0,1,2) in counter clockwise order so that the normal points up
+     */
+    private ShortBuffer mIndexBuffer;
+
+    /**
+     * Constructs our {@code Triangle} instance by allocating and initializing our fields. First we
+     * allocate {@code ByteBuffer vbb} on the native heap, set its byte order to native byte order
+     * and initialize {@code FloatBuffer mFVertexBuffer} with a view of {@code vbb} as a float buffer.
+     * We allocate {@code ByteBuffer tbb} on the native heap, set its byte order to native byte order
+     * and initialize {@code FloatBuffer mTexBuffer} with a view of {@code tbb} as a float buffer.
+     * We allocate {@code ByteBuffer ibb} on the native heap, set its byte order to native byte order
+     * and initialize {@code ShortBuffer mIndexBuffer} with a view of {@code tbb} as a short buffer.
+     * <p>
+     * We define the contents of {@code float[] coords} to be the coordinates of a unit-sided
+     * equilateral triangle centered on the origin. Then we load the 9 entries in {@code coords[]}
+     * multiplied by 2.0 into {@code FloatBuffer mFVertexBuffer}, and the (x,y) values only
+     * multiplied by 2.0 and offset by 0.5 into {@code FloatBuffer mTexBuffer}. We load
+     * {@code ShortBuffer mIndexBuffer} with the three indices 0, 1, and 2.
+     * <p>
+     * Finally we position {@code mFVertexBuffer}, {@code mTexBuffer}, and {@code mIndexBuffer} to
+     * their beginning entry ready for use.
+     */
     public Triangle() {
 
         // Buffers to be passed to gl*Pointer() functions
@@ -183,7 +217,7 @@ class Triangle {
         // native heap where the garbage collector cannot
         // move them.
         //
-        // Buffers with multi-byte datatypes (e.g., short, int, float)
+        // Buffers with multi-byte data types (e.g., short, int, float)
         // must have their byte order set to native order
 
         ByteBuffer vbb = ByteBuffer.allocateDirect(VERTS * 3 * 4);
@@ -198,27 +232,27 @@ class Triangle {
         ibb.order(ByteOrder.nativeOrder());
         mIndexBuffer = ibb.asShortBuffer();
 
-        // A unit-sided equalateral triangle centered on the origin.
+        // A unit-sided equilateral triangle centered on the origin.
         float[] coords = {
                 // X, Y, Z
                 -0.5f, -0.25f, 0,
-                 0.5f, -0.25f, 0,
-                 0.0f,  0.559016994f, 0
+                0.5f, -0.25f, 0,
+                0.0f, 0.559016994f, 0
         };
 
         for (int i = 0; i < VERTS; i++) {
-            for(int j = 0; j < 3; j++) {
-                mFVertexBuffer.put(coords[i*3+j] * 2.0f);
+            for (int j = 0; j < 3; j++) {
+                mFVertexBuffer.put(coords[i * 3 + j] * 2.0f);
             }
         }
 
         for (int i = 0; i < VERTS; i++) {
-            for(int j = 0; j < 2; j++) {
-                mTexBuffer.put(coords[i*3+j] * 2.0f + 0.5f);
+            for (int j = 0; j < 2; j++) {
+                mTexBuffer.put(coords[i * 3 + j] * 2.0f + 0.5f);
             }
         }
 
-        for(int i = 0; i < VERTS; i++) {
+        for (int i = 0; i < VERTS; i++) {
             mIndexBuffer.put((short) i);
         }
 
@@ -227,6 +261,21 @@ class Triangle {
         mIndexBuffer.position(0);
     }
 
+    /**
+     * Draws our triangle. First we specify the orientation of front-facing polygons to be GL_CCW
+     * (selects counterclockwise polygons as front-facing). We next define {@code mFVertexBuffer} to
+     * be our array of vertex data, with 3 coordinates per vertex, using GL_FLOAT as its data type,
+     * and a stride of 0. We enable the server-side GL capability GL_TEXTURE_2D (two-dimensional
+     * texturing is performed), then define {@code mTexBuffer} to be our array of texture coordinates,
+     * with 2 coordinates per point, using GL_FLOAT as its data type, and a stride of 0.
+     * <p>
+     * Finally we call {@code glDrawElements} to render primitives from array data specifying
+     * {@code ShortBuffer mIndexBuffer} as our indices array, GL_UNSIGNED_SHORT as its data type,
+     * and GL_TRIANGLE_STRIP as the type of primitive to render (Every group of 3 adjacent vertices
+     * forms a triangle - we have only one triangle).
+     *
+     * @param gl the GL interface.
+     */
     public void draw(GL10 gl) {
         gl.glFrontFace(GL10.GL_CCW);
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mFVertexBuffer);
@@ -234,10 +283,4 @@ class Triangle {
         gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTexBuffer);
         gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, VERTS, GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
     }
-
-    private final static int VERTS = 3;
-
-    private FloatBuffer mFVertexBuffer;
-    private FloatBuffer mTexBuffer;
-    private ShortBuffer mIndexBuffer;
 }
