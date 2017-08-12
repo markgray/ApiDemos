@@ -1149,6 +1149,8 @@ Graphics
    Kube
     Graphics/OpenGL ES/Kube                all
         .graphics.kube.Kube
+        .graphics.kube.GLWorld
+        .graphics.kube.KubeRenderer
             Animates a Rubic cube, randomly spinning layers one by one.
 
    Matrix Palette Skinning

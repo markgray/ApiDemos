@@ -27,7 +27,7 @@ import static android.R.attr.width;
  * Render a pair of tumbling cubes.
  */
 public class CubeRenderer implements GLSurfaceView.Renderer {
-//  private static String TAG = "CubeRenderer";
+    //  private static String TAG = "CubeRenderer";
     private boolean mTranslucentBackground; // Flag to use a translucent background (glClearColor(0,0,0,0)
     private Cube mCube; // an instance of a vertex shaded cube.
     private float mAngle; // ever increasing angle that is used to rotate the two cubes
@@ -79,15 +79,15 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
         gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glLoadIdentity();
         gl.glTranslatef(0, 0, -3.0f);
-        gl.glRotatef(mAngle,        0, 1, 0);
-        gl.glRotatef(mAngle*0.25f,  1, 0, 0);
+        gl.glRotatef(mAngle, 0, 1, 0);
+        gl.glRotatef(mAngle * 0.25f, 1, 0, 0);
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
 
         mCube.draw(gl);
 
-        gl.glRotatef(mAngle*2.0f, 0, 1, 1);
+        gl.glRotatef(mAngle * 2.0f, 0, 1, 1);
         gl.glTranslatef(0.5f, 0.5f, 0.5f);
 
         mCube.draw(gl);
@@ -105,14 +105,14 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
      * horizontal clipping planes set to -1 and +1 respectively, and the distances to the near and
      * far depth clipping planes set to 1 and 10 respectively.
      *
-     * @param gl the GL interface. Use <b>instanceof</b> to test if the interface supports
-     *           GL11 or higher interfaces.
-     * @param width width of the surface in pixels
+     * @param gl     the GL interface. Use <b>instanceof</b> to test if the interface supports
+     *               GL11 or higher interfaces.
+     * @param width  width of the surface in pixels
      * @param height height of the surface in pixels
      */
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-         gl.glViewport(0, 0, width, height);
+        gl.glViewport(0, 0, width, height);
 
          /*
           * Set our projection matrix. This doesn't have to be done
@@ -120,15 +120,15 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
           * be set when the viewport is resized.
           */
 
-         float ratio = (float) width / height;
-         gl.glMatrixMode(GL10.GL_PROJECTION);
-         gl.glLoadIdentity();
-         gl.glFrustumf(-ratio, ratio, -1, 1, 1, 10);
+        float ratio = (float) width / height;
+        gl.glMatrixMode(GL10.GL_PROJECTION);
+        gl.glLoadIdentity();
+        gl.glFrustumf(-ratio, ratio, -1, 1, 1, 10);
     }
 
     /**
      * Called when the surface is created or recreated. Part of the GLSurfaceView.Renderer interface.
-     *
+     * <p>
      * Called when the rendering thread starts and whenever the EGL context is lost. The EGL context
      * will typically be lost when the Android device awakes after going to sleep.
      * <p>
@@ -140,7 +140,7 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
      * Note that when the EGL context is lost, all OpenGL resources associated with that context
      * will be automatically deleted. You do not need to call the corresponding "glDelete" methods
      * such as glDeleteTextures to manually delete these lost resources.
-     *
+     * <p>
      * First to improve performance we disable the GL_DITHER GL capability (dithers color components
      * or indices before they are written to the color buffer). Next we specify implementation
      * specific hint GL_PERSPECTIVE_CORRECTION_HINT (Indicates the quality of color and texture
@@ -152,8 +152,8 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
      * and finally enable the GL capability GL_DEPTH_TEST (do depth comparisons and update the depth
      * buffer).
      *
-     * @param gl the GL interface. Use <b>instanceof</b> to test if the interface supports
-     *           GL11 or higher interfaces.
+     * @param gl     the GL interface. Use <b>instanceof</b> to test if the interface supports
+     *               GL11 or higher interfaces.
      * @param config the EGLConfig of the created surface. Can be used to create matching pbuffers.
      */
     @Override
@@ -169,16 +169,16 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
          * Some one-time OpenGL initialization can be made here
          * probably based on features of this particular context
          */
-         gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT,
-                 GL10.GL_FASTEST);
+        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT,
+                GL10.GL_FASTEST);
 
-         if (mTranslucentBackground) {
-             gl.glClearColor(0,0,0,0);
-         } else {
-             gl.glClearColor(1,1,1,1);
-         }
-         gl.glEnable(GL10.GL_CULL_FACE);
-         gl.glShadeModel(GL10.GL_SMOOTH);
-         gl.glEnable(GL10.GL_DEPTH_TEST);
+        if (mTranslucentBackground) {
+            gl.glClearColor(0, 0, 0, 0);
+        } else {
+            gl.glClearColor(1, 1, 1, 1);
+        }
+        gl.glEnable(GL10.GL_CULL_FACE);
+        gl.glShadeModel(GL10.GL_SMOOTH);
+        gl.glEnable(GL10.GL_DEPTH_TEST);
     }
 }

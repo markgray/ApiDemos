@@ -51,6 +51,12 @@ public class GLSurfaceViewActivity extends Activity {
         setContentView(mGLSurfaceView);
     }
 
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or {@link #onPause}, for
+     * your activity to start interacting with the user. First we call through to our super's
+     * implementation of {@code onResume}, then we pass the call on to the {@code onResume} method
+     * of our field {@code mGLSurfaceView}.
+     */
     @Override
     protected void onResume() {
         // Ideally a game should implement onResume() and onPause()
@@ -59,6 +65,12 @@ public class GLSurfaceViewActivity extends Activity {
         mGLSurfaceView.onResume();
     }
 
+    /**
+     * Called as part of the activity lifecycle when an activity is going into the background, but
+     * has not (yet) been killed. The counterpart to {@link #onResume}. First we call through to our
+     * super's implementation of {@code onPause}, then we pass the call on to the {@code onPause}
+     * method of our field {@code mGLSurfaceView}.
+     */
     @Override
     protected void onPause() {
         // Ideally a game should implement onResume() and onPause()

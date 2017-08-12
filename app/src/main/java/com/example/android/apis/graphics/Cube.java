@@ -31,25 +31,38 @@ class Cube {
     /**
      * {@code VertexBuffer} for the eight corners of our cube.
      */
-    private IntBuffer   mVertexBuffer;
+    private IntBuffer mVertexBuffer;
     /**
      * Array of colors used to draw our cube's surface, one for each vertex. {@code glDrawElements}
      * will smoothly morph between the color at a vertex to the color of each connected vertex when
      * drawing the surface of the triangle defined by three vertices.
      */
-    private IntBuffer   mColorBuffer;
+    private IntBuffer mColorBuffer;
     /**
      * Array of indices pointing to {@code mVertexBuffer} vertices with three indices per triangle
      * specified in a counter clockwise manner so that the normal points out of the triangle. There
      * are a total of 12 triangles used to draw the faces of our cube.
      */
-    private ByteBuffer  mIndexBuffer;
+    private ByteBuffer mIndexBuffer;
 
     /**
      * Default constructor for our Cube. We initialize IntBuffer mVertexBuffer with the values of
      * the int vertices[] array, IntBuffer mColorBuffer with the values of the int colors[] array,
      * and ByteBuffer mIndexBuffer with the values of the byte indices[] array for use in our draw
      * method.
+     * <p>
+     * Next we allocate {@code ByteBuffer vbb} on the native heap, set its byte order to native order,
+     * initialize our field {@code IntBuffer mVertexBuffer} with a view of {@code vbb} as an IntBuffer,
+     * transfer the contents of {@code int vertices[]} to {@code mVertexBuffer}, and reposition it
+     * to point to the first entry.
+     * <p>
+     * We allocate {@code ByteBuffer cbb} on the native heap, set its byte order to native order,
+     * initialize our field {@code IntBuffer mColorBuffer} with a view of {@code cbb} as an IntBuffer,
+     * transfer the contents of {@code int colors[]} to {@code mColorBuffer}, and reposition it
+     * to point to the first entry.
+     * <p>
+     * Finally we allocate {@code ByteBuffer mIndexBuffer} on the native heap, transfer the contents
+     * of {@code byte indices[]}  to it, and reposition it to point to the first entry.
      */
     public Cube() {
         int one = 0x10000; // Fixed point value to use for coordinates and rgba values
@@ -60,38 +73,38 @@ class Cube {
         int vertices[] = {
                 -one, -one, -one,
                 one, -one, -one,
-                one,  one, -one,
-                -one,  one, -one,
-                -one, -one,  one,
-                one, -one,  one,
-                one,  one,  one,
-                -one,  one,  one,
+                one, one, -one,
+                -one, one, -one,
+                -one, -one, one,
+                one, -one, one,
+                one, one, one,
+                -one, one, one,
         };
 
         /*
          * Colors for the eight vertices of the cube
          */
         int colors[] = {
-                0,    0,    0,  one,
-                one,    0,    0,  one,
-                one,  one,    0,  one,
-                0,  one,    0,  one,
-                0,    0,  one,  one,
-                one,    0,  one,  one,
-                one,  one,  one,  one,
-                0,  one,  one,  one,
+                0, 0, 0, one,
+                one, 0, 0, one,
+                one, one, 0, one,
+                0, one, 0, one,
+                0, 0, one, one,
+                one, 0, one, one,
+                one, one, one, one,
+                0, one, one, one,
         };
 
         /*
          * Indexes to define the 12 triangles used to draw the cube
          */
         byte indices[] = {
-                0, 4, 5,    0, 5, 1,
-                1, 5, 6,    1, 6, 2,
-                2, 6, 7,    2, 7, 3,
-                3, 7, 4,    3, 4, 0,
-                4, 7, 6,    4, 6, 5,
-                3, 0, 1,    3, 1, 2
+                0, 4, 5, 0, 5, 1,
+                1, 5, 6, 1, 6, 2,
+                2, 6, 7, 2, 7, 3,
+                3, 7, 4, 3, 4, 0,
+                4, 7, 6, 4, 6, 5,
+                3, 0, 1, 3, 1, 2
         };
 
         // Buffers to be passed to gl*Pointer() functions
@@ -102,13 +115,13 @@ class Cube {
         // Buffers with multi-byte data types (e.g., short, int, float)
         // must have their byte order set to native order
 
-        ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length*4);
+        ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
         vbb.order(ByteOrder.nativeOrder());
         mVertexBuffer = vbb.asIntBuffer();
         mVertexBuffer.put(vertices);
         mVertexBuffer.position(0);
 
-        ByteBuffer cbb = ByteBuffer.allocateDirect(colors.length*4);
+        ByteBuffer cbb = ByteBuffer.allocateDirect(colors.length * 4);
         cbb.order(ByteOrder.nativeOrder());
         mColorBuffer = cbb.asIntBuffer();
         mColorBuffer.put(colors);
