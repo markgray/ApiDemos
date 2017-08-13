@@ -25,7 +25,16 @@ import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
 
+@SuppressWarnings("WeakerAccess")
 public class GLWorld {
+	private ArrayList<GLShape>	mShapeList = new ArrayList<>();
+	private ArrayList<GLVertex>	mVertexList = new ArrayList<>();
+
+	private int mIndexCount = 0;
+
+	private IntBuffer   mVertexBuffer;
+	private IntBuffer   mColorBuffer;
+	private ShortBuffer mIndexBuffer;
 
 	public void addShape(GLShape shape) {
 		mShapeList.add(shape);
@@ -88,13 +97,4 @@ public class GLWorld {
 	static public float toFloat(int x) {
     	return x/65536.0f;
     }
-
-	private ArrayList<GLShape>	mShapeList = new ArrayList<>();
-	private ArrayList<GLVertex>	mVertexList = new ArrayList<>();
-	
-	private int mIndexCount = 0;
-
-    private IntBuffer   mVertexBuffer;
-    private IntBuffer   mColorBuffer;
-    private ShortBuffer mIndexBuffer;
 }

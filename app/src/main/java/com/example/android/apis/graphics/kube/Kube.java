@@ -29,6 +29,12 @@ import java.util.Random;
  */
 public class Kube extends Activity implements KubeRenderer.AnimationCallback {
 
+    /**
+     * Creates, configures and returns a new instance of {@code GLWorld} which consists of a 27
+     * {@code Cube} cube (3 by 3 by 3) representing a Rubic cube.
+     *
+     * @return a new instance of {@code GLWorld} configured with Rubic cube cubes.
+     */
     private GLWorld makeGLWorld() {
         GLWorld world = new GLWorld();
 
