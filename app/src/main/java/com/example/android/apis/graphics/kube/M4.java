@@ -21,6 +21,7 @@ package com.example.android.apis.graphics.kube;
  * A 4x4 float matrix
  *
  */
+@SuppressWarnings("WeakerAccess")
 public class M4 {
 	public float[][] m = new float[4][4];
 

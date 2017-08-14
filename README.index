@@ -1148,11 +1148,16 @@ Graphics
 
    Kube
     Graphics/OpenGL ES/Kube                all
-        .graphics.kube.Kube
-        .graphics.kube.GLWorld
+        .graphics.kube.Kube Main Activity
+        .graphics.kube.Cube
         .graphics.kube.GLColor
+        .graphics.kube.GLFace
+        .graphics.kube.GLShape
         .graphics.kube.GLVertex
+        .graphics.kube.GLWorld
         .graphics.kube.KubeRenderer
+        .graphics.kube.Layer
+        .graphics.kube.M4
             Animates a Rubic cube, randomly spinning layers one by one.
 
    Matrix Palette Skinning

@@ -21,6 +21,7 @@ import android.util.Log;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 
+@SuppressWarnings("WeakerAccess")
 public class GLFace {
 
 	@SuppressWarnings("unused")

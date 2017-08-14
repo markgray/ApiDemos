@@ -16,6 +16,7 @@
 
 package com.example.android.apis.graphics.kube;
 
+@SuppressWarnings("WeakerAccess")
 public class Layer {
 	
 	public Layer(int axis) {

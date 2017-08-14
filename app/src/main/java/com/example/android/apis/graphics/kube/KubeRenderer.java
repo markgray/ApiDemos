@@ -25,7 +25,9 @@ import javax.microedition.khronos.opengles.GL10;
  * Example of how to use OpenGL|ES in a custom view
  *
  */
+@SuppressWarnings("WeakerAccess")
 class KubeRenderer implements GLSurfaceView.Renderer {
+
     public interface AnimationCallback {
         void animate();
     }

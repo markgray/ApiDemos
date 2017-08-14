@@ -17,6 +17,7 @@
 package com.example.android.apis.graphics.kube;
 
 
+@SuppressWarnings("WeakerAccess")
 public class Cube extends GLShape {
 
 	public Cube(GLWorld world, float left, float bottom, float back, float right, float top, float front) {

@@ -18,6 +18,7 @@ package com.example.android.apis.graphics.kube;
 
 import java.nio.IntBuffer;
 
+@SuppressWarnings("WeakerAccess")
 public class GLVertex {
 
     public float x;
