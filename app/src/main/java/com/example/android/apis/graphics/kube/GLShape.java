@@ -21,10 +21,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- *
+ * Base class for {@code Cube}, which uses its methods {@code addVertex} and {@code addFace} to add
+ * {@code GLVertex} and {@code GLFace} instances to add data describing a single instance of
+ * {@code Cube} that is part of the 3 by 3 by 3 {@code Cube} rubic cube. Other classes then use the
+ * other methods provided to modify the {@code Cube}.
  */
 @SuppressWarnings("WeakerAccess")
 public class GLShape {
+    /**
+     * Current transformation matrix, it is used to move the vertices of our shape to the position
+     * required for the current location of our {@code GLShape} (a {@code Cube} in our demo) using
+     * the method {@code mWorld.transformVertex}. This happens whenever our method {@code animateTransform}
+     * is called from {@code Layer.setAngle} which is called from the method {@code Kube.animate},
+     * which gets called from the {@code onDrawFrame} method of {@code KubeRenderer}.
+     */
     public M4 mTransform;
     public M4 mAnimateTransform;
 
