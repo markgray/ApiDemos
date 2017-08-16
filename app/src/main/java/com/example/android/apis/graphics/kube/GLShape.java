@@ -36,12 +36,38 @@ public class GLShape {
      * which gets called from the {@code onDrawFrame} method of {@code KubeRenderer}.
      */
     public M4 mTransform;
+    /**
+     * Transform to multiply {@code M4 mTransform} by in order to move this instance of {@code GLShape}
+     * to the next step in its animation. It is set by a call to our method {@code animateTransform},
+     * which is called from {@code Layer.setAngle}, which is called from {@code Kube.animate}, which
+     * gets called from the {@code onDrawFrame} method of {@code KubeRenderer}.
+     */
     public M4 mAnimateTransform;
 
+    /**
+     * List of {@code GLFace} faces making up our {@code GLShape}, it is added to by our method
+     * {@code addFace}, which is called from the constructor for a {@code Cube} object (our one and
+     * only subclass).
+     */
     protected ArrayList<GLFace> mFaceList = new ArrayList<>();
+    /**
+     * List of {@code GLVertex} vertices making up our {@code GLShape}, it is added to by our method
+     * {@code addVertex}, which is called from the constructor for a {@code Cube} object (our one and
+     * only subclass).
+     */
     protected ArrayList<GLVertex> mVertexList = new ArrayList<>();
+    /**
+     * We do not use, so who cares?
+     */
     @SuppressWarnings("unused")
     protected ArrayList<Integer> mIndexList = new ArrayList<>();    // make more efficient?
+    /**
+     * {@code GLWorld} we belong to, it is set in our constructor, which is called from the constructor
+     * of {@code Cube}, which is called from the {@code Kube.makeGLWorld} method (once for each
+     * {@code Cube} in our rubic cube), which is called in the {@code onCreate} override of {@code Kube}
+     * which uses the {@code GLWorld} object it creates when it creates its instance of
+     * {@code KubeRenderer}.
+     */
     protected GLWorld mWorld;
 
     public GLShape(GLWorld world) {
