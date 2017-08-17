@@ -70,18 +70,58 @@ public class GLShape {
      */
     protected GLWorld mWorld;
 
+    /**
+     * Our constructor, we simply save our parameter {@code GLWorld world} in our field
+     * {@code GLWorld mWorld}. It is called in the constructor for a {@code Cube} instance, which
+     * passes the {@code GLWorld} instance used when it is called. The constructor for a {@code Cube}
+     * is called only from the {@code makeGLWorld} method of {@code Kube} which creates the single
+     * {@code GLWorld} we use throughout, populates it with {@code Cube} objects, and calls the
+     * {@code generate} method of that {@code GLWorld} to finish it off. The {@code makeGLWorld} method
+     * is called when constructing the {@code KubeRenderer} instance in the {@code onCreate} method
+     * of {@code Kube}.
+     *
+     * @param world {@code GLWorld} we belong to
+     */
     public GLShape(GLWorld world) {
         mWorld = world;
     }
 
+    /**
+     * Adds a {@code GLFace} to our list {@code ArrayList<GLFace> mFaceList}. Called only from the
+     * constructor for a {@code Cube} object.
+     *
+     * @param face {@code GLFace} to add
+     */
     public void addFace(GLFace face) {
         mFaceList.add(face);
     }
 
+    /**
+     * Sets the color of the {@code GLFace} which is at position {@code int face} in our list
+     * {@code ArrayList<GLFace> mFaceList}. Called only from the method {@code Kube.makeGLWorld}.
+     * We retrieve a reference to the {@code GLFace} at position {@code face} in our list
+     * {@code ArrayList<GLFace> mFaceList}, and call its method {@code setColor} which sets the
+     * color of all the vertices used by the {@code GLFace} to {@code GLColor color}.
+     *
+     * @param face  index into our list {@code ArrayList<GLFace> mFaceList}
+     * @param color {@code GLColor} that we want the {@code GLFace} to have.
+     */
     public void setFaceColor(int face, GLColor color) {
         mFaceList.get(face).setColor(color);
     }
 
+    /**
+     * Adds all the indices used by all the {@code GLFace} objects contained in our field
+     * {@code ArrayList<GLFace> mFaceList} to the index buffer passed us. Called only from the
+     * method {@code GLWorld.generate} which adds all the indices used by all the {@code GLShape}
+     * objects in its field {@code ArrayList<GLShape> mShapeList} to its index buffer field
+     * {@code ShortBuffer mIndexBuffer}. First we set {@code Iterator<GLFace> iter} to an iterator
+     * over all the elements in the list {@code ArrayList<GLFace> mFaceList}, then as long as there
+     * is a "next" element we fetch a reference to that element to {@code GLFace face} and call its
+     * method {@code putIndices} to add all the indices of {@code face} to {@code buffer}.
+     *
+     * @param buffer openGL index buffer to add all our indices to.
+     */
     public void putIndices(ShortBuffer buffer) {
         Iterator<GLFace> iter = mFaceList.iterator();
         //noinspection WhileLoopReplaceableByForEach
@@ -91,6 +131,16 @@ public class GLShape {
         }
     }
 
+    /**
+     * Adds up all the indices used by all the faces in our field {@code ArrayList<GLFace> mFaceList}.
+     * Called only from the method {@code GLWorld.addShape}. We initialize {@code int count} to 0,
+     * then we set {@code Iterator<GLFace> iter} to an iterator over all the elements in the list
+     * {@code ArrayList<GLFace> mFaceList}, and as long as there is a "next" element we fetch a
+     * reference to that element to {@code GLFace face} and add the value returned by its method
+     * {@code getIndexCount} to {@code count}. When done we return {@code count} to the called.
+     *
+     * @return total number of indices in all our faces
+     */
     public int getIndexCount() {
         int count = 0;
         Iterator<GLFace> iter = mFaceList.iterator();
@@ -102,6 +152,25 @@ public class GLShape {
         return count;
     }
 
+    /**
+     * Finds a vertex with the coordinates (x,y.z) in {@code ArrayList<GLVertex> mVertexList} (if it
+     * exists), or creates a {@code GLVertex} with those coordinates and adds it to our list. The
+     * {@code GLVertex} is then returned to the caller. Called only from the constructor for a
+     * {@code Cube} object. First we set {@code Iterator<GLVertex> iter} to an iterator over all the
+     * elements in the list {@code ArrayList<GLVertex> mVertexList}, then as long as there is a "next"
+     * element we fetch a reference to that element to {@code GLVertex vertex}, and if all three
+     * coordinates of {@code vertex} match the (x,y,z) coordinates passed us we return {@code vertex}.
+     * If we are unable to find a matching {@code GLVertex} in our list, we create {@code GLVertex vertex}
+     * by calling the method {@code mWorld.addVertex}, add it to {@code ArrayList<GLVertex> mVertexList}
+     * and return it to the caller.
+     *
+     * @param x x coordinate of vertex
+     * @param y y coordinate of vertex
+     * @param z z coordinate of vertex
+     * @return {@code GLVertex} we have either found in {@code ArrayList<GLVertex> mVertexList} that
+     * already has the same coordinates, or one that we have created by calling the method
+     * {@code mWorld.addVertex} and added to {@code ArrayList<GLVertex> mVertexList}.
+     */
     public GLVertex addVertex(float x, float y, float z) {
 
         // look for an existing GLVertex first
@@ -120,6 +189,10 @@ public class GLShape {
         return vertex;
     }
 
+    /**
+     *
+     * @param transform transform that will move our {@code GLShape} to its next position.
+     */
     public void animateTransform(M4 transform) {
         mAnimateTransform = transform;
 
