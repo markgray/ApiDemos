@@ -190,6 +190,18 @@ public class GLShape {
     }
 
     /**
+     * Applies {@code M4 transform} to all the vertices used by our {@code GLShape} instance.
+     * First we save our parameter {@code M4 transform} in our field {@code M4 mAnimateTransform}
+     * then if our field {@code M4 mTransform} is not null (see note) we multiply it by our parameter
+     * {@code M4 transform} to get a new {@code M4 transfer}. We set {@code Iterator<GLVertex> iter}
+     * to an iterator over the elements in the list {@code ArrayList<GLVertex> mVertexList}, then
+     * while there is a next element in the list we fetch the next vertex to {@code GLVertex vertex}
+     * and use the method {@code GLWorld mWorld.transformVertex} to move {@code vertex} to the
+     * position specified by {@code transform}.
+     * <p>
+     * Note: {@code mTransform} is set to non-null only by our method {@code endAnimation} which is
+     * called from {@code Layer.endAnimation} which is called from {@code Kube.animate} when the
+     * angle that the current layer is being rotated has reached its end point.
      *
      * @param transform transform that will move our {@code GLShape} to its next position.
      */
@@ -207,9 +219,16 @@ public class GLShape {
         }
     }
 
+    /**
+     * Called from {@code Layer.startAnimation}, which is called from {@code Kube.animate}, which is
+     * called from {@code KubeRenderer.onDrawFrame}. It is a no-op in our demo.
+     */
     public void startAnimation() {
     }
 
+    /**
+     * 
+     */
     public void endAnimation() {
         if (mTransform == null) {
             mTransform = new M4(mAnimateTransform);
