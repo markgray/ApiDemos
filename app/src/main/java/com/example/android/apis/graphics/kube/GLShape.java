@@ -102,6 +102,7 @@ public class GLShape {
      * We retrieve a reference to the {@code GLFace} at position {@code face} in our list
      * {@code ArrayList<GLFace> mFaceList}, and call its method {@code setColor} which sets the
      * color of all the vertices used by the {@code GLFace} to {@code GLColor color}.
+     * TODO: figure out how setColor actually works (seems only one vertex gets its color set)
      *
      * @param face  index into our list {@code ArrayList<GLFace> mFaceList}
      * @param color {@code GLColor} that we want the {@code GLFace} to have.
@@ -227,7 +228,11 @@ public class GLShape {
     }
 
     /**
-     * 
+     * Called from {@code Layer.endAnimation} for every {@code GLShape} in the current layer, which
+     * is called from {@code Kube.animate} when the rotation of the layer has reached its endpoint,
+     * which is called from {@code KubeRenderer.onDrawFrame}. If our current {@code M4 mTransform}
+     * is null we set it to a copy of {@code M4 mAnimateTransform}, otherwise we set it to itself
+     * multiplied by {@code M4 mAnimateTransform}.
      */
     public void endAnimation() {
         if (mTransform == null) {

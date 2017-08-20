@@ -16,11 +16,20 @@
 
 package com.example.android.apis.graphics.kube;
 
-
+/**
+ * Class representing a single cube of the 3x3x3 cube Rubic cube.
+ */
 @SuppressWarnings("WeakerAccess")
 public class Cube extends GLShape {
 
-	public Cube(GLWorld world, float left, float bottom, float back, float right, float top, float front) {
+    public static final int kBottom = 0;
+    public static final int kFront = 1;
+    public static final int kLeft = 2;
+    public static final int kRight = 3;
+    public static final int kBack = 4;
+    public static final int kTop = 5;
+
+    public Cube(GLWorld world, float left, float bottom, float back, float right, float top, float front) {
 		super(world);
        	GLVertex leftBottomBack = addVertex(left, bottom, back);
         GLVertex rightBottomBack = addVertex(right, bottom, back);
@@ -47,12 +56,6 @@ public class Cube extends GLShape {
 		
 	}
 	
-    public static final int kBottom = 0;
-    public static final int kFront = 1;
-    public static final int kLeft = 2;
-    public static final int kRight = 3;
-    public static final int kBack = 4;
-    public static final int kTop = 5;
 
 	
 }
