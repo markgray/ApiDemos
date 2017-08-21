@@ -18,15 +18,40 @@ package com.example.android.apis.graphics.kube;
 
 import java.nio.IntBuffer;
 
+/**
+ * Class representing data for a vertex, the (x,y,z) coordinates, the index number this instance
+ * occupies in the vertex table, and the color of the vertex.
+ */
 @SuppressWarnings("WeakerAccess")
 public class GLVertex {
 
+    /**
+     * x coordinate of the vertex
+     */
     public float x;
+    /**
+     * y coordinate of the vertex
+     */
     public float y;
+    /**
+     * z coordinate of the vertex
+     */
     public float z;
+    /**
+     * Index number of this vertex in the field {@code ArrayList<GLVertex> mVertexList} of our instance
+     * of {@code GLWorld}.
+     */
     final short index; // index in vertex table
+    /**
+     * Color of this vertex.
+     */
     GLColor color;
 
+    /**
+     * Basic constructor, only used in our {@code update} method to create a temporary {@code GLVertex}
+     * which we use as the destination vertex of the transform of our instance of {@code GLVertex}
+     * by the transformation matrix argument {@code M4 transform}
+     */
     GLVertex() {
         this.x = 0;
         this.y = 0;
@@ -34,29 +59,62 @@ public class GLVertex {
         this.index = -1;
     }
 
+    /**
+     * Constructor for a new instance of {@code GLVertex}, called from our {@code GLWorld} method
+     * {@code addVertex}, which is called from {@code GLShape.addVertex}, which is called from the
+     * constructor of a {@code Cube} object for each of the six vertices making up a cube in the
+     * Rubic cube.
+     *
+     * @param x     x coordinate
+     * @param y     y coordinate
+     * @param z     z coordinate
+     * @param index Index number of this vertex in the field {@code ArrayList<GLVertex> mVertexList}
+     *              of our instance of {@code GLWorld}.
+     */
     GLVertex(float x, float y, float z, int index) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.index = (short)index;
+        this.index = (short) index;
     }
 
+    /**
+     * Compares this instance with the specified object and indicates if they are equal. First we
+     * make sure that {@code Object other} is an instance of {@code GLVertex} and if so, we cast
+     * {@code other} to {@code GLVertex v} and return return true if the {@code x}. {@code y}, and
+     * {@code z} fields of both are equal, false otherwise.
+     *
+     * @param other the object to compare this instance with.
+     * @return true if the specified object is equal to this object; false otherwise.
+     */
     @Override
     public boolean equals(Object other) {
         if (other instanceof GLVertex) {
-            GLVertex v = (GLVertex)other;
+            GLVertex v = (GLVertex) other;
             return (x == v.x && y == v.y && z == v.z);
         }
         return false;
     }
 
-    static public int toFixed(float x) {
-        return (int)(x * 65536.0f);
+    /**
+     * Convenience function to convert our float fields (x,y,z) to an {@code int} for storing in
+     * an {@code IntBuffer vertexBuffer}. Used in our methods {@code put} and {@code update}.
+     *
+     * @param floatValue float value to be turned into an {@code int}
+     * @return its argument converted to an {@code int}
+     */
+    static public int toFixed(float floatValue) {
+        return (int) (floatValue * 65536.0f);
     }
 
+    /**
+     * 
+     *
+     * @param vertexBuffer {@code IntBuffer} used by {@code GLWorld} as a vertex buffer.
+     * @param colorBuffer {@code IntBuffer} used by {@code GLWorld} as a color buffer.
+     */
     public void put(IntBuffer vertexBuffer, IntBuffer colorBuffer) {
         vertexBuffer.put(toFixed(x));
-        //noinspection SuspiciousNameCombination
         vertexBuffer.put(toFixed(y));
         vertexBuffer.put(toFixed(z));
         if (color == null) {
@@ -78,14 +136,12 @@ public class GLVertex {
 
         if (transform == null) {
             vertexBuffer.put(toFixed(x));
-            //noinspection SuspiciousNameCombination
             vertexBuffer.put(toFixed(y));
             vertexBuffer.put(toFixed(z));
         } else {
             GLVertex temp = new GLVertex();
             transform.multiply(this, temp);
             vertexBuffer.put(toFixed(temp.x));
-            //noinspection SuspiciousNameCombination
             vertexBuffer.put(toFixed(temp.y));
             vertexBuffer.put(toFixed(temp.z));
         }
