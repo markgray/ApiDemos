@@ -16,6 +16,9 @@
 
 package com.example.android.apis.graphics.kube;
 
+/**
+ * Class containing the four components of a color
+ */
 @SuppressWarnings("WeakerAccess")
 public class GLColor {
 

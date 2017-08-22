@@ -108,10 +108,20 @@ public class GLVertex {
     }
 
     /**
-     * 
+     * Adds the coordinates of this instance of {@code GLVertex} to the {@code IntBuffer vertexBuffer},
+     * and the color components to {@code IntBuffer colorBuffer}. {@code vertexBuffer} and
+     * {@code colorBuffer} are the direct allocated byte buffers used by the openGL method
+     * {@code glDrawElements} to render our Rubic cube. Called from {@code GLWorld.generate} for
+     * every {@code GLVertex} in its vertex list {@code ArrayList<GLVertex> mVertexList}.
+     * <p>
+     * We assume that the {@code IntBuffer vertexBuffer} and {@code IntBuffer colorBuffer} are positioned
+     * properly, then we convert our instances coordinates x, y, and z to {@code int} and write them
+     * in order to {@code IntBuffer vertexBuffer}. If our field {@code GLColor color} is null we write
+     * four 0's to {@code IntBuffer colorBuffer}, otherwise we write the {@code GLColor color} fields
+     * {@code red}, {@code green}, {@code blue}, and {@code alpha} to {@code IntBuffer colorBuffer}.
      *
      * @param vertexBuffer {@code IntBuffer} used by {@code GLWorld} as a vertex buffer.
-     * @param colorBuffer {@code IntBuffer} used by {@code GLWorld} as a color buffer.
+     * @param colorBuffer  {@code IntBuffer} used by {@code GLWorld} as a color buffer.
      */
     public void put(IntBuffer vertexBuffer, IntBuffer colorBuffer) {
         vertexBuffer.put(toFixed(x));
@@ -130,6 +140,22 @@ public class GLVertex {
         }
     }
 
+    /**
+     * Applies the transform matrix {@code M4 transform} to our coordinates x, y, and z and stores
+     * them in their proper place in {@code IntBuffer vertexBuffer}. Called from our {@code GLWorld}
+     * object method {@code transformVertex}, which is called from {@code GLShape.animateTransform},
+     * which is called from {@code Layer.setAngle}, which is called from {@code Kube.animate}, which
+     * is called from {@code KubeRenderer.onDrawFrame}.
+     * <p>
+     * First we position {@code IntBuffer vertexBuffer} to our index in it. Then if {@code M4 transform}
+     * is null we simply write our unmodified x, y, and z coordinates into {@code IntBuffer vertexBuffer}.
+     * If {@code M4 transform} is not null we create a new empty {@code GLVertex temp}, apply the
+     * transform to our current coordinates saving the result in {@code GLVertex temp}, then we write
+     * the x, y, and z coordinates of {@code GLVertex temp} into {@code IntBuffer vertexBuffer}.
+     *
+     * @param vertexBuffer {@code IntBuffer mVertexBuffer} field from our {@code GLWorld}
+     * @param transform    transformation matrix to apply to our coordinates
+     */
     public void update(IntBuffer vertexBuffer, M4 transform) {
         // skip to location of vertex in mVertex buffer
         vertexBuffer.position(index * 3);
