@@ -37,12 +37,20 @@ public class GLFace {
      */
     private GLColor mColor;
 
+    /**
+     * Unused so I won't comment on it.
+     */
     @SuppressWarnings("unused")
     public GLFace() {
-
     }
 
-    // for triangles
+    /**
+     * Constructor for triangles. Unused
+     *
+     * @param v1 First {@code GLVertex} of our triangle
+     * @param v2 Second {@code GLVertex} of our triangle
+     * @param v3 Third {@code GLVertex} of our triangle
+     */
     @SuppressWarnings("unused")
     public GLFace(GLVertex v1, GLVertex v2, GLVertex v3) {
         addVertex(v1);
@@ -50,7 +58,18 @@ public class GLFace {
         addVertex(v3);
     }
 
-    // for quadrilaterals
+    //
+
+    /**
+     * Constructor for quadrilaterals, called from the constructor for a {@code Cube} object. We
+     * simply call our method {@code addVertex} with each of our parameters and they are added in
+     * order to the list of {@code GLVertex} objects in our field {@code ArrayList<GLVertex> mVertexList}.
+     *
+     * @param v1 First {@code GLVertex} of our quadrilateral
+     * @param v2 Second {@code GLVertex} of our quadrilateral
+     * @param v3 Third {@code GLVertex} of our quadrilateral
+     * @param v4 Fourth {@code GLVertex} of our quadrilateral
+     */
     public GLFace(GLVertex v1, GLVertex v2, GLVertex v3, GLVertex v4) {
         addVertex(v1);
         addVertex(v2);
@@ -58,6 +77,12 @@ public class GLFace {
         addVertex(v4);
     }
 
+    /**
+     * Convenience function that adds its {@code GLVertex v} to the list of our vertices contained in
+     * our field {@code ArrayList<GLVertex> mVertexList}. Called only from our constructors.
+     *
+     * @param v {@code GLVertex} to add to our list of vertices {@code ArrayList<GLVertex> mVertexList}.
+     */
     public void addVertex(GLVertex v) {
         mVertexList.add(v);
     }
