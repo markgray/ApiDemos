@@ -87,7 +87,24 @@ public class GLFace {
         mVertexList.add(v);
     }
 
-    // must be called after all vertices are added
+    /**
+     * Sets the color used to draw this instance of {@code GLFace} to the parameter {@code GLColor c}.
+     * Must be called after all vertices are added, it is called by the method {@code GLShape.setFaceColor},
+     * which is called only from the method {@code Kube.makeGLWorld}. First we set {@code int last} to
+     * the index of the last {@code GLVertex} in {@code ArrayList<GLVertex> mVertexList}, and if it is
+     * less than 2 we log it as an error and proceed, otherwise we fetch {@code GLVertex vertex} from
+     * the last location in the list {@code mVertexList} and if our field {@code mColor} is null (has
+     * never been set) we loop through our {@code ArrayList<GLVertex> mVertexList} as a ring list
+     * inserting the current last {@code GLVertex} at the beginning, removing it from the end, and
+     * setting {@code GLVertex vertex} to the new last {@code GLVertex}, looping until we find a
+     * {@code GLVertex vertex} which does not have its color already set. While obviously this process
+     * would never end if all of our {@code GLVertex} objects already had their color set, in our case
+     * the first {@code GLVertex} always has a null {@code color} field. In any case we then set the
+     * {@code color} field of {@code vertex} to {@code GLColor c}, and finally set our field
+     * {@code GLColor mColor} to {@code c}.
+     *
+     * @param c {@code GLColor} to use for this instance of {@code GLFace}
+     */
     public void setColor(GLColor c) {
 
         int last = mVertexList.size() - 1;
@@ -111,10 +128,28 @@ public class GLFace {
         mColor = c;
     }
 
+    /**
+     * Calculates and returns the number of indices required to draw the vertices in our list of vertices
+     * {@code ArrayList<GLVertex> mVertexList}. Called from {@code GLShape.getIndexCount}, which is
+     * called from {@code GLWorld.addShape}, which is called from {@code GLWorld.makeGLWorld}, which
+     * is called from the {@code onCreate} override of {@code Kube} when it calls the constructor for
+     * {@code KubeRenderer} to initialize its field {@code KubeRenderer mRenderer}. Since in our case
+     * we always have 4 {@code GLVertex} objects in our {@code ArrayList<GLVertex> mVertexList}, we
+     * always return the number 6.
+     *
+     * @return number of indices required for the {@code GLVertex} objects in our list of vertices
+     * {@code ArrayList<GLVertex> mVertexList}.
+     */
     public int getIndexCount() {
         return (mVertexList.size() - 2) * 3;
     }
 
+    /**
+     * 
+     *
+     * @param buffer {@code ShortBuffer mIndexBuffer} which is directly allocated on the native heap
+     *               so it can be used as the index buffer for a {@code glDrawElements} call.
+     */
     public void putIndices(ShortBuffer buffer) {
         int last = mVertexList.size() - 1;
 
