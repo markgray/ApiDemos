@@ -145,7 +145,19 @@ public class GLFace {
     }
 
     /**
-     * 
+     * Divides our {@code GLFace} instance into GL_TRIANGLES by grouping the {@code GLVertex} objects
+     * in {@code ArrayList<GLVertex> mVertexList} in groups of three, then adding the {@code index}
+     * field of the {@code GLVertex} objects to the {@code ShortBuffer buffer} passed us (it is used
+     * as the index buffer in a call to {@code glDrawElements} which draws the current state of the
+     * entire rubic cube). First we set {@code int last} to the location of the last {@code GLVertex}
+     * in our {@code mVertexList} list, we fetch the first item in the list to {@code GLVertex v0},
+     * and the last item to {@code GLVertex vn}. Then we loop through the {@code GLVertex} objects
+     * starting with the second in the list and ending with the item before the last in the list
+     * fetching the item to {@code GLVertex v1}. We then add the {@code index} field of {@code v0},
+     * {@code v1}, and {@code vn} to {@code buffer}, and advance {@code v0} to point to the present
+     * {@code GLVertex} in {@code v1} and loop for the next item in the list. In the case of our
+     * quadrilateral {@code GLFace} this results in two {@code GL_TRIANGLES} consisting of the
+     * {@code GLVertex} items (0,1,3) and (1,2,3).
      *
      * @param buffer {@code ShortBuffer mIndexBuffer} which is directly allocated on the native heap
      *               so it can be used as the index buffer for a {@code glDrawElements} call.

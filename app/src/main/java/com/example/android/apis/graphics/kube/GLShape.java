@@ -22,7 +22,7 @@ import java.util.Iterator;
 
 /**
  * Base class for {@code Cube}, which uses its methods {@code addVertex} and {@code addFace} to add
- * {@code GLVertex} and {@code GLFace} instances to add data describing a single instance of
+ * {@code GLVertex} and {@code GLFace} instances and to add data describing a single instance of
  * {@code Cube} that is part of the 3 by 3 by 3 {@code Cube} rubic cube. Other classes then use the
  * other methods provided to modify the {@code Cube}.
  */
