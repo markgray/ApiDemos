@@ -28,11 +28,81 @@ import java.util.Random;
  * Animates a Rubic cube, randomly spinning layers one by one.
  */
 public class Kube extends Activity implements KubeRenderer.AnimationCallback {
+    /**
+     * {@code GLSurfaceView} that we use as our content view, if uses {@code KubeRenderer mRenderer}
+     * as its renderer.
+     */
+    GLSurfaceView mView;
+    /**
+     * Renderer which performs the drawing to our {@code GLSurfaceView mView} using the Rubic cube
+     * we construct and initialize in the instance of {@code GLWorld} we pass to its constructor for
+     * its data (see our method {@code makeGLWorld} for how we do this).
+     */
+    KubeRenderer mRenderer;
+    /**
+     * The 27 {@code Cube} objects which represent our Rubic cube
+     */
+    Cube[] mCubes = new Cube[27];
+    /**
+     * a {@code Layer} for each possible move, each layer consists of the 9 {@code Cube} objects in
+     * a plane which can be rotated around its center {@code Cube}, 3 rotating around x, 3 rotating
+     * around y, and 3 rotating around z.
+     */
+    Layer[] mLayers = new Layer[9];
+    /**
+     * permutations corresponding to a pi/2 (90 degree) rotation of each layer about its axis.
+     */
+    static int[][] mLayerPermutations = {
+            // permutation for UP layer
+            {2, 5, 8, 1, 4, 7, 0, 3, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26},
+            // permutation for DOWN layer
+            {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 20, 23, 26, 19, 22, 25, 18, 21, 24},
+            // permutation for LEFT layer
+            {6, 1, 2, 15, 4, 5, 24, 7, 8, 3, 10, 11, 12, 13, 14, 21, 16, 17, 0, 19, 20, 9, 22, 23, 18, 25, 26},
+            // permutation for RIGHT layer
+            {0, 1, 8, 3, 4, 17, 6, 7, 26, 9, 10, 5, 12, 13, 14, 15, 16, 23, 18, 19, 2, 21, 22, 11, 24, 25, 20},
+            // permutation for FRONT layer
+            {0, 1, 2, 3, 4, 5, 24, 15, 6, 9, 10, 11, 12, 13, 14, 25, 16, 7, 18, 19, 20, 21, 22, 23, 26, 17, 8},
+            // permutation for BACK layer
+            {18, 9, 0, 3, 4, 5, 6, 7, 8, 19, 10, 1, 12, 13, 14, 15, 16, 17, 20, 11, 2, 21, 22, 23, 24, 25, 26},
+            // permutation for MIDDLE layer
+            {0, 7, 2, 3, 16, 5, 6, 25, 8, 9, 4, 11, 12, 13, 14, 15, 22, 17, 18, 1, 20, 21, 10, 23, 24, 19, 26},
+            // permutation for EQUATOR layer
+            {0, 1, 2, 3, 4, 5, 6, 7, 8, 11, 14, 17, 10, 13, 16, 9, 12, 15, 18, 19, 20, 21, 22, 23, 24, 25, 26},
+            // permutation for SIDE layer
+            {0, 1, 2, 21, 12, 3, 6, 7, 8, 9, 10, 11, 22, 13, 4, 15, 16, 17, 18, 19, 20, 23, 14, 5, 24, 25, 26}
+    };
+
+    /**
+     * current permutation of starting position
+     */
+    int[] mPermutation;
+
+    // for random cube movements
+    Random mRandom = new Random(System.currentTimeMillis());
+    // currently turning layer
+    Layer mCurrentLayer = null;
+    // current and final angle for current Layer animation
+    float mCurrentAngle, mEndAngle;
+    // amount to increment angle
+    float mAngleIncrement;
+    int[] mCurrentLayerPermutation;
+
+    // names for our 9 layers (based on notation from http://www.cubefreak.net/notation.html)
+    static final int kUp = 0;
+    static final int kDown = 1;
+    static final int kLeft = 2;
+    static final int kRight = 3;
+    static final int kFront = 4;
+    static final int kBack = 5;
+    static final int kMiddle = 6;
+    static final int kEquator = 7;
+    static final int kSide = 8;
 
     /**
      * Creates, configures and returns a new instance of {@code GLWorld} which consists of a 27
      * {@code Cube} cube (3 by 3 by 3) representing a Rubic cube. First we create a new instance
-     * for {@code GLWorld world}.
+     * for {@code GLWorld world}. Then we initialize some constants to use
      *
      * @return a new instance of {@code GLWorld} configured with Rubic cube cubes.
      */
@@ -295,56 +365,4 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
             mCurrentLayer.setAngle(mCurrentAngle);
         }
     }
-
-    GLSurfaceView mView;
-    KubeRenderer mRenderer;
-    Cube[] mCubes = new Cube[27];
-    // a Layer for each possible move
-    Layer[] mLayers = new Layer[9];
-    // permutations corresponding to a pi/2 rotation of each layer about its axis
-    static int[][] mLayerPermutations = {
-            // permutation for UP layer
-            {2, 5, 8, 1, 4, 7, 0, 3, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26},
-            // permutation for DOWN layer
-            {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 20, 23, 26, 19, 22, 25, 18, 21, 24},
-            // permutation for LEFT layer
-            {6, 1, 2, 15, 4, 5, 24, 7, 8, 3, 10, 11, 12, 13, 14, 21, 16, 17, 0, 19, 20, 9, 22, 23, 18, 25, 26},
-            // permutation for RIGHT layer
-            {0, 1, 8, 3, 4, 17, 6, 7, 26, 9, 10, 5, 12, 13, 14, 15, 16, 23, 18, 19, 2, 21, 22, 11, 24, 25, 20},
-            // permutation for FRONT layer
-            {0, 1, 2, 3, 4, 5, 24, 15, 6, 9, 10, 11, 12, 13, 14, 25, 16, 7, 18, 19, 20, 21, 22, 23, 26, 17, 8},
-            // permutation for BACK layer
-            {18, 9, 0, 3, 4, 5, 6, 7, 8, 19, 10, 1, 12, 13, 14, 15, 16, 17, 20, 11, 2, 21, 22, 23, 24, 25, 26},
-            // permutation for MIDDLE layer
-            {0, 7, 2, 3, 16, 5, 6, 25, 8, 9, 4, 11, 12, 13, 14, 15, 22, 17, 18, 1, 20, 21, 10, 23, 24, 19, 26},
-            // permutation for EQUATOR layer
-            {0, 1, 2, 3, 4, 5, 6, 7, 8, 11, 14, 17, 10, 13, 16, 9, 12, 15, 18, 19, 20, 21, 22, 23, 24, 25, 26},
-            // permutation for SIDE layer
-            {0, 1, 2, 21, 12, 3, 6, 7, 8, 9, 10, 11, 22, 13, 4, 15, 16, 17, 18, 19, 20, 23, 14, 5, 24, 25, 26}
-    };
-
-    // current permutation of starting position
-    int[] mPermutation;
-
-    // for random cube movements
-    Random mRandom = new Random(System.currentTimeMillis());
-    // currently turning layer
-    Layer mCurrentLayer = null;
-    // current and final angle for current Layer animation
-    float mCurrentAngle, mEndAngle;
-    // amount to increment angle
-    float mAngleIncrement;
-    int[] mCurrentLayerPermutation;
-
-    // names for our 9 layers (based on notation from http://www.cubefreak.net/notation.html)
-    static final int kUp = 0;
-    static final int kDown = 1;
-    static final int kLeft = 2;
-    static final int kRight = 3;
-    static final int kFront = 4;
-    static final int kBack = 5;
-    static final int kMiddle = 6;
-    static final int kEquator = 7;
-    static final int kSide = 8;
-
 }
