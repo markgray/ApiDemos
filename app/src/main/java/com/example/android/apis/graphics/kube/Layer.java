@@ -75,7 +75,9 @@ public class Layer {
     }
 
     /**
-     * 
+     * Called from {@code Kube.animate}, which is called from {@code KubeRenderer.onDrawFrame}. For
+     * each of the {@code GLShape shape} objects in our list {@code GLShape[] mShapes}, we call its
+     * method {@code startAnimation} ... which is a no-op in our case.
      */
     public void startAnimation() {
         //noinspection ForLoopReplaceableByForEach
@@ -87,6 +89,17 @@ public class Layer {
         }
     }
 
+    /**
+     * Called from {@code Kube.animate} when the {@code Layer} being rotated has reached its ending
+     * angle. {@code Kube.animate} is called from {@code KubeRenderer.onDrawFrame}. For each of the
+     * {@code GLShape shape} objects in our list {@code GLShape[] mShapes}, we call its method
+     * {@code endAnimation} which updates its field {@code M4 mTransform} to reflect the movement
+     * which has been applied to the {@code GLShape} via its field {@code M4 mAnimateTransform}
+     * (which we have been setting in our {@code setAngle} method as the {@code Layer} rotates).
+     * {@code mTransform} thus represents the cumulative transforms which have been applied to the
+     * {@code GLShape} instance as the various layers it belongs to are rotated, resulting in its
+     * current x,y,z location.
+     */
     public void endAnimation() {
         //noinspection ForLoopReplaceableByForEach
         for (int i = 0; i < mShapes.length; i++) {
@@ -97,6 +110,10 @@ public class Layer {
         }
     }
 
+    /**
+     *
+     * @param angle angle in radians to rotate our {@code Layer}
+     */
     public void setAngle(float angle) {
         // normalize the angle
         float twopi = (float) Math.PI * 2f;
