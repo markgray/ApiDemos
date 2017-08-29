@@ -111,6 +111,36 @@ public class Layer {
     }
 
     /**
+     * This is used by {@code Kube.animate} to set the angle of our layer. We do this by using our
+     * {@code float angle} parameter to set our field {@code M4 mTransform} to be a transform matrix
+     * designed to move a {@code GLVertex} of the {@code GLShape} objects comprising our {@code Layer}
+     * to the position it should be when our layer is rotated to {@code angle} radians around its
+     * {@code int mAxis}.
+     * <p>
+     * First we normalize {@code angle} to be between 0.0 and 2.0 pi radians, then we set
+     * {@code float sin} to be the sine of {@code angle}, and {@code float cos} to be the cosine of
+     * {@code angle}. We fetch a reference to our fields field {@code mTransform.m} to the variable
+     * {@code float[][] m} to make the following code easier to read. Then we switch on the value of
+     * our field {@code int mAxis} (our rotation axis):
+     * <ul>
+     * <li>
+     * {@code kAxisX} - rotation around the x axis
+     * </li>
+     * <li>
+     * {@code kAxisY} - rotation around the y axis
+     * </li>
+     * <li>
+     * {@code kAxisZ} - rotation around the z axis
+     * </li>
+     * </ul>
+     * and set the values of the entries in {@code m} to the appropriate values for the axis in
+     * question.
+     * <p>
+     * Having calculated the new contents of {@code mTransform.m}, we call the method
+     * {@code animateTransform(mTransform} for each of the {@code GLShape shape} objects in our list
+     * {@code GLShape[] mShapes} and it applies the transform matrix to each of the {@code GLVertex}
+     * vertices used to describe the {@code GLShape} (causing the {@code GLShape} to move the next
+     * time it is drawn).
      *
      * @param angle angle in radians to rotate our {@code Layer}
      */
