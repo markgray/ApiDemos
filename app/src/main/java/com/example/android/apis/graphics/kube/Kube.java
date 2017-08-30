@@ -50,7 +50,12 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
      */
     Layer[] mLayers = new Layer[9];
     /**
-     * permutations corresponding to a pi/2 (90 degree) rotation of each layer about its axis.
+     * permutations corresponding to a pi/2 (90 degree) rotation of each of the layers about its axis.
+     * They are chosen at random in our method {@code animate}, and applied in our method {@code updateLayers}
+     * to assign the {@code GLShapes} to the layer they belong to, both before any rotations have been
+     * done and after the current rotation has finished. TODO: check the code to see if I have this right
+     * Each of these has the same index as the layer it permutates, and represents the layer assignments
+     * of each of the {@code GLShape} object that need to be made after the rotation completes.
      */
     static int[][] mLayerPermutations = {
             // permutation for UP layer
@@ -74,13 +79,17 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
     };
 
     /**
-     * current permutation of starting position
+     * current permutation of starting position TODO: is this right?
      */
     int[] mPermutation;
 
     // for random cube movements
     Random mRandom = new Random(System.currentTimeMillis());
-    // currently turning layer
+    /**
+     * currently turning layer, set to null when the layer reaches its mEndAngle. It is set to a
+     * random value in our method {@code animate} if it is null, and is the same layer as the layer
+     * chosen to be permutated from {@code mLayerPermutations} of course.
+     */
     Layer mCurrentLayer = null;
     // current and final angle for current Layer animation
     float mCurrentAngle, mEndAngle;
@@ -89,14 +98,41 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
     int[] mCurrentLayerPermutation;
 
     // names for our 9 layers (based on notation from http://www.cubefreak.net/notation.html)
+    /**
+     * Up layer (top 9 cubes)
+     */
     static final int kUp = 0;
+    /**
+     * Down layer (bottom 9 cubes)
+     */
     static final int kDown = 1;
+    /**
+     * Left layer (9 cubes on left side)
+     */
     static final int kLeft = 2;
+    /**
+     * Right layer (9 cubes on right side)
+     */
     static final int kRight = 3;
+    /**
+     * Front layer (layer in front of you)
+     */
     static final int kFront = 4;
+    /**
+     * Back layer (layer at the back of the Rubic cube)
+     */
     static final int kBack = 5;
+    /**
+     * Middle layer (layer between left and right)
+     */
     static final int kMiddle = 6;
+    /**
+     * Equator layer (layer between up and down)
+     */
     static final int kEquator = 7;
+    /**
+     * Side layer (layer between front and back)
+     */
     static final int kSide = 8;
 
     /**
