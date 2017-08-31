@@ -53,9 +53,9 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
      * permutations corresponding to a pi/2 (90 degree) rotation of each of the layers about its axis.
      * They are chosen at random in our method {@code animate}, and applied in our method {@code updateLayers}
      * to assign the {@code GLShapes} to the layer they belong to, both before any rotations have been
-     * done and after the current rotation has finished. TODO: check the code to see if I have this right
-     * Each of these has the same index as the layer it permutates, and represents the layer assignments
-     * of each of the {@code GLShape} object that need to be made after the rotation completes.
+     * done and after the current rotation has finished. Each of these has the same index as the layer
+     * it permutates, and represents the layer assignments of each of the {@code GLShape} objects that
+     * need to be made after the rotation completes.
      */
     static int[][] mLayerPermutations = {
             // permutation for UP layer
@@ -79,11 +79,14 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
     };
 
     /**
-     * current permutation of starting position TODO: is this right?
+     * permutation that needs to be done after the current rotation is finished (and the initial solved
+     * permutation (0, 1, ... ,26) as well).
      */
     int[] mPermutation;
 
-    // for random cube movements
+    /**
+     * random number generator for random cube movements
+     */
     Random mRandom = new Random(System.currentTimeMillis());
     /**
      * currently turning layer, set to null when the layer reaches its mEndAngle. It is set to a
@@ -91,10 +94,19 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
      * chosen to be permutated from {@code mLayerPermutations} of course.
      */
     Layer mCurrentLayer = null;
-    // current and final angle for current Layer animation
+    /**
+     * current and final angle for current Layer animation
+     */
     float mCurrentAngle, mEndAngle;
-    // amount to increment angle
+    /**
+     * amount to increment angle
+     */
     float mAngleIncrement;
+    /**
+     * Temporary storage for the {@code mLayerPermutations} chosen for the next rotation which is
+     * then used to permutate {@code mLayerPermutation} to create a new {@code mLayerPermutation}
+     * when the rotation has completed
+     */
     int[] mCurrentLayerPermutation;
 
     // names for our 9 layers (based on notation from http://www.cubefreak.net/notation.html)
@@ -138,7 +150,9 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
     /**
      * Creates, configures and returns a new instance of {@code GLWorld} which consists of a 27
      * {@code Cube} cube (3 by 3 by 3) representing a Rubic cube. First we create a new instance
-     * for {@code GLWorld world}. Then we initialize some constants to use
+     * for {@code GLWorld world}. Then we initialize some constants to use to create the seven
+     * {@code GLColor} objects we use to color our {@code Cube} objects, and the six coordinate
+     * values we use when we construct the 27 {@code Cube} objects used in our Rubic cube.
      *
      * @return a new instance of {@code GLWorld} configured with Rubic cube cubes.
      */
