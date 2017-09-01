@@ -152,7 +152,53 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
      * {@code Cube} cube (3 by 3 by 3) representing a Rubic cube. First we create a new instance
      * for {@code GLWorld world}. Then we initialize some constants to use to create the seven
      * {@code GLColor} objects we use to color our {@code Cube} objects, and the six coordinate
-     * values we use when we construct the 27 {@code Cube} objects used in our Rubic cube.
+     * values we use when we construct the 27 {@code Cube} objects used in our Rubic cube. We
+     * construct the 27 instances of {@code Cube} in our Rubic cube to initialize our the contents
+     * of our field {@code Cube[] mCubes}, then we loop through {@code mCubes} using there method
+     * {@code setFaceColor} to set all the faces to the default black. We now go through all of the
+     * {@code Cube} objects setting the color of the {@code GLFace} facing out as follows:
+     * <ul>
+     * <li>
+     * top of Rubic cube - orange. This includes all the {@code Cube.kTop} faces of the 9
+     * {@code Cube} objects in {@code mCubes[]} (0,1,2,3,4,5,6,7,8)
+     * </li>
+     * <li>
+     * bottom of Rubic cube - red. This includes all the {@code Cube.kBottom} faces of the 9
+     * {@code Cube} objects in {@code mCubes[]} (18,19,20,21,22,23,24,25,26)
+     * </li>
+     * <li>
+     * left of Rubic cube - yellow. This includes all the {@code Cube.kLeft} faces of the 9
+     * {@code Cube} objects in {@code mCubes[]} (0,3,6,9,12,15,18,21,24)
+     * </li>
+     * <li>
+     * right of Rubic cube - white. This includes all the {@code Cube.kRight} faces of the 9
+     * {@code Cube} objects in {@code mCubes[]} (2,5,8,11,15,17,20,23,26)
+     * </li>
+     * <li>
+     * back of Rubic cube - blue. This includes all the {@code Cube.kBack} faces of the 9
+     * {@code Cube} objects in {@code mCubes[]} (0,1,2,9,10,11,18,19,20)
+     * </li>
+     * <li>
+     * front of Rubic cube - green. This includes all the {@code Cube.kFront} faces of the 9
+     * {@code Cube} objects in {@code mCubes[]} (6,7,8,15,16,17,24,25,26)
+     * </li>
+     * </ul>
+     * Then for each of the 27 {@code Cube} objects in {@code Cube[] mCubes} we call the method
+     * {@code world.addShape} to add the {@code GLShape} to its list of {@code Cube} objects in
+     * {@code ArrayList<GLShape> mShapeList}.
+     * <p>
+     * Next we initialize our field {@code int[] mPermutation} with the numbers (0,1,...,26) representing
+     * an initial "solved" ordering of {@code Cube} objects. We call our method {@code createLayers}
+     * to allocate and construct the 9 layers initializing the axis they can rotate about, and call
+     * our method {@code updateLayers} to assign each of the {@code Cube} objects to the {@code Layer}
+     * that it belongs to in the solved initial position that {@code int[] mPermutation} presently
+     * represents.
+     * <p>
+     * Then we call the method {@code world.generate} which allocates and fills the direct allocated
+     * buffers required by the method {@code glDrawElements} when it draws our Rubic cube. Finally we
+     * return {@code world} to the caller (in our case the call to the constructor of the
+     * {@code KubeRenderer} that is used to initialize our field {@code KubeRenderer mRenderer} in
+     * this activities override of {@code onCreate}.
      *
      * @return a new instance of {@code GLWorld} configured with Rubic cube cubes.
      */
@@ -263,6 +309,9 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
         return world;
     }
 
+    /**
+     * 
+     */
     private void createLayers() {
         mLayers[kUp] = new Layer(Layer.kAxisY);
         mLayers[kDown] = new Layer(Layer.kAxisY);
