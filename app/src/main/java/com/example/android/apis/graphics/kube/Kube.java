@@ -310,7 +310,37 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
     }
 
     /**
-     * 
+     * This initializes our field {@code Layer[] mLayers} with {@code Layer} objects constructed to
+     * rotate around their respective axises:
+     * <ul>
+     * <li>
+     * kUp = 0 Up layer (top 9 cubes) rotates around the y axis.
+     * </li>
+     * <li>
+     * kDown = 1 Down layer (bottom 9 cubes) rotates around the y axis.
+     * </li>
+     * <li>
+     * kLeft = 2 Left layer (9 cubes on left side) rotates around the x axis.
+     * </li>
+     * <li>
+     * kRight = 3 Right layer (9 cubes on right side) rotates around the x axis.
+     * </li>
+     * <li>
+     * kFront = 4 Front layer (layer in front of you) rotates around the z axis.
+     * </li>
+     * <li>
+     * kBack = 5 Back layer (layer at the back of the Rubic cube) rotates around the z axis.
+     * </li>
+     * <li>
+     * kMiddle = 6 Middle layer (layer between left and right) rotates around the x axis.
+     * </li>
+     * <li>
+     * kEquator = 7 Equator layer (layer between up and down) rotates around the y axis.
+     * </li>
+     * <li>
+     * kSide = 8 Side layer (layer between front and back) rotates around the z axis.
+     * </li>
+     * </ul>
      */
     private void createLayers() {
         mLayers[kUp] = new Layer(Layer.kAxisY);
@@ -324,6 +354,66 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
         mLayers[kSide] = new Layer(Layer.kAxisZ);
     }
 
+    /**
+     * This method updates all the layers in our field {@code Layer[] mLayers} so that their field
+     * {@code GLShape[] mShapes} contains the correct {@code Cube} objects based on the latest
+     * {@code mPermutation} performed (including the initial "solved" {@code mPermutation} (0.1,...,26).
+     * <p>
+     * First we declare the variables we will be using:
+     * <ul>
+     * <li>
+     * {@code Layer layer} will contain a reference to the {@code Layer} object from the {@code Layer[] mLayers}
+     * that we are currently working with.
+     * </li>
+     * <li>
+     * {@code GLShape[] shapes} will contain a reference to the {@code GLShape[] mShapes} field
+     * of the current {@code Layer layer}
+     * </li>
+     * <li>
+     * {@code i, j, and k} will be used as indices
+     * </li>
+     * </ul>
+     * Next we assign the correct {@code Cube} objects from our field {@code Cube[] mCubes}. This
+     * assignment is done for the 9 layers as follows:
+     * <ul>
+     * <li>
+     * kUp = 0 Up layer (top 9 cubes), its 9 {@code mShapes} {@code Cube} objects are chosen
+     * from our {@code Cube[] mCubes} based on {@code mPermutation} entries (0,1,2,3,4,5,6,7,8)
+     * </li>
+     * <li>
+     * kDown = 1 Down layer (bottom 9 cubes), its 9 {@code mShapes} {@code Cube} objects are chosen
+     * from our {@code Cube[] mCubes} based on {@code mPermutation} entries (18,19,20,21,22,23,24,25,26)
+     * </li>
+     * <li>
+     * kLeft = 2 Left layer (9 cubes on left side), its 9 {@code mShapes} {@code Cube} objects are chosen
+     * from our {@code Cube[] mCubes} based on {@code mPermutation} entries (0,3,6,9,12,15,18,21,24)
+     * </li>
+     * <li>
+     * kRight = 3 Right layer (9 cubes on right side), its 9 {@code mShapes} {@code Cube} objects are chosen
+     * from our {@code Cube[] mCubes} based on {@code mPermutation} entries (2,5,8,11,14,17,20,23,26)
+     * </li>
+     * <li>
+     * kFront = 4 Front layer (layer in front of you), its 9 {@code mShapes} {@code Cube} objects are chosen
+     * from our {@code Cube[] mCubes} based on {@code mPermutation} entries (6,7,8,15,16,17,24,25,26)
+     * </li>
+     * <li>
+     * kBack = 5 Back layer (layer at the back of the Rubic cube), its 9 {@code mShapes} {@code Cube} objects are chosen
+     * from our {@code Cube[] mCubes} based on {@code mPermutation} entries (0,1,2,9,10,11,18,19,20)
+     * </li>
+     * <li>
+     * kMiddle = 6 Middle layer (layer between left and right), its 9 {@code mShapes} {@code Cube} objects are chosen
+     * from our {@code Cube[] mCubes} based on {@code mPermutation} entries (1,4,7,9,13,16,18,21,24)
+     * </li>
+     * <li>
+     * kEquator = 7 Equator layer (layer between up and down), its 9 {@code mShapes} {@code Cube} objects are chosen
+     * from our {@code Cube[] mCubes} based on {@code mPermutation} entries (9,10,11,12,13,14,15,16,17)
+     * </li>
+     * <li>
+     * kSide = 8 Side layer (layer between front and back), its 9 {@code mShapes} {@code Cube} objects are chosen
+     * from our {@code Cube[] mCubes} based on {@code mPermutation} entries (3,4,5,12,13,14,21,22,23)
+     * </li>
+     * </ul>
+     */
     private void updateLayers() {
         Layer layer;
         GLShape[] shapes;
@@ -390,6 +480,16 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
                 shapes[k++] = mCubes[mPermutation[i + j]];
     }
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. Then we request the window feature FEATURE_NO_TITLE. Next we initialize our
+     * field {@code GLSurfaceView mView} with an instance of {@code GLSurfaceView}, initialize our
+     * field {@code KubeRenderer mRenderer} with an instance of {@code KubeRenderer} constructed using
+     * the {@code GLWorld} returned by the method {@code makeGLWorld} and set {@code mRenderer} as
+     * the renderer for {@code mView}. Finally we set our content view to {@code mView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -403,18 +503,35 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
         setContentView(mView);
     }
 
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or {@link #onPause}, for
+     * your activity to start interacting with the user. First we call through to our super's
+     * implementation of {@code onResume} then we call the {@code onResume} method of our field
+     * {@code GLSurfaceView mView}.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         mView.onResume();
     }
 
+    /**
+     * Called as part of the activity lifecycle when an activity is going into the background, but
+     * has not (yet) been killed.  The counterpart to {@link #onResume}. First we call through to our
+     * super's implementation of {@code onPause} then we call the {@code onPause} method of our field
+     * {@code GLSurfaceView mView}.
+     */
     @Override
     protected void onPause() {
         super.onPause();
         mView.onPause();
     }
 
+    /**
+     * Called by {@code KubeRenderer.onDrawFrame} to prepare the Rubic cube for the next frame to be
+     * drawn. First we instruct our {@code KubeRenderer mRenderer} to add 1.2 degrees to the angle it
+     * uses when rotating the entire Rubic cube.
+     */
     @Override
     public void animate() {
         // change our angle of view
@@ -437,7 +554,7 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
             if (direction) {
                 mAngleIncrement = (float) Math.PI / 50;
                 mEndAngle = mCurrentAngle + ((float) Math.PI * count) / 2f;
-            } else {
+            } else { // This path is always taken.
                 mAngleIncrement = -(float) Math.PI / 50;
                 mEndAngle = mCurrentAngle - ((float) Math.PI * count) / 2f;
             }
