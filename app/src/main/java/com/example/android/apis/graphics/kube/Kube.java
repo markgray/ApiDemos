@@ -530,7 +530,29 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
     /**
      * Called by {@code KubeRenderer.onDrawFrame} to prepare the Rubic cube for the next frame to be
      * drawn. First we instruct our {@code KubeRenderer mRenderer} to add 1.2 degrees to the angle it
-     * uses when rotating the entire Rubic cube.
+     * uses when rotating the entire Rubic cube. Then if {@code Layer mCurrentLayer} is null (the
+     * last layer rotation has reached its endpoint, or we are just starting) we set {@code layerID}
+     * to a random number between 0 and 8, and use it as an index into {@code mLayers} in order to
+     * set {@code mCurrentLayer}, and we use it as an index into {@code mLayerPermutations} in order
+     * to set {@code mCurrentLayerPermutation}. We call the method {@code mCurrentLayer.startAnimation}
+     * which calls {@code Shape.startAnimation} (which does nothing) for each of the shapes in the
+     * layer. We execute some unused code, then set {@code count} to 1, and {@code direction} to
+     * false (neither of which is used). We set our field {@code mCurrentAngle} to 0 then (since
+     * {@code direction} is always false) we set {@code mAngleIncrement} to PI/50 and {@code mEndAngle}
+     * to -PI/2 (since {@code mCurrentAngle} is 0 at this point, and count is 1).
+     * <p>
+     * Now that {@code mCurrentLayer} is known not to be null, we increment {@code mCurrentAngle} by
+     * {@code mAngleIncrement}, and if we have reached our {@code mEndAngle} we set the angle of
+     * {@code mCurrentLayer} to {@code mEndAngle}, and call the method {@code mCurrentLayer.endAnimation}
+     * which calls the method {@code Shape.endAnimation} for each of the 9 shapes in the layer inorder
+     * to update its cumulative transfer matrix {@code mTransform} with the transform matrix it used for
+     * the movement to the angle {@code mEndAngle}: {@code mAnimateTransform}. We then set our field
+     * {@code mCurrentLayer} to null (so that a new layer will be chosen then next time {@code animate}
+     * is called).
+     * <p>
+     * We now have to adjust {@code mPermutation} so that the next call to {@code updateLayers} will
+     * assign the {@code Cube} objects to the correct layer based on the just completed layer rotation.
+     * 
      */
     @Override
     public void animate() {
