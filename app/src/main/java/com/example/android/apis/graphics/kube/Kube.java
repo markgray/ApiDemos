@@ -58,23 +58,32 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
      * need to be made after the rotation completes.
      */
     static int[][] mLayerPermutations = {
-            // permutation for UP layer
+            /* permutation for UP layer
+            {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}*/
             {2, 5, 8, 1, 4, 7, 0, 3, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26},
-            // permutation for DOWN layer
+            /* permutation for DOWN layer
+            {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}*/
             {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 20, 23, 26, 19, 22, 25, 18, 21, 24},
-            // permutation for LEFT layer
+            /* permutation for LEFT layer
+            {0, 1, 2,  3, 4, 5, 6,  7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,18, 19, 20,21, 22, 23, 24, 25, 26}*/
             {6, 1, 2, 15, 4, 5, 24, 7, 8, 3, 10, 11, 12, 13, 14, 21, 16, 17, 0, 19, 20, 9, 22, 23, 18, 25, 26},
-            // permutation for RIGHT layer
+            /* permutation for RIGHT layer
+            {0, 1, 2, 3, 4,  5, 6, 7,  8, 9, 10,11, 12, 13, 14, 15, 16, 17, 18, 19,20, 21, 22, 23, 24, 25, 26}*/
             {0, 1, 8, 3, 4, 17, 6, 7, 26, 9, 10, 5, 12, 13, 14, 15, 16, 23, 18, 19, 2, 21, 22, 11, 24, 25, 20},
-            // permutation for FRONT layer
+            /* permutation for FRONT layer
+            {0, 1, 2, 3, 4, 5,  6,  7, 8, 9, 10, 11, 12, 13, 14, 15, 16,17, 18, 19, 20, 21, 22, 23, 24, 25, 26}*/
             {0, 1, 2, 3, 4, 5, 24, 15, 6, 9, 10, 11, 12, 13, 14, 25, 16, 7, 18, 19, 20, 21, 22, 23, 26, 17, 8},
-            // permutation for BACK layer
+            /* permutation for BACK layer
+            {0,  1, 2, 3, 4, 5, 6, 7, 8,  9, 10,11, 12, 13, 14, 15, 16, 17, 18, 19,20, 21, 22, 23, 24, 25, 26}*/
             {18, 9, 0, 3, 4, 5, 6, 7, 8, 19, 10, 1, 12, 13, 14, 15, 16, 17, 20, 11, 2, 21, 22, 23, 24, 25, 26},
-            // permutation for MIDDLE layer
+            /* permutation for MIDDLE layer
+            {0, 1, 2, 3,  4, 5, 6,  7, 8, 9,10, 11, 12, 13, 14, 15, 16, 17, 18,19, 20, 21, 22, 23, 24, 25, 26}*/
             {0, 7, 2, 3, 16, 5, 6, 25, 8, 9, 4, 11, 12, 13, 14, 15, 22, 17, 18, 1, 20, 21, 10, 23, 24, 19, 26},
-            // permutation for EQUATOR layer
+            /* permutation for EQUATOR layer
+            {0, 1, 2, 3, 4, 5, 6, 7, 8,  9, 10, 11, 12, 13, 14,15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}*/
             {0, 1, 2, 3, 4, 5, 6, 7, 8, 11, 14, 17, 10, 13, 16, 9, 12, 15, 18, 19, 20, 21, 22, 23, 24, 25, 26},
-            // permutation for SIDE layer
+            /* permutation for SIDE layer
+            {0, 1, 2,  3,  4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14, 15, 16, 17, 18, 19, 20, 21, 22,23, 24, 25, 26}*/
             {0, 1, 2, 21, 12, 3, 6, 7, 8, 9, 10, 11, 22, 13, 4, 15, 16, 17, 18, 19, 20, 23, 14, 5, 24, 25, 26}
     };
 
@@ -552,7 +561,16 @@ public class Kube extends Activity implements KubeRenderer.AnimationCallback {
      * <p>
      * We now have to adjust {@code mPermutation} so that the next call to {@code updateLayers} will
      * assign the {@code Cube} objects to the correct layer based on the just completed layer rotation.
-     * 
+     * To do this we first allocate temporary storage for {@code int[] newPermutation}, then for each
+     * of the current layer assignments for our {@code Cube[] mCubes} which was last specified by the
+     * contents of {@code mPermutation} we assign a new layer based on the contents of the respective
+     * index entry contained in {@code mCurrentLayerPermutation} (the permutation of the just completed
+     * rotation). Then we assign our temporary {@code newPermutation} to {@code mPermutation} and call
+     * our method {@code updateLayers} to apply this layer assignment to all the {@code Layer[] mLayers}
+     * {@code Layer.mShapes} fields.
+     * <p>
+     * If we have not yet reached the {@code mEndAngle} we just call the {@code setAngle} method of
+     * {@code mCurrentLayer} to set the angle to the new {@code mCurrentAngle}
      */
     @Override
     public void animate() {
