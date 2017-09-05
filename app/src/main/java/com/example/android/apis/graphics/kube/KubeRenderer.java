@@ -21,8 +21,6 @@ import android.opengl.GLSurfaceView;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import static android.R.attr.width;
-
 /**
  * Example of how to use OpenGL|ES in a custom view. This is the {@code GLSurfaceView.Renderer}
  * implementation which is set as the renderer of our {@code GLSurfaceView} in the {@code onCreate}
@@ -48,7 +46,7 @@ class KubeRenderer implements GLSurfaceView.Renderer {
      */
     private AnimationCallback mCallback;
     /**
-     * Angle to rotate the entire rubic cube before drawing it.
+     * Angle in degrees to rotate the entire rubic cube before drawing it.
      */
     private float mAngle;
 
@@ -135,7 +133,16 @@ class KubeRenderer implements GLSurfaceView.Renderer {
     }
 
     /**
-     * Called when the surface changed size.
+     * Called when the surface changed size. First we set the viewport to have its lower left corner
+     * at (0,0), a width of {@code width} and a height of {@code height}. Next we calculate the
+     * aspect ratio {@code float ratio} to be {@code width/height}, specify GL_PROJECTION to be the
+     * current matrix (the matrix used to create your viewing volume), load it with the identity
+     * matrix, set coordinates for the left and right vertical clipping planes to {@code -ratio}
+     * and {@code +ratio}, set the bottom clipping plane to -1, the top clipping plane to +2, the
+     * near clipping plane to 2, and the far clipping plane to 12. We disable the server-side GL
+     * capability GL_DITHER (do not dither color components or indices before they are written to the
+     * color buffer), and finally set the active texture to GL_TEXTURE0 (selects which texture unit
+     * subsequent texture state calls will affect - we do not use textures so?).
      *
      * @param gl     the GL interface.
      * @param width  new width of our {@code GLSurfaceView}
@@ -165,15 +172,33 @@ class KubeRenderer implements GLSurfaceView.Renderer {
         gl.glActiveTexture(GL10.GL_TEXTURE0);
     }
 
+    /**
+     * Called when the surface is created or recreated. We do nothing.
+     *
+     * @param gl     the GL interface. Use <code>instanceof</code> to
+     *               test if the interface supports GL11 or higher interfaces.
+     * @param config the EGLConfig of the created surface. Can be used
+     *               to create matching pbuffers.
+     */
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         // Nothing special, don't have any textures we need to recreate.
     }
 
+    /**
+     * Setter method for our field {@code float mAngle}.
+     *
+     * @param angle angle in degrees to set {@code mAngle} to
+     */
     public void setAngle(float angle) {
         mAngle = angle;
     }
 
+    /**
+     * Getter method for our field {@code float mAngle}.
+     *
+     * @return current value of our field {@code float mAngle}
+     */
     public float getAngle() {
         return mAngle;
     }

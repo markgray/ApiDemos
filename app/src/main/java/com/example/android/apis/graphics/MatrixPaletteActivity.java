@@ -21,9 +21,22 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
 /**
- * This sample shows how to implement a Matrix Palette
+ * This sample shows how to implement a Matrix Palette, used to rock a column back and forth.
  */
 public class MatrixPaletteActivity extends Activity {
+    /**
+     * {@code GLSurfaceView} we create for {@code MatrixPaletteRenderer} to render to.
+     */
+    private GLSurfaceView mGLSurfaceView;
+
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we create a new {@code GLSurfaceView} and use it to initialize our field
+     * {@code GLSurfaceView mGLSurfaceView}, set its renderer to a new instance of {@code MatrixPaletteRenderer}
+     * and finally set our content view to {@code GLSurfaceView mGLSurfaceView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +45,12 @@ public class MatrixPaletteActivity extends Activity {
         setContentView(mGLSurfaceView);
     }
 
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or {@link #onPause}, for
+     * your activity to start interacting with the user. First we call through to our super's
+     * implementation of {@code onResume}, then we call the {@code onResume} method of our field
+     * {@code GLSurfaceView mGLSurfaceView}.
+     */
     @Override
     protected void onResume() {
         // Ideally a game should implement onResume() and onPause()
@@ -40,6 +59,12 @@ public class MatrixPaletteActivity extends Activity {
         mGLSurfaceView.onResume();
     }
 
+    /**
+     * Called as part of the activity lifecycle when an activity is going into the background, but
+     * has not (yet) been killed. The counterpart to {@link #onResume}. First we call through to our
+     * super's  implementation of {@code onPause}, then we call the {@code onPause} method of our
+     * field {@code GLSurfaceView mGLSurfaceView}.
+     */
     @Override
     protected void onPause() {
         // Ideally a game should implement onResume() and onPause()
@@ -47,6 +72,4 @@ public class MatrixPaletteActivity extends Activity {
         super.onPause();
         mGLSurfaceView.onPause();
     }
-
-    private GLSurfaceView mGLSurfaceView;
 }

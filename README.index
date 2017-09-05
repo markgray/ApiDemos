@@ -1163,6 +1163,7 @@ Graphics
    Matrix Palette Skinning
     Graphics/OpenGL ES/Matrix Palette Skinning  -- all
         .graphics.MatrixPaletteActivity
+        .graphics.MatrixPaletteRenderer
             This sample shows how to implement a Matrix Palette, used to rock a column
             back and forth.
 

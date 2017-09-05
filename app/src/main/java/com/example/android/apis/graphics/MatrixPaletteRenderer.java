@@ -39,7 +39,16 @@ import android.os.SystemClock;
 
 import com.example.android.apis.R;
 
+/**
+ * This renderer is part of the {@code MatrixPaletteActivity} sample which shows how to implement a
+ * Matrix Palette, which is used to rock a column back and forth.
+ */
+@SuppressWarnings("WeakerAccess")
 public class MatrixPaletteRenderer implements GLSurfaceView.Renderer{
+    /**
+     * Context used to retrieve resources, set in our constructor ("this" when called from the
+     * {@code onCreate} method of {@code MatrixPaletteActivity}.
+     */
     private Context mContext;
     private Grid mGrid;
     private int mTextureID;
@@ -86,6 +95,7 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer{
         private int mH;
         private int mIndexCount;
 
+        @SuppressWarnings("WeakerAccess")
         public Grid(int w, int h) {
             if (w < 0 || w >= 65536) {
                 throw new IllegalArgumentException("w");
@@ -178,6 +188,7 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer{
             mVertexByteBuffer.put((byte) p1);
         }
 
+        @SuppressWarnings("WeakerAccess")
         public void createBufferObjects(GL gl) {
             // Generate a the vertex and element buffer IDs
             int[] vboIds = new int[2];
@@ -227,6 +238,7 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer{
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     public MatrixPaletteRenderer(Context context) {
         mContext = context;
     }
