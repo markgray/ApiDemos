@@ -44,24 +44,27 @@ import com.example.android.apis.R;
  * Matrix Palette, which is used to rock a column back and forth.
  */
 @SuppressWarnings("WeakerAccess")
-public class MatrixPaletteRenderer implements GLSurfaceView.Renderer{
+public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
     /**
      * Context used to retrieve resources, set in our constructor ("this" when called from the
-     * {@code onCreate} method of {@code MatrixPaletteActivity}.
+     * {@code onCreate} method of {@code MatrixPaletteActivity}).
      */
     private Context mContext;
+    /**
+     *
+     */
     private Grid mGrid;
     private int mTextureID;
 
-    /** A grid is a topologically rectangular array of vertices.
-     *
+    /**
+     * A grid is a topologically rectangular array of vertices.
+     * <p>
      * This grid class is customized for the vertex data required for this
      * example.
-     *
+     * <p>
      * The vertex and index data are held in VBO objects because on most
      * GPUs VBO objects are the fastest way of rendering static vertex
      * and index data.
-     *
      */
 
     private static class Grid {
@@ -112,7 +115,7 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer{
             int size = w * h;
 
             mVertexByteBuffer = ByteBuffer.allocateDirect(VERTEX_SIZE * size)
-                .order(ByteOrder.nativeOrder());
+                    .order(ByteOrder.nativeOrder());
             mVertexBuffer = mVertexByteBuffer.asFloatBuffer();
 
             int quadW = mW - 1;
@@ -121,7 +124,7 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer{
             int indexCount = quadCount * 6;
             mIndexCount = indexCount;
             mIndexBuffer = ByteBuffer.allocateDirect(CHAR_SIZE * indexCount)
-                .order(ByteOrder.nativeOrder()).asCharBuffer();
+                    .order(ByteOrder.nativeOrder()).asCharBuffer();
 
             /*
              * Initialize triangle list mesh.
@@ -157,10 +160,12 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer{
 
         }
 
-        public void set(int i, int j, float x, float y, float z,
-                float u, float v,
-                float w0, float w1,
-                int p0, int p1) {
+        public void set(int i, int j,
+                        float x, float y, float z,
+                        float u, float v,
+                        float w0, float w1,
+                        int p0, int p1) {
+
             if (i < 0 || i >= mW) {
                 throw new IllegalArgumentException("i");
             }
@@ -225,8 +230,8 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer{
             gl.glEnableClientState(GL11Ext.GL_MATRIX_INDEX_ARRAY_OES);
             gl.glEnableClientState(GL11Ext.GL_WEIGHT_ARRAY_OES);
 
-            gl11Ext.glWeightPointerOES(2, GL10.GL_FLOAT, VERTEX_SIZE, VERTEX_WEIGHT_BUFFER_INDEX_OFFSET  * FLOAT_SIZE);
-            gl11Ext.glMatrixIndexPointerOES(2, GL10.GL_UNSIGNED_BYTE, VERTEX_SIZE, VERTEX_PALETTE_INDEX_OFFSET );
+            gl11Ext.glWeightPointerOES(2, GL10.GL_FLOAT, VERTEX_SIZE, VERTEX_WEIGHT_BUFFER_INDEX_OFFSET * FLOAT_SIZE);
+            gl11Ext.glMatrixIndexPointerOES(2, GL10.GL_UNSIGNED_BYTE, VERTEX_SIZE, VERTEX_PALETTE_INDEX_OFFSET);
 
             gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, mElementBufferObjectId);
             gl11.glDrawElements(GL10.GL_TRIANGLES, mIndexCount, GL10.GL_UNSIGNED_SHORT, 0);
@@ -243,6 +248,58 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer{
         mContext = context;
     }
 
+    /**
+     * Called when the surface is created or recreated. Called when the rendering thread starts and
+     * whenever the EGL context is lost. The EGL context will typically be lost when the Android
+     * device awakes after going to sleep.
+     *
+     * First we disable the server-side GL capability GL_DITHER (color components or indices will not
+     * be dithered before they are written to the color buffer). We specify the implementation-specific
+     * hint GL_PERSPECTIVE_CORRECTION_HINT to be GL_FASTEST (Indicates the quality of color, texture
+     * coordinate, and fog coordinate interpolation to be a simple linear interpolation of colors
+     * and/or texture coordinates). We set the clear color to gray, the shade model to GL_SMOOTH
+     * (causes the computed colors of vertices to be interpolated as the primitive is rasterized,
+     * typically assigning different colors to each resulting pixel fragment). We enable the server
+     * side GL capability GL_DEPTH_TEST (do depth comparisons and update the depth buffer) and the
+     * server-side GL capability GL_TEXTURE_2D (if no fragment shader is active, two-dimensional
+     * texturing is performed). Next we allocate {@code int[] textures} and ask GL to generate 1
+     * texture name in it, and we set our field {@code mTextureID} to that texture name, then bind
+     * that named texture to the texturing target GL_TEXTURE_2D (while a texture is bound, GL
+     * operations on the target to which it is bound affect the bound texture, and queries of the
+     * target to which it is bound return state from the bound texture. If texture mapping is active
+     * on the target to which a texture is bound, the bound texture is used. In effect, the texture
+     * targets become aliases for the textures currently bound to them, and the texture name zero
+     * refers to the default textures that were bound to them at initialization).
+     *
+     * Next we set texture parameter GL_TEXTURE_MIN_FILTER for GL_TEXTURE_2D to be GL_NEAREST (The
+     * texture minifying function is used whenever the pixel being textured maps to an area greater
+     * than one texture element. GL_NEAREST Returns the value of the texture element that is nearest
+     * (in Manhattan distance) to the center of the pixel being textured). We set texture parameter
+     * GL_TEXTURE_MAG_FILTER for GL_TEXTURE_2D to be GL_LINEAR (The GL_TEXTURE_MAG_FILTER function
+     * is used when the pixel being textured maps to an area less than or equal to one texture
+     * element. GL_LINEAR Returns the weighted average of the four texture elements that are closest
+     * to the center of the pixel being textured).
+     *
+     * We set texture parameter GL_TEXTURE_WRAP_S for GL_TEXTURE_2D to be GL_CLAMP_TO_EDGE (Sets the
+     * wrap parameter for texture coordinate s to GL_CLAMP_TO_EDGE which causes s coordinates to be
+     * clamped to the range [1/2N, 1-1/2N] where N is the size of the texture in the direction of
+     * clamping), and we set texture parameter GL_TEXTURE_WRAP_T for GL_TEXTURE_2D to be GL_CLAMP_TO_EDGE
+     * as well. This has textures stop at the last pixel when you fall off the edge in either direction.
+     *
+     * We next set texture environment parameter GL_TEXTURE_ENV_MODE of GL_TEXTURE_ENV to GL_REPLACE
+     * (causes the texture to replace whatever pixels were present).
+     *
+     * We open our raw resource file robot.png for reading by {@code InputStream is} and decode the
+     * png into {@code Bitmap bitmap} (with the code wrapped in an appropriate try block). We then
+     * specify {@code bitmap} as a two-dimensional texture image for GL_TEXTURE_2D, and recycle
+     * {@code bitmap}.
+     *
+     * Finally we initialize our field {@code Grid mGrid} with the {@code Grid} generated by our
+     * method {@code generateWeightedGrid}.
+     *
+     * @param gl     the GL interface.
+     * @param config the EGLConfig of the created surface.
+     */
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         /*
          * By default, OpenGL enables features that improve quality
@@ -255,8 +312,7 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer{
          * Some one-time OpenGL initialization can be made here
          * probably based on features of this particular context
          */
-        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT,
-                GL10.GL_FASTEST);
+        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
 
         gl.glClearColor(.5f, .5f, .5f, 1);
         gl.glShadeModel(GL10.GL_SMOOTH);
@@ -274,29 +330,22 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer{
         mTextureID = textures[0];
         gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID);
 
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
-                GL10.GL_NEAREST);
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D,
-                GL10.GL_TEXTURE_MAG_FILTER,
-                GL10.GL_LINEAR);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
-                GL10.GL_CLAMP_TO_EDGE);
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
-                GL10.GL_CLAMP_TO_EDGE);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
 
-        gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
-                GL10.GL_REPLACE);
+        gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE);
 
-        InputStream is = mContext.getResources()
-                .openRawResource(R.raw.robot);
+        InputStream is = mContext.getResources().openRawResource(R.raw.robot);
         Bitmap bitmap;
         try {
             bitmap = BitmapFactory.decodeStream(is);
         } finally {
             try {
                 is.close();
-            } catch(IOException e) {
+            } catch (IOException e) {
                 // Ignore.
             }
         }
@@ -307,6 +356,11 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer{
         mGrid = generateWeightedGrid(gl);
     }
 
+    /**
+     * Called to draw the current frame.
+     *
+     * @param gl the GL interface.
+     */
     public void onDrawFrame(GL10 gl) {
         /*
          * By default, OpenGL enables features that improve quality
