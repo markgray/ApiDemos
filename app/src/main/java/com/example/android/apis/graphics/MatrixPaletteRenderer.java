@@ -387,9 +387,23 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
      * <p>
      * We enable the server side capability GL_MATRIX_PALETTE_OES (When this extension is utilized,
      * the enabled units transform each vertex by the modelview matrices specified by the vertices'
-     * respective indices.  These results are subsequently scaled by the weights of the respective
+     * respective indices. These results are subsequently scaled by the weights of the respective
      * units and then summed to create the eye-space vertex i.e. it warps the vertex location before
-     * they are rendered to the eye-space).
+     * they are rendered to the eye-space). We set the current matrix mode to GL_MATRIX_PALETTE_OES
+     * (GL_MATRIX_PALETTE_OES matrix stack is the target for subsequent matrix operations), set the
+     * current matrix palette to 0, and load the current palette matrix from the modelview matrix.
+     * We then multiply the matrix by a rotation matrix of {@code angle} around the z axis.
+     * <p>
+     * Next we set the current matrix palette to 1, and load the current palette matrix from the
+     * modelview matrix. Each vertex contains a weight for the two palette matrices, with the vertices
+     * at the bottom of the column giving less weight to palette 0 (the rotated model view) with the
+     * rest given to palette 1 so palette 1 (the un-rotated matrix) has more influence at the bottom
+     * and palette 0 (the rotated matrix) has more influence at the top causing the bottom to be
+     * glued in place and the top to sway with the {@code angle} of rotation.
+     * <p>
+     * Now that we have set up our texture and palette configuration we call {@code mGrid.draw} to
+     * draw the vertices of the {@code Grid mGrid}. And finally we disable the server-side capability
+     * GL_MATRIX_PALETTE_OES.
      *
      * @param gl the GL interface.
      */
@@ -448,8 +462,7 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
         gl11Ext.glCurrentPaletteMatrixOES(0);
         gl11Ext.glLoadPaletteFromModelViewMatrixOES();
 
-
-        // matrix 1: rotate by "angle"
+        // matrix 1: rotate by "angle" TODO: verify that this comment is wrong matrix 0 is rotated!
         gl.glRotatef(angle, 0, 0, 1.0f);
 
         gl11Ext.glCurrentPaletteMatrixOES(1);
@@ -460,6 +473,20 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
         gl.glDisable(GL11Ext.GL_MATRIX_PALETTE_OES);
     }
 
+    /**
+     * Called when the surface changed size. Called after the surface is created and whenever the
+     * OpenGL ES surface size changes. First we set the viewport to have the lower left corner at
+     * (0,0), a width of {@code width} and a height of {@code height}. Then we calculate the aspect
+     * ratio {@code ratio} w/h, set the matrix mode to GL_PROJECTION (subsequent matrix operations
+     * will be applied to the projection matrix stack), load it with the identity matrix, and apply
+     * a perspective projection to that with the left and right vertical clipping planes at
+     * {@code -ratio}, and {@code +ratio}, the bottom clipping plane at -1, the top clipping plane
+     * at +1, the near clipping plane at 3 and the far clipping plane at 7.
+     *
+     * @param gl the GL interface.
+     * @param w  new width of the surface
+     * @param h  new height of the surface
+     */
     public void onSurfaceChanged(GL10 gl, int w, int h) {
         gl.glViewport(0, 0, w, h);
 
