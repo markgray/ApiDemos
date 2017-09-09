@@ -114,8 +114,7 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
             mH = h;
             int size = w * h;
 
-            mVertexByteBuffer = ByteBuffer.allocateDirect(VERTEX_SIZE * size)
-                    .order(ByteOrder.nativeOrder());
+            mVertexByteBuffer = ByteBuffer.allocateDirect(VERTEX_SIZE * size).order(ByteOrder.nativeOrder());
             mVertexBuffer = mVertexByteBuffer.asFloatBuffer();
 
             int quadW = mW - 1;
@@ -123,8 +122,7 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
             int quadCount = quadW * quadH;
             int indexCount = quadCount * 6;
             mIndexCount = indexCount;
-            mIndexBuffer = ByteBuffer.allocateDirect(CHAR_SIZE * indexCount)
-                    .order(ByteOrder.nativeOrder()).asCharBuffer();
+            mIndexBuffer = ByteBuffer.allocateDirect(CHAR_SIZE * indexCount).order(ByteOrder.nativeOrder()).asCharBuffer();
 
             /*
              * Initialize triangle list mesh.
@@ -462,7 +460,7 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
         gl11Ext.glCurrentPaletteMatrixOES(0);
         gl11Ext.glLoadPaletteFromModelViewMatrixOES();
 
-        // matrix 1: rotate by "angle" TODO: verify that this comment is wrong matrix 0 is rotated!
+        // matrix 1: rotate by "angle" NOTE: This comment is wrong, matrix 0 is rotated!
         gl.glRotatef(angle, 0, 0, 1.0f);
 
         gl11Ext.glCurrentPaletteMatrixOES(1);
@@ -502,6 +500,50 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
         gl.glFrustumf(-ratio, ratio, -1, 1, 3, 7);
     }
 
+    /**
+     * Creates and configures a {@code Grid} instance of our swaying column. First we define the
+     * constants used to size our {@code Grid}: {@code uSteps} (number of "steps" in the u texture
+     * coordinate space) and {@code vSteps} (number of "steps" in the v texture coordinate space).
+     * Then we initialize the {@code radius} of our column to be 0.25 and the {@code height} to be 2.
+     * <p>
+     * Next we initialize {@code Grid grid} to be a {@code Grid} allocated and indexed for the texture
+     * space size required for our {@code uSteps} by {@code vSteps} column.
+     * <p>
+     * Now we loop with the index {@code j} covering all of the v coordinates, and the inner loop with
+     * the index {@code i} covering all of the u coordinates. We calculate the current {@code angle}
+     * of the column we are to use to locate our vertex by dividing 2*pi by {@code uSteps} and
+     * multiplying this by the index {@code i} (the inner loop goes around the column). Then we
+     * calculate the {@code x} coordinate of the vertex to be the {@code radius} times the cosine of
+     * {@code angle}, the {@code y} coordinate of the vertex to be the {@code height} of the column
+     * times the index {@code j} divided by the quantity {@code vSteps} minus 0.5 (the outer loop
+     * goes from the bottom of the tower to the top). We calculate the {@code z} coordinate of the
+     * vertex to be the {@code radius} times the sine of {@code angle}. The texture coordinate {@code u}
+     * is -4.0 time the {@code i} index divided by {@code uSteps} (the 2 dimensional texture wraps
+     * around the tower), and the texture coordinate {@code v} is -4.0 time the {@code j} index
+     * divided by {@code vSteps} (the 2 dimensional texture runs up and down the tower).
+     * <p>
+     * Now comes the fun part where we calculate the weights of our two palette matrices. {@code w0}
+     * (the weight of palette matrix 0) is assigned the value of the index {@code j} divided by the
+     * number of {@code vSteps} (it runs from a weight of 0 at the bottom of the tower (no effect),
+     * to 1.0 at the top of the tower (maximum effect), and {@code w1} is just {@code 1-w0} (it runs
+     * from a weight of 1.0 at the bottom of the tower (maximum effect) to a weight of 0 at the top
+     * of the tower (no effect). The last statement of our double loop calls the method {@code grid.set}
+     * to store in the space reserved for the index {@code (i,j)} the location of the vertex (x,y,z),
+     * its texture coordinate assignment (u,v), the weights of the two palette matrices {@code w0}
+     * and {@code w1} and the indices of these matrices 0 and 1.
+     * <p>
+     * When our loops have finished building our tower {@code Grid grid} we call the method
+     * {@code grid.createBufferObjects} to load the information contained in its {@code mVertexBuffer}
+     * and {@code mIndexBuffer} into the openGL buffer object data store.
+     * <p>
+     * And finally we return {@code grid} to our caller (the {@code onSurfaceCreated} method, which
+     * stores it in {@code Grid mGrid}).
+     *
+     * @param gl the GL interface.
+     * @return A {@code Grid} ready to be drawn, with (x,y,z) vertex coordinates, (u,v) texture
+     * coordinates, weights and indices of the two palette matrices used all loaded into the openGL
+     * vertex buffer.
+     */
     private Grid generateWeightedGrid(GL gl) {
         final int uSteps = 20;
         final int vSteps = 20;
