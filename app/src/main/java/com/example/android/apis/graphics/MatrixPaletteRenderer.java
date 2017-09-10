@@ -51,25 +51,32 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
      */
     private Context mContext;
     /**
-     *
+     * {@code Grid} containing our column vertices. It is created and configured by the method
+     * {@code generateWeightedGrid} with all the data needed for drawing by the method {@code draw}
+     * loaded into GPU vertex buffer objects.
      */
     private Grid mGrid;
+    /**
+     * Texture name that we use for the texture we use for GL_TEXTURE_2D, it is created and uploaded
+     * to the GPU in the method {@code onSurfaceCreated} from the raw resource robot.png
+     */
     private int mTextureID;
 
     /**
-     * A grid is a topologically rectangular array of vertices.
-     * <p>
-     * This grid class is customized for the vertex data required for this
-     * example.
-     * <p>
-     * The vertex and index data are held in VBO objects because on most
-     * GPUs VBO objects are the fastest way of rendering static vertex
-     * and index data.
+     * A grid is a topologically rectangular array of vertices. This grid class is customized for
+     * the vertex data required for this example. The vertex and index data are held in VBO objects
+     * because on most GPUs VBO objects are the fastest way of rendering static vertex and index
+     * data.
      */
-
     private static class Grid {
         // Size of vertex data elements in bytes:
+        /**
+         * Number of bytes in a {@code float} value
+         */
         final static int FLOAT_SIZE = 4;
+        /**
+         * Number of bytes in a {@code char} value
+         */
         final static int CHAR_SIZE = 2;
 
         // Vertex structure:
@@ -78,20 +85,52 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
         // float weight0, weight1;
         // byte palette0, palette1, pad0, pad1;
 
+        /**
+         * Total number of bytes for a complete vertex entry
+         */
         final static int VERTEX_SIZE = 8 * FLOAT_SIZE;
+        /**
+         * Offset to the texture coordinates of a vertex entry
+         */
         final static int VERTEX_TEXTURE_BUFFER_INDEX_OFFSET = 3;
+        /**
+         * Offset to the palette matrix weight part of the vertex entry
+         */
         final static int VERTEX_WEIGHT_BUFFER_INDEX_OFFSET = 5;
+        /**
+         * Offset to the palette matrix indices in a vertex entry
+         */
         final static int VERTEX_PALETTE_INDEX_OFFSET = 7 * FLOAT_SIZE;
 
+        /**
+         * Buffer object name for the GPU VBO we use for our vertex buffer
+         */
         private int mVertexBufferObjectId;
+        /**
+         * Buffer object name for the GPU VBO we use for our the GL_ELEMENT_ARRAY_BUFFER indices into
+         * our vertex buffer. Consists of the indices of the vertex buffer elements that are to be
+         * used for the GL_TRIANGLES triangles that will be drawn by {@code glDrawElements}.
+         */
         private int mElementBufferObjectId;
 
         // These buffers are used to hold the vertex and index data while
         // constructing the grid. Once createBufferObjects() is called
         // the buffers are nulled out to save memory.
 
+        /**
+         * {@code ByteBuffer} pointer for the vertex data, allows the vertex data buffer to be
+         * accessed as {@code byte} values when "putting" the {@code byte} values for the palette
+         * matrix indices.
+         */
         private ByteBuffer mVertexByteBuffer;
+        /**
+         * {@code FloatBuffer} pointer for the vertex data, allows the vertex data to be accessed as
+         * {@code float} values when "putting" {@code float} values into the vertex data buffer
+         */
         private FloatBuffer mVertexBuffer;
+        /**
+         * 
+         */
         private CharBuffer mIndexBuffer;
 
         private int mW;
