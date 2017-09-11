@@ -125,18 +125,52 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
         private ByteBuffer mVertexByteBuffer;
         /**
          * {@code FloatBuffer} pointer for the vertex data, allows the vertex data to be accessed as
-         * {@code float} values when "putting" {@code float} values into the vertex data buffer
+         * {@code float} values when "putting" {@code float} values into the vertex data buffer.
          */
         private FloatBuffer mVertexBuffer;
         /**
-         * 
+         * {@code CharBuffer} we build the indices of the GL_TRIANGLES triangles of our column,
+         * which we later upload to the GL_ELEMENT_ARRAY_BUFFER GPU VBO for drawing .
          */
         private CharBuffer mIndexBuffer;
 
+        /**
+         * Width of our {@code Grid} in number of vertices, set in our constructor.
+         */
         private int mW;
+        /**
+         * Height of our {@code Grid} in number of vertices, set in our constructor.
+         */
         private int mH;
+        /**
+         * Number of indices in our {@code Grid} and {@code char} values in {@code mIndexBuffer},
+         * used in the call to {@code glDrawElements}.
+         */
         private int mIndexCount;
 
+        /**
+         * Our constructor. First we check that our arguments are within the bounds dictated by the
+         * use of {@code char} size index entries, and throw an IllegalArgumentException if they are
+         * too large or negative. Then we initialize our field {@code mW} with our argument {@code w}
+         * (the width in vertices of our {@code Grid}) and {@code mH} with our argument {@code h}
+         * (the height in vertices of our {@code Grid}). We calculate the total number of vertices
+         * required {@code int size} to be {@code w*h}, and initialize {@code ByteBuffer mVertexByteBuffer}
+         * with a {@code ByteBuffer} on the native heap that is large enough to hold that many vertices
+         * and is in native byte order. We initialize {@code FloatBuffer mVertexBuffer} to be a
+         * {@code FloatBuffer} view of {@code ByteBuffer mVertexByteBuffer}.
+         *
+         * Next we calculate the number of index entries {@code mIndexCount} required to divide our
+         * {@code Grid} into triangles for {@code glDrawElements}. This is the quantity 6*(mW-1)(mH-1).
+         * We use this to allocate enough bytes on the native heap in native byte order, which we use
+         * to initialize our field {@code CharBuffer mIndexBuffer} by viewing that {@code ByteBuffer}
+         * as a {@code CharBuffer}.
+         *
+         * Our next step is to initialize the triangle list mesh that {@code mIndexBuffer} needs to
+         * divide our {@code Grid} into triangles.
+         *
+         * @param w width of our {@code Grid} in vertices
+         * @param h height of our {@code Grid} in vertices
+         */
         @SuppressWarnings("WeakerAccess")
         public Grid(int w, int h) {
             if (w < 0 || w >= 65536) {
