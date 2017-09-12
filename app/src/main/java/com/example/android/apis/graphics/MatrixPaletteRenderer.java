@@ -161,12 +161,31 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
          *
          * Next we calculate the number of index entries {@code mIndexCount} required to divide our
          * {@code Grid} into triangles for {@code glDrawElements}. This is the quantity 6*(mW-1)(mH-1).
-         * We use this to allocate enough bytes on the native heap in native byte order, which we use
-         * to initialize our field {@code CharBuffer mIndexBuffer} by viewing that {@code ByteBuffer}
-         * as a {@code CharBuffer}.
+         * This calculation is based on the fact that the number of quadrilaterals in each direction
+         * ({@code quadW} and {@code quadW}) is one less than the number of vertices in that direction,
+         * the total number of quadrilaterals is {@code quadW*quadH}, there are 2 triangles needed for
+         * each quadrilateral, and 3 vertices for each triangle hence 6 indices required for each of
+         * the quadrilaterals.
+         *
+         * We use this count of required indices to allocate enough bytes on the native heap in native
+         * byte order, which we use to initialize our field {@code CharBuffer mIndexBuffer} by viewing
+         * that {@code ByteBuffer} as a {@code CharBuffer}.
          *
          * Our next step is to initialize the triangle list mesh that {@code mIndexBuffer} needs to
-         * divide our {@code Grid} into triangles.
+         * divide our {@code Grid} into triangles. To do this we loop from the "bottom" quadrilateral
+         * to the "top" using the index {@code y}, and in an inner loop we loop from the "left" to the
+         * "right" using the index {@code x}. Then for each of these quadrilaterals we calculate the
+         * vertex index values for the quadrilateral:
+         * <ul>
+         *     <li>{@code a} (lower left corner) (y * mW + x)</li>
+         *     <li>{@code b} (lower right corner) (y * mW + x + 1)</li>
+         *     <li>{@code c} (upper left corner) ((y + 1) * mW + x)</li>
+         *     <li>{@code d} (upper right corner) ((y + 1) * mW + x + 1)</li>
+         * </ul>
+         * We now use these 4 index values to define the two triangles required to produce the current
+         * quadrilateral: (a, c, b) lower left to upper left to lower right (normal faces away from us),
+         * and (b, c, d) lower right to upper left to upper right (normal faces away from us). These
+         * six index values are added in order to our field {@code CharBuffer mIndexBuffer}.
          *
          * @param w width of our {@code Grid} in vertices
          * @param h height of our {@code Grid} in vertices
@@ -198,15 +217,24 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
             mIndexBuffer = ByteBuffer.allocateDirect(CHAR_SIZE * indexCount).order(ByteOrder.nativeOrder()).asCharBuffer();
 
             /*
-             * Initialize triangle list mesh.
+             * Initialize triangle list mesh. (Original comment got this diagram wrong (I think?))
+             * the author confused View coordinates which start at 0 at the top and and increase down
+             * the screen, with openGL coordinates which start with 0 at the bottom and increase up
+             * the screen.
              *
+             *     [w]-----[w + 1] ...
+             *      | \      |
+             *      |   \    |
+             *      |     \  |
              *     [0]-----[  1] ...
-             *      |    /   |
-             *      |   /    |
-             *      |  /     |
-             *     [w]-----[w+1] ...
-             *      |       |
+             *      |        |
              *
+             *     [c]------[d] ...
+             *      | \      |
+             *      |   \    |
+             *      |     \  |
+             *     [a]------[b] ...
+             *      |       |
              */
 
             {
@@ -231,6 +259,32 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
 
         }
 
+        /**
+         * Sets the values of a specific vertex in {@code FloatBuffer mVertexBuffer} (aka for byte
+         * values: {@code ByteBuffer mVertexByteBuffer}). After making sure our input values are
+         * within range and throwing IllegalArgumentException if they are not, we calculate the index
+         * value {@code index} for the vertex in question, which is {@code (mW*j + i)} (the number of
+         * vertices in a row times the row number (y index), plus the column number (x index). We use
+         * {@code index} to calculate the correct offset into {@code FloatBuffer mVertexBuffer} (which
+         * is {@code index*VERTEX_SIZE/FLOAT_SIZE}) and position {@code FloatBuffer mVertexBuffer}
+         * to this offset. We then {@code put} the seven float parameters {@code x, y, z, u, v, w0, w1}
+         * into {@code mVertexBuffer}. We then position {@code ByteBuffer mVertexByteBuffer} to the
+         * correct position for our two byte parameters {@code p0, p1} of our vertex (which is
+         * {@code index*VERTEX_SIZE + VERTEX_PALETTE_INDEX_OFFSET}) and put them into the buffer in
+         * order.
+         *
+         * @param i x index of the vertex to set
+         * @param j y index of the vertex to set
+         * @param x x coordinate of the vertex
+         * @param y y coordinate of the vertex
+         * @param z z coordinate of the vertex
+         * @param u x coordinate of the texture to use
+         * @param v y coordinate of the texture to use
+         * @param w0 weight of palette matrix 0
+         * @param w1 weight of palette matrix 1
+         * @param p0 index of palette matrix that w0 refers to (always 0)
+         * @param p1 index of palette matrix that w1 refers to (always 1)
+         */
         public void set(int i, int j,
                         float x, float y, float z,
                         float u, float v,
@@ -264,6 +318,12 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
             mVertexByteBuffer.put((byte) p1);
         }
 
+        /**
+         * Uploads our two data buffers {@code ByteBuffer mVertexByteBuffer} (our vertex buffer) and
+         * {@code CharBuffer mIndexBuffer} (our index buffer) to the proper openGL GPU VBOs.
+         *
+         * @param gl the GL interface.
+         */
         @SuppressWarnings("WeakerAccess")
         public void createBufferObjects(GL gl) {
             // Generate a the vertex and element buffer IDs
