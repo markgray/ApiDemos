@@ -158,7 +158,7 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
          * with a {@code ByteBuffer} on the native heap that is large enough to hold that many vertices
          * and is in native byte order. We initialize {@code FloatBuffer mVertexBuffer} to be a
          * {@code FloatBuffer} view of {@code ByteBuffer mVertexByteBuffer}.
-         *
+         * <p>
          * Next we calculate the number of index entries {@code mIndexCount} required to divide our
          * {@code Grid} into triangles for {@code glDrawElements}. This is the quantity 6*(mW-1)(mH-1).
          * This calculation is based on the fact that the number of quadrilaterals in each direction
@@ -166,21 +166,21 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
          * the total number of quadrilaterals is {@code quadW*quadH}, there are 2 triangles needed for
          * each quadrilateral, and 3 vertices for each triangle hence 6 indices required for each of
          * the quadrilaterals.
-         *
+         * <p>
          * We use this count of required indices to allocate enough bytes on the native heap in native
          * byte order, which we use to initialize our field {@code CharBuffer mIndexBuffer} by viewing
          * that {@code ByteBuffer} as a {@code CharBuffer}.
-         *
+         * <p>
          * Our next step is to initialize the triangle list mesh that {@code mIndexBuffer} needs to
          * divide our {@code Grid} into triangles. To do this we loop from the "bottom" quadrilateral
          * to the "top" using the index {@code y}, and in an inner loop we loop from the "left" to the
          * "right" using the index {@code x}. Then for each of these quadrilaterals we calculate the
          * vertex index values for the quadrilateral:
          * <ul>
-         *     <li>{@code a} (lower left corner) (y * mW + x)</li>
-         *     <li>{@code b} (lower right corner) (y * mW + x + 1)</li>
-         *     <li>{@code c} (upper left corner) ((y + 1) * mW + x)</li>
-         *     <li>{@code d} (upper right corner) ((y + 1) * mW + x + 1)</li>
+         * <li>{@code a} (lower left corner) (y * mW + x)</li>
+         * <li>{@code b} (lower right corner) (y * mW + x + 1)</li>
+         * <li>{@code c} (upper left corner) ((y + 1) * mW + x)</li>
+         * <li>{@code d} (upper right corner) ((y + 1) * mW + x + 1)</li>
          * </ul>
          * We now use these 4 index values to define the two triangles required to produce the current
          * quadrilateral: (a, c, b) lower left to upper left to lower right (normal faces away from us),
@@ -273,13 +273,13 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
          * {@code index*VERTEX_SIZE + VERTEX_PALETTE_INDEX_OFFSET}) and put them into the buffer in
          * order.
          *
-         * @param i x index of the vertex to set
-         * @param j y index of the vertex to set
-         * @param x x coordinate of the vertex
-         * @param y y coordinate of the vertex
-         * @param z z coordinate of the vertex
-         * @param u x coordinate of the texture to use
-         * @param v y coordinate of the texture to use
+         * @param i  x index of the vertex to set
+         * @param j  y index of the vertex to set
+         * @param x  x coordinate of the vertex
+         * @param y  y coordinate of the vertex
+         * @param z  z coordinate of the vertex
+         * @param u  x coordinate of the texture to use
+         * @param v  y coordinate of the texture to use
          * @param w0 weight of palette matrix 0
          * @param w1 weight of palette matrix 1
          * @param p0 index of palette matrix that w0 refers to (always 0)
@@ -320,7 +320,27 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
 
         /**
          * Uploads our two data buffers {@code ByteBuffer mVertexByteBuffer} (our vertex buffer) and
-         * {@code CharBuffer mIndexBuffer} (our index buffer) to the proper openGL GPU VBOs.
+         * {@code CharBuffer mIndexBuffer} (our index buffer) to the proper openGL GPU VBOs. First
+         * we allocate 2 ints for {@code int[] vboIds}, cast our argument {@code GL gl} to set
+         * {@code GL11 gl11}, and use {@code gl11} to generate 2 buffer object names in {@code vboIds}.
+         * We initialize our fields {@code int mVertexBufferObjectId} and {@code int mElementBufferObjectId}
+         * with these to buffer object names.
+         * <p>
+         * We bind {@code mVertexBufferObjectId} to the target GL_ARRAY_BUFFER (The GL_ARRAY_BUFFER
+         * target for buffer objects represents the intent to use that buffer object for vertex
+         * attribute data), then we rewind {@code mVertexByteBuffer} and then we create and initialize
+         * the GL_ARRAY_BUFFER buffer object's data store using {@code mVertexByteBuffer}, giving
+         * openGL the hint GL_STATIC_DRAW (The user will be writing data to the buffer, but the user
+         * will not read it, and The user will set the data once).
+         * <p>
+         * We bind {@code mElementBufferObjectId} to the target GL_ELEMENT_ARRAY_BUFFER (the
+         * GL_ELEMENT_ARRAY_BUFFER contains the indices of each element in the GL_ARRAY_BUFFER buffer),
+         * then we rewind {@code mIndexBuffer} and create and initialize the GL_ELEMENT_ARRAY_BUFFER
+         * buffer object's data store using {@code mIndexBuffer}, giving openGL the hint GL_STATIC_DRAW
+         * (as above).
+         * <p>
+         * In order to save memory we now null out {@code mVertexBuffer}, {@code mVertexByteBuffer},
+         * and {@code mIndexBuffer} so their storage can be garbage collected.
          *
          * @param gl the GL interface.
          */
@@ -348,6 +368,12 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
             mIndexBuffer = null;
         }
 
+        /**
+         * Called from {@code onDrawFrame} issue the commands for the openGL GPU to draw our VBOs to
+         * the {@code GLSurfaceView}.
+         *
+         * @param gl the GL interface.
+         */
         public void draw(GL10 gl) {
             GL11 gl11 = (GL11) gl;
             GL11Ext gl11Ext = (GL11Ext) gl;
