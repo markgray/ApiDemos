@@ -369,8 +369,38 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
         }
 
         /**
-         * Called from {@code onDrawFrame} issue the commands for the openGL GPU to draw our VBOs to
-         * the {@code GLSurfaceView}.
+         * Called from {@code onDrawFrame} to issue the commands for the openGL GPU to draw our VBOs
+         * to the {@code GLSurfaceView}. First we cast our parameter {@code GL gl} to {@code GL11 gl11}
+         * and {@code GL11Ext gl11Ext}. We enable the client side capability GL_VERTEX_ARRAY (the vertex
+         * array is enabled for writing and used during rendering), and bind our buffer object
+         * {@code mVertexBufferObjectId} to the target GL_ARRAY_BUFFER (registers our intent to use
+         * that buffer object for vertex attribute data). We next specify the location and data format
+         * of our array of vertex coordinates to use when rendering to have 3 coordinates per vertex,
+         * to be in GL_FLOAT data type, have a stride of VERTEX_SIZE (32), and initial pointer of 0.
+         * We then specify the location and data format of an array of texture coordinates to use when
+         * rendering to have 2 coordinates per array element, to be in GL_FLOAT data type, have a stride
+         * of VERTEX_SIZE (32), and have an initial pointer of VERTEX_TEXTURE_BUFFER_INDEX_OFFSET*FLOAT_SIZE
+         * (3*4=12).
+         * <p>
+         * We enable the client side capability GL_MATRIX_INDEX_ARRAY_OES (the palette matrix index
+         * array is enabled for writing and used for rendering), and the client side capability
+         * GL_WEIGHT_ARRAY_OES (the palette matrix weight array is enabled for writing and used for
+         * rendering). Then we specify the palette matrix weight array pointer to have 2 entries, of
+         * type GL_FLOAT, with a stride of VERTEX_SIZE (32), and an initial pointer of the quantity
+         * VERTEX_WEIGHT_BUFFER_INDEX_OFFSET*FLOAT_SIZE (5*4=20). We specify the palette matrix index
+         * pointer to have 2 entries, of type GL_UNSIGNED_BYTE, with a stride of VERTEX_SIZE (32),
+         * and an initial pointer of VERTEX_PALETTE_INDEX_OFFSET (28). These two are used to describe
+         * the weights and matrix indices used to blend corresponding matrices for a given vertex.
+         * <p>
+         * Now we bind our buffer name {@code mElementBufferObjectId} to the GL_ELEMENT_ARRAY_BUFFER
+         * (the GL_ELEMENT_ARRAY_BUFFER contains the indices of each element in the GL_ARRAY_BUFFER
+         * buffer), and we call the method {@code glDrawElements} to render {@code mIndexCount}
+         * GL_TRIANGLES primitives, with values of our indices being of the type GL_UNSIGNED_SHORT,
+         * and an initial pointer of 0.
+         * <p>
+         * Having done our drawing, we now disable the client side capability GL_VERTEX_ARRAY,
+         * GL_MATRIX_INDEX_ARRAY_OES, and GL_WEIGHT_ARRAY_OES. Then reset our binding of GL_ARRAY_BUFFER
+         * and GL_ELEMENT_ARRAY_BUFFER to 0.
          *
          * @param gl the GL interface.
          */
@@ -392,6 +422,7 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
 
             gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, mElementBufferObjectId);
             gl11.glDrawElements(GL10.GL_TRIANGLES, mIndexCount, GL10.GL_UNSIGNED_SHORT, 0);
+
             gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
             gl.glDisableClientState(GL11Ext.GL_MATRIX_INDEX_ARRAY_OES);
             gl.glDisableClientState(GL11Ext.GL_WEIGHT_ARRAY_OES);
@@ -400,6 +431,12 @@ public class MatrixPaletteRenderer implements GLSurfaceView.Renderer {
         }
     }
 
+    /**
+     * Our constructor, we simply save our parameter in our field {@code Context mContext}.
+     *
+     * @param context {@code Context} to use to retrieve resources, this when called from the
+     *                {@code onCreate} method of the {@code MatrixPaletteActivity} {@code Activity}.
+     */
     @SuppressWarnings("WeakerAccess")
     public MatrixPaletteRenderer(Context context) {
         mContext = context;

@@ -1170,6 +1170,8 @@ Graphics
    OpenGL ES 2.0
     Graphics/OpenGL ES/OpenGL ES 2.0       all
         .graphics.GLES20Activity
+        .graphics.GLES20TriangleRenderer
+        .graphics.TriangleRenderer
             This sample shows how to check for OpenGL ES 2.0 support at runtime, and then
             use either OpenGL ES 1.0 or OpenGL ES 2.0, as appropriate. Since even froyo 
             uses 2.0 this is not all that important it seems. Does show a simple example
