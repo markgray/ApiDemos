@@ -78,7 +78,65 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
 
     /**
      * Source code for the GL_VERTEX_SHADER part of our shader program {@code mProgram} (shader that
-     * is intended to run on the programmable vertex processor).
+     * is intended to run on the programmable vertex processor). The statements meanings:
+     * <ul>
+     *     <li>
+     *         uniform mat4 uMVPMatrix; # A {@code uniform} is a global openGL Shading Language variable
+     *         declared with the "uniform" storage qualifier. These act as parameters that the user of a
+     *         shader program can pass to that program. They are stored in a program object. Uniforms
+     *         are so named because they do not change from one execution of a shader program to the next
+     *         within a particular rendering call. This makes them unlike shader stage inputs and outputs,
+     *         which are often different for each invocation of a program stage. A {@code mat4} is a
+     *         4x4 matrix, and {@code uMVPMatrix} is the name of the uniform variable which is located
+     *         using the method {@code glGetUniformLocation}, its location assigned to the field
+     *         {@code muMVPMatrixHandle} and changed using the method {@code glUniformMatrix4fv} in our
+     *         {@code onDrawFrame} method. It is used to feed the transformation matrix {@code mMVPMatrix}
+     *         which rotates the triangle a little bit every frame.
+     *     </li>
+     *     <li>
+     *         attribute vec4 aPosition; # An {@code attribute} is used to feed data from the vertex
+     *         array object, with the index into that object for the vertices being fed it set by the
+     *         method {@code glVertexAttribPointer}, a {@code vec4} is a 4-component float vector,
+     *         {@code aPosition} is the name of the attribute, and its location is located and assigned
+     *         to the field {@code maPositionHandle} using the method {@code glGetAttribLocation}. It
+     *         is used to feed the (x,y,z) coordinates to the shader program.
+     *     </li>
+     *     <li>
+     *         attribute vec2 aTextureCoord; # Like {@code aPosition} but a 2-component float vector,
+     *         with the location assigned to the field {@code maTextureHandle}. It is used to feed
+     *         the (u,v) texture coordinates to the shader program.
+     *     </li>
+     *     <li>
+     *         varying vec2 vTextureCoord; # A {@code varying} variable provides an interface between
+     *         Vertex and Fragment Shader. Vertex Shaders compute values per vertex and fragment shaders
+     *         compute values per fragment. If you define a varying variable in a vertex shader, its
+     *         value will be interpolated (perspective-correct) over the primitive being rendered and
+     *         you can access the interpolated value in the fragment shader. We use it simply to pass
+     *         the value of {@code aTextureCoord} for this vertex to the fragment shader.
+     *     </li>
+     *     <li>
+     *         void main() { # Each shader's entry point is at its {@code main} function where we
+     *         process any input variables and output the results in its output variables.
+     *     </li>
+     *     <li>
+     *         gl_Position = uMVPMatrix * aPosition; # {@code gl_Position} is a built-in variable for
+     *         the clip-space output position of the current vertex, and is intended for writing the
+     *         homogeneous vertex position. It can be written at any time during vertex shader execution.
+     *         This value will be used by primitive assembly, clipping, culling, and other fixed
+     *         functionality operations, if present, that operate on primitives after vertex processing
+     *         has occurred. Its value is undefined after the vertex processing stage if the vertex
+     *         shader executable does not write gl_Position. We calculate it by multiplying the (x,y,z)
+     *         coordinates of the vertex fed us in {@code aPosition} by the transformation matrix
+     *         {@code uMVPMatrix} which rotates the vertex to the current position.
+     *     </li>
+     *     <li>
+     *         vTextureCoord = aTextureCoord; # We merely pass on the (u,v) texture coordinates of this
+     *         vertex fed us in {@code aTextureCoord} to the fragment shader using {@code vTextureCoord}.
+     *     </li>
+     *     <li>
+     *         } # That's all folks!
+     *     </li>
+     * </ul>
      */
     private final String mVertexShader =
             "uniform mat4 uMVPMatrix;\n" +
@@ -92,7 +150,41 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
 
     /**
      * Source code for the GL_FRAGMENT_SHADER part of our shader program {@code mProgram} (shader that
-     * is intended to run on the programmable fragment processor).
+     * is intended to run on the programmable fragment processor). The statements meanings:
+     * <ul>
+     *     <li>
+     *         precision mediump float; # Specifies the use of medium precision for {@code float} calculations.
+     *     </li>
+     *     <li>
+     *         varying vec2 vTextureCoord; # Storage for the vertex shader to use to pass us the (u,v) texture
+     *         coordinates for the vertex.
+     *     </li>
+     *     <li>
+     *         uniform sampler2D sTexture; # A {@code uniform} is a global openGL Shading Language variable
+     *         declared with the "uniform" storage qualifier. These act as parameters that the user of a
+     *         shader program can pass to that program. They are stored in a program object. Uniforms
+     *         are so named because they do not change from one execution of a shader program to the next
+     *         within a particular rendering call. This makes them unlike shader stage inputs and outputs,
+     *         which are often different for each invocation of a program stage. A {@code sampler2D} is
+     *         a floating point sampler for a 2 dimensional texture. The only place where you can use a
+     *         sampler is in one of the openGL Shader Language standard library's texture lookup functions.
+     *         These functions access the texture referred to by the sampler. They take a texture coordinate
+     *         as parameters. The name {@code sTexture} is never used by the java program, so the sampler2D
+     *         simply accesses the texture bound to the GL_TEXTURE_2D of the default texture unit GL_TEXTURE0.
+     *     </li>
+     *     <li>
+     *         void main() { # As in the vertex shader program
+     *     </li>
+     *     <li>
+     *         gl_FragColor = texture2D(sTexture, vTextureCoord); # {@code gl_FragColor} is a built-in output
+     *         variable for setting the {@code vec4} fragment color. {@code texture2D} looks up the color
+     *         for the coordinates given by {@code vTextureCoord} using the sampler {@code sTexture} (which
+     *         just our texture we bound to GL_TEXTURE_2D for the default texture unit GL_TEXTURE0.
+     *     </li>
+     *     <li>
+     *         } # That's all folks!
+     *     </li>
+     * </ul>
      */
     private final String mFragmentShader =
             "precision mediump float;\n" +
@@ -103,7 +195,7 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
                     "}\n";
 
     /**
-     * 
+     *
      */
     private float[] mMVPMatrix = new float[16];
     private float[] mProjMatrix = new float[16];
