@@ -90,8 +90,8 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
      *         4x4 matrix, and {@code uMVPMatrix} is the name of the uniform variable which is located
      *         using the method {@code glGetUniformLocation}, its location assigned to the field
      *         {@code muMVPMatrixHandle} and changed using the method {@code glUniformMatrix4fv} in our
-     *         {@code onDrawFrame} method. It is used to feed the transformation matrix {@code mMVPMatrix}
-     *         which rotates the triangle a little bit every frame.
+     *         {@code onDrawFrame} method. It is used to feed the Model View Projection matrix
+     *         {@code mMVPMatrix} which rotates the triangle a little bit every frame.
      *     </li>
      *     <li>
      *         attribute vec4 aPosition; # An {@code attribute} is used to feed data from the vertex
@@ -126,7 +126,7 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
      *         functionality operations, if present, that operate on primitives after vertex processing
      *         has occurred. Its value is undefined after the vertex processing stage if the vertex
      *         shader executable does not write gl_Position. We calculate it by multiplying the (x,y,z)
-     *         coordinates of the vertex fed us in {@code aPosition} by the transformation matrix
+     *         coordinates of the vertex fed us in {@code aPosition} by the Model View Projection matrix
      *         {@code uMVPMatrix} which rotates the vertex to the current position.
      *     </li>
      *     <li>
@@ -195,14 +195,46 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
                     "}\n";
 
     /**
-     *
+     * Model View Projection Matrix is the multiplication of the Projection Matrix times the View
+     * matrix times the Model Matrix, and transforms a vertex from model coordinates to Homogeneous
+     * coordinates. We pass this matrix to the vertex shader using {@code uniform mat4 uMVPMatrix}
+     * which we locate using the method {@code glGetUniformLocation} (saving the location in our
+     * variable {@code muMVPMatrixHandle}) and set using the method {@code glUniformMatrix4fv}.
      */
     private float[] mMVPMatrix = new float[16];
-    private float[] mProjMatrix = new float[16];
+    /**
+     * Model matrix, translates model coordinates to world coordinates. We set it to a rotation matrix
+     * for the current angle of rotation using the method {@code setRotateM}. It is used to calculate
+     * our Model View Projection Matrix {@code mMVPMatrix} (along with our view matrix {@code mVMatrix}
+     * and projection matrix {@code mProjMatrix}). It is set every frame in our method {@code onDrawFrame}
+     * to an angle calculated from the system time since boot.
+     */
     private float[] mMMatrix = new float[16];
+    /**
+     * View matrix, translates world coordinates to camera coordinates. We set it using the method
+     * {@code setLookAtM} to have an (x,y,z) eye point coordinate of (0,0,-5), an (x,y,z) center at
+     * (0,0,0), and an "up vector" of (0,1,0). It is set once in our method {@code onSurfaceCreated}.
+     */
     private float[] mVMatrix = new float[16];
+    /**
+     * Projection matrix, translates camera coordinates to Homogeneous Space (perspective is included).
+     * We set it using the method {@code frustumM} to have  (mProjMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
+     * a left clipping plane of the negative of the aspect ration, a right clipping plane of the
+     * aspect ration, bottom clipping plane of -1, top clipping plane of 1, near clipping plane of 3,
+     * and a far clipping plane of 7. It is set once in our method {@code onSurfaceChanged}.
+     */
+    private float[] mProjMatrix = new float[16];
 
+    /**
+     * Compiled and linked Program object which contains an executable that will run its GL_VERTEX_SHADER
+     * shader object on the vertex processor and run its GL_FRAGMENT_SHADER object on the fragment processor.
+     * Its code comes from {@code String mVertexShader} and {@code String mFragmentShader}, and it is
+     * compiled and linked by our method {@code createProgram} using GLES20 utility methods.
+     */
     private int mProgram;
+    /**
+     * 
+     */
     private int mTextureID;
     private int muMVPMatrixHandle;
     private int maPositionHandle;
