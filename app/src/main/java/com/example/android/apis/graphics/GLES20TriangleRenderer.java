@@ -300,7 +300,7 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
      * texture is bound, the bound texture is used. In effect, the texture targets become aliases
      * for the textures currently bound to them, and the texture name zero refers to the default
      * textures that were bound to them at initialization).
-     *
+     * <p>
      * We position {@code mTriangleVertices} to the offset to the location of the (x,y,z) coordinates
      * TRIANGLE_VERTICES_DATA_POS_OFFSET (0), and then use the method {@code glVertexAttribPointer}
      * to initialize the vertex shader program's {@code attribute vec4 aPosition} (whose location we
@@ -309,7 +309,7 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
      * a stride of TRIANGLE_VERTICES_DATA_STRIDE_BYTES (20), and draws its data from our field
      * {@code FloatBuffer mTriangleVertices}. We then call our method {@code checkGlError} which will
      * throw a RuntimeException if any openGL error occurred. TODO: rephrase this garbage
-     *
+     * <p>
      * Next we position {@code mTriangleVertices} to the offset to the location of the (u,v) texture
      * coordinates TRIANGLE_VERTICES_DATA_UV_OFFSET (3), enable the vertex attribute array given by
      * the handle {@code maPositionHandle} using the method {@code glEnableVertexAttribArray} (If
@@ -317,31 +317,31 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
      * rendering when calls are made to vertex array commands such as glDrawArrays or glDrawElements).
      * And again we call our method {@code checkGlError} which will throw a RuntimeException if any
      * openGL error occurred.
-     *
+     * <p>
      * We now use the method {@code glVertexAttribPointer} to initialize the vertex shader program's
      * {@code attribute vec2 aTextureCoord} (whose location we have stored in {@code maTextureHandle})
      * by defining its array of generic vertex attribute data. This array has 2 components (u,v), is
      * of type GL_FLOAT, does not need to be normalized, has a stride of TRIANGLE_VERTICES_DATA_STRIDE_BYTES
      * (20), and draws its data from our field {@code FloatBuffer mTriangleVertices}. We then call
      * our method {@code checkGlError} which will throw a RuntimeException if any openGL error occurred.
-     *
+     * <p>
      * We enable the vertex attribute array given by the handle {@code maTextureHandle} using the
      * method {@code glEnableVertexAttribArray} (as above for {@code maPositionHandle}), and call
      * our method {@code checkGlError} which will throw a RuntimeException if any openGL error
      * occurred.
-     *
+     * <p>
      * We fetch the milliseconds since boot modulo 4000 to initialize {@code long time} and use it to
      * calculate {@code float angle} (an angle in degrees which goes from 0 to 360 in those 4000
      * milliseconds and repeats). We set our model matrix {@code mMMatrix} to a rotation matrix of
      * {@code angle} around the z axis, set our model view projection matrix {@code mMVPMatrix} to
      * the view matrix {@code mVMatrix} times {@code mMMatrix} and then set {@code mMVPMatrix} to
      * the projection matrix {@code mProjMatrix} times that value of {@code mMVPMatrix}.
-     *
+     * <p>
      * We next use the method {@code glUniformMatrix4fv} to specify the value of the uniform variable
      * {@code uniform mat4 uMVPMatrix} for the current program object whose location we have stored
      * in {@code muMVPMatrixHandle} specifying that 1 matrix is to be modified, no need to transpose,
      * the values are to come from {@code mMVPMatrix}, with an offset of 0.
-     *
+     * <p>
      * We now use the method {@code glDrawArrays} to request that GL_TRIANGLES be drawn starting from
      * vertex 0, with 3 indices to be rendered, and call our method {@code checkGlError} which will
      * throw a RuntimeException if any openGL error occurred.
@@ -391,7 +391,7 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
      * Called when the surface changed size. Called after the surface is created and whenever the
      * OpenGL ES surface size changes. Typically you will set your viewport here. If your camera is
      * fixed then you could also set your projection matrix here.
-     *
+     * <p>
      * We set our viewport to have the lower left corner at (0,0), a width of {@code width}, and
      * a height of {@code height}. We calculate the aspect ration {@code float ratio} to be the value
      * {@code width/height}, and then use the method {@code frustumM} to define the projection matrix
@@ -400,8 +400,8 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
      * plane at 3, and the far clipping plane at 7.
      *
      * @param glUnused The GL interface, but we don't use it
-     * @param width width of the new surface
-     * @param height height of the new surface
+     * @param width    width of the new surface
+     * @param height   height of the new surface
      */
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
@@ -420,29 +420,48 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
      * to create resources that need to be created when the rendering starts, and that need to be
      * recreated when the EGL context is lost. Textures are an example of a resource that you might
      * want to create here.
-     *
+     * <p>
      * First we call our method {@code createProgram} to compile and link our two shader programs:
      * the vertex shader {@code mVertexShader} and the fragment shader {@code mFragmentShader}, saving
      * the handle to the program object it has created in our field {@code int mProgram}. A zero return
      * indicates it failed to create it, so we just return.
-     *
+     * <p>
      * We initialize our field {@code maPositionHandle} by locating the {@code attribute vec4 aPosition}
      * within the program object {@code mProgram} using the method {@code glGetAttribLocation}, and
      * throw a RuntimeException if we failed to locate it.
-     *
+     * <p>
      * We initialize our field {@code maTextureHandle} by locating the {@code attribute vec2 aTextureCoord}
      * within the program object {@code mProgram} using the method {@code glGetAttribLocation}, and
      * throw a RuntimeException if we failed to locate it.
-     *
+     * <p>
      * We initialize our field {@code muMVPMatrixHandle} by locating the {@code uniform mat4 uMVPMatrix}
      * within the program object {@code mProgram} using the method {@code glGetUniformLocation}, and
      * throw a RuntimeException if we failed to locate it.
-     *
+     * <p>
      * Now we create our texture. We use {@code glGenTextures} to generate a texture name which we
-     * save to our field {@code mTextureID}. We bind it to the target GL_TEXTURE_2D. 
+     * save to our field {@code mTextureID}. We bind it to the target GL_TEXTURE_2D. Then we proceed
+     * to configure GL_TEXTURE_2D, setting its texture parameter GL_TEXTURE_MIN_FILTER to GL_NEAREST
+     * (the texture minifying function is used whenever the pixel being textured maps to an area
+     * greater than one texture element, GL_NEAREST Returns the value of the texture element that is
+     * nearest (in Manhattan distance) to the center of the pixel being textured), and its texture
+     * parameter GL_TEXTURE_MAG_FILTER to GL_LINEAR (The texture magnification function is used when
+     * the pixel being textured maps to an area less than or equal to one texture element, GL_LINEAR
+     * Returns the weighted average of the four texture elements that are closest to the center of
+     * the pixel being textured). We set the texture parameters GL_TEXTURE_WRAP_S, and GL_TEXTURE_WRAP_T
+     * both to GL_REPEAT (causes the integer part of the coordinate to be ignored; the GL uses only
+     * the fractional part, thereby creating a repeating pattern).
+     * <p>
+     * Next we open {@code InputStream is} to read the raw resource robot.png, declare {@code Bitmap bitmap}
+     * and wrapped in a try block intended to catch IOException we decode {@code is} into {@code bitmap}.
+     * We then use the method {@code texImage2D} to read {@code bitmap} into GL_TEXTURE_2D, and recycle
+     * the {@code Bitmap bitmap}.
+     * <p>
+     * Finally we initialize our view matrix {@code mVMatrix} with a viewing transformation which has
+     * the eye point (x,y,z) coordinates of (0,0,-5), the center of the view at (0,0,0), and the up
+     * vector of (0,1,0).
      *
      * @param glUnused The GL interface, but we don't use it
-     * @param config the EGLConfig of the created surface. UNUSED
+     * @param config   the EGLConfig of the created surface. UNUSED
      */
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
@@ -506,6 +525,22 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
         Matrix.setLookAtM(mVMatrix, 0, 0, 0, -5, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
     }
 
+    /**
+     * Compiles shader source code into a shader object. First we call {@code glCreateShader} to
+     * create an empty shader of type {@code shaderType} and save the {@code int} which we can use
+     * to reference it in {@code int shader}. If {@code shader} is non-zero we call the method
+     * {@code glShaderSource} to replace the source code in the shader object with the source code
+     * contained in our parameter {@code String source}. We then call {@code glCompileShader} to
+     * compile the source code strings that have been stored in the shader object {@code shader}.
+     * We allocate 1 int for {@code int[] compiled}, then call {@code glGetShaderiv} to retrieve the
+     * compile status of {@code shader} into {@code compiled}. A zero returned indicates the compile
+     * failed so we log it, delete {@code shader} and set it to 0. In any case we return the value
+     * of {@code shader} to the caller.
+     *
+     * @param shaderType type of shader, either GL_VERTEX_SHADER or GL_FRAGMENT_SHADER
+     * @param source     string containing source code of shader
+     * @return compiled shader object
+     */
     private int loadShader(int shaderType, String source) {
         int shader = GLES20.glCreateShader(shaderType);
         if (shader != 0) {
@@ -523,6 +558,37 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
         return shader;
     }
 
+    /**
+     * Compiles and links the shader source code passed it into a program which can be referenced
+     * using the int it returns. First we call our method {@code loadShader} to compile our parameter
+     * {@code String vertexSource} into a vertex shader whose reference number we save to the variable
+     * {@code int vertexShader}. If the result was 0, we return 0 to the caller, otherwise we call our
+     * method {@code loadShader} to compile our parameter {@code String fragmentSource} into a fragment
+     * shader whose reference number we save to the variable {@code int pixelShader}. If the result
+     * was 0, we return 0 to the caller.
+     * <p>
+     * We create an empty program object by calling {@code glCreateProgram} saving the reference int
+     * returned in {@code int program}. If the result was non-zero, we call {@code glAttachShader} to
+     * attach the shader object {@code vertexShader} to the program object {@code program}. We call
+     * our method {@code checkGlError} to throw a RuntimeException if an error occurred. We call
+     * {@code glAttachShader} to attach the shader object {@code pixelShader} to the program object
+     * {@code program}. We call our method {@code checkGlError} to throw a RuntimeException if an
+     * error occurred.
+     * <p>
+     * We next call {@code glLinkProgram} to link the program object specified by {@code program}
+     * (A shader object of type GL_VERTEX_SHADER attached to {@code program} is used to create an
+     * executable that will run on the programmable vertex processor. A shader object of type
+     * GL_FRAGMENT_SHADER attached to {@code program} is used to create an executable that will run
+     * on the programmable fragment processor).
+     * <p>
+     * Next we call {@code glGetProgramiv} to retrieve the link status into {@code int[] linkStatus},
+     * and if the result is not GL_TRUE we log the error, delete {@code program} and set it to 0.
+     * In either case we return the value of {@code program} to the caller.
+     *
+     * @param vertexSource   source code string for the vertex shader program
+     * @param fragmentSource source code string for the fragment shader program
+     * @return an int which can be used to access the compiled and linked program object
+     */
     private int createProgram(String vertexSource, String fragmentSource) {
         int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexSource);
         if (vertexShader == 0) {
@@ -553,6 +619,12 @@ class GLES20TriangleRenderer implements GLSurfaceView.Renderer {
         return program;
     }
 
+    /**
+     * Fetches the next error in the error queue, and if it is not GL_NO_ERROR, logs the error and
+     * throws a RuntimeException.
+     *
+     * @param op string indicating which operation is checking for an error
+     */
     private void checkGlError(String op) {
         int error;
         //noinspection LoopStatementThatDoesntLoop

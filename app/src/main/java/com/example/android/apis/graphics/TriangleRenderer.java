@@ -41,12 +41,86 @@ import com.example.android.apis.R;
  */
 @SuppressWarnings("WeakerAccess")
 public class TriangleRenderer implements GLSurfaceView.Renderer {
+    /**
+     * {@code Context} passed to our constructor, we use it to access resources, "this" when called
+     * from the {@code onCreate} method the the activity {@code GLES20Activity}.
+     */
+    private Context mContext;
+    /**
+     * Our {@code Triangle} instance. We use it only to ask it to {@code draw} itself.
+     */
+    private Triangle mTriangle;
+    /**
+     * Texture name for the texture we use. It is bound to {@code GL_TEXTURE_2D}, configured and
+     * loaded from the raw resource robot.png in our method {@code onSurfaceCreated}.
+     */
+    private int mTextureID;
 
+    /**
+     * Our constructor, we save our parameter {@code Context context} in our field {@code Context mContext}
+     * and initialize our field {@code Triangle mTriangle} with a new instance of {@code Triangle}.
+     *
+     * @param context {@code Context} to use to access resources, "this" when called from the
+     *                {@code onCreate} method of the activity {@code GLES20Activity}.
+     */
     public TriangleRenderer(Context context) {
         mContext = context;
         mTriangle = new Triangle();
     }
 
+    /**
+     * Called when the surface is created or recreated. Called when the rendering thread starts and
+     * whenever the EGL context is lost. The EGL context will typically be lost when the Android
+     * device awakes after going to sleep.
+     * <p>
+     * First we disable the server side capability GL_DITHER (color components and indices will not
+     * be dithered before they are written to the color buffer), then we specify the implementation
+     * specific hint GL_PERSPECTIVE_CORRECTION_HINT to GL_FASTEST (the quality of color, texture
+     * coordinate, and fog coordinate interpolation should use the fastest method, probably a simple
+     * linear interpolation of colors and/or texture coordinates). We set the clear color to gray,
+     * set the shade model to GL_SMOOTH (causes the computed colors of vertices to be interpolated as
+     * the primitive is rasterized, typically assigning different colors to each resulting pixel
+     * fragment), enable the server side capability GL_DEPTH_TEST (each Fragment's output depth value
+     * will be tested against the depth of the sample being written to. If the test fails, the fragment
+     * is discarded. If the test passes, the depth buffer will be updated with the new fragment's output
+     * depth), and enable the server side capability GL_TEXTURE_2D (If enabled and no fragment shader
+     * is active, two-dimensional texturing is performed).
+     * <p>
+     * Next we create our texture. we call {@code glGenTextures} to generate a texture name which we
+     * store in our field {@code int mTextureID}. We bind {@code int mTextureID} to the target
+     * GL_TEXTURE_2D (While a texture is bound, GL operations on the target to which it is bound
+     * affect the bound texture, and queries of the target to which it is bound return state from
+     * the bound texture. If texture mapping is active on the target to which a texture is bound,
+     * the bound texture is used. In effect, the texture targets become aliases for the textures
+     * currently bound to them, and the texture name zero refers to the default textures that were
+     * bound to them at initialization).
+     * <p>
+     * We now proceed to configure our texture. We use {@code glTexParameterf} to set the texture
+     * parameter GL_TEXTURE_MIN_FILTER to GL_NEAREST (The texture minifying function is used whenever
+     * the pixel being textured maps to an area greater than one texture element. GL_NEAREST Returns
+     * the value of the texture element that is nearest (in Manhattan distance) to the center of the
+     * pixel being textured). We set the texture parameter GL_TEXTURE_MAG_FILTER to GL_LINEAR (The
+     * texture magnification function is used when the pixel being textured maps to an area less than
+     * or equal to one texture element. GL_LINEAR Returns the weighted average of the four texture
+     * elements that are closest to the center of the pixel being textured). We set the texture
+     * parameters GL_TEXTURE_WRAP_S, and GL_TEXTURE_WRAP_T to GL_CLAMP_TO_EDGE (causes texture
+     * coordinates to be clamped to the range [1/(2N), 1-1/(2N)] where N is the size of the texture
+     * in the direction of clamping ie. the color of the edge colors will be repeated when the
+     * drawing reaches the edge of the texture, rather than repeating the texture).
+     * <p>
+     * We next set the GL_TEXTURE_ENV_MODE texture environment parameter of the target texture
+     * environment GL_TEXTURE_ENV to GL_REPLACE (the texture color will replace the color already
+     * present).
+     * <p>
+     * We open {@code InputStream is} to read our raw resource file robot.png, allocate
+     * {@code Bitmap bitmap} and wrapped in a try we decode {@code is} into {@code bitmap}. We then
+     * use {@code GLUtils.texImage2D} use {@code bitmap} as the image for the target GL_TEXTURE_2D.
+     * Then we recycle {@code bitmap}.
+     *
+     * @param gl     the GL interface.
+     * @param config the EGLConfig of the created surface.
+     */
+    @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         /*
          * By default, OpenGL enables features that improve quality
@@ -101,6 +175,13 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
         bitmap.recycle();
     }
 
+    /**
+     * Called to draw the current frame.
+     *
+     * @param gl the GL interface. Use <code>instanceof</code> to
+     *           test if the interface supports GL11 or higher interfaces.
+     */
+    @Override
     public void onDrawFrame(GL10 gl) {
         /*
          * By default, OpenGL enables features that improve quality
@@ -147,6 +228,7 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
         mTriangle.draw(gl);
     }
 
+    @Override
     public void onSurfaceChanged(GL10 gl, int w, int h) {
         gl.glViewport(0, 0, w, h);
 
@@ -162,14 +244,10 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
         gl.glFrustumf(-ratio, ratio, -1, 1, 3, 7);
 
     }
-
-    private Context mContext;
-    private Triangle mTriangle;
-    private int mTextureID;
 }
 
 /**
- * Draws a triangle, used both by {@code TriangleRenderer} an {@code FrameBufferObjectActivity}.
+ * Draws a triangle, used both by {@code TriangleRenderer} and {@code FrameBufferObjectActivity}.
  */
 @SuppressWarnings("WeakerAccess")
 class Triangle {
