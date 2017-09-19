@@ -22,8 +22,29 @@ import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
+/**
+ * Shows how to add text to a GLSurfaceView using OpenGL labels. OpenGL labels are implemented by
+ * creating a Bitmap, drawing all the labels into the Bitmap, converting the Bitmap into an Alpha
+ * texture, and drawing portions of the texture using glDrawTexiOES. The benefits of this approach
+ * are that the labels are drawn using the high quality anti-aliased font rasterizer, full character
+ * set support, and all the text labels are stored on a single texture, which makes it faster to use.
+ * The drawbacks are that you can only have as many labels as will fit onto one texture, and you have
+ * to recreate the whole texture if any label text changes. Characters are too small on lollipop,
+ * okay on froyo.
+ */
 public class SpriteTextActivity extends Activity {
+    /**
+     * Our {@code GLSurfaceView}, created in our {@code onCreate} method.
+     */
+    private GLSurfaceView mGLSurfaceView;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we initialize our field {@code GLSurfaceView mGLSurfaceView} with a new
+     * instance of {@code GLSurfaceView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +68,4 @@ public class SpriteTextActivity extends Activity {
         super.onResume();
         mGLSurfaceView.onResume();
     }
-
-    private GLSurfaceView mGLSurfaceView;
 }

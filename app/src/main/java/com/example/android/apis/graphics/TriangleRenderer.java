@@ -176,7 +176,36 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
     }
 
     /**
-     * Called to draw the current frame.
+     * Called to draw the current frame. First we disable the server side capability GL_DITHER (Do not
+     * dither color components or indices before they are written to the color buffer). Then we set
+     * the GL_TEXTURE_ENV_MODE texture environment parameter for the texture environment GL_TEXTURE_ENV
+     * to GL_MODULATE (color from the texture image will be merged with the existing color on the
+     * surface of the polygon by multiplying the color components together). We next clear both the
+     * color buffer and the depth buffer.
+     * <p>
+     * We set the matrix mode to GL_MODELVIEW (subsequent matrix operations will apply to the model
+     * view matrix stack), and load it with the identify matrix. We define a viewing transformation
+     * with the eye at (0,0,-5), the center at (0,0,0), and an up vector of (0,1,0).
+     * <p>
+     * We enable the client side capability GL_VERTEX_ARRAY (the vertex array is enabled for writing
+     * and used during rendering), and the client side capability GL_TEXTURE_COORD_ARRAY (the texture
+     * coordinate array is enabled for writing and used during rendering). We select GL_TEXTURE0 to
+     * be the active texture unit (selects which texture unit subsequent texture state calls will
+     * affect), and bind our texture name {@code mTextureID} to the texture target GL_TEXTURE_2D
+     * (While a texture is bound, GL operations on the target to which it is bound affect the bound
+     * texture, and queries of the target to which it is bound return state from the bound texture.
+     * If texture mapping is active on the target to which a texture is bound, the bound texture is
+     * used. In effect, the texture targets become aliases for the textures currently bound to them,
+     * and the texture name zero refers to the default textures that were bound to them at initialization).
+     * <p>
+     * We set both the texture parameters GL_TEXTURE_WRAP_S and GL_TEXTURE_WRAP_T of GL_TEXTURE_2D
+     * to GL_REPEAT (causes the integer part of the texture coordinate to be ignored; the GL uses
+     * only the fractional part, thereby creating a repeating pattern).
+     * <p>
+     * We next compute an {@code float angle} based on the current system time since boot modulo 4000
+     * which creates an angle which goes from 0 to 360 degrees every 4 seconds, and we use it to
+     * rotate our model matrix around the z axis. We then instruct our field {@code Triangle mTriangle}
+     * to draw itself.
      *
      * @param gl the GL interface. Use <code>instanceof</code> to
      *           test if the interface supports GL11 or higher interfaces.
@@ -190,8 +219,7 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
          */
         gl.glDisable(GL10.GL_DITHER);
 
-        gl.glTexEnvx(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
-                GL10.GL_MODULATE);
+        gl.glTexEnvx(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
 
         /*
          * Usually, the first thing one might want to do is to clear
@@ -215,10 +243,8 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
 
         gl.glActiveTexture(GL10.GL_TEXTURE0);
         gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID);
-        gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
-                GL10.GL_REPEAT);
-        gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
-                GL10.GL_REPEAT);
+        gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
+        gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
 
         long time = SystemClock.uptimeMillis() % 4000L;
         float angle = 0.090f * ((int) time);
@@ -228,6 +254,20 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
         mTriangle.draw(gl);
     }
 
+    /**
+     * Called when the surface changed size. Called after the surface is created and whenever the
+     * OpenGL ES surface size changes. We set the view port to have its lower left hand corner at
+     * (0,0) and to have a width of {@code w} and a height of {@code h}. We calculate the aspect
+     * ratio {@code float ratio} to be {@code w/h}, set the matrix mode to GL_PROJECTION (subsequent
+     * matrix operations will apply to the projection matrix stack), load it with the identity matrix,
+     * then set its left clipping plane to {@code -ratio}, its right clipping plane to {@code ratio}.
+     * its bottom clipping plane to -1, its top clipping plane to 1, its near clipping plane to 3,
+     * and its far clipping plane to 7.
+     *
+     * @param gl the GL interface.
+     * @param w  width of new surface
+     * @param h  height of new surface
+     */
     @Override
     public void onSurfaceChanged(GL10 gl, int w, int h) {
         gl.glViewport(0, 0, w, h);
@@ -242,7 +282,6 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
         gl.glMatrixMode(GL10.GL_PROJECTION);
         gl.glLoadIdentity();
         gl.glFrustumf(-ratio, ratio, -1, 1, 3, 7);
-
     }
 }
 
@@ -266,7 +305,7 @@ class Triangle {
      */
     private FloatBuffer mTexBuffer;
     /**
-     * Indices of the triangle (0,1,2) in counter clockwise order so that the normal points up
+     * Indices of the triangle (0,1,2) in counter clockwise order so that the normal points towards us
      */
     private ShortBuffer mIndexBuffer;
 

@@ -25,7 +25,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 /**
  * A 2D rectangular mesh. Can be drawn textured or untextured.
- *
  */
 @SuppressWarnings("unused")
 class Grid {

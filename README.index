@@ -1180,6 +1180,13 @@ Graphics
    Sprite Text
     Graphics/OpenGL ES/Sprite Text         all
         .graphics.spritetext.SpriteTextActivity
+        .graphics.spritetext.LabelMaker
+        .graphics.spritetext.MatrixGrabber
+        .graphics.spritetext.MatrixStack
+        .graphics.spritetext.MatrixTrackingGL
+        .graphics.spritetext.NumericSprite
+        .graphics.spritetext.Projector
+        .graphics.spritetext.SpriteTextRenderer
             Shows how to add text to a GLSurfaceView using OpenGL labels. OpenGL labels 
             are implemented by creating a Bitmap, drawing all the labels into the Bitmap,
             converting the Bitmap into an Alpha texture, and drawing portions of the
