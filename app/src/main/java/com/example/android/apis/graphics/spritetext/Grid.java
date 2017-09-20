@@ -24,10 +24,18 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * A 2D rectangular mesh. Can be drawn textured or untextured.
+ * A 2D rectangular mesh. Can be drawn textured or untextured. UNUSED!
  */
 @SuppressWarnings("unused")
 class Grid {
+
+    private FloatBuffer mVertexBuffer;
+    private FloatBuffer mTexCoordBuffer;
+    private CharBuffer mIndexBuffer;
+
+    private int mW;
+    private int mH;
+    private int mIndexCount;
 
     @SuppressWarnings("unused")
     public Grid(int w, int h) {
@@ -127,16 +135,7 @@ class Grid {
             gl.glDisable(GL10.GL_TEXTURE_2D);
         }
 
-        gl.glDrawElements(GL10.GL_TRIANGLES, mIndexCount,
-                GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
+        gl.glDrawElements(GL10.GL_TRIANGLES, mIndexCount, GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
     }
-
-    private FloatBuffer mVertexBuffer;
-    private FloatBuffer mTexCoordBuffer;
-    private CharBuffer mIndexBuffer;
-
-    private int mW;
-    private int mH;
-    private int mIndexCount;
 }

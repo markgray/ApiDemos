@@ -20,7 +20,15 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.graphics.Paint;
 
+@SuppressWarnings("WeakerAccess")
 public class NumericSprite {
+
+    private LabelMaker mLabelMaker;
+    private String mText;
+    private int[] mWidth = new int[10];
+    private int[] mLabelId = new int[10];
+    private final static String sStrike = "0123456789";
+
     public NumericSprite() {
         mText = "";
         mLabelMaker = null;
@@ -64,8 +72,7 @@ public class NumericSprite {
         mText = format(value);
     }
 
-    public void draw(GL10 gl, float x, float y,
-            float viewWidth, float viewHeight) {
+    public void draw(GL10 gl, float x, float y, float viewWidth, float viewHeight) {
         int length = mText.length();
         mLabelMaker.beginDrawing(gl, viewWidth, viewHeight);
         for(int i = 0; i < length; i++) {
@@ -90,10 +97,4 @@ public class NumericSprite {
     private String format(int value) {
         return Integer.toString(value);
     }
-
-    private LabelMaker mLabelMaker;
-    private String mText;
-    private int[] mWidth = new int[10];
-    private int[] mLabelId = new int[10];
-    private final static String sStrike = "0123456789";
 }

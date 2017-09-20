@@ -1196,7 +1196,7 @@ Graphics
             which makes it faster to use. The drawbacks are that you can only have as many
             labels as will fit onto one texture, and you have to recreate the whole 
             texture if any label text changes. Characters are too small on lollipop, okay
-            on froyo.
+            on froyo. TODO: Resize characters
 
    Textured Triangle
     Graphics/OpenGL ES/Textured Triangle   all

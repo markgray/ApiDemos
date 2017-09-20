@@ -41,7 +41,12 @@ public class SpriteTextActivity extends Activity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we initialize our field {@code GLSurfaceView mGLSurfaceView} with a new
-     * instance of {@code GLSurfaceView}.
+     * instance of {@code GLSurfaceView}. Next we set the {@code GLWrapper} of {@code mGLSurfaceView}
+     * to an anonymous class which returns a new instance of {@code MatrixTrackingGL} "wrapping" the
+     * GL it is passed when its {@code wrap} method is called ({@code MatrixTrackingGL} implements
+     * the various GL variants adding code to track changes to the GL matrices, and to retrieve their
+     * contents). Then we set the renderer of {@code mGLSurfaceView} to a new instance of
+     * {@code SpriteTextRenderer}, and set our content view to {@code mGLSurfaceView}.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
@@ -50,19 +55,40 @@ public class SpriteTextActivity extends Activity {
         super.onCreate(savedInstanceState);
         mGLSurfaceView = new GLSurfaceView(this);
         mGLSurfaceView.setGLWrapper(new GLSurfaceView.GLWrapper() {
+            /**
+             * Wraps a gl interface in another gl interface, in our case a new instance of
+             * {@code MatrixTrackingGL}.
+             *
+             * @param gl a GL interface that is to be wrapped.
+             * @return a new instance of {@code MatrixTrackingGL} that wraps the input argument.
+             */
+            @Override
             public GL wrap(GL gl) {
                 return new MatrixTrackingGL(gl);
-            }});
+            }
+        });
         mGLSurfaceView.setRenderer(new SpriteTextRenderer(this));
         setContentView(mGLSurfaceView);
     }
 
+    /**
+     * Called as part of the activity lifecycle when an activity is going into the background, but
+     * has not (yet) been killed. The counterpart to {@link #onResume}. First we call through to our
+     * super's implementation of {@code onPause}, then we call the {@code onPause} method of our
+     * field {@code GLSurfaceView mGLSurfaceView}.
+     */
     @Override
     protected void onPause() {
         super.onPause();
         mGLSurfaceView.onPause();
     }
 
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or {@link #onPause}, for
+     * your activity to start interacting with the user. First we call through to our super's
+     * implementation of {@code onResume}, then we call the {@code onResume} method of our
+     * field {@code GLSurfaceView mGLSurfaceView}.
+     */
     @Override
     protected void onResume() {
         super.onResume();

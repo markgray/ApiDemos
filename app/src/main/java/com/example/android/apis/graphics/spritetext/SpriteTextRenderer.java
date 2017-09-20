@@ -16,16 +16,6 @@
 
 package com.example.android.apis.graphics.spritetext;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,7 +28,55 @@ import android.util.Log;
 
 import com.example.android.apis.R;
 
-public class SpriteTextRenderer implements GLSurfaceView.Renderer{
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
+
+@SuppressWarnings("WeakerAccess")
+public class SpriteTextRenderer implements GLSurfaceView.Renderer {
+
+    /**
+     * Width of the {@code GLSurfaceView} we are rendering to, set using the {@code w} parameter
+     * passed to our method {@code onSurfaceChanged}.
+     */
+    private int mWidth;
+    /**
+     * Height of the {@code GLSurfaceView} we are rendering to, set using the {@code h} parameter
+     * passed to our method {@code onSurfaceChanged}.
+     */
+    private int mHeight;
+    /**
+     * {@code Context} to use for accessing resources, set to the parameter {@code Context context}
+     * passed to our constructor ("this" when called from the {@code onCreate} method of the activity
+     * {@code SpriteTextActivity}).
+     */
+    private Context mContext;
+    /**
+     * Rotating {@code Triangle} instance that we render.
+     */
+    private Triangle mTriangle;
+    private int mTextureID;
+    private int mFrames;
+    private int mMsPerFrame;
+    private final static int SAMPLE_PERIOD_FRAMES = 12;
+    private final static float SAMPLE_FACTOR = 1.0f / SAMPLE_PERIOD_FRAMES;
+    private long mStartTime;
+    private LabelMaker mLabels;
+    private Paint mLabelPaint;
+    private int mLabelA;
+    private int mLabelB;
+    private int mLabelC;
+    private int mLabelMsPF;
+    private Projector mProjector;
+    private NumericSprite mNumericSprite;
+    private float[] mScratch = new float[8];
+    private long mLastTime;
 
     public SpriteTextRenderer(Context context) {
         mContext = context;
@@ -50,6 +88,7 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer{
         mLabelPaint.setARGB(0xff, 0x00, 0x00, 0x00);
     }
 
+    @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         /*
          * By default, OpenGL enables features that improve quality
@@ -103,7 +142,7 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer{
         } finally {
             try {
                 is.close();
-            } catch(IOException e) {
+            } catch (IOException e) {
                 // Ignore.
             }
         }
@@ -132,6 +171,7 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer{
         mNumericSprite.initialize(gl, mLabelPaint);
     }
 
+    @Override
     public void onDrawFrame(GL10 gl) {
         /*
          * By default, OpenGL enables features that improve quality
@@ -238,6 +278,7 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer{
         mLabels.draw(gl, tx, ty, labelId);
     }
 
+    @Override
     public void onSurfaceChanged(GL10 gl, int w, int h) {
         mWidth = w;
         mHeight = h;
@@ -256,29 +297,9 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer{
         gl.glFrustumf(-ratio, ratio, -1, 1, 1, 10);
         mProjector.getCurrentProjection(gl);
     }
-
-    private int mWidth;
-    private int mHeight;
-    private Context mContext;
-    private Triangle mTriangle;
-    private int mTextureID;
-    private int mFrames;
-    private int mMsPerFrame;
-    private final static int SAMPLE_PERIOD_FRAMES = 12;
-    private final static float SAMPLE_FACTOR = 1.0f / SAMPLE_PERIOD_FRAMES;
-    private long mStartTime;
-    private LabelMaker mLabels;
-    private Paint mLabelPaint;
-    private int mLabelA;
-    private int mLabelB;
-    private int mLabelC;
-    private int mLabelMsPF;
-    private Projector mProjector;
-    private NumericSprite mNumericSprite;
-    private float[] mScratch = new float[8];
-    private long mLastTime;
 }
 
+@SuppressWarnings("WeakerAccess")
 class Triangle {
     public Triangle() {
 
@@ -287,7 +308,7 @@ class Triangle {
         // native heap where the garbage collector cannot
         // move them.
         //
-        // Buffers with multi-byte datatypes (e.g., short, int, float)
+        // Buffers with multi-byte data types (e.g., short, int, float)
         // must have their byte order set to native order
 
         ByteBuffer vbb = ByteBuffer.allocateDirect(VERTS * 3 * 4);
@@ -303,18 +324,18 @@ class Triangle {
         mIndexBuffer = ibb.asShortBuffer();
 
         for (int i = 0; i < VERTS; i++) {
-            for(int j = 0; j < 3; j++) {
-                mFVertexBuffer.put(sCoords[i*3+j]);
+            for (int j = 0; j < 3; j++) {
+                mFVertexBuffer.put(sCoords[i * 3 + j]);
             }
         }
 
         for (int i = 0; i < VERTS; i++) {
-            for(int j = 0; j < 2; j++) {
-                mTexBuffer.put(sCoords[i*3+j] * 2.0f + 0.5f);
+            for (int j = 0; j < 2; j++) {
+                mTexBuffer.put(sCoords[i * 3 + j] * 2.0f + 0.5f);
             }
         }
 
-        for(int i = 0; i < VERTS; i++) {
+        for (int i = 0; i < VERTS; i++) {
             mIndexBuffer.put((short) i);
         }
 
@@ -333,11 +354,11 @@ class Triangle {
     }
 
     public float getX(int vertex) {
-        return sCoords[3*vertex];
+        return sCoords[3 * vertex];
     }
 
     public float getY(int vertex) {
-        return sCoords[3*vertex+1];
+        return sCoords[3 * vertex + 1];
     }
 
     private final static int VERTS = 3;
@@ -345,11 +366,11 @@ class Triangle {
     private FloatBuffer mFVertexBuffer;
     private FloatBuffer mTexBuffer;
     private ShortBuffer mIndexBuffer;
-    // A unit-sided equalateral triangle centered on the origin.
+    // A unit-sided equilateral triangle centered on the origin.
     private final static float[] sCoords = {
             // X, Y, Z
             -0.5f, -0.25f, 0,
-             0.5f, -0.25f, 0,
-             0.0f,  0.559016994f, 0
+            0.5f, -0.25f, 0,
+            0.0f, 0.559016994f, 0
     };
 }
