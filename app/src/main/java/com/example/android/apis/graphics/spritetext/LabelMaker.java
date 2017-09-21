@@ -58,26 +58,83 @@ public class LabelMaker {
      * constructor.
      */
     private int mStrikeHeight;
+    /**
+     * true if we want a full color backing store (4444), otherwise we generate a grey L8 backing
+     * store. Set to the {@code boolean fullColor} parameter of our constructor, always true in our
+     * case.
+     */
     private boolean mFullColor;
+    /**
+     * {@code Bitmap} we create our labels in, and when done creating the labels we upload it as
+     * GL_TEXTURE_2D for drawing the labels (and then recycle it).
+     */
     private Bitmap mBitmap;
+    /**
+     * {@code Canvas} we use to draw into {@code Bitmap mBitmap}.
+     */
     private Canvas mCanvas;
+    /**
+     * We create this as a black paint, with a style of FILL but never actually use it.
+     */
     private Paint mClearPaint;
 
+    /**
+     * Texture name of our label texture.
+     */
     private int mTextureID;
 
     @SuppressWarnings("unused")
     private float mTexelWidth;  // Convert texel to U
     @SuppressWarnings("unused")
     private float mTexelHeight; // Convert texel to V
+    /**
+     * {@code u} (x) coordinate to use when adding next label to our texture.
+     */
     private int mU;
+    /**
+     * {@code v} (y) coordinate to use when adding next label to our texture.
+     */
     private int mV;
+    /**
+     * Height of the current line of labels.
+     */
     private int mLineHeight;
+    /**
+     * List of the {@code Label} objects in our texture. A {@code Label} instance contains information
+     * about the location and size of the label's text in the texture, as well as the cropping
+     * parameters to use to draw only that {@code Label}.
+     */
     private ArrayList<Label> mLabels = new ArrayList<>();
 
+    /**
+     * Constant used to set our field {@code mState} to indicate that we are just starting the
+     * creation of our {@code Label} texture and there are no resources that need to be freed if
+     * our {@code GLSurface} is destroyed.
+     */
     private static final int STATE_NEW = 0;
+    /**
+     * Constant used to set our field {@code mState} to indicate that our {@code initialize} method
+     * has been called, and we are ready to begin adding labels. We have acquired a texture name
+     * for our field {@code mTextureID}, bound it to GL_TEXTURE_2D and configured it so there is
+     * a texture which needs to be freed if our {@code GLSurface} is destroyed.
+     */
     private static final int STATE_INITIALIZED = 1;
+    /**
+     * Constant used to set our field {@code mState} to indicate that our {@code beginAdding} method
+     * has been called, and we are ready to add a label (or an additional label). {@code initialize}
+     * was called before us, and we have allocated a {@code Bitmap} for our field {@code Bitmap mBitmap}
+     * so there is some needed if our {@code GLSurface} is destroyed.
+     */
     private static final int STATE_ADDING = 2;
+    /**
+     * Constant used to set our field {@code mState} to indicate that our {@code beginDrawing} method
+     * has been called and we are in the process of drawing the various {@code Label} objects located
+     * in our texture.
+     */
     private static final int STATE_DRAWING = 3;
+    /**
+     * State that our {@code LabelMaker} instance is in, one of the above constants.
+     */
     private int mState;
 
     /**
@@ -118,18 +175,13 @@ public class LabelMaker {
         gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID);
 
         // Use Nearest for performance.
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
-                GL10.GL_NEAREST);
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
-                GL10.GL_NEAREST);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);
 
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
-                GL10.GL_CLAMP_TO_EDGE);
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
-                GL10.GL_CLAMP_TO_EDGE);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
 
-        gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
-                GL10.GL_REPLACE);
+        gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE);
     }
 
     /**
@@ -149,7 +201,7 @@ public class LabelMaker {
     /**
      * Call before adding labels. Clears out any existing labels.
      *
-     * @param gl the gl interface
+     * @param gl the gl interface UNUSED
      */
     @SuppressWarnings("UnusedParameters")
     public void beginAdding(GL10 gl) {
