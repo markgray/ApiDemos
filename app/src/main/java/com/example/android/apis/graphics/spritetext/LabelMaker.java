@@ -298,14 +298,45 @@ public class LabelMaker {
     }
 
     /**
-     * Call to add a label.
+     * Call to add a label. First we call our method {@code checkState} to make sure we are in the
+     * state STATE_ADDING (our method {@code beginAdding} has been called). Next we determine if
+     * we have a {@code background} to draw {@code background != null}) saving the result to
+     * {@code boolean drawBackground}, and determine if we have text to draw ({@code text != null}
+     * and {@code textPaint != null}) saving the result to {@code boolean drawText}.
      *
-     * @param gl        the gl interface UNUSED
-     * @param text      the text of the label
-     * @param textPaint the paint of the label
+     * We allocate a new instance for {@code Rect padding} and if we have a background that needs to
+     * be drawn we fetch the padding insets for {@code background} to {@code padding}, set the input
+     * parameter {@code minWidth} to the max of {@code minWidth} and the minimum width of the drawable
+     * {@code background}, and set the input parameter {@code minHeight} to the max of {@code minHeight}
+     * and the minimum height of the drawable {@code background}.
+     *
+     * Next we set {@code int ascent}, {@code int descent} and {@code int measuredTextWidth} all to
+     * 0, and if we have text that needs drawing we set {@code int ascent} to the ceiling value of
+     * the highest ascent above the baseline for the current typeface and text size of the parameter
+     * {@code Paint textPaint}, set {@code int descent} to the ceiling value of the lowest descent
+     * below the baseline for the current typeface and text size of the parameter {@code Paint textPaint},
+     * and set {@code {@code measuredTextWidth}} to the ceiling value of the length of {@code text}.
+     *
+     * We now perform a bunch of boring calculations to determine where on the {@code Canvas mCanvas}
+     * we are to draw our background and/or text, and if we have a background we draw the background
+     * drawable at that position, and if we have text we draw the text at that position.
+     *
+     * Having done so, we update our field {@code mU} to point to the next u (x) coordinate we can
+     * use, {@code mV} to point to the next v (y) coordinate we can use, and {@code mLineHeight} to
+     * the (possibly new) height of our current line.
+     *
+     * Finally we add a new instance of {@code Label} to {@code ArrayList<Label> mLabels} with the
+     * information that will be needed to locate, crop and draw the label we just drew, and return
+     * the index of this {@code Label} object to the caller.
+     *
+     * @param gl         the gl interface UNUSED
+     * @param background background {@code Drawable} to use
+     * @param text       the text of the label
+     * @param textPaint  the paint of the label
      * @param minWidth   minimum width of label
      * @param minHeight  minimum height of label
-     * @return the id of the label, used to measure and draw the label
+     * @return index of the {@code Label} in {@code ArrayList<Label> mLabels}, the {@code Label}
+     * object will be used to locate, measure, crop and draw the label.
      */
     @SuppressWarnings("UnusedParameters")
     public int add(GL10 gl, Drawable background, String text, Paint textPaint, int minWidth, int minHeight) {
@@ -393,7 +424,11 @@ public class LabelMaker {
     }
 
     /**
-     * Call to end adding labels. Must be called before drawing starts.
+     * Call to end adding labels. Must be called before drawing starts. First we call our method
+     * {@code checkState} to verify that we are in the STATE_ADDING state, and if so transition back
+     * to the STATE_INITIALIZED state. Next we bind our texture name {@code mTextureID} to the
+     * GL_TEXTURE_2D target, upload our {@code Bitmap mBitmap} to the GPU, recycle our {@code mBitmap}
+     * and null our both {@code mBitmap} and {@code mCanvas} so they can be garbage collected.
      *
      * @param gl the gl interface
      */
@@ -408,7 +443,8 @@ public class LabelMaker {
     }
 
     /**
-     * Get the width in pixels of a given label.
+     * Get the width in pixels of a given label. Convenience getter for the {@code width} field of
+     * the {@code Label} at index value {@code labelID} in our {@code ArrayList<Label> mLabels}.
      *
      * @param labelID index of label
      * @return the width in pixels
@@ -418,7 +454,8 @@ public class LabelMaker {
     }
 
     /**
-     * Get the height in pixels of a given label.
+     * Get the height in pixels of a given label. Convenience getter for the {@code height} field of
+     * the {@code Label} at index value {@code labelID} in our {@code ArrayList<Label> mLabels}.
      *
      * @param labelID index of label
      * @return the height in pixels
@@ -428,9 +465,8 @@ public class LabelMaker {
     }
 
     /**
-     * Get the baseline of a given label. That's how many pixels from the top of
-     * the label to the text baseline. (This is equivalent to the negative of
-     * the label's paint's ascent.)
+     * Get the baseline of a given label. That's how many pixels from the top of the label to the
+     * text baseline. (This is equivalent to the negative of the label's paint's ascent.) UNUSED
      *
      * @param labelID index of label
      * @return the baseline in pixels.
@@ -441,7 +477,27 @@ public class LabelMaker {
     }
 
     /**
-     * Begin drawing labels. Sets the OpenGL state for rapid drawing.
+     * Begin drawing labels. Sets the OpenGL state for rapid drawing. First we call our method
+     * {@code checkState} to verify that we are in STATE_INITIALIZED state and if so to transition
+     * to STATE_DRAWING state. Next we bind our texture name {@code mTextureID} to the target
+     * GL_TEXTURE_2D, set the shade model to GL_FLAT and enable the server side capability GL_BLEND
+     * (blend the computed fragment color values with the values in the color buffers). We call the
+     * method {@code glBlendFunc} to set the source blending function to GL_SRC_ALPHA, and the
+     * destination blending function to GL_ONE_MINUS_SRC_ALPHA (modifies the incoming color by its
+     * associated alpha value and modifies the destination color by one minus the incoming alpha
+     * value. The sum of these two colors is then written back into the framebuffer.) We then call
+     * the method {@code glColor4x} to set the primitive’s opacity to 1.0 in GLfixed format.
+     *
+     * We set the current matrix to the projection matrix GL_PROJECTION, push the current projection
+     * matrix to its stack, load GL_PROJECTION with the identity matrix, and multiply it with the
+     * orthographic matrix that has the left clipping plane at 0, the right clipping plane at
+     * {@code viewWidth}, the bottom clipping plane at 0, the top clipping plane at {@code viewHeight},
+     * the near clipping plane at 0.0, and the far clipping plane at 1.0
+     *
+     * We then set the current matrix to the model view matrix GL_MODELVIEW, push the current model
+     * view matrix to its stack, load GL_MODELVIEW with the identity matrix, and multiply it by a
+     * translation matrix which moves both x and y coordinates by 0.375 in order to promote consistent
+     * rasterization.
      *
      * @param gl         the gl interface
      * @param viewWidth  view width
@@ -451,13 +507,16 @@ public class LabelMaker {
         checkState(STATE_INITIALIZED, STATE_DRAWING);
         gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID);
         gl.glShadeModel(GL10.GL_FLAT);
+
         gl.glEnable(GL10.GL_BLEND);
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
         gl.glColor4x(0x10000, 0x10000, 0x10000, 0x10000);
+
         gl.glMatrixMode(GL10.GL_PROJECTION);
         gl.glPushMatrix();
         gl.glLoadIdentity();
         gl.glOrthof(0.0f, viewWidth, 0.0f, viewHeight, 0.0f, 1.0f);
+
         gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glPushMatrix();
         gl.glLoadIdentity();
@@ -466,8 +525,8 @@ public class LabelMaker {
     }
 
     /**
-     * Draw a given label at a given x,y position, expressed in pixels, with the
-     * lower-left-hand-corner of the view being (0,0).
+     * Draw a given label at a given x,y position, expressed in pixels, with the lower-left-hand
+     * corner of the view being (0,0).
      *
      * @param gl      the gl interface
      * @param x       x coordinate to draw at
