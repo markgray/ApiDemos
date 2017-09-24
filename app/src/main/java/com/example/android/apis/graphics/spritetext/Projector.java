@@ -25,6 +25,16 @@ import javax.microedition.khronos.opengles.GL10;
  *
  */
 class Projector {
+
+    private MatrixGrabber mGrabber;
+    private boolean mMVPComputed;
+    private float[] mMVP;
+    private float[] mV;
+    private int mX;
+    private int mY;
+    private int mViewWidth;
+    private int mViewHeight;
+
     public Projector() {
         mMVP = new float[16];
         mV = new float[4];
@@ -72,13 +82,4 @@ class Projector {
         mGrabber.getCurrentModelView(gl);
         mMVPComputed = false;
     }
-
-    private MatrixGrabber mGrabber;
-    private boolean mMVPComputed;
-    private float[] mMVP;
-    private float[] mV;
-    private int mX;
-    private int mY;
-    private int mViewWidth;
-    private int mViewHeight;
 }

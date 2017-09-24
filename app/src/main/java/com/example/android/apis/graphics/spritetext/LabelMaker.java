@@ -303,28 +303,28 @@ public class LabelMaker {
      * we have a {@code background} to draw {@code background != null}) saving the result to
      * {@code boolean drawBackground}, and determine if we have text to draw ({@code text != null}
      * and {@code textPaint != null}) saving the result to {@code boolean drawText}.
-     *
+     * <p>
      * We allocate a new instance for {@code Rect padding} and if we have a background that needs to
      * be drawn we fetch the padding insets for {@code background} to {@code padding}, set the input
      * parameter {@code minWidth} to the max of {@code minWidth} and the minimum width of the drawable
      * {@code background}, and set the input parameter {@code minHeight} to the max of {@code minHeight}
      * and the minimum height of the drawable {@code background}.
-     *
+     * <p>
      * Next we set {@code int ascent}, {@code int descent} and {@code int measuredTextWidth} all to
      * 0, and if we have text that needs drawing we set {@code int ascent} to the ceiling value of
      * the highest ascent above the baseline for the current typeface and text size of the parameter
      * {@code Paint textPaint}, set {@code int descent} to the ceiling value of the lowest descent
      * below the baseline for the current typeface and text size of the parameter {@code Paint textPaint},
      * and set {@code {@code measuredTextWidth}} to the ceiling value of the length of {@code text}.
-     *
+     * <p>
      * We now perform a bunch of boring calculations to determine where on the {@code Canvas mCanvas}
      * we are to draw our background and/or text, and if we have a background we draw the background
      * drawable at that position, and if we have text we draw the text at that position.
-     *
+     * <p>
      * Having done so, we update our field {@code mU} to point to the next u (x) coordinate we can
      * use, {@code mV} to point to the next v (y) coordinate we can use, and {@code mLineHeight} to
      * the (possibly new) height of our current line.
-     *
+     * <p>
      * Finally we add a new instance of {@code Label} to {@code ArrayList<Label> mLabels} with the
      * information that will be needed to locate, crop and draw the label we just drew, and return
      * the index of this {@code Label} object to the caller.
@@ -487,13 +487,13 @@ public class LabelMaker {
      * associated alpha value and modifies the destination color by one minus the incoming alpha
      * value. The sum of these two colors is then written back into the framebuffer.) We then call
      * the method {@code glColor4x} to set the primitive’s opacity to 1.0 in GLfixed format.
-     *
+     * <p>
      * We set the current matrix to the projection matrix GL_PROJECTION, push the current projection
      * matrix to its stack, load GL_PROJECTION with the identity matrix, and multiply it with the
      * orthographic matrix that has the left clipping plane at 0, the right clipping plane at
      * {@code viewWidth}, the bottom clipping plane at 0, the top clipping plane at {@code viewHeight},
      * the near clipping plane at 0.0, and the far clipping plane at 1.0
-     *
+     * <p>
      * We then set the current matrix to the model view matrix GL_MODELVIEW, push the current model
      * view matrix to its stack, load GL_MODELVIEW with the identity matrix, and multiply it by a
      * translation matrix which moves both x and y coordinates by 0.375 in order to promote consistent
@@ -526,7 +526,13 @@ public class LabelMaker {
 
     /**
      * Draw a given label at a given x,y position, expressed in pixels, with the lower-left-hand
-     * corner of the view being (0,0).
+     * corner of the view being (0,0). First we call our method {@code checkState} to make sure we
+     * are in the STATE_DRAWING state. We fetch the {@code Label} object for the label we are to
+     * draw to {@code Label label}, enable the server side capability GL_TEXTURE_2D, and set the
+     * cropping rectangle of GL_TEXTURE_2D to the contents of the {@code label.mCrop} field. Then
+     * we call glDrawTexiOES to draw the cropped area of the texture at {@code (x,y,z)} using the
+     * width and height specified by the {@code label.width} field, and the {@code label.height}
+     * field.
      *
      * @param gl      the gl interface
      * @param x       x coordinate to draw at
@@ -542,7 +548,11 @@ public class LabelMaker {
     }
 
     /**
-     * Ends the drawing and restores the OpenGL state.
+     * Ends the drawing and restores the OpenGL state. First we call our method {@code checkState} to
+     * make sure we are in the STATE_DRAWING state and if so to transition to the STATE_INITIALIZED
+     * state. We disable the server side capability GL_BLEND, set the current matrix to the projection
+     * matrix GL_PROJECTION and pop the old matrix off of its stake, and then set the current matrix
+     * to the model view matrix GL_MODELVIEW and pop the old matrix off of its stake.
      *
      * @param gl the gl interface
      */
@@ -555,6 +565,13 @@ public class LabelMaker {
         gl.glPopMatrix();
     }
 
+    /**
+     * Throws an IllegalArgumentException if we are not currently in the state {@code oldState}, and
+     * if we are in that state transitions to {@code newState}.
+     *
+     * @param oldState state we need to be in to use the method we are called from
+     * @param newState state to transition to iff we were in {@code oldState}
+     */
     private void checkState(int oldState, int newState) {
         if (mState != oldState) {
             throw new IllegalArgumentException("Can't call this method now.");
@@ -562,13 +579,42 @@ public class LabelMaker {
         mState = newState;
     }
 
+    /**
+     * Class that contains the information needed to crop and draw a label contained in the current
+     * GL_TEXTURE_2D label texture.
+     */
     private static class Label {
 
+        /**
+         * width of the label in pixels
+         */
         public float width;
+        /**
+         * height of the label in pixels
+         */
         public float height;
+        /**
+         * Unused, but set to the ascent value of the font and font size of the paint used to draw
+         */
         public float baseline;
+        /**
+         * Defines the location and size of the label in the texture, it is used to crop the texture
+         * so that only this label is used for drawing.
+         */
         public int[] mCrop;
 
+        /**
+         * Our constructor. We simply initialize our fields using our input parameters.
+         *
+         * @param width    width of our label
+         * @param height   height of our label
+         * @param baseLine baseline of our label
+         * @param cropU    u coordinate of left side of label in texture
+         * @param cropV    v coordinate of top of texture
+         * @param cropW    width of label in texture
+         * @param cropH    height of the crop region, the negative value in our case specifies that the
+         *                 region lies below the coordinate (u,v) in the texture image.
+         */
         public Label(float width, float height, float baseLine, int cropU, int cropV, int cropW, int cropH) {
             this.width = width;
             this.height = height;
