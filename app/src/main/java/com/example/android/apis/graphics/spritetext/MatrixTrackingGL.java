@@ -38,26 +38,78 @@ import javax.microedition.khronos.opengles.GL11Ext;
  * Note: the actual matrix may differ from the retrieved matrix, due
  * to differences in the way the math is implemented by GLMatrixWrapper
  * as compared to the way the math is implemented by the OpenGL ES
- * driver.
+ * driver. TODO: comment every single method you lazy so and so.
  */
 @SuppressWarnings("WeakerAccess")
 class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
+    /**
+     * The {@code GL gl} interface passed to our constructor, cast to {@code GL10}.
+     */
     private GL10 mgl;
+    /**
+     * The {@code GL gl} interface passed to our constructor, cast to {@code GL10Ext}.
+     */
     private GL10Ext mgl10Ext;
+    /**
+     * The {@code GL gl} interface passed to our constructor, cast to {@code GL11}.
+     */
     private GL11 mgl11;
+    /**
+     * The {@code GL gl} interface passed to our constructor, cast to {@code GL11Ext}.
+     */
     private GL11Ext mgl11Ext;
+    /**
+     * Current matrix mode, initially GL10.GL_MODELVIEW set by our constructor, then set to the mode
+     * passed to the method {@code glMatrixMode} from then on.
+     */
     private int mMatrixMode;
+    /**
+     * Current matrix stack, set in {@code glMatrixMode} to point to the model view matrix stack
+     * {@code mModelView}, texture matrix stack {@code mTexture}, or projection matrix stack
+     * {@code mProjection}. Initially set to {@code mModelView} in our constructor.
+     */
     private MatrixStack mCurrent;
+    /**
+     * Model view matrix stack
+     */
     private MatrixStack mModelView;
+    /**
+     * Texture matrix stack
+     */
     private MatrixStack mTexture;
+    /**
+     * Projection matrix stack
+     */
     private MatrixStack mProjection;
 
+    /**
+     * Debugging flag, if set to true causes a call to our method {@code check} to verify that our
+     * current matrix is identical with the GPU current matrix. Otherwise {@code check} is not used.
+     */
     private final static boolean _check = false;
+    /**
+     * {@code ByteBuffer} used by our method {@code check} to read the current matrix from the GPU
+     */
     ByteBuffer mByteBuffer;
+    /**
+     * {@code FloatBuffer} view of {@code ByteBuffer mByteBuffer} to allow our method {@code check}
+     * to read the GPU matrix into temp storage for its comparison.
+     */
     FloatBuffer mFloatBuffer;
+    /**
+     * Temp storage for our current matrix (used only by {@code check}
+     */
     float[] mCheckA;
+    /**
+     * Temp storage for the GPU current matrix (used only by {@code check}
+     */
     float[] mCheckB;
 
+    /**
+     * Our constructor.
+     *
+     * @param gl the gl interface
+     */
     public MatrixTrackingGL(GL gl) {
         mgl = (GL10) gl;
         if (gl instanceof GL10Ext) {
@@ -150,8 +202,7 @@ class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
     }
 
     @Override
-    public void glColorMask(boolean red, boolean green, boolean blue,
-                            boolean alpha) {
+    public void glColorMask(boolean red, boolean green, boolean blue, boolean alpha) {
         mgl.glColorMask(red, green, blue, alpha);
     }
 
@@ -161,33 +212,30 @@ class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
     }
 
     @Override
-    public void glCompressedTexImage2D(int target, int level,
-                                       int internalformat, int width, int height, int border,
+    public void glCompressedTexImage2D(int target, int level, int internalformat,
+                                       int width, int height, int border,
                                        int imageSize, Buffer data) {
-        mgl.glCompressedTexImage2D(target, level, internalformat, width,
-                height, border, imageSize, data);
+        mgl.glCompressedTexImage2D(target, level, internalformat, width, height, border, imageSize, data);
     }
 
     @Override
-    public void glCompressedTexSubImage2D(int target, int level, int xoffset,
-                                          int yoffset, int width, int height, int format, int imageSize,
-                                          Buffer data) {
-        mgl.glCompressedTexSubImage2D(target, level, xoffset, yoffset, width,
-                height, format, imageSize, data);
+    public void glCompressedTexSubImage2D(int target, int level,
+                                          int xoffset, int yoffset,
+                                          int width, int height,
+                                          int format, int imageSize, Buffer data) {
+        mgl.glCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, imageSize, data);
     }
 
     @Override
     public void glCopyTexImage2D(int target, int level, int internalformat,
                                  int x, int y, int width, int height, int border) {
-        mgl.glCopyTexImage2D(target, level, internalformat, x, y, width,
-                height, border);
+        mgl.glCopyTexImage2D(target, level, internalformat, x, y, width, height, border);
     }
 
     @Override
     public void glCopyTexSubImage2D(int target, int level, int xoffset,
                                     int yoffset, int x, int y, int width, int height) {
-        mgl.glCopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width,
-                height);
+        mgl.glCopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
     }
 
     @Override
@@ -309,8 +357,7 @@ class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
     }
 
     @Override
-    public void glFrustumx(int left, int right, int bottom, int top, int near,
-                           int far) {
+    public void glFrustumx(int left, int right, int bottom, int top, int near, int far) {
         mCurrent.glFrustumx(left, right, bottom, top, near, far);
         mgl.glFrustumx(left, right, bottom, top, near, far);
         if (_check) check();
@@ -328,9 +375,7 @@ class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
 
     @Override
     public int glGetError() {
-        @SuppressWarnings("UnnecessaryLocalVariable")
-        int result = mgl.glGetError();
-        return result;
+        return mgl.glGetError();
     }
 
     @Override
@@ -345,9 +390,7 @@ class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
 
     @Override
     public String glGetString(int name) {
-        @SuppressWarnings("UnnecessaryLocalVariable")
-        String result = mgl.glGetString(name);
-        return result;
+        return mgl.glGetString(name);
     }
 
     @Override
@@ -552,8 +595,7 @@ class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
     }
 
     @Override
-    public void glMultiTexCoord4f(int target,
-                                  float s, float t, float r, float q) {
+    public void glMultiTexCoord4f(int target, float s, float t, float r, float q) {
         mgl.glMultiTexCoord4f(target, s, t, r, q);
     }
 
@@ -699,8 +741,7 @@ class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
     }
 
     @Override
-    public void glTexCoordPointer(int size, int type,
-                                  int stride, Buffer pointer) {
+    public void glTexCoordPointer(int size, int type, int stride, Buffer pointer) {
         mgl.glTexCoordPointer(size, type, stride, pointer);
     }
 
@@ -736,9 +777,10 @@ class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
 
     @Override
     public void glTexImage2D(int target, int level, int internalformat,
-                             int width, int height, int border, int format, int type,
-                             Buffer pixels) {
-        mgl.glTexImage2D(target, level, internalformat, width, height, border,
+                             int width, int height, int border,
+                             int format, int type, Buffer pixels) {
+        mgl.glTexImage2D(target, level, internalformat,
+                width, height, border,
                 format, type, pixels);
     }
 
@@ -763,11 +805,10 @@ class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
     }
 
     @Override
-    public void glTexSubImage2D(int target, int level, int xoffset,
-                                int yoffset, int width, int height, int format, int type,
-                                Buffer pixels) {
-        mgl.glTexSubImage2D(target, level, xoffset, yoffset, width, height,
-                format, type, pixels);
+    public void glTexSubImage2D(int target, int level,
+                                int xoffset, int yoffset, int width, int height,
+                                int format, int type, Buffer pixels) {
+        mgl.glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
     }
 
     @Override
@@ -785,8 +826,7 @@ class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
     }
 
     @Override
-    public void glVertexPointer(int size, int type,
-                                int stride, Buffer pointer) {
+    public void glVertexPointer(int size, int type, int stride, Buffer pointer) {
         mgl.glVertexPointer(size, type, stride, pointer);
     }
 
@@ -848,8 +888,7 @@ class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
     }
 
     @Override
-    public void glDrawTexsOES(short x, short y, short z,
-                              short width, short height) {
+    public void glDrawTexsOES(short x, short y, short z, short width, short height) {
         mgl11Ext.glDrawTexsOES(x, y, z, width, height);
     }
 
