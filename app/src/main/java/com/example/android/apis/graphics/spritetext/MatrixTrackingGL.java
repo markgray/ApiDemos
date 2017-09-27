@@ -106,7 +106,13 @@ class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
     float[] mCheckB;
 
     /**
-     * Our constructor.
+     * Our constructor. First we cast our parameter {@code GL gl} to {@code GL10 mgl}, if {@code gl}
+     * is an instance of {@code GL10Ext} we cast it to {@code GL10Ext mgl10Ext}, if {@code gl} is an
+     * instance of {@code G11} we cast it to {@code GL11 mgl11}, and if  if {@code gl} is an instance
+     * of {@code G11Ext} we cast it to {@code GL11Ext mgl11Ext}. Next we allocate storage for our
+     * three matrix stacks {@code MatrixStack mModelView}, {@code MatrixStack mProjection} and
+     * {@code MatrixStack mTexture}. We set {@code MatrixStack mCurrent} to point to {@code mModelView},
+     * and set our matrix mode {@code int mMatrixMode} to GL_MODELVIEW.
      *
      * @param gl the gl interface
      */

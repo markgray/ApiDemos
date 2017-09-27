@@ -208,11 +208,12 @@ public class LabelMaker {
     }
 
     /**
-     * Call when the surface has been destroyed NOT TRUE - it is called when it is necessary to update
-     * the label texture used by this instance of {@code LabelMaker}. To do this if it has already
-     * passed to a state where a texture name has been allocated by the hardware ({@code mState>STATE_NEW})
-     * we must delete our texture {@code int mTextureID} and move our state field {@code int mState}
-     * to the state STATE_NEW (ready to start building a new label texture).
+     * Called when the surface we were labeling has been destroyed and a new surface is being created
+     * so that the the label texture used by this instance of {@code LabelMaker} can be deleted. To
+     * do this if we have already passed to a state where a texture name has been allocated by the
+     * hardware ({@code mState>STATE_NEW}) we must delete our texture {@code int mTextureID} and
+     * move our state field {@code int mState} to the state STATE_NEW (ready to start building a new
+     * label texture).
      *
      * @param gl the gl interface
      */

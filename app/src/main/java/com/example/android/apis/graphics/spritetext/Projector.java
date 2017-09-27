@@ -22,8 +22,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 /**
  * A utility that projects
- *
  */
+@SuppressWarnings("WeakerAccess")
 class Projector {
 
     private MatrixGrabber mGrabber;
@@ -66,6 +66,7 @@ class Projector {
     /**
      * Get the current projection matrix. Has the side-effect of
      * setting current matrix mode to GL_PROJECTION
+     *
      * @param gl the gl interface
      */
     public void getCurrentProjection(GL10 gl) {
@@ -76,6 +77,7 @@ class Projector {
     /**
      * Get the current model view matrix. Has the side-effect of
      * setting current matrix mode to GL_MODELVIEW
+     *
      * @param gl the gl interface
      */
     public void getCurrentModelView(GL10 gl) {
