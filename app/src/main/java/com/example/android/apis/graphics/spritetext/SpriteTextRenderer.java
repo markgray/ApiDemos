@@ -38,6 +38,9 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+/**
+ * Renderer for the {@code GLSurfaceView} used for the demo.
+ */
 @SuppressWarnings("WeakerAccess")
 public class SpriteTextRenderer implements GLSurfaceView.Renderer {
 
