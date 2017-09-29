@@ -64,23 +64,88 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer {
      * Rotating {@code Triangle} instance that we render.
      */
     private Triangle mTriangle;
+    /**
+     * Texture name we use for our texture image robot.png
+     */
     private int mTextureID;
+    /**
+     * Frame counter we use to determine milliseconds per frame value (goes from 0 to SAMPLE_PERIOD_FRAMES)
+     */
     private int mFrames;
+    /**
+     * Current milliseconds per frame value, recalculated every SAMPLE_PERIOD_FRAMES frames
+     */
     private int mMsPerFrame;
+    /**
+     * Number of frames to draw before updating the value of {@code mMsPerFrame}
+     */
     private final static int SAMPLE_PERIOD_FRAMES = 12;
+    /**
+     * Factor to multiply elapsed time for drawing SAMPLE_PERIOD_FRAMES frames to calculate the
+     * value of {@code mMsPerFrame}
+     */
     private final static float SAMPLE_FACTOR = 1.0f / SAMPLE_PERIOD_FRAMES;
+    /**
+     * Start time for current counting of frames used to calculate the value of {@code mMsPerFrame}
+     */
     private long mStartTime;
+    /**
+     * {@code LabelMaker} containing labels for the three vertices of our triangle "A", "B", and "C",
+     * as well as the label "ms/f"
+     */
     private LabelMaker mLabels;
+    /**
+     * {@code Paint} instance we use for our labels as well as the labels that {@code NumericSprite}
+     * draws to display our frame millisecond per frame data.
+     */
     private Paint mLabelPaint;
+    /**
+     * {@code Label} index pointing to the {@code Label} "A" in {@code LabelMaker mLabels}
+     */
     private int mLabelA;
+    /**
+     * {@code Label} index pointing to the {@code Label} "B" in {@code LabelMaker mLabels}
+     */
     private int mLabelB;
+    /**
+     * {@code Label} index pointing to the {@code Label} "C" in {@code LabelMaker mLabels}
+     */
     private int mLabelC;
+    /**
+     * {@code Label} index pointing to the {@code Label} "ms/f" in {@code LabelMaker mLabels}
+     */
     private int mLabelMsPF;
+    /**
+     * {@code Projector} we use to "project" our vertex labels to the correct position on our rotating
+     * triangle.
+     */
     private Projector mProjector;
+    /**
+     * {@code NumericSprite} instance we use to draw the digit labels to display our {@code mMsPerFrame}
+     * (milliseconds per frame) data at the bottom of the {@code SurfaceView}.
+     */
     private NumericSprite mNumericSprite;
+    /**
+     * Scratch array we use in our call to {@code Projector.project} to calculate the correct location
+     * of our triangle vertex labels.
+     */
     private float[] mScratch = new float[8];
+    /**
+     * Start time of our current frame count which we use to calculate the value of {@code mMsPerFrame}
+     * (milliseconds per frame)
+     */
     private long mLastTime;
 
+    /**
+     * Our constructor. First we save our parameter {@code Context context} in our field
+     * {@code Context mContext}, then we initialize our fields {@code Triangle mTriangle},
+     * {@code Projector mProjector} and {@code Paint mLabelPaint} with new instances. We set
+     * the text size of {@code Paint mLabelPaint} to 32, set its antialias flag, and set its
+     * color to black.
+     *
+     * @param context {@code Context} to use to access resources, "this" when we are called from the
+     *                {@code onCreate} method of the activity {@code SpriteTextActivity}.
+     */
     public SpriteTextRenderer(Context context) {
         mContext = context;
         mTriangle = new Triangle();
@@ -91,6 +156,60 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer {
         mLabelPaint.setARGB(0xff, 0x00, 0x00, 0x00);
     }
 
+    /**
+     * Called when the surface is created or recreated. Called when the rendering thread starts and
+     * whenever the EGL context is lost. The EGL context will typically be lost when the Android
+     * device awakes after going to sleep. First we disable the server side capability GL_DITHER
+     * (color components and indices will not be dithered before they are written to the color buffer).
+     * <p>
+     * Next we specify the implementation specific hint GL_FASTEST for the GL_PERSPECTIVE_CORRECTION_HINT
+     * target (Indicates the quality of color, texture coordinate, and fog coordinate interpolation.
+     * GL_FASTEST will result in simple linear interpolation of colors and/or texture coordinates).
+     * <p>
+     * We set the clear color to gray, set the shade model to GL_SMOOTH (causes the computed colors
+     * of vertices to be interpolated as the primitive is rasterized, typically assigning different
+     * colors to each resulting pixel fragment), enable the server side capability GL_DEPTH_TEST
+     * (do depth comparisons and update the depth buffer), and the server side capability GL_TEXTURE_2D
+     * (If enabled and no fragment shader is active, two-dimensional texturing is performed).
+     * <p>
+     * Next we request that a texture name be generated, and we save the name in our field
+     * {@code mTextureID}. We then bind {@code mTextureID} to the target GL_TEXTURE_2D (GL_TEXTURE_2D
+     * becomes an alias for {@code mTextureID} which becomes a two dimensional texture. While a texture
+     * is bound, GL operations on the target to which it is bound affect the bound texture, and queries
+     * of the target to which it is bound return state from the bound texture).
+     * <p>
+     * We set the texture parameter GL_TEXTURE_MIN_FILTER of GL_TEXTURE_2D to GL_NEAREST (The texture
+     * minifying function is used whenever the pixel being textured maps to an area greater than one
+     * texture element. GL_NEAREST causes the value of the texture element that is nearest (in Manhattan
+     * distance) to the center of the pixel being textured to be used). We set the texture parameter
+     * GL_TEXTURE_MAG_FILTER of GL_TEXTURE_2D to GL_LINEAR (The texture magnification function is
+     * used when the pixel being textured maps to an area less than or equal to one texture element.
+     * GL_LINEAR causes the weighted average of the four texture elements that are closest to the
+     * center of the pixel being textured to be used).
+     * <p>
+     * We set the texture parameters GL_TEXTURE_WRAP_S and GL_TEXTURE_WRAP_T of GL_TEXTURE_2D both to
+     * GL_CLAMP_TO_EDGE (causes the color of the pixel at the edges of the texture to be used when
+     * the area being textured extends past the size of the texture). We set texture parameter
+     * GL_TEXTURE_ENV_MODE of the texture environment target GL_TEXTURE_ENV to GL_REPLACE (causes
+     * the colors of the texture to replace whatever colors were there before).
+     * <p>
+     * We open {@code InputStream is} to read the contents of our raw resource robot.png, declare
+     * {@code Bitmap bitmap}, then decode {@code is} into {@code bitmap}. We upload {@code bitmap}
+     * to the texture target GL_TEXTURE_2D and recycle {@code bitmap}.
+     * <p>
+     * If we already have a {@code LabelMaker mLabels} in use (our surface has been recreated), we
+     * surface has been recreated), We then instruct {@code mLabels} to begin adding labels and add the
+     * four labels "A", "B", "C", and "ms/f" and saving the index number returned in {@code mLabelA},
+     * {@code mLabelB}, {@code mLabelC}, and {@code mLabelMsPF} respectively. We then instruct
+     * {@code mLabels} to end the adding of labels.
+     * <p>
+     * Finally, if {@code NumericSprite mNumericSprite} is not null (our surface has been recreated),
+     * we instruct it to {@code shutdown}, otherwise we initialize {@code mNumericSprite} with a new
+     * instance of {@code NumericSprite}. Then we instruct {@code mNumericSprite} to initialize.
+     *
+     * @param gl     the GL interface
+     * @param config the EGLConfig of the created surface. UNUSED
+     */
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         /*
@@ -104,8 +223,7 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer {
          * Some one-time OpenGL initialization can be made here
          * probably based on features of this particular context
          */
-        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT,
-                GL10.GL_FASTEST);
+        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
 
         gl.glClearColor(.5f, .5f, .5f, 1);
         gl.glShadeModel(GL10.GL_SMOOTH);
@@ -119,26 +237,19 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer {
 
         int[] textures = new int[1];
         gl.glGenTextures(1, textures, 0);
-
         mTextureID = textures[0];
+
         gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID);
 
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
-                GL10.GL_NEAREST);
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D,
-                GL10.GL_TEXTURE_MAG_FILTER,
-                GL10.GL_LINEAR);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
-                GL10.GL_CLAMP_TO_EDGE);
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
-                GL10.GL_CLAMP_TO_EDGE);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
 
-        gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
-                GL10.GL_REPLACE);
+        gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE);
 
-        InputStream is = mContext.getResources()
-                .openRawResource(R.raw.robot);
+        InputStream is = mContext.getResources().openRawResource(R.raw.robot);
         Bitmap bitmap;
         try {
             bitmap = BitmapFactory.decodeStream(is);
@@ -174,6 +285,11 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer {
         mNumericSprite.initialize(gl, mLabelPaint);
     }
 
+    /**
+     * Called to draw the current frame.
+     *
+     * @param gl the GL interface.
+     */
     @Override
     public void onDrawFrame(GL10 gl) {
         /*
@@ -183,8 +299,7 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer {
          */
         gl.glDisable(GL10.GL_DITHER);
 
-        gl.glTexEnvx(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
-                GL10.GL_MODULATE);
+        gl.glTexEnvx(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
 
         /*
          * Usually, the first thing one might want to do is to clear
@@ -350,8 +465,7 @@ class Triangle {
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mFVertexBuffer);
         gl.glEnable(GL10.GL_TEXTURE_2D);
         gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTexBuffer);
-        gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, VERTS,
-                GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
+        gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, VERTS, GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
     }
 
     public float getX(int vertex) {
