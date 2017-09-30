@@ -286,7 +286,41 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer {
     }
 
     /**
-     * Called to draw the current frame.
+     * Called to draw the current frame. First we disable the server side capability GL_DITHER (color
+     * components and indices will not be dithered before they are written to the color buffer). Then
+     * we set texture parameter  GL_TEXTURE_ENV_MODE of the texture environment target GL_TEXTURE_ENV
+     * to GL_MODULATE (causes the colors from the texture units to be multiplied). Next we clear both
+     * the color buffer and the depth buffer.
+     * <p>
+     * To do the drawing we make the model view matrix the current matrix, load it with the identity
+     * matrix, then we create a viewing matrix derived from an eye point at (0,0,-2.5), a reference
+     * point indicating the center of the scene at (0,0,0), and an UP vector or (0,1,0).
+     * <p>
+     * We enable the client side capability GL_VERTEX_ARRAY (the vertex array is enabled for writing
+     * and used during rendering), and the client side capability GL_TEXTURE_COORD_ARRAY (the texture
+     * coordinate array is enabled for writing and used during rendering). We set the active texture
+     * unit to GL_TEXTURE0, and bind our texture name {@code mTextureID} to the texture target
+     * GL_TEXTURE_2D. We set the texture parameters GL_TEXTURE_WRAP_S and GL_TEXTURE_WRAP_T of
+     * GL_TEXTURE_2D both to GL_REPEAT (causes the texture to be repeated when the area being textured
+     * is bigger than the texture).
+     * <p>
+     * We calculate {@code angle} based on the system time since boot modulo 4000, multiplied by a
+     * factor of 0.090 (angle goes from 0 degrees to 360 degrees every 4 seconds). We then rotate
+     * our model view matrix by {@code angle} degrees around the z axis, and scale it by 2.0 in all
+     * three directions (multiply the current matrix by a general scaling matrix using 2.0 for all
+     * three scale factors). Then we instruct our field {@code Triangle mTriangle} to draw itself.
+     * <p>
+     * To add our labels to the {@code SurfaceView} we instruct our {@code Projector mProjector} to
+     * load the current model view matrix, tell our {@code LabelMaker mLabels} to begin drawing, then
+     * call our method {@code drawLabel} to draw the three vertex labels {@code mLabelA}, {@code mLabelB},
+     * and {@code mLabelC}. We calculate {@code float msPFX} to be the x coordinate of our label
+     * {@code mLabelMsPF} by subtracting the width of that label from the width {@code mWidth} of our
+     * surface view (with an additional pixel for spacing), then instruct {@code mLabels} to draw our
+     * label {@code mLabelMsPF} at the xy location (msPFX,0). We then instruct {@code mLabels} to end
+     * its drawing state.
+     * <p>
+     * Finally we call our method {@code drawMsPF} to display the milliseconds per frame data before
+     * the {@code mLabelMsPF} label.
      *
      * @param gl the GL interface.
      */
@@ -328,7 +362,7 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer {
         gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
         gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
 
-        //noinspection ConstantIfStatement,ConstantConditions
+/*      DEBUGGING CODE
         if (false) {
             long time = SystemClock.uptimeMillis();
             if (mLastTime != 0) {
@@ -337,6 +371,7 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer {
             }
             mLastTime = time;
         }
+*/
 
         long time = SystemClock.uptimeMillis() % 4000L;
         float angle = 0.090f * ((int) time);
@@ -358,6 +393,29 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer {
         drawMsPF(gl, msPFX);
     }
 
+    /**
+     * Draws the milliseconds per frame data on the {@code SurfaceView} using our field
+     * {@code NumericSprite mNumericSprite} to draw the value using its per digit labels.
+     * <p>
+     * First we fetch the system time since boot to {@code long time}, and if {@code mStartTime} is
+     * 0 (our first time called) we also save it in {@code mStartTime}. We increment our field
+     * {@code mFrames} and if we have waited for SAMPLE_PERIOD_FRAMES (12) since our last update,
+     * we set {@code mFrames} to 0, calculate {@code long delta} as the number of milliseconds that
+     * have passed between {@code time} and {@code mStartTime}, set {@code mStartTime} to {@code time},
+     * and set {@code mMsPerFrame} to the number of milliseconds per frame we calculate by multiplying
+     * {@code delta} times SAMPLE_FACTOR.
+     * <p>
+     * Then if {@code mMsPerFrame} is greater than 0, we tell {@code mNumericSprite} to set its value
+     * to {@code mMsPerFrame}, retrieve the width need to display this value to {@code float numWidth}
+     * and calculate the value of the x coordinate to begin our number display {@code float x} by
+     * subtracting {@code numWidth} from our input parameter {@code float rightMargin}.
+     * <p>
+     * Finally we instruct {@code mNumericSprite} to draw its value at ({@code x}, 0).
+     *
+     * @param gl          the GL interface
+     * @param rightMargin x coordinate of the end of our milliseconds display (the beginning of the
+     *                    "ms/f" label).
+     */
     private void drawMsPF(GL10 gl, float rightMargin) {
         long time = SystemClock.uptimeMillis();
         if (mStartTime == 0) {
@@ -377,6 +435,13 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer {
         }
     }
 
+    /**
+     * Draws the vertex label requested in the proper position on the rotating triangle.
+     *
+     * @param gl             the GL interface
+     * @param triangleVertex the index number of the vertex, 0, 1, or 2.
+     * @param labelId        the label index we are to draw.
+     */
     private void drawLabel(GL10 gl, int triangleVertex, int labelId) {
         float x = mTriangle.getX(triangleVertex);
         float y = mTriangle.getY(triangleVertex);
