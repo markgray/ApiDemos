@@ -26,13 +26,13 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 
 /**
- * Wrapper activity demonstrating the use of {@link GLSurfaceView}, a view
- * that uses OpenGL drawing into a dedicated surface.
- *
- * Shows:
- * + How to redraw in response to user input.
+ * How to redraw in response to user input. Draws a cube, and allows the user to rotate it using
+ * their finger.
  */
 public class TouchRotateActivity extends Activity {
+
+    private GLSurfaceView mGLSurfaceView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,15 +60,21 @@ public class TouchRotateActivity extends Activity {
         super.onPause();
         mGLSurfaceView.onPause();
     }
-
-    private GLSurfaceView mGLSurfaceView;
 }
 
 /**
  * Implement a simple rotation control.
  *
  */
+@SuppressWarnings("FieldCanBeLocal")
 class TouchSurfaceView extends GLSurfaceView {
+
+    private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
+    private final float TRACKBALL_SCALE_FACTOR = 36.0f;
+    private CubeRenderer mRenderer;
+    private float mPreviousX;
+    private float mPreviousY;
+
 
     public TouchSurfaceView(Context context) {
         super(context);
@@ -105,7 +111,13 @@ class TouchSurfaceView extends GLSurfaceView {
     /**
      * Render a cube.
      */
+    @SuppressWarnings("WeakerAccess")
     private class CubeRenderer implements GLSurfaceView.Renderer {
+
+        private Cube mCube;
+        public float mAngleX;
+        public float mAngleY;
+
         public CubeRenderer() {
             mCube = new Cube();
         }
@@ -174,16 +186,5 @@ class TouchSurfaceView extends GLSurfaceView {
              gl.glShadeModel(GL10.GL_SMOOTH);
              gl.glEnable(GL10.GL_DEPTH_TEST);
         }
-        private Cube mCube;
-        public float mAngleX;
-        public float mAngleY;
     }
-
-    @SuppressWarnings("FieldCanBeLocal")
-    private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
-    @SuppressWarnings("FieldCanBeLocal")
-    private final float TRACKBALL_SCALE_FACTOR = 36.0f;
-    private CubeRenderer mRenderer;
-    private float mPreviousX;
-    private float mPreviousY;
 }

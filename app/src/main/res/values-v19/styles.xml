@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2011 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2011 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,16 +13,13 @@
      limitations under the License.
 -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- For API level XX or later, the Material theme is available and we prefer that. -->
-    <style name="ThemeCurrent" parent="android:Theme.Material">
-    </style>
+    <style name="ThemeCurrent" parent="android:Theme.Material" tools:ignore="NewApi" />
 
     <!-- For API level XX or later, the Holo theme is available and we prefer that. -->
-    <style name="ThemeCurrentDialog" parent="android:Theme.Material.Dialog">
-    </style>
+    <style name="ThemeCurrentDialog" parent="android:Theme.Material.Dialog" tools:ignore="NewApi" />
 
     <!-- For API level XX or later, we can use the magical DialogWhenLarge theme. -->
-    <style name="ThemeCurrentDialogWhenLarge" parent="android:style/Theme.Material.DialogWhenLarge">
-    </style>
+    <style name="ThemeCurrentDialogWhenLarge" parent="android:style/Theme.Material.DialogWhenLarge" />
 </resources>

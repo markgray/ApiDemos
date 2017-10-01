@@ -1201,13 +1201,16 @@ Graphics
    Textured Triangle
     Graphics/OpenGL ES/Textured Triangle   all
         .graphics.TriangleActivity
+        .graphics.StaticTriangleRenderer
             Shows a rotating triangle using a bitmap made from raw/robot.png as the 
             texture. It uses a GLSurfaceView.Renderer that uses the Android-specific 
             android.opengl.GLESXXX static OpenGL ES APIs. The static APIs expose more 
             of the OpenGL ES features than the javax.microedition.khronos.opengles APIs,
             and also provide a programming model that is closer to the C OpenGL ES APIs, 
             which may make it easier to reuse code and documentation written for the C 
-            OpenGL ES APIs.
+            OpenGL ES APIs. It uses android:theme="@style/ThemeCurrentDialog" in the
+             AndroidManifest.xml so the SurfaceView is shrunk to appear in a dialog size
+              window
 
    Touch Rotate
     Graphics/OpenGL ES/Touch Rotate        all

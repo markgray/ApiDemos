@@ -24,7 +24,6 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.opengl.GLUtils;
 import android.os.SystemClock;
-import android.util.Log;
 
 import com.example.android.apis.R;
 
@@ -130,11 +129,6 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer {
      * of our triangle vertex labels.
      */
     private float[] mScratch = new float[8];
-    /**
-     * Start time of our current frame count which we use to calculate the value of {@code mMsPerFrame}
-     * (milliseconds per frame)
-     */
-    private long mLastTime;
 
     /**
      * Our constructor. First we save our parameter {@code Context context} in our field
@@ -362,17 +356,6 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer {
         gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
         gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
 
-/*      DEBUGGING CODE
-        if (false) {
-            long time = SystemClock.uptimeMillis();
-            if (mLastTime != 0) {
-                long delta = time - mLastTime;
-                Log.w("time", Long.toString(delta));
-            }
-            mLastTime = time;
-        }
-*/
-
         long time = SystemClock.uptimeMillis() % 4000L;
         float angle = 0.090f * ((int) time);
 
@@ -436,7 +419,19 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer {
     }
 
     /**
-     * Draws the vertex label requested in the proper position on the rotating triangle.
+     * Draws the vertex label requested in the proper position on the rotating triangle. First we
+     * get the x and y coordinates of the {@code triangleVertex} vertex we are to label to the
+     * variables {@code x} and {@code y}. We load our scratch vector with {@code x}, {@code y}, 0
+     * for the z coordinate, and 1.0 for the w (to indicate it is a point). Then we call our the
+     * {@code project} method of our field {@code Projector mProjector} to translate the relative
+     * position of our vertex to the absolute position in the rotating model view and retrieve the
+     * resulting x coordinate to {@code sx}, and the y coordinate to {@code sy}. We get the height
+     * of our label for {@code float height}, and the width of our label for {@code float width} and
+     * calculate the centered location {@code (tx,ty)} for placing our label by subtracting half the
+     * width from {@code sx} and half the height from {@code sy} respectively.
+     * <p>
+     * Finally we instruct our field {@code LabelMaker mLabels} to draw the label with index
+     * {@code labelID} at the location {@code (tx,ty)}.
      *
      * @param gl             the GL interface
      * @param triangleVertex the index number of the vertex, 0, 1, or 2.
@@ -459,6 +454,25 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer {
         mLabels.draw(gl, tx, ty, labelId);
     }
 
+    /**
+     * Called when the surface changed size. Called after the surface is created and whenever the
+     * OpenGL ES surface size changes. First we save our parameter {@code w} (the new width) in our
+     * field {@code mWidth} and our parameter {@code h} (the new height) in our field {@code mHeight}.
+     * Then we set the viewport of our surface to have the lower left hand corner at (0,0), a width
+     * of {@code w} and a height of {@code h}. We also inform our field {@code Projector mProjector}
+     * about the new surface size.
+     * <p>
+     * Next we calculate the aspect ration {@code float ratio}, set the current matrix to GL_PROJECTION,
+     * load it with the identity matrix, and multiply it by a perspective matrix with the left clipping
+     * plane at {@code -ratio}, the right clipping plane at {@code ratio}, the bottom clipping plane
+     * at -1, the top clipping plane at 1, the near clipping plane at 1, and the far clipping plane
+     * at 10. Finally we instruct {@code Projector mProjector} to fetch a copy of this projection
+     * matrix for its use.
+     *
+     * @param gl the GL interface.
+     * @param w  new width of the surface
+     * @param h  hew height of the surface
+     */
     @Override
     public void onSurfaceChanged(GL10 gl, int w, int h) {
         mWidth = w;
@@ -480,8 +494,59 @@ public class SpriteTextRenderer implements GLSurfaceView.Renderer {
     }
 }
 
+/**
+ * Class that draws a triangle to the surface view when required to do so.
+ */
 @SuppressWarnings("WeakerAccess")
 class Triangle {
+
+    /**
+     * number of vertices of our object.
+     */
+    private final static int VERTS = 3;
+
+    /**
+     * Native heap {@code FloatBuffer} we use to hold our vertex coordinates in.
+     */
+    private FloatBuffer mFVertexBuffer;
+    /**
+     * Native heap {@code FloatBuffer} we use to hold our texture coordinates in.
+     */
+    private FloatBuffer mTexBuffer;
+    /**
+     * Native heap {@code ShortBuffer} we use to hold our indices in.
+     */
+    private ShortBuffer mIndexBuffer;
+    /**
+     * (x,y,z) coordinates for a unit-sided equilateral triangle centered on the origin.
+     */
+    private final static float[] sCoords = {
+            // X, Y, Z
+            -0.5f, -0.25f, 0,
+            0.5f, -0.25f, 0,
+            0.0f, 0.559016994f, 0
+    };
+
+    /**
+     * Our constructor. First we allocate {@code ByteBuffer vbb} on the native heap, with enough space
+     * to hold our {@code float[] sCoords} array of vertex coordinates, we set its byte order to native
+     * byte order, and initialize our field {@code FloatBuffer mFVertexBuffer} with a view of this byte
+     * buffer as a float buffer. We allocate {@code ByteBuffer tbb} on the native heap, with enough space
+     * to hold our two dimensional texture vertex coordinates, we set its byte order to native byte order,
+     * and initialize our field {@code FloatBuffer mTexBuffer} with a view of this byte buffer as a float
+     * buffer. We allocate {@code ByteBuffer ibb} on the native heap, with enough space to hold our indices,
+     * we set its byte order to native byte order, and initialize our field {@code ShortBuffer mIndexBuffer}
+     * with a view of this byte buffer as a short buffer.
+     * <p>
+     * Next we loop through the 3 vertices, each with 3 coordinates and add the coordinate values from
+     * {@code float[] sCoords} to {@code mFVertexBuffer}. For the texture coordinates we loop through
+     * the 3 vertices, each with 2 coordinates, scaling the (x,y) coordinates of {@code sCoords} by
+     * 2.0 and offsetting them by 0.5 before storing them in {@code mTexBuffer}. For our index buffer
+     * {@code mIndexBuffer} we simply add the three indices 0, 1, 2.
+     * <p>
+     * Finally we rewind our three buffers {@code mFVertexBuffer}, {@code mTexBuffer}, and
+     * {@code mIndexBuffer} so they will be ready for use.
+     */
     public Triangle() {
 
         // Buffers to be passed to gl*Pointer() functions
@@ -525,6 +590,20 @@ class Triangle {
         mIndexBuffer.position(0);
     }
 
+    /**
+     * Called from the {@code onDrawFrame} method of {@code SpriteTextRenderer} to draw our triangle.
+     * First we select counterclockwise polygons as front-facing. Next we specify {@code mFVertexBuffer}
+     * to be the location of our vertex data, with 3 coordinates per vertex, GL_FLOAT as the data
+     * type, and 0 as the stride. We enable the server side capability GL_TEXTURE_2D, and specify
+     * {@code mTexBuffer} to be the location of our texture coordinates, with 2 coordinates per array
+     * element, GL_FLOAT as the data type, and 0 as the stride.
+     * <p>
+     * Finally we instruct openGL to render primitives from array data, using GL_TRIANGLE_STRIP as the
+     * primitive type, VERTS (3) as the number of elements to be rendered, {@code mIndexBuffer} as the
+     * location of the indices, and GL_UNSIGNED_SHORT as the type of values it contains.
+     *
+     * @param gl the GL interface
+     */
     public void draw(GL10 gl) {
         gl.glFrontFace(GL10.GL_CCW);
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mFVertexBuffer);
@@ -533,24 +612,23 @@ class Triangle {
         gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, VERTS, GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
     }
 
+    /**
+     * Getter for the x coordinate of a particular vertex.
+     *
+     * @param vertex vertex number, 0, 1, or 2.
+     * @return the x coordinate of vertex number {@code vertex}
+     */
     public float getX(int vertex) {
         return sCoords[3 * vertex];
     }
 
+    /**
+     * Getter for the y coordinate of a particular vertex.
+     *
+     * @param vertex vertex number, 0, 1, or 2.
+     * @return the y coordinate of vertex number {@code vertex}
+     */
     public float getY(int vertex) {
         return sCoords[3 * vertex + 1];
     }
-
-    private final static int VERTS = 3;
-
-    private FloatBuffer mFVertexBuffer;
-    private FloatBuffer mTexBuffer;
-    private ShortBuffer mIndexBuffer;
-    // A unit-sided equilateral triangle centered on the origin.
-    private final static float[] sCoords = {
-            // X, Y, Z
-            -0.5f, -0.25f, 0,
-            0.5f, -0.25f, 0,
-            0.0f, 0.559016994f, 0
-    };
 }
