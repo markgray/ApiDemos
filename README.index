@@ -1215,12 +1215,14 @@ Graphics
    Touch Rotate
     Graphics/OpenGL ES/Touch Rotate        all
         .graphics.TouchRotateActivity
+        .graphics.Cube
             Shows how to redraw in response to user input. Draws a cube, and allows the
             user to rotate it using their finger. TODO: Implement molecule demo.
 
    Translucent GLSurfaceView
     Graphics/OpenGL ES/Translucent GLSurfaceView  -- all
         .graphics.TranslucentGLSurfaceViewActivity
+        .graphics.CubeRenderer
             Sets the background of the GLSurfaceView of a CubeRenderer to Translucent, 
             allowing the user to see the ApiDemos application behind the rotating cube.
 

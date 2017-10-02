@@ -16,12 +16,10 @@
 
 package com.example.android.apis.graphics;
 
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
-
 import android.opengl.GLSurfaceView;
 
-import static android.R.attr.width;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Render a pair of tumbling cubes.

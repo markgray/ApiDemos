@@ -23,10 +23,16 @@ import android.os.Bundle;
 
 
 /**
- * Wrapper activity demonstrating the use of {@link GLSurfaceView} to
- * display translucent 3D graphics.
+ * Wrapper activity demonstrating the use of {@link GLSurfaceView} to display translucent 3D graphics.
+ * Sets the background of the GLSurfaceView of a CubeRenderer to Translucent, allowing the user to
+ * see the ApiDemos application behind the rotating cube.
  */
 public class TranslucentGLSurfaceViewActivity extends Activity {
+    /**
+     * Called when the activity is starting.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
