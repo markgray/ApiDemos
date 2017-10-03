@@ -28,8 +28,22 @@ import android.os.Bundle;
  * see the ApiDemos application behind the rotating cube.
  */
 public class TranslucentGLSurfaceViewActivity extends Activity {
+
     /**
-     * Called when the activity is starting.
+     * Our {@code GLSurfaceView}.
+     */
+    private GLSurfaceView mGLSurfaceView;
+
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we initialize our field {@code GLSurfaceView mGLSurfaceView} with a
+     * new instance of {@code GLSurfaceView}. We install a config chooser for {@code mGLSurfaceView}
+     * which will choose a config with depthSize of 16 and stencilSize of 0, with redSize, greenSize,
+     * blueSize and alphaSize 8 bit. We set the renderer of {@code mGLSurfaceView} to a new instance
+     * of {@code CubeRenderer}, passing it the flag true so that it will use a translucent background.
+     * We fetch an instance of {@code SurfaceHolder} from {@code mGLSurfaceView} which provides access
+     * and control over its underlying surface and set its {@code PixelFormat} to TRANSLUCENT. Finally
+     * we set our content view to {@code mGLSurfaceView}.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
      */
@@ -52,18 +66,27 @@ public class TranslucentGLSurfaceViewActivity extends Activity {
         setContentView(mGLSurfaceView);
     }
 
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or {@link #onPause}, for
+     * our activity to start interacting with the user. First we call through to our super's
+     * implementation of {@code onResume}, then we pass the call on to the {@code onResume} method
+     * of our field {@code GLSurfaceView mGLSurfaceView}.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         mGLSurfaceView.onResume();
     }
 
+    /**
+     * Called as part of the activity lifecycle when an activity is going into the background, but
+     * has not (yet) been killed. First we call through to our super's implementation of {@code onPause},
+     * then we pass the call on to the {@code onPause} method of our field {@code GLSurfaceView mGLSurfaceView}.
+     */
     @Override
     protected void onPause() {
         super.onPause();
         mGLSurfaceView.onPause();
     }
-
-    private GLSurfaceView mGLSurfaceView;
 }
 
