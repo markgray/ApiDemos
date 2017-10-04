@@ -27,8 +27,19 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 
+/**
+ * Shows the effect of four different Path.FillType's on the same Path, which consists of two
+ * intersecting circles: Path.FillType.WINDING, Path.FillType.EVEN_ODD, Path.FillType.INVERSE_WINDING,
+ * and Path.FillType.INVERSE_EVEN_ODD.
+ */
 public class PathFillTypes extends GraphicsActivity {
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to a new instance of {@code SampleView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,18 +47,25 @@ public class PathFillTypes extends GraphicsActivity {
     }
 
     /**
-     * This method converts dp unit to equivalent pixels, depending on device density.
+     * This method converts dp unit to equivalent pixels, depending on device density. First we fetch
+     * a {@code Resources} instance for {@code Resources resources}, then we fetch the current display
+     * metrics that are in effect for this resource object to {@code DisplayMetrics metrics}. Finally
+     * we return our {@code dp} parameter multiplied by the the screen density expressed as dots-per-inch,
+     * divided by the reference density used throughout the system.
      *
-     * @param dp A value in dp (density independent pixels) unit. Which we need to convert into pixels
+     * @param dp      A value in dp (density independent pixels) unit. Which we need to convert into pixels
      * @param context Context to get resources and device specific display metrics
      * @return A float value to represent px equivalent to dp depending on device density
      */
-    public static float convertDpToPixel(float dp, Context context){
+    public static float convertDpToPixel(float dp, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        return dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
+    /**
+     * Sample view which draws two intersecting circles using 4 different {@code Path.FillType}.
+     */
     private static class SampleView extends View {
         private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private Path mPath;
@@ -60,30 +78,30 @@ public class PathFillTypes extends GraphicsActivity {
             mPixelMultiplier = convertDpToPixel(1, context);
 
             mPath = new Path();
-            mPath.addCircle(40*mPixelMultiplier, 40*mPixelMultiplier, 45*mPixelMultiplier, Path.Direction.CCW);
-            mPath.addCircle(80*mPixelMultiplier, 80*mPixelMultiplier, 45*mPixelMultiplier, Path.Direction.CCW);
+            mPath.addCircle(40 * mPixelMultiplier, 40 * mPixelMultiplier, 45 * mPixelMultiplier, Path.Direction.CCW);
+            mPath.addCircle(80 * mPixelMultiplier, 80 * mPixelMultiplier, 45 * mPixelMultiplier, Path.Direction.CCW);
         }
 
-        private void showPath(Canvas canvas, int x, int y, Path.FillType ft,
-                              Paint paint) {
+        private void showPath(Canvas canvas, int x, int y, Path.FillType ft, Paint paint) {
             canvas.save();
             canvas.translate(x, y);
-            canvas.clipRect(0, 0, 120*mPixelMultiplier, 120*mPixelMultiplier);
+            canvas.clipRect(0, 0, 120 * mPixelMultiplier, 120 * mPixelMultiplier);
             canvas.drawColor(Color.WHITE);
             mPath.setFillType(ft);
             canvas.drawPath(mPath, paint);
             canvas.restore();
         }
 
-        @Override protected void onDraw(Canvas canvas) {
+        @Override
+        protected void onDraw(Canvas canvas) {
             Paint paint = mPaint;
 
             canvas.drawColor(0xFFCCCCCC);
 
-            canvas.translate(20*mPixelMultiplier, 20*mPixelMultiplier);
+            canvas.translate(20 * mPixelMultiplier, 20 * mPixelMultiplier);
 
             paint.setAntiAlias(true);
-            int m160 = Math.round(160*mPixelMultiplier);
+            int m160 = Math.round(160 * mPixelMultiplier);
 
             showPath(canvas, 0, 0, Path.FillType.WINDING, paint);
             showPath(canvas, m160, 0, Path.FillType.EVEN_ODD, paint);

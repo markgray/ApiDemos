@@ -87,9 +87,42 @@ public class PathEffects extends GraphicsActivity {
 
         /**
          * Allocates and initializes 6 different {@code PathEffect} objects using the current value
-         * of {@code phase} passed us.
+         * of {@code phase} passed us:
+         * <ul>
+         * <li>
+         * e[0] - null for no path effect
+         * </li>
+         * <li>
+         * e[1] - {@code CornerPathEffect(10)} Transforms geometries that are drawn (either
+         * STROKE or FILL styles) by replacing any sharp angles between line segments into
+         * rounded angles of the specified radius (10).
+         * </li>
+         * <li>
+         * e[2] - {@code DashPathEffect} Dashed line with the first segment 10 pixels, followed
+         * by 5 pixels off, then 5 pixels drawn, then 5 pixels off. {@code phase} is passed to
+         * the constructor to select an offset into the dashes allowing for an animated dashed
+         * line when this method is called with different values for {@code phase} every time
+         * the line is to be drawn.
+         * </li>
+         * <li>
+         * e[3] - {@code PathDashPathEffect} Dashes the drawn path by stamping it with the shape
+         * of the {@code Path} returned by our method {@code makePathDash} (an arrow like shape).
+         * It has a spacing of 12 between "stampings", passes {@code phase} to the constructor
+         * to allow animation of the dashes, and uses PathDashPathEffect.Style.ROTATE (rotates
+         * the shape about its center)
+         * </li>
+         * <li>
+         * e[4] - {@code ComposePathEffect} A {@code PathEffect} which applies e[1] first (replaces
+         * sharp corners with rounded angles) followed by e[2] (dashed line path effect).
+         * </li>
+         * <li>
+         * e[5] - {@code ComposePathEffect} A {@code PathEffect} which applies e[1] first (replaces
+         * sharp corners with rounded angles) followed by e[3] (dashed line using a shape to stamp
+         * along the line).
+         * </li>
+         * </ul>
          *
-         * @param e array of {@code PathEffect} objects to allocate and initialize.
+         * @param e     array of {@code PathEffect} objects to allocate and initialize.
          * @param phase Offset into the intervals array.
          */
         private static void makeEffects(PathEffect[] e, float phase) {
@@ -101,6 +134,21 @@ public class PathEffects extends GraphicsActivity {
             e[5] = new ComposePathEffect(e[3], e[1]);
         }
 
+        /**
+         * Our constructor. First we call our super's constructor, then we set our window to be focusable,
+         * an focusable in touch mode. We initialize our field {@code Paint mPaint} with a new instance of
+         * {@code Paint} with the anti alias flag set, set its style to STROKE, and set its stroke width
+         * to 6. We initialize our field {@code Path mPath} with the value returned from our method
+         * {@code makeFollowPath}. We allocate a 6 element array of {@code PathEffect} objects for our
+         * field {@code PathEffect[] mEffects}, and initialize our field {@code int[] mColors} with 6
+         * colors.
+         * <p>
+         * Finally we set our {@code OnClickListener} to an anonymous class which sets {@code mPath}
+         * to a new random {@code Path} created by our method {@code makeFollowPath}.
+         *
+         * @param context {@code Context} to use for resources, this when called from the {@code onCreate}
+         *                method of the {@code PathEffects} activity.
+         */
         public SampleView(Context context) {
             super(context);
             setFocusable(true);
@@ -118,6 +166,12 @@ public class PathEffects extends GraphicsActivity {
                     Color.GREEN, Color.MAGENTA, Color.BLACK
             };
             setOnClickListener(new OnClickListener() {
+                /**
+                 * Called when the view is clicked in order to create a new random {@code Path} for
+                 * {@code mPath}.
+                 *
+                 * @param v {@code View} that was clicked
+                 */
                 @Override
                 public void onClick(View v) {
                     mPath = makeFollowPath();
@@ -125,6 +179,27 @@ public class PathEffects extends GraphicsActivity {
             });
         }
 
+        /**
+         * We implement this to do our drawing. First we fill the {@code Canvas canvas} with the color
+         * white. Then we allocate a new instance of {@code RectF} for {@code RectF bounds} and load
+         * it with the bounds of the control points of the path {@code mPath}. We translate our
+         * {@code Canvas canvas} in the x direction by 10 - {@code bounds.left} ({@code bounds.left}
+         * is always 0) and in the y direction by 10 - {@code bounds.top} {@code bounds.top} is always
+         * 0 as well).
+         * <p>
+         * Next we call our method {@code makeEffects} to generate new versions of {@code PathEffects}
+         * for {@code mEffects} using the present value of {@code mPhase}, then increment {@code mPhase}
+         * and call {@code invalidate} to request that a new call to this method {@code onDraw} in the
+         * future.
+         * <p>
+         * Now we are ready to loop through each {@code PathEffect} in {@code mEffects}, setting the
+         * path effect object for {@code Paint mPaint} to each in turn, setting the color of {@code mPaint}
+         * to the next color, then instructing the {@code Canvas canvas} to draw the path {@code mPath}
+         * using {@code mPaint} as the {@code Paint}. We then translate the canvas down in the y coordinate
+         * in order to get ready for the next {@code PathEffect}.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.WHITE);
@@ -146,6 +221,16 @@ public class PathEffects extends GraphicsActivity {
             }
         }
 
+        /**
+         * Called when a key down event has occurred. If the keycode we KEYCODE_DPAD_CENTER, we set
+         * {@code Path mPath} to the new random {@code Path} returned from our method {@code makeFollowPath}
+         * and return true, otherwise we return the value returned by our super's implementation of
+         * {@code onKeyDown}.
+         *
+         * @param keyCode A key code that represents the button pressed,
+         * @param event   The KeyEvent object that defines the button action.
+         * @return true if we handled the event
+         */
         @Override
         public boolean onKeyDown(int keyCode, KeyEvent event) {
             switch (keyCode) {
@@ -156,6 +241,13 @@ public class PathEffects extends GraphicsActivity {
             return super.onKeyDown(keyCode, event);
         }
 
+        /**
+         * Creates and returns a random {@code Path}. First we allocate a new {@code Path} instance
+         * {@code Path p}. We move {@code p} to (0,0), then add 15 {@code lineTo} line segments with
+         * a spacing of X_INCREMENT in the x direction and a random y between 0 and 35.
+         *
+         * @return random {@code Path}.
+         */
         private static Path makeFollowPath() {
             Path p = new Path();
             p.moveTo(0, 0);
@@ -165,6 +257,11 @@ public class PathEffects extends GraphicsActivity {
             return p;
         }
 
+        /**
+         * Creates and returns a {@code Path} that looks rather like an arrowhead when drawn.
+         *
+         * @return {@code Path} drawing an arrowhead.
+         */
         private static Path makePathDash() {
             Path p = new Path();
             p.moveTo(4, 0);
