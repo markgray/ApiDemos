@@ -67,10 +67,31 @@ public class PathFillTypes extends GraphicsActivity {
      * Sample view which draws two intersecting circles using 4 different {@code Path.FillType}.
      */
     private static class SampleView extends View {
+        /**
+         * {@code Paint} used to draw all 4 examples.
+         */
         private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        /**
+         * {@code Path} used to draw our two circles for all 4 examples.
+         */
         private Path mPath;
+        /**
+         * Multiplier to convert dp units to pixels.
+         */
         private float mPixelMultiplier;
 
+        /**
+         * Our constructor. First we call through to our super's constructor, then we set our window
+         * to be focusable, and focusable in touch mode. We initialize our field {@code mPixelMultiplier}
+         * with the return value of our method {@code convertDpToPixel} (a multiplier to convert dp
+         * units to pixels for devices with different pixel densities).
+         * <p>
+         * We allocate a new instance of {@code Path} for our field {@code Path mPath}, then add two
+         * intersecting circles to it (both use counter clockwise direction to wind the circle's contour).
+         *
+         * @param context {@code Context} used to access resources. "this" when called from the
+         *                {@code onCreate} method of the {@code PathFillTypes} activity.
+         */
         public SampleView(Context context) {
             super(context);
             setFocusable(true);
@@ -82,6 +103,22 @@ public class PathFillTypes extends GraphicsActivity {
             mPath.addCircle(80 * mPixelMultiplier, 80 * mPixelMultiplier, 45 * mPixelMultiplier, Path.Direction.CCW);
         }
 
+        /**
+         * Draws {@code Path mPath} at different locations using different {@code Path.FillType} fill
+         * types. First we save the current matrix and clip of {@code Canvas canvas} onto a private stack.
+         * Then we pre-concatenate the current matrix with a translation matrix to (x,y), set the clip
+         * rectangle of {@code canvas} to a 120 dp square, then set the entire canvas to the color white.
+         * We set the fill type of {@code Path mPath} to our argument {@code Path.FillType ft}, and
+         * instruct {@code canvas} to draw that {@code Path} using our argument {@code Paint paint}
+         * as the {@code Paint}. Finally we remove all modifications to the {@code Canvas} matrix/clip
+         * state since the save call at the beginning of this method.
+         *
+         * @param canvas {@code Canvas} we are supposed to draw on
+         * @param x      x coordinate to use for our top left corner
+         * @param y      y coordinate to use for our top left corner
+         * @param ft     {@code Path.FillType} to use when we draw {@code Path mPath}
+         * @param paint  {@code Paint} to use when drawing.
+         */
         private void showPath(Canvas canvas, int x, int y, Path.FillType ft, Paint paint) {
             canvas.save();
             canvas.translate(x, y);
@@ -92,6 +129,37 @@ public class PathFillTypes extends GraphicsActivity {
             canvas.restore();
         }
 
+        /**
+         * We implement this to do our drawing. First we make a copy of the {@code Paint mPaint} pointer
+         * in {@code Paint paint}. Next we set the entire {@code Canvas canvas} to a darkish gray, and
+         * translate the canvas by 20 dp in both the x and y direction. We set the anti alias flag of
+         * {@code paint} to true, and define the constant {@code m160} to be the pixel equivalent of
+         * 160 dp.
+         * <p>
+         * We call our method {@code showPath} to draw our {@code Path mPath} using 4 different fill
+         * types:
+         * <ul>
+         * <li>
+         * (0,0) - WINDING - Specifies that "inside" is computed by a non-zero sum of signed edge crossings.
+         * The inside of both circles are colored black.
+         * </li>
+         * <li>
+         * (160,0) - EVEN_ODD - Specifies that "inside" is computed by an odd number of edge crossings.
+         * The intersection of the two circles is left white, the rest of the circle is black.
+         * </li>
+         * <li>
+         * (0,160) - INVERSE_WINDING - Same as WINDING, but draws outside of the path, rather than inside.
+         * The inside of both cirlces is left white, and outside of the circles i painted black.
+         * </li>
+         * <li>
+         * (160,160) - INVERSE_EVEN_ODD - Same as EVEN_ODD, but draws outside of the path, rather than inside.
+         * The area outside of the circles and the intersection of the circles is painted black, the rest
+         * of the inside of the circles is left white.
+         * </li>
+         * </ul>
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             Paint paint = mPaint;

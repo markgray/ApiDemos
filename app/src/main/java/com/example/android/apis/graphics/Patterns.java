@@ -22,14 +22,40 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.*;
 
+/**
+ * Creates two Bitmap's: a blue rectangle on a red background, and a green circle on a clear background.
+ * It uses these Bitmap's to make two BitmapShader's, and it rotates the Circle BitmapShader by 30
+ * degrees. In the onDraw method it first draws using the rectangle pattern, translate's the Canvas
+ * based on the current MotionEvent movement and draws using the circle pattern. The effect is to
+ * allow you to move the circle pattern with your finger while leaving the rectangle pattern stationary
+ * and partially visible through the circle pattern on top.
+ */
 public class Patterns extends GraphicsActivity {
 
+    /**
+     * Called when the activity is starting. First we call our super's implementation of {@code onCreate},
+     * then we set our content view to a new instance of {@code SampleView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new SampleView(this));
     }
 
+    /**
+     * Creates and returns a 40x40 pixel {@code Bitmap} containing a single blue 30x30 rectangle at
+     * the center of its red background. First we create a new instance of a 40x40 {@code Bitmap}
+     * for {@code Bitmap bm}. We create a {@code Canvas c} that uses {@code bm} to draw into and set
+     * the entire canvas to RED. We create a new instance of {@code Paint} for {@code Paint p} and set
+     * its color to BLUE. We use {@code p} to draw a rectangle on {@code c} whose top left corner is
+     * at (5,5), and whose bottom right corner is at (35,35). We then return the {@code Bitmap bm} that
+     * now contains that rectangle.
+     *
+     * @return 40x40 pixel {@code Bitmap} containing a single blue 30x30 rectangle at the center of
+     * its red background.
+     */
     private static Bitmap makeBitmap1() {
         Bitmap bm = Bitmap.createBitmap(40, 40, Bitmap.Config.RGB_565);
         Canvas c = new Canvas(bm);
@@ -40,6 +66,17 @@ public class Patterns extends GraphicsActivity {
         return bm;
     }
 
+    /**
+     * Creates and returns a 64x64 pixel {@code Bitmap} containing a single GREEN circle of radius 27
+     * at the center of its uncolored background. First we create a new instance of a 64x64 {@code Bitmap}
+     * for {@code Bitmap bm}. We create a {@code Canvas c} that uses {@code bm} to draw into. We create a
+     * new instance of {@code Paint} for {@code Paint p} and set its color to GREEN, and its alpha to
+     * 0xCC. We use {@code p} to draw a circle on {@code c} whose center is at (32,32) and whose radius
+     * is 27. We then return the {@code Bitmap bm} that now contains that circle.
+     *
+     * @return 64x64 pixel {@code Bitmap} containing a single GREEN circle of radius 27 at the center
+     * of its uncolored background.
+     */
     private static Bitmap makeBitmap2() {
         Bitmap bm = Bitmap.createBitmap(64, 64, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bm);
@@ -50,6 +87,10 @@ public class Patterns extends GraphicsActivity {
         return bm;
     }
 
+    /**
+     * A custom {@code View} consisting of two {@code Shader} objects, one stationary consisting of
+     * a rectangle pattern, and one movable on top of it consisting of a circle pattern.
+     */
     private static class SampleView extends View {
         private final Shader mShader1;
         private final Shader mShader2;
@@ -67,14 +108,10 @@ public class Patterns extends GraphicsActivity {
             setFocusable(true);
             setFocusableInTouchMode(true);
 
-            mFastDF = new PaintFlagsDrawFilter(Paint.FILTER_BITMAP_FLAG |
-                                               Paint.DITHER_FLAG,
-                                               0);
+            mFastDF = new PaintFlagsDrawFilter(Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG, 0);
 
-            mShader1 = new BitmapShader(makeBitmap1(), Shader.TileMode.REPEAT,
-                                        Shader.TileMode.REPEAT);
-            mShader2 = new BitmapShader(makeBitmap2(), Shader.TileMode.REPEAT,
-                                        Shader.TileMode.REPEAT);
+            mShader1 = new BitmapShader(makeBitmap1(), Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+            mShader2 = new BitmapShader(makeBitmap2(), Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
 
             Matrix m = new Matrix();
             m.setRotate(30);

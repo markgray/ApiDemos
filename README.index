@@ -1250,7 +1250,7 @@ Graphics
             In the onDraw method it first draws using the rectangle pattern, translate's
             the Canvas based on the current MotionEvent movement and draws using the
             circle pattern. The effect is to allow you to move the circle pattern with
-            your finger while leaving the rectangle pattern stationary and visible 
+            your finger while leaving the rectangle pattern stationary and partially visible
             through the circle pattern on top.
 
   Pictures
