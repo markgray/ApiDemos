@@ -111,7 +111,34 @@ public class Pictures extends GraphicsActivity {
         }
 
         /**
-         * We implement this to do our drawing.
+         * We implement this to do our drawing. First we set the entire {@code Canvas canvas} to the
+         * color WHITE. Then we draw our {@code Picture mPicture} 4 different ways:
+         * <ul>
+         * <li>
+         * Using the {@code canvas} method {@code drawPicture}
+         * </li>
+         * <li>
+         * Using the {@code canvas} method {@code drawPicture} and specifying a {@code RectF}
+         * whose top left corner is at (0,100) and whose bottom right corner is at
+         * ({@code getWidth()},200) where {@code getWidth} returns the width of our view. This
+         * has the effect of moving the {@code Picture} down 100 pixels and stretching it to
+         * fill our view.
+         * </li>
+         * <li>
+         * Setting the bounds of our {@code Drawable mDrawable} version of {@code mPicture} to
+         * left of 0, top of 200, right of {@code getWidth} and bottom of 300, then using the
+         * {@code draw} method of {@code mDrawable} to draw to the {@code Canvas canvas}
+         * </li>
+         * <li>
+         * Finally we open {@code ByteArrayOutputStream os}, write {@code Picture mPicture} to it,
+         * open {@code InputStream is}, translate the {@code Canvas canvas} to (0,300) and use the
+         * {@code drawPicture} method of {@code canvas} to draw the {@code Picture} read in from
+         * {@code is} by the method {@code Picture.createFromStream}.
+         * </li>
+         * </ul>
+         * Notice the three different ways the {@code Picture} is located on the canvas, using
+         * {@code RectF} to move it down by 100 pixels, using {@code setBounds} to move it down by
+         * 200 pixels, and using {@code translate} to move it down by 300 pixels.
          *
          * @param canvas the canvas on which the background will be drawn
          */

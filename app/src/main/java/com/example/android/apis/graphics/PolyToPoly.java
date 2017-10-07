@@ -20,22 +20,41 @@ package com.example.android.apis.graphics;
 // class is in a sub-package.
 //import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.*;
 import android.os.Bundle;
 import android.view.View;
 
+/**
+ * Shows how to use Matrix.setPolyToPoly to move and warp drawings done to a Canvas:
+ * <ul>
+ * <li>translate (1 point)</li>
+ * <li>rotate/uniform-scale (2 points)</li>
+ * <li>rotate/skew (3 points)</li>
+ * <li>perspective (4 points)</li>
+ * </ul>
+ */
 public class PolyToPoly extends GraphicsActivity {
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to a new instance of {@code SampleView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new SampleView(this));
     }
 
+    /**
+     * Demo showing how to use Matrix.setPolyToPoly to move and warp drawings done to a Canvas
+     */
     private static class SampleView extends View {
-        private Paint   mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        private Matrix  mMatrix = new Matrix();
+        private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private Matrix mMatrix = new Matrix();
         private Paint.FontMetrics mFontMetrics;
 
         private void doDraw(Canvas canvas, float src[], float dst[]) {
@@ -53,10 +72,10 @@ public class PolyToPoly extends GraphicsActivity {
             mPaint.setStyle(Paint.Style.FILL);
             // how to draw the text center on our square
             // centering in X is easy... use alignment (and X at midpoint)
-            float x = 64/2;
+            float x = 64 / 2;
             // centering in Y, we need to measure ascent/descent first
-            float y = 64/2 - (mFontMetrics.ascent + mFontMetrics.descent)/2;
-            canvas.drawText(src.length/2 + "", x, y, mPaint);
+            float y = 64 / 2 - (mFontMetrics.ascent + mFontMetrics.descent) / 2;
+            canvas.drawText(src.length / 2 + "", x, y, mPaint);
 
             canvas.restore();
         }
@@ -72,6 +91,7 @@ public class PolyToPoly extends GraphicsActivity {
             mFontMetrics = mPaint.getFontMetrics();
         }
 
+        @SuppressLint("DrawAllocation")
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.WHITE);
@@ -79,28 +99,28 @@ public class PolyToPoly extends GraphicsActivity {
             canvas.save();
             canvas.translate(10, 10);
             // translate (1 point)
-            doDraw(canvas, new float[] { 0, 0 }, new float[] { 5, 5 });
+            doDraw(canvas, new float[]{0, 0}, new float[]{5, 5});
             canvas.restore();
 
             canvas.save();
             canvas.translate(160, 10);
             // rotate/uniform-scale (2 points)
-            doDraw(canvas, new float[] { 32, 32, 64, 32 },
-                           new float[] { 32, 32, 64, 48 });
+            doDraw(canvas, new float[]{32, 32, 64, 32},
+                    new float[]{32, 32, 64, 48});
             canvas.restore();
 
             canvas.save();
             canvas.translate(10, 110);
             // rotate/skew (3 points)
-            doDraw(canvas, new float[] { 0, 0, 64, 0, 0, 64 },
-                           new float[] { 0, 0, 96, 0, 24, 64 });
+            doDraw(canvas, new float[]{0, 0, 64, 0, 0, 64},
+                    new float[]{0, 0, 96, 0, 24, 64});
             canvas.restore();
 
             canvas.save();
             canvas.translate(160, 110);
             // perspective (4 points)
-            doDraw(canvas, new float[] { 0, 0, 64, 0, 64, 64, 0, 64 },
-                           new float[] { 0, 0, 96, 0, 64, 96, 0, 64 });
+            doDraw(canvas, new float[]{0, 0, 64, 0, 64, 64, 0, 64},
+                    new float[]{0, 0, 96, 0, 64, 96, 0, 64});
             canvas.restore();
         }
     }
