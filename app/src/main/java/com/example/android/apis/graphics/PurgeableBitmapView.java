@@ -31,18 +31,19 @@ import java.io.ByteArrayOutputStream;
 /**
  * PurgeableBitmapView works with PurgeableBitmap to demonstrate the effects of setting
  * Bitmaps as being purgeable.
- *
+ * <p>
  * PurgeableBitmapView decodes an encoded bitstream to a Bitmap each time update()
  * is invoked(), and its onDraw() draws the Bitmap and a number to screen.
- * The number is used to indicate the number of Bitmaps that has been decoded.
+ * The number is used to indicate the number of Bitmaps that have been decoded.
  */
+@SuppressWarnings("FieldCanBeLocal")
 @SuppressLint("ViewConstructor")
 public class PurgeableBitmapView extends View {
     private final byte[] bitstream;
 
     private Bitmap mBitmap;
     private final int mArraySize = 200;
-    private final Bitmap[] mBitmapArray = new Bitmap [mArraySize];
+    private final Bitmap[] mBitmapArray = new Bitmap[mArraySize];
     private final Options mOptions = new Options();
     private static final int WIDTH = 150;
     private static final int HEIGHT = 450;
@@ -50,7 +51,6 @@ public class PurgeableBitmapView extends View {
     private int mDecodingCount = 0;
     private final Paint mPaint = new Paint();
     private final int textSize = 32;
-    @SuppressWarnings("FieldCanBeLocal")
     private static int delay = 100;
 
     public PurgeableBitmapView(Context context, boolean isPurgeable) {
@@ -60,8 +60,7 @@ public class PurgeableBitmapView extends View {
         mOptions.inPurgeable = isPurgeable;
 
         int[] colors = createColors();
-        Bitmap src = Bitmap.createBitmap(colors, 0, STRIDE, WIDTH, HEIGHT,
-                Bitmap.Config.ARGB_8888);
+        Bitmap src = Bitmap.createBitmap(colors, 0, STRIDE, WIDTH, HEIGHT, Bitmap.Config.ARGB_8888);
         bitstream = generateBitstream(src, Bitmap.CompressFormat.JPEG, 80);
 
         mPaint.setTextSize(textSize);
@@ -85,7 +84,7 @@ public class PurgeableBitmapView extends View {
     public int update(PurgeableBitmap.RefreshHandler handler) {
         try {
             mBitmapArray[mDecodingCount] = BitmapFactory.decodeByteArray(
-                bitstream, 0, bitstream.length, mOptions);
+                    bitstream, 0, bitstream.length, mOptions);
             mBitmap = mBitmapArray[mDecodingCount];
             mDecodingCount++;
             if (mDecodingCount < mArraySize) {
@@ -103,15 +102,14 @@ public class PurgeableBitmapView extends View {
         }
     }
 
-    @Override protected void onDraw(Canvas canvas) {
+    @Override
+    protected void onDraw(Canvas canvas) {
         canvas.drawColor(Color.WHITE);
         canvas.drawBitmap(mBitmap, 0, 0, null);
-        canvas.drawText(String.valueOf(mDecodingCount), WIDTH / 2 - 20,
-            HEIGHT / 2, mPaint);
+        canvas.drawText(String.valueOf(mDecodingCount), WIDTH / 2 - 20, HEIGHT / 2, mPaint);
     }
 
-    private byte[] generateBitstream(Bitmap src, Bitmap.CompressFormat format,
-            int quality) {
+    private byte[] generateBitstream(Bitmap src, Bitmap.CompressFormat format, int quality) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         src.compress(format, quality, os);
         return os.toByteArray();

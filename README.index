@@ -1284,6 +1284,7 @@ Graphics
    NonPurgeable
     Graphics/PurgeableBitmap/NonPurgeable  all
         .graphics.PurgeableBitmap
+        .graphics.PurgeableBitmapView
             Uses Options.inPurgeable to increase the number of Bitmap's before running 
             out of memory, but it is deprecated as of LOLLIPOP, and is ignored. Use 
             inBitmap or other bitmap memory tricks instead.
@@ -1291,6 +1292,7 @@ Graphics
    Purgeable
     Graphics/PurgeableBitmap/Purgeable     all
         .graphics.PurgeableBitmap
+        .graphics.PurgeableBitmapView
             Uses Options.inPurgeable to increase the number of Bitmap's before running 
             out of memory, but it is deprecated as of LOLLIPOP, and is ignored. Use 
             inBitmap or other bitmap memory tricks instead.
