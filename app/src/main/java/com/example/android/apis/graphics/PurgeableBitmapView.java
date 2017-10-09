@@ -39,6 +39,10 @@ import java.io.ByteArrayOutputStream;
 @SuppressWarnings("FieldCanBeLocal")
 @SuppressLint("ViewConstructor")
 public class PurgeableBitmapView extends View {
+    /**
+     * Contains a JPEG compressed bitmap which we try to load into each of the 200 members of our
+     * {@code Bitmap[] mBitmapArray}.
+     */
     private final byte[] bitstream;
 
     private Bitmap mBitmap;
@@ -83,8 +87,7 @@ public class PurgeableBitmapView extends View {
 
     public int update(PurgeableBitmap.RefreshHandler handler) {
         try {
-            mBitmapArray[mDecodingCount] = BitmapFactory.decodeByteArray(
-                    bitstream, 0, bitstream.length, mOptions);
+            mBitmapArray[mDecodingCount] = BitmapFactory.decodeByteArray(bitstream, 0, bitstream.length, mOptions);
             mBitmap = mBitmapArray[mDecodingCount];
             mDecodingCount++;
             if (mDecodingCount < mArraySize) {
