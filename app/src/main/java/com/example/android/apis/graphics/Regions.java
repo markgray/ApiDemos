@@ -21,19 +21,51 @@ import android.graphics.*;
 import android.os.Bundle;
 import android.view.View;
 
+/**
+ * Shows how to use the Region class to merge two or more Rectangle's in a Region using Union, Xor,
+ * Difference, and Intersect operations.
+ */
 public class Regions extends GraphicsActivity {
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to a new instance of {@code SampleView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new SampleView(this));
     }
 
+    /**
+     * Our demo custom view, demonstrates the use of the Region class.
+     */
     private static class SampleView extends View {
+        /**
+         * {@code Paint} instance used to do all our drawing.
+         */
         private final Paint mPaint = new Paint();
-        private final Rect  mRect1 = new Rect();
-        private final Rect  mRect2 = new Rect();
+        /**
+         * {@code Rect} rectangle with the top left corner at (10.10) and bottom right corner at (100.80)
+         */
+        private final Rect mRect1 = new Rect();
+        /**
+         * {@code Rect} rectangle with the top left corner at (50,50) and bottom right corner at (130.110)
+         */
+        private final Rect mRect2 = new Rect();
 
+        /**
+         * Our constructor. First we call our super's constructor, then we enable our view to receive
+         * focus. We set the anti alias flag of {@code Paint mPaint} to true, its text size to 16 and
+         * its text alignment to CENTER. We then initialize our field {@code Rect mRect1} with a rectangle
+         * with the top left corner at (10.10) and bottom right corner at (100.80), and {@code Rect mRect2}
+         * with a rectangle with the top left corner at (50,50) and bottom right corner at (130.110).
+         *
+         * @param context {@code Context} to use to access resources, this when called from the
+         *                {@code onCreate} method of the {@code Regions} activity.
+         */
         public SampleView(Context context) {
             super(context);
             setFocusable(true);
@@ -46,6 +78,13 @@ public class Regions extends GraphicsActivity {
             mRect2.set(50, 50, 130, 110);
         }
 
+        /**
+         * Draws the original rectangles {@code Rect1} and {@code Rect2} using the parameter
+         * {@code alpha} as the alpha value of the {@code Paint mPaint} we use to draw them.
+         *
+         * @param canvas {@code Canvas} to draw to
+         * @param alpha alpha value to set the alpha value of {@code Paint mPaint} to before drawing.
+         */
         private void drawOriginalRects(Canvas canvas, int alpha) {
             mPaint.setStyle(Paint.Style.STROKE);
             mPaint.setColor(Color.RED);
@@ -86,8 +125,7 @@ public class Regions extends GraphicsActivity {
             if (inset == 0) {   // catch hairlines
                 inset = 0.5f;
             }
-            c.drawRect(r.left + inset, r.top + inset,
-                       r.right - inset, r.bottom - inset, p);
+            c.drawRect(r.left + inset, r.top + inset, r.right - inset, r.bottom - inset, p);
         }
 
         @Override
