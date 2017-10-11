@@ -81,9 +81,19 @@ public class Regions extends GraphicsActivity {
         /**
          * Draws the original rectangles {@code Rect1} and {@code Rect2} using the parameter
          * {@code alpha} as the alpha value of the {@code Paint mPaint} we use to draw them.
+         * <p>
+         * First we set the style of {@code Paint mPaint} to STROKE, its color to RED, and its alpha
+         * to our parameter {@code alpha}. We then call our method {@code drawCentered} to draw
+         * {@code mRect1} on {@code Canvas canvas} using {@code mPaint}.
+         * <p>
+         * Next we set the color of {@code mPaint} to BLUE, and its alpha to our parameter
+         * {@code alpha}. We then call our method {@code drawCentered} to draw {@code mRect2} on
+         * {@code Canvas canvas} using {@code mPaint}.
+         * <p>
+         * Finally we restore the style of {@code mPaint} to FILL.
          *
          * @param canvas {@code Canvas} to draw to
-         * @param alpha alpha value to set the alpha value of {@code Paint mPaint} to before drawing.
+         * @param alpha  alpha value to set the alpha value of {@code Paint mPaint} to before drawing.
          */
         private void drawOriginalRects(Canvas canvas, int alpha) {
             mPaint.setStyle(Paint.Style.STROKE);
@@ -98,6 +108,40 @@ public class Regions extends GraphicsActivity {
             mPaint.setStyle(Paint.Style.FILL);
         }
 
+        /**
+         * Creates a {@code Region} by combining {@code Rect mRect1} and {@code Rect mRect2} using
+         * our parameter {@code Region.Op op} and then draws it.
+         * <p>
+         * First if our parameter {@code String str} is not null, we set the color of {@code Paint mPaint}
+         * to BLACK and draw {@code str} at the coordinates (80,24).
+         * <p>
+         * We allocate a new instance of {@code Region} for {@code Region rgn}, set it to {@code Rect Rect1},
+         * then perform {@code Region.Op op} on the {@code Region} and {@code Rect Rect2} ({@code rgn}
+         * will become a collection of 1 or more {@code Rect} objects depending on the {@code Region.Op}
+         * used when {@code Rect2} was included in the {@code Region}:
+         * <ul>
+         * <li>UNION - 3 {@code Rect}: (10,10,100,50), (10,50,130,80), and (50,80,130,110)</li>
+         * <li>XOR - 4 {@code Rect}: (10,10,100,50), (10,50,50,80), (100,50,130,80), and (50,80,130,110)</li>
+         * <li>DIFFERENCE - 2 {@code Rect}: (10,10,100,50), and (10,50,50,80)</li>
+         * <li>INTERSECT - 1 {@code Rect}: (50,50,100,80)</li>
+         * </ul>
+         * Next we set the color of {@code Paint mPaint} to our parameter {@code color}, create an
+         * {@code RegionIterator iter} for {@code Region rgm}, and allocate a new {@code Rect} for
+         * {@code Rect r}. We move the {@code Canvas canvas} to (0,30) and set the color of
+         * {@code Paint mPaint} to our parameter {@code color} one more time for luck.
+         * <p>
+         * Now we iterate through the {@code Rect} objects in {@code Region rgn} (using the iterator
+         * {@code iter}) setting {@code Rect r} to each in turn, and then drawing that {@code Rect}
+         * to {@code Canvas canvas} using {@code Paint mPaint}.
+         * <p>
+         * Finally we call our method {@code drawOriginalRects} to draw an outline of the original
+         * {@code Rect mRect1} and {@code Rect mRect2} using an alpha of only 0x80.
+         *
+         * @param canvas {@code Canvas} we are to draw to
+         * @param color  color to use for drawing
+         * @param str    optional string to label our drawing
+         * @param op     {@code Region.Op} to use in forming our {@code Region}
+         */
         private void drawRgn(Canvas canvas, int color, String str, Region.Op op) {
             if (str != null) {
                 mPaint.setColor(Color.BLACK);
@@ -120,6 +164,16 @@ public class Regions extends GraphicsActivity {
             drawOriginalRects(canvas, 0x80);
         }
 
+        /**
+         * Draws the {@code Rect r} passed it offset by half the stroke width of the {@code Paint p}
+         * on {@code Canvas c} using {@code p} as the {@code Paint}. We calculate {@code inset} to
+         * be half of the stroke width of {@code Paint p}, and if 0 set {@code inset} to 0.5. Then
+         * we draw the rectangle passed us in {@code Rect r} with each coordinate offset by {@code inset}
+         *
+         * @param c {@code Canvas} to draw to
+         * @param r {@code Rect} to draw
+         * @param p {@code Paint} to use when drawing
+         */
         private static void drawCentered(Canvas c, Rect r, Paint p) {
             float inset = p.getStrokeWidth() * 0.5f;
             if (inset == 0) {   // catch hairlines
@@ -128,6 +182,39 @@ public class Regions extends GraphicsActivity {
             c.drawRect(r.left + inset, r.top + inset, r.right - inset, r.bottom - inset, p);
         }
 
+        /**
+         * We implement this to do our drawing. First we set the entire {@code Canvas canvas} to
+         * the color GRAY. We save the current matrix and clip of the canvas onto a private stack,
+         * move the canvas to the point (80,5) and call our method {@code drawOriginalRects} to draw
+         * {@code Rect mRect1} and {@code Rect mRect2} using an alpha of 0xFF, then we restore the
+         * state of the canvas to its previous state.
+         * <p>
+         * Next we set the style of {@code Paint mPaint} to FILL. We save the current matrix and clip
+         * of the canvas onto a private stack, move the canvas to the point (0,140) and call our method
+         * {@code drawRgn} to form a {@code Region} from {@code mRect1} and {@code mRect2} using the
+         * Region.Op.UNION, draw the result in RED and label it "Union". We then restore the state of
+         * the canvas to its previous state before we called {@code save}.
+         * <p>
+         * Now we save the current matrix and clip of the canvas onto a private stack, move the canvas
+         * to the point (0,280) and call our method {@code drawRgn} to form a {@code Region} from
+         * {@code mRect1} and {@code mRect2} using the Region.Op.XOR, draw the result in BLUE and
+         * label it "Xor". We then restore the state of the canvas to its previous state before we
+         * called {@code save}.
+         * <p>
+         * We save the current matrix and clip of the canvas onto a private stack, move the canvas
+         * to the point (160,140) and call our method {@code drawRgn} to form a {@code Region} from
+         * {@code mRect1} and {@code mRect2} using the Region.Op.DIFFERENCE, draw the result in GREEN
+         * and label it "Difference". We then restore the state of the canvas to its previous state
+         * before we called {@code save}.
+         * <p>
+         * We save the current matrix and clip of the canvas onto a private stack, move the canvas
+         * to the point (160,280) and call our method {@code drawRgn} to form a {@code Region} from
+         * {@code mRect1} and {@code mRect2} using the Region.Op.INTERSECT, draw the result in WHITE
+         * and label it "Intersect". We then restore the state of the canvas to its previous state
+         * before we called {@code save}.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.GRAY);

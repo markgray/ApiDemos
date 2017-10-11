@@ -22,8 +22,19 @@ import android.graphics.drawable.*;
 import android.os.Bundle;
 import android.view.*;
 
+/**
+ * Shows how to use a GradientDrawable to draw rectangles with rounded corners, and three different
+ * types of color gradient: GradientDrawable.LINEAR_GRADIENT, GradientDrawable.RADIAL_GRADIENT, and
+ * GradientDrawable.SWEEP_GRADIENT.
+ */
 public class RoundRects extends GraphicsActivity {
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to a new instance of {@code SampleView}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,32 +42,35 @@ public class RoundRects extends GraphicsActivity {
     }
 
     private static class SampleView extends View {
-        @SuppressWarnings("unused")
-        private Path    mPath;
-        @SuppressWarnings("unused")
-        private Paint   mPaint;
-        private Rect    mRect;
+        /**
+         * {@code Rect} we use to set the bounds of the {@code GradientDrawable mDrawable} we draw
+         */
+        private Rect mRect;
+        /**
+         * {@code GradientDrawable} that we draw using different gradient types.
+         */
         private GradientDrawable mDrawable;
 
+        /**
+         * Our constructor.
+         *
+         * @param context {@code Context} to access resources, "this" when called from the {@code onCreate}
+         *                method of the activity {@code RoundRects}.
+         */
         public SampleView(Context context) {
             super(context);
             setFocusable(true);
 
-            mPath = new Path();
-            mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             mRect = new Rect(0, 0, 120, 120);
 
             mDrawable = new GradientDrawable(GradientDrawable.Orientation.TL_BR,
-                                             new int[] { 0xFFFF0000, 0xFF00FF00,
-                                                 0xFF0000FF });
+                    new int[]{0xFFFF0000, 0xFF00FF00, 0xFF0000FF});
             mDrawable.setShape(GradientDrawable.RECTANGLE);
-            mDrawable.setGradientRadius((float)(Math.sqrt(2) * 60));
+            mDrawable.setGradientRadius((float) (Math.sqrt(2) * 60));
         }
 
-        static void setCornerRadii(GradientDrawable drawable, float r0,
-                                   float r1, float r2, float r3) {
-            drawable.setCornerRadii(new float[] { r0, r0, r1, r1,
-                                                  r2, r2, r3, r3 });
+        static void setCornerRadii(GradientDrawable drawable, float r0, float r1, float r2, float r3) {
+            drawable.setCornerRadii(new float[]{r0, r0, r1, r1, r2, r2, r3, r3});
         }
 
         @Override
