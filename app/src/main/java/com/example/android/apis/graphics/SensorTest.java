@@ -26,16 +26,48 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+/**
+ * This sample only draws a nice looking arrow, and logs sensor readings.
+ * No meaningful graphics lessons here?
+ */
+@SuppressWarnings("FieldCanBeLocal")
 public class SensorTest extends GraphicsActivity {
-    @SuppressWarnings("FieldCanBeLocal")
+    /**
+     * TAG used for logging
+     */
     private final String TAG = "SensorTest";
 
     private SensorManager mSensorManager;
     private Sensor mSensor;
-    @SuppressWarnings("FieldCanBeLocal")
     private SampleView mView;
-    @SuppressWarnings({"unused", "MismatchedReadAndWriteOfArray"})
-    private float[] mValues;
+    private float[] mValues;  // Need to set this correctly I think
+
+    @Override
+    protected void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
+        mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mView = new SampleView(this);
+        setContentView(mView);
+        //noinspection ConstantIfStatement,ConstantConditions
+        if (false) Log.d(TAG, "create " + mSensorManager);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(mListener, mSensor, SensorManager.SENSOR_DELAY_FASTEST);
+        //noinspection ConstantIfStatement,ConstantConditions
+        if (false) Log.d(TAG, "resume " + mSensorManager);
+    }
+
+    @Override
+    protected void onStop() {
+        mSensorManager.unregisterListener(mListener);
+        super.onStop();
+        //noinspection ConstantIfStatement,ConstantConditions
+        if (false) Log.d(TAG, "stop " + mSensorManager);
+    }
 
     @SuppressWarnings("unused")
     private static class RunAve {
@@ -49,9 +81,8 @@ public class SensorTest extends GraphicsActivity {
             mWeights = weights;
 
             float sum = 0;
-            //noinspection ForLoopReplaceableByForEach
-            for (int i = 0; i < weights.length; i++) {
-                sum += weights[i];
+            for (float weight : weights) {
+                sum += weight;
             }
             mWeightScale = 1 / sum;
 
@@ -82,7 +113,7 @@ public class SensorTest extends GraphicsActivity {
 
     private final SensorEventListener mListener = new SensorEventListener() {
 
-        private final float[] mScale = new float[] { 2, 2.5f, 0.5f };   // accel
+        private final float[] mScale = new float[] { 2, 2.5f, 0.5f };   // acceleration
         private float[] mPrev = new float[3];
         private long mLastGestureTime;
 
@@ -106,6 +137,7 @@ public class SensorTest extends GraphicsActivity {
                         " (" + event.values[0] + ", " + event.values[1] + ", " +
                         event.values[2] + ")" + " diff(" + diff[0] +
                         " " + diff[1] + " " + diff[2] + ")");
+                mValues = event.values; // DOES THIS WORK? Mark Gray
             }
 
             long now = android.os.SystemClock.uptimeMillis();
@@ -140,33 +172,6 @@ public class SensorTest extends GraphicsActivity {
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
         }
     };
-
-    @Override
-    protected void onCreate(Bundle icicle) {
-        super.onCreate(icicle);
-        mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mView = new SampleView(this);
-        setContentView(mView);
-        //noinspection ConstantIfStatement,ConstantConditions
-        if (false) Log.d(TAG, "create " + mSensorManager);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mSensorManager.registerListener(mListener, mSensor, SensorManager.SENSOR_DELAY_FASTEST);
-        //noinspection ConstantIfStatement,ConstantConditions
-        if (false) Log.d(TAG, "resume " + mSensorManager);
-    }
-
-    @Override
-    protected void onStop() {
-        mSensorManager.unregisterListener(mListener);
-        super.onStop();
-        //noinspection ConstantIfStatement,ConstantConditions
-        if (false) Log.d(TAG, "stop " + mSensorManager);
-    }
 
     private class SampleView extends View {
         private Paint   mPaint = new Paint();
