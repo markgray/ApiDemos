@@ -37,11 +37,33 @@ public class SensorTest extends GraphicsActivity {
      */
     private final String TAG = "SensorTest";
 
+    /**
+     * {@code SensorManager} for accessing sensors
+     */
     private SensorManager mSensorManager;
+    /**
+     * Default sensor for the accelerometer sensor type TYPE_ACCELEROMETER
+     */
     private Sensor mSensor;
+    /**
+     * Our display of an arrow
+     */
     private SampleView mView;
-    private float[] mValues;  // Need to set this correctly I think
+    /**
+     * The {@code onDraw} method of {@code SampleView} rotates the canvas based on the value of
+     * {@code mValues[0]} - must have been copied from the compass example.
+     */
+    private float[] mValues = new float[1];
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. We fetch the handle to the system level service SENSOR_SERVICE to set our
+     * field {@code SensorManager mSensorManager}, then use it to initialize our field {@code Sensor mSensor}
+     * with the default sensor for the accelerometer sensor type. Finally we create a new instance of
+     * {@code SampleView} for our field {@code SampleView mView} and set our content view to it.
+     *
+     * @param icicle We do not call {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -49,26 +71,34 @@ public class SensorTest extends GraphicsActivity {
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mView = new SampleView(this);
         setContentView(mView);
-        //noinspection ConstantIfStatement,ConstantConditions
-        if (false) Log.d(TAG, "create " + mSensorManager);
     }
 
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or {@link #onPause}, for
+     * your activity to start interacting with the user. First we call through to our super's
+     * implementation of {@code onResume}, then we register {@code SensorEventListener mListener} as
+     * the listener for our sensor {@code Sensor mSensor} using SENSOR_DELAY_FASTEST (get sensor data
+     * as quickly as possible).
+     */
     @Override
     protected void onResume() {
         super.onResume();
         mSensorManager.registerListener(mListener, mSensor, SensorManager.SENSOR_DELAY_FASTEST);
-        //noinspection ConstantIfStatement,ConstantConditions
-        if (false) Log.d(TAG, "resume " + mSensorManager);
     }
 
+    /**
+     * Called when you are no longer visible to the user. We unregister {@code SensorEventListener mListener}
+     * as a listener for its sensors, then call through to our super's implementation of {@code onStop}.
+     */
     @Override
     protected void onStop() {
         mSensorManager.unregisterListener(mListener);
         super.onStop();
-        //noinspection ConstantIfStatement,ConstantConditions
-        if (false) Log.d(TAG, "stop " + mSensorManager);
     }
 
+    /**
+     * Unused so I won't comment on it.
+     */
     @SuppressWarnings("unused")
     private static class RunAve {
         private final float[] mWeights;
@@ -111,12 +141,43 @@ public class SensorTest extends GraphicsActivity {
         }
     }
 
+    /**
+     * An anonymous {@code SensorEventListener} that we use to listen to {@code Sensor mSensor}
+     */
     private final SensorEventListener mListener = new SensorEventListener() {
 
+        /**
+         * Scale factors used in calculating whether the sensor has changed enough to constitute a
+         * "serious" move left/right or up/down.
+         */
         private final float[] mScale = new float[] { 2, 2.5f, 0.5f };   // acceleration
+        /**
+         * Values of the previous {@code SensorEvent.values[]} array, used to detect change in the
+         * sensor readings.
+         */
         private float[] mPrev = new float[3];
+        /**
+         * Time in milliseconds since boot of the last time we logged a gesture. Used to limit that
+         * output to 1 per second.
+         */
         private long mLastGestureTime;
 
+        /**
+         * Called when sensor values have changed. First we set our flag {@code show} to false (we set
+         * it to true if the sensor readings have changed enough to justify logging them (which we then
+         * do)). We allocate 3 floats for {@code float[] diff}, then loop through the 3 readings in
+         * {@code event.values[]} and 3 previous readings in our field {@code mPrev[]}, scaling each
+         * change in readings then rounding them to the nearest {@code int} before assigning the result
+         * to the corresponding {@code diff[]}. If the absolute value is greater than 0, we set {@code show}
+         * to true. We then save the current sensor reading in {@code mPrev[]} to the next time we are
+         * called and loop back for the next element of {@code values[]}.
+         *
+         * When done with the sensor readings we check if {@code show} is now true, and if so log the
+         * sensor changes, increment {@code mValues[0]} modulo 360, and invalidate {@code SampleView mView}
+         * so that the compass angle will change (why not?).
+         *
+         * @param event the {@link android.hardware.SensorEvent SensorEvent}.
+         */
         @Override
         public void onSensorChanged(SensorEvent event) {
             boolean show = false;
@@ -137,7 +198,8 @@ public class SensorTest extends GraphicsActivity {
                         " (" + event.values[0] + ", " + event.values[1] + ", " +
                         event.values[2] + ")" + " diff(" + diff[0] +
                         " " + diff[1] + " " + diff[2] + ")");
-                mValues = event.values; // DOES THIS WORK? Mark Gray
+                mValues[0] = (mValues[0]+5) % 360;
+                mView.invalidate();
             }
 
             long now = android.os.SystemClock.uptimeMillis();
