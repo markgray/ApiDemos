@@ -174,7 +174,7 @@ public class SensorTest extends GraphicsActivity {
          *
          * When done with the sensor readings we check if {@code show} is now true, and if so log the
          * sensor changes, increment {@code mValues[0]} modulo 360, and invalidate {@code SampleView mView}
-         * so that the compass angle will change (why not?).
+         * so that the compass arrow angle will change (why not?).
          *
          * @param event the {@link android.hardware.SensorEvent SensorEvent}.
          */
