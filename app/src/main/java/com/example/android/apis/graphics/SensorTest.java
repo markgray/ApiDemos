@@ -67,7 +67,7 @@ public class SensorTest extends GraphicsActivity {
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mView = new SampleView(this);
         setContentView(mView);
@@ -150,7 +150,7 @@ public class SensorTest extends GraphicsActivity {
          * Scale factors used in calculating whether the sensor has changed enough to constitute a
          * "serious" move left/right or up/down.
          */
-        private final float[] mScale = new float[] { 2, 2.5f, 0.5f };   // acceleration
+        private final float[] mScale = new float[]{2, 2.5f, 0.5f};   // acceleration
         /**
          * Values of the previous {@code SensorEvent.values[]} array, used to detect change in the
          * sensor readings.
@@ -176,6 +176,17 @@ public class SensorTest extends GraphicsActivity {
          * sensor changes, increment {@code mValues[0]} modulo 360, and invalidate {@code SampleView mView}
          * so that the compass arrow angle will change (why not?).
          *
+         * We fetch the milliseconds since boot for {@code long now}, and if 1000 milliseconds have passed
+         * since {@code mLastGestureTime} was last set we set {@code mLastGestureTime} to 0 copy {@code diff[0]}
+         * to {@code float x} and {@code diff[1]} to {@code float y}. We set {@code boolean gestX} to true
+         * if the absolute value of {@code x} is greater than 3 and {@code boolean gestY} to true if the
+         * absolute value of {@code y} is greater than 3. Then if either {@code gestX} or {@code gestY}
+         * is true, but both are not true we have a gesture to log. If {@code gestX} was the one that was
+         * true, a value for {@code x} less than 0 is logged as a LEFT gesture, otherwise it is logged
+         * as a RITE gesture. If {@code gestY} was the one that was true, a value of {@code y} less than
+         * -2 is logged as UP, otherwise it is logged as DOWN. If we logged a gesture we now set the
+         * value of {@code mLastGestureTime} to {@code now}.
+         *
          * @param event the {@link android.hardware.SensorEvent SensorEvent}.
          */
         @Override
@@ -198,7 +209,7 @@ public class SensorTest extends GraphicsActivity {
                         " (" + event.values[0] + ", " + event.values[1] + ", " +
                         event.values[2] + ")" + " diff(" + diff[0] +
                         " " + diff[1] + " " + diff[2] + ")");
-                mValues[0] = (mValues[0]+5) % 360;
+                mValues[0] = (mValues[0] + 5) % 360;
                 mView.invalidate();
             }
 
@@ -230,16 +241,44 @@ public class SensorTest extends GraphicsActivity {
             }
         }
 
+        /**
+         * Called when the accuracy of the registered sensor has changed. We do nothing.
+         *
+         * @param sensor The {@code Sensor} whose accuracy has changed
+         * @param accuracy The new accuracy of this sensor, one of {@code SensorManager.SENSOR_STATUS_*}
+         */
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
         }
     };
 
+    /**
+     * Custom {@code View} which just displays a compass arrow, rotated by the value of {@code -mValues[0]}
+     * for no apparent reason.
+     */
     private class SampleView extends View {
-        private Paint   mPaint = new Paint();
-        private Path    mPath = new Path();
+        /**
+         * {@code Paint} we use to draw our compass arrow.
+         */
+        private Paint mPaint = new Paint();
+        /**
+         * {@code Path} that draws a compass arrow.
+         */
+        private Path mPath = new Path();
+        /**
+         * Flag which we do not actually use, but set to true when our method {@code onAttachedToWindow}
+         * is called and set to false when our method {@code onDetachedFromWindow} is called.
+         */
         private boolean mAnimate;
 
+        /**
+         * Our constructor. First we call our super's constructor, then we construct a wedge shaped
+         * path in {@code Path mPath} which our {@code onDraw} method will use to draw our compass
+         * arrow.
+         *
+         * @param context {@code Context} used to retrieve resources, this when called from the
+         *                {@code onCreate} method of the {@code SensorTest} activity.
+         */
         public SampleView(Context context) {
             super(context);
 
@@ -251,6 +290,18 @@ public class SensorTest extends GraphicsActivity {
             mPath.close();
         }
 
+        /**
+         * We implement this to do our drawing. First we make a local copy {@code Paint paint} of the
+         * pointer in our field {@code Paint mPaint}. Then we fill the entire {@code Canvas canvas}
+         * with the color WHITE. We set the antialias flag of {@code paint} to true, its color to
+         * BLACK, and its style to FILL. We initialize {@code int w} with the width of the {@code canvas}
+         * and {@code int h} with the height. We calculate the center of the canvas from these values
+         * and move the canvas to that point. Then is our field {@code mValues} is not null we rotate
+         * the canvas by {@code -mValues[0]}. Finally we draw the compass arrow contained in {@code Path mPath}
+         * to the canvas using {@code Paint mPaint} as the paint.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             Paint paint = mPaint;
@@ -273,19 +324,29 @@ public class SensorTest extends GraphicsActivity {
             canvas.drawPath(mPath, mPaint);
         }
 
+        /**
+         * This is called when the view is attached to a window. At this point it has a Surface and
+         * will soon start drawing. We set our flag {@code mAnimate} to true for no apparent reason
+         * and call through to our super's implementation of {@code onAttachedToWindow}.
+         */
         @Override
         protected void onAttachedToWindow() {
             mAnimate = true;
             //noinspection ConstantIfStatement,ConstantConditions
-            if (false) Log.d(TAG, "onAttachedToWindow. mAnimate="+mAnimate);
+            if (false) Log.d(TAG, "onAttachedToWindow. mAnimate=" + mAnimate);
             super.onAttachedToWindow();
         }
 
+        /**
+         * This is called when the view is detached from a window. At this point it no longer has a
+         * surface for drawing. We set our flag {@code mAnimate} to false for no apparent reason
+         * and call through to our super's implementation of {@code onDetachedFromWindow}.
+         */
         @Override
         protected void onDetachedFromWindow() {
             mAnimate = false;
             //noinspection ConstantIfStatement,ConstantConditions
-            if (false) Log.d(TAG, "onAttachedToWindow. mAnimate="+mAnimate);
+            if (false) Log.d(TAG, "onDetachedFromWindow. mAnimate=" + mAnimate);
             super.onDetachedFromWindow();
         }
     }

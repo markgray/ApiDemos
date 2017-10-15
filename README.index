@@ -1329,7 +1329,7 @@ Graphics
   Shadow Card Drag
     Graphics/Shadow Card Drag              v21 (or crashes due to Outline.setConvexPath)
         .graphics.ShadowCardDrag
-            Shows "material design" effects of simple dragable shapes that generate a 
+            Shows "material design" effects of simple draggable shapes that generate a
             shadow casting outline on touching the screen
 
   Shadow Card Stack

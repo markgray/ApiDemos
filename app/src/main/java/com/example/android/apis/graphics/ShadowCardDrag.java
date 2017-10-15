@@ -39,16 +39,163 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+
 import com.example.android.apis.R;
 
 import java.util.ArrayList;
 
+/**
+ * Shows "material design" effects of simple draggable shapes that generate a shadow casting outline
+ * on touching the screen.
+ */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class ShadowCardDrag extends Activity {
+    /**
+     * Maximum Z value for animation of the android:translationZ attribute of the draggable card.
+     */
     private static final float MAX_Z_DP = 10;
+    /**
+     * Scale used to scale the "momentum" in X and Y direction when determining how much to tilt the
+     * card (only when the "Enable Tilt" checkbox is checked)
+     */
     private static final float MOMENTUM_SCALE = 10;
+    /**
+     * Maximum angle for the tilt of the card (used only when the "Enable Tilt" checkbox is checked)
+     */
     private static final int MAX_ANGLE = 10;
+    /**
+     * {@code ShapeDrawable} presently being used for the draggable, it is cycled by the R.id.shape_select
+     * {@code Button} to be one of {@code RectShape}, {@code OvalShape}, {@code RoundRectShape} and
+     * {@code TriangleShape} which are contained in {@code ArrayList<Shape> mShapes}.
+     */
+    private final ShapeDrawable mCardBackground = new ShapeDrawable();
+    /**
+     * List containing the different {@code Shape} types which our draggable card can be set to, it
+     * is filled in our {@code onCreate} method with {@code RectShape}, {@code OvalShape},
+     * {@code RoundRectShape} and {@code TriangleShape}, and cycled through when the R.id.shape_select
+     * "Select Shape" {@code Button} is pressed.
+     */
+    private final ArrayList<Shape> mShapes = new ArrayList<>();
+    /**
+     * The logical density of the display. This is a scaling factor for the Density Independent Pixel
+     * unit, where one DIP is one pixel on an approximately 160 dpi screen (for example a 240x320,
+     * 1.5"x2" screen), providing the baseline of the system's display. Thus on a 160dpi screen this
+     * density value will be 1; on a 120 dpi screen it would be .75; etc. It is retrieved from the
+     * current display metrics of the packages resources in our {@code onCreate} method, and used
+     * whenever it is necessary to scale DPI measurements to pixels.
+     */
+    private float mDensity;
+    /**
+     * Our draggable card, with ID R.id.card in our layout file R.layout.shadow_card_drag.
+     */
+    private View mCard;
 
+    private final CardDragState mDragState = new CardDragState();
+    private boolean mTiltEnabled;
+    private boolean mShadingEnabled;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.shadow_card_drag);
+
+        mDensity = getResources().getDisplayMetrics().density;
+        mShapes.add(new RectShape());
+        mShapes.add(new OvalShape());
+        float r = 10 * mDensity;
+        float radii[] = new float[]{r, r, r, r, r, r, r, r};
+        mShapes.add(new RoundRectShape(radii, null, null));
+        mShapes.add(new TriangleShape());
+
+        mCardBackground.getPaint().setColor(Color.WHITE);
+        mCardBackground.setShape(mShapes.get(0));
+        final View cardParent = findViewById(R.id.card_parent);
+        mCard = findViewById(R.id.card);
+        mCard.setBackground(mCardBackground);
+
+        final CheckBox tiltCheck = (CheckBox) findViewById(R.id.tilt_check);
+        tiltCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mTiltEnabled = isChecked;
+                if (!mTiltEnabled) {
+                    mDragState.onUp();
+                }
+            }
+        });
+
+        final CheckBox shadingCheck = (CheckBox) findViewById(R.id.shading_check);
+        shadingCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mShadingEnabled = isChecked;
+                if (!mShadingEnabled) {
+                    mCardBackground.setColorFilter(null);
+                }
+            }
+        });
+
+        final Button shapeButton = (Button) findViewById(R.id.shape_select);
+        shapeButton.setOnClickListener(new View.OnClickListener() {
+            int index = 0;
+
+            @Override
+            public void onClick(View v) {
+                index = (index + 1) % mShapes.size();
+                mCardBackground.setShape(mShapes.get(index));
+            }
+        });
+
+        /*
+         * Enable any touch on the parent to drag the card. Note that this doesn't do a proper hit
+         * test, so any drag (including off of the card) will work.
+         *
+         * This enables the user to see the effect more clearly for the purpose of this demo.
+         */
+        cardParent.setOnTouchListener(new View.OnTouchListener() {
+            float downX;
+            float downY;
+            long downTime;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        downX = event.getX() - mCard.getTranslationX();
+                        downY = event.getY() - mCard.getTranslationY();
+                        downTime = event.getDownTime();
+                        ObjectAnimator upAnim = ObjectAnimator.ofFloat(mCard, "translationZ",
+                                MAX_Z_DP * mDensity);
+                        upAnim.setDuration(100);
+                        upAnim.setInterpolator(new DecelerateInterpolator());
+                        upAnim.start();
+                        if (mTiltEnabled) {
+                            mDragState.onDown(event.getDownTime(), event.getX(), event.getY());
+                        }
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        mCard.setTranslationX(event.getX() - downX);
+                        mCard.setTranslationY(event.getY() - downY);
+                        if (mTiltEnabled) {
+                            mDragState.onMove(event.getEventTime(), event.getX(), event.getY());
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        ObjectAnimator downAnim = ObjectAnimator.ofFloat(mCard, "translationZ", 0);
+                        downAnim.setDuration(100);
+                        downAnim.setInterpolator(new AccelerateInterpolator());
+                        downAnim.start();
+                        if (mTiltEnabled) {
+                            mDragState.onUp();
+                        }
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
+    @SuppressWarnings("WeakerAccess")
     private class CardDragState {
         long lastEventTime;
         float lastX;
@@ -88,7 +235,7 @@ public class ShadowCardDrag extends Activity {
                     float alphaDarkening = (momentumX * momentumX + momentumY * momentumY) / (90 * 90);
                     alphaDarkening /= 2;
 
-                    int alphaByte = 0xff - ((int)(alphaDarkening * 255) & 0xff);
+                    int alphaByte = 0xff - ((int) (alphaDarkening * 255) & 0xff);
                     int color = Color.rgb(alphaByte, alphaByte, alphaByte);
                     mCardBackground.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
                 }
@@ -138,114 +285,5 @@ public class ShadowCardDrag extends Activity {
         public void getOutline(@SuppressWarnings("NullableProblems") Outline outline) {
             outline.setConvexPath(mPath);
         }
-    }
-
-    private final ShapeDrawable mCardBackground = new ShapeDrawable();
-    private final ArrayList<Shape> mShapes = new ArrayList<>();
-    private float mDensity;
-    private View mCard;
-
-    private final CardDragState mDragState = new CardDragState();
-    private boolean mTiltEnabled;
-    private boolean mShadingEnabled;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.shadow_card_drag);
-
-        mDensity = getResources().getDisplayMetrics().density;
-        mShapes.add(new RectShape());
-        mShapes.add(new OvalShape());
-        float r = 10 * mDensity;
-        float radii[] = new float[] {r, r, r, r, r, r, r, r};
-        mShapes.add(new RoundRectShape(radii, null, null));
-        mShapes.add(new TriangleShape());
-
-        mCardBackground.getPaint().setColor(Color.WHITE);
-        mCardBackground.setShape(mShapes.get(0));
-        final View cardParent = findViewById(R.id.card_parent);
-        mCard = findViewById(R.id.card);
-        mCard.setBackground(mCardBackground);
-
-        final CheckBox tiltCheck = (CheckBox) findViewById(R.id.tilt_check);
-        tiltCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mTiltEnabled = isChecked;
-                if (!mTiltEnabled) {
-                    mDragState.onUp();
-                }
-            }
-        });
-
-        final CheckBox shadingCheck = (CheckBox) findViewById(R.id.shading_check);
-        shadingCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mShadingEnabled = isChecked;
-                if (!mShadingEnabled) {
-                    mCardBackground.setColorFilter(null);
-                }
-            }
-        });
-
-        final Button shapeButton = (Button) findViewById(R.id.shape_select);
-        shapeButton.setOnClickListener(new View.OnClickListener() {
-            int index = 0;
-            @Override
-            public void onClick(View v) {
-                index = (index + 1) % mShapes.size();
-                mCardBackground.setShape(mShapes.get(index));
-            }
-        });
-
-        /**
-         * Enable any touch on the parent to drag the card. Note that this doesn't do a proper hit
-         * test, so any drag (including off of the card) will work.
-         *
-         * This enables the user to see the effect more clearly for the purpose of this demo.
-         */
-        cardParent.setOnTouchListener(new View.OnTouchListener() {
-            float downX;
-            float downY;
-            long downTime;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        downX = event.getX() - mCard.getTranslationX();
-                        downY = event.getY() - mCard.getTranslationY();
-                        downTime = event.getDownTime();
-                        ObjectAnimator upAnim = ObjectAnimator.ofFloat(mCard, "translationZ",
-                                MAX_Z_DP * mDensity);
-                        upAnim.setDuration(100);
-                        upAnim.setInterpolator(new DecelerateInterpolator());
-                        upAnim.start();
-                        if (mTiltEnabled) {
-                            mDragState.onDown(event.getDownTime(), event.getX(), event.getY());
-                        }
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        mCard.setTranslationX(event.getX() - downX);
-                        mCard.setTranslationY(event.getY() - downY);
-                        if (mTiltEnabled) {
-                            mDragState.onMove(event.getEventTime(), event.getX(), event.getY());
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        ObjectAnimator downAnim = ObjectAnimator.ofFloat(mCard, "translationZ", 0);
-                        downAnim.setDuration(100);
-                        downAnim.setInterpolator(new AccelerateInterpolator());
-                        downAnim.start();
-                        if (mTiltEnabled) {
-                            mDragState.onUp();
-                        }
-                        break;
-                }
-                return true;
-            }
-        });
     }
 }
