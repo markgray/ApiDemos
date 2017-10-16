@@ -86,77 +86,121 @@ public class ShadowCardDrag extends Activity {
      */
     private float mDensity;
     /**
-     * Our draggable card, with ID R.id.card in our layout file R.layout.shadow_card_drag.
+     * Our draggable card, ID R.id.card in our layout file R.layout.shadow_card_drag.
      */
     private View mCard;
 
+    /**
+     * Class which handles tilting and/or shading when those checkboxes are checked.
+     */
     private final CardDragState mDragState = new CardDragState();
+    /**
+     * true if the "Enable Tilt" checkbox is checked. The card will be "tilted" in proportion to the
+     * velocity of movement.
+     */
     private boolean mTiltEnabled;
+    /**
+     * true if the "Enable Shading checkbox is checked. If so, a color filter will be applied to the
+     * card background darkening it in proportion to the velocity of movement.
+     */
     private boolean mShadingEnabled;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.shadow_card_drag.
+     * We initialize our field {@code mDensity} with the logical density of the display. We call our
+     * method {@code initShapes} to fill our field {@code ArrayList<Shape> mShapes} with four
+     * different {@code ShapeDrawable} objects: a {@code RectShape}, an {@code OvalShape}, a
+     * {@code RoundRectShape}, and a {@code TriangleShape}. We fetch the {@code Paint} used to draw
+     * our field {@code ShapeDrawable mCardBackground} and set its color to WHITE, then set its
+     * background to the first {@code Shape} in {@code mShapes} (a {@code RectShape}). We locate the
+     * {@code TextView} in our layout with id R.id.card and set its background to {@code mCardBackground}.
+     * We next initialize our "Enable Tilt" checkbox, our "Enable Shading" checkbox, and our "Select
+     * Shape" button. Finally we initialize an {@code OnTouchListener} for our entire {@code FrameLayout}
+     * (id R.id.card_parent) to allow us to move and animate the card according to the touch events
+     * received.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shadow_card_drag);
 
         mDensity = getResources().getDisplayMetrics().density;
-        mShapes.add(new RectShape());
-        mShapes.add(new OvalShape());
-        float r = 10 * mDensity;
-        float radii[] = new float[]{r, r, r, r, r, r, r, r};
-        mShapes.add(new RoundRectShape(radii, null, null));
-        mShapes.add(new TriangleShape());
 
+        initShapes();
         mCardBackground.getPaint().setColor(Color.WHITE);
         mCardBackground.setShape(mShapes.get(0));
-        final View cardParent = findViewById(R.id.card_parent);
         mCard = findViewById(R.id.card);
         mCard.setBackground(mCardBackground);
 
-        final CheckBox tiltCheck = (CheckBox) findViewById(R.id.tilt_check);
-        tiltCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mTiltEnabled = isChecked;
-                if (!mTiltEnabled) {
-                    mDragState.onUp();
-                }
-            }
-        });
+        initTiltEnable();
+        initShadingEnable();
+        initShapeButton();
+        initTouchListener();
+    }
 
-        final CheckBox shadingCheck = (CheckBox) findViewById(R.id.shading_check);
-        shadingCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mShadingEnabled = isChecked;
-                if (!mShadingEnabled) {
-                    mCardBackground.setColorFilter(null);
-                }
-            }
-        });
+    /**
+     * Initializes the {@code OnTouchListener} of the {@code FrameLayout} to allow the user to move
+     * the card with his finger. First we set {@code View cardParent} to the view in our layout with
+     * id {@code R.id.card_parent} (the {@code FrameLayout} holding our entire UI). Then we set its
+     * {@code OnTouchListener} to an anonymous class which will translate the {@code MotionEvent}
+     * received into movement of the card.
+     */
+    private void initTouchListener() {
+    /*
+     * Enable any touch on the parent to drag the card. Note that this doesn't do a proper hit
+     * test, so any drag (including off of the card) will work.
+     *
+     * This enables the user to see the effect more clearly for the purpose of this demo.
+     */
+        final View cardParent = findViewById(R.id.card_parent);
 
-        final Button shapeButton = (Button) findViewById(R.id.shape_select);
-        shapeButton.setOnClickListener(new View.OnClickListener() {
-            int index = 0;
-
-            @Override
-            public void onClick(View v) {
-                index = (index + 1) % mShapes.size();
-                mCardBackground.setShape(mShapes.get(index));
-            }
-        });
-
-        /*
-         * Enable any touch on the parent to drag the card. Note that this doesn't do a proper hit
-         * test, so any drag (including off of the card) will work.
-         *
-         * This enables the user to see the effect more clearly for the purpose of this demo.
-         */
         cardParent.setOnTouchListener(new View.OnTouchListener() {
+            /**
+             * Distance in the X direction of the last ACTION_DOWN {@code MotionEvent} received with
+             * respect to the current X coordinate of the card. Used to translate the X coordinate
+             * of future ACTION_MOVE events to a new location for the card.
+             */
             float downX;
+            /**
+             * Distance in the Y direction of the last ACTION_DOWN {@code MotionEvent} received with
+             * respect to the current Y coordinate of the card. Used to translate the Y coordinate
+             * of future ACTION_MOVE events to a new location for the card.
+             */
             float downY;
+            /**
+             * The time (in ms) when the user originally pressed down to start a stream of position
+             * events. Set when an ACTION_DOWN event is received, but never used.
+             */
             long downTime;
 
+            /**
+             * Called when a touch event is dispatched to our view. We switch based on the kind of
+             * action of the {@code MotionEvent event}:
+             * <ul>
+             *     <li>
+             *         ACTION_DOWN - First we calculate how far the event coordinates are from the
+             *         current location of the card, setting {@code downX} and {@code downY} so that
+             *         they may be used to calculate where to move the card when future ACTION_MOVE
+             *         events are received. Then we create an {@code ObjectAnimator upAnim} to animate
+             *         the property name "translationZ" of {@code View mCard}, set its duration to
+             *         100 milliseconds, its interpolator to a new instance of {@code DecelerateInterpolator},
+             *         and then start it running. If the flag {@code mTiltEnabled} is true, we call the
+             *         {@code onDown} method of {@code CardDragState mDragState} to initialize it for
+             *         a "tilting" animation of the card.
+             *     </li>
+             *     <li>
+             *         ACTION_MOVE - 
+             *     </li>
+             * </ul>
+             *
+             * @param v The view the touch event has been dispatched to.
+             * @param event The MotionEvent object containing full information about the event.
+             * @return True if the listener has consumed the event, false otherwise. We always return
+             * true.
+             */
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
@@ -164,8 +208,7 @@ public class ShadowCardDrag extends Activity {
                         downX = event.getX() - mCard.getTranslationX();
                         downY = event.getY() - mCard.getTranslationY();
                         downTime = event.getDownTime();
-                        ObjectAnimator upAnim = ObjectAnimator.ofFloat(mCard, "translationZ",
-                                MAX_Z_DP * mDensity);
+                        ObjectAnimator upAnim = ObjectAnimator.ofFloat(mCard, "translationZ", MAX_Z_DP * mDensity);
                         upAnim.setDuration(100);
                         upAnim.setInterpolator(new DecelerateInterpolator());
                         upAnim.start();
@@ -193,6 +236,54 @@ public class ShadowCardDrag extends Activity {
                 return true;
             }
         });
+    }
+
+    private void initShapeButton() {
+        final Button shapeButton = (Button) findViewById(R.id.shape_select);
+        shapeButton.setOnClickListener(new View.OnClickListener() {
+            int index = 0;
+
+            @Override
+            public void onClick(View v) {
+                index = (index + 1) % mShapes.size();
+                mCardBackground.setShape(mShapes.get(index));
+            }
+        });
+    }
+
+    private void initShadingEnable() {
+        final CheckBox shadingCheck = (CheckBox) findViewById(R.id.shading_check);
+        shadingCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mShadingEnabled = isChecked;
+                if (!mShadingEnabled) {
+                    mCardBackground.setColorFilter(null);
+                }
+            }
+        });
+    }
+
+    private void initTiltEnable() {
+        final CheckBox tiltCheck = (CheckBox) findViewById(R.id.tilt_check);
+        tiltCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mTiltEnabled = isChecked;
+                if (!mTiltEnabled) {
+                    mDragState.onUp();
+                }
+            }
+        });
+    }
+
+    private void initShapes() {
+        mShapes.add(new RectShape());
+        mShapes.add(new OvalShape());
+        float r = 10 * mDensity;
+        float radii[] = new float[]{r, r, r, r, r, r, r, r};
+        mShapes.add(new RoundRectShape(radii, null, null));
+        mShapes.add(new TriangleShape());
     }
 
     @SuppressWarnings("WeakerAccess")
