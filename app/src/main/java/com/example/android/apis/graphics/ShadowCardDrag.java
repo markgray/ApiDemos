@@ -192,9 +192,23 @@ public class ShadowCardDrag extends Activity {
              *         a "tilting" animation of the card.
              *     </li>
              *     <li>
-             *         ACTION_MOVE - 
+             *         ACTION_MOVE - We move the card in the X direction by the change in position of
+             *         the current event with respect to the position of the last ACTION_DOWN event,
+             *         and do the same for the Y direction. Then if our flag {@code mTiltEnabled} is
+             *         true we call the {@code onMove} method of {@code CardDragState mDragState} with
+             *         the time of our event, and its x and y coordinates. The {@code onMove} method
+             *         will tilt the card in proportion to the current momentum.
+             *     </li>
+             *     <li>
+             *         ACTION_UP - We create {@code ObjectAnimator downAnim} to animate the "translationZ"
+             *         attribute of {@code View mCard} to 0, set its duration to 100 milliseconds, set
+             *         its interpolator to a new instance of {@code AccelerateInterpolator}, and start
+             *         the animation running. Then is our flag {@code mTiltEnabled} is true we call the
+             *         {@code onUp} method of {@code CardDragState mDragState} to animate the flattening
+             *         of the tilting which was in progress.
              *     </li>
              * </ul>
+             * In all cases we return true to the caller to signal that we have consumed the event.
              *
              * @param v The view the touch event has been dispatched to.
              * @param event The MotionEvent object containing full information about the event.
@@ -238,11 +252,24 @@ public class ShadowCardDrag extends Activity {
         });
     }
 
+    /**
+     * Sets the {@code OnClickListener} of the "Select Shape" button (id R.id.shape_select) to an
+     * anonymous class which steps through the list of {@code Shape} objects in {@code ArrayList<Shape> mShapes}
+     * setting the {@code ShapeDrawable mCardBackground} to a different one every time it is clicked.
+     */
     private void initShapeButton() {
         final Button shapeButton = (Button) findViewById(R.id.shape_select);
         shapeButton.setOnClickListener(new View.OnClickListener() {
             int index = 0;
 
+            /**
+             * Called when our button is clicked. First we increment {@code index} modulo the number
+             * of {@code Shape} objects in the list {@code ArrayList<Shape> mShapes}, then we fetch
+             * the {@code Shape} at index {@code index} and use it to set the {@code ShapeDrawable}
+             * of {@code ShapeDrawable mCardBackground}.
+             *
+             * @param v {@code View} that was clicked
+             */
             @Override
             public void onClick(View v) {
                 index = (index + 1) % mShapes.size();
@@ -251,9 +278,23 @@ public class ShadowCardDrag extends Activity {
         });
     }
 
+    /**
+     * Sets the {@code OnClickListener} of the "Enable Shading" checkbox (id R.id.shading_check) to an
+     * anonymous class which saves the value of {@code boolean isChecked} in {@code mShadingEnabled}
+     * and if it is not enabled now, sets the color filter of {@code ShapeDrawable mCardBackground}
+     * to null.
+     */
     private void initShadingEnable() {
         final CheckBox shadingCheck = (CheckBox) findViewById(R.id.shading_check);
         shadingCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            /**
+             * Called when the checked state of a compound button has changed. First we save the value
+             * of {@code boolean isChecked} in {@code mShadingEnabled} and if it is not enabled now,
+             * we set the color filter of {@code ShapeDrawable mCardBackground} to null.
+             *
+             * @param buttonView The compound button view whose state has changed.
+             * @param isChecked  The new checked state of buttonView.
+             */
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mShadingEnabled = isChecked;
@@ -264,9 +305,24 @@ public class ShadowCardDrag extends Activity {
         });
     }
 
+    /**
+     * Sets the {@code OnClickListener} of the "Enable Tilt" checkbox (id R.id.tilt_check) to an
+     * anonymous class which saves the value of {@code boolean isChecked} in {@code mTiltEnabled}
+     * and if it is not enabled now, calls the {@code onUp} method of {@code CardDragState mDragState}
+     * to animate the flattening of the card if it was tilted at the moment.
+     */
     private void initTiltEnable() {
         final CheckBox tiltCheck = (CheckBox) findViewById(R.id.tilt_check);
         tiltCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            /**
+             * Called when the checked state of a compound button has changed. First we save the value
+             * of {@code boolean isChecked} in {@code mTiltEnabled} and if it is not enabled now,
+             * we call the {@code onUp} method of {@code CardDragState mDragState} to animate the
+             * flattening of the card if it was tilted at the moment.
+             *
+             * @param buttonView The compound button view whose state has changed.
+             * @param isChecked  The new checked state of buttonView.
+             */
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mTiltEnabled = isChecked;
@@ -277,6 +333,11 @@ public class ShadowCardDrag extends Activity {
         });
     }
 
+    /**
+     * Fills the list of {@code Shape} objects in {@code ArrayList<Shape> mShapes} with the following
+     * new instances: a {@code RectShape}, an {@code OvalShape}, a {@code RoundRectShape} and a
+     * {@code TriangleShape}.
+     */
     private void initShapes() {
         mShapes.add(new RectShape());
         mShapes.add(new OvalShape());
@@ -286,15 +347,52 @@ public class ShadowCardDrag extends Activity {
         mShapes.add(new TriangleShape());
     }
 
+    /**
+     * Class used to animate the "tilt" and "shading" of the card iff those features are selected.
+     */
     @SuppressWarnings("WeakerAccess")
     private class CardDragState {
+        /**
+         * Time of the last event we were informed of when our {@code onDown} or {@code onMove} methods
+         * are called. Used to calculate the speed that the card is being moved at in order to scale
+         * the "tilt" and/or "shading" of the card proportionately.
+         */
         long lastEventTime;
+        /**
+         * X location of the last event we were informed of when our {@code onDown} or {@code onMove}
+         * methods were called. Used to calculate the speed that the card is being moved at in order
+         * to scale the "tilt" and/or "shading" of the card proportionately.
+         */
         float lastX;
+        /**
+         * Y location of the last event we were informed of when our {@code onDown} or {@code onMove}
+         * methods were called. Used to calculate the speed that the card is being moved at in order
+         * to scale the "tilt" and/or "shading" of the card proportionately.
+         */
         float lastY;
 
+        /**
+         * Calculated "momentum" in the X direction of our card, used to scale the tilt about the
+         * Y axis, and the shading of the card
+         */
         float momentumX;
+        /**
+         * Calculated "momentum" in the Y direction of our card, used to scale the tilt about the
+         * X axis, and the shading of the card
+         */
         float momentumY;
 
+        /**
+         * Called when the {@code OnTouchListener} of our {@code FrameLayout} (id R.id.card_parent)
+         * receives an ACTION_DOWN event and only if tilt is enabled. We save the event time
+         * {@code eventTime} in our field {@code lastEventTime}, and the {@code x} and {@code y}
+         * coordinates of the event in our fields {@code lastX} and {@code lastY} respectively. We
+         * then set both {@code momentumX} and {@code momentumY} to 0.
+         *
+         * @param eventTime time that the ACTION_DOWN event occurred at
+         * @param x         x coordinate of the event
+         * @param y         y coordinate of the event
+         */
         public void onDown(long eventTime, float x, float y) {
             lastEventTime = eventTime;
             lastX = x;
@@ -304,6 +402,24 @@ public class ShadowCardDrag extends Activity {
             momentumY = 0;
         }
 
+        /**
+         * Called when the {@code OnTouchListener} of our {@code FrameLayout} (id R.id.card_parent)
+         * receives an ACTION_MOVE event and only if tilt is enabled. First we calculate the change
+         * in time {@code deltaT} of the event time since {@code lastEventTime} was set. If this is
+         * not 0, we calculate and scale values for {@code momentumX} and {@code momentumY} based on
+         * the movement since the last event, and rotate the card about the X axis proportionately
+         * to the value of {@code -momentumY} and rotate the card about the Y axis proportionately
+         * to the value of {@code -momentumX}. Then if shading is enabled, we calculate a value of
+         * {@code float alphaDarkening} proportional to the momentum, scale it into a byte, and use
+         * that byte to create an rgb color which we set as the color filter using PorterDuff MULTIPLY
+         * mode for {@code ShapeDrawable mCardBackground}. Finally we save the event time in our field
+         * {@code lastEventTime}, and the {@code x} and {@code y} coordinates of the event in our
+         * fields {@code lastX} and {@code lastY} respectively.
+         *
+         * @param eventTime time that the ACTION_MOVE event occurred at
+         * @param x         x coordinate of the event
+         * @param y         y coordinate of the event
+         */
         public void onMove(long eventTime, float x, float y) {
             final long deltaT = eventTime - lastEventTime;
 
@@ -337,6 +453,9 @@ public class ShadowCardDrag extends Activity {
             lastEventTime = eventTime;
         }
 
+        /**
+         * 
+         */
         public void onUp() {
             ObjectAnimator flattenX = ObjectAnimator.ofFloat(mCard, "rotationX", 0);
             flattenX.setDuration(100);
