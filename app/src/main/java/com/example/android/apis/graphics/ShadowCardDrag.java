@@ -454,7 +454,16 @@ public class ShadowCardDrag extends Activity {
         }
 
         /**
-         * 
+         * Called when the {@code OnTouchListener} of our {@code FrameLayout} (id R.id.card_parent)
+         * receives an ACTION_UP event when tilt is enabled, and it is also called from the
+         * {@code OnCheckedChangeListener} of the "Enable Tilt" checkbox when tilt is disabled. First
+         * we create {@code ObjectAnimator flattenX} to animate the "rotationX" attribute of our
+         * {@code View mCard} to 0 rotation, set its duration to 100  milliseconds, its interpolator
+         * to an {@code AccelerateInterpolator}, then start it running. Next we create
+         * {@code ObjectAnimator flattenY} to animate the "rotationY" attribute of our
+         * {@code View mCard} to 0 rotation, set its duration to 100  milliseconds, its interpolator
+         * to an {@code AccelerateInterpolator}, then start it running. Finally we set the color
+         * filter of {@code ShapeDrawable mCardBackground} to null.
          */
         public void onUp() {
             ObjectAnimator flattenX = ObjectAnimator.ofFloat(mCard, "rotationX", 0);
@@ -474,8 +483,20 @@ public class ShadowCardDrag extends Activity {
      * Simple shape example that generates a shadow casting outline.
      */
     private static class TriangleShape extends Shape {
+        /**
+         * {@code Path} which draws our triangular shape.
+         */
         private final Path mPath = new Path();
 
+        /**
+         * Callback method called when {@link #resize(float,float)} is executed. First we clear any
+         * lines and curves from the {@code Path mPath}, making it empty. We move the path to (0,0),
+         * draw a line to ({@code width},0), draw a line to {@code (width/2,height)}, then draw a
+         * line back to (0,0) (a triangle). Finally we close the current contour.
+         *
+         * @param width the new width of the Shape
+         * @param height the new height of the Shape
+         */
         @Override
         protected void onResize(float width, float height) {
             mPath.reset();
@@ -486,11 +507,26 @@ public class ShadowCardDrag extends Activity {
             mPath.close();
         }
 
+        /**
+         * Draw this shape into the provided Canvas, with the provided Paint. We simply call the
+         * {@code drawPath} method of {@code Canvas canvas} to draw {@code Path mPath} using
+         * {@code Paint paint}.
+         *
+         * @param canvas the Canvas within which this shape should be drawn
+         * @param paint  the Paint object that defines this shape's characteristics
+         */
         @Override
         public void draw(Canvas canvas, Paint paint) {
             canvas.drawPath(mPath, paint);
         }
 
+        /**
+         * Compute the Outline of the shape and return it in the supplied Outline parameter. We simply
+         * call the {@code setConvexPath} method of {@code Outline outline} to construct an outline
+         * of our {@code Path mPath}.
+         *
+         * @param outline The Outline to be populated with the result. Should not be null.
+         */
         @Override
         public void getOutline(@SuppressWarnings("NullableProblems") Outline outline) {
             outline.setConvexPath(mPath);

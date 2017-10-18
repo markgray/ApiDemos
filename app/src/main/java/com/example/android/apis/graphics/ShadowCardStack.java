@@ -31,14 +31,51 @@ import com.example.android.apis.R;
 
 import java.util.ArrayList;
 
+/**
+ * Clever use of Animator and AnimatorSet to move card stack using "material design" shadowing.
+ * The properties being animated are: translationY (expandAnimators), translationZ (towardAnimators),
+ * rotationY and translationX (moveAwayAnimators), rotationY and translationX (moveBackAnimators),
+ * translationZ (awayAnimators), and translationY (collapseAnimators). Crashes for less than v21 due
+ * to AndroidManifest android:theme="@android:style/Theme.Material.Light"
+ */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ShadowCardStack extends Activity {
 
+    /**
+     * X coordinate in DP that the cards "slide away" to in the {@code Animator slideAway}, (where it
+     * is scaled to pixels using the display's logical density before being used).
+     */
     private static final float X_SHIFT_DP = 1000;
+    /**
+     * Used to calculate the {@code targetY} for each individual card that that card "expands to"
+     * in the {@code Animator expand}, (where it is scaled to pixels using the display's logical
+     * density before being used). It is essentially the size in DP of the top edge of the card that
+     * is visible when the stack is expanded.
+     */
     private static final float Y_SHIFT_DP = 50;
+    /**
+     * Each card has an animation of its "translationZ" attribute by a multiple of this depending on
+     * the location of the card in the stack in the {@code Animator toward}, (where it is scaled to
+     * pixels using the display's logical density before being used). It is essentially the height
+     * of a card above the card below it when the stack is expanded.
+     */
     private static final float Z_LIFT_DP = 8;
+    /**
+     * Angle to which the cards are rotated around the y axis using the "rotationY" attribute as
+     * they begin to "slide away" in the {@code Animator rotateAway}. It is a subtle animation when
+     * the "slide away" happens so fast, but is visible if you change the "slide away" duration to
+     * a much longer time period.
+     */
     private static final float ROTATE_DEGREES = 15;
 
+    /**
+     *
+     * @param items list of {@code Animator} objects
+     * @param startDelay amount of time, in milliseconds, to delay starting the animation after its
+     *                   {@code start()} method is called.
+     * @return An {@code AnimatorSet} containing all of the {@code Animator} objects in {@code items},
+     * configured to play together with a start delay of {@code startDelay}
+     */
     public AnimatorSet createSet(ArrayList<Animator> items, long startDelay) {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(items);
@@ -81,13 +118,11 @@ public class ShadowCardStack extends Activity {
             towardAnimators.add(toward);
 
             card.setPivotX(X_SHIFT_DP);
-            Animator rotateAway = ObjectAnimator.ofFloat(card, "rotationY",
-                    i == 0 ? 0 : ROTATE_DEGREES);
+            Animator rotateAway = ObjectAnimator.ofFloat(card, "rotationY", i == 0 ? 0 : ROTATE_DEGREES);
             rotateAway.setStartDelay(200 * ((max) - i));
             rotateAway.setDuration(100);
             moveAwayAnimators.add(rotateAway);
-            Animator slideAway = ObjectAnimator.ofFloat(card, "translationX",
-                    i == 0 ? 0 : X);
+            Animator slideAway = ObjectAnimator.ofFloat(card, "translationX", i == 0 ? 0 : X);
             slideAway.setStartDelay(200 * ((max) - i));
             slideAway.setDuration(100);
             moveAwayAnimators.add(slideAway);
@@ -121,6 +156,7 @@ public class ShadowCardStack extends Activity {
         totalSet.addListener(new RepeatListener(totalSet));
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static class RepeatListener implements Animator.AnimatorListener {
         final Animator mRepeatAnimator;
         public RepeatListener(Animator repeatAnimator) {
