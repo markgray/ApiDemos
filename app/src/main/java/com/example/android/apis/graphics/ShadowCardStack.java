@@ -69,6 +69,9 @@ public class ShadowCardStack extends Activity {
     private static final float ROTATE_DEGREES = 15;
 
     /**
+     * Turns a list of {@code Animator} objects into an {@code AnimatorSet}, with the {@code Animator}
+     * objects set to play together, with a start delay of {@code startDelay} milliseconds, and returns
+     * it to the caller.
      *
      * @param items list of {@code Animator} objects
      * @param startDelay amount of time, in milliseconds, to delay starting the animation after its
@@ -83,6 +86,17 @@ public class ShadowCardStack extends Activity {
         return set;
     }
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout R.layout.shadow_card_stack. Next
+     * we fetch the current logical density of our display to {@code float density} to use to scale
+     * DP to pixels. We find the {@code ViewGroup} with id R.id.card_parent and save a pointer to it
+     * in {@code ViewGroup cardParent}. Next we convert {@code X_SHIFT_DP} to pixels and assign the
+     * value to {@code float X}, {@code Y_SHIFT_DP} to {@code float Y} and {@code Z_LIFT_DP} to
+     * {@code float Z} for later use.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
