@@ -73,7 +73,7 @@ public class ShadowCardStack extends Activity {
      * objects set to play together, with a start delay of {@code startDelay} milliseconds, and returns
      * it to the caller.
      *
-     * @param items list of {@code Animator} objects
+     * @param items      list of {@code Animator} objects
      * @param startDelay amount of time, in milliseconds, to delay starting the animation after its
      *                   {@code start()} method is called.
      * @return An {@code AnimatorSet} containing all of the {@code Animator} objects in {@code items},
@@ -93,7 +93,47 @@ public class ShadowCardStack extends Activity {
      * DP to pixels. We find the {@code ViewGroup} with id R.id.card_parent and save a pointer to it
      * in {@code ViewGroup cardParent}. Next we convert {@code X_SHIFT_DP} to pixels and assign the
      * value to {@code float X}, {@code Y_SHIFT_DP} to {@code float Y} and {@code Z_LIFT_DP} to
-     * {@code float Z} for later use.
+     * {@code float Z} for later use. We create 6 lists of {@code Animator} objects:
+     * <ul>
+     * <li>{@code towardAnimators} - contains "translationZ" {@code Animator} objects for moving towards the viewer</li>
+     * <li>{@code expandAnimators} - contains "translationY" {@code Animator} objects for expanding from 1 card to 5 stacked cards</li>
+     * <li>{@code moveAwayAnimators} - contains "rotationY" and "translationX" {@code Animator} objects for moving away</li>
+     * <li>{@code moveBackAnimators} - contains "rotationY" and "translationX" {@code Animator} objects for moving back</li>
+     * <li>{@code awayAnimators} - contains "translationZ" {@code Animator} objects for moving Z back to 0</li>
+     * <li>{@code collapseAnimators} - contains "translationY" {@code Animator} objects for moving Y back to 0</li>
+     * </ul>
+     * We now initialize {@code max} to the number of child {@code TextView} objects in our layout (5 in
+     * our case), and loop for each of these. We fetch a reference to the current child to {@code TextView card},
+     * set its text to display the "Card number" it represents. We calculate the Y coordinate we want that
+     * card to "expand" to, create an {@code Animator expand} to animate the cards "translationY" attribute
+     * to that coordinate and add it to the {@code expandAnimators} list. We calculate how high we want
+     * that card to rise toward the viewer, create an {@code Animator toward} to animate the cards "translationZ"
+     * to that point and add it to the {@code towardAnimators} list. We set the x location of the point around
+     * which the view is rotated to X_SHIFT_DP (1000), create an {@code Animator rotateAway} to rotate every
+     * card except card 0 (the bottom card) by ROTATE_DEGREES (15), set its start delay to 1000ms for card 0,
+     * 800ms for card 1, 600ms for card 2, 400ms for card 3, and 200ms for card 4 (top of stack), set its
+     * duration to 100ms, and add it to the {@code moveAwayAnimators} list. We create an {@code Animator slideAway}
+     * to animate the cards "translationX" to 0 for card 0, and to {@code X} for all other cards, set its start
+     * delay to 1000ms for card 0, 800ms for card 1, 600ms for card 2, 400ms for card 3, and 200ms for card 4
+     * (top of stack), set its duration to 100ms and add it to the {@code moveAwayAnimators} list. We create
+     * an {@code Animator rotateBack} to animate the cards "rotationY" to 0, set its start delay to 0ms
+     * for card 0, 200ms for card 1, 400ms for card 2, 600ms for card 3, and 800ms for card 4 (top of stack),
+     * and add it to the {@code moveBackAnimators} list. We create an {@code Animator slideBack} to animate the
+     * cards "translationX" to 0, set its start delay to 0ms for card 0, 200ms for card 1, 400ms for card 2,
+     * 600ms for card 3, and 800ms for card 4 (top of stack), and add it to the {@code moveBackAnimators} list.
+     * We create an {@code Animator away} to animate the cards "translationZ" to 0, set its start delay to 0ms
+     * for card 0, 200ms for card 1, 400ms for card 2, 600ms for card 3, and 800ms for card 4 (top of stack),
+     * and add it to the {@code awayAnimators} list. And finally we create an {@code Animator collapse} to
+     * animate the cards "translationY" to 0, and add it to the {@code collapseAnimators} list.
+     * <p>
+     * When we are done creating the animators for all five cards, we create {@code AnimatorSet totalSet}
+     * and set it up to play each of the {@code AnimatorSet} objects that our method {@code createSet}
+     * creates from our 6 {@code Animator} lists. The {@code expandAnimators} run together after a start
+     * delay of 250ms, followed by the {@code towardAnimators}, followed after a 250ms delay by the
+     * {@code moveAwayAnimators}, followed by the {@code moveBackAnimators}, followed after a 250ms
+     * delay by the {@code awayAnimators}, followed by the {@code collapseAnimators}. We then start
+     * {@code totalSet} running and set its {@code AnimatorListener} to a new instance of our
+     * {@code RepeatListener(totalSet)} which restarts the {@code totalSet} animation when it ends.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
@@ -123,7 +163,7 @@ public class ShadowCardStack extends Activity {
             TextView card = (TextView) cardParent.getChildAt(i);
             card.setText("Card number " + i);
 
-            float targetY = (i - (max-1) / 2.0f) * Y;
+            float targetY = (i - (max - 1) / 2.0f) * Y;
             Animator expand = ObjectAnimator.ofFloat(card, "translationY", targetY);
             expandAnimators.add(expand);
 
@@ -170,16 +210,40 @@ public class ShadowCardStack extends Activity {
         totalSet.addListener(new RepeatListener(totalSet));
     }
 
+    /**
+     * {@code AnimatorListener} which starts its animation over again when it ends.
+     */
     @SuppressWarnings("WeakerAccess")
     public static class RepeatListener implements Animator.AnimatorListener {
+        /**
+         * The {@code Animator} we were constructed to listen to.
+         */
         final Animator mRepeatAnimator;
+
+        /**
+         * Our constructor simply saves its argument in our field {@code Animator mRepeatAnimator}.
+         *
+         * @param repeatAnimator {@code Animator} object that we are created to listen to.
+         */
         public RepeatListener(Animator repeatAnimator) {
             mRepeatAnimator = repeatAnimator;
         }
 
+        /**
+         * Notifies the start of the animation. We ignore.
+         *
+         * @param animation The started animation.
+         */
         @Override
-        public void onAnimationStart(Animator animation) {}
+        public void onAnimationStart(Animator animation) {
+        }
 
+        /**
+         * Notifies the end of the animation. If we are being called for the same {@code Animator} we
+         * were created to listen to, we start it running again.
+         *
+         * @param animation The animation which reached its end.
+         */
         @Override
         public void onAnimationEnd(Animator animation) {
             if (animation == mRepeatAnimator) {
@@ -187,10 +251,22 @@ public class ShadowCardStack extends Activity {
             }
         }
 
+        /**
+         * Notifies the cancellation of the animation. We do nothing.
+         *
+         * @param animation The animation which was canceled.
+         */
         @Override
-        public void onAnimationCancel(Animator animation) {}
+        public void onAnimationCancel(Animator animation) {
+        }
 
+        /**
+         * Notifies the repetition of the animation. We do nothing.
+         *
+         * @param animation The animation which was repeated.
+         */
         @Override
-        public void onAnimationRepeat(Animator animation) {}
+        public void onAnimationRepeat(Animator animation) {
+        }
     }
 }
