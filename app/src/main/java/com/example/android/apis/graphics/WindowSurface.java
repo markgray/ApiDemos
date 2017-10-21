@@ -20,8 +20,21 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
      * TAG for logging.
      */
     private static final String TAG = "WindowSurface";
+    /**
+     * Our {@code DrawingThread} instance for background drawing.
+     */
     public final DrawingThread mDrawingThread = new DrawingThread();
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we retrieve the current Window for the activity and take ownership of
+     * the window's surface (The window's view hierarchy will no longer draw into the surface, though
+     * it will otherwise continue to operate (such as for receiving input events). Our implementation
+     * of the {@code SurfaceHolder.Callback2} interface will be used to tell us about state changes
+     * to the surface). Finally we start our background drawing thread {@code DrawingThread mDrawingThread}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +48,12 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
         mDrawingThread.start();
     }
 
+    /**
+     * Called as part of the activity lifecycle when an activity is going into the background, but
+     * has not (yet) been killed. First we call our super's implementation of {@code onPause}, then
+     * synchronizing on {@code mDrawingThread} we set the {@code mRunning} field of {@code mDrawingThread}
+     * to false and wake it up (it will be blocking on its "this" waiting for us).
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -46,6 +65,13 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
         }
     }
 
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or {@link #onPause}, for our
+     * activity to start interacting with the user. First we call through to our super's implementation
+     * of {@code onResume}, then synchronizing on {@code mDrawingThread} we set the {@code mRunning}
+     * field of {@code mDrawingThread} to true and wake it up (it will be blocking on its "this"
+     * waiting for us).
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -57,6 +83,12 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
         }
     }
 
+    /**
+     * Perform any final cleanup before our activity is destroyed. First we call through to our super's
+     * implementation of {@code onDestroy}, then synchronizing on {@code mDrawingThread} we set the
+     * {@code mQuit} field of {@code mDrawingThread} to true and wake it up (it will be blocking on
+     * its "this" waiting for us).
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -68,6 +100,13 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
         }
     }
 
+    /**
+     * This is called immediately after the surface is first created. Synchronizing on {@code mDrawingThread}
+     * we set the {@code mSurface} field of {@code mDrawingThread} to our parameter {@code SurfaceHolder holder}
+     * and wake it up (it will be blocking on its "this" waiting for us).
+     *
+     * @param holder The SurfaceHolder whose surface is being created.
+     */
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         // Tell the drawing thread that a surface is available.
@@ -77,16 +116,43 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
         }
     }
 
+    /**
+     * This is called immediately after any structural changes (format or size) have been made to the
+     * surface. We do nothing.
+     *
+     * @param holder The SurfaceHolder whose surface has changed.
+     * @param format The new PixelFormat of the surface.
+     * @param width  The new width of the surface.
+     * @param height The new height of the surface.
+     */
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         // Don't need to do anything here; the drawing thread will pick up
         // new sizes from the canvas.
     }
 
+    /**
+     * Called when the application needs to redraw the content of its surface, after it is resized
+     * or for some other reason. We do nothing.
+     *
+     * @param holder The SurfaceHolder whose surface has changed.
+     */
     @Override
     public void surfaceRedrawNeeded(SurfaceHolder holder) {
     }
 
+    /**
+     * This is called immediately before a surface is destroyed. It is called after {@code onPause}
+     * so the {@code mRunning} field of {@code mDrawingThread} is false at this point so the thread
+     * will be looping waiting for it to become true (after a call to {@code onResume}). Synchronizing
+     * on {@code mDrawingThread} we set the {@code mSurface} field of {@code mDrawingThread} to our
+     * parameter {@code SurfaceHolder holder} and wake it up. Then while the {@code mActive} field of
+     * {@code mDrawingThread} is true we temporarily relinquish the lock and {@code wait} for that
+     * thread to call the {@code notify} method. We loop here until {@code mActive} is false because
+     * we should not return from this method until our thread stops drawing to the surface.
+     *
+     * @param holder The SurfaceHolder whose surface is being destroyed.
+     */
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         // We need to tell the drawing thread to stop, and block until
@@ -104,11 +170,37 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
         }
     }
 
-    // Tracking of a single point that is moving on the screen.
+    /**
+     * Tracking of a single point that is moving on the screen.
+     */
     @SuppressWarnings("WeakerAccess")
     static final class MovingPoint {
-        float x, y, dx, dy;
+        /**
+         * Our current x coordinate
+         */
+        float x;
+        /**
+         * Our current y coordinate
+         */
+        float y;
+        /**
+         * Our current change in x coordinate for the next call to our method {@code step}
+         */
+        float dx;
+        /**
+         * Our current change in y coordinate for the next call to our method {@code step}
+         */
+        float dy;
 
+        /**
+         * Initializes our fields with random numbers based on the constraints of the input parameters.
+         * We initialize our field {@code x} to a random number between 0 and {@code width-1}, and
+         * {@code y} to a random number between 0 and {@code height-1}.
+         *
+         * @param width   maximum value for the x coordinate (or red color)
+         * @param height  maximum value for the y coordinate (or blue color)
+         * @param minStep minimum step to use for changing x and y.
+         */
         void init(int width, int height, float minStep) {
             x = (float) ((width - 1) * Math.random());
             y = (float) ((height - 1) * Math.random());
@@ -231,10 +323,8 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
                         mPoint2.init(canvas.getWidth(), canvas.getHeight(), mMinStep);
                         mColor.init(127, 127, 1);
                     } else {
-                        mPoint1.step(canvas.getWidth(), canvas.getHeight(),
-                                mMinStep, mMaxStep);
-                        mPoint2.step(canvas.getWidth(), canvas.getHeight(),
-                                mMinStep, mMaxStep);
+                        mPoint1.step(canvas.getWidth(), canvas.getHeight(), mMinStep, mMaxStep);
+                        mPoint2.step(canvas.getWidth(), canvas.getHeight(), mMinStep, mMaxStep);
                         mColor.step(127, 127, 1, 3);
                     }
                     mBrightLine += 2;
