@@ -195,7 +195,8 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
         /**
          * Initializes our fields with random numbers based on the constraints of the input parameters.
          * We initialize our field {@code x} to a random number between 0 and {@code width-1}, and
-         * {@code y} to a random number between 0 and {@code height-1}.
+         * {@code y} to a random number between 0 and {@code height-1}. We initialize our fields
+         * {@code dx} and {@code dy} to random numbers between 1 and 2 times {@code minStep} plus 1.
          *
          * @param width   maximum value for the x coordinate (or red color)
          * @param height  maximum value for the y coordinate (or blue color)
@@ -208,6 +209,21 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
             dy = (float) (Math.random() * minStep * 2) + 1;
         }
 
+        /**
+         * Calculates a new random delta value for {@code cur} given the constraints of {@code minStep}
+         * and {@code maxStep}. First we add to {@code cur} a random number between {@code -minStep/2}
+         * and {@code +minStep/2}. Then if the new {@code cur} is less than 0, but greater than
+         * {@code -minStep} we set it to {@code -minStep}. If it's greater than or equal to 0 and less
+         * than {@code minStep} we set it to {@code minStep}. If it's greater than {@code maxStep} we
+         * set it to {@code maxStep}, and if it's less than {@code -maxStep} we set it to {@code -maxStep}.
+         * Finally we return {@code cur} to the caller.
+         *
+         * @param cur     current delta value
+         * @param minStep minimum allowed delta value
+         * @param maxStep maximum allowed delta value
+         * @return a new random delta value between {@code -maxStep} and {@code +maxStep} but greater
+         * whose absolute value is greater than or equal to {@code minStep}.
+         */
         float adjDelta(float cur, float minStep, float maxStep) {
             cur += (Math.random() * minStep) - (minStep / 2);
             if (cur < 0 && cur > -minStep) cur = -minStep;
@@ -217,6 +233,17 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
             return cur;
         }
 
+        /**
+         * Adds {@code dx} to {@code x} and {@code dy} to {@code y}, and if either is outside the
+         * bounds set for them (0 to {@code width} for x, and 0 to {@code height} for {@code y}),
+         * we set them to those bounds and call our method {@code adjDelta} to calculate a new value
+         * for {@code dx} and/or {@code dy}.
+         *
+         * @param width maximum value for x
+         * @param height maximum value for y
+         * @param minStep minimum change for both x and y
+         * @param maxStep maximum change for both x and y
+         */
         void step(int width, int height, float minStep, float maxStep) {
             x += dx;
             if (x <= 0 || x >= (width - 1)) {
@@ -240,24 +267,79 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
     @SuppressWarnings("WeakerAccess")
     class DrawingThread extends Thread {
         // These are protected by the Thread's lock.
+        /**
+         * Our interface to someone holding our display surface, we use it to obtain a {@code Canvas}
+         * to draw to using the method {@code lockCanvas}, and to call {@code unlockCanvasAndPost} to
+         * finish editing pixels in the surface so they can be displayed.
+         */
         SurfaceHolder mSurface;
+        /**
+         * Flag indicating whether our thread should be running (true) or not (false). If is set to
+         * true in the {@code onResume} method of {@code WindowSurface} and to false in its
+         * {@code onPause} method.
+         */
         boolean mRunning;
+        /**
+         * Flag indicating that we are currently running and drawing to the surface. The main thread's
+         * {@code surfaceDestroyed} uses this flag to loop before returning to its caller to make
+         * sure all drawing to the surface has stopped.
+         */
         boolean mActive;
+        /**
+         * Flag to indicate that we should stop running by returning to the caller of our {@code run}
+         * method. It is set to true by the {@code onDestroy} method of the main thread.
+         */
         boolean mQuit;
 
         // Internal state.
+        /**
+         * Width of the lines that we draw, calculated using the current logical display density.
+         */
         int mLineWidth;
+        /**
+         * Minimum change in x and y coordinate, calculated to be 2 times {@code mLineWidth}
+         */
         float mMinStep;
+        /**
+         * Maximum change in x and y coordinate, calculated to be 3 times {@code mMinStep}
+         */
         float mMaxStep;
 
+        /**
+         * Flag to indicate whether we have initialized everything. Set to true first time our drawing
+         * loop is run so that we only call the {@code init} methods of the end points of our lines
+         * {@code MovingPoint mPoint1} and {@code MovingPoint mPoint2} and the associated color value
+         * {@code MovingPoint mColor} once and only once.
+         */
         boolean mInitialized;
+        /**
+         * First point of the newest line to be drawn
+         */
         final MovingPoint mPoint1 = new MovingPoint();
+        /**
+         * Second point of the newest line to be drawn
+         */
         final MovingPoint mPoint2 = new MovingPoint();
 
+        /**
+         * Number of old lines to remember for next display refresh.
+         */
         static final int NUM_OLD = 100;
+        /**
+         * Current number of old lines in our refresh buffer.
+         */
         int mNumOld = 0;
+        /**
+         * Array to hold our old line endpoints so they can be redrawn.
+         */
         final float[] mOld = new float[NUM_OLD * 4];
+        /**
+         * Array to hold the colors of our old lines so they can be redrawn.
+         */
         final int[] mOldColor = new int[NUM_OLD];
+        /**
+         * 
+         */
         int mBrightLine = 0;
 
         // X is red, Y is blue.
