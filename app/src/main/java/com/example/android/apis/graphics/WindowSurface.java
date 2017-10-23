@@ -338,22 +338,76 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
          */
         final int[] mOldColor = new int[NUM_OLD];
         /**
-         * 
+         * Ranges from -2 to NUM_OLD*2 then back to -2, it is incremented by 2 every time the surface
+         * is drawn. It is used to determine which of the old lines are shaded to green by the method
+         * {@code makeGreen} (those whose {@code index} is within +/-10 of {@code mBrightLine}
          */
         int mBrightLine = 0;
 
         // X is red, Y is blue.
+        /**
+         * Random Color used for the newest line.
+         */
         final MovingPoint mColor = new MovingPoint();
 
+        /**
+         * {@code Paint} used to contain the color for the background, its color is set to black near
+         * the beginning of the {@code run} method and the color is retrieved for a call to the
+         * {@code drawColor} method of our {@code Canvas canvas}.
+         */
         final Paint mBackground = new Paint();
+        /**
+         * {@code Paint} used to draw our lines.
+         */
         final Paint mForeground = new Paint();
 
+        /**
+         * Calculates whether the old line at {@code index} should have its color tinged green and
+         * by how much based on its distance from the current value of {@code mBrightLine}. First we
+         * calculate the absolute difference {@code dist} between our parameter {@code index} and our
+         * field {@code mBrightLine}. If this is greater than 10, we return 0 (no green tinging to
+         * do). Otherwise we return a value between 255 ({@code dist} is 0) to 25 ({@code dist} is 9)
+         * left shifted into the correct position for the color green in an ARGB color.
+         *
+         * @param index index number of the old line that is being drawn
+         * @return 0 if {@code index} is farther away than +/-10 from {@code mBrightLine}, otherwise
+         * a shade of green proportional to the distance apart between 255 and 25 (shifted into the
+         * byte used for the color green).
+         */
         int makeGreen(int index) {
             int dist = Math.abs(mBrightLine - index);
             if (dist > 10) return 0;
             return (255 - (dist * (255 / 10))) << 8;
         }
 
+        /**
+         * Our drawing loop. We retrieve the current logical density of the display and set our field
+         * {@code mLineWidth} to 1.5 times that. If the result was less than 1, we set {@code mLineWidth}
+         * to 1. Then we set our field {@code mMinStep} to 2 times {@code mLineWidth}, and {@code mMaxStep}
+         * to 3 times {@code mMinStep}. We set the color of the {@code Paint mBackground} to black (for
+         * no good reason, since we only retrieve the color to draw the canvas black, and have no other
+         * use for the {@code Paint}. We set the color of the {@code Paint mBackground} to a dark
+         * blue/green shade. set its anti alias flag to false, and set its stroke width to {@code mLineWidth}
+         * (setting the color is useless, since it is set again before the {@code Paint} is used, but
+         * what the hay).
+         *
+         * Now we loop almost for ever (until our flag {@code mQuit} is changed to true by the main
+         * thread, it does this in its {@code onDestroy} callback). Synchronizing on "this" we loop
+         * waiting for our field {@code mSurface} to become non-null (it is set to the {@code SurfaceHolder}
+         * passed to the {@code surfaceCreated} and {@code surfaceDestroyed} callbacks of the main thread)
+         * and our field {@code mRunning} to become true (it is set to true in the {@code onResume}
+         * callback of the main thread). While waiting it our {@code mActive} field is true we set it
+         * to false and wake up the main thread (it waits for it to become false in its {@code surfaceDestroyed}
+         * callback before returning to its caller). Then if our {@code mQuit} field has become true
+         * we return to our caller, ending the thread (it is set to true in the {@code onDestroy} callback
+         * of the main thread).
+         *
+         * Now we wait for the main thread to release its lock on this instance, and once it has if
+         * {@code mActive} is false we set it to true and notify the main thread (just in case its
+         * {@code surfaceDestroyed} has been called in the meantime I suppose, since we hold the lock
+         * it won't be able to proceed until we finish the {@code synchronized} block which releases
+         * the lock until we try to get it again at the top of the while loop).
+         */
         @Override
         public void run() {
             mLineWidth = (int) (getResources().getDisplayMetrics().density * 1.5);
