@@ -239,8 +239,8 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
          * we set them to those bounds and call our method {@code adjDelta} to calculate a new value
          * for {@code dx} and/or {@code dy}.
          *
-         * @param width maximum value for x
-         * @param height maximum value for y
+         * @param width   maximum value for x
+         * @param height  maximum value for y
          * @param minStep minimum change for both x and y
          * @param maxStep maximum change for both x and y
          */
@@ -390,7 +390,7 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
          * blue/green shade. set its anti alias flag to false, and set its stroke width to {@code mLineWidth}
          * (setting the color is useless, since it is set again before the {@code Paint} is used, but
          * what the hay).
-         *
+         * <p>
          * Now we loop almost for ever (until our flag {@code mQuit} is changed to true by the main
          * thread, it does this in its {@code onDestroy} callback). Synchronizing on "this" we loop
          * waiting for our field {@code mSurface} to become non-null (it is set to the {@code SurfaceHolder}
@@ -401,7 +401,7 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
          * callback before returning to its caller). Then if our {@code mQuit} field has become true
          * we return to our caller, ending the thread (it is set to true in the {@code onDestroy} callback
          * of the main thread).
-         *
+         * <p>
          * Now we wait for the main thread to release its lock on this instance, and once it has if
          * {@code mActive} is false we set it to true and notify the main thread (just in case its
          * {@code surfaceDestroyed} has been called in the meantime I suppose, since we hold the lock
