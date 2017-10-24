@@ -28,21 +28,48 @@ import android.widget.Button;
 import com.example.android.apis.R;
 
 /**
- * Demonstration of overlays placed on top of a SurfaceView.
+ * Demonstration of overlays placed on top of a SurfaceView. Shows how to use a FrameLayout to layer
+ * views within it, and how to use View.setVisibility(View.VISIBLE), View.INVISIBLE, and View.GONE to
+ * toggle which ones are shown. Good use of a translucent background as well.
  */
 public class SurfaceViewOverlay extends Activity {
+    /**
+     * {@code LinearLayout} which contains our two "Hide Me!" buttons (id R.id.hidecontainer)
+     */
     View mVictimContainer;
+    /**
+     * First "Hide Me!" {@code Button} (id R.id.hideme1)
+     */
     View mVictim1;
+    /**
+     * Second "Hide Me!" {@code Button} (id R.id.hideme2)
+     */
     View mVictim2;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.surface_view_overlay.
+     * Then we locate {@code GLSurfaceView glSurfaceView} in our layout (id R.id.glsurfaceview), and
+     * set its renderer to a new instance of {@code CubeRenderer} (a pair of tumbling cubes). We locate
+     * {@code View mVictimContainer} with id R.id.hidecontainer. We locate {@code View mVictim1} with
+     * id R.id.hideme1 and set its {@code OnClickListener} to a new instance of {@code HideMeListener}
+     * constructed for it, and we locate {@code View mVictim2} with id R.id.hideme2 and set its
+     * {@code OnClickListener} to a new instance of {@code HideMeListener} constructed for it.
+     * We locate {@code Button visibleButton} id R.id.vis and set its {@code OnClickListener} to
+     * {@code OnClickListener mVisibleListener}, {@code Button invisibleButton} id R.id.invis and set
+     * its {@code OnclickListener} to {@code OnClickListener mInvisibleListener}, and locate
+     * {@code Button goneButton} id R.id.gone and set its {@code OnClickListener} to
+     * {@code OnClickListener mGoneListener}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.surface_view_overlay);
 
-        GLSurfaceView glSurfaceView =
-            (GLSurfaceView) findViewById(R.id.glsurfaceview);
+        GLSurfaceView glSurfaceView = (GLSurfaceView) findViewById(R.id.glsurfaceview);
         glSurfaceView.setRenderer(new CubeRenderer(false));
 
         // Find the views whose visibility will change
@@ -63,6 +90,11 @@ public class SurfaceViewOverlay extends Activity {
         goneButton.setOnClickListener(mGoneListener);
     }
 
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or {@link #onPause}, for
+     * your activity to start interacting with the user. We simply call through to our super's
+     * implementation of {@code onResume}.
+     */
     @Override
     protected void onResume() {
         // Ideally a game should implement onResume() and onPause()
@@ -70,6 +102,10 @@ public class SurfaceViewOverlay extends Activity {
         super.onResume();
     }
 
+    /**
+     * Called as part of the activity lifecycle when an activity is going into the background, but
+     * has not (yet) been killed. We simply call through to our super's implementation of {@code onPause}.
+     */
     @Override
     protected void onPause() {
         // Ideally a game should implement onResume() and onPause()
@@ -77,6 +113,11 @@ public class SurfaceViewOverlay extends Activity {
         super.onPause();
     }
 
+    /**
+     * {@code OnClickListener} which sets the visibility of the {@code View} it is constructed for
+     * to INVISIBLE.
+     */
+    @SuppressWarnings("WeakerAccess")
     class HideMeListener implements OnClickListener {
         final View mTarget;
 
@@ -84,6 +125,7 @@ public class SurfaceViewOverlay extends Activity {
             mTarget = target;
         }
 
+        @Override
         public void onClick(View v) {
             mTarget.setVisibility(View.INVISIBLE);
         }
@@ -91,6 +133,7 @@ public class SurfaceViewOverlay extends Activity {
     }
 
     OnClickListener mVisibleListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             mVictim1.setVisibility(View.VISIBLE);
             mVictim2.setVisibility(View.VISIBLE);
@@ -99,6 +142,7 @@ public class SurfaceViewOverlay extends Activity {
     };
 
     OnClickListener mInvisibleListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             mVictim1.setVisibility(View.INVISIBLE);
             mVictim2.setVisibility(View.INVISIBLE);
@@ -107,6 +151,7 @@ public class SurfaceViewOverlay extends Activity {
     };
 
     OnClickListener mGoneListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
             mVictim1.setVisibility(View.GONE);
             mVictim2.setVisibility(View.GONE);

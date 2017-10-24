@@ -1349,11 +1349,11 @@ Graphics
             to it (without going through the view hierarchy). Good example of how to use 
             a background thread to do your drawing. Shows use of life cycle callbacks when
             a thread is running in the background.
-            TODO: getWindow is a good starting place to better understand Android View implementation
 
   SurfaceView Overlay
     Graphics/SurfaceView Overlay           all
         .graphics.SurfaceViewOverlay
+        .graphics.CubeRenderer
             Shows how to use a FrameLayout to layer views within it, and how to use 
             View.setVisibility(View.VISIBLE), View.INVISIBLE, and View.GONE to toggle
             which ones are shown. Good use of a translucent background as well.

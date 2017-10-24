@@ -407,6 +407,55 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
          * {@code surfaceDestroyed} has been called in the meantime I suppose, since we hold the lock
          * it won't be able to proceed until we finish the {@code synchronized} block which releases
          * the lock until we try to get it again at the top of the while loop).
+         * <p>
+         * We now lock the {@code Canvas canvas} of {@code SurfaceHolder mSurface} for drawing. If
+         * {@code canvas} is null after this (surface has not been created or otherwise cannot be edited)
+         * we skip our drawing code and loop back to the start of our while loop. Next we check to see
+         * if our {@code mInitialized} flag is false, and if so we set it to true, initialize both
+         * {@code mPoint1} and {@code mPoint2} to the width and height of the {@code Canvas canvas},
+         * with a minimum step size of {@code mMinStep}, then initialize {@code mColor} to a red of
+         * 127, a blue of 127 and a minimum step size of 1. If we have already initialized, we call
+         * the {@code step} of {@code mPoint1} and {@code mPoint2} to move the points to a new random
+         * position with a maximum width of the width of the canvas, maximum height of the height of
+         * the canvas, a minimum step of {@code mMinStep} and a maximum step of {@code mMaxStep}. We
+         * call the {@code step} method of {@code mColor} to "step" it to a random color with a maximum
+         * red of 127, maximum blue of 127, a minimum step of 1, and a maximum step of 3.
+         * <p>
+         * Next we advance {@code mBrightLine} by 2, and if the result is greater than {@code NUM_OLD*2}
+         * we set it to -2.
+         * <p>
+         * We set the entire {@code Canvas canvas} to the color of {@code Paint mBackground} (which is
+         * set to black at the beginning of this method).
+         * <p>
+         * We next proceed to draw all the lines stored in the array {@code mOld}, with their colors
+         * stored in the array {@code mOldColor} (or'ed with the green tinge appropriate for this line
+         * as determined by the method {@code makeGreen}). To do this we loop starting with the oldest
+         * line currently stored, setting the color of {@code Paint mForeground} to the old color
+         * stored for it in {@code mOldColor} or'ed with the color returned by the method {@code makeGreen}
+         * for that line number, and setting the alpha of the {@code Paint} color to that goes from
+         * 255 for the newest line to {@code 255/NUM_OLD} for the oldest possible line. Finally we
+         * draw the line using {@code mForeground} as the {@code Paint} (each line occupies 4 locations
+         * in {@code mOld} with each of those 4 values used as a coordinate for the two endpoints).
+         * <p>
+         * Now we draw the new line. We determine the color {@code color} using the latest value of
+         * {@code mColor} by adding 128 to the value of {@code mColor.x} as the red, and 128 to the
+         * value of {@code mColor.y} as the blue (limiting both to a maximum of 255). We shift and or
+         * these values together with an alpha of 255 to make a proper ARGB format color for {@code color}.
+         * Then we set the color of {@code Paint mForeground} to {@code color} or'ed with the green
+         * tinge returned by our method {@code makeGreen} for an index of -2. We then draw a line
+         * from {@code mPaint1} to {@code mPaint2} using {@code mForeground} as the {@code Paint}.
+         * <p>
+         * To add the new line to the old lines we first move all the old entries in {@code mOld} up
+         * by 4 positions, and {@code mOldColor} up by 1 position. If {@code mNumOld} is less than
+         * {@code NUM_OLD} we increment {@code mNumOld}. Then we copy {@code mPoint1.x} to {@code mOld[0]},
+         * {@code mPoint1.y} to {@code mOld[1]}. {@code mPoint2.x} to {@code mOld[2]}, {@code mPoint2.y}
+         * to {@code mOld[3]}, and we copy {@code color} to {@code mOldColor[0]}.
+         * <p>
+         * Finally we call the method {@code unlockCanvasAndPost} which finishes editing pixels in
+         * the surface, and loop back to the beginning of the while loop. (After this call, the
+         * surface's current pixels will be shown on the screen, but its content is lost, in particular
+         * there is no guarantee that the content of the Surface will remain unchanged when the method
+         * {@code lockCanvas()} is called again.)
          */
         @Override
         public void run() {
