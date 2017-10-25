@@ -21,6 +21,10 @@ import android.graphics.*;
 import android.os.Bundle;
 import android.view.*;
 
+/**
+ * Shows how to position text drawn to a Canvas using Paint.setTextAlign, Canvas.drawPosText, and
+ * along an arbitrary path using Canvas.drawTextOnPath
+ */
 public class TextAlign extends GraphicsActivity {
 
     @Override

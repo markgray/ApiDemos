@@ -1369,7 +1369,7 @@ Graphics
     Graphics/Text Align                    all
         .graphics.TextAlign
             Shows how to position text drawn to a Canvas using Paint.setTextAlign, 
-            Canvas.drawPosText, and along an arbitrary using Canvas.drawTextOnPath
+            Canvas.drawPosText, and along an arbitrary path using Canvas.drawTextOnPath
             TODO: resize text for dpi and fix deprecated methods warnings
 
   Touch Paint

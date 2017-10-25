@@ -119,12 +119,27 @@ public class SurfaceViewOverlay extends Activity {
      */
     @SuppressWarnings("WeakerAccess")
     class HideMeListener implements OnClickListener {
+        /**
+         * {@code View} we were constructed to make INVISIBLE when it is clicked.
+         */
         final View mTarget;
 
+        /**
+         * Our constructor. We simple save our parameter {@code View target} in our field
+         * {@code View mTarget}.
+         *
+         * @param target {@code View} to make invisible if it is clicked
+         */
         HideMeListener(View target) {
             mTarget = target;
         }
 
+        /**
+         * Called when a view whose {@code OnClickListener} we are has been clicked. We simply set
+         * the visibility of our {@code View mTarget} to INVISIBLE.
+         *
+         * @param v {@code View} that was clicked.
+         */
         @Override
         public void onClick(View v) {
             mTarget.setVisibility(View.INVISIBLE);
@@ -132,7 +147,19 @@ public class SurfaceViewOverlay extends Activity {
 
     }
 
+    /**
+     * {@code OnClickListener} for the {@code Button} "Vis", id R.id.vis in our layout. It sets the
+     * visibility of {@code View mVictim1}, {@code View mVictim2} and {@code View mVictimContainer}
+     * to VISIBLE when the {@code Button} is clicked.
+     */
     OnClickListener mVisibleListener = new OnClickListener() {
+        /**
+         * Called when a view whose {@code OnClickListener} we are has been clicked. When clicked we
+         * set the visibility of {@code View mVictim1}, {@code View mVictim2} and {@code View mVictimContainer}
+         * to VISIBLE.
+         *
+         * @param v The view that was clicked.
+         */
         @Override
         public void onClick(View v) {
             mVictim1.setVisibility(View.VISIBLE);
@@ -141,7 +168,19 @@ public class SurfaceViewOverlay extends Activity {
         }
     };
 
+    /**
+     * {@code OnClickListener} for the {@code Button} "Invis", id R.id.invis in our layout. It sets the
+     * visibility of {@code View mVictim1}, {@code View mVictim2} and {@code View mVictimContainer}
+     * to INVISIBLE when the {@code Button} is clicked.
+     */
     OnClickListener mInvisibleListener = new OnClickListener() {
+        /**
+         * Called when a view whose {@code OnClickListener} we are has been clicked. When clicked we
+         * set the visibility of {@code View mVictim1}, {@code View mVictim2} and {@code View mVictimContainer}
+         * to INVISIBLE.
+         *
+         * @param v The view that was clicked.
+         */
         @Override
         public void onClick(View v) {
             mVictim1.setVisibility(View.INVISIBLE);
@@ -150,7 +189,19 @@ public class SurfaceViewOverlay extends Activity {
         }
     };
 
+    /**
+     * {@code OnClickListener} for the {@code Button} "Gone", id R.id.gone in our layout. It sets the
+     * visibility of {@code View mVictim1}, {@code View mVictim2} and {@code View mVictimContainer}
+     * to GONE when the {@code Button} is clicked.
+     */
     OnClickListener mGoneListener = new OnClickListener() {
+        /**
+         * Called when a view whose {@code OnClickListener} we are has been clicked. When clicked we
+         * set the visibility of {@code View mVictim1}, {@code View mVictim2} and {@code View mVictimContainer}
+         * to GONE.
+         *
+         * @param v The view that was clicked.
+         */
         @Override
         public void onClick(View v) {
             mVictim1.setVisibility(View.GONE);
