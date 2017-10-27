@@ -137,7 +137,18 @@ public class TextAlign extends GraphicsActivity {
 
         /**
          * Creates and returns an array of x, y coordinates for drawing each individual character in
-         * the parameter {@code String text}.
+         * the parameter {@code String text}. First we allocate an entry for every character in
+         * {@code text} in {@code float[] widths}. Then we fill it with the widths of all of the
+         * characters in {@code text}, saving the number of code units in the text in {@code int n}.
+         * We allocate for {@code float[] pos} an array of {@code 2*n} {@code float} objects.
+         * <p>
+         * Then initializing {@code accumulatedX} to 0, we loop through all {@code n} values in
+         * {@code widths} setting two entries in {@code pos} for the coordinates of each character,
+         * the first value being {@code accumulatedX}, and the second our parameter {@code y}. We
+         * then add the entry in {@code widths} for this character to {@code accumulatedX} and loop
+         * back for the next character.
+         * <p>
+         * Finally we return {@code pos} to the caller.
          *
          * @param text  String whose characters we are to determine the position of.
          * @param y     y coordinate position for all the characters.
@@ -162,6 +173,53 @@ public class TextAlign extends GraphicsActivity {
             return pos;
         }
 
+        /**
+         * We implement this to do our drawing. First we draw the entire {@code Canvas canvas} WHITE.
+         * We make a copy of the {@code Paint mPaint} pointer for {@code Paint p}, copy {@code mX} to
+         * {@code float x}, set {@code y} to 0, and make a copy of the {@code float[] mPos} pointer in
+         * {@code float[] pos}.
+         * <p>
+         * We set the color of {@code p} to red and use it to draw a line from (x,y) to (x,y+DY*3)
+         * (this is a line showing the center of the aligned text we are about to draw). We now set
+         * the color of {@code p} to BLACK, translate the {@code canvas} down {@code DY} pixels, set
+         * the text alignment of {@code p} to LEFT, and use it to draw the text TEXT_L ("Left") at
+         * location (x,y). We move the {@code canvas} down {@code DY} pixels, set the text alignment
+         * of {@code p} to CENTER, and use it to draw the text TEXT_C ("Center") at location (x,y).
+         * We move the {@code canvas} down {@code DY} pixels, set the text alignment of {@code p} to
+         * RIGHT, and use it to draw the text TEXT_R ("Right") at location (x,y).
+         * <p>
+         * Now we move on to the positioned text, first moving the {@code Canvas canvas} to the
+         * location (100,DY*2), and setting the color of {@code p} to green. We loop through the
+         * coordinates in {@code pos} drawing a vertical line between one {@code DY} above to two
+         * {@code DY} below the (x,y) coordinates contained in {@code pos}.
+         * <p>
+         * Then we set the color of {@code p} to BLACK, its text alignment to LEFT, and use the method
+         * {@code canvas.drawPosText} to draw the text {@code POSTEXT} ("Positioned"), using {@code pos}
+         * as the location of each character, and the {@code Paint p} as the {@code Paint}. We move the
+         * {@code Canvas canvas} down by {@code DY}, set the text alignment of {@code p} to to CENTER,
+         * and use the method {@code canvas.drawPosText} to draw the text {@code POSTEXT} ("Positioned"),
+         * using {@code pos} as the location of each character, and the {@code Paint p} as the {@code Paint}.
+         * Finally we move the {@code Canvas canvas} down by {@code DY}, set the text alignment of {@code p}
+         * to to RIGHT, and use the method {@code canvas.drawPosText} to draw the text {@code POSTEXT}
+         * ("Positioned"), using {@code pos} as the location of each character, and the {@code Paint p}
+         * as the {@code Paint}.
+         * <p>
+         * We move the {@code Canvas canvas} to (-100,DY*2) (relative to its last position of course),
+         * and draw our {@code Path mPath} using the {@code Paint mPathPaint}. We set the text alignment
+         * of {@code p} to LEFT, and use the method {@code canvas.drawTextOnPath} to draw the text
+         * TEXTONPATH ("Along a path") along the {@code Path mPath} using {@code Paint p} as the
+         * {@code Paint}. We move the {@code Canvas canvas} down by {@code DY*1.5} pixels, and draw
+         * our {@code Path mPath} using the {@code Paint mPathPaint}. We set the text alignment of
+         * {@code p} to CENTER, and use the method {@code canvas.drawTextOnPath} to draw the text
+         * TEXTONPATH ("Along a path") along the {@code Path mPath} using {@code Paint p} as the
+         * {@code Paint}. And finally we move the {@code Canvas canvas} down by {@code DY*1.5} pixels,
+         * and draw  our {@code Path mPath} using the {@code Paint mPathPaint}. We set the text alignment
+         * of {@code p} to RIGHT, and use the method {@code canvas.drawTextOnPath} to draw the text
+         * TEXTONPATH ("Along a path") along the {@code Path mPath} using {@code Paint p} as the
+         * {@code Paint}.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.WHITE);
@@ -234,6 +292,17 @@ public class TextAlign extends GraphicsActivity {
             canvas.drawTextOnPath(TEXTONPATH, mPath, 0, 0, p);
         }
 
+        /**
+         * This is called during layout when the size of this view has changed. If you were just added
+         * to the view hierarchy, you're called with the old values of 0. First we call through to our
+         * super's implementation of {@code onSizeChanged}, then we initialize our field {@code mX} to
+         * half of the new width of the view {@code int w}.
+         *
+         * @param w  Current width of this view.
+         * @param h  Current height of this view.
+         * @param ow Old width of this view.
+         * @param oh Old height of this view.
+         */
         @Override
         protected void onSizeChanged(int w, int h, int ow, int oh) {
             super.onSizeChanged(w, h, ow, oh);
