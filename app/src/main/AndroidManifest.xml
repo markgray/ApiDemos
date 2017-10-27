@@ -3591,8 +3591,7 @@
         <activity
             android:name=".graphics.TouchPaint"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize"
-            android:label="Graphics/Touch Paint"
-            android:theme="@style/Theme.Black">
+            android:label="Graphics/Touch Paint">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
