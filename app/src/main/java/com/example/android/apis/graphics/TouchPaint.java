@@ -108,7 +108,53 @@ public class TouchPaint extends GraphicsActivity {
     boolean mFading;
 
     /**
-     * Called when the activity is starting.
+     * {@code Handler} which calls the {@code fade} method of {@code PaintView mView} every FADE_DELAY
+     * (100ms) to "fade" the finger painting.
+     */
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                // Upon receiving the fade pulse, we have the view perform a
+                // fade and then enqueue a new message to pulse at the desired
+                // next time.
+                case MSG_FADE: {
+                    mView.fade();
+                    scheduleFade();
+                    break;
+                }
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    };
+
+    /**
+     * Mode we are painting in:
+     * <ul>
+     * <li>Draw - we draw a loci of the movement of the finger</li>
+     * <li>Splat - random splatter across the canvas ala Jackson Pollock</li>
+     * <li>Erase - erases where the finger moves</li>
+     * </ul>
+     * Without a keyboard, only Draw is used.
+     */
+    enum PaintMode {
+        Draw,
+        Splat,
+        Erase,
+    }
+
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, initialize our field {@code PaintView mView} with a new instance of
+     * {@code PaintView}, set our content view to it, and enable it to receive focus. Then if our
+     * parameter {@code savedInstanceState} is not null we set our field {@code boolean mFading} with
+     * the value stored in {@code savedInstanceState} under the key "fading" (defaulting to true if
+     * no value was found), and we set the field {@code mColorIndex} of our {@code PaintView mView}
+     * to the value saved under the key "color" (defaulting to 0 if no value was found). If our
+     * parameter {@code savedInstanceState} is null (first time running) we set {@code boolean mFading}
+     * to true, and the field {@code mColorIndex} of our {@code PaintView mView} to 0.
      *
      * @param savedInstanceState In our {@code onSaveInstanceState} we save the value of our field
      *                           {@code mFading} and the value of the field {@code mColorIndex} of our
@@ -136,6 +182,17 @@ public class TouchPaint extends GraphicsActivity {
         }
     }
 
+    /**
+     * We initialize the contents of the Activity's standard options menu here, adding our menu items
+     * to the {@code Menu menu} parameter. We add a menu item with the id CLEAR_ID and the title
+     * "Clear" to {@code menu}, and a menu item with the id FADE_ID and the title "Fade" to {@code menu}
+     * setting its checkable state to true. Finally we return the value returned by our super's
+     * implementation {@code onCreateOptionsMenu}.
+     *
+     * @param menu The options menu in which you place your items.
+     * @return You must return true for the menu to be displayed; if you return false it will not
+     * be shown.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, CLEAR_ID, 0, "Clear");
@@ -143,12 +200,42 @@ public class TouchPaint extends GraphicsActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * We prepare the Screen's standard options menu to be displayed here. We find our item with the
+     * id FADE_ID in our parameter {@code Menu menu} and set its checkable state to the value of our
+     * field {@code boolean mFading}. Then we return the value returned by our super's implementation
+     * {@code onPrepareOptionsMenu} to our caller.
+     *
+     * @param menu The options menu as last shown or first initialized by onCreateOptionsMenu().
+     * @return You must return true for the menu to be displayed; if you return false it will not be shown.
+     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(FADE_ID).setChecked(mFading);
         return super.onPrepareOptionsMenu(menu);
     }
 
+    /**
+     * This hook is called whenever an item in our options menu is selected. We switch on the value
+     * of the identifier of our parameter {@code MenuItem item}:
+     * <ul>
+     * <li>
+     * CLEAR_ID - we call the {@code clear} method of {@code PaintView mView} then return true
+     * </li>
+     * <li>
+     * FADE_ID - we toggle the value of our field {@code boolean mFading}, and if the new value is
+     * true we call our method {@code startFading}, if false we call our method {@code stopFading}.
+     * In either case we return true to our caller.
+     * </li>
+     * <li>
+     * default - we return the value returned by our super's implementation of {@code onOptionsItemSelected}
+     * </li>
+     * </ul>
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return false to allow normal menu processing to
+     * proceed, true to consume it here.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -168,6 +255,12 @@ public class TouchPaint extends GraphicsActivity {
         }
     }
 
+    /**
+     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or {@link #onPause}, for
+     * our activity to start interacting with the user. First we call through to our super's
+     * implementation of {@code onResume}, then if our field {@code boolean mFading} is true we call
+     * our method {@code startFading}.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -179,6 +272,16 @@ public class TouchPaint extends GraphicsActivity {
         }
     }
 
+    /**
+     * Called to retrieve per-instance state from an activity before being killed so that the state
+     * can be restored in {@link #onCreate} or {@link #onRestoreInstanceState} (the {@link Bundle}
+     * populated by this method will be passed to both). First we call through to our super's
+     * implementation of {@code onSaveInstanceState}, then we save the value of our field
+     * {@code boolean mFading} in our parameter {@code Bundle outState} under the key "fading", and
+     * the value of the field {@code mColorIndex} of our {@code PaintView mView} under the key "color".
+     *
+     * @param outState Bundle in which to place your saved state.
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -189,6 +292,11 @@ public class TouchPaint extends GraphicsActivity {
         outState.putInt("color", mView.mColorIndex);
     }
 
+    /**
+     * Called as part of the activity lifecycle when an activity is going into the background, but
+     * has not (yet) been killed. First we call through to our super's implementation of {@code onPause},
+     * then we call our method {@code stopFading} to stop the pulse that fades the screen.
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -199,8 +307,9 @@ public class TouchPaint extends GraphicsActivity {
     }
 
     /**
-     * Start up the pulse to fade the screen, clearing any existing pulse to
-     * ensure that we don't have multiple pulses running at a time.
+     * Start up the pulse to fade the screen, first clearing any existing pulse to ensure that we
+     * don't have multiple pulses running at a time. Then we call our method {@code scheduleFade} to
+     * schedule a new FADE_DELAY message to our {@code Handler mHandler}.
      */
     void startFading() {
         mHandler.removeMessages(MSG_FADE);
@@ -208,7 +317,8 @@ public class TouchPaint extends GraphicsActivity {
     }
 
     /**
-     * Stop the pulse to fade the screen.
+     * Stop the pulse to fade the screen. To do this we simply remove all of the MSG_FADE messages
+     * in the queue of {@code Handler mHandler}.
      */
     void stopFading() {
         mHandler.removeMessages(MSG_FADE);
@@ -219,31 +329,6 @@ public class TouchPaint extends GraphicsActivity {
      */
     void scheduleFade() {
         mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_FADE), FADE_DELAY);
-    }
-
-    @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                // Upon receiving the fade pulse, we have the view perform a
-                // fade and then enqueue a new message to pulse at the desired
-                // next time.
-                case MSG_FADE: {
-                    mView.fade();
-                    scheduleFade();
-                    break;
-                }
-                default:
-                    super.handleMessage(msg);
-            }
-        }
-    };
-
-    enum PaintMode {
-        Draw,
-        Splat,
-        Erase,
     }
 
     /**
