@@ -325,7 +325,8 @@ public class TouchPaint extends GraphicsActivity {
     }
 
     /**
-     * Schedule a fade message for later.
+     * Schedule a fade message for later. We simply call the {@code sendMessageDelayed} method of
+     * {@code Handler mHandler} to send a MSG_FADE message with a delay of FADE_DELAY (100ms).
      */
     void scheduleFade() {
         mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_FADE), FADE_DELAY);
@@ -337,20 +338,70 @@ public class TouchPaint extends GraphicsActivity {
      * It handles all of the input events and drawing functions.
      */
     public static class PaintView extends View {
+        /**
+         * Alpha used by {@code Paint mFadePaint} to fade the finger painting.
+         */
         private static final int FADE_ALPHA = 0x06;
+        /**
+         * Maximum number of times our fade thread is run (89).
+         */
         private static final int MAX_FADE_STEPS = 256 / (FADE_ALPHA / 2) + 4;
+        /**
+         * Constant used by the method {@code onTrackballEvent} to multiply the value returned by
+         * {@code getXPrecision} and {@code getYPrecision} to scale the precision of the coordinates
+         * being reported by {@code getX} and {@code getY} (as well as the values returned by
+         * {@code getHistoricalX} and {@code getHistoricalY}) when a trackball is used to "finger
+         * paint" using the {@code moveTrackball} method.
+         */
         private static final int TRACKBALL_SCALE = 10;
 
+        /**
+         * Number of random splat vectors generated and drawn by the method {@code drawSplat}.
+         */
         private static final int SPLAT_VECTORS = 40;
 
+        /**
+         * Random number generator used by the {@code drawSplat} method to create random splat vectors.
+         */
         private final Random mRandom = new Random();
+        /**
+         * Bitmap used by {@code Canvas mCanvas} to draw into. Our method {@code onSizeChanged} also
+         * uses it to remember what has been drawn when the size of the window changes.
+         */
         private Bitmap mBitmap;
+        /**
+         * {@code Canvas} we draw on, and when our {@code onDraw} method is called we draw the
+         * {Bitmap mBitmap} that {@code mCanvas} draws into the {@code Canvas canvas} passed as
+         * a parameter to {@code onDraw} (our view's {@code Canvas}).
+         */
         private Canvas mCanvas;
+        /**
+         * {@code Paint} we use to draw with.
+         */
         private final Paint mPaint = new Paint();
+        /**
+         * {@code Paint} our fade thread uses to "fade" the finger painting.
+         */
         private final Paint mFadePaint = new Paint();
+        /**
+         * Last known X coordinate of a move by finger or trackball.
+         */
         private float mCurX;
+        /**
+         * Last known Y coordinate of a move by finger or trackball.
+         */
         private float mCurY;
+        /**
+         * Old state of all buttons that are pressed such as a mouse or stylus button, used to tell
+         * when one of the button has changed state.
+         */
         private int mOldButtonState;
+        /**
+         * Number of times the fade thread {@code Handler mHandler} has called our method {@code fade}
+         * to fade our finger painting. When it reaches MAX_FADE_STEPS our {@code fade} method stops
+         * "fading". It is set to 0 to start fading again when our methods {@code paint} and {@code text}
+         * are called.
+         */
         private int mFadeSteps = MAX_FADE_STEPS;
 
         /**
@@ -358,6 +409,13 @@ public class TouchPaint extends GraphicsActivity {
          */
         int mColorIndex;
 
+        /**
+         * Our constructor. First we call our super's constructor, then we call our method {@code init}
+         * to initialize our instance.
+         *
+         * @param c {@code Context} to use to access resources, "this" in the {@code onCreate} method
+         *          of {@code TouchPaint}
+         */
         public PaintView(Context c) {
             super(c);
             init();
@@ -414,8 +472,7 @@ public class TouchPaint extends GraphicsActivity {
                     mPaint.getTextBounds(text, 0, text.length(), bounds);
                 }
                 Paint.FontMetrics fm = mPaint.getFontMetrics();
-                mCanvas.drawText(text, (width - bounds.width()) / 2,
-                        ((height - size) / 2) - fm.ascent, mPaint);
+                mCanvas.drawText(text, (width - bounds.width()) / 2, ((height - size) / 2) - fm.ascent, mPaint);
                 mFadeSteps = 0;
                 invalidate();
             }
