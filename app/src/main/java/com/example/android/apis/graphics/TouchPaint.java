@@ -421,11 +421,27 @@ public class TouchPaint extends GraphicsActivity {
             init();
         }
 
+        /**
+         * Constructor that is called when our view is inflated from xml. {@code GameActivity.Content}
+         * extends us, and it is inflated in the layout file of {@code GameActivity} R.layout.game.
+         * First we call through to our super's constructor, then we call our method {@code init} to
+         * initialize our instance.
+         *
+         * @param c     {@code Context} our view is running in, through which we can access the current
+         *              theme, resources, etc.
+         * @param attrs attributes of the XML tag that is inflating this view.
+         */
         public PaintView(Context c, AttributeSet attrs) {
             super(c, attrs);
             init();
         }
 
+        /**
+         * Our initialization method, called from our constructors. First we enable our view to receive
+         * focus, then we set the anti alias flag of {@code Paint mPaint}, set the color of
+         * {@code Paint mFadePaint} to BACKGROUND_COLOR ({@code Color.BLACK}, and set its alpha to
+         * FADE_ALPHA (0x06).
+         */
         private void init() {
             setFocusable(true);
 
@@ -435,6 +451,13 @@ public class TouchPaint extends GraphicsActivity {
             mFadePaint.setAlpha(FADE_ALPHA);
         }
 
+        /**
+         * Clears the {@code Canvas mCanvas}. If {@code mCanvas} is not null, we set the color of
+         * {@code Paint mPaint} to BACKGROUND_COLOR ({@code Color.BLACK}), fill the entire {@code mCanvas}
+         * to the color of {@code mPaint}, call invalidate to schedule {@code onDraw} to be called
+         * to copy {@code mCanvas} to the view's {@code Canvas}, and finally set {@code mFadeSteps}
+         * to MAX_FADE_STEPS (89).
+         */
         public void clear() {
             if (mCanvas != null) {
                 mPaint.setColor(BACKGROUND_COLOR);
@@ -445,6 +468,12 @@ public class TouchPaint extends GraphicsActivity {
             }
         }
 
+        /**
+         * "Fades" the {@code Canvas mCanvas}. If {@code mCanvas} is not null, and if {@code mFadeSteps}
+         * is less than MAX_FADE_STEPS (89) we fill the entire {@code mCanvas} with {@code Paint mFadePaint},
+         * and call invalidate so {@code onDraw} will be called to copy {@code mCanvas} to the view's
+         * {@code Canvas}. Finally we increment {@code mFadeSteps}.
+         */
         public void fade() {
             if (mCanvas != null && mFadeSteps < MAX_FADE_STEPS) {
                 mCanvas.drawPaint(mFadePaint);
@@ -454,6 +483,29 @@ public class TouchPaint extends GraphicsActivity {
             }
         }
 
+        /**
+         * Draws the {@code String text} to {@code Canvas mCanvas} and causes {@code onDraw} to copy
+         * {@code mCanvas} to the view's {@code Canvas}. Before doing anything, we make sure that
+         * {@code Bitmap mBitmap} is not null, returning having done nothing if it is null. Otherwise
+         * we set {@code int width} to the width of {@code mBitmap}, and {@code int height} to the
+         * height of {@code mBitmap}. We set the color of {@code Paint mPaint} to the color currently
+         * selected by {@code COLORS[mColorIndex]}, and its alpha to 255. We set {@code int size} to
+         * {@code height}, and set the text size of {@code mPaint} to {@code size}. We create a
+         * {@code Rect bounds}, and fetch the text bounds of {@code String text} drawn using {@code mPaint}
+         * to {@code bounds}. We set {@code int twidth} to the width of {@code bounds}, then increment
+         * it by one quarter of itself. If {@code twidth} is greater than {@code width}, we set size
+         * to {@code (size*width)/twidth}, set the text size of {@code mPaint} to {@code size}, and
+         * retrieve the text bounds of {@code text} drawn using {@code mPaint} to {@code bounds}. We
+         * fetch the font metrics of {@code mPaint} to {@code Paint.FontMetrics fm}, so that we can
+         * use the {@code fm.ascent} field. We then call the {@code mCanvas.drawText} method to draw
+         * the {@code String text} using {@code Paint mPaint} with the x coordinate calculated to
+         * center the text in the middle of the {@code Canvas}, and the y coordinate calculated to
+         * position the text in a weird part of the screen (probably a bug?). We set {@code mFadeSteps}
+         * to 0 so that fading will start again, and call {@code invalidate} so that a call to our
+         * {@code onDraw} method will be scheduled to copy {@code mCanvas} to the view's {@code Canvas}.
+         *
+         * @param text String to display
+         */
         public void text(String text) {
             if (mBitmap != null) {
                 final int width = mBitmap.getWidth();
@@ -478,6 +530,30 @@ public class TouchPaint extends GraphicsActivity {
             }
         }
 
+        /**
+         * This is called during layout when the size of this view has changed. If you were just added
+         * to the view hierarchy, you're called with the old values of 0. If {@code Bitmap mBitmap} is
+         * not null we set {@code int curW} to the width of {@code mBitmap} and {@code int curH} to
+         * the height of {@code mBitmap}, if it is null we set them both to 0. If {@code curW} is
+         * greater than or equal to {@code w} and {@code curH} is greater than or equal to {@code h}
+         * we return having done nothing.
+         *
+         * If {@code curW} is less than {@code w} we set it to {@code w}, and if {@code curH} is less
+         * than {@code h} we set it to {@code h}. We create {@code Bitmap newBitmap} to be {@code curW}
+         * by {@code curH} using the ARGB_8888 format. We allocate a new {@code Canvas newCanvas} and
+         * set {@code newBitmap} to be the bitmap for it to draw into. If {@code Bitmap mBitmap} is
+         * not null we draw it into {@code newCanvas} (this function will take care of automatically
+         * scaling the bitmap to draw at the same density as the canvas). Then we set our fields
+         * {@code Bitmap mBitmap} to {@code newBitmap}, and {@code Canvas mCanvas} to {@code newCanvas}.
+         *
+         * Finally we set {@code mFadeSteps} to MAX_FADE_STEPS so that fading will pause until new
+         * finger painting starts.
+         *
+         * @param w Current width of this view.
+         * @param h Current height of this view.
+         * @param oldw Old width of this view.
+         * @param oldh Old height of this view.
+         */
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             int curW = mBitmap != null ? mBitmap.getWidth() : 0;
@@ -500,6 +576,12 @@ public class TouchPaint extends GraphicsActivity {
             mFadeSteps = MAX_FADE_STEPS;
         }
 
+        /**
+         * We implement this to do our drawing. If {@code Bitmap mBitmap} is not null we draw it to
+         * our argument {@code Canvas canvas}.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             if (mBitmap != null) {
@@ -507,6 +589,16 @@ public class TouchPaint extends GraphicsActivity {
             }
         }
 
+        /**
+         * We implement this method to handle trackball motion events. The relative movement of the
+         * trackball since the last event can be retrieved with {@code MotionEvent.getX()} and
+         * {@code MotionEvent.getY()}. These are normalized so that a movement of 1 corresponds to
+         * the user pressing one DPAD key (so they will often be fractional values, representing the
+         * more fine-grained movement information available from a trackball).
+         *
+         * @param event The motion event.
+         * @return True if the event was handled, false otherwise.
+         */
         @Override
         public boolean onTrackballEvent(MotionEvent event) {
             final int action = event.getActionMasked();
