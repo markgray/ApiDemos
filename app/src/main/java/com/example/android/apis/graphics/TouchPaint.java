@@ -537,7 +537,7 @@ public class TouchPaint extends GraphicsActivity {
          * the height of {@code mBitmap}, if it is null we set them both to 0. If {@code curW} is
          * greater than or equal to {@code w} and {@code curH} is greater than or equal to {@code h}
          * we return having done nothing.
-         *
+         * <p>
          * If {@code curW} is less than {@code w} we set it to {@code w}, and if {@code curH} is less
          * than {@code h} we set it to {@code h}. We create {@code Bitmap newBitmap} to be {@code curW}
          * by {@code curH} using the ARGB_8888 format. We allocate a new {@code Canvas newCanvas} and
@@ -545,12 +545,12 @@ public class TouchPaint extends GraphicsActivity {
          * not null we draw it into {@code newCanvas} (this function will take care of automatically
          * scaling the bitmap to draw at the same density as the canvas). Then we set our fields
          * {@code Bitmap mBitmap} to {@code newBitmap}, and {@code Canvas mCanvas} to {@code newCanvas}.
-         *
+         * <p>
          * Finally we set {@code mFadeSteps} to MAX_FADE_STEPS so that fading will pause until new
          * finger painting starts.
          *
-         * @param w Current width of this view.
-         * @param h Current height of this view.
+         * @param w    Current width of this view.
+         * @param h    Current height of this view.
          * @param oldw Old width of this view.
          * @param oldh Old height of this view.
          */
@@ -590,11 +590,8 @@ public class TouchPaint extends GraphicsActivity {
         }
 
         /**
-         * We implement this method to handle trackball motion events. The relative movement of the
-         * trackball since the last event can be retrieved with {@code MotionEvent.getX()} and
-         * {@code MotionEvent.getY()}. These are normalized so that a movement of 1 corresponds to
-         * the user pressing one DPAD key (so they will often be fractional values, representing the
-         * more fine-grained movement information available from a trackball).
+         * We implement this method to handle trackball motion events. I do not have a trackball
+         * connected to an Android device, so I will not comment.
          *
          * @param event The motion event.
          * @return True if the event was handled, false otherwise.
@@ -620,6 +617,13 @@ public class TouchPaint extends GraphicsActivity {
             return true;
         }
 
+        /**
+         * Adds the change in x and y to {@code mCurW} and {@code mCurH} and draws an oval at the new
+         * point.
+         *
+         * @param deltaX X coordinate change
+         * @param deltaY Y coordinate change
+         */
         private void moveTrackball(float deltaX, float deltaY) {
             final int curW = mBitmap != null ? mBitmap.getWidth() : 0;
             final int curH = mBitmap != null ? mBitmap.getHeight() : 0;
@@ -629,17 +633,66 @@ public class TouchPaint extends GraphicsActivity {
             paint(PaintMode.Draw, mCurX, mCurY);
         }
 
+        /**
+         * We implement this method to handle touch screen motion events. We simply return the value
+         * returned by our method {@code onTouchOrHoverEvent} when its {@code isTouch} argument is
+         * true.
+         *
+         * @param event The motion event.
+         * @return True if the event was handled, false otherwise.
+         */
         @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouchEvent(MotionEvent event) {
             return onTouchOrHoverEvent(event, true /*isTouch*/);
         }
 
+        /**
+         * We implement this method to handle hover events. We simply return the value returned by
+         * our method {@code onTouchOrHoverEvent} when its {@code isTouch} argument is false.
+         *
+         * @param event The motion event that describes the hover.
+         * @return True if the view handled the hover event.
+         */
         @Override
         public boolean onHoverEvent(MotionEvent event) {
             return onTouchOrHoverEvent(event, false /*isTouch*/);
         }
 
+        /**
+         * Handles both touch and hover events. First we fetch the state of all buttons that are
+         * pressed to {@code buttonState}, and isolate the bits that have changed from the state saved
+         * in {@code mOldButtonState} to {@code pressedButtons}. We then set {@code mOldButtonState}
+         * to {@code buttonState}. If the newly pressed buttons in {@code pressedButtons} includes
+         * the BUTTON_SECONDARY button, we call our method {@code advanceColor} to change the color
+         * used to draw to the next one in line.
+         * <p>
+         * Next we declare {@code PaintMode mode}, and if the BUTTON_TERTIARY is pressed we set
+         * {@code mode} to {@code PaintMode.Splat}, if the event is a touch event or BUTTON_PRIMARY
+         * is pressed we set {@code mode} to {@code PaintMode.Draw}. Otherwise we return having done
+         * nothing.
+         * <p>
+         * We initialize {@code action} to the masked action being performed in {@code event}. If the
+         * {@code action} is ACTION_DOWN, or ACTION_MOVE, or ACTION_HOVER_MOVE we initialize {@code N}
+         * to the number of historical points in {@code event}, and {@code P} to the number of pointers
+         * of data contained in {@code event}. We loop through the {@code N} historical points, and
+         * for each of the {@code P} pointers we call our method {@code paint} to paint an oval at the
+         * historical (x,y) for the pointer and event index of the historical point in question, using
+         * the tool type of the pointer to decide whether to use our current {@code mode} or to use
+         * {@code PaintMode.Erase} if the tool type was TOOL_TYPE_ERASER. We also pass it the historical
+         * pressure, historical touch major axis coordinate, historical touch minor axis coordinate,
+         * historical orientation coordinate, historical value of the AXIS_DISTANCE axis, and the
+         * historical value of the AXIS_TILT axis for the data point being processed.
+         * <p>
+         * Once we have painted all of the historical points, we do the same thing using the values
+         * for the current data point, and set our fields {@code mCurX} and {@code mCurY} to the x
+         * and y coordinates of the first pointer index. Then we return true to the caller whether
+         * we had anything to draw or not.
+         *
+         * @param event   The motion event.
+         * @param isTouch true if the event was a touch event, false if it was a hover event
+         * @return True if the event was handled, false otherwise.
+         */
         private boolean onTouchOrHoverEvent(MotionEvent event, boolean isTouch) {
             final int buttonState = event.getButtonState();
             int pressedButtons = buttonState & ~mOldButtonState;
@@ -698,6 +751,15 @@ public class TouchPaint extends GraphicsActivity {
             return true;
         }
 
+        /**
+         * Returns the correct {@code PaintMode} to use to paint, either {@code PaintMode.Erase} is
+         * the {@code toolType} is TOOL_TYPE_ERASER, or {@code defaultMode}.
+         *
+         * @param toolType    the type of tool used to make contact such as a finger or stylus, if known.
+         * @param defaultMode {@code PaintMode} to return if the tool type is not TOOL_TYPE_ERASER
+         * @return either {@code PaintMode.Erase} is the {@code toolType} is TOOL_TYPE_ERASER, otherwise
+         * returns {@code defaultMode}.
+         */
         private PaintMode getPaintModeForTool(int toolType, PaintMode defaultMode) {
             if (toolType == MotionEvent.TOOL_TYPE_ERASER) {
                 return PaintMode.Erase;
@@ -705,14 +767,47 @@ public class TouchPaint extends GraphicsActivity {
             return defaultMode;
         }
 
+        /**
+         * Increments {@code mColorIndex} modulo {@code COLORS.length}. {@code mColorIndex} is Used
+         * to select a color from the array {@code int[] COLORS} in order to set the color of
+         * {@code Paint mPaint}.
+         */
         private void advanceColor() {
             mColorIndex = (mColorIndex + 1) % COLORS.length;
         }
 
+        /**
+         * Convenience method to call {@code paint} specifying only the {@code PaintMode mode},
+         * {@code x} and {@code y} parameters. The other parameters are given default values.
+         *
+         * @param mode {@code PaintMode} to use, one of "Draw", "Erase", or "Splat".
+         * @param x    x coordinate of oval to be drawn
+         * @param y    y coordinate of oval to be drawn
+         */
         private void paint(PaintMode mode, float x, float y) {
             paint(mode, x, y, 1.0f, 0, 0, 0, 0, 0);
         }
 
+        /**
+         * Draws an oval in the manner specified by its parameters.
+         *
+         * @param mode        {@code PaintMode} to use, one of "Draw", "Erase", or "Splat".
+         * @param x           x coordinate of oval to be drawn
+         * @param y           y coordinate of oval to be drawn
+         * @param pressure    "Pressure" of the touch, used to set the alpha of {@code Paint mPaint}.
+         * @param major       used to calculate the x size of the {@code RectF} of the oval to be drawn.
+         * @param minor       used to calculate the y size of the {@code RectF} of the oval to be drawn.
+         * @param orientation used to rotate the canvas before drawing the oval.
+         * @param distance    "Distance" to splat the paint if {@code PaintMode} is "Splat". It is the
+         *                    value of the AXIS_DISTANCE axis of the motion event. For a stylus, reports
+         *                    the distance of the stylus from the screen. A value of 0.0 indicates direct
+         *                    contact and larger values indicate increasing distance from the surface.
+         * @param tilt        "Tilt" to use to splat the paint if {@code PaintMode} is "Splat". It is the
+         *                    value of the AXIS_TILT tilt axis of a motion event. Which for a stylus,
+         *                    reports the tilt angle of the stylus in radians where 0 radians indicates
+         *                    that the stylus is being held perpendicular to the surface, and PI/2 radians
+         *                    indicates that the stylus is being held flat against the surface.
+         */
         private void paint(PaintMode mode, float x, float y, float pressure,
                            float major, float minor, float orientation,
                            float distance, float tilt) {
