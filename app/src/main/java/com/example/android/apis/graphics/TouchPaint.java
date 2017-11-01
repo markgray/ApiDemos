@@ -789,7 +789,36 @@ public class TouchPaint extends GraphicsActivity {
         }
 
         /**
-         * Draws an oval in the manner specified by its parameters.
+         * Draws an oval in the manner specified by its parameters. If our field {@code Bitmap mBitmap}
+         * is not null we have a {@code Canvas mCanvas} that we can use to draw into {@code mBitmap}
+         * and we proceed to do so. First we make sure that both of parameters {@code major} and
+         * {@code minor} are greater than 0, and if not we set them to the default value 16. Then we
+         * switch based on the value of our paramter {@code PaintMode mode}:
+         * <ul>
+         * <li>
+         * Draw: we set the color of {@code Paint mPaint} to the color in the array {@code COLORS}
+         * pointed to by {@code mColorIndex}, set its alpha to the lesser of {@code pressure*128}
+         * and 255, then call our method {@code drawOval} to use {@code mPaint} to draw an oval
+         * on {@code mCanvas} at ({@code x},{@code y}) with the size of the containing {@code RectF}
+         * being {@code minor} by {@code major} in size, and rotated by {@code orientation} radians.
+         * </li>
+         * <li>
+         * Erase: we set the color of {@code Paint mPaint} to the color BACKGROUND_COLOR, set its
+         * alpha to the lesser of {@code pressure*128} and 255, then call our method {@code drawOval}
+         * to use {@code mPaint} to draw an oval on {@code mCanvas} at ({@code x},{@code y}) with
+         * the size of the containing {@code RectF} being {@code minor} by {@code major} in size,
+         * and rotated by {@code orientation} radians.
+         * </li>
+         * <li>
+         * Erase: we set the color of {@code Paint mPaint} to the color in the array {@code COLORS}
+         * pointed to by {@code mColorIndex}, set its alpha to 64, and use our method {@code drawSplat}
+         * to use {@code mPaint} "splatter" paint on {@code mCanvas} using the other parameters to
+         * control where and how much paint is randomly splattered to the canvas.
+         * </li>
+         * Whether we did any drawing or not, we set {@code mFadeSteps} to 0, and invalidate the view
+         * so that the current {@code mBitmap} (if it exists) will be drawn to the views canvas by
+         * our {@code onDraw} method, and fading will start if it was stopped.
+         * </ul>
          *
          * @param mode        {@code PaintMode} to use, one of "Draw", "Erase", or "Splat".
          * @param x           x coordinate of oval to be drawn
@@ -842,13 +871,29 @@ public class TouchPaint extends GraphicsActivity {
         }
 
         /**
-         * Draw an oval.
-         * <p>
-         * When the orientation is 0 radians, orients the major axis vertically,
-         * angles less than or greater than 0 radians rotate the major axis left or right.
+         * {@code RectF} used to size the oval drawn by our method {@code drawOval}.
          */
         private final RectF mReusableOvalRect = new RectF();
 
+        /**
+         * Draw an oval. When the orientation is 0 radians, orients the major axis vertically, angles
+         * less than or greater than 0 radians rotate the major axis left or right. First we save the
+         * current matrix and clip of our parameter {@code Canvas canvas} onto a private stack. Then
+         * we rotate the current matrix of {@code Canvas canvas} by our parameter {@code orientation}
+         * (after first converting it to degrees). We configure {@code RectF mReusableOvalRect} to be
+         * the size specified by our parameters {@code minor} and {@code major} centered at the point
+         * {@code (x,y)}, then we use it to draw an oval on {@code canvas} using {@code paint} as the
+         * {@code Paint}. Finally we restore the state of the current matrix and clip of {@code canvas}
+         * to that it had when our method was called.
+         *
+         * @param canvas      {@code Canvas} to draw our oval on
+         * @param x           X coordinate of center of our oval
+         * @param y           Y coordinate of center of our oval
+         * @param major       size of our bounding {@code RectF} on Y axis
+         * @param minor       size of our bounding {@code RectF} on X axis
+         * @param orientation radians clockwise from vertical to rotate the oval
+         * @param paint       {@code Paint} to use to draw our oval
+         */
         private void drawOval(Canvas canvas, float x, float y, float major, float minor, float orientation, Paint paint) {
             canvas.save();
             canvas.rotate((float) (orientation * 180 / Math.PI), x, y);
@@ -864,11 +909,24 @@ public class TouchPaint extends GraphicsActivity {
          * Splatter paint in an area.
          * <p>
          * Chooses random vectors describing the flow of paint from a round nozzle
-         * across a range of a few degrees.  Then adds this vector to the direction
+         * across a range of a few degrees. Then adds this vector to the direction
          * indicated by the orientation and tilt of the tool and throws paint at
          * the canvas along that vector.
          * <p>
          * Repeats the process until a masterpiece is born.
+         *
+         * @param canvas      We ignore this, and splatter our paint on {@code Canvas mCanvas} instead.
+         * @param x           X coordinate of the center of the splatter
+         * @param y           Y coordinate of the center of the splatter
+         * @param orientation angle describes the direction of movement since last position event.
+         * @param distance    "Distance" to splat the paint. It is the value of the AXIS_DISTANCE axis
+         *                    of the motion event. For a stylus, the distance of the stylus from the screen.
+         * @param tilt        "Tilt" to use to splat the paint. It is the value of the AXIS_TILT tilt axis
+         *                    of a motion event. Which for a stylus, reports the tilt angle of the stylus in
+         *                    radians where 0 radians indicates that the stylus is being held perpendicular
+         *                    to the surface, and PI/2 radians indicates that the stylus is being held flat
+         *                    against the surface.
+         * @param paint       {@code Paint} to use to splatter the {@code Canvas mCanvas}.
          */
         @SuppressWarnings("UnusedParameters")
         private void drawSplat(Canvas canvas, float x, float y, float orientation,
