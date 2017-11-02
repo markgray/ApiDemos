@@ -1388,13 +1388,13 @@ Graphics
     Graphics/UnicodeChart                  all
         .graphics.UnicodeChart
             Draws a unicode chart, and if you had a dpad it would draw more than 
-            one chart. Way too small on the newer devices (froyo OK).
-            TODO: resize for dpi.
+            one chart. Way too small on the newer devices (froyo OK). I fixed this
+            by scaling the canvas by the logical screen density before drawing to it.
 
   Vertices
     Graphics/Vertices                      all
         .graphics.Vertices
-            Shows how to use Canvas.drawVertices with BitmapShader to draw warpable
+            Shows how to use Canvas.drawVertices with BitmapShader to draw warp-able
             Bitmap's. The Canvas.translate before drawing the bottom version of the
             two is not far enough away from the top for high dpi so it overlaps it.
             TODO: change spacing based on dpi

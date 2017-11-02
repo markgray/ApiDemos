@@ -23,6 +23,11 @@ import android.graphics.*;
 import android.os.Bundle;
 import android.view.*;
 
+/**
+ * Shows how to use Canvas.drawVertices with BitmapShader to draw warp-able Bitmap's. The
+ * Canvas.translate before drawing the bottom version of the two is not far enough away from
+ * the top for high dpi so it overlaps it.
+ */
 public class Vertices extends GraphicsActivity {
 
     @Override
