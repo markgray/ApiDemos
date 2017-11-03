@@ -1396,15 +1396,15 @@ Graphics
         .graphics.Vertices
             Shows how to use Canvas.drawVertices with BitmapShader to draw warp-able
             Bitmap's. The Canvas.translate before drawing the bottom version of the
-            two is not far enough away from the top for high dpi so it overlaps it.
-            TODO: change spacing based on dpi
+            two is not far enough away from the top for high dpi so it overlaps it
+            in the original version, so I scaled it by the logical screen density.
 
   Xfermodes
     Graphics/Xfermodes                     all
         .graphics.Xfermodes
             Shows the results of using different Xfermode's when drawing an overlapping 
-            square and a circle to the same Canvas. Way too small on the newer devices
-            (froyo OK). TODO: scale for dpi
+            square and a circle to the same Canvas. It was way too small on the newer devices
+            (froyo OK). So I modified it to scale for dpi
 
 Hardware
     Hardware/Consumer IR                  all  -- but v19+ or crash
