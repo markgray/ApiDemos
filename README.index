@@ -1404,7 +1404,7 @@ Graphics
         .graphics.Xfermodes
             Shows the results of using different Xfermode's when drawing an overlapping 
             square and a circle to the same Canvas. It was way too small on the newer devices
-            (froyo OK). So I modified it to scale for dpi
+            (froyo OK), so I modified it to scale for dpi
 
 Hardware
     Hardware/Consumer IR                  all  -- but v19+ or crash

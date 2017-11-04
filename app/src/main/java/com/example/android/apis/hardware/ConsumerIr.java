@@ -33,23 +33,23 @@ import android.util.Log;
 import com.example.android.apis.R;
 
 /**
- * App that transmit an IR code
- *
+ * App that transmits an IR code
+ * <p>
  * <p>This demonstrates the {@link android.hardware.ConsumerIrManager android.hardware.ConsumerIrManager} class.
- *
+ * <p>
  * <h4>Demo</h4>
  * Hardware / Consumer IR
- *
+ * <p>
  * <h4>Source files</h4>
  * <table class="LinkTable">
- *         <tr>
- *             <td>src/com.example.android.apis/hardware/ConsumerIr.java</td>
- *             <td>Consumer IR demo</td>
- *         </tr>
- *         <tr>
- *             <td>res/any/layout/consumer_ir.xml</td>
- *             <td>Defines contents of the screen</td>
- *         </tr>
+ * <tr>
+ * <td>src/com.example.android.apis/hardware/ConsumerIr.java</td>
+ * <td>Consumer IR demo</td>
+ * </tr>
+ * <tr>
+ * <td>res/any/layout/consumer_ir.xml</td>
+ * <td>Defines contents of the screen</td>
+ * </tr>
  * </table>
  */
 @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -69,7 +69,7 @@ public class ConsumerIr extends Activity {
         super.onCreate(savedInstanceState);
 
         // Get a reference to the ConsumerIrManager
-        mCIR = (ConsumerIrManager)getSystemService(Context.CONSUMER_IR_SERVICE);
+        mCIR = (ConsumerIrManager) getSystemService(Context.CONSUMER_IR_SERVICE);
 
         // See assets/res/any/layout/consumer_ir.xml for this
         // view layout definition, which is being set here as
@@ -83,6 +83,7 @@ public class ConsumerIr extends Activity {
     }
 
     View.OnClickListener mSendClickListener = new View.OnClickListener() {
+        @Override
         public void onClick(View v) {
             if (!mCIR.hasIrEmitter()) {
                 Log.e(TAG, "No IR Emitter found\n");
@@ -92,10 +93,10 @@ public class ConsumerIr extends Activity {
             // A pattern of alternating series of carrier on and off periods measured in
             // microseconds.
             int[] pattern = {1901, 4453, 625, 1614, 625, 1588, 625, 1614, 625, 442, 625, 442, 625,
-                468, 625, 442, 625, 494, 572, 1614, 625, 1588, 625, 1614, 625, 494, 572, 442, 651,
-                442, 625, 442, 625, 442, 625, 1614, 625, 1588, 651, 1588, 625, 442, 625, 494, 598,
-                442, 625, 442, 625, 520, 572, 442, 625, 442, 625, 442, 651, 1588, 625, 1614, 625,
-                1588, 625, 1614, 625, 1588, 625, 48958};
+                    468, 625, 442, 625, 494, 572, 1614, 625, 1588, 625, 1614, 625, 494, 572, 442, 651,
+                    442, 625, 442, 625, 442, 625, 1614, 625, 1588, 651, 1588, 625, 442, 625, 494, 598,
+                    442, 625, 442, 625, 520, 572, 442, 625, 442, 625, 442, 651, 1588, 625, 1614, 625,
+                    1588, 625, 1614, 625, 1588, 625, 48958};
 
             // transmit the pattern at 38.4KHz
             mCIR.transmit(38400, pattern);
@@ -104,6 +105,7 @@ public class ConsumerIr extends Activity {
 
     View.OnClickListener mGetFreqsClickListener = new View.OnClickListener() {
         @SuppressLint({"SetTextI18n", "DefaultLocale"})
+        @Override
         public void onClick(View v) {
             StringBuilder b = new StringBuilder();
 
@@ -118,7 +120,7 @@ public class ConsumerIr extends Activity {
             b.append("IR Carrier Frequencies:\n");
             for (ConsumerIrManager.CarrierFrequencyRange range : freqs) {
                 b.append(String.format("    %d - %d\n", range.getMinFrequency(),
-                            range.getMaxFrequency()));
+                        range.getMaxFrequency()));
             }
             mFreqsText.setText(b.toString());
         }

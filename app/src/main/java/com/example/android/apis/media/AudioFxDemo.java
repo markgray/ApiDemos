@@ -40,9 +40,15 @@ import android.widget.TextView;
 
 import com.example.android.apis.R;
 
-
+/**
+ * Nifty equalizer with simplified audio waveform display using onWaveFormDataCapture callback of
+ * the Visualizer.OnDataCaptureListener interface.
+ */
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class AudioFxDemo extends Activity {
+    /**
+     * TAG for logging
+     */
     private static final String TAG = "AudioFxDemo";
 
     private static final float VISUALIZER_HEIGHT_DIP = 50f;
