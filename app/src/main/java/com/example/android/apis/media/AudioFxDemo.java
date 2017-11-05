@@ -51,17 +51,67 @@ public class AudioFxDemo extends Activity {
      */
     private static final String TAG = "AudioFxDemo";
 
+    /**
+     * Visualizer height in dip, scaled to pixels using logical screen density before use.
+     */
     private static final float VISUALIZER_HEIGHT_DIP = 50f;
 
+    /**
+     * {@code MediaPlayer} that plays test_cbr.mp3
+     */
     private MediaPlayer mMediaPlayer;
+    /**
+     * {@code Visualizer} which gathers waveform data from our {@code mMediaPlayer} and delivers it to
+     * our {@code OnDataCaptureListener} which passes the bytes of captured waveform to the method
+     * {@code mVisualizerView.updateVisualizer} for display.
+     */
     private Visualizer mVisualizer;
+
+    /**
+     * {@code Equalizer} which allows the user to adjust the balance between the frequency components
+     * of the media being played by {@code MediaPlayer mMediaPlayer}.
+     */
     private Equalizer mEqualizer;
 
+    /**
+     * {@code LinearLayout} we create programmatically and use as our content view.
+     */
     private LinearLayout mLinearLayout;
+    /**
+     * {@code VisualizerView} which draws our waveform.
+     */
     private VisualizerView mVisualizerView;
+    /**
+     * {@code TextView} used to display the status of our app, (always "Playing audio..." as far as
+     * I can see, even when the mp3 being played is long finished).
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private TextView mStatusTextView;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we call the method {@code setVolumeControlStream} to request that the
+     * volume of the audio stream for music playback (STREAM_MUSIC) should be changed by the hardware
+     * volume controls.
+     * <p>
+     * We initialize our field {@code TextView mStatusTextView} with a new instance of {@code TextView},
+     * and our field {@code LinearLayout mLinearLayout} with a new instance of {@code LinearLayout}
+     * whose orientation we set to VERTICAL. We add the view {@code mStatusTextView} to {@code mLinearLayout}
+     * and then set {@code mLinearLayout} to be our content view.
+     * <p>
+     * We initialize {@code MediaPlayer mMediaPlayer} with a {@code MediaPlayer} to play the mp3
+     * R.raw.test_cbr, then call our method {@code setupVisualizerFxAndUI} to set up our visualizer,
+     * and our method {@code setupEqualizerFxAndUI} to set up our equalizer. We then enable our
+     * visualization engine {@code mVisualizer} (which was set up by {@code setupVisualizerFxAndUI}).
+     * <p>
+     * We set the {@code OnCompletionListener} of {@code MediaPlayer mMediaPlayer} to an anonymous
+     * class which simply disables our visualization engine {@code mVisualizer}.
+     * <p>
+     * Finally we start the playback of {@code MediaPlayer mMediaPlayer}, and set the text of
+     * {@code TextView mStatusTextView} to the string "Playing audio...".
+     *
+     * @param icicle we do not override {@code onSaveInstanceState} so do not use.
+     */
     @SuppressLint("SetTextI18n")
     @Override
     public void onCreate(Bundle icicle) {
@@ -92,6 +142,7 @@ public class AudioFxDemo extends Activity {
         // setupVisualizerFxAndUI because we likely want to have more, non-Visualizer related code
         // in this callback.
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 mVisualizer.setEnabled(false);
             }
@@ -101,6 +152,43 @@ public class AudioFxDemo extends Activity {
         mStatusTextView.setText("Playing audio...");
     }
 
+    /**
+     * Creates and sets up the equalizer. First we create a new instance for {@code Equalizer mEqualizer}
+     * using the audio session ID of {@code MediaPlayer mMediaPlayer} with a priority for our control
+     * of it of 0 (the normal priority). We then enable {@code Equalizer mEqualizer} to make the effect
+     * to be actually applied to the audio content being played in the corresponding audio session.
+     * <p>
+     * We create {@code TextView eqTextView}, set its text to "Equalizer:" and add it to the main UI
+     * {@code LinearLayout mLinearLayout}.
+     * <p>
+     * We set {@code short bands} to the number of frequency bands supported by the Equalizer engine
+     * {@code Equalizer mEqualizer}, set {@code short minEQLevel} to minimum equalization value, and
+     * {@code short maxEQLevel} to the maximum equalization value of {@code mEqualizer}.
+     * <p>
+     * We loop through the {@code bands} bands of {@code Equalizer mEqualizer}, set {@code short band}
+     * to the band index being processed, create a {@code TextView freqTextView}, set its layout parameters
+     * to MATCH_PARENT and WRAP_CONTENT, set its gravity to CENTER_HORIZONTAL, and set its text to
+     * the center frequency of the given {@code band} divided by 1000 and with the string " Hz" appended
+     * to it. We then add the view {@code freqTextView} to {@code LinearLayout mLinearLayout}.
+     * <p>
+     * We create a {@code LinearLayout row}, and set its orientation to HORIZONTAL. We create a
+     * {@code TextView minDbTextView}, set its layout parameters to WRAP_CONTENT (both horizontal and
+     * vertical), and set its text to {@code minEQLevel} divided by 100 with the string " dB" appended
+     * to it. We create a {@code TextView maxDbTextView}, set its layout parameters to WRAP_CONTENT
+     * (both horizontal and vertical), and set its text to {@code maxEQLevel} divided by 100 with the
+     * string " dB" appended to it. We create {@code LinearLayout.LayoutParams layoutParams} with the
+     * layout parameters MATCH_PARENT and WRAP_CONTENT, and set its {@code weight} to 1. We create a
+     * {@code SeekBar bar}, set its layout parameters to {@code layoutParams}, set its maximum setting
+     * to {@code maxEQLevel-minEQLevel}, and set its current progress to the gain currently set for
+     * the equalizer band {@code band} of {@code mEqualizer}. Then we set the {@code OnSeekBarChangeListener}
+     * of {@code bar} to an anonymous class whose {@code onProgressChanged} override sets the equalizer
+     * gain value of band {@code band} to the {@code progress} added to {@code minEQLevel}. Now we
+     * add the views {@code minDbTextView}, {@code bar} and {@code maxDbTextView} to {@code LinearLayout row},
+     * and add {@code row} to {@code LinearLayout mLinearLayout} (the content view of our UI that we are
+     * filling.
+     * <p>
+     * Then we loop back to process the next {@code band} of {@code bands}.
+     */
     @SuppressLint("SetTextI18n")
     private void setupEqualizerFxAndUI() {
         // Create the Equalizer object (an AudioEffect subclass) and attach it to our media player,
@@ -153,13 +241,18 @@ public class AudioFxDemo extends Activity {
             bar.setProgress(mEqualizer.getBandLevel(band));
 
             bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                public void onProgressChanged(SeekBar seekBar, int progress,
-                        boolean fromUser) {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     mEqualizer.setBandLevel(band, (short) (progress + minEQLevel));
                 }
 
-                public void onStartTrackingTouch(SeekBar seekBar) {}
-                public void onStopTrackingTouch(SeekBar seekBar) {}
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                }
             });
 
             row.addView(minDbTextView);
@@ -170,13 +263,16 @@ public class AudioFxDemo extends Activity {
         }
     }
 
+    /**
+     * Creates and set up our {@code VisualizerView mVisualizerView}.
+     */
     private void setupVisualizerFxAndUI() {
         // Create a VisualizerView (defined below), which will render the simplified audio
         // wave form to a Canvas.
         mVisualizerView = new VisualizerView(this);
         mVisualizerView.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                (int)(VISUALIZER_HEIGHT_DIP * getResources().getDisplayMetrics().density)));
+                (int) (VISUALIZER_HEIGHT_DIP * getResources().getDisplayMetrics().density)));
         mLinearLayout.addView(mVisualizerView);
 
         // Create the Visualizer object and attach it to our media player.
@@ -184,13 +280,13 @@ public class AudioFxDemo extends Activity {
         mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
         mVisualizer.setDataCaptureListener(new Visualizer.OnDataCaptureListener() {
             @Override
-            public void onWaveFormDataCapture(Visualizer visualizer, byte[] bytes,
-                    int samplingRate) {
+            public void onWaveFormDataCapture(Visualizer visualizer, byte[] bytes, int samplingRate) {
                 mVisualizerView.updateVisualizer(bytes);
             }
 
             @Override
-            public void onFftDataCapture(Visualizer visualizer, byte[] bytes, int samplingRate) {}
+            public void onFftDataCapture(Visualizer visualizer, byte[] bytes, int samplingRate) {
+            }
         }, Visualizer.getMaxCaptureRate() / 2, true, false);
     }
 
