@@ -24,8 +24,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+/**
+ * Shows how to use the MediaPlayer class to control playback of audio/video files and streams.
+ * TODO: Set the path variables to a local audio and video file path.
+ */
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class MediaPlayerDemo extends Activity {
+    /**
+     * 
+     */
     private Button mlocalvideo;
     private Button mresourcesvideo;
     private Button mstreamvideo;
@@ -59,46 +66,34 @@ public class MediaPlayerDemo extends Activity {
     private OnClickListener mLocalAudioListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent =
-                    new Intent(MediaPlayerDemo.this.getApplication(),
-                            MediaPlayerDemo_Audio.class);
+            Intent intent = new Intent(MediaPlayerDemo.this.getApplication(), MediaPlayerDemo_Audio.class);
             intent.putExtra(MEDIA, LOCAL_AUDIO);
             startActivity(intent);
-
         }
     };
     private OnClickListener mResourcesAudioListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent =
-                    new Intent(MediaPlayerDemo.this.getApplication(),
-                            MediaPlayerDemo_Audio.class);
+            Intent intent = new Intent(MediaPlayerDemo.this.getApplication(), MediaPlayerDemo_Audio.class);
             intent.putExtra(MEDIA, RESOURCES_AUDIO);
             startActivity(intent);
-
         }
     };
 
     private OnClickListener mLocalVideoListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent =
-                    new Intent(MediaPlayerDemo.this,
-                            MediaPlayerDemo_Video.class);
+            Intent intent = new Intent(MediaPlayerDemo.this, MediaPlayerDemo_Video.class);
             intent.putExtra(MEDIA, LOCAL_VIDEO);
             startActivity(intent);
-
         }
     };
     private OnClickListener mStreamVideoListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent =
-                    new Intent(MediaPlayerDemo.this,
-                            MediaPlayerDemo_Video.class);
+            Intent intent = new Intent(MediaPlayerDemo.this, MediaPlayerDemo_Video.class);
             intent.putExtra(MEDIA, STREAM_VIDEO);
             startActivity(intent);
-
         }
     };
 

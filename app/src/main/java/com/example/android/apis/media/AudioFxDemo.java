@@ -264,7 +264,18 @@ public class AudioFxDemo extends Activity {
     }
 
     /**
-     * Creates and set up our {@code VisualizerView mVisualizerView}.
+     * Creates and set up our {@code VisualizerView mVisualizerView}. First we initialize our field
+     * {@code VisualizerView mVisualizerView} with a new instance. Then we set its layout parameters
+     * to MATCH_PARENT and VISUALIZER_HEIGHT_DIP scaled to pixels by multiplying by the logical screen
+     * density. We then add {@code mVisualizerView} to {@code VisualizerView mVisualizerView}. We
+     * initialize our field {@code Visualizer mVisualizer} with a new instance constructed to use the
+     * system wide unique audio session identifier of {@code MediaPlayer mMediaPlayer} to attach to it.
+     * We set the capture size, i.e. the number of bytes returned by getWaveForm(byte[]) and getFft(byte[])
+     * methods to the maximum capture size range of {@code Visualizer}. We set the {@code OnDataCaptureListener}
+     * of {@code mVisualizer} to an anonymous class whose {@code onWaveFormDataCapture} override calls
+     * the {@code updateVisualizer} method of {@code VisualizerView mVisualizerView} with the {@code bytes}
+     * sampled. The rate of the {@code OnDataCaptureListener} is half of the maximum capture rate for
+     * the callback capture method, and a waveform capture is requested and not a frequency capture.
      */
     private void setupVisualizerFxAndUI() {
         // Create a VisualizerView (defined below), which will render the simplified audio
@@ -290,6 +301,14 @@ public class AudioFxDemo extends Activity {
         }, Visualizer.getMaxCaptureRate() / 2, true, false);
     }
 
+    /**
+     * Called as part of the activity lifecycle when an activity is going into the background, but
+     * has not (yet) been killed. First we call our super's implementation of {@code onPause}, then
+     * if the method {@code isFinishing} returns true and is {@code MediaPlayer mMediaPlayer} is not
+     * null, we release the native resources used by {@code Visualizer mVisualizer}, release the
+     * native AudioEffect resources of {@code Equalizer mEqualizer}, release resources associated
+     * with {@code MediaPlayer mMediaPlayer} and set {@code mMediaPlayer} to null.
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -308,17 +327,46 @@ public class AudioFxDemo extends Activity {
  * {@link Visualizer.OnDataCaptureListener#onWaveFormDataCapture }
  */
 class VisualizerView extends View {
+    /**
+     * Array containing latest sample bytes passed to our method {@code updateVisualizer} by the
+     * {@code onWaveFormDataCapture} override of the {@code OnDataCaptureListener} of
+     * {@code Visualizer mVisualizer}
+     */
     private byte[] mBytes;
+    /**
+     * The coordinates of points used to draw lines to display the {@code mBytes} of the sample. Each
+     * line requires four coordinates (two points) so its size is four times the number of sample
+     * values.
+     */
     private float[] mPoints;
+    /**
+     * {@code Rect} having same size as the view we are drawing to (ie. {@code getWidth()} by
+     * {@code getHeight()}.
+     */
     private Rect mRect = new Rect();
 
+    /**
+     * {@code Paint} used to draw the lines of our graph of the media sample.
+     */
     private Paint mForePaint = new Paint();
 
+    /**
+     * Our constructor. First we call our super's constructor, then we call our {@code init} method
+     * to initialize our instance.
+     *
+     * @param context {@code Context} to use to access resources, "this" in the
+     *                {@code setupVisualizerFxAndUI} method of {@code AudioFxDemo}.
+     */
     public VisualizerView(Context context) {
         super(context);
         init();
     }
 
+    /**
+     * Initialize our instance, called from our constructor. First we set our field
+     * {@code byte[] mBytes} to null, then we set the stroke width of {@code Paint mForePaint}
+     * to 1, set its antialias flag, and set its color to a shade of blue.
+     */
     private void init() {
         mBytes = null;
 
@@ -327,11 +375,35 @@ class VisualizerView extends View {
         mForePaint.setColor(Color.rgb(0, 128, 255));
     }
 
+    /**
+     * Saves the data array passed to the {@code onWaveFormDataCapture} method of the
+     * {@code OnDataCaptureListener} of {@code Visualizer mVisualizer} in our field
+     * {@code byte[] mBytes}.
+     *
+     * @param bytes Array of bytes containing the waveform representation of our audio sample.
+     */
     public void updateVisualizer(byte[] bytes) {
         mBytes = bytes;
         invalidate();
     }
 
+    /**
+     * We implement this to do our drawing. First we call our super's implementation of {@code onDraw},
+     * and if our field {@code byte[] mBytes} is null we return having done nothing. Then if our field
+     * {@code float[] mPoints} is null, or smaller than four times the length of {@code mBytes} we
+     * allocate a {@code float[]} array that is four times the length of {@code mBytes} and set
+     * {@code mPoints} to it. We set the size of {@code Rect mRect} to the same size as our view in
+     * order to use it to scale the audio waveform sample data to fit in our view. We loop through
+     * all the bytes in {@code byte[] mBytes} calculating the (x,y) coordinates to plot the values in
+     * the space allocated for our view, which we store in {@code float[] mPoints}. Each line requires
+     * four coordinates and each data point has a line which connects to the one before it and a line
+     * which has connects it to the one after it.
+     *
+     * When done filling {@code float[] mPoints} we call {@code canvas.drawLines} to draw the lines
+     * using the {@code Paint mForePaint} as the {@code Paint}.
+     *
+     * @param canvas the canvas on which the background will be drawn
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
