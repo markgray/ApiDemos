@@ -31,12 +31,17 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
-
+/**
+ * Activity launched by {@code MediaPlayerDemo} to play a video file
+ */
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class MediaPlayerDemo_Video extends Activity implements
         OnBufferingUpdateListener, OnCompletionListener,
         OnPreparedListener, OnVideoSizeChangedListener, SurfaceHolder.Callback {
 
+    /**
+     * TAG for logging
+     */
     private static final String TAG = "MediaPlayerDemo";
     private int mVideoWidth;
     private int mVideoHeight;
@@ -96,9 +101,9 @@ public class MediaPlayerDemo_Video extends Activity implements
                     break;
                 case STREAM_VIDEO:
                     /*
-                     * TODO: Set path variable to progressive streamable mp4 or
+                     * TODO: Set path variable to progressive stream-able mp4 or
                      * 3gpp format URL. Http protocol should be used.
-                     * Mediaplayer can only play "progressive streamable
+                     * MediaPlayer can only play "progressive stream-able
                      * contents" which basically means: 1. the movie atom has to
                      * precede all the media data atoms. 2. The clip has to be
                      * reasonably interleaved.

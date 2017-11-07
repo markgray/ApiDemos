@@ -1421,6 +1421,8 @@ Media
 
     Media/MediaPlayer                      all
         .media.MediaPlayerDemo
+        .media.MediaPlayerDemo_Audio
+        .media.MediaPlayerDemo_Video
             Shows how to use the MediaPlayer class to control playback of audio/video 
             files and streams.
             TODO: Set the path variables to a local audio and video file path.

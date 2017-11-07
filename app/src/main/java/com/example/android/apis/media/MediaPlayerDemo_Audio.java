@@ -26,27 +26,70 @@ import android.widget.Toast;
 
 import com.example.android.apis.R;
 
+/**
+ * Activity launched by {@code MediaPlayerDemo} to play a video file
+ */
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
 public class MediaPlayerDemo_Audio extends Activity {
 
+    /**
+     * TAG for logging
+     */
     private static final String TAG = "MediaPlayerDemo";
+
+    /**
+     * {@code MediaPlayer} we use to play our audio files, both local files, and raw files read from
+     * our resources.
+     */
     private MediaPlayer mMediaPlayer;
+    /**
+     * The name of the extra data included in the intent used to launch us. The extra data is one of
+     * LOCAL_AUDIO, STREAM_AUDIO, RESOURCES_AUDIO, LOCAL_VIDEO, STREAM_VIDEO, or RESOURCES_VIDEO.
+     */
     private static final String MEDIA = "media";
+    /**
+     * "media" extra data which causes us to play a local audio file
+     */
     private static final int LOCAL_AUDIO = 1;
+    /**
+     * Unused
+     */
     private static final int STREAM_AUDIO = 2;
+    /**
+     * "media" extra data which causes us to play an audio file from our raw resources (the mp3 R.raw.test_cbr).
+     */
     private static final int RESOURCES_AUDIO = 3;
+    /**
+     * Unused by us
+     */
     private static final int LOCAL_VIDEO = 4;
+    /**
+     * Unused by us
+     */
     private static final int STREAM_VIDEO = 5;
+    /**
+     * local audio file path (an empty string at the moment, so LOCAL_AUDIO does not work)
+     */
     private String path;
 
+    /**
+     * {@code TextView} we use as our content view. Currently displays the string "Playing audio..."
+     * if and only if we are used to play the file from our raw resources.
+     */
     private TextView tx;
 
+    /**
+     * Called when the activity is starting.
+     *
+     * @param icicle we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         tx = new TextView(this);
         setContentView(tx);
         Bundle extras = getIntent().getExtras();
+        //noinspection ConstantConditions
         playAudio(extras.getInt(MEDIA));
     }
 
@@ -55,7 +98,7 @@ public class MediaPlayerDemo_Audio extends Activity {
         try {
             switch (media) {
                 case LOCAL_AUDIO:
-                    /**
+                    /*
                      * TODO: Set the path variable to a local audio file path.
                      */
                     path = "";
@@ -77,10 +120,6 @@ public class MediaPlayerDemo_Audio extends Activity {
                     mMediaPlayer.start();
                     break;
                 case RESOURCES_AUDIO:
-                    /**
-                     * TODO: Upload a audio file to res/raw folder and provide
-                     * its resid in MediaPlayer.create() method.
-                     */
                     mMediaPlayer = MediaPlayer.create(this, R.raw.test_cbr);
                     mMediaPlayer.start();
 
