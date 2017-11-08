@@ -79,7 +79,11 @@ public class MediaPlayerDemo_Audio extends Activity {
     private TextView tx;
 
     /**
-     * Called when the activity is starting.
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we create a new instance of {@code TextView} to initialize our field
+     * {@code TextView tx}, and set our content view to it. Next we fetch a map of the extended data
+     * from our intent to set {@code Bundle extras} and call our method {@code playAudio} with the
+     * data stored under the key MEDIA ("media").
      *
      * @param icicle we do not override {@code onSaveInstanceState} so do not use
      */
@@ -88,11 +92,37 @@ public class MediaPlayerDemo_Audio extends Activity {
         super.onCreate(icicle);
         tx = new TextView(this);
         setContentView(tx);
+
         Bundle extras = getIntent().getExtras();
         //noinspection ConstantConditions
         playAudio(extras.getInt(MEDIA));
     }
 
+    /**
+     * Creates and fires up a {@code MediaPlayer} to play some audio, either LOCAL_AUDIO or
+     * RESOURCES_AUDIO depending on our parameter {@code Integer media}. Wrapped in a try block
+     * intended to catch any Exception we switch based the value of {@code media}:
+     * <ul>
+     *     <li>
+     *         LOCAL_AUDIO - The code needs to be edited to modify the assignment to our field
+     *         {@code String path} to point to a local audio file path or it just toasts a message
+     *         stating that it needs to be set to a valid file path. Assuming it has been edited, we
+     *         initialize our field {@code MediaPlayer mMediaPlayer} with a new instance, set its data
+     *         source file-path to {@code path}, calls its {@code prepare} method (which prepares the
+     *         player for playback, synchronously, and blocks until MediaPlayer is ready for playback),
+     *         and call its method {@code start} to resume playing (or stop had it been playing).
+     *     </li>
+     *     <li>
+     *         RESOURCES_AUDIO - Initializes our field {@code MediaPlayer mMediaPlayer} with a
+     *         {@code MediaPlayer} created for the resource id R.raw.test_cbr (On success,
+     *         {@code prepare()} will already have been called), and call its method {@code start}
+     *         to resume playing (or stop had it been playing).
+     *     </li>
+     * </ul>
+     * After doing the above, we set the text of {@code TextView tx} to "Playing audio..."
+     *
+     * @param media The type of audio we are to play, either LOCAL_AUDIO or RESOURCES_AUDIO
+     */
     @SuppressLint("SetTextI18n")
     private void playAudio(Integer media) {
         try {
@@ -105,14 +135,11 @@ public class MediaPlayerDemo_Audio extends Activity {
                     //noinspection StringEquality
                     if (path == "") {
                         // Tell the user to provide an audio file URL.
-                        Toast
-                                .makeText(
-                                        MediaPlayerDemo_Audio.this,
+                        Toast.makeText(MediaPlayerDemo_Audio.this,
                                         "Please edit MediaPlayer_Audio Activity, "
                                                 + "and set the path variable to your audio file path."
                                                 + " Your audio file must be stored on sdcard.",
                                         Toast.LENGTH_LONG).show();
-
                     }
                     mMediaPlayer = new MediaPlayer();
                     mMediaPlayer.setDataSource(path);
@@ -122,7 +149,6 @@ public class MediaPlayerDemo_Audio extends Activity {
                 case RESOURCES_AUDIO:
                     mMediaPlayer = MediaPlayer.create(this, R.raw.test_cbr);
                     mMediaPlayer.start();
-
             }
             tx.setText("Playing audio...");
 
@@ -132,6 +158,12 @@ public class MediaPlayerDemo_Audio extends Activity {
 
     }
 
+    /**
+     * Perform any final cleanup before an activity is destroyed. First we call through to our super's
+     * implementation of {@code onDestroy}, then if our field {@code MediaPlayer mMediaPlayer} is not
+     * null, we call its {@code release} method (Releases resources associated with this MediaPlayer
+     * object) and set {@code mMediaPlayer} to null.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
