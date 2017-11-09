@@ -45,9 +45,22 @@ import android.widget.ToggleButton;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Shows how to use a ProjectionManager.createScreenCaptureIntent to capture screen content to a
+ * VirtualDisplay which is created using MediaProjection.createVirtualDisplay to display to a
+ * SurfaceView.
+ */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class MediaProjectionDemo extends Activity {
+    /**
+     * TAG used for logging.
+     */
     private static final String TAG = "MediaProjectionDemo";
+    /**
+     * Request code used when starting the intent created by {@code createScreenCaptureIntent} (for
+     * result). It is returned in the {@code requestCode} parameter when our {@code onActivityResult}
+     * method is called.
+     */
     private static final int PERMISSION_CODE = 1;
     private static final List<Resolution> RESOLUTIONS = new ArrayList<Resolution>() {{
         add(new Resolution(640,360));
@@ -132,8 +145,7 @@ public class MediaProjectionDemo extends Activity {
             return;
         }
         if (mMediaProjection == null) {
-            startActivityForResult(mProjectionManager.createScreenCaptureIntent(),
-                    PERMISSION_CODE);
+            startActivityForResult(mProjectionManager.createScreenCaptureIntent(), PERMISSION_CODE);
             return;
         }
         mVirtualDisplay = createVirtualDisplay();
@@ -170,8 +182,7 @@ public class MediaProjectionDemo extends Activity {
         public void onItemSelected(AdapterView<?> parent, View v, int pos, long id) {
             Resolution r = (Resolution) parent.getItemAtPosition(pos);
             ViewGroup.LayoutParams lp = mSurfaceView.getLayoutParams();
-            if (getResources().getConfiguration().orientation
-                    == Configuration.ORIENTATION_LANDSCAPE) {
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 mDisplayHeight = r.y;
                 mDisplayWidth = r.x;
             } else {
@@ -220,6 +231,7 @@ public class MediaProjectionDemo extends Activity {
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     private static class Resolution {
         int x;
         int y;
