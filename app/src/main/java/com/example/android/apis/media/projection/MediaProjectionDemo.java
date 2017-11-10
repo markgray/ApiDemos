@@ -62,6 +62,10 @@ public class MediaProjectionDemo extends Activity {
      * method is called.
      */
     private static final int PERMISSION_CODE = 1;
+    /**
+     * List of {@code Resolution} objects which are used to populate the spinner R.id.spinner, and
+     * which the user can select to set the resolution of the virtual display.
+     */
     private static final List<Resolution> RESOLUTIONS = new ArrayList<Resolution>() {{
         add(new Resolution(640,360));
         add(new Resolution(960,540));
@@ -69,19 +73,67 @@ public class MediaProjectionDemo extends Activity {
         add(new Resolution(1600,900));
     }};
 
+    /**
+     * Screen density expressed as dots-per-inch. May be either DENSITY_LOW, DENSITY_MEDIUM, or
+     * DENSITY_HIGH. Retrieved from the display metrics of the default screen in our {@code onCreate}
+     * method.
+     */
     private int mScreenDensity;
+    /**
+     * {@code MediaProjectionManager} that we use to create an intent to do a screen capture and to
+     * retrieve the screen capture token granting applications the ability to capture screen contents
+     * to our field {@code MediaProjection mMediaProjection} from the intent data that is received by
+     * our method {@code onActivityResult} after the activity launched by our screen capture intent
+     * finishes its task.
+     */
     private MediaProjectionManager mProjectionManager;
 
+    /**
+     * Width of the virtual display we display our screen capture in.
+     */
     private int mDisplayWidth;
+    /**
+     * Height of the virtual display we display our screen capture in.
+     */
     private int mDisplayHeight;
+    /**
+     * Flag to indicate that we are currently "sharing" the screen to our virtual display.
+     */
     private boolean mScreenSharing;
 
+    /**
+     * {@code MediaProjection} token granting applications the ability to capture screen contents,
+     * it is retrieved from the intent data passed to our {@code onActivityResult} method from the
+     * activity started for result with a screen capture intent.
+     */
     private MediaProjection mMediaProjection;
+    /**
+     * {@code VirtualDisplay} used to display our screen capture.
+     */
     private VirtualDisplay mVirtualDisplay;
+    /**
+     * The {@code Surface} that provides direct access to the surface object underlying our field
+     * {@code SurfaceView mSurfaceView}
+     */
     private Surface mSurface;
+    /**
+     * {@code SurfaceView} with id R.id.surface in our layout file, we use it to display our virtual
+     * display.
+     */
     private SurfaceView mSurfaceView;
+    /**
+     * {@code ToggleButton} with id R.id.screen_sharing_toggle in our layout file, its on click
+     * callback is set with the attribute android:onClick="onToggleScreenShare". {@code onToggleScreenShare}
+     * toggles screen sharing, calling {@code shareScreen} if the new state is "isChecked", or
+     * {@code stopScreenSharing} if the new state is not checked.
+     */
     private ToggleButton mToggle;
 
+    /**
+     * Called when the activity is starting.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,8 +174,7 @@ public class MediaProjectionDemo extends Activity {
             return;
         }
         if (resultCode != RESULT_OK) {
-            Toast.makeText(this,
-                    "User denied screen sharing permission", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "User denied screen sharing permission", Toast.LENGTH_SHORT).show();
             return;
         }
         mMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
