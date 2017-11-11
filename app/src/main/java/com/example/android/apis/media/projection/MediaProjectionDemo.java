@@ -67,10 +67,10 @@ public class MediaProjectionDemo extends Activity {
      * which the user can select to set the resolution of the virtual display.
      */
     private static final List<Resolution> RESOLUTIONS = new ArrayList<Resolution>() {{
-        add(new Resolution(640,360));
-        add(new Resolution(960,540));
-        add(new Resolution(1366,768));
-        add(new Resolution(1600,900));
+        add(new Resolution(640, 360));
+        add(new Resolution(960, 540));
+        add(new Resolution(1366, 768));
+        add(new Resolution(1600, 900));
     }};
 
     /**
@@ -130,7 +130,30 @@ public class MediaProjectionDemo extends Activity {
     private ToggleButton mToggle;
 
     /**
-     * Called when the activity is starting.
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.media_projection.
+     * We create a new instance for {@code DisplayMetrics metrics}, then retrieve the window manager
+     * for showing custom windows, fetch the Display upon which this WindowManager instance will
+     * create new windows, and get the display metrics that describe the size and density of this
+     * display into {@code DisplayMetrics metrics}. We then initialize our field {@code int mScreenDensity}
+     * with the screen density field in {@code metrics}, expressed as dots-per-inch (may be either
+     * DENSITY_LOW, DENSITY_MEDIUM, or DENSITY_HIGH).
+     * <p>
+     * We initialize our field {@code SurfaceView mSurfaceView} by locating the {@code SurfaceView}
+     * in our layout file with ID R.id.surface. We fetch the SurfaceHolder providing access and
+     * control of the underlying surface of {@code SurfaceView mSurfaceView}, then set our field
+     * {@code Surface mSurface} to its {@code Surface}. Next we initialize our field
+     * {@code MediaProjectionManager mProjectionManager} with the handle to the system-level service
+     * MEDIA_PROJECTION_SERVICE (used for managing media projection sessions).
+     * <p>
+     * We create {@code ArrayAdapter<Resolution> arrayAdapter} from our list {@code List<Resolution> RESOLUTIONS}
+     * using android.R.layout.simple_list_item_1 as the layout file containing a TextView to use when
+     * instantiating views. We locate the {@code Spinner} with ID R.id.spinner in our layout file in
+     * order to set {@code Spinner s}, set its adapter to {@code arrayAdapter}, set its {@code OnItemSelectedListener}
+     * to a new instance of our class {@code ResolutionSelector}, and set its selection to 0.
+     * <p>
+     * Finally we locate the {@code ToggleButton} with ID R.id.screen_sharing_toggle in our layout
+     * file in order to initialize our field {@code ToggleButton mToggle}.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
      */
@@ -146,7 +169,7 @@ public class MediaProjectionDemo extends Activity {
         mSurfaceView = (SurfaceView) findViewById(R.id.surface);
         mSurface = mSurfaceView.getHolder().getSurface();
         mProjectionManager =
-            (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+                (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 
         ArrayAdapter<Resolution> arrayAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_list_item_1, RESOLUTIONS);
@@ -158,6 +181,11 @@ public class MediaProjectionDemo extends Activity {
         mToggle = (ToggleButton) findViewById(R.id.screen_sharing_toggle);
     }
 
+    /**
+     * Perform any final cleanup before an activity is destroyed. First we call through to our super's
+     * implementation of {@code onDestroy}, then if our field {@code MediaProjection mMediaProjection}
+     * is not null, we stop the projection, and set {@code mMediaProjection} to null.
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -167,6 +195,26 @@ public class MediaProjectionDemo extends Activity {
         }
     }
 
+    /**
+     * Called when an activity you launched exits, giving you the requestCode you started it with,
+     * the resultCode it returned, and any additional data from it. First we make sure that the
+     * {@code requestCode} returned is PERMISSION_CODE, and if not we log the problem and return
+     * having done nothing. If the {@code resultCode} is not RESULT_OK, we toast the message "User
+     * denied screen sharing permission" and return having done nothing.
+     * <p>
+     * If everything is correct, we initialize our field {@code MediaProjection mMediaProjection} to
+     * the MediaProjection obtained from the successful screen capture request contained in the returned
+     * {@code Intent data}. We register a new instance of our class {@code MediaProjectionCallback}
+     * as the callback for {@code MediaProjection mMediaProjection}, and finally initialize our field
+     * {@code VirtualDisplay mVirtualDisplay} with the instance of {@code VirtualDisplay} returned by
+     * our method {@code createVirtualDisplay}.
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult(),
+     *                    allowing you to identify who this result came from.
+     * @param resultCode  The integer result code returned by the child activity through its setResult().
+     * @param data        An Intent, which can return result data to the caller (various data can be
+     *                    attached to Intent "extras").
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode != PERMISSION_CODE) {
@@ -182,6 +230,14 @@ public class MediaProjectionDemo extends Activity {
         mVirtualDisplay = createVirtualDisplay();
     }
 
+    /**
+     * Set as the {@code OnClickListener} of the {@code ToggleButton} with ID R.id.screen_sharing_toggle
+     * in our layout file using the attribute android:onClick="onToggleScreenShare". If the new state
+     * of the {@code View view} is "checked" we call our method {@code shareScreen}, otherwise we call
+     * our method {@code stopScreenSharing}.
+     *
+     * @param view View ({@code ToggleButton}) which has been toggled
+     */
     public void onToggleScreenShare(View view) {
         if (((ToggleButton) view).isChecked()) {
             shareScreen();
@@ -190,6 +246,15 @@ public class MediaProjectionDemo extends Activity {
         }
     }
 
+    /**
+     * Starts sharing the screen. First we set our flag {@code boolean mScreenSharing} to true, then
+     * if our field {@code Surface mSurface} is null we return without doing anything more. If our
+     * field {@code MediaProjection mMediaProjection} is null we start an activity for its result
+     * using the intent to start screen capture created by our {@code MediaProjectionManager mProjectionManager}
+     * and using PERMISSION_CODE as the request code, and return. Otherwise we set our field
+     * {@code VirtualDisplay mVirtualDisplay} to the {@code VirtualDisplay} returned by our method
+     * {@code createVirtualDisplay}.
+     */
     private void shareScreen() {
         mScreenSharing = true;
         if (mSurface == null) {
@@ -202,6 +267,12 @@ public class MediaProjectionDemo extends Activity {
         mVirtualDisplay = createVirtualDisplay();
     }
 
+    /**
+     * Stops screen sharing. If {@code ToggleButton mToggle} is "checked", we set it to unchecked,
+     * then we set our flag {@code mScreenSharing} to false. If our field {@code VirtualDisplay mVirtualDisplay}
+     * is not null, we release the virtual display and destroy its underlying surface, and set
+     * {@code mVirtualDisplay} to null.
+     */
     private void stopScreenSharing() {
         if (mToggle.isChecked()) {
             mToggle.setChecked(false);
@@ -213,6 +284,44 @@ public class MediaProjectionDemo extends Activity {
         }
     }
 
+    /**
+     * Creates and returns a {@code VirtualDisplay} that continuously displays the screen capture to
+     * {@code Surface mSurface}. We return the {@code VirtualDisplay} returned from the
+     * {@code createVirtualDisplay} method of our field {@code MediaProjection mMediaProjection}.
+     * The parameters passed to its {@code createVirtualDisplay} are:
+     * <ul>
+     * <li>
+     * name String: The name of the virtual display: "ScreenSharingDemo"
+     * </li>
+     * <li>
+     * width int: The width of the virtual display in pixels: our field {@code mDisplayWidth}
+     * </li>
+     * <li>
+     * height int: The height of the virtual display in pixels: our field {@code mDisplayHeight}
+     * </li>
+     * <li>
+     * dpi int: The density of the virtual display in dpi: our filed {@code mScreenDensity}
+     * </li>
+     * <li>
+     * flags int: A combination of virtual display flags: VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR
+     * (an auto-mirroring virtual display, continuously capturing and displaying the screen)
+     * </li>
+     * <li>
+     * surface Surface: The surface to which the content of the virtual display should be rendered:
+     * our field {@code Surface mSurface}
+     * </li>
+     * <li>
+     * callback VirtualDisplay.Callback: Callback to call when the virtual display's state changes:
+     * null, so no callback.
+     * </li>
+     * <li>
+     * handler Handler: The Handler on which the callback should be invoked: null so the callback
+     * should be invoked on the calling thread's main Looper (if we had a callback).
+     * </li>
+     * </ul>
+     *
+     * @return a {@code VirtualDisplay} drawing the screen capture to {@code Surface mSurface}.
+     */
     private VirtualDisplay createVirtualDisplay() {
         return mMediaProjection.createVirtualDisplay("ScreenSharingDemo",
                 mDisplayWidth, mDisplayHeight, mScreenDensity,
@@ -220,6 +329,12 @@ public class MediaProjectionDemo extends Activity {
                 mSurface, null /*Callbacks*/, null /*Handler*/);
     }
 
+    /**
+     * Re-sizes our {@code VirtualDisplay mVirtualDisplay} to be {@code mDisplayWidth} by {@code mDisplayHeight}
+     * with density {@code mScreenDensity} is {@code mVirtualDisplay} is not null. Called only from
+     * the {@code surfaceChanged} method of our class {@code SurfaceCallbacks} which is UNUSED, so this
+     * is unused as well.
+     */
     private void resizeVirtualDisplay() {
         if (mVirtualDisplay == null) {
             return;
@@ -227,6 +342,10 @@ public class MediaProjectionDemo extends Activity {
         mVirtualDisplay.resize(mDisplayWidth, mDisplayHeight, mScreenDensity);
     }
 
+    /**
+     * {@code OnItemSelectedListener} of the {@code Spinner} with ID R.id.spinner, it allows the
+     * user to select a {@code Resolution} from the list {@code List<Resolution> RESOLUTIONS}.
+     */
     private class ResolutionSelector implements Spinner.OnItemSelectedListener {
         @SuppressWarnings("SuspiciousNameCombination")
         @Override
