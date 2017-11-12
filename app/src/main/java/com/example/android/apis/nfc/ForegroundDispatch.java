@@ -39,8 +39,21 @@ import android.widget.TextView;
 @TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
 @SuppressLint("SetTextI18n")
 public class ForegroundDispatch extends Activity {
+    /**
+     * Default NFC Adapter
+     */
     private NfcAdapter mAdapter;
+    /**
+     * {@code PendingIntent} that will be delivered to this activity. The NFC stack will fill in the
+     * intent with the details of the discovered tag before delivering to this activity. This intent
+     * will be delivered to our method {@code onNewIntent}.
+     */
     private PendingIntent mPendingIntent;
+    /**
+     * The IntentFilters to override dispatching for, one entry for the action ACTION_NDEF_DISCOVERED,
+     * with the data type "&#42;&#47;&#42;". We use it in our call to the {@code enableForegroundDispatch}
+     * method of {@code NfcAdapter mAdapter}.
+     */
     private IntentFilter[] mFilters;
     private String[][] mTechLists;
     private TextView mText;
@@ -80,10 +93,28 @@ public class ForegroundDispatch extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        if (mAdapter != null) mAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters,
-                mTechLists);
+        if (mAdapter != null) {
+            mAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters, mTechLists);
+        }
     }
 
+    /**
+     * This is called for activities that set launchMode to "singleTop" in
+     * their package, or if a client used the {@link Intent#FLAG_ACTIVITY_SINGLE_TOP}
+     * flag when calling {@link #startActivity}.  In either case, when the
+     * activity is re-launched while at the top of the activity stack instead
+     * of a new instance of the activity being started, onNewIntent() will be
+     * called on the existing instance with the Intent that was used to
+     * re-launch it.
+     *
+     * <p>An activity will always be paused before receiving a new intent, so
+     * you can count on {@link #onResume} being called after this method.
+     *
+     * <p>Note that {@link #getIntent} still returns the original Intent.  You
+     * can use {@link #setIntent} to update it to this new Intent.
+     *
+     * @param intent The new intent that was started for the activity.
+     */
     @Override
     public void onNewIntent(Intent intent) {
         Log.i("Foreground dispatch", "Discovered tag with intent: " + intent);
@@ -93,6 +124,8 @@ public class ForegroundDispatch extends Activity {
     @Override
     public void onPause() {
         super.onPause();
-        if (mAdapter != null) mAdapter.disableForegroundDispatch(this);
+        if (mAdapter != null) {
+            mAdapter.disableForegroundDispatch(this);
+        }
     }
 }

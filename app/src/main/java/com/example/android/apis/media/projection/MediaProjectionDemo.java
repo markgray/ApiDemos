@@ -347,7 +347,23 @@ public class MediaProjectionDemo extends Activity {
      * user to select a {@code Resolution} from the list {@code List<Resolution> RESOLUTIONS}.
      */
     private class ResolutionSelector implements Spinner.OnItemSelectedListener {
-        @SuppressWarnings("SuspiciousNameCombination")
+        /**
+         * Callback method to be invoked when a new item in this view has been selected. First we
+         * retrieve the item that has been selected to {@code Resolution r}. We fetch the layout
+         * parameters of {@code SurfaceView mSurfaceView} (the view our virtual display is drawing
+         * to) into {@code ViewGroup.LayoutParams lp}. We fetch our packages resources current
+         * configuration in order to check the current orientation. If the orientation is ORIENTATION_LANDSCAPE
+         * we set {@code mDisplayHeight} to {@code r.y} and {@code mDisplayWidth} to {@code r.x}, otherwise
+         * we set {@code mDisplayHeight} to {@code r.x} and {@code mDisplayWidth} to {@code r.y}.
+         * We set the {@code height} field of {@code lp} to {@code mDisplayHeight} and the {@code width}
+         * field to {@code mDisplayWidth}, and finally set the layout parameters of {@code mSurfaceView}
+         * to the modified {@code lp}.
+         *
+         * @param parent The AdapterView where the selection happened
+         * @param v      The view within the AdapterView that was clicked
+         * @param pos    The position of the view in the adapter
+         * @param id     The row id of the item that is selected
+         */
         @Override
         public void onItemSelected(AdapterView<?> parent, View v, int pos, long id) {
             Resolution r = (Resolution) parent.getItemAtPosition(pos);
@@ -356,7 +372,9 @@ public class MediaProjectionDemo extends Activity {
                 mDisplayHeight = r.y;
                 mDisplayWidth = r.x;
             } else {
+                //noinspection SuspiciousNameCombination
                 mDisplayHeight = r.x;
+                //noinspection SuspiciousNameCombination
                 mDisplayWidth = r.y;
             }
             lp.height = mDisplayHeight;
@@ -364,11 +382,24 @@ public class MediaProjectionDemo extends Activity {
             mSurfaceView.setLayoutParams(lp);
         }
 
+        /**
+         * Callback method to be invoked when the selection disappears from this view. We ignore it.
+         *
+         * @param parent The AdapterView that now contains no selected item.
+         */
         @Override
         public void onNothingSelected(AdapterView<?> parent) { /* Ignore */ }
     }
 
+    /**
+     * Callback for the projection session.
+     */
     private class MediaProjectionCallback extends MediaProjection.Callback {
+        /**
+         * Called when the MediaProjection session is no longer valid. We set {@code mMediaProjection}
+         * to null and call our method {@code stopScreenSharing} to release the virtual display if
+         * it exists.
+         */
         @Override
         public void onStop() {
             mMediaProjection = null;
@@ -376,8 +407,25 @@ public class MediaProjectionDemo extends Activity {
         }
     }
 
+    /**
+     * We implement this interface to receive information about changes to the surface, but do not use
+     */
     @SuppressWarnings("unused")
     private class SurfaceCallbacks implements SurfaceHolder.Callback {
+        /**
+         * This is called immediately after any structural changes (format or size) have been made
+         * to the surface.  You should at this point update the imagery in the surface.  This method
+         * is always called at least once, after {@link #surfaceCreated}.
+         * <p>
+         * We store the new {@code width} in {@code mDisplayWidth}, the new {@code height} in
+         * {@code mDisplayHeight} and call our method {@code resizeVirtualDisplay} to resize our
+         * virtual display.
+         *
+         * @param holder The SurfaceHolder whose surface has changed.
+         * @param format The new PixelFormat of the surface.
+         * @param width  The new width of the surface.
+         * @param height The new height of the surface.
+         */
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             mDisplayWidth = width;
@@ -385,6 +433,14 @@ public class MediaProjectionDemo extends Activity {
             resizeVirtualDisplay();
         }
 
+        /**
+         * This is called immediately after the surface is first created. We initialize our field
+         * {@code Surface mSurface} with direct access to the surface object of {@code holder}. Then
+         * if our flag {@code boolean mScreenSharing} is true, we call our method {@code shareScreen}
+         * to start sharing the screen.
+         *
+         * @param holder The SurfaceHolder whose surface is being created.
+         */
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
             mSurface = holder.getSurface();
@@ -393,6 +449,13 @@ public class MediaProjectionDemo extends Activity {
             }
         }
 
+        /**
+         * This is called immediately before a surface is being destroyed. If our flag
+         * {@code boolean mScreenSharing} is not true we call our method {@code stopScreenSharing}
+         * to stop sharing the screen.
+         *
+         * @param holder The SurfaceHolder whose surface is being destroyed.
+         */
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
             if (!mScreenSharing) {
@@ -401,16 +464,38 @@ public class MediaProjectionDemo extends Activity {
         }
     }
 
+    /**
+     * Class used to hold each of the available screen resolutions that the user can choose using the
+     * {@code Spinner} with ID R.id.spinner.
+     */
     @SuppressWarnings("WeakerAccess")
     private static class Resolution {
+        /**
+         * x dimension of the resolution
+         */
         int x;
+        /**
+         * y dimension of the resolution
+         */
         int y;
 
+        /**
+         * Our constructor, simply initializes our fields with our parameters.
+         *
+         * @param x x dimension of the resolution
+         * @param y y dimension of the resolution
+         */
         public Resolution(int x, int y) {
             this.x = x;
             this.y = y;
         }
 
+        /**
+         * Returns a string containing a concise, human-readable description of this object. We simply
+         * return the string representation of our two fields separated with the string "x".
+         *
+         * @return a printable representation of this object.
+         */
         @Override
         public String toString() {
             return x + "x" + y;
