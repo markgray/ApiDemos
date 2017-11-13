@@ -29,16 +29,43 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 /**
- * An example of how to use the NFC foreground NDEF push APIs.
+ * An example of how to use the NFC foreground NDEF push APIs to push an url to another android device.
  */
 @SuppressWarnings("FieldCanBeLocal")
 @SuppressLint("SetTextI18n")
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class ForegroundNdefPush extends Activity {
+    /**
+     * The default NFC Adapter of our device.
+     */
     private NfcAdapter mAdapter;
+    /**
+     * {@code TextView} in our layout file with ID R.id.text, we use it to display the instruction
+     * "Tap another Android phone with NFC to push a URL", and if NFC is unavailable the message
+     * "This phone is not NFC enabled."
+     */
     private TextView mText;
+    /**
+     * The {@code NdefMessage} we create to send to another device, contains an NDEF Record containing
+     * the uri "http://www.android.com".
+     */
     private NdefMessage mMessage;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we initialize our field {@code NfcAdapter mAdapter} with the default
+     * NFC adaptor of our device, initialize {@code NdefMessage mMessage} with an {@code NdefMessage}
+     * containing the the uri "http://www.android.com", set our content view to our layout file
+     * R.layout.foreground_dispatch, and initialize {@code TextView mText} by locating the TextView
+     * in our layout file with ID R.id.text.
+     * <p>
+     * Finally if {@code mAdapter} is not null, we set {@code mMessage} as the static NdefMessage to
+     * send using Android Beam, and set the text of {@code mText} to "Tap another Android phone with
+     * NFC to push a URL". If {@code mAdapter} is null we set the text of {@code mText} to "This phone
+     * is not NFC enabled.".
+     *
+     * @param savedState we do not override {@code onSaveInstanceState}, so do not use
+     */
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);

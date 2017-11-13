@@ -25,6 +25,9 @@ import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.widget.TextView;
 
+/**
+ * No idea, but nfc related somehow.
+ */
 @SuppressLint("SetTextI18n")
 public class TechFilter extends Activity {
     private TextView mText;
