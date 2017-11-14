@@ -1451,11 +1451,13 @@ NFC
 
     NFC/TechFilter                         all
         .nfc.TechFilter
-            No idea, but nfc related somehow.
+            No idea, but nfc related somehow. Having looked at it more closely, it does not
+            look like it does anything at all
 
 OS
     OS/MMS Messaging                       v21 or crash
         .os.MmsMessagingDemo
+        .os.MmsWapPushReceiver
             Shows how to send and receive mms messaging (test using real phone)
 
     OS/Morse Code                          all

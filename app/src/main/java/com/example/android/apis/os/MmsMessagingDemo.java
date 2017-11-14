@@ -16,6 +16,7 @@
 
 package com.example.android.apis.os;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -67,20 +68,76 @@ import java.util.Random;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class MmsMessagingDemo extends Activity {
+    /**
+     * TAG used for logging
+     */
     private static final String TAG = "MmsMessagingDemo";
 
+    /**
+     * {@code Intent} Extras key for the X-Mms-Content-Location value (See the method
+     * {@code getContentLocation} in class com.google.android.mms.pdu.NotificationInd)
+     */
     public static final String EXTRA_NOTIFICATION_URL = "notification_url";
 
+    /**
+     * The action for {@code IntentFilter mSentFilter}, registered to be listened for by
+     * {@code BroadcastReceiver mSentReceiver}. It is the action used for the {@code PendingIntent}
+     * argument to the method {@code sendMultimediaMessage} which is broadcast when the message is
+     * successfully sent, or failed.
+     */
     private static final String ACTION_MMS_SENT = "com.example.android.apis.os.MMS_SENT_ACTION";
-    private static final String ACTION_MMS_RECEIVED =
-            "com.example.android.apis.os.MMS_RECEIVED_ACTION";
+    /**
+     * The action for {@code IntentFilter mReceivedFilter}, registered to be listened for by
+     * {@code BroadcastReceiver mReceivedReceiver}. It is the action used for the {@code PendingIntent}
+     * argument to the method {@code downloadMultimediaMessage} which is broadcast when the message
+     * is downloaded, or the download has failed.
+     */
+    private static final String ACTION_MMS_RECEIVED = "com.example.android.apis.os.MMS_RECEIVED_ACTION";
 
+    /**
+     * {@code EditText} with ID R.id.mms_recipients_input in our layout file, used by the user for
+     * setting the recipients of a message to be sent, and by our method {@code handleReceivedResult}
+     * to display the recipients of a received message.
+     */
     private EditText mRecipientsInput;
+    /**
+     * {@code EditText} with ID R.id.mms_subject_input in our layout file, used by the user for
+     * setting the subject of a message to be sent, and by our method {@code handleReceivedResult}
+     * to display the subject of a received message.
+     */
     private EditText mSubjectInput;
+    /**
+     * {@code EditText} with ID R.id.mms_text_input in our layout file, used by the user for
+     * entering the text of a message to be sent, and by our method {@code handleReceivedResult}
+     * to display the text of a received message.
+     */
     private EditText mTextInput;
+    /**
+     * {@code TextView} with ID R.id.mms_send_status in our layout file, used to display the status
+     * of our activity, one of: R.string.mms_status_sending ("Sending"), R.string.mms_status_downloading
+     * ("Downloading"), R.string.mms_status_failed ("Failed"), R.string.mms_status_sent ("Sent OK"),
+     * or R.string.mms_status_downloaded ("Downloaded") depending on the status we are reporting.
+     */
     private TextView mSendStatusView;
+    /**
+     * {@code Button} with ID R.id.mms_send_button, when clicked its {@code OnClickListener} calls
+     * our method {@code sendMessage} which sends the MMS message we have composed, titled, and
+     * addressed using the {@code EditText} views in our layout.
+     */
     private Button mSendButton;
+    /**
+     * File we write our message pdu to. The method {@code make} of a {@code PduComposer} created
+     * from the {@code SendReq} (see com.google.android.mms.pdu.SendReq) we build from the message
+     * the user wants to send returns a byte[] array which we write to {@code mSendFile}. We then
+     * pass an {@code Uri} pointing to this file when we call {@code sendMultimediaMessage}.
+     */
     private File mSendFile;
+    /**
+     * File we download an MMS message to. We pass an {@code Uri} pointing to this file when we call
+     * {@code downloadMultimediaMessage}. Our method {@code handleReceivedResult} is called to read
+     * and parse this file when our {@code BroadcastReceiver mReceivedReceiver} receives an
+     * ACTION_MMS_RECEIVED broadcast in its {@code onReceive} method.
+     */
     private File mDownloadFile;
     private Random mRandom = new Random();
 
@@ -99,15 +156,6 @@ public class MmsMessagingDemo extends Activity {
         }
     };
     private IntentFilter mReceivedFilter = new IntentFilter(ACTION_MMS_RECEIVED);
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        final String notificationIndUrl = intent.getStringExtra(EXTRA_NOTIFICATION_URL);
-        if (!TextUtils.isEmpty(notificationIndUrl)) {
-            downloadMessage(notificationIndUrl);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +197,15 @@ public class MmsMessagingDemo extends Activity {
         registerReceiver(mSentReceiver, mSentFilter);
         registerReceiver(mReceivedReceiver, mReceivedFilter);
         final Intent intent = getIntent();
+        final String notificationIndUrl = intent.getStringExtra(EXTRA_NOTIFICATION_URL);
+        if (!TextUtils.isEmpty(notificationIndUrl)) {
+            downloadMessage(notificationIndUrl);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
         final String notificationIndUrl = intent.getStringExtra(EXTRA_NOTIFICATION_URL);
         if (!TextUtils.isEmpty(notificationIndUrl)) {
             downloadMessage(notificationIndUrl);
@@ -335,8 +392,7 @@ public class MmsMessagingDemo extends Activity {
                 "</body>" +
             "</smil>";
 
-    private static byte[] buildPdu(Context context, String recipients, String subject,
-            String text) {
+    private static byte[] buildPdu(Context context, String recipients, String subject, String text) {
         final SendReq req = new SendReq();
         // From, per spec
         final String lineNumber = getSimNumber(context);
@@ -381,6 +437,7 @@ public class MmsMessagingDemo extends Activity {
         return new PduComposer(context, req).make();
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static int addTextPart(PduBody pb, String message, boolean addTextSmil) {
         final PduPart part = new PduPart();
         // Set Charset if it's a text media.
@@ -457,9 +514,13 @@ public class MmsMessagingDemo extends Activity {
         return sb.toString();
     }
 
+    @SuppressLint({"MissingPermission", "HardwareIds"})
     private static String getSimNumber(Context context) {
         final TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(
                 Context.TELEPHONY_SERVICE);
-        return telephonyManager.getLine1Number();
+        if (telephonyManager != null) {
+            return telephonyManager.getLine1Number();
+        }
+        return null;
     }
 }
