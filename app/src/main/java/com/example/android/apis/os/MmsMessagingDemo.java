@@ -139,24 +139,105 @@ public class MmsMessagingDemo extends Activity {
      * ACTION_MMS_RECEIVED broadcast in its {@code onReceive} method.
      */
     private File mDownloadFile;
+    /**
+     * Random number generator used to create random file names for both send and download.
+     */
     private Random mRandom = new Random();
 
+    /**
+     * {@code BroadcastReceiver} used to receive broadcast intents for {@code IntentFilter mSentFilter}
+     * whose action is ACTION_MMS_SENT. Just passes the result code and {@code Intent} to our method
+     * {@code handleSentResult}
+     */
     private BroadcastReceiver mSentReceiver = new BroadcastReceiver() {
+        /**
+         * This method is called when the BroadcastReceiver is receiving an Intent broadcast that
+         * matches {@code IntentFilter mSentFilter} (whose action is ACTION_MMS_SENT). We simply
+         * pass the current result code and the {@code Intent} that was sent to us to our method
+         * {@code handleSentResult}.
+         *
+         * @param context The Context in which the receiver is running.
+         * @param intent The Intent being received.
+         */
         @Override
         public void onReceive(Context context, Intent intent) {
             handleSentResult(getResultCode(), intent);
         }
     };
+    /**
+     * {@code IntentFilter} used for {@code BroadcastReceiver mSentReceiver}, its action is ACTION_MMS_SENT
+     * ("com.example.android.apis.os.MMS_SENT_ACTION").
+     */
     private IntentFilter mSentFilter = new IntentFilter(ACTION_MMS_SENT);
 
+    /**
+     * {@code BroadcastReceiver} used to receive broadcast intents for {@code IntentFilter mReceivedFilter}
+     * whose action is ACTION_MMS_RECEIVED. Just passes the context we are running in, the result code
+     * and {@code Intent} to our method {@code handleReceivedResult}
+     */
     private BroadcastReceiver mReceivedReceiver = new BroadcastReceiver() {
+        /**
+         * This method is called when the BroadcastReceiver is receiving an Intent broadcast that
+         * matches {@code IntentFilter mReceivedFilter} (whose action is ACTION_MMS_RECEIVED). We
+         * simply pass the context we are running in, the current result code, and the {@code Intent}
+         * that was sent to us to our method {@code handleReceivedResult}
+         *
+         * @param context The Context in which the receiver is running.
+         * @param intent The Intent being received.
+         */
         @Override
         public void onReceive(Context context, Intent intent) {
             handleReceivedResult(context, getResultCode(), intent);
         }
     };
+    /**
+     * {@code IntentFilter} used for {@code BroadcastReceiver mReceivedReceiver}, its action is
+     * ACTION_MMS_RECEIVED ("com.example.android.apis.os.MMS_RECEIVED_ACTION").
+     */
     private IntentFilter mReceivedFilter = new IntentFilter(ACTION_MMS_RECEIVED);
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file. We initialize our field
+     * {@code CheckBox enableCheckBox} by locating the {@code CheckBox} with ID R.id.mms_enable_receiver
+     * in our layout. We set {@code PackageManager pm} to a {@code PackageManager} instance. We create
+     * {@code ComponentName componentName} with the name of the package that the component exists in
+     * as "com.example.android.apis", and The name of the class inside of that package that implements
+     * the component set to "com.example.android.apis.os.MmsWapPushReceiver". We use {@code componentName}
+     * to fetch the enabled setting for {@code MmsWapPushReceiver} to set {@code int componentEnabledSetting}
+     * (it will be one of COMPONENT_ENABLED_STATE_ENABLED, COMPONENT_ENABLED_STATE_DISABLED, or
+     * COMPONENT_ENABLED_STATE_DEFAULT, with the last implying that its enabled state is the same as
+     * that originally specified in the AndroidManifest which is disabled). If {@code componentEnabledSetting}
+     * is COMPONENT_ENABLED_STATE_ENABLED (1) we set the {@code CheckBox enableCheckBox} to checked,
+     * otherwise unchecked. We next set the {@code OnCheckedChangeListener} of {@code enableCheckBox}
+     * to an anonymous class which sets the enabled setting for {@code componentName} to the new state
+     * of {@code enableCheckBox} (this setting will override any enabled state which may have been set
+     * by the component in its manifest, and is persistent). We also include the flag DONT_KILL_APP
+     * in our call to {@code setComponentEnabledSetting} to indicate that we don't want to kill the
+     * app containing the component.
+     * <p>
+     * We initialize our field {@code EditText mRecipientsInput} by locating the view with ID
+     * R.id.mms_recipients_input, our field {@code EditText mSubjectInput} by locating the view with
+     * ID R.id.mms_subject_input, our field {@code EditText mTextInput} by locating the view with ID
+     * R.id.mms_text_input, our field {@code TextView mSendStatusView} by locating the view with ID
+     * R.id.mms_send_status, and our field {@code Button mSendButton} by locating the view with ID
+     * R.id.mms_send_button. We set the {@code OnClickListener} of {@code mSendButton} to an anonymous
+     * class which calls our method {@code sendMessage} with the text from {@code mRecipientsInput},
+     * {@code mSubjectInput}, and {@code mTextInput}.
+     * <p>
+     * We not register {@code BroadcastReceiver mSentReceiver} to receive any broadcast intents matching
+     * {@code IntentFilter mSentFilter}, and {@code BroadcastReceiver mReceivedReceiver} to receive any
+     * broadcast intents matching {@code IntentFilter mReceivedFilter}.
+     * <p>
+     * We fetch the intent that launched us to {@code Intent intent}, and try to extract an extra from
+     * it with key EXTRA_NOTIFICATION_URL ("notification_url") to {@code String notificationIndUrl}.
+     * If {@code notificationIndUrl} is not the empty string, we call our method {@code downloadMessage}
+     * with {@code notificationIndUrl} as the parameter (which will download the SMS message from the
+     * carrier on a background thread, using {@code notificationIndUrl} as the location URL of the MMS
+     * message to be downloaded, obtained from the MMS WAP push notification by {@code MmsWapPushReceiver}).
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState}, so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,9 +249,11 @@ public class MmsMessagingDemo extends Activity {
         final PackageManager pm = this.getPackageManager();
         final ComponentName componentName = new ComponentName("com.example.android.apis",
                 "com.example.android.apis.os.MmsWapPushReceiver");
-        enableCheckBox.setChecked(pm.getComponentEnabledSetting(componentName) ==
+        final int componentEnabledSetting = pm.getComponentEnabledSetting(componentName);
+        enableCheckBox.setChecked(componentEnabledSetting ==
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
         enableCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.d(TAG, (isChecked ? "Enabling" : "Disabling") + " MMS receiver");
                 pm.setComponentEnabledSetting(componentName,
@@ -194,8 +277,10 @@ public class MmsMessagingDemo extends Activity {
                         mTextInput.getText().toString());
             }
         });
+
         registerReceiver(mSentReceiver, mSentFilter);
         registerReceiver(mReceivedReceiver, mReceivedFilter);
+
         final Intent intent = getIntent();
         final String notificationIndUrl = intent.getStringExtra(EXTRA_NOTIFICATION_URL);
         if (!TextUtils.isEmpty(notificationIndUrl)) {
@@ -225,10 +310,10 @@ public class MmsMessagingDemo extends Activity {
             public void run() {
                 final byte[] pdu = buildPdu(MmsMessagingDemo.this, recipients, subject, text);
                 Uri writerUri = (new Uri.Builder())
-                       .authority("com.example.android.apis.os.MmsFileProvider")
-                       .path(fileName)
-                       .scheme(ContentResolver.SCHEME_CONTENT)
-                       .build();
+                        .authority("com.example.android.apis.os.MmsFileProvider")
+                        .path(fileName)
+                        .scheme(ContentResolver.SCHEME_CONTENT)
+                        .build();
                 final PendingIntent pendingIntent = PendingIntent.getBroadcast(
                         MmsMessagingDemo.this, 0, new Intent(ACTION_MMS_SENT), 0);
                 FileOutputStream writer = null;
@@ -379,18 +464,18 @@ public class MmsMessagingDemo extends Activity {
     private static final String TEXT_PART_FILENAME = "text_0.txt";
     private static final String sSmilText =
             "<smil>" +
-                "<head>" +
+                    "<head>" +
                     "<layout>" +
-                        "<root-layout/>" +
-                        "<region height=\"100%%\" id=\"Text\" left=\"0%%\" top=\"0%%\" width=\"100%%\"/>" +
+                    "<root-layout/>" +
+                    "<region height=\"100%%\" id=\"Text\" left=\"0%%\" top=\"0%%\" width=\"100%%\"/>" +
                     "</layout>" +
-                "</head>" +
-                "<body>" +
+                    "</head>" +
+                    "<body>" +
                     "<par dur=\"8000ms\">" +
-                        "<text src=\"%s\" region=\"Text\"/>" +
+                    "<text src=\"%s\" region=\"Text\"/>" +
                     "</par>" +
-                "</body>" +
-            "</smil>";
+                    "</body>" +
+                    "</smil>";
 
     private static byte[] buildPdu(Context context, String recipients, String subject, String text) {
         final SendReq req = new SendReq();
