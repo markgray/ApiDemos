@@ -1458,6 +1458,7 @@ OS
     OS/MMS Messaging                       v21 or crash
         .os.MmsMessagingDemo
         .os.MmsWapPushReceiver
+        .os.MmsFileProvider
             Shows how to send and receive mms messaging (test using real phone)
 
     OS/Morse Code                          all

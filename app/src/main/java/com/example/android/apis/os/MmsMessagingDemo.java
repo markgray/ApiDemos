@@ -269,6 +269,14 @@ public class MmsMessagingDemo extends Activity {
         mSendStatusView = (TextView) findViewById(R.id.mms_send_status);
         mSendButton = (Button) findViewById(R.id.mms_send_button);
         mSendButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Called when our {@code Button mSendButton} ("Send") is clicked. We fetch the text in
+             * {@code EditText mRecipientsInput}, {@code EditText mSubjectInput}, and
+             * {@code EditText mTextInput} to use as arguments to our method {@code sendMessage}
+             * (which we call).
+             *
+             * @param v View that was clicked
+             */
             @Override
             public void onClick(View v) {
                 sendMessage(
@@ -288,6 +296,22 @@ public class MmsMessagingDemo extends Activity {
         }
     }
 
+    /**
+     * This is called for activities that set launchMode to "singleTop" in
+     * their package, or if a client used the {@link Intent#FLAG_ACTIVITY_SINGLE_TOP}
+     * flag when calling {@link #startActivity}.  In either case, when the
+     * activity is re-launched while at the top of the activity stack instead
+     * of a new instance of the activity being started, onNewIntent() will be
+     * called on the existing instance with the Intent that was used to
+     * re-launch it.
+     * <p>
+     * First we call our super's implementation of {@code onNewIntent}, then we retrieve the string
+     * stored under the key EXTRA_NOTIFICATION_URL ("notification_url") to {@code String notificationIndUrl}
+     * and if the result is not empty we call our method {@code downloadMessage} to download
+     * {@code notificationIndUrl}.
+     *
+     * @param intent The new intent that was started for the activity.
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -297,15 +321,39 @@ public class MmsMessagingDemo extends Activity {
         }
     }
 
+    /**
+     * Sends the MMS message in a background thread. First we set the text of {@code TextView mSendStatusView}
+     * to the string R.string.mms_status_sending ("Sending"), and disable {@code Button mSendButton}
+     * (the "Send" button). We create a random string to set {@code String fileName}, creating a
+     * filename consisting of "send." appended to the string value of a random long, appended to the
+     * extension ".dat", then create {@code File mSendFile} using the application specific cache directory
+     * as the path and {@code filename} as the file name.
+     *
+     * Now we create an anonymous {@code Runnable} class to send our MMS message, and start it running
+     * in a background thread. (See the comments of the {@code Run} method of this {@code Runnable}
+     * class for the details.
+     *
+     * @param recipients the intended recipients of the MMS message, read from text entered in
+     *                   {@code EditText mRecipientsInput}.
+     * @param subject    subject of the MMS message, read from text entered in
+     *                   {@code EditText mSubjectInput}
+     * @param text       text of the MMS message, read from text entered in {@code EditText mTextInput}
+     */
     private void sendMessage(final String recipients, final String subject, final String text) {
         Log.d(TAG, "Sending");
         mSendStatusView.setText(getResources().getString(R.string.mms_status_sending));
         mSendButton.setEnabled(false);
+
         final String fileName = "send." + String.valueOf(Math.abs(mRandom.nextLong())) + ".dat";
         mSendFile = new File(getCacheDir(), fileName);
 
         // Making RPC call in non-UI thread
         AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
+            /**
+             * Writes a PDU containing the {@code recipients}, {@code subject}, and {@code text} passed
+             * to {@code sendMessage} to the file {@code mSendFile}, and creates Uri's which will allow
+             * the MMS system to access this file to send it out.
+             */
             @Override
             public void run() {
                 final byte[] pdu = buildPdu(MmsMessagingDemo.this, recipients, subject, text);
