@@ -328,7 +328,7 @@ public class MmsMessagingDemo extends Activity {
      * filename consisting of "send." appended to the string value of a random long, appended to the
      * extension ".dat", then create {@code File mSendFile} using the application specific cache directory
      * as the path and {@code filename} as the file name.
-     *
+     * <p>
      * Now we create an anonymous {@code Runnable} class to send our MMS message, and start it running
      * in a background thread. (See the comments of the {@code Run} method of this {@code Runnable}
      * class for the details.
@@ -351,8 +351,37 @@ public class MmsMessagingDemo extends Activity {
         AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
             /**
              * Writes a PDU containing the {@code recipients}, {@code subject}, and {@code text} passed
-             * to {@code sendMessage} to the file {@code mSendFile}, and creates Uri's which will allow
-             * the MMS system to access this file to send it out.
+             * to {@code sendMessage} to the file {@code mSendFile}, creates a Uri which will allow
+             * the MMS system to access this file to send it out, creates a {@code PendingIntent}
+             * which the {@code SmsManager} will broadcast to our {@code BroadcastReceiver mSentReceiver}
+             * when the message is successfully sent, or failed, and sends the MMS message using the
+             * {@code SmsManager} associated with the default subscription id.
+             *
+             * First we call our method {@code buildPdu} to fill {@code byte[] pdu} with a PDU constructed
+             * from the {@code recipients}, {@code subject}, and {@code text} passed to {@code sendMessage}.
+             * We use a new {@code Uri.Builder} to build a Uri in {@code Uri writerUri} with the
+             * authority set to "com.example.android.apis.os.MmsFileProvider" ({@code MmsFileProvider}
+             * is named as the {@code ContentProvider} for this authority in our AndroidManifest.xml).
+             *
+             * Next we create a broadcast {@code PendingIntent pendingIntent} which will be sent to
+             * us by the {@code SmsManager} using the action ACTION_MMS_SENT (and it will be received
+             * by our broadcast receiver {@code BroadcastReceiver mSentReceiver}).
+             *
+             * We initialize both {@code FileOutputStream writer} and {@code Uri contentUri} to null,
+             * then wrapped in a try block intended to catch IOException we create a file output stream
+             * from our {@code File mSendFile} for {@code FileOutputStream writer}, write the entire
+             * contents of {@code pdu} to it, and set {@code contentUri} to {@code writerUri}. If
+             * everything went well, we close {@code writer} in the finally block.
+             *
+             * If {@code contentUri} is not null, we call the {@code sendMultimediaMessage} method
+             * of the {@code SmsManager} associated with the default subscription id to send the MMS
+             * message using {@code contentUri} as the content Uri from which the message pdu will be
+             * read ({@code MmsFileProvider} will be asked by the system to provide the file we just
+             * wrote), and {@code PendingIntent pendingIntent} as the {@code PendingIntent} to be
+             * broadcast when the message is successfully sent, or failed.
+             *
+             * If {@code contentUri} is null, we use {@code PendingIntent} to send the result code
+             * MMS_ERROR_IO_ERROR to {@code BroadcastReceiver mSentReceiver}.
              */
             @Override
             public void run() {
@@ -398,6 +427,30 @@ public class MmsMessagingDemo extends Activity {
         });
     }
 
+    /**
+     * Downloads an MMS message, it is called when the intent used to launch this activity contains
+     * an URL stored under the key EXTRA_NOTIFICATION_URL ("notification_url"). This URL is an
+     * X-Mms-Content-Location value (See the method {@code getContentLocation} in the system class
+     * com.google.android.mms.pdu.NotificationInd). The broadcast receiver {@code MmsWapPushReceiver}
+     * receives this in a WAP_PUSH_RECEIVED_ACTION intent, which it parses and extracts the URL from.
+     * <p>
+     * First we set the text of {@code TextView mSendStatusView} to the string R.string.mms_status_downloading
+     * ("Downloading"), disable the {@code Button mSendButton}, and set the text of {@code mRecipientsInput},
+     * {@code mSubjectInput}, and {@code mTextInput} to the empty string.
+     * <p>
+     * We create {@code String fileName} consisting of the string "download." concatenated with the
+     * string value of a random long, concatenated with the extension ".dat". We set our field
+     * {@code File mDownloadFile} to a {@code File} using {@code fileName} as the file name and the
+     * application specific cache directory as the path.
+     * <p>
+     * Then in a background thread we execute an anonymous {@code Runnable} class which asks the
+     * default {@code SmsManager} to download the MMS message using {@code MmsFileProvider} to write
+     * the message to the file {@code fileName} (see the comments for the {@code run} method of the
+     * {@code Runnable} for the details of how this is done).
+     *
+     * @param locationUrl the location URL of the MMS message to be downloaded, obtained from the MMS
+     *                    WAP push notification by the {@code BroadcastReceiver} {@code MmsWapPushReceiver}
+     */
     private void downloadMessage(final String locationUrl) {
         Log.d(TAG, "Downloading " + locationUrl);
         mSendStatusView.setText(getResources().getString(R.string.mms_status_downloading));
@@ -405,10 +458,33 @@ public class MmsMessagingDemo extends Activity {
         mRecipientsInput.setText("");
         mSubjectInput.setText("");
         mTextInput.setText("");
+
         final String fileName = "download." + String.valueOf(Math.abs(mRandom.nextLong())) + ".dat";
         mDownloadFile = new File(getCacheDir(), fileName);
         // Making RPC call in non-UI thread
         AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
+            /**
+             * Starts the download of the MMS message using {@code locationUrl} as location URL of
+             * the MMS message to be downloaded, an Uri that can be used by the {@code SmsManager}
+             * to get {@code MmsFileProvider} to open {@code fileName} for writing, and a pending
+             * intent with the action ACTION_MMS_RECEIVED for it to send to our broadcast receiver
+             * {@code BroadcastReceiver mReceivedReceiver} when the download is complete.
+             * <p>
+             * First we build {@code Uri contentUri} to access {@code fileName} with the authority
+             * set to "com.example.android.apis.os.MmsFileProvider" ({@code MmsFileProvider} is named
+             * as the {@code ContentProvider} for this authority in our AndroidManifest.xml).
+             * <p>
+             * Then we create a broadcast pending intent {@code PendingIntent pendingIntent} with the
+             * action ACTION_MMS_RECEIVED (which will be received by our broadcast receiver
+             * {@code BroadcastReceiver mReceivedReceiver}.
+             * <p>
+             * Finally we call the {@code downloadMultimediaMessage} method of the default
+             * {@code SmsManager} to download the MMS message with the location URL of {@code locationUrl}
+             * using {@code contentUri} to ask {@code MmsFileProvider} to open {@code fileName} to
+             * write the MMS message to (which the {@code SmsManager} will then try to do), and
+             * {@code pendingIntent} as the broadcast intent for it to broadcast when the message is
+             * downloaded, or the download has failed.
+             */
             @Override
             public void run() {
                 Uri contentUri = (new Uri.Builder())
@@ -424,6 +500,13 @@ public class MmsMessagingDemo extends Activity {
         });
     }
 
+    /**
+     * Handle the MMS message sent broadcast intent, called from the {@code onReceive} method of our
+     * broadcast receiver {@code BroadcastReceiver mSentReceiver}.
+     *
+     * @param code The result code of the broadcast.
+     * @param intent The Intent being received.
+     */
     private void handleSentResult(int code, Intent intent) {
         //noinspection ResultOfMethodCallIgnored
         mSendFile.delete();
