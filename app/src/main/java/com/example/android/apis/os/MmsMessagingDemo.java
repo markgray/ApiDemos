@@ -501,10 +501,24 @@ public class MmsMessagingDemo extends Activity {
     }
 
     /**
-     * Handle the MMS message sent broadcast intent, called from the {@code onReceive} method of our
-     * broadcast receiver {@code BroadcastReceiver mSentReceiver}.
+     * Handle the "MMS message sent" broadcast intent, called from the {@code onReceive} method of our
+     * broadcast receiver {@code BroadcastReceiver mSentReceiver}. First we delete the file we have
+     * just sent: {@code File mSendFile}. Next we initialize {@code int status} to point to the resource
+     * string R.string.mms_status_failed ("Failed"). Then if our parameter {@code code} is the result
+     * code RESULT_OK, we retrieve the extra data contained in our parameter {@code Intent intent} under
+     * the key EXTRA_MMS_DATA (the Intent extra name for MMS sending result data in byte array type
+     * "android.telephony.extra.MMS_DATA") to the array {@code byte[] response}. If {@code response}
+     * is not null, we parse {@code response} into {@code GenericPdu pdu}. If {@code pdu} is an instance
+     * of {@code SendConf} (a subclass of {@code GenericPdu} used to return send confirmation) we cast
+     * {@code pdu} to {@code SendConf sendConf}, and if the {@code getResponseStatus} method of
+     * {@code sendConf} (returns the X-Mms-Response-Status) is RESPONSE_STATUS_OK (0x80) we set
+     * {@code status} to R.string.mms_status_sent ("Sent OK"). (If any of these "if" tests fail we
+     * log a message appropriate for the type of failure without changing the value of {@code status}).
+     * <p>
+     * Finally we set {@code mSendFile} to null, set the text of {@code TextView mSendStatusView} to
+     * the resource string pointed to by {@code status}, and enable {@code Button mSendButton}.
      *
-     * @param code The result code of the broadcast.
+     * @param code   The result code of the broadcast.
      * @param intent The Intent being received.
      */
     private void handleSentResult(int code, Intent intent) {
@@ -538,6 +552,16 @@ public class MmsMessagingDemo extends Activity {
         mSendButton.setEnabled(true);
     }
 
+    /**
+     * Perform any final cleanup before an activity is destroyed. This can happen either because the
+     * activity is finishing (someone called {@link #finish} on it, or because the system is temporarily
+     * destroying this instance of the activity to save space.  You can distinguish between these two
+     * scenarios with the {@link #isFinishing} method.
+     *
+     * First we call through to our super's implementation of {@code onDestroy}, then if
+     * {@code BroadcastReceiver mSentReceiver} is not null we unregister it and if
+     * {@code BroadcastReceiver mReceivedReceiver} is not null we unregister it as well.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -549,6 +573,37 @@ public class MmsMessagingDemo extends Activity {
         }
     }
 
+    /**
+     * Handles the {@code Intent} received by {@code BroadcastReceiver mReceivedReceiver} from the
+     * ACTION_MMS_RECEIVED broadcast by the {@code SmsManager} (this is the action used for the
+     * {@code PendingIntent} argument to the method {@code downloadMultimediaMessage} and is broadcast
+     * when the message is downloaded, or the download has failed).
+     *
+     * First we initialize {@code int status} to point to the resource string R.string.mms_status_failed
+     * ("Failed"). If {@code code} is the result code RESULT_OK, then wrapped in a try block intended
+     * to catch FileNotFoundException or IOException, we set {@code int nBytes} to the length of the
+     * file {@code File mDownloadFile}, and We create {@code FileInputStream reader} to read the file.
+     *
+     * We allocate a byte array holding {@code nBytes} for {@code byte[] response} and try to read
+     * {@code nBytes} bytes from {@code reader} into it, saving the number of bytes actually read in
+     * {@code int read}. If {@code read} is not equal to {@code nBytes} we log the message "MMS received,
+     * empty response", otherwise we parse {@code response} into {@code GenericPdu pdu}. If {@code pdu}
+     * is not an instance of {@code RetrieveConf} we log the message "MMS received, invalid response",
+     * otherwise we cast {@code pdu} to {@code RetrieveConf retrieveConf}, and use it to set the
+     * text of {@code EditText mRecipientsInput} to the string returned by our method {@code getRecipients},
+     * to set the text of {@code EditText mSubjectInput} to the string returned by our method
+     * {@code getSubject}, and the text of {@code EditText mTextInput} to the string returned by our
+     * method {@code getMessageText}. Then we set {@code status} to point to the resource string
+     * R.string.mms_status_downloaded ("Downloaded"). The catch blocks merely log the nature of the
+     * exception caught, and the finally block deletes {@code mDownloadFile}.
+     *
+     * In all cases we conclude by setting {@code mDownloadFile} to null, set the text of
+     * {@code TextView mSendStatusView} to {@code status} and enable {@code Button mSendButton}.
+     *
+     * @param context The Context in which the receiver is running.
+     * @param code the current result code, as set by the previous receiver.
+     * @param intent The Intent being received.
+     */
     @SuppressWarnings("UnusedParameters")
     private void handleReceivedResult(Context context, int code, Intent intent) {
         int status = R.string.mms_status_failed;
@@ -589,10 +644,22 @@ public class MmsMessagingDemo extends Activity {
         mSendButton.setEnabled(true);
     }
 
+    /**
+     * The X-Mms-Expiry value we use for our MMS {@code SendReq}
+     */
     public static final long DEFAULT_EXPIRY_TIME = 7 * 24 * 60 * 60;
+    /**
+     * The X-Mms-Priority value we use for our MMS {@code SendReq}
+     */
     public static final int DEFAULT_PRIORITY = PduHeaders.PRIORITY_NORMAL;
 
+    /**
+     * File name we use for the Content-Location value that we use for our MMS {@code SendReq}.
+     */
     private static final String TEXT_PART_FILENAME = "text_0.txt";
+    /**
+     * Format string we use when encoding TEXT_PART_FILENAME into the {@code PduPart} "part data".
+     */
     private static final String sSmilText =
             "<smil>" +
                     "<head>" +
@@ -608,6 +675,18 @@ public class MmsMessagingDemo extends Activity {
                     "</body>" +
                     "</smil>";
 
+    /**
+     * Builds a {@code SendReq} from its parameters, builds a {@code PduComposer} from it, and returns
+     * a {@code byte[]} array containing the output message.
+     *
+     * 
+     *
+     * @param context {@code Context} used to retrieve resources, MmsMessagingDemo.this in our case
+     * @param recipients Used for the "To" value of our message (see {@code SendReq.setTo})
+     * @param subject The "subject" value of our message (see {@code SendReq.setSubject})
+     * @param text The body of the PDU (see {@code SendReq.setBody})
+     * @return {@code byte[]} array containing the output message.
+     */
     private static byte[] buildPdu(Context context, String recipients, String subject, String text) {
         final SendReq req = new SendReq();
         // From, per spec
