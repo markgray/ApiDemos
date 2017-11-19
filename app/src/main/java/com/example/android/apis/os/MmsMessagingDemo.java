@@ -557,7 +557,7 @@ public class MmsMessagingDemo extends Activity {
      * activity is finishing (someone called {@link #finish} on it, or because the system is temporarily
      * destroying this instance of the activity to save space.  You can distinguish between these two
      * scenarios with the {@link #isFinishing} method.
-     *
+     * <p>
      * First we call through to our super's implementation of {@code onDestroy}, then if
      * {@code BroadcastReceiver mSentReceiver} is not null we unregister it and if
      * {@code BroadcastReceiver mReceivedReceiver} is not null we unregister it as well.
@@ -578,12 +578,12 @@ public class MmsMessagingDemo extends Activity {
      * ACTION_MMS_RECEIVED broadcast by the {@code SmsManager} (this is the action used for the
      * {@code PendingIntent} argument to the method {@code downloadMultimediaMessage} and is broadcast
      * when the message is downloaded, or the download has failed).
-     *
+     * <p>
      * First we initialize {@code int status} to point to the resource string R.string.mms_status_failed
      * ("Failed"). If {@code code} is the result code RESULT_OK, then wrapped in a try block intended
      * to catch FileNotFoundException or IOException, we set {@code int nBytes} to the length of the
      * file {@code File mDownloadFile}, and We create {@code FileInputStream reader} to read the file.
-     *
+     * <p>
      * We allocate a byte array holding {@code nBytes} for {@code byte[] response} and try to read
      * {@code nBytes} bytes from {@code reader} into it, saving the number of bytes actually read in
      * {@code int read}. If {@code read} is not equal to {@code nBytes} we log the message "MMS received,
@@ -596,13 +596,13 @@ public class MmsMessagingDemo extends Activity {
      * method {@code getMessageText}. Then we set {@code status} to point to the resource string
      * R.string.mms_status_downloaded ("Downloaded"). The catch blocks merely log the nature of the
      * exception caught, and the finally block deletes {@code mDownloadFile}.
-     *
+     * <p>
      * In all cases we conclude by setting {@code mDownloadFile} to null, set the text of
      * {@code TextView mSendStatusView} to {@code status} and enable {@code Button mSendButton}.
      *
      * @param context The Context in which the receiver is running.
-     * @param code the current result code, as set by the previous receiver.
-     * @param intent The Intent being received.
+     * @param code    the current result code, as set by the previous receiver.
+     * @param intent  The Intent being received.
      */
     @SuppressWarnings("UnusedParameters")
     private void handleReceivedResult(Context context, int code, Intent intent) {
@@ -678,13 +678,44 @@ public class MmsMessagingDemo extends Activity {
     /**
      * Builds a {@code SendReq} from its parameters, builds a {@code PduComposer} from it, and returns
      * a {@code byte[]} array containing the output message.
+     * <p>
+     * First we create a new instance for {@code SendReq req}. We call our method {@code getSimNumber}
+     * to retrieve the phone number string for line 1 and set {@code String lineNumber} to it. If
+     * {@code lineNumber} is not empty we set the "From" value of {@code req} to an instance of
+     * {@code EncodedStringValue} constructed from {@code lineNumber} ({@code EncodedStringValue} is
+     * a class containing both a Char-set value (DEFAULT_CHARSET = UTF_8 see {@code CharacterSets}),
+     * and a Text-string value (the bytes of the string)).
+     * <p>
+     * We create the array {@code EncodedStringValue[] encodedNumbers} by splitting our parameter
+     * {@code recipients} by the regular expression " " and feeding the resulting {@code String[]}
+     * array to the {@code EncodedStringValue.encodeStrings} method. If {@code encodedNumbers} is
+     * not null we set the "To" value of {@code req} to it.
+     * <p>
+     * If our parameter {@code subject} is not null, we set the "Subject" value of {@code req} to an
+     * instance of {@code EncodedStringValue} created from it.
+     * <p>
+     * We set the "Date" value of {@code req} to the current time in milliseconds divided by 1000.
+     * <p>
+     * We create a new instance for {@code PduBody body} and call our method {@code addTextPart} to
+     * configure and fill it with our parameter {@code text} returning the size of the data part of
+     * it which we save in {@code int size}. We then set the "Body" value of {@code req} to
+     * {@code body}, and set the message size of {@code req} to {@code size}.
+     * <p>
+     * We set the message class of {@code req} to the bytes of {@code PduHeaders.MESSAGE_CLASS_PERSONAL_STR}
+     * ("personal") and set the X-Mms-Expiry value of {@code req} to DEFAULT_EXPIRY_TIME (604800).
+     * <p>
+     * Then wrapped in a try block intended to catch InvalidHeaderValueException, we set the
+     * X-Mms-Priority value of {@code req} to DEFAULT_PRIORITY ({@code PduHeaders.PRIORITY_NORMAL}),
+     * set the X-Mms-Delivery-Report value to {@code PduHeaders.VALUE_NO} (0x81), and set the
+     * X-Mms-Read-Report value of {@code req} to {@code PduHeaders.VALUE_NO} as well.
+     * <p>
+     * Finally we return the {@code byte[]} array that results from "making" a new instance of
+     * {@code PduComposer} created from {@code req}.
      *
-     * 
-     *
-     * @param context {@code Context} used to retrieve resources, MmsMessagingDemo.this in our case
+     * @param context    {@code Context} used to retrieve resources, MmsMessagingDemo.this in our case
      * @param recipients Used for the "To" value of our message (see {@code SendReq.setTo})
-     * @param subject The "subject" value of our message (see {@code SendReq.setSubject})
-     * @param text The body of the PDU (see {@code SendReq.setBody})
+     * @param subject    The "subject" value of our message (see {@code SendReq.setSubject})
+     * @param text       The body of the PDU (see {@code SendReq.setBody})
      * @return {@code byte[]} array containing the output message.
      */
     private static byte[] buildPdu(Context context, String recipients, String subject, String text) {
@@ -732,6 +763,40 @@ public class MmsMessagingDemo extends Activity {
         return new PduComposer(context, req).make();
     }
 
+    /**
+     * Creates a {@code PduPart} from the parameter {@code message}, and appends it to the end of our
+     * parameter {@code PduBody pb}, returning the size of the data part of the {@code PduPart}. If
+     * our parameter {@code addTextSmil} is true we also call our method {@code addSmilPart} to add
+     * the Synchronized Multimedia Integration Language xml markup referencing TEXT_PART_FILENAME.
+     * <p>
+     * First we create a new instance for {@code PduPart part}, set its character set to UTF_8, set
+     * its content type to the bytes of TEXT_PLAIN ("text/plain"), set its content location to the
+     * bytes of TEXT_PART_FILENAME ("text_0.txt").
+     * <p>
+     * We search for that last "." in TEXT_PART_FILENAME and save the index to it in {@code int index}.
+     * If {@code index} is -1 we set {@code String contentId} to the entire string TEXT_PART_FILENAME,
+     * otherwise we set it to the {@code substring} of TEXT_PART_FILENAME up to but not including
+     * that "." We then set the Content-id value of {@code part} to the bytes of {@code contentId}.
+     * <p>
+     * We set the data part of {@code part} to the bytes of our parameter {@code message} and then
+     * append {@code part} to the end of our parameter {@code PduBody pb}.
+     * <p>
+     * If our parameter {@code addTextSmil} is true, we create {@code String smil} by formatting the
+     * string TEXT_PART_FILENAME using the format {@code sSmilText} (inserts the filename in to a
+     * "text" element: {@code <text src="%s" region="Text"/>}), then we pass {@code smil} to our
+     * method {@code addSmilPart} which will create a {@code PduPart} from it and append it to the
+     * end of {@code pb}.
+     * <p>
+     * Finally we return the size of the data part of {@code PduPart part} to our caller.
+     *
+     * @param pb          {@code PduBody} that we are to append a {@code PduPart} constructed from our parameter
+     *                    {@code String message} to.
+     * @param message     {@code String} containing the text of the MMS message we are sending
+     * @param addTextSmil flag to indicate whether we should add the Synchronized Multimedia
+     *                    Integration Language xml markup referencing TEXT_PART_FILENAME.
+     * @return the length of the {@code byte[]} array of the data part of the {@code PduPart} we have
+     * created from the {@code message}
+     */
     @SuppressWarnings("SameParameterValue")
     private static int addTextPart(PduBody pb, String message, boolean addTextSmil) {
         final PduPart part = new PduPart();
@@ -754,6 +819,22 @@ public class MmsMessagingDemo extends Activity {
         return part.getData().length;
     }
 
+    /**
+     * Creates a {@code PduPart}, configures it as an APP_SMIL ("application/smil") data type, adds
+     * the bytes of our parameter {@code String smil} to it then inserts at the beginning or our
+     * parameter {@code PduBody pb}.
+     * <p>
+     * First we create a new instance for {@code PduPart smilPart}, set its Content-ID value to the
+     * bytes of the string "smil", sets its Content-Location value to the bytes of the string "smil.xml",
+     * and set the Content-Type value to the bytes of APP_SMIL ("application/smil"). Having configured
+     * it we set the data part of {@code smilPart} to the bytes of our parameter {@code smil}.
+     * <p>
+     * Finally we insert {@code smilPart} into our parameter {@code PduBody pb} at index 0.
+     *
+     * @param pb   {@code PduBody} we are to insert the "application/smil" data created from our parameter
+     *             {@code smil} into.
+     * @param smil string containing the Synchronized Multimedia Integration Language markup.
+     */
     private static void addSmilPart(PduBody pb, String smil) {
         final PduPart smilPart = new PduPart();
         smilPart.setContentId("smil".getBytes());
@@ -763,6 +844,15 @@ public class MmsMessagingDemo extends Activity {
         pb.addPart(0, smilPart);
     }
 
+    /**
+     * Retrieves the recipients of an MMS message from the "From value" of an M-Retrieve.conf Pdu.
+     * 
+     *
+     * @param context      The Context in which the receiver that called us is running.
+     * @param retrieveConf {@code RetrieveConf} extracted from the downloaded MMS message
+     * @return a {@code String} containing all the phone numbers that received the MMS message,
+     * separated by spaces.
+     */
     private static String getRecipients(Context context, RetrieveConf retrieveConf) {
         final String self = getSimNumber(context);
         final StringBuilder sb = new StringBuilder();
@@ -811,8 +901,8 @@ public class MmsMessagingDemo extends Activity {
 
     @SuppressLint({"MissingPermission", "HardwareIds"})
     private static String getSimNumber(Context context) {
-        final TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(
-                Context.TELEPHONY_SERVICE);
+        final TelephonyManager telephonyManager =
+                (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         if (telephonyManager != null) {
             return telephonyManager.getLine1Number();
         }
