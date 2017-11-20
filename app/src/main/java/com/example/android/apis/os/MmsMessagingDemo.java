@@ -845,8 +845,23 @@ public class MmsMessagingDemo extends Activity {
     }
 
     /**
-     * Retrieves the recipients of an MMS message from the "From value" of an M-Retrieve.conf Pdu.
-     * 
+     * Retrieves the recipients of an MMS message from the "From value", "To value" and "CC value" of
+     * an M-Retrieve.conf Pdu.
+     * <p>
+     * First we call our method {@code getSimNumber} to get the phone number string for line 1 of our
+     * device and save it in {@code String self}. We then create {@code StringBuilder sb}. If the
+     * "From value" of our parameter {@code retrieveConf} is not null, we append it to {@code sb}.
+     * If the "To value" of {@code retrieveConf} is not null, we loop though all the "To value"
+     * {@code EncodedStringValue} objects fetching the string value them to {@code String number}
+     * which we then compare with the {@code self} string, adding them to {@code sb} if they are
+     * different from {@code self}.
+     * <p>
+     * If the "CC value" of {@code retrieveConf} is not null, we loop though all the "CC value"
+     * {@code EncodedStringValue} objects fetching the string value them to {@code String number}
+     * which we then compare with the {@code self} string, adding them to {@code sb} if they are
+     * different from {@code self}.
+     * <p>
+     * Finally we return the string value of {@code sb} to the caller.
      *
      * @param context      The Context in which the receiver that called us is running.
      * @param retrieveConf {@code RetrieveConf} extracted from the downloaded MMS message
@@ -878,11 +893,33 @@ public class MmsMessagingDemo extends Activity {
         return sb.toString();
     }
 
+    /**
+     * We retrieve the "Subject value" from our parameter {@code retrieveConf} to the variable
+     * {@code EncodedStringValue subject}, then if {@code subject} is not null, we return its
+     * string value, otherwise we return the empty string.
+     *
+     * @param retrieveConf {@code RetrieveConf} extracted from the downloaded MMS message
+     * @return the "Subject value" from the parameter {@code retrieveConf} as a string
+     */
     private static String getSubject(RetrieveConf retrieveConf) {
         final EncodedStringValue subject = retrieveConf.getSubject();
         return subject != null ? subject.getString() : "";
     }
 
+    /**
+     * Retrieves the message ("Body value") from our parameter {@code retrieveConf}. First we create
+     * a new instance for {@code StringBuilder sb}. Then we retrieve the "Body value" of our parameter
+     * {@code retrieveConf} to {@code PduBody body}. If {@code body} is not null we loop through all
+     * the parts of it, retrieving each in turn to {@code PduPart part}. If {@code part} is not null,
+     * and its content type is not null, and the method {@code isTextType} detects that the content
+     * type is a text type (it begins with "text/") THEN we append the string created from the bytes
+     * of the data part of {@code part} to {@code sb}.
+     * <p>
+     * Finally we return the string value of {@code sb} to the caller.
+     *
+     * @param retrieveConf {@code RetrieveConf} extracted from the downloaded MMS message
+     * @return the "Body value" from the parameter {@code retrieveConf} as a string
+     */
     private static String getMessageText(RetrieveConf retrieveConf) {
         final StringBuilder sb = new StringBuilder();
         final PduBody body = retrieveConf.getBody();
@@ -899,6 +936,14 @@ public class MmsMessagingDemo extends Activity {
         return sb.toString();
     }
 
+    /**
+     * Returns the phone number of the device we are running on. First we fetch a handle to the system
+     * level service TELEPHONY_SERVICE to {@code TelephonyManager telephonyManager}, then if it is not
+     * null, we return the phone number string for line 1 to the caller. Otherwise we return null.
+     *
+     * @param context the {@code Context} we are running in.
+     * @return the phone number string for line 1, or null.
+     */
     @SuppressLint({"MissingPermission", "HardwareIds"})
     private static String getSimNumber(Context context) {
         final TelephonyManager telephonyManager =

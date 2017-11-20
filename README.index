@@ -1463,6 +1463,7 @@ OS
 
     OS/Morse Code                          all
         .os.MorseCode
+        .os.MorseCodeConverter
             App that vibrates the vibrator with the Morse Code for a string. This 
             demonstrates the android.os.Vibrator class.
 
