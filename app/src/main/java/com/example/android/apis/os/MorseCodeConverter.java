@@ -22,13 +22,28 @@ package com.example.android.apis.os;
 @SuppressWarnings("WeakerAccess")
 class MorseCodeConverter {
     /**
-     *
+     * Base duration of vibration in milliseconds, all other durations are multiples of this
      */
     private static final long SPEED_BASE = 100;
+    /**
+     * Duration in milliseconds of a "Dot"
+     */
     static final long DOT = SPEED_BASE;
+    /**
+     * Duration in milliseconds of a "Dash"
+     */
     static final long DASH = SPEED_BASE * 3;
+    /**
+     * Duration in milliseconds of a pause between dots and dashes
+     */
     static final long GAP = SPEED_BASE;
+    /**
+     * Duration in milliseconds of a pause between letters
+     */
     static final long LETTER_GAP = SPEED_BASE * 3;
+    /**
+     * Duration in milliseconds of a pause between words
+     */
     static final long WORD_GAP = SPEED_BASE * 7;
 
     /**
@@ -79,10 +94,19 @@ class MorseCodeConverter {
         /* 9 */ new long[]{DASH, GAP, DASH, GAP, DASH, GAP, DASH, GAP, DOT},
     };
 
+    /**
+     * Duration in milliseconds of a pause when the character is not one we support
+     */
     private static final long[] ERROR_GAP = new long[]{GAP};
 
     /**
-     * Return the pattern data for a given character.
+     * Return the pattern data for a given character. We first check if the parameter {@code char c}
+     * is between 'A' and 'Z' and if so we return the array in {@code LETTERS} that is indexed by the
+     * value {@code c - 'A'}, then we check if the parameter {@code char c} is between 'a' and 'z'
+     * and if so we return the array in {@code LETTERS} that is indexed by the value {@code c - 'a'},
+     * then we check if the parameter {@code char c} is between '0' and '9' and if so we return the
+     * array in {@code NUMBERS} that is indexed by the value {@code c - '0'}. If it is not one of the
+     * above we return the array {@code ERROR_GAP}.
      *
      * @param c Character that is being converted to Morse code
      * @return an array of {@code long} that contains the Morse code for the parameter {@code c}
@@ -100,9 +124,47 @@ class MorseCodeConverter {
         }
     }
 
+    /**
+     * Return the pattern data for a given string. We declare our flag {@code boolean lastWasWhitespace},
+     * and store the length of our parameter {@code str} in {@code strlen}.
+     * <p>
+     * Next we proceed to calculate how big our return array of {@code long[]} needs to be, by first
+     * initializing {@code len} to 1 (the length needed), and setting {@code lastWasWhitespace} to
+     * true. Then we loop through all the {@code char c} in {@code str}, checking whether {@code c}
+     * is a white space character, and if so we check whether the previous character was also a
+     * white space character skipping it if so, otherwise incrementing {@code len} and setting
+     * {@code lastWasWhitespace} to true. If {@code c} was not a white space character and the
+     * previous character was also not a white space character we increment {@code len}, then for all
+     * non white space characters we then set {@code lastWasWhitespace} to false and add the length
+     * of the Morse code pattern returned for {@code c} by our method {@code pattern(char)} to {@code len}.
+     * <p>
+     * Now that we know how long our array needs to be we allocate {@code len+1} longs for our variable
+     * {@code long[] result}, set {@code result[0]} to 0 (the initial pause of the vibration pattern),
+     * set {@code int pos} to 1 (next storage location in {@code result[]}), and set {@code lastWasWhitespace}
+     * to true. Then once again looping through all the {@code char c} in {@code str}, we first check
+     * if {@code c} is a white space character, and if so we check whether the previous character was
+     * also a white space character skipping it if so, otherwise setting {@code result[pos]} to
+     * {@code WORD_GAP} incrementing {@code pos} and setting {@code lastWasWhitespace} to true. If
+     * {@code c} was not a white space character and the previous character was a white space character
+     * we set {@code result[pos]} to the array {@code LETTER_GAP} and increment {@code pos} before setting
+     * {@code lastWasWhitespace} to true, and {@code long[] letter} to the array of Morse code that our
+     * method {@code pattern(char)} returns for {@code c}. We then copy the contents of the array
+     * {@code letter} to our array {@code result} starting at location {@code pos} and add the length
+     * of {@code letter} to {@code pos}.
+     * <p>
+     * When done with all the characters in {@code str} we return {@code result} to the caller.
+     *
+     * @param str a string which needs to be converted to Morse code
+     * @return an array of {@code long} that contains the Morse code for the parameter {@code str}
+     */
     static long[] pattern(String str) {
+        /*
+         * Flag to indicate that the previous character was a "white space" character
+         */
         boolean lastWasWhitespace;
-        @SuppressWarnings("SpellCheckingInspection")
+        /*
+         * Number of characters in our parameter {@code str}
+         */
         int strlen = str.length();
 
         // Calculate how long our array needs to be.

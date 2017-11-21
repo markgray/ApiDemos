@@ -1469,7 +1469,7 @@ OS
 
     OS/Rotation Vector                     all -- v9+ or crash
         .os.RotationVectorDemo
-            Use output from Sensor.TYPE_ROTATION_VECTOR to change the rotation matrix
+            Uses output from Sensor.TYPE_ROTATION_VECTOR to change the rotation matrix
             of an openGL Cube.
 
     OS/SMS Messaging                       all
