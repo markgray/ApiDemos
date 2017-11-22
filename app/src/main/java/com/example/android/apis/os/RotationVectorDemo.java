@@ -220,10 +220,18 @@ public class RotationVectorDemo extends Activity {
         }
 
         /**
-         * Called when the surface changed size.
+         * Called when the surface changed size. First we set our view port to have the lower left
+         * corner at (0,0), and a width of {@code int width} and a height of {@code int height}. Then
+         * we calculate th aspect ratio {@code float ratio} to be {@code width/height}. We set the
+         * current matrix mode to GL_PROJECTION (The projection matrix defines the properties of the
+         * camera that views the objects in the world coordinate frame. Here you typically set the
+         * zoom factor, aspect ratio and the near and far clipping planes). We load the matrix with
+         * the identity matrix, and then set the left clipping plane to {@code -ratio} the right
+         * clipping plane to {@code ratio}, the bottom clipping plane to -1, the top clipping plane
+         * to 1, the near clipping plane to 1, and the far clipping plane to 10.
          *
-         * @param gl the GL interface.
-         * @param width new width of the surface.
+         * @param gl     the GL interface.
+         * @param width  new width of the surface.
          * @param height new height of the surface.
          */
         @Override
@@ -237,6 +245,14 @@ public class RotationVectorDemo extends Activity {
             gl.glFrustumf(-ratio, ratio, -1, 1, 1, 10);
         }
 
+        /**
+         * Called when the surface is created or recreated. First we disable the server side capability
+         * GL_DITHER (disables the dithering of color components and indices before they are written
+         * to the color buffer), and then we set the clear color to white.
+         *
+         * @param gl     the GL interface.
+         * @param config the EGLConfig of the created surface.
+         */
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             // dither is enabled by default, we don't need it
@@ -245,12 +261,48 @@ public class RotationVectorDemo extends Activity {
             gl.glClearColor(1, 1, 1, 1);
         }
 
+        /**
+         * Implements a openGL cube.
+         */
         class Cube {
             // initialize our cube
+            /**
+             * Vertex buffer for a cube, loaded in the constructor from an array, passed to the openGL
+             * system by the method {@code glVertexPointer} to define the array of vertex data to use
+             * for rendering.
+             */
             private FloatBuffer mVertexBuffer;
+            /**
+             * Color buffer for a cube, loaded in the constructor from an array, passed to the openGL
+             * system by the method {@code glColorPointer} to define the array of colors to use for
+             * rendering.
+             */
             private FloatBuffer mColorBuffer;
+            /**
+             * Index buffer for a cube, loaded in the constructor from an array, passed to the openGL
+             * system by the method {@code glDrawElements} to draw a series of GL_TRIANGLES primitives
+             * using the index buffer to specify the coordinates of each point addressed by the indices,
+             * and color buffer to specify the color.
+             */
             private ByteBuffer mIndexBuffer;
 
+            /**
+             * Our constructor. We allocate a new direct byte buffer for {@code ByteBuffer vbb} large
+             * enough to hold our constant array {@code vertices[]}, set its byte order to the native
+             * order for our device, and create a view of it as a float buffer in order to initialize
+             * our field {@code FloatBuffer mVertexBuffer}. We then transfer the entire content of
+             * {@code vertices[]} into {@code mVertexBuffer}, and position it to its beginning.
+             * <p>
+             * We allocate a new direct byte buffer for {@code ByteBuffer cbb} large enough to hold
+             * our constant array {@code colors[]}, set its byte order to the native order for our
+             * device, and create a view of it as a float buffer in order to initialize our field
+             * {@code FloatBuffer mColorBuffer}. We then transfer the entire content of
+             * {@code colors[]} into {@code mColorBuffer}, and position it to its beginning.
+             * <p>
+             * Finally We allocate a new direct byte buffer for {@code ByteBuffer mIndexBuffer} large
+             * enough to hold our constant array {@code indices[]}, and transfer the entire content of
+             * {@code indices[]} into {@code mIndexBuffer}, and position it to its beginning.
+             */
             public Cube() {
                 final float vertices[] = {
                         -1, -1, -1, 1, -1, -1,
@@ -292,6 +344,24 @@ public class RotationVectorDemo extends Activity {
                 mIndexBuffer.position(0);
             }
 
+            /**
+             * Called by {@code MyRenderer.onDrawFrame} to draw our {@code Cube}. First we enable the
+             * server side capability GL_CULL_FACE (culls polygons based on their winding in window
+             * coordinates). We set the orientation of front-facing polygons to GL_CW (clockwise),
+             * and set the shade model to GL_SMOOTH (causes the computed colors of vertices to be
+             * interpolated as the primitive is rasterized, typically assigning different colors to
+             * each resulting pixel fragment). Next we specify the location and data format of the
+             * array of vertex coordinates to use when rendering to be {@code FloatBuffer mVertexBuffer},
+             * with a size of 3, a data type of GL_FLOAT, and a stride of 0. We specify the location
+             * and data format of an array of color components to use when rendering to be our field
+             * {@code FloatBuffer mColorBuffer}, with a size of 4, a data type of GL_FLOAT, and a
+             * stride of 0.
+             * <p>
+             * Finally we call {@code glDrawElements} to draw 36 GL_TRIANGLES using the GL_UNSIGNED_BYTE
+             * data in {@code ByteBuffer mIndexBuffer} as the indices into the vertex and color buffers.
+             *
+             * @param gl the GL interface.
+             */
             public void draw(GL10 gl) {
                 gl.glEnable(GL10.GL_CULL_FACE);
                 gl.glFrontFace(GL10.GL_CW);
@@ -302,6 +372,12 @@ public class RotationVectorDemo extends Activity {
             }
         }
 
+        /**
+         * Called when the accuracy of the registered sensor has changed. We ignore it.
+         *
+         * @param sensor   the {@code Sensor} whose accuracy has changed
+         * @param accuracy The new accuracy of this sensor
+         */
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
         }

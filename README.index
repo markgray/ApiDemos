@@ -1474,6 +1474,8 @@ OS
 
     OS/SMS Messaging                       all
         .os.SmsMessagingDemo
+        .os.SmsReceivedDialog
+        .os.SmsMessageReceiver
             Shows how to send and receive SMS messages. Nifty use of tts as well.
 
     OS/TriggerSensors                      all -- v18+ or crash

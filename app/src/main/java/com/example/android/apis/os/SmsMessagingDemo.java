@@ -43,14 +43,48 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.example.android.apis.R;
 
+/**
+ * Shows how to send and receive SMS messages. Nifty use of tts as well.
+ */
 public class SmsMessagingDemo extends Activity {
-    /** Tag string for our debug logs */
+    /**
+     * Tag string for our debug logs
+     */
     private static final String TAG = "SmsMessagingDemo";
 
+    /**
+     * Intent Extra key for the originating address (sender) of this SMS message in String form,
+     * set when we are started by the {@code SmsMessageReceiver} {@code BroadcastReceiver}.
+     */
     public static final String SMS_RECIPIENT_EXTRA = "com.example.android.apis.os.SMS_RECIPIENT";
 
+    /**
+     * Used as the action for the "Sent {@code PendingIntent}" passed to {@code sendTextMessage}.
+     * It sounds as if since 4.4 KitKat the default SMS app will take precedence for this (but the
+     * documentation is a bit confusing).
+     */
     public static final String ACTION_SMS_SENT = "com.example.android.apis.os.SMS_SENT_ACTION";
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.sms_demo.
+     * <p>
+     * Next we check to see if the {@code Intent} that launched us contains an extra with the key
+     * SMS_RECIPIENT_EXTRA (this is set to the from data of a received SMS message when
+     * {@code SmsReceivedDialog} launches us), and if it does we set the text of the {@code TextView}
+     * in our layout which has the ID R.id.sms_recipient (labeled "Recipient #") to the string stored
+     * in the extras of the {@code Intent} that launched us under that key. We then request focus for
+     * the the view in our layout which has ID R.id.sms_content (labeled "Message Body").
+     * <p>
+     * We locate the view in our layout with ID R.id.sms_enable_receiver (labeled "Enable SMS broadcast
+     * receiver") and save a reference to it in {@code CheckBox enableCheckBox}. We then set
+     * {@code PackageManager pm} to a new instance, and create {@code ComponentName componentName} to
+     * reference the {@code SmsMessageReceiver} class in our package. We set the checked state of
+     * {@code enableCheckBox} to the enabled setting for {@code componentName} (it starts our false
+     * in the AndroidManifest.xml file).
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +92,9 @@ public class SmsMessagingDemo extends Activity {
         setContentView(R.layout.sms_demo);
 
         if (getIntent().hasExtra(SMS_RECIPIENT_EXTRA)) {
-            ((TextView) findViewById(R.id.sms_recipient)).setText(getIntent().getExtras()
-                    .getString(SMS_RECIPIENT_EXTRA));
+            //noinspection ConstantConditions
+            ((TextView) findViewById(R.id.sms_recipient))
+                    .setText(getIntent().getExtras().getString(SMS_RECIPIENT_EXTRA));
             findViewById(R.id.sms_content).requestFocus();
         }
 
@@ -72,9 +107,10 @@ public class SmsMessagingDemo extends Activity {
                 "com.example.android.apis.os.SmsMessageReceiver");
 
         enableCheckBox.setChecked(pm.getComponentEnabledSetting(componentName) ==
-                                  PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
 
         enableCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.d(TAG, (isChecked ? "Enabling" : "Disabling") + " SMS receiver");
 
@@ -85,15 +121,14 @@ public class SmsMessagingDemo extends Activity {
             }
         });
 
-        final EditText recipientTextEdit = (EditText) SmsMessagingDemo.this
-                .findViewById(R.id.sms_recipient);
-        final EditText contentTextEdit = (EditText) SmsMessagingDemo.this
-                .findViewById(R.id.sms_content);
+        final EditText recipientTextEdit = (EditText) SmsMessagingDemo.this.findViewById(R.id.sms_recipient);
+        final EditText contentTextEdit = (EditText) SmsMessagingDemo.this.findViewById(R.id.sms_content);
         final TextView statusView = (TextView) SmsMessagingDemo.this.findViewById(R.id.sms_status);
 
         // Watch for send button clicks and send text messages.
         Button sendButton = (Button) findViewById(R.id.sms_send_message);
         sendButton.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View v) {
                 if (TextUtils.isEmpty(recipientTextEdit.getText())) {
                     Toast.makeText(SmsMessagingDemo.this, "Please enter a message recipient.",
@@ -116,8 +151,15 @@ public class SmsMessagingDemo extends Activity {
 
                 String recipient = recipientTextEdit.getText().toString();
                 for (String message : messages) {
-                    sms.sendTextMessage(recipient, null, message, PendingIntent.getBroadcast(
-                            SmsMessagingDemo.this, 0, new Intent(ACTION_SMS_SENT), 0), null);
+                    sms.sendTextMessage(recipient,
+                            null,
+                            message,
+                            PendingIntent.getBroadcast(
+                                    SmsMessagingDemo.this,
+                                    0,
+                                    new Intent(ACTION_SMS_SENT),
+                                    0),
+                            null);
                 }
             }
         });
@@ -129,22 +171,22 @@ public class SmsMessagingDemo extends Activity {
                 String message = null;
                 boolean error = true;
                 switch (getResultCode()) {
-                case Activity.RESULT_OK:
-                    message = "Message sent!";
-                    error = false;
-                    break;
-                case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                    message = "Error.";
-                    break;
-                case SmsManager.RESULT_ERROR_NO_SERVICE:
-                    message = "Error: No service.";
-                    break;
-                case SmsManager.RESULT_ERROR_NULL_PDU:
-                    message = "Error: Null PDU.";
-                    break;
-                case SmsManager.RESULT_ERROR_RADIO_OFF:
-                    message = "Error: Radio off.";
-                    break;
+                    case Activity.RESULT_OK:
+                        message = "Message sent!";
+                        error = false;
+                        break;
+                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                        message = "Error.";
+                        break;
+                    case SmsManager.RESULT_ERROR_NO_SERVICE:
+                        message = "Error: No service.";
+                        break;
+                    case SmsManager.RESULT_ERROR_NULL_PDU:
+                        message = "Error: Null PDU.";
+                        break;
+                    case SmsManager.RESULT_ERROR_RADIO_OFF:
+                        message = "Error: Radio off.";
+                        break;
                 }
 
                 recipientTextEdit.setEnabled(true);
