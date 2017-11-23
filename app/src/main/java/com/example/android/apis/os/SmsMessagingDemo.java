@@ -80,8 +80,23 @@ public class SmsMessagingDemo extends Activity {
      * receiver") and save a reference to it in {@code CheckBox enableCheckBox}. We then set
      * {@code PackageManager pm} to a new instance, and create {@code ComponentName componentName} to
      * reference the {@code SmsMessageReceiver} class in our package. We set the checked state of
-     * {@code enableCheckBox} to the enabled setting for {@code componentName} (it starts our false
-     * in the AndroidManifest.xml file).
+     * {@code enableCheckBox} to the enabled setting for {@code componentName} (it starts out false
+     * in the AndroidManifest.xml file). Next we set the {@code OnClickListener} of {@code enableCheckBox}
+     * to an anonymous class which uses the {@code setComponentEnabledSetting} method of {@code pm}
+     * to enable or disable {@code SmsMessageReceiver} depending on whether {@code enableCheckBox}
+     * is now checked or unchecked.
+     *
+     * To set {@code EditText recipientTextEdit} we locate the view in our layout with ID R.id.sms_recipient
+     * (labeled "Recipient #"), to set {@code EditText contentTextEdit} we locate the view in our layout
+     * with ID R.id.sms_content (labeled "Message Body"), and to set {@code TextView statusView} we locate
+     * the view in our layout with ID R.id.sms_status (bottom of the layout). We locate the {@code Button}
+     * with ID R.id.sms_send_message ("SEND") to set {@code Button sendButton} and set its {@code OnClickListener}
+     * to an anonymous class which sends the SMS text that the user has entered in {@code contentTextEdit} to
+     * the recipients he has entered in {@code recipientTextEdit}.
+     *
+     * Finally we register an anonymous class as the {@code BroadcastReceiver} for the action
+     * ACTION_SMS_SENT (which was used as the action for the {@code sentIntent} that is passed to
+     * {@code sendTextMessage} for the system to broadcast when the SMS message has been sent).
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
@@ -110,6 +125,14 @@ public class SmsMessagingDemo extends Activity {
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
 
         enableCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            /**
+             * Called when the checked state of {@code CheckBox} has changed. If the new checked state
+             * is "checked" we enable {@code ComponentName componentName}, if it is "unchecked" we
+             * disable it.
+             *
+             * @param buttonView The view whose state has changed.
+             * @param isChecked  The new checked state.
+             */
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.d(TAG, (isChecked ? "Enabling" : "Disabling") + " SMS receiver");
@@ -128,6 +151,27 @@ public class SmsMessagingDemo extends Activity {
         // Watch for send button clicks and send text messages.
         Button sendButton = (Button) findViewById(R.id.sms_send_message);
         sendButton.setOnClickListener(new OnClickListener() {
+            /**
+             * Called when the "SEND" button is clicked. First we make sure that the user has entered
+             * a recipient in the {@code EditText recipientTextEdit}, and if not we toast the message
+             * "Please enter a message recipient." and return having done nothing. We make sure that
+             * the user has entered a message to send in {@code EditText contentTextEdit} and if not
+             * we toast the message "Please enter a message body." and return having done nothing.
+             *
+             * If the above tests pass, we disable both {@code recipientTextEdit} and {@code contentTextEdit}.
+             * We initialize {@code SmsManager sms} with the SmsManager associated with the default
+             * subscription ID, initialize {@code List<String> messages} by dividing the text in
+             * {@code contentTextEdit} into several fragments, none bigger than the maximum SMS message
+             * size, and initialize {@code String recipient} by retrieving the text in {@code recipientTextEdit}.
+             *
+             * Then for each {@code String message} in {@code messages} we call the {@code sendTextMessage}
+             * method of {@code sms} to send {@code message} to {@code recipient}, asking that a
+             * {@code BroadcastIntent} with action ACTION_SMS_SENT be broadcast when the SMS message
+             * has been sent (it will be caught by the anonymous {@code BroadcastReceiver} we register
+             * below.
+             *
+             * @param v view that has been clicked
+             */
             @Override
             public void onClick(View v) {
                 if (TextUtils.isEmpty(recipientTextEdit.getText())) {
@@ -166,6 +210,35 @@ public class SmsMessagingDemo extends Activity {
 
         // Register broadcast receivers for SMS sent and delivered intents
         registerReceiver(new BroadcastReceiver() {
+            /**
+             * This method is called when the BroadcastReceiver is receiving an Intent broadcast.
+             * First we set {@code String message} to null, and {@code boolean error} to true.
+             * Then we switch based on the current result code (as set by the previous receiver):
+             * <ul>
+             *     <li>
+             *         RESULT_OK - we set {@code message} to "Message sent!", and set {@code error} to false.
+             *     </li>
+             *     <li>
+             *         RESULT_ERROR_GENERIC_FAILURE - we set {@code message} to "Error.".
+             *     </li>
+             *     <li>
+             *         RESULT_ERROR_NO_SERVICE - we set {@code message} to "Error: No service."
+             *     </li>
+             *     <li>
+             *         RESULT_ERROR_NULL_PDU - we set {@code message} to "Error: Null PDU."
+             *     </li>
+             *     <li>
+             *         RESULT_ERROR_RADIO_OFF - we set {@code message} to "Error: Radio off."
+             *     </li>
+             * </ul>
+             * Now we enable both {@code recipientTextEdit} and {@code contentTextEdit} and set the
+             * text of {@code contentTextEdit} to the empty string. We set the text of {@code statusView}
+             * to {@code message}, and if {@code error} is true we set its text color to RED, if false
+             * we set its text color to GREEN.
+             *
+             * @param context The Context in which the receiver is running.
+             * @param intent The Intent being received.
+             */
             @Override
             public void onReceive(Context context, Intent intent) {
                 String message = null;

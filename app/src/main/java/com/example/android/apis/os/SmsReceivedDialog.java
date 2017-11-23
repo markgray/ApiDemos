@@ -30,27 +30,77 @@ import android.util.Log;
 
 import com.example.android.apis.R;
 
+/**
+ * Part of the {@code SmsMessagingDemo} demonstration, we are launched by {@code SmsMessageReceiver}
+ * to display an SMS message that it has received and to use the {@code TextToSpeech} engine to read
+ * it aloud as well.
+ */
 @SuppressWarnings("FieldCanBeLocal")
 public class SmsReceivedDialog extends Activity implements OnInitListener {
+    /**
+     * TAG used for logging.
+     */
     private static final String TAG = "SmsReceivedDialog";
 
+    /**
+     * The id of the dialog that we display (there is only the one), it is the value we use when
+     * calling {@code showDialog}, and is passed to our {@code onCreateDialog} override.
+     */
     private static final int DIALOG_SHOW_MESSAGE = 1;
 
+    /**
+     * Key for the SMS "From Address" information which {@code SmsMessageReceiver} adds as an extra
+     * to the {@code Intent} it uses to launch us.
+     */
     public static final String SMS_FROM_ADDRESS_EXTRA = "com.example.android.apis.os.SMS_FROM_ADDRESS";
+    /**
+     * Key for the DISPLAY_NAME which {@code SmsMessageReceiver} adds as an extra to the {@code Intent}
+     * it uses to launch us ({@code SmsMessageReceiver} retrieves it from the contacts database using
+     * the phone number the SMS message appears to come from).
+     */
     public static final String SMS_FROM_DISPLAY_NAME_EXTRA = "com.example.android.apis.os.SMS_FROM_DISPLAY_NAME";
+    /**
+     * Key for the message body of the SMS message which {@code SmsMessageReceiver} adds as an extra
+     * to the {@code Intent} it uses to launch us
+     */
     public static final String SMS_MESSAGE_EXTRA = "com.example.android.apis.os.SMS_MESSAGE";
 
+    /**
+     * {@code TextToSpeech} instance we use to read the message out loud.
+     */
     private TextToSpeech mTts;
 
+    /**
+     * DISPLAY_NAME information retrieved from the {@code Intent} that {@code SmsMessageReceiver}
+     * used to launch us.
+     */
     private String mFromDisplayName;
+    /**
+     * "From Address" information retrieved from the {@code Intent} that {@code SmsMessageReceiver}
+     * used to launch us.
+     */
     private String mFromAddress;
+    /**
+     * The message body of the SMS message retrieved from the {@code Intent} that {@code SmsMessageReceiver}
+     * used to launch us.
+     */
     private String mMessage;
+    /**
+     * {@code String} with {@code mFromDisplayName} and {@code mMessage} formatted for the
+     * {@code TextToSpeech} engine to read aloud.
+     */
     private String mFullBodyString;
 
+    /**
+     * Called when the activity is starting.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //noinspection ConstantConditions
         mFromAddress = getIntent().getExtras().getString(SMS_FROM_ADDRESS_EXTRA);
         mFromDisplayName = getIntent().getExtras().getString(SMS_FROM_DISPLAY_NAME_EXTRA);
         mMessage = getIntent().getExtras().getString(SMS_MESSAGE_EXTRA);
