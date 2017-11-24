@@ -16,8 +16,6 @@
 
 package com.example.android.apis.os;
 
-import java.util.Locale;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -29,6 +27,8 @@ import android.speech.tts.TextToSpeech.OnInitListener;
 import android.util.Log;
 
 import com.example.android.apis.R;
+
+import java.util.Locale;
 
 /**
  * Part of the {@code SmsMessagingDemo} demonstration, we are launched by {@code SmsMessageReceiver}
@@ -92,7 +92,17 @@ public class SmsReceivedDialog extends Activity implements OnInitListener {
     private String mFullBodyString;
 
     /**
-     * Called when the activity is starting.
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. We initialize our field {@code String mFromAddress} by retrieving the extra
+     * with key SMS_FROM_ADDRESS_EXTRA from the {@code Intent}, our field {@code String mFromDisplayName}
+     * by retrieving the extra with key SMS_FROM_DISPLAY_NAME_EXTRA, and our field {@code String mMessage}
+     * by retrieving the extra with key SMS_MESSAGE_EXTRA. Then we format {@code mFromDisplayName} and
+     * {@code mMessage} into a string using the format contained in R.string.sms_speak_string_format
+     * to initialize our field {@code String mFullBodyString}. We call the method {@code showDialog}
+     * to display our dialog with ID DIALOG_SHOW_MESSAGE (this calls our override {@code onCreateDialog}).
+     * Finally we initialize our field {@code TextToSpeech mTts} with a new instance using "this" as
+     * the {@code TextToSpeech.OnInitListener} (this will also initialize the associated TextToSpeech
+     * engine if it isn't already running).
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
@@ -115,6 +125,14 @@ public class SmsReceivedDialog extends Activity implements OnInitListener {
         mTts = new TextToSpeech(this, this);
     }
 
+    /**
+     * Called to signal the completion of the TextToSpeech engine initialization. If our parameter is
+     * TextToSpeech.SUCCESS we set the text-to-speech language to Locale.US and if the {@code result}
+     * of the call is LANG_MISSING_DATA, we log an error "TTS language is not available", otherwise
+     * we call the {@code speak} method of {@code mTts} to speak the string in {@code mFullBodyString}.
+     *
+     * @param status {@link TextToSpeech#SUCCESS} or {@link TextToSpeech#ERROR}.
+     */
     @Override
     public void onInit(int status) {
         if (status == TextToSpeech.SUCCESS) {
@@ -132,38 +150,56 @@ public class SmsReceivedDialog extends Activity implements OnInitListener {
         }
     }
 
+    /**
+     * Callback for creating dialogs that are managed (saved and restored) for you by the activity.
+     * We switch based on the {@code int id} parameter, returning null for everything except the
+     * ID DIALOG_SHOW_MESSAGE. For DIALOG_SHOW_MESSAGE we create and return an {@code AlertDialog}
+     * whose icon is android.R.drawable.ic_dialog_email, whose message is "Message Received". Its
+     * positive button displays the text R.string.reply ("Reply"), and has an {@code OnClickListener}
+     * that is an anonymous class which creates an {@code Intent} to launch {@code SmsMessagingDemo},
+     * adds the from address contained in {@code String mFromAddress} as an extra with the key
+     * {@code SmsMessagingDemo.SMS_RECIPIENT_EXTRA}, and launches the {@code Intent} then dismisses
+     * our dialog and finishes the {@code SmsReceivedDialog} activity we are a part of. Its negative
+     * button displays the text R.string.dismiss ("Dismiss") and has an {@code OnClickListener} which
+     * simply dismisses our dialog and finishes the {@code SmsReceivedDialog} activity we are a part of.
+     * Its {@code OnCancelListener} just finishes the {@code SmsReceivedDialog} activity we are a part
+     * of.
+     *
+     * @param id The id of the dialog.
+     * @return The dialog.
+     */
     @SuppressWarnings("deprecation")
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
-        case DIALOG_SHOW_MESSAGE:
-            return new AlertDialog.Builder(this)
-                    .setIcon(android.R.drawable.ic_dialog_email)
-                    .setTitle("Message Received")
-                    .setMessage(mFullBodyString)
-                    .setPositiveButton(R.string.reply, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            // Begin creating the reply with the SmsMessagingDemo activity
-                            Intent i = new Intent();
-                            i.setClass(SmsReceivedDialog.this, SmsMessagingDemo.class);
-                            i.putExtra(SmsMessagingDemo.SMS_RECIPIENT_EXTRA, mFromAddress);
-                            startActivity(i);
+            case DIALOG_SHOW_MESSAGE:
+                return new AlertDialog.Builder(this)
+                        .setIcon(android.R.drawable.ic_dialog_email)
+                        .setTitle("Message Received")
+                        .setMessage(mFullBodyString)
+                        .setPositiveButton(R.string.reply, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                // Begin creating the reply with the SmsMessagingDemo activity
+                                Intent i = new Intent();
+                                i.setClass(SmsReceivedDialog.this, SmsMessagingDemo.class);
+                                i.putExtra(SmsMessagingDemo.SMS_RECIPIENT_EXTRA, mFromAddress);
+                                startActivity(i);
 
-                            dialog.dismiss();
-                            finish();
-                        }
-                    })
-                    .setNegativeButton(R.string.dismiss, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            dialog.dismiss();
-                            finish();
-                        }
-                    })
-                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        public void onCancel(DialogInterface dialog) {
-                            finish();
-                        }
-                    }).create();
+                                dialog.dismiss();
+                                finish();
+                            }
+                        })
+                        .setNegativeButton(R.string.dismiss, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.dismiss();
+                                finish();
+                            }
+                        })
+                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            public void onCancel(DialogInterface dialog) {
+                                finish();
+                            }
+                        }).create();
         }
         return null;
     }

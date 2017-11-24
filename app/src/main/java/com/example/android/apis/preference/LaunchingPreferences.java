@@ -36,6 +36,9 @@ import android.widget.LinearLayout.LayoutParams;
  */
 public class LaunchingPreferences extends Activity implements OnClickListener {
 
+    /**
+     * Request code we use when starting the activity {@code AdvancedPreferences} for result.
+     */
     private static final int REQUEST_CODE_PREFERENCES = 1;
 
     private TextView mCounterText;
@@ -60,12 +63,10 @@ public class LaunchingPreferences extends Activity implements OnClickListener {
         Button launchPreferences = new Button(this);
         launchPreferences.setText(getString(R.string.launch_preference_activity));
         launchPreferences.setOnClickListener(this);
-        layout.addView(launchPreferences, new LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT));
+        layout.addView(launchPreferences, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         mCounterText = new TextView(this);
-        layout.addView(mCounterText, new LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT));
+        layout.addView(mCounterText, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         updateCounterText();
     }

@@ -25,20 +25,53 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.SmsMessage;
 
+/**
+ * {@code BroadcastReceiver} for the SMS actions android.provider.Telephony.SMS_RECEIVED and
+ * android.provider.Telephony.SMS_DELIVER, a part of the {@code SmsMessagingDemo} sample code.
+ */
 public class SmsMessageReceiver extends BroadcastReceiver {
-    /** Tag string for our debug logs */
-    @SuppressWarnings("unused")
-    private static final String TAG = "SmsMessageReceiver";
-
+    /**
+     * This method is called when the BroadcastReceiver is receiving an Intent broadcast. First we
+     * retrieve all the extras from the {@code Intent} that launched us into {@code Bundle extras},
+     * and if it is null we return having done nothing. We retrieve the object stored in {@code extras}
+     * under the key "pdus" to {@code Object[] pdus}. Then for all the objects in {@code Object[] pdus}
+     * we retrieve the {@code SmsMessage message} from the current {@code Object[] pdus}. We fetch
+     * the originating address from {@code SmsMessage message} to {@code String fromAddress} and set
+     * {@code String fromDisplayName} to {@code fromAddress}.
+     * <p>
+     * We declare {@code Uri uri}, and {@code String[] projection}. Then set {@code uri} to an {@code Uri}
+     * whose path is ContactsContract.PhoneLookup.CONTENT_FILTER_URI (the content:// style URI for
+     * the the {@code PhoneLookup} table), with the encoded phone number in {@code fromAddress} appended
+     * to it (the phone number to lookup in the Contacts database). We set {@code projection} to an
+     * array of {@code String[]} whose only entry is for the DISPLAY_NAME column of the database.
+     * <p>
+     * We create {@code Cursor cursor} by querying {@code uri} with the projection {@code projection}
+     * and it is not null, we move {@code cursor} to the first row and set {@code fromDisplayName}
+     * to the string in column index 0, and then close {@code cursor}.
+     * <p>
+     * We now create a new instance for {@code Intent di}, set its class to {@code SmsReceivedDialog},
+     * add the flags FLAG_ACTIVITY_NEW_TASK and FLAG_ACTIVITY_SINGLE_TOP, add {@code fromAddress} as
+     * an extra under the key SmsReceivedDialog.SMS_FROM_ADDRESS_EXTRA, {@code fromDisplayName} under
+     * the key SmsReceivedDialog.SMS_FROM_DISPLAY_NAME_EXTRA, and the body of the {@code message} pdu
+     * as a string under the key SmsReceivedDialog.SMS_MESSAGE_EXTRA. We then start the activity that
+     * {@code di} is an intent for ({@code SmsReceivedDialog}).
+     * <p>
+     * Finally we break out of the loop without processing the rest of the pdu objects in {@code pdus}.
+     *
+     * @param context The Context in which the receiver is running.
+     * @param intent  The Intent being received.
+     */
+    @SuppressWarnings({"UnusedAssignment", "SpellCheckingInspection"})
     @Override
     public void onReceive(Context context, Intent intent) {
         Bundle extras = intent.getExtras();
-        if (extras == null)
+        if (extras == null) {
             return;
+        }
 
         Object[] pdus = (Object[]) extras.get("pdus");
 
-        //noinspection ForLoopReplaceableByForEach,LoopStatementThatDoesntLoop,ConstantConditions
+        //noinspection ConstantConditions,ForLoopReplaceableByForEach,LoopStatementThatDoesntLoop
         for (int i = 0; i < pdus.length; i++) {
             @SuppressWarnings("deprecation")
             SmsMessage message = SmsMessage.createFromPdu((byte[]) pdus[i]);
@@ -54,7 +87,7 @@ public class SmsMessageReceiver extends BroadcastReceiver {
             uri = Uri.withAppendedPath(
                     ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
                     Uri.encode(fromAddress));
-            projection = new String[] { ContactsContract.PhoneLookup.DISPLAY_NAME };
+            projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
 
             // Query the filter URI
             Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);

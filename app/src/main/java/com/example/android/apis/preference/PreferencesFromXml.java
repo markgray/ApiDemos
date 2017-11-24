@@ -18,12 +18,23 @@ package com.example.android.apis.preference;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
+/**
+ * Uses deprecated method PreferenceActivity.addPreferencesFromResource to load preferences.
+ */
+@SuppressLint("ExportedPreferenceActivity")
 @SuppressWarnings("deprecation")
 public class PreferencesFromXml extends PreferenceActivity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we call the method {@code addPreferencesFromResource} to load the
+     * preferences from the XML resource file R.xml.preferences.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
