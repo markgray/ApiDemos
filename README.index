@@ -1491,6 +1491,8 @@ Preference
 
     Preference/2. Launching preferences    all
         .preference.LaunchingPreferences
+        .preference.AdvancedPreferences
+        .preference.MyPreference
             Shows how to launch a separate PreferenceActivity activity to collect user
             preference choices. TODO: Use PreferenceFragment instead.
 
@@ -1513,6 +1515,7 @@ Preference
 
     Preference/6. Advanced preferences     all
         .preference.AdvancedPreferences
+        .preference.MyPreference ?
             Show how to impliment a OnSharedPreferenceChangeListener.
             TODO: use PreferenceFragment instead.
 

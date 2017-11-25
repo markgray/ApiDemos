@@ -41,8 +41,31 @@ public class LaunchingPreferences extends Activity implements OnClickListener {
      */
     private static final int REQUEST_CODE_PREFERENCES = 1;
 
+    /**
+     * {@code TextView} that we display our counter in.
+     */
     private TextView mCounterText;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. Then we set the default values from preference file R.xml.advanced_preferences
+     * by reading the values defined by each Preference item's android:defaultValue attribute (We pass
+     * false as the {@code boolean readAgain} flag so this will only happen once).
+     * <p>
+     * Next we create {@code LinearLayout layout}, set its orientation to VERTICAL and set it as our
+     * content view. We create {@code Button launchPreferences}, set its text to the string
+     * R.string.launch_preference_activity ("Launch PreferenceActivity"), set its {@code OnClickListener}
+     * to "this" and add it to {@code LinearLayout layout} using the layout parameters MATCH_PARENT
+     * and WRAP_CONTENT for the width and height. Next we initialize our field {@code TextView mCounterText}
+     * with a new instance and add it to {@code LinearLayout layout} using the layout parameters MATCH_PARENT
+     * and WRAP_CONTENT for the width and height.
+     * <p>
+     * Finally we call our method {@code updateCounterText} to read the preference stored under the
+     * key {@code AdvancedPreferences.KEY_MY_PREFERENCE} ("my_preference"), then format and display
+     * it in {@code TextView mCounterText}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +94,15 @@ public class LaunchingPreferences extends Activity implements OnClickListener {
         updateCounterText();
     }
 
+    /**
+     * Called when our "Launch PreferenceActivity" button is clicked. First we create an intent
+     * {@code Intent launchPreferencesIntent} to launch {@code AdvancedPreferences}, then we use
+     * it to start that activity for a result using the request code REQUEST_CODE_PREFERENCES (1).
+     * When that activity is finished, the result will be passed to our {@code onActivityResult}
+     * override.
+     *
+     * @param v View that has been clicked, the button labeled "Launch PreferenceActivity" in our case
+     */
     @Override
     public void onClick(View v) {
 
@@ -81,6 +113,19 @@ public class LaunchingPreferences extends Activity implements OnClickListener {
         startActivityForResult(launchPreferencesIntent, REQUEST_CODE_PREFERENCES);
     }
 
+    /**
+     * Called when an activity we launched exits, giving us the requestCode we started it with, the
+     * resultCode it returned, and any additional data from it. First we call our super's implementation
+     * of {@code onActivityResult}, then if the {@code requestCode} parameter is REQUEST_CODE_PREFERENCES
+     * (the code we started {@code AdvancedPreferences} with), we call our method {@code updateCounterText}
+     * to read the preference stored under the key {@code AdvancedPreferences.KEY_MY_PREFERENCE}
+     * ("my_preference"), then format and display it in {@code TextView mCounterText}.
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult(),
+     *                    in our case REQUEST_CODE_PREFERENCES
+     * @param resultCode  The integer result code returned by the child activity through its setResult().
+     * @param data        An Intent, which can return result data to the caller UNUSED
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -93,6 +138,16 @@ public class LaunchingPreferences extends Activity implements OnClickListener {
         }
     }
 
+    /**
+     * Called to read the preference stored under the key {@code AdvancedPreferences.KEY_MY_PREFERENCE}
+     * ("my_preference"), then format and display it in {@code TextView mCounterText}. First we fetch
+     * a {@code SharedPreferences} instance that points to the default file that is used by the
+     * preference framework in the given context to initialize {@code SharedPreferences sharedPref}.
+     * We fetch the int stored under the key {@code AdvancedPreferences.KEY_MY_PREFERENCE} in
+     * {@code sharedPref} to initialize {@code int counter}. Then we concatenate the string
+     * R.string.counter_value_is ("The counter value is") to a space followed by the string value of
+     * {@code counter} and set the text of {@code TextView mCounterText} to it.
+     */
     @SuppressLint("SetTextI18n")
     private void updateCounterText() {
         // Since we're in the same package, we can use this context to get
