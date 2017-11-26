@@ -221,7 +221,9 @@ public class MyPreference extends Preference {
         int clickCounter;
 
         /**
-         * Our constructor.
+         * Our constructor. First we call our super's constructor, then we read an integer value
+         * from {@code Parcel source} from the current {@code dataPosition()} into our field
+         * {@code int clickCounter}.
          *
          * @param source {@code Parcelable} returned by the {@code Preference} implementation of
          *               {@code onSaveInstanceState}
@@ -233,6 +235,14 @@ public class MyPreference extends Preference {
             clickCounter = source.readInt();
         }
 
+        /**
+         * Flatten this object in to a Parcel. First we call our super's implementation of {@code writeToParcel},
+         * then we call the method {@code dest.writeInt} to write the value of our field {@code int clickCounter}
+         * into the parcel at the current {@code dest.dataPosition()}, growing its {@code dataCapacity()} if needed.
+         *
+         * @param dest  The Parcel in which the object should be written.
+         * @param flags Additional flags about how the object should be written.
+         */
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             super.writeToParcel(dest, flags);
@@ -241,16 +251,42 @@ public class MyPreference extends Preference {
             dest.writeInt(clickCounter);
         }
 
+        /**
+         * Constructor called by derived classes when creating their SavedState objects. We just call
+         * our super's constructor.
+         *
+         * @param superState The state of the superclass of this view
+         */
         public SavedState(Parcelable superState) {
             super(superState);
         }
 
+        /**
+         * Interface that must be implemented and provided as a public CREATOR field that generates
+         * instances of our Parcelable class from a Parcel.
+         */
         public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
+            /**
+             * Create a new instance of the Parcelable class, instantiating it from the given Parcel
+             * whose data had previously been written by {@code Parcelable.writeToParcel()}. We simply
+             * return a new instance of {@code SavedState} created from our parameter {@code Parcel in}
+             *
+             * @param in The Parcel to read the object's data from.
+             * @return Returns a new instance of the Parcelable class.
+             */
             @Override
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
             }
 
+            /**
+             * Create a new array of the Parcelable class. We simply return a new array of
+             * {@code SavedState[]} of size {@code int size}.
+             *
+             * @param size Size of the array.
+             * @return Returns an array of the Parcelable class, with every entry
+             * initialized to null.
+             */
             @Override
             public SavedState[] newArray(int size) {
                 return new SavedState[size];

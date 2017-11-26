@@ -1505,8 +1505,14 @@ Preference
 
     Preference/4. Default values           all
         .preference.DefaultValues
-            How to properly use default values when using a preference file. PreferenceActivity
-            is deprecated -- TODO: use PreferenceFragment instead.
+            How to properly use default values when using a preference file. This activity is an
+            example of a simple settings screen that has default values. In order for the default
+            values to be populated into the SharedPreferences(from the preferences XML file), the
+            client must call PreferenceManager.setDefaultValues(android.content.Context, int, boolean)}.
+            This should be called early, typically when the application is first created. An easy way
+            to do this is to have a common function for retrieving the SharedPreferences that takes
+            care of calling it.
+            TODO: use PreferenceFragment instead.
 
     Preference/5. Preferences from code    all -- v14+ or crash
         .preference.PreferencesFromCode

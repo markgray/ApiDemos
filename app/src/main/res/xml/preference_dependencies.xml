@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2008 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2008 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,21 +14,19 @@
 -->
 
 <!-- This is a primitive example showing how some preferences can depend on other preferences. -->
-<PreferenceScreen
-        xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-            android:title="@string/example_preference_dependency">
-            
+    <PreferenceCategory android:title="@string/example_preference_dependency">
+
         <CheckBoxPreference
-                android:key="wifi"
-                android:title="@string/title_wifi" />
-            
+            android:key="wifi"
+            android:title="@string/title_wifi" />
+
         <EditTextPreference
-                android:layout="?android:attr/preferenceLayoutChild"
-                android:title="@string/title_wifi_settings"
-                android:dependency="wifi" />
-            
+            android:dependency="wifi"
+            android:layout="?android:attr/preferenceLayoutChild"
+            android:title="@string/title_wifi_settings" />
+
     </PreferenceCategory>
-                
+
 </PreferenceScreen>

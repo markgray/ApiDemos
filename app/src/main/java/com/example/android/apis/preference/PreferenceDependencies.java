@@ -18,11 +18,25 @@ package com.example.android.apis.preference;
 
 import com.example.android.apis.R;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
+/**
+ * A primitive example showing how some preferences can depend on other preferences. Uses
+ * android:dependency to point to key of another Preference that the Preference will depend on.
+ * If the other Preference is not set or is off, the Preference will be disabled.
+ */
+@SuppressLint("ExportedPreferenceActivity")
 public class PreferenceDependencies extends PreferenceActivity {
-
+    /**
+     * Called when the {@code PreferenceActivity} is starting. We just call through to our super's
+     * implementation of {@code onCreate}, then we inflate the XML resource R.xml.preference_dependencies
+     * and add its preference hierarchy to the current preference hierarchy. The entire example occurs
+     * in the xml, see the android:dependency="wifi" attribute ("wifi" is the key of the CheckBoxPreference)
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

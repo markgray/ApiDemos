@@ -30,7 +30,11 @@ import android.preference.PreferenceFragment;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentPreferences extends Activity {
-
+    /**
+     * Called when the activity is starting.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
