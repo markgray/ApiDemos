@@ -57,14 +57,20 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+/**
+ * Shows how to use api to generate Key pairs, sign and verify.
+ */
 @TargetApi(Build.VERSION_CODES.M)
 @SuppressLint("SetTextI18n")
 public class KeyStoreUsage extends Activity {
+    /**
+     * TAG used for logging.
+     */
     private static final String TAG = "AndroidKeyStoreUsage";
 
     /**
      * An instance of {@link java.security.KeyStore} through which this app
-     * talks to the {@code AndroidKeyStore}.
+     * talks to the {@code AndroidKeyStore}. UNUSED
      */
     @SuppressWarnings("unused")
     KeyStore mKeyStore;
@@ -88,7 +94,7 @@ public class KeyStoreUsage extends Activity {
     Button mSignButton;
 
     /**
-     * Button in the UI that causes data to be signed by a key we selected from
+     * Button in the UI that causes data to be verified by a key we selected from
      * the list available in the {@code KeyStore}.
      */
     Button mVerifyButton;
@@ -114,6 +120,60 @@ public class KeyStoreUsage extends Activity {
      */
     private String mSelectedAlias;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.keystore_usage.
+     * We locate the {@code ListView lv} with ID R.id.entries_list, allocate a new instance to for
+     * {@code AliasAdapter mAdapter}, set it as the adapter for {@code lv}, set the choice mode of
+     * {@code lv} to CHOICE_MODE_SINGLE and set its {@code OnItemClickListener} to an anonymous class
+     * which sets {@code String mSelectedAlias} to the item that has been clicked and calls our method
+     * {@code setKeyActionButtonsEnabled} to enable the views which need a key to use, namely
+     * {@code EditText mPlainText}, {@code EditText mCipherText}, {@code Button mSignButton},
+     * {@code Button mVerifyButton}, and {@code Button mDeleteButton}.
+     *
+     * We locate the {@code EditText} with ID R.id.entry_name to set {@code EditText aliasInput}, and
+     * the {@code Button} with ID R.id.generate_button to initialize our field {@code Button mGenerateButton},
+     * then set the {@code OnClickListener} of {@code mGenerateButton} to an anonymous class which reads
+     * the text from {@code EditText aliasInput} into {@code String alias}, checks to make sure it was
+     * not empty (complaining about the error if it was) otherwise it clears any {@code aliasInput} error,
+     * disables the {@code Button mGenerateButton} and starts the {@code AsyncTask GenerateTask} running
+     * using {@code alias} as its argument.
+     *
+     * Next we locate the button with ID R.id.sign_button to initialize our field {@code Button mSignButton},
+     * set its {@code OnClickListener} to an anonymous class which sets {@code String alias} to the contents
+     * of our field {@code String mSelectedAlias}, fetches the text from {@code EditText mPlainText} to
+     * the variable {@code String data}, then if {@code alias} is not null calls {@code setKeyActionButtonsEnabled}
+     * to temporarily disable the key action views, and then starts the {@code AsyncTask SignTask} running
+     * using the arguments {@code alias} and {@code data}.
+     *
+     * We locate the button with ID R.id.verify_button to initialize our field {@code Button mVerifyButton}, and
+     * set its {@code OnClickListener} to an anonymous class which sets {@code String alias} to the contents
+     * of our field {@code String mSelectedAlias}, fetches the text from {@code EditText mPlainText} to the variable
+     * {@code String data}, fetches the text from {@code EditText mCipherText} to set {@code String signature}, then
+     * if {@code alias} is not null calls {@code setKeyActionButtonsEnabled} to temporarily disable the key action
+     * views, and then starts the {@code AsyncTask VerifyTask} running using the arguments {@code alias}, {@code data}
+     * and {@code signature}.
+     *
+     * We locate the button with ID R.id.delete_button to initialize our field {@code Button mDeleteButton}, and
+     * set its {@code OnClickListener} to an anonymous class which sets {@code String alias} to the contents
+     * of our field {@code String mSelectedAlias}, and if it is not null calls {@code setKeyActionButtonsEnabled}
+     * to temporarily disable the key action views, and then starts the {@code AsyncTask DeleteTask} running using
+     * the argument {@code alias}.
+     *
+     * We locate the {@code EditText} with ID R.id.plaintext to initialize our field {@code EditText mPlainText} and
+     * set its {@code OnFocusChangeListener} to an anonymous class which sets the color of the text to the correct
+     * color for its state based on the values in android.R.color.primary_text_dark.
+     *
+     * We locate the {@code EditText} with ID R.id.ciphertext to initialize our field {@code EditText mCipherText} and
+     * set its {@code OnFocusChangeListener} to an anonymous class which sets the color of the text to the correct
+     * color for its state based on the values in android.R.color.primary_text_dark.
+     *
+     * Finally we call our method {@code updateKeyList} which calls {@code setKeyActionButtonsEnabled}
+     * to temporarily disable the key action views, and then starts the {@code AsyncTask UpdateKeyListTask}
+     * running.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -225,15 +285,32 @@ public class KeyStoreUsage extends Activity {
         updateKeyList();
     }
 
+    /**
+     * The {@code Adapter} we use for our {@code AliasAdapter mAdapter}, it stores the alias strings
+     * the use has used in its {@code ArrayAdapter<String>}
+     */
+    @SuppressWarnings("WeakerAccess")
     private class AliasAdapter extends ArrayAdapter<String> {
+        /**
+         * Our constructor. We call our super's constructor specifying android.R.layout.simple_list_item_single_choice
+         * as the resource ID for the layout file containing a TextView to use when instantiating views (it is a
+         * {@code CheckedTextView}).
+         *
+         * @param context {@code Context} to use to access resources.
+         */
         public AliasAdapter(Context context) {
             // We want users to choose a key, so use the appropriate layout.
             super(context, android.R.layout.simple_list_item_single_choice);
         }
 
         /**
-         * This clears out all previous aliases and replaces it with the
-         * current entries.
+         * This clears out all previous aliases and replaces it with the current entries. First we
+         * remove all elements from the list, and then we add our parameter {@code List<String> items}
+         * at the end of the array. Finally we call {@code notifyDataSetChanged} to notify the attached
+         * observers that the underlying data has been changed and any View reflecting the data set
+         * should refresh itself.
+         *
+         * @param items the list of alias entries we should now be using.
          */
         public void setAliases(List<String> items) {
             clear();
@@ -242,6 +319,9 @@ public class KeyStoreUsage extends Activity {
         }
     }
 
+    /**
+     * Updates the list of keys.
+     */
     private void updateKeyList() {
         setKeyActionButtonsEnabled(false);
         new UpdateKeyListTask().execute();
@@ -259,6 +339,7 @@ public class KeyStoreUsage extends Activity {
         mDeleteButton.setEnabled(enabled);
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class UpdateKeyListTask extends AsyncTask<Void, Void, Enumeration<String>> {
         @Override
         protected Enumeration<String> doInBackground(Void... params) {
@@ -300,6 +381,7 @@ public class KeyStoreUsage extends Activity {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class GenerateTask extends AsyncTask<String, Void, Boolean> {
         @Override
         protected Boolean doInBackground(String... params) {
@@ -349,6 +431,7 @@ public class KeyStoreUsage extends Activity {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class SignTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -411,6 +494,7 @@ public class KeyStoreUsage extends Activity {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class VerifyTask extends AsyncTask<String, Void, Boolean> {
         @Override
         protected Boolean doInBackground(String... params) {
@@ -490,6 +574,7 @@ public class KeyStoreUsage extends Activity {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class DeleteTask extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... params) {

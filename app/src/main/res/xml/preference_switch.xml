@@ -16,8 +16,8 @@
 
 <!-- This is a primitive example showing the different types of preferences available. -->
 <!-- BEGIN_INCLUDE(preferences) -->
-<PreferenceScreen
-        xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
             android:title="@string/inline_preferences">
@@ -38,7 +38,8 @@
                 android:summary="@string/summary_switch_preference_yes_no"
                 android:switchTextOn = "YES"
                 android:switchTextOff = "NO"
-                android:defaultValue="true" />
+                android:defaultValue="true"
+            tools:targetApi="ice_cream_sandwich" />
             
     </PreferenceCategory>
     

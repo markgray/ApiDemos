@@ -31,7 +31,11 @@ import android.preference.PreferenceFragment;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentPreferences extends Activity {
     /**
-     * Called when the activity is starting.
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. Then we fetch the FragmentManager for interacting with fragments associated
+     * with this activity and use it to begin a fragment transaction which will replace any fragments
+     * occupying the root element of our view with a new instance of {@code PrefsFragment}, and then
+     * we schedule a commit of this transaction.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
@@ -45,9 +49,25 @@ public class FragmentPreferences extends Activity {
                 .commit();
     }
 
-
+    /**
+     * Our {@code PreferenceFragment}, loads its preferences from an XML resource
+     */
     public static class PrefsFragment extends PreferenceFragment {
-
+        /**
+         * Called to do the initial creation of our fragment. This is called after {@code onAttach(Activity)}
+         * and before {@code onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+         * <p>
+         * Note that this can be called while the fragment's activity is still in the process of
+         * being created.  As such, you can not rely on things like the activity's content view
+         * hierarchy being initialized at this point.  If you want to do work once the activity itself
+         * is created, see {@code onActivityCreated(Bundle)}.
+         * <p>
+         * First we call through to our super's implementation of {@code onCreate}. Then we Inflate
+         * the XML resource R.xml.preferences and add the preference hierarchy to the current preference
+         * hierarchy.
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+         */
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);

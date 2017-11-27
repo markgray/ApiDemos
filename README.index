@@ -1532,7 +1532,7 @@ Preference
     Preference/8. Headers                  v11 -- need to override isValidFragment or crash
         .preference.PreferenceWithHeaders
             After override of isValidFragment {return true;} you have a top-level preference 
-            panel with headers which when clicked on launch the PreferenceFragment's listed
+            panel with headers which when clicked launch the PreferenceFragment's listed
             in the xml/preference_headers.xml resource loaded using loadHeadersFromResource.
 
     Preference/9. Switch                   v14
