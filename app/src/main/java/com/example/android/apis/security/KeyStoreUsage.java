@@ -130,7 +130,7 @@ public class KeyStoreUsage extends Activity {
      * {@code setKeyActionButtonsEnabled} to enable the views which need a key to use, namely
      * {@code EditText mPlainText}, {@code EditText mCipherText}, {@code Button mSignButton},
      * {@code Button mVerifyButton}, and {@code Button mDeleteButton}.
-     *
+     * <p>
      * We locate the {@code EditText} with ID R.id.entry_name to set {@code EditText aliasInput}, and
      * the {@code Button} with ID R.id.generate_button to initialize our field {@code Button mGenerateButton},
      * then set the {@code OnClickListener} of {@code mGenerateButton} to an anonymous class which reads
@@ -138,14 +138,14 @@ public class KeyStoreUsage extends Activity {
      * not empty (complaining about the error if it was) otherwise it clears any {@code aliasInput} error,
      * disables the {@code Button mGenerateButton} and starts the {@code AsyncTask GenerateTask} running
      * using {@code alias} as its argument.
-     *
+     * <p>
      * Next we locate the button with ID R.id.sign_button to initialize our field {@code Button mSignButton},
      * set its {@code OnClickListener} to an anonymous class which sets {@code String alias} to the contents
      * of our field {@code String mSelectedAlias}, fetches the text from {@code EditText mPlainText} to
      * the variable {@code String data}, then if {@code alias} is not null calls {@code setKeyActionButtonsEnabled}
      * to temporarily disable the key action views, and then starts the {@code AsyncTask SignTask} running
      * using the arguments {@code alias} and {@code data}.
-     *
+     * <p>
      * We locate the button with ID R.id.verify_button to initialize our field {@code Button mVerifyButton}, and
      * set its {@code OnClickListener} to an anonymous class which sets {@code String alias} to the contents
      * of our field {@code String mSelectedAlias}, fetches the text from {@code EditText mPlainText} to the variable
@@ -153,21 +153,21 @@ public class KeyStoreUsage extends Activity {
      * if {@code alias} is not null calls {@code setKeyActionButtonsEnabled} to temporarily disable the key action
      * views, and then starts the {@code AsyncTask VerifyTask} running using the arguments {@code alias}, {@code data}
      * and {@code signature}.
-     *
+     * <p>
      * We locate the button with ID R.id.delete_button to initialize our field {@code Button mDeleteButton}, and
      * set its {@code OnClickListener} to an anonymous class which sets {@code String alias} to the contents
      * of our field {@code String mSelectedAlias}, and if it is not null calls {@code setKeyActionButtonsEnabled}
      * to temporarily disable the key action views, and then starts the {@code AsyncTask DeleteTask} running using
      * the argument {@code alias}.
-     *
+     * <p>
      * We locate the {@code EditText} with ID R.id.plaintext to initialize our field {@code EditText mPlainText} and
      * set its {@code OnFocusChangeListener} to an anonymous class which sets the color of the text to the correct
      * color for its state based on the values in android.R.color.primary_text_dark.
-     *
+     * <p>
      * We locate the {@code EditText} with ID R.id.ciphertext to initialize our field {@code EditText mCipherText} and
      * set its {@code OnFocusChangeListener} to an anonymous class which sets the color of the text to the correct
      * color for its state based on the values in android.R.color.primary_text_dark.
-     *
+     * <p>
      * Finally we call our method {@code updateKeyList} which calls {@code setKeyActionButtonsEnabled}
      * to temporarily disable the key action views, and then starts the {@code AsyncTask UpdateKeyListTask}
      * running.
@@ -278,7 +278,7 @@ public class KeyStoreUsage extends Activity {
             public void onFocusChange(View v, boolean hasFocus) {
                 //noinspection deprecation
                 mCipherText.setTextColor(getResources()
-                           .getColor(android.R.color.primary_text_dark));
+                        .getColor(android.R.color.primary_text_dark));
             }
         });
 
@@ -320,7 +320,10 @@ public class KeyStoreUsage extends Activity {
     }
 
     /**
-     * Updates the list of keys.
+     * Updates the list of keys. First we call our method {@code setKeyActionButtonsEnabled} to disable
+     * the views used by the key actions: {@code EditText mPlainText}, {@code EditText mCipherText},
+     * {@code Button mSignButton}, {@code Button mVerifyButton}, and {@code Button mDeleteButton}.
+     * Then we start our {@code AsyncTask UpdateKeyListTask} running to do the actual updating.
      */
     private void updateKeyList() {
         setKeyActionButtonsEnabled(false);
@@ -328,8 +331,9 @@ public class KeyStoreUsage extends Activity {
     }
 
     /**
-     * Sets all the buttons related to actions that act on an existing key to
-     * enabled or disabled.
+     * Sets all the buttons related to actions that act on an existing key to enabled or disabled:
+     * {@code EditText mPlainText}, {@code EditText mCipherText}, {@code Button mSignButton},
+     * {@code Button mVerifyButton}, and {@code Button mDeleteButton}.
      */
     private void setKeyActionButtonsEnabled(boolean enabled) {
         mPlainText.setEnabled(enabled);
@@ -339,8 +343,22 @@ public class KeyStoreUsage extends Activity {
         mDeleteButton.setEnabled(enabled);
     }
 
+    /**
+     * {@code AsyncTask} which updates the list of aliases used by {@code AliasAdapter mAdapter}.
+     */
     @SuppressLint("StaticFieldLeak")
     private class UpdateKeyListTask extends AsyncTask<Void, Void, Enumeration<String>> {
+        /**
+         * Returns an {@code Enumeration<String>} of all the names in the "AndroidKeyStore" keystore
+         * object. First we fetch a {@code KeyStore} object of type "AndroidKeyStore" to initialize
+         * {@code KeyStore ks}, we load {@code ks}, and then return an {@code Enumeration<String> aliases}
+         * listing all of the alias names of this keystore.
+         *
+         * @param params we do not use params, so these are {@code Void}
+         * @return An object that implements the Enumeration interface for {@code String} objects,
+         * it generates a series of elements, one at a time. Successive calls to the nextElement
+         * method return successive elements of the series.
+         */
         @Override
         protected Enumeration<String> doInBackground(Void... params) {
             try {
@@ -371,6 +389,16 @@ public class KeyStoreUsage extends Activity {
             }
         }
 
+        /**
+         * Runs on the UI thread after {@code doInBackground}. The parameter {@code result} is the
+         * value returned by {@code doInBackground}. First we create an {@code ArrayList} for
+         * {@code List<String> aliases}, then we loop through all of the {@code String} objects in
+         * our parameter {@code result} adding each of them to {@code aliases}. Finally we call the
+         * method {@code mAdapter.setAliases} to clear out all previous aliases and replace them with
+         * the contents of {@code aliases}.
+         *
+         * @param result The list of {@code KeyStore} aliases computed by {@code doInBackground}.
+         */
         @Override
         protected void onPostExecute(Enumeration<String> result) {
             List<String> aliases = new ArrayList<>();
@@ -381,8 +409,26 @@ public class KeyStoreUsage extends Activity {
         }
     }
 
+    /**
+     * {@code AsyncTask} which is run to generate a new EC key pair entry in the Android Keystore.
+     */
     @SuppressLint("StaticFieldLeak")
     private class GenerateTask extends AsyncTask<String, Void, Boolean> {
+        /**
+         * Generate a new EC key pair entry in the Android Keystore by using the KeyPairGenerator API.
+         * First we set {@code String alias} from our parameter {@code params[0]} then we set
+         * {@code KeyPairGenerator kpg} to a KeyPairGenerator object that generates public/private
+         * key pairs for the KEY_ALGORITHM_EC algorithm using the KeyPairGeneratorSpi implementation
+         * from the "AndroidKeyStore" provider. We initialize {@code kpg} using a
+         * {@code KeyGenParameterSpec.Builder} which uses {@code alias} as the alias of the entry in
+         * which the generated key will appear in Android KeyStore, and whose purpose is both
+         * PURPOSE_SIGN and PURPOSE_VERIFY, whose digests algorithms we set to DIGEST_SHA256 and
+         * DIGEST_SHA512 and then build. Finally we instruct {@code kpg} to generate a new key pair,
+         * and return true to the caller.
+         *
+         * @param params The alias for the key.
+         * @return true if successful, false if and exception is thrown (it is ignored though)
+         */
         @Override
         protected Boolean doInBackground(String... params) {
             final String alias = params[0];
@@ -395,12 +441,12 @@ public class KeyStoreUsage extends Activity {
                  * SHA-512 as the message digest.
                  */
                 KeyPairGenerator kpg = KeyPairGenerator.getInstance(
-                        KeyProperties.KEY_ALGORITHM_EC, "AndroidKeyStore");
+                        KeyProperties.KEY_ALGORITHM_EC,
+                        "AndroidKeyStore");
                 kpg.initialize(new KeyGenParameterSpec.Builder(
                         alias,
                         KeyProperties.PURPOSE_SIGN | KeyProperties.PURPOSE_VERIFY)
-                        .setDigests(KeyProperties.DIGEST_SHA256,
-                            KeyProperties.DIGEST_SHA512)
+                        .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
                         .build());
 
                 @SuppressWarnings("unused")
@@ -419,20 +465,51 @@ public class KeyStoreUsage extends Activity {
             }
         }
 
+        /**
+         * Called on the UI thread when the background task returns. We call our method {@code updateKeyList}
+         * to update the list of keys, and then enable the {@code Button mGenerateButton}.
+         *
+         * @param result we ignore this.
+         */
         @Override
         protected void onPostExecute(Boolean result) {
             updateKeyList();
             mGenerateButton.setEnabled(true);
         }
 
+        /**
+         * Called if the background task is cancelled, we simply enable the {@code Button mGenerateButton}.
+         */
         @Override
         protected void onCancelled() {
             mGenerateButton.setEnabled(true);
         }
     }
 
+    /**
+     * {@code AsyncTask} which is run to create a signature for some data.
+     */
     @SuppressLint("StaticFieldLeak")
     private class SignTask extends AsyncTask<String, Void, String> {
+        /**
+         * Uses the keystore entry specified by {@code params[0]} to sign the data specified by
+         * {@code params[1]} and returns the resulting signature. First we copy references to our
+         * two parameters to {@code String alias} and {@code String dataString}. Then we load
+         * {@code byte[] data} with the {@code byte[]} version of {@code dataString}. We initialize
+         * {@code KeyStore ks} with an instance of {@code KeyStore} providing the "AndroidKeyStore"
+         * type, then instruct it to load. We fetch from {@code ks} the keystore entry for the alias
+         * {@code String alias} to initialize {@code KeyStore.Entry entry}. If {@code entry} is not
+         * an instance of {@code PrivateKeyEntry} we log the error and return null. Otherwise we
+         * initialize {@code Signature s} with an instance that implements the "SHA256withECDSA"
+         * signature algorithm. We initialize {@code s} for signing using the {@code PrivateKey} of
+         * {@code entry}, update the data to be signed or verified by {@code s}, and then use {@code s}
+         * to initialize {@code byte[] signature} with the signature bytes of all the data updated.
+         * We then return {@code byte[] signature} as a Base64-encoded string using Base64.DEFAULT.
+         *
+         * @param params the alias in the keystore to use ({@code params[0]}), and the data that we
+         *               are to sign ({@code params[1]}).
+         * @return The signature of the data using the keystore alias entry passed us
+         */
         @Override
         protected String doInBackground(String... params) {
             final String alias = params[0];
@@ -481,12 +558,25 @@ public class KeyStoreUsage extends Activity {
             }
         }
 
+        /**
+         * When the background task completes, we are called on the UI thread with our parameter
+         * {@code String result} containing the signature it computed. We set the text of
+         * {@code EditText mCipherText} to our parameter {@code result}, and call our method
+         * {@code setKeyActionButtonsEnabled} to re-enable the views involved with the key actions.
+         *
+         * @param result signature of the data returned by the background task
+         */
         @Override
         protected void onPostExecute(String result) {
             mCipherText.setText(result);
             setKeyActionButtonsEnabled(true);
         }
 
+        /**
+         * Called on the UI thread when the background thread is cancelled. We set the text of
+         * {@code EditText mCipherText} to "error!", and call our method {@code setKeyActionButtonsEnabled}
+         * to re-enable the views involved with the key actions.
+         */
         @Override
         protected void onCancelled() {
             mCipherText.setText("error!");
@@ -494,8 +584,33 @@ public class KeyStoreUsage extends Activity {
         }
     }
 
+    /**
+     * {@code AsyncTask} which is run to verify a signature.
+     */
     @SuppressLint("StaticFieldLeak")
     private class VerifyTask extends AsyncTask<String, Void, Boolean> {
+        /**
+         * Verifies a signature in the background. First we copy references to our three parameters to
+         * {@code String alias}, {@code String dataString} and {@code String signatureString}. We
+         * initialize {@code byte[] data} with the byte version of {@code dataString}, declare
+         * {@code byte[] signature} and try to decode the Base64 contained in {@code signatureString}
+         * into it (setting {@code byte[]} to an zero element array if it fails). We initialize
+         * {@code KeyStore ks} with an instance of {@code KeyStore} providing the "AndroidKeyStore"
+         * type, then instruct it to load. We fetch from {@code ks} the keystore entry for the alias
+         * {@code String alias} to initialize {@code KeyStore.Entry entry}. If {@code entry} is not
+         * an instance of {@code PrivateKeyEntry} we log the error and return false. Otherwise we
+         * initialize {@code Signature s} with an instance that implements the "SHA256withECDSA"
+         * signature algorithm. We initialize {@code s} for verification, using the public key from
+         * the end entity Certificate from the certificate chain of {@code entry}, update the data
+         * verified by {@code s}, and then use {@code s} to verify {@code signature} setting our
+         * variable {@code boolean valid} to the result of the verification which we return to the
+         * caller.
+         *
+         * @param params {@code params[0]} contains the alias to use from the keystore, {@code params[1]}
+         *               contains the data that has been signed, and {@code params[2]} contains the
+         *               signature to be verified.
+         * @return true if the signature is valid, false if it is not
+         */
         @Override
         protected Boolean doInBackground(String... params) {
             final String alias = params[0];
@@ -554,6 +669,15 @@ public class KeyStoreUsage extends Activity {
             }
         }
 
+        /**
+         * Called on the UI thread after the background thread has finished verifying the signature.
+         * If our parameter {@code result} is true we set the text color of {@code EditText mCipherText}
+         * to green, if false we set the text color of {@code EditText mCipherText} to red. In either
+         * case we call our method {@code setKeyActionButtonsEnabled} to re-enable the views involved
+         * with the key actions.
+         *
+         * @param result true if the signature was verified, false if it was not.
+         */
         @SuppressWarnings("deprecation")
         @Override
         protected void onPostExecute(Boolean result) {
@@ -565,6 +689,12 @@ public class KeyStoreUsage extends Activity {
             setKeyActionButtonsEnabled(true);
         }
 
+        /**
+         * Called on the UI thread when the background thread is cancelled. We set the text of
+         * {@code EditText mCipherText} to the string "error!", call our method
+         * {@code setKeyActionButtonsEnabled} to re-enable the views involved with the key actions,
+         * and set the text color of {@code EditText mCipherText} to android.R.color.primary_text_dark
+         */
         @SuppressWarnings("deprecation")
         @Override
         protected void onCancelled() {
@@ -574,8 +704,21 @@ public class KeyStoreUsage extends Activity {
         }
     }
 
+    /**
+     * {@code AsyncTask} used to delete an alias from the keystore.
+     */
     @SuppressLint("StaticFieldLeak")
     private class DeleteTask extends AsyncTask<String, Void, Void> {
+        /**
+         * Deletes a previously generated or stored entry in the KeyStore. First we copy a reference
+         * to our parameter to {@code String alias}. We initialize {@code KeyStore ks} with an instance
+         * of {@code KeyStore} providing the "AndroidKeyStore" type, then instruct it to load. We then
+         * call its {@code deleteEntry} method to delete the entry identified by {@code alias} from
+         * the keystore. Finally we return null to the caller.
+         *
+         * @param params {@code params[0]} contains the alias that is to be deleted
+         * @return Void.
+         */
         @Override
         protected Void doInBackground(String... params) {
             final String alias = params[0];
@@ -595,11 +738,21 @@ public class KeyStoreUsage extends Activity {
             return null;
         }
 
+        /**
+         * Called on the UI thread when the background thread has finished. We simply call our method
+         * {@code updateKeyList} to update the list of keys used by our UI.
+         *
+         * @param result unused, Void
+         */
         @Override
         protected void onPostExecute(Void result) {
             updateKeyList();
         }
 
+        /**
+         * Called on the UI thread when the background thread is cancelled. We simply call our method
+         * {@code updateKeyList} to update the list of keys used by our UI.
+         */
         @Override
         protected void onCancelled() {
             updateKeyList();
