@@ -1561,7 +1561,7 @@ Views
 
     Views/Animation/Interpolators          all
         .view.Animation3
-            Shows the effect of selecting each of six different types of TranslateAnimation
+            Shows the effect of selecting each of seven different types of TranslateAnimation
             interpolator: "Accelerate", "Decelerate", "Accelerate/Decelerate", "Anticipate",
             "Overshoot", "Anticipate/Overshoot", and "Bounce".
 

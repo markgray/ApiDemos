@@ -18,6 +18,7 @@ package com.example.android.apis.view;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+
 import com.example.android.apis.R;
 
 import android.app.Activity;
@@ -30,13 +31,36 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+/**
+ * Shows the effect of selecting each of seven different types of TranslateAnimation interpolator:
+ * "Accelerate", "Decelerate", "Accelerate/Decelerate", "Anticipate", "Overshoot",
+ * "Anticipate/Overshoot", and "Bounce".
+ */
 public class Animation3 extends Activity implements AdapterView.OnItemSelectedListener {
+    /**
+     * The list of types of interpolators used to create the {@code Adapter} which is used by the
+     * {@code Spinner} with ID R.id.spinner in our layout file.
+     */
     private static final String[] INTERPOLATORS = {
             "Accelerate", "Decelerate", "Accelerate/Decelerate",
             "Anticipate", "Overshoot", "Anticipate/Overshoot",
             "Bounce"
     };
 
+    /**
+     * Called when our activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.animation_3. We
+     * initialize {@code Spinner s} by locating the spinner with ID R.id.spinner in our layout, then
+     * create {@code ArrayAdapter<String> adapter} using android.R.layout.simple_spinner_item as the
+     * resource ID for a layout file containing a TextView to use when instantiating views, and our
+     * array {@code String[] INTERPOLATORS} as the objects to represent in the {@code Spinner}, we
+     * set the layout resource to create the drop down views of {@code adapter} to the resource file
+     * android.R.layout.simple_spinner_dropdown_item, and then set {@code adapter} as the
+     * {@code SpinnerAdapter} for {@code s}. Finally we set "this" as the {@code OnItemSelectedListener}
+     * for {@code s}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +73,15 @@ public class Animation3 extends Activity implements AdapterView.OnItemSelectedLi
         s.setOnItemSelectedListener(this);
     }
 
+    /**
+     * Callback method to be invoked when an item in the {@code Spinner} with ID R.id.spinner has
+     * been selected.
+     *
+     * @param parent   The AdapterView where the selection happened
+     * @param v        The view within the AdapterView that was clicked
+     * @param position The position of the view in the adapter
+     * @param id       The row id of the item that is selected
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
         final View target = findViewById(R.id.target);
@@ -56,7 +89,7 @@ public class Animation3 extends Activity implements AdapterView.OnItemSelectedLi
 
         Animation a = new TranslateAnimation(0.0f,
                 targetParent.getWidth() - target.getWidth() - targetParent.getPaddingLeft() -
-                targetParent.getPaddingRight(), 0.0f, 0.0f);
+                        targetParent.getPaddingRight(), 0.0f, 0.0f);
         a.setDuration(1000);
         a.setStartOffset(300);
         a.setRepeatMode(Animation.RESTART);
