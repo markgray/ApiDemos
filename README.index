@@ -1570,12 +1570,12 @@ Views
             Shows how to use the four different animations available for a ViewFlipper:
             "Push up", "Push left", "Cross fade", and "Hyperspace". A ViewFlipper is a
             Simple ViewAnimator that will animate between two or more views that have 
-            been added to it. Only one child is shown at a time. If requested, can 
+            been added to it. Only one child is shown at a time. If requested, it can
             automatically flip between each child at a regular interval.
  
     Views/Animation/Shake                  all
         .view.Animation1
-            Shows use of a translate animation defined in xml to "shake" a textfield. 
+            Shows use of a translate animation defined in xml to "shake" a TextView.
             It uses an android:interpolator also defined in xml which consists of a 
             cycleInterpolator whose android:cycles="7".
 

@@ -75,7 +75,49 @@ public class Animation3 extends Activity implements AdapterView.OnItemSelectedLi
 
     /**
      * Callback method to be invoked when an item in the {@code Spinner} with ID R.id.spinner has
-     * been selected.
+     * been selected. First we locate the {@code View target} in our layout with ID R.id.target
+     * (the TextView with the text "Interpolators" which we animate), then we find its parent view
+     * {@code View targetParent} (the main LinearLayout holding the entire UI). We create
+     * {@code Animation a} which is a {@code TranslateAnimation} with a {@code fromXDelta} of 0.0,
+     * a {@code toXDelta} which is calculated to be the width of {@code targetParent} minus the width
+     * of {@code target} minus the left and right padding of {@code targetParent}, and with 0.0
+     * for both {@code fromYDelta} and {@code toYDelta}. We then set the duration of {@code a} to
+     * 1000 milliseconds, its start offset to 300 milliseconds (when the animation should start
+     * relative to the start time), its repeat mode to RESTART (when it reaches the end it restarts
+     * from the beginning), and its repeat count to INFINITE.
+     *
+     * Next we switch based on the parameter {@code position} to choose the type of interpolator:
+     * <ul>
+     *     <li>
+     *         0 - "Accelerate" we load the interpolator of {@code a} from the resource with ID
+     *         android.R.anim.accelerate_interpolator.
+     *     </li>
+     *     <li>
+     *         1 - "Decelerate" we load the interpolator of {@code a} from the resource with ID
+     *         android.R.anim.decelerate_interpolator
+     *     </li>
+     *     <li>
+     *         2 - "Accelerate/Decelerate" we load the interpolator of {@code a} from the resource with ID
+     *         android.R.anim.accelerate_decelerate_interpolator
+     *     </li>
+     *     <li>
+     *         3 - "Anticipate" we load the interpolator of {@code a} from the resource with ID
+     *         android.R.anim.anticipate_interpolator
+     *     </li>
+     *     <li>
+     *         4 - "Overshoot" we load the interpolator of {@code a} from the resource with ID
+     *         android.R.anim.overshoot_interpolator
+     *     </li>
+     *     <li>
+     *         5 - "Anticipate/Overshoot" we load the interpolator of {@code a} from the resource with ID
+     *         android.R.anim.anticipate_overshoot_interpolator
+     *     </li>
+     *     <li>
+     *         6 - "Bounce" we load the interpolator of {@code a} from the resource with ID
+     *         android.R.anim.bounce_interpolator
+     *     </li>
+     * </ul>
+     * Finally we instruct {@code target} to start {@code Animation a} now.
      *
      * @param parent   The AdapterView where the selection happened
      * @param v        The view within the AdapterView that was clicked
@@ -129,6 +171,11 @@ public class Animation3 extends Activity implements AdapterView.OnItemSelectedLi
         target.startAnimation(a);
     }
 
+    /**
+     * Callback method to be invoked when the selection disappears from this view. We ignore it.
+     *
+     * @param parent The AdapterView that now contains no selected item.
+     */
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
     }
