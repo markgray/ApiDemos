@@ -23,9 +23,25 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
-
+/**
+ * Shows how to use an AutoCompleteTextView to provide suggestions as a user types. The entire very
+ * long layout is inside a ScrollView that you have to scroll down to see the AutoCompleteTextView's,
+ * which control the ScrollView as they need to when presenting the suggestion list.
+ */
 public class AutoComplete3 extends Activity {
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.autocomplete_3.
+     * We create {@code ArrayAdapter<String> adapter} using the array {@code AutoComplete1.COUNTRIES}
+     * as the data and android.R.layout.simple_dropdown_item_1line as the resource ID for the layout
+     * file which contains a TextView to use when instantiating views. We initialize our variable
+     * {@code AutoCompleteTextView textView} by finding the view with ID R.id.edit, and set its
+     * adapter to {@code adapter}. Next we locate the view with ID R.id.edit2 to set {@code textView},
+     * and set its adapter to {@code adapter} as well.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +50,7 @@ public class AutoComplete3 extends Activity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line,
                 AutoComplete1.COUNTRIES);
-        AutoCompleteTextView textView = (AutoCompleteTextView)
-                findViewById(R.id.edit);
+        AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.edit);
         textView.setAdapter(adapter);
         textView = (AutoCompleteTextView) findViewById(R.id.edit2);
         textView.setAdapter(adapter);

@@ -26,7 +26,24 @@ import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
 import android.widget.AutoCompleteTextView;
 
+/**
+ * Shows how to use the ContentResolver for the contacts database as the source
+ * of data for an auto complete lookup of a contact. It uses android:completionHint
+ * to show the hint "Typing * will show all of your contacts." in the AutoCompleteTextView.
+ */
 public class AutoComplete5 extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.autocomplete_5.
+     * We initialize {@code ContentResolver content} with a ContentResolver instance for our
+     * application's package, create {@code Cursor cursor} by querying the URI Contacts.CONTENT_URI
+     * (content://com.android.contacts/contacts), with the projection {@code AutoComplete4.CONTACT_PROJECTION}
+     * returning a Cursor over the result set. We create {@code AutoComplete4.ContactListAdapter adapter} from
+     * {@code cursor}, initialize {@code AutoCompleteTextView textView} by finding the view with ID
+     * R.id.edit, and set its adapter to {@code adapter}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

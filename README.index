@@ -1608,15 +1608,15 @@ Views
     Views/Auto Complete/5. Contacts with Hint -- all
         .view.AutoComplete5
             Shows how to use the ContentResolver for the contacts database as the source
-            of data for an auto complete lookup of a contact. It should show a hint in
-            the EditText block, but does not for some reason.
+            of data for an auto complete lookup of a contact. It uses android:completionHint
+            to show the hint "Typing * will show all of your contacts." in the AutoCompleteTextView.
 
     Views/Auto Complete/6. Multiple items  all
         .view.AutoComplete6
             Shows how to use a MultiAutoCompleteTextView to show completion suggestions 
             for the substring of the text where the user is typing. Adds a comma at the
             end of every selected suggestion and MultiAutoCompleteTextView.CommaTokenizer
-            uses that to seperate the words for the MultiAutoCompleteTextView.
+            uses that to separate the words for the MultiAutoCompleteTextView.
 
 Buttons
     Views/Buttons                          all

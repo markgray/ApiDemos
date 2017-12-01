@@ -30,7 +30,12 @@ import android.os.Bundle;
  */
 public class AutoComplete1 extends Activity {
     /**
-     * Called when the activity is starting.
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.autocomplete_1.
+     * We create {@code ArrayAdapter<String> adapter} using our array {@code COUNTRIES} as the data
+     * and android.R.layout.simple_dropdown_item_1line as the resource ID for the layout file which
+     * contains a TextView to use when instantiating views. We set {@code AutoCompleteTextView textView}
+     * by finding the view with ID R.id.edit, and set its adapter to {@code adapter}.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */

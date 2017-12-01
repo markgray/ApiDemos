@@ -24,10 +24,18 @@ import android.app.Activity;
 import android.os.Bundle;
 
 /**
- * A gallery of the different styles of buttons.
+ * A gallery of the different styles of buttons. Shows three different buttons,
+ * all totally defined in layout/buttons_1.xml: a default button, a small button
+ * using style="?android:attr/buttonStyleSmall", and a ToggleButton. The small
+ * button is same size as normal button on M.
  */
 public class Buttons1 extends Activity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.buttons_1.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -28,6 +28,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Chronometer;
 
+/**
+ * Demonstrates the Chronometer class.
+ */
 public class ChronometerDemo extends Activity {
     Chronometer mChronometer;
 
