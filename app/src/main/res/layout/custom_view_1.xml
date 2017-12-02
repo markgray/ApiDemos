@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -17,28 +16,30 @@
 <!-- Demonstrates defining custom views in a layout file. -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res/com.example.android.apis"
-        android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.example.android.apis.view.LabelView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    
+        android:layout_height="wrap_content"
+        android:background="@drawable/red"
+        app:text="Red" />
+
     <com.example.android.apis.view.LabelView
-            android:background="@drawable/red"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" 
-            app:text="Red"/>
-    
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/blue"
+        app:text="Blue"
+        app:textSize="20sp" />
+
     <com.example.android.apis.view.LabelView
-            android:background="@drawable/blue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" 
-            app:text="Blue" app:textSize="20dp"/>
-    
-    <com.example.android.apis.view.LabelView
-            android:background="@drawable/green"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" 
-            app:text="Green" app:textColor="#ffffffff" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/green"
+        app:text="Green"
+        app:textColor="#ffffffff" />
 
 </LinearLayout>
 

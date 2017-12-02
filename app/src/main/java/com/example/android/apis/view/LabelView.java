@@ -18,6 +18,7 @@ package com.example.android.apis.view;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -32,16 +33,27 @@ import com.example.android.apis.R;
  * Example of how to write a custom subclass of View. LabelView
  * is used to draw simple text views. Note that it does not handle
  * styled text or right-to-left writing systems.
- *
  */
 public class LabelView extends View {
-    private Paint mTextPaint;
-    private String mText;
-    private int mAscent;
-    
     /**
-     * Constructor.  This version is only needed if you will be instantiating
-     * the object manually (not from a layout XML file).
+     * {@code Paint} we use to draw our text with
+     */
+    private Paint mTextPaint;
+    /**
+     * Text we draw on our label
+     */
+    private String mText;
+    /**
+     * The maximum distance above the baseline based on the current typeface and text size of
+     * {@code Paint mTextPaint} (a negative number).
+     */
+    private int mAscent;
+
+    /**
+     * Constructor. This version is only needed if you will be instantiating the object manually
+     * (not from a layout XML file). We call our super's constructor, then we call our method
+     * {@code initLabelView}.
+     *
      * @param context context the view is running in
      */
     public LabelView(Context context) {
@@ -50,18 +62,56 @@ public class LabelView extends View {
     }
 
     /**
-     * Construct object, initializing with any attributes we understand from a
-     * layout file. These attributes are defined in
-     * SDK/assets/res/any/classes.xml.
-     * 
-     * @see android.view.View#View(android.content.Context, android.util.AttributeSet)
+     * Constructor that is called when inflating a view from XML. This is called when a view is
+     * being constructed from an XML file, supplying attributes that were specified in the XML file.
+     * Our attributes are defined in values/attrs.xml. First we call our super's constructor, then
+     * we call our method {@code initLabelView}.
+     * <p>
+     * Next we retrieve styled attribute information in this Context's theme to initialize
+     * {@code TypedArray a}, specifying R.styleable.LabelView as the attributes to retrieve.
+     * R.styleable.LabelView is defined in a declare-styleable element and declares the following
+     * attributes:
+     * <ul>
+     * <li>
+     * name="text" format="string" R.styleable.LabelView_text
+     * </li>
+     * <li>
+     * name="textColor" format="color" R.styleable.LabelView_textColor
+     * </li>
+     * <li>
+     * name="textSize" format="dimension R.styleable.LabelView_textSize
+     * </li>
+     * </ul>
+     * Having obtained our custom attributes in {@code a}, we proceed to extract them:
+     * <ul>
+     * <li>
+     * We set {@code CharSequence s} to the string at index R.styleable.LabelView_text in
+     * {@code a}, and if it is not null we call our method {@code setText} to set our text
+     * to {@code s}
+     * </li>
+     * <li>
+     * We call our method {@code setTextColor} to set the color of our text to the color at
+     * index R.styleable.LabelView_textColor in {@code a}, defaulting to black if the xml
+     * did not specify it.
+     * </li>
+     * <li>
+     * We set {@code int textSize} to the pixel version of the dimension in {@code a} at index
+     * R.styleable.LabelView_textSize, defaulting to 0 if the xml did not specify it. If
+     * {@code textSize} is greater than 0, we call our method {@code setTextSize} to set the
+     * size of our text.
+     * </li>
+     * </ul>
+     * Finally we recycle {@code a}.
+     *
+     * @param context The Context the view is running in, through which it can
+     *                access the current theme, resources, etc.
+     * @param attrs   The attributes of the XML tag that is inflating the view.
      */
     public LabelView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initLabelView();
 
-        TypedArray a = context.obtainStyledAttributes(attrs,
-                R.styleable.LabelView);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LabelView);
 
         CharSequence s = a.getString(R.styleable.LabelView_text);
         if (s != null) {
@@ -81,6 +131,9 @@ public class LabelView extends View {
         a.recycle();
     }
 
+    /**
+     * Called to initialize this instance of {@code LabelView}.
+     */
     private void initLabelView() {
         mTextPaint = new Paint();
         mTextPaint.setAntiAlias(true);
@@ -92,6 +145,7 @@ public class LabelView extends View {
 
     /**
      * Sets the text to display in this label
+     *
      * @param text The text to display. This will be drawn as one line.
      */
     public void setText(String text) {
@@ -102,6 +156,7 @@ public class LabelView extends View {
 
     /**
      * Sets the text size for this label
+     *
      * @param size Font size
      */
     public void setTextSize(int size) {
@@ -113,6 +168,7 @@ public class LabelView extends View {
 
     /**
      * Sets the text color for this label.
+     *
      * @param color ARGB value for the text
      */
     public void setTextColor(int color) {
@@ -131,6 +187,7 @@ public class LabelView extends View {
 
     /**
      * Determines the width of this view
+     *
      * @param measureSpec A measureSpec packed into an int
      * @return The width of the view, honoring constraints from measureSpec
      */
@@ -157,6 +214,7 @@ public class LabelView extends View {
 
     /**
      * Determines the height of this view
+     *
      * @param measureSpec A measureSpec packed into an int
      * @return The height of the view, honoring constraints from measureSpec
      */
@@ -183,7 +241,7 @@ public class LabelView extends View {
 
     /**
      * Render the text
-     * 
+     *
      * @see android.view.View#onDraw(android.graphics.Canvas)
      */
     @Override

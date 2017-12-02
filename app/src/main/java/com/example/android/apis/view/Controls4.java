@@ -16,4 +16,8 @@
 
 package com.example.android.apis.view;
 
-public class Controls4 extends Controls1 {}
+/**
+ * Uses .view.Controls1 with android:theme="@android:style/Theme.Holo" set in AndroidManifest.xml
+ */
+public class Controls4 extends Controls1 {
+}

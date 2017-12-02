@@ -26,12 +26,16 @@ import android.os.Bundle;
 
 /**
  * Demonstrates creating a Screen that uses custom views. This example uses
- * {@link com.example.android.apis.view.LabelView}, which is defined in
- * SDK/src/com/example/android/apis/view/LabelView.java.
- * 
+ * com.example.android.apis.view.LabelView.java -- the attributes it accepts
+ * are defined in the file values/attrs.xml
  */
 public class CustomView1 extends Activity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.custom_view_1.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

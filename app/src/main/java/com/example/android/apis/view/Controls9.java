@@ -16,4 +16,9 @@
 
 package com.example.android.apis.view;
 
-public class Controls9 extends Controls1 {}
+/**
+ * Uses .view.Controls1 without specifying a theme which uses the system default
+ * of the device it is running on.
+ */
+public class Controls9 extends Controls1 {
+}

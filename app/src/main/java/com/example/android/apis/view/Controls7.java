@@ -16,4 +16,10 @@
 
 package com.example.android.apis.view;
 
-public class Controls7 extends Controls1 {}
+/**
+ * Uses .view.Controls1 with a custom theme derived from parent="android:Theme.Light",
+ * with: {@code <color name="custom_theme_color">#b0b0ff</color>} used for both
+ * android:windowBackground, and android:colorBackground
+ */
+public class Controls7 extends Controls1 {
+}

@@ -18,6 +18,7 @@ package com.example.android.apis.view;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+
 import com.example.android.apis.R;
 
 import android.app.Activity;
@@ -28,11 +29,24 @@ import android.widget.Spinner;
 
 
 /**
- * A gallery of basic controls: Button, EditText, RadioButton, Checkbox,
- * Spinner. This example uses the light theme.
+ * A gallery of basic controls: Button, EditText, RadioButton, Checkbox, Spinner and switch if v14+.
+ * This example uses the light theme which is set using android:theme="@android:style/Theme.Light"
+ * in AndroidManifest.xml
  */
 public class Controls1 extends Activity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.controls_1. We set
+     * {@code Button disabledButton} by finding the view with ID R.id.button_disabled in our layout
+     * and disable it (in order to show what a disabled button looks like). We set {@code Spinner s1}
+     * by finding the view in our layout with ID R.id.spinner1, create {@code ArrayAdapter<String> adapter}
+     * from our string array {@code String[] mStrings} using android.R.layout.simple_spinner_item as
+     * the resource ID for a layout file containing a TextView to use when instantiating views, and
+     * set its layout resource defining the drop down views to be android.R.layout.simple_spinner_dropdown_item.
+     * Finally we set {@code adapter} as the adapter for {@code s1}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,13 +56,16 @@ public class Controls1 extends Activity {
         disabledButton.setEnabled(false);
 
         Spinner s1 = (Spinner) findViewById(R.id.spinner1);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, mStrings);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s1.setAdapter(adapter);
     }
 
+    /**
+     * String array used to populate the spinner with ID R.id.spinner1
+     */
     private static final String[] mStrings = {
-        "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"
+            "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"
     };
 }

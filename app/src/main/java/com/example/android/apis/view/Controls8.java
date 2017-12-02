@@ -16,4 +16,10 @@
 
 package com.example.android.apis.view;
 
-public class Controls8 extends Controls1 {}
+/**
+ * Uses .view.Controls1 with style/ThemeCurrent which selects a theme based on the
+ * version using values/styles.xml and values-vNN/styles.xml to select between the
+ * versions.
+ */
+public class Controls8 extends Controls1 {
+}

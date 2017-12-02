@@ -1635,7 +1635,7 @@ Controls
         .view.Controls1
             A gallery of basic controls: Button, EditText, RadioButton, Checkbox, Spinner
             and switch if v14+. This example uses the light theme which is set using
-            android:theme="@android:style/Theme.Light"> in AndroidManifest.xml
+            android:theme="@android:style/Theme.Light" in AndroidManifest.xml
 
     Views/Controls/2. Dark Theme           all
         .view.Controls2
@@ -1664,14 +1664,15 @@ Controls
 
     Views/Controls/7. Custom Theme         all
         .view.Controls7
-            A custom theme derived from parent="android:Theme.Light", with:
-            <color name="custom_theme_color">#b0b0ff</color> used for both 
+            Uses .view.Controls1 with a custom theme derived from parent="android:Theme.Light",
+            with: <color name="custom_theme_color">#b0b0ff</color> used for both
             android:windowBackground, and android:colorBackground
 
     Views/Controls/8. Current or Old Theme all
         .view.Controls8
-            Uses style/ThemeCurrent which select a theme based on the version using
-            values/styles.xml and values-vNN/styles.xml to select between the versions.
+            Uses .view.Controls1 with style/ThemeCurrent which selects a theme based on the
+            version using values/styles.xml and values-vNN/styles.xml to select between the
+            versions.
 
     Views/Controls/9. Default Theme        all
         .view.Controls9
@@ -1681,6 +1682,7 @@ Controls
 Custom
     Views/Custom                           all
         .view.CustomView1
+        .view.LabelView.java
             Demonstrates creating a Screen that uses custom views. This example uses
             com.example.android.apis.view.LabelView.java -- the attributes it accepts
             are defined in the file values/attrs.xml
