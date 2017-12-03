@@ -132,7 +132,10 @@ public class LabelView extends View {
     }
 
     /**
-     * Called to initialize this instance of {@code LabelView}.
+     * Called to initialize this instance of {@code LabelView}. We allocate a new {@code Paint}
+     * instance for {@code Paint mTextPaint}, set its antialias flag, set its text size to 16 times
+     * the logical density of our display, and set its color to black. Finally We set the padding of
+     * our view to 3 pixels on all four sides.
      */
     private void initLabelView() {
         mTextPaint = new Paint();
@@ -144,7 +147,10 @@ public class LabelView extends View {
     }
 
     /**
-     * Sets the text to display in this label
+     * Sets the text to display in this label. We save our parameter {@code String text} in our field
+     * {@code String mText}, call {@code requestLayout} to schedule a layout pass of the view tree,
+     * and call {@code invalidate} to invalidate the whole view so that {@code onDraw} will be called
+     * at some point in the future.
      *
      * @param text The text to display. This will be drawn as one line.
      */
@@ -155,7 +161,10 @@ public class LabelView extends View {
     }
 
     /**
-     * Sets the text size for this label
+     * Sets the text size for this label. We set the text size of {@code Paint mTextPaint} to our
+     * parameter {@code int size}, call {@code requestLayout} to schedule a layout pass of the view
+     * tree, and call {@code invalidate} to invalidate the whole view so that {@code onDraw} will be
+     * called at some point in the future.
      *
      * @param size Font size
      */
@@ -167,7 +176,9 @@ public class LabelView extends View {
     }
 
     /**
-     * Sets the text color for this label.
+     * Sets the text color for this label. We set the color of {@code Paint mTextPaint} to our
+     * parameter {@code int color}, and call {@code invalidate} to invalidate the whole view so that
+     * {@code onDraw} will be called at some point in the future.
      *
      * @param color ARGB value for the text
      */
@@ -177,16 +188,41 @@ public class LabelView extends View {
     }
 
     /**
-     * @see android.view.View#measure(int, int)
+     * Measure the view and its content to determine the measured width and the
+     * measured height. This method is invoked by {@link #measure(int, int)} and
+     * should be overridden by subclasses to provide accurate and efficient
+     * measurement of their contents.
+     * <p>
+     * We call our methods {@code measureWidth} and {@code measureHeight} to determine to determine
+     * the width and height we want given the space requirements imposed by our parent in our
+     * parameters {@code widthMeasureSpec} and {@code heightMeasureSpec} respectively, and then
+     * pass the values they calculate to the method {@code setMeasuredDimension} to store the measured
+     * width and measured height.
+     *
+     * @param widthMeasureSpec  horizontal space requirements as imposed by the parent.
+     *                          The requirements are encoded with
+     *                          {@link android.view.View.MeasureSpec}.
+     * @param heightMeasureSpec vertical space requirements as imposed by the parent.
+     *                          The requirements are encoded with
+     *                          {@link android.view.View.MeasureSpec}.
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(measureWidth(widthMeasureSpec),
-                measureHeight(heightMeasureSpec));
+        setMeasuredDimension(measureWidth(widthMeasureSpec), measureHeight(heightMeasureSpec));
     }
 
     /**
-     * Determines the width of this view
+     * Determines the width of this view. We declare {@code result}, and then initialize {@code specMode}
+     * with the mode of our parameter {@code measureSpec} (one of UNSPECIFIED, AT_MOST or EXACTLY),
+     * and initialize {@code specSize} with the size in pixels defined by the {@code measureSpec}
+     * measure specification. If {@code specMode} is EXACTLY (we were told how big to be) we set
+     * {@code result} to {@code specSize}. Otherwise we set {@code result} to the total width of our
+     * text {@code mText} when drawn using {@code Paint mTextPaint}, plus the left padding and the
+     * right padding of this view. If {@code specMode} is AT_MOST we then set {@code result} to the
+     * minimum of {@code result} and {@code specSize} (if it were UNSPECIFIED we leave {@code result}
+     * as is.
+     * <p>
+     * Finally we return {@code result} to the caller.
      *
      * @param measureSpec A measureSpec packed into an int
      * @return The width of the view, honoring constraints from measureSpec
@@ -201,8 +237,7 @@ public class LabelView extends View {
             result = specSize;
         } else {
             // Measure the text
-            result = (int) mTextPaint.measureText(mText) + getPaddingLeft()
-                    + getPaddingRight();
+            result = (int) mTextPaint.measureText(mText) + getPaddingLeft() + getPaddingRight();
             if (specMode == MeasureSpec.AT_MOST) {
                 // Respect AT_MOST value if that was what is called for by measureSpec
                 result = Math.min(result, specSize);
@@ -213,7 +248,17 @@ public class LabelView extends View {
     }
 
     /**
-     * Determines the height of this view
+     * Determines the height of this view. We declare {@code result}, and then initialize {@code specMode}
+     * with the mode of our parameter {@code measureSpec} (one of UNSPECIFIED, AT_MOST or EXACTLY),
+     * and initialize {@code specSize} with the size in pixels defined by the {@code measureSpec}
+     * measure specification. If {@code specMode} is EXACTLY (we were told how big to be) we set
+     * {@code result} to {@code specSize}. Otherwise we set {@code result} to the total width of our
+     * text {@code mText} when drawn using {@code Paint mTextPaint}, plus the left padding and the
+     * right padding of this view. If {@code specMode} is AT_MOST we then set {@code result} to the
+     * minimum of {@code result} and {@code specSize} (if it were UNSPECIFIED we leave {@code result}
+     * as is.
+     * <p>
+     * Finally we return {@code result} to the caller.
      *
      * @param measureSpec A measureSpec packed into an int
      * @return The height of the view, honoring constraints from measureSpec
@@ -240,9 +285,12 @@ public class LabelView extends View {
     }
 
     /**
-     * Render the text
+     * Render the text. First we call our super's implementation of {@code onDraw}, then we instruct
+     * our parameter {@code Canvas canvas} to draw our text {@code String mText}, with x starting at
+     * our left padding value (3), y starting at {@code mAscent} below our top padding, and using
+     * {@code Paint mTextPaint} as the {@code Paint}.
      *
-     * @see android.view.View#onDraw(android.graphics.Canvas)
+     * @param canvas the canvas on which the background will be drawn
      */
     @Override
     protected void onDraw(Canvas canvas) {
