@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2010 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -17,77 +16,72 @@
 <!-- Layout description of the DragAndDrop sample's main activity -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:dot="http://schemas.android.com/apk/res/com.example.android.apis"
+    xmlns:dot="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drag_main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
-    <TextView android:id="@+id/drag_explanation"
+    <TextView
+        android:id="@+id/drag_explanation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/drag_explanation"
-        />
+        android:text="@string/drag_explanation" />
 
     <com.example.android.apis.view.DraggableDot
         android:id="@+id/drag_dot_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        dot:radius="64dp"
-        android:padding="15dp"
         android:layout_below="@id/drag_explanation"
-        />
+        android:padding="15dp"
+        dot:radius="64dp" />
 
     <com.example.android.apis.view.DraggableDot
         android:id="@+id/drag_dot_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        dot:radius="64dp"
-        android:padding="15dp"
         android:layout_below="@id/drag_explanation"
         android:layout_toRightOf="@id/drag_dot_1"
-        dot:legend="Drag ANR"
+        android:padding="15dp"
         dot:anr="thumbnail"
-        />
+        dot:legend="Drag ANR"
+        dot:radius="64dp" />
 
     <com.example.android.apis.view.DraggableDot
         android:id="@+id/drag_dot_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        dot:radius="64dp"
-        android:padding="15dp"
-        android:layout_below="@id/drag_dot_1"
         android:layout_alignLeft="@id/drag_dot_1"
-        dot:legend="Drop ANR"
+        android:layout_below="@id/drag_dot_1"
+        android:padding="15dp"
         dot:anr="drop"
-        />
+        dot:legend="Drop ANR"
+        dot:radius="64dp" />
 
     <com.example.android.apis.view.DraggableDot
         android:id="@+id/drag_dot_hidden"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        dot:radius="64dp"
-        android:padding="15dp"
-        android:layout_toRightOf="@id/drag_dot_3"
         android:layout_alignTop="@id/drag_dot_3"
+        android:layout_toRightOf="@id/drag_dot_3"
+        android:padding="15dp"
         android:visibility="invisible"
         dot:legend="Surprise!"
-        />
+        dot:radius="64dp" />
 
-    <TextView android:id="@+id/drag_result_text"
+    <TextView
+        android:id="@+id/drag_result_text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/drag_explanation"
         android:layout_alignRight="@id/drag_explanation"
-        android:layout_toRightOf="@id/drag_dot_2"
-        />
+        android:layout_below="@id/drag_explanation"
+        android:layout_toRightOf="@id/drag_dot_2" />
 
-    <TextView android:id="@+id/drag_text"
+    <TextView
+        android:id="@+id/drag_text"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="1"
-        android:layout_below="@id/drag_dot_3"
         android:layout_alignLeft="@id/drag_dot_3"
-        />
+        android:layout_below="@id/drag_dot_3" />
 
 </RelativeLayout>

@@ -1703,6 +1703,7 @@ Date Widgets
 Drag and Drop
     Views/Drag and Drop                    v11
         .view.DragAndDropDemo
+        .view.DraggableDot
             Shows how to implement draggable views.
 
 

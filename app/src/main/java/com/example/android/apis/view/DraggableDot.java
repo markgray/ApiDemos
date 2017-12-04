@@ -33,6 +33,9 @@ import android.view.DragEvent;
 import android.view.View;
 import android.widget.TextView;
 
+/**
+ * Used by {@code DragAndDropDemo} to draw the dots which the user can drag.
+ */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class DraggableDot extends View {
     static final String TAG = "DraggableDot";
@@ -60,7 +63,9 @@ public class DraggableDot extends View {
     static final int ANR_DROP = 2;
 
     void sleepSixSeconds() {
+        return;
         // hang forever; good for producing ANRs
+/*
         long start = SystemClock.uptimeMillis();
         do {
             try {
@@ -69,12 +74,14 @@ public class DraggableDot extends View {
                 Log.i(TAG, e.getLocalizedMessage());
             }
         } while (SystemClock.uptimeMillis() < start + 6000);
+*/
     }
 
     // Shadow builder that can ANR if desired
     class ANRShadowBuilder extends DragShadowBuilder {
         boolean mDoAnr;
 
+        @SuppressWarnings("WeakerAccess")
         public ANRShadowBuilder(View view, boolean doAnr) {
             super(view);
             mDoAnr = doAnr;

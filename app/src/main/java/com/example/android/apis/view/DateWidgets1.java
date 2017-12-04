@@ -234,10 +234,25 @@ public class DateWidgets1 extends Activity {
     }
 
     /**
-     * {@code OnDateSetListener} for our {@code DatePickerDialog} dialog
+     * {@code OnDateSetListener} for our {@code DatePickerDialog} dialog, when called we save our
+     * {@code year}, {@code monthOfYear}, and {@code dayOfMonth} parameters in our fields {@code mYear},
+     * {@code monthOfYear}, and {@code mDay} respectively then call our method {@code updateDisplay}
+     * to update our display of these fields.
      */
     private DatePickerDialog.OnDateSetListener mDateSetListener =
             new DatePickerDialog.OnDateSetListener() {
+                /**
+                 * The callback used to indicate the user is done filling in the date. We simply save
+                 * our {@code year}, {@code monthOfYear}, and {@code dayOfMonth} parameters in our
+                 * fields {@code mYear}, {@code monthOfYear}, and {@code mDay} respectively then call
+                 * our method {@code updateDisplay} to update our display of these fields.
+                 *
+                 * @param view        The view associated with this listener.
+                 * @param year        The year that was set.
+                 * @param monthOfYear The month that was set (0-11) for compatibility
+                 *                    with {@link java.util.Calendar}.
+                 * @param dayOfMonth  The day of the month that was set.
+                 */
                 @Override
                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                     mYear = year;
@@ -247,8 +262,23 @@ public class DateWidgets1 extends Activity {
                 }
             };
 
+    /**
+     * {@code OnTimeSetListener} for our {@code TimePickerDialog} dialog, when called we save our
+     * {@code hourOfDay}, and {@code minute} parameters in our fields {@code mHour}, and {@code mMinute}
+     * respectively then call our method {@code updateDisplay} to update our display of these fields.
+     */
     private TimePickerDialog.OnTimeSetListener mTimeSetListener =
             new TimePickerDialog.OnTimeSetListener() {
+                /**
+                 * Called when the user is done setting a new time and the dialog has closed. We simply
+                 * save our {@code hourOfDay}, and {@code minute} parameters in our fields {@code mHour},
+                 * and {@code mMinute} respectively then call our method {@code updateDisplay} to update
+                 * our display of these fields.
+                 *
+                 * @param view      the view associated with this listener
+                 * @param hourOfDay the hour that was set
+                 * @param minute    the minute that was set
+                 */
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                     mHour = hourOfDay;
@@ -257,6 +287,14 @@ public class DateWidgets1 extends Activity {
                 }
             };
 
+    /**
+     * Converts int to String, and Zero Pads numbers under 10. If our parameter {@code c} is greater
+     * than of equal to 10 we just return the String version of {@code c}, otherwise we append a "0"
+     * to the String version of {@code c} and return that.
+     *
+     * @param c number to convert to zero padded String
+     * @return zero padded string version of number
+     */
     private static String pad(int c) {
         if (c >= 10)
             return String.valueOf(c);
