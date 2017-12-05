@@ -16,16 +16,14 @@
 
 package com.example.android.apis.view;
 
-import com.example.android.apis.R;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Build;
-import android.os.SystemClock;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -33,26 +31,81 @@ import android.view.DragEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.android.apis.R;
+
 /**
  * Used by {@code DragAndDropDemo} to draw the dots which the user can drag.
  */
+@SuppressLint("SetTextI18n")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class DraggableDot extends View {
+    /**
+     * TAG used for logging
+     */
     static final String TAG = "DraggableDot";
 
+    /**
+     * Flag used to indicate that a drag has started. Set to true when we receive a ACTION_DRAG_STARTED
+     * event, and false when we receive a ACTION_DRAG_ENDED event. It is used in our {@code onDraw}
+     * method to decide whether to light up as a potential target.
+     */
     private boolean mDragInProgress;
+    /**
+     * Flag used to indicate that the dot being dragged is over our {@code DraggableDot} instance.
+     * Set to true when we receive a ACTION_DRAG_ENTERED event, false when we receive either an
+     * ACTION_DRAG_EXITED, or a ACTION_DRAG_ENDED event. It is used in our {@code onDraw} method to
+     * decide whether to "light" our {@code DraggableDot} with a green (false) or white (true) circle.
+     */
     private boolean mHovering;
+    /**
+     * Flag used to indicate that we accept drops of the {@code DraggableDot} being dragged. If is
+     * set to true when we receive a ACTION_DRAG_STARTED event, and never set to false again so it may
+     * be unnecessary.
+     */
     private boolean mAcceptsDrag;
+    /**
+     * {@code TextView} we are to append the drag's textual conversion to if it is dropped on us.
+     */
     TextView mReportView;
 
+    /**
+     * {@code Paint} used to draw our Red dot with.
+     */
     private Paint mPaint;
+    /**
+     * {@code TextPaint} used to draw the "legend" in the center of our dot. The "legend" comes from
+     * the dot:legend attribute as set in the layout file for this instance of {@code DraggableDot}.
+     */
     private TextPaint mLegendPaint;
+    /**
+     * {@code Paint} used to draw the green or white circle around our dot when a drag is in progress
+     * if we are a potential target to be dropped on.
+     */
     private Paint mGlow;
+    /**
+     * Number of steps in green, white, and alpha colors used when drawing the green or white circle
+     * around our dot when a drag is in progress (the effect is not really noticeable to me).
+     */
     private static final int NUM_GLOW_STEPS = 10;
+    /**
+     * Size of a green step to use when drawing the green around our dot when a drag is in progress
+     * (and the dot being dragged is not over us).
+     */
     private static final int GREEN_STEP = 0x0000FF00 / NUM_GLOW_STEPS;
+    /**
+     * Size of a white step to use when drawing the white around our dot when a drag is in progress
+     * (and the dot being dragged is over us).
+     */
     private static final int WHITE_STEP = 0x00FFFFFF / NUM_GLOW_STEPS;
+    /**
+     * Size of the alpha step used when drawing the green or white circle around our dot when a drag
+     * is in progress
+     */
     private static final int ALPHA_STEP = 0xFF000000 / NUM_GLOW_STEPS;
 
+    /**
+     *
+     */
     int mRadius;
     int mAnrType;
     CharSequence mLegend;
@@ -63,7 +116,6 @@ public class DraggableDot extends View {
     static final int ANR_DROP = 2;
 
     void sleepSixSeconds() {
-        return;
         // hang forever; good for producing ANRs
 /*
         long start = SystemClock.uptimeMillis();
@@ -111,6 +163,7 @@ public class DraggableDot extends View {
 
         mLegendPaint = new TextPaint();
         mLegendPaint.setAntiAlias(true);
+        mLegendPaint.setTextSize(getResources().getDisplayMetrics().density * 12);
         mLegendPaint.setTextAlign(Paint.Align.CENTER);
         mLegendPaint.setColor(0xFFF0F0FF);
 
@@ -146,7 +199,21 @@ public class DraggableDot extends View {
                 + "' anr=" + mAnrType);
 
         setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
             public boolean onLongClick(View v) {
+                switch (mAnrType) {
+                    case ANR_SHADOW: {
+                        mReportView.setText("I am going to ANR_SHADOW\n");
+                        break;
+                    }
+                    case ANR_DROP: {
+                        mReportView.setText("I am going to ANR_DROP\n");
+                        break;
+                    }
+                    default: {
+                        mReportView.setText("");
+                    }
+                }
                 ClipData data = ClipData.newPlainText("dot", "Dot : " + v.toString());
                 //noinspection RedundantCast
                 v.startDrag(data, new ANRShadowBuilder(v, mAnrType == ANR_SHADOW), (Object)v, 0);
@@ -273,7 +340,7 @@ public class DraggableDot extends View {
                 if (event.getLocalState() == (Object) this) {
                     text += " : Dropped on self!";
                 }
-                mReportView.setText(text);
+                mReportView.append(text);
             }
         }
     }
