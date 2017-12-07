@@ -31,7 +31,6 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.apis.R;
 
@@ -287,22 +286,30 @@ public class DraggableDot extends View {
                 + "' anr=" + mAnrType);
 
         setOnLongClickListener(new View.OnLongClickListener() {
+            /**
+             * Called when a view has been clicked and held. First we set the text of our field
+             * {@code TextView mReportView} to the empty string (note that the "thumbnail" or drag
+             * ANR dot hangs before the view can be displayed). Next we create {@code ClipData data}
+             * to be a new ClipData holding data of the type MIMETYPE_TEXT_PLAIN which uses "dot" as
+             * the user-visible label for the clip data, and a formatted string which contains the
+             * text "Dot : " concatenated to the string value of {@code View v} as the actual text
+             * in the clip. Next we call the {@code startDrag} method of {@code View v} to start a
+             * drag and drop operation using {@code data} as the ClipData object pointing to the data
+             * to be transferred by the drag and drop operation, an {@code ANRShadowBuilder} object
+             * for building the drag shadow which is constructed using {@code v} as the view (any
+             * View in scope can be used) and if {@code mAnrType} is equal to ANR_SHADOW the flag
+             * true so that an ANR will be generated when the dot is long-clicked (this dot is nasty)
+             * otherwise false so the dot is a normal dot. We also include {@code v} cast to Object
+             * in the arguments of {@code startDrag} to use as the local state Object which contains
+             * local data about the drag and drop operation, and 0 for the flags that control the
+             * drag and drop operation (no flags). Finally we return true to the caller.
+             *
+             * @param v The view that was clicked and held.
+             * @return true if the callback consumed the long click, false otherwise.
+             */
             @Override
             public boolean onLongClick(View v) {
-                switch (mAnrType) {
-                    case ANR_SHADOW: {
-                        mReportView.setText("I am going to ANR_SHADOW\n");
-                        Toast.makeText(context, "I am going to ANR_SHADOW", Toast.LENGTH_LONG).show();
-                        break;
-                    }
-                    case ANR_DROP: {
-                        mReportView.setText("I am going to ANR_DROP\n");
-                        break;
-                    }
-                    default: {
-                        mReportView.setText("");
-                    }
-                }
+                mReportView.setText("");
                 ClipData data = ClipData.newPlainText("dot", "Dot : " + v.toString());
                 //noinspection RedundantCast
                 v.startDrag(data, new ANRShadowBuilder(v, mAnrType == ANR_SHADOW), (Object) v, 0);
@@ -311,10 +318,42 @@ public class DraggableDot extends View {
         });
     }
 
+    /**
+     * A setter method for {@code TextView mReportView}, just sets our field {@code mReportView}
+     * to its argument.
+     *
+     * @param view TextView that we want to set {@code TextView mReportView} to
+     */
     void setReportView(TextView view) {
         mReportView = view;
     }
 
+    /**
+     * We implement this to draw our View when required to do so. First we initialize our variable
+     * {@code float wf} with the width of our View, and {@code float hf} with our height. We calculate
+     * the center X {@code float cx} and center Y {@code float cy} to be half of the {@code wf} and
+     * {@code hf} respectively. We then subtract the left and right padding from {@code wf} and the
+     * top and bottom padding from {@code hf}. We calculate {@code float rad} (our radius) to be half
+     * of the smaller of {@code wf} and {@code hf} then instruct {@code Canvas canvas} to draw a circle
+     * at (cy,cy) with a radius of {@code rad} using {@code Paint mPaint} as the paint.
+     * <p>
+     * Then if our field {@code mLegend} is not null, and has 1 or more characters in it we instruct
+     * {@code canvas} to draw the text in {@code mLegend} with the center of the text with {@code cx}
+     * as the X coordinate and {@code cy} with half of the line spacing of {@code mLegendPaint} added
+     * to it as the Y coordinate, and using {@code TextPaint mLegendPaint} as the paint.
+     * <p>
+     * Next we check whether we are in the middle of a drag ({@code mDragInProgress} is true) and we
+     * are configured to accept drops ({@code mAcceptsDrag} is true). If so we want to "light up as
+     * a potential target". To do this we loop for NUM_GLOW_STEPS (10) times setting {@code int color}
+     * to WHITE_STEP if the drag is over us ({@code mHovering} is true) or GREEN_STEP if not. We now
+     * multiply {@code color} or'ed with ALPHA_STEP by the index count of our loop (10 down to 1) and
+     * set the color of {@code Paint mGlow} to it. We instruct {@code canvas} to draw a circle centered
+     * at (cx,cy) of {@code rad} radius using {@code mGlow} as the paint, subtract 0.5 from {@code rad}
+     * and have {@code canvas} draw another circle. We subtract another 0.5 from {@code rad} and continue
+     * the loop.
+     *
+     * @param canvas the canvas on which the background will be drawn
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         float wf = getWidth();
@@ -346,6 +385,19 @@ public class DraggableDot extends View {
         }
     }
 
+    /**
+     * Measure the view and its content to determine the measured width and the measured height.
+     * We set {@code int totalDiameter} to twice the value of our field {@code mRadius} plus our
+     * left padding and right padding, then use {@code totalDiameter} as both the X and Y arguments
+     * to {@code setMeasuredDimension}.
+     *
+     * @param widthSpec  horizontal space requirements as imposed by the parent.
+     *                   The requirements are encoded with
+     *                   {@link android.view.View.MeasureSpec}.
+     * @param heightSpec vertical space requirements as imposed by the parent.
+     *                   The requirements are encoded with
+     *                   {@link android.view.View.MeasureSpec}.
+     */
     @Override
     protected void onMeasure(int widthSpec, int heightSpec) {
         int totalDiameter = 2 * mRadius + getPaddingLeft() + getPaddingRight();
@@ -353,7 +405,48 @@ public class DraggableDot extends View {
     }
 
     /**
-     * Drag and drop
+     * Handles drag events sent by the system following a call to {@code startDrag()}. We initialize
+     * our variable {@code boolean result} to false, then switch based on the action of our parameter
+     * {@code DragEvent event}:
+     * <ul>
+     * <li>
+     * ACTION_DRAG_STARTED - We set our field {@code boolean mDragInProgress} to true, and
+     * set our field {@code boolean mAcceptsDrag} and {@code result} to true. Finally we call
+     * {@code invalidate} to schedule a redraw so we can "light up as a potential target".
+     * Then we break.
+     * </li>
+     * <li>
+     * ACTION_DRAG_ENDED - If {@code mAcceptsDrag} is true we call {@code invalidate} to
+     * schedule a redraw so we can "light up as a potential target", then we set our field
+     * {@code mDragInProgress} to true and {@code mHovering} to true. Then we break.
+     * </li>
+     * <li>
+     * ACTION_DRAG_LOCATION - We set {@code result} to {@code mAcceptsDrag} and break.
+     * </li>
+     * <li>
+     * ACTION_DROP - If we are configured to ANR when dropped on we call our method
+     * {@code sleepSixSeconds} to force an ANR (nasty!), then we call our method
+     * {@code processDrop(event)} to process the drop, set {@code result} to true and break.
+     * </li>
+     * <li>
+     * ACTION_DRAG_ENTERED - We set our field {@code mHovering} to true, call {@code invalidate}
+     * to schedule a redraw so we can "light up as a WHITE hovered over target", and break.
+     * </li>
+     * <li>
+     * ACTION_DRAG_EXITED - We set our field {@code mHovering} to false, call {@code invalidate}
+     * to schedule a redraw so we can "light up as a GREEN potential target", and break.
+     * </li>
+     * <li>
+     * default - We set {@code result} to {@code mAcceptsDrag} and break.
+     * </li>
+     * </ul>
+     * Finally we return {@code result} to the caller.
+     *
+     * @param event The {@code DragEvent} sent by the system.
+     * @return true if the method was successful, otherwise false. The method should return true in
+     * response to an action type of ACTION_DRAG_STARTED to receive drag events for the current
+     * operation. The method should also return true in response to an action type of ACTION_DROP if
+     * it consumed the drop, or false if it didn't.
      */
     @Override
     public boolean onDragEvent(DragEvent event) {
@@ -365,11 +458,8 @@ public class DraggableDot extends View {
                 // cache whether we accept the drag to return for LOCATION events
                 mDragInProgress = true;
                 mAcceptsDrag = result = true;
-                // Redraw in the new visual state if we are a potential drop target
-                //noinspection ConstantConditions
-                if (mAcceptsDrag) {
-                    invalidate();
-                }
+                // Redraw in the new visual state since we are a potential drop target
+                invalidate();
             }
             break;
 
