@@ -1716,7 +1716,6 @@ Expandable Lists
             "Cat Names", and "Fish Names". When clicked the groups expand to show the
             child lists, any child or group which is long-pressed will pop up a context
             menu with an "action button".
-            TODO: Scale TextSize and TextView for high dpi
 
     Views/Expandable Lists/2. Cursor (People) -- all -- crashes on froyo: null pointer
         .view.ExpandableList2

@@ -513,6 +513,20 @@ public class DraggableDot extends View {
         return result;
     }
 
+    /**
+     * Processes an ACTION_DROP {@code DragEvent} received by {@code onDragEvent}. First we retrieve
+     * the ClipData object sent to the system as part of the call to {@code startDrag()} to initialize
+     * {@code ClipData data}, and set {@code int N} to the number of items in the clip data. Next we
+     * loop over the {@code ClipData.Item item} objects in {@code data}, logging the string value of
+     * the {@code item}, and if our field {@code TextView mReportView} is not null we create
+     * {@code String text} by coercing {@code item} to a {@code CharSequence} then converting that
+     * to a string. We next check whether the local state object sent to the system as part of the
+     * call to {@code startDrag()} is "this" in which case we append the string " : Dropped on self!"
+     * to {@code text}. Finally we append {@code text} to {@code TextView mReportView} and loop for
+     * the next {@code ClipData.Item}.
+     *
+     * @param event {@code DragEvent} passed to our {@code onDragEvent} callback
+     */
     private void processDrop(DragEvent event) {
         final ClipData data = event.getClipData();
         final int N = data.getItemCount();

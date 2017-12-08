@@ -38,14 +38,30 @@ import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
 import com.example.android.apis.R;
 
 /**
- * Demonstrates expandable lists using a custom {@link ExpandableListAdapter}
- * from {@link BaseExpandableListAdapter}.
+ * Demonstrates expandable lists using a custom {@link ExpandableListAdapter} from
+ * {@link BaseExpandableListAdapter}. The custom BaseExpandableListAdapter groups
+ * different child lists under group names: "People Names", "Dog Names", "Cat Names",
+ * and "Fish Names". When clicked the groups expand to show the child lists, any child
+ * or group which is long-pressed will pop up a context menu with an "action button".
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 public class ExpandableList1 extends ExpandableListActivity {
 
+    /**
+     * The {@code ExpandableListAdapter} which serves as the {@code ListAdapter} for our activity.
+     * (It is actually a {@code MyExpandableListAdapter} as initialized in {@code onCreate}).
+     */
     ExpandableListAdapter mAdapter;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. We initialize our field {@code ExpandableListAdapter mAdapter} with a new
+     * instance, and provide it as the adapter for the expandable list. We fetch our activity's
+     * expandable list view widget and register it for a context menu to be shown (this will set the
+     * View.OnCreateContextMenuListener on the view to "this").
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,65 +72,139 @@ public class ExpandableList1 extends ExpandableListActivity {
         registerForContextMenu(getExpandableListView());
     }
 
+    /**
+     * Called when the context menu for this view is being built after the expandable list view widget
+     * is long clicked. First we set the {@code ContextMenu menu} header's title to the string
+     * "Sample menu". Then we add a menu item with the title R.string.expandable_list_sample_action
+     * ("Sample action").
+     *
+     * @param menu     The context menu that is being built
+     * @param v        The view for which the context menu is being built
+     * @param menuInfo Extra information about the item for which the context menu should be shown.
+     *                 This information will vary depending on the class of v.
+     */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         menu.setHeaderTitle("Sample menu");
         menu.add(0, 0, 0, R.string.expandable_list_sample_action);
     }
-    
+
+    /**
+     * This hook is called whenever an item in a context menu is selected. First we initialize our
+     * variable {@code ExpandableListContextMenuInfo info} to the extra information linked to the View
+     * that added {@code MenuItem item} to the menu. We initialize {@code String title} by casting
+     * the view for which the context menu is being displayed to a {@code TextView}, fetching its
+     * text, and converting it to a string. We initialize {@code int type} to the type of the position
+     * contained within the packed position {@code info.packedPosition}, either PACKED_POSITION_TYPE_CHILD,
+     * PACKED_POSITION_TYPE_GROUP, or PACKED_POSITION_TYPE_NULL. Then if type is PACKED_POSITION_TYPE_CHILD
+     * we fetch the group position from the packed position {@code info.packedPosition} to set our
+     * variable {@code int groupPos}, and the child position from it to set {@code int childPos}.
+     * We then create and show a toast using a string made from concatenating the {@code title} (which
+     * will be the child name) with the string ": Child ", the {@code childPos}, the string " clicked in group ",
+     * followed by {@code groupPos}. If type is PACKED_POSITION_TYPE_GROUP we fetch the group position
+     * from the packed position {@code info.packedPosition} to set our variable {@code int groupPos}.
+     * We then create and show a toast using a string made from concatenating the {@code title} (which
+     * will be the group name) with the string ": Group ", the {@code groupPos}, followed by the string
+     * " clicked". In both cases we return true to the caller to consume the menu selection here. If
+     * the {@code type} is not one of the two above we return false to the caller to allow normal context
+     * menu processing to proceed.
+     *
+     * @param item The context menu item that was selected.
+     * @return boolean Return false to allow normal context menu processing to
+     * proceed, true to consume it here.
+     */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         ExpandableListContextMenuInfo info = (ExpandableListContextMenuInfo) item.getMenuInfo();
 
         String title = ((TextView) info.targetView).getText().toString();
-        
+
         int type = ExpandableListView.getPackedPositionType(info.packedPosition);
         if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-            int groupPos = ExpandableListView.getPackedPositionGroup(info.packedPosition); 
-            int childPos = ExpandableListView.getPackedPositionChild(info.packedPosition); 
+            int groupPos = ExpandableListView.getPackedPositionGroup(info.packedPosition);
+            int childPos = ExpandableListView.getPackedPositionChild(info.packedPosition);
             Toast.makeText(this, title + ": Child " + childPos + " clicked in group " + groupPos,
                     Toast.LENGTH_SHORT).show();
             return true;
         } else if (type == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-            int groupPos = ExpandableListView.getPackedPositionGroup(info.packedPosition); 
+            int groupPos = ExpandableListView.getPackedPositionGroup(info.packedPosition);
             Toast.makeText(this, title + ": Group " + groupPos + " clicked", Toast.LENGTH_SHORT).show();
             return true;
         }
-        
+
         return false;
     }
 
     /**
-     * A simple adapter which maintains an ArrayList of photo resource Ids. 
-     * Each photo is displayed as an image. This adapter supports clearing the
-     * list of photos and adding a new photo.
-     *
+     * A simple adapter which is based on two hardcoded {@code String[]} arrays, one containing the
+     * four group names, and the other containing {@code String[]} arrays for each of the groups.
      */
+    @SuppressWarnings("WeakerAccess")
     public class MyExpandableListAdapter extends BaseExpandableListAdapter {
-        // Sample data set.  children[i] contains the children (String[]) for groups[i].
-        private String[] groups = { "People Names", "Dog Names", "Cat Names", "Fish Names" };
+        /**
+         * Names of the four groups in our expandable list, children[i] contains the children (String[])
+         * for groups[i].
+         */
+        private String[] groups = {"People Names", "Dog Names", "Cat Names", "Fish Names"};
+        /**
+         * {@code String[]} arrays containing the names of the children belong to each of the groups
+         * in {@code String[] groups}, children[i] contains the children (String[]) for groups[i].
+         */
         private String[][] children = {
-                { "Arnold", "Barry", "Chuck", "David" },
-                { "Ace", "Bandit", "Cha-Cha", "Deuce" },
-                { "Fluffy", "Snuggles" },
-                { "Goldy", "Bubbles" }
+                {"Arnold", "Barry", "Chuck", "David"},
+                {"Ace", "Bandit", "Cha-Cha", "Deuce"},
+                {"Fluffy", "Snuggles"},
+                {"Goldy", "Bubbles"}
         };
 
+        /**
+         * Gets the data associated with the given child within the given group.
+         *
+         * @param groupPosition the position of the group that the child resides in
+         * @param childPosition the position of the child with respect to other children in the group
+         * @return the data of the child
+         */
         @Override
         public Object getChild(int groupPosition, int childPosition) {
             return children[groupPosition][childPosition];
         }
 
+        /**
+         * Gets the ID for the given child within the given group. We simply return our parameter
+         * {@code childPosition} to the caller.
+         *
+         * @param groupPosition the position of the group that contains the child
+         * @param childPosition the position of the child within the group for which the ID is wanted
+         * @return the ID associated with the child
+         */
         @Override
         public long getChildId(int groupPosition, int childPosition) {
             return childPosition;
         }
 
+        /**
+         * Gets the number of children in a specified group. We simply return the length of the
+         * {@code String[]} array in {@code children} for the group {@code groupPosition}.
+         *
+         * @param groupPosition the position of the group for which the children count should be returned
+         * @return the children count in the specified group
+         */
         @Override
         public int getChildrenCount(int groupPosition) {
             return children[groupPosition].length;
         }
 
+        /**
+         * Creates, configures and returns a {@code TextView} that can be used to display a child in
+         * our expandable list. First we create {@code AbsListView.LayoutParams lp} with a width of
+         * MATCH_PARENT, and a height of 64. We create a new instance for {@code TextView textView},
+         * set its layout parameters to {@code lp}, set its gravity to CENTER_VERTICAL and LEFT, set
+         * its padding to 36 (start), 0 (top), 0 (end), and 0 (bottom), set its text alignment to
+         * TEXT_ALIGNMENT_VIEW_START, and set its text size to 18sp. Finally we return {@code textView}
+         * to our caller.
+         *
+         * @return a {@code TextView} configured for use in our expandable list.
+         */
         public TextView getGenericView() {
             // Layout parameters for the ExpandableListView
             AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
@@ -132,42 +222,99 @@ public class ExpandableList1 extends ExpandableListActivity {
             return textView;
         }
 
+        /**
+         * Gets a View that displays the data for the given child within the given group. First we
+         * set {@code TextView textView} to a text view created and configured by our method
+         * {@code getGenericView}, then we set its text to the string that our override of
+         * {@code getChild} returns for group {@code groupPosition} and child {@code childPosition}.
+         * Finally we return {@code textView} to the caller.
+         *
+         * @param groupPosition the position of the group that contains the child
+         * @param childPosition the position of the child within the group
+         * @param isLastChild   Whether the child is the last child within the group
+         * @param convertView   the old view to reuse, if possible. We do not bother.
+         * @param parent        the parent that this view will eventually be attached to
+         * @return the View corresponding to the child at the specified position
+         */
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
-                View convertView, ViewGroup parent) {
+                                 View convertView, ViewGroup parent) {
             TextView textView = getGenericView();
             textView.setText(getChild(groupPosition, childPosition).toString());
             return textView;
         }
 
+        /**
+         * Gets the data associated with the given group. Simply returns the string contained in
+         * {@code groups[groupPosition]}.
+         *
+         * @param groupPosition the position of the group
+         * @return the string title of the specified group
+         */
         @Override
         public Object getGroup(int groupPosition) {
             return groups[groupPosition];
         }
 
+        /**
+         * Gets the number of groups. We simply return the length of our array {@code String[] groups}.
+         *
+         * @return the number of groups
+         */
         @Override
         public int getGroupCount() {
             return groups.length;
         }
 
+        /**
+         * Gets the ID for the group at the given position. We simply return the {@code groupPosition}
+         * parameter to the caller.
+         *
+         * @param groupPosition the position of the group for which the ID is wanted
+         * @return the ID associated with the group
+         */
         @Override
         public long getGroupId(int groupPosition) {
             return groupPosition;
         }
 
+        /**
+         * Gets a View that displays the given group. First we set {@code TextView textView} to a
+         * text view created and configured by our method {@code getGenericView}, then we set its
+         * text to the string returned by our override of {@code getGroup(groupPosition)} returns.
+         * Finally we return {@code textView} to the caller.
+         *
+         * @param groupPosition the position of the group for which the View is returned
+         * @param isExpanded    whether the group is expanded or collapsed
+         * @param convertView   the old view to reuse, if possible. We do not bother.
+         * @param parent        the parent that this view will eventually be attached to
+         * @return the View corresponding to the group at the specified position
+         */
         @Override
-        public View getGroupView(int groupPosition, boolean isExpanded, View convertView,
-                ViewGroup parent) {
+        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
             TextView textView = getGenericView();
             textView.setText(getGroup(groupPosition).toString());
             return textView;
         }
 
+        /**
+         * Whether the child at the specified position is selectable. We always return true.
+         *
+         * @param groupPosition the position of the group that contains the child
+         * @param childPosition the position of the child within the group
+         * @return whether the child is selectable. We always return true.
+         */
         @Override
         public boolean isChildSelectable(int groupPosition, int childPosition) {
             return true;
         }
 
+        /**
+         * Indicates whether the child and group IDs are stable across changes to the underlying data.
+         * We always return true.
+         *
+         * @return whether or not the same ID always refers to the same object. We always return true.
+         */
         @Override
         public boolean hasStableIds() {
             return true;
