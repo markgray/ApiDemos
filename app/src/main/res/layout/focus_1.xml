@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,28 +14,32 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView android:id="@+id/txtStatus"
-        android:text="@string/focus_1_message"
+    <TextView
+        android:id="@+id/txtStatus"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content" />
+        android:text="@string/focus_1_message" />
 
-    <ListView android:id="@+id/rssListView"
-        android:background="#7700CC00"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent" />
-
-   <WebView android:id="@+id/rssWebView"
-        android:background="#77CC0000"
-        android:layout_height="50dip"
+    <ListView
+        android:id="@+id/rssListView"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#7700CC00" />
+
+    <WebView
+        android:id="@+id/rssWebView"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:background="#77CC0000"
         android:focusable="false" />
 
-    <Button android:layout_height="wrap_content"
+    <Button
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/focus_1_placeholder" />
 
 </LinearLayout>

@@ -18,27 +18,36 @@ package com.example.android.apis.view;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import static android.view.View.FOCUS_DOWN;
+
 /**
- * {@link android.view.View#requestFocus(int, android.graphics.Rect)}
- * and
+ * {@link android.view.View#requestFocus(int, android.graphics.Rect)} and
  * {@link android.view.View#onFocusChanged(boolean, int, android.graphics.Rect)}
  * work together to give a newly focused item a hint about the most interesting
  * rectangle of the previously focused view.  The view taking focus can use this
  * to set an internal selection more appropriate using this rect.
- *
- * This Activity excercises that behavior using three adjacent {@link InternalSelectionView}
+ * <p>
+ * This Activity exercises that behavior using three adjacent {@link InternalSelectionView}
  * that report interesting rects when giving up focus, and use interesting rects
  * when taking focus to best select the internal row to show as selected.
- *
+ * <p>
  * Were {@link InternalSelectionView} not to override {@link android.view.View#getFocusedRect}, or
  * {@link android.view.View#onFocusChanged(boolean, int, android.graphics.Rect)}, the focus would
- * jump to some default internal selection (the top) and not allow for the smooth handoff.
+ * jump to some default internal selection (the top) and not allow for the smooth hand-off.
+ * <p>
+ * Need keys to move focus, so I do not know what this does.
  */
 public class InternalSelectionFocus extends Activity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

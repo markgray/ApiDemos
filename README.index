@@ -1759,7 +1759,7 @@ Focus
             Were InternalSelectionView not to override android.view.View#getFocusedRect, or
             android.view.View#onFocusChanged(boolean, int, android.graphics.Rect)}, the focus 
             would jump to some default internal selection (the top) and not allow for the 
-            smooth handoff. Need keys to move focus, so I do not know what this does.
+            smooth hand-off. Need keys to move focus, so I do not know what this does.
 
     Views/Focus/5. Sequential (Tab Order)  all
         .view.Focus5

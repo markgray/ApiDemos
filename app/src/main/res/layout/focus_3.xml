@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -18,41 +17,47 @@
      focus behavior that would be difficult with default focus calculation alg.-->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dip">
 
-    <Button android:id="@+id/top"
+    <Button
+        android:id="@+id/top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:nextFocusDown="@+id/bottom"
-        android:text="@string/focus_3_top"/>
+        android:text="@string/focus_3_top" />
 
-    <Button android:id="@+id/right"
+    <Button
+        android:id="@+id/right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:nextFocusLeft="@+id/left"
-        android:text="@string/focus_3_right"/>
+        android:text="@string/focus_3_right"
+        tools:ignore="RelativeOverlap" />
 
-    <Button android:id="@+id/bottom"
+    <Button
+        android:id="@+id/bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:nextFocusUp="@+id/top"
-        android:text="@string/focus_3_bottom"/>
+        android:text="@string/focus_3_bottom" />
 
-    <Button android:id="@+id/left"
+    <Button
+        android:id="@+id/left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:nextFocusRight="@+id/right"
-        android:text="@string/focus_3_left"/>
+        android:text="@string/focus_3_left" />
 
 </RelativeLayout>
 

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,27 +14,30 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <Button android:id="@+id/leftButton"
+    <Button
+        android:id="@+id/leftButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="3dip"
-        android:text="@string/focus_2_left"
-        android:nextFocusRight="@+id/rightButton"/>  <!-- jump over middle! -->
+        android:nextFocusRight="@+id/rightButton"
+        android:text="@string/focus_2_left" />  <!-- jump over middle! -->
 
-    <Button android:id="@+id/centerButton"
+    <Button
+        android:id="@+id/centerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="3dip"
         android:text="@string/focus_2_jump" />
 
-    <Button android:id="@+id/rightButton"
+    <Button
+        android:id="@+id/rightButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="3dip"
-        android:text="@string/focus_2_right"/>
-    
+        android:text="@string/focus_2_right" />
+
 </LinearLayout>
