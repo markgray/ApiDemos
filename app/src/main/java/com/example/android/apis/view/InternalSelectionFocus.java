@@ -44,7 +44,24 @@ import static android.view.View.FOCUS_DOWN;
 public class InternalSelectionFocus extends Activity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * {@code onCreate}.
+     * {@code onCreate}. We create {@code LinearLayout layout}, set its orientation to HORIZONTAL,
+     * and set its layout parameters for width and height both to MATCH_PARENT. We create an new
+     * instance for {@code LinearLayout.LayoutParams params} with a width of 0, height of MATCH_PARENT,
+     * and a weight of 1.
+     * <p>
+     * We create {@code InternalSelectionView leftColumn} with 5 rows and the label "left column",
+     * set its layout parameters to {@code param}, its padding to 10 on all 4 sides and add it to
+     * {@code layout}.
+     * <p>
+     * We create {@code InternalSelectionView middleColumn} with 5 rows and the label "middle column",
+     * set its layout parameters to {@code param}, its padding to 10 on all 4 sides and add it to
+     * {@code layout}.
+     * <p>
+     * We create {@code InternalSelectionView rightColumn} with 5 rows and the label "right column",
+     * set its layout parameters to {@code param}, its padding to 10 on all 4 sides and add it to
+     * {@code layout}.
+     * <p>
+     * Finally we set our content view to {@code layout}.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
@@ -78,6 +95,4 @@ public class InternalSelectionFocus extends Activity {
 
         setContentView(layout);
     }
-
-
 }

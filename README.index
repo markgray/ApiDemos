@@ -1748,6 +1748,7 @@ Focus
 
     Views/Focus/4. Internal Selection      all
         .view.InternalSelectionFocus
+        .view.InternalSelectionView
             android.view.View#requestFocus(int, android.graphics.Rect) and 
             android.view.View#onFocusChanged(boolean, int, android.graphics.Rect)
             work together to give a newly focused item a hint about the most interesting

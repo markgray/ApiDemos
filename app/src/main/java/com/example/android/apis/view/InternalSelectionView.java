@@ -16,6 +16,7 @@
 
 package com.example.android.apis.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -26,41 +27,91 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
-
-
 /**
  * A view that has a known number of selectable rows, and maintains a notion of which
- * row is selected. The rows take up the
- * entire width of the view.  The height of the view is divided evenly among
- * the rows.
- *
+ * row is selected. The rows take up the entire width of the view.  The height of the
+ * view is divided evenly among the rows.
+ * <p>
  * Notice what this view does to be a good citizen w.r.t its internal selection:
- * 1) calls {@link View#requestRectangleOnScreen} each time the selection changes due to
- *    internal navigation.
- * 2) overrides {@link View#getFocusedRect} by filling in the rectangle of the currently
- *    selected row
- * 3) overrides {@link View#onFocusChanged} and sets selection appropriately according to
- *    the previously focused rectangle.
+ * <ul>
+ * <li>
+ * 1) calls {@code requestRectangleOnScreen} each time the selection changes due to internal navigation.
+ * </li>
+ * <li>
+ * 2) overrides {@code getFocusedRect} by filling in the rectangle of the currently selected row
+ * </li>
+ * <li>
+ * 3) overrides {@code onFocusChanged} and sets selection appropriately according to the previously
+ * focused rectangle.
+ * </li>
+ * </ul>
  */
 public class InternalSelectionView extends View {
-
+    /**
+     * {@code Paint} used to draw our rectangles
+     */
     private Paint mPainter = new Paint();
+    /**
+     * {@code Paint} used to draw the "row number" text at the top of a rectangle
+     */
     private Paint mTextPaint = new Paint();
+    /**
+     * {@code Rect} used to draw the rectangles.
+     */
     private Rect mTempRect = new Rect();
 
+    /**
+     * Number of rows of rectangles we are to draw, defaults to 5 but is settable by several of our
+     * constructors.
+     */
     private int mNumRows = 5;
+    /**
+     * Which row is selected (it will be drawn in RED, unselected rows will be BLACK).
+     */
     private int mSelectedRow = 0;
+    /**
+     * Guess of how big our rectangles should be not including padding. Used in our method
+     * {@code measureHeight} to get a ballpark figure to give to {@code setMeasuredDimension} if
+     * {@code mDesiredHeight} is null (which it always is).
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private final int mEstimatedPixelHeight = 10;
 
+    /**
+     * Can be set using our method {@code setDesiredHeight} to use an exact height to pass to
+     * {@code setMeasuredDimension} (but {@code setDesiredHeight} is unused so it is always null).
+     */
     private Integer mDesiredHeight = null;
+    /**
+     * Label that is set to a string by one of our constructors (the one used only by the activity
+     * {@code InternalSelectionFocus}, but the field is never accessed or used for anything).
+     */
     private String mLabel = null;
 
-
+    /**
+     * The constructor used by the activity {@code InternalSelectionScroll}, we simply call our
+     * {@code InternalSelectionView(Context context, int numRows, String label)} constructor with
+     * the empty string ("") as the label.
+     *
+     * @param context {@code Context} to use to access resources, "this" in the {@code onCreate}
+     *                method of the activity {@code InternalSelectionScroll}.
+     * @param numRows number of rows of rectangles to draw.
+     */
     public InternalSelectionView(Context context, int numRows) {
         this(context, numRows, "");
     }
-    
+
+    /**
+     * The constructor used by the activity {@code InternalSelectionFocus} (and internally by us).
+     * First we call through to our super's constructor, then we save our parameter {@code int numRows}
+     * in our field {@code int mNumRows}, and our parameter {@code String label} in our field
+     * {@code String mLabel}. Finally we call our method {@code init} to perform initialization for
+     * our instance.
+     *
+     * @param context {@code Context} to use to access resources
+     * @param numRows number of rows of rectangles to draw.
+     * @param label   String to save in our field {@code String mLabel} (and never actually use)
+     */
     public InternalSelectionView(Context context, int numRows, String label) {
         super(context);
         mNumRows = numRows;
@@ -68,44 +119,96 @@ public class InternalSelectionView extends View {
         init();
     }
 
+    /**
+     * Constructor that is called when inflating a view from XML. This is called when a view is being
+     * constructed from an XML file, supplying attributes that were specified in the XML file. First
+     * we call our super's constructor, then we call our method {@code init} to perform initialization
+     * for our instance. UNUSED.
+     *
+     * @param context The Context the view is running in, through which it can
+     *                access the current theme, resources, etc.
+     * @param attrs   The attributes of the XML tag that is inflating the view.
+     */
     public InternalSelectionView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
+    /**
+     * Initialization method used by our constructors. First we enable our {@code View} to receive
+     * focus, then we set the antialias flag of {@code Paint mTextPaint} to true, its text size to
+     * 10 times the logical density of the display, and its color to WHITE.
+     */
     private void init() {
         setFocusable(true);
         mTextPaint.setAntiAlias(true);
-        mTextPaint.setTextSize(10);
+        mTextPaint.setTextSize(10 * getResources().getDisplayMetrics().density);
         mTextPaint.setColor(Color.WHITE);
     }
 
+    /**
+     * Getter for our field {@code int mNumRows} UNUSED.
+     *
+     * @return The current value of our field {@code int mNumRows}
+     */
     @SuppressWarnings("unused")
     public int getNumRows() {
         return mNumRows;
     }
 
+    /**
+     * Getter for our field {@code int mSelectedRow} UNUSED.
+     *
+     * @return The current value of our field {@code int mSelectedRow}
+     */
     @SuppressWarnings("unused")
     public int getSelectedRow() {
         return mSelectedRow;
     }
 
+    /**
+     * Setter for our field {@code int desiredHeight} UNUSED.
+     */
     @SuppressWarnings("unused")
     public void setDesiredHeight(int desiredHeight) {
         mDesiredHeight = desiredHeight;
     }
 
+    /**
+     * Getter for our field {@code String mLabel} UNUSED.
+     *
+     * @return The current value of our field {@code String mLabel}
+     */
+    @SuppressWarnings("unused")
     public String getLabel() {
         return mLabel;
     }
 
+    /**
+     * Measure the view and its content to determine the measured width and the measured height.
+     * We simply call {@code setMeasuredDimension} using the width returned by our method
+     * {@code measureWidth}, and the height returned by our method {@code measureHeight}.
+     *
+     * @param widthMeasureSpec  horizontal space requirements as imposed by the parent encoded in a
+     *                          {@code View.MeasureSpec}
+     * @param heightMeasureSpec vertical space requirements as imposed by the parent encoded in a
+     *                          {@code View.MeasureSpec}
+     */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(
-            measureWidth(widthMeasureSpec),
-            measureHeight(heightMeasureSpec));
+                measureWidth(widthMeasureSpec),
+                measureHeight(heightMeasureSpec));
     }
 
+    /**
+     * Returns a desired width for our {@code View} subject to the constraints imposed by our parameter
+     * {@code int measureSpec}.
+     *
+     * @param measureSpec horizontal space requirements as imposed by the parent encoded in a
+     *                    {@code View.MeasureSpec}
+     * @return Width in pixels we would like to have.
+     */
     private int measureWidth(int measureSpec) {
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
@@ -194,19 +297,21 @@ public class InternalSelectionView extends View {
                 top + rowHeight);
     }
 
-
     void ensureRectVisible() {
         getRectForRow(mTempRect, mSelectedRow);
         requestRectangleOnScreen(mTempRect);
     }
 
-
-    /* (non-Javadoc)
-    * @see android.view.KeyEvent.Callback#onKeyDown(int, android.view.KeyEvent)
-    */
+    /**
+     * Perform press of the view when {@code KEYCODE_DPAD_CENTER} or {@code KEYCODE_ENTER} is
+     * released, if the view is enabled and clickable.
+     *
+     * @param keyCode A key code that represents the button pressed
+     * @param event   The KeyEvent object that defines the button action.
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch(event.getKeyCode()) {
+        switch (event.getKeyCode()) {
             case KeyEvent.KEYCODE_DPAD_UP:
                 if (mSelectedRow > 0) {
                     mSelectedRow--;
@@ -244,6 +349,7 @@ public class InternalSelectionView extends View {
      * @param event The motion event.
      * @return True if the event was handled, false otherwise.
      */
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
@@ -267,9 +373,10 @@ public class InternalSelectionView extends View {
         getRectForRow(r, mSelectedRow);
     }
 
+    @SuppressLint("SwitchIntDef")
     @Override
     protected void onFocusChanged(boolean focused, int direction,
-            Rect previouslyFocusedRect) {
+                                  Rect previouslyFocusedRect) {
         super.onFocusChanged(focused, direction, previouslyFocusedRect);
 
         if (focused) {
@@ -301,6 +408,7 @@ public class InternalSelectionView extends View {
         }
     }
 
+    @SuppressWarnings("unused")
     @Override
     public String toString() {
         if (mLabel != null) {
