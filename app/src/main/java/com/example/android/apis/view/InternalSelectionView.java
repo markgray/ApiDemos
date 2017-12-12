@@ -136,11 +136,13 @@ public class InternalSelectionView extends View {
 
     /**
      * Initialization method used by our constructors. First we enable our {@code View} to receive
-     * focus, then we set the antialias flag of {@code Paint mTextPaint} to true, its text size to
-     * 10 times the logical density of the display, and its color to WHITE.
+     * focus, and to receive focus in touch mode, then we set the antialias flag of our field
+     * {@code Paint mTextPaint} to true, its text size to 10 times the logical density of the display,
+     * and its color to WHITE.
      */
     private void init() {
         setFocusable(true);
+        setFocusableInTouchMode(true);
         mTextPaint.setAntiAlias(true);
         mTextPaint.setTextSize(10 * getResources().getDisplayMetrics().density);
         mTextPaint.setColor(Color.WHITE);
@@ -203,7 +205,12 @@ public class InternalSelectionView extends View {
 
     /**
      * Returns a desired width for our {@code View} subject to the constraints imposed by our parameter
-     * {@code int measureSpec}.
+     * {@code int measureSpec}. First we extract the mode from {@code int measureSpec} to initialize
+     * {@code int specMode}, and then the size to initialize {@code int specSize}. We calculate an
+     * estimate of the width we would like: {@code int desiredWidth} which would be 300 pixels plus
+     * our left and right padding. If {@code specMode} is EXACTLY we return {@code specSize}, and if
+     * {@code specMode} is AT_MOST we return the lesser of {@code desiredWidth} or {@code specSize}.
+     * Otherwise we return {@code desiredWidth}.
      *
      * @param measureSpec horizontal space requirements as imposed by the parent encoded in a
      *                    {@code View.MeasureSpec}
@@ -224,6 +231,21 @@ public class InternalSelectionView extends View {
         }
     }
 
+    /**
+     * Returns a desired height for our {@code View} subject to the constraints imposed by our parameter
+     * {@code int measureSpec}. First we extract the mode from {@code int measureSpec} to initialize
+     * {@code int specMode}, and then the size to initialize {@code int specSize}. If our field
+     * {@code Integer mDesiredHeight} is not null we initialize our variable {@code int desiredHeight}
+     * to it, otherwise we set it to an estimated height using {@code mEstimatedPixelHeight} for each
+     * of the {@code mNumRows} rows, also adding the top and bottom padding of our view to this. If
+     * {@code specMode} is EXACTLY we return {@code specSize}, and if {@code specMode} is AT_MOST we
+     * return the lesser of {@code desiredWidth} or {@code specSize}. Otherwise we return
+     * {@code desiredWidth}.
+     *
+     * @param measureSpec vertical space requirements as imposed by the parent encoded in a
+     *                    {@code View.MeasureSpec}
+     * @return Width in pixels we would like to have.
+     */
     private int measureHeight(int measureSpec) {
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
@@ -241,7 +263,38 @@ public class InternalSelectionView extends View {
         }
     }
 
-
+    /**
+     * We implement this to do our drawing. We initialize our variable {@code int rowHeight} with the
+     * value returned by our method {@code getRowHeight} (which is just the height of our view, minus
+     * the top and bottom padding, all divided by the number of rows: {@code mNumRows}). We initialize
+     * our variable {@code int rectTop} to the top padding, {@code int rectLeft} to the left padding,
+     * and {@code int rectRight} to the width of our view minus the right padding.
+     * <p>
+     * Now we loop over {@code int i} for {@code mNumRows} rows, first setting the color of
+     * {@code Paint mPainter} to black and its alpha to 0x20. We set the coordinates of our field
+     * {@code Rect mTempRect} to {@code (rectLeft,rectTop)} for the top left corner and
+     * {@code (rectRight,rectTop+rowHeight)} for the bottom right corner, then instruct {@code canvas}
+     * to draw the rectangle {@code mTempRect} using {@code mPainter} as the paint.
+     * <p>
+     * If our index {@code i} is equal to {@code mSelectedRow} (our current row is the selected one)
+     * and our view has the focus we set the color of {@code mPainter} to RED, and its alpha to 0xF0,
+     * and set the alpha of {@code mTextPaint} to 0xFF. Otherwise we set the color of {@code mPainter}
+     * to BLACK, and its alpha to 0x40, and set the alpha of {@code mTextPaint} to 0xF0.
+     * <p>
+     * We now set the coordinates of our field {@code Rect mTempRect} to {@code (rectLeft+2,rectTop+2)}
+     * for the top left corner and {@code (rectRight-2,rectTop+rowHeight-2)} for the bottom right corner,
+     * then instruct {@code canvas} to draw the rectangle {@code mTempRect} again using {@code mPainter}
+     * as the paint.
+     * <p>
+     * We now instruct {@code canvas} to draw the string value of {@code i} using {@code mTextPaint}
+     * as the paint, with {@code rectLeft+2} as the X coordinate and {@code rectTop+2} minus the
+     * ascent of {@code mTextPaint} for the Y coordinate.
+     * <p>
+     * Finally we add the row height {@code rowHeight} to {@code rectTop} and loop back for the next
+     * row.
+     *
+     * @param canvas the canvas on which the background will be drawn
+     */
     @Override
     protected void onDraw(Canvas canvas) {
 
@@ -284,10 +337,30 @@ public class InternalSelectionView extends View {
         }
     }
 
+    /**
+     * Calculates the height of an individual row. To do this we subtract the top and bottom padding
+     * from the height of our view, and divide the result by the number of rows of rectangles in our
+     * view {@code mNumRows}. We return the resulting value to the caller.
+     *
+     * @return the height of an individual row.
+     */
     private int getRowHeight() {
         return (getHeight() - getPaddingTop() - getPaddingBottom()) / mNumRows;
     }
 
+    /**
+     * Calculates the coordinates of the rectangle in row {@code int row} and sets the coordinates
+     * of {@code Rect rect} to them. We initialize our variable {@code int rowHeight} to the row
+     * height value calculated by our method {@code getRowHeight}, and our variable {@code int top}
+     * to the value of {@code row*rowHeight} plus our view's top padding. Then we set the coordinates
+     * of {@code Rect rect} using the value of the left padding for the X coordinate of the top left
+     * corner and {@code top} for the Y, the width of our view minus the right padding of our view
+     * for the Y coordinate of the bottom right corner and {@code top} plus {@code rowHeight} for the
+     * Y coordinate.
+     *
+     * @param rect {@code Rect} whose coordinates we are to set
+     * @param row  row number whose {@code Rect} we are to "get" to set {@code Rect rect}
+     */
     public void getRectForRow(Rect rect, int row) {
         final int rowHeight = getRowHeight();
         final int top = getPaddingTop() + row * rowHeight;
@@ -297,6 +370,13 @@ public class InternalSelectionView extends View {
                 top + rowHeight);
     }
 
+    /**
+     * Requests that the rectangle for the selected row {@code mSelectedRow} of this view be visible
+     * on the screen, scrolling if necessary just enough. First we call our method {@code getRectForRow}
+     * to load the coordinates for row {@code mSelectedRow} into {@code mTempRect}, then we call the
+     * system method {@code requestRectangleOnScreen} with {@code mTempRect} as the rectangle that
+     * we want to scroll onto the screen if necessary.
+     */
     void ensureRectVisible() {
         getRectForRow(mTempRect, mSelectedRow);
         requestRectangleOnScreen(mTempRect);
@@ -304,10 +384,28 @@ public class InternalSelectionView extends View {
 
     /**
      * Perform press of the view when {@code KEYCODE_DPAD_CENTER} or {@code KEYCODE_ENTER} is
-     * released, if the view is enabled and clickable.
+     * released, if the view is enabled and clickable. We switch based on the value of the keycode
+     * in our parameter {@code KeyEvent event}:
+     * <ul>
+     * <li>
+     * KEYCODE_DPAD_UP - if {@code mSelectedRow} is greater than 0 we decrement it, invalidate
+     * our view, call our method {@code ensureRectVisible} to scroll to the new selected row
+     * {@code mSelectedRow}, and return true to the caller.
+     * </li>
+     * <li>
+     * KEYCODE_DPAD_DOWN - if {@code mSelectedRow} is less than the last row (as given by
+     * {@code mNumRows-1}, we increment {@code mSelectedRow}, invalidate our view, call our
+     * method {@code ensureRectVisible} to scroll to the new selected row {@code mSelectedRow},
+     * and return true to the caller.
+     * </li>
+     * </ul>
+     * If the keycode is not one we know about, or {@code mSelectedRow} had already reached one of
+     * the ends of our view, we return false to the caller.
      *
      * @param keyCode A key code that represents the button pressed
      * @param event   The KeyEvent object that defines the button action.
+     * @return If you handled the event, return true. If you want to allow the
+     * event to be handled by the next receiver, return false.
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -334,17 +432,7 @@ public class InternalSelectionView extends View {
 
     /**
      * Implement this method to handle touch screen motion events.
-     * <p/>
-     * If this method is used to detect click actions, it is recommended that
-     * the actions be performed by implementing and calling
-     * {@link #performClick()}. This will ensure consistent system behavior,
-     * including:
-     * <ul>
-     * <li>obeying click sound preferences
-     * <li>dispatching OnClickListener calls
-     * <li>handling AccessibilityNodeInfo#ACTION_CLICK ACTION_CLICK when
-     * accessibility features are enabled
-     * </ul>
+     * TODO: make it advance one at a time, then reverse.
      *
      * @param event The motion event.
      * @return True if the event was handled, false otherwise.
@@ -353,14 +441,15 @@ public class InternalSelectionView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
-        if (mSelectedRow > 0) {
-            mSelectedRow--;
+        requestFocus();
+        if (mSelectedRow < (mNumRows - 1)) {
+            mSelectedRow++;
             invalidate();
             ensureRectVisible();
             return true;
         }
-        if (mSelectedRow < (mNumRows - 1)) {
-            mSelectedRow++;
+        if (mSelectedRow > 0) {
+            mSelectedRow--;
             invalidate();
             ensureRectVisible();
             return true;
