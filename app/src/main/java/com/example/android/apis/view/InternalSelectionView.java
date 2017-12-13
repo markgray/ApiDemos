@@ -70,6 +70,10 @@ public class InternalSelectionView extends View {
      */
     private int mSelectedRow = 0;
     /**
+     * Flag to indicate whether our selection is moving down when moved by clicking
+     */
+    private boolean mDown = true;
+    /**
      * Guess of how big our rectangles should be not including padding. Used in our method
      * {@code measureHeight} to get a ballpark figure to give to {@code setMeasuredDimension} if
      * {@code mDesiredHeight} is null (which it always is).
@@ -431,8 +435,19 @@ public class InternalSelectionView extends View {
     }
 
     /**
-     * Implement this method to handle touch screen motion events.
-     * TODO: make it advance one at a time, then reverse.
+     * Implement this method to handle touch screen motion events. First we call through to our super's
+     * implementation of {@code onTouchEvent}, then if the action of the parameter {@code MotionEvent event}
+     * is not ACTION_DOWN we return false to the caller without doing anything. If it is ACTION_DOWN
+     * we request focus for our view, then if our field {@code mDown} is true we increment our field
+     * {@code mSelectedRow} and if the result is greater than or equal to {@code mNumRows} we subtract
+     * 2 from it again and set {@code mDown} to false. In either case we invalidate our view, call our
+     * method {@code ensureRectVisible} to scroll the new rectangle onto the screen if necessary, and
+     * return true to our caller.
+     * <p>
+     * If {@code mDown} was false we make sure {@code mSelectedRow} is greater than 0 before decrementing
+     * it, if it was already 0 we set {@code mSelectedRow} to 1 and {@code mDown} to true. In either case
+     * we now invalidate our view and call our method {@code ensureRectVisible} to scroll the new rectangle
+     * onto the screen if necessary, and return true to our caller.
      *
      * @param event The motion event.
      * @return True if the event was handled, false otherwise.
@@ -441,31 +456,86 @@ public class InternalSelectionView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
+        if (event.getAction() != MotionEvent.ACTION_DOWN) {
+            return false;
+        }
         requestFocus();
-        if (mSelectedRow < (mNumRows - 1)) {
+        if (mDown) {
             mSelectedRow++;
+            if (mSelectedRow >= mNumRows) {
+                mSelectedRow -= 2;
+                mDown = false;
+            }
             invalidate();
             ensureRectVisible();
             return true;
         }
         if (mSelectedRow > 0) {
             mSelectedRow--;
-            invalidate();
-            ensureRectVisible();
-            return true;
+        } else {
+            mSelectedRow = 1;
+            mDown = true;
         }
+        invalidate();
+        ensureRectVisible();
         return true;
     }
 
+    /**
+     * Loads the coordinates of our parameter {@code Rect r} with those used by the {@code Rect} in row
+     * {@code mSelectedRow}. To do this we just call our method {@code getRectForRow}.
+     *
+     * @param r {@code Rect} whose coordinates we are to set to those used by the {@code Rect} in row
+     *          {@code mSelectedRow}.
+     */
     @Override
     public void getFocusedRect(Rect r) {
         getRectForRow(r, mSelectedRow);
     }
 
+    /**
+     * Called by the view system when the focus state of this view changes. First we call through to
+     * our super's implementation of {@code onFocusChanged}. Then if {@code focused} is true (indicating
+     * we have the focus), we switch based on the value of our parameter {@code direction}:
+     * <ul>
+     * <li>
+     * FOCUS_DOWN - we set {@code mSelectedRow} to 0 and break.
+     * </li>
+     * <li>
+     * FOCUS_UP - we set {@code mSelectedRow} to the last row ({@code mNumRows-1}) and break.
+     * </li>
+     * <li>
+     * FOCUS_LEFT - we fall through to execute the same code as FOCUS_RIGHT
+     * </li>
+     * <li>
+     * FOCUS_RIGHT - if our parameter {@code Rect previouslyFocusedRect} is not null, we use it
+     * to calculate which of our rows is closest to that {@code Rect}. We do that by adding half
+     * of the height of {@code previouslyFocusedRect} to its top Y coordinate to set {@code int y}.
+     * We calculate the value {@code yPerRow} by dividing our height by the number of rows in
+     * our view {@code mNumRows}. Then we set our selected row {@code mSelectedRow} to {@code y}
+     * divided by {@code yPerRow}. If {@code previouslyFocusedRect} was null, we set our selected
+     * row {@code mSelectedRow} to 0, and then break whether it was null or not.
+     * </li>
+     * <li>
+     * default - We just return because we can't gleam any useful information about what internal
+     * selection should be...
+     * </li>
+     * </ul>
+     * After setting {@code mSelectedRow} in our switch code above, we invalidate our view before returning.
+     *
+     * @param focused               True if the View has focus; false otherwise.
+     * @param direction             The direction focus has moved when requestFocus() is called to
+     *                              give this view focus. Values are {@code FOCUS_UP}, {@code FOCUS_DOWN},
+     *                              {@code FOCUS_LEFT}, {@code FOCUS_RIGHT}, {@code FOCUS_FORWARD}, or
+     *                              {@code FOCUS_BACKWARD}.
+     * @param previouslyFocusedRect The rectangle, in this view's coordinate system, of the previously
+     *                              focused view. If applicable, this will be passed in as finer grained
+     *                              information about where the focus is coming from (in addition to
+     *                              direction). Will be null otherwise.
+     */
     @SuppressLint("SwitchIntDef")
     @Override
-    protected void onFocusChanged(boolean focused, int direction,
-                                  Rect previouslyFocusedRect) {
+    protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
         super.onFocusChanged(focused, direction, previouslyFocusedRect);
 
         if (focused) {
@@ -497,6 +567,12 @@ public class InternalSelectionView extends View {
         }
     }
 
+    /**
+     * If our field {@code String mLabel} is not null, we return it to the caller, otherwise we return
+     * the value returned by our super's implementation of {@code toString}.
+     *
+     * @return Returns a string appropriate for our instance.
+     */
     @SuppressWarnings("unused")
     @Override
     public String toString() {

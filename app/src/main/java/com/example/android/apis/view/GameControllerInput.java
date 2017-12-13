@@ -204,6 +204,7 @@ public class GameControllerInput extends Activity
      * Tracks the state of joystick axes and game controller buttons for a particular
      * input device for diagnostic purposes.
      */
+    @SuppressWarnings("WeakerAccess")
     private static class InputDeviceState {
         private final InputDevice mDevice;
         private final int[] mAxes;
@@ -334,6 +335,7 @@ public class GameControllerInput extends Activity
     /**
      * A list adapter that displays a summary of the device state.
      */
+    @SuppressWarnings("WeakerAccess")
     private static class SummaryAdapter extends BaseAdapter {
         private static final int BASE_ID_HEADING = 1 << 10;
         private static final int BASE_ID_DEVICE_ITEM = 2 << 10;
@@ -467,6 +469,7 @@ public class GameControllerInput extends Activity
                 if (mView == null) {
                     LayoutInflater inflater = (LayoutInflater)
                             parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    //noinspection ConstantConditions
                     mView = inflater.inflate(mLayoutResourceId, parent, false);
                     initView(mView);
                 }

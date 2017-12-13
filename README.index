@@ -1769,7 +1769,7 @@ Focus
 
     Views/Focus/6. Window Focus Observer   all  -- v18+ or crash
         .view.WindowFocusObserver
-            Impliments a WindowId.FocusObserver() whose onFocusGained(WindowId) merely
+            Implements a WindowId.FocusObserver() whose onFocusGained(WindowId) merely
             prints "Gained focus", and whose onFocusLost(WindowId) prints "Lost focus".
             Nothing happens on a touch only screen of course.
 
