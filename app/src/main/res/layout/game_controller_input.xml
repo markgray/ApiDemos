@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2011 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2011 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -17,31 +16,31 @@
 <!-- Game controller input demo. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/game_controller_input_description"
-        android:padding="12dip" />
+        android:padding="12dip"
+        android:text="@string/game_controller_input_description" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
+        android:orientation="horizontal"
         android:padding="12dip">
+
         <ListView
             android:id="@+id/summary"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="3dip"
-            tools:ignore="NestedWeights">
-        </ListView>
+            tools:ignore="NestedWeights" />
 
         <com.example.android.apis.view.GameView
             android:id="@+id/game"

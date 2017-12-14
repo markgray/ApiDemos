@@ -47,35 +47,70 @@ import java.util.List;
 /**
  * Demonstrates how to process input events received from game controllers.
  * It also shows how to detect when input devices are added, removed or reconfigured.
- *
+ * <p>
  * This activity displays button states and joystick positions.
  * Also writes detailed information about relevant input events to the log.
- *
- * The game controller is also uses to control a very simple game.  See {@link GameView}
- * for the game itself.
+ * <p>
+ * The game controller is also uses to control a very simple game.  See {@code GameView}
+ * for the game itself, it is used by our layout file R.layout.game_controller_input.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-public class GameControllerInput extends Activity
-        implements InputManager.InputDeviceListener {
+public class GameControllerInput extends Activity implements InputManager.InputDeviceListener {
+    /**
+     * TAG used for logging.
+     */
     private static final String TAG = "GameControllerInput";
 
+    /**
+     * {@code InputManager} for interacting with input devices.
+     */
     private InputManager mInputManager;
+    /**
+     * Array of {@code InputDeviceState} Objects using the device ID as the index.
+     */
     private SparseArray<InputDeviceState> mInputDeviceStates;
+    /**
+     * Reference to the {@code GameView} in our layout file with ID R.id.game
+     */
     private GameView mGame;
+    /**
+     * {@code ListView} in our layout file with ID R.id.summary, fed by the adapter
+     * {@code SummaryAdapter mSummaryAdapter}, we use it to output information we
+     * receive as an {@code InputDeviceListener} in a very nifty way.
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private ListView mSummaryList;
+    /**
+     * {@code SummaryAdapter} which feeds {@code ListView mSummaryList}, displays textual representations
+     * of {@code InputDeviceState} Objects our {@code InputDeviceListener} interface receives.
+     */
     private SummaryAdapter mSummaryAdapter;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.game_controller_input.
+     * Then we initialize our field {@code InputManager mInputManager} with an new instance for
+     * interacting with input devices. Next we initialize our fields
+     * {@code SparseArray<InputDeviceState> mInputDeviceStates} with a new instance of {@code SparseArray},
+     * and {@code SummaryAdapter mSummaryAdapter} with a new instance of {@code SummaryAdapter} using
+     * this as the {@code Context} and a resources instance for our application's package.
+     * <p>
+     * We initialize our field {@code GameView mGame} by finding the view with ID R.id.game, and our
+     * field {@code ListView mSummaryList} by finding the view with ID R.id.summary. We set the adapter
+     * of {@code mSummaryList} to {@code mSummaryAdapter}, and its {@code OnItemClickListener} to an
+     * anonymous class which calls through to the {@code onItemClick} method of {@code mSummaryAdapter}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.game_controller_input);
 
-        mInputManager = (InputManager)getSystemService(Context.INPUT_SERVICE);
+        mInputManager = (InputManager) getSystemService(Context.INPUT_SERVICE);
 
         mInputDeviceStates = new SparseArray<>();
         mSummaryAdapter = new SummaryAdapter(this, getResources());
-
-        setContentView(R.layout.game_controller_input);
 
         mGame = (GameView) findViewById(R.id.game);
 
@@ -89,6 +124,20 @@ public class GameControllerInput extends Activity
         });
     }
 
+    /**
+     * Called after {@code onRestoreInstanceState}, {@code onRestart}, or {@code onPause}, for our
+     * activity to start interacting with the user. First we call through to our super's implementation
+     * of {@code onResume}. We then use {@code InputManager mInputManager} to register "this" as an
+     * input device listener to watch for when input devices are added, removed or reconfigured. Next
+     * we use {@code mInputManager} to fetch the ids of all input devices in the system to the array
+     * {@code int[] ids}. Then we loop for each {@code int id} in {@code int[] ids} calling our method
+     * {@code getInputDeviceState} for it. {@code getInputDeviceState} maintains the {@code SparseArray}
+     * {@code SparseArray<InputDeviceState> mInputDeviceStates} and if the device ID it is called for
+     * is not already in the array, gets information about that input device from {@code mInputManager}
+     * in a {@code InputDevice}, creates a {@code InputDeviceState} from it and stores it in the array
+     * {@code mInputDeviceStates}. If the device ID already had an entry it just returns that to the
+     * caller.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -105,6 +154,11 @@ public class GameControllerInput extends Activity
         }
     }
 
+    /**
+     * Called as part of the activity lifecycle when an activity is going into the background, but
+     * has not (yet) been killed. We call through to our super's implementation of {@code onPause}
+     * then use {@code InputManager mInputManager} to unregister "this" as an {@code InputDeviceListener}.
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -113,6 +167,14 @@ public class GameControllerInput extends Activity
         mInputManager.unregisterInputDeviceListener(this);
     }
 
+    /**
+     * Called when the current {@code Window} of the activity gains or loses focus. This is the best
+     * indicator of whether this activity is visible to the user. First we call through to our super's
+     * implementation of {@code onWindowFocusChanged}, then we request focus for our field
+     * {@code GameView mGame}.
+     *
+     * @param hasFocus Whether the window of this activity has focus.
+     */
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -375,8 +437,7 @@ public class GameControllerInput extends Activity
         @SuppressWarnings("UnusedParameters")
         public void onItemClick(int position) {
             if (mState != null) {
-                Toast toast = Toast.makeText(
-                        mContext, mState.getDevice().toString(), Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(mContext, mState.getDevice().toString(), Toast.LENGTH_LONG);
                 toast.show();
             }
         }

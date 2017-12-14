@@ -1776,13 +1776,15 @@ Focus
 Game Controller Input
     Views/Game Controller Input            all
         .view.GameControllerInput
+        .view.GameView
             Demonstrates how to process input events received from game controllers.
             It also shows how to detect when input devices are added, removed or 
             reconfigured.
             This activity displays button states and joystick positions. Also writes 
             detailed information about relevant input events to the log. The game 
             controller is also uses to control a very simple game.  See GameView
-            for the game itself. No game controller here.
+            for the game itself, it is used by our layout file R.layout.game_controller_input.
+            No game controller here.
 
 Grid
     Views/Grid/1. Icon Grid                all
