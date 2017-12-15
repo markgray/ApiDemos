@@ -182,6 +182,30 @@ public class GameControllerInput extends Activity implements InputManager.InputD
         mGame.requestFocus();
     }
 
+    /**
+     * Called to process key events. You can override this to intercept all key events before they
+     * are dispatched to the window. First we call our method {@code getInputDeviceState} to initialize
+     * {@code InputDeviceState state} with the {@code InputDeviceState} of the device ID that generated
+     * our parameter {@code KeyEvent event}. If {@code state} is not null, we switch on the value of
+     * the action of {@code event}:
+     * <ul>
+     * <li>
+     * ACTION_DOWN - if the {@code onKeyDown} method of {@code state} returns true (the key is
+     * a key used by the game), we call the {@code show} method of {@code SummaryAdapter mSummaryAdapter}
+     * with {@code state} as the argument. We then break
+     * </li>
+     * <li>
+     * ACTION_UP - if the {@code onKeyUp} method of {@code state} returns true (the key is
+     * a key used by the game), we call the {@code show} method of {@code SummaryAdapter mSummaryAdapter}
+     * with {@code state} as the argument. We then break
+     * </li>
+     * </ul>
+     * Finally we return the value returned by our super's implementation of {@code dispatchKeyEvent} to
+     * our caller.
+     *
+     * @param event The key event.
+     * @return boolean Return true if this event was consumed.
+     */
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         // Update device state for visualization and logging.
@@ -203,6 +227,21 @@ public class GameControllerInput extends Activity implements InputManager.InputD
         return super.dispatchKeyEvent(event);
     }
 
+    /**
+     * Called to process generic motion events. You can override this to intercept all generic motion
+     * events before they are dispatched to the window. Only if the {@code MotionEvent event} is from
+     * a SOURCE_CLASS_JOYSTICK input source (a joystick) and the action of {@code event} is ACTION_MOVE
+     * we call our method {@code getInputDeviceState} to initialize {@code InputDeviceState state} with
+     * the {@code InputDeviceState} of the device ID that generated our parameter {@code KeyEvent event}.
+     * Then if {@code state} is not null, and its {@code onJoystickMotion} method returns true given
+     * {@code MotionEvent event} (it always returns true) we call the {@code show} method of
+     * {@code SummaryAdapter mSummaryAdapter} with {@code state} as the argument. Finally we return
+     * the value returned by our super's implementation of {@code dispatchGenericMotionEvent} to our
+     * caller.
+     *
+     * @param event The generic motion event.
+     * @return boolean Return true if this event was consumed.
+     */
     @Override
     public boolean dispatchGenericMotionEvent(MotionEvent event) {
         // Check that the event came from a joystick since a generic motion event
@@ -218,6 +257,22 @@ public class GameControllerInput extends Activity implements InputManager.InputD
         return super.dispatchGenericMotionEvent(event);
     }
 
+    /**
+     * Returns an {@code InputDeviceState} object for {@code deviceId}, from the cache contained in
+     * {@code SparseArray<InputDeviceState> mInputDeviceStates}, or freshly created (and cached for
+     * future calls. First we try to initialize {@code InputDeviceState state} by using {@code deviceId}
+     * to fetch it from our cache {@code SparseArray<InputDeviceState> mInputDeviceStates}. If it is
+     * null, we use {@code InputManager mInputManager} to initialize {@code InputDevice device} with
+     * information about the input device with ID {@code deviceId}. If {@code device} is null, we
+     * return null to our caller. Otherwise we set {@code state} to a new instance of {@code InputDeviceState}
+     * created from {@code device}, store {@code state} in our cache {@code mInputDeviceStates} under the
+     * index {@code deviceId}, and log the new device. Finally we return {@code state} to our caller.
+     *
+     * @param deviceId Device ID
+     * @return an {@code InputDeviceState} object for {@code deviceId}, from the cache contained in
+     * {@code SparseArray<InputDeviceState> mInputDeviceStates}, or freshly created (and cached for
+     * future calls.
+     */
     private InputDeviceState getInputDeviceState(int deviceId) {
         InputDeviceState state = mInputDeviceStates.get(deviceId);
         if (state == null) {
@@ -232,7 +287,14 @@ public class GameControllerInput extends Activity implements InputManager.InputD
         return state;
     }
 
-    // Implementation of InputManager.InputDeviceListener.onInputDeviceAdded()
+    /**
+     * Called whenever an input device has been added to the system, part of the {@code InputDeviceListener}
+     * interface. We call our method {@code getInputDeviceState} to initialize {@code InputDeviceState state}
+     * with the {@code InputDeviceState} of the device ID of our parameter {@code deviceId}. We then
+     * log the string value of the {@code InputDevice} object for that device.
+     *
+     * @param deviceId The id of the input device that was added.
+     */
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onInputDeviceAdded(int deviceId) {
@@ -240,7 +302,16 @@ public class GameControllerInput extends Activity implements InputManager.InputD
         Log.i(TAG, "Device added: " + state.mDevice);
     }
 
-    // Implementation of InputManager.InputDeviceListener.onInputDeviceChanged()
+    /**
+     * Called whenever the properties of an input device have changed since they were last queried,
+     * part of the {@code InputDeviceListener} interface. part of the {@code InputDeviceListener} interface
+     * If {@code state} is not null, we remove the entry for {@code deviceId} from our cache
+     * {@code SparseArray<InputDeviceState> mInputDeviceStates}, and call our method {@code getInputDeviceState}
+     * to create a new {@code InputDeviceState} for {@code deviceId} to set {@code state} to (and cache it).
+     * We then log the string value of the {@code InputDevice} object for that device.
+     *
+     * @param deviceId The id of the input device that changed.
+     */
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onInputDeviceChanged(int deviceId) {
@@ -252,7 +323,15 @@ public class GameControllerInput extends Activity implements InputManager.InputD
         }
     }
 
-    // Implementation of InputManager.InputDeviceListener.onInputDeviceRemoved()
+    /**
+     * Called whenever an input device has been removed from the system, part of the {@code InputDeviceListener}
+     * interface. We call our method {@code getInputDeviceState} to initialize {@code InputDeviceState state}
+     * with the {@code InputDeviceState} of the device ID of our parameter {@code deviceId}. If {@code state}
+     * is not null we log the string value of the {@code InputDevice} object for that device, then remove
+     * the entry for {@code deviceId} from our cache {@code SparseArray<InputDeviceState> mInputDeviceStates}.
+     *
+     * @param deviceId The id of the input device that was removed.
+     */
     @Override
     public void onInputDeviceRemoved(int deviceId) {
         InputDeviceState state = mInputDeviceStates.get(deviceId);
@@ -268,11 +347,43 @@ public class GameControllerInput extends Activity implements InputManager.InputD
      */
     @SuppressWarnings("WeakerAccess")
     private static class InputDeviceState {
+        /**
+         * The {@code InputDevice} that we were created for, set in our constructor.
+         */
         private final InputDevice mDevice;
+        /**
+         * Axis ID's if we are created for a SOURCE_CLASS_JOYSTICK (joystick).
+         */
         private final int[] mAxes;
+        /**
+         * Axis values reported to {@code onJoystickMotion} in the last received {@code MotionEvent}.
+         */
         private final float[] mAxisValues;
+        /**
+         * {@code SparseIntArray} holding the state of the keys of our device (1 for pressed, 0 for
+         * not pressed), indexed by the key code of the key events received (this is the physical key
+         * that was pressed, not the Unicode character).
+         */
         private final SparseIntArray mKeys;
 
+        /**
+         * Our constructor. First we save our parameter {@code InputDevice device} in our field
+         * {@code InputDevice mDevice}. We initialize our variable {@code int numAxes} to 0, and
+         * initialize {@code List<MotionRange> ranges} to the ranges for all axes supported by the
+         * device {@code device}. We loop over the {@code MotionRange range} in {@code ranges} (if
+         * any), and if {@code range} is from a SOURCE_CLASS_JOYSTICK input device (a joystick) we
+         * increment {@code numAxes}.
+         * <p>
+         * We next allocate {@code numAxes} entries for our fields {@code int[] mAxes} and
+         * {@code float[] mAxisValues}. We initialize our variable {@code int i} to 0, then once
+         * again loop over the {@code MotionRange range} in {@code ranges} (if any), and if
+         * {@code range} is from a SOURCE_CLASS_JOYSTICK input device (a joystick) we set
+         * {@code mAxes[i++]} to the axis ID of {@code range}.
+         * <p>
+         * Finally we initialize {@code SparseIntArray mKeys} with a new instance.
+         *
+         * @param device {@code InputDevice} we are created for.
+         */
         public InputDeviceState(InputDevice device) {
             mDevice = device;
 
@@ -296,6 +407,11 @@ public class GameControllerInput extends Activity implements InputManager.InputD
             mKeys = new SparseIntArray();
         }
 
+        /**
+         * Getter for our {@code InputDevice mDevice} field.
+         * 
+         * @return the value of our {@code InputDevice mDevice} field
+         */
         public InputDevice getDevice() {
             return mDevice;
         }
