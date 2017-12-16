@@ -409,43 +409,99 @@ public class GameControllerInput extends Activity implements InputManager.InputD
 
         /**
          * Getter for our {@code InputDevice mDevice} field.
-         * 
+         *
          * @return the value of our {@code InputDevice mDevice} field
          */
         public InputDevice getDevice() {
             return mDevice;
         }
 
+        /**
+         * Getter for the length of the {@code int[] mAxes} array (number of axis supported by the
+         * device).
+         *
+         * @return Number of axis supported by the device
+         */
         public int getAxisCount() {
             return mAxes.length;
         }
 
+        /**
+         * Getter for the Axis ID from the {@code int[] mAxes} array (the entry at index {@code axisIndex})
+         *
+         * @param axisIndex index for axis we are looking for
+         * @return Axis ID of axis at index {@code axisIndex} of our device
+         */
         public int getAxis(int axisIndex) {
             return mAxes[axisIndex];
         }
 
+        /**
+         * Getter for the current value of the axis at index {@code axisIndex} of our device.
+         *
+         * @param axisIndex index for axis we are looking for
+         * @return Current value of the axis at index {@code axisIndex} of our device
+         */
         public float getAxisValue(int axisIndex) {
             return mAxisValues[axisIndex];
         }
 
+        /**
+         * Getter for the number of key-value mappings in the {@code SparseIntArray mKeys} array.
+         *
+         * @return number of key-value mappings in the {@code SparseIntArray mKeys} array.
+         */
         public int getKeyCount() {
             return mKeys.size();
         }
 
+        /**
+         * Given an index in the range 0...size()-1, returns the keycode from the {@code int keyIndex}
+         * key-value mapping that {@code SparseIntArray mKeys} stores. We simply return the key that
+         * the {@code keyAt} method of {@code SparseIntArray mKeys} returns ({@code mKeys} stores the
+         * state of that keycode using the keycode as the key).
+         *
+         * @param keyIndex index (0...size()-1) of the key we are interested in
+         * @return keycode that is the key in the {@code SparseIntArray mKeys} array for index
+         * {@code keyIndex}
+         */
         public int getKeyCode(int keyIndex) {
             return mKeys.keyAt(keyIndex);
         }
 
+        /**
+         * Returns true if the key stored in the {@code int keyIndex} entry ((0...size()-1) of the
+         * {@code SparseIntArray mKeys} array) of {@code mKeys} is pressed, false otherwise. We
+         * simply return the result of checking whether the value returned by the {@code valueAt}
+         * method of {@code SparseIntArray mKeys} for {@code keyIndex} is not 0.
+         *
+         * @param keyIndex index (0...size()-1) of the key we are interested in
+         * @return true if the key is pressed, false if it is not.
+         */
         public boolean isKeyPressed(int keyIndex) {
             return mKeys.valueAt(keyIndex) != 0;
         }
 
+        /**
+         * Called by our {@code dispatchKeyEvent} override to determine if the keycode which generated
+         * the {@code KeyEvent} it received is one that our game is interested in, and also to record
+         * the state of that key in our {@code SparseIntArray mKeys} array if it is one. We first fetch
+         * the keycode from the {@code KeyEvent} to initialize our variable {@code int keyCode}. If our
+         * {@code isGameKey} method determines that it is a key our game is interested in we do some
+         * more processing (if not, we return false to the caller). If the repeat count of our parameter
+         * {@code KeyEvent event} is 0, we put the value 1 into the {@code mKeys} array under the key
+         * {@code keyCode}, set {@code String symbolicName} to the symbolic name of the keycode, log
+         * a message about the "Key Down" occurrence, and in both cases return true to the caller.
+         *
+         * @param event {@code KeyEvent} received by our {@code dispatchKeyEvent} override.
+         * @return true if the keycode is one our game is interested in, false if not.
+         */
         public boolean onKeyDown(KeyEvent event) {
             final int keyCode = event.getKeyCode();
             if (isGameKey(keyCode)) {
                 if (event.getRepeatCount() == 0) {
-                    final String symbolicName = KeyEvent.keyCodeToString(keyCode);
                     mKeys.put(keyCode, 1);
+                    final String symbolicName = KeyEvent.keyCodeToString(keyCode);
                     Log.i(TAG, mDevice.getName() + " - Key Down: " + symbolicName);
                 }
                 return true;
@@ -453,13 +509,30 @@ public class GameControllerInput extends Activity implements InputManager.InputD
             return false;
         }
 
+        /**
+         * Called by our {@code dispatchKeyEvent} override to determine if the keycode which generated
+         * the {@code KeyEvent} it received is one that our game is interested in, and also to record
+         * the state of that key in our {@code SparseIntArray mKeys} array if it is one. We first fetch
+         * the keycode from the {@code KeyEvent} to initialize our variable {@code int keyCode}. If our
+         * {@code isGameKey} method determines that it is a key our game is interested in we do some
+         * more processing (if not, we return false to the caller). We first make sure the keycode is
+         * already in our {@code SparseIntArray mKeys} array by calling the {@code indexOfKey} method
+         * of {@code mKeys}, and if the result is less that 0 it is not in the array, so we do not
+         * record of log its state. If it is already in the array (a key down event has previously
+         * occurred), we put the value 0 into the {@code mKeys} array under the key {@code keyCode},
+         * set {@code String symbolicName} to the symbolic name of the keycode, log a message about
+         * the "Key Up" occurrence, and in both cases return true to the caller.
+         *
+         * @param event {@code KeyEvent} received by our {@code dispatchKeyEvent} override.
+         * @return true if the keycode is one our game is interested in, false if not.
+         */
         public boolean onKeyUp(KeyEvent event) {
             final int keyCode = event.getKeyCode();
             if (isGameKey(keyCode)) {
                 int index = mKeys.indexOfKey(keyCode);
                 if (index >= 0) {
-                    final String symbolicName = KeyEvent.keyCodeToString(keyCode);
                     mKeys.put(keyCode, 0);
+                    final String symbolicName = KeyEvent.keyCodeToString(keyCode);
                     Log.i(TAG, mDevice.getName() + " - Key Up: " + symbolicName);
                 }
                 return true;
@@ -467,6 +540,27 @@ public class GameControllerInput extends Activity implements InputManager.InputD
             return false;
         }
 
+        /**
+         * Called by our {@code dispatchGenericMotionEvent} override to record and log the contents
+         * of the {@code MotionEvent} it received. First we create {@code StringBuilder message} and
+         * append a string consisting of the name of the device we are following with the string
+         * "Joystick Motion" appended to it. We initialize {@code int historySize} with the the number
+         * of historical points in  {@code MotionEvent event}. Then we loop over {@code int i} of all
+         * the axis in our {@code int[] mAxes} array, setting {@code int axis} to the axis identifier
+         * contained in {@code mAxes[i]}, and {@code float value} to the value of that axis contained
+         * in the {@code MotionEvent event}. We then save this value in our {@code mAxisValues[i]}
+         * array, and append a string consisting of the symbolic name of the axis followed by a ":"
+         * to {@code StringBuilder message}. We now loop through all the historical axis values for
+         * that axis appending all the values for it separated by a "," to {@code StringBuilder message}.
+         * Finally we append the value {@code value} and a "\n" to {@code message} and loop back for the
+         * next axis.
+         * <p>
+         * When done with all the axis we log the string value {@code message} under our tag {@code TAG},
+         * and return true to the caller.
+         *
+         * @param event {@code MotionEvent} received by our {@code dispatchGenericMotionEvent} override
+         * @return always returns true.
+         */
         public boolean onJoystickMotion(MotionEvent event) {
             StringBuilder message = new StringBuilder();
             message.append(mDevice.getName()).append(" - Joystick Motion:\n");
@@ -492,9 +586,15 @@ public class GameControllerInput extends Activity implements InputManager.InputD
             return true;
         }
 
-        // Check whether this is a key we care about.
-        // In a real game, we would probably let the user configure which keys to use
-        // instead of hardcoding the keys like this.
+        /**
+         * Check whether this is a key we care about. We switch on {@code int keyCode} returning true
+         * if the key is one of KEYCODE_DPAD_UP, KEYCODE_DPAD_DOWN, KEYCODE_DPAD_LEFT, KEYCODE_DPAD_RIGHT,
+         * KEYCODE_DPAD_CENTER, or KEYCODE_SPACE. Otherwise we return the result of calling the
+         * {@code KeyEvent.isGamepadButton} method for {@code keyCode} to the caller.
+         *
+         * @param keyCode keycode we are to check for
+         * @return true if {@code keyCode} is one of the six keycodes we are interested in, false if not.
+         */
         private static boolean isGameKey(int keyCode) {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_DPAD_UP:
