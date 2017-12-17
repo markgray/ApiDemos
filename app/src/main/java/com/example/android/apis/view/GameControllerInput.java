@@ -615,25 +615,94 @@ public class GameControllerInput extends Activity implements InputManager.InputD
      */
     @SuppressWarnings("WeakerAccess")
     private static class SummaryAdapter extends BaseAdapter {
+        /**
+         * Base of the row ID's used for the headings for device (0), axes (1), and keys (2)
+         */
         private static final int BASE_ID_HEADING = 1 << 10;
+        /**
+         * Base of the row ID used for the device name {@code TextColumn} item
+         */
         private static final int BASE_ID_DEVICE_ITEM = 2 << 10;
+        /**
+         * Base of the row ID used for the individual axes items
+         */
         private static final int BASE_ID_AXIS_ITEM = 3 << 10;
+        /**
+         * Base of the row ID used for the "keys" items (the keycode is or'ed with it)
+         */
         private static final int BASE_ID_KEY_ITEM = 4 << 10;
 
+        /**
+         * {@code Context} to use toast a message, this when constructed in the {@code onCreate}
+         * method of the {@code GameControllerInput} activity.
+         */
         private final Context mContext;
+        /**
+         * {@code Resources} instance to use to access resources, the value returned by the
+         * {@code getResources} method when constructed in the {@code onCreate} method of the
+         * {@code GameControllerInput} activity.
+         */
         private final Resources mResources;
 
+        /**
+         * {@code SparseArray} used to hold both axes, and keycode {@code Item} objects, indexed by
+         * BASE_ID_AXIS_ITEM or'ed with the axis ID for axes, and indexed by BASE_ID_KEY_ITEM or'ed
+         * with the keyCode for keys.
+         */
         private final SparseArray<Item> mDataItems = new SparseArray<>();
+        /**
+         * The list shown in our {@code ListView} after our method {@code show} is called after our
+         * callbacks receive either a {@code KeyEvent} or {@code MotionEvent} we are interested in.
+         * It is built from the {@code InputDeviceState} for the device that received the event.
+         */
         private final ArrayList<Item> mVisibleItems = new ArrayList<>();
 
+        /**
+         * {@code Heading} for the device heading row (the string "Input Device" will be written to
+         * its {@code TextView} when the {@code Heading.initView} method is called.
+         */
         private final Heading mDeviceHeading;
+        /**
+         * {@code TextColumn} for the device name row, consists of two {@code TextView} views, one
+         * with the string "Name", and the other set to the name of the device whose event we are
+         * displaying.
+         */
         private final TextColumn mDeviceNameTextColumn;
 
+        /**
+         * {@code Heading} for the axes heading row (the string "Axes" will be written to its
+         * {@code TextView} when the {@code Heading.initView} method is called.
+         */
         private final Heading mAxesHeading;
+        /**
+         * {@code Heading} for the keys heading row (the string "Keys and Buttons" will be written
+         * to its {@code TextView} when the {@code Heading.initView} method is called).
+         */
         private final Heading mKeysHeading;
 
+        /**
+         * {@code InputDeviceState} we are currently displaying, it is passed to our {@code show}
+         * method when a new event we are interested in is received by our callbacks.
+         */
         private InputDeviceState mState;
 
+        /**
+         * Our constructor. First we save our parameters {@code Context context} in our field
+         * {@code Context mContext}, and {@code Resources resources} in our field
+         * {@code Resources mResources}. We initialize our field {@code Heading mDeviceHeading} with
+         * a new instance using the row ID BASE_ID_HEADING or'ed with 0 (1024) and the string
+         * R.string.game_controller_input_label_device_name ("Input Device"). We initialize our field
+         * {@code TextColumn mDeviceNameTextColumn} with a new instance using the row ID BASE_ID_DEVICE_ITEM
+         * or'ed with 0 (2048), and the string R.string.game_controller_input_label_device_name ("Name").
+         * We initialize our field {@code Heading mAxesHeading} with a new instance using the row ID
+         * BASE_ID_HEADING or'ed with 1 (1025) and the string R.string.game_controller_input_heading_axes
+         * ("Axes"). We initialize our field {@code Heading mKeysHeading} with a new instance using the row ID
+         * BASE_ID_HEADING or'ed with 2 (1026) and the string R.string.game_controller_input_heading_keys
+         * ("Keys and Buttons")
+         *
+         * @param context   {@code Context} to use to toast messages
+         * @param resources {@code Resources} instance to use to access resources.
+         */
         @SuppressWarnings("PointlessBitwiseExpression")
         public SummaryAdapter(Context context, Resources resources) {
             mContext = context;
@@ -650,6 +719,14 @@ public class GameControllerInput extends Activity implements InputManager.InputD
                     mResources.getString(R.string.game_controller_input_heading_keys));
         }
 
+        /**
+         * Called from the {@code OnItemClickListener} of {@code ListView mSummaryList} (our
+         * {@code ListView}). If our field {@code InputDeviceState mState} is not null we toast a
+         * message which displays the string value of the {@code InputDevice mDevice} field in
+         * {@code mState}.
+         *
+         * @param position position in our {@code ListView} that was clicked UNUSED
+         */
         @SuppressWarnings("UnusedParameters")
         public void onItemClick(int position) {
             if (mState != null) {
@@ -658,6 +735,14 @@ public class GameControllerInput extends Activity implements InputManager.InputD
             }
         }
 
+        /**
+         * Called from our {@code dispatchKeyEvent} and {@code dispatchGenericMotionEvent} to display
+         * the {@code InputDeviceState} of the device which just received a {@code KeyEvent} or a
+         * {@code MotionEvent} that we are interested in.
+         *
+         * @param state {@code InputDeviceState} of the device which just received an event we are
+         *              interested in.
+         */
         public void show(InputDeviceState state) {
             mState = state;
             mVisibleItems.clear();
@@ -717,6 +802,12 @@ public class GameControllerInput extends Activity implements InputManager.InputD
             return mVisibleItems.get(position);
         }
 
+        /**
+         * Get the row id associated with the specified position in the list.
+         *
+         * @param position The position of the item within the adapter's data set whose row id we want.
+         * @return The id of the item at the specified position.
+         */
         @Override
         public long getItemId(int position) {
             return getItem(position).getItemId();
