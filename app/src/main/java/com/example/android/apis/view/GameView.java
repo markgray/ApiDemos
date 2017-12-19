@@ -16,13 +16,12 @@
 
 package com.example.android.apis.view;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Paint.Style;
+import android.graphics.Path;
 import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -53,42 +52,132 @@ public class GameView extends View {
      * Length of delay between running of our animation runnable background thread.
      */
     private final long ANIMATION_TIME_STEP = 1000 / 60;
+    /**
+     * Maximum number of obstacles to have in existence at any given time.
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private final int MAX_OBSTACLES = 12;
 
+    /**
+     * {@code Random} instance we use to generate random numbers whenever needed.
+     */
     private final Random mRandom;
+    /**
+     * {@code Ship} instance that we control with our non-existent game controller.
+     */
     private Ship mShip;
+    /**
+     * List of {@code Bullet} objects that are currently in flight.
+     */
     private final List<Bullet> mBullets;
+    /**
+     * List of {@code Obstacle} objects that are currently in existence.
+     */
     private final List<Obstacle> mObstacles;
 
+    /**
+     * Milliseconds since boot of the previous time that our method {@code step} was called to advance
+     * the animation of the game.
+     */
     private long mLastStepTime;
+    /**
+     * Set to the device of the last {@code MotionEvent} received by our {@code onGenericMotionEvent}
+     * callback if it is a SOURCE_CLASS_JOYSTICK device, and used to move our spaceship.
+     */
     private InputDevice mLastInputDevice;
 
+    /**
+     * Bit in our field {@code int mDPadState} we use to indicate that the KEYCODE_DPAD_LEFT key is
+     * currently pressed.
+     */
     private static final int DPAD_STATE_LEFT = 1 << 0;
+    /**
+     * Bit in our field {@code int mDPadState} we use to indicate that the KEYCODE_DPAD_RIGHT key is
+     * currently pressed.
+     */
     private static final int DPAD_STATE_RIGHT = 1 << 1;
+    /**
+     * Bit in our field {@code int mDPadState} we use to indicate that the KEYCODE_DPAD_UP key is
+     * currently pressed.
+     */
     private static final int DPAD_STATE_UP = 1 << 2;
+    /**
+     * Bit in our field {@code int mDPadState} we use to indicate that the KEYCODE_DPAD_DOWN key is
+     * currently pressed.
+     */
     private static final int DPAD_STATE_DOWN = 1 << 3;
 
+    /**
+     * Contains bit fields to indicate which of our dpad keys are currently pressed: KEYCODE_DPAD_LEFT,
+     * KEYCODE_DPAD_RIGHT, KEYCODE_DPAD_UP, and/or KEYCODE_DPAD_DOWN.
+     */
     private int mDPadState;
 
+    /**
+     * Size of the spaceship in pixels given the logical density of the display.
+     */
     private float mShipSize;
+    /**
+     * Speed that the ship can accelerate in pixels given the logical density of the display.
+     */
     private float mMaxShipThrust;
+    /**
+     * Maximum speed that the ship can reach in pixels given the logical density of the display.
+     */
     private float mMaxShipSpeed;
 
+    /**
+     * Size of the a bullet in pixels given the logical density of the display.
+     */
     private float mBulletSize;
+    /**
+     * Speed of a bullet in pixels given the logical density of the display.
+     */
     private float mBulletSpeed;
 
+    /**
+     * Minimum size of an obstacle in pixels given the logical density of the display.
+     */
     private float mMinObstacleSize;
+    /**
+     * Maximum size of an obstacle in pixels given the logical density of the display.
+     */
     private float mMaxObstacleSize;
+    /**
+     * Minimum speed of an obstacle in pixels given the logical density of the display.
+     */
     private float mMinObstacleSpeed;
+    /**
+     * Maximum speed of an obstacle in pixels given the logical density of the display.
+     */
     private float mMaxObstacleSpeed;
 
+    /**
+     * Background thread that runs every ANIMATION_TIME_STEP milliseconds to animate the next frame
+     * of our game.
+     */
     private final Runnable mAnimationRunnable = new Runnable() {
+        /**
+         * Our handler calls this every ANIMATION_TIME_STEP milliseconds to animate our next frame.
+         * We simply call our method {@code animateFrame}.
+         */
+        @Override
         public void run() {
             animateFrame();
         }
     };
 
+    /**
+     * Constructor that is called when inflating a view from XML. First we call our super's constructor,
+     * and allocate new instances for our fields {@code Random mRandom}, {@code List<Bullet> mBullets},
+     * and {@code List<Obstacle> mObstacles}. We enable our view to receive focus, and to receive
+     * focus in touch mode. We initialize {@code float baseSize} to 5.0 times the logical density of
+     * our display, and {@code float baseSpeed} to be 3.0 times {@code baseSize}.
+     *
+     * @param context The Context the view is running in, through which it can access the current
+     *                theme, resources, etc.
+     * @param attrs   The attributes of the XML tag that is inflating the view.
+     */
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -699,13 +788,13 @@ public class GameView extends View {
             return true;
         }
 
-        @SuppressLint("WrongConstant")
+        @Override
         public void draw(Canvas canvas) {
             setPaintARGBBlend(mPaint, mDestroyAnimProgress,
                     255, 63, 255, 63,
                     0, 255, 0, 0);
 
-            canvas.save(Canvas.MATRIX_SAVE_FLAG);
+            canvas.save();
             canvas.translate(mPositionX, mPositionY);
             canvas.rotate(mHeadingAngle * TO_DEGREES);
             canvas.drawPath(mPath, mPaint);
