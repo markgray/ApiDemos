@@ -172,7 +172,13 @@ public class GameView extends View {
      * and allocate new instances for our fields {@code Random mRandom}, {@code List<Bullet> mBullets},
      * and {@code List<Obstacle> mObstacles}. We enable our view to receive focus, and to receive
      * focus in touch mode. We initialize {@code float baseSize} to 5.0 times the logical density of
-     * our display, and {@code float baseSpeed} to be 3.0 times {@code baseSize}.
+     * our display, and {@code float baseSpeed} to be 3.0 times {@code baseSize}. We initialize our
+     * field {@code mShipSize} to be 3.0 times {@code baseSize}, {@code mMaxShipThrust} to be 0.25
+     * times {@code baseSpeed}, and {@code mMaxShipSpeed} to be 12 times {@code baseSpeed}. We initialize
+     * {@code mBulletSize} to be {@code baseSize}, and {@code mBulletSpeed} to be 12 times {@code baseSpeed}.
+     * We initialize {@code mMinObstacleSize} to be 2 times {@code baseSize}, {@code mMaxObstacleSize}
+     * to be 12 times {@code baseSize}, {@code mMinObstacleSpeed} to be {@code baseSpeed}, and
+     * {@code mMaxObstacleSpeed} to be 3 times {@code baseSpeed}.
      *
      * @param context The Context the view is running in, through which it can access the current
      *                theme, resources, etc.
@@ -204,6 +210,16 @@ public class GameView extends View {
         mMaxObstacleSpeed = baseSpeed * 3;
     }
 
+    /**
+     * This is called during layout when the size of this view has changed. First we call our super's
+     * implementation of {@code onSizeChanged}, then we call our method {@code reset} to reset the
+     * game.
+     *
+     * @param w    Current width of this view.
+     * @param h    Current height of this view.
+     * @param oldw Old width of this view.
+     * @param oldh Old height of this view.
+     */
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -212,6 +228,47 @@ public class GameView extends View {
         reset();
     }
 
+    /**
+     * Callback for a key being pressed. First we call our method {@code ensureInitialized} to make
+     * sure we have a spaceship to play with. Then we initialize our variable {@code handled} to
+     * false. Then if the {@code getRepeatCount} method of our parameter {@code KeyEvent event} returns
+     * 0 (we only want to handle the keys on initial down but not on auto-repeat), we switch on the
+     * value of {@code keyCode}:
+     * <ul>
+     * <li>
+     * KEYCODE_DPAD_LEFT - we call the {@code setHeadingX} method of our field {@code Ship mShip}
+     * with a value of -1, set the DPAD_STATE_LEFT bit in {@code mDPadState}, set {@code handled}
+     * to true, and break.
+     * </li>
+     * <li>
+     * KEYCODE_DPAD_RIGHT - we call the {@code setHeadingX} method of our field {@code Ship mShip}
+     * with a value of 1, set the DPAD_STATE_RIGHT bit in {@code mDPadState}, set {@code handled}
+     * to true, and break.
+     * </li>
+     * <li>
+     * KEYCODE_DPAD_UP - we call the {@code setHeadingY} method of our field {@code Ship mShip}
+     * with a value of -1, set the DPAD_STATE_UP bit in {@code mDPadState}, set {@code handled}
+     * to true, and break.
+     * </li>
+     * <li>
+     * KEYCODE_DPAD_DOWN - we call the {@code setHeadingY} method of our field {@code Ship mShip}
+     * with a value of 1, set the DPAD_STATE_DOWN bit in {@code mDPadState}, set {@code handled}
+     * to true, and break.
+     * </li>
+     * <li>
+     * default - if our {@code isFireKey} method returns true for {@code keyCode}, we call our
+     * method {@code fire}, set {@code handled} to true, and break.
+     * </li>
+     * </ul>
+     * Having handled the keys we are interested in, we check if {@code handled} is true, and if so
+     * we call our method {@code step} with the time that the {@code KeyEvent event} occurred, and
+     * return true to our caller. Otherwise we return the value returned by our super's implementation
+     * of {@code onKeyDown}.
+     *
+     * @param keyCode A key code that represents the button pressed
+     * @param event   The KeyEvent object that defines the button action.
+     * @return true if we handled the event, false otherwise.
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         ensureInitialized();
@@ -255,6 +312,45 @@ public class GameView extends View {
         return super.onKeyDown(keyCode, event);
     }
 
+    /**
+     * Called when a key is released. First we call our method {@code ensureInitialized} to make
+     * sure we have a spaceship to play with. Then we initialize our variable {@code handled} to
+     * false, and we switch on the value of {@code keyCode}:
+     * <ul>
+     * <li>
+     * KEYCODE_DPAD_LEFT - we call the {@code setHeadingX} method of our field {@code Ship mShip}
+     * with a value of 0, clear the DPAD_STATE_LEFT bit in {@code mDPadState}, set {@code handled}
+     * to true, and break.
+     * </li>
+     * <li>
+     * KEYCODE_DPAD_RIGHT - we call the {@code setHeadingX} method of our field {@code Ship mShip}
+     * with a value of 0, clear the DPAD_STATE_RIGHT bit in {@code mDPadState}, set {@code handled}
+     * to true, and break.
+     * </li>
+     * <li>
+     * KEYCODE_DPAD_UP - we call the {@code setHeadingY} method of our field {@code Ship mShip}
+     * with a value of 0, clear the DPAD_STATE_UP bit in {@code mDPadState}, set {@code handled}
+     * to true, and break.
+     * </li>
+     * <li>
+     * KEYCODE_DPAD_DOWN - we call the {@code setHeadingY} method of our field {@code Ship mShip}
+     * with a value of 0, clear the DPAD_STATE_DOWN bit in {@code mDPadState}, set {@code handled}
+     * to true, and break.
+     * </li>
+     * <li>
+     * default - the our method {@code isFireKey} returns true for {@code keyCode} we set {@code handled}
+     * to true and break.
+     * </li>
+     * </ul>
+     * If {@code handled} is now true, we call our method {@code step} with the time that the
+     * {@code KeyEvent event} occurred, and return true to our caller. Otherwise we return the value
+     * returned by our super's implementation of {@code onKeyDown}.
+     *
+     * @param keyCode A key code that represents the button pressed, from
+     *                {@link android.view.KeyEvent}.
+     * @param event   The KeyEvent object that defines the button action.
+     * @return true if we handled the event.
+     */
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         ensureInitialized();
@@ -295,12 +391,34 @@ public class GameView extends View {
         return super.onKeyUp(keyCode, event);
     }
 
+    /**
+     * Convenience function to check whether our parameter {@code keyCode} is either a gamepad button,
+     * KEYCODE_DPAD_CENTER, or KEYCODE_SPACE (in which case we return true).
+     *
+     * @param keyCode keycode we are to check to see if it is a "fire" key
+     * @return true if {@code keyCode} is a "fire" key, false if not.
+     */
     private static boolean isFireKey(int keyCode) {
         return KeyEvent.isGamepadButton(keyCode)
                 || keyCode == KeyEvent.KEYCODE_DPAD_CENTER
                 || keyCode == KeyEvent.KEYCODE_SPACE;
     }
 
+    /**
+     * We implement this method to handle generic motion events. First we call our method
+     * {@code ensureInitialized} to make sure we have a spaceship to play with. Then if the
+     * {@code MotionEvent event} is from the source SOURCE_CLASS_JOYSTICK (a joystick), and the
+     * action of {@code event} is ACTION_MOVE it is an {@code MotionEvent} we may be interested in
+     * so we do some more processing. If {@code mLastInputDevice} is null or it does not have the
+     * same input device ID as the {@code MotionEvent event} we set {@code mLastInputDevice} to the
+     * {@code InputDevice} of {@code event} (if that is still null we return false to the caller
+     * as the {@code MotionEvent event} is obviously invalid). We make sure that none of our DPAD
+     * keys are pressed by checking the value of {@code mDPadState}, and if any are set we ignore
+     * the joystick by returning true to the caller.
+     *
+     * @param event The generic motion event being processed.
+     * @return True if the event was handled, false otherwise.
+     */
     @Override
     public boolean onGenericMotionEvent(MotionEvent event) {
         ensureInitialized();
