@@ -415,6 +415,18 @@ public class GameView extends View {
      * as the {@code MotionEvent event} is obviously invalid). We make sure that none of our DPAD
      * keys are pressed by checking the value of {@code mDPadState}, and if any are set we ignore
      * the joystick by returning true to the caller.
+     * <p>
+     * Now we are ready to process all historical movement samples in the batch. First we initialize
+     * our variable {@code int historySize} with the number of historical points in {@code event},
+     * then we loop over {@code i} for all these points calling our method {@code processJoystickInput}
+     * with {@code event} and {@code i} (this method will determine an X and Y value for that movement,
+     * change the heading of our spaceship appropriately and call our method {@code step} to advance
+     * the animation to the time that that sample occurred). When done with the historical samples,
+     * we call {@code processJoystickInput} again with -1 as the sample number to process the current
+     * movement sample in the batch and return true to the caller.
+     * <p>
+     * If the {@code MotionEvent event} is not from a joystick we return the value returned by our
+     * super's implementation of {@code onGenericMotionEvent}.
      *
      * @param event The generic motion event being processed.
      * @return True if the event was handled, false otherwise.
@@ -457,6 +469,32 @@ public class GameView extends View {
         return super.onGenericMotionEvent(event);
     }
 
+    /**
+     * Called by our {@code onGenericMotionEvent} callback to process the {@code MotionEvent} it
+     * received from a joystick. We first try to set our variable {@code float x} by calling our
+     * method {@code getCenteredAxis} to retrieve the AXIS_X axis from the {@code historyPos} sample
+     * in {@code event} (we also pass it {@code mLastInputDevice} so it can determine the range of
+     * the device). If that returns 0, we try to get the AXIS_HAT_X axis, and if that returns 0 also
+     * we try to get the AXIS_Z axis.
+     * <p>
+     * Next we try to set our variable {@code float y} by calling our method {@code getCenteredAxis}
+     * to retrieve the AXIS_Y axis from the {@code historyPos} sample in {@code event} (we also pass
+     * it {@code mLastInputDevice} so it can determine the range of the device). If that returns 0,
+     * we try to get the AXIS_HAT_Y axis, and if that returns 0 also we try to get the AXIS_RZ axis.
+     * <p>
+     * We have to try the extra axes because many game pads with two joysticks report the position
+     * of the second joystick using the other axis types.
+     * <p>
+     * Once we have extracted the (x,y) coordinates from {@code event} we call the {@code setHeading}
+     * method of {@code Ship mShip} to change its heading, and call our {@code step} method to advance
+     * the animation, using the time the event occurred if {@code historyPos} is less than 0, or the
+     * time that the historical movement {@code historyPos} occurred between this event and the previous
+     * event if greater or equal to zero.
+     *
+     * @param event      {@code MotionEvent} that we received in our {@code onGenericMotionEvent} callback.
+     * @param historyPos number of the historical movement sample in the batch (-1 for the current
+     *                   movement).
+     */
     private void processJoystickInput(MotionEvent event, int historyPos) {
         // Get joystick position.
         // Many game pads with two joysticks report the position of the second joystick
@@ -483,8 +521,26 @@ public class GameView extends View {
         step(historyPos < 0 ? event.getEventTime() : event.getHistoricalEventTime(historyPos));
     }
 
-    private static float getCenteredAxis(MotionEvent event, InputDevice device,
-                                         int axis, int historyPos) {
+    /**
+     * Returns the value of the requested joystick axis from the {@code MotionEvent} passed it. First
+     * we initialize our variable {@code InputDevice.MotionRange range} by calling the {@code getMotionRange}
+     * method of {@code InputDevice device} for the {@code axis} we are interested in and the source
+     * of {@code event}. If that is not null, we initialize our variable {@code float flat} with the
+     * extent of the center flat position with respect to this axis. If {@code historyPos} is less than
+     * 0 we initialize our variable {@code float value} with the value of the requested axis for the
+     * for the current movement, otherwise we initialize it to the value of the requested axis for the
+     * historical movement {@code historyPos}. If the absolute value of {@code value} is greater than
+     * than the {@code flat} range we return {@code value} to the caller, otherwise we return 0.
+     *
+     * @param event joystick {@code MotionEvent} received by our {@code onGenericMotionEvent} callback.
+     * @param device {@code InputDevice} of the device which sent us the event.
+     * @param axis joystick axis we are interested in.
+     * @param historyPos number of the historical movement sample in the batch (-1 for the current
+     *                   movement).
+     * @return value of the requested axis for the event or historical event we are interested in
+     * (or 0 if the value is within the "flat" range of the device).
+     */
+    private static float getCenteredAxis(MotionEvent event, InputDevice device, int axis, int historyPos) {
         final InputDevice.MotionRange range = device.getMotionRange(axis, event.getSource());
         if (range != null) {
             final float flat = range.getFlat();
@@ -500,6 +556,24 @@ public class GameView extends View {
         return 0;
     }
 
+    /**
+     * Called when the window containing this view gains or loses focus. If our parameter {@code hasWindowFocus}
+     * is true, we get a handler associated with the thread running this View (This handler can be used to pump
+     * events in the UI events queue) and add our {@code Runnable mAnimationRunnable} to its message queue
+     * with a delay of ANIMATION_TIME_STEP (16). We then set {@code mLastStepTime} to the current milliseconds
+     * since boot.
+     *
+     * If {@code hasWindowFocus} is false, we remove all scheduled {@code Runnable mAnimationRunnable} from
+     * the handler associated with the thread running this View, set {@code mDPadState} (no keys pressed),
+     * and if {@code Ship mShip} is not null we call its {@code setHeading} method to set its heading to
+     * (0,0) and its {@code setVelocity} method to set its velocity to (0,0).
+     *
+     * Finally we return the value returned by our super's implementation of {@code onWindowFocusChanged} to
+     * our caller.
+     *
+     * @param hasWindowFocus True if the window containing this view now has
+     *        focus, false otherwise.
+     */
     @Override
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         // Turn on and off animations based on the window focus.
@@ -521,6 +595,9 @@ public class GameView extends View {
         super.onWindowFocusChanged(hasWindowFocus);
     }
 
+    /**
+     * Called to have the spaceship fire its gun.
+     */
     private void fire() {
         if (mShip != null && !mShip.isDestroyed()) {
             Bullet bullet = new Bullet();
