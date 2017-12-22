@@ -532,9 +532,9 @@ public class GameView extends View {
      * historical movement {@code historyPos}. If the absolute value of {@code value} is greater than
      * than the {@code flat} range we return {@code value} to the caller, otherwise we return 0.
      *
-     * @param event joystick {@code MotionEvent} received by our {@code onGenericMotionEvent} callback.
-     * @param device {@code InputDevice} of the device which sent us the event.
-     * @param axis joystick axis we are interested in.
+     * @param event      joystick {@code MotionEvent} received by our {@code onGenericMotionEvent} callback.
+     * @param device     {@code InputDevice} of the device which sent us the event.
+     * @param axis       joystick axis we are interested in.
      * @param historyPos number of the historical movement sample in the batch (-1 for the current
      *                   movement).
      * @return value of the requested axis for the event or historical event we are interested in
@@ -562,17 +562,17 @@ public class GameView extends View {
      * events in the UI events queue) and add our {@code Runnable mAnimationRunnable} to its message queue
      * with a delay of ANIMATION_TIME_STEP (16). We then set {@code mLastStepTime} to the current milliseconds
      * since boot.
-     *
+     * <p>
      * If {@code hasWindowFocus} is false, we remove all scheduled {@code Runnable mAnimationRunnable} from
      * the handler associated with the thread running this View, set {@code mDPadState} (no keys pressed),
      * and if {@code Ship mShip} is not null we call its {@code setHeading} method to set its heading to
      * (0,0) and its {@code setVelocity} method to set its velocity to (0,0).
-     *
+     * <p>
      * Finally we return the value returned by our super's implementation of {@code onWindowFocusChanged} to
      * our caller.
      *
      * @param hasWindowFocus True if the window containing this view now has
-     *        focus, false otherwise.
+     *                       focus, false otherwise.
      */
     @Override
     public void onWindowFocusChanged(boolean hasWindowFocus) {
@@ -596,36 +596,71 @@ public class GameView extends View {
     }
 
     /**
-     * Called to have the spaceship fire its gun.
+     * Called to have the spaceship fire its gun. First we make sure that {@code Ship mShip} is not
+     * null, and that its {@code isDestroyed} method returns false, returning having done nothing if
+     * we no longer have a spaceship. If we are still alive we initialize {@code Bullet bullet} with
+     * a new instance, call its {@code setPosition} method to set its initial position to the initial
+     * position to the position {@code mShip} dictates for a bullet by its {@code getBulletInitialX}
+     * and {@code getBulletInitialY} methods, and call its {@code setVelocity} method to set its
+     * velocity to the bullet velocity that {@code mShip} dictates for a bullet using its
+     * {@code getBulletVelocityX} and {@code getBulletVelocityY} methods. We then add {@code bullet}
+     * to our list of bullets in {@code List<Bullet> mBullets}. Finally we get the vibrator service
+     * associated with the device {@code InputDevice mLastInputDevice} and ask it to vibrate for 20
+     * milliseconds.
      */
     private void fire() {
         if (mShip != null && !mShip.isDestroyed()) {
             Bullet bullet = new Bullet();
             bullet.setPosition(mShip.getBulletInitialX(), mShip.getBulletInitialY());
-            bullet.setVelocity(mShip.getBulletVelocityX(mBulletSpeed),
-                    mShip.getBulletVelocityY(mBulletSpeed));
+            bullet.setVelocity(mShip.getBulletVelocityX(mBulletSpeed), mShip.getBulletVelocityY(mBulletSpeed));
             mBullets.add(bullet);
 
             getVibrator().vibrate(20);
         }
     }
 
+    /**
+     * Convenience function to call {@code reset} if {@code Ship mShip} is null.
+     */
     private void ensureInitialized() {
         if (mShip == null) {
             reset();
         }
     }
 
+    /**
+     * Called when an obstacle hits our {@code Ship mShip} in our {@code step} method. We simply get
+     * the vibrator service associated with the device {@code InputDevice mLastInputDevice} and ask
+     * it to vibrate for a series of pulses to simulate a "crash" of our spaceship.
+     */
     private void crash() {
         getVibrator().vibrate(new long[]{0, 20, 20, 40, 40, 80, 40, 300}, -1);
     }
 
+    /**
+     * Resets the game to the starting conditions. First we create a new instance for {@code Ship mShip},
+     * then we clear our list of bullets in {@code List<Bullet> mBullets} and our list of obstacles
+     * in {@code List<Obstacle> mObstacles}.
+     */
     private void reset() {
         mShip = new Ship();
         mBullets.clear();
         mObstacles.clear();
     }
 
+    /**
+     * Gets a {@code Vibrator} instance to use for some buzzing, either the vibrator associated with
+     * the current input device or the system level vibrator if the device lacks a vibrator. First we
+     * check that {@code mLastInputDevice} is not null, and if it is not we initialize our variable
+     * {@code Vibrator vibrator} by calling the {@code getVibrator} method of {@code mLastInputDevice}.
+     * If the {@code hasVibrator} method of {@code vibrator} returns true we return {@code vibrator}
+     * to the caller.
+     * <p>
+     * Otherwise we return a {@code Vibrator} from the system level service VIBRATOR_SERVICE.
+     *
+     * @return vibrator service associated with the device {@code InputDevice mLastInputDevice} or
+     * a {@code Vibrator} from the system level service VIBRATOR_SERVICE if the device lacks one.
+     */
     private Vibrator getVibrator() {
         if (mLastInputDevice != null) {
             Vibrator vibrator = mLastInputDevice.getVibrator();
@@ -636,6 +671,16 @@ public class GameView extends View {
         return (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
     }
 
+    /**
+     * Called from the {@code run} method of {@code Runnable mAnimationRunnable} to animate the next
+     * frame of our game. First we initialize our variable {@code long currentStepTime} with the time
+     * since boot in milliseconds. We then call our method {@code step} with {@code currentStepTime}
+     * as the argument to move all the {@code Sprite} objects in our game to the new time. We initialize
+     * {@code Handler handler} with a handler associated with the thread running our View and if it is
+     * not null, we add {@code mAnimationRunnable} to its message queue to be run ANIMATION_TIME_STEP
+     * (16) milliseconds from {@code currentStepTime}, and invalidate our view so the new {@code Sprite}
+     * locations will eventually be drawn.
+     */
     void animateFrame() {
         long currentStepTime = SystemClock.uptimeMillis();
         step(currentStepTime);
@@ -647,6 +692,45 @@ public class GameView extends View {
         }
     }
 
+    /**
+     * Moves all the {@code Sprite} objects in our game to the new time {@code long currentStepTime},
+     * and removes any that are destroyed when that is done. First we calculate {@code float tau},
+     * the number of seconds between {@code mLastStepTime} and {@code currentStepTime}, then we set
+     * {@code mLastStepTime} to {@code currentStepTime}. We call our method {@code ensureInitialized}
+     * to make sure we have a spaceship to play with, then we call the {@code accelerate} method of
+     * {@code Ship mShip} to increase its velocity by the amount {@code mMaxShipThrust} will increase
+     * it in {@code tau} seconds (up to the maximum of {@code mMaxShipSpeed}. We then call the
+     * {@code step} method of {@code Ship mShip} with {@code tau} as the delta time, and if that
+     * returns false (the movement causes the spaceship to be destroyed) we call our method {@code reset}
+     * to reset the game to the initial conditions.
+     * <p>
+     * Next we move all the bullets in our list {@code List<Bullet> mBullets}. To do this we first
+     * initialize our variable {@code int numBullets} with the size of {@code mBullets}. Next we loop
+     * over {@code i} for all the bullets in {@code mBullets} fetching the i'th bullet to our variable
+     * {@code Bullet bullet} and call its method {@code step} with {@code tau} as the delta time. If
+     * {@code step} returns false (the bullet has expired for some reason) we remove it from
+     * {@code mBullets}, decrement {@code i} and decrement {@code numBullets} then loop around for the
+     * next bullet.
+     * <p>
+     * Now we need to move all the obstacles in our list {@code List<Obstacle> mObstacles}. To do this
+     * we first initialize our variable {@code int numObstacles} with the size of {@code mObstacles}.
+     * Next we loop over {@code i} for all the obstacles in {@code mObstacles} fetching the i'th
+     * obstacle to our variable {@code Obstacle obstacle} and call its method {@code step} with
+     * {@code tau} as the delta time. If {@code step} returns false (the obstacle has expired for
+     * some reason) we remove it from {@code mObstacles}, decrement {@code i} and decrement
+     * {@code numObstacles} then loop around for the next obstacle.
+     * <p>
+     * Now we have to check for collisions between bullets and obstacles. To do this we loop in an
+     * outer loop over {@code i} for the {@code numBullets} left in {@code mBullets} fetching each
+     * bullet in turn to our variable {@code Bullet bullet}. In an inner loop we loop over {@code j}
+     * for the {@code numObstacles} obstacles remaining in {@code mObstacles} fetching each obstacle
+     * in turn to our variable {@code Obstacle obstacle}. We then call the {@code collidesWith} method
+     * of {@code bullet} for {@code obstacle} and if that returns true we call the {@code destroy}
+     * method of {@code bullet} and the {@code destroy} method of {@code obstacle} and loop around
+     * for the next combination of bullet and obstacle.
+     *
+     * @param currentStepTime current time of the frame we are to build
+     */
     private void step(long currentStepTime) {
         float tau = (currentStepTime - mLastStepTime) * 0.001f;
         mLastStepTime = currentStepTime;
