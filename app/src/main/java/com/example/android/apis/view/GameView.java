@@ -726,8 +726,59 @@ public class GameView extends View {
      * for the {@code numObstacles} obstacles remaining in {@code mObstacles} fetching each obstacle
      * in turn to our variable {@code Obstacle obstacle}. We then call the {@code collidesWith} method
      * of {@code bullet} for {@code obstacle} and if that returns true we call the {@code destroy}
-     * method of {@code bullet} and the {@code destroy} method of {@code obstacle} and loop around
-     * for the next combination of bullet and obstacle.
+     * method of {@code bullet} and the {@code destroy} method of {@code obstacle} and break out of
+     * the inner obstacle loop and loop around for the next bullet. If it returns false we loop
+     * around for the next combination of bullet and obstacle.
+     *
+     * Next we check for collisions between the spaceship and obstacles. To do this we loop over
+     * {@code i} for the {@code numObstacles} in this list {@code List<Obstacle> mObstacles} fetching
+     * each in turn to {@code Obstacle obstacle}, we then call the {@code collidesWith} method of
+     * {@code mShip} with {@code obstacle} and if it returns true we call the {@code destroy} method
+     * of {@code mShip} and the {@code destroy} method of {@code obstacle} and break out of the loop.
+     *
+     * We now want to Spawn more obstacles offscreen when needed to replace any destroyed. In an
+     * outer loop with the label "OuterLoop:" we loop while the size of {@code mObstacles} is less
+     * than MAX_OBSTACLES (12). We define {@code float minDistance} to be 4 times the size of our
+     * spaceship {@code mShipSize}, define {@code float size} to be a random obstacle size between
+     * {@code mMinObstacleSize} and {@code mMaxObstacleSize}, declare the floats {@code positionX}
+     * and {@code positionY}, and set {@code tries} to 0.
+     *
+     * Then in an inner loop we loop choosing random values for {@code positionX} and {@code positionY}
+     * as long as that position is too close to our spaceship (closer than {@code minDistance}), each
+     * time incrementing {@code tries} and giving up and breaking out of the outer loop ("OuterLoop:")
+     * when {@code tries} is greater than 10. In this inner loop we first choose a random {@code edge}
+     * (0-3) to spawn from. We switch on {@code edge}:
+     * <ul>
+     *     <li>
+     *         0: (left edge) we set {@code positionX} to {@code -size} and {@code positionY} to a
+     *         random percentage of the height of our view.
+     *     </li>
+     *     <li>
+     *         1: (right edge) we set {@code positionX} to the width of our view plus {@code size}
+     *         and {@code positionY} to a random percentage of the height of our view.
+     *     </li>
+     *     <li>
+     *         2: (top edge) we set {@code positionX} to a random percentage of the width of our view,
+     *         and {@code positionY} to {@code -size}.
+     *     </li>
+     *     <li>
+     *         default: (bottom edge) we set {@code positionX} to a random percentage of the width of our view,
+     *         and {@code positionY} to the height of our view plus {@code size}.
+     *     </li>
+     * </ul>
+     * At the end of this inner loop we increment {@code tries} and give up and break out of the outer
+     * loop ("OuterLoop:") if {@code tries} is greater than 10. If it is not, we evaluate our while
+     * expression to test whether the obstacle is less than {@code minDistance} from our ship by
+     * calling the {@code distanceTo} method of {@code mShip} with {@code positionX} and {@code positionY}
+     * as the parameters, and loop back in the inner loop to try another position if it is too close.
+     *
+     * If it is not, we initialize {@code float direction} to a random percentage of 2 pi, {@code float speed}
+     * to be a random number between {@code mMinObstacleSpeed} and {@code mMaxObstacleSpeed}, initialize
+     * {@code float velocityX} to be the X component of {@code speed} given the {@code direction}, and
+     * {@code float velocityY} to be the Y component of {@code speed} given the {@code direction}. We
+     * now create a new instance {@code Obstacle obstacle}, set its position to {@code positionX},
+     * {@code positionY}, its size to {@code size}, its velocity to {@code (velocityX, velocityY)},
+     * and then add it to {@code mObstacles}.
      *
      * @param currentStepTime current time of the frame we are to build
      */
@@ -793,8 +844,7 @@ public class GameView extends View {
         OuterLoop:
         while (mObstacles.size() < MAX_OBSTACLES) {
             final float minDistance = mShipSize * 4;
-            float size = mRandom.nextFloat() * (mMaxObstacleSize - mMinObstacleSize)
-                    + mMinObstacleSize;
+            float size = mRandom.nextFloat() * (mMaxObstacleSize - mMinObstacleSize) + mMinObstacleSize;
             float positionX, positionY;
             int tries = 0;
             do {
@@ -823,8 +873,7 @@ public class GameView extends View {
             } while (mShip.distanceTo(positionX, positionY) < minDistance);
 
             float direction = mRandom.nextFloat() * (float) Math.PI * 2;
-            float speed = mRandom.nextFloat() * (mMaxObstacleSpeed - mMinObstacleSpeed)
-                    + mMinObstacleSpeed;
+            float speed = mRandom.nextFloat() * (mMaxObstacleSpeed - mMinObstacleSpeed) + mMinObstacleSpeed;
             float velocityX = (float) Math.cos(direction) * speed;
             float velocityY = (float) Math.sin(direction) * speed;
 
@@ -836,6 +885,17 @@ public class GameView extends View {
         }
     }
 
+    /**
+     * We implement this to do our drawing. First we call our super's implementation of {@code onDraw},
+     * then if {@code mShip} is not null we ask it to draw itself on the {@code Canvas canvas}. We
+     * initialize {@code int numBullets} to the number of bullets in {@code mBullets}, and loop over
+     * them fetching each in turn to {@code Bullet bullet} and instructing that {@code Bullet} to draw
+     * itself. We initialize {@code int numObstacles} to the number of obstacles in {@code mObstacles},
+     * and loop over them fetching each in turn to {@code Obstacle obstacle} and instructing that
+     * {@code Obstacle} to draw itself.
+     *
+     * @param canvas the canvas on which the background will be drawn
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -860,14 +920,45 @@ public class GameView extends View {
         }
     }
 
+    /**
+     * Convenience function for calling {@code Math.hypot}, and returning its result cast to float.
+     *
+     * @param x length of x component
+     * @param y length of y component
+     * @return the result of calling {@code Math.hypot} for x and y, cast to float
+     */
     static float pythag(float x, float y) {
         return (float) Math.hypot(x, y);
     }
 
+    /**
+     * Convenience function to calculate a color value that starts at {@code from} and is animated
+     * to {@code to} based on the value of {@code alpha}.
+     *
+     * @param alpha value of alpha component
+     * @param from starting value for this color component
+     * @param to ending value for this color component
+     * @return a value that is positioned by {@code alpha} between {@code from} and {@code to}
+     */
     static int blend(float alpha, int from, int to) {
         return from + (int) ((to - from) * alpha);
     }
 
+    /**
+     * Convenience function to animate the color of {@code Paint paint} between a "from" color and a
+     * "to" color based on the current value of our parameter {@code float alpha}.
+     *
+     * @param paint {@code Paint} whose color we are to set
+     * @param alpha a value between 0 and 1.0 which determines where between from and to we are currently
+     * @param a1 from alpha color component
+     * @param r1 from red color component
+     * @param g1 from green color component
+     * @param b1 from blue color component
+     * @param a2 to alpha color component
+     * @param r2 to red color component
+     * @param g2 to green color component
+     * @param b2 ti blue color component
+     */
     @SuppressWarnings("SameParameterValue")
     static void setPaintARGBBlend(Paint paint, float alpha,
                                   int a1, int r1, int g1, int b1,
@@ -876,6 +967,9 @@ public class GameView extends View {
                 blend(alpha, g1, g2), blend(alpha, b1, b2));
     }
 
+    /**
+     * Base class for our {@code Ship}, {@code Bullet}, and {@code Obstacle} objects.
+     */
     @SuppressWarnings("WeakerAccess")
     private abstract class Sprite {
         protected float mPositionX;
