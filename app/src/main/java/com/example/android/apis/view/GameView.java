@@ -972,36 +972,108 @@ public class GameView extends View {
      */
     @SuppressWarnings("WeakerAccess")
     private abstract class Sprite {
+        /**
+         * X coordinate of the position of the {@code Sprite} in pixels
+         */
         protected float mPositionX;
+        /**
+         * Y coordinate of the position of the {@code Sprite} in pixels
+         */
         protected float mPositionY;
+        /**
+         * X component of the velocity of the {@code Sprite} in pixels per second
+         */
         protected float mVelocityX;
+        /**
+         * Y component of the velocity of the {@code Sprite} in pixels per second
+         */
         protected float mVelocityY;
+        /**
+         * Size of the {@code Sprite} in pixels
+         */
         protected float mSize;
+        /**
+         * Flag to indicate that the {@code Sprite} has been destroyed
+         */
         protected boolean mDestroyed;
+        /**
+         * How far along in the destruction animation we are, ranges from 0 (start) to 1.0 (gone).
+         */
         protected float mDestroyAnimProgress;
 
+        /**
+         * Setter for the position of the {@code Sprite}, just saves its parameters {@code x} and
+         * {@code y} in our fields {@code mPositionX} and {@code mPositionY} respectively.
+         *
+         * @param x new X coordinate of the {@code Sprite}
+         * @param y new Y coordinate of the {@code Sprite}
+         */
         public void setPosition(float x, float y) {
             mPositionX = x;
             mPositionY = y;
         }
 
+        /**
+         * Setter for the velocity of the {@code Sprite}, just saves its parameters {@code x} and
+         * {@code y} in our fields {@code mVelocityX} and {@code mVelocityY} respectively.
+         *
+         * @param x new X component of the {@code Sprite} velocity
+         * @param y new Y component of the {@code Sprite} velocity
+         */
         public void setVelocity(float x, float y) {
             mVelocityX = x;
             mVelocityY = y;
         }
 
+        /**
+         * Setter for the size of the {@code Sprite}, just saves its parameter {@code size} in our
+         * field {@code mSize}.
+         *
+         * @param size new size of the {@code Sprite}
+         */
         public void setSize(float size) {
             mSize = size;
         }
 
+        /**
+         * Calculates the distance from our position to a point that has the coordinates given by our
+         * parameters {@code x} and {@code y} by calling our method {@code pythag} on the results
+         * of subtracting {@code x} from {@code mPositionX} and {@code y} from {@code mPositionY}.
+         *
+         * @param x X coordinate of the point we are interested in
+         * @param y Y coordinate of the point we are interested in
+         * @return distance from our position to the point (x,y) in pixels
+         */
         public float distanceTo(float x, float y) {
             return pythag(mPositionX - x, mPositionY - y);
         }
 
+        /**
+         * Calculates the distance between us and the position of {@code Sprite other} by calling
+         * our {@code distanceTo(float x, float y)} method with the {@code mPositionX} and
+         * {@code mPositionY} fields of our parameter {@code Sprite other}.
+         *
+         * @param other the {@code Sprite} we wish to measure the distance to
+         * @return the distance in pixels between us and the position of {@code Sprite other}
+         */
         public float distanceTo(Sprite other) {
             return distanceTo(other.mPositionX, other.mPositionY);
         }
 
+        /**
+         * Detects whether we are colliding with our parameter {@code Sprite other}. The short circuit
+         * and argument of our return statement returns false if we have been destroyed (our field
+         * {@code mDestroyed} is true), and false if our parameter {@code Sprite other} has been
+         * destroyed (its {@code mDestroyed} is true), and false if {@code Sprite other} is farther
+         * away than the maximum of the size of the two {@code Sprite} objects plus 0.5 times the
+         * minimum of the size of the two {@code Sprite} objects. If we have not been destroyed, and
+         * {@code Sprite other} has not been destroyed, AND we are closer than the maximum of the size
+         * of the two {@code Sprite} objects plus 0.5 times the minimum of the size of the two
+         * {@code Sprite} objects we return true, the two {@code Sprite} objects are colliding.
+         *
+         * @param other {@code Sprite} we are checking for collision with us
+         * @return true if we are colliding with the {@code Sprite other}
+         */
         public boolean collidesWith(Sprite other) {
             // Really bad collision detection.
             return !mDestroyed && !other.mDestroyed
@@ -1009,10 +1081,30 @@ public class GameView extends View {
                     + Math.min(mSize, other.mSize) * 0.5f;
         }
 
+        /**
+         * Getter for our {@code mDestroyed} field.
+         *
+         * @return the value of our field {@code mDestroyed}.
+         */
         public boolean isDestroyed() {
             return mDestroyed;
         }
 
+        /**
+         * Base method to advance our animation by {@code float tau} seconds, derived classes override
+         * us to add any special handling required by their objects, calling us to do the basic step
+         * operations. First we add {@code tau} times {@code mVelocityX} to {@code mPositionX} and
+         * add {@code tau} times {@code mVelocityY} to {@code mPositionY}. If we have been destroyed
+         * ({@code mDestroyed} is true) we add {@code tau} divided by the value returned by our
+         * overridden method {@code getDestroyAnimDuration} to {@code mDestroyAnimProgress} and if
+         * the result is greater than 1.0f we return false to our caller (our destruction animation
+         * has reached its end). We fall through to return true to the caller (same as if we had not
+         * been destroyed).
+         *
+         * @param tau delta time in seconds to step our animation
+         * @return true if our {@code Sprite} object has successfully been moved, false if it has
+         * disappeared from the game.
+         */
         public boolean step(float tau) {
             mPositionX += mVelocityX * tau;
             mPositionY += mVelocityY * tau;
@@ -1026,10 +1118,33 @@ public class GameView extends View {
             return true;
         }
 
+        /**
+         * Derived classes must override this to get drawn.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         public abstract void draw(Canvas canvas);
 
+        /**
+         * Derived classes must override this to specify a divisor of the delta time {@code tau} to
+         * use to calculate a new value for {@code mDestroyAnimProgress} in our method {@code step}
+         * if we have been destroyed.
+         *
+         * @return divisor of the delta time {@code tau} to use to calculate a new value for
+         * {@code mDestroyAnimProgress} in our method {@code step} if we have been destroyed.
+         */
         public abstract float getDestroyAnimDuration();
 
+        /**
+         * Convenience function to check whether our position is outside of our view. We initialize
+         * {@code int width} with the width of our {@code GameView} instance, and {@code int height}
+         * with the height of our {@code GameView} instance. We return true if {@code mPositionX} is
+         * less than 0, or {@code mPositionX} is greater than or equal to {@code width}, or
+         * {@code mPositionY} is less than 0, or {@code mPositionY} is greater than or equal to
+         * {@code height}. Otherwise we return false.
+         *
+         * @return true if our position is outside of our view, false if it is inside the view
+         */
         protected boolean isOutsidePlayfield() {
             final int width = GameView.this.getWidth();
             final int height = GameView.this.getHeight();
@@ -1037,6 +1152,24 @@ public class GameView extends View {
                     || mPositionY < 0 || mPositionY >= height;
         }
 
+        /**
+         * Wraps the values of {@code mPositionX} and {@code mPositionY} around to the other side of
+         * our view when they fall outside of our view. We initialize {@code int width} with the
+         * width of our {@code GameView} instance, and {@code int height} with the height of our
+         * {@code GameView} instance.
+         *
+         * While {@code mPositionX} is less than or equal to {@code -mSize} we add {@code width} plus
+         * 2 times {@code mSize} to it.
+         *
+         * While {@code mPositionX} is greater than or equal to {@code width} plus {@code mSize} we
+         * subtract {@code width} plus 2 times {@code mSize} to it.
+         *
+         * While {@code mPositionY} is less than or equal to {@code -mSize} we add {@code height}
+         * plus 2 times {@code mSize} to it.
+         *
+         * While {@code mPositionY} is greater than or equal to {@code height} plus {@code mSize} we
+         * subtract {@code height} plus 2 times {@code mSize} to it.
+         */
         protected void wrapAtPlayfieldBoundary() {
             final int width = GameView.this.getWidth();
             final int height = GameView.this.getHeight();
@@ -1054,25 +1187,62 @@ public class GameView extends View {
             }
         }
 
+        /**
+         * Called when our {@code Sprite} object has been destroyed. We set our flag {@code mDestroyed}
+         * to true, and call our method {@code step} with a delta time {@code tau} of 0 to begin our
+         * destruction animation.
+         */
         public void destroy() {
             mDestroyed = true;
             step(0);
         }
     }
 
+    /**
+     * {@code Sprite} subclass adding functionality needed to model our spaceship.
+     */
     @SuppressWarnings("WeakerAccess")
     private class Ship extends Sprite {
+        /**
+         * Angle of our arrowhead "point" of our spaceship.
+         */
         private static final float CORNER_ANGLE = (float) Math.PI * 2 / 3;
+        /**
+         * Constant used to convert radians to degrees (by multiplying)
+         */
         private static final float TO_DEGREES = (float) (180.0 / Math.PI);
 
+        /**
+         * X coordinate of the arrowhead "point" of our spaceship, relative to the center of our view.
+         */
         private float mHeadingX;
+        /**
+         * Y coordinate of the arrowhead "point" of our spaceship, relative to the center of our view.
+         */
         private float mHeadingY;
+        /**
+         * Polar coordinate angle of the heading of our spaceship in radians.
+         */
         private float mHeadingAngle;
+        /**
+         * Polar coordinate length of the heading of our spaceship in pixels.
+         */
         private float mHeadingMagnitude;
+        /**
+         * {@code Paint} we use to draw our spaceship.
+         */
         private final Paint mPaint;
+        /**
+         * {@code Path} defining the shape of our spaceship (an arrowhead), created in our constructor
+         * and used by our {@code draw} method to draw it by calling {@code Canvas.drawPath}.
+         */
         private final Path mPath;
 
-
+        /**
+         * Our constructor. We initialize our field {@code Paint mPaint} with a new instance, and set
+         * its style to FILL. We set our position to the center of our view, set our velocity to 0,
+         * and set our ship size to {@code mShipSize}.
+         */
         public Ship() {
             mPaint = new Paint();
             mPaint.setStyle(Style.FILL);
