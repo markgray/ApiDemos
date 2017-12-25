@@ -32,7 +32,10 @@ import java.util.List;
 //class is in a sub-package.
 import com.example.android.apis.R;
 
-
+/**
+ * Shows how to use a GridView to display a grid of ImageView's created
+ * from the app icons retrieved from the PackageManager
+ */
 public class Grid1 extends Activity {
 
     GridView mGrid;
@@ -57,6 +60,7 @@ public class Grid1 extends Activity {
         mApps = getPackageManager().queryIntentActivities(mainIntent, 0);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public class AppsAdapter extends BaseAdapter {
         public AppsAdapter() {
         }

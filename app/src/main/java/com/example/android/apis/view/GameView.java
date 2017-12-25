@@ -729,49 +729,49 @@ public class GameView extends View {
      * method of {@code bullet} and the {@code destroy} method of {@code obstacle} and break out of
      * the inner obstacle loop and loop around for the next bullet. If it returns false we loop
      * around for the next combination of bullet and obstacle.
-     *
+     * <p>
      * Next we check for collisions between the spaceship and obstacles. To do this we loop over
      * {@code i} for the {@code numObstacles} in this list {@code List<Obstacle> mObstacles} fetching
      * each in turn to {@code Obstacle obstacle}, we then call the {@code collidesWith} method of
      * {@code mShip} with {@code obstacle} and if it returns true we call the {@code destroy} method
      * of {@code mShip} and the {@code destroy} method of {@code obstacle} and break out of the loop.
-     *
+     * <p>
      * We now want to Spawn more obstacles offscreen when needed to replace any destroyed. In an
      * outer loop with the label "OuterLoop:" we loop while the size of {@code mObstacles} is less
      * than MAX_OBSTACLES (12). We define {@code float minDistance} to be 4 times the size of our
      * spaceship {@code mShipSize}, define {@code float size} to be a random obstacle size between
      * {@code mMinObstacleSize} and {@code mMaxObstacleSize}, declare the floats {@code positionX}
      * and {@code positionY}, and set {@code tries} to 0.
-     *
+     * <p>
      * Then in an inner loop we loop choosing random values for {@code positionX} and {@code positionY}
      * as long as that position is too close to our spaceship (closer than {@code minDistance}), each
      * time incrementing {@code tries} and giving up and breaking out of the outer loop ("OuterLoop:")
      * when {@code tries} is greater than 10. In this inner loop we first choose a random {@code edge}
      * (0-3) to spawn from. We switch on {@code edge}:
      * <ul>
-     *     <li>
-     *         0: (left edge) we set {@code positionX} to {@code -size} and {@code positionY} to a
-     *         random percentage of the height of our view.
-     *     </li>
-     *     <li>
-     *         1: (right edge) we set {@code positionX} to the width of our view plus {@code size}
-     *         and {@code positionY} to a random percentage of the height of our view.
-     *     </li>
-     *     <li>
-     *         2: (top edge) we set {@code positionX} to a random percentage of the width of our view,
-     *         and {@code positionY} to {@code -size}.
-     *     </li>
-     *     <li>
-     *         default: (bottom edge) we set {@code positionX} to a random percentage of the width of our view,
-     *         and {@code positionY} to the height of our view plus {@code size}.
-     *     </li>
+     * <li>
+     * 0: (left edge) we set {@code positionX} to {@code -size} and {@code positionY} to a
+     * random percentage of the height of our view.
+     * </li>
+     * <li>
+     * 1: (right edge) we set {@code positionX} to the width of our view plus {@code size}
+     * and {@code positionY} to a random percentage of the height of our view.
+     * </li>
+     * <li>
+     * 2: (top edge) we set {@code positionX} to a random percentage of the width of our view,
+     * and {@code positionY} to {@code -size}.
+     * </li>
+     * <li>
+     * default: (bottom edge) we set {@code positionX} to a random percentage of the width of our view,
+     * and {@code positionY} to the height of our view plus {@code size}.
+     * </li>
      * </ul>
      * At the end of this inner loop we increment {@code tries} and give up and break out of the outer
      * loop ("OuterLoop:") if {@code tries} is greater than 10. If it is not, we evaluate our while
      * expression to test whether the obstacle is less than {@code minDistance} from our ship by
      * calling the {@code distanceTo} method of {@code mShip} with {@code positionX} and {@code positionY}
      * as the parameters, and loop back in the inner loop to try another position if it is too close.
-     *
+     * <p>
      * If it is not, we initialize {@code float direction} to a random percentage of 2 pi, {@code float speed}
      * to be a random number between {@code mMinObstacleSpeed} and {@code mMaxObstacleSpeed}, initialize
      * {@code float velocityX} to be the X component of {@code speed} given the {@code direction}, and
@@ -936,8 +936,8 @@ public class GameView extends View {
      * to {@code to} based on the value of {@code alpha}.
      *
      * @param alpha value of alpha component
-     * @param from starting value for this color component
-     * @param to ending value for this color component
+     * @param from  starting value for this color component
+     * @param to    ending value for this color component
      * @return a value that is positioned by {@code alpha} between {@code from} and {@code to}
      */
     static int blend(float alpha, int from, int to) {
@@ -950,14 +950,14 @@ public class GameView extends View {
      *
      * @param paint {@code Paint} whose color we are to set
      * @param alpha a value between 0 and 1.0 which determines where between from and to we are currently
-     * @param a1 from alpha color component
-     * @param r1 from red color component
-     * @param g1 from green color component
-     * @param b1 from blue color component
-     * @param a2 to alpha color component
-     * @param r2 to red color component
-     * @param g2 to green color component
-     * @param b2 ti blue color component
+     * @param a1    from alpha color component
+     * @param r1    from red color component
+     * @param g1    from green color component
+     * @param b1    from blue color component
+     * @param a2    to alpha color component
+     * @param r2    to red color component
+     * @param g2    to green color component
+     * @param b2    ti blue color component
      */
     @SuppressWarnings("SameParameterValue")
     static void setPaintARGBBlend(Paint paint, float alpha,
@@ -1157,16 +1157,16 @@ public class GameView extends View {
          * our view when they fall outside of our view. We initialize {@code int width} with the
          * width of our {@code GameView} instance, and {@code int height} with the height of our
          * {@code GameView} instance.
-         *
+         * <p>
          * While {@code mPositionX} is less than or equal to {@code -mSize} we add {@code width} plus
          * 2 times {@code mSize} to it.
-         *
+         * <p>
          * While {@code mPositionX} is greater than or equal to {@code width} plus {@code mSize} we
          * subtract {@code width} plus 2 times {@code mSize} to it.
-         *
+         * <p>
          * While {@code mPositionY} is less than or equal to {@code -mSize} we add {@code height}
          * plus 2 times {@code mSize} to it.
-         *
+         * <p>
          * While {@code mPositionY} is greater than or equal to {@code height} plus {@code mSize} we
          * subtract {@code height} plus 2 times {@code mSize} to it.
          */
@@ -1241,7 +1241,11 @@ public class GameView extends View {
         /**
          * Our constructor. We initialize our field {@code Paint mPaint} with a new instance, and set
          * its style to FILL. We set our position to the center of our view, set our velocity to 0,
-         * and set our ship size to {@code mShipSize}.
+         * and set our ship size to {@code mShipSize}. We create a new instance for {@code Path mPath},
+         * move to (0,0), draw a line to (-19.687501987396608,-34.09974912658822), draw a line to
+         * (39.375,0), draw a line to (-19.687501987396608,34.09974912658822), and draw a line to
+         * (0,0) (an arrowhead shape, the values are for a Pixel phone, other phones with different
+         * display densities will result in values scaled for that density).
          */
         public Ship() {
             mPaint = new Paint();
@@ -1261,22 +1265,52 @@ public class GameView extends View {
             mPath.lineTo(0, 0);
         }
 
+        /**
+         * Setter for the X coordinate of our heading, we set our field {@code mHeadingX} to our
+         * parameter {@code x} and call our method {@code updateHeading} to calculate and set the
+         * polar equivalent of the new heading.
+         *
+         * @param x value to set the X coordinate of our heading to
+         */
         public void setHeadingX(float x) {
             mHeadingX = x;
             updateHeading();
         }
 
+        /**
+         * Setter for the Y coordinate of our heading, we set our field {@code mHeadingY} to our
+         * parameter {@code y} and call our method {@code updateHeading} to calculate and set the
+         * polar equivalent of the new heading.
+         *
+         * @param y value to set the Y coordinate of our heading to
+         */
         public void setHeadingY(float y) {
             mHeadingY = y;
             updateHeading();
         }
 
+        /**
+         * Setter for both the X and the Y coordinate of our heading. We set our field {@code mHeadingX}
+         * to our parameter {@code x} and our field {@code mHeadingY} to our parameter {@code y} then
+         * call our method {@code updateHeading} to calculate and set the polar equivalent of the new
+         * heading.
+         *
+         * @param x value to set the X coordinate of our heading to
+         * @param y value to set the Y coordinate of our heading to
+         */
         public void setHeading(float x, float y) {
             mHeadingX = x;
             mHeadingY = y;
             updateHeading();
         }
 
+        /**
+         * Updates the polar coordinate version of our heading from our fields {@code mHeadingX} and
+         * {@code mHeadingY}. We call our method {@code pythag} with our fields {@code mHeadingX} and
+         * {@code mHeadingY} as the parameters to calculate {@code mHeadingMagnitude}, and if the
+         * result is greater than 0.1, we set {@code mHeadingAngle} to the {@code Math.atan2} of
+         * {@code mHeadingX} and {@code mHeadingY}.
+         */
         private void updateHeading() {
             mHeadingMagnitude = pythag(mHeadingX, mHeadingY);
             if (mHeadingMagnitude > 0.1f) {
@@ -1284,30 +1318,94 @@ public class GameView extends View {
             }
         }
 
+        /**
+         * Calculates the X coordinate of the end of a vector with the length of its parameter
+         * {@code radius} pointing in the same direction as our ship. Simple trig equation.
+         *
+         * @param radius length of vector whose X coordinate we are interested in
+         * @return X coordinate of the end of the vector
+         */
         private float polarX(float radius) {
             return (float) Math.cos(mHeadingAngle) * radius;
         }
 
+        /**
+         * Calculates the Y coordinate of the end of a vector with the length of its parameter
+         * {@code radius} pointing in the same direction as our ship. Simple trig equation.
+         *
+         * @param radius length of vector whose Y coordinate we are interested in
+         * @return Y coordinate of the end of the vector
+         */
         private float polarY(float radius) {
             return (float) Math.sin(mHeadingAngle) * radius;
         }
 
+        /**
+         * Calculates the initial X coordinate of a bullet being fired from our spaceship, by adding
+         * the X coordinate of the spaceships position to the X coordinate of the front of the
+         * spaceship calculated by our method {@code polarX(mSize)}.
+         *
+         * @return initial X coordinate of a bullet being fired from our spaceship.
+         */
         public float getBulletInitialX() {
             return mPositionX + polarX(mSize);
         }
 
+        /**
+         * Calculates the initial Y coordinate of a bullet being fired from our spaceship, by adding
+         * the Y coordinate of the spaceships position to the Y coordinate of the front of the
+         * spaceship calculated by our method {@code polarY(mSize)}.
+         *
+         * @return initial Y coordinate of a bullet being fired from our spaceship.
+         */
         public float getBulletInitialY() {
             return mPositionY + polarY(mSize);
         }
 
+        /**
+         * Calculates the X component of the absolute velocity of a bullet (that is, its velocity
+         * relative to the view) given the relative speed of a bullet as given by our parameter
+         * {@code relativeSpeed}, and the X component of the velocity of the spaceship. We do this
+         * by adding the X component of the velocity of the spaceship ({@code mVelocityX}) to the
+         * X component of {@code relativeSpeed} when the bullet leaves the front of the spaceship
+         * as calculated by our method {@code polarX(mSize)}.
+         *
+         * @param relativeSpeed speed of the bullet relative to the spaceship
+         * @return X component of the velocity of a bullet relative to the view.
+         */
         public float getBulletVelocityX(float relativeSpeed) {
             return mVelocityX + polarX(relativeSpeed);
         }
 
+        /**
+         * Calculates the Y component of the absolute velocity of a bullet (that is, its velocity
+         * relative to the view) given the relative speed of a bullet as given by our parameter
+         * {@code relativeSpeed}, and the Y component of the velocity of the spaceship. We do this
+         * by adding the Y component of the velocity of the spaceship ({@code mVelocityY}) to the
+         * Y component of {@code relativeSpeed} when the bullet leaves the front of the spaceship
+         * as calculated by our method {@code polarY(mSize)}.
+         *
+         * @param relativeSpeed speed of the bullet relative to the spaceship
+         * @return X component of the velocity of a bullet relative to the view.
+         */
         public float getBulletVelocityY(float relativeSpeed) {
             return mVelocityY + polarY(relativeSpeed);
         }
 
+        /**
+         * Applies the maximum thrust to the spaceship in the direction that the spaceship is
+         * heading. We initialize {@code float thrust} to the current polar heading coordinate
+         * {@code mHeadingMagnitude} times our parameter {@code maxThrust}. We add the X component
+         * of {@code thrust} to {@code mVelocityX}, and the Y component to {@code mVelocityY}. We
+         * calculate the new speed {@code float speed } (pixels per second) by calling our method
+         * {@code pythag(mVelocityX, mVelocityY)}. If {@code speed} is greater than {@code maxSpeed}
+         * we calculate {@code float scale} to be {@code maxSpeed} divided by {@code speed} and scale
+         * both {@code mVelocityX} and {@code mVelocityY} by it.
+         *
+         * @param tau       delta time that the thrust is being applied UNUSED
+         * @param maxThrust maximum thrust of the spaceship
+         * @param maxSpeed  maximum speed of the spaceship
+         */
         @SuppressWarnings("UnusedParameters")
         public void accelerate(float tau, float maxThrust, float maxSpeed) {
             final float thrust = mHeadingMagnitude * maxThrust;
@@ -1322,6 +1420,17 @@ public class GameView extends View {
             }
         }
 
+        /**
+         * Called to advance our spaceship's animation by {@code float tau} seconds. If our super's
+         * implementation of {@code step} returns false (our {@code Sprite} object has disappeared
+         * from the game) we return false to the caller. Otherwise we make sure that our spaceship
+         * wraps around to the other side of the view if we cross one of the edges by calling our
+         * method {@code wrapAtPlayfieldBoundary}, and return true to the caller.
+         *
+         * @param tau delta time in seconds to step our animation
+         * @return true if our {@code Ship} object has successfully been moved, false if it has
+         * disappeared from the game.
+         */
         @Override
         public boolean step(float tau) {
             if (!super.step(tau)) {
@@ -1331,6 +1440,19 @@ public class GameView extends View {
             return true;
         }
 
+        /**
+         * We implement this to get drawn. First we call the method {@code setPaintARGBBlend} to set
+         * the color of {@code mPaint} to a color that is appropriate for the stage of destruction
+         * given by {@code mDestroyAnimProgress} (a puke green shade to start with an alpha of 255,
+         * which morphs to RED with an alpha of 0 when we are fully destroyed, we stay a puke green
+         * until we hit an obstacle of course). Then we save the state of {@code Canvas canvas} on
+         * its private stack, move it to {@code (mPositionX, mPositionY)}, rotate the canvas to
+         * {@code mHeadingAngle} (converted to degrees by multiplying it by TO_DEGREES), draw the
+         * {@code Path mPath} defining our shape using {@code mPaint} as the paint, and restore the
+         * state of {@code canvas}.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         public void draw(Canvas canvas) {
             setPaintARGBBlend(mPaint, mDestroyAnimProgress,
@@ -1344,11 +1466,25 @@ public class GameView extends View {
             canvas.restore();
         }
 
+        /**
+         * Just returns 1.0 to use as the scaling factor to divide the delta time {@code tau} by in
+         * order to calculate the value to add to {@code mDestroyAnimProgress} in {@code Sprite.step}
+         * (if we are currently animating our destruction that is).
+         *
+         * @return scaling factor to divide the delta time {@code tau} by in order to calculate the
+         * value to add to {@code mDestroyAnimProgress} in {@code Sprite.step} (if we are currently
+         * animating our destruction that is).
+         */
         @Override
         public float getDestroyAnimDuration() {
             return 1.0f;
         }
 
+        /**
+         * Called when we have collided with an obstacle and have entered our "destruction phase".
+         * First we call our super's implementation of {@code destroy} to initiate the destruction
+         * animation, then we call our method {@code crash} to perform some appropriate vibrating.
+         */
         @Override
         public void destroy() {
             super.destroy();
@@ -1356,10 +1492,20 @@ public class GameView extends View {
         }
     }
 
+    /**
+     * {@code Sprite} subclass adding functionality needed to model a bullet.
+     */
     @SuppressWarnings("WeakerAccess")
     private class Bullet extends Sprite {
+        /**
+         * {@code Paint} we use to draw our bullet.
+         */
         private final Paint mPaint;
 
+        /**
+         * Our constructor. First we allocate a new instance for {@code Paint mPaint}, and set its
+         * style to FILL. Then we set our size to {@code mBulletSize} by calling {@code setSize}.
+         */
         public Bullet() {
             mPaint = new Paint();
             mPaint.setStyle(Style.FILL);
@@ -1367,6 +1513,17 @@ public class GameView extends View {
             setSize(mBulletSize);
         }
 
+        /**
+         * Called to advance our bullet's animation by {@code float tau} seconds. If our super's
+         * implementation of {@code step} returns false (our {@code Sprite} object has disappeared
+         * from the game) we return false to the caller. Otherwise we return the negation of the
+         * value returned by the method {@code isOutsidePlayfield} (ie. false if it is outside of the
+         * playing field, our bullet disappears from the game if it leaves the playing field).
+         *
+         * @param tau delta time in seconds to step our animation
+         * @return true if our {@code Bullet} object has successfully been moved, false if it has
+         * disappeared from the game.
+         */
         @Override
         public boolean step(float tau) {
             //noinspection SimplifiableIfStatement
@@ -1376,6 +1533,16 @@ public class GameView extends View {
             return !isOutsidePlayfield();
         }
 
+        /**
+         * We implement this to get drawn. First we call the method {@code setPaintARGBBlend} to set
+         * the color of {@code mPaint} to a color that is appropriate for the stage of destruction
+         * given by {@code mDestroyAnimProgress} (a bright yellow shade to start with an alpha of 255,
+         * which morphs to white with an alpha of 0 when we are fully destroyed, we stay bright yellow
+         * until we hit an obstacle of course). Then we draw a circle at {@code (mPositionX,mPositionY)}
+         * using {@code mPaint}.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         public void draw(Canvas canvas) {
             setPaintARGBBlend(mPaint, mDestroyAnimProgress,
                     255, 255, 255, 0,
@@ -1383,22 +1550,52 @@ public class GameView extends View {
             canvas.drawCircle(mPositionX, mPositionY, mSize, mPaint);
         }
 
+        /**
+         * Just returns 0.125 to use as the scaling factor to divide the delta time {@code tau} by in
+         * order to calculate the value to add to {@code mDestroyAnimProgress} in {@code Sprite.step}
+         * (if we are currently animating our destruction that is).
+         *
+         * @return scaling factor to divide the delta time {@code tau} by in order to calculate the
+         * value to add to {@code mDestroyAnimProgress} in {@code Sprite.step} (if we are currently
+         * animating our destruction that is).
+         */
         @Override
         public float getDestroyAnimDuration() {
             return 0.125f;
         }
     }
 
+    /**
+     * {@code Sprite} subclass adding functionality needed to model an obstacle
+     */
     @SuppressWarnings("WeakerAccess")
     private class Obstacle extends Sprite {
+        /**
+         * {@code Paint} we use to draw our obstacle.
+         */
         private final Paint mPaint;
 
+        /**
+         * Our constructor. First we allocate a new instance for {@code Paint mPaint}, set its color
+         * to a shade of blue and set its style to FILL.
+         */
         public Obstacle() {
             mPaint = new Paint();
             mPaint.setARGB(255, 127, 127, 255);
             mPaint.setStyle(Style.FILL);
         }
 
+        /**
+         * Called to advance our obstacle's animation by {@code float tau} seconds. If our super's
+         * implementation of {@code step} returns false (our {@code Sprite} object has disappeared
+         * from the game) we return false to the caller. Otherwise we make sure that our obstacle
+         * wraps around to the other side of the view if we cross one of the edges by calling our
+         * method {@code wrapAtPlayfieldBoundary}, and return true to the caller.
+         *
+         * @param tau delta time in seconds to step our animation
+         * @return true if our {@code Obstacle} object has successfully been moved, false if it has
+         * disappeared from the game.
+         */
         @Override
         public boolean step(float tau) {
             if (!super.step(tau)) {
@@ -1408,6 +1605,17 @@ public class GameView extends View {
             return true;
         }
 
+        /**
+         * We implement this to get drawn. First we call the method {@code setPaintARGBBlend} to set
+         * the color of {@code mPaint} to a color that is appropriate for the stage of destruction
+         * given by {@code mDestroyAnimProgress} (a blue shade to start with an alpha of 255, which
+         * morphs to RED with an alpha of 0 when we are fully destroyed, we stay blue until we hit
+         * another {@code Sprite} of course). Then we draw a circle at {@code (mPositionX,mPositionY)}
+         * using {@code mPaint} of a size which starts at {@code mSize} and decreases to 0.0 when we
+         * are animating our destruction.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         public void draw(Canvas canvas) {
             setPaintARGBBlend(mPaint, mDestroyAnimProgress,
                     255, 127, 127, 255,
@@ -1416,6 +1624,15 @@ public class GameView extends View {
                     mSize * (1.0f - mDestroyAnimProgress), mPaint);
         }
 
+        /**
+         * Just returns 0.25 to use as the scaling factor to divide the delta time {@code tau} by in
+         * order to calculate the value to add to {@code mDestroyAnimProgress} in {@code Sprite.step}
+         * (if we are currently animating our destruction that is).
+         *
+         * @return scaling factor to divide the delta time {@code tau} by in order to calculate the
+         * value to add to {@code mDestroyAnimProgress} in {@code Sprite.step} (if we are currently
+         * animating our destruction that is).
+         */
         @Override
         public float getDestroyAnimDuration() {
             return 0.25f;
