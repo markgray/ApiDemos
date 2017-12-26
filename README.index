@@ -1797,12 +1797,10 @@ Grid
         .view.Grid2
             Shows how to use a GridView created from resource jpg's using 
             ImageView.setImageResource
-            TODO: Scale for high dpi screens
 
     Views/Grid/3. Selection Mode           all -- v11+ or crash
         .view.Grid3
             Implements multi-selection mode on GridView - hard to select by touch though
-            TODO: Scale for high dpi screens
 
 Hover Events
     Views/Hover Events                     all -- v14+ or crash View.OnHoverListener()
