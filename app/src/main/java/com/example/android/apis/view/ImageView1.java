@@ -24,10 +24,17 @@ import com.example.android.apis.R;
 
 /**
  * Demonstrates setting size constraints on {@link android.widget.ImageView}
- *
+ * Shows how to control scaling in an ImageView in a layout file using:
+ * android:layout_width, android:layout_height, android:maxWidth, and
+ * android:maxHeight and other attributes of ImageView.
  */
 public class ImageView1 extends Activity {
-    
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.image_view_1.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

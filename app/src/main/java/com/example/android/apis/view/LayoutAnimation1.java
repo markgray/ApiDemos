@@ -30,6 +30,9 @@ import android.widget.ImageView;
 
 import java.util.List;
 
+/**
+ * Uses @anim/layout_grid_fade.xml and @anim/fade.xml to fade in app icons in a GridView
+ */
 public class LayoutAnimation1 extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
