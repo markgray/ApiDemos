@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,43 +14,49 @@
 -->
 
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layoutAnimation="@anim/layout_animation_table"
-    android:animationCache="false"
-    android:clipToPadding="false"
-    android:padding="12dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:stretchColumns="1">
+    android:animationCache="false"
+    android:clipToPadding="false"
+    android:layoutAnimation="@anim/layout_animation_table"
+    android:padding="12dp"
+    android:stretchColumns="1"
+    tools:ignore="TextFields">
 
-    <TableRow
-        android:layoutAnimation="@anim/layout_animation_row_right_slide">
+    <TableRow android:layoutAnimation="@anim/layout_animation_row_right_slide">
+
         <TextView
             android:gravity="right"
             android:text="@string/layout_animation_name" />
+
         <EditText />
     </TableRow>
 
-    <TableRow
-        android:layoutAnimation="@anim/layout_animation_row_left_slide">
+    <TableRow android:layoutAnimation="@anim/layout_animation_row_left_slide">
+
         <TextView
             android:gravity="right"
             android:text="@string/layout_animation_lastname" />
+
         <EditText />
     </TableRow>
 
-    <TableRow
-        android:layoutAnimation="@anim/layout_animation_row_right_slide">
+    <TableRow android:layoutAnimation="@anim/layout_animation_row_right_slide">
+
         <TextView
             android:gravity="right"
             android:text="@string/layout_animation_phone" />
+
         <EditText />
     </TableRow>
 
-    <TableRow
-        android:layoutAnimation="@anim/layout_animation_row_left_slide">
+    <TableRow android:layoutAnimation="@anim/layout_animation_row_left_slide">
+
         <TextView
             android:gravity="right"
             android:text="@string/layout_animation_address" />
+
         <EditText android:lines="3" />
     </TableRow>
 </TableLayout>

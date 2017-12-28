@@ -23,10 +23,16 @@ import android.os.Bundle;
 
 
 /**
- * Baseline alignment in RelativeLayout.
+ * Baseline alignment in RelativeLayout. Demonstrates the baseline alignment in a RelativeLayout
+ * when one of the widgets is a multi-line EditText
  */
 public class Baseline6 extends Activity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.baseline_6.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

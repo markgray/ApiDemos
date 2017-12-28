@@ -23,10 +23,17 @@ import android.os.Bundle;
 
 
 /**
- * Baseline alignment in LinearLayout with a BOTTOM gravity.
+ * Baseline alignment in LinearLayout with a BOTTOM gravity. Uses android:layout_gravity="bottom"
+ * of LinearLayout to place widgets at bottom of window -- the baseline of the text in the views
+ * of differently sized text is used to align.
  */
 public class Baseline2 extends Activity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.baseline_2.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

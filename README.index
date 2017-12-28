@@ -1823,8 +1823,8 @@ ImageView
 Layout Animation
     Views/Layout Animation/1. Grid Fade    all
         .view.LayoutAnimation1
-            Uses @anim/layout_grid_fade.xml and @anim/fade.xml to fade in app icons
-            in a GridView
+            Uses @anim/layout_grid_fade.xml which is a gridLayoutAnimation which uses
+            @anim/fade.xml to fade in app icons in a GridView
 
     Views/Layout Animation/2. List Cascade all
         .view.LayoutAnimation2
@@ -1834,31 +1834,42 @@ Layout Animation
 
     Views/Layout Animation/3. Reverse Order  -- all
         .view.LayoutAnimation3
-            Same as List Cascade above, only using reverse order as specified in
-            anim/layout_bottom_to_top_slide.xml using anim/slide_right instead of
-            implementing animation in code
+            Same as List Cascade above, but an android:layoutAnimation attribute in the layout
+            file R.layout.layout_animation_3 uses anim/layout_bottom_to_top_slide.xml which uses
+             anim/slide_right instead of implementing the animation in code
 
     Views/Layout Animation/4. Randomize    all
         .view.LayoutAnimation4
-            Uses a layoutAnimation with android:animationOrder="random" and an alpha
-            animation specified in anim/fade.xml to fade in app icons in random order.
+            Its layout file R.layout.layout_animation_4 uses a android:layoutAnimation attribute
+            to animate using anim/layout_random_fade which has an android:animationOrder="random"
+            attribute and uses the alpha animation specified in anim/fade.xml to fade in app
+            icons in random order.
 
     Views/Layout Animation/5. Grid Direction  -- all
         .view.LayoutAnimation5
-            Uses android:layoutAnimation="@anim/layout_grid_inverse_fade" with 
+            Its layout file R.layout.layout_animation_5 uses an android:layoutAnimation attribute
+            which uses "@anim/layout_grid_inverse_fade" which in turn uses the attributes
             android:directionPriority="row", and android:direction="right_to_left|bottom_to_top"
             along with anim/fade.xml to fade in app icons in a grid from bottom right to top left
             instead of top down order.
 
     Views/Layout Animation/6. Wave Scale   all
         .view.LayoutAnimation6
-            Uses android:layoutAnimation="@anim/layout_wave_scale" animation set to 1. Fade in app
-            icons, 2. Scale them in from .5 size, to 1.5 size, 3. Scale back from 1.5 to 1.0 size.
+            Its layout file R.layout.layout_animation_6 uses and android:layoutAnimation attribute
+            specifying "@anim/layout_wave_scale" as the animation, which in turn use an
+            android:animation attribute to specify @anim/wave_scale as its animation. This
+            animation animates alpha from 0.0 to 1.0 with a duration of 100, and two fancy scaling
+            animations. The results are: 1. Fade in app icons, 2. Scale them in from .5 size, to
+            1.5 size, 3. Scale back from 1.5 to 1.0 size.
 
     Views/Layout Animation/7. Nested Animations  -- all
         .view.LayoutAnimation7
-            Creates an animation of the layout of a TableLayout, with the layout of each 
-            TableRow animated as well. Way too fast to see effect well even on Excite 10
+            Its layout file R.layout.layout_animation_7 contains a android:layoutAnimation
+            attribute specifying @anim/layout_animation_table as its animation. This creates
+            an animation of the layout files TableLayout, with the layout of each TableRow
+            animated using an android:layoutAnimation so that alternating rows use
+            @anim/layout_animation_row_right_slide and @anim/layout_animation_row_left_slide.
+            Way too fast to see effect well even on Excite 10
             TODO: slow down animation to show effect.
 
 Layouts
@@ -1877,7 +1888,7 @@ Layouts
 
     Views/Layouts/Baseline/3. Center       all
         .view.Baseline3
-            This example shows that baseline alignment has no effect when the layout 
+            This example shows that baseline alignment has no effect when the layout
             gravity is set to center_vertical.
 
     Views/Layouts/Baseline/4. Everywhere   all
@@ -1899,6 +1910,7 @@ Layouts
         .view.BaselineNested1
             Shows how to use android:baselineAlignedChildIndex to align the baseline of
             widgets contained inside a android:orientation="horizontal" LinearLayout
+            TODO: describe layout file R.layout.baseline_nested_1
 
     Views/Layouts/Baseline/Nested Example 2  --all
         .view.BaselineNested2

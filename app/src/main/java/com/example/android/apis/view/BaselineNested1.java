@@ -22,15 +22,20 @@ import android.app.Activity;
 import android.os.Bundle;
 
 /**
- * Baseline alignment includes elements within nested vertical
- * {@link android.widget.LinearLayout}s.
+ * Baseline alignment includes elements within nested vertical {@link android.widget.LinearLayout}s.
+ * Shows how to use android:baselineAlignedChildIndex to align the baseline of widgets contained
+ * inside a android:orientation="horizontal" LinearLayout
  */
 public class BaselineNested1 extends Activity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.baseline_nested_1.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.baseline_nested_1);
     }
 }

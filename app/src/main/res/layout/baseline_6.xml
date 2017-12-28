@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,14 +14,17 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText android:id="@+id/anchor"
+    <EditText
+        android:id="@+id/anchor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:text="@string/baseline_6_multi_line"
         android:textSize="20sp"
-        android:text="@string/baseline_6_multi_line" />
+        tools:ignore="TextFields" />
 
     <TextView
         android:layout_width="wrap_content"

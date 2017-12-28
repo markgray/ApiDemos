@@ -22,23 +22,40 @@ import android.app.ListActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 
+/**
+ * Same as List Cascade above, but an android:layoutAnimation attribute in the layout file
+ * R.layout.layout_animation_3 uses anim/layout_bottom_to_top_slide.xml which uses anim/slide_right
+ * instead of implementing the animation in code
+ */
 public class LayoutAnimation3 extends ListActivity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.layout_animation_3.
+     * Then we set our list adapter to a new instance of {@code ArrayAdapter} which is constructed
+     * using our array {@code String[] mStrings} as the data, and android.R.layout.simple_list_item_1
+     * as the layout file containing a TextView to use when instantiating views.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.layout_animation_3);
+
         setListAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, mStrings));
     }
 
+    /**
+     * The data that our {@code ArrayAdapter} uses to fill our {@code ListView}.
+     */
     private String[] mStrings = {
-        "Bordeaux",
-        "Lyon",
-        "Marseille",
-        "Nancy",
-        "Paris",
-        "Toulouse",
-        "Strasbourg"
+            "Bordeaux",
+            "Lyon",
+            "Marseille",
+            "Nancy",
+            "Paris",
+            "Toulouse",
+            "Strasbourg"
     };
 }

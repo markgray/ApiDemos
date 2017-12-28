@@ -23,10 +23,16 @@ import android.os.Bundle;
 
 
 /**
- * Baseline alignment in LinearLayout with mixed gravities.
+ * Baseline alignment in LinearLayout with mixed gravities. This example scatters widgets around
+ * the window using different values of android:layout_gravity
  */
 public class Baseline4 extends Activity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.baseline_4.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
