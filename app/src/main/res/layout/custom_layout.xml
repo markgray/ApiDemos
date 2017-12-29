@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2013 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2013 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -18,77 +17,79 @@
 
 
 <com.example.android.apis.view.CustomLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res/com.example.android.apis"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="HardcodedText">
 
     <!-- put first view to left. -->
     <TextView
-            android:background="@drawable/filled_box"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_position="left"
-            android:layout_gravity="fill_vertical|center_horizontal"
-            android:text="l1"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="fill_vertical|center_horizontal"
+        android:background="@drawable/filled_box"
+        android:text="l1"
+        app:layout_position="left" />
 
     <!-- stack second view to left. -->
     <TextView
-            android:background="@drawable/filled_box"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_position="left"
-            android:layout_gravity="fill_vertical|center_horizontal"
-            android:text="l2"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="fill_vertical|center_horizontal"
+        android:background="@drawable/filled_box"
+        android:text="l2"
+        app:layout_position="left" />
 
     <!-- also put a view on the right. -->
     <TextView
-            android:background="@drawable/filled_box"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_position="right"
-            android:layout_gravity="fill_vertical|center_horizontal"
-            android:text="r1"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="fill_vertical|center_horizontal"
+        android:background="@drawable/filled_box"
+        android:text="r1"
+        app:layout_position="right" />
 
     <!-- by default views go in the middle; use fill vertical gravity -->
     <TextView
-            android:background="@drawable/green"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="fill_vertical|center_horizontal"
-            android:text="fill-vert"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="fill_vertical|center_horizontal"
+        android:background="@drawable/green"
+        android:text="fill-vert" />
 
     <!-- by default views go in the middle; use fill horizontal gravity -->
     <TextView
-            android:background="@drawable/green"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|fill_horizontal"
-            android:text="fill-horiz"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|fill_horizontal"
+        android:background="@drawable/green"
+        android:text="fill-horiz" />
 
     <!-- by default views go in the middle; use top-left gravity -->
     <TextView
-            android:background="@drawable/blue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|left"
-            android:text="top-left"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|left"
+        android:background="@drawable/blue"
+        android:text="top-left" />
 
     <!-- by default views go in the middle; use center gravity -->
     <TextView
-            android:background="@drawable/blue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="center"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/blue"
+        android:text="center" />
 
     <!-- by default views go in the middle; use bottom-right -->
     <TextView
-            android:background="@drawable/blue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:text="bottom-right"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:background="@drawable/blue"
+        android:text="bottom-right" />
 
 </com.example.android.apis.view.CustomLayout>
 

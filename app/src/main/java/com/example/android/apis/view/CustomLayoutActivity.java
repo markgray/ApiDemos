@@ -23,8 +23,18 @@ import com.example.android.apis.R;
 import android.app.Activity;
 import android.os.Bundle;
 
+/**
+ * Example of writing a custom layout manager.  This is a fairly full-featured
+ * layout manager that is relatively general, handling all layout cases. The
+ * custom parameters that it supports are extensions of ViewGroup.MarginLayoutParams
+ */
 public class CustomLayoutActivity extends Activity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.custom_layout.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

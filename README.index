@@ -1926,6 +1926,7 @@ Layouts
   CustomLayout
     Views/Layouts/CustomLayout             all -- v11+ or crashes combineMeasuredStates
         .view.CustomLayoutActivity
+        .view.CustomLayout
             Example of writing a custom layout manager.  This is a fairly full-featured 
             layout manager that is relatively general, handling all layout cases.  The
             custom parameters that it supports are extensions of ViewGroup.MarginLayoutParams

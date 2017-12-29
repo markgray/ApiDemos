@@ -22,11 +22,18 @@ import android.app.Activity;
 import android.os.Bundle;
 
 /**
- * Baseline alignment includes a {@link android.widget.LinearLayout}
- * within another {@link android.widget.LinearLayout}.
+ * Baseline alignment includes a {@link android.widget.LinearLayout} within another
+ * {@link android.widget.LinearLayout}. Using android:baselineAlignedChildIndex
+ * again this time to point to a linear layout to baseline align by, which in turn
+ * will point to a text view inside of it.
  */
 public class BaselineNested3 extends Activity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.baseline_nested_3.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

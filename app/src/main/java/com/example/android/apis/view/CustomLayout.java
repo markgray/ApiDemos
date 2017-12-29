@@ -16,12 +16,13 @@
 
 package com.example.android.apis.view;
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.graphics.Rect;
-import com.example.android.apis.R;
 
+// Need the following import to get access to the app resources, since this
+// class is in a sub-package.
+import com.example.android.apis.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -33,37 +34,71 @@ import android.view.ViewGroup;
 import android.widget.RemoteViews;
 
 /**
- * Example of writing a custom layout manager.  This is a fairly full-featured
- * layout manager that is relatively general, handling all layout cases.  You
+ * Example of writing a custom layout manager. This is a fairly full-featured
+ * layout manager that is relatively general, handling all layout cases. You
  * can simplify it for more specific cases.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @RemoteViews.RemoteView
 public class CustomLayout extends ViewGroup {
-    /** The amount of space used by children in the left gutter. */
+    /**
+     * The amount of space used by children in the left gutter.
+     */
     private int mLeftWidth;
 
-    /** The amount of space used by children in the right gutter. */
+    /**
+     * The amount of space used by children in the right gutter.
+     */
     private int mRightWidth;
 
-    /** These are used for computing child frames based on their gravity. */
+    /**
+     * These are used for computing child frames based on their gravity.
+     * The frame of the containing space, in which the object will be placed.
+     */
     private final Rect mTmpContainerRect = new Rect();
+    /**
+     * Receives the computed frame of the object in its container.
+     */
     private final Rect mTmpChildRect = new Rect();
 
+    /**
+     * Our constructor, simply calls our super's constructor.
+     *
+     * @param context {@code Context} to use to access resources
+     */
     public CustomLayout(Context context) {
         super(context);
     }
 
+    /**
+     * Constructor that is called when inflating from xml.
+     *
+     * @param context The Context the view is running in, through which it can
+     *        access the current theme, resources, etc.
+     * @param attrs The attributes of the XML tag that is inflating the view.
+     */
     public CustomLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
+    /**
+     * Perform inflation from XML and apply a class-specific base style from a
+     * theme attribute or style resource.
+     *
+     * @param context The Context the view is running in, through which it can
+     *        access the current theme, resources, etc.
+     * @param attrs The attributes of the XML tag that is inflating the view.
+     * @param defStyle An attribute in the current theme that contains a
+     *        reference to a style resource that supplies default values for
+     *        the view. Can be 0 to not look for defaults.
+     */
     public CustomLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
     /**
-     * Any layout manager that doesn't scroll will want this.
+     * Any layout manager that doesn't scroll will want to implement this. We return false to the
+     * caller because we do not scroll.
      */
     @Override
     public boolean shouldDelayChildPressedState() {
@@ -71,8 +106,48 @@ public class CustomLayout extends ViewGroup {
     }
 
     /**
-     * Ask all children to measure themselves and compute the measurement of this
-     * layout based on the children.
+     * Ask all children to measure themselves and compute the measurement of this layout based on
+     * the children. This method is invoked by {@code measure(int, int)} and should be overridden
+     * by subclasses to provide accurate and efficient measurement of their contents.
+     *
+     * First we initialize our variable {@code int count} with the number of children we have. Then
+     * we initialize our fields {@code mLeftWidth} and {@code mRightWidth} to 0. Next we initialize
+     * our variables {@code int maxHeight}, {@code int maxWidth}, and {@code int childState} to 0.
+     *
+     * Now we loop over all {@code count} of our children using {@code i} as the index. We initialize
+     * our variable {@code View child} with the child at position {@code i}, and if the visibility of
+     * {@code child} is not GONE we ask {@code child} to measure itself given the {@code widthMeasureSpec}
+     * and {@code heightMeasureSpec} passed us. Next we initialize {@code LayoutParams lp} with the
+     * layout parameters of {@code child}. If the {@code position} field of {@code lp} is POSITION_LEFT
+     * the child needs to go in the left gutter so we add the maximum of {@code maxWidth} and the
+     * measured width of {@code child} plus the {@code leftMargin} plus the {@code rightMargin} fields
+     * of {@code lp} to {@code mLeftWidth}. If the {@code position} field of {@code lp} is POSITION_RIGHT
+     * the child needs to go in the right gutter so we add the maximum of {@code maxWidth} and the
+     * measured width of {@code child} plus the {@code leftMargin} plus the {@code rightMargin} fields
+     * of {@code lp} to {@code mRightWidth}. Otherwise we add the maximum of {@code maxWidth} and the
+     * measured width of {@code child} plus the {@code leftMargin} plus the {@code rightMargin} fields
+     * of {@code lp} to {@code maxWidth}. We set {@code maxHeight} to the maximum of {@code maxHeight}
+     * and the sum of the measured height of {@code child} plus the {@code topMargin} plus the
+     * {@code bottomMargin} fields of {@code lp}. We set {@code childState} to the result of combining
+     * the previous value of {@code childState} with the state bits of {@code child} then loop around
+     * for the next of our children.
+     *
+     * Having processed all of our children we add {@code mLeftWidth} and {@code mRightWidth} to
+     * {@code maxWidth} (total width is the maximum width of all inner children plus the width of
+     * the children in the gutters). We then make sure the {@code maxHeight} and {@code maxWidth}
+     * are bigger than our suggested minimum height and width.
+     *
+     * Finally we call the method {@code setMeasuredDimension} to store the measured width and
+     * measured height, where the width is given by the return value of {@code resolveSizeAndState}
+     * with {@code maxWidth} as how big our view wants to be, {@code widthMeasureSpec} as the restraints
+     * imposed by our parent, and {@code childState} as the size information bit mask for our children,
+     * and where the height is given by the return value of {@code resolveSizeAndState} with
+     * {@code maxHeight} as how big our view wants to be, {@code heightMeasureSpec} as the restraints
+     * imposed by our parent, and {@code childState} left shifted by MEASURED_HEIGHT_STATE_SHIFT (16)
+     * as the size information bit mask for our children.
+     *
+     * @param widthMeasureSpec horizontal space requirements as imposed by the parent.
+     * @param heightMeasureSpec vertical space requirements as imposed by the parent.
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -130,7 +205,20 @@ public class CustomLayout extends ViewGroup {
     }
 
     /**
-     * Position all children within this layout.
+     * Called from layout when this view should assign a size and position to each of its children.
+     * First we initialize our variable {@code int count} with the number of children we have. We
+     * initialize {@code int leftPos} with the left padding of our view, and {@code int rightPos}
+     * with the result of subtracting our parameter {@code left} and our right padding from our
+     * parameter {@code right}. We initialize {@code int middleLeft} with the result of adding
+     * {@code leftPos} to {@code mLeftWidth} (the left side of the middle region between the gutters)
+     * and {@code int middleRight} with the result of subtracting {@code mRightWidth} from
+     * {@code rightPos} (the right side of the middle region between the gutters).
+     *
+     * @param changed This is a new size or position for this view if true
+     * @param left Left position, relative to parent
+     * @param top Top position, relative to parent
+     * @param right Right position, relative to parent
+     * @param bottom Bottom position, relative to parent
      */
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -211,6 +299,7 @@ public class CustomLayout extends ViewGroup {
     /**
      * Custom per-child layout information.
      */
+    @SuppressWarnings("WeakerAccess")
     public static class LayoutParams extends MarginLayoutParams {
         /**
          * The gravity to apply with the View to which these layout parameters
@@ -230,6 +319,7 @@ public class CustomLayout extends ViewGroup {
             // Pull the layout param values from the layout XML during
             // inflation.  This is not needed if you don't care about
             // changing the layout behavior in XML.
+            @SuppressLint("CustomViewStyleable")
             TypedArray a = c.obtainStyledAttributes(attrs, R.styleable.CustomLayoutLP);
             gravity = a.getInt(R.styleable.CustomLayoutLP_android_layout_gravity, gravity);
             position = a.getInt(R.styleable.CustomLayoutLP_layout_position, position);
