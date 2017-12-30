@@ -32,15 +32,29 @@ import static android.widget.GridLayout.*;
 import static android.widget.GridLayout.LayoutParams;
 
 /**
- * A form, showing use of the GridLayout API. Here we demonstrate use of the row/column order
- * preserved property which allows rows and or columns to pass over each other when needed.
- * The two buttons in the bottom right corner need to be separated from the other UI elements.
- * This can either be done by separating rows or separating columns - but we don't need
- * to do both and may only have enough space to do one or the other.
+ * A form, showing use of the GridLayout API from java code. Here we demonstrate use of the
+ * row/column order preserved property which allows rows and or columns to pass over each other
+ * when needed. The two buttons in the bottom right corner need to be separated from the other
+ * UI elements. This can either be done by separating rows or separating columns - but we don't
+ * need to do both and may only have enough space to do one or the other.
  */
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 @SuppressLint("SetTextI18n")
 public class GridLayout3 extends Activity {
+    /**
+     * Creates, builds, configures and returns a {@code GridLayout} to use for our UI. First we
+     * initialize our variable {@code GridLayout p} with a new instance, set it to use the default
+     * margins, and set its alignment mode to ALIGN_BOUNDS. We initialize {@code Configuration configuration}
+     * with the current configuration that is in effect for our {@code context}. If the {@code orientation}
+     * field of {@code configuration} is ORIENTATION_PORTRAIT we configure {@code p} to be at liberty to
+     * place the horizontal column boundaries in whatever order best fits its constraints. Otherwise
+     * we configure {@code p} to be at liberty to place the vertical row boundaries in whatever order
+     * best fits its constraints.
+     *
+     * @param context {@code Context} to use to access resources, "this" when called from our
+     *                {@code onCreate} override.
+     * @return a {@code GridLayout} containing our UI
+     */
     public static View create(Context context) {
         GridLayout p = new GridLayout(context);
         p.setUseDefaultMargins(true);
@@ -52,19 +66,19 @@ public class GridLayout3 extends Activity {
             p.setRowOrderPreserved(false);
         }
 
-        Spec titleRow              = spec(0);
-        Spec introRow              = spec(1);
-        Spec emailRow              = spec(2, BASELINE);
-        Spec passwordRow           = spec(3, BASELINE);
-        Spec button1Row            = spec(5);
-        Spec button2Row            = spec(6);
+        Spec titleRow = spec(0);
+        Spec introRow = spec(1);
+        Spec emailRow = spec(2, BASELINE);
+        Spec passwordRow = spec(3, BASELINE);
+        Spec button1Row = spec(5);
+        Spec button2Row = spec(6);
 
-        Spec centerInAllColumns    = spec(0, 4, CENTER);
+        Spec centerInAllColumns = spec(0, 4, CENTER);
         Spec leftAlignInAllColumns = spec(0, 4, LEFT);
-        Spec labelColumn           = spec(0, RIGHT);
-        Spec fieldColumn           = spec(1, LEFT);
-        Spec defineLastColumn      = spec(3);
-        Spec fillLastColumn        = spec(3, FILL);
+        Spec labelColumn = spec(0, RIGHT);
+        Spec fieldColumn = spec(1, LEFT);
+        Spec defineLastColumn = spec(3);
+        Spec fillLastColumn = spec(3, FILL);
 
         {
             TextView c = new TextView(context);
@@ -114,6 +128,13 @@ public class GridLayout3 extends Activity {
         return p;
     }
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to the {@code GridLayout} built and configured
+     * by our method {@code create}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

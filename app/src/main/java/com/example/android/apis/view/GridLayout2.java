@@ -22,9 +22,16 @@ import android.app.Activity;
 import android.os.Bundle;
 
 /**
- * A form, showing use of the GridLayout API from XML.
+ * A form, showing use of the GridLayout API from XML, using a separate layout for landscape mode
+ * defined in layout-land
  */
 public class GridLayout2 extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.grid_layout_2.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.grid_layout_2);

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2011 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2011 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,51 +13,49 @@
      limitations under the License.
 -->
 
-<GridLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:useDefaultMargins="true"
     android:alignmentMode="alignBounds"
-    android:columnOrderPreserved="false"
     android:columnCount="4"
-    tools:targetApi="ice_cream_sandwich"
-    tools:ignore="HardcodedText,SpUsage,TextFields">
+    android:columnOrderPreserved="false"
+    android:useDefaultMargins="true"
+    tools:ignore="HardcodedText,SpUsage,TextFields"
+    tools:targetApi="ice_cream_sandwich">
+
     <TextView
-        android:text="Email setup"
-        android:textSize="32dip"
         android:layout_columnSpan="4"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:text="Email setup"
+        android:textSize="32dip" />
+
     <TextView
-        android:text="You can configure email in a few simple steps:"
-        android:textSize="16dip"
         android:layout_columnSpan="4"
         android:layout_gravity="left"
-    />
+        android:text="You can configure email in a few simple steps:"
+        android:textSize="16dip" />
+
     <TextView
-        android:text="Email address:"
         android:layout_gravity="right"
-    />
-    <EditText
-        android:ems="10"
-    />
+        android:text="Email address:" />
+
+    <EditText android:ems="10" />
+
     <TextView
-        android:text="Password:"
         android:layout_column="0"
         android:layout_gravity="right"
-    />
-    <EditText
-        android:ems="8"
-    />
+        android:text="Password:" />
+
+    <EditText android:ems="8" />
+
     <Button
-        android:text="Manual setup"
-        android:layout_row="5"
         android:layout_column="3"
-    />
+        android:layout_row="5"
+        android:text="Manual setup" />
+
     <Button
-        android:text="Next"
         android:layout_column="3"
         android:layout_gravity="fill_horizontal"
-    />
+        android:text="Next" />
 </GridLayout>
