@@ -18,17 +18,23 @@ package com.example.android.apis.view;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+
 import com.example.android.apis.R;
 
 import android.app.Activity;
 import android.os.Bundle;
 
-
 /**
- * A simple linear layout that fills the screen vertically, and the middle child is padded with extra space.
+ * A simple linear layout that fills the screen vertically, and the middle child is padded with extra
+ * space. The middle child gets allocated any extra space due to its attribute android:layout_weight="1"
  */
 public class LinearLayout3 extends Activity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.linear_layout_3.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

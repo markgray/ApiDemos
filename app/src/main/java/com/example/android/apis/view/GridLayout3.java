@@ -50,6 +50,47 @@ public class GridLayout3 extends Activity {
      * place the horizontal column boundaries in whatever order best fits its constraints. Otherwise
      * we configure {@code p} to be at liberty to place the vertical row boundaries in whatever order
      * best fits its constraints.
+     * <p>
+     * Next we define the grid indices and alignment for the rows of {@code Grid} cells. We define
+     * {@code Spec titleRow} to start in row 0, {@code Spec introRow} to start row 1, {@code Spec emailRow}
+     * to start in row 2 with BASELINE alignment, {@code Spec passwordRow} to start row 3 with BASELINE
+     * alignment, {@code Spec button1Row} to start row 5, and {@code Spec button2Row} to start row 6.
+     * <p>
+     * We define the grid indices, size, and alignment of the columns of cells as follows:
+     * {@code Spec centerInAllColumns} starts in column 0, with size 4 and CENTER alignment,
+     * {@code Spec leftAlignInAllColumns} starts in column 0, with size 4 and LEFT alignment,
+     * {@code Spec labelColumn} starts in column 0, with RIGHT alignment, {@code Spec fieldColumn}
+     * starts in column 1, with LEFT alignment, {@code Spec defineLastColumn} starts in column 3,
+     * {@code Spec fillLastColumn} starts in column 3 with FILL alignment (Indicates that a view
+     * should expanded to fit the boundaries of its cell group).
+     * <p>
+     * Now we create some views and use the above {@code Spec} objects to position them. We create
+     * {@code TextView c}, set its text size to 32, set its text to "Email setup" and add it to
+     * {@code p} using a new instance of {@code LayoutParams} which uses {@code titleRow} as the
+     * row spec, and {@code centerInAllColumns} as the column spec. We then create a new instance
+     * of {@code TextView c}, set its text size to 16, set its text to "You can configure email in
+     * a few simple steps:", and add it to {@code p} using a new instance of {@code LayoutParams}
+     * which uses {@code introRow} as the row spec, and {@code leftAlignInAllColumns} as the column
+     * spec. We then create a new instance of {@code TextView c}, set its text to "Email address:",
+     * and add it to {@code p} using a new instance of {@code LayoutParams} which uses {@code emailRow}
+     * as the row spec, and {@code labelColumn} as the column spec. We create a new instance for
+     * {@code EditText c}, set its size to 10 ems, set its input type to TYPE_CLASS_TEXT or'ed with
+     * TYPE_TEXT_VARIATION_EMAIL_ADDRESS, and add it to {@code p} using a new instance of
+     * {@code LayoutParams} which uses {@code emailRow} as the row spec, and {@code fieldColumn} as
+     * the column spec. We create a new instance for {@code TextView c}, set its text to "Password:",
+     * and add it to {@code p} using a new instance of {@code LayoutParams} which uses {@code passwordRow}
+     * as the row spec, and {@code labelColumn} as the column spec. We create a new instance of
+     * {@code EditText} for {@code TextView c}, set its size to 8 ems, set its input type to TYPE_CLASS_TEXT
+     * or'ed with TYPE_TEXT_VARIATION_PASSWORD, and add it to {@code p} using a new instance of
+     * {@code LayoutParams} which uses {@code passwordRow} as the row spec, and {@code fieldColumn}
+     * as the column spec. We create a new instance for {@code Button c}, set its text to "Manual setup",
+     * and add it to {@code p} using a new instance of {@code LayoutParams} which uses {@code button1Row}
+     * as the row spec, and {@code defineLastColumn} as the column spec. We create a new instance for
+     * {@code Button c}, set its text to "Next", and add it to {@code p} using a new instance of
+     * {@code LayoutParams} which uses {@code button2Row} as the row spec, and {@code fillLastColumn}
+     * as the column spec.
+     * <p>
+     * Finally we return {@code p} to the caller.
      *
      * @param context {@code Context} to use to access resources, "this" when called from our
      *                {@code onCreate} override.
@@ -140,5 +181,4 @@ public class GridLayout3 extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(create(this));
     }
-
 }

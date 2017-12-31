@@ -25,17 +25,26 @@ import android.widget.ArrayAdapter;
 
 /**
  * Demonstrates how the layout_weight attribute can shrink an element too big
- * to fit on screen.
+ * to fit on screen. The layout fills the screen, with the children stacked from
+ * the top. The ListView receives all the extra space due to its attribute
+ * android:layout_weight="1.0", but because it is still larger than the screen
+ * it is forced to enter scroll mode.
  */
 public class LinearLayout9 extends Activity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.linear_layout_9.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.linear_layout_9);
         ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, AutoComplete1.COUNTRIES));
+                android.R.layout.simple_list_item_1,
+                AutoComplete1.COUNTRIES));
     }
 
 }

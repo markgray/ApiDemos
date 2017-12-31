@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2011 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2011 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,13 +14,13 @@
 -->
 
 <!-- Demonstrates horizontal scrolling with a ScrollView. -->
-<HorizontalScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="100dip"
     android:layout_height="120dip">
+
     <TextView
-        android:textSize="24sp"
         android:layout_width="300dip"
         android:layout_height="wrap_content"
-        android:text="@string/scrollbar_3_text" />
+        android:text="@string/scrollbar_3_text"
+        android:textSize="24sp" />
 </HorizontalScrollView>

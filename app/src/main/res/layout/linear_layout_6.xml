@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -20,34 +19,34 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@drawable/blue"
-    android:padding="20dip"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/blue"
+    android:orientation="vertical"
+    android:padding="20dip">
 
     <TextView
-        android:background="@drawable/box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/linear_layout_6_one"/>
+        android:background="@drawable/box"
+        android:text="@string/linear_layout_6_one" />
 
     <TextView
-        android:background="@drawable/box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/linear_layout_6_two"/>
+        android:background="@drawable/box"
+        android:text="@string/linear_layout_6_two" />
 
     <TextView
-        android:background="@drawable/box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/linear_layout_6_three"/>
+        android:background="@drawable/box"
+        android:text="@string/linear_layout_6_three" />
 
     <TextView
-        android:background="@drawable/box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/linear_layout_6_four"/>
+        android:background="@drawable/box"
+        android:text="@string/linear_layout_6_four" />
 
 </LinearLayout>

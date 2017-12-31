@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -19,36 +18,37 @@
     Some columns force their height to match the parent.
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <TextView
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         android:background="@drawable/red"
-        android:layout_width="0dip"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:text="@string/linear_layout_7_small"/>
-
-    <TextView
-        android:background="@drawable/green"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/linear_layout_7_big"/>
-
-    <TextView
-        android:background="@drawable/blue"
-        android:layout_width="0dip"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
         android:text="@string/linear_layout_7_small" />
 
     <TextView
-        android:background="@drawable/yellow"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/linear_layout_7_wrap"/>
+        android:background="@drawable/green"
+        android:text="@string/linear_layout_7_big" />
+
+    <TextView
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/blue"
+        android:text="@string/linear_layout_7_small" />
+
+    <TextView
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/yellow"
+        android:text="@string/linear_layout_7_wrap" />
 
 </LinearLayout>
