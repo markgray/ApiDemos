@@ -27,20 +27,58 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-
+/**
+ * Button's toggle collapsed state of column 0 or column 2, also show how to build a
+ * TableRow and add it to a TableLayout programmatically. Note that the attribute
+ * android:collapseColumns="2" starts column 2 in a collapsed state.
+ */
 public class TableLayout7 extends Activity {
+    /**
+     * True if column number 2 (the shortcuts column) is collapsed, toggled by the button with ID
+     * R.id.toggle1 ("Toggle Shortcuts")
+     */
     private boolean mShortcutsCollapsed;
+    /**
+     * True is column number 0 (the checkmarks column) is collapsed, toggled by the button with ID
+     * R.id.toggle2 ("Toggle Checkmarks")
+     */
     private boolean mCheckmarksCollapsed;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.table_layout_7.
+     * We initialize our variable {@code TableLayout table} by finding the view with ID R.id.menu.
+     * We initialize {@code Button button} by finding the view with ID R.id.toggle1 and set its
+     * {@code OnClickListener} to an anonymous class whose {@code onClick} method toggles the current
+     * value of our field {@code mShortcutsCollapsed} and uses it to set the collapsed state of column
+     * 2 in {@code table}. We then set {@code button} by finding the view with ID R.id.toggle2 and set its
+     * {@code OnClickListener} to an anonymous class whose {@code onClick} method toggles the current
+     * value of our field {@code mCheckmarksCollapsed} and uses it to set the collapsed state of column
+     * 0 in {@code table}.
+     * <p>
+     * Next we set {@code mCheckmarksCollapsed} to the current collapsed state of column 0 of {@code table}
+     * and {@code mShortcutsCollapsed} to the current collapsed state of column 0 of {@code table}.
+     * Finally we call our method {@code appendRow} to programmatically build a {@code TableRow} and
+     * add it to {@code table}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.table_layout_7);
 
         final TableLayout table = (TableLayout) findViewById(R.id.menu);
         Button button = (Button) findViewById(R.id.toggle1);
         button.setOnClickListener(new Button.OnClickListener() {
+            /**
+             * Called when the button with ID R.id.toggle1 ("Toggle Shortcuts") is clicked. First we
+             * toggle the value of our field {@code mShortcutsCollapsed}, then we use it to set the
+             * collapsed state of column 2 in {@code TableLayout table}.
+             *
+             * @param v View that was clicked
+             */
+            @Override
             public void onClick(View v) {
                 mShortcutsCollapsed = !mShortcutsCollapsed;
                 table.setColumnCollapsed(2, mShortcutsCollapsed);
@@ -48,6 +86,14 @@ public class TableLayout7 extends Activity {
         });
         button = (Button) findViewById(R.id.toggle2);
         button.setOnClickListener(new Button.OnClickListener() {
+            /**
+             * Called when the button with ID R.id.toggle2 ("Toggle Checkmarks") is clicked. First we
+             * toggle the value of our field {@code mCheckmarksCollapsed}, then we use it to set the
+             * collapsed state of column 0 in {@code TableLayout table}.
+             *
+             * @param v View that was clicked
+             */
+            @Override
             public void onClick(View v) {
                 mCheckmarksCollapsed = !mCheckmarksCollapsed;
                 table.setColumnCollapsed(0, mCheckmarksCollapsed);
@@ -60,6 +106,18 @@ public class TableLayout7 extends Activity {
         appendRow(table);
     }
 
+    /**
+     * Programmatically builds, configures, and adds a {@code TableRow} to its argument
+     * {@code TableLayout table}. First we create a new instance for our variable {@code TableRow row}.
+     * Next we create {@code TextView label}, set its text to the string "Quit", and set its padding
+     * to 3 on all sides. We create {@code TextView shortcut}, set its text to the string "Ctrl-Q",
+     * set its padding to 3 on all sides, and set its gravity to RIGHT or'ed with TOP. We add
+     * {@code label} to {@code row} with a {@code LayoutParams} instance that specifies column 1,
+     * and add {@code shortcut} to {@code row} with a default instance of {@code LayoutParams}.
+     * Finally we add {@code row} to {@code table} using a default instance of {@code LayoutParams}.
+     *
+     * @param table {@code TableLayout} we are to add a row to.
+     */
     private void appendRow(TableLayout table) {
         TableRow row = new TableRow(this);
 

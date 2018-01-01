@@ -21,12 +21,19 @@ import com.example.android.apis.R;
 import android.app.Activity;
 import android.os.Bundle;
 
-
+/**
+ * TableLayout of Button and TextView's showing how to leave a cell empty
+ */
 public class TableLayout2 extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.table_layout_2.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.table_layout_2);
     }
 }

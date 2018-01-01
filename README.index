@@ -2009,6 +2009,7 @@ Layouts
 
     Views/Layouts/LinearLayout/09. Layout Weight  --all
         .view.LinearLayout9
+        .view.AutoComplete1
             Demonstrates a simple linear layout. The layout fills the screen, with the
             children stacked from the top. The ListView receives all the extra space due
             to android:layout_weight="1.0", but because it is still larger than the screen
@@ -2046,6 +2047,7 @@ Layouts
 
     Views/Layouts/ScrollView/3. Internal Selection  --all
         .view.InternalSelectionScroll
+        .view.InternalSelectionView
             Demonstrates how a well behaved view with internal selection InternalSelectionView
             can cause its parent android.widget.ScrollView to scroll to keep the internally
             interesting rectangle on the screen.  InternalSelectionView achieves this by calling
@@ -2093,7 +2095,8 @@ Layouts
     Views/Layouts/TableLayout/07. Column Collapse  --all
         .view.TableLayout7
             Button's toggle collapsed state of column 0 or column 2, also show how to build a
-            TableRow and add it to a TableLayout programmatically
+            TableRow and add it to a TableLayout programmatically. Note that the attribute
+            android:collapseColumns="2" starts column 2 in a collapsed state.
 
     Views/Layouts/TableLayout/08. Toggle Stretch  --all
         .view.TableLayout8

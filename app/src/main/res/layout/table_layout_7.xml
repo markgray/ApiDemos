@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,47 +14,54 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <TableLayout
         android:id="@+id/menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:stretchColumns="1"
-        android:collapseColumns="2">
+        android:collapseColumns="2"
+        android:stretchColumns="1">
 
         <TableRow>
+
             <TextView
                 android:layout_column="1"
-                android:text="@string/table_layout_7_open"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:text="@string/table_layout_7_open" />
+
             <TextView
-                android:text="@string/table_layout_7_open_shortcut"
                 android:gravity="right"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:text="@string/table_layout_7_open_shortcut" />
         </TableRow>
 
         <TableRow>
+
             <TextView
                 android:layout_column="1"
-                android:text="@string/table_layout_7_save"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:text="@string/table_layout_7_save" />
+
             <TextView
-                android:text="@string/table_layout_7_save_shortcut"
                 android:gravity="right"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:text="@string/table_layout_7_save_shortcut" />
         </TableRow>
 
         <TableRow>
+
             <TextView
                 android:layout_column="1"
-                android:text="@string/table_layout_7_save_as"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:text="@string/table_layout_7_save_as" />
+
             <TextView
-                android:text="@string/table_layout_7_save_as_shortcut"
                 android:gravity="right"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:text="@string/table_layout_7_save_as_shortcut" />
         </TableRow>
 
         <View
@@ -63,25 +69,30 @@
             android:background="#FF909090" />
 
         <TableRow>
+
             <TextView
-                android:text="@string/table_layout_7_x"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:text="@string/table_layout_7_x" />
+
             <TextView
-                android:text="@string/table_layout_7_import"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:text="@string/table_layout_7_import" />
         </TableRow>
 
         <TableRow>
+
             <TextView
-                android:text="@string/table_layout_7_x"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:text="@string/table_layout_7_x" />
+
             <TextView
-                android:text="@string/table_layout_7_export"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:text="@string/table_layout_7_export" />
+
             <TextView
-                android:text="@string/table_layout_7_export_shortcut"
                 android:gravity="right"
-                android:padding="3dip" />
+                android:padding="3dip"
+                android:text="@string/table_layout_7_export_shortcut" />
         </TableRow>
 
         <View
@@ -92,11 +103,13 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <Button
             android:id="@+id/toggle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/table_layout_7_toggle_checkmarks" />
+
         <Button
             android:id="@+id/toggle1"
             android:layout_width="wrap_content"

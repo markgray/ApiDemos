@@ -34,6 +34,10 @@ public class LinearLayout9 extends Activity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.linear_layout_9.
+     * Then we initialize our varaible {@code ListView list} by finding the view with the ID
+     * R.id.list, and set its adapter to a new instance of {@code ArrayAdapter} constructed to
+     * display the array {@code String[] COUNTRIES} in the activity {@code AutoComplete1} using
+     * the system layout android.R.layout.simple_list_item_1.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */

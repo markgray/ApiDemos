@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2008 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2008 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -18,9 +17,11 @@
      TextViews, EditTexts, and Buttons. -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="TextFields,RtlSymmetry,InefficientWeight,ContentDescription">
 
     <!-- Top label/button text field. -->
 
@@ -28,9 +29,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:addStatesFromChildren="true"
+        android:background="@android:drawable/edit_text"
         android:gravity="center_vertical"
-        android:paddingRight="0dip"
-        android:background="@android:drawable/edit_text">
+        android:paddingRight="0dip">
 
         <!--
             TextView label goes at the left.
@@ -39,9 +40,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/linear_layout_10_from"
-            android:textColor="?android:attr/textColorSecondary"
             android:textAppearance="?android:attr/textAppearanceLargeInverse"
-        />
+            android:textColor="?android:attr/textColorSecondary" />
 
         <!--
             EditText goes in between.
@@ -50,23 +50,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:singleLine="true"
             android:background="@null"
-        />
+            android:singleLine="true" />
 
         <!--
             The button goes at the right.
         -->
         <ImageButton
             style="@android:style/Widget.Button.Inset"
-            android:src="@android:drawable/star_big_on"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
-            android:layout_marginRight="2dip"
             android:layout_marginBottom="2dip"
+            android:layout_marginRight="2dip"
+            android:layout_marginTop="2dip"
             android:padding="10dip"
-        />
+            android:src="@android:drawable/star_big_on" />
 
     </LinearLayout>
 
@@ -77,9 +75,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:addStatesFromChildren="true"
+        android:background="@android:drawable/edit_text"
         android:gravity="center_vertical"
-        android:paddingRight="0dip"
-        android:background="@android:drawable/edit_text">
+        android:paddingRight="0dip">
 
         <!--
             TextView label goes at the left.
@@ -88,9 +86,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/linear_layout_10_to"
-            android:textColor="?android:attr/textColorSecondary"
             android:textAppearance="?android:attr/textAppearanceLargeInverse"
-        />
+            android:textColor="?android:attr/textColorSecondary" />
 
         <!--
             EditText goes in between.
@@ -99,23 +96,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:singleLine="true"
             android:background="@null"
-        />
+            android:singleLine="true" />
 
         <!--
             The button goes at the right.
         -->
         <ImageButton
             style="@android:style/Widget.Button.Inset"
-            android:src="@android:drawable/star_big_on"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
-            android:layout_marginRight="2dip"
             android:layout_marginBottom="2dip"
+            android:layout_marginRight="2dip"
+            android:layout_marginTop="2dip"
             android:padding="10dip"
-        />
+            android:src="@android:drawable/star_big_on" />
 
     </LinearLayout>
 

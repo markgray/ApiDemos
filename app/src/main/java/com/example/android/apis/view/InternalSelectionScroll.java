@@ -23,21 +23,32 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 /**
- * Demonstrates how a well behaved view with internal selection
- * ({@link InternalSelectionView}) can cause its parent {@link android.widget.ScrollView}
- * to scroll to keep the internally interesting rectangle on the screen.
- *
- * {@link InternalSelectionView} achieves this by calling {@link android.view.View#requestRectangleOnScreen}
- * each time its internal selection changes.
- *
- * {@link android.widget.ScrollView}, in turn, implements {@link android.view.View#requestRectangleOnScreen}
- * thereby achieving the result.  Note that {@link android.widget.ListView} also implements the
- * method, so views that call {@link android.view.View#requestRectangleOnScreen} that are embedded
- * within either {@link android.widget.ScrollView}s or {@link android.widget.ListView}s can
- * expect to keep their internal interesting rectangle visible.
+ * Demonstrates how a well behaved view with internal selection InternalSelectionView
+ * can cause its parent android.widget.ScrollView to scroll to keep the internally
+ * interesting rectangle on the screen. InternalSelectionView achieves this by calling
+ * android.view.View#requestRectangleOnScreen each time its internal selection changes.
+ * android.widget.ScrollView, in turn, implements android.view.View#requestRectangleOnScreen
+ * thereby achieving the result.  Note that android.widget.ListView also implements the
+ * method, so views that call android.view.View#requestRectangleOnScreen that are embedded
+ * within either android.widget.ScrollView's or android.widget.ListView's can expect to
+ * keep their internal interesting rectangle visible. Needs keyboard and a fix to
+ * background colors in InternalSelectView.java
  */
 public class InternalSelectionScroll extends Activity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. Next we create a new instance for our variable {@code ScrollView sv}, and
+     * a new instance for {@code ViewGroup.LayoutParams svLp} with the width set to MATCH_PARENT,
+     * and the height set to WRAP_CONTENT. We create a new instance for {@code LinearLayout ll}, set
+     * its layout parameters to {@code svLp}, and add it to {@code sv}. We create a new instance for
+     * {@code InternalSelectionView isv} with 10 rows. We fetch the height of our display to initialize
+     * {@code int screenHeight}, then create {@code LinearLayout.LayoutParams llLp} with the width
+     * set to MATCH_PARENT and the height set to 2 times {@code screenHeight}, then use it to set the
+     * layout parameters of {@code isv}, and add {@code isv} to {@code ll}. Finally we set our content
+     * view to {@code sv}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +70,7 @@ public class InternalSelectionScroll extends Activity {
                 2 * screenHeight);  // 2x screen height to ensure scrolling
         isv.setLayoutParams(llLp);
         ll.addView(isv);
-        
+
         setContentView(sv);
     }
 }

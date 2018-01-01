@@ -27,14 +27,19 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 
-
+/**
+ * Uses Button to toggle stretch attribute of one column. Includes programmatically built
+ * TableRow along with xml TableRows
+ */
 public class TableLayout8 extends Activity {
+    /**
+     * 
+     */
     private boolean mStretch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.table_layout_8);
 
         final TableLayout table = (TableLayout) findViewById(R.id.menu);

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -21,36 +20,42 @@
     android:stretchColumns="1">
 
     <TableRow>
+
         <TextView
             android:layout_column="1"
-            android:text="@string/table_layout_6_open"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_6_open" />
+
         <TextView
-            android:text="@string/table_layout_6_open_shortcut"
             android:gravity="right"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_6_open_shortcut" />
     </TableRow>
 
     <TableRow>
+
         <TextView
             android:layout_column="1"
-            android:text="@string/table_layout_6_save"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_6_save" />
+
         <TextView
-            android:text="@string/table_layout_6_save_shortcut"
             android:gravity="right"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_6_save_shortcut" />
     </TableRow>
 
     <TableRow>
+
         <TextView
             android:layout_column="1"
-            android:text="@string/table_layout_6_save_as"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_6_save_as" />
+
         <TextView
-            android:text="@string/table_layout_6_save_as_shortcut"
             android:gravity="right"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_6_save_as_shortcut" />
     </TableRow>
 
     <View
@@ -58,25 +63,30 @@
         android:background="#FF909090" />
 
     <TableRow>
+
         <TextView
-            android:text="@string/table_layout_6_x"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_6_x" />
+
         <TextView
-            android:text="@string/table_layout_6_import"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_6_import" />
     </TableRow>
 
     <TableRow>
+
         <TextView
-            android:text="@string/table_layout_6_x"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_6_x" />
+
         <TextView
-            android:text="@string/table_layout_6_export"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_6_export" />
+
         <TextView
-            android:text="@string/table_layout_6_export_shortcut"
             android:gravity="right"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_6_export_shortcut" />
     </TableRow>
 
     <View
@@ -84,9 +94,10 @@
         android:background="#FF909090" />
 
     <TableRow>
+
         <TextView
             android:layout_column="1"
-            android:text="@string/table_layout_6_quit"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_6_quit" />
     </TableRow>
 </TableLayout>

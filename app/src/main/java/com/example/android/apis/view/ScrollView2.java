@@ -26,10 +26,24 @@ import android.widget.TextView;
 import android.widget.Button;
 
 /**
- * Demonstrates wrapping a layout in a ScrollView.
- *
+ * Demonstrates wrapping a LONG LinearLayout in a ScrollView (All but the first
+ * TextView and Button in the LinearLayout are Created and .addView'd programmatically)
  */
 public class ScrollView2 extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.scroll_view_2.
+     * We initialize our variable {@code LinearLayout layout} by finding the view with ID R.id.layout.
+     * Then we loop for i=2 to i=63, creating a new instance for {@code TextView textView}, setting
+     * its text to the string formed by concatenating "Text View " and the string value of {@code i},
+     * then creating {@code LayoutParams p} with the width set to MATCH_PARENT and the height set to
+     * WRAP_CONTENT, and using it when we add the view {@code textView} to {@code layout}. We next
+     * create {@code Button buttonView}, set its text to the string formed by concatenating "Button "
+     * and the string value of {@code i}, then using {@code p} as the {@code LayoutParams} add it to
+     * {@code layout}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {

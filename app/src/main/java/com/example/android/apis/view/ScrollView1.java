@@ -25,10 +25,15 @@ import android.os.Bundle;
 
 
 /**
- * Demonstrates wrapping a layout in a ScrollView.
- *
+ * Demonstrates wrapping a (short) layout in a ScrollView.
  */
 public class ScrollView1 extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.scroll_view_1.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

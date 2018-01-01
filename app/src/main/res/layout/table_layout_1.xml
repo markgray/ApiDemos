@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -19,38 +18,47 @@
     android:layout_height="match_parent">
 
     <TableRow>
+
         <TextView
-          android:text="@string/table_layout_1_star"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_1_star" />
+
         <TextView
-            android:text="@string/table_layout_1_open"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_1_open" />
+
         <TextView
-            android:text="@string/table_layout_1_open_shortcut"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_1_open_shortcut" />
     </TableRow>
 
     <TableRow>
+
         <TextView
-            android:text="@string/table_layout_1_triple_star"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_1_triple_star" />
+
         <TextView
-            android:text="@string/table_layout_1_save"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_1_save" />
+
         <TextView
-            android:text="@string/table_layout_1_save_shortcut"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_1_save_shortcut" />
     </TableRow>
 
     <TableRow>
+
         <TextView
-            android:text="@string/table_layout_1_star"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_1_star" />
+
         <TextView
-            android:text="@string/table_layout_1_quit"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_1_quit" />
+
         <TextView
-            android:text="@string/table_layout_1_quit_shortcut"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_1_quit_shortcut" />
     </TableRow>
 </TableLayout>

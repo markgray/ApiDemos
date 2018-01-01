@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -22,41 +21,51 @@
     <!-- Rows have different number of columns and content doesn't fit on
          screen: column 4 of row 2 shrinks all of the other columns -->
     <TableRow>
+
         <TextView
-            android:text="@string/table_layout_3_star"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_3_star" />
+
         <TextView
-            android:text="@string/table_layout_3_open"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_3_open" />
+
         <TextView
-            android:text="@string/table_layout_3_open_shortcut"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_3_open_shortcut" />
     </TableRow>
 
     <TableRow>
+
         <TextView
-            android:text="@string/table_layout_3_triple_star"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_3_triple_star" />
+
         <TextView
-            android:text="@string/table_layout_3_save"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_3_save" />
+
         <TextView
-            android:text="@string/table_layout_3_save_shortcut"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_3_save_shortcut" />
+
         <TextView
-            android:text="@string/table_layout_3_too_long"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_3_too_long" />
     </TableRow>
 
     <TableRow>
+
         <TextView
-            android:text="@string/table_layout_3_star"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_3_star" />
+
         <TextView
-            android:text="@string/table_layout_3_quit"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_3_quit" />
+
         <TextView
-            android:text="@string/table_layout_3_quit_shortcut"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_3_quit_shortcut" />
     </TableRow>
 </TableLayout>

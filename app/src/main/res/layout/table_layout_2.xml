@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -19,22 +18,27 @@
     android:layout_height="match_parent">
 
     <TableRow>
-        <Button
-            android:text="@string/table_layout_2_open" />
+
+        <Button android:text="@string/table_layout_2_open" />
+
         <TextView
-            android:text="@string/table_layout_2_path_1"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_2_path_1" />
     </TableRow>
+
     <TableRow>
-        <Button
-            android:text="@string/table_layout_2_save_all"/>
+
+        <Button android:text="@string/table_layout_2_save_all" />
     </TableRow>
+
     <TableRow>
+
         <Button
             android:text="@string/table_layout_2_save"
             android:visibility="invisible" />
+
         <TextView
-            android:text="@string/table_layout_2_path_2"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_2_path_2" />
     </TableRow>
 </TableLayout>

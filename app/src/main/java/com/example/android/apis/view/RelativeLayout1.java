@@ -26,9 +26,16 @@ import android.os.Bundle;
 
 /**
  * A simple layout which demonstrates stretching a view to fill the space between two other views.
+ * This occurs oddly enough because even though all three share the same default weight, the
+ * android:layout_height="0dip" causes the center view to take the leftover space from the parent.
  */
 public class RelativeLayout1 extends Activity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.relative_layout_1.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
