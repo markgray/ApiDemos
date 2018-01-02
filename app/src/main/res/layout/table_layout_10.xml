@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,44 +14,52 @@
 -->
 
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-   android:layout_width="match_parent"
-   android:layout_height="match_parent"
-   android:stretchColumns="1">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:stretchColumns="1"
+    tools:ignore="TextFields">
 
-   <TableRow>
-       <TextView
-           android:text="@string/table_layout_10_user"
-           android:textStyle="bold"
-           android:gravity="right"
-           android:padding="3dip" />
+    <TableRow>
 
-       <EditText android:id="@+id/username"
-           android:text="@string/table_layout_10_username_text"
-           android:padding="3dip"
-           android:scrollHorizontally="true" />
-   </TableRow>
+        <TextView
+            android:gravity="right"
+            android:padding="3dip"
+            android:text="@string/table_layout_10_user"
+            android:textStyle="bold" />
 
-   <TableRow>
-       <TextView
-           android:text="@string/table_layout_10_password"
-           android:textStyle="bold"
-           android:gravity="right"
-           android:padding="3dip" />
+        <EditText
+            android:id="@+id/username"
+            android:padding="3dip"
+            android:text="@string/table_layout_10_username_text" />
 
-       <EditText android:id="@+id/password"
-           android:text="@string/table_layout_10_password_text"
-           android:password="true"
-           android:padding="3dip"
-           android:scrollHorizontally="true" />
-   </TableRow>
+    </TableRow>
 
-   <TableRow
-       android:gravity="right">
+    <TableRow>
 
-       <Button android:id="@+id/cancel"
-           android:text="@string/table_layout_10_cancel" />
+        <TextView
+            android:gravity="right"
+            android:padding="3dip"
+            android:text="@string/table_layout_10_password"
+            android:textStyle="bold" />
 
-       <Button android:id="@+id/login"
-           android:text="@string/table_layout_10_login" />
-   </TableRow>
+        <EditText
+            android:id="@+id/password"
+            android:inputType="textPassword"
+            android:padding="3dip"
+            android:text="@string/table_layout_10_password_text" />
+    </TableRow>
+
+    <TableRow
+        android:gravity="right"
+        android:scrollHorizontally="false">
+
+        <Button
+            android:id="@+id/cancel"
+            android:text="@string/table_layout_10_cancel" />
+
+        <Button
+            android:id="@+id/login"
+            android:text="@string/table_layout_10_login" />
+    </TableRow>
 </TableLayout>

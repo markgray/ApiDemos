@@ -22,13 +22,19 @@ import android.app.Activity;
 import android.os.Bundle;
 
 /**
- * <p>This example shows how to use cell spanning in a table layout.</p>
+ * This example shows how to use cell spanning in a table layout. Creates large
+ * multi-column cells for several rows using android:layout_span=
  */
 public class TableLayout12 extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.table_layout_12.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.table_layout_12);
     }
 }

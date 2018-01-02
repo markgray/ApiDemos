@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -20,41 +19,46 @@
     android:stretchColumns="1">
 
     <TableRow>
+
         <TextView
             android:layout_column="1"
-            android:text="@string/table_layout_7_open"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_7_open" />
+
         <TextView
-            android:text="@string/table_layout_7_open_shortcut"
             android:gravity="right"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_7_open_shortcut" />
     </TableRow>
 
     <TableRow>
+
         <TextView
             android:layout_column="1"
-            android:text="@string/table_layout_7_save"
             android:background="#FF00FF00"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_7_save" />
+
         <TextView
-            android:text="@string/table_layout_7_save_shortcut"
             android:gravity="right"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_7_save_shortcut" />
     </TableRow>
 
     <TableRow>
         <!-- Horizontally centers the content of the cell -->
         <TextView
             android:layout_column="1"
-            android:text="@string/table_layout_7_save_as"
-            android:background="#FFFF0000"
             android:layout_gravity="center_horizontal"
-            android:padding="3dip" />
+            android:background="#FFFF0000"
+            android:padding="3dip"
+            android:text="@string/table_layout_7_save_as" />
+
         <TextView
-            android:text="@string/table_layout_7_save_as_shortcut"
             android:background="#FFFF00FF"
             android:gravity="right"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_7_save_as_shortcut" />
     </TableRow>
 
     <View
@@ -62,29 +66,33 @@
         android:background="#FF909090" />
 
     <TableRow>
+
         <TextView
-            android:text="@string/table_layout_7_x"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_7_x" />
+
         <TextView
-            android:text="@string/table_layout_7_import"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_7_import" />
     </TableRow>
 
     <TableRow>
+
         <View
             android:layout_height="68dip"
             android:background="#FF909090" />
         <!-- Aligns the content of the cell to the bottom right -->
         <TextView
-            android:text="@string/table_layout_7_export"
-            android:background="#FFFF0000"
             android:layout_gravity="right|bottom"
-            android:padding="3dip" />
+            android:background="#FFFF0000"
+            android:padding="3dip"
+            android:text="@string/table_layout_7_export" />
+
         <TextView
-            android:text="@string/table_layout_7_export_shortcut"
             android:background="#FF00FFFF"
             android:gravity="right"
-            android:padding="3dip" />
+            android:padding="3dip"
+            android:text="@string/table_layout_7_export_shortcut" />
     </TableRow>
 
     <View

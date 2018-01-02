@@ -18,38 +18,65 @@ package com.example.android.apis.view;
 
 import android.app.ListActivity;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.view.View;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
- /**
- * A list view example where the
- * data comes from a cursor, and a
+/**
+ * A list view example where the data comes from a cursor, and a
  * SimpleCursorListAdapter is used to map each item to a two-line
  * display.
  */
 @SuppressWarnings("deprecation")
 public class List3 extends ListActivity {
+    /**
+     * Projection of the data fields we want from the phone database.
+     */
+    private static final String[] PHONE_PROJECTION = new String[]{
+            Phone._ID,
+            Phone.TYPE,
+            Phone.LABEL,
+            Phone.NUMBER
+    };
 
+    /**
+     * Column number in our projection for the Phone.TYPE field
+     */
+    private static final int COLUMN_TYPE = 1;
+    /**
+     * Column number in our projection for the Phone.LABEL field
+     */
+    private static final int COLUMN_LABEL = 2;
+
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. Next we retrieve {@code Cursor c} by querying the uri Phone.CONTENT_URI
+     * ("content://com.android.contacts/data/phones"), for the projection PHONE_PROJECTION, and null
+     * for the rest of the arguments to {@code query}. We call the method {@code startManagingCursor}
+     * so the {@code Activity} will take care of managing {@code Cursor c}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Get a cursor with all phones
-        Cursor c = getContentResolver().query(Phone.CONTENT_URI,
-                PHONE_PROJECTION, null, null, null);
+        Cursor c = getContentResolver().query(Phone.CONTENT_URI, PHONE_PROJECTION,
+                null, null, null);
         startManagingCursor(c);
 
         // Map Cursor columns to views defined in simple_list_item_2.xml
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
                 android.R.layout.simple_list_item_2, c,
-                        new String[] {
-                            Phone.TYPE,
-                            Phone.NUMBER
-                        },
-                        new int[] { android.R.id.text1, android.R.id.text2 });
+                new String[]{
+                        Phone.TYPE,
+                        Phone.NUMBER
+                },
+                new int[]{android.R.id.text1, android.R.id.text2});
         //Used to display a readable string for the phone type
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
             @Override
@@ -73,14 +100,4 @@ public class List3 extends ListActivity {
         });
         setListAdapter(adapter);
     }
-
-    private static final String[] PHONE_PROJECTION = new String[] {
-        Phone._ID,
-        Phone.TYPE,
-        Phone.LABEL,
-        Phone.NUMBER
-    };
-
-    private static final int COLUMN_TYPE = 1;
-    private static final int COLUMN_LABEL = 2;
 }
