@@ -2146,6 +2146,7 @@ Lists
 
     Views/Lists/04. ListAdapter            all
         .view.List4
+        .Shakespeare
             A list view example where the data comes from a custom ListAdapter which displays from
             an array of strings using a custom view (reusing recycled views when one is given to it.)
 

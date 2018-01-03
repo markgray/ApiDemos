@@ -26,14 +26,18 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
 /**
- * A list view example where the
- * data comes from a custom
- * ListAdapter
+ * A list view example where the data comes from a custom ListAdapter, onListItemClick is
+ * overridden to "toggle" the view between two states: collapsed to a title, and expanded
+ * to a title and text for that title
  */
 public class List6 extends ListActivity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. Then we set our list adapter to a new instance of {@code SpeechListAdapter}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

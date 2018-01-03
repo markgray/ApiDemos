@@ -68,7 +68,7 @@ public final class Shakespeare {
             "The air, a charter'd libertine, is still," + 
             "And the mute wonder lurketh in men's ears," + 
             "To steal his sweet and honey'd sentences;" + 
-            "So that the art and practic part of life" + 
+            "So that the art and practice part of life" +
             "Must be the mistress to this theoric:" + 
             "Which is a wonder how his grace should glean it," + 
             "Since his addiction was to courses vain," + 

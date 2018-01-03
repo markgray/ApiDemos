@@ -18,7 +18,6 @@ package com.example.android.apis.view;
 
 import android.app.ListActivity;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.view.View;
@@ -56,7 +55,15 @@ public class List3 extends ListActivity {
      * {@code onCreate}. Next we retrieve {@code Cursor c} by querying the uri Phone.CONTENT_URI
      * ("content://com.android.contacts/data/phones"), for the projection PHONE_PROJECTION, and null
      * for the rest of the arguments to {@code query}. We call the method {@code startManagingCursor}
-     * so the {@code Activity} will take care of managing {@code Cursor c}.
+     * so the {@code Activity} will take care of managing {@code Cursor c}. We create a new instance
+     * for {@code SimpleCursorAdapter adapter} from {@code Cursor c} using the system layout
+     * android.R.layout.simple_list_item_2 to display the Phone.TYPE, and Phone.NUMBER fields of our
+     * data in the {@code TextView} with ID android.R.id.text1, and android.R.id.text2 respectively.
+     * We set the view binder of {@code adapter} to an anonymous class whose {@code setViewValue}
+     * override intercepts only the COLUMN_TYPE columnIndex and does some special handling in order
+     * to properly handle the Phone.TYPE_CUSTOM COLUMN_TYPE (if the COLUMN_TYPE is Phone.TYPE_CUSTOM
+     * it fetches the {@code label} to use for the phone from the COLUMN_LABEL field of the cursor).
+     * Finally we set our list adapter to {@code adapter}.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
@@ -79,6 +86,21 @@ public class List3 extends ListActivity {
                 new int[]{android.R.id.text1, android.R.id.text2});
         //Used to display a readable string for the phone type
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+            /**
+             * Binds the Cursor column defined by the specified index to the specified view. If the
+             * {@code columnIndex} is not our COLUMN_TYPE we return false so that the adapter will
+             * handle the binding itself. Otherwise we initialize {@code int type} with the value
+             * in column {@code COLUMN_TYPE} of the {@code cursor}, and initialize {@code String label}
+             * to null. If {@code type} is Phone.TYPE_CUSTOM we set {@code label} to the value of
+             * column COLUMN_LABEL of the cursor. We set {@code String text} to the CharSequence that
+             * best describes {@code type}, substituting {@code label} if {@code type} is TYPE_CUSTOM.
+             * We set the text of {@code view} to {@code text} and return true to the caller.
+             *
+             * @param view the view to bind the data to
+             * @param cursor the cursor to get the data from
+             * @param columnIndex the column at which the data can be found in the cursor
+             * @return true if the data was bound to the view, false otherwise
+             */
             @Override
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
                 //Let the adapter handle the binding if the column is not TYPE
