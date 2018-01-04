@@ -46,7 +46,16 @@ public class List6 extends ListActivity {
         setListAdapter(new SpeechListAdapter(this));
     }
 
-
+    /**
+     * This method will be called when an item in the list is selected. We Get the {@code ListAdapter}
+     * associated with this activity's {@code ListView}, cast it to an {@code SpeechListAdapter} and
+     * call its {@code toggle} method with our {@code position} parameter.
+     *
+     * @param l        The ListView where the click happened
+     * @param v        The view that was clicked within the ListView
+     * @param position The position of the view in the list
+     * @param id       The row id of the item that was clicked
+     */
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         ((SpeechListAdapter) getListAdapter()).toggle(position);
@@ -56,17 +65,25 @@ public class List6 extends ListActivity {
      * A sample ListAdapter that presents content
      * from arrays of speeches and text.
      */
+    @SuppressWarnings({"WeakerAccess", "SpellCheckingInspection"})
     private class SpeechListAdapter extends BaseAdapter {
+        /**
+         * Our constructor, we just save our parameter {@code context} in our field
+         * {@code Context mContext}.
+         *
+         * @param context {@code Context} to use to construct Views
+         */
         public SpeechListAdapter(Context context) {
             mContext = context;
         }
 
 
         /**
-         * The number of items in the list is determined by the number of speeches
-         * in our array.
+         * How many items are in the data set represented by this Adapter. The number of items in
+         * the list is determined by the number of speeches in our array, so we just return the
+         * length of our {@code String[] mTitles} array.
          *
-         * @see android.widget.ListAdapter#getCount()
+         * @return Count of items.
          */
         @Override
         public int getCount() {
@@ -74,13 +91,13 @@ public class List6 extends ListActivity {
         }
 
         /**
-         * Since the data comes from an array, just returning
-         * the index is sufficent to get at the data. If we
-         * were using a more complex data structure, we
-         * would return whatever object represents one
+         * Get the data item associated with the specified position in the data set. Since the data
+         * comes from an array, just returning the index is sufficient to get at the data. If we
+         * were using a more complex data structure, we would return whatever object represents one
          * row in the list.
          *
-         * @see android.widget.ListAdapter#getItem(int)
+         * @param position Position of the item whose data we want within the adapter's data set.
+         * @return The data at the specified position.
          */
         @Override
         public Object getItem(int position) {
@@ -88,9 +105,11 @@ public class List6 extends ListActivity {
         }
 
         /**
-         * Use the array index as a unique id.
+         * Get the row id associated with the specified position in the list. Use the array index as
+         * a unique id.
          *
-         * @see android.widget.ListAdapter#getItemId(int)
+         * @param position The position of the item within the adapter's data set whose row id we want.
+         * @return The id of the item at the specified position.
          */
         @Override
         public long getItemId(int position) {
@@ -98,9 +117,20 @@ public class List6 extends ListActivity {
         }
 
         /**
-         * Make a SpeechView to hold each row.
+         * Get a View that displays the data at the specified position in the data set. First we
+         * declare {@code SpeechView sv}. If {@code convertView} is null, we create a new instance
+         * for {@code sv} constructed using the title from {@code mTitles[position]}, dialog from
+         * {@code mDialogue[position]}, and expanded state from {@code mExpanded[position]}. If
+         * {@code convertView} is not null we cast it to set {@code SpeechView sv}, call the method
+         * {@code sv.setTitle} to set the title to {@code mTitles[position]}, call the method
+         * {@code sv.setDialogue} to set the dialog to {@code mDialogue[position]}, and call the
+         * method {@code sv.setExpanded} to set the expanded state to {@code mExpanded[position]}.
+         * In either case we return {@code sv} to the caller.
          *
-         * @see android.widget.ListAdapter#getView(int, android.view.View, android.view.ViewGroup)
+         * @param position    The position of the item within the adapter's data set whose view we want.
+         * @param convertView The old view to reuse, if possible.
+         * @param parent      The parent that this view will eventually be attached to
+         * @return A View corresponding to the data at the specified position.
          */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -117,6 +147,14 @@ public class List6 extends ListActivity {
             return sv;
         }
 
+        /**
+         * Toggles the state of the {@code SpeechView} at position {@code position} in our array.
+         * First we toggle the value of {@code mExpanded[position]}, then we call the method
+         * {@code notifyDataSetChanged} to notify the attached observers that the underlying data
+         * has been changed and any View reflecting the data set should refresh itself.
+         *
+         * @param position The position of the item within the adapter's data set we are to toggle.
+         */
         public void toggle(int position) {
             mExpanded[position] = !mExpanded[position];
             notifyDataSetChanged();
@@ -368,6 +406,31 @@ public class List6 extends ListActivity {
      * with two text fields.
      */
     private class SpeechView extends LinearLayout {
+        /**
+         * {@code TextView} we use to display the title of our dialog
+         */
+        private TextView mTitle;
+        /**
+         * {@code TextView} we use to display our dialog
+         */
+        private TextView mDialogue;
+
+        /**
+         * Our constructor. First we call our super's constructor. Then we set our orientation to
+         * VERTICAL. We create a new instance for {@code TextView mTitle}, set its text to our
+         * parameter {@code String title} and add it to our {@code LinearLayout} using a new instance
+         * of {@code LayoutParams} specifying a width of MATCH_PARENT, and a height of WRAP_CONTENT.
+         * We create a new instance for {@code TextView mDialogue}, set its text to our parameter
+         * {@code String dialogue} and add it to our {@code LinearLayout} using a new instance of
+         * {@code LayoutParams} specifying a width of MATCH_PARENT, and a height of WRAP_CONTENT.
+         * Finally we set the visibility of {@code mDialogue} to VISIBLE if {@code expanded} is true,
+         * or GONE if it is false.
+         *
+         * @param context  {@code Context} to use to create Views
+         * @param title    string to use for our {@code TextView mTitle}
+         * @param dialogue string to use for our {@code TextView mDialogue}
+         * @param expanded flag indicating whether we should display {@code mDialogue} or not.
+         */
         public SpeechView(Context context, String title, String dialogue, boolean expanded) {
             super(context);
 
@@ -388,27 +451,34 @@ public class List6 extends ListActivity {
         }
 
         /**
-         * Convenience method to set the title of a SpeechView
+         * Convenience method to set the title of our {@code SpeechView}. We just set the text of
+         * {@code TextView mTitle} to our parameter {@code title}
+         *
+         * @param title String to use as the text for {@code TextView mTitle}
          */
         public void setTitle(String title) {
             mTitle.setText(title);
         }
 
         /**
-         * Convenience method to set the dialogue of a SpeechView
+         * Convenience method to set the dialogue of a {@code SpeechView}. We just set the text of
+         * {@code TextView mDialogue} to our parameter {@code words}.
+         *
+         * @param words String to use as the text for {@code TextView mDialogue}
          */
         public void setDialogue(String words) {
             mDialogue.setText(words);
         }
 
         /**
-         * Convenience method to expand or hide the dialogue
+         * Convenience method to expand or hide the dialogue. We set the visibility of {@code mDialogue}
+         * to VISIBLE if {@code expanded} is true, or GONE if it is false.
+         *
+         * @param expanded flag to indicate whether {@code TextView mDialogue} should be visible (true)
+         *                 or gone (false)
          */
         public void setExpanded(boolean expanded) {
             mDialogue.setVisibility(expanded ? VISIBLE : GONE);
         }
-
-        private TextView mTitle;
-        private TextView mDialogue;
     }
 }

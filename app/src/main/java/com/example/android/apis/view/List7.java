@@ -18,6 +18,7 @@ package com.example.android.apis.view;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+
 import com.example.android.apis.R;
 
 
@@ -34,29 +35,63 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 /**
- * A list view example where the data comes from a cursor.
+ * A list view example where the data comes from a cursor. Original used the "selected"
+ * item in list to display the details of an item at the bottom of the string by implementing
+ * OnItemSelectedListener, I modified to do the same when onListItemClick is called since
+ * a touch interface cannot select.
  */
 @SuppressWarnings("deprecation")
 public class List7 extends ListActivity implements OnItemSelectedListener {
-
+    /**
+     * {@code TextView} we use to display the phone number of the selected contact.
+     */
     private TextView mPhone;
 
-    private static final String[] PHONE_PROJECTION = new String[] {
-        Phone._ID,
-        Phone.TYPE,
-        Phone.LABEL,
-        Phone.NUMBER,
-        Phone.DISPLAY_NAME
+    /**
+     * Projection we use to query the contact database.
+     */
+    private static final String[] PHONE_PROJECTION = new String[]{
+            Phone._ID,
+            Phone.TYPE,
+            Phone.LABEL,
+            Phone.NUMBER,
+            Phone.DISPLAY_NAME
     };
 
+    /**
+     * Column number of the phone TYPE field in our cursor
+     */
     private static final int COLUMN_PHONE_TYPE = 1;
+    /**
+     * Column number of the phone LABEL field in our cursor
+     */
     private static final int COLUMN_PHONE_LABEL = 2;
+    /**
+     * Column number of the phone NUMBER field in our cursor
+     */
     private static final int COLUMN_PHONE_NUMBER = 3;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.list_7. We initialize
+     * our field {@code TextView mPhone} by finding the view with ID R.id.phone, and we set the
+     * {@code OnItemSelectedListener} of our {@code ListView} to this. Next we retrieve {@code Cursor c}
+     * by querying the uri Phone.CONTENT_URI ("content://com.android.contacts/data/phones"), for the
+     * projection PHONE_PROJECTION, with the selection Phone.NUMBER concatenated to the string
+     * " NOT NULL", null for the {@code selectionArgs} and null for the {@code sortOrder} arguments
+     * to {@code query}. We call the method {@code startManagingCursor} so the {@code Activity} will
+     * take care of managing {@code Cursor c}. We create a new instance of {@code SimpleCursorAdapter}
+     * for {@code ListAdapter adapter} from {@code Cursor c} using the system layout
+     * android.R.layout.simple_list_item_1 to display the Phone.DISPLAY_NAME in the TextView with
+     * ID android.R.id.text1. Finally we set our list adapter to {@code adapter}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_7);
+
         mPhone = (TextView) findViewById(R.id.phone);
         getListView().setOnItemSelectedListener(this);
 
@@ -72,17 +107,16 @@ public class List7 extends ListActivity implements OnItemSelectedListener {
                 // Give the cursor to the list adapter
                 c,
                 // Map the DISPLAY_NAME column to...
-                new String[] {Phone.DISPLAY_NAME},
+                new String[]{Phone.DISPLAY_NAME},
                 // The "text1" view defined in the XML template
-                new int[] {android.R.id.text1});
+                new int[]{android.R.id.text1});
         setListAdapter(adapter);
     }
 
     /**
-     * This method will be called when an item in the list is selected.
-     * Subclasses should override. Subclasses can call
-     * getListView().getItemAtPosition(position) if they need to access the
-     * data associated with the selected item.
+     * This method will be called when an item in the list is clicked. First we call the method
+     * {@code setSelection} to set our parameter {@code position} to be the currently selected list
+     * item.
      *
      * @param l        The ListView where the click happened
      * @param v        The view that was clicked within the ListView
