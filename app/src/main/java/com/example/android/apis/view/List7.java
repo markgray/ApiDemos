@@ -116,7 +116,15 @@ public class List7 extends ListActivity implements OnItemSelectedListener {
     /**
      * This method will be called when an item in the list is clicked. First we call the method
      * {@code setSelection} to set our parameter {@code position} to be the currently selected list
-     * item.
+     * item. Then we set {@code Cursor c} to the object at {@code position} in our {@code ListView}.
+     * We set our variable {@code int type} to the data in the Phone.TYPE column of {@code c}, and
+     * {@code String phone} to the data in the Phone.NUMBER column. We initialize {@code String label}
+     * to null, and if the {@code type} is Phone.TYPE_CUSTOM we set {@code label} to the data in
+     * the Phone.LABEL column of {@code c}. We initialize {@code String numberType} to the type label
+     * returned by {@code getTypeLabel} for {@code type} (defaulting to {@code label} if it is a
+     * Phone.TYPE_CUSTOM type), and create {@code String text} by concatenating {@code numberType}
+     * with the string ": " and {@code phone}. We then set the text of {@code TextView mPhone} to
+     * {@code text}.
      *
      * @param l        The ListView where the click happened
      * @param v        The view that was clicked within the ListView
@@ -140,6 +148,23 @@ public class List7 extends ListActivity implements OnItemSelectedListener {
         mPhone.setText(text);
     }
 
+    /**
+     * Callback method to be invoked when an item in this view has been selected. If our parameter
+     * {@code position} is greater than or equal to 0, we set {@code Cursor c} to the object at
+     * {@code position} in our {@code AdapterView<?> parent}. We set our variable {@code int type}
+     * to the data in the Phone.TYPE column of {@code c}, and {@code String phone} to the data in
+     * the Phone.NUMBER column. We initialize {@code String label} to null, and if the {@code type}
+     * is Phone.TYPE_CUSTOM we set {@code label} to the data in the Phone.LABEL column of {@code c}.
+     * We initialize {@code String numberType} to the type label returned by {@code getTypeLabel}
+     * for {@code type} (defaulting to {@code label} if it is a Phone.TYPE_CUSTOM type), and create
+     * {@code String text} by concatenating {@code numberType} with the string ": " and {@code phone}.
+     * We then set the text of {@code TextView mPhone} to {@code text}.
+     *
+     * @param parent   The AdapterView where the selection happened
+     * @param v        The view within the AdapterView that was clicked
+     * @param position The position of the view in the adapter
+     * @param id       The row id of the item that is selected
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
         if (position >= 0) {
@@ -159,6 +184,11 @@ public class List7 extends ListActivity implements OnItemSelectedListener {
         }
     }
 
+    /**
+     * Callback method to be invoked when the selection disappears from this view. We ignore this.
+     *
+     * @param parent The AdapterView that now contains no selected item.
+     */
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
     }
