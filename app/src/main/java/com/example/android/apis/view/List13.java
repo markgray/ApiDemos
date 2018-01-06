@@ -37,11 +37,12 @@ import com.example.android.apis.R;
  * case, we pretend that binding a view to its data is slow (even though it really isn't). When
  * a scroll/fling is happening, the adapter binds the view to temporary data. After the scroll/fling
  * has finished, the temporary data is replaced with the actual data.
- *
  */
 @SuppressLint("SetTextI18n")
 public class List13 extends ListActivity implements ListView.OnScrollListener {
-
+    /**
+     * 
+     */
     private TextView mStatus;
     
     private boolean mBusy = false;
@@ -50,6 +51,7 @@ public class List13 extends ListActivity implements ListView.OnScrollListener {
      * Will not bind views while the list is scrolling
      * 
      */
+    @SuppressWarnings("WeakerAccess")
     private class SlowAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
         
@@ -168,6 +170,7 @@ public class List13 extends ListActivity implements ListView.OnScrollListener {
         }
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     private String[] mStrings = {
             "Abbaye de Belloc", "Abbaye du Mont des Cats", "Abertam",
             "Abondance", "Ackawi", "Acorn", "Adelost", "Affidelice au Chablis",

@@ -22,28 +22,39 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 /**
- * This example shows how to use choice mode on a list. This list is 
+ * This example shows how to use choice mode on a list. This list is
  * in CHOICE_MODE_SINGLE mode, which means the items behave like
  * radio-buttons.
  */
 public class List10 extends ListActivity {
-    
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. Next We set the adapter of our {@code ListView} to a new instance of
+     * {@code ArrayAdapter} constructed to display our array {@code String[] GENRES} using
+     * android.R.layout.simple_list_item_single_choice as the layout file for each item in the list.
+     * We fetch our {@code ListView} to initialize {@code ListView listView}, disable focus for its
+     * items, and set its choice mode to CHOICE_MODE_SINGLE.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setListAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_single_choice, GENRES));
-        
+
         final ListView listView = getListView();
 
         listView.setItemsCanFocus(false);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     }
 
-
-    private static final String[] GENRES = new String[] {
-        "Action", "Adventure", "Animation", "Children", "Comedy", "Documentary", "Drama",
-        "Foreign", "History", "Independent", "Romance", "Sci-Fi", "Television", "Thriller"
+    /**
+     * Our data array.
+     */
+    private static final String[] GENRES = new String[]{
+            "Action", "Adventure", "Animation", "Children", "Comedy", "Documentary", "Drama",
+            "Foreign", "History", "Independent", "Romance", "Sci-Fi", "Television", "Thriller"
     };
 }

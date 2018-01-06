@@ -2177,6 +2177,7 @@ Lists
 
     Views/Lists/09. Array (Overlay)        all
         .view.List9
+        .view.Cheeses
             Another variation of the list of cheeses. In this case, we use
             AbsListView#setOnScrollListener(AbsListView.OnScrollListener)
             AbsListView#setOnItemScrollListener(AbsListView.OnItemScrollListener)
