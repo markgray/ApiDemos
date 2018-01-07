@@ -31,19 +31,44 @@ import android.widget.Toast;
 
 /**
  * This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection mode on ListView.
+ * It switches into selection mode on long press.
  */
 public class List15 extends ListActivity {
+    /**
+     * Reference to the array that we use as our database.
+     */
+    private String[] mStrings = Cheeses.sCheeseStrings;
+
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. We initialize our variable {@code ListView lv} by fetching a reference to
+     * our {@code ListView}, set its choice mode to {@code CHOICE_MODE_MULTIPLE_MODAL}, and set its
+     * {@code MultiChoiceModeListener} to a new instance of {@code ModeCallback}. Finally we set our
+     * list adapter to a new instance of {@code ArrayAdapter} constructed to display our array
+     * {@code mStrings} using the layout android.R.layout.simple_list_item_checked.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         ListView lv = getListView();
         lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         lv.setMultiChoiceModeListener(new ModeCallback());
         setListAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_checked, mStrings));
     }
-    
+
+    /**
+     * Called when activity start-up is complete (after {@code onStart} and {@code onRestoreInstanceState}
+     * have been called). First we call through to our super's implementation of {@code onPostCreate},
+     * then we fetch a reference to this activity's ActionBar and set its subtitle to the string:
+     * "Long press to start selection".
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -51,7 +76,7 @@ public class List15 extends ListActivity {
         //noinspection ConstantConditions
         getActionBar().setSubtitle("Long press to start selection");
     }
-    
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private class ModeCallback implements ListView.MultiChoiceModeListener {
 
@@ -72,15 +97,15 @@ public class List15 extends ListActivity {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
-            case R.id.share:
-                Toast.makeText(List15.this, "Shared " + getListView().getCheckedItemCount() +
-                        " items", Toast.LENGTH_SHORT).show();
-                mode.finish();
-                break;
-            default:
-                Toast.makeText(List15.this, "Clicked " + item.getTitle(),
-                        Toast.LENGTH_SHORT).show();
-                break;
+                case R.id.share:
+                    Toast.makeText(List15.this, "Shared " + getListView().getCheckedItemCount() +
+                            " items", Toast.LENGTH_SHORT).show();
+                    mode.finish();
+                    break;
+                default:
+                    Toast.makeText(List15.this, "Clicked " + item.getTitle(),
+                            Toast.LENGTH_SHORT).show();
+                    break;
             }
             return true;
         }
@@ -91,7 +116,7 @@ public class List15 extends ListActivity {
 
         @Override
         public void onItemCheckedStateChanged(ActionMode mode,
-                int position, long id, boolean checked) {
+                                              int position, long id, boolean checked) {
             setSubtitle(mode);
         }
 
@@ -110,6 +135,4 @@ public class List15 extends ListActivity {
             }
         }
     }
-
-    private String[] mStrings = Cheeses.sCheeseStrings;
 }

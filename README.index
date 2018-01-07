@@ -2214,6 +2214,7 @@ Lists
 
     Views/Lists/14. Efficient Adapter      all
         .view.List14
+        .view.Cheeses
             Demonstrates how to write an efficient list adapter. The adapter used in this example
             binds to an ImageView and to a TextView for each row in the list.
             To work efficiently the adapter implemented here uses two techniques:
@@ -2230,6 +2231,7 @@ Lists
 
     Views/Lists/15. Selection Mode         all -- v11+ or crash
         .view.List15
+        .view.Cheeses
             This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection
             mode on ListView. It switches into selection mode on long press.
 

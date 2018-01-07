@@ -41,29 +41,43 @@ import com.example.android.apis.R;
 @SuppressLint("SetTextI18n")
 public class List13 extends ListActivity implements ListView.OnScrollListener {
     /**
-     * 
+     * {@code TextView} in our layout that we use to display the scrolling status in our
+     * {@code onScrollStateChanged} callback: SCROLL_STATE_IDLE "Idle",
+     * SCROLL_STATE_TOUCH_SCROLL "Touch scroll", or SCROLL_STATE_FLING "Fling".
      */
     private TextView mStatus;
-    
+
+    /**
+     * Flag used to indicate that scrolling is in progress, set to true or false in our
+     * {@code onScrollStateChanged} callback
+     */
     private boolean mBusy = false;
-    
+
     /**
      * Will not bind views while the list is scrolling
-     * 
      */
     @SuppressWarnings("WeakerAccess")
     private class SlowAdapter extends BaseAdapter {
+        /**
+         * {@code LayoutInflater} instance we use to inflate our item views in our {@code getView} override.
+         */
         private LayoutInflater mInflater;
-        
+
+        /**
+         * Our constructor, we just initialize our field {@code LayoutInflater mInflater} with an
+         * instance of the system level service LAYOUT_INFLATER_SERVICE.
+         *
+         * @param context {@code Context} we use to access resources.
+         */
         public SlowAdapter(Context context) {
-            mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
         /**
-         * The number of items in the list is determined by the number of cheeses
-         * in our array.
-         * 
-         * @see android.widget.ListAdapter#getCount()
+         * How many items are in the data set represented by this Adapter. The number of items in
+         * the list is determined by the number of cheeses in our array {@code String[] mStrings}.
+         *
+         * @return Count of items.
          */
         @Override
         public int getCount() {
@@ -71,12 +85,13 @@ public class List13 extends ListActivity implements ListView.OnScrollListener {
         }
 
         /**
-         * Since the data comes from an array, just returning the index is
-         * sufficient to get at the data. If we were using a more complex data
-         * structure, we would return whatever object represents one row in the
-         * list.
-         * 
-         * @see android.widget.ListAdapter#getItem(int)
+         * Get the data item associated with the specified position in the data set. Since the data
+         * comes from an array, just returning the index is sufficient to get at the data. If we were
+         * using a more complex data structure, we would return whatever object represents one row in
+         * the list.
+         *
+         * @param position Position of the item within the adapter's data set whose data we want.
+         * @return The data at the specified position.
          */
         @Override
         public Object getItem(int position) {
@@ -84,9 +99,11 @@ public class List13 extends ListActivity implements ListView.OnScrollListener {
         }
 
         /**
-         * Use the array index as a unique id.
-         * 
-         * @see android.widget.ListAdapter#getItemId(int)
+         * Get the row id associated with the specified position in the list. We use the array index
+         * as a unique id.
+         *
+         * @param position The position of the item within the adapter's data set whose row id we want.
+         * @return The id of the item at the specified position.
          */
         @Override
         public long getItemId(int position) {
@@ -94,19 +111,31 @@ public class List13 extends ListActivity implements ListView.OnScrollListener {
         }
 
         /**
-         * Make a view to hold each row.
-         * 
-         * @see android.widget.ListAdapter#getView(int, android.view.View,
-         *      android.view.ViewGroup)
+         * Get a View that displays the data at the specified position in the data set. First we
+         * declare {@code TextView text}. If {@code convertView} is null, we use {@code mInflater}
+         * to inflate the layout file android.R.layout.simple_list_item_1, using {@code parent} to
+         * provide layout parameters in order to set {@code text}. If {@code convertView} is not
+         * null we cast it to {@code TextView} in order to set {@code text}.
+         * <p>
+         * If our flag {@code mBusy} is false we set the text of {@code text} to the string in
+         * {@code mStrings[position]}, and set its tag to null. If {@code mBusy} is true we set the
+         * text of {@code text} to the string "Loading..." and set the tag to "this".
+         * <p>
+         * Finally we return {@code text} to the caller.
+         *
+         * @param position    The position of the item within the adapter's data set whose view we want.
+         * @param convertView The old view to reuse, if possible.
+         * @param parent      The parent that this view will eventually be attached to
+         * @return A View corresponding to the data at the specified position.
          */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView text;
-            
+
             if (convertView == null) {
-                text = (TextView)mInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+                text = (TextView) mInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
             } else {
-                text = (TextView)convertView;
+                text = (TextView) convertView;
             }
 
             if (!mBusy) {
@@ -122,54 +151,101 @@ public class List13 extends ListActivity implements ListView.OnScrollListener {
             return text;
         }
     }
-    
+
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.list_13. We
+     * initialize our field {@code mStatus} by finding the view with ID R.id.status and set its text
+     * to the string "Idle". We set the list adapter of our {@code ListView} to a new instance of
+     * {@code SlowAdapter}, and we set its {@code OnScrollListener} to "this".
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_13);
+
         mStatus = (TextView) findViewById(R.id.status);
         mStatus.setText("Idle");
-        
+
         // Use an existing ListAdapter that will map an array
         // of strings to TextViews
         setListAdapter(new SlowAdapter(this));
-        
+
         getListView().setOnScrollListener(this);
     }
-    
+
+    /**
+     * Callback method to be invoked when the list or grid has been scrolled. We ignore it.
+     *
+     * @param view             The view whose scroll state is being reported
+     * @param firstVisibleItem the index of the first visible cell
+     * @param visibleItemCount the number of visible cells
+     * @param totalItemCount   the number of items in the list adaptor
+     */
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
     }
 
+    /**
+     * Callback method to be invoked while the list view or grid view is being scrolled. We switch
+     * the value of {@code scrollState}:
+     * <ul>
+     * <li>
+     * SCROLL_STATE_IDLE - we set our flag {@code mBusy} to false, initialize {@code first}
+     * to the position value of the first visible position, and {@code count} to the number
+     * of children in {@code view}. Then we loop over {@code i} from 0 to {@code count-1}
+     * setting {@code TextView t} to each child in turn, and if the tag of {@code t} is not
+     * null we set the text of {@code t} to the string {@code mStrings[first+i]}, and set
+     * its tag to null. We then set the text of {@code mStatus} to the string "Idle" and break.
+     * </li>
+     * <li>
+     * SCROLL_STATE_TOUCH_SCROLL - we set our flag {@code mBusy} to true, set the text of
+     * {@code mStatus} to the string "Touch scroll", and break
+     * </li>
+     * <li>
+     * SCROLL_STATE_FLING - we set our flag {@code mBusy} to true, set the text of
+     * {@code mStatus} to the string "Fling", and break
+     * </li>
+     * </ul>
+     *
+     * @param view        The view whose scroll state is being reported
+     * @param scrollState The current scroll state. One of SCROLL_STATE_TOUCH_SCROLL,
+     *                    SCROLL_STATE_IDLE, SCROLL_STATE_FLING.
+     */
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         switch (scrollState) {
-        case OnScrollListener.SCROLL_STATE_IDLE:
-            mBusy = false;
-            
-            int first = view.getFirstVisiblePosition();
-            int count = view.getChildCount();
-            for (int i=0; i<count; i++) {
-                TextView t = (TextView)view.getChildAt(i);
-                if (t.getTag() != null) {
-                    t.setText(mStrings[first + i]);
-                    t.setTag(null);
+            case OnScrollListener.SCROLL_STATE_IDLE:
+                mBusy = false;
+
+                int first = view.getFirstVisiblePosition();
+                int count = view.getChildCount();
+                for (int i = 0; i < count; i++) {
+                    TextView t = (TextView) view.getChildAt(i);
+                    if (t.getTag() != null) {
+                        t.setText(mStrings[first + i]);
+                        t.setTag(null);
+                    }
                 }
-            }
-            
-            mStatus.setText("Idle");
-            break;
-        case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
-            mBusy = true;
-            mStatus.setText("Touch scroll");
-            break;
-        case OnScrollListener.SCROLL_STATE_FLING:
-            mBusy = true;
-            mStatus.setText("Fling");
-            break;
+
+                mStatus.setText("Idle");
+                break;
+            case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
+                mBusy = true;
+                mStatus.setText("Touch scroll");
+                break;
+            case OnScrollListener.SCROLL_STATE_FLING:
+                mBusy = true;
+                mStatus.setText("Fling");
+                break;
         }
     }
 
+    /**
+     * Our list of cheeses that we use as our database.
+     */
     @SuppressWarnings("SpellCheckingInspection")
     private String[] mStrings = {
             "Abbaye de Belloc", "Abbaye du Mont des Cats", "Abertam",
@@ -345,5 +421,4 @@ public class List13 extends ListActivity implements ListView.OnScrollListener {
             "Woodside Cabecou", "Xanadu", "Xynotyro", "Yarg Cornish",
             "Yarra Valley Pyramid", "Yorkshire Blue", "Zamorano",
             "Zanetti Grana Padano", "Zanetti Parmigiano Reggiano"};
-
 }
