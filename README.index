@@ -2237,12 +2237,14 @@ Lists
 
     Views/Lists/16. Border selection mode  all -- v11+ or crash
         .view.List16
+        .view.Cheeses
             This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection
             mode on ListView couple with the new simple_list_item_activated_1 which uses
             a highlighted border for selected items.
 
     Views/Lists/17. Activate items         all -- v11+ or crash
         .view.List17
+        .view.Cheeses
             A ListView.CHOICE_MODE_SINGLE list view where the last item the user
             clicked is placed in the "activated" state, causing its background to
             highlight. Uses the built-in layout android.R.layout.simple_list_item_activated_1
@@ -2265,7 +2267,7 @@ Progress Bar
             android:max="100". It uses android:progress="50" to initialize the state of
             the default progress and android:secondaryProgress="75" to initialize the state
             of the secondary progress. Buttons below the ProgressBar decrement or increment
-            the two progresss states. In spite of the comments in the code, the progress bar
+            the two progress states. In spite of the comments in the code, the progress bar
             does not appear in the title bar, it appears at the top of the LinearLayout
 
     Views/Progress Bar/2. Smooth           all

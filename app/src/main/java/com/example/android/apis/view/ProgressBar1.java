@@ -25,12 +25,28 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 
-
 /**
  * Demonstrates how to use progress bars as widgets and in the title bar.  The progress bar
  * in the title will be shown until the progress is complete, at which point it fades away.
+ * Demonstrates how to use ProgressBar as a widget. The ProgressBar is defined in
+ * the layout xml file to use style="?android:attr/progressBarStyleHorizontal",
+ * android:layout_width="200dip", android:layout_height="wrap_content",
+ * android:max="100". It uses android:progress="50" to initialize the state of
+ * the default progress and android:secondaryProgress="75" to initialize the state
+ * of the secondary progress. Buttons below the ProgressBar decrement or increment
+ * the two progress states. In spite of the comments in the code, the progress bar
+ * does not appear in the title bar, it appears at the top of the LinearLayout
  */
 public class ProgressBar1 extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we request the window feature FEATURE_PROGRESS (No longer supported
+     * starting in API 21) then we set our content view to our layout file R.layout.progressbar_1.
+     * We call the method {@code setProgressBarVisibility} to set the visibility of the progress bar
+     * in the title to true (No longer supported starting in API 21).
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +55,11 @@ public class ProgressBar1 extends Activity {
         requestWindowFeature(Window.FEATURE_PROGRESS);
         setContentView(R.layout.progressbar_1);
         setProgressBarVisibility(true);
-        
+
         final ProgressBar progressHorizontal = (ProgressBar) findViewById(R.id.progress_horizontal);
         setProgress(progressHorizontal.getProgress() * 100);
         setSecondaryProgress(progressHorizontal.getSecondaryProgress() * 100);
-        
+
         Button button = (Button) findViewById(R.id.increase);
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -83,6 +99,6 @@ public class ProgressBar1 extends Activity {
                 setSecondaryProgress(100 * progressHorizontal.getSecondaryProgress());
             }
         });
-        
+
     }
 }

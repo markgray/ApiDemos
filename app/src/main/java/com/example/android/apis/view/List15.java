@@ -77,9 +77,27 @@ public class List15 extends ListActivity {
         getActionBar().setSubtitle("Long press to start selection");
     }
 
+    /**
+     * Our custom {@code MultiChoiceModeListener}, becomes active when the {@code ListView} is long
+     * clicked. It then inflates an action mode R.menu.list_select_menu which remains up as long as
+     * at least one item is selected, or until the selected items are "shared"
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private class ModeCallback implements ListView.MultiChoiceModeListener {
-
+        /**
+         * Called when action mode is first created. The menu supplied will be used to generate
+         * action buttons for the action mode. First we initialize {@code MenuInflater inflater} by
+         * setting it to the value returned by {@code getMenuInflater}, then we use it to inflate
+         * our menu layout file R.menu.list_select_menu into our parameter {@code Menu menu}. We set
+         * the title of our parameter {@code ActionMode mode} to the string "Select Items", then
+         * call our method {@code setSubtitle} to set the subtitle of {@code mode} to a string
+         * showing the number of items currently selected, or to null if no items are selected
+         * anymore. Finally we return true to the caller so that the action mode will be created.
+         *
+         * @param mode ActionMode being created
+         * @param menu Menu used to populate action buttons
+         * @return true if the action mode should be created
+         */
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             MenuInflater inflater = getMenuInflater();
@@ -89,11 +107,40 @@ public class List15 extends ListActivity {
             return true;
         }
 
+        /**
+         * Called to refresh an action mode's action menu whenever it is invalidated. We always
+         * return true to the caller.
+         *
+         * @param mode ActionMode being prepared
+         * @param menu Menu used to populate action buttons
+         * @return true if the menu or action mode was updated, false otherwise.
+         */
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             return true;
         }
 
+        /**
+         * Called to report a user click on an action button. We switch on the item ID of our
+         * parameter {@code MenuItem item}:
+         * <ul>
+         * <li>
+         * R.id.share - we toast a message saying that the number of checked items have
+         * been "shared", then call the {@code finish} method of our parameter
+         * {@code ActionMode mode} to finish and close the action mode. Finally we break.
+         * </li>
+         * <li>
+         * default - we toast a message stating that the item with the title of our parameter
+         * {@code MenuItem item} has been clicked, then we break
+         * </li>
+         * </ul>
+         * In all cases we return true to the caller signifying that we have handled the event.
+         *
+         * @param mode The current ActionMode
+         * @param item The item that was clicked
+         * @return true if this callback handled the event, false if the standard MenuItem
+         * invocation should continue.
+         */
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
@@ -110,16 +157,50 @@ public class List15 extends ListActivity {
             return true;
         }
 
+        /**
+         * Called when an action mode is about to be exited and destroyed. We ignore it.
+         *
+         * @param mode The current ActionMode being destroyed
+         */
         @Override
         public void onDestroyActionMode(ActionMode mode) {
         }
 
+        /**
+         * Called when an item is checked or unchecked during selection mode. We call our method
+         * {@code setSubtitle} to set the subtitle of {@code mode} to a string showing the number of
+         * items currently selected, or to null if no items are selected anymore.
+         *
+         * @param mode     The {@code ActionMode} providing the selection mode
+         * @param position Adapter position of the item that was checked or unchecked
+         * @param id       Adapter ID of the item that was checked or unchecked
+         * @param checked  true if the item is now checked, false if the item is now unchecked.
+         */
         @Override
-        public void onItemCheckedStateChanged(ActionMode mode,
-                                              int position, long id, boolean checked) {
+        public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
             setSubtitle(mode);
         }
 
+        /**
+         * Sets the subtitle of our parameter {@code ActionMode mode} to a string showing the number
+         * of items currently selected, or to null if no items are selected anymore. We initialize
+         * our variable {@code int checkedCount} with the number of checked items in our
+         * {@code ListView}, then switch on it:
+         * <ul>
+         * <li>
+         * 0 - we set the subtitle of {@code ActionMode mode} to null and break.
+         * </li>
+         * <li>
+         * 1 - we set the subtitle of {@code ActionMode mode} to the string "One item selected" and break.
+         * </li>
+         * <li>
+         * default - we set the subtitle of {@code ActionMode mode} to the string value of {@code checkedCount}
+         * concatenated to the string " items selected" and break.
+         * </li>
+         * </ul>
+         *
+         * @param mode The {@code ActionMode} providing the selection mode
+         */
         private void setSubtitle(ActionMode mode) {
             final int checkedCount = getListView().getCheckedItemCount();
             switch (checkedCount) {
