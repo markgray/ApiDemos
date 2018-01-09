@@ -43,7 +43,28 @@ public class ProgressBar1 extends Activity {
      * {@code onCreate}, then we request the window feature FEATURE_PROGRESS (No longer supported
      * starting in API 21) then we set our content view to our layout file R.layout.progressbar_1.
      * We call the method {@code setProgressBarVisibility} to set the visibility of the progress bar
-     * in the title to true (No longer supported starting in API 21).
+     * in the title to true (No longer supported starting in API 21). We initialize our variable
+     * {@code ProgressBar progressHorizontal} by finding the view with ID R.id.progress_horizontal
+     * set the progress of the progress bar in the title to 100 times the progress of the progress
+     * bar {@code progressHorizontal} (starts at 50 of 100 in the xml), then we set the secondary
+     * progress for the progress bar in the title to 100 times the progress of the secondary progress
+     * bar of {@code progressHorizontal} (starts at 75 of 100 in the xml). We initialize our variable
+     * {@code Button button} by finding the view with the ID R.id.increase in our layout, then set
+     * its {@code OnClickListener} to an anonymous class which increments the progress of
+     * {@code progressHorizontal} by 1, and sets the progress bar in the title to 100 times the
+     * progress of {@code progressHorizontal}. We set {@code button} again by finding the view with
+     * the ID R.id.decrease then set its {@code OnClickListener} to an anonymous class which increments
+     * the progress of {@code progressHorizontal} by -1 (decrements), and sets the progress bar in the
+     * title to 100 times the progress of {@code progressHorizontal}. We set {@code button} again by
+     * finding the view with the ID R.id.increase_secondary then set its {@code OnClickListener} to
+     * an anonymous class which increments the progress of the secondary progress of {@code progressHorizontal}
+     * by 1, and sets the secondary progress bar in the title to 100 times the secondary progress of
+     * {@code progressHorizontal}. Finally we set {@code button} again by finding the view with the ID
+     * R.id.decrease_secondary then set its {@code OnClickListener} to an anonymous class which increments
+     * the progress of the secondary progress of {@code progressHorizontal} by -1 (decrements), and sets
+     * the secondary progress bar in the title to 100 times the secondary progress of {@code progressHorizontal}.
+     * <p>
+     * None of the title bar progress settings have any effect as of API 21.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */

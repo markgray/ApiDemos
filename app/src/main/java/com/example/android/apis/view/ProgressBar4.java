@@ -24,13 +24,30 @@ import android.view.Window;
 import android.view.View;
 import android.widget.Button;
 
-
 /**
- * Demonstrates how to use an indeterminate progress indicator in the window's title bar.
+ * Demonstrates how to use an indeterminate progress indicator in the window's
+ * title bar. This does not work for android starting with 5.0
  */
 public class ProgressBar4 extends Activity {
+    /**
+     * Flag to indicate whether indeterminate progress indicator in the window's title bar is
+     * visible or not.
+     */
     private boolean mToggleIndeterminate = false;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, we request the window feature FEATURE_INDETERMINATE_PROGRESS (does nothing
+     * since API 21), and then we set our content view to our layout file R.layout.progressbar_4.
+     * We set the visibility of the indeterminate progress bar in the title to the value of our
+     * field {@code mToggleIndeterminate} (starts out false for what it is worth, the call does
+     * nothing since API 21). We initialize {@code Button button} by finding the view with ID
+     * R.id.toggle, and set its {@code OnClickListener} to an anonymous class which toggles the
+     * value of {@code mToggleIndeterminate} and set the visibility of the indeterminate progress
+     * bar in the title to the new value (does nothing since API 21).
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +56,17 @@ public class ProgressBar4 extends Activity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.progressbar_4);
         setProgressBarIndeterminateVisibility(mToggleIndeterminate);
-        
+
         Button button = (Button) findViewById(R.id.toggle);
         button.setOnClickListener(new Button.OnClickListener() {
+            /**
+             * Called when the button with ID R.id.toggle ("Toggle Indeterminate") is clicked, we
+             * toggle the value of {@code mToggleIndeterminate} and call the method
+             * {@code setProgressBarIndeterminateVisibility} with the new value (does nothing since
+             * API 21).
+             *
+             * @param v view that was clicked
+             */
             @Override
             public void onClick(View v) {
                 mToggleIndeterminate = !mToggleIndeterminate;

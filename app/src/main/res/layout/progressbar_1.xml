@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,11 +14,12 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <ProgressBar android:id="@+id/progress_horizontal"
+    <ProgressBar
+        android:id="@+id/progress_horizontal"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="200dip"
         android:layout_height="wrap_content"
@@ -30,19 +30,21 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/progressbar_1_default_progress" />        
+        android:text="@string/progressbar_1_default_progress" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <Button android:id="@+id/decrease"
+        <Button
+            android:id="@+id/decrease"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/progressbar_1_minus" />
 
-        <Button android:id="@+id/increase"
+        <Button
+            android:id="@+id/increase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/progressbar_1_plus" />
@@ -52,19 +54,21 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/progressbar_1_secondary_progress" />        
+        android:text="@string/progressbar_1_secondary_progress" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <Button android:id="@+id/decrease_secondary"
+        <Button
+            android:id="@+id/decrease_secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/progressbar_1_minus" />
 
-        <Button android:id="@+id/increase_secondary"
+        <Button
+            android:id="@+id/increase_secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/progressbar_1_plus" />

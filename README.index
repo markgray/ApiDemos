@@ -2280,11 +2280,11 @@ Progress Bar
     Views/Progress Bar/3. Dialogs          all
         .view.ProgressBar3
             Demonstrates the use of progress dialogs.  Uses Activity#onCreateDialog
-             Activity#showDialog to ensure the dialogs will be properly saved and
-             restored. Buttons on the main Layout allow you to choose between one
-             which sets the title using dialog.setTitle("Indeterminate") and one which
-             has no title. (Direct use of showDialog is deprecated, use a DialogFragment
-             instead. TODO: convert to use DialogFragment
+            Activity#showDialog to ensure the dialogs will be properly saved and
+            restored. Buttons on the main Layout allow you to choose between one
+            which sets the title using dialog.setTitle("Indeterminate") and one which
+            has no title. (Direct use of showDialog is deprecated, use a DialogFragment
+            instead). TODO: convert to use DialogFragment
 
     Views/Progress Bar/4. In Title Bar     all -- does not work lollipop
         .view.ProgressBar4
