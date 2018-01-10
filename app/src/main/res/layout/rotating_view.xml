@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2010 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,147 +14,147 @@
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/container"
+    android:orientation="vertical"
     android:splitMotionEvents="true"
     tools:targetApi="honeycomb">
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dip"
-        android:splitMotionEvents="true"
-        >
+        android:orientation="horizontal"
+        android:splitMotionEvents="true">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="5dip"
             android:paddingRight="5dip"
-            android:textStyle="bold"
             android:text="@string/tx"
-            />
+            android:textStyle="bold" />
+
         <SeekBar
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/translationX"
-        />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="15dip"
             android:paddingRight="5dip"
-            android:textStyle="bold"
             android:text="@string/ty"
-            />
+            android:textStyle="bold" />
+
         <SeekBar
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/translationY"
-        />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal" />
     </LinearLayout>
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dip"
-        android:splitMotionEvents="true"
-        >
+        android:orientation="horizontal"
+        android:splitMotionEvents="true">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="5dip"
             android:paddingRight="5dip"
-            android:textStyle="bold"
             android:text="@string/sx"
-            />
+            android:textStyle="bold" />
+
         <SeekBar
-            android:orientation="horizontal"
-            android:layout_weight="1"
+            android:id="@+id/scaleX"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/scaleX"
-        />
+            android:layout_weight="1"
+            android:orientation="horizontal" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="15dip"
             android:paddingRight="5dip"
-            android:textStyle="bold"
             android:text="@string/sy"
-            />
+            android:textStyle="bold" />
+
         <SeekBar
-            android:orientation="horizontal"
-            android:layout_weight="1"
+            android:id="@+id/scaleY"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/scaleY"
-        />
+            android:layout_weight="1"
+            android:orientation="horizontal" />
     </LinearLayout>
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dip"
-        android:splitMotionEvents="true"
-        >
+        android:orientation="horizontal"
+        android:splitMotionEvents="true">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="5dip"
             android:paddingRight="5dip"
-            android:textStyle="bold"
             android:text="@string/x"
-            />
+            android:textStyle="bold" />
+
         <SeekBar
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/rotationX"
-        />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="15dip"
             android:paddingRight="5dip"
-            android:textStyle="bold"
             android:text="@string/y"
-            />
+            android:textStyle="bold" />
+
         <SeekBar
-            android:orientation="horizontal"
-            android:layout_weight="1"
+            android:id="@+id/rotationY"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/rotationY"
-        />
+            android:layout_weight="1"
+            android:orientation="horizontal" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="15dip"
             android:paddingRight="5dip"
-            android:textStyle="bold"
             android:text="@string/z"
-            />
+            android:textStyle="bold" />
+
         <SeekBar
-            android:orientation="horizontal"
-            android:layout_weight="1"
+            android:id="@+id/rotationZ"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/rotationZ"
-        />
+            android:layout_weight="1"
+            android:orientation="horizontal" />
     </LinearLayout>
+
     <Button
+        android:id="@+id/rotatingButton"
         android:layout_width="200dip"
         android:layout_height="150dip"
         android:layout_marginLeft="50dip"
         android:layout_marginTop="50dip"
-        android:text="@string/rotating_button"
-        android:id="@+id/rotatingButton"
-        />
+        android:text="@string/rotating_button" />
 </LinearLayout>

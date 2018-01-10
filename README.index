@@ -2327,7 +2327,7 @@ ScrollBars
     Views/ScrollBars/2. Fancy              all
         .view.ScrollBar2
             Demonstrates scrolling with a ScrollView, android:scrollbarTrackVertical
-            and android:scrollbarTrackVertical as set to colored drawables created in xml
+            and android:scrollbarTrackVertical are set to colored drawables created in xml
             using <shape> and android:scrollbarSize="12dip" makes it wider than normal.
             http://developer.android.com/guide/topics/resources/drawable-resource.html#Shape
             The drawable/scrollbar_vertical_thumb has <corners android:radius="6dp" /> which

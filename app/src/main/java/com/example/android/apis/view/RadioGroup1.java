@@ -52,7 +52,7 @@ public class RadioGroup1 extends Activity implements RadioGroup.OnCheckedChangeL
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.radio_group_1. We
      * initialize our field {@code RadioGroup mRadioGroup} by finding the view with the ID R.id.menu.
-     *
+     * <p>
      * We create a new instance to initialize our variable {@code RadioButton newRadioButton}, set its
      * text to the string with the resource ID R.string.radio_group_snack ("Snack"), set its ID to
      * the value with resource ID R.id.snack (this is defined in the file values/ids.xml using the
@@ -99,9 +99,14 @@ public class RadioGroup1 extends Activity implements RadioGroup.OnCheckedChangeL
 
     /**
      * Called when the checked radio button has changed. When the selection is cleared, checkedId is -1.
-     * 
+     * First we initialize our variable {@code String selection} by retrieving the string with the
+     * resource ID R.string.radio_group_selection ("You have selected:"), then we initialize our
+     * variable {@code String none} by retrieving the string with the resource ID R.string.radio_group_none
+     * ("(none)"). Finally we set the text of {@code TextView mChoice} to the string formed by concatenating
+     * {@code selection} with {@code none} if our parameter {@code checkedId} is equal to View.NO_ID (-1)
+     * or to the string value of {@code checkedId} otherwise.
      *
-     * @param group the group in which the checked radio button has changed
+     * @param group     the group in which the checked radio button has changed
      * @param checkedId the unique identifier of the newly checked radio button
      */
     @Override
@@ -112,6 +117,13 @@ public class RadioGroup1 extends Activity implements RadioGroup.OnCheckedChangeL
                 (checkedId == View.NO_ID ? none : checkedId));
     }
 
+    /**
+     * Called when the button with ID R.id.clear ("Clear") is clicked. We just call the {@code clearCheck}
+     * method of {@code RadioGroup mRadioGroup} to clear the selection. When the selection is cleared, no
+     * radio button in this group is selected and {@code getCheckedRadioButtonId()} returns null.
+     *
+     * @param v View that was clicked
+     */
     @Override
     public void onClick(View v) {
         mRadioGroup.clearCheck();

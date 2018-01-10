@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -16,8 +15,8 @@
 
 <!-- Demonstrates scrolling with a ScrollView. -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -31,47 +30,58 @@
             android:layout_width="100dip"
             android:layout_height="120dip"
             android:background="#FF0000">
+
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:ignore="ScrollViewSize">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/scrollbar_2_text" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/scrollbar_2_text" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/scrollbar_2_text" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/scrollbar_2_text" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/scrollbar_2_text" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/scrollbar_2_text" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/scrollbar_2_text" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/scrollbar_2_text" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/scrollbar_2_text" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -83,13 +93,15 @@
             android:layout_width="100dip"
             android:layout_height="120dip"
             android:background="#00FF00"
-            android:paddingRight="12dip">
+            android:paddingRight="12dip"
+            tools:ignore="RtlSymmetry">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#60AA60"
                 android:text="@string/scrollbar_3_text"
-                android:textColor="#000000"
-                android:background="#60AA60" />
+                android:textColor="#000000" />
         </ScrollView>
 
         <ScrollView
@@ -97,40 +109,45 @@
             android:layout_width="100dip"
             android:layout_height="120dip"
             android:background="@android:drawable/edit_text">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:text="@string/scrollbar_3_text" />
+                android:text="@string/scrollbar_3_text"
+                android:textColor="#000000" />
         </ScrollView>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ScrollView
             android:id="@+id/view4"
             android:layout_width="100dip"
             android:layout_height="120dip"
-            android:scrollbarStyle="outsideOverlay"
-            android:background="@android:drawable/edit_text">
+            android:background="@android:drawable/edit_text"
+            android:scrollbarStyle="outsideOverlay">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:text="@string/scrollbar_3_text" />
+                android:text="@string/scrollbar_3_text"
+                android:textColor="#000000" />
         </ScrollView>
+
         <ScrollView
             android:id="@+id/view5"
             android:layout_width="100dip"
             android:layout_height="120dip"
-            android:scrollbarStyle="outsideInset"
-            android:background="@android:drawable/edit_text">
+            android:background="@android:drawable/edit_text"
+            android:scrollbarStyle="outsideInset">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:text="@string/scrollbar_3_text" />
+                android:text="@string/scrollbar_3_text"
+                android:textColor="#000000" />
         </ScrollView>
     </LinearLayout>
 </LinearLayout>

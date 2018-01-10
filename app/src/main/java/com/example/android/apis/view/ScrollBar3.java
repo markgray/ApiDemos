@@ -22,14 +22,25 @@ import android.view.View;
 
 import com.example.android.apis.R;
 
-
+/**
+ * Demonstrates scrolling with ScrollView's with android:scrollbarStyle set to
+ * outsideOverlay and outsideInset in the xml, and one set programmatically using
+ * setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET)
+ */
 public class ScrollBar3 extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.scrollbar3.
+     * Then we find the view with ID R.id.view3 and set its scrollbar style to SCROLLBARS_INSIDE_INSET.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.scrollbar3);
-        
+
         findViewById(R.id.view3).setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
     }
 }
