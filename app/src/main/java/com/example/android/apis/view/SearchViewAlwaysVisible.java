@@ -19,9 +19,17 @@ package com.example.android.apis.view;
 /**
  * This demonstrates the usage of SearchView in an ActionBar as a menu item.
  * It sets a SearchableInfo on the SearchView for suggestions and submitting queries to.
+ * This Activity extends .view.SearchViewActionBar, with the only difference being it
+ * Override's isAlwaysExpanded() to return true instead of false.
  */
 public class SearchViewAlwaysVisible extends SearchViewActionBar {
 
+    /**
+     * Overrides {@code isAlwaysExpanded} in {@code SearchViewActionBar} to have the search view menu
+     * item always be expanded (by returning true instead of the false returned by the default).
+     *
+     * @return true to have our search view menu item always be expanded
+     */
     @Override
     protected boolean isAlwaysExpanded() {
         return true;

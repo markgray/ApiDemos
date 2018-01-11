@@ -32,44 +32,42 @@ import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-
 /**
  * This activity demonstrates two different ways in which views can be made more secure to
  * touch spoofing attacks by leveraging framework features.
- *
+ * <p>
  * The activity presents 3 buttons that ostensibly perform a risky security critical
  * function.  Under ordinary circumstances, the user would never click on these buttons
  * or would at least think long and hard about it.  However, a carefully crafted toast can
  * overlay the contents of the activity in such a way as to make the user believe the buttons
  * are innocuous.  Since the toast cannot receive input, the touches are passed down to the
  * activity potentially yielding an effect other than what the user intended.
- *
+ * <p>
  * To simulate the spoofing risk, this activity pops up a specially crafted overlay as
  * a toast lay-ed out so as to cover the buttons and part of the descriptive text.
  * For the purposes of this demonstration, pretend that the overlay was actually popped
  * up by a malicious application published by the International Cabal of Evil Penguins.
- *
+ * <p>
  * The 3 buttons are set up as follows:
- *
+ * <p>
  * 1. The "unsecured button" does not apply any touch filtering of any kind.
- *    When the toast appears, this button remains clickable as usual which creates an
- *    opportunity for spoofing to occur.
- *
+ * When the toast appears, this button remains clickable as usual which creates an
+ * opportunity for spoofing to occur.
+ * <p>
  * 2. The "built-in secured button" leverages the android:filterTouchesWhenObscured view
- *    attribute to ask the framework to filter out touches when the window is obscured.
- *    When the toast appears, the button does not receive the touch and appears to be inoperable.
- *
+ * attribute to ask the framework to filter out touches when the window is obscured.
+ * When the toast appears, the button does not receive the touch and appears to be inoperable.
+ * <p>
  * 3. The "custom secured button" adds a touch listener to the button which intercepts the
- *    touch event and checks whether the window is obscured.  If so, it warns the user and
- *    drops the touch event.  This example is intended to demonstrate how a view can
- *    perform its own filtering and provide additional feedback by examining the {@MotionEvent}
- *    flags to determine whether the window is obscured.  Here we use a touch listener but
- *    a custom view subclass could perform the filtering by overriding
- *    {@link View#onFilterTouchEventForSecurity(MotionEvent)}.
- *
- * Refer to the comments on {@View} for more information about view security.
+ * touch event and checks whether the window is obscured.  If so, it warns the user and
+ * drops the touch event.  This example is intended to demonstrate how a view can
+ * perform its own filtering and provide additional feedback by examining the {@code MotionEvent}
+ * flags to determine whether the window is obscured.  Here we use a touch listener but
+ * a custom view subclass could perform the filtering by overriding
+ * {@link View#onFilterTouchEventForSecurity(MotionEvent)}.
+ * <p>
+ * Refer to the comments on {@code View} for more information about view security.
  */
-@SuppressWarnings("JavaDoc")
 public class SecureView extends Activity {
     private int mClickCount;
 
@@ -120,16 +118,16 @@ public class SecureView extends Activity {
                 String message = messages[mClickCount++ % messages.length];
 
                 new AlertDialog.Builder(SecureView.this)
-                    .setTitle(R.string.secure_view_action_dialog_title)
-                    .setMessage(message)
-                    .setNeutralButton(getResources().getString(
-                            R.string.secure_view_action_dialog_dismiss), null)
-                    .show();
+                        .setTitle(R.string.secure_view_action_dialog_title)
+                        .setMessage(message)
+                        .setNeutralButton(getResources().getString(
+                                R.string.secure_view_action_dialog_dismiss), null)
+                        .show();
             }
         });
     }
 
-    private void setTouchFilter(Button button) {
+    private void setTouchFilter(final Button button) {
         button.setOnTouchListener(new OnTouchListener() {
             @TargetApi(Build.VERSION_CODES.GINGERBREAD)
             @Override
@@ -137,11 +135,11 @@ public class SecureView extends Activity {
                 if ((event.getFlags() & MotionEvent.FLAG_WINDOW_IS_OBSCURED) != 0) {
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         new AlertDialog.Builder(SecureView.this)
-                            .setTitle(R.string.secure_view_caught_dialog_title)
-                            .setMessage(R.string.secure_view_caught_dialog_message)
-                            .setNeutralButton(getResources().getString(
-                                    R.string.secure_view_caught_dialog_dismiss), null)
-                            .show();
+                                .setTitle(R.string.secure_view_caught_dialog_title)
+                                .setMessage(R.string.secure_view_caught_dialog_message)
+                                .setNeutralButton(getResources().getString(
+                                        R.string.secure_view_caught_dialog_dismiss), null)
+                                .show();
                     }
                     // Return true to prevent the button from processing the touch.
                     return true;

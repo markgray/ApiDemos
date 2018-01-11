@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 Google Inc.
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2010 Google Inc.
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,12 +12,13 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<menu xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/action_search"
-          android:title="@string/action_bar_search"
-          android:icon="@android:drawable/ic_menu_search"
-          android:showAsAction="always"
-          android:actionViewClass="android.widget.SearchView"
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/action_search"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="@android:drawable/ic_menu_search"
+        android:showAsAction="always"
+        android:title="@string/action_bar_search"
         tools:ignore="AppCompatResource" />
 </menu>
