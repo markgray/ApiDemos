@@ -27,22 +27,25 @@ import android.widget.TextView;
 
 import com.example.android.apis.R;
 
-
 /**
- * Demonstrates how to use a seek bar
+ * Demonstrates how to use a seek bar. It implements SeekBar.OnSeekBarChangeListener which
+ * has the three call backs: onProgressChanged, onStartTrackingTouch, and onStopTrackingTouch
+ * displaying appropriate text based on the information passed it.
  */
 public class SeekBar1 extends Activity implements SeekBar.OnSeekBarChangeListener {
-    
+    /**
+     * 
+     */
     SeekBar mSeekBar;
     TextView mProgressText;
     TextView mTrackingText;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.seekbar_1);
-        
+
         mSeekBar = (SeekBar) findViewById(R.id.seek);
         mSeekBar.setOnSeekBarChangeListener(this);
         mProgressText = (TextView) findViewById(R.id.progress);
@@ -62,7 +65,7 @@ public class SeekBar1 extends Activity implements SeekBar.OnSeekBarChangeListene
     @SuppressLint("SetTextI18n")
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch) {
-        mProgressText.setText(progress + " " + 
+        mProgressText.setText(progress + " " +
                 getString(R.string.seekbar_from_touch) + "=" + fromTouch);
     }
 

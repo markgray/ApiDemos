@@ -2369,6 +2369,7 @@ Search View
 Secure View
     Views/Secure View                      all -- v9+ or crash
         .view.SecureView
+        .view.SecureViewOverlay
             This activity demonstrates two different ways in which views can be made more secure to
             touch spoofing attacks by leveraging framework features.
 
