@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2010 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -17,29 +16,33 @@
 <!-- Split touch demo. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/split_touch_view_description"/>
+        android:text="@string/split_touch_view_description" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:splitMotionEvents="true"
         android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:splitMotionEvents="true"
         tools:targetApi="honeycomb">
-        <ListView android:id="@+id/list1"
-                  android:layout_width="0dip"
-                  android:layout_height="match_parent"
-                  android:layout_weight="1" />
-        <ListView android:id="@+id/list2"
-                  android:layout_width="0dip"
-                  android:layout_height="match_parent"
-                  android:layout_weight="1" />
+
+        <ListView
+            android:id="@+id/list1"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ListView
+            android:id="@+id/list2"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
     </LinearLayout>
 </LinearLayout>

@@ -47,7 +47,11 @@ import com.example.android.apis.R;
 
 /**
  * This activity demonstrates how to use system UI flags to implement
- * a content browser style of UI (such as a book reader).
+ * a content browser style of UI (such as a book reader). Includes "Content",
+ * and implementation of a view for displaying immersive content, using system
+ * UI flags to transition in and out of modes where the user is focused on
+ * that content. When the user clicks, it toggles the visibility of navigation
+ * elements.
  */
 @SuppressWarnings("deprecation")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -59,17 +63,34 @@ public class ContentBrowserActivity extends Activity
      * flags to transition in and out of modes where the user is focused on that
      * content.
      */
-
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static class Content extends ScrollView
             implements View.OnSystemUiVisibilityChangeListener, View.OnClickListener {
+        /**
+         * {@code TextView} we use to display our "content" in (the string with the resource id
+         * R.string.alert_dialog_two_buttons2ultra_msg)
+         */
         TextView mText;
+        /**
+         * {@code TextView} that our containing activity uses to display a title, it is toggled between
+         * VISIBLE and INVISIBLE to increase usable window space.
+         */
         TextView mTitleView;
+        /**
+         * {@code SeekBar} that our containing activity uses to display and control the position of
+         * our {@code ScrollView}, it is toggled between VISIBLE and INVISIBLE to increase usable
+         * window space.
+         */
         SeekBar mSeekView;
+        /**
+         * UNUSED
+         */
         @SuppressWarnings("unused")
         boolean mNavVisible;
-        int mBaseSystemUiVisibility = SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | SYSTEM_UI_FLAG_LAYOUT_STABLE;
+        /**
+         * 
+         */
+        int mBaseSystemUiVisibility = SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | SYSTEM_UI_FLAG_LAYOUT_STABLE;
         int mLastSystemUiVis;
 
         Runnable mNavHider = new Runnable() {
@@ -81,7 +102,7 @@ public class ContentBrowserActivity extends Activity
 
         public Content(Context context, AttributeSet attrs) {
             super(context, attrs);
-    
+
             mText = new TextView(context);
             mText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
             mText.setText(context.getString(R.string.alert_dialog_two_buttons2ultra_msg));
@@ -109,8 +130,8 @@ public class ContentBrowserActivity extends Activity
             // is changing from its last state, and turning off.
             int diff = mLastSystemUiVis ^ visibility;
             mLastSystemUiVis = visibility;
-            if ((diff&SYSTEM_UI_FLAG_LOW_PROFILE) != 0
-                    && (visibility&SYSTEM_UI_FLAG_LOW_PROFILE) == 0) {
+            if ((diff & SYSTEM_UI_FLAG_LOW_PROFILE) != 0
+                    && (visibility & SYSTEM_UI_FLAG_LOW_PROFILE) == 0) {
                 setNavVisibility(true);
             }
         }
@@ -137,7 +158,7 @@ public class ContentBrowserActivity extends Activity
         public void onClick(View v) {
             // When the user clicks, we toggle the visibility of navigation elements.
             int curVis = getSystemUiVisibility();
-            setNavVisibility((curVis&SYSTEM_UI_FLAG_LOW_PROFILE) != 0);
+            setNavVisibility((curVis & SYSTEM_UI_FLAG_LOW_PROFILE) != 0);
         }
 
         void setBaseSystemUiVisibility(int visibility) {
@@ -180,9 +201,9 @@ public class ContentBrowserActivity extends Activity
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 
         setContentView(R.layout.content_browser);
-        mContent = (Content)findViewById(R.id.content);
-        mContent.init((TextView)findViewById(R.id.title),
-                (SeekBar)findViewById(R.id.seekbar));
+        mContent = (Content) findViewById(R.id.content);
+        mContent.init((TextView) findViewById(R.id.title),
+                (SeekBar) findViewById(R.id.seekbar));
 
         ActionBar bar = getActionBar();
         //noinspection ConstantConditions
@@ -247,7 +268,7 @@ public class ContentBrowserActivity extends Activity
                 item.setChecked(!item.isChecked());
                 mContent.setBaseSystemUiVisibility(item.isChecked()
                         ? View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         : View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
                 return true;
         }

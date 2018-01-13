@@ -2415,8 +2415,8 @@ Seek Bar
 Spinner
     Views/Spinner                          all
         .view.Spinner1
-            Demonstrates the use of the Spinner widget. It creates ArrayAdapter<CharSequence>'s
-            from string-array resources and setDropDownViewResource to set the view used by the
+            Demonstrates the use of the Spinner widget. It creates two ArrayAdapter<CharSequence>
+            from string-array resources and uses setDropDownViewResource to set the view used by the
             adapter to create drop down views, then uses setAdapter to set the adapter used by
             each Spinner. setOnItemSelectedListener is used to set an OnItemSelectedListener
             for each which involves implementing onItemSelected and onNothingSelected to receive
@@ -2425,6 +2425,7 @@ Spinner
 Splitting Touches across Views
     Views/Splitting Touches across Views   all - v11+ or crash in layout
         .view.SplitTouchView
+        .view.Cheeses
             This activity demonstrates splitting touch events across multiple views within a
             view group.  Here we have two ListViews within a LinearLayout that has the attribute
             android:splitMotionEvents set to "true". Try scrolling both lists simultaneously

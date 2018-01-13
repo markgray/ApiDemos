@@ -48,8 +48,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dip"
-            android:text="Customized text"
             android:showText="true"
+            android:text="Customized text"
             android:textOff="NO"
             android:textOn="YES"
             tools:targetApi="lollipop" />
