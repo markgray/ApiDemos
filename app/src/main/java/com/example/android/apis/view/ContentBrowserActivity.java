@@ -88,18 +88,63 @@ public class ContentBrowserActivity extends Activity
         @SuppressWarnings("unused")
         boolean mNavVisible;
         /**
-         * 
+         * These are the visibility flags to be given to {@code setSystemUiVisibility(int)}, they are
+         * modified by user choice in the menu. It starts out:
+         * <p>
+         * SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN:
+         * View would like its window to be laid out as if it has requested SYSTEM_UI_FLAG_FULLSCREEN,
+         * even if it currently hasn't. This allows it to avoid artifacts when switching in and out of
+         * that mode, at the expense that some of its user interface may be covered by screen decorations
+         * when they are shown.
+         * <p>
+         * SYSTEM_UI_FLAG_LAYOUT_STABLE:
+         * When using other layout flags, we would like a stable view of the content insets given to
+         * fitSystemWindows(Rect). This means that the insets seen there will always represent the
+         * worst case that the application can expect as a continuous state. In the stock Android UI
+         * this is the space for the system bar, nav bar, and status bar, but not more transient
+         * elements such as an input method. The stable layout your UI sees is based on the system
+         * UI modes you can switch to. That is, if you specify SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN then
+         * you will get a stable layout for changes of the SYSTEM_UI_FLAG_FULLSCREEN mode
          */
         int mBaseSystemUiVisibility = SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | SYSTEM_UI_FLAG_LAYOUT_STABLE;
+        /**
+         * Current global UI visibility flags received by our {@code onSystemUiVisibilityChange}
+         * callback.
+         */
         int mLastSystemUiVis;
 
+        /**
+         * {@code Runnable} that makes the navigation invisible after a delay of 2000ms. Used by our
+         * {@code onWindowVisibilityChanged} callback in order to show our navigation elements briefly
+         * before hiding them.
+         */
         Runnable mNavHider = new Runnable() {
+            /**
+             * Calls our method {@code setNavVisibility(false)} to make the navigation views
+             * invisible, this includes {@code TextView mTitleView}, and {@code SeekBar mSeekView}
+             * as well as calling {@code setSystemUiVisibility} to set the system UI visibility to
+             * the appropriate state.
+             */
             @Override
             public void run() {
                 setNavVisibility(false);
             }
         };
 
+        /**
+         * Our constructor which is called when we are inflated from an xml layout file. First we
+         * call our super's constructor. We initialize our field {@code TextView mText} with a new
+         * instance, set its text size to 16dp, set its text to the string with resource id
+         * R.string.alert_dialog_two_buttons2ultra_msg (a very long bit of nonsense text), disable
+         * its clickable state, set its {@code OnClickListener} to "this", make its text selectable
+         * by the user, then add it our view using {@code LayoutParams} which specify a width of
+         * MATCH_PARENT and a height of WRAP_CONTENT. Finally we register "this" as an
+         * {@code OnSystemUiVisibilityChangeListener}.
+         *
+         * @param context The Context the view is running in, through which it can
+         *                access the current theme, resources, etc.
+         * @param attrs   The attributes of the XML tag that is inflating the view.
+         */
         public Content(Context context, AttributeSet attrs) {
             super(context, attrs);
 
@@ -115,6 +160,16 @@ public class ContentBrowserActivity extends Activity
             setOnSystemUiVisibilityChangeListener(this);
         }
 
+        /**
+         * Called by the containing activity to supply the surrounding state of the content browser
+         * that it will interact with. We save our parameter {@code TextView title} in our field
+         * {@code TextView mTitleView}, and {@code SeekBar seek} in {@code SeekBar mSeekView} then
+         * call our method {@code setNavVisibility(true)} to make our navigation UI appropriately
+         * visible.
+         *
+         * @param title {@code TextView} to use for our title in {@code TextView mTitleView}.
+         * @param seek  {@code SeekBar} to use for our seekbar in {@code SeekBar mSeekView}.
+         */
         public void init(TextView title, SeekBar seek) {
             // This called by the containing activity to supply the surrounding
             // state of the content browser that it will interact with.
@@ -123,6 +178,18 @@ public class ContentBrowserActivity extends Activity
             setNavVisibility(true);
         }
 
+        /**
+         * Called when the status bar changes visibility because of a call to {@code setSystemUiVisibility(int)}.
+         * We initialize our variable {@code int diff} by xor'ing {@code mLastSystemUiVis} (the previous
+         * visibility mask) with our parameter {@code int visibility} (the new visibility mask) isolating
+         * the bits that have changed state. We then set {@code mLastSystemUiVis} to {@code visibility}.
+         * If the bit that changed was SYSTEM_UI_FLAG_LOW_PROFILE, and the new value in {@code visibility}
+         * is 0 (we have left low profile mode), we call our method {@code setNavVisibility(true)} to
+         * make our navigation UI visible.
+         *
+         * @param visibility Bitwise-or of flags SYSTEM_UI_FLAG_LOW_PROFILE, SYSTEM_UI_FLAG_HIDE_NAVIGATION
+         *                   SYSTEM_UI_FLAG_FULLSCREEN.
+         */
         @Override
         public void onSystemUiVisibilityChange(int visibility) {
             // Detect when we go out of low-profile mode, to also go out
@@ -136,6 +203,15 @@ public class ContentBrowserActivity extends Activity
             }
         }
 
+        /**
+         * Called when the containing window has changed its visibility (between GONE, INVISIBLE,
+         * and VISIBLE). First we call our super's implementation of {@code onWindowVisibilityChanged},
+         * then we call our method {@code setNavVisibility(true)} to make our navigation UI visible.
+         * Finally we get a handler associated with the thread running our view and schedule the
+         * {@code Runnable mNavHider} to run in 2000ms to make the navigation UI invisible.
+         *
+         * @param visibility The new visibility of the window.
+         */
         @Override
         protected void onWindowVisibilityChanged(int visibility) {
             super.onWindowVisibilityChanged(visibility);
@@ -146,6 +222,16 @@ public class ContentBrowserActivity extends Activity
             getHandler().postDelayed(mNavHider, 2000);
         }
 
+        /**
+         * This is called in response to an internal scroll in this view. We first call through to
+         * our super's implementation of {@code onScrollChanged}, then we call our method
+         * {@code setNavVisibility(false)} to hide the navigation elements.
+         *
+         * @param l    Current horizontal scroll origin.
+         * @param t    Current vertical scroll origin.
+         * @param oldl Previous horizontal scroll origin.
+         * @param oldt Previous vertical scroll origin.
+         */
         @Override
         protected void onScrollChanged(int l, int t, int oldl, int oldt) {
             super.onScrollChanged(l, t, oldl, oldt);
@@ -154,6 +240,15 @@ public class ContentBrowserActivity extends Activity
             setNavVisibility(false);
         }
 
+        /**
+         * Called when our view has been clicked. When the user clicks, we toggle the visibility of
+         * the navigation elements. We fetch the current system visibility flags to initialize our
+         * variable {@code int curVis}. Then we call our method {@code setNavVisibility} with false
+         * if the SYSTEM_UI_FLAG_LOW_PROFILE bit in {@code curVis} is not set and true if it is
+         * set (thereby toggling the visibility of the navigation elements).
+         *
+         * @param v The view that was clicked.
+         */
         @Override
         public void onClick(View v) {
             // When the user clicks, we toggle the visibility of navigation elements.
@@ -161,10 +256,32 @@ public class ContentBrowserActivity extends Activity
             setNavVisibility((curVis & SYSTEM_UI_FLAG_LOW_PROFILE) != 0);
         }
 
+        /**
+         * Convenience setter method for our field {@code mBaseSystemUiVisibility}, we just set
+         * {@code mBaseSystemUiVisibility} to our parameter {@code int visibility}.
+         *
+         * @param visibility new value for {@code mBaseSystemUiVisibility}
+         */
         void setBaseSystemUiVisibility(int visibility) {
             mBaseSystemUiVisibility = visibility;
         }
 
+        /**
+         * Set our navigation elements visible if our parameter {@code visible} is true, or invisible
+         * if it is false. First we initialize our variable {@code int newVis} to our field
+         * {@code mBaseSystemUiVisibility}. If our parameter {@code visible} is false we set the flags
+         * SYSTEM_UI_FLAG_LOW_PROFILE and SYSTEM_UI_FLAG_FULLSCREEN in {@code newVis}. We initialize
+         * {@code boolean changed} to true if {@code newVis} is the same as the last system UI that
+         * was requested using {@code setSystemUiVisibility(int)} (is this logic inverted?). If
+         * {@code changed} or {@code visible} is true, we initialize {@code Handler h} with a handler
+         * associated with the thread running our View, and if the result is not null we remove any
+         * scheduled {@code Runnable mNavHider} from the queue. We then call {@code setSystemUiVisibility}
+         * to set the system UI visibility to {@code newVis}, and if {@code visible} is true we set
+         * the visibility of both {@code TextView mTitleView} and {@code SeekBar mSeekView} to VISIBLE,
+         * or to INVISIBLE if {@code visible} is false.
+         *
+         * @param visible true makes our navigation elements visible, false makes them invisible.
+         */
         void setNavVisibility(boolean visible) {
             int newVis = mBaseSystemUiVisibility;
             if (!visible) {
@@ -188,7 +305,9 @@ public class ContentBrowserActivity extends Activity
         }
     }
 
-
+    /**
+     * {@code Content} instance we use.
+     */
     Content mContent;
 
     public ContentBrowserActivity() {
