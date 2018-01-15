@@ -38,17 +38,47 @@ public class GameActivity extends Activity {
     /**
      * Implementation of a view for the game, filling the entire screen.
      */
-
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class Content extends TouchPaint.PaintView implements
             View.OnSystemUiVisibilityChangeListener, View.OnClickListener {
+
+        /**
+         * Set by our containing Activity to "this" by calling our {@code init} method, but never
+         * used.
+         */
         Activity mActivity;
+        /**
+         * Set by our containing Activity to the {@code Button} in its layout with resource id
+         * R.id.play by calling our {@code init} method, we set its {@code OnClickListener} to this
+         * and toggle our paused state when the user clicks on it.
+         */
         Button mPlayButton;
+        /**
+         * Flag indicating whether we are paused of not. When true the navigation UI elements are
+         * displayed and the text of {@code Button mPlayButton} is set to "Play". When false the
+         * navigation UI elements are invisible and the text of {@code Button mPlayButton} is set to
+         * "Pause".
+         */
         boolean mPaused;
+        /**
+         * The last system UI visibility mask passed to our {@code onSystemUiVisibilityChange} callback.
+         */
         int mLastSystemUiVis;
+        /**
+         * Flag indicating that the system UI state should be updated during the next game loop
+         */
         boolean mUpdateSystemUi;
 
+        /**
+         * {@code Runnable} which is used to fade the current finger painting.
+         */
         Runnable mFader = new Runnable() {
+            /**
+             * First we call our method {@code fade} to fade the current finger painting a bit, then
+             * if our {@code mUpdateSystemUi} flag is true we call our {@code updateNavVisibility} to
+             * make the system UI invisible if we are running. Then if we are not paused we reschedule
+             * ourselves to run again in 33ms.
+             */
             @Override
             public void run() {
                 fade();
@@ -56,11 +86,19 @@ public class GameActivity extends Activity {
                     updateNavVisibility();
                 }
                 if (!mPaused) {
-                    getHandler().postDelayed(mFader, 1000/30);
+                    getHandler().postDelayed(mFader, 1000 / 30);
                 }
             }
         };
 
+        /**
+         * Our constructor which is called when we are inflated from an xml layout file. First we
+         * call our super's constructor.
+         *
+         * @param context The Context the view is running in, through which it can
+         *                access the current theme, resources, etc.
+         * @param attrs   The attributes of the XML tag that is inflating the view.
+         */
         public Content(Context context, AttributeSet attrs) {
             super(context, attrs);
             setOnSystemUiVisibilityChangeListener(this);
@@ -82,8 +120,8 @@ public class GameActivity extends Activity {
             // as it is being played and stay shown when paused.
             int diff = mLastSystemUiVis ^ visibility;
             mLastSystemUiVis = visibility;
-            if (!mPaused && (diff&SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0
-                    && (visibility&SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0) {
+            if (!mPaused && (diff & SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0
+                    && (visibility & SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0) {
                 // We are running and the system UI navigation has become
                 // shown...  we want it to remain hidden, so update our system
                 // UI state at the next game loop.
@@ -142,7 +180,7 @@ public class GameActivity extends Activity {
                     | SYSTEM_UI_FLAG_LAYOUT_STABLE;
             if (!mPaused) {
                 newVis |= SYSTEM_UI_FLAG_LOW_PROFILE | SYSTEM_UI_FLAG_FULLSCREEN
-                        | SYSTEM_UI_FLAG_HIDE_NAVIGATION  | SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+                        | SYSTEM_UI_FLAG_HIDE_NAVIGATION | SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
             }
 
             // Set the new desired visibility.
@@ -162,8 +200,8 @@ public class GameActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.game);
-        mContent = (Content)findViewById(R.id.content);
-        mContent.init(this, (Button)findViewById(R.id.play));
+        mContent = (Content) findViewById(R.id.content);
+        mContent.init(this, (Button) findViewById(R.id.play));
     }
 
     @Override
