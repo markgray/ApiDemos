@@ -19,9 +19,9 @@ package com.example.android.apis.view;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
+import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.FragmentTransaction;
-import android.app.ActionBar.Tab;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -38,53 +38,106 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.SearchView.OnQueryTextListener;
 
 import com.example.android.apis.R;
 
 /**
  * This activity demonstrates some of the available ways to reduce the size or visual contrast of
  * the system decor, in order to better focus the user's attention or use available screen real
- * estate on the task at hand.
+ * estate on the task at hand. Uses CheckBox'es to set or unset the various flags passed to
+ * View.setSystemUiVisibility for the IV extends ImageView which serves as the background in the
+ * FrameLayout holding it and the CheckBox'es which overlay it.
  */
 @SuppressWarnings("deprecation")
 @TargetApi(Build.VERSION_CODES.KITKAT)
 public class SystemUIModes extends Activity
         implements OnQueryTextListener, ActionBar.TabListener {
 
-    public static class IV extends ImageView implements View.OnSystemUiVisibilityChangeListener {
+    /**
+     * {@code ImageView} which is used as the background of our window.
+     */
+    public static class IV extends android.support.v7.widget.AppCompatImageView
+            implements View.OnSystemUiVisibilityChangeListener {
+        /**
+         * {@code SystemUIModes} activity containing us. We use it to access its methods in
+         * several places.
+         */
         private SystemUIModes mActivity;
+        /**
+         * {@code ActionMode} which the user can select to be displayed using a checkbox.
+         */
         private ActionMode mActionMode;
 
+        /**
+         * Our constructor. We just call our super's constructor. UNUSED
+         *
+         * @param context The Context the view is running in, through which it can access the current
+         *                theme, resources, etc.
+         */
         public IV(Context context) {
             super(context);
         }
 
+        /**
+         * Constructor which is called when our view is being inflated from an xml file. We just call
+         * our super's constructor.
+         *
+         * @param context The Context the view is running in, through which it can access the current
+         *                theme, resources, etc.
+         * @param attrs The attributes of the XML tag that is inflating the view.
+         */
         public IV(Context context, AttributeSet attrs) {
             super(context, attrs);
         }
 
+        /**
+         * Setter for our field {@code SystemUIModes mActivity}. We register "this" as a
+         * {@code OnSystemUiVisibilityChangeListener}, then save our parameter {@code SystemUIModes act}
+         * in our field {@code SystemUIModes mActivity}.
+         *
+         * @param act {@code SystemUIModes} instance which is containing us.
+         */
         public void setActivity(SystemUIModes act) {
             setOnSystemUiVisibilityChangeListener(this);
             mActivity = act;
         }
 
+        /**
+         * This is called during layout when the size of this view has changed. We just call the
+         * {@code refreshSizes} method of our containing activity {@code SystemUIModes mActivity}.
+         *
+         * @param w Current width of this view.
+         * @param h Current height of this view.
+         * @param oldw Old width of this view.
+         * @param oldh Old height of this view.
+         */
         @Override
         public void onSizeChanged(int w, int h, int oldw, int oldh) {
             mActivity.refreshSizes();
         }
 
+        /**
+         * Called when the status bar changes visibility. We call the {@code updateCheckControls} and
+         * {@code refreshSizes} methods of our containing activity {@code SystemUIModes mActivity}.
+         *
+         * @param visibility  Bitwise-or of flags SYSTEM_UI_FLAG_LOW_PROFILE, SYSTEM_UI_FLAG_HIDE_NAVIGATION
+         *                    SYSTEM_UI_FLAG_FULLSCREEN.
+         */
         @Override
         public void onSystemUiVisibilityChange(int visibility) {
             mActivity.updateCheckControls();
             mActivity.refreshSizes();
         }
 
+        /**
+         * {@code ActionMode.Callback} for the {@code ActionMode} which the user can choose to
+         * display using a checkbox.
+         */
         private class MyActionModeCallback implements ActionMode.Callback {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override

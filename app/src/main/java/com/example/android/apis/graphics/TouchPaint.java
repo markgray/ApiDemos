@@ -793,7 +793,7 @@ public class TouchPaint extends GraphicsActivity {
          * is not null we have a {@code Canvas mCanvas} that we can use to draw into {@code mBitmap}
          * and we proceed to do so. First we make sure that both of parameters {@code major} and
          * {@code minor} are greater than 0, and if not we set them to the default value 16. Then we
-         * switch based on the value of our paramter {@code PaintMode mode}:
+         * switch based on the value of our parameter {@code PaintMode mode}:
          * <ul>
          * <li>
          * Draw: we set the color of {@code Paint mPaint} to the color in the array {@code COLORS}

@@ -2456,6 +2456,7 @@ System UI Visibility
 
     Views/System UI Visibility/Game        v19
         .view.GameActivity
+        .view.TouchPaint.PaintView
             This activity demonstrates how to use the system UI flags to implement
             an immersive game.
 
@@ -2466,7 +2467,7 @@ System UI Visibility
             attention or use available screen real estate on the task at hand. Uses
             CheckBox'es to set or unset the various flags passed to View.setSystemUiVisibility
             for the IV extends ImageView which serves as the background in the FrameLayout
-            holding it and the CheckBox'es which are overlay it.
+            holding it and the CheckBox'es which overlay it.
 
     Views/System UI Visibility/System UI Modes Overlay  -- v16
         .view.SystemUIModesOverlay
