@@ -34,7 +34,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SeekBar;
@@ -48,7 +47,9 @@ import com.example.android.apis.R;
  * This activity demonstrates how to use system UI flags to implement
  * a video player style of UI (where the navigation bar should be hidden
  * when the user isn't interacting with the screen to achieve full screen
- * video playback).
+ * video playback). Uses system UI flags to transition in and out of modes
+ * where the entire screen can be filled with content (at the expense of
+ * no user interaction).
  */
 @SuppressWarnings("deprecation")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -60,16 +61,49 @@ public class VideoPlayerActivity extends Activity
      * using system UI flags to transition in and out of modes where the entire
      * screen can be filled with content (at the expense of no user interaction).
      */
-
-    public static class Content extends ImageView implements
+    public static class Content extends android.support.v7.widget.AppCompatImageView implements
             View.OnSystemUiVisibilityChangeListener, View.OnClickListener,
             ActionBar.OnMenuVisibilityListener {
+        /**
+         * {@code Activity} of the containing activity that is passed to our {@code init} method.
+         * ("this" when called from the {@code onCreate} method of {@code VideoPlayerActivity}.
+         */
         Activity mActivity;
+        /**
+         * {@code TextView} in the {@code VideoPlayerActivity} layout file R.layout.video_player
+         * with the id R.layout.video_player (the text reads "A title goes here"), we use it just
+         * to switch its visibility to VISIBLE or INVISIBLE in our {@code setNavVisibility} method.
+         */
         TextView mTitleView;
+        /**
+         * {@code Button} in the {@code VideoPlayerActivity} layout file R.layout.video_player
+         * with the id R.id.play we use it to switch its text to "Play" of "Pause" in our
+         * {@code setPlayPaused} method, and to make it VISIBLE or INVISIBLE in our
+         * {@code setNavVisibility} method.
+         */
         Button mPlayButton;
+        /**
+         * {@code SeekBar} in the {@code VideoPlayerActivity} layout file R.layout.video_player
+         * with the id R.id.seekbar, we use it just to switch its visibility to VISIBLE or INVISIBLE
+         * in our {@code setNavVisibility} method.
+         */
         SeekBar mSeekView;
+        /**
+         * Flag to indicate whether we have added "this" as an {@code OnMenuVisibilityListener} to
+         * the action bar (which we do in our {@code onAttachedToWindow} override). If it is true
+         * we call {@code removeOnMenuVisibilityListener} in our {@code onDetachedFromWindow}
+         * override to remove us.
+         */
         boolean mAddedMenuListener;
+        /**
+         * Flag to indicate that the menus are currently open, it is set in {@code onMenuVisibilityChanged}
+         * to its parameter, and if it is true our {@code setNavVisibility} will not schedule
+         * {@code Runnable mNavHider} to auto hide our navigation UI.
+         */
         boolean mMenusOpen;
+        /**
+         * 
+         */
         boolean mPaused;
         @SuppressWarnings("unused")
         boolean mNavVisible;

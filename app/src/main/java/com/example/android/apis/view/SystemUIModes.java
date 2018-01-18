@@ -89,7 +89,7 @@ public class SystemUIModes extends Activity
          *
          * @param context The Context the view is running in, through which it can access the current
          *                theme, resources, etc.
-         * @param attrs The attributes of the XML tag that is inflating the view.
+         * @param attrs   The attributes of the XML tag that is inflating the view.
          */
         public IV(Context context, AttributeSet attrs) {
             super(context, attrs);
@@ -111,8 +111,8 @@ public class SystemUIModes extends Activity
          * This is called during layout when the size of this view has changed. We just call the
          * {@code refreshSizes} method of our containing activity {@code SystemUIModes mActivity}.
          *
-         * @param w Current width of this view.
-         * @param h Current height of this view.
+         * @param w    Current width of this view.
+         * @param h    Current height of this view.
          * @param oldw Old width of this view.
          * @param oldh Old height of this view.
          */
@@ -125,8 +125,8 @@ public class SystemUIModes extends Activity
          * Called when the status bar changes visibility. We call the {@code updateCheckControls} and
          * {@code refreshSizes} methods of our containing activity {@code SystemUIModes mActivity}.
          *
-         * @param visibility  Bitwise-or of flags SYSTEM_UI_FLAG_LOW_PROFILE, SYSTEM_UI_FLAG_HIDE_NAVIGATION
-         *                    SYSTEM_UI_FLAG_FULLSCREEN.
+         * @param visibility Bitwise-or of flags SYSTEM_UI_FLAG_LOW_PROFILE, SYSTEM_UI_FLAG_HIDE_NAVIGATION
+         *                   SYSTEM_UI_FLAG_FULLSCREEN.
          */
         @Override
         public void onSystemUiVisibilityChange(int visibility) {
@@ -152,7 +152,7 @@ public class SystemUIModes extends Activity
              * @param mode ActionMode being created
              * @param menu Menu used to populate action buttons
              * @return true if the action mode should be created, false if entering this
-             *              mode should be aborted.
+             * mode should be aborted.
              */
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
@@ -184,7 +184,7 @@ public class SystemUIModes extends Activity
              * @param mode The current ActionMode
              * @param item The item that was clicked
              * @return true if this callback handled the event, false if the standard MenuItem
-             *          invocation should continue.
+             * invocation should continue.
              */
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
@@ -248,7 +248,7 @@ public class SystemUIModes extends Activity
         WindowManager.LayoutParams winParams = win.getAttributes();
         final int bits = WindowManager.LayoutParams.FLAG_FULLSCREEN;
         if (on) {
-            winParams.flags |=  bits;
+            winParams.flags |= bits;
         } else {
             winParams.flags &= ~bits;
         }
@@ -274,7 +274,7 @@ public class SystemUIModes extends Activity
         WindowManager.LayoutParams winParams = win.getAttributes();
         final int bits = WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN;
         if (on) {
-            winParams.flags |=  bits;
+            winParams.flags |= bits;
         } else {
             winParams.flags &= ~bits;
         }
@@ -301,7 +301,7 @@ public class SystemUIModes extends Activity
         WindowManager.LayoutParams winParams = win.getAttributes();
         final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
         if (on) {
-            winParams.flags |=  bits;
+            winParams.flags |= bits;
         } else {
             winParams.flags &= ~bits;
         }
@@ -320,7 +320,7 @@ public class SystemUIModes extends Activity
      * {@code win}.
      *
      * @param on true to request a translucent navigation bar with minimal system-provided background
-     *          protection, false to disable this.
+     *           protection, false to disable this.
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void setTranslucentNavigation(boolean on) {
@@ -328,7 +328,7 @@ public class SystemUIModes extends Activity
         WindowManager.LayoutParams winParams = win.getAttributes();
         final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
         if (on) {
-            winParams.flags |=  bits;
+            winParams.flags |= bits;
         } else {
             winParams.flags &= ~bits;
         }
@@ -397,7 +397,7 @@ public class SystemUIModes extends Activity
     /**
      * System UI Flags controlled by the 8 checkboxes in {@code CheckBox[] mCheckControls}
      */
-    int[] mCheckFlags = new int[] { View.SYSTEM_UI_FLAG_LOW_PROFILE,
+    int[] mCheckFlags = new int[]{View.SYSTEM_UI_FLAG_LOW_PROFILE,
             View.SYSTEM_UI_FLAG_FULLSCREEN, View.SYSTEM_UI_FLAG_HIDE_NAVIGATION,
             View.SYSTEM_UI_FLAG_IMMERSIVE, View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY,
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE, View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN,
@@ -425,94 +425,94 @@ public class SystemUIModes extends Activity
      * to changes state. We initialize the 8 entries in {@code CheckBox[] mCheckControls} by finding
      * the views with the following ids:
      * <ul>
-     *     <li>
-     *         R.id.modeLowProfile - "LOW_PROFILE" controls flag SYSTEM_UI_FLAG_LOW_PROFILE
-     *         View requests the system UI to enter an unobtrusive "low profile" mode.
-     *     </li>
-     *     <li>
-     *         R.id.modeFullscreen - "FULLSCRN" controls flag SYSTEM_UI_FLAG_FULLSCREEN
-     *         View requests to go into the normal fullscreen mode so that its content can take over
-     *         the screen.
-     *     </li>
-     *     <li>
-     *         R.id.modeHideNavigation - "HIDE_NAV" controls flag SYSTEM_UI_FLAG_HIDE_NAVIGATION
-     *         View request that the system navigation be temporarily hidden.
-     *     </li>
-     *     <li>
-     *         R.id.modeImmersive - "IMMERSIVE" controls flag SYSTEM_UI_FLAG_IMMERSIVE
-     *         View would like to remain interactive when hiding the navigation bar with
-     *         SYSTEM_UI_FLAG_HIDE_NAVIGATION. If this flag is not set, SYSTEM_UI_FLAG_HIDE_NAVIGATION
-     *         will be force cleared by the system on any user interaction.
-     *     </li>
-     *     <li>
-     *         R.id.modeImmersiveSticky - "IMM_STICKY" controls flag SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-     *         View would like to remain interactive when hiding the status bar with SYSTEM_UI_FLAG_FULLSCREEN
-     *         and/or hiding the navigation bar with SYSTEM_UI_FLAG_HIDE_NAVIGATION. Use this flag to
-     *         create an immersive experience while also hiding the system bars. If this flag is not set,
-     *         SYSTEM_UI_FLAG_HIDE_NAVIGATION will be force cleared by the system on any user interaction,
-     *         and SYSTEM_UI_FLAG_FULLSCREEN will be force-cleared by the system if the user swipes from
-     *         the top of the screen.
-     *     </li>
-     *     <li>
-     *         R.id.layoutStable - "STABLE" controls flag SYSTEM_UI_FLAG_LAYOUT_STABLE
-     *         When using other layout flags, we would like a stable view of the content insets given
-     *         to fitSystemWindows(Rect). This means that the insets seen there will always represent
-     *         the worst case that the application can expect as a continuous state.
-     *     </li>
-     *     <li>
-     *         R.id.layoutFullscreen - "FULLSCRN" controls flag SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-     *         View would like its window to be laid out as if it has requested SYSTEM_UI_FLAG_FULLSCREEN,
-     *         even if it currently hasn't. This allows it to avoid artifacts when switching in and out
-     *         of that mode, at the expense that some of its user interface may be covered by screen
-     *         decorations when they are shown.
-     *     </li>
-     *     <li>
-     *         R.id.layoutHideNavigation - "HIDE_NAV" controls flag SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-     *         View would like its window to be laid out as if it has requested SYSTEM_UI_FLAG_HIDE_NAVIGATION,
-     *         even if it currently hasn't. This allows it to avoid artifacts when switching in and out
-     *         of that mode, at the expense that some of its user interface may be covered by screen
-     *         decorations when they are shown.
-     *     </li>
+     * <li>
+     * R.id.modeLowProfile - "LOW_PROFILE" controls flag SYSTEM_UI_FLAG_LOW_PROFILE
+     * View requests the system UI to enter an unobtrusive "low profile" mode.
+     * </li>
+     * <li>
+     * R.id.modeFullscreen - "FULLSCRN" controls flag SYSTEM_UI_FLAG_FULLSCREEN
+     * View requests to go into the normal fullscreen mode so that its content can take over
+     * the screen.
+     * </li>
+     * <li>
+     * R.id.modeHideNavigation - "HIDE_NAV" controls flag SYSTEM_UI_FLAG_HIDE_NAVIGATION
+     * View request that the system navigation be temporarily hidden.
+     * </li>
+     * <li>
+     * R.id.modeImmersive - "IMMERSIVE" controls flag SYSTEM_UI_FLAG_IMMERSIVE
+     * View would like to remain interactive when hiding the navigation bar with
+     * SYSTEM_UI_FLAG_HIDE_NAVIGATION. If this flag is not set, SYSTEM_UI_FLAG_HIDE_NAVIGATION
+     * will be force cleared by the system on any user interaction.
+     * </li>
+     * <li>
+     * R.id.modeImmersiveSticky - "IMM_STICKY" controls flag SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+     * View would like to remain interactive when hiding the status bar with SYSTEM_UI_FLAG_FULLSCREEN
+     * and/or hiding the navigation bar with SYSTEM_UI_FLAG_HIDE_NAVIGATION. Use this flag to
+     * create an immersive experience while also hiding the system bars. If this flag is not set,
+     * SYSTEM_UI_FLAG_HIDE_NAVIGATION will be force cleared by the system on any user interaction,
+     * and SYSTEM_UI_FLAG_FULLSCREEN will be force-cleared by the system if the user swipes from
+     * the top of the screen.
+     * </li>
+     * <li>
+     * R.id.layoutStable - "STABLE" controls flag SYSTEM_UI_FLAG_LAYOUT_STABLE
+     * When using other layout flags, we would like a stable view of the content insets given
+     * to fitSystemWindows(Rect). This means that the insets seen there will always represent
+     * the worst case that the application can expect as a continuous state.
+     * </li>
+     * <li>
+     * R.id.layoutFullscreen - "FULLSCRN" controls flag SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+     * View would like its window to be laid out as if it has requested SYSTEM_UI_FLAG_FULLSCREEN,
+     * even if it currently hasn't. This allows it to avoid artifacts when switching in and out
+     * of that mode, at the expense that some of its user interface may be covered by screen
+     * decorations when they are shown.
+     * </li>
+     * <li>
+     * R.id.layoutHideNavigation - "HIDE_NAV" controls flag SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+     * View would like its window to be laid out as if it has requested SYSTEM_UI_FLAG_HIDE_NAVIGATION,
+     * even if it currently hasn't. This allows it to avoid artifacts when switching in and out
+     * of that mode, at the expense that some of its user interface may be covered by screen
+     * decorations when they are shown.
+     * </li>
      * </ul>
      * Next we loop through all 8 of the checkboxes in {@code mCheckControls} and set their
      * {@code OnCheckedChangeListener} to {@code checkChangeListener}.
-     *
+     * <p>
      * We now find the 6 remaining checkboxes in our layout under the "Window" label (grouped this
      * way because they each set or clear their flags using the layout parameters of the current
      * Window of the activity instead of using {@code setSystemUiVisibility}) and set their
      * {@code OnCheckedChangeListener} to anonymous classes as follows:
      * <ul>
-     *     <li>
-     *         R.id.windowFullscreen - "FULLSCRN" calls our method {@code setFullscreen} with the
-     *         value of its parameter {@code isChecked} which sets or clears the
-     *         WindowManager.LayoutParams.FLAG_FULLSCREEN bit of our activities window.
-     *     </li>
-     *     <li>
-     *         R.id.windowOverscan - "OVERSCAN" calls our method {@code setOverscan} with the
-     *         value of its parameter {@code isChecked} which sets or clears the
-     *         WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN bit of our activities window.
-     *     </li>
-     *     <li>
-     *         R.id.windowTranslucentStatus - "TRANS_STATUS" calls our method {@code setTranslucentStatus}
-     *         with the value of its parameter {@code isChecked} which sets or clears the
-     *         WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS bit of our activities window.
-     *     </li>
-     *     <li>
-     *         R.id.windowTranslucentNav - "TRANS_NAV" calls our method {@code setTranslucentNavigation}
-     *         with the value of its parameter {@code isChecked} which sets or clears the
-     *         WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION bit of our activities window.
-     *     </li>
-     *     <li>
-     *         R.id.windowHideActionBar - "No ActionBar" if its parameter {@code isChecked} is true
-     *         it retrieves a reference to this activity's ActionBar and calls its {@code hide}
-     *         method, if false it retrieves a reference to this activity's ActionBar and calls its
-     *         {@code show} method.
-     *     </li>
-     *     <li>
-     *         R.id.windowActionMode - "Action Mode" if its parameter {@code isChecked} is true
-     *         if calls the {@code startActionMode} method of {@code IV mImage}, if it is false it
-     *         calls the {@code stopActionMode} method.
-     *     </li>
+     * <li>
+     * R.id.windowFullscreen - "FULLSCRN" calls our method {@code setFullscreen} with the
+     * value of its parameter {@code isChecked} which sets or clears the
+     * WindowManager.LayoutParams.FLAG_FULLSCREEN bit of our activities window.
+     * </li>
+     * <li>
+     * R.id.windowOverscan - "OVERSCAN" calls our method {@code setOverscan} with the
+     * value of its parameter {@code isChecked} which sets or clears the
+     * WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN bit of our activities window.
+     * </li>
+     * <li>
+     * R.id.windowTranslucentStatus - "TRANS_STATUS" calls our method {@code setTranslucentStatus}
+     * with the value of its parameter {@code isChecked} which sets or clears the
+     * WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS bit of our activities window.
+     * </li>
+     * <li>
+     * R.id.windowTranslucentNav - "TRANS_NAV" calls our method {@code setTranslucentNavigation}
+     * with the value of its parameter {@code isChecked} which sets or clears the
+     * WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION bit of our activities window.
+     * </li>
+     * <li>
+     * R.id.windowHideActionBar - "No ActionBar" if its parameter {@code isChecked} is true
+     * it retrieves a reference to this activity's ActionBar and calls its {@code hide}
+     * method, if false it retrieves a reference to this activity's ActionBar and calls its
+     * {@code show} method.
+     * </li>
+     * <li>
+     * R.id.windowActionMode - "Action Mode" if its parameter {@code isChecked} is true
+     * if calls the {@code startActionMode} method of {@code IV mImage}, if it is false it
+     * calls the {@code stopActionMode} method.
+     * </li>
      * </ul>
      * Finally we initialize our field {@code TextView mMetricsText} by finding the view with id
      * R.id.metricsText.
@@ -543,7 +543,7 @@ public class SystemUIModes extends Activity
         mCheckControls[6] = (CheckBox) findViewById(R.id.layoutFullscreen);
         mCheckControls[7] = (CheckBox) findViewById(R.id.layoutHideNavigation);
         //noinspection ForLoopReplaceableByForEach
-        for (int i=0; i<mCheckControls.length; i++) {
+        for (int i = 0; i < mCheckControls.length; i++) {
             mCheckControls[i].setOnCheckedChangeListener(checkChangeListener);
         }
 
@@ -609,11 +609,25 @@ public class SystemUIModes extends Activity
     }
 
     /**
-     * Initialize the contents of the Activity's standard options menu.
+     * Initialize the contents of the Activity's standard options menu. We initialize our variable
+     * {@code MenuInflater inflater} with a {@code MenuInflater} for this context, then use it to
+     * inflate our menu file R.menu.content_actions into our parameter {@code Menu menu}. We initialize
+     * {@code SearchView searchView} by finding the menu item in {@code menu} with the id
+     * R.id.action_search then retrieving its currently set action view, then set its
+     * {@code OnQueryTextListener} to "this". We initialize {@code MenuItem actionItem} by finding
+     * the menu item with the id R.id.menu_item_share_action_provider_action_bar, the initialize
+     * {@code ShareActionProvider actionProvider} by retrieving its action provider. We set the
+     * share history file name of {@code actionProvider} to DEFAULT_SHARE_HISTORY_FILE_NAME
+     * ("share_history.xml"). We initialize {@code Intent shareIntent} with a new intent with the
+     * action ACTION_SEND, and set its type to "image/&#42;". We initialize {@code Uri uri} with
+     * an Uri for the file "shared.png" ("file:///data/user/0/com.example.android.apis/files/shared.png")
+     * and add it as an extra to {@code shareIntent} using the key EXTRA_STREAM. We then set the share
+     * intent of {@code actionProvider} to {@code shareIntent}, and return true to the caller to have
+     * menu displayed.
      *
      * @param menu The options menu in which to place our items.
      * @return You must return true for the menu to be displayed;
-     *         if you return false it will not be shown.
+     * if you return false it will not be shown.
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
@@ -637,30 +651,91 @@ public class SystemUIModes extends Activity
         return true;
     }
 
+    /**
+     * Called when the main window associated with the activity has been attached to the window
+     * manager. We call our method {@code updateCheckControls} to read the System Ui Visibility
+     * settings and update the state of the 8 checkboxes in {@code CheckBox[] mCheckControls} based
+     * on the current settings.
+     */
     @Override
     public void onAttachedToWindow() {
         updateCheckControls();
     }
 
+    /**
+     * Called after {@code onRestoreInstanceState}, {@code onRestart}, or {@code onPause}, for our
+     * activity to start interacting with the user. We just call our super's implementation of
+     * {@code onResume}.
+     */
     @Override
     protected void onResume() {
         super.onResume();
     }
 
+    /**
+     * Called using an android:onClick="onSort" attribute in the menu file R.menu.content_actions
+     * from the two menu items @+id/action_sort_alpha ("Alphabetically") and @+id/action_sort_size
+     * ("By size"). We ignore.
+     *
+     * @param item {@code MenuItem} that was selected
+     */
     public void onSort(MenuItem item) {
     }
 
+    /**
+     * Called when the query text is changed by the user. We return true to indicate that we have
+     * consumed the event.
+     *
+     * @param newText the new content of the query text field.
+     * @return false if the SearchView should perform the default action of showing any
+     * suggestions if available, true if the action was handled by the listener.
+     */
     @Override
     public boolean onQueryTextChange(String newText) {
         return true;
     }
 
+    /**
+     * Called when the user submits the query. We toast a string formed by concatenating the string
+     * "Searching for: " with our parameter {@code String query} followed by the string "...", then
+     * return true to indicate that we have handled the query.
+     *
+     * @param query the query text that is to be submitted
+     * @return true if the query has been handled by the listener, false to let the
+     * SearchView perform the default action.
+     */
     @Override
     public boolean onQueryTextSubmit(String query) {
         Toast.makeText(this, "Searching for: " + query + "...", Toast.LENGTH_SHORT).show();
         return true;
     }
 
+    /**
+     * This hook is called whenever an item in your options menu is selected. We switch on the item
+     * id of our parameter {@code MenuItem item}:
+     * <ul>
+     * <li>
+     * R.id.show_tabs ("Show Tabs") - we fetch a reference to the action bar and set its
+     * navigation mode to NAVIGATION_MODE_TABS (Instead of static title text this mode
+     * presents a series of tabs for navigation within the activity), set {@code item} to
+     * the checked state, and return true to the caller to consume the event here.
+     * </li>
+     * <li>
+     * R.id.hide_tabs ("Hide Tabs") - we fetch a reference to the action bar and set its
+     * navigation mode to NAVIGATION_MODE_STANDARD (Standard navigation mode. Consists of
+     * either a logo or icon and title text with an optional subtitle. Clicking any of these
+     * elements will dispatch onOptionsItemSelected to the host Activity with a MenuItem
+     * with item ID android.R.id.home), set {@code item} to the unchecked state, and return
+     * true to the caller to consume the event here.
+     * </li>
+     * </ul>
+     * If the item id of {@code MenuItem item} is neither of the above we return false to the caller
+     * to allow normal menu processing to proceed.
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return false to allow normal menu processing to
+     * proceed, true to consume it here.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -678,28 +753,68 @@ public class SystemUIModes extends Activity
         return false;
     }
 
+    /**
+     * Called when a tab enters the selected state. We ignore.
+     *
+     * @param tab The tab that was selected
+     * @param ft  A {@code FragmentTransaction} for queuing fragment operations to execute
+     *            during a tab switch. The previous tab's un-select and this tab's select will be
+     *            executed in a single transaction. This FragmentTransaction does not support
+     *            being added to the back stack.
+     */
     @Override
     public void onTabSelected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
     }
 
+    /**
+     * Called when a tab exits the selected state. We ignore.
+     *
+     * @param tab The tab that was unselected
+     * @param ft  A {@code FragmentTransaction} for queuing fragment operations to execute
+     *            during a tab switch. This tab's unselect and the newly selected tab's select
+     *            will be executed in a single transaction. This FragmentTransaction does not
+     *            support being added to the back stack.
+     */
     @Override
     public void onTabUnselected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
     }
 
+    /**
+     * Called when a tab that is already selected is chosen again by the user. We ignore.
+     *
+     * @param tab The tab that was reselected.
+     * @param ft  A {@link FragmentTransaction} for queuing fragment operations to execute
+     *            once this method returns. This FragmentTransaction does not support
+     *            being added to the back stack.
+     */
     @Override
     public void onTabReselected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
     }
 
+    /**
+     * Called to update the checked/unchecked state of the 8 checkboxes in {@code CheckBox[] mCheckControls}
+     * based on the current value of the system UI visibility mask. First we initialize our variable
+     * {@code int visibility} with the current system UI visibility. Then we loop over {@code i} through
+     * the 8 checkboxes in {@code mCheckControls} setting each checkbox to checked if the bit in
+     * {@code visibility} for the bit given in {@code mCheckFlags[i]} is 1, or to unchecked if it is zero.
+     */
     public void updateCheckControls() {
         int visibility = mImage.getSystemUiVisibility();
-        for (int i=0; i<mCheckControls.length; i++) {
-            mCheckControls[i].setChecked((visibility&mCheckFlags[i]) != 0);
+        for (int i = 0; i < mCheckControls.length; i++) {
+            mCheckControls[i].setChecked((visibility & mCheckFlags[i]) != 0);
         }
     }
 
+    /**
+     * Called to update the system UI visibility based on the current state of the 8 checkboxes in
+     * {@code CheckBox[] mCheckControls}. First we initialize {@code int visibility} to zero, then
+     * we loop over {@code i} through the 8 checkboxes in {@code mCheckControls} or'ing the bit in
+     * {@code mCheckFlags[i]} into {@code visibility} if {@code mCheckControls[i]} is checked.
+     * Finally we set the system UI visibility to {@code visibility}.
+     */
     public void updateSystemUi() {
         int visibility = 0;
-        for (int i=0; i<mCheckControls.length; i++) {
+        for (int i = 0; i < mCheckControls.length; i++) {
             if (mCheckControls[i].isChecked()) {
                 visibility |= mCheckFlags[i];
             }
@@ -707,6 +822,11 @@ public class SystemUIModes extends Activity
         mImage.setSystemUiVisibility(visibility);
     }
 
+    /**
+     * Called from the {@code onDestroyActionMode} override of our {@code IV} objects action mode
+     * callback {@code MyActionModeCallback}, we just locate the {@code CheckBox} with the id
+     * R.id.windowActionMode and set it to the unchecked state.
+     */
     public void clearActionMode() {
         ((CheckBox) findViewById(R.id.windowActionMode)).setChecked(false);
     }

@@ -22,9 +22,22 @@ import android.os.Bundle;
 import android.view.Window;
 
 /**
- * Version of demo that uses the action bar in overlay mode.
+ * Version of demo that uses the action bar in overlay mode. Extends
+ * .view.SystemUIModes with the addition of requesting the window feature
+ * Window.FEATURE_ACTION_BAR_OVERLAY which overlays the action bar rather than
+ * positioning the action bar in the space above the window content.
  */
 public class SystemUIModesOverlay extends SystemUIModes {
+    /**
+     * Called when the activity is starting. We fetch a reference to the current Window for this
+     * activity and use it to request the feature FEATURE_ACTION_BAR_OVERLAY (requests an Action Bar
+     * that overlays window content. Normally an Action Bar will sit in the space above window
+     * content, but if this feature is requested along with FEATURE_ACTION_BAR it will be layered
+     * over the window content itself), then we call through to our super's implementation of
+     * {@code onCreate}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onCreate(Bundle savedInstanceState) {

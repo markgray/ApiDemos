@@ -2471,6 +2471,7 @@ System UI Visibility
 
     Views/System UI Visibility/System UI Modes Overlay  -- v16
         .view.SystemUIModesOverlay
+        .view.SystemUIModes
             Extend .view.SystemUIModes with the addition of requesting the window feature
             Window.FEATURE_ACTION_BAR_OVERLAY which overlays the action bar rather than
             positioning the action bar in the space above the window content.
