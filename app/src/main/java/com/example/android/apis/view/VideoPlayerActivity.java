@@ -102,13 +102,23 @@ public class VideoPlayerActivity extends Activity
          */
         boolean mMenusOpen;
         /**
-         * 
+         * Paused flag, when true navigation UI is displayed.
          */
         boolean mPaused;
+        /**
+         * Unused
+         */
         @SuppressWarnings("unused")
         boolean mNavVisible;
+        /**
+         * Last system UI visibility mask, received by {@code onSystemUiVisibilityChange} override.
+         */
         int mLastSystemUiVis;
 
+        /**
+         * {@code Runnable} which makes system UI visibility go away after 3000ms when play is
+         * resumed, its running is scheduled in {@code setNavVisibility} method
+         */
         Runnable mNavHider = new Runnable() {
             @Override
             public void run() {
@@ -116,14 +126,36 @@ public class VideoPlayerActivity extends Activity
             }
         };
 
+        /**
+         * Perform inflation from XML. First we call our super's constructor, then we register this
+         * as a {@code OnSystemUiVisibilityChangeListener}, and a {@code OnClickListener}.
+         *
+         * @param context The Context the view is running in, through which it can
+         *                access the current theme, resources, etc.
+         * @param attrs   The attributes of the XML tag that is inflating the view.
+         */
         public Content(Context context, AttributeSet attrs) {
             super(context, attrs);
             setOnSystemUiVisibilityChangeListener(this);
             setOnClickListener(this);
         }
 
-        public void init(Activity activity, TextView title, Button playButton,
-                SeekBar seek) {
+        /**
+         * Called by our containing {@code Activity} to initialize our fields with information about
+         * the state of the video player that we will interact with. We save our parameter
+         * {@code Activity activity} in our field {@code Activity mActivity}, our parameter
+         * {@code TextView title} in our field {@code TextView mTitleView}, our parameter
+         * {@code Button playButton} in our field {@code Button mPlayButton}, and our parameter
+         * {@code SeekBar seek} in our field {@code SeekBar mSeekView}. We set the {@code OnClickListener}
+         * of {@code mPlayButton} to "this", and call our {@code setPlayPaused(true)} to initialize
+         * our UI to the paused state.
+         *
+         * @param activity   {@code Activity} we use to fetch the action bar
+         * @param title      {@code TextView} containing the title we are playing
+         * @param playButton {@code Button} that toggles between play and paused states
+         * @param seek       {@code SeekBar} in the layout file we are contained in
+         */
+        public void init(Activity activity, TextView title, Button playButton, SeekBar seek) {
             // This called by the containing activity to supply the surrounding
             // state of the video player that it will interact with.
             mActivity = activity;
@@ -134,6 +166,12 @@ public class VideoPlayerActivity extends Activity
             setPlayPaused(true);
         }
 
+        /**
+         * This is called when the view is attached to a window. First we call our super's implementation
+         * of {@code onAttachedToWindow}. Then if our field {@code Activity mActivity} is not null we
+         * set our flag {@code mAddedMenuListener} to true, use {@code mActivity} to get a reference
+         * to the action bar in order to register "this" as an {@code OnMenuVisibilityListener}.
+         */
         @Override
         protected void onAttachedToWindow() {
             super.onAttachedToWindow();
@@ -144,6 +182,12 @@ public class VideoPlayerActivity extends Activity
             }
         }
 
+        /**
+         * This is called when the view is detached from a window. First we call our super's implementation
+         * of {@code onDetachedFromWindow}. Then if our flag {@code mAddedMenuListener} is true, we
+         * use {@code mActivity} to get a reference to the action bar in order to remove "this" as an
+         * {@code OnMenuVisibilityListener}.
+         */
         @Override
         protected void onDetachedFromWindow() {
             super.onDetachedFromWindow();
@@ -153,6 +197,19 @@ public class VideoPlayerActivity extends Activity
             }
         }
 
+        /**
+         * Called when the status bar changes visibility. We initialize {@code int diff} to the bits
+         * that have changed by bitwise exclusive or'ing our parameter {@code visibility} with our
+         * field {@code mLastSystemUiVis}, then set {@code mLastSystemUiVis} to {@code visibility}.
+         * If the bit that changed is SYSTEM_UI_FLAG_HIDE_NAVIGATION, and the new value of the bit
+         * in {@code visibility} is equal to 0, we call our method {@code setNavVisibility(true)}
+         * in order to make our navigation UI visible, and to schedule {@code Runnable mNavHider} to
+         * run in 3000ms to make it invisible.
+         *
+         * @param visibility current system UI visibility mask, Bitwise-or of the bit flags
+         *                   SYSTEM_UI_FLAG_LOW_PROFILE, SYSTEM_UI_FLAG_HIDE_NAVIGATION, and
+         *                   SYSTEM_UI_FLAG_FULLSCREEN.
+         */
         @Override
         public void onSystemUiVisibilityChange(int visibility) {
             // Detect when we go out of nav-hidden mode, to clear our state
@@ -160,12 +217,20 @@ public class VideoPlayerActivity extends Activity
             // the state is changing and nav is no longer hidden.
             int diff = mLastSystemUiVis ^ visibility;
             mLastSystemUiVis = visibility;
-            if ((diff&SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0
-                    && (visibility&SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0) {
+            if ((diff & SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0
+                    && (visibility & SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0) {
                 setNavVisibility(true);
             }
         }
 
+        /**
+         * Called when the window containing has changed its visibility (between GONE, INVISIBLE, and
+         * VISIBLE). First we call our super's implementation of {@code onWindowVisibilityChanged} then
+         * we call our method {@code setPlayPaused(true)} in order to pause play (when we become visible
+         * or invisible, play is paused).
+         *
+         * @param visibility The new visibility of the window.
+         */
         @Override
         protected void onWindowVisibilityChanged(int visibility) {
             super.onWindowVisibilityChanged(visibility);
@@ -174,6 +239,14 @@ public class VideoPlayerActivity extends Activity
             setPlayPaused(true);
         }
 
+        /**
+         * Called when a {@code View} we are registered as an {@code OnClickListener} for it clicked.
+         * If the {@code View v} that was clicked is {@code Button mPlayButton} we call our method
+         * {@code setPlayPaused(!mPaused)} to toggle our play/pause state, otherwise we call our
+         * method {@code setNavVisibility(true)} to make the navigation visible.
+         *
+         * @param v View that was clicked
+         */
         @Override
         public void onClick(View v) {
             if (v == mPlayButton) {
@@ -185,12 +258,32 @@ public class VideoPlayerActivity extends Activity
             }
         }
 
+        /**
+         * Called when an action bar menu is shown or hidden. We save our parameter {@code isVisible}
+         * in our field {@code mMenusOpen}, then call our method {@code setNavVisibility(true)} to
+         * make the navigation visible.
+         *
+         * @param isVisible True if an action bar menu is now visible, false if no action bar
+         *                  menus are visible.
+         */
         @Override
         public void onMenuVisibilityChanged(boolean isVisible) {
             mMenusOpen = isVisible;
             setNavVisibility(true);
         }
 
+        /**
+         * Called to change state to paused if its parameter {@code paused} is true, or to play if
+         * it is false. First we save {@code paused} in our field {@code mPaused}. If {@code mPaused}
+         * is true we set the text of our field {@code Button mPlayButton} to the string with the
+         * resource id R.string.play ("Play"), if false we set it to the string with the resource id
+         * R.string.pause ("Pause"). We call our method {@code setKeepScreenOn(!paused)} to keep our
+         * screen on if we are now in play state, or to allow it to go off if we are now in paused
+         * state. Finally we call our method {@code setNavVisibility(true)} to make the navigation
+         * visible.
+         *
+         * @param paused if true move to the paused state, if false move to the play state
+         */
         void setPlayPaused(boolean paused) {
             mPaused = paused;
             mPlayButton.setText(paused ? R.string.play : R.string.pause);
@@ -198,13 +291,69 @@ public class VideoPlayerActivity extends Activity
             setNavVisibility(true);
         }
 
+        /**
+         * Called to make our navigation visible if its parameter {@code visible} is true, or to hide
+         * it if it is false. We initialize our variable {@code int newVis} by or'ing together the
+         * following bit flags:
+         * <ul>
+         * <li>
+         * SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN - View would like its window to be laid out as if it
+         * has requested SYSTEM_UI_FLAG_FULLSCREEN, even if it currently hasn't. This allows it
+         * to avoid artifacts when switching in and out of that mode, at the expense that some
+         * of its user interface may be covered by screen decorations when they are shown.
+         * </li>
+         * <li>
+         * SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION - View would like its window to be laid out
+         * as if it has requested SYSTEM_UI_FLAG_HIDE_NAVIGATION, even if it currently hasn't.
+         * This allows it to avoid artifacts when switching in and out of that mode, at the
+         * expense that some of its user interface may be covered by screen decorations when
+         * they are shown.
+         * </li>
+         * <li>
+         * SYSTEM_UI_FLAG_LAYOUT_STABLE - When using other layout flags, we would like a
+         * stable view of the content insets given to fitSystemWindows(Rect). This means that
+         * the insets seen there will always represent the worst case that the application
+         * can expect as a continuous state.
+         * </li>
+         * </ul>
+         * Then is {@code visible} is false (we want to hide the navigation) we or {@code newVis}
+         * with the following bit flags:
+         * <ul>
+         * <li>
+         * SYSTEM_UI_FLAG_LOW_PROFILE - View requests the system UI to enter an unobtrusive
+         * "low profile" mode. In low profile mode, the status bar and/or navigation icons
+         * may dim.
+         * </li>
+         * <li>
+         * SYSTEM_UI_FLAG_FULLSCREEN - View requests to go into the normal fullscreen mode
+         * so that its content can take over the screen while still allowing the user to
+         * interact with the application.
+         * </li>
+         * <li>
+         * SYSTEM_UI_FLAG_HIDE_NAVIGATION - View requests that the system navigation be
+         * temporarily hidden.
+         * </li>
+         * </ul>
+         * Then if {@code visible} is true, we initialize {@code Handler h} with a handler associated
+         * with the thread running the View. If {@code h} is not null, we remove all scheduled runs of
+         * {@code Runnable mNavHider} from its queue. If {@code mMenusOpen} is false (no menus are
+         * open), and {@code mPaused} is false (we are in play state) we use {@code h} to schedule
+         * {@code Runnable mNavHider} to run in 3000ms to hide the navigation again.
+         * <p>
+         * We now set the system UI visibility to {@code newVis}, and set the visibility of the views
+         * {@code mTitleView}, {@code mPlayButton}, and {@code mSeekView} to VISIBLE if our parameter
+         * {@code visible} is true, or the INVISIBLE if it is false.
+         *
+         * @param visible if true we make our navigation visible, if false we hide the navigation.
+         */
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         void setNavVisibility(boolean visible) {
             int newVis = SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     | SYSTEM_UI_FLAG_LAYOUT_STABLE;
             if (!visible) {
-                newVis |= SYSTEM_UI_FLAG_LOW_PROFILE | SYSTEM_UI_FLAG_FULLSCREEN
+                newVis |= SYSTEM_UI_FLAG_LOW_PROFILE
+                        | SYSTEM_UI_FLAG_FULLSCREEN
                         | SYSTEM_UI_FLAG_HIDE_NAVIGATION;
             }
 
@@ -228,12 +377,25 @@ public class VideoPlayerActivity extends Activity
         }
     }
 
-
+    /**
+     * Our {@code Content} instance.
+     */
     Content mContent;
 
+    /**
+     * Our constructor.
+     */
     public VideoPlayerActivity() {
     }
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we request the window feature FEATURE_ACTION_BAR_OVERLAY (requests an
+     * Action Bar that overlays window content), and then we set our content view to our layout file
+     * R.layout.video_player.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -241,10 +403,11 @@ public class VideoPlayerActivity extends Activity
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 
         setContentView(R.layout.video_player);
-        mContent = (Content)findViewById(R.id.content);
-        mContent.init(this, (TextView)findViewById(R.id.title),
-                (Button)findViewById(R.id.play),
-                (SeekBar)findViewById(R.id.seekbar));
+
+        mContent = (Content) findViewById(R.id.content);
+        mContent.init(this, (TextView) findViewById(R.id.title),
+                (Button) findViewById(R.id.play),
+                (SeekBar) findViewById(R.id.seekbar));
 
         ActionBar bar = getActionBar();
         //noinspection ConstantConditions
