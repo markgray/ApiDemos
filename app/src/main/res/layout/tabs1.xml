@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -18,22 +17,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView android:id="@+id/view1"
+    <TextView
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@drawable/blue"
+        android:text="@string/tabs_1_tab_1" />
+
+    <TextView
+        android:id="@+id/view2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/tabs_1_tab_1"/>
-
-    <TextView android:id="@+id/view2"
         android:background="@drawable/red"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/tabs_1_tab_2"/>
+        android:text="@string/tabs_1_tab_2" />
 
-    <TextView android:id="@+id/view3"
-        android:background="@drawable/green"
+    <TextView
+        android:id="@+id/view3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/tabs_1_tab_3"/>
+        android:background="@drawable/green"
+        android:text="@string/tabs_1_tab_3" />
 
 </FrameLayout>

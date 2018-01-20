@@ -392,7 +392,12 @@ public class VideoPlayerActivity extends Activity
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we request the window feature FEATURE_ACTION_BAR_OVERLAY (requests an
      * Action Bar that overlays window content), and then we set our content view to our layout file
-     * R.layout.video_player.
+     * R.layout.video_player. We initialize our field {@code Content mContent} by finding the view
+     * with the id R.id.content, then call its {@code init} method with "this" as the activity, the
+     * {@code TextView} with id R.id.title, the {@code Button} with id R.id.play, and the {@code SeekBar}
+     * with id R.id.seekbar. We initialize {@code ActionBar bar} by retrieving a reference to this
+     * activity's ActionBar, then add 3 tabs to it with the text "Tab 1", "Tab 2", and "Tab 3" and
+     * setting their {@code TabListener} each to this.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
@@ -416,6 +421,26 @@ public class VideoPlayerActivity extends Activity
         bar.addTab(bar.newTab().setText("Tab 3").setTabListener(this));
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu. We initialize our variable
+     * {@code MenuInflater inflater} with a menu inflater in this context and use it to inflate our
+     * menu file R.menu.content_actions into our parameter {@code Menu menu}. We initialize our
+     * variable {@code SearchView searchView} by finding the menu item with id R.id.action_search
+     * in {@code menu} and retrieving its action view. We then set the {@code OnQueryTextListener}
+     * of {@code searchView} to "this". We initialize our variable {@code MenuItem actionItem} by
+     * finding the menu item in {@code menu} with id R.id.menu_item_share_action_provider_action_bar,
+     * then initialize {@code ShareActionProvider actionProvider} by retrieving its action provider.
+     * We then set the share history file name of {@code actionProvider} to the file DEFAULT_SHARE_HISTORY_FILE_NAME
+     * ("share_history.xml"). We create {@code Intent shareIntent} with the action ACTION_SEND, set its
+     * type to "image/&#42;". We create {@code Uri uri} to reference the file "shared.png", and put
+     * it as an extra to {@code shareIntent} under the key EXTRA_STREAM. We then set {@code shareIntent}
+     * as the share intent of {@code actionProvider} and return true to the caller so that the menu
+     * will be displayed.
+     *
+     * @param menu The options menu in which you place your items.     *
+     * @return You must return true for the menu to be displayed;
+     * if you return false it will not be shown.
+     */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -438,22 +463,58 @@ public class VideoPlayerActivity extends Activity
         return true;
     }
 
+    /**
+     * Called when the main window associated with the activity has been attached to the window
+     * manager. We just call our super's implementation of {@code onAttachedToWindow}.
+     */
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
     }
 
+    /**
+     * Called after {@code onRestoreInstanceState}, {@code onRestart}, or {@code onPause}, for our
+     * activity to start interacting with the user. We just call our super's implementation of
+     * {@code onResume}.
+     */
     @Override
     protected void onResume() {
         super.onResume();
     }
 
     /**
-     * This method is declared in the menu.
+     * This method is referenced in the menu in the attribute android:onClick="onSort".
      */
     public void onSort(MenuItem item) {
     }
 
+    /**
+     * This hook is called whenever an item in your options menu is selected. We switch on the item
+     * id of our parameter {@code MenuItem item}:
+     * <ul>
+     * <li>
+     * R.id.show_tabs "Show Tabs" - We retrieve the action bar for our activity and set its
+     * navigation mode to NAVIGATION_MODE_TABS (Tab navigation mode. Instead of static title
+     * text this mode presents a series of tabs for navigation within the activity). We then
+     * set the item to checked, and return true to the caller to indicate we have consumed
+     * the event.
+     * </li>
+     * <li>
+     * R.id.hide_tabs "Hide Tabs" - We retrieve the action bar for our activity and set its
+     * navigation mode to NAVIGATION_MODE_STANDARD (Standard navigation mode. Consists of
+     * either a logo or icon and title text with an optional subtitle. Clicking any of these
+     * elements will dispatch onOptionsItemSelected to the host Activity with a MenuItem
+     * with item ID android.R.id.home). We then set the item to checked, and return true to
+     * the caller to indicate we have consumed the event.
+     * </li>
+     * </ul>
+     * If the item id is not one of two above, we return false to the caller to allow normal menu
+     * processing to proceed.
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return false to allow normal menu processing to
+     * proceed, true to consume it here.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -471,25 +532,68 @@ public class VideoPlayerActivity extends Activity
         return false;
     }
 
+    /**
+     * Called when the query text is changed by the user. We just return true to the caller to indicate
+     * that we have handled the event.
+     *
+     * @param newText the new content of the query text field.
+     * @return false if the SearchView should perform the default action of showing any
+     * suggestions if available, true if the action was handled by the listener.
+     */
     @Override
     public boolean onQueryTextChange(String newText) {
         return true;
     }
 
+    /**
+     * Called when the user submits the query. We toast a string formed by concatenating the string
+     * "Searching for: " with our parameter {@code String query} followed by the string "...", then
+     * return true to the caller to indicate that we have handled the event.
+     *
+     * @param query the query text that is to be submitted
+     * @return true if the query has been handled by the listener, false to let the
+     * SearchView perform the default action.
+     */
     @Override
     public boolean onQueryTextSubmit(String query) {
         Toast.makeText(this, "Searching for: " + query + "...", Toast.LENGTH_SHORT).show();
         return true;
     }
 
+    /**
+     * Called when a tab enters the selected state. We ignore.
+     *
+     * @param tab The tab that was selected
+     * @param ft  A {@code FragmentTransaction} for queuing fragment operations to execute
+     *            during a tab switch. The previous tab's unselect and this tab's select will be
+     *            executed in a single transaction. This FragmentTransaction does not support
+     *            being added to the back stack.
+     */
     @Override
     public void onTabSelected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
     }
 
+    /**
+     * Called when a tab exits the selected state. We ignore.
+     *
+     * @param tab The tab that was unselected
+     * @param ft  A {@code FragmentTransaction} for queuing fragment operations to execute
+     *            during a tab switch. This tab's unselect and the newly selected tab's select
+     *            will be executed in a single transaction. This FragmentTransaction does not
+     *            support being added to the back stack.
+     */
     @Override
     public void onTabUnselected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
     }
 
+    /**
+     * Called when a tab that is already selected is chosen again by the user. We ignore.
+     *
+     * @param tab The tab that was reselected.
+     * @param ft  A {@link FragmentTransaction} for queuing fragment operations to execute
+     *            once this method returns. This FragmentTransaction does not support
+     *            being added to the back stack.
+     */
     @Override
     public void onTabReselected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
     }

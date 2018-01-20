@@ -18,6 +18,8 @@ package com.example.android.apis.view;
 
 
 /**
- * Identical to Tabs2. The change is in the theme used in the manifest file.
+ * Identical to Tabs2. The change is in the theme used in the manifest file:
+ * android:theme="@android:style/Theme" The Icon shows up now unlike Tabs2.
  */
-public class Tabs4 extends Tabs2 {}
+public class Tabs4 extends Tabs2 {
+}

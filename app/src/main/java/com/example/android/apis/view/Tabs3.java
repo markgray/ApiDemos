@@ -22,11 +22,32 @@ import android.widget.TabHost;
 import android.content.Intent;
 
 /**
- * An example of tab content that launches an activity via {@link android.widget.TabHost.TabSpec#setContent(android.content.Intent)}
+ * An example of tab content that launches an activity via
+ * android.widget.TabHost.TabSpec#setContent(android.content.Intent), the
+ * three tabs launch .view.List1, .view.List8, and .view.Controls1
+ * respectively, using Intent's. The last sets the Intent flag so that it is
+ * recreated each time the tab is clicked using:
+ * Intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
  */
 @SuppressWarnings("deprecation")
 public class Tabs3 extends TabActivity {
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. Then we initialize our variable {@code TabHost tabHost} by retrieving the
+     * TabHost our activity is using to host its tabs. We add three tabs to {@code TabHost tabHost}
+     * using its {@code addTab} method to add tab specs created with the tags "tab1", "tab2", and
+     * "tab3", use the strings "list", "photo list", and "destroy" to set the indicator labels, and
+     * set the content to an {@code Intent} to launch the activities {@code List1}, {@code List8},
+     * and {@code Controls1} respectively. The {@code Intent} for the third tab has the flag
+     * FLAG_ACTIVITY_CLEAR_TOP set as well (If set, and the activity being launched is already running
+     * in the current task, then instead of launching a new instance of that activity, all of the other
+     * activities on top of it will be closed and this Intent will be delivered to the (now on top) old
+     * activity as a new Intent). So while the first two tabs recall their content, the third one
+     * starts from scratch every time it is selected.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +61,7 @@ public class Tabs3 extends TabActivity {
         tabHost.addTab(tabHost.newTabSpec("tab2")
                 .setIndicator("photo list")
                 .setContent(new Intent(this, List8.class)));
-        
+
         // This tab sets the intent flag so that it is recreated each time
         // the tab is clicked.
         tabHost.addTab(tabHost.newTabSpec("tab3")

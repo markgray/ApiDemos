@@ -29,7 +29,28 @@ import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.widget.TextView;
 
+/**
+ * Four different ways to generate html like links and styled text: text1 shows
+ * the android:autoLink property, which automatically creates links for things
+ * like URLs and phone numbers found in the text. No java code is needed to make
+ * this work; text2 has links specified by putting <a> tags in the string resource
+ * By default these links will appear but not respond to user input. To make
+ * them active, you need to call setMovementMethod() on the TextView object;
+ * text3 shows creating text with links from HTML in the Java code, rather than
+ * from a string resource. Note that for a fixed string, using a (localizable)
+ * resource as shown above is usually a better way to go, this example is
+ * intended to illustrate how you might display text that came from a dynamic
+ * source (eg, the network); text4 illustrates constructing a styled string
+ * containing a link without using HTML at all. Again, for a fixed string you
+ * should probably be using a string resource, not a hardcoded value.
+ */
 public class Link extends Activity {
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.link.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,19 +59,19 @@ public class Link extends Activity {
 
         // text1 shows the android:autoLink property, which
         // automatically creates links for things like URLs and phone numbers
-        // found in the text.  No java code is needed to make this
+        // found in the text. No java code is needed to make this
         // work.
 
         // text2 has links specified by putting <a> tags in the string
-        // resource.  By default these links will appear but not
-        // respond to user input.  To make them active, you need to
+        // resource. By default these links will appear but not
+        // respond to user input. To make them active, you need to
         // call setMovementMethod() on the TextView object.
 
         TextView t2 = (TextView) findViewById(R.id.text2);
         t2.setMovementMethod(LinkMovementMethod.getInstance());
 
         // text3 shows creating text with links from HTML in the Java
-        // code, rather than from a string resource.  Note that for a
+        // code, rather than from a string resource. Note that for a
         // fixed string, using a (localizable) resource as shown above
         // is usually a better way to go; this example is intended to
         // illustrate how you might display text that came from a
@@ -65,7 +86,7 @@ public class Link extends Activity {
         t3.setMovementMethod(LinkMovementMethod.getInstance());
 
         // text4 illustrates constructing a styled string containing a
-        // link without using HTML at all.  Again, for a fixed string
+        // link without using HTML at all. Again, for a fixed string
         // you should probably be using a string resource, not a
         // hardcoded value.
 

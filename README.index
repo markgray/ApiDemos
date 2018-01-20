@@ -2525,7 +2525,7 @@ Tabs
         .view.Tabs5
             Demonstrates the Tab scrolling when too many tabs are displayed to fit
             in the screen. In the layout a HorizontalScrollView contains the TabWidget
-            and 30 tabs are added to it using Tabhost.addTab (TabHost.TabSpec tabSpec)
+            and 30 tabs are added to it using TabHost.addTab(TabHost.TabSpec tabSpec)
             the callback createTabContent creates the content as each tab is selected.
 
     Views/Tabs/6. Right aligned            all

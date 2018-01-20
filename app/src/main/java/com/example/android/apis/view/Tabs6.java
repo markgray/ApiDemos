@@ -26,11 +26,27 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 /**
- * Uses a right gravity for the TabWidget.
+ * Uses a right gravity for the TabWidget. Does not seem to have any effect even
+ * after changing AndroidManifest to android:theme="@android:style/Theme"
  */
 @SuppressWarnings("deprecation")
 public class Tabs6 extends TabActivity implements TabHost.TabContentFactory {
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.tabs_right_gravity.
+     * Next we initialize our variable {@code TabHost tabHost} by retrieving the TabHost our activity
+     * is using to host its tabs. We add three tabs to {@code TabHost tabHost} using its {@code addTab}
+     * method to add tab specs created with the tags "tab1", "tab2", and "tab3", using the same string
+     * to set the indicator label, and setting the content of the tabs to use "this" as the
+     * TabHost.TabContentFactory to use to create the content of all tabs.
+     * <p>
+     * Note that the "tab1" call to the method {@code setIndicator} also specifies a drawable to
+     * use but this stopped working for the default Theme as of Ice Cream Sandwich, changing the t
+     * heme used in the manifest file to android:theme="@android:style/Theme" fixed this.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +65,14 @@ public class Tabs6 extends TabActivity implements TabHost.TabContentFactory {
                 .setContent(this));
     }
 
+    /**
+     * Callback to make the tab contents. We initialize our variable {@code TextView tv} with a new
+     * instance, set its text to a string formed by concatenating the string "Content for tab with tag "
+     * with our parameter {@code String tag}, then return {@code tv} to the caller.
+     *
+     * @param tag Which tab was selected.
+     * @return The view to display the contents of the selected tab.
+     */
     @SuppressLint("SetTextI18n")
     public View createTabContent(String tag) {
         final TextView tv = new TextView(this);
