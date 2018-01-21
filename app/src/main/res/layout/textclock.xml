@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2012 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -19,12 +18,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:targetApi="jelly_bean_mr1" >
+        tools:targetApi="jelly_bean_mr1">
 
         <!-- Default formats -->
         <TextClock
@@ -33,49 +32,49 @@
 
         <!-- Shows the date only -->
         <TextClock
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
             android:format12Hour="MMM dd, yyyy"
-            android:format24Hour="MMM dd, yyyy"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:format24Hour="MMM dd, yyyy" />
 
         <!-- Use styles -->
         <TextClock
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
             android:format12Hour="@string/styled_12_hour_clock"
-            android:format24Hour="@string/styled_24_hour_clock"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:format24Hour="@string/styled_24_hour_clock" />
 
         <!-- Use styles -->
         <TextClock
-            android:format12Hour="@string/styled_12_hour_clock2"
-            android:format24Hour="@string/styled_24_hour_clock2"
-
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+
+            android:format12Hour="@string/styled_12_hour_clock2"
+            android:format24Hour="@string/styled_24_hour_clock2" />
 
         <!-- Shows seconds -->
         <TextClock
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
             android:format12Hour="hh:mm:ss a"
             android:format24Hour="HH:mm:ss"
-
-            android:textSize="20sp"
             android:shadowColor="#7fffffff"
-            android:shadowRadius="3.0"
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:shadowRadius="3.0"
+            android:textSize="20sp" />
 
         <!-- Use a fixed time zone -->
         <TextClock
-            android:format12Hour="'Time in Paris:' MMM dd, yyyy h:mma"
-            android:format24Hour="'Time in Paris:' MMM dd, yyyy HH:mm"
-            android:timeZone="Europe/Paris"
-
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:format12Hour="'Time in Paris:' MMM dd, yyyy h:mma"
+
+            android:format24Hour="'Time in Paris:' MMM dd, yyyy HH:mm"
+            android:timeZone="Europe/Paris" />
 
     </LinearLayout>
-    
+
 </ScrollView>

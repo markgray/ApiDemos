@@ -18,6 +18,7 @@ package com.example.android.apis.view;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+
 import com.example.android.apis.R;
 
 import android.app.Activity;
@@ -26,13 +27,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-
 /**
- * Demonstrates making a view VISIBLE, INVISIBLE and GONE
- *
+ * Demonstrates making a view VISIBLE, INVISIBLE and GONE. Three buttons control
+ * the visibility of a TextView which is sandwiched between two other TextView's
  */
 public class Visibility1 extends Activity {
-
+    /**
+     *
+     */
     private View mVictim;
 
     @Override

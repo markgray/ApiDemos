@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<?xml version="1.0" encoding="utf-8"?><!--
  * Copyright (C) 2008 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,37 +15,37 @@
  -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent" 
-    android:layout_height="match_parent">
-    
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <Button
-        android:layout_width="150dip" 
+        android:layout_width="150dip"
         android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:text="@string/marquee_default"
-        android:singleLine="true"
-        android:ellipsize="marquee"/>
-        
-    <Button
-        android:layout_width="150dip" 
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:text="@string/marquee_once"
-        android:singleLine="true"
         android:ellipsize="marquee"
-        android:marqueeRepeatLimit="1"/>
-        
-    <Button
-        android:layout_width="150dip" 
-        android:layout_height="wrap_content"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:text="@string/marquee_forever"
         android:singleLine="true"
+        android:text="@string/marquee_default" />
+
+    <Button
+        android:layout_width="150dip"
+        android:layout_height="wrap_content"
         android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"/>  
-           
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="1"
+        android:singleLine="true"
+        android:text="@string/marquee_once" />
+
+    <Button
+        android:layout_width="150dip"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:text="@string/marquee_forever" />
+
 </LinearLayout>

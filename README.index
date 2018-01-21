@@ -2557,12 +2557,15 @@ Text
 
     Views/Text/LogTextBox                        all
         .text.LogTextBox1
+        .text.LogTextBox
             Using a LogTextBox to display a scrollable text area to which text is
             appended. LogTextBox.java is a custom TextView that is Editable and by
             default scrollable, like EditText without a cursor.
 
     Views/Text/Marquee                           all
         .text.Marquee
+            Uses android:ellipsize="marquee" in the layout file to auto scroll Button
+            text that is longer than the view is wide.
             Need to add android:focusable="true" and android:focusableInTouchMode="true"
             to each of the buttons in order for the Marquee animations to run.
 

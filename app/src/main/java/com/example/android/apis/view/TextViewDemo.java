@@ -23,12 +23,20 @@ import android.os.Bundle;
 // class is in a sub-package.
 import com.example.android.apis.R;
 
-
 /**
- * Demonstrates the {@link android.widget.TextView} widget.
+ * Demonstrates the android.widget.TextView widget. Shows different values for
+ * android:textAppearance: ?android:attr/textAppearanceSmall,
+ * ?android:attr/textAppearanceMedium, and ?android:attr/textAppearanceLarge,
+ * as well as the effect of android:textIsSelectable="true",
+ * android:visibility="invisible", and android:background="#ff00ff00"
  */
 public class TextViewDemo extends Activity {
-
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.text_view_demo.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
