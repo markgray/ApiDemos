@@ -33,10 +33,27 @@ import android.widget.Button;
  */
 public class Visibility1 extends Activity {
     /**
-     *
+     * {@code View} whose visibility is changed by the buttons between VISIBLE INVISIBLE or GONE
      */
     private View mVictim;
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.visibility_1. We
+     * initialize our field {@code View mVictim} by finding the view with the id R.id.victim (a
+     * {@code TextView} with the text "View B" that lies between two other {@code TextView}). We
+     * initialize our variables {@code Button visibleButton} by finding the view with id R.id.vis
+     * ("Vis"), {@code Button invisibleButton} by finding the view with id R.id.invis ("Invis"), and
+     * {@code Button goneButton} by finding the view with id R.id.gone ("Gone"). We set the
+     * {@code OnClickListener} of {@code visibleButton} to {@code OnClickListener mVisibleListener}
+     * (an anonymous class which sets the visibility of {@code View mVictim} to VISIBLE), the
+     * {@code OnClickListener} of {@code invisibleButton} to {@code OnClickListener mInvisibleListener}
+     * (an anonymous class which sets the visibility of {@code View mVictim} to INVISIBLE), and the
+     * {@code OnClickListener} of {@code goneButton} to {@code OnClickListener mGoneListener}
+     * (an anonymous class which sets the visibility of {@code View mVictim} to GONE).
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,21 +73,51 @@ public class Visibility1 extends Activity {
         goneButton.setOnClickListener(mGoneListener);
     }
 
+    /**
+     * An anonymous class which sets the visibility of {@code View mVictim} to VISIBLE when its view
+     * is clicked.
+     */
     OnClickListener mVisibleListener = new OnClickListener() {
+        /**
+         * Called when the {@code Button} with id R.id.vis ("Vis") is clicked, we just set the
+         * visibility of {@code View mVictim} to VISIBLE.
+         *
+         * @param v View that was clicked.
+         */
         @Override
         public void onClick(View v) {
             mVictim.setVisibility(View.VISIBLE);
         }
     };
 
+    /**
+     * An anonymous class which sets the visibility of {@code View mVictim} to INVISIBLE when its view
+     * is clicked.
+     */
     OnClickListener mInvisibleListener = new OnClickListener() {
+        /**
+         * Called when the {@code Button} with id R.id.invis ("Invis") is clicked, we just set the
+         * visibility of {@code View mVictim} to INVISIBLE.
+         *
+         * @param v View that was clicked.
+         */
         @Override
         public void onClick(View v) {
             mVictim.setVisibility(View.INVISIBLE);
         }
     };
 
+    /**
+     * An anonymous class which sets the visibility of {@code View mVictim} to GONE when its view
+     * is clicked.
+     */
     OnClickListener mGoneListener = new OnClickListener() {
+        /**
+         * Called when the {@code Button} with id R.id.gone ("Gone") is clicked, we just set the
+         * visibility of {@code View mVictim} to GONE.
+         *
+         * @param v View that was clicked.
+         */
         @Override
         public void onClick(View v) {
             mVictim.setVisibility(View.GONE);
