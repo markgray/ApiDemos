@@ -81,6 +81,67 @@ public class ApiDemos extends ListActivity {
      * "com.example.android.apis.Path" used to store the next value of {@code String prefix} for its
      * {@code onCreate} method to use when calling us to create the data used by its adapter.
      * (Very clever! Needs careful explanation).
+     * <p>
+     * First we initialize our variable {@code List<Map<String, Object>> myData} with an instance of
+     * {@code ArrayList} (this is the list we will return to our caller). We initialize our variable
+     * {@code Intent mainIntent} with an intent with the action ACTION_MAIN (Start as a main entry
+     * point, does not expect to receive data) and a null uri, and add the category CATEGORY_SAMPLE_CODE
+     * (To be used as a sample code example (not part of the normal user experience)). We initialize
+     * our variable {@code PackageManager pm} with a {@code PackageManager} instance for finding global
+     * package information, then retrieve all activities that can be performed for {@code mainIntent}
+     * (that is all activities performing the action ACTION_MAIN and with the category CATEGORY_SAMPLE_CODE)
+     * saving the results in {@code List<ResolveInfo> list}. If {@code list} is null we return {@code myData}
+     * to the caller.
+     * <p>
+     * We declare {@code String[] prefixPath}, and set our variable {@code String prefixWithSlash} to
+     * our parameter {@code prefix}. If {@code prefix} is equal to "" (the empty string, as it will be
+     * at the beginning of our app) we set {@code prefixPath} to null, otherwise we split {@code prefixPath}
+     * on the "/" character saving the results in {@code String[] prefixPath}, and set {@code prefixWithSlash}
+     * to the string formed by adding an "/" to the end of {@code prefix}.
+     * <p>
+     * We initialize {@code int len} to the length of {@code List<ResolveInfo> list}, and create a new
+     * instance of {@code HashMap} to initialize our  variable {@code Map<String, Boolean> entries}.
+     * We now loop over {@code int i} for the {@code len} {@code ResolveInfo} objects in {@code list}.
+     * We initialize {@code ResolveInfo info} with the entry at {@code i} in {@code list}, then use
+     * {@code pm} to load the label of {@code info} into our variable {@code CharSequence labelSeq}.
+     * If {@code labelSeq} is not null, we initialize {@code String label} to the string value of
+     * {@code labelSeq}, or if it is null we use the {@code name} field of the {@code activityInfo}
+     * field of {@code info} to initialize {@code label}.
+     * <p>
+     * If the length of {@code prefixWithSlash} is 0, or {@code label} starts with the string
+     * {@code prefixWithSlash} we have found an activity we want to process further. We split
+     * {@code label} on the "/" character and save the results in {@code String[] labelPath}. If
+     * {@code prefixPath} is equal to null, we initialize {@code String nextLabel} to the contents
+     * of {@code labelPath[0]} (this happens the first time {@code onCreate} calls us), otherwise
+     * we initialize it to the contents of {@code labelPath[prefixPath.length]} (the path segment in
+     * the activities label which follows {@code prefixPath}).
+     * <p>
+     * If our {@code prefixPath} array is one shorter than our {@code labelPath} array (we have found
+     * a leaf "node" activity with no further segments in its path) we call our method {@code addItem}
+     * to add a {@code Map<String, Object>} to {@code myData} with {@code nextLabel} stored under the
+     * key "label", and an {@code Intent} stored under the key "intent" which we create using our method
+     * {@code activityIntent} from the {@code packageName} field of the {@code applicationInfo} field
+     * of the {@code activityInfo} field of {@code info} for the name of the package implementing the
+     * desired component, and the {@code name} field of the {@code activityInfo} field of {@code info}
+     * for the name of the class inside of the application package that will be used for the Intent.
+     * <p>
+     * If there are more than one segments left in the {@code labelPath} array path compared to the
+     * {@code prefixPath} array we first check to see if our map {@code entries} is null, skipping this
+     * activity if it is not null (previous activities shared our "path" prefix). If it is null this
+     * is the first of possibly several more which share this "path" prefix, so we call our method
+     * {@code addItem} to add a {@code Map<String, Object>} to {@code myData} with {@code nextLabel}
+     * stored under the "label" key and stored under the "intent" key will be an intent created by our
+     * method {@code browseIntent} using the path string of {@code nextLabel} is {@code prefix} is
+     * equal to the empty string "", or the string formed by concatenating {@code prefix} to a "/"
+     * character followed by {@code nextLabel} if {@code prefix} is not equal to "" ({@code browseIntent}
+     * creates an intent which launches this {@code ApiDemos} activity again only with an extra stored
+     * under the key "com.example.android.apis.Path" which contains its argument {@code String path}).
+     * Finally we store true under the {@code nextLabel} key in our map {@code entries} so we will skip
+     * duplicate list entries for activities which share this sub-path, and then we loop back to process
+     * the next {@code ResolveInfo} object in {@code list}.
+     * <p>
+     * After processing all of {@code list} we sort {@code myData} using our {@code Comparator}
+     * {@code sDisplayNameComparator} and return {@code myData} to our caller.
      *
      * @param prefix Prefix string to use to filter entries to those our caller is interested in
      * @return List of {@code Map<String, Object>} of all the activities in our manifest which have
@@ -145,6 +206,10 @@ public class ApiDemos extends ListActivity {
         return myData;
     }
 
+    /**
+     * Custom {@code Comparator} to sort our {@code List<Map<String, Object>> myData} list using
+     * the strings stored under the key "title" as the alphabetical sort key.
+     */
     private final static Comparator<Map<String, Object>> sDisplayNameComparator =
             new Comparator<Map<String, Object>>() {
                 private final Collator collator = Collator.getInstance();
