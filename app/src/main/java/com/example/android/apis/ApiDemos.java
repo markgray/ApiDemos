@@ -131,7 +131,7 @@ public class ApiDemos extends ListActivity {
      * is the first of possibly several more which share this "path" prefix, so we call our method
      * {@code addItem} to add a {@code Map<String, Object>} to {@code myData} with {@code nextLabel}
      * stored under the "label" key and stored under the "intent" key will be an intent created by our
-     * method {@code browseIntent} using the path string of {@code nextLabel} is {@code prefix} is
+     * method {@code browseIntent} using the path string of {@code nextLabel} if {@code prefix} is
      * equal to the empty string "", or the string formed by concatenating {@code prefix} to a "/"
      * character followed by {@code nextLabel} if {@code prefix} is not equal to "" ({@code browseIntent}
      * creates an intent which launches this {@code ApiDemos} activity again only with an extra stored
@@ -212,20 +212,59 @@ public class ApiDemos extends ListActivity {
      */
     private final static Comparator<Map<String, Object>> sDisplayNameComparator =
             new Comparator<Map<String, Object>>() {
+                /**
+                 * {@code Collator} instance for the current default locale
+                 * that we use to compare two strings
+                 */
                 private final Collator collator = Collator.getInstance();
 
+                /**
+                 * Compares two {@code Map<String, Object>} objects to determine their relative ordering.
+                 * We sort based on the {@code String} stored under the key "title" in each object, so
+                 * we just return the value returned by the {@code compare} method of {@code collator}
+                 * for the values stored under the key "title" in our two parameters.
+                 *
+                 * @param map1 an {@code Map<String, Object>} object
+                 * @param map2 a second {@code Map<String, Object>} object to compare with {@code map1}
+                 * @return an integer < 0 if {@code map1} is less than {@code map2}, 0 if they are
+                 *         equal, and > 0 if {@code map1} is greater than {@code map2}.
+                 */
                 @Override
                 public int compare(Map<String, Object> map1, Map<String, Object> map2) {
                     return collator.compare(map1.get("title"), map2.get("title"));
                 }
             };
 
+    /**
+     * Creates and returns an {@code Intent} created from the {@code activityInfo.applicationInfo.packageName}
+     * and {@code activityInfo.name} fields of a {@code ResolveInfo} object returned by the {@code PackageManager}
+     * method {@code queryIntentActivities}. We initialize our variable {@code Intent result} with a new
+     * instance, then call its {@code setClassName} method using our parameters {@code pkg} and
+     * {@code componentName} to set its explicit application package name and class name. Finally we return
+     * {@code result} to the caller.
+     *
+     * @param pkg           The name of the package implementing the desired component.
+     * @param componentName The name of a class inside of the application package that will be
+     *                      used as the component for this Intent.
+     * @return an {@code Intent} to launch the activity specified by our two parameters
+     */
     protected Intent activityIntent(String pkg, String componentName) {
         Intent result = new Intent();
         result.setClassName(pkg, componentName);
         return result;
     }
 
+    /**
+     * Creates and returns an {@code Intent} designed to relaunch this {@code ApiDemos} activity with
+     * its parameter {@code String path} stored as an extra under the key "com.example.android.apis.Path".
+     * First we initialize our variable {@code Intent result} with a new instance, then we set its class
+     * to {@code ApiDemos.class} using this as the Context of the application package implementing this
+     * class. We then add our parameter {@code path} as an extra for {@code result} under the key
+     * "com.example.android.apis.Path" and return {@code result} to the caller.
+     *
+     * @param path path to add as an extra under the key "com.example.android.apis.Path"
+     * @return an intent to relaunch this {@code ApiDemos} activity with a different path extra.
+     */
     protected Intent browseIntent(String path) {
         Intent result = new Intent();
         result.setClass(this, ApiDemos.class);
@@ -233,6 +272,18 @@ public class ApiDemos extends ListActivity {
         return result;
     }
 
+    /**
+     * Creates a new {@code Map<String, Object>} to hold our parameters {@code String name} and
+     * {@code Intent intent} and adds it to its parameter {@code List<Map<String, Object>> data}.
+     * First we initialize our variable {@code Map<String, Object> temp} with a new instance of
+     * {@code HashMap}. Then we add to it our parameter {@code name} using the key "title" and our
+     * parameter {@code intent} using the key "intent". Finally we add {@code temp} to our parameter
+     * {@code List<Map<String, Object>> data}.
+     *
+     * @param data   List we are to add a new item to
+     * @param name   String we are to store in the map item under the key "title"
+     * @param intent Intent we are to store in the map item under the key "intent"
+     */
     protected void addItem(List<Map<String, Object>> data, String name, Intent intent) {
         Map<String, Object> temp = new HashMap<>();
         temp.put("title", name);
@@ -240,6 +291,19 @@ public class ApiDemos extends ListActivity {
         data.add(temp);
     }
 
+    /**
+     * This method will be called when an item in our {@code ListView} is selected. We initialize our
+     * variable {@code Map<String, Object> map} by fetching the item at position {@code position} in
+     * {@code ListView l}. Then we initialize our variable {@code Intent intent} by constructing an
+     * {@code Intent} from the object in {@code map} stored under the key "intent" add the category
+     * CATEGORY_SAMPLE_CODE to {@code intent} and use it to start the activity it was designed to
+     * start.
+     *
+     * @param l        The ListView where the click happened
+     * @param v        The view that was clicked within the ListView
+     * @param position The position of the view in the list
+     * @param id       The row id of the item that was clicked
+     */
     @Override
     @SuppressWarnings("unchecked")
     protected void onListItemClick(ListView l, View v, int position, long id) {

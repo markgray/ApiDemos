@@ -25,14 +25,31 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.ImageButton;
 
-/** Starts up the task list that will interact with the AccessibilityService sample. */
+/**
+ * Starts up the task list that will interact with the AccessibilityService sample.
+ */
 public class TaskListActivity extends ListActivity {
 
-    /** An intent for launching the system settings. */
+    /**
+     * An intent for launching the system settings.
+     */
     private static final Intent sSettingsIntent =
-        new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
 
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.tasklist_main. Then
+     * we initialize {@code boolean[] checkboxes} with initial values for the {@code TaskAdapter} to
+     * apply to its checkboxes, and {@code String[] labels} to the labels it should use. We then ask
+     * the {@code TaskAdapter} constructor to construct an adapter from {@code labels} and {@code checkboxes}
+     * to initialize our variable {@code TaskAdapter myAdapter} which we then set as our list adapter.
+     * We initialize our variable {@code ImageButton button} by finding the view in our layout with
+     * the id R.id.button and set its {@code OnClickListener} to an anonymous class which starts the
+     * activity specified by our field {@code Intent sSettingsIntent} (an intent for launching the
+     * system settings).
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +58,8 @@ public class TaskListActivity extends ListActivity {
         // Hard-coded hand-waving here.
         boolean[] checkboxes = {true, true, false, true, false, false, false};
         String[] labels = {"Take out Trash", "Do Laundry",
-                           "Conquer World", "Nap", "Do Taxes",
-                           "Abolish IRS", "Tea with Aunt Sharon" };
+                "Conquer World", "Nap", "Do Taxes",
+                "Abolish IRS", "Tea with Aunt Sharon"};
 
         TaskAdapter myAdapter = new TaskAdapter(this, labels, checkboxes);
         this.setListAdapter(myAdapter);
@@ -50,6 +67,12 @@ public class TaskListActivity extends ListActivity {
         // Add a shortcut to the accessibility settings.
         ImageButton button = (ImageButton) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
+            /**
+             * When the button with the id R.id.button is clicked we start the activity specified by
+             * our field {@code Intent sSettingsIntent} (an intent for launching the system settings).
+             *
+             * @param v v{@code View} that was clicked
+             */
             @Override
             public void onClick(View v) {
                 startActivity(sSettingsIntent);

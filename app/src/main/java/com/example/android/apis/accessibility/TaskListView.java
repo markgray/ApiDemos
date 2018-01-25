@@ -18,7 +18,9 @@ package com.example.android.apis.accessibility;
 
 import com.example.android.apis.R;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,22 +32,37 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
-/** Acts as a go-between for all AccessibilityEvents sent from items in the ListView, providing the
- *  option of sending more context to an AccessibilityService by adding more AccessiblityRecords to
- *  an event.
+/**
+ * Acts as a go-between for all AccessibilityEvents sent from items in the ListView, providing the
+ * option of sending more context to an AccessibilityService by adding more AccessibilityRecords to
+ * an event.
  */
 public class TaskListView extends ListView {
 
+    /**
+     * Perform inflation from XML. We just call our super's constructor.
+     *
+     * @param context The Context the view is running in, through which it can
+     *        access the current theme, resources, etc.
+     * @param attributeSet The attributes of the XML tag that is inflating the view.
+     */
     public TaskListView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
     }
 
     /**
-     * This method will fire whenever a child event wants to send an AccessibilityEvent.  As a
-     * result, it's a great place to add more AccessibilityRecords, if you want.  In this case,
+     * This method will fire whenever a child event wants to send an AccessibilityEvent. As a
+     * result, it's a great place to add more AccessibilityRecords, if you want. In this case,
      * the code is grabbing the position of the item in the list, and assuming that to be the
      * priority for the task.
+     *
+     *
+     *
+     * @param child The child which requests sending the event.
+     * @param event The event to be sent.
+     * @return True if the event should be sent.
      */
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public boolean onRequestSendAccessibilityEvent(View child, AccessibilityEvent event) {
         // Add a record for ourselves as well.
@@ -61,8 +78,11 @@ public class TaskListView extends ListView {
     }
 }
 
-/** Adds Accessibility information to individual child views of rows in the list. */
-final class TaskAdapter extends BaseAdapter{
+/**
+ * Adds Accessibility information to individual child views of rows in the list.
+ */
+@SuppressWarnings("WeakerAccess")
+final class TaskAdapter extends BaseAdapter {
 
     private String[] mLabels = null;
     private boolean[] mCheckboxes = null;
@@ -80,12 +100,14 @@ final class TaskAdapter extends BaseAdapter{
         return mLabels.length;
     }
 
-    /** Expands the views for individual list entries, and sets content descriptions for use by the
-     *  TaskBackAccessibilityService.
+    /**
+     * Expands the views for individual list entries, and sets content descriptions for use by the
+     * TaskBackAccessibilityService.
      */
+    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if(convertView == null) {
+        if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             convertView = inflater.inflate(R.layout.tasklist_row, parent, false);
         }
@@ -93,7 +115,7 @@ final class TaskAdapter extends BaseAdapter{
         CheckBox checkbox = (CheckBox) convertView.findViewById(R.id.tasklist_finished);
         checkbox.setChecked(mCheckboxes[position]);
 
-        TextView label = (TextView)(convertView.findViewById(R.id.tasklist_label));
+        TextView label = (TextView) (convertView.findViewById(R.id.tasklist_label));
         label.setText(mLabels[position]);
 
         String contentDescription = new StringBuilder()
