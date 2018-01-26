@@ -21,10 +21,22 @@ Accessibility
 
   Accessibility/Accessibility Service
         .accessibility.ClockBackActivity
+        .accessibility.ClockBackService
+            This is the entry activity for a sample that demonstrates how to implement an
+            AccessibilityService, namely the ClockBackService
 
   Accessibility/Custom View
         .accessibility.CustomViewAccessibilityActivity
-
+            Demonstrates how to implement accessibility support of custom views. Custom view
+            is a tailored widget developed by extending the base classes in the android.view
+            package. This sample shows how to implement the accessibility behavior via both
+            inheritance (non backwards compatible) and composition (backwards compatible).
+            While the Android framework has a diverse portfolio of views tailored for various
+            use cases, sometimes a developer needs a specific functionality not implemented
+            by the standard views. A solution is to write a custom view that extends one of the
+            base view classes. While implementing the desired functionality a developer should
+            also implement accessibility support for that new functionality such that
+            disabled users can leverage it.
 
 Animation (disabled for froyo)
   Animation/Activity Transition v20+

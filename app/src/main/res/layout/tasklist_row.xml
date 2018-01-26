@@ -24,7 +24,7 @@
     android:baselineAligned="false">
 
     <TextView android:id="@+id/tasklist_label"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:layout_height="48dp"
         android:layout_width="300dip"
@@ -33,6 +33,6 @@
     <CheckBox android:id="@+id/tasklist_finished"
         android:checked="false" android:layout_height="48dp"
         android:layout_weight=".25"
-        android:layout_width="wrap_content" />
+        android:layout_width="0dp" />
 
 </LinearLayout>

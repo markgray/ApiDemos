@@ -16,6 +16,7 @@
 
 package com.example.android.apis.accessibility;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -42,7 +43,7 @@ import com.example.android.apis.R;
  * <p>
  * While the Android framework has a diverse portfolio of views tailored for various
  * use cases, sometimes a developer needs a specific functionality not implemented
- * by the standard views. A solution is to write a custom view that extends one the
+ * by the standard views. A solution is to write a custom view that extends one of the
  * base view classes. While implementing the desired functionality a developer should
  * also implement accessibility support for that new functionality such that
  * disabled users can leverage it.
@@ -50,6 +51,12 @@ import com.example.android.apis.R;
  */
 public class CustomViewAccessibilityActivity extends Activity {
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.custom_view_accessibility.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,20 +70,33 @@ public class CustomViewAccessibilityActivity extends Activity {
      * backwards compatibility. In particular, overriding a method that takes as
      * an argument or returns a class not present on an older platform
      * version will prevent your application from running on that platform.
-     * For example, {@link AccessibilityNodeInfo} was introduced in
-     * {@link Build.VERSION_CODES#ICE_CREAM_SANDWICH API 14}, thus overriding
-     * {@link View#onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo)
-     *  View.onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo)}
+     * For example, {@code AccessibilityNodeInfo} was introduced in
+     * {@code ICE_CREAM_SANDWICH API 14}, thus overriding
+     * {@code View.onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo)}
      * will prevent you application from running on a platform older than
-     * {@link Build.VERSION_CODES#ICE_CREAM_SANDWICH API 14}.
+     * {@code ICE_CREAM_SANDWICH API 14}.
      * </p>
      */
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public static class AccessibleCompoundButtonInheritance extends BaseToggleButton {
 
+        /**
+         * Perform inflation from XML. We just call our super's constructor.
+         *
+         * @param context The Context the view is running in, through which it can
+         *        access the current theme, resources, etc.
+         * @param attrs The attributes of the XML tag that is inflating the view.
+         */
         public AccessibleCompoundButtonInheritance(Context context, AttributeSet attrs) {
             super(context, attrs);
         }
 
+        /**
+         * Initializes an {@code AccessibilityEvent} with information about this View (which is the
+         * event source).
+         *
+         * @param event The event to initialize.
+         */
         @Override
         public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
             super.onInitializeAccessibilityEvent(event);
@@ -122,6 +142,7 @@ public class CustomViewAccessibilityActivity extends Activity {
      * using the accessibility APIs in a backwards compatible manner.
      * </p>
      */
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public static class AccessibleCompoundButtonComposition extends BaseToggleButton {
 
         public AccessibleCompoundButtonComposition(Context context, AttributeSet attrs) {
@@ -193,6 +214,7 @@ public class CustomViewAccessibilityActivity extends Activity {
      * accessibility support of a custom View.
      * </p>
      */
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private static class BaseToggleButton extends View {
         private boolean mChecked;
 

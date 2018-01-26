@@ -27,16 +27,24 @@ import com.example.android.apis.R;
 
 /**
  * This is the entry activity for a sample that demonstrates how to implement an
- * {@link android.accessibilityservice.AccessibilityService}.
+ * {@code AccessibilityService}, namely the ClockBackService.
  */
 public class ClockBackActivity extends Activity {
 
-    /** An intent for launching the system settings. */
+    /**
+     * An intent for launching the system settings.
+     */
     private static final Intent sSettingsIntent =
-        new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
 
     /**
-     * {@inheritDoc}
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.accessibility_service.
+     * We initialize our variable {@code ImageButton button} by finding the view with the id R.id.button
+     * and set its {@code OnClickListener} to an anonymous class which starts the system settings
+     * activity.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +54,12 @@ public class ClockBackActivity extends Activity {
         // Add a shortcut to the accessibility settings.
         ImageButton button = (ImageButton) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Called when the button with id R.id.button is clicked, we just launch the settings
+             * activity.
+             *
+             * @param v View that was clicked
+             */
             @Override
             public void onClick(View v) {
                 startActivity(sSettingsIntent);
