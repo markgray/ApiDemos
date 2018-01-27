@@ -93,7 +93,9 @@ public class CustomViewAccessibilityActivity extends Activity {
 
         /**
          * Initializes an {@code AccessibilityEvent} with information about this View (which is the
-         * event source).
+         * event source). First we call our super's implementation of {@code onInitializeAccessibilityEvent},
+         * then we set the source of the {@code AccessibilityEvent event} to the checked state based
+         * on whether our custom {@code BaseToggleButton} is checked or not.
          *
          * @param event The event to initialize.
          */
@@ -106,6 +108,17 @@ public class CustomViewAccessibilityActivity extends Activity {
             event.setChecked(isChecked());
         }
 
+        /**
+         * Initializes an {@code AccessibilityNodeInfo} with information about this view. First we
+         * call our super's implementation to let super classes set appropriate info properties.
+         * Then we call the {@code setCheckable} method of {@code info} to set that this node is
+         * checkable, and call its {@code setChecked} method to set its checked state to that of our
+         * custom {@code BaseToggleButton}. We call our {@code getText} method to get the text of
+         * our custom view into {@code CharSequence text} and if it is not empty we call the
+         * {@code setText} method of {@code info} to set its text to {@code text}.
+         *
+         * @param info The instance to initialize.
+         */
         @Override
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
             super.onInitializeAccessibilityNodeInfo(info);
@@ -121,6 +134,17 @@ public class CustomViewAccessibilityActivity extends Activity {
             }
         }
 
+        /**
+         * Called from {@code dispatchPopulateAccessibilityEvent(AccessibilityEvent)}
+         * giving this View a chance to to populate the accessibility event with its
+         * text content. First we call our super's implementation to populate its text
+         * into the event. Then we call our {@code getText} method to get the text of
+         * our custom view into {@code CharSequence text} and if it is not empty we call the
+         * {@code getText} method of {@code event} to get the current text list of the event, and
+         * then add {@code text} to this list.
+         *
+         * @param event The accessibility event which to populate.
+         */
         @Override
         public void onPopulateAccessibilityEvent(AccessibilityEvent event) {
             super.onPopulateAccessibilityEvent(event);
@@ -145,18 +169,36 @@ public class CustomViewAccessibilityActivity extends Activity {
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public static class AccessibleCompoundButtonComposition extends BaseToggleButton {
 
+        /**
+         * Perform inflation from XML. First we call our super's constructor, then we call our
+         * method {@code tryInstallAccessibilityDelegate} to attempt to install an Accessibility
+         * Delegate.
+         *
+         * @param context The Context the view is running in, through which it can
+         *        access the current theme, resources, etc.
+         * @param attrs The attributes of the XML tag that is inflating the view.
+         */
         public AccessibleCompoundButtonComposition(Context context, AttributeSet attrs) {
             super(context, attrs);
             tryInstallAccessibilityDelegate();
         }
 
+        /**
+         * Tries to install an Accessibility Delegate if the API of our device is 14 or greater. If
+         * the user-visible SDK version of our framework is less than 14 we return having done
+         * nothing. Otherwise we call the method {@code setAccessibilityDelegate} to set the delegate
+         * for implementing accessibility support via composition to an anonymous {@code AccessibilityDelegate}
+         * class which overrides the three methods {@code onInitializeAccessibilityEvent},
+         * {@code onInitializeAccessibilityNodeInfo} and {@code onPopulateAccessibilityEvent} with
+         * custom methods which add our custom accessibility features to the framework.
+         */
         public void tryInstallAccessibilityDelegate() {
             // If the API version of the platform we are running is too old
             // and does not support the AccessibilityDelegate APIs, do not
             // call View.setAccessibilityDelegate(AccessibilityDelegate) or
             // refer to AccessibilityDelegate, otherwise an exception will
             // be thrown.
-            // NOTE: The android-support-v4 library contains APIs the enable
+            // NOTE: The android-support-v4 library contains APIs that enable
             // using the accessibility APIs in a backwards compatible fashion.
             if (Build.VERSION.SDK_INT < 14) {
                 return;
@@ -165,6 +207,15 @@ public class CustomViewAccessibilityActivity extends Activity {
             // correspond to the accessibility methods in View and register the
             // delegate in the View essentially injecting the accessibility support.
             setAccessibilityDelegate(new AccessibilityDelegate() {
+                /**
+                 * Initializes an {@code AccessibilityEvent} with information about this View (which is the
+                 * event source). First we call our super's implementation of {@code onInitializeAccessibilityEvent},
+                 * then we set the source of the {@code AccessibilityEvent event} to the checked state based
+                 * on whether our custom {@code BaseToggleButton} is checked or not.
+                 *
+                 * @param host The View hosting the delegate.
+                 * @param event The event to initialize.
+                 */
                 @Override
                 public void onInitializeAccessibilityEvent(View host, AccessibilityEvent event) {
                     super.onInitializeAccessibilityEvent(host, event);
@@ -174,9 +225,20 @@ public class CustomViewAccessibilityActivity extends Activity {
                     event.setChecked(isChecked());
                 }
 
+                /**
+                 * Initializes an {@code AccessibilityNodeInfo} with information about this view. First we
+                 * call our super's implementation to let super classes set appropriate info properties.
+                 * Then we call the {@code setCheckable} method of {@code info} to set that this node is
+                 * checkable, and call its {@code setChecked} method to set its checked state to that of our
+                 * custom {@code BaseToggleButton}. We call our {@code getText} method to get the text of
+                 * our custom view into {@code CharSequence text} and if it is not empty we call the
+                 * {@code setText} method of {@code info} to set its text to {@code text}.
+                 *
+                 * @param host The View hosting the delegate.
+                 * @param info The instance to initialize.
+                 */
                 @Override
-                public void onInitializeAccessibilityNodeInfo(View host,
-                        AccessibilityNodeInfo info) {
+                public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfo info) {
                     super.onInitializeAccessibilityNodeInfo(host, info);
                     // We called the super implementation to let super classes set
                     // appropriate info properties. Then we add our properties
@@ -190,6 +252,17 @@ public class CustomViewAccessibilityActivity extends Activity {
                     }
                 }
 
+                /**
+                 * Gives a chance to the host View to populate the accessibility event with its
+                 * text content. First we call our super's implementation to populate its text
+                 * into the event. Then we call our {@code getText} method to get the text of
+                 * our custom view into {@code CharSequence text} and if it is not empty we call the
+                 * {@code getText} method of {@code event} to get the current text list of the event, and
+                 * then add {@code text} to this list.
+                 *
+                 * @param host The View hosting the delegate.
+                 * @param event The accessibility event which to populate.
+                 */
                 @Override
                 public void onPopulateAccessibilityEvent(View host, AccessibilityEvent event) {
                     super.onPopulateAccessibilityEvent(host, event);
@@ -216,20 +289,58 @@ public class CustomViewAccessibilityActivity extends Activity {
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private static class BaseToggleButton extends View {
+        /**
+         * Flag to indicate whether our toggle button is checked (true) or not checked (false)
+         */
         private boolean mChecked;
 
+        /**
+         * Text to read when the button is on, comes from R.string.accessibility_custom_on ("On")
+         */
         private CharSequence mTextOn;
+        /**
+         * Text to read when the button is off, comes from R.string.accessibility_custom_off ("Off")
+         */
         private CharSequence mTextOff;
 
+        /**
+         * {@code StaticLayout} which should show the text {@code mTextOn} (Invisible because of color choice)
+         */
         private Layout mOnLayout;
+        /**
+         * {@code StaticLayout} which should show the text {@code mTextOff} (Invisible because of color choice)
+         */
         private Layout mOffLayout;
 
+        /**
+         * {@code TextPaint} used to draw the text in our toggle buttons.
+         */
         private TextPaint mTextPaint;
 
+        /**
+         * Perform inflation from XML. We call our three argument constructor using the default
+         * style android.R.attr.buttonStyle.
+         *
+         * @param context The Context the view is running in, through which it can
+         *        access the current theme, resources, etc.
+         * @param attrs The attributes of the XML tag that is inflating the view.
+         */
         public BaseToggleButton(Context context, AttributeSet attrs) {
             this(context, attrs, android.R.attr.buttonStyle);
         }
 
+        /**
+         * Perform inflation from XML and apply a class-specific base style from a theme attribute.
+         * First we call our super's constructor, then we initialize our field {@code TextPaint mTextPaint}
+         * with a new instance of {@code TextPaint} whose anti alias flag is set.
+         *
+         * @param context The Context the view is running in, through which it can
+         *        access the current theme, resources, etc.
+         * @param attrs The attributes of the XML tag that is inflating the view.
+         * @param defStyle An attribute in the current theme that contains a
+         *        reference to a style resource that supplies default values for
+         *        the view. Can be 0 to not look for defaults.
+         */
         public BaseToggleButton(Context context, AttributeSet attrs, int defStyle) {
             super(context, attrs, defStyle);
 
