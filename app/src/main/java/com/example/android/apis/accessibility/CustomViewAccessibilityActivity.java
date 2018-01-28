@@ -28,6 +28,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
@@ -84,8 +85,8 @@ public class CustomViewAccessibilityActivity extends Activity {
          * Perform inflation from XML. We just call our super's constructor.
          *
          * @param context The Context the view is running in, through which it can
-         *        access the current theme, resources, etc.
-         * @param attrs The attributes of the XML tag that is inflating the view.
+         *                access the current theme, resources, etc.
+         * @param attrs   The attributes of the XML tag that is inflating the view.
          */
         public AccessibleCompoundButtonInheritance(Context context, AttributeSet attrs) {
             super(context, attrs);
@@ -175,8 +176,8 @@ public class CustomViewAccessibilityActivity extends Activity {
          * Delegate.
          *
          * @param context The Context the view is running in, through which it can
-         *        access the current theme, resources, etc.
-         * @param attrs The attributes of the XML tag that is inflating the view.
+         *                access the current theme, resources, etc.
+         * @param attrs   The attributes of the XML tag that is inflating the view.
          */
         public AccessibleCompoundButtonComposition(Context context, AttributeSet attrs) {
             super(context, attrs);
@@ -322,8 +323,8 @@ public class CustomViewAccessibilityActivity extends Activity {
          * style android.R.attr.buttonStyle.
          *
          * @param context The Context the view is running in, through which it can
-         *        access the current theme, resources, etc.
-         * @param attrs The attributes of the XML tag that is inflating the view.
+         *                access the current theme, resources, etc.
+         * @param attrs   The attributes of the XML tag that is inflating the view.
          */
         public BaseToggleButton(Context context, AttributeSet attrs) {
             this(context, attrs, android.R.attr.buttonStyle);
@@ -332,14 +333,33 @@ public class CustomViewAccessibilityActivity extends Activity {
         /**
          * Perform inflation from XML and apply a class-specific base style from a theme attribute.
          * First we call our super's constructor, then we initialize our field {@code TextPaint mTextPaint}
-         * with a new instance of {@code TextPaint} whose anti alias flag is set.
+         * with a new instance of {@code TextPaint} whose anti alias flag is set. We initialize our
+         * variable {@code TypedValue typedValue} with a new instance, and fetch the resolved attribute
+         * android.R.attr.textSize (size of text) into it by using our parameter {@code Context context}
+         * to fetch the {@code Theme} object associated with it and using its {@code resolveAttribute}
+         * method to resolve that attribute, saving its return value in {@code boolean valid}. We declare
+         * {@code int textSize} and initialize {@code DisplayMetrics displayMetrics} with the current
+         * display metrics that are in effect for the resources of {@code context}.
+         * <p>
+         * If {@code valid} is true (it is never so!) we set {@code textSize} to the data of {@code typedValue}
+         * as a dimension, scaled by the display density and scaling information of {@code displayMetrics}
+         * and cast to {@code int}. If {@code valid} is false we set {@code textSize} to 15 times the
+         * logical density of the display, cast to {@code int}. In either case we set the text size of
+         * {@code mTextPaint} to {@code textSize}.
+         * <p>
+         * We fetch the resolved attribute android.R.attr.textColorPrimary (most prominent text color)
+         * into {@code typedValue}, then initialize {@code int textColor} by retrieving the color from
+         * the resource id of it. We then set the color of {@code mTextPaint} to {@code textColor}.
+         * <p>
+         * We set {@code mTextOn} to the string with resource id R.string.accessibility_custom_on ("On"),
+         * and {@code mTextOff} to the string with resource id R.string.accessibility_custom_off ("Off").
          *
-         * @param context The Context the view is running in, through which it can
-         *        access the current theme, resources, etc.
-         * @param attrs The attributes of the XML tag that is inflating the view.
+         * @param context  The Context the view is running in, through which it can
+         *                 access the current theme, resources, etc.
+         * @param attrs    The attributes of the XML tag that is inflating the view.
          * @param defStyle An attribute in the current theme that contains a
-         *        reference to a style resource that supplies default values for
-         *        the view. Can be 0 to not look for defaults.
+         *                 reference to a style resource that supplies default values for
+         *                 the view. Can be 0 to not look for defaults.
          */
         public BaseToggleButton(Context context, AttributeSet attrs, int defStyle) {
             super(context, attrs, defStyle);
@@ -347,9 +367,15 @@ public class CustomViewAccessibilityActivity extends Activity {
             mTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
 
             TypedValue typedValue = new TypedValue();
-            context.getTheme().resolveAttribute(android.R.attr.textSize, typedValue, true);
-            final int textSize = (int) typedValue.getDimension(
-                    context.getResources().getDisplayMetrics());
+            final boolean valid = context.getTheme().resolveAttribute(android.R.attr.textSize, typedValue, true);
+
+            int textSize;
+            final DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+            if (valid) {
+                textSize = (int) typedValue.getDimension(displayMetrics);
+            } else {
+                textSize = (int) (15 * displayMetrics.density);
+            }
             mTextPaint.setTextSize(textSize);
 
             context.getTheme().resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
@@ -360,14 +386,36 @@ public class CustomViewAccessibilityActivity extends Activity {
             mTextOff = context.getString(R.string.accessibility_custom_off);
         }
 
+        /**
+         * Returns whether our toggle button is checked (true) or not (false). We just return the value
+         * of our field {@code boolean mChecked} to the caller.
+         *
+         * @return value of our field {@code boolean mChecked}
+         */
         public boolean isChecked() {
             return mChecked;
         }
 
+        /**
+         * Called to get the text string corresponding to the current checked or unchecked state. If
+         * our field {@code mChecked} is true we return {@code mTextOn} ("On"), if false we return
+         * {@code mTextOff} ("Off").
+         *
+         * @return string corresponding to the current checked or unchecked state.
+         */
         public CharSequence getText() {
             return mChecked ? mTextOn : mTextOff;
         }
 
+        /**
+         * Call this view's OnClickListener, if it is defined. First we call our super's implementation
+         * of {@code performClick} saving the return value in {@code boolean handled}. If {@code handled}
+         * is false we toggle the value of {@code mChecked} and invalidate our view. In either case we
+         * return {@code handled} to the caller.
+         *
+         * @return True there was an assigned OnClickListener that was called, false
+         * otherwise is returned.
+         */
         @Override
         public boolean performClick() {
             final boolean handled = super.performClick();
@@ -378,6 +426,22 @@ public class CustomViewAccessibilityActivity extends Activity {
             return handled;
         }
 
+        /**
+         * Measure the view and its content to determine the measured width and the measured height.
+         * If {@code Layout mOnLayout} is null we set it to the layout created by our method
+         * {@code makeLayout} from the string {@code mTextOn}. If {@code Layout mOffLayout} is null
+         * we set it to the layout created by our method {@code makeLayout} from the string
+         * {@code mTextOff}. We initialize {@code int minWidth} to the maximum of the widths of
+         * {@code mOnLayout} and {@code mOffLayout} plus the left padding and right padding. We
+         * initialize {@code int minHeight} to the maximum of the heights of {@code mOnLayout} and
+         * {@code mOffLayout} plus the top padding and bottom padding. Finally we call the method
+         * {@code setMeasuredDimension} with the values returned by the method {@code resolveSizeAndState}
+         * reconciling our desired sizes {@code minWidth} and {@code minHeight} with the constraints
+         * imposed our parameters {@code widthMeasureSpec} and {@code heightMeasureSpec} respectively.
+         *
+         * @param widthMeasureSpec  horizontal space requirements as imposed by the parent.
+         * @param heightMeasureSpec vertical space requirements as imposed by the parent.
+         */
         @Override
         public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             if (mOnLayout == null) {
@@ -389,22 +453,44 @@ public class CustomViewAccessibilityActivity extends Activity {
             final int minWidth = Math.max(mOnLayout.getWidth(), mOffLayout.getWidth())
                     + getPaddingLeft() + getPaddingRight();
             final int minHeight = Math.max(mOnLayout.getHeight(), mOffLayout.getHeight())
-                    + getPaddingLeft() + getPaddingRight();
+                    + getPaddingTop() + getPaddingBottom();
             setMeasuredDimension(resolveSizeAndState(minWidth, widthMeasureSpec, 0),
                     resolveSizeAndState(minHeight, heightMeasureSpec, 0));
         }
 
+        /**
+         * Creates and returns a {@code StaticLayout} which uses {@code TextPaint mTextPaint} to
+         * draw our parameter {@code CharSequence text}. We just return a new instance of
+         * {@code StaticLayout} constructed using its 7 parameter constructor, with our parameter
+         * {@code text} as the source text, {@code mTextPaint} as the {@code TextPaint}, the int value
+         * of the ceiling of the desired width of {@code text} when drawn using {@code mTextPaint},
+         * ALIGN_NORMAL as the layout alignment, and three more values I am too lazy to search for
+         * the meaning of.
+         *
+         * @param text string to write in our static layout.
+         * @return a {@code StaticLayout} which displays our parameter {@code CharSequence text}
+         */
         private Layout makeLayout(CharSequence text) {
             return new StaticLayout(text, mTextPaint,
                     (int) Math.ceil(Layout.getDesiredWidth(text, mTextPaint)),
                     Layout.Alignment.ALIGN_NORMAL, 1.f, 0, true);
         }
 
+        /**
+         * We implement this to do our drawing. First we call our super's implementation of {@code onDraw},
+         * then we save the current matrix and clip of {@code canvas} onto a private stack. We translate
+         * {@code canvas} to the (x,y) coordinates of the left padding and top padding. We set the variable
+         * {@code Layout switchText} to {@code mOnLayout} if {@code mChecked} is true and to {@code mOffLayout}
+         * if it is false, then instruct {@code switchText} to draw itself on {@code canvas}. Finally we
+         * remove all modifications to the matrix/clip state of {@code canvas}.
+         *
+         * @param canvas the canvas on which the background will be drawn
+         */
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
             canvas.save();
-            canvas.translate(getPaddingLeft(), getPaddingRight());
+            canvas.translate(getPaddingLeft(), getPaddingTop());
             Layout switchText = mChecked ? mOnLayout : mOffLayout;
             switchText.draw(canvas);
             canvas.restore();

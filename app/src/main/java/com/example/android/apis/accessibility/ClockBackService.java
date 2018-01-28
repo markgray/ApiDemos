@@ -178,6 +178,9 @@ public class ClockBackService extends AccessibilityService {
      */
     private static final SparseArray<long[]> sVibrationPatterns = new SparseArray<>();
 
+    /*
+     * Initializes our {@code sVibrationPatterns} {@code SparseArray}.
+     */
     static {
         sVibrationPatterns.put(AccessibilityEvent.TYPE_VIEW_CLICKED, new long[]{
                 0L, 100L
@@ -211,6 +214,9 @@ public class ClockBackService extends AccessibilityService {
     @SuppressLint("UseSparseArrays")
     private static SparseArray<Integer> sSoundsResourceIds = new SparseArray<>();
 
+    /*
+     * Initializes our {@code sSoundsResourceIds} {@code SparseArray}.
+     */
     static {
         sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_CLICKED,
                 R.raw.sound_view_clicked);
@@ -282,6 +288,38 @@ public class ClockBackService extends AccessibilityService {
      */
     @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
+        /**
+         * We implement this to receive messages. We switch on the {@code what} field of our parameter
+         * {@code Message message}:
+         * <ul>
+         *     <li>
+         *         MESSAGE_SPEAK
+         *     </li>
+         *     <li>
+         *         MESSAGE_STOP_SPEAK
+         *     </li>
+         *     <li>
+         *         MESSAGE_START_TTS
+         *     </li>
+         *     <li>
+         *         MESSAGE_SHUTDOWN_TTS
+         *     </li>
+         *     <li>
+         *         MESSAGE_PLAY_EARCON
+         *     </li>
+         *     <li>
+         *         MESSAGE_STOP_PLAY_EARCON
+         *     </li>
+         *     <li>
+         *         MESSAGE_VIBRATE
+         *     </li>
+         *     <li>
+         *         MESSAGE_STOP_VIBRATE
+         *     </li>
+         * </ul>
+         *
+         * @param message A {@code Message} object
+         */
         @SuppressWarnings("UnnecessaryReturnStatement")
         @Override
         public void handleMessage(Message message) {
