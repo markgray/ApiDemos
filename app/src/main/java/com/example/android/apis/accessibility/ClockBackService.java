@@ -292,30 +292,44 @@ public class ClockBackService extends AccessibilityService {
          * We implement this to receive messages. We switch on the {@code what} field of our parameter
          * {@code Message message}:
          * <ul>
-         *     <li>
-         *         MESSAGE_SPEAK
-         *     </li>
-         *     <li>
-         *         MESSAGE_STOP_SPEAK
-         *     </li>
-         *     <li>
-         *         MESSAGE_START_TTS
-         *     </li>
-         *     <li>
-         *         MESSAGE_SHUTDOWN_TTS
-         *     </li>
-         *     <li>
-         *         MESSAGE_PLAY_EARCON
-         *     </li>
-         *     <li>
-         *         MESSAGE_STOP_PLAY_EARCON
-         *     </li>
-         *     <li>
-         *         MESSAGE_VIBRATE
-         *     </li>
-         *     <li>
-         *         MESSAGE_STOP_VIBRATE
-         *     </li>
+         * <li>
+         * MESSAGE_SPEAK - we initialize {@code String utterance} with the {@code obj} field of
+         * {@code message} (cast to {@code String}), call the {@code speak} method of our field
+         * {@code TextToSpeech mTts} to speak {@code utterance} using the queuing strategy
+         * QUEUING_MODE_INTERRUPT, then return
+         * </li>
+         * <li>
+         * MESSAGE_STOP_SPEAK - we call the {@code stop} method of our field {@code TextToSpeech mTts}
+         * to interrupt the current utterance and discard all utterances in the queue, then return.
+         * </li>
+         * <li>
+         * MESSAGE_START_TTS - we initialize our field {@code TextToSpeech mTts} with a new instance
+         * using an anonymous class for the {@code TextToSpeech.OnInitListener} which just registers
+         * us as a broadcast receiver, and we then return.
+         * </li>
+         * <li>
+         * MESSAGE_SHUTDOWN_TTS - we call the {@code shutdown} method of {@code mTts} and return.
+         * </li>
+         * <li>
+         * MESSAGE_PLAY_EARCON - we initialize {@code int resourceId} with the {@code arg1} field of
+         * our argument {@code message}, call our method {@code playEarcon} with it to play the
+         * earcon with that id (an earcon is a brief, distinctive sound used to represent a specific
+         * event or convey other information), then we return.
+         * </li>
+         * <li>
+         * MESSAGE_STOP_PLAY_EARCON - we call the {@code stop} method of {@code mTts} and return.
+         * </li>
+         * <li>
+         * MESSAGE_VIBRATE - we initialize {@code int key} with the {@code arg1} field of our argument
+         * {@code message}, initialize {@code long[] pattern} with the array stored at position {@code key}
+         * in {@code SparseArray<long[]> sVibrationPatterns}, and if that is not null we call the
+         * {@code vibrate} method of {@code Vibrator mVibrator} with that pattern. In either case we
+         * return to our caller.
+         * </li>
+         * <li>
+         * MESSAGE_STOP_VIBRATE - we call the {@code cancel} method of {@code Vibrator mVibrator} and
+         * return.
+         * </li>
          * </ul>
          *
          * @param message A {@code Message} object
@@ -365,10 +379,27 @@ public class ClockBackService extends AccessibilityService {
     };
 
     /**
-     * {@code BroadcastReceiver} for receiving updates for our context - device
-     * state.
+     * {@code BroadcastReceiver} for receiving updates for the actions ACTION_SCREEN_ON, ACTION_SCREEN_OFF
+     * and AudioManager.RINGER_MODE_CHANGED_ACTION.
      */
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        /**
+         * This method is called when the BroadcastReceiver is receiving an Intent broadcast. We
+         * initialize {@code String action} with the action of our argument {@code Intent intent}.
+         * If {@code action} is equal to AudioManager.RINGER_MODE_CHANGED_ACTION we initialize
+         * {@code int ringerMode} with the extra in {@code intent} stored under the key
+         * AudioManager.EXTRA_RINGER_MODE (defaulting to RINGER_MODE_NORMAL) and call our method
+         * {@code configureForRingerMode} with {@code ringerMode} to configure our feedback to
+         * the new ringer mode. Else if {@code action} equals ACTION_SCREEN_ON, we call our method
+         * {@code provideScreenStateChangeFeedback} to provide feedback to announce the screen state
+         * change to INDEX_SCREEN_ON. Else if {@code action} equals ACTION_SCREEN_OFF, we call our method
+         * {@code provideScreenStateChangeFeedback} to provide feedback to announce the screen state
+         * change to INDEX_SCREEN_OFF. If {@code action} is not any of the above we just log a message
+         * stating that we do not handle {@code action}.
+         *
+         * @param context The Context in which the receiver is running.
+         * @param intent The Intent being received.
+         */
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -387,8 +418,32 @@ public class ClockBackService extends AccessibilityService {
         }
 
         /**
-         * Provides feedback to announce the screen state change. Such a change
-         * is turning the screen on or off.
+         * Provides feedback to announce the screen state change. Such a change is turning the screen
+         * on or off. We switch on our field {@code int mProvidedFeedbackType}:
+         * <ul>
+         *     <li>
+         *         FEEDBACK_SPOKEN - we initialize {@code String utterance} with the string returned
+         *         by our method {@code generateScreenOnOrOffUtternace} for our argument {@code feedbackIndex},
+         *         use {@code Handler mHandler} to load a {@code Message} with the {@code what} field of
+         *         MESSAGE_SPEAK, and the {@code obj} field of {@code utterance} then send this {@code Message}
+         *         to {@code Handler mHandler}, and return to our caller.
+         *     </li>
+         *     <li>
+         *         FEEDBACK_AUDIBLE - we use {@code Handler mHandler} to load a {@code Message} with
+         *         the {@code what} field of MESSAGE_PLAY_EARCON, the {@code arg1} field of {@code feedbackIndex},
+         *         and the {@code arg2} field of 0, then send this {@code Message} to {@code Handler mHandler},
+         *         and return to our caller.
+         *     </li>
+         *     <li>
+         *         FEEDBACK_HAPTIC - we use {@code Handler mHandler} to load a {@code Message} with
+         *         the {@code what} field of MESSAGE_VIBRATE, the {@code arg1} field of {@code feedbackIndex},
+         *         and the {@code arg2} field of 0, then send this {@code Message} to {@code Handler mHandler},
+         *         and return to our caller.
+         *     </li>
+         *     <li>
+         *         default - we throw an IllegalStateException.
+         *     </li>
+         * </ul>
          *
          * @param feedbackIndex The index of the feedback in the statically
          *            mapped feedback resources.
@@ -413,6 +468,10 @@ public class ClockBackService extends AccessibilityService {
         }
     };
 
+    /**
+     * This method is a part of the {@code AccessibilityService} lifecycle and is called after the
+     * system has successfully bound to the service.
+     */
     @Override
     public void onServiceConnected() {
         if (isInfrastructureInitialized) {
