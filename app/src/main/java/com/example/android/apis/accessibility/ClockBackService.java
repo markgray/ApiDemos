@@ -470,7 +470,16 @@ public class ClockBackService extends AccessibilityService {
 
     /**
      * This method is a part of the {@code AccessibilityService} lifecycle and is called after the
-     * system has successfully bound to the service.
+     * system has successfully bound to the service. First we check if we have already initialized
+     * our Infrastructure (our flag {@code isInfrastructureInitialized} is true) and if so we return
+     * having done nothing. We initialize our field {@code Context mContext} to "this", then send
+     * the empty message MESSAGE_START_TTS to {@code Handler mHandler} to start the Text to speech
+     * service running. We initialize {@code Vibrator mVibrator} with an instance of the system level
+     * service VIBRATOR_SERVICE, and {@code AudioManager mAudioManager} with an instance of the
+     * service AUDIO_SERVICE. We use {@code mAudioManager} to fetch the current ringer mode to
+     * {@code int ringerMode} and call our method {@code configureForRingerMode} with it to configure
+     * the types of feedback which are appropriate for the ringer mode. Finally we set our flag
+     * {@code boolean isInfrastructureInitialized} to true.
      */
     @Override
     public void onServiceConnected() {
@@ -498,6 +507,16 @@ public class ClockBackService extends AccessibilityService {
         isInfrastructureInitialized = true;
     }
 
+    /**
+     * Called when all clients have disconnected from a particular interface published by the service.
+     * If our flag {@code boolean isInfrastructureInitialized} is true we send the empty message
+     * MESSAGE_SHUTDOWN_TTS to our {@code Handler mHandler} to shut down the text to speech service,
+     * and if {@code BroadcastReceiver mBroadcastReceiver} is not null we unregister it. We then set
+     * {@code isInfrastructureInitialized} to false. In either case we return false to the caller.
+     *
+     * @param intent The Intent that was used to bind to this service
+     * @return Return true if you would like to have the service's
+     */
     @Override
     public boolean onUnbind(Intent intent) {
         if (isInfrastructureInitialized) {
@@ -516,7 +535,10 @@ public class ClockBackService extends AccessibilityService {
     }
 
     /**
-     * Registers the phone state observing broadcast receiver.
+     * Registers the phone state observing broadcast receiver. We initialize {@code IntentFilter filter}
+     * with a new instance, add the actions RINGER_MODE_CHANGED_ACTION, ACTION_SCREEN_ON, and
+     * ACTION_SCREEN_OFF to it then register {@code BroadcastReceiver mBroadcastReceiver} to receive
+     * broadcast intents matching {@code filter}.
      */
     private void registerBroadCastReceiver() {
         // Create a filter with the broadcast intents we are interested in.
@@ -529,7 +551,17 @@ public class ClockBackService extends AccessibilityService {
     }
 
     /**
-     * Generates an utterance for announcing screen on and screen off.
+     * Generates an utterance for announcing screen on and screen off. If our argument {@code feedbackIndex}
+     * is INDEX_SCREEN_ON We initialize our variable {@code int resourceId} to the resource id
+     * R.string.template_screen_on ("Screen on. Volume %1$s percent."), otherwise we initialize it
+     * to the resource id R.string.template_screen_off ("Screen off. Volume %1$s percent."). We
+     * fetch the string that {@code resourceId} references to {@code String template}. We set
+     * {@code int currentRingerVolume} to the volume of the stream STREAM_RING that {@code mAudioManager}
+     * returns when queried, and {@code int maxRingerVolume} to the maximum value for that stream.
+     * We calculate {@code int volumePercent} to be 100 divided by {@code maxRingerVolume} times
+     * {@code currentRingerVolume} (the current volume 0 to 100 percent). We do some math tricks
+     * to round {@code volumePercent} to the nearest 5 percent then we return the string formed by
+     * formatting {@code volumePercent} using the format in {@code template}.
      *
      * @param feedbackIndex The feedback index for looking up feedback value.
      * @return The utterance.
@@ -621,14 +653,21 @@ public class ClockBackService extends AccessibilityService {
     }
 
     /**
-     * Sets the {@code AccessibilityServiceInfo} which informs the system how to
-     * handle this {@code AccessibilityService}.
+     * Sets the {@code AccessibilityServiceInfo} which informs the system how to handle this
+     * {@code AccessibilityService}. We initialize {@code AccessibilityServiceInfo info} with a new
+     * instance, set its {@code eventTypes} field (the event types an AccessibilityService we are
+     * interested in) to TYPES_ALL_MASK (Mask for all types of AccessibilityEvent), and set its
+     * {@code feedbackType} field (the type of feedback we want to provide) to our parameter
+     * {@code int feedbackType}, the {@code notificationTimeout} field (the timeout after the most
+     * recent event of a given type before an AccessibilityService is notified) to our constant
+     * EVENT_NOTIFICATION_TIMEOUT_MILLIS (80ms), and its {@code packageNames} field (the package names
+     * we are interested in) to our array {@code String[] PACKAGE_NAMES} (which contains the package
+     * names of the standard Android clock packages). Finally we call the {@code setServiceInfo} method
+     * with {@code info} as its argument to set the AccessibilityServiceInfo that describes this service.
      *
-     * @param feedbackType The type of feedback this service will provide.
-     *                     <p>
-     *                     Note: The feedbackType parameter is an bitwise or of all
-     *                     feedback types this service would like to provide.
-     *                     </p>
+     * @param feedbackType The type of feedback this service will provide. Note: The feedbackType
+     *                     parameter is an bitwise or of all feedback types this service would like
+     *                     to provide.
      */
     private void setServiceInfo(int feedbackType) {
         AccessibilityServiceInfo info = new AccessibilityServiceInfo();
@@ -643,6 +682,22 @@ public class ClockBackService extends AccessibilityService {
         setServiceInfo(info);
     }
 
+    /**
+     * Callback for {@code AccessibilityEvent}s. First we log the string value of our argument
+     * {@code AccessibilityEvent event}. If our field {@code mProvidedFeedbackType} is equal to
+     * FEEDBACK_SPOKEN, we obtain and send a {@code Message} to {@code Handler mHandler} with a
+     * {@code what} field of MESSAGE_SPEAK, and the {@code String} generated by our method
+     * {@code formatUtterance} for {@code event}. Else if field {@code mProvidedFeedbackType} is equal
+     * to FEEDBACK_AUDIBLE, we obtain and send a {@code Message} to {@code Handler mHandler} with a
+     * {@code what} field of MESSAGE_PLAY_EARCON, the event type of {@code event} as the {@code arg1}
+     * field and 0 for the {@code arg2} field. Else if field {@code mProvidedFeedbackType} is equal
+     * to FEEDBACK_HAPTIC, we obtain and send a {@code Message} to {@code Handler mHandler} with a
+     * {@code what} field of MESSAGE_VIBRATE, the event type of {@code event} as the {@code arg1}
+     * field and 0 for the {@code arg2} field. If the {@code mProvidedFeedbackType} is none of the
+     * above we throw an IllegalStateException: "Unexpected feedback type ".
+     *
+     * @param event An event.
+     */
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         Log.i(LOG_TAG, mProvidedFeedbackType + " " + event.toString());
@@ -659,6 +714,16 @@ public class ClockBackService extends AccessibilityService {
         }
     }
 
+    /**
+     * Callback for interrupting the accessibility feedback. If our field {@code mProvidedFeedbackType}
+     * is equal to FEEDBACK_SPOKEN, we obtain and send a {@code Message} to {@code Handler mHandler}
+     * with a {@code what} field of MESSAGE_STOP_SPEAK. Else if our field {@code mProvidedFeedbackType}
+     * is equal to FEEDBACK_AUDIBLE, we obtain and send a {@code Message} to {@code Handler mHandler}
+     * with a {@code what} field of MESSAGE_STOP_PLAY_EARCON. Else if our field {@code mProvidedFeedbackType}
+     * is equal to FEEDBACK_HAPTIC, we obtain and send a {@code Message} to {@code Handler mHandler}
+     * with a {@code what} field of MESSAGE_STOP_VIBRATE. If the {@code mProvidedFeedbackType} is none
+     * of the above we throw an IllegalStateException: "Unexpected feedback type ".
+     */
     @Override
     public void onInterrupt() {
         // Here we act according to the feedback type we are currently providing.
@@ -674,7 +739,14 @@ public class ClockBackService extends AccessibilityService {
     }
 
     /**
-     * Formats an utterance from an {@code AccessibilityEvent}.
+     * Formats an utterance from an {@code AccessibilityEvent}. We initialize {@code StringBuilder utterance}
+     * by copying the reference from our field {@code StringBuilder mUtterance}, and clear it by setting
+     * its length to 0. We initialize {@code List<CharSequence> eventText} by retrieving the text
+     * of the {@code AccessibilityEvent event}. If {@code eventText} we loop through all the
+     * {@code CharSequence subText} in {@code eventText} removing the character '0' if it is the first
+     * character, appending {@code subText} to {@code utterance} followed by a SPACE character. When
+     * we are done appending all the {@code CharSequence} into {@code utterance} we return the string
+     * value of {@code utterance} to the caller.
      *
      * @param event The event from which to format an utterance.
      * @return The formatted utterance.
@@ -713,7 +785,18 @@ public class ClockBackService extends AccessibilityService {
     }
 
     /**
-     * Plays an earcon given its id.
+     * Plays an earcon given its id. We set {@code String earconName} to the string in our field
+     * {@code SparseArray<String> mEarconNames} at index {@code earconId}. If {@code earconName} is
+     * null we do not know the sound id, hence we need to load the sound. We initialize
+     * {@code Integer resourceId} with the resource id at index {@code earconId} in our field
+     * {@code SparseArray<Integer> sSoundsResourceIds}. If {@code resourceId} is not equal to null,
+     * we set {@code earconName} to the string formed by surrounding the string value of {@code earconId}
+     * with '[' and ']' characters, call the {@code addEarcon} method of {@code TextToSpeech mTts} to
+     * add a mapping between the string of text {@code earconName}, our package name, and the sound
+     * resource {@code resourceId}. We then store {@code earconName} under the key {@code earconId}
+     * in {@code SparseArray<String> mEarconNames}. Finally we call the {@code playEarcon} method of
+     * {@code mTts} to play the Earcon {@code earconName} using QUEUING_MODE_INTERRUPT as the queueing
+     * mode.
      *
      * @param earconId The id of the earcon to be played.
      */

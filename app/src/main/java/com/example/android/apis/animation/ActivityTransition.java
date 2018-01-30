@@ -33,15 +33,24 @@ import java.util.Map;
 
 /**
  * Uses ActivityOptions.makeSceneTransitionAnimation to transition using a
- * shared view as the epicenter of the transition. The animation is set up using
- * the AndroidManifest element android:theme="@style/ActivityTransitionTheme"
- *
+ * shared view as the epicenter of the transition. The xml layout file
+ * layout/image_block.xml sets android:onClick="clicked" to use for each thumbnail
+ * in the GridLayout and the {@code clicked()} method creates an intent to launch
+ * ActivityTransitionDetails.class using a bundle containing an
+ * ActivityOptions.makeSceneTransitionAnimation() which causes the thumbnail to "expand"
+ * into the image detail version. When the ImageView in the image detail version is clicked,
+ * the reverse transition to ActivityTransition activity occurs. The animation is set up using
+ * AndroidManifest android:theme="@style/ActivityTransitionTheme" which contains elements which point
+ * to files in res/transition
  */
 public class ActivityTransition extends Activity {
 
     @SuppressWarnings("unused")
     private static final String TAG = "ActivityTransition";
 
+    /**
+     *
+     */
     private static final String KEY_ID = "ViewTransitionValues:id";
 
     private ImageView mHero;
@@ -91,6 +100,7 @@ public class ActivityTransition extends Activity {
 
     /**
      * Passed a string name of an item returns the R.drawable.* for the image
+     *
      * @param id String name of item
      * @return R.drawable.* for the image
      */
@@ -146,7 +156,7 @@ public class ActivityTransition extends Activity {
             setEnterSharedElementCallback(new SharedElementCallback() {
                 @Override
                 public void onMapSharedElements(List<String> names,
-                        Map<String, View> sharedElements) {
+                                                Map<String, View> sharedElements) {
                     sharedElements.put("hero", mHero);
                 }
             });
@@ -177,9 +187,9 @@ public class ActivityTransition extends Activity {
      * @return Random color
      */
     private static int randomColor() {
-        int red = (int)(Math.random() * 128);
-        int green = (int)(Math.random() * 128);
-        int blue = (int)(Math.random() * 128);
+        int red = (int) (Math.random() * 128);
+        int green = (int) (Math.random() * 128);
+        int blue = (int) (Math.random() * 128);
         return 0xFF000000 | (red << 16) | (green << 8) | blue;
     }
 }
