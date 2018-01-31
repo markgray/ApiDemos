@@ -29,7 +29,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 /**
- *
+ * This is the companion activity for the {@code ActivityTransition} demo, and displays an enlarged
+ * version of an {@code ImageView} when it is clicked, with fancy activity transition between the
+ * two activities.
  */
 public class ActivityTransitionDetails extends Activity {
 

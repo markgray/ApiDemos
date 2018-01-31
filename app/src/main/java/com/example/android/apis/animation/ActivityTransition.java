@@ -49,12 +49,20 @@ public class ActivityTransition extends Activity {
     private static final String TAG = "ActivityTransition";
 
     /**
-     *
+     * Key used to store the transition name in the extra of the {@code Intent} that is used to
+     * launch both us and {@code ActivityTransitionDetails}
      */
     private static final String KEY_ID = "ViewTransitionValues:id";
 
+    /**
+     * This is the {@code ImageView} in our {@code GridView} which was clicked, and which we
+     * "share" during the transition to {@code ActivityTransitionDetails} and back again.
+     */
     private ImageView mHero;
 
+    /**
+     * This is the list of the jpg drawables which populates our {@code GridView}
+     */
     public static final int[] DRAWABLES = {
             R.drawable.ball,
             R.drawable.block,
@@ -66,6 +74,10 @@ public class ActivityTransition extends Activity {
             R.drawable.woot,
     };
 
+    /**
+     * This is the list of the resource ids of the {@code ImageView}s in our layout file's
+     * {@code GridView} (file layout/image_block.xml)
+     */
     public static final int[] IDS = {
             R.id.ball,
             R.id.block,
@@ -77,6 +89,12 @@ public class ActivityTransition extends Activity {
             R.id.woot,
     };
 
+    /**
+     * String name of the {@code ImageView}s in our layout file, used as the android:transitionName
+     * attribute for the respective {@code ImageView} in our layout file's {@code GridView} and
+     * passed as an extra to the {@code Intent} that launches both us and {@code ActivityTransitionDetails}
+     * stored under the key KEY_ID ("ViewTransitionValues:id")
+     */
     public static final String[] NAMES = {
             "ball",
             "block",
@@ -89,7 +107,10 @@ public class ActivityTransition extends Activity {
     };
 
     /**
-     * Passed a string name of an item returns the R.id.* for the thumbnail in the layout
+     * Passed a string name of an item returns the R.id.* for the thumbnail in the layout. We call
+     * our method {@code getIndexForKey(id)} to convert the {@code String id} to the index in the
+     * {@code String[] NAMES} array which us occupied by an equal string, then use that index to access
+     * the corresponding entry in the {@code int[] IDS} array which we return to our caller.
      *
      * @param id String name of item
      * @return Resource R.id.* of that item in layout
@@ -99,7 +120,10 @@ public class ActivityTransition extends Activity {
     }
 
     /**
-     * Passed a string name of an item returns the R.drawable.* for the image
+     * Passed a string name of an item returns the R.drawable.* for the image. We call our method
+     * {@code getIndexForKey(id)} to convert the {@code String id} to the index in the {@code String[] NAMES}
+     * array which is occupied by an equal string, then use that index to access the corresponding
+     * entry in the {@code int[] DRAWABLES} array which we return to our caller.
      *
      * @param id String name of item
      * @return R.drawable.* for the image
@@ -109,7 +133,11 @@ public class ActivityTransition extends Activity {
     }
 
     /**
-     * Searches the array of names of id string and returns the index number for that string
+     * Searches the array of names of id string and returns the index number for that string. We loop
+     * over {@code int i} for all of the strings in {@code String[] NAMES} setting {@code String name}
+     * to the current {@code NAMES[i]} then if {@code name} is equal to our argument {@code String id}
+     * we return {@code i} to the caller. If none of the strings in {@code NAMES} match {@code id} we
+     * return 2 to the caller.
      *
      * @param id String name of an item
      * @return Index in the arrays for it (or "2" if not found)
@@ -125,15 +153,15 @@ public class ActivityTransition extends Activity {
     }
 
     /**
-     * Sets a random background color, Loads the activity layout and sets up the transition
-     * "hero" if the activity was launched by an clicked() return from ActivityTransitionDetails
-     * (If the back button was pushed instead, onCreate is not called again and the background color
-     * remains the same.)
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. Then we set a random background color for our window chosen by our method
+     * {@code randomColor}, and set our content view to our layout file R.layout.image_block.
+     * Finally we call our method {@code setupHero} which sets up the transition "hero" if the activity
+     * was launched by a {@code clicked()} return from the activity {@code ActivityTransitionDetails}.
+     * (If the back button was pushed instead, {@code onCreate} is not called again and the background
+     * color remains the same.)
      *
-     * @param savedInstanceState If the activity is being re-initialized after previously
-     *                           being shut down then this Bundle contains the data it most
-     *                           recently supplied in onSaveInstanceState(Bundle).
-     *                           Note: Otherwise it is null.
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +173,14 @@ public class ActivityTransition extends Activity {
 
     /**
      * Sets up the SharedElementCallback for a clicked() return from ActivityTransitionDetails,
-     * does nothing on an initial launching.
+     * does nothing on an initial launching. We retrieve the extra stored under the key KEY_ID
+     * ("ViewTransitionValues:id") in the {@code Intent} that launched us in order to initialize
+     * {@code String name}. We set our field {@code ImageView mHero} to null, then if {@code name}
+     * is not null (the KEY_ID extra was found) we set {@code mHero} by finding the resource id
+     * corresponding to {@code name} returned by our method {@code getIdForKey} then finding the
+     * {@code ImageView} in our layout with that id. Finally we set the shared element callback to
+     * an anonymous class using the method {@code setEnterSharedElementCallback}. That anonymous
+     * class adds {@code mHero} to the {@code sharedElements} map passed it under the key "hero".
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setupHero() {
@@ -154,6 +189,16 @@ public class ActivityTransition extends Activity {
         if (name != null) {
             mHero = (ImageView) findViewById(getIdForKey(name));
             setEnterSharedElementCallback(new SharedElementCallback() {
+                /**
+                 * Lets the SharedElementCallback adjust the mapping of shared element names to
+                 * Views. We just add our field {@code ImageView mHero} to our argument
+                 * {@code sharedElements} under the key "hero".
+                 *
+                 * @param names The names of all shared elements transferred from the calling Activity
+                 *              or Fragment in the order they were provided.
+                 * @param sharedElements The mapping of shared element names to Views. The best guess
+                 *                       will be filled into sharedElements based on the transitionNames.
+                 */
                 @Override
                 public void onMapSharedElements(List<String> names,
                                                 Map<String, View> sharedElements) {
@@ -164,9 +209,19 @@ public class ActivityTransition extends Activity {
     }
 
     /**
-     * This is called by each ImageView in image_block.xml's GridView using android:onClick="clicked"
-     * The ImageView's contain an android:transitionName element naming the transitionName to be the
-     * same as the ImageView's drawable, and this is retrieved by v.getTransitionName()
+     * This is called by each ImageView in image_block.xml's GridView using android:onClick="clicked".
+     * First we set our field {@code ImageView mHero} to the {@code View v} that was clicked. Then we
+     * create {@code Intent intent} with the activity {@code ActivityTransitionDetails} as the class
+     * that is to be launched by the intent. We initialize {@code String transitionName} to the
+     * transition name of {@code v} (this is set by the android:transitionName attribute of the view
+     * in the layout file). We add {@code transitionName} as an extra to {@code intent} using the key
+     * KEY_ID ("ViewTransitionValues:id"). We create {@code ActivityOptions activityOptions} by
+     * calling the method {@code makeSceneTransitionAnimation} to create an ActivityOptions that uses
+     * {@code mHero} as the View to transition to in the started Activity, and "hero" as the shared
+     * element name as used in the target Activity. We then start the activity specified by our
+     * {@code intent} with a "bundled up" {@code activityOptions} as the bundle (this all causes the
+     * transition between our activities to use cross-Activity scene animations with {@code mHero}
+     * as the epicenter of the transition).
      *
      * @param v View in the GridView which has been clicked
      */
@@ -182,7 +237,7 @@ public class ActivityTransition extends Activity {
     }
 
     /**
-     * Create a random color with maximum alpha and the three RGB colors <=128 intensity
+     * Create a random color with maximum alpha and the three RGB colors <=128 intensity.
      *
      * @return Random color
      */
