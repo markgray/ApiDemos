@@ -38,22 +38,34 @@ public class ActivityTransitionDetails extends Activity {
     @SuppressWarnings("unused")
     private static final String TAG = "ActivityTransitionDetails";
 
+    /**
+     * Key used to store the transition name in the extra of the {@code Intent} that is used to
+     * launch both us and {@code ActivityTransition}
+     */
     private static final String KEY_ID = "ViewTransitionValues:id";
 
+    /**
+     * Resource id of the image we were launched to display, we look it up using the method
+     * {@code ActivityTransition.getDrawableIdForKey} based on the string stored as an extra
+     * under the key KEY_ID in the intent that launched us. We default to R.drawable.ducky
+     */
     private int mImageResourceId = R.drawable.ducky;
 
+    /**
+     * String stored as an extra under the key KEY_ID in the intent that launched us.
+     * We default to "ducky"
+     */
     private String mName = "ducky";
 
     /**
-     * Sets the background to a random color, sets the activity content from a layout resource which
-     * will be inflated, adding all top-level views to the activity, locates the ImageView for the
-     * titleImage and sets the image displayed according to the KEY_ID name bundled up in the Intent
-     * which launched the activity.
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}. We set the background to a random color, and then we set our content view
+     * to our layout file R.layout.titleImage. We initialize {@code ImageView titleImage} by finding
+     * the view with the id R.id.titleImage, then set its drawable to the image that our method
+     * {@code getHeroDrawable} finds that corresponds to the name string stored under the key KEY_ID
+     * in the Intent which launched our activity.
      *
-     * @param savedInstanceState If the activity is being re-initialized after previously being
-     *                           shut down then this Bundle contains the data it most recently
-     *                           supplied in onSaveInstanceState(Bundle).
-     *                           Note: Otherwise it is null.
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +77,17 @@ public class ActivityTransitionDetails extends Activity {
     }
 
     /**
-     * Retrieves the name stored as an extra in the Intent launching the activity under the
-     * key KEY_ID, uses ActivityTransition.getDrawableIdForKey(name) to look it up in the
-     * list DRAWABLES and returns a drawable based on the name. Defaults to R.drawable.ducky
-     * if for some reason the Intent did not contain a KEY_ID name.
+     * Retrieves a drawable based on the name stored as an extra in the Intent launching the activity
+     * under the key KEY_ID. First we initialize {@code String name} by retrieving the string stored
+     * in the intent that launched us under the key KEY_ID ("ViewTransitionValues:id"), if that is
+     * not null we set our field {@code String mName} to it and set our field {@code int mImageResourceId}
+     * to the resource id that the method {@code ActivityTransition.getDrawableIdForKey} finds for the
+     * string {@code name} (these default to "ducky" and R.drawable.ducky respectively if for some
+     * reason the Intent did not contain a KEY_ID name). We declare {@code Drawable drawable}, and if
+     * the build version is less than or equal to LOLLIPOP we set {@code drawable} using the old deprecated
+     * one argument version of {@code getDrawable} for the resource id {@code mImageResourceId},
+     * otherwise we use the new two argument version of {@code getDrawable} to set it. Finally we
+     * return {@code drawable} to the caller.
      *
      * @return Drawable to be displayed full size
      */
@@ -95,6 +114,12 @@ public class ActivityTransitionDetails extends Activity {
      * an android:transitionName element naming the transitionName "hero" and is used to put
      * an ActivityOptions.makeSceneTransitionAnimation into the bundle used with the Intent
      * to launch ActivityTransition.class
+     * <p>
+     * First we create {@code Intent intent} with {@code ActivityTransition} as the target activity
+     * to launch. Then we add {@code mName} as an extra under the key KEY_ID. We create the scene
+     * transition animation {@code ActivityOptions activityOptions} using the shared element name
+     * "hero", then start the activity specified in {@code Intent intent} with a bundled up
+     * {@code activityOptions} as additional options for how the Activity should be started.
      *
      * @param v ImageView R.id.titleImage clicked on
      */

@@ -18,10 +18,13 @@ package com.example.android.apis.animation;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.widget.Button;
+
 import com.example.android.apis.R;
+
 import android.animation.*;
 import android.app.Activity;
 import android.content.Context;
@@ -36,6 +39,7 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
+
 import java.util.ArrayList;
 
 /**
@@ -53,23 +57,34 @@ import java.util.ArrayList;
 public class AnimationCloning extends Activity {
 
     /**
-     * Loads the animation_cloning layout as the content view, finds the LinearLayout container
-     * for our animation, creates a MyAnimationView and addView's it the the container. Then it
-     * finds the startButton and setOnClickListener's a callback to startAnimation our
-     * MyAnimationView.
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.animation_cloning.
+     * We initialize {@code LinearLayout container} by finding the view with id R.id.container, then
+     * we initialize {@code MyAnimationView animView} with a new instance and add that view to
+     * {@code container}. We initialize {@code Button starter} by finding the view with the id
+     * R.id.startButton ("Run") and set its {@code OnClickListener} to an anonymous class which calls
+     * the {@code startAnimation} method of {@code animView} which creates the animation if this is
+     * the first time it is called then starts the animation running.
      *
-     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animation_cloning);
+
         LinearLayout container = (LinearLayout) findViewById(R.id.container);
         final MyAnimationView animView = new MyAnimationView(this);
         container.addView(animView);
 
         Button starter = (Button) findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Called when the button with id R.id.startButton ("Run") is clicked, we just call the
+             * {@code startAnimation} method of {@code MyAnimationView animView}.
+             *
+             * @param v View that was clicked
+             */
             @Override
             public void onClick(View v) {
                 animView.startAnimation();
@@ -77,15 +92,29 @@ public class AnimationCloning extends Activity {
         });
     }
 
+    /**
+     * A custom view with 4 animated balls in it.
+     */
     public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener {
 
+        /**
+         * List holding our 4 balls.
+         */
         public final ArrayList<ShapeHolder> balls = new ArrayList<>();
+        /**
+         * {@code AnimatorSet} we use to hold the animations for all 4 balls, created in our method
+         * {@code createAnimation} and started by our method {@code startAnimation}.
+         */
         AnimatorSet animation = null;
+        /**
+         * logical density of the display.
+         */
         private float mDensity;
 
         /**
-         * Retrieves the logical density of the display and saves it to use for scaling the ball
-         * size, creates 4 balls and adds them to the ArrayList<ShapeHolder> balls
+         * Our constructor. First we call our super's constructor then we initialize our field
+         * {@code float mDensity} with the logical density of the display. Then we create 4 balls
+         * and add them to the {@code ArrayList<ShapeHolder> balls} using our method {@code addBall}
          *
          * @param context Context which in our case is derived from super of Activity
          */
@@ -94,15 +123,14 @@ public class AnimationCloning extends Activity {
 
             mDensity = getContext().getResources().getDisplayMetrics().density;
 
-            // These variables are unused because addBall .add's each ball to balls List
-            @SuppressWarnings("unused") ShapeHolder ball0 = addBall(50f * mDensity, 25f * mDensity);
-            @SuppressWarnings("unused") ShapeHolder ball1 = addBall(150f * mDensity, 25f * mDensity);
-            @SuppressWarnings("unused") ShapeHolder ball2 = addBall(250f * mDensity, 25f * mDensity);
-            @SuppressWarnings("unused") ShapeHolder ball3 = addBall(350f * mDensity, 25f * mDensity);
+            addBall(50f * mDensity, 25f * mDensity);
+            addBall(150f * mDensity, 25f * mDensity);
+            addBall(250f * mDensity, 25f * mDensity);
+            addBall(350f * mDensity, 25f * mDensity);
         }
 
         /**
-         * Creates the AnimatorSet animation. anim1 moves balls{0} y coordinate from 0f to the
+         * Creates the {@code AnimatorSet animation}. anim1 moves balls{0} y coordinate from 0f to the
          * bottom of the View. anim2 is a clone of anim1 which is applied to balls{1}. anim1 has
          * "this" added as a listener causing this.onAnimationUpdate to be called for every frame
          * of this animation (simply calls invalidate() to cause redraw of the view). animDown is
@@ -156,6 +184,7 @@ public class AnimationCloning extends Activity {
          * @param y y coordinate for new ball
          * @return ShapeHolder containing the new ball
          */
+        @SuppressWarnings("UnusedReturnValue")
         private ShapeHolder addBall(float x, float y) {
             OvalShape circle = new OvalShape();
             circle.resize(50f * mDensity, 50f * mDensity);
@@ -163,12 +192,12 @@ public class AnimationCloning extends Activity {
             ShapeHolder shapeHolder = new ShapeHolder(drawable);
             shapeHolder.setX(x - 25f);
             shapeHolder.setY(y - 25f);
-            int red = (int)(100 + Math.random() * 155);
-            int green = (int)(100 + Math.random() * 155);
-            int blue = (int)(100 + Math.random() * 155);
+            int red = (int) (100 + Math.random() * 155);
+            int green = (int) (100 + Math.random() * 155);
+            int blue = (int) (100 + Math.random() * 155);
             int color = 0xff000000 | red << 16 | green << 8 | blue;
             Paint paint = drawable.getPaint(); //new Paint(Paint.ANTI_ALIAS_FLAG);
-            int darkColor = 0xff000000 | red/4 << 16 | green/4 << 8 | blue/4;
+            int darkColor = 0xff000000 | red / 4 << 16 | green / 4 << 8 | blue / 4;
             RadialGradient gradient = new RadialGradient(37.5f, 12.5f,
                     50f, color, darkColor, Shader.TileMode.CLAMP);
             paint.setShader(gradient);
