@@ -130,19 +130,26 @@ public class AnimationCloning extends Activity {
         }
 
         /**
-         * Creates the {@code AnimatorSet animation}. anim1 moves balls{0} y coordinate from 0f to the
-         * bottom of the View. anim2 is a clone of anim1 which is applied to balls{1}. anim1 has
-         * "this" added as a listener causing this.onAnimationUpdate to be called for every frame
-         * of this animation (simply calls invalidate() to cause redraw of the view). animDown is
-         * created to animate the y coordinate of balls{2} from 0f to the bottom of the View and
-         * has its interpolator set to an AccelerateInterpolator(). animUp is created to animate
-         * balls{2} y coordinate from the bottom of the View to 0f and has its interpolator set
-         * to an DecelerateInterpolator(). An AnimatorSet s1 is created to play animDown animUp
-         * using playSequentially(animDown, animUp). animDown and animUp have "this" added as a
-         * listener causing this.onAnimationUpdate to be called for every frame  of these animations.
-         * s1 is cloned to s2, and its target is set to be balls{3}. The master AnimatorSet
-         * animation is created and it has anim1, anim2, and s1 set to playTogether(), and s1 and s2
-         * are set to playSequentially()
+         * Creates the {@code AnimatorSet animation}. First we create {@code ObjectAnimator anim1}
+         * which moves balls{0} y coordinate from 0f to the bottom of the View. We create
+         * {@code ObjectAnimator anim2} as a clone of {@code anim1} and target it to balls{1}.
+         * We add "this" as an {@code AnimatorUpdateListener} for {@code anim1} which causes
+         * {@code this.onAnimationUpdate} to be called for every frame of this animation (it simply
+         * calls invalidate() to cause redraw of the view). We initialize {@code ShapeHolder ball2}
+         * with balls{2}, then create {@code ObjectAnimator animDown} to animate the y coordinate of
+         * {@code ball2} from 0f to the bottom of the View and set its interpolator to an
+         * {@code AccelerateInterpolator}. We create {@code ObjectAnimator animUp} to animate
+         * {@code ball2} y coordinate from the bottom of the View to 0f and set its interpolator to
+         * an {@code DecelerateInterpolator}. We create {@code AnimatorSet s1} and configure it to
+         * play sequentially {@code animDown} followed by {@code animUp}. We then set the
+         * {@code AnimatorUpdateListener} of both {@code animDown} and {@code animUp} to "this"
+         * (our override of {@code onAnimationUpdate} will be called for every frame  of these
+         * animations. We clone {@code s1} to initialize {@code AnimatorSet s2}, and its target to
+         * balls{3}. We create the master {@code AnimatorSet animation}, and add {@code anim1},
+         * {@code anim2}, and {@code s1} set to play together, and {@code s1} and {@code s2} are
+         * then added to play sequentially (the first three balls start their animations when the
+         * "Run" button is clicked, and the fourth ball starts its animation only after the other
+         * three have finished their animations).
          */
         private void createAnimation() {
             if (animation == null) {
@@ -173,12 +180,25 @@ public class AnimationCloning extends Activity {
         }
 
         /**
-         * Adds a ball at coordinates x, y to the ArrayList<ShapeHolder> balls. The ball is
-         * constructed of an OvalShape resized to 50dp x 50dp, placed in a ShapeDrawable and
-         * that ShapeDrawable is used in creating a ShapeHolder to hold it. The ShapeHolder
-         * has its x and y coordinates set to the method's arguments x,y. Random colors and
-         * a RadialGradient are used to initialize a Paint and that Paint is stored in the
-         * ShapeHolder, and the ShapeHolder is then add'ed to the balls List.
+         * Creates, configures, then adds a randomly colored ball at coordinates {@code (x,y)} to our
+         * field {@code ArrayList<ShapeHolder> balls}. First we initialize our variable
+         * {@code OvalShape circle} with a new instance, then we resize it to 50dp x 50dp, place it
+         * in a {@code ShapeDrawable drawable} and use that {@code ShapeDrawable} to create
+         * {@code ShapeHolder shapeHolder} to hold it. We set the x and y coordinates of {@code shapeHolder}
+         * to our arguments {@code x} and {@code y} respectively. We create a random {@code int red}
+         * between 100 and 255, a random {@code int green} between 100 and 255, and a random
+         * {@code int blue} between 100 and 255. We then shift them into the appropriate bit positions
+         * for a 32 bit color and or the three colors along with a maximum alpha field to form the color
+         * {@code int color}. We retrieve the {@code Paint} used to draw {@code drawable} to initialize
+         * {@code Paint paint}. We create {@code int darkColor} using our random colors {@code red},
+         * {@code green} and {@code blue} divided by 4 before being shifted into position and or'ed
+         * together with a maximum alpha value. {@code RadialGradient gradient} is then created with
+         * 37.5 as the x-coordinate of the center of the radius, 12.5 as the y-coordinate of the center
+         * of the radius, 50. as the radius of the circle for the gradient, {@code color} as the color
+         * at the center of the circle, {@code darkColor} as the color at the edge of the circle, and
+         * using CLAMP Shader tiling mode (replicate the edge color if the shader draws outside of its
+         * original bounds). We set {@code gradient} as the shader of {@code paint}, add {@code shapeHolder}
+         * to {@code ArrayList<ShapeHolder> balls} and return {@code shapeHolder} to the caller.
          *
          * @param x x coordinate for new ball
          * @param y y coordinate for new ball
@@ -207,11 +227,14 @@ public class AnimationCloning extends Activity {
         }
 
         /**
-         * This callback draws the MyAnimationView after every invalidate() call. For each
-         * ShapeHolder in the balls List the current matrix and clip are saved onto a private
-         * stack, the current matrix is pre-concatenated with a translation to the coordinate
-         * x, y of the ShapeHolder, and the ShapeDrawable in the ShapeHolder is told to draw
-         * itself. Canvas.restore() then removes all modifications to the matrix/clip state.
+         * This callback draws its {@code MyAnimationView} after every invalidate() call. We loop over
+         * {@code int i} for all the {@code ShapeHolder} objects in {@code ArrayList<ShapeHolder> balls}
+         * initializing {@code ShapeHolder shapeHolder} with the {@code ShapeHolder} in {@code balls}
+         * at index {@code i}. We save the current matrix and clip of {@code canvas} onto a private
+         * stack, pre-concatenate the matrix of {@code canvas} with a translation to the coordinates
+         * {@code (x,y)} of the ShapeHolder, then instruct the {@code ShapeDrawable} in {@code shapeHolder}
+         * to draw itself. We then remove all modifications to the matrix/clip state of {@code canvas}
+         * and loop around for the next ball.
          *
          * @param canvas the canvas on which the background will be drawn
          */
@@ -227,8 +250,9 @@ public class AnimationCloning extends Activity {
         }
 
         /**
-         * Called when the RUN button is clicked, it first creates the animation (if this is the
-         * first time the button is clicked), and then starts the animation running.
+         * Called when the RUN button is clicked, we first call our method {@code createAnimation} to
+         * create the animation {@code AnimatorSet animation} (if this is the first time the button is
+         * clicked), and then start the animation running.
          */
         public void startAnimation() {
             createAnimation();
