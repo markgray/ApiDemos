@@ -181,6 +181,7 @@ Animation (disabled for froyo)
         .animation.AnimationSeeking
             Uses a SeekBar to allow user to set the animation to a particular position
             using android.animation.ValueAnimator.setCurrentPlayTime(long playTime)
+            Pressing the Run button will play from the current position of the animation.
 
   Animation/Simple Transitions v11 -- TransitionInflater.from(this) requires v19 as does
         Scene.getSceneForLayout, as does android.transition itself.

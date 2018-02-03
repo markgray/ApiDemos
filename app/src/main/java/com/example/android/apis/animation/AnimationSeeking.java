@@ -51,31 +51,42 @@ import android.widget.SeekBar;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class AnimationSeeking extends Activity {
-
+    /**
+     * Maximum value to use for our {@code SeekBar}.
+     */
     private static final int DURATION = 1500;
+    /**
+     * TAG used for logging.
+     */
     private static final String TAG = "AnimationSeeking";
+    /**
+     * The {@code SeekBar} in our layout with id R.id.seekBar used by the user to adjust the position
+     * of the animation.
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private SeekBar mSeekBar;
 
-    /** Called when the activity is first created. */
     /**
-     * First we call through to our super's implementation of onCreate, then we set the activity
-     * content to our layout file R.layout.animation_seeking, this file will be inflated, adding
-     * all top-level views to the activity. Then we locate the top level LinearLayout container
-     * (R.id.container) in our layout, we create an MyAnimationView animView (the custom View which
-     * contains our demo animation), and addView animView to our container. Next we locate the "RUN"
-     * Button (R.id.startButton) and set the OnClickListener to an anonymous class which will start
-     * the animation of animView running. Finally we locate SeekBar mSeekBar (R.id.seekBar). We set
-     * the range of the progress bar to 0...DURATION, and set the OnSeekBarChangeListener to an
-     * anonymous class which will seek the animView animation to the setting of the SeekBar mSeekBar
-     * whenever the user changes the setting.
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.animation_seeking.
+     * We initialize {@code LinearLayout container} by finding the view with the id R.id.container,
+     * initialize {@code MyAnimationView animView} with a new instance, and add it to our
+     * {@code LinearLayout container}. We initialize {@code Button starter} by finding the view with
+     * id R.id.startButton ("Run") and set its {@code OnClickListener} to an anonymous class which
+     * calls the {@code startAnimation()} method of the {@code MyAnimationView animView} when the
+     * button is clicked. We initialize our field {@code SeekBar mSeekBar} by finding the view with
+     * id R.id.seekBar, set its maximum value to {@code DURATION} (1500), and set its
+     * {@code OnSeekBarChangeListener} to an anonymous class whose {@code onProgressChanged} override
+     * calls the {@code seek} method of {@code MyAnimationView animView} to set the animation to the
+     * time indicated by the position of the seekbar (0-1500ms)whenever the user changes the setting.
      *
-     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animation_seeking);
+
         LinearLayout container = (LinearLayout) findViewById(R.id.container);
         final MyAnimationView animView = new MyAnimationView(this);
         container.addView(animView);
@@ -83,7 +94,8 @@ public class AnimationSeeking extends Activity {
         Button starter = (Button) findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
             /**
-             * Starts the animation when Button is clicked.
+             * Starts the animation when Button is clicked by calling the {@code startAnimation} method
+             * of {@code MyAnimationView animView}.
              *
              * @param v RUN Button View that was clicked
              */
@@ -144,10 +156,21 @@ public class AnimationSeeking extends Activity {
      */
     @SuppressWarnings("unused")
     public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener, Animator.AnimatorListener {
-
+        /**
+         * A pinkish red shade
+         */
         private static final int RED = 0xffFF8080;
+        /**
+         * A dirty blue shade
+         */
         private static final int BLUE = 0xff8080FF;
+        /**
+         * A turquoise shade of blue/ green
+         */
         private static final int CYAN = 0xff80ffff;
+        /**
+         * Puke green
+         */
         private static final int GREEN = 0xff80ff80;
         private static final float BALL_SIZE = 100f;
 
@@ -219,6 +242,7 @@ public class AnimationSeeking extends Activity {
          * @param y y coordinate for ShapeHolder
          * @return ShapeHolder containing "ball" at (x,y)
          */
+        @SuppressWarnings("SameParameterValue")
         private ShapeHolder addBall(float x, float y) {
             OvalShape circle = new OvalShape();
             circle.resize(BALL_SIZE, BALL_SIZE);
