@@ -18,12 +18,14 @@ package com.example.android.apis.animation;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
 import com.example.android.apis.R;
 
 import java.util.ArrayList;
@@ -45,28 +47,99 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 /**
- * This demo shows how the AnimatorListener events work.
+ * Supposed to show when the various Sequencer Events and Animator Events:
+ * Start Repeat Cancel and End occur, but Repeat Events are not generated
+ * for the Sequencer because the api does not support setRepeatCount on a
+ * AnimatorSet.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class AnimatorEvents extends Activity {
-
-    TextView startText, repeatText, cancelText, endText;
-    TextView startTextAnimator, repeatTextAnimator, cancelTextAnimator, endTextAnimator;
+    /**
+     * {@code TextView} with id R.id.startText ("Start") in "Sequencer Events:" row of the animation
+     * event display, it has its alpha increased from .5f to 1f in the {@code onAnimationStart}
+     * override if the argument passed it is an instance of {@code AnimatorSet}.
+     */
+    TextView startText;
+    /**
+     * {@code TextView} with id R.id.repeatText ("Repeat") in "Sequencer Events:" row of the animation
+     * event display, it has its alpha increased from .5f to 1f in the {@code onAnimationRepeat}
+     * override if the argument passed it is an instance of {@code AnimatorSet}.
+     */
+    TextView repeatText;
+    /**
+     * {@code TextView} with id R.id.cancelText ("Cancel") in "Sequencer Events:" row of the animation
+     * event display, it has its alpha increased from .5f to 1f in the {@code onAnimationCancel}
+     * override if the argument passed it is an instance of {@code AnimatorSet}.
+     */
+    TextView cancelText;
+    /**
+     * {@code TextView} with id R.id.endText ("End") in "Sequencer Events:" row of the animation
+     * event display, it has its alpha increased from .5f to 1f in the {@code onAnimationEnd}
+     * override if the argument passed it is an instance of {@code AnimatorSet}.
+     */
+    TextView endText;
+    /**
+     * {@code TextView} with id R.id.startTextAnimator ("Start") in "Animator Events:" row of the
+     * animation event display, it has its alpha increased from .5f to 1f in the {@code onAnimationStart}
+     * override if the argument passed it is NOT an instance of {@code AnimatorSet}.
+     */
+    TextView startTextAnimator;
+    /**
+     * {@code TextView} with id R.id.repeatTextAnimator ("Repeat") in "Animator Events:" row of the
+     * animation event display, it has its alpha increased from .5f to 1f in the {@code onAnimationRepeat}
+     * override if the argument passed it is NOT an instance of {@code AnimatorSet}.
+     */
+    TextView repeatTextAnimator;
+    /**
+     * {@code TextView} with id R.id.cancelTextAnimator ("Cancel") in "Animator Events:" row of the
+     * animation event display, it has its alpha increased from .5f to 1f in the {@code onAnimationCancel}
+     * override if the argument passed it is NOT an instance of {@code AnimatorSet}.
+     */
+    TextView cancelTextAnimator;
+    /**
+     * {@code TextView} with id R.id.endTextAnimator ("End") in "Animator Events:" row of the
+     * animation event display, it has its alpha increased from .5f to 1f in the {@code onAnimationEnd}
+     * override if the argument passed it is NOT an instance of {@code AnimatorSet}.
+     */
+    TextView endTextAnimator;
 
     /**
-     * Sets the content view to animator_events layout, and addView's an instance of MyAnimationView
-     * to the layout. It then locates the TextView's used as output (start, repeat, cancel, and end
-     * for both Sequencer and Animator events) and applies setAlpha(.5f) to make them appear as not
-     * having occurred, the AnimatorListener callbacks will apply setAlpha(1.0f) to signify that
-     * the callback has been called. It then locates the control buttons (PLAY, CANCEL, END) and
-     * sets OnClickListener's to perform these actions
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * {@code onCreate}, then we set our content view to our layout file R.layout.animator_events.
+     * We initialize {@code LinearLayout container} by finding the view with id R.id.container,
+     * create a new instance for {@code MyAnimationView animView} and add that view to {@code container}.
+     * We initialize our field {@code TextView startText} by finding the view with id R.id.startText
+     * and set its alpha to .5f, initialize our field {@code TextView repeatText} by finding the view
+     * with id R.id.repeatText and set its alpha to .5f, initialize our field {@code TextView cancelText}
+     * by finding the view with id R.id.cancelText and set its alpha to .5f, initialize our field
+     * {@code TextView endText} by finding the view with id R.id.endText and set its alpha to .5f,
+     * initialize our field {@code TextView startTextAnimator} by finding the view with id
+     * R.id.startTextAnimator and set its alpha to .5f, initialize our field {@code TextView repeatTextAnimator}
+     * by finding the view with id R.id.repeatTextAnimator and set its alpha to .5f, initialize our field
+     * {@code TextView cancelTextAnimator} by finding the view with id R.id.cancelTextAnimator and set
+     * its alpha to .5f, and initialize our field {@code TextView endTextAnimator} by finding the view
+     * with id R.id.endTextAnimator and set its alpha to .5f.
+     * <p>
+     * We initialize {@code CheckBox endCB} by finding the view with id R.id.endCB ("End Immediately").
+     * We initialize {@code Button starter} by finding the view with id R.id.startButton ("Play") and
+     * set its {@code OnClickListener} to an anonymous class which calls the {@code startAnimation}
+     * method of {@code MyAnimationView animView} with the checked state of {@code CheckBox endCB}.
+     * <p>
+     * We initialize {@code Button canceler} by finding the view with id R.id.cancelButton ("Cancel")
+     * and set its {@code OnClickListener} to an anonymous class which calls the {@code cancelAnimation}
+     * method of {@code MyAnimationView animView}.
+     * <p>
+     * Finally we initialize {@code Button ender} by finding the view with id R.id.endButton ("End")
+     * and set its {@code OnClickListener} to an anonymous class which calls the {@code endAnimation}
+     * method of {@code MyAnimationView animView}.
      *
-     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animator_events);
+
         LinearLayout container = (LinearLayout) findViewById(R.id.container);
         final MyAnimationView animView = new MyAnimationView(this);
         container.addView(animView);
@@ -86,8 +159,8 @@ public class AnimatorEvents extends Activity {
         cancelTextAnimator.setAlpha(.5f);
         endTextAnimator = (TextView) findViewById(R.id.endTextAnimator);
         endTextAnimator.setAlpha(.5f);
-        final CheckBox endCB = (CheckBox) findViewById(R.id.endCB);
 
+        final CheckBox endCB = (CheckBox) findViewById(R.id.endCB);
         Button starter = (Button) findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
             /**
@@ -209,8 +282,8 @@ public class AnimatorEvents extends Activity {
          * Animator animation, and animation.start() to start the animation running.
          *
          * @param endImmediately used to set the field endImmediately for use by the callback
-         *        onAnimationStart (which will call animation.end() immediately ending the
-         *        animation.)
+         *                       onAnimationStart (which will call animation.end() immediately ending the
+         *                       animation.)
          */
         public void startAnimation(boolean endImmediately) {
             this.endImmediately = endImmediately;
@@ -253,6 +326,7 @@ public class AnimatorEvents extends Activity {
          * @param y y coordinate of the ShapeHolder created
          * @return ShapeHolder containing the created ball
          */
+        @SuppressWarnings("SameParameterValue")
         private ShapeHolder createBall(float x, float y) {
             OvalShape circle = new OvalShape();
             circle.resize(50f, 50f);
@@ -260,12 +334,12 @@ public class AnimatorEvents extends Activity {
             ShapeHolder shapeHolder = new ShapeHolder(drawable);
             shapeHolder.setX(x - 25f);
             shapeHolder.setY(y - 25f);
-            int red = (int)(Math.random() * 255);
-            int green = (int)(Math.random() * 255);
-            int blue = (int)(Math.random() * 255);
+            int red = (int) (Math.random() * 255);
+            int green = (int) (Math.random() * 255);
+            int blue = (int) (Math.random() * 255);
             int color = 0xff000000 | red << 16 | green << 8 | blue;
             Paint paint = drawable.getPaint(); //new Paint(Paint.ANTI_ALIAS_FLAG);
-            int darkColor = 0xff000000 | red/4 << 16 | green/4 << 8 | blue/4;
+            int darkColor = 0xff000000 | red / 4 << 16 | green / 4 << 8 | blue / 4;
             RadialGradient gradient = new RadialGradient(37.5f, 12.5f,
                     50f, color, darkColor, Shader.TileMode.CLAMP);
             paint.setShader(gradient);
