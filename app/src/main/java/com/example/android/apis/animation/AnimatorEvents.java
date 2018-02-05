@@ -214,12 +214,26 @@ public class AnimatorEvents extends Activity {
 
         @SuppressWarnings("unused")
         public final ArrayList<ShapeHolder> balls = new ArrayList<>();
+        /**
+         * {@code AnimatorSet} created in method {@code createAnimation} which moves
+         * {@code ShapeHolder ball} in both x and y directions
+         */
         Animator animation;
+        /**
+         * The ball which we move.
+         */
         ShapeHolder ball = null;
+        /**
+         * Flag set when "End Immediately" checkbox is checked, if true in {@code onAnimationStart}
+         * callback causes the {@code end} method of {@code Animator animation} to be called
+         * causing our animation to stop immediately.
+         */
         boolean endImmediately = false;
 
         /**
-         * Initializes ball to be a 25px by 25px circle. See createBall(float, float)
+         * Our constructor. First we call our super's constructor, then we initialize our field
+         * {@code ShapeHolder ball} with a 25 pixel diameter circle created by our method
+         * {@code createBall}.
          *
          * @param context context of the Application
          */
@@ -229,23 +243,27 @@ public class AnimatorEvents extends Activity {
         }
 
         /**
-         * Creates the "Animator animation" for the "ShapeHolder ball". yAnim animates the "y"
-         * coordinate of the ball ShapeHolder from the current position to the bottom minus 50px
-         * with a duration of 1500 milliseconds, with a repeat count of 2, a repeatMode of
-         * ValueAnimator.REVERSE using a factor of 2.0 AccelerateInterpolator (starts slow and
-         * ends fast). xAnim animates the "x" coordinate of the ball from the current position
-         * to the current position plus 300px with a duration of 1000 milliseconds, with a repeat
-         * count of 2, a repeatMode of ValueAnimator.REVERSE using a factor of 2.0
-         * AccelerateInterpolator (starts slow and ends fast). alphaAnim and alphaSeq are strange
-         * in that they are played during the creation of the "AnimatorSet animation" and do not
-         * participate with the event demonstration. Together they animate the alpha of the
-         * ShapeHolder ball from 1f to .5f with a duration of 1000 milliseconds. The finish of the
-         * process is to create the AnimatorSet animation, and use it to .playTogether yAnim, and
-         * xAnim. yAnim has its addUpdateListener set to "this" (causing this.onAnimationUpdate
-         * to be called and invalidate() the View) and addListener set to "this" (causing
-         * onAnimationStart, onAnimationEnd, onAnimationCancel, and onAnimationRepeat to be
-         * called when these events occur) and animation also has its addListener set to this
-         * (causing the same event callbacks to called).
+         * Creates the {@code Animator animation} for the {@code ShapeHolder ball} (if it does not
+         * already exist). If {@code animation} is not null we do nothing, if it is null we first
+         * create {@code ObjectAnimator yAnim} to animate the "y" property name (the y coordinate)
+         * {@code ShapeHolder ball} from the current position to the bottom minus 50px with a
+         * duration of 1500 milliseconds. We set its repeat count to 2, its repeat mode to
+         * REVERSE using a factor of 2.0 {@code AccelerateInterpolator} (starts slow and ends fast).
+         * We add "this" as an {@code AnimatorUpdateListener} for {@code yAnim}, and also add "this"
+         * as a {@code AnimatorListener}.
+         * <p>
+         * We create {@code ObjectAnimator xAnim} to animates the "x" property name (the y coordinate)
+         * of the ball from the current position to the current position plus 300px with a duration
+         * of 1000 milliseconds. We set its repeat count to 2, its repeatMode to REVERSE, and set
+         * its interpolator to an {@code AccelerateInterpolator} using a factor of 2.0 (starts slow
+         * and ends fast). {@code ObjectAnimator alphaAnim} and {@code AnimatorSet alphaSeq} are
+         * strange in that they are played during the creation of the {@code AnimatorSet animation}
+         * and do not participate with the event demonstration. Together they animate the alpha of
+         * the {@code ShapeHolder ball} from 1f to .5f with a duration of 1000 milliseconds.
+         * <p>
+         * The finish of the process is to create the {@code AnimatorSet animation}, configure it to
+         * play together {@code yAnim}, and {@code xAnim}. We then add "this" as an {@code AnimatorListener}
+         * to {@code animation}.
          */
         private void createAnimation() {
             if (animation == null) {
@@ -276,14 +294,18 @@ public class AnimatorEvents extends Activity {
         }
 
         /**
-         * Sets the field endImmediately for later use by the callback onAnimationStart,
-         * sets the alpha of the text used to display the occurrence of events to .5f to
-         * signify that they have not occurred yet, calls createAnimation to create the
-         * Animator animation, and animation.start() to start the animation running.
+         * Starts {@code Animator animation} running. First we set our field {@code endImmediately}
+         * to our argument {@code endImmediately} for later use by the callback onAnimationStart.
+         * Then we set the alpha of the text used to display the occurrence of events to .5f
+         * ({@code startText}, {@code repeatText}, {@code cancelText}, {@code endText},
+         * {@code startTextAnimator}, {@code repeatTextAnimator}, {@code cancelTextAnimator}, and
+         * {@code endTextAnimator}) to signify that they have not occurred yet. Then we call our
+         * method {@code createAnimation} to create the {@code Animator animation}. Finally we call
+         * the {@code start} method of {@code animation} to start the animation running.
          *
-         * @param endImmediately used to set the field endImmediately for use by the callback
-         *                       onAnimationStart (which will call animation.end() immediately ending the
-         *                       animation.)
+         * @param endImmediately used to set the field {@code endImmediately} for use by the callback
+         *                       {@code onAnimationStart} (which will call the {@code end} method of
+         *                       {@code animation} immediately ending the animation.)
          */
         public void startAnimation(boolean endImmediately) {
             this.endImmediately = endImmediately;
@@ -300,7 +322,9 @@ public class AnimatorEvents extends Activity {
         }
 
         /**
-         * cancel the Animator animation (used by the CANCEL Button's onClick call back)
+         * Cancel the {@code Animator animation} (used by the CANCEL Button's {@code onClick} call
+         * back). First we call our method {@code createAnimation} to create {@code Animator animation}
+         * if it does not exist yet, then we call the {@code cancel} method of {@code animation}.
          */
         public void cancelAnimation() {
             createAnimation();
@@ -308,7 +332,9 @@ public class AnimatorEvents extends Activity {
         }
 
         /**
-         * end the Animator animation (used by the END Button's onClick call back)
+         * End the {@code Animator animation} (used by the END Button's {@code onClick} call back).
+         * First we call our method {@code createAnimation} to create {@code Animator animation} if
+         * it does not exist yet, then we call the {@code end} method of {@code animation}.
          */
         public void endAnimation() {
             createAnimation();
@@ -316,11 +342,22 @@ public class AnimatorEvents extends Activity {
         }
 
         /**
-         * Creates a circle OvalShape of size 50px by 50px, creates a ShapeDrawable of that circle
-         * Shape and creates a ShapeHolder to hold that ShapeDrawable. The ShapeHolder has its x,y
-         * coordinates set to the method parameters. A random color is used to create a light and
-         * dark random color which is used to create a RadialGradient used as the shader for a Paint
-         * instance and the ShapeHolder has its Paint set to that Paint.
+         * Creates and returns a {@code ShapeHolder} holding a "ball". First we create an
+         * {@code OvalShape circle}, re-size it to be a 50px by 50px circle, create a
+         * {@code ShapeDrawable drawable} from it, and place it in a {@code ShapeHolder shapeHolder}.
+         * We sets the (x,y) coordinates of the {@code ShapeHolder} to the calling parameters of the
+         * method minus 25 pixels. We initialize {@code int red} with a random number between 0 and
+         * 255, and do the same for {@code int green} and {@code int blue}. We then initialize
+         * {@code int color} by shifting these variables into the appropriate positions to form a
+         * 32 bit RGB color and or them together along with a maximum alpha value. We initialize
+         * {@code Paint paint} by retrieving the paint used to draw {@code ShapeDrawable drawable}.
+         * We initialize {@code int darkColor} by or'ing together the RGB values used for {@code color}
+         * divided by 4 along with a maximum alpha value. We create {@code RadialGradient gradient}
+         * with a center x coordinate of 37.5, center y coordinate of 12.5, a radius of 50, with
+         * {@code color} as the color at the center, {@code darkColor} as the color at the edge, and
+         * using CLAMP tiling mode (replicates the edge color if the shader draws outside of its
+         * original bounds). We set the shader of {@code paint} to {@code gradient} and set the paint
+         * of {@code shapeHolder} to {@code paint}, then return {@code shapeHolder} to the caller.
          *
          * @param x x coordinate of the ShapeHolder created
          * @param y y coordinate of the ShapeHolder created
@@ -348,11 +385,12 @@ public class AnimatorEvents extends Activity {
         }
 
         /**
-         * Does the drawing of the MyAnimationView every time invalidate() is called. It Saves
-         * the current matrix and clip onto a private stack, pre-concatenates the current matrix
-         * with a translation to the ShapeHolder ball's current x,y coordinates, instructs the
-         * ShapeHolder's ShapeDrawable to draw itself, and then restores the matrix/clip state
-         * to the state saved on the private stack.
+         * Does the drawing of the {@code MyAnimationView} every time invalidate() is called. First
+         * we save the current matrix and clip of {@code Canvas canvas} onto a private stack.
+         * Then we pre-concatenate the current matrix with a translation to the current x,y coordinates
+         * of {@code ShapeHolder ball}, instruct the {@code ShapeDrawable} of {@code ShapeHolder ball}
+         * to draw itself, and then restore the matrix/clip state to the state saved on the private
+         * stack.
          *
          * @param canvas the canvas on which the background will be drawn
          */
@@ -365,10 +403,10 @@ public class AnimatorEvents extends Activity {
         }
 
         /**
-         * Part of the AnimatorUpdateListener interface which we implement, this callback is
+         * Part of the {@code AnimatorUpdateListener} interface which we implement, this callback is
          * called to notify us of the occurrence of another frame of the animation. We simply
-         * invalidate the whole view which will cause our onDraw(Canvas) callback to be called
-         * to redraw our view using the new values set in the ShapeHolder by the animation.
+         * invalidate the whole view which will cause our {@code onDraw(Canvas)} callback to be
+         * called to redraw our view using the new values set in the ShapeHolder by the animation.
          *
          * @param animation The animation which was has advanced by a frame.
          */
@@ -378,8 +416,8 @@ public class AnimatorEvents extends Activity {
         }
 
         /**
-         * Part of the AnimatorListener interface which we implement, this callback is called to
-         * notify us of the start of the animation. We set the alpha of the text used to indicate
+         * Part of the {@code AnimatorListener} interface which we implement, this callback is called
+         * to notify us of the start of the animation. We set the alpha of the text used to indicate
          * the occurrence of the "Start" event to 1.0f, either startText for our AnimatorSet
          * instance signaling the event, or else startTextAnimator for sequencer events caused by
          * our yAnim ObjectAnimator. If the "End Immediately" checkbox is checked the animation is
