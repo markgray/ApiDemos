@@ -38,6 +38,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -604,6 +605,7 @@ public class DocumentsSample extends Activity {
             InputStream is = null;
             try {
                 is = cr.openInputStream(uri);
+                //noinspection ConstantConditions
                 log("read length=" + readFullyNoClose(is).length);
             } catch (Exception e) {
                 log("FAILED TO READ", e);
@@ -643,9 +645,24 @@ public class DocumentsSample extends Activity {
             }
 
             // Create some documents
-            Uri pic = DocumentsContract.createDocument(cr, doc, "image/png", "pic.png");
-            Uri dir = DocumentsContract.createDocument(cr, doc, Document.MIME_TYPE_DIR, "my dir");
-            Uri dirPic = DocumentsContract.createDocument(cr, dir, "image/png", "pic2.png");
+            Uri pic = null;
+            try {
+                pic = DocumentsContract.createDocument(cr, doc, "image/png", "pic.png");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            Uri dir = null;
+            try {
+                dir = DocumentsContract.createDocument(cr, doc, Document.MIME_TYPE_DIR, "my dir");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            Uri dirPic = null;
+            try {
+                dirPic = DocumentsContract.createDocument(cr, dir, "image/png", "pic2.png");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
 
             log("created " + pic);
             log("created " + dir);
@@ -654,6 +671,7 @@ public class DocumentsSample extends Activity {
             // Write to one of them
             OutputStream os = null;
             try {
+                //noinspection ConstantConditions
                 os = cr.openOutputStream(dirPic);
                 //noinspection ConstantConditions
                 os.write("THE COMPLETE WORKS OF SHAKESPEARE".getBytes());
@@ -665,18 +683,29 @@ public class DocumentsSample extends Activity {
             }
 
             // And delete the first pic
-            if (DocumentsContract.deleteDocument(cr, pic)) {
-                log("deleted untouched pic");
-            } else {
-                log("FAILED TO DELETE PIC");
+            try {
+                if (DocumentsContract.deleteDocument(cr, pic)) {
+                    log("deleted untouched pic");
+                } else {
+                    log("FAILED TO DELETE PIC");
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
         } else if (requestCode == CODE_RENAME) {
-            final Uri newUri = DocumentsContract.renameDocument(cr, uri, "MEOW.TEST");
+            Uri newUri = null;
+            try {
+                newUri = DocumentsContract.renameDocument(cr, uri, "MEOW.TEST");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
             log("rename result=" + newUri);
 
             InputStream is = null;
             try {
+                //noinspection ConstantConditions
                 is = cr.openInputStream(newUri);
+                //noinspection ConstantConditions
                 log("read length=" + readFullyNoClose(is).length);
             } catch (Exception e) {
                 log("FAILED TO READ", e);
