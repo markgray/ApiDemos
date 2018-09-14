@@ -65,7 +65,7 @@ public class TaskListActivity extends ListActivity {
         this.setListAdapter(myAdapter);
 
         // Add a shortcut to the accessibility settings.
-        ImageButton button = (ImageButton) findViewById(R.id.button);
+        ImageButton button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             /**
              * When the button with the id R.id.button is clicked we start the activity specified by
