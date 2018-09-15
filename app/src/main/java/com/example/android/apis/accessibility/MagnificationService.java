@@ -37,6 +37,9 @@ import android.view.accessibility.AccessibilityEvent;
  *   <li>Observing and respond to user-generated key events
  *   <li>Querying and modifying the state of display magnification
  * </ol>
+ * It includes the file xml/magnification_service.xml describing the service, which is referenced by
+ * a meta-data android:name="android.accessibilityservice" android:resource="@xml/magnification_service"
+ * element in AndroidManifest.xml.
  */
 public class MagnificationService extends AccessibilityService {
     /**
@@ -123,7 +126,12 @@ public class MagnificationService extends AccessibilityService {
      * parameter {@code isVolumeUp} is true or -0.1f if it is false, then initialize {@code float nextScale}
      * to the maximum of 1.0f and the minimum of 5.0f and {@code currScale} added to {@code increment}
      * (clamping the scale between 1x and 5x). If {@code nextScale} is equal to {@code currScale} we
-     * return false without having done nothing.
+     * return false without having done nothing. Otherwise we initialize {@code DisplayMetrics metrics}
+     * by using a Resources instance for the application's package to retrieve the current display
+     * metrics, set the magnification scale of {@code controller} animating to the new scale, and
+     * set the center of {@code controller} to an X coordinate of half the absolute width of the display,
+     * a Y coordinate of half the absolute height of the display, also animating to the new center.
+     * Finally we return true to consume the event here.
      *
      * @param isVolumeUp {@code true} if the volume up key was pressed or
      *                   {@code false} if the volume down key was pressed
@@ -157,6 +165,16 @@ public class MagnificationService extends AccessibilityService {
      * This method is a part of the {@link AccessibilityService} lifecycle and is
      * called after the system has successfully bound to the service. If is
      * convenient to use this method for setting the {@link AccessibilityServiceInfo}.
+     * <p>
+     * First we initialize {@code AccessibilityServiceInfo info} with an {@link AccessibilityServiceInfo}
+     * describing this {@link AccessibilityService}. If {@code info} is null, we are not really connected
+     * so we return having done nothing. Otherwise we or in the FLAG_REQUEST_FILTER_KEY_EVENTS flag
+     * (if this flag is set the accessibility service will receive the key events before applications
+     * allowing it implement global shortcuts) into the {@code flags} field of {@code info} and then
+     * call the {@code setServiceInfo} method to set the {@link AccessibilityServiceInfo} that describes
+     * this service to {@code info}. Finally we add an anonymous {@code OnMagnificationChangedListener}
+     * to receive notification of changes in the state of magnification. Its {@code onMagnificationChanged}
+     * override just logs the new magnification scale.
      *
      * @see AccessibilityServiceInfo
      * @see #setServiceInfo(AccessibilityServiceInfo)
@@ -179,6 +197,18 @@ public class MagnificationService extends AccessibilityService {
 
         // Set up a listener for changes in the state of magnification.
         getMagnificationController().addListener(new OnMagnificationChangedListener() {
+            /**
+             * Called when the magnified region, scale, or center changes. We just log a message
+             * about the new magnification scale {@code float scale}.
+             *
+             * @param controller the magnification controller
+             * @param region the magnification region
+             * @param scale the new scale
+             * @param centerX the new X coordinate, in unscaled coordinates, around which
+             * magnification is focused
+             * @param centerY the new Y coordinate, in unscaled coordinates, around which
+             * magnification is focused
+             */
             @Override
             public void onMagnificationChanged(@NonNull MagnificationController controller,
                                                @NonNull Region region, float scale, float centerX, float centerY) {

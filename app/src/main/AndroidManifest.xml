@@ -38,6 +38,12 @@
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.TRANSMIT_IR" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES"/>
+    <!-- Required for drawing overlay windows (TYPE_SYSTEM_ALERT, TYPE_APPLICATION_OVERLAY) -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <!-- For android.media.audiofx.Visualizer -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -118,7 +124,8 @@
             android:name=".app.OverscanActivity"
             android:enabled="@bool/atLeastJellyBeanMR2"
             android:label="@string/activity_overscan"
-            android:theme="@android:style/Theme.Holo.NoActionBar.Overscan">
+            android:theme="@android:style/Theme.Holo.NoActionBar.Overscan"
+            tools:targetApi="jelly_bean_mr2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -671,6 +678,7 @@
         </activity>
 
         <service android:name=".app.ForegroundService" />
+        <service android:name=".app.ForegroundService2" />
 
         <activity
             android:name=".app.ForegroundService$Controller"
@@ -2739,7 +2747,8 @@
             android:name=".view.Controls5"
             android:enabled="@bool/atLeastLRelease"
             android:label="Views/Controls/5. Material Light Theme"
-            android:theme="@android:style/Theme.Material.Light">
+            android:theme="@android:style/Theme.Material.Light"
+            tools:targetApi="lollipop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -2750,7 +2759,8 @@
             android:name=".view.Controls6"
             android:enabled="@bool/atLeastLRelease"
             android:label="Views/Controls/6. Material Dark Theme"
-            android:theme="@android:style/Theme.Material">
+            android:theme="@android:style/Theme.Material"
+            tools:targetApi="lollipop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -3140,7 +3150,8 @@
             android:name=".view.TranslucentBarsActivity"
             android:enabled="@bool/atLeastKitKat"
             android:label="Views/System UI Visibility/Translucent Bars"
-            android:theme="@android:style/Theme.Holo.NoActionBar.TranslucentDecor">
+            android:theme="@android:style/Theme.Holo.NoActionBar.TranslucentDecor"
+            tools:targetApi="kitkat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -3358,7 +3369,8 @@
         <activity
             android:name=".graphics.ShadowCardStack"
             android:label="Graphics/Shadow Card Stack"
-            android:theme="@android:style/Theme.Material.Light">
+            android:theme="@android:style/Theme.Material.Light"
+            tools:targetApi="lollipop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -3368,7 +3380,8 @@
         <activity
             android:name=".graphics.ShadowCardDrag"
             android:label="Graphics/Shadow Card Drag"
-            android:theme="@android:style/Theme.Material.Light">
+            android:theme="@android:style/Theme.Material.Light"
+            tools:targetApi="lollipop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
