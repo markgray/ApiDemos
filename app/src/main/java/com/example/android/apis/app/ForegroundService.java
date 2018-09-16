@@ -147,7 +147,42 @@ public class ForegroundService extends Service {
      * <p>
      * If the action of our parameter {@code Intent intent} is either ACTION_FOREGROUND or
      * ACTION_FOREGROUND_WAKELOCK we initialize {@code CharSequence text} with the string whose
-     * resource id is R.string.foreground_service_started ("Service is in the foreground")
+     * resource id is R.string.foreground_service_started ("Service is in the foreground"). We
+     * initialize {@code PendingIntent contentIntent} with an intent that will start our activity
+     * {@code ForegroundService.Controller} with a request code of 0 and 0 flags. We then build
+     * {@code Notification notification} with a {@code Notification.Builder} for notification channel
+     * PRIMARY_CHANNEL ("default"), setting its small icon to R.drawable.stat_sample, its status text
+     * which is sent to accessibility services to {@code text}, its time stamp to the current time,
+     * its label (first line) to the the string with resource id R.string.alarm_service_label ("Sample
+     * Alarm Service"), its contents (second line of text) to {@code text} and the {@link PendingIntent}
+     * to be sent when the notification is clicked to {@code contentIntent}. Finally we call the method
+     * {@code startForeground} to make this service run in the foreground, supplying {@code notification}
+     * for the ongoing notification to be shown to the user while in this state, and R.string.foreground_service_started
+     * as the identifier for this notification. If it is not one of the foreground actions but is either
+     * ACTION_BACKGROUND or ACTION_BACKGROUND_WAKELOCK we call the {@code stopForeground} with the flag
+     * STOP_FOREGROUND_DETACH (notification will remain shown, but be completely detached from the service
+     * and so no longer changed except through direct calls to the notification manager) to remove this
+     * service from foreground state, allowing it to be killed if more memory is needed.
+     * <p>
+     * Now if the action of {@code intent} is either ACTION_FOREGROUND_WAKELOCK or ACTION_BACKGROUND_WAKELOCK
+     * we branch on whether our field {@code WakeLock mWakeLock} is null:
+     * <ul>
+     *     <li>
+     *         null: We initialize {@code mWakeLock} by using a handle to the system level service with
+     *         class {@code PowerManager.class} to create a new wake lock with the level PARTIAL_WAKE_LOCK
+     *         (Ensures that the CPU is running; the screen and keyboard back-light will be allowed to go off)
+     *         and the tag "wake-service" (for debugging purposes). We then call the {@code acquire} method
+     *         of {@code mWakeLock} to acquire the wake lock with a timeout of 30 seconds.
+     *     </li>
+     *     <li>
+     *         not null: We call our {@code releaseWakeLock} method to release {@code mWakeLock} and
+     *         set it to null.
+     *     </li>
+     * </ul>
+     * We then remove any pending posts of Runnable {@code mPulser} that are in the message queue of
+     * {@code Handler mHandler} and then call the {@code run} method of {@code mPulser} to start it
+     * running. Finally we return START_STICKY to the caller since we want this service to continue
+     * running until it is explicitly stopped.
      *
      * @param intent  The Intent supplied to {@link android.content.Context#startService}, as given.
      *                This may be null if the service is being restarted after its process has gone
@@ -208,6 +243,10 @@ public class ForegroundService extends Service {
         return START_STICKY;
     }
 
+    /**
+     * Convenience function to release the wakelock {@code mWakeLock} if it is not null then set it to
+     * null.
+     */
     void releaseWakeLock() {
         if (mWakeLock != null) {
             mWakeLock.release();
@@ -215,11 +254,23 @@ public class ForegroundService extends Service {
         }
     }
 
+    /**
+     * Convenience function called from our {@code onDestroy} override to release our wakelock and to
+     * remove any pending posts of Runnable {@code mPulser} that are in the message queue of
+     * {@code Handler mHandler}
+     */
     void handleDestroy() {
         releaseWakeLock();
         mHandler.removeCallbacks(mPulser);
     }
 
+    /**
+     * Return the communication channel to the service. We return null since clients can not bind to
+     * this service.
+     *
+     * @param intent The Intent that was used to bind to this service
+     * @return null since clients can not bind to this service.
+     */
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -230,14 +281,55 @@ public class ForegroundService extends Service {
     /**
      * <p>Example of explicitly starting and stopping the {@link ForegroundService}.
      * 
-     * <p>Note that this is implemented as an inner class only keep the sample
+     * <p>Note that this is implemented as an inner class only to keep the sample
      * all together; typically this code would appear in some separate class.
      */
     public static class Controller extends Activity {
+        /**
+         * Called when the activity is starting. First we call our super's implementation of {@code onCreate},
+         * then we set our content view to our layout file R.layout.foreground_service_controller. We
+         * then proceed to set {@code Button button} by finding the buttons in our layout file in order
+         * to set their {@code OnClickListener} as follows:
+         * <ul>
+         *     <li>
+         *         R.id.start_foreground: {@code mForegroundListener} (starts {@code ForegroundService}
+         *         running in the foreground).
+         *     </li>
+         *     <li>
+         *         R.id.start_foreground_wakelock: {@code mForegroundWakelockListener} (starts {@code ForegroundService}
+         *         running in the foreground with a wakelock).
+         *     </li>
+         *     <li>
+         *         R.id.start_background: {@code mBackgroundListener} (starts {@code ForegroundService}
+         *         running in the background).
+         *     </li>
+         *     <li>
+         *         R.id.start_background_wakelock: {@code mBackgroundWakelockListener} (starts {@code ForegroundService}
+         *         running in the background with a wakelock).
+         *     </li>
+         *     <li>
+         *         R.id.stop: {@code mStopListener} calls the {@code stopService} method to stop
+         *         {@code ForegroundService}.
+         *     </li>
+         *     <li>
+         *         R.id.start_foreground_2: {@code mForegroundListener2} starts {@code ForegroundService2}
+         *         running in the foreground.
+         *     </li>
+         *     <li>
+         *         R.id.stop_2: {@code mStopListener2} calls the {@code stopService} method to stop
+         *         {@code ForegroundService2}.
+         *     </li>
+         *     <li>
+         *         R.id.start_foreground_2_alarm: {@code mForegroundAlarmListener} uses an alarm to
+         *         start {@code ForegroundService2} running in the foreground 15 seconds from now.
+         *     </li>
+         * </ul>
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+         */
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
             setContentView(R.layout.foreground_service_controller);
 
             // Watch for button clicks.
@@ -259,7 +351,19 @@ public class ForegroundService extends Service {
             button.setOnClickListener(mForegroundAlarmListener);
         }
 
+        /**
+         * {@code OnClickListener} for the button with id R.id.start_foreground
+         */
         private OnClickListener mForegroundListener = new OnClickListener() {
+            /**
+             * Called when the button with id R.id.start_foreground is clicked. We initialize
+             * {@code Intent intent} with a new instance whose action is ACTION_FOREGROUND, set the
+             * class it is to launch to {@code ForegroundService} then call the {@code startService}
+             * method with it to request that that application service be started.
+             *
+             * @param v {@code View} that was clicked.
+             */
+            @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ForegroundService.ACTION_FOREGROUND);
                 intent.setClass(Controller.this, ForegroundService.class);
@@ -267,7 +371,19 @@ public class ForegroundService extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the button with id R.id.start_foreground_wakelock
+         */
         private OnClickListener mForegroundWakelockListener = new OnClickListener() {
+            /**
+             * Called when the button with id R.id.start_foreground_wakelock is clicked. We initialize
+             * {@code Intent intent} with a new instance whose action is ACTION_FOREGROUND_WAKELOCK, set the
+             * class it is to launch to {@code ForegroundService} then call the {@code startService}
+             * method with it to request that that application service be started.
+             *
+             * @param v {@code View} that was clicked.
+             */
+            @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ForegroundService.ACTION_FOREGROUND_WAKELOCK);
                 intent.setClass(Controller.this, ForegroundService.class);
@@ -275,7 +391,19 @@ public class ForegroundService extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the button with id R.id.start_background
+         */
         private OnClickListener mBackgroundListener = new OnClickListener() {
+            /**
+             * Called when the button with id R.id.start_background is clicked. We initialize
+             * {@code Intent intent} with a new instance whose action is ACTION_BACKGROUND, set the
+             * class it is to launch to {@code ForegroundService} then call the {@code startService}
+             * method with it to request that that application service be started.
+             *
+             * @param v {@code View} that was clicked.
+             */
+            @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ForegroundService.ACTION_BACKGROUND);
                 intent.setClass(Controller.this, ForegroundService.class);
@@ -283,7 +411,19 @@ public class ForegroundService extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the button with id R.id.start_background_wakelock
+         */
         private OnClickListener mBackgroundWakelockListener = new OnClickListener() {
+            /**
+             * Called when the button with id R.id.start_background_wakelock is clicked. We initialize
+             * {@code Intent intent} with a new instance whose action is ACTION_BACKGROUND_WAKELOCK, set the
+             * class it is to launch to {@code ForegroundService} then call the {@code startService}
+             * method with it to request that that application service be started.
+             *
+             * @param v {@code View} that was clicked.
+             */
+            @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ForegroundService.ACTION_BACKGROUND_WAKELOCK);
                 intent.setClass(Controller.this, ForegroundService.class);
@@ -291,14 +431,35 @@ public class ForegroundService extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the button with id R.id.stop
+         */
         private OnClickListener mStopListener = new OnClickListener() {
+            /**
+             * Called when the button with id R.id.stop is clicked. We the {@code stopService} method
+             * to stop {@code ForegroundService}.
+             *
+             * @param v {@code View} that was clicked.
+             */
+            @Override
             public void onClick(View v) {
-                stopService(new Intent(Controller.this,
-                        ForegroundService.class));
+                stopService(new Intent(Controller.this, ForegroundService.class));
             }
         };
 
+        /**
+         * {@code OnClickListener} for the button with id R.id.start_foreground_2
+         */
         private OnClickListener mForegroundListener2 = new OnClickListener() {
+            /**
+             * Called when the button with id R.id.start_foreground_2 is clicked. We initialize
+             * {@code Intent intent} with a new instance whose action is ACTION_FOREGROUND, set the
+             * class it is to launch to {@code ForegroundService2} then call the {@code startService}
+             * method with it to request that that application service be started.
+             *
+             * @param v {@code View} that was clicked.
+             */
+            @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ForegroundService.ACTION_FOREGROUND);
                 intent.setClass(Controller.this, ForegroundService2.class);
@@ -306,8 +467,17 @@ public class ForegroundService extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the button with id R.id.start_foreground_2_alarm
+         */
         private OnClickListener mForegroundAlarmListener = new OnClickListener() {
+            /**
+             * Called when the button with id R.id.start_foreground_2_alarm is clicked.
+             *
+             * @param v {@code View} that was clicked.
+             */
             @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
             public void onClick(View v) {
                 final Context ctx = Controller.this;
 
@@ -325,9 +495,9 @@ public class ForegroundService extends Service {
         };
 
         private OnClickListener mStopListener2 = new OnClickListener() {
+            @Override
             public void onClick(View v) {
-                stopService(new Intent(Controller.this,
-                        ForegroundService2.class));
+                stopService(new Intent(Controller.this, ForegroundService2.class));
             }
         };
 
