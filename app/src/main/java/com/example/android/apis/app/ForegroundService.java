@@ -472,7 +472,17 @@ public class ForegroundService extends Service {
          */
         private OnClickListener mForegroundAlarmListener = new OnClickListener() {
             /**
-             * Called when the button with id R.id.start_foreground_2_alarm is clicked.
+             * Called when the button with id R.id.start_foreground_2_alarm is clicked. First we initialize
+             * {@code Context ctx} with the context of this {@code Controller} activity. We initialize
+             * {@code Intent intent} with a new instance whose action is ACTION_FOREGROUND, and set its
+             * class to that of {@code ForegroundService2}. We initialize {@code PendingIntent pi} with
+             * a PendingIntent that will start the foreground service specified by {@code intent} (which
+             * is {@code ForegroundService2} as you recall), the request code is 0 and no flags are used.
+             * We initialize {@code AlarmManager am} with a handle to the system level service ALARM_SERVICE,
+             * and use it to schedule an alarm to be delivered precisely 15 seconds in ELAPSED_REALTIME from
+             * now (does not wake the device up; if it goes off while the device is asleep, it will not be
+             * delivered until the next time the device wakes up) with {@code pi} as the operation that will
+             * be performed at that time. Finally we log that we are starting that service in 15 seconds.
              *
              * @param v {@code View} that was clicked.
              */
@@ -494,7 +504,16 @@ public class ForegroundService extends Service {
             }
         };
 
+        /**
+         * {@code OnClickListener} for the button with id R.id.stop_2
+         */
         private OnClickListener mStopListener2 = new OnClickListener() {
+            /**
+             * Called when the button with id R.id.stop_2 is clicked. We the {@code stopService} method
+             * to stop {@code ForegroundService2}.
+             *
+             * @param v {@code View} that was clicked.
+             */
             @Override
             public void onClick(View v) {
                 stopService(new Intent(Controller.this, ForegroundService2.class));
