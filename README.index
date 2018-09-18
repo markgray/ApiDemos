@@ -342,6 +342,21 @@ App
             Intent.ACTION_GET_CONTENT Intents based on which button the user clicks,
             and it then hands the created "chooser Intent" to startActivity(Intent)
 
+    App/Activity/Max Aspect Ratio/1:1
+        .app.MaxAspectRatio$Square
+            Uses android:maxAspectRatio="1" in AndroidManifest.xml to set the aspect
+            ratio of an empty MaxAspectRatio activity subclass Square
+
+    App/Activity/Max Aspect Ratio/16:9
+        .app.MaxAspectRatio$SixteenToNine
+            Uses android:maxAspectRatio="1.77777778" in AndroidManifest.xml to set the aspect
+            ratio of an empty MaxAspectRatio activity subclass SixteenToNine
+
+    App/Activity/Max Aspect Ratio/Any
+        .app.MaxAspectRatio$Any
+            Uses no android:maxAspectRatio in AndroidManifest.xml to use any aspect
+            ratio of an empty MaxAspectRatio activity subclass Any
+
     App/Activity/Overscan                  v18
         .app.OverscanActivity
             Uses @android:style/Theme.Holo.NoActionBar.Overscan set in AndroidManifest,
