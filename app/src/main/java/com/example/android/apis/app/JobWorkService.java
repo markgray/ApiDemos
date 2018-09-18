@@ -75,7 +75,40 @@ public class JobWorkService extends JobService {
         }
 
         /**
-         * Override this method to perform a computation on a background thread.
+         * Override this method to perform a computation on a background thread. Our while loop is
+         * designed to first check whether this task has been canceled by calling {@code isCanceled}
+         * saving the return value in {@code canceled} and if we have not been canceled we dequeue
+         * the next pending {@link JobWorkItem} from our field {@code JobParameters mParams} into
+         * {@code work} and if that is not null we continue:
+         * <ul>
+         *     <li>
+         *         We initialize {@code String txt} by retrieving the {@code Intent} from {@code work}
+         *         and fetching the string extra stored under the key "name" in it.
+         *     </li>
+         *     <li>
+         *         We log a message describing what we are doing with {@code text}
+         *     </li>
+         *     <li>
+         *         We call our {@code showNotification} method to display a notification about {@code txt}
+         *     </li>
+         *     <li>
+         *         Wrapped in a try block intended to catch and log {@code InterruptedException} we
+         *         sleep for 5 seconds.
+         *     </li>
+         *     <li>
+         *         We call our {@code hideNotification} method to cancel our notification.
+         *     </li>
+         *     <li>
+         *         We log the fact that we are done processing {@code work}
+         *     </li>
+         *     <li>
+         *         We call the {@code completeWork} method of {@code mParams} report the completion of
+         *         executing {@code JobWorkItem work} (tells the system you are done with the work
+         *         associated with that item, so it will not be returned again).
+         *     </li>
+         * </ul>
+         * When we exit the while loop we check if that was because we were canceled and if so we log
+         * this fact. Then we return null to the caller.
          *
          * @param params we do not have any
          * @return we do not have a return value.
@@ -86,6 +119,9 @@ public class JobWorkService extends JobService {
              * true if task was cancelled before it completed, we set every loop of our while loop
              */
             boolean cancelled;
+            /*
+             * JobWorkItem removed from queue to be performed
+             */
             JobWorkItem work;
 
             /*
@@ -120,6 +156,17 @@ public class JobWorkService extends JobService {
         }
     }
 
+    /**
+     * Called by the system when the service is first created. First We initialize our field
+     * {@code NotificationManager mNM} with a handle to the NOTIFICATION_SERVICE system level
+     * service. We initialize {@code NotificationChannel chan1} with a new instance whose id and
+     * user visible name are both PRIMARY_CHANNEL ("default"), and whose importance is IMPORTANCE_DEFAULT
+     * (shows everywhere, makes noise, but does not visually intrude). We set the notification light
+     * color of {@code chan1} to GREEN, and set its lock screen visibility to VISIBILITY_PRIVATE
+     * (shows this notification on all lockscreens, but conceal sensitive or private information on
+     * secure lockscreens). We then have {@code mNM} create notification channel {@code chan1}.
+     * Finally we toast the string with resource id R.string.service_created ("Service created.")
+     */
     @Override
     public void onCreate() {
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
@@ -131,12 +178,29 @@ public class JobWorkService extends JobService {
         Toast.makeText(this, R.string.service_created, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Called by the system to notify a Service that it is no longer used and is being removed. We
+     * call our method {@code hideNotification} to cancel our notification then we toast the string
+     * with resource id R.string.service_destroyed ("Service destroyed.").
+     */
     @Override
     public void onDestroy() {
         hideNotification();
         Toast.makeText(this, R.string.service_destroyed, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Called to indicate that the job has begun executing. First we initialize our field
+     * {@code CommandProcessor mCurProcessor} with an instance constructed to process our parameter
+     * {@code JobParameters params}. Then we call its {@code executeOnExecutor} method to start it
+     * running in the background using the executor THREAD_POOL_EXECUTOR (an executor which allows
+     * multiple tasks to run in parallel on a pool of threads managed by AsyncTask). Finally we
+     * return true so that our job will continue running while we process work.
+     *
+     * @param params Parameters specifying info about this job.
+     * @return {@code true} if your service will continue running, using a separate thread
+     *     when appropriate.  {@code false} means that this job has completed its work.
+     */
     @Override
     public boolean onStartJob(JobParameters params) {
         // Start task to pull work out of the queue and process it.
@@ -147,6 +211,16 @@ public class JobWorkService extends JobService {
         return true;
     }
 
+    /**
+     * This method is called if the system has determined that you must stop execution of your job
+     * even before you've had a chance to call {@link #jobFinished(JobParameters, boolean)}.
+     *
+     * @param params The parameters identifying this job, as supplied to
+     *               the job in the {@link #onStartJob(JobParameters)} callback.
+     * @return {@code true} to indicate to the JobManager whether you'd like to reschedule
+     * this job based on the retry criteria provided at job creation-time; or {@code false}
+     * to end the job entirely.  Regardless of the value returned, your job must stop executing.
+     */
     @Override
     public boolean onStopJob(JobParameters params) {
         // Have the processor cancel its current work.
@@ -159,7 +233,18 @@ public class JobWorkService extends JobService {
     }
 
     /**
-     * Show a notification while this service is running.
+     * Show a notification while this service is running. We initialize {@code PendingIntent contentIntent}
+     * with an instance intended to launch the activity {@code JobWorkServiceActivity} with request code
+     * 0. We initialize {@code Notification.Builder noteBuilder} with a new instance using notification
+     * channel PRIMARY_CHANNEL ("default"), set its small icon to R.drawable.stat_sample, its ticker
+     * text to our parameter {@code String text}, its time stamp to now, its second line of text to
+     * {@code text} and its {@link PendingIntent} to be sent when the notification is clicked to
+     * {@code contentIntent}. We then set it to be an "ongoing" notification (ongoing notifications
+     * cannot be dismissed by the user, so your application or service must take care of canceling them).
+     * Finally we use {@code NotificationManager mNM} to post the notification build from {@code noteBuilder}
+     * using the resource id R.string.job_service_created as its id.
+     *
+     * @param text string to use as both the ticker text (for accessibility) and content text
      */
     private void showNotification(String text) {
         // The PendingIntent to launch our activity if the user selects this notification
@@ -183,7 +268,10 @@ public class JobWorkService extends JobService {
         mNM.notify(R.string.job_service_created, noteBuilder.build());
     }
 
+    /**
+     * Cancels the notification with id R.string.job_service_created.
+     */
     private void hideNotification() {
-        mNM.cancel(R.string.service_created);
+        mNM.cancel(R.string.job_service_created);
     }
 }
