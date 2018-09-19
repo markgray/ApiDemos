@@ -953,6 +953,15 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".app.NotificationBackgroundService" />
+        <activity android:name=".app.NotificationBackgroundService$Controller"
+            android:label="App/Notification/Background Service">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
         <!-- Dialog samples -->
         <activity
             android:name=".app.AlertDialogSamples"

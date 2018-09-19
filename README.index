@@ -715,6 +715,10 @@ App
             the submenu does?
 
   Notification
+    App/Notification/Background Service    v26
+        .app.NotificationBackgroundService
+            Example service that gets launched from a notification and runs in the background.
+
     App/Notification/IncomingMessage       all -> v16
         .app.IncomingMessage               interstitial crashes froyo startActivities()
         .app.IncomingMessageView
