@@ -1530,6 +1530,20 @@
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".content.InstallApkSessionApi"
+            android:label="@string/activity_install_apk_session_api"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:exported="true"
+                    android:name="com.example.android.apis.content.SESSION_API_PACKAGE_INSTALLED" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".content.DocumentsSample"
             android:enabled="@bool/atLeastKitKat"
