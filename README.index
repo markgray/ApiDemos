@@ -364,6 +364,11 @@ App
             place a surrounding "white box" in the overscan region of the display, and
             displays a picture in a FrameLayout offset to avoid the overscan region.
 
+    App/Activity/Picture in Picture        v24
+        .app.PictureInPicture
+            Minimal demo of Picture in Picture mode, just enters that mode with current
+            content view when button is clicked.
+
     App/Activity/Persistent State          all
         .app.PersistentState
             Demonstrates saving and restoring activity state by using a
