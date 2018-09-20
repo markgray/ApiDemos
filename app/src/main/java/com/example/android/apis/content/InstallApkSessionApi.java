@@ -47,18 +47,78 @@ import java.io.OutputStream;
  */
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class InstallApkSessionApi extends Activity {
+    /**
+     * Action of the {@code Intent} used for the install status receiver.
+     */
     private static final String PACKAGE_INSTALLED_ACTION =
             "com.example.android.apis.content.SESSION_API_PACKAGE_INSTALLED";
 
+    /**
+     * Called when the activity is starting. First we call our super's implementation of {@code onCreate},
+     * then we set our content view to our layout file R.layout.install_apk_session_api. We initialize
+     * {@code Button button} by finding the view with id R.id.install and set its {@code OnClickListener}
+     * to an anonymous class which creates, configures, and commits a package installer session.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.install_apk_session_api);
 
         // Watch for button clicks.
-        Button button = (Button) findViewById(R.id.install);
+        Button button = findViewById(R.id.install);
         button.setOnClickListener(new OnClickListener() {
+            /**
+             * Called when the button with id R.id.install ("Install") is clicked. We initialize our
+             * variable {@code PackageInstaller.Session session} to null, then wrapped in a try block
+             * intended to catch IOException in order to convert it to a RuntimeException, and catch
+             * RuntimeException in order to abandon {@code session} if it is not null and rethrow the
+             * RuntimeException we:
+             * <ul>
+             *     <li>
+             *         Initialize {@code PackageInstaller packageInstaller} with the interface that
+             *         offers the ability to install, upgrade, and remove applications on the device
+             *         as returned by a PackageManager instance for our context.
+             *     </li>
+             *     <li>
+             *         Initialize {@code PackageInstaller.SessionParams params} with a new instance
+             *         whose mode is MODE_FULL_INSTALL (Mode for an install session whose staged APKs
+             *         should fully replace any existing APKs for the target app).
+             *     </li>
+             *     <li>
+             *         Use {@code packageInstaller} to create a new package installer session saving
+             *         the id of the session in {@code int sessionId}.
+             *     </li>
+             *     <li>
+             *         Use {@code packageInstaller} to open session {@code sessionId} to actively
+             *         perform work, saving the {@code Session} instance in {@code session}.
+             *     </li>
+             *     <li>
+             *         Call our method {@code addApkToInstallSession} to read our sample APK assets
+             *         file "HelloActivity.apk" and write it into {@code session} under the name
+             *         "package".
+             *     </li>
+             *     <li>
+             *         Initialize {@code Context context} with this {@code InstallApkSessionApi} context.
+             *     </li>
+             *     <li>
+             *         Initialize {@code Intent intent} with a new instance intended for our activities
+             *         class {@code InstallApkSessionApi.class}, set its action to PACKAGE_INSTALLED_ACTION
+             *         and use it as the {@code Intent} that will be fired by {@code PendingIntent pendingIntent}
+             *         using a request code of 0 and no flags.
+             *     </li>
+             *     <li>
+             *         Initialize {@code IntentSender statusReceiver} with an {@code IntentSender}
+             *         object that wraps the existing sender of {@code PendingIntent pendingIntent},
+             *         and use it as the status receiver callback when we commit {@code session}
+             *         causing it to do its work.
+             *     </li>
+             * </ul>
+             *
+             * @param v {@code View} that was clicked.
+             */
+            @Override
             public void onClick(View v) {
                 PackageInstaller.Session session = null;
                 try {
@@ -91,6 +151,31 @@ public class InstallApkSessionApi extends Activity {
         });
     }
 
+    /**
+     * Reads the file in our assets with the filename {@code String assetName} and writes it to the
+     * {@code PackageInstaller.Session session}. Wrapped in a try block with the closeable asset
+     * consisting of {@code OutputStream packageInSession} (a stream to write an APK file into the
+     * PackageInstaller Session {@code session} using the name "package") and {@code InputStream is}
+     * (an {@code InputStream} for the file with file name {@code String assetName}) we:
+     * <ul>
+     *     <li>
+     *         Allocate 16384 bytes for {@code byte[] buffer}
+     *     </li>
+     *     <li>
+     *         Declare {@code int n}
+     *     </li>
+     *     <li>
+     *         Loop while there is data to be read from {@code is} into {@code buffer} saving the number
+     *         of bytes read in {@code n} then writing {@code n} bytes from {@code buffer} into
+     *         {@code packageInSession}.
+     *     </li>
+     * </ul>
+     *
+     * @param assetName File name of the apk in our assets that we should read in
+     * @param session Package session we should write our apk to.
+     * @throws IOException if an IO error occurs.
+     */
+    @SuppressWarnings("SameParameterValue")
     private void addApkToInstallSession(String assetName, PackageInstaller.Session session)
             throws IOException {
         // It's recommended to pass the file size to openWrite(). Otherwise installation may fail
@@ -107,10 +192,20 @@ public class InstallApkSessionApi extends Activity {
 
     // Note: this Activity must run in singleTop launchMode for it to be able to receive the intent
     // in onNewIntent().
+    /**
+     * This is called for activities that set launchMode to "singleTop" in their package, or if a
+     * client used the {@link Intent#FLAG_ACTIVITY_SINGLE_TOP} flag when calling {@link #startActivity}.
+     * In either case, when the activity is re-launched while at the top of the activity stack instead
+     * of a new instance of the activity being started, onNewIntent() will be called on the existing
+     * instance with the Intent that was used to re-launch it.
+     *
+     * @param intent The new intent that was started for the activity.
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         Bundle extras = intent.getExtras();
         if (PACKAGE_INSTALLED_ACTION.equals(intent.getAction())) {
+            //noinspection ConstantConditions
             int status = extras.getInt(PackageInstaller.EXTRA_STATUS);
             String message = extras.getString(PackageInstaller.EXTRA_STATUS_MESSAGE);
 
