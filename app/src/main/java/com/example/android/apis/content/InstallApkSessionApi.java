@@ -41,7 +41,7 @@ import java.io.OutputStream;
 
 /**
  * Demonstration of package installation and un-installation using the package installer Session
- * API.
+ * API. AndroidManifest activity element has an android:launchMode="singleTop" attribute.
  *
  * @see InstallApk for a demo of the original (non-Session) API.
  */
@@ -198,6 +198,67 @@ public class InstallApkSessionApi extends Activity {
      * In either case, when the activity is re-launched while at the top of the activity stack instead
      * of a new instance of the activity being started, onNewIntent() will be called on the existing
      * instance with the Intent that was used to re-launch it.
+     * <p>
+     * First we initialize {@code Bundle extras} by fetching the extras stored in our parameter
+     * {@code Intent intent}. If the action of {@code intent} is PACKAGE_INSTALLED_ACTION then we
+     * initialize {@code int status} with the int stored in {@code extras} under the key EXTRA_STATUS
+     * (status of the operation), and {@code String message} with the string stored in {@code extras}
+     * under the key EXTRA_STATUS_MESSAGE (detailed string representation of the status, including
+     * raw details that are useful for debugging). Then we switch on the value of {@code status}:
+     * <ul>
+     *     <li>
+     *         STATUS_PENDING_USER_ACTION: User action is currently required to proceed. We initialize
+     *         {@code Intent confirmIntent} by fetching the intent stored in {@code extras} under the
+     *         key EXTRA_INTENT, start that activity running and break.
+     *     </li>
+     *     <li>
+     *         STATUS_SUCCESS: The operation succeeded. We toast the message "Install succeeded!" and
+     *         break.
+     *     </li>
+     *     <li>
+     *         STATUS_FAILURE: The operation failed in a generic way. The system will always try to
+     *         provide a more specific failure reason, but in some rare cases this may be delivered.
+     *         We just fall through.
+     *     </li>
+     *     <li>
+     *         STATUS_FAILURE_ABORTED: The operation failed because it was actively aborted. For
+     *         example, the user actively declined requested permissions, or the session was abandoned.
+     *         We just fall through.
+     *     </li>
+     *     <li>
+     *         STATUS_FAILURE_BLOCKED: The operation failed because it was blocked. For example, a
+     *         device policy may be blocking the operation, a package verifier may have blocked the
+     *         operation, or the app may be required for core system operation. We just fall through.
+     *     </li>
+     *     <li>
+     *         STATUS_FAILURE_CONFLICT: The operation failed because it conflicts (or is inconsistent
+     *         with) with another package already installed on the device. For example, an existing
+     *         permission, incompatible certificates, etc. The user may be able to uninstall another
+     *         app to fix the issue. We just fall through.
+     *     </li>
+     *     <li>
+     *         STATUS_FAILURE_INCOMPATIBLE: The operation failed because it is fundamentally incompatible
+     *         with this device. For example, the app may require a hardware feature that doesn't exist,
+     *         it may be missing native code for the ABIs supported by the device, or it requires a newer
+     *         SDK version, etc. We just fall through.
+     *     </li>
+     *     <li>
+     *         STATUS_FAILURE_INVALID: The operation failed because one or more of the APKs was invalid.
+     *         For example, they might be malformed, corrupt, incorrectly signed, mismatched, etc.
+     *         We just fall through.
+     *     </li>
+     *     <li>
+     *         STATUS_FAILURE_STORAGE: The operation failed because of storage issues. For example,
+     *         the device may be running low on space, or external media may be unavailable. The
+     *         user may be able to help free space or insert different external media. We toast a
+     *         message consisting of the string "Install failed! " concatenated to the string value
+     *         of {@code status} concatenated to {@code message} then break.
+     *     </li>
+     *     <li>
+     *         default: We toast a message consisting of the string "Unrecognized status received
+     *         from installer: " concatenated to {@code status}.
+     *     </li>
+     * </ul>
      *
      * @param intent The new intent that was started for the activity.
      */
