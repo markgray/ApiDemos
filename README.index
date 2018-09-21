@@ -939,6 +939,11 @@ Content
             Shows how to use Intent.ACTION_INSTALL_PACKAGE, and Intent.ACTION_UNINSTALL_PACKAGE
             to install and uninstall packages.
 
+    Content/Packages/Install Apk using Session API    v21
+    .content.InstallApkSessionApi
+            Demonstration of package installation and un-installation using the package installer Session
+            API. AndroidManifest activity element has an android:launchMode="singleTop" attribute.
+
   Process Text Intent                      v23 uses things not supported earlier.
     Content/Process Text Intent
     .content.ProcessTextLauncher
