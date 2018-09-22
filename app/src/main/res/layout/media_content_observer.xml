@@ -57,7 +57,7 @@
             android:id="@+id/changes_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ff303030"
+            android:background="#fff0f0f0"
             android:padding="4dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             />

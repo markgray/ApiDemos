@@ -37,11 +37,21 @@ import java.util.List;
  */
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class MediaContentJob extends JobService {
+    /**
+     * {@code Uri} we observe using our {@code TriggerContentUri}
+     */
     static final Uri MEDIA_URI = Uri.parse("content://" + MediaStore.AUTHORITY + "/");
 
+    /**
+     * {@code Handler} we use to delay our work by 10 seconds so we can see batching happen.
+     */
     final Handler mHandler = new Handler();
+    /**
+     * {@code Runnable} which does all our "work" after a ten second delay?
+     */
     final Runnable mWorker = new Runnable() {
-        @Override public void run() {
+        @Override
+        public void run() {
             scheduleJob(MediaContentJob.this);
             jobFinished(mRunningParams, false);
         }
@@ -109,6 +119,7 @@ public class MediaContentJob extends JobService {
             sb.append("(No content)");
         }
         Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
+        Log.i("MediaContentJob", "onStartJob called: " + sb.toString());
         // We will emulate taking some time to do this work, so we can see batching happen.
         mHandler.postDelayed(mWorker, 10*1000);
         return true;

@@ -107,17 +107,40 @@ public class MediaContentObserver extends Activity {
      *         {@code mScheduleMediaJob}: its {@code onClick} override calls the {@code scheduleJob}
      *         method of {@code MediaContentJob} to schedule a {@code MediaContentJob} job to monitor
      *         when there is a change to any media content URI, then calls our {@code updateButtons}
-     *         to update the enabled/disabled state of the buttons.
+     *         method to update the enabled/disabled state of the buttons.
      *     </li>
      *     <li>
      *         {@code mCancelMediaJob}: its {@code onClick} override calls the {@code cancelJob}
      *         method of {@code MediaContentJob} to cancel the {@code MediaContentJob} job, then
-     *         calls our {@code updateButtons} to update the enabled/disabled state of the buttons.
+     *         calls our {@code updateButtons} method to update the enabled/disabled state of the buttons.
      *     </li>
      *     <li>
-     *         {@code mSchedulePhotosJob}: its {@code onClick} override 
+     *         {@code mSchedulePhotosJob}: its {@code onClick} override branches on whether the method
+     *         {@code checkSelfPermission} returns PERMISSION_GRANTED:
+     *         <ul>
+     *             <li>
+     *                 no: We call the method {@code requestPermissions} to ask the user for the
+     *                 READ_EXTERNAL_STORAGE permission using REQ_PHOTOS_PERM as the request code
+     *                 that will be passed to our {@code onRequestPermissionsResult} callback.
+     *             </li>
+     *             <li>
+     *                 yes: we call the {@code scheduleJob} method of {@code PhotosContentJob} to
+     *                 schedule a {@code PhotosContentJob} job to monitor when there is a change to
+     *                 photos in the media provider, then call our {@code updateButtons} method to
+     *                 update the enabled/disabled state of the buttons.
+     *             </li>
+     *         </ul>
+     *     </li>
+     *     <li>
+     *         {@code mCancelPhotosJob}: its {@code onClick} override calls the {@code cancelJob}
+     *         method of {@code PhotosContentJob} to cancel the {@code PhotosContentJob} job, then
+     *         calls our {@code updateButtons} method to update the enabled/disabled state of the buttons.
      *     </li>
      * </ul>
+     * We call our {@code updateButtons} method to update the enabled/disabled state of the buttons,
+     * then we use a {@code ContentResolver} instance for our application's package to register
+     * {@code ContentObserver mContentObserver} as an observer that will get callbacks when data
+     * identified by the content URI {@code MediaContentJob.MEDIA_URI} ("content://media/") changes.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
@@ -182,9 +205,24 @@ public class MediaContentObserver extends Activity {
                 mContentObserver);
     }
 
+    /**
+     * Callback for the result from requesting permissions. This method is invoked for every call on
+     * {@link #requestPermissions(String[], int)}. If our parameter {@code requestCode} is the same
+     * REQ_PHOTOS_PERM (1) used in our call to {@code requestPermissions}, we check that the length
+     * of our parameter {@code String[] permissions} is greater than 0 and the value stored in
+     * {@code grantResults[0]} is PERMISSION_GRANTED before calling the {@code scheduleJob} method
+     * of {@code PhotosContentJob} to schedule a {@code PhotosContentJob} job to monitor when there
+     * is a change to photos in the media provider, and then call our {@code updateButtons} method
+     * to update the enabled/disabled state of the buttons.
+     *
+     * @param requestCode The request code passed in {@link #requestPermissions(String[], int)}.
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
+     *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
+     */
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQ_PHOTOS_PERM) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 PhotosContentJob.scheduleJob(MediaContentObserver.this);
@@ -193,6 +231,16 @@ public class MediaContentObserver extends Activity {
         }
     }
 
+    /**
+     * Updates the enabled/disabled state of the four buttons in our UI depending on whether
+     * {@code MediaContentJob} and/or {@code PhotosContentJob} are scheduled or not. If the
+     * {@code isScheduled} method of {@code MediaContentJob} returns true we disable the button
+     * {@code mScheduleMediaJob} and enable the button {@code mCancelMediaJob} otherwise we enable
+     * the button {@code mScheduleMediaJob} and disable the button {@code mCancelMediaJob}. If the
+     * {@code isScheduled} method of {@code PhotosContentJob} returns true we disable the button
+     * {@code mSchedulePhotosJob} and enable the button {@code mCancelPhotosJob} otherwise we enable
+     * the button {@code mSchedulePhotosJob} and disable the button {@code mCancelPhotosJob}.
+     */
     void updateButtons() {
         if (MediaContentJob.isScheduled(this)) {
             mScheduleMediaJob.setEnabled(false);
@@ -210,6 +258,11 @@ public class MediaContentObserver extends Activity {
         }
     }
 
+    /**
+     * Perform any final cleanup before our activity is destroyed. First we call our super's implementation
+     * of {@code onDestroy}, then we use a {@code ContentResolver} instance for our application's package to
+     * unregister our change observer {@code ContentObserver mContentObserver}.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
