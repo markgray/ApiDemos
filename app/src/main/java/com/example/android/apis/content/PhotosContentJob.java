@@ -35,34 +35,58 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-//BEGIN_INCLUDE(job)
-
 /**
  * Example stub job to monitor when there is a change to photos in the media provider.
  */
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class PhotosContentJob extends JobService {
-    // The root URI of the media provider, to monitor for generic changes to its content.
+    /**
+     * The root URI of the media provider, to monitor for generic changes
+     * to its content: "content://media/"
+     */
     static final Uri MEDIA_URI = Uri.parse("content://" + MediaStore.AUTHORITY + "/");
 
-    // Path segments for image-specific URIs in the provider.
+    /**
+     * Path segments for image-specific URIs in the provider: "external", "images", and "media".
+     */
     static final List<String> EXTERNAL_PATH_SEGMENTS
             = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.getPathSegments();
 
-    // The columns we want to retrieve about a particular image.
+    /**
+     * The columns we want to retrieve about a particular image.
+     */
     static final String[] PROJECTION = new String[] {
             MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATA
     };
+    /**
+     * Column number of the _ID column in the {@code Cursor} returned by our query
+     */
     static final int PROJECTION_ID = 0;
+    /**
+     * Column number of the DATA column in the {@code Cursor} returned by our query
+     */
     static final int PROJECTION_DATA = 1;
 
-    // This is the external storage directory where cameras place pictures.
+    /**
+     * This is the external storage directory where cameras place pictures: /storage/emulated/0/DCIM
+     */
     static final String DCIM_DIR = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_DCIM).getPath();
 
-    // A pre-built JobInfo we use for scheduling our job.
+    /**
+     * A pre-built JobInfo we use for scheduling our job, built in the following static block.
+     */
     static final JobInfo JOB_INFO;
 
+    /*
+     * Builds a JobInfo for our field JOB_INFO. We initialize 'JobInfo.Builder builder' with a new
+     * instance with a job id of PHOTOS_CONTENT_JOB (2) with the class of PhotosContentJob designated
+     * as the endpoint that will receive the callback from the JobScheduler. We add a TriggerContentUri
+     * for EXTERNAL_CONTENT_URI (a Uri for "content://media/external/images/media") with the flag
+     * FLAG_NOTIFY_FOR_DESCENDANTS (also triggers if any descendants of the given URI change). We also
+     * add a TriggerContentUri for MEDIA_URI ("content://media/") with no flags. Finally we build
+     * 'builder' and use the JobInfo it creates to initialize JOB_INFO
+     */
     static {
         JobInfo.Builder builder = new JobInfo.Builder(JobIds.PHOTOS_CONTENT_JOB,
                 new ComponentName("com.example.android.apis", PhotosContentJob.class.getName()));
@@ -76,17 +100,48 @@ public class PhotosContentJob extends JobService {
     }
 
     // Fake job work.  A real implementation would do some work on a separate thread.
+    /**
+     * {@code Handler} we use to delay our work by 10 seconds so we can see batching happen.
+     */
     final Handler mHandler = new Handler();
+    /**
+     * {@code Runnable} which does all our "work" after a ten second delay
+     */
     final Runnable mWorker = new Runnable() {
-        @Override public void run() {
+        /**
+         * When an object implementing interface <code>Runnable</code> is used to create a thread,
+         * starting the thread causes the object's <code>run</code> method to be called in that
+         * separately executing thread. We call our method {@code scheduleJob} to schedule this
+         * {@code PhotosContentJob} to run, then we call the {@code jobFinished} to inform the
+         * JobScheduler that the job has finished its work, with false as the wants reschedule
+         * to specify that we do not want the job rescheduled.
+         */
+        @Override
+        public void run() {
             scheduleJob(PhotosContentJob.this);
             jobFinished(mRunningParams, false);
         }
     };
 
+    /**
+     * {@code JobParameters} passed to our {@code onStartJob} override, used to retrieve information
+     * about which content authorities have triggered the job, and to identify the job when calling
+     * {@code jobFinished}.
+     */
     JobParameters mRunningParams;
 
-    // Schedule this job, replace any existing one.
+    /**
+     * Called to Schedule a {@code PhotosContentJob} job to be executed, replacing any existing one.
+     * We initialize {@code JobScheduler js} with a handle to the system level service which has the
+     * class {@code JobScheduler.class}. We then use {@code js} to schedule the job described by the
+     * prebuilt {@code JobInfo JOB_INFO} and log the fact that we have scheduled the {@code PhotosContentJob}.
+     *
+     * @param context {@code Context} to use to access activity resources, {@code PhotosContentJob.this}
+     *                when called by the {@code Runnable mWorker}, and {@code MediaContentObserver.this}
+     *                when called by the {@code OnClickListener} {@code onClick} override of the UI
+     *                button with id R.id.schedule_media_job ("Schedule media job") in the
+     *                {@code MediaContentObserver} activity.
+     */
     public static void scheduleJob(Context context) {
         JobScheduler js = context.getSystemService(JobScheduler.class);
         //noinspection ConstantConditions
@@ -94,7 +149,20 @@ public class PhotosContentJob extends JobService {
         Log.i("PhotosContentJob", "JOB SCHEDULED!");
     }
 
-    // Check whether this job is currently scheduled.
+    /**
+     * Called to determine if there is currently a job with id {@code JobIds.PHOTOS_CONTENT_JOB} in
+     * the list of all jobs that have been scheduled by our application. First we initialize our
+     * variable {@code JobScheduler js} with a handle to the system level service whose class is
+     * {@code JobScheduler.class}. We use {@code js} to initialize {@code List<JobInfo> jobs} with
+     * the list of all jobs that have been scheduled by our application. If this is null we return
+     * false to the caller. Otherwise we loop over i for all the {@code JobInfo} objects in {@code jobs}
+     * returning true if the job id of the i'th entry is {@code JobIds.PHOTOS_CONTENT_JOB}. If none of
+     * the jobs in {@code jobs} match we return false to the caller.
+     *
+     * @param context {@code Context} to use to get a handle to the {@code JobScheduler}.
+     * @return true if there is a job with id {@code JobIds.PHOTOS_CONTENT_JOB} (ours) in the list of
+     * all jobs that have been scheduled by our application.
+     */
     public static boolean isScheduled(Context context) {
         JobScheduler js = context.getSystemService(JobScheduler.class);
         //noinspection ConstantConditions
@@ -111,13 +179,77 @@ public class PhotosContentJob extends JobService {
         return false;
     }
 
-    // Cancel this job, if currently scheduled.
+    /**
+     * Called to cancel the job with id {@code JobIds.PHOTOS_CONTENT_JOB} (ours). First we initialize
+     * our variable {@code JobScheduler js} with a handle to the system level service whose class is
+     * {@code JobScheduler.class}, then use it to cancel the job with id {@code JobIds.PHOTOS_CONTENT_JOB}.
+     *
+     * @param context {@code Context} to use to get a handle to the {@code JobScheduler}.
+     */
     public static void cancelJob(Context context) {
         JobScheduler js = context.getSystemService(JobScheduler.class);
         //noinspection ConstantConditions
         js.cancel(JobIds.PHOTOS_CONTENT_JOB);
     }
 
+    /**
+     * Called to indicate that the job has begun executing. Override this method with the logic for
+     * your job. Like all other component lifecycle callbacks, this method executes on your application's
+     * main thread.
+     * <p>
+     * Return {@code true} from this method if your job needs to continue running. If you do this,
+     * the job remains active until you call {@link #jobFinished(JobParameters, boolean)} to tell
+     * the system that it has completed its work, or until the job's required constraints are no
+     * longer satisfied.
+     * <p>
+     * The system holds a wakelock on behalf of your app as long as your job is executing.
+     * This wakelock is acquired before this method is invoked, and is not released until either
+     * you call {@link #jobFinished(JobParameters, boolean)}, or after the system invokes
+     * {@link #onStopJob(JobParameters)} to notify your job that it is being shut down
+     * prematurely.
+     * <p>
+     * Returning {@code false} from this method means your job is already finished.  The
+     * system's wakelock for the job will be released, and {@link #onStopJob(JobParameters)}
+     * will not be invoked.
+     * <p>
+     * First we log the fact that our PhotosContentJob has started, then we save our parameters in our
+     * field {@code JobParameters mRunningParams}. We initialize {@code StringBuilder sb} with a new
+     * instance. If the list of content authorities that have triggered our job is null we just append
+     * the string "(No photos content)" to {@code sb}. If it is not null we initialize our flag
+     * {@code boolean rescanNeeded} to false (this flag if true is used to flag the fact that the data
+     * that we read from our parameter {@code JobParameters params} suggest that to properly list the
+     * content changes will require a rescan of the photos, in which case we append the string "Photos
+     * rescan needed!" to {@code sb}). If the list of URIs that have triggered the job returned by the
+     * {@code getTriggeredContentUris} method of {@code params} is not null we want to iterate through
+     * them and collect either the ids that were impacted or note that a generic change has happened,
+     * so we initialize {@code ArrayList<String> ids} with a new instance then for each {@code Uri uri}
+     * in the list of URIs that have triggered the job returned by the {@code getTriggeredContentUris}
+     * method of {@code params} we initialize {@code List<String> path} with the decoded path segments
+     * of {@code uri}, each without a leading or trailing '/'. If {@code path} is not null and its size
+     * is one more than the size of EXTERNAL_PATH_SEGMENTS then the last entry in {@code path} is a
+     * filename so we add that last entry to our list {@code ids}, otherwise there is some general
+     * change in the photos so we set {@code rescanNeeded} to true.
+     * <p>
+     * When done processing the changed URIs in {@code params}, we check if the size of {@code ids}
+     * is greater than 0 (we found some ids that changed), and if so we proceed to determine what they
+     * are. To do this we initialize {@code StringBuilder selection} with a new instance then loop over
+     * i for all the entries in {@code ids} first appending the string " OR " to {@code selection} following
+     * every selection clause in {@code selection} (by skipping this if the size of {@code selection}
+     * is 0). We then append the string "_id" followed by the string "='" followed by the i'th entry
+     * in {@code ids} followed by the string "'" (forming a selection query like _id='88').
+     * <p>
+     * When done forming our selection string in {@code selection} we initialize {@code Cursor cursor}
+     * to null and {@code boolean haveFiles} to false. Then wrapped in a try block intended to catch
+     * SecurityException, and whose finally block closes {@code Cursor cursor} if it is not null we:
+     * 
+     *
+     * @param params Parameters specifying info about this job, including the optional
+     *     extras configured with {@link JobInfo.Builder#setExtras(android.os.PersistableBundle).
+     *     This object serves to identify this specific running job instance when calling
+     *     {@link #jobFinished(JobParameters, boolean)}.
+     * @return {@code true} if your service will continue running, using a separate thread
+     *     when appropriate. {@code false} means that this job has completed its work.
+     */
     @Override
     public boolean onStartJob(JobParameters params) {
         Log.i("PhotosContentJob", "JOB STARTED!");
@@ -217,4 +349,3 @@ public class PhotosContentJob extends JobService {
         return false;
     }
 }
-//END_INCLUDE(job)

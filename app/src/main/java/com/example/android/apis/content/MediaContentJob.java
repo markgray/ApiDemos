@@ -162,7 +162,31 @@ public class MediaContentJob extends JobService {
      * system's wakelock for the job will be released, and {@link #onStopJob(JobParameters)}
      * will not be invoked.
      * <p>
-     * First we log the fact that our MediaContentJob has started.
+     * First we log the fact that our MediaContentJob has started, then we save our parameters in our
+     * field {@code JobParameters mRunningParams}. We initialize {@code StringBuilder sb} with a new
+     * instance and append the string "Media content has changed:\n" to it. We then branch on whether
+     * the {@code getTriggeredContentAuthorities} method of {@code params} is null or not (list of
+     * which content authorities have triggered this job):
+     * <ul>
+     *     <li>
+     *         not null: we append the string "Authorities: " to {@code sb}, and initialize
+     *         {@code boolean first} to true. Then for each {@code String auth} in the list of
+     *         strings returned by the {@code getTriggeredContentAuthorities} method of {@code params}:
+     *         If {@code first} is true we set it to false, if it is false we append ", " to
+     *         {@code sb} then append {@code auth} to {@code sb}. When done with the list of content
+     *         authorities that triggered us we check whether the {@code getTriggeredContentUris}
+     *         method of {@code params} is not null (returns which URIs have triggered this job), and
+     *         if it is not we loop through the {@code Uri uri} in the list of {@code Uri} returned
+     *         by {@code getTriggeredContentUris} appending a newline followed by the string value
+     *         or {@code uri} to {@code sb}.
+     *     </li>
+     *     <li>
+     *         null: we append the string "(No content)" to {@code sb}
+     *     </li>
+     * </ul>
+     * We now toast a message containing {@code sb} converted to a string, and log it as well, then
+     * add {@code Runnable mWorker} to the queue of {@code Handler mHandler} to be run after a delay
+     * of 10 seconds. Finally we return true to indicate that our service will continue running.
      *
      * @param params Parameters specifying info about this job, including the optional
      *     extras configured with {@link JobInfo.Builder#setExtras(android.os.PersistableBundle).
@@ -204,6 +228,18 @@ public class MediaContentJob extends JobService {
         return true;
     }
 
+    /**
+     * This method is called if the system has determined that you must stop execution of your job
+     * even before you've had a chance to call {@link #jobFinished(JobParameters, boolean)}. We
+     * remove any pending posts of {@code Runnable mWorker} from the queue of {@code Handler mHandler}
+     * and return false to end our job entirely.
+     *
+     * @param params The parameters identifying this job, as supplied to
+     *               the job in the {@link #onStartJob(JobParameters)} callback.
+     * @return {@code true} to indicate to the JobManager whether you'd like to reschedule
+     * this job based on the retry criteria provided at job creation-time; or {@code false}
+     * to end the job entirely.  Regardless of the value returned, your job must stop executing.
+     */
     @Override
     public boolean onStopJob(JobParameters params) {
         mHandler.removeCallbacks(mWorker);
