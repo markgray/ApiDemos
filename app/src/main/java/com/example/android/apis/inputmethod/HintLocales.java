@@ -41,9 +41,18 @@ public class HintLocales extends Activity {
      * Creates a new instance of {@link EditText} that is configured to specify the given
      * {@link LocaleList} to {@link android.view.inputmethod.EditorInfo#hintLocales} so that
      * developers can locally test how the current input method behaves for the given hint locales.
-     *
-     * <p><b>Note:</b> {@link android.view.inputmethod.EditorInfo#hintLocales} is just a hint for
-     * the input method. IME developers can decide how to use it.</p>
+     * <p>
+     * <b>Note:</b> {@link android.view.inputmethod.EditorInfo#hintLocales} is just a hint for
+     * the input method. IME developers can decide how to use it.
+     * <p>
+     * First we initialize {@code EditText exitText} with a new instance. If our parameter
+     * {@code LocaleList hintLocales} is null we set the text to be displayed when the text of the
+     * {@code exitText} is empty to the string "EditorInfo#hintLocales: (null)", otherwise we set
+     * that text to the string "EditorInfo#hintLocales: " concatenated to the String representation
+     * of the language tags in {@code LocaleList hintLocales}. We then call the {@code setImeHintLocales}
+     * method of {@code exitText} to change the "hint" locales associated with the text view to
+     * {@code hintLocales}, which will be reported to an IME with {@code EditorInfo.hintLocales}
+     * when it has focus. Finally we return {@code exitText} to the caller.
      *
      * @return A new instance of {@link EditText}, which specifies
      * {@link android.view.inputmethod.EditorInfo#hintLocales} with the given {@link LocaleList}.
@@ -66,6 +75,15 @@ public class HintLocales extends Activity {
         return exitText;
     }
 
+    /**
+     * Called when the activity is starting. First we call our super's implementation of {@code onCreate}.
+     * Then we initialize {@code LinearLayout layout} with a new instance and set its orientation to
+     * VERTICAL. We then proceed to add the views that our method {@code createEditTextWithImeHintLocales}
+     * creates for various {@code LocaleList} objects created by the {@code LocaleList.forLanguageTags}
+     * method to {@code layout}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
