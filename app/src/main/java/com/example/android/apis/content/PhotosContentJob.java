@@ -241,7 +241,7 @@ public class PhotosContentJob extends JobService {
      * When done forming our selection string in {@code selection} we initialize {@code Cursor cursor}
      * to null and {@code boolean haveFiles} to false. Then wrapped in a try block intended to catch
      * SecurityException, and whose finally block closes {@code Cursor cursor} if it is not null we:
-     * 
+     *
      *
      * @param params Parameters specifying info about this job, including the optional
      *     extras configured with {@link JobInfo.Builder#setExtras(android.os.PersistableBundle).
@@ -296,6 +296,7 @@ public class PhotosContentJob extends JobService {
                     // the items to determine if they are ones we are interested in.
                     Cursor cursor = null;
                     boolean haveFiles = false;
+                    //noinspection TryFinallyCanBeTryWithResources
                     try {
                         cursor = getContentResolver().query(
                                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
