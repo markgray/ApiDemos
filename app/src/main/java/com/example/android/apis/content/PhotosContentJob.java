@@ -241,7 +241,29 @@ public class PhotosContentJob extends JobService {
      * When done forming our selection string in {@code selection} we initialize {@code Cursor cursor}
      * to null and {@code boolean haveFiles} to false. Then wrapped in a try block intended to catch
      * SecurityException, and whose finally block closes {@code Cursor cursor} if it is not null we:
-     *
+     * <ul>
+     *     <li>
+     *         We use a ContentResolver instance for our application's package to query the URI
+     *         EXTERNAL_CONTENT_URI ("content://media/external/images/media") for the projection
+     *         PROJECTION (the _ID and DATA columns) with the selection consisting of the string
+     *         value of {@code selection} with null for the selection arguments and null for the
+     *         sort order saving the {@code Cursor} returned in {@code cursor}.
+     *     </li>
+     *     <li>
+     *         We now loop while the {@code moveToNext} method of {@code cursor} returns true when
+     *         moving to the next row (false is returned if it is past the last entry). We initialize
+     *         {@code String dir} by retrieving the string in column PROJECTION_DATA of {@code cursor}.
+     *         If {@code dir} starts with the string DCIM_DIR, we check if {@code haveFiles} is false
+     *         (first time through) and if so we set it to true and append the string "New photos:\n"
+     *         to {@code sb}. Then we append the string value of the int in column PROJECTION_ID of
+     *         {@code cursor} to {@code sb}, followed by the string ": ", followed by {@code dir}
+     *         followed by a newline, then loop back for the next row.
+     *     </li>
+     * </ul>
+     * After adding any filenames that have changed to {@code sb}, or adding text to the effect that
+     * we did not find any we toast the string value of {@code sb}, then add a delayed execution of
+     * {@code Runnable mWorker} to the queue of {@code Handler mHandler} we return true to the caller
+     * indicating that our service will continue running.
      *
      * @param params Parameters specifying info about this job, including the optional
      *     extras configured with {@link JobInfo.Builder#setExtras(android.os.PersistableBundle).
@@ -344,6 +366,18 @@ public class PhotosContentJob extends JobService {
         return true;
     }
 
+    /**
+     * This method is called if the system has determined that you must stop execution of your job
+     * even before you've had a chance to call {@link #jobFinished(JobParameters, boolean)}. We
+     * remove any pending posts of {@code Runnable mWorker} from the queue of {@code Handler mHandler}
+     * and return false to end our job entirely.
+     *
+     * @param params The parameters identifying this job, as supplied to
+     *               the job in the {@link #onStartJob(JobParameters)} callback.
+     * @return {@code true} to indicate to the JobManager whether you'd like to reschedule
+     * this job based on the retry criteria provided at job creation-time; or {@code false}
+     * to end the job entirely.  Regardless of the value returned, your job must stop executing.
+     */
     @Override
     public boolean onStopJob(JobParameters params) {
         mHandler.removeCallbacks(mWorker);

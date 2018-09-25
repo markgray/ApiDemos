@@ -966,6 +966,13 @@ Content
             deleted since a certain time. Layout is created by java code, includes instructive
             use of a ListView to contain the results of the Cursor queries.
 
+    Content/Provider/Media Content Observer v24
+    .content.MediaContentObserver
+    .content.MediaContentJob
+    .content.PhotosContentJob
+            Shows how to use a JobService and TriggerContentUri to monitor when there is a 
+            change detected by the media provider.
+
     Content/Provider/Pick Contact          all
         .content.PickContact
             Demonstrates launching the contacts app to pick a contact.  Does not require
