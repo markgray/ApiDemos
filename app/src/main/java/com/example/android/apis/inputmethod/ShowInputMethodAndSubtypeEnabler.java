@@ -131,7 +131,13 @@ public class ShowInputMethodAndSubtypeEnabler extends Activity {
     }
 
     /**
-     * Returns a list of all {@code InputMethodInfo} on the device with more than one subtype.
+     * Returns a list of all {@code InputMethodInfo} on the device with more than one subtype. First
+     * we initialize {@code InputMethodManager imm} with a handle to the system level service
+     * INPUT_METHOD_SERVICE, and initialize {@code List<InputMethodInfo> result} with a new instance.
+     * If {@code imm} is null we return {@code result}. Otherwise for all {@code InputMethodInfo imi}
+     * in the list of {@code InputMethodInfo} returned by the {@code getEnabledInputMethodList} method
+     * of {@code imm}  we add {@code imi} to {@code result}. When done we return {@code result} to the
+     * caller.
      *
      * @return list of all {@code InputMethodInfo} with more than one subtype.
      */

@@ -1902,6 +1902,18 @@ ImageView
             android:layout_width, android:layout_height, android:maxWidth, and 
             android:maxHeight and other attributes of ImageView.
 
+Input Method
+    Views/Input Method/HintLocales         v24
+         .view.HintLocales
+             Provide some EditText with specifying android.view.inputmethod.EditorInfo.hintLocales
+             so that IME developers can test their IMEs.
+
+    Views/Input Method/ShowInputMethodAndSubtypeEnabler  v24
+         .view.ShowInputMethodAndSubtypeEnabler
+             Demonstrates how to show the input method subtype enabler without relying on
+             InputMethodManager.showInputMethodAndSubtypeEnabler(String), which is highly 
+             likely to be broken.
+
 Layout Animation
     Views/Layout Animation/1. Grid Fade    all
         .view.LayoutAnimation1
