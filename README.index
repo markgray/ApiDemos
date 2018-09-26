@@ -2129,7 +2129,7 @@ Layouts
             (EditText is hard to read because of background color -- please fix.)
             TODO: Change background or text color so it can be read especially for Excite 10.
 
-  RelativeLayout
+ RelativeLayout
     Views/Layouts/RelativeLayout/1. Vertical  --all
         .view.RelativeLayout1
             A simple layout which demonstrates stretching a view to fill the space
@@ -2358,7 +2358,16 @@ Lists
             changes when activated. Uses getListView().setItemChecked in onCreate
             to start with first item activated.
 
-Popup Menu
+    Views/Number Picker                   all
+         .view.NumberPickerActivity
+             Demonstrates how to use a NumberPicker
+
+    Views/Pointer shapes v24
+        .view.PointerShapes
+        .view.LivePointerIconButton
+            A gallery of the different pointer icons, crashes TODO: find out why
+
+ Popup Menu
     Views/Popup Menu                       all -- v11+ or crash
         .view.PopupMenu1
             This demonstrates the use of the PopupMenu class. Clicking the button will
