@@ -1734,10 +1734,22 @@ Controls
             Uses .view.Controls1 with android:theme="@android:style/Theme.Holo" set in
             AndroidManifest.xml
 
+    Views/Controls/5. Material Light Theme v24
+        .view.ControlsMaterialLight
+            Uses layout/controls_material.xml with android:theme="@android:style/Theme.Material.Light" 
+            set in AndroidManifest.xml which contains more advanced controls than used in old
+            version.
+
     Views/Controls/5. Material Light Theme v20
         .view.Controls5
             Uses .view.Controls1 with android:theme="@android:style/Theme.Material.Light"
             set in AndroidManifest.xml
+
+    Views/Controls/6. Material Dark Theme v24
+         .view.ControlsMaterialLight
+         .view.ControlsMaterialDark
+             Extends ControlsMaterialLight with android:theme="@android:style/Theme.Material"
+             set in AndroidManifest.xml
 
     Views/Controls/6. Material Dark Theme  v20
         .view.Controls6

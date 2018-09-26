@@ -2859,6 +2859,29 @@
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".view.ControlsMaterialLight"
+            android:label="Views/Controls/5. Material Light Theme"
+            android:theme="@android:style/Theme.Material.Light"
+            android:enabled="@bool/atLeastLRelease"
+            tools:targetApi="lollipop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".view.ControlsMaterialDark"
+            android:label="Views/Controls/6. Material Dark Theme"
+            android:theme="@android:style/Theme.Material"
+            android:enabled="@bool/atLeastLRelease"
+            tools:targetApi="lollipop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".view.Controls5"
             android:enabled="@bool/atLeastLRelease"
