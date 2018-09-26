@@ -38,13 +38,28 @@ import com.example.android.apis.R;
 /**
  * Demonstrates the display of overlay windows, i.e. windows that are drawn on top of other apps.
  */
-
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class OverlayWindowActivity extends Activity {
 
+    /**
+     * Request code we use when we have settings app ask the user's permission to use overlays.
+     */
     private static int MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 1;
+    /**
+     * {@code TextView} which we used as our overlay view, saved so we can {@code removeView} it.
+     */
     private View mOverlayView;
 
+    /**
+     * Called when the activity is starting. First we call our super's implementation of {@code onCreate},
+     * then we set our content view to our layout file R.layout.overlay_window. We initialize
+     * {@code Button button} by finding the view with id R.id.show_overlay ("Show Overlay") and set
+     * its {@code OnClickListener} to {@code mShowOverlayListener}, then set {@code button} by finding
+     * the view with id R.id.hide_overlay ("Hide Overlay") and set its {@code OnClickListener} to
+     * {@code mHideOverlayListener}.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +72,9 @@ public class OverlayWindowActivity extends Activity {
         button.setOnClickListener(mHideOverlayListener);
     }
 
+    /**
+     * {@code OnClickListener} for the button with id R.id.show_overlay ("Show Overlay")
+     */
     private OnClickListener mShowOverlayListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
