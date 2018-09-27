@@ -16,10 +16,8 @@
 
 <!-- Lots of buttons = might need scrolling -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:targetApi="n" >
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -190,6 +188,13 @@
               android:layout_height="wrap_content"
               android:text="@string/pointer_type_none"
               android:pointerIcon="none" />
+
+          <Button
+              android:id="@+id/pointer_type_view_custom"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/pointer_type_custom_resource"
+              android:pointerIcon="@drawable/custom_pointer_icon" />
 
           <com.example.android.apis.view.ResourcePointerIconButton
             android:layout_width="wrap_content"
