@@ -73,9 +73,24 @@ public class OverlayWindowActivity extends Activity {
     }
 
     /**
-     * {@code OnClickListener} for the button with id R.id.show_overlay ("Show Overlay")
+     * {@code OnClickListener} for the button with id R.id.show_overlay ("Show Overlay"), its
+     * {@code onClick} override calls our {@code drawOverlay} method to show the overlay if we
+     * have permission to draw overlays, otherwise it launches the settings app to ask the user
+     * for those permissions.
      */
     private OnClickListener mShowOverlayListener = new OnClickListener() {
+        /**
+         * Called when our view has been clicked. If the {@code canDrawOverlays} method of {@code Settings}
+         * returns true (the user has granted our activity permission to draw on top of other apps), we
+         * call our method {@code drawOverlay} to draw our overlay window. Otherwise we need to ask the
+         * user, so we initialize {@code Intent intent} with a new instance with the settings action
+         * ACTION_MANAGE_OVERLAY_PERMISSION (Show screen for controlling which apps can draw on top of
+         * other app) with an Uri parsed from the string "package:" and our app's package name (it
+         * resolves as: "package:com.example.android.apis"). We then start the activity of {@code intent}
+         * for a result using MANAGE_OVERLAY_PERMISSION_REQUEST_CODE as the request code.
+         *
+         * @param view The view that was clicked.
+         */
         @Override
         public void onClick(View view) {
             if (Settings.canDrawOverlays(OverlayWindowActivity.this)) {
@@ -89,6 +104,12 @@ public class OverlayWindowActivity extends Activity {
         }
     };
 
+    /**
+     * {@code OnClickListener} for the button with id R.id.hide_overlay ("Hide Overlay"), in its
+     * {@code onClick} override if {@code mOverlayView} is not null it initializes {@code WindowManager wm}
+     * by retrieving the window manager for showing custom windows, then calls its {@code removeView}
+     * method to remove {@code View mOverlayView} and sets {@code mOverlayView} to null.
+     */
     private OnClickListener mHideOverlayListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -102,7 +123,18 @@ public class OverlayWindowActivity extends Activity {
 
     /**
      * This is called after the user chooses whether they grant permission to the app to display
-     * overlays or not.
+     * overlays or not. If {@code requestCode} is MANAGE_OVERLAY_PERMISSION_REQUEST_CODE we check
+     * whether the user granted permission to draw overlays by calling the {@code canDrawOverlays}
+     * method of {@code Settings} and if so we call our method {@code drawOverlay} to draw our
+     * overlay window.
+     *
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult(). UNUSED
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras"). UNUSED
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -114,6 +146,32 @@ public class OverlayWindowActivity extends Activity {
         }
     }
 
+    /**
+     * Called to draw an overlay window. If our field {@code View mOverlayView} there is already an
+     * overlay being shown so we return having done nothing. Otherwise we initialize {@code TextView textView}
+     * with a new instance, set its text to the string "I'm an overlay", set its background color to WHITE,
+     * set its text color to BLACK, and set its padding to 10 pixels on every side. We initialize
+     * {@code WindowManager wm} by retrieving the window manager for showing custom windows, and initialize
+     * {@code LayoutParams params} with a new instance. If the SDK version of the software currently running
+     * on this hardware device is greater than or equal to "O" (v26) we set the {@code type} field of
+     * {@code params} to TYPE_APPLICATION_OVERLAY (Window type: Application overlay windows are displayed
+     * above all activity windows (types between {@code FIRST_APPLICATION_WINDOW} and {@code LAST_APPLICATION_WINDOW})
+     * but below critical system windows like the status bar or IME), otherwise we set it to TYPE_PHONE
+     * (Window type: phone.  These are non-application windows providing user interaction with the phone
+     * (in particular incoming calls). These windows are normally placed above all applications, but behind
+     * the status bar). We then set the {@code flags} field of {@code params} to bitwise or of FLAG_NOT_FOCUSABLE
+     * (this window won't ever get key input focus, so the user can not send key or other button events to it),
+     * FLAG_NOT_TOUCH_MODAL (even when this window is focusable allow any pointer events outside of the window
+     * to be sent to the windows behind it), and FLAG_WATCH_OUTSIDE_TOUCH (if you have set FLAG_NOT_TOUCH_MODAL,
+     * you can set this flag to receive a single special MotionEvent with the action ACTION_OUTSIDE for
+     * touches that occur outside of your window). We set the {@code format} field of {@code params} to
+     * TRANSPARENT (system chooses a format that supports transparency (at least 1 alpha bit)). Set both its
+     * {@code width} and {@code height} fields to WRAP_CONTENT. We set the {@code gravity} field of {@code params}
+     * to the bitwise or of TOP and RIGHT (snap to the upper right corner of the screen), and set its
+     * {@code x} and {@code y} fields both to 10 (position relative to upper right corner). We then use the
+     * {@code addView} method of {@code wm} to add {@code textView} to our window using {@code params} as
+     * the LayoutParams to assign to the view. Finally we save {@code textView} in our field {@code mOverlayView}.
+     */
     @SuppressLint({"SetTextI18n", "RtlHardcoded"})
     private void drawOverlay() {
         if (mOverlayView != null) {
