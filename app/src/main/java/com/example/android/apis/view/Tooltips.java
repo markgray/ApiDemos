@@ -24,11 +24,21 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 
 /**
- * A demo for tooltips
+ * A demo for tooltips, it is implemented almost entirely in the layout file layout/tooltips.xml using
+ * the android:tooltipText attribute for the views, but the {@code TextView} with id R.id.tooltips_code
+ * has its tooltip set using its {@code setTooltipText} method in our {@code onCreate} override.
  */
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Tooltips extends Activity {
 
+    /**
+     * Called when the activity is starting. First we call our super's implementation of {@code onCreate},
+     * then we set our content view to our layout file R.layout.tooltips. We find the view in our layout
+     * file with id R.id.tooltips_code and call its {@code setTooltipText} method to set its tooltip text
+     * to the string "This tooltip is set in code".
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
