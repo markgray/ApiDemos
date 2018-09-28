@@ -517,8 +517,10 @@ App
             has android:windowShowWallpaper = "true".
 
   Alarm
-    App/Alarm/Alarm Controller             all
+    App/Alarm/Alarm Controller             v23
         .app.AlarmController
+        .app.OneShotAlarm
+        .app.RepeatingAlarm
             Shows how to schedule both one-shot alarms (OneShotAlarm.java), and repeating
             alarms (RepeatingAlarm.java) using AlarmManager.set() for one-shot and 
             AlarmManager.setRepeating() for the repeating alarm. OneShotAlarm and RepeatingAlarm

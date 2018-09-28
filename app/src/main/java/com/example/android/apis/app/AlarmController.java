@@ -25,8 +25,10 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.SystemClock;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -64,19 +66,38 @@ App/Service/Alarm Controller
 </table>
 
  */
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class AlarmController extends Activity {
-    Toast mToast; // Toast instance latest Toast
+    /**
+     * Latest Toast we have shown.
+     */
+    Toast mToast;
 
     /**
-     * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, then we set our content view to our layout file R.layout.alarm_controller. Next we
-     * locate the three Button's in our layout and set their OnClickListener's as follows:
+     * Called when the activity is starting. First we call our super's implementation of {@code onCreate},
+     * then we set our content view to our layout file R.layout.alarm_controller. Next we find the three
+     * buttons in our layout by their id and set their {@code OnClickListener} as follows:
+     * <ul>
+     *     <li>
+     *         R.id.one_shot ("One Shot Alarm") set to {@code OnClickListener mOneShotListener}, its
+     *         {@code onClick} override will call {@code AlarmManager.set} for this button id.
+     *     </li>
+     *     <li>
+     *         R.id.one_shot_while_idle ("One Shot While-Idle Alarm") set to {@code OnClickListener mOneShotListener},
+     *         its {@code onClick} override will call {@code AlarmManager.setExactAndAllowWhileIdle} for this button id.
+     *     </li>
+     *     <li>
+     *         R.id.start_repeating ("Start Repeating Alarm") set to {@code OnClickListener mStartRepeatingListener},
+     *         its {@code onClick} override will call {@code AlarmManager.setRepeating}
+     *     </li>
+     *     <li>
+     *         R.id.stop_repeating ("Stop Repeating Alarm") set to {@code OnClickListener mStopRepeatingListener},
+     *         its {@code onClick} override will call {@code AlarmManager.cancel} for the {@code PendingIntent}
+     *         started by the "Start Repeating Alarm" button.
+     *     </li>
+     * </ul>
      *
-     *   R.id.one_shot "ONE SHOT ALARM" is set to OnClickListener mOneShotListener
-     *   R.id.start_repeating "START REPEATING ALARM" is set to OnClickListener mStartRepeatingListener
-     *   R.id.stop_repeating "STOP REPEATING ALARM" is set to OnClickListener mStopRepeatingListener
-     *
-     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,32 +106,50 @@ public class AlarmController extends Activity {
         setContentView(R.layout.alarm_controller);
 
         // Watch for button clicks.
-        Button button = (Button)findViewById(R.id.one_shot);
+        Button button = findViewById(R.id.one_shot);
         button.setOnClickListener(mOneShotListener);
-        button = (Button)findViewById(R.id.start_repeating);
+        button = findViewById(R.id.one_shot_while_idle);
+        button.setOnClickListener(mOneShotListener);
+        button = findViewById(R.id.start_repeating);
         button.setOnClickListener(mStartRepeatingListener);
-        button = (Button)findViewById(R.id.stop_repeating);
+        button = findViewById(R.id.stop_repeating);
         button.setOnClickListener(mStopRepeatingListener);
     }
 
     /**
-     * OnClickListener for Button R.id.one_shot "ONE SHOT ALARM"
+     * {@code OnClickListener} used for buttons R.id.one_shot ("One Shot Alarm") and R.id.one_shot_while_idle
+     * ("One Shot While-Idle Alarm"), its {@code onClick} override switches on the id of the view that
+     * triggered it to differentiate.
      */
     private OnClickListener mOneShotListener = new OnClickListener() {
         /**
-         * Called when the R.id.one_shot Button is clicked. We create an Intent to launch our
-         * BroadcastReceiver OneShotAlarm. Then we create a PendingIntent sender that will perform
-         * a broadcast. We create a Calendar calendar, set its current time to the current time in
-         * milliseconds, and add 30 seconds to this calendar. Then we create an AlarmManager am, and
-         * use it to schedule an alarm of type RTC_WAKEUP which will wake up the device when it goes
-         * off, set to trigger at Calendar calendar, and using PendingIntent sender as the action to
-         * perform when the alarm goes off. Then we make sure any previous Toast mToast has been
-         * cancelled, and show a Toast mToast stating:
+         * Called when our view has been clicked. We initialize {@code Intent intent} with an instance
+         * intended for the {@code BroadcastReceiver} with the class {@code OneShotAlarm.class}, then
+         * initialize {@code PendingIntent sender} with an instance that will perform a broadcast of
+         * {@code intent} using the request code of 0, and no flags. We initialize {@code Calendar calendar}
+         * with a new instance, set its time to the current time in milliseconds, then add 30 seconds to
+         * it. We initialize {@code AlarmManager am} with a handle to the ALARM_SERVICE system level service.
+         * We then switch on the id of our parameter {@code View view}:
+         * <ul>
+         *     <li>
+         *         R.id.one_shot: ("One Shot Alarm" button) we call the {@code set} method of {@code am}
+         *         to schedule an RTC_WAKEUP alarm (wall clock time in UTC which will wake up the device
+         *         when it goes off) to fire at the time in milliseconds of {@code calendar} when it will
+         *         broadcast {@code sender}.
+         *     </li>
+         *     <li>
+         *         default: ("One Shot While-Idle Alarm" button in our case) we call the {@code setExactAndAllowWhileIdle}
+         *         method of {@code am} to schedule an RTC_WAKEUP alarm (wall clock time in UTC which will wake up the device
+         *         when it goes off) to fire at the time in milliseconds of {@code calendar} when it will broadcast {@code sender}.
+         *         This is like the call to {@code AlarmManager.set} but is also allowed even when the system is in low-power
+         *         idle modes.
+         *     </li>
+         * </ul>
+         * If our field {@code Toast mToast} is not null we cancel it. We then set {@code mToast} to
+         * an instance that will display the string with id R.string.one_shot_scheduled ("One-shot alarm
+         * will go off in 30 seconds...") and show it to the user.
          *
-         *   One-shot alarm will go off in 30 seconds based on the real time clock.
-         *   Try changing the current time before then!
-         *
-         * @param v View of Button that was clicked.
+         * @param v The view that was clicked.
          */
         @Override
         public void onClick(View v) {
@@ -130,40 +169,51 @@ public class AlarmController extends Activity {
 
             // Schedule the alarm!
             AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-            am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+
+            switch (v.getId()) {
+                case R.id.one_shot:
+                    //noinspection ConstantConditions
+                    am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+                    break;
+                default:
+                    //noinspection ConstantConditions
+                    am.setExactAndAllowWhileIdle(
+                            AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+                    break;
+            }
 
             // Tell the user about what we did.
             if (mToast != null) {
                 mToast.cancel();
             }
-            mToast = Toast.makeText(AlarmController.this, R.string.one_shot_scheduled,
-                    Toast.LENGTH_LONG);
+            mToast = Toast.makeText(AlarmController.this, R.string.one_shot_scheduled, Toast.LENGTH_LONG);
             mToast.show();
         }
     };
 
     /**
-     * OnClickListener for Button R.id.start_repeating "START REPEATING ALARM"
+     * {@code OnClickListener} used for the button R.id.start_repeating ("Start Repeating Alarm")
+     *
      */
-    @SuppressLint("ShortAlarm")
     private OnClickListener mStartRepeatingListener = new OnClickListener() {
         /**
-         * Called when the R.id.start_repeating Button is clicked. We create an Intent to launch our
-         * BroadcastReceiver RepeatingAlarm. Then we create a PendingIntent sender that will perform
-         * a broadcast. We fetch the milliseconds since boot, including time spent in sleep to our
-         * variable long firstTime and add 15 seconds to it. Then we create an AlarmManager am, and
-         * use it to schedule an alarm of type ELAPSED_REALTIME_WAKEUP (Alarm time to use is
-         * SystemClock.elapsedRealtime() (time since boot, including sleep), which will wake up the
-         * device when it goes off), set to trigger at firstTime and using PendingIntent sender as
-         * the action to perform when the alarm goes off. Then we make sure any previous Toast mToast
-         * has been cancelled, and show a Toast mToast stating:
+         * Called when the button with id R.id.start_repeating ("Start Repeating Alarm") is clicked.
+         * We initialize {@code Intent intent} with an instance intended for the {@code BroadcastReceiver}
+         * with the class {@code RepeatingAlarm.class}, then initialize {@code PendingIntent sender}
+         * with an instance that will perform a broadcast of {@code intent} using the request code of 0,
+         * and no flags. We initialize {@code long firstTime} with the milliseconds since boot then add
+         * 15,000 to it. We initialize {@code AlarmManager am} with a handle to the ALARM_SERVICE system
+         * level service, then call its {@code setRepeating} method to schedule a repeating alarm of type
+         * ELAPSED_REALTIME_WAKEUP (time since boot, including sleep, which will wake up the device when
+         * it goes off) which will first go off at {@code firstTime} then again at 15 second intervals
+         * broadcasting {@code sender} to its {@code BroadcastReceiver}. If our field {@code Toast mToast}
+         * is not null we cancel it. We then set {@code mToast} to an instance that will display the string
+         * with id R.string.repeating_scheduled ("Repeating alarm will go off in 15 seconds..") and show
+         * it to the user.
          *
-         *        Repeating alarm will go off in 15 seconds and every
-         *        15 seconds after based on the elapsed realtime clock
-         *
-         * @param v View of the Button that has been clicked.
+         * @param v {@code View} that was clicked.
          */
-        @Override
+        @SuppressLint("ShortAlarm")
         public void onClick(View v) {
             // When the alarm goes off, we want to broadcast an Intent to our
             // BroadcastReceiver.  Here we make an Intent with an explicit class
@@ -182,6 +232,7 @@ public class AlarmController extends Activity {
 
             // Schedule the alarm!
             AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+            //noinspection ConstantConditions
             am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                             firstTime, 15*1000, sender);
 
@@ -189,26 +240,28 @@ public class AlarmController extends Activity {
             if (mToast != null) {
                 mToast.cancel();
             }
-            mToast = Toast.makeText(AlarmController.this, R.string.repeating_scheduled,
-                    Toast.LENGTH_LONG);
+            mToast = Toast.makeText(AlarmController.this, R.string.repeating_scheduled, Toast.LENGTH_LONG);
             mToast.show();
         }
     };
 
     /**
-     * OnClickListener for Button R.id.stop_repeating "STOP REPEATING ALARM"
+     * {@code OnClickListener} used for the button R.id.stop_repeating ("Stop Repeating Alarm")
      */
     private OnClickListener mStopRepeatingListener = new OnClickListener() {
         /**
-         * Called when the R.id.stop_repeating Button is clicked. We create an Intent that is
-         * identical to the one used to start the repeating alarm, and a PendingIntent for a
-         * Broadcast of that Intent intent. Then we create an AlarmManager am, and use it to
-         * remove any alarms with an Intent matching PendingIntent sender. Then we make sure
-         * any previous Toast mToast has been cancelled, and show a Toast mToast stating:
+         * Called when the button with id R.id.stop_repeating ("Stop Repeating Alarm") is clicked.
+         * We initialize {@code Intent intent} with an instance intended for the {@code BroadcastReceiver}
+         * with the class {@code RepeatingAlarm.class}, then initialize {@code PendingIntent sender}
+         * with an instance that will perform a broadcast of {@code intent} using the request code of 0,
+         * and no flags. We initialize {@code AlarmManager am} with a handle to the ALARM_SERVICE system
+         * level service, then call its {@code cancel} method to remove any alarms with an {@link Intent}
+         * matching {@code sender} (the one we scheduled with the R.id.start_repeating ("Start Repeating Alarm")
+         * button in our case). If our field {@code Toast mToast} is not null we cancel it. We then set
+         * {@code mToast} to an instance that will display the string with id R.string.repeating_unscheduled
+         * ("Repeating alarm has been unscheduled") and show it to the user.
          *
-         *       Repeating alarm has been unscheduled
-         *
-         * @param v View of the Button that was clicked
+         * @param v {@code View} that was clicked.
          */
         @Override
         public void onClick(View v) {
@@ -220,14 +273,14 @@ public class AlarmController extends Activity {
             
             // And cancel the alarm.
             AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+            //noinspection ConstantConditions
             am.cancel(sender);
 
             // Tell the user about what we did.
             if (mToast != null) {
                 mToast.cancel();
             }
-            mToast = Toast.makeText(AlarmController.this, R.string.repeating_unscheduled,
-                    Toast.LENGTH_LONG);
+            mToast = Toast.makeText(AlarmController.this, R.string.repeating_unscheduled, Toast.LENGTH_LONG);
             mToast.show();
         }
     };
