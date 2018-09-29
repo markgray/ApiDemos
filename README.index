@@ -551,7 +551,7 @@ App
             returns. All this is very deprecated - TODO: Write a DialogFragment version.
 
   Device Admin
-    App/Device Admin                       Works only on newer versions(?) v23+ or crash
+    App/Device Admin                       Works only on newer versions(?) v24+ or crash
         .app.DeviceAdminSample
             Shows how to implement a comprehensive UI for exploring and operating the 
             DevicePolicyManager api. TODO: work up enough courage to play around with this (lem?)

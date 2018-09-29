@@ -17,7 +17,6 @@
 package com.example.android.apis.app;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.admin.DeviceAdminReceiver;
@@ -52,10 +51,10 @@ import java.util.List;
 /**
  * This activity provides a comprehensive UI for exploring and operating the DevicePolicyManager
  * api.  It consists of two primary modules:
- *
+ * <p>
  * 1:  A device policy controller, implemented here as a series of preference fragments.  Each
  *     one contains code to monitor and control a particular subset of device policies.
- *
+ * <p>
  * 2:  A DeviceAdminReceiver, to receive updates from the DevicePolicyManager when certain aspects
  *     of the device security status have changed.
  */
@@ -63,61 +62,194 @@ import java.util.List;
 public class DeviceAdminSample extends PreferenceActivity {
 
     // Miscellaneous utilities and definitions
+    /**
+     * TAG used for logging
+     */
     private static final String TAG = "DeviceAdminSample";
 
+    /**
+     * Request code used when starting the activity to have the user enable our admin.
+     */
     private static final int REQUEST_CODE_ENABLE_ADMIN = 1;
+    /**
+     * Request code used when starting the activity to activate encryption.
+     */
     private static final int REQUEST_CODE_START_ENCRYPTION = 2;
 
+    /**
+     * Number of milliseconds in a minute
+     */
     private static final long MS_PER_MINUTE = 60 * 1000;
+    /**
+     * Number of milliseconds in an hour
+     */
     private static final long MS_PER_HOUR = 60 * MS_PER_MINUTE;
+    /**
+     * Number of milliseconds in a day
+     */
     private static final long MS_PER_DAY = 24 * MS_PER_HOUR;
 
     // The following keys are used to find each preference item
+    /**
+     * android:key for the "Enable admin" CheckBoxPreference in the xml/device_admin_general.xml PreferenceScreen
+     */
     private static final String KEY_ENABLE_ADMIN = "key_enable_admin";
+    /**
+     * android:key for the "Disable all device cameras" CheckBoxPreference in the xml/device_admin_general.xml PreferenceScreen
+     */
     private static final String KEY_DISABLE_CAMERA = "key_disable_camera";
+    /**
+     * android:key for the "Disable keyguard notifications" CheckBoxPreference in the xml/device_admin_general.xml PreferenceScreen
+     */
     private static final String KEY_DISABLE_NOTIFICATIONS = "key_disable_notifications";
+    /**
+     * android:key for the "Disable keyguard unredacted notifications" CheckBoxPreference in the xml/device_admin_general.xml PreferenceScreen
+     */
     private static final String KEY_DISABLE_UNREDACTED = "key_disable_unredacted";
+    /**
+     * android:key for the "Disable keyguard Trust Agents" CheckBoxPreference in the xml/device_admin_general.xml PreferenceScreen
+     */
     private static final String KEY_DISABLE_TRUST_AGENTS = "key_disable_trust_agents";
+    /**
+     * android:key for the "Enabled Component Name" EditTextPreference in the xml/device_admin_general.xml PreferenceScreen
+     */
     private static final String KEY_TRUST_AGENT_COMPONENT = "key_trust_agent_component";
+    /**
+     * android:key for the "Enabled Features (comma-separated)" EditTextPreference in the xml/device_admin_general.xml PreferenceScreen
+     */
     private static final String KEY_TRUST_AGENT_FEATURES = "key_trust_agent_features";
+    /**
+     * android:key for the "Disable keyguard widgets" CheckBoxPreference in the xml/device_admin_general.xml PreferenceScreen
+     */
     private static final String KEY_DISABLE_KEYGUARD_WIDGETS = "key_disable_keyguard_widgets";
-    private static final String KEY_DISABLE_KEYGUARD_SECURE_CAMERA
-            = "key_disable_keyguard_secure_camera";
+    /**
+     * android:key for the "Disable keyguard secure camera" CheckBoxPreference in the xml/device_admin_general.xml PreferenceScreen
+     */
+    private static final String KEY_DISABLE_KEYGUARD_SECURE_CAMERA = "key_disable_keyguard_secure_camera";
+    /**
+     * android:key for the "Disable keyguard Fingerprint" CheckBoxPreference in the xml/device_admin_general.xml PreferenceScreen
+     */
     private static final String KEY_DISABLE_FINGERPRINT = "key_disable_fingerprint";
+    /**
+     * android:key for the "Disable keyguard Remote Input" CheckBoxPreference in the xml/device_admin_general.xml PreferenceScreen
+     */
     private static final String KEY_DISABLE_REMOTE_INPUT = "key_disable_remote_input";
 
+    /**
+     * android:key for the "Password quality" PreferenceCategory in the xml/device_admin_quality.xml PreferenceScreen
+     */
     private static final String KEY_CATEGORY_QUALITY = "key_category_quality";
+    /**
+     * android:key for the "Set password (user)" PreferenceScreen in the xml/device_admin_quality.xml PreferenceScreen
+     */
     private static final String KEY_SET_PASSWORD = "key_set_password";
+    /**
+     * android:key for the "Set password (via API)" EditTextPreference in the xml/device_admin_quality.xml PreferenceScreen
+     */
     private static final String KEY_RESET_PASSWORD = "key_reset_password";
+    /**
+     * android:key for the "Password quality" ListPreference in the xml/device_admin_quality.xml PreferenceScreen
+     */
     private static final String KEY_QUALITY = "key_quality";
+    /**
+     * android:key for the "Minimum length" EditTextPreference in the xml/device_admin_quality.xml PreferenceScreen
+     */
     private static final String KEY_MIN_LENGTH = "key_minimum_length";
+    /**
+     * android:key for the "Minimum letters" EditTextPreference in the xml/device_admin_quality.xml PreferenceScreen
+     */
     private static final String KEY_MIN_LETTERS = "key_minimum_letters";
+    /**
+     * android:key for the "Minimum numeric" EditTextPreference in the xml/device_admin_quality.xml PreferenceScreen
+     */
     private static final String KEY_MIN_NUMERIC = "key_minimum_numeric";
+    /**
+     * android:key for the "Minimum lower case" EditTextPreference in the xml/device_admin_quality.xml PreferenceScreen
+     */
     private static final String KEY_MIN_LOWER_CASE = "key_minimum_lower_case";
+    /**
+     * android:key for the "Minimum upper case" EditTextPreference in the xml/device_admin_quality.xml PreferenceScreen
+     */
     private static final String KEY_MIN_UPPER_CASE = "key_minimum_upper_case";
+    /**
+     * android:key for the "Minimum symbols" EditTextPreference in the xml/device_admin_quality.xml PreferenceScreen
+     */
     private static final String KEY_MIN_SYMBOLS = "key_minimum_symbols";
+    /**
+     * android:key for the "Minimum non-letter" EditTextPreference in the xml/device_admin_quality.xml PreferenceScreen
+     */
     private static final String KEY_MIN_NON_LETTER = "key_minimum_non_letter";
 
+    /**
+     * android:key for the "Password history / Expiration" PreferenceCategory in the xml/device_admin_expiration.xml PreferenceScreen
+     */
     private static final String KEY_CATEGORY_EXPIRATION = "key_category_expiration";
+    /**
+     * android:key for the "Password history depth" EditTextPreference in the xml/device_admin_expiration.xml PreferenceScreen
+     */
     private static final String KEY_HISTORY = "key_history";
+    /**
+     * android:key for the "Password expiration timeout (minutes)" EditTextPreference in the xml/device_admin_expiration.xml PreferenceScreen
+     */
     private static final String KEY_EXPIRATION_TIMEOUT = "key_expiration_timeout";
+    /**
+     * android:key for the "Password expiration status" PreferenceScreen in the xml/device_admin_expiration.xml PreferenceScreen
+     */
     private static final String KEY_EXPIRATION_STATUS = "key_expiration_status";
 
+    /**
+     * android:key for the "Lock screen / Wipe" PreferenceCategory in the xml/device_admin_lock_wipe.xml PreferenceScreen
+     */
     private static final String KEY_CATEGORY_LOCK_WIPE = "key_category_lock_wipe";
+    /**
+     * android:key for the "Max time to screen lock (minutes)" EditTextPreference in the xml/device_admin_lock_wipe.xml PreferenceScreen
+     */
     private static final String KEY_MAX_TIME_SCREEN_LOCK = "key_max_time_screen_lock";
+    /**
+     * android:key for the "Max password failures for local wipe" EditTextPreference in the xml/device_admin_lock_wipe.xml PreferenceScreen
+     */
     private static final String KEY_MAX_FAILS_BEFORE_WIPE = "key_max_fails_before_wipe";
+    /**
+     * android:key for the "Lock screen now" PreferenceScreen in the xml/device_admin_lock_wipe.xml PreferenceScreen
+     */
     private static final String KEY_LOCK_SCREEN = "key_lock_screen";
+    /**
+     * android:key for the "Wipe data" PreferenceScreen in the xml/device_admin_lock_wipe.xml PreferenceScreen
+     */
     private static final String KEY_WIPE_DATA = "key_wipe_data";
+    /**
+     * android:key for the "Wipe all data" PreferenceScreen in the xml/device_admin_lock_wipe.xml PreferenceScreen
+     */
     private static final String KEY_WIP_DATA_ALL = "key_wipe_data_all";
 
+    /**
+     * android:key for the "Encryption" PreferenceCategory in the xml/device_admin_encryption.xml PreferenceScreen
+     */
     private static final String KEY_CATEGORY_ENCRYPTION = "key_category_encryption";
+    /**
+     * android:key for the "Require encryption" CheckBoxPreference in the xml/device_admin_encryption.xml PreferenceScreen
+     */
     private static final String KEY_REQUIRE_ENCRYPTION = "key_require_encryption";
+    /**
+     * android:key for the "Activate encryption" PreferenceScreen in the xml/device_admin_encryption.xml PreferenceScreen
+     */
     private static final String KEY_ACTIVATE_ENCRYPTION = "key_activate_encryption";
 
     // Interaction with the DevicePolicyManager
+    /**
+     * Handle to the DEVICE_POLICY_SERVICE system level service.
+     */
     DevicePolicyManager mDPM;
+    /**
+     * {@code ComponentName} of the class of {@code DeviceAdminSampleReceiver}
+     */
     ComponentName mDeviceAdminSample;
 
+    /**
+     * Called when the PreferenceActivity is starting.
+     *
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -418,8 +550,6 @@ public class DeviceAdminSample extends PreferenceActivity {
             //noinspection ConstantConditions
             getView().post(new Runnable() {
                 @SuppressLint("NewApi")
-                @TargetApi(Build.VERSION_CODES.M)
-                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                 @Override
                 public void run() {
                     mDPM.setKeyguardDisabledFeatures(mDeviceAdminSample,
