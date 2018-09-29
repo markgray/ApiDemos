@@ -16,6 +16,7 @@
 
 package com.example.android.apis.app;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
@@ -39,6 +40,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -46,23 +48,22 @@ import android.widget.Toast;
 import com.example.android.apis.R;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This activity provides a comprehensive UI for exploring and operating the DevicePolicyManager
  * api.  It consists of two primary modules:
- * <p>
+ *
  * 1:  A device policy controller, implemented here as a series of preference fragments.  Each
- * one contains code to monitor and control a particular subset of device policies.
- * <p>
+ *     one contains code to monitor and control a particular subset of device policies.
+ *
  * 2:  A DeviceAdminReceiver, to receive updates from the DevicePolicyManager when certain aspects
- * of the device security status have changed.
+ *     of the device security status have changed.
  */
-@TargetApi(Build.VERSION_CODES.M)
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class DeviceAdminSample extends PreferenceActivity {
 
     // Miscellaneous utilities and definitions
-    private static final String TAG = "DeviceAdminSample"; // TAG used for logging
+    private static final String TAG = "DeviceAdminSample";
 
     private static final int REQUEST_CODE_ENABLE_ADMIN = 1;
     private static final int REQUEST_CODE_START_ENCRYPTION = 2;
@@ -80,7 +81,10 @@ public class DeviceAdminSample extends PreferenceActivity {
     private static final String KEY_TRUST_AGENT_COMPONENT = "key_trust_agent_component";
     private static final String KEY_TRUST_AGENT_FEATURES = "key_trust_agent_features";
     private static final String KEY_DISABLE_KEYGUARD_WIDGETS = "key_disable_keyguard_widgets";
-    private static final String KEY_DISABLE_KEYGUARD_SECURE_CAMERA = "key_disable_keyguard_secure_camera";
+    private static final String KEY_DISABLE_KEYGUARD_SECURE_CAMERA
+            = "key_disable_keyguard_secure_camera";
+    private static final String KEY_DISABLE_FINGERPRINT = "key_disable_fingerprint";
+    private static final String KEY_DISABLE_REMOTE_INPUT = "key_disable_remote_input";
 
     private static final String KEY_CATEGORY_QUALITY = "key_category_quality";
     private static final String KEY_SET_PASSWORD = "key_set_password";
@@ -149,12 +153,12 @@ public class DeviceAdminSample extends PreferenceActivity {
 
     /**
      * Common fragment code for DevicePolicyManager access.  Provides two shared elements:
-     * <p>
-     * 1.  Provides instance variables to access activity/context, DevicePolicyManager, etc.
-     * 2.  Provides support for the "set password" button(s) shared by multiple fragments.
+     *
+     *   1.  Provides instance variables to access activity/context, DevicePolicyManager, etc.
+     *   2.  Provides support for the "set password" button(s) shared by multiple fragments.
      */
     public static class AdminSampleFragment extends PreferenceFragment
-            implements OnPreferenceChangeListener, OnPreferenceClickListener {
+            implements OnPreferenceChangeListener, OnPreferenceClickListener{
 
         // Useful instance variables
         protected DeviceAdminSample mActivity;
@@ -239,7 +243,7 @@ public class DeviceAdminSample extends PreferenceActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             if (mResetPassword != null && preference == mResetPassword) {
-                doResetPassword((String) newValue);
+                doResetPassword((String)newValue);
                 return true;
             }
             return false;
@@ -284,6 +288,8 @@ public class DeviceAdminSample extends PreferenceActivity {
         private CheckBoxPreference mDisableKeyguardUnredactedCheckbox;
         private EditTextPreference mTrustAgentComponent;
         private EditTextPreference mTrustAgentFeatures;
+        private CheckBoxPreference mDisableKeyguardFingerprintCheckbox;
+        private CheckBoxPreference mDisableKeyguardRemoteInputCheckbox;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -296,11 +302,11 @@ public class DeviceAdminSample extends PreferenceActivity {
             mDisableCameraCheckbox.setOnPreferenceChangeListener(this);
 
             mDisableKeyguardWidgetsCheckbox =
-                    (CheckBoxPreference) findPreference(KEY_DISABLE_KEYGUARD_WIDGETS);
+                (CheckBoxPreference) findPreference(KEY_DISABLE_KEYGUARD_WIDGETS);
             mDisableKeyguardWidgetsCheckbox.setOnPreferenceChangeListener(this);
 
             mDisableKeyguardSecureCameraCheckbox =
-                    (CheckBoxPreference) findPreference(KEY_DISABLE_KEYGUARD_SECURE_CAMERA);
+                (CheckBoxPreference) findPreference(KEY_DISABLE_KEYGUARD_SECURE_CAMERA);
             mDisableKeyguardSecureCameraCheckbox.setOnPreferenceChangeListener(this);
 
             mDisableKeyguardNotificationCheckbox =
@@ -310,6 +316,14 @@ public class DeviceAdminSample extends PreferenceActivity {
             mDisableKeyguardUnredactedCheckbox =
                     (CheckBoxPreference) findPreference(KEY_DISABLE_UNREDACTED);
             mDisableKeyguardUnredactedCheckbox.setOnPreferenceChangeListener(this);
+
+            mDisableKeyguardFingerprintCheckbox =
+                    (CheckBoxPreference) findPreference(KEY_DISABLE_FINGERPRINT);
+            mDisableKeyguardFingerprintCheckbox.setOnPreferenceChangeListener(this);
+
+            mDisableKeyguardRemoteInputCheckbox =
+                    (CheckBoxPreference) findPreference(KEY_DISABLE_REMOTE_INPUT);
+            mDisableKeyguardRemoteInputCheckbox.setOnPreferenceChangeListener(this);
 
             mDisableKeyguardTrustAgentCheckbox =
                     (CheckBoxPreference) findPreference(KEY_DISABLE_TRUST_AGENTS);
@@ -350,6 +364,10 @@ public class DeviceAdminSample extends PreferenceActivity {
                     DevicePolicyManager.KEYGUARD_DISABLE_UNREDACTED_NOTIFICATIONS : 0;
             flags |= mDisableKeyguardTrustAgentCheckbox.isChecked() ?
                     DevicePolicyManager.KEYGUARD_DISABLE_TRUST_AGENTS : 0;
+            flags |= mDisableKeyguardFingerprintCheckbox.isChecked() ?
+                    DevicePolicyManager.KEYGUARD_DISABLE_FINGERPRINT : 0;
+            flags |= mDisableKeyguardRemoteInputCheckbox.isChecked() ?
+                    DevicePolicyManager.KEYGUARD_DISABLE_REMOTE_INPUT : 0;
             return flags;
         }
 
@@ -386,6 +404,8 @@ public class DeviceAdminSample extends PreferenceActivity {
                     || preference == mDisableKeyguardNotificationCheckbox
                     || preference == mDisableKeyguardUnredactedCheckbox
                     || preference == mDisableKeyguardTrustAgentCheckbox
+                    || preference == mDisableKeyguardFingerprintCheckbox
+                    || preference == mDisableKeyguardRemoteInputCheckbox
                     || preference == mTrustAgentComponent
                     || preference == mTrustAgentFeatures) {
                 postUpdateDpmDisableFeatures();
@@ -397,6 +417,9 @@ public class DeviceAdminSample extends PreferenceActivity {
         private void postUpdateDpmDisableFeatures() {
             //noinspection ConstantConditions
             getView().post(new Runnable() {
+                @SuppressLint("NewApi")
+                @TargetApi(Build.VERSION_CODES.M)
+                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                 @Override
                 public void run() {
                     mDPM.setKeyguardDisabledFeatures(mDeviceAdminSample,
@@ -434,27 +457,39 @@ public class DeviceAdminSample extends PreferenceActivity {
             mDisableKeyguardWidgetsCheckbox.setSummary(keyguardWidgetSummary);
 
             String keyguardSecureCameraSummary = getString(
-                    (disabled & DevicePolicyManager.KEYGUARD_DISABLE_SECURE_CAMERA) != 0 ?
-                            R.string.keyguard_secure_camera_disabled : R.string.keyguard_secure_camera_enabled);
+                (disabled & DevicePolicyManager.KEYGUARD_DISABLE_SECURE_CAMERA) != 0 ?
+                R.string.keyguard_secure_camera_disabled : R.string.keyguard_secure_camera_enabled);
             mDisableKeyguardSecureCameraCheckbox.setSummary(keyguardSecureCameraSummary);
 
             String keyguardSecureNotificationsSummary = getString(
                     (disabled & DevicePolicyManager.KEYGUARD_DISABLE_SECURE_NOTIFICATIONS) != 0 ?
-                            R.string.keyguard_secure_notifications_disabled
-                            : R.string.keyguard_secure_notifications_enabled);
+                        R.string.keyguard_secure_notifications_disabled
+                        : R.string.keyguard_secure_notifications_enabled);
             mDisableKeyguardNotificationCheckbox.setSummary(keyguardSecureNotificationsSummary);
 
             String keyguardUnredactedSummary = getString(
                     (disabled & DevicePolicyManager.KEYGUARD_DISABLE_UNREDACTED_NOTIFICATIONS) != 0
-                            ? R.string.keyguard_unredacted_notifications_disabled
-                            : R.string.keyguard_unredacted_notifications_enabled);
+                        ? R.string.keyguard_unredacted_notifications_disabled
+                        : R.string.keyguard_unredacted_notifications_enabled);
             mDisableKeyguardUnredactedCheckbox.setSummary(keyguardUnredactedSummary);
 
             String keyguardEnableTrustAgentSummary = getString(
                     (disabled & DevicePolicyManager.KEYGUARD_DISABLE_TRUST_AGENTS) != 0 ?
-                            R.string.keyguard_trust_agents_disabled
-                            : R.string.keyguard_trust_agents_enabled);
+                        R.string.keyguard_trust_agents_disabled
+                        : R.string.keyguard_trust_agents_enabled);
             mDisableKeyguardTrustAgentCheckbox.setSummary(keyguardEnableTrustAgentSummary);
+
+            String keyguardEnableFingerprintSummary = getString(
+                    (disabled & DevicePolicyManager.KEYGUARD_DISABLE_FINGERPRINT) != 0 ?
+                        R.string.keyguard_fingerprint_disabled
+                        : R.string.keyguard_fingerprint_enabled);
+            mDisableKeyguardFingerprintCheckbox.setSummary(keyguardEnableFingerprintSummary);
+
+            String keyguardEnableRemoteInputSummary = getString(
+                    (disabled & DevicePolicyManager.KEYGUARD_DISABLE_REMOTE_INPUT) != 0 ?
+                        R.string.keyguard_remote_input_disabled
+                        : R.string.keyguard_remote_input_enabled);
+            mDisableKeyguardRemoteInputCheckbox.setSummary(keyguardEnableRemoteInputSummary);
 
             final SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
             final boolean trustDisabled =
@@ -468,9 +503,7 @@ public class DeviceAdminSample extends PreferenceActivity {
             mTrustAgentFeatures.setEnabled(trustDisabled);
         }
 
-        /**
-         * Updates the device capabilities area (dis/enabling) as the admin is (de)activated
-         */
+        /** Updates the device capabilities area (dis/enabling) as the admin is (de)activated */
         private void enableDeviceCapabilitiesArea(boolean enabled) {
             mDisableCameraCheckbox.setEnabled(enabled);
             mDisableKeyguardWidgetsCheckbox.setEnabled(enabled);
@@ -491,26 +524,26 @@ public class DeviceAdminSample extends PreferenceActivity {
 
         // Password quality values
         // This list must match the list found in samples/ApiDemos/res/values/arrays.xml
-        final static int[] mPasswordQualityValues = new int[]{
-                DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED,
-                DevicePolicyManager.PASSWORD_QUALITY_SOMETHING,
-                DevicePolicyManager.PASSWORD_QUALITY_NUMERIC,
-                DevicePolicyManager.PASSWORD_QUALITY_NUMERIC_COMPLEX,
-                DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC,
-                DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC,
-                DevicePolicyManager.PASSWORD_QUALITY_COMPLEX
+        final static int[] mPasswordQualityValues = new int[] {
+            DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED,
+            DevicePolicyManager.PASSWORD_QUALITY_SOMETHING,
+            DevicePolicyManager.PASSWORD_QUALITY_NUMERIC,
+            DevicePolicyManager.PASSWORD_QUALITY_NUMERIC_COMPLEX,
+            DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC,
+            DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC,
+            DevicePolicyManager.PASSWORD_QUALITY_COMPLEX
         };
 
         // Password quality values (as strings, for the ListPreference entryValues)
         // This list must match the list found in samples/ApiDemos/res/values/arrays.xml
-        final static String[] mPasswordQualityValueStrings = new String[]{
-                String.valueOf(DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED),
-                String.valueOf(DevicePolicyManager.PASSWORD_QUALITY_SOMETHING),
-                String.valueOf(DevicePolicyManager.PASSWORD_QUALITY_NUMERIC),
-                String.valueOf(DevicePolicyManager.PASSWORD_QUALITY_NUMERIC_COMPLEX),
-                String.valueOf(DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC),
-                String.valueOf(DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC),
-                String.valueOf(DevicePolicyManager.PASSWORD_QUALITY_COMPLEX)
+        final static String[] mPasswordQualityValueStrings = new String[] {
+            String.valueOf(DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED),
+            String.valueOf(DevicePolicyManager.PASSWORD_QUALITY_SOMETHING),
+            String.valueOf(DevicePolicyManager.PASSWORD_QUALITY_NUMERIC),
+            String.valueOf(DevicePolicyManager.PASSWORD_QUALITY_NUMERIC_COMPLEX),
+            String.valueOf(DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC),
+            String.valueOf(DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC),
+            String.valueOf(DevicePolicyManager.PASSWORD_QUALITY_COMPLEX)
         };
 
         // UI elements
@@ -598,7 +631,7 @@ public class DeviceAdminSample extends PreferenceActivity {
             if (super.onPreferenceChange(preference, newValue)) {
                 return true;
             }
-            String valueString = (String) newValue;
+            String valueString = (String)newValue;
             if (TextUtils.isEmpty(valueString)) {
                 return false;
             }
@@ -632,10 +665,10 @@ public class DeviceAdminSample extends PreferenceActivity {
         }
 
         private String qualityValueToString(int quality) {
-            for (int i = 0; i < mPasswordQualityValues.length; i++) {
+            for (int i=  0; i < mPasswordQualityValues.length; i++) {
                 if (mPasswordQualityValues[i] == quality) {
                     String[] qualities =
-                            mActivity.getResources().getStringArray(R.array.password_qualities);
+                        mActivity.getResources().getStringArray(R.array.password_qualities);
                     return qualities[i];
                 }
             }
@@ -701,7 +734,7 @@ public class DeviceAdminSample extends PreferenceActivity {
             if (super.onPreferenceChange(preference, newValue)) {
                 return true;
             }
-            String valueString = (String) newValue;
+            String valueString = (String)newValue;
             if (TextUtils.isEmpty(valueString)) {
                 return false;
             }
@@ -837,7 +870,7 @@ public class DeviceAdminSample extends PreferenceActivity {
             if (super.onPreferenceChange(preference, newValue)) {
                 return true;
             }
-            String valueString = (String) newValue;
+            String valueString = (String)newValue;
             if (TextUtils.isEmpty(valueString)) {
                 return false;
             }
@@ -892,29 +925,29 @@ public class DeviceAdminSample extends PreferenceActivity {
             builder.setMessage(R.string.wipe_warning_first);
             builder.setPositiveButton(R.string.wipe_warning_first_ok,
                     new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    if (wipeAllData) {
+                        builder.setMessage(R.string.wipe_warning_second_full);
+                    } else {
+                        builder.setMessage(R.string.wipe_warning_second);
+                    }
+                    builder.setPositiveButton(R.string.wipe_warning_second_ok,
+                            new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                            if (wipeAllData) {
-                                builder.setMessage(R.string.wipe_warning_second_full);
-                            } else {
-                                builder.setMessage(R.string.wipe_warning_second);
+                            boolean stillActive = mActivity.isActiveAdmin();
+                            if (stillActive) {
+                                mDPM.wipeData(wipeAllData
+                                        ? DevicePolicyManager.WIPE_EXTERNAL_STORAGE : 0);
                             }
-                            builder.setPositiveButton(R.string.wipe_warning_second_ok,
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            boolean stillActive = mActivity.isActiveAdmin();
-                                            if (stillActive) {
-                                                mDPM.wipeData(wipeAllData
-                                                        ? DevicePolicyManager.WIPE_EXTERNAL_STORAGE : 0);
-                                            }
-                                        }
-                                    });
-                            builder.setNegativeButton(R.string.wipe_warning_second_no, null);
-                            builder.show();
                         }
                     });
+                    builder.setNegativeButton(R.string.wipe_warning_second_no, null);
+                    builder.show();
+                }
+            });
             builder.setNegativeButton(R.string.wipe_warning_first_no, null);
             builder.show();
         }
@@ -1035,7 +1068,7 @@ public class DeviceAdminSample extends PreferenceActivity {
         long days = time / MS_PER_DAY;
         long hours = (time / MS_PER_HOUR) % 24;
         long minutes = (time / MS_PER_MINUTE) % 60;
-        return context.getString(R.string.status_days_hours_minutes, "" + days, "" + hours, "" + minutes);
+        return context.getString(R.string.status_days_hours_minutes, days, hours, minutes);
     }
 
     /**
@@ -1057,7 +1090,7 @@ public class DeviceAdminSample extends PreferenceActivity {
     /**
      * Sample implementation of a DeviceAdminReceiver.  Your controller must provide one,
      * although you may or may not implement all of the methods shown here.
-     * <p>
+     *
      * All callbacks are on the UI thread and your implementations should not engage in any
      * blocking operations, including disk I/O.
      */
@@ -1069,7 +1102,8 @@ public class DeviceAdminSample extends PreferenceActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (Objects.equals(intent.getAction(), ACTION_DEVICE_ADMIN_DISABLE_REQUESTED)) {
+            //noinspection ConstantConditions
+            if (intent.getAction().equals(ACTION_DEVICE_ADMIN_DISABLE_REQUESTED)) {
                 abortBroadcast();
             }
             super.onReceive(context, intent);
@@ -1109,6 +1143,7 @@ public class DeviceAdminSample extends PreferenceActivity {
         public void onPasswordExpiring(Context context, Intent intent) {
             DevicePolicyManager dpm = (DevicePolicyManager) context.getSystemService(
                     Context.DEVICE_POLICY_SERVICE);
+            //noinspection ConstantConditions
             long expr = dpm.getPasswordExpiration(
                     new ComponentName(context, DeviceAdminSampleReceiver.class));
             long delta = expr - System.currentTimeMillis();
@@ -1118,5 +1153,8 @@ public class DeviceAdminSample extends PreferenceActivity {
             showToast(context, message);
             Log.v(TAG, message);
         }
+    }
+
+    public static class DeviceAdminSampleReceiver2 extends DeviceAdminReceiver {
     }
 }
