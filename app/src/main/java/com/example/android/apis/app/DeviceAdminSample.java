@@ -246,7 +246,12 @@ public class DeviceAdminSample extends PreferenceActivity {
     ComponentName mDeviceAdminSample;
 
     /**
-     * Called when the PreferenceActivity is starting.
+     * Called when the PreferenceActivity is starting. First we call our super's implementation of
+     * {@code onCreate}. Then we initialize our field {@code DevicePolicyManager mDPM} with a handle
+     * to the DEVICE_POLICY_SERVICE system level service (the public interface for managing policies
+     * enforced on a device). Finally we initialize our field {@code ComponentName mDeviceAdminSample}
+     * with an instance for the class of {@code DeviceAdminSampleReceiver} (we will later use this
+     * when we need to supply the name of the admin component to {@code DevicePolicyManager} methods).
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
@@ -260,6 +265,16 @@ public class DeviceAdminSample extends PreferenceActivity {
     }
 
     /**
+     * Called when the activity needs its list of headers built. By implementing this and adding at
+     * least one item to the list, you will cause the activity to run in its modern fragment mode.
+     * Note that this function may not always be called; for example, if the activity has been asked
+     * to display a particular fragment without the header list, there is no need to build the headers.
+     * <p>
+     * Typical implementations will use {@link #loadHeadersFromResource} to fill in the list from a
+     * resource as we do, loading them from the file R.xml.device_admin_headers into our parameter
+     * {@code List<Header> target}.
+     *
+     * @param target The list in which to place the headers.
      * We override this method to provide PreferenceActivity with the top-level preference headers.
      */
     @Override
@@ -268,12 +283,27 @@ public class DeviceAdminSample extends PreferenceActivity {
     }
 
     /**
-     * Helper to determine if we are an active admin
+     * Helper to determine if we are an active admin, returns true if {@code ComponentName mDeviceAdminSample}
+     * is currently active (enabled) in the system. We just return the value returned by the
+     * {@code isAdminActive} method of our field {@code DevicePolicyManager mDPM} for our field
+     * {@code ComponentName mDeviceAdminSample}.
+     *
+     * @return {@code true} if {@code ComponentName mDeviceAdminSample} is currently enabled in the
+     * system, {@code false} otherwise.
      */
     private boolean isActiveAdmin() {
         return mDPM.isAdminActive(mDeviceAdminSample);
     }
 
+    /**
+     * Subclasses should override this method and verify that the given fragment is a valid type
+     * to be attached to this activity. We return true if our parameter {@code String fragmentName}
+     * matches one of five the class names: {@code GeneralFragment}, {@code QualityFragment},
+     * {@code ExpirationFragment}, {@code LockWipeFragment}, or {@code EncryptionFragment}.
+     *
+     * @param fragmentName the class name of the Fragment about to be attached to this activity.
+     * @return true if the fragment class name is valid for this Activity and false otherwise.
+     */
     @Override
     protected boolean isValidFragment(String fragmentName) {
         return GeneralFragment.class.getName().equals(fragmentName)
@@ -284,24 +314,74 @@ public class DeviceAdminSample extends PreferenceActivity {
     }
 
     /**
-     * Common fragment code for DevicePolicyManager access.  Provides two shared elements:
-     *
-     *   1.  Provides instance variables to access activity/context, DevicePolicyManager, etc.
-     *   2.  Provides support for the "set password" button(s) shared by multiple fragments.
+     * Common fragment code for DevicePolicyManager access. Provides two shared elements:
+     * <ul>
+     *     <li>
+     *         1. Provides instance variables to access activity/context, DevicePolicyManager, etc.
+     *     </li>
+     *     <li>
+     *         2. Provides support for the "set password" button(s) shared by multiple fragments.
+     *     </li>
+     * </ul>
      */
     public static class AdminSampleFragment extends PreferenceFragment
             implements OnPreferenceChangeListener, OnPreferenceClickListener{
 
         // Useful instance variables
+        /**
+         * Cached reference to the Activity this fragment is currently associated with, as returned
+         * by {@code getActivity}. Used as the context for retrieving resources, and accessing fields
+         * and methods of our parent Activity.
+         */
         protected DeviceAdminSample mActivity;
+        /**
+         * Cached reference to the {@code DevicePolicyManager mDPM} field of {@code mActivity}
+         * (saves typing?).
+         */
         protected DevicePolicyManager mDPM;
+        /**
+         * Cached reference to the {@code ComponentName mDeviceAdminSample} field of {@code mActivity}
+         * (saves typing?).
+         */
         protected ComponentName mDeviceAdminSample;
+        /**
+         * Cached value of a call to the {@code isActiveAdmin} method of {@code mActivity}, saves
+         * repeated calls to the {@code DevicePolicyManager.isAdminActive} method.
+         */
         protected boolean mAdminActive;
 
         // Optional shared UI
+        /**
+         * Reference to the KEY_SET_PASSWORD ("key_set_password") {@code PreferenceScreen} in our UI
+         * (if it exists).
+         */
         private PreferenceScreen mSetPassword;
+        /**
+         * Reference to the KEY_RESET_PASSWORD ("key_reset_password") {@code EditTextPreference} in
+         * our UI (if it exists).
+         */
         private EditTextPreference mResetPassword;
 
+        /**
+         * Called when the fragment's activity has been created and this fragment's view hierarchy
+         * instantiated. First we call our super's implementation of {@code onActivityCreated}. We
+         * initialize our field {@code DeviceAdminSample mActivity} with the Activity this fragment
+         * is currently associated with (as returned by the {@code getActivity} method), and then use
+         * it to set our field {@code DevicePolicyManager mDPM} to the value of the {@code mDPM} field
+         * of {@code mActivity}, our field {@code ComponentName mDeviceAdminSample} to the value of
+         * field {@code mDeviceAdminSample} of {@code mActivity}, and our field {@code boolean mAdminActive}
+         * to the value returned by the {@code isActiveAdmin} method of {@code mActivity}. We initialize
+         * our field {@code EditTextPreference mResetPassword} by finding the {@link Preference} with
+         * the key KEY_RESET_PASSWORD ("key_reset_password"), and our field {@code EditTextPreference mResetPassword}
+         * by finding the {@link Preference} with the key KEY_SET_PASSWORD ("key_set_password"). If
+         * {@code mResetPassword} is not null we set its {@code OnPreferenceChangeListener} to this
+         * (the callback to be invoked when the Preference is changed by the user will be our override
+         * of {@code onPreferenceChange}). If {@code mSetPassword} is not null we set its
+         * {@code OnPreferenceClickListener} to this (the callback to be invoked when this Preference
+         * is clicked, our {@code onPreferenceClick} override will be called).
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+         */
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
@@ -324,6 +404,16 @@ public class DeviceAdminSample extends PreferenceActivity {
             }
         }
 
+        /**
+         * Called when the fragment is visible to the user and actively running. First we call our
+         * super's implementation of {@code onResume}. We set our {@code boolean mAdminActive} to the
+         * value returned by the {@code isActiveAdmin} method of our parent activity {@code mActivity}
+         * (returns true if we are currently an active admin). We then call our method {@code reloadSummaries}
+         * which will display text describing the sufficiency of our password if it is appropriate to
+         * do so. If our field {@code EditTextPreference mResetPassword} is not null we call its
+         * {@code setEnabled} method with {@code mAdminActive}, disabling the preference if we are
+         * not an active admin.
+         */
         @Override
         public void onResume() {
             super.onResume();
@@ -336,8 +426,23 @@ public class DeviceAdminSample extends PreferenceActivity {
         }
 
         /**
-         * Called automatically at every onResume.  Should also call explicitly any time a
-         * policy changes that may affect other policy values.
+         * Called automatically at every onResume. Should also call explicitly any time a  policy
+         * changes that may affect other policy values. If our field {@code PreferenceScreen mSetPassword}
+         * is null we do nothing, if it is not branch on the value of {@code mAdminActive}:
+         * <ul>
+         *     <li>
+         *         true (we are an active admin): we initialize {@code boolean sufficient} with the
+         *         value returned by the {@code isActivePasswordSufficient} method of {@code mDPM}
+         *         (Returns true if the password meets the current requirements, else false). If
+         *         {@code sufficient} is true we set the summary of {@code mSetPassword} to the string
+         *         with resource ID R.string.password_sufficient ("Current password meets policy
+         *         requirements"), if false we set its summary to the string with resource ID
+         *         R.string.password_insufficient ("Current password does not meet policy requirements").
+         *     </li>
+         *     <li>
+         *         false (we are not an active admin): we set the summary of {@code mSetPassword} to null.
+         *     </li>
+         * </ul>
          */
         protected void reloadSummaries() {
             if (mSetPassword != null) {
@@ -352,6 +457,10 @@ public class DeviceAdminSample extends PreferenceActivity {
             }
         }
 
+        /**
+         * Delays a call to {@code reloadSummaries} until after preference changes have been applied
+         * upon return from the various {@code onPreferenceChange} overrides.
+         */
         protected void postReloadSummaries() {
             //noinspection ConstantConditions
             getView().post(new Runnable() {
@@ -362,6 +471,12 @@ public class DeviceAdminSample extends PreferenceActivity {
             });
         }
 
+        /**
+         * Called when a Preference has been clicked.
+         *
+         * @param preference The Preference that was clicked.
+         * @return True if the click was handled.
+         */
         @Override
         public boolean onPreferenceClick(Preference preference) {
             if (mSetPassword != null && preference == mSetPassword) {
