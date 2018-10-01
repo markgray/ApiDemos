@@ -472,7 +472,12 @@ public class DeviceAdminSample extends PreferenceActivity {
         }
 
         /**
-         * Called when a Preference has been clicked.
+         * Called when a Preference has been clicked. This is used only by {@code mSetPassword}, so
+         * if {@code mSetPassword} is null or not equal to our parameter {@code preference} we return
+         * false having done nothing. If it is {@code mSetPassword} we initialize {@code Intent intent}
+         * with an instance for the action ACTION_SET_NEW_PASSWORD (have the user enter a new password
+         * that meets the current requirements), launch the activity of {@code intent} and return true
+         * consuming the click.
          *
          * @param preference The Preference that was clicked.
          * @return True if the click was handled.
@@ -487,6 +492,19 @@ public class DeviceAdminSample extends PreferenceActivity {
             return false;
         }
 
+        /**
+         * Called when a Preference has been changed by the user. This is called before the state of
+         * the Preference is about to be updated and before the state is persisted. This is used only
+         * by {@code mResetPassword}, so if {@code mResetPassword} is null or not equal to our parameter
+         * {@code preference} we return false having done nothing. If it is {@code mResetPassword} we
+         * call our method {@code doResetPassword} with the string cast of our parameter {@code newValue}
+         * to force a new password for device unlock (no longer works for Android O and above), and
+         * return true to update the state of the Preference with the new value.
+         *
+         * @param preference The changed Preference.
+         * @param newValue The new value of the Preference.
+         * @return True to update the state of the Preference with the new value.
+         */
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             if (mResetPassword != null && preference == mResetPassword) {
@@ -497,8 +515,24 @@ public class DeviceAdminSample extends PreferenceActivity {
         }
 
         /**
-         * This is dangerous, so we prevent automated tests from doing it, and we
-         * remind the user after we do it.
+         * Force a new password for device unlock. This is dangerous, so we prevent automated tests
+         * from doing it, and we remind the user after we do it. If our method {@code alertIfMonkey}
+         * returns true indicating we are being run by an automated test, we return true having done
+         * nothing ({@code alertIfMonkey} will have displayed an alert dialog with the string with
+         * resource id R.string.monkey_reset_password: "You can't reset my password, you are a monkey!")
+         * If we are being used by a real user we call the {@code resetPassword} method of our field
+         * {@code DevicePolicyManager mDPM} with our parameter {@code newPassword} as the new password
+         * for the user, and RESET_PASSWORD_REQUIRE_ENTRY (don't allow other admins to change the
+         * password again until the user has entered it) as the flags. We then initialize our variable
+         * {@code AlertDialog.Builder builder} with a new instance, initialize {@code String message}
+         * with the string resulting from formatting {@code newPassword} with the format string with
+         * resource id R.string.reset_password_warning ("You have just reset your screen lock password
+         * to "%1$s"). We then set the message of {@code builder} to {@code message}, set the text of
+         * its positive button to the string with resource id R.string.reset_password_ok ("Don't forget
+         * it") with null for the {@code OnClickListener}. Finally we create an {@link AlertDialog}
+         * with the arguments supplied to {@code builder} and immediately display the dialog.
+         *
+         * @param newPassword new password.
          */
         private void doResetPassword(String newPassword) {
             if (alertIfMonkey(mActivity, R.string.monkey_reset_password)) {
@@ -513,7 +547,14 @@ public class DeviceAdminSample extends PreferenceActivity {
         }
 
         /**
-         * Simple helper for summaries showing local & global (aggregate) policy settings
+         * Simple helper for summaries showing local & global (aggregate) policy settings. We just
+         * return a string displaying the string value of our parameters formatted using the string
+         * with resource id R.string.status_local_global ("Local=%1$s / Global=%2$s").
+         *
+         * @param local policy setting for local
+         * @param global policy setting for global
+         * @return string displaying the string value of our parameters formatted using the string
+         * with resource id R.string.status_local_global ("Local=%1$s / Global=%2$s")
          */
         protected String localGlobalSummary(Object local, Object global) {
             return getString(R.string.status_local_global, local, global);
@@ -526,22 +567,78 @@ public class DeviceAdminSample extends PreferenceActivity {
     public static class GeneralFragment extends AdminSampleFragment
             implements OnPreferenceChangeListener {
         // UI elements
+        /**
+         * {@code CheckBoxPreference} with the key KEY_ENABLE_ADMIN ("key_enable_admin") in the
+         * xml/device_admin_general.xml PreferenceScreen
+         */
         private CheckBoxPreference mEnableCheckbox;
+        /**
+         * {@code CheckBoxPreference} with the key KEY_DISABLE_CAMERA ("key_disable_camera") in the
+         * xml/device_admin_general.xml PreferenceScreen
+         */
         private CheckBoxPreference mDisableCameraCheckbox;
+        /**
+         * {@code CheckBoxPreference} with the key KEY_DISABLE_KEYGUARD_WIDGETS ("key_disable_keyguard_widgets")
+         * in the xml/device_admin_general.xml PreferenceScreen
+         */
         private CheckBoxPreference mDisableKeyguardWidgetsCheckbox;
+        /**
+         * {@code CheckBoxPreference} with the key KEY_DISABLE_KEYGUARD_SECURE_CAMERA
+         * ("key_disable_keyguard_secure_camera") in the xml/device_admin_general.xml PreferenceScreen
+         */
         private CheckBoxPreference mDisableKeyguardSecureCameraCheckbox;
+        /**
+         * {@code CheckBoxPreference} with the key KEY_DISABLE_NOTIFICATIONS ("key_disable_notifications")
+         * in the xml/device_admin_general.xml PreferenceScreen
+         */
         private CheckBoxPreference mDisableKeyguardNotificationCheckbox;
+        /**
+         * {@code CheckBoxPreference} with the key KEY_DISABLE_TRUST_AGENTS ("key_disable_trust_agents")
+         * in the xml/device_admin_general.xml PreferenceScreen
+         */
         private CheckBoxPreference mDisableKeyguardTrustAgentCheckbox;
+        /**
+         * {@code CheckBoxPreference} with the key KEY_DISABLE_UNREDACTED ("key_disable_unredacted")
+         * in the xml/device_admin_general.xml PreferenceScreen
+         */
         private CheckBoxPreference mDisableKeyguardUnredactedCheckbox;
+        /**
+         * {@code EditTextPreference} with the key KEY_TRUST_AGENT_COMPONENT ("key_trust_agent_component")
+         * in the xml/device_admin_general.xml PreferenceScreen
+         */
         private EditTextPreference mTrustAgentComponent;
+        /**
+         * {@code EditTextPreference} with the key KEY_TRUST_AGENT_FEATURES ("key_trust_agent_features")
+         * in the xml/device_admin_general.xml PreferenceScreen
+         */
         private EditTextPreference mTrustAgentFeatures;
+        /**
+         * {@code CheckBoxPreference} with the key KEY_DISABLE_FINGERPRINT ("key_disable_fingerprint")
+         * in the xml/device_admin_general.xml PreferenceScreen
+         */
         private CheckBoxPreference mDisableKeyguardFingerprintCheckbox;
+        /**
+         * {@code CheckBoxPreference} with the key KEY_DISABLE_REMOTE_INPUT ("key_disable_remote_input")
+         * in the xml/device_admin_general.xml PreferenceScreen
+         */
         private CheckBoxPreference mDisableKeyguardRemoteInputCheckbox;
 
+        /**
+         * Called to do initial creation of a {@code PreferenceFragment}. First we call our super's
+         * implementation of {@code onCreate}, then we call the {@code addPreferencesFromResource}
+         * method to inflate our XML resource file R.xml.device_admin_general and add its preference
+         * hierarchy to the current preference hierarchy. We then initialize the fields we use to
+         * access the various {@link Preference} widgets in our UI by finding them using the android:key
+         * strings they are identified by in the xml/device_admin_general.xml file. After doing so we
+         * set their {@code OnPreferenceChangeListener} to this.
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+         */
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.device_admin_general);
+
             mEnableCheckbox = (CheckBoxPreference) findPreference(KEY_ENABLE_ADMIN);
             mEnableCheckbox.setOnPreferenceChangeListener(this);
 
@@ -585,7 +682,22 @@ public class DeviceAdminSample extends PreferenceActivity {
             mTrustAgentFeatures.setOnPreferenceChangeListener(this);
         }
 
-        // At onResume time, reload UI with current values as required
+        /**
+         * Called when the fragment is visible to the user and actively running, this is where we
+         * reload our UI with the current values of the Preferences. First we call our super's
+         * implementation of {@code onResume}. We then enable or disable the {@code mEnableCheckbox}
+         * {@code CheckBoxPreference} depending on whether our {@code mAdminActive} is true of false.
+         * We call our {@code enableDeviceCapabilitiesArea} method with {@code mAdminActive} to do the
+         * same with all the other widgets in our UI. If {@code mAdminActive} is true we call the
+         * {@code setCameraDisabled} method of {@code DevicePolicyManager mDPM} to disable all cameras
+         * on the device for this user if our {@code CheckBoxPreference mDisableCameraCheckbox} is
+         * checked. We call the {@code setKeyguardDisabledFeatures} method of {@code mDPM} to disable
+         * keyguard customizations, such as widgets according to the feature list created by our method
+         * {@code createKeyguardDisabledFlag} (it reads the state of the various keyguard widgets in
+         * order to build a flag bitmask enabling or disabling the feature the widget controls depending
+         * on the checked/unchecked state of the widget). Finally we call our {@code reloadSummaries}
+         * method to set the summary text of our widgets appropriately for their current state.
+         */
         @Override
         public void onResume() {
             super.onResume();
@@ -599,6 +711,56 @@ public class DeviceAdminSample extends PreferenceActivity {
             }
         }
 
+        /**
+         * Creates a bitmask of keyguard features that are disabled by the checked state of the feature's
+         * {@code CheckBoxPreference}. The seven keyguard {@code CheckBoxPreference} in our UI and the
+         * feature bitmask they disable are:
+         * <ul>
+         *     <li>
+         *         {@code mDisableKeyguardWidgetsCheckbox} ("Disable keyguard widgets"): KEYGUARD_DISABLE_WIDGETS_ALL
+         *         Disable all keyguard widgets, has no effect starting from LOLLIPOP since keyguard
+         *         widget is only supported on Android versions lower than 5.0.
+         *     </li>
+         *     <li>
+         *         {@code mDisableKeyguardSecureCameraCheckbox} ("Disable keyguard secure camera"):
+         *         KEYGUARD_DISABLE_SECURE_CAMERA Disable the camera on secure keyguard screens (e.g.
+         *         PIN/Pattern/Password)
+         *     </li>
+         *     <li>
+         *         {@code mDisableKeyguardNotificationCheckbox} ("Disable keyguard notifications"):
+         *         KEYGUARD_DISABLE_SECURE_NOTIFICATIONS Disable showing all notifications on secure
+         *         keyguard screens (e.g. PIN/Pattern/Password)
+         *     </li>
+         *     <li>
+         *         {@code mDisableKeyguardUnredactedCheckbox} ("Disable keyguard unredacted notifications")
+         *         KEYGUARD_DISABLE_UNREDACTED_NOTIFICATIONS Only allow redacted notifications on secure
+         *         keyguard screens (e.g. PIN/Pattern/Password)
+         *     </li>
+         *     <li>
+         *         {@code mDisableKeyguardTrustAgentCheckbox} ("Disable keyguard Trust Agents")
+         *         KEYGUARD_DISABLE_TRUST_AGENTS Disable trust agents on secure keyguard screens
+         *         (e.g. PIN/Pattern/Password). By setting this flag alone, all trust agents are
+         *         disabled. If the admin then wants to whitelist specific features of some trust
+         *         agent, {@code setTrustAgentConfiguration} can be used in conjunction to set
+         *         trust-agent-specific configurations.
+         *     </li>
+         *     <li>
+         *         {@code mDisableKeyguardFingerprintCheckbox} ("Disable keyguard Fingerprint")
+         *         KEYGUARD_DISABLE_FINGERPRINT Disable fingerprint authentication on keyguard secure
+         *         screens (e.g. PIN/Pattern/Password).
+         *     </li>
+         *     <li>
+         *         {@code mDisableKeyguardRemoteInputCheckbox} ("Disable keyguard Remote Input")
+         *         KEYGUARD_DISABLE_REMOTE_INPUT Disable text entry into notifications on secure
+         *         keyguard screens (e.g. PIN/Pattern/Password).
+         *     </li>
+         * </ul>
+         * Having created {@code flags} by or'ing the appropriate bitmasks into it we return {@code flags}
+         * to the caller.
+         *
+         * @return bitmask of keyguard features representing the state of our keyguard widgets that
+         * is appropriate for the {@code setKeyguardDisabledFeatures} method of {@code DevicePolicyManager}
+         */
         int createKeyguardDisabledFlag() {
             int flags = DevicePolicyManager.KEYGUARD_DISABLE_FEATURES_NONE;
             flags |= mDisableKeyguardWidgetsCheckbox.isChecked() ?
@@ -618,6 +780,13 @@ public class DeviceAdminSample extends PreferenceActivity {
             return flags;
         }
 
+        /**
+         * Called when a Preference has been changed by the user.
+         *
+         * @param preference The changed Preference.
+         * @param newValue The new value of the Preference.
+         * @return True to update the state of the Preference with the new value.
+         */
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             if (super.onPreferenceChange(preference, newValue)) {
