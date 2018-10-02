@@ -781,7 +781,90 @@ public class DeviceAdminSample extends PreferenceActivity {
         }
 
         /**
-         * Called when a Preference has been changed by the user.
+         * Called when a Preference has been changed by the user. If our super's implementation of
+         * {@code onPreferenceChange} returns true, we return true having done nothing. Otherwise we
+         * branch on the value of our parameter {@code Preference preference}:
+         * <ul>
+         *     <li>
+         *         {@code mEnableCheckbox} "Enable admin" {@code CheckBoxPreference} in the PreferenceScreen
+         *         xml/device_admin_general.xml -- We initialize {@code boolean value} by casting our parameter
+         *         {@code Object newValue} to boolean, and if {@code value} is not equal to our field
+         *         {@code mAdminActive} we branch on the value of {@code value}
+         *         <ul>
+         *             <li>
+         *                 true: we initialize {@code Intent intent} with an instance whose action is
+         *                 ACTION_ADD_DEVICE_ADMIN (ask the user to add a new device administrator to
+         *                 the system), add {@code mDeviceAdminSample} as an extra under the key EXTRA_DEVICE_ADMIN
+         *                 (ComponentName of the administrator component), add the string with resource
+         *                 id R.string.add_admin_extra_app_text ("Additional text explaining why this needs
+         *                 to be added") as an extra under the key EXTRA_ADD_EXPLANATION (optional CharSequence
+         *                 providing additional explanation for why the admin is being added) then start the
+         *                 intent's activity running for a result. Finally we return false so that the
+         *                 Preference will not be updated until we're really active.
+         *             </li>
+         *             <li>
+         *                 false: we call the {@code removeActiveAdmin} method of {@code DevicePolicyManager mDPM}
+         *                 to remove the administration component {@code ComponentName mDeviceAdminSample} then
+         *                 call our method {@code enableDeviceCapabilitiesArea} to update the device capabilities
+         *                 area of our UI by disabling the widgets.
+         *             </li>
+         *         </ul>
+         *     </li>
+         *     <li>
+         *         {@code mDisableCameraCheckbox} "Disable all device cameras" {@code CheckBoxPreference} in the
+         *         PreferenceScreen xml/device_admin_general.xml -- We initialize {@code boolean value} by casting
+         *         our parameter {@code Object newValue} to boolean, then call the {@code setCameraDisabled}
+         *         method of {@code DevicePolicyManager mDPM} to disable or enable all cameras on the device for
+         *         this user depending on the value of {@code value}. Finally we call our {@code postReloadSummaries}
+         *         method to delay a call to {@code reloadSummaries} until after preference changes have been applied.
+         *     </li>
+         *     <li>
+         *         If {@code Preference preference} is one of:
+         *         <ul>
+         *             <li>
+         *                 {@code mDisableKeyguardWidgetsCheckbox} "Disable keyguard widgets" in the
+         *                 PreferenceScreen xml/device_admin_general.xml
+         *             </li>
+         *             <li>
+         *                 {@code mDisableKeyguardSecureCameraCheckbox} "Disable keyguard secure camera"
+         *                 in the PreferenceScreen xml/device_admin_general.xml
+         *             </li>
+         *             <li>
+         *                 {@code mDisableKeyguardNotificationCheckbox} "Disable keyguard notifications"
+         *                 in the PreferenceScreen xml/device_admin_general.xml
+         *             </li>
+         *             <li>
+         *                 {@code mDisableKeyguardUnredactedCheckbox} "Disable keyguard unredacted notifications"
+         *                 in the PreferenceScreen xml/device_admin_general.xml
+         *             </li>
+         *             <li>
+         *                 {@code mDisableKeyguardTrustAgentCheckbox} "Disable keyguard Trust Agents"
+         *                 in the PreferenceScreen xml/device_admin_general.xml
+         *             </li>
+         *             <li>
+         *                 {@code mDisableKeyguardFingerprintCheckbox} "Disable keyguard Fingerprint"
+         *                 in the PreferenceScreen xml/device_admin_general.xml
+         *             </li>
+         *             <li>
+         *                 {@code mDisableKeyguardRemoteInputCheckbox} "Disable keyguard Remote Input"
+         *                 in the PreferenceScreen xml/device_admin_general.xml
+         *             </li>
+         *             <li>
+         *                 {@code mTrustAgentComponent} "Enabled Component Name" in the PreferenceScreen
+         *                 xml/device_admin_general.xml
+         *             </li>
+         *             <li>
+         *                 {@code mTrustAgentFeatures} "Enabled Features (comma-separated)" in the
+         *                 PreferenceScreen xml/device_admin_general.xml
+         *             </li>
+         *             We call our method {@code postUpdateDpmDisableFeatures} to have the {@code DevicePolicyManager}
+         *             enable, disable or set all the features controlled by these {@code Preference} widgets. Then
+         *             we call our {@code postReloadSummaries} method to delay a call to {@code reloadSummaries}
+         *             until after the preference change has been applied.
+         *         </ul>
+         *     </li>
+         * </ul>
+         * Finally we return true to the caller to have the state of the Preference updated with the new value.
          *
          * @param preference The changed Preference.
          * @param newValue The new value of the Preference.
@@ -830,14 +913,40 @@ public class DeviceAdminSample extends PreferenceActivity {
             return true;
         }
 
+        /**
+         * Posts a runnable to the queue of the UI thread which propagates the values set in our
+         * {@code PreferenceScreen} xml/device_admin_general.xml to {@code DevicePolicyManager mDPM},
+         * enabling and disabling the keyguard features controlled by the various {@code CheckBoxPreference}
+         * widgets and transferring the text in the {@code EditTextPreference} widgets to their appropriate
+         * destinations.
+         */
         private void postUpdateDpmDisableFeatures() {
             //noinspection ConstantConditions
             getView().post(new Runnable() {
+                /**
+                 * Propagates the values set in our {@code PreferenceScreen} xml/device_admin_general.xml
+                 * to {@code DevicePolicyManager mDPM}. First we call the {@code setKeyguardDisabledFeatures}
+                 * method of {@code mDPM} to disable keyguard customizations, such as widgets according to
+                 * the feature list created by our method {@code createKeyguardDisabledFlag} (it reads the
+                 * state of the various keyguard widgets in order to build a flag bitmask enabling or
+                 * disabling the feature the widget controls depending on the checked/unchecked state
+                 * of the widget). We initialize {@code String component} to the text contained in our
+                 * field {@code EditTextPreference mTrustAgentComponent} and if this is not null we
+                 * initialize {@code ComponentName agent} by calling the {@code unflattenFromString}
+                 * method of {@code ComponentName} to parse {@code String component}. If {@code agent}
+                 * is null we just log "Invalid component:". Otherwise we initialize {@code String featureString}
+                 * to the text contained in our field {@code EditTextPreference mTrustAgentFeatures}
+                 * and if this is not null we initialize {@code PersistableBundle bundle} with a new
+                 * instance then split {@code featureString} on the "," character in order to store the
+                 * resulting string array in {@code bundle} under the key "features". Finally we call the
+                 * {@code setTrustAgentConfiguration} method of {@code DevicePolicyManager mDPM} to set
+                 * the list of configuration features in {@code bundle} to enable for the trust agent
+                 * component {@code agent}.
+                 */
                 @SuppressLint("NewApi")
                 @Override
                 public void run() {
-                    mDPM.setKeyguardDisabledFeatures(mDeviceAdminSample,
-                            createKeyguardDisabledFlag());
+                    mDPM.setKeyguardDisabledFeatures(mDeviceAdminSample, createKeyguardDisabledFlag());
                     String component = mTrustAgentComponent.getText();
                     if (component != null) {
                         ComponentName agent = ComponentName.unflattenFromString(component);
@@ -856,6 +965,29 @@ public class DeviceAdminSample extends PreferenceActivity {
             });
         }
 
+        /**
+         * Set the summaries of all our {@code Preference} widgets to strings appropriate for their
+         * current state. First we call our super's implementation of {@code reloadSummaries}. Then
+         * we initialize {@code String cameraSummary} to the string with id R.string.camera_disabled
+         * ("Device cameras disabled") if the {@code getCameraDisabled} method of {@code mDPM} returns
+         * true or the string with id R.string.camera_enabled ("Device cameras enabled") if it returns
+         * false, and then we set the summary of {@code CheckBoxPreference mDisableCameraCheckbox} to
+         * {@code cameraSummary}.
+         * <p>
+         * We initialize {@code int disabled} with the bitmap of flags for the disabled keyguard features
+         * return by the {@code getKeyguardDisabledFeatures} of {@code mDPM}. Then for the following
+         * keyguard feature {@code CheckBoxPreference} widgets in our UI:
+         * <ul>
+         *     <li>
+         *         {@code mDisableKeyguardWidgetsCheckbox} "Disable keyguard widgets" -- If the KEYGUARD_DISABLE_WIDGETS_ALL
+         *         bit is set in {@code disable} we initialize {@code String keyguardWidgetSummary} to the
+         *         string with resource id R.string.keyguard_widgets_disabled ("Keyguard widgets disabled"),
+         *         if unset we initialize {@code String keyguardWidgetSummary} to the string with resource id
+         *         R.string.keyguard_widgets_enabled ("Keyguard widgets enabled"). Then we set the summary
+         *         of {@code mDisableKeyguardWidgetsCheckbox} to {@code keyguardWidgetSummary}.
+         *     </li>
+         * </ul>
+         */
         @Override
         protected void reloadSummaries() {
             super.reloadSummaries();
