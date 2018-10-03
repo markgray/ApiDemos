@@ -986,7 +986,68 @@ public class DeviceAdminSample extends PreferenceActivity {
          *         R.string.keyguard_widgets_enabled ("Keyguard widgets enabled"). Then we set the summary
          *         of {@code mDisableKeyguardWidgetsCheckbox} to {@code keyguardWidgetSummary}.
          *     </li>
+         *     <li>
+         *         {@code mDisableKeyguardSecureCameraCheckbox} "Disable keyguard secure camera" -- If the
+         *         KEYGUARD_DISABLE_SECURE_CAMERA bit is set in {@code disable} we initialize {@code String keyguardSecureCameraSummary}
+         *         to the string with resource id R.string.keyguard_secure_camera_disabled ("Keyguard secure camera disabled"),
+         *         if unset we initialize {@code String keyguardSecureCameraSummary} to the string with resource id
+         *         R.string.keyguard_secure_camera_enabled ("Keyguard secure camera enabled"). Then we set the summary
+         *         of {@code mDisableKeyguardSecureCameraCheckbox} to {@code keyguardSecureCameraSummary}.
+         *     </li>
+         *     <li>
+         *         {@code mDisableKeyguardNotificationCheckbox} "Disable keyguard notifications" -- If the
+         *         KEYGUARD_DISABLE_SECURE_NOTIFICATIONS bit is set in {@code disable} we initialize
+         *         {@code String keyguardSecureNotificationsSummary} to the string with resource id
+         *         R.string.keyguard_secure_notifications_disabled ("Keyguard notifications disabled"),
+         *         if unset we initialize {@code String keyguardSecureNotificationsSummary} to the string with
+         *         resource id R.string.keyguard_secure_notifications_enabled ("Keyguard notifications enabled").
+         *         Then we set the summary of {@code mDisableKeyguardNotificationCheckbox} to
+         *         {@code keyguardSecureNotificationsSummary}.
+         *     </li>
+         *     <li>
+         *         {@code mDisableKeyguardUnredactedCheckbox} "Disable keyguard unredacted notifications" -- If the
+         *         KEYGUARD_DISABLE_UNREDACTED_NOTIFICATIONS bit is set in {@code disable} we initialize
+         *         {@code String keyguardUnredactedSummary} to the string with resource id R.string.keyguard_unredacted_notifications_disabled
+         *         ("Keyguard unredacted notifications disabled"), if unset we initialize {@code String keyguardUnredactedSummary}
+         *         to the string with resource id R.string.keyguard_unredacted_notifications_enabled ("Keyguard unredacted notifications enabled").
+         *         Then we set the summary of {@code mDisableKeyguardUnredactedCheckbox} to {@code keyguardUnredactedSummary}.
+         *     </li>
+         *     <li>
+         *         {@code mDisableKeyguardTrustAgentCheckbox} "Disable keyguard Trust Agents" -- If the
+         *         KEYGUARD_DISABLE_TRUST_AGENTS bit is set in {@code disable} we initialize {@code String keyguardEnableTrustAgentSummary}
+         *         to the string with resource id R.string.keyguard_trust_agents_disabled ("Keyguard Trust Agents disabled"), if unset we
+         *         initialize {@code String keyguardEnableTrustAgentSummary} to the string with resource id R.string.keyguard_trust_agents_enabled
+         *         ("Keyguard Trust Agents enabled"). Then we set the summary of {@code mDisableKeyguardTrustAgentCheckbox} to
+         *         {@code keyguardEnableTrustAgentSummary}.
+         *     </li>
+         *     <li>
+         *         {@code mDisableKeyguardFingerprintCheckbox} "Disable keyguard Fingerprint" -- If the
+         *         KEYGUARD_DISABLE_FINGERPRINT bit is set in {@code disable} we initialize
+         *         {@code String keyguardEnableFingerprintSummary} to the string with resource id
+         *         R.string.keyguard_fingerprint_disabled ("Keyguard Fingerprint disabled"), if unset we
+         *         initialize {@code String keyguardEnableFingerprintSummary} to the string with resource
+         *         id R.string.keyguard_fingerprint_enabled ("Keyguard Fingerprint enabled"). Then we set
+         *         the summary of {@code mDisableKeyguardFingerprintCheckbox} to {@code keyguardEnableFingerprintSummary}.
+         *     </li>
+         *     <li>
+         *         {@code mDisableKeyguardRemoteInputCheckbox} "Disable keyguard Remote Input" -- If the
+         *         KEYGUARD_DISABLE_REMOTE_INPUT bit is set in {@code disable} we initialize {@code String keyguardEnableRemoteInputSummary}
+         *         to the string with resource id R.string.keyguard_remote_input_disabled ("Keyguard Remote Input disabled"),
+         *         if unset we initialize {@code String keyguardEnableRemoteInputSummary} to the string with resource
+         *         id R.string.keyguard_remote_input_enabled ("Keyguard Remote Input enabled"). Then we set
+         *         the summary of {@code mDisableKeyguardRemoteInputCheckbox} to {@code keyguardEnableRemoteInputSummary}.
+         *     </li>
          * </ul>
+         * Now we deal with the two trust agent {@code EditTextPreference} widgets. We initialize {@code SharedPreferences prefs}
+         * with an instance that the {@code getSharedPreferences} method of the {@code PreferenceManager} used by this fragment
+         * returns for us to use. We initialize {@code boolean trustDisabled} to true if the KEYGUARD_DISABLE_TRUST_AGENTS
+         * bit of {@code disabled} is set, and false if not. We initialize {@code String component} with the string stored in
+         * {@code SharedPreferences prefs} under the key used by {@code EditTextPreference mTrustAgentComponent} defaulting
+         * to null. We then set the summary of {@code mTrustAgentComponent} to {@code component}, and enable or disable it
+         * depending on the value of {@code trustDisabled}. We initialize {@code String features} with the string stored in
+         * {@code SharedPreferences prefs} under the key used by {@code EditTextPreference mTrustAgentFeatures} defaulting
+         * to null. We then set the summary of {@code mTrustAgentFeatures} to {@code features}, and enable or disable it
+         * depending on the value of {@code trustDisabled}.
          */
         @Override
         protected void reloadSummaries() {
@@ -1049,7 +1110,11 @@ public class DeviceAdminSample extends PreferenceActivity {
             mTrustAgentFeatures.setEnabled(trustDisabled);
         }
 
-        /** Updates the device capabilities area (dis/enabling) as the admin is (de)activated */
+        /** Updates the device capabilities area (dis/enabling) as the admin is (de)activated
+         *
+         * @param enabled if true all the device capability {@code CheckBoxPreference} widgets are
+         *                enabled, if false they are disabled.
+         */
         private void enableDeviceCapabilitiesArea(boolean enabled) {
             mDisableCameraCheckbox.setEnabled(enabled);
             mDisableKeyguardWidgetsCheckbox.setEnabled(enabled);
@@ -1068,8 +1133,10 @@ public class DeviceAdminSample extends PreferenceActivity {
     public static class QualityFragment extends AdminSampleFragment
             implements OnPreferenceChangeListener {
 
-        // Password quality values
-        // This list must match the list found in samples/ApiDemos/res/values/arrays.xml
+        /**
+         * Password quality values. This list must match the list found in res/values/arrays.xml
+         * for the "password_qualities" string-array.
+         */
         final static int[] mPasswordQualityValues = new int[] {
             DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED,
             DevicePolicyManager.PASSWORD_QUALITY_SOMETHING,
@@ -1080,8 +1147,10 @@ public class DeviceAdminSample extends PreferenceActivity {
             DevicePolicyManager.PASSWORD_QUALITY_COMPLEX
         };
 
-        // Password quality values (as strings, for the ListPreference entryValues)
-        // This list must match the list found in samples/ApiDemos/res/values/arrays.xml
+        /**
+         * Password quality values (as strings, for the ListPreference entryValues). This list must
+         * match the list found in res/values/arrays.xml for the "password_qualities" string-array.
+         */
         final static String[] mPasswordQualityValueStrings = new String[] {
             String.valueOf(DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED),
             String.valueOf(DevicePolicyManager.PASSWORD_QUALITY_SOMETHING),
@@ -1093,16 +1162,65 @@ public class DeviceAdminSample extends PreferenceActivity {
         };
 
         // UI elements
+        /**
+         * {@code PreferenceCategory} "Password quality" in the {@code PreferenceScreen}
+         * xml/device_admin_quality.xml with the key "key_category_quality"
+         */
         private PreferenceCategory mQualityCategory;
+        /**
+         * {@code ListPreference} "Password quality" in the {@code PreferenceScreen}
+         * xml/device_admin_quality.xml with the key "key_quality"
+         */
         private ListPreference mPasswordQuality;
+        /**
+         * {@code EditTextPreference} "Minimum length" in the {@code PreferenceScreen}
+         * xml/device_admin_quality.xml with the key "key_minimum_length"
+         */
         private EditTextPreference mMinLength;
+        /**
+         * {@code EditTextPreference} "Minimum letters" in the {@code PreferenceScreen}
+         * xml/device_admin_quality.xml with the key "key_minimum_letters"
+         */
         private EditTextPreference mMinLetters;
+        /**
+         * {@code EditTextPreference} "Minimum numeric" in the {@code PreferenceScreen}
+         * xml/device_admin_quality.xml with the key "key_minimum_numeric"
+         */
         private EditTextPreference mMinNumeric;
+        /**
+         * {@code EditTextPreference} "Minimum lower case" in the {@code PreferenceScreen}
+         * xml/device_admin_quality.xml with the key "key_minimum_lower_case"
+         */
         private EditTextPreference mMinLowerCase;
+        /**
+         * {@code EditTextPreference} "Minimum upper case" in the {@code PreferenceScreen}
+         * xml/device_admin_quality.xml with the key "key_minimum_upper_case"
+         */
         private EditTextPreference mMinUpperCase;
+        /**
+         * {@code EditTextPreference} "Minimum symbols" in the {@code PreferenceScreen}
+         * xml/device_admin_quality.xml with the key "key_minimum_symbols"
+         */
         private EditTextPreference mMinSymbols;
+        /**
+         * {@code EditTextPreference} "Minimum non-letter" in the {@code PreferenceScreen}
+         * xml/device_admin_quality.xml with the key "key_minimum_non_letter"
+         */
         private EditTextPreference mMinNonLetter;
 
+        /**
+         * Called to do initial creation of a {@code PreferenceFragment}. First we call our super's
+         * implementation of {@code onCreate}, then we call the {@code addPreferencesFromResource}
+         * method to inflate our XML resource file R.xml.device_admin_quality and add its preference
+         * hierarchy to the current preference hierarchy. We then initialize the fields we use to
+         * access the various {@link Preference} widgets in our UI by finding them using the android:key
+         * strings they are identified by in the xml/device_admin_general.xml file. After doing so we
+         * set their {@code OnPreferenceChangeListener} to this. Finally we call the {@code setEntryValues}
+         * method of {@code ListPreference mPasswordQuality} to set the values to save for the preferences
+         * when an entry is selected to our array {@code String[] mPasswordQualityValueStrings}.
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+         */
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -1131,6 +1249,12 @@ public class DeviceAdminSample extends PreferenceActivity {
             mPasswordQuality.setEntryValues(mPasswordQualityValueStrings);
         }
 
+        /**
+         * Called when the fragment is visible to the user and actively running. First we call our
+         * super's implementation of {@code onResume}. Then we enable or disable our UI element
+         * {@code PreferenceCategory mQualityCategory} depending on the value of {@code mAdminActive},
+         * enabling it if we are in an active admin capacity and disabling it if we are not.
+         */
         @Override
         public void onResume() {
             super.onResume();
@@ -1172,6 +1296,65 @@ public class DeviceAdminSample extends PreferenceActivity {
             mMinNonLetter.setSummary(localGlobalSummary(local, global));
         }
 
+        /**
+         * Called when a Preference has been changed by the user. If our super's implementation of
+         * {@code onPreferenceChange} returns true, we return true having done nothing. Otherwise we
+         * initialize {@code String valueString} by casting our parameter {@code Object newValue} to
+         * string, and if it is empty we return false so that the preference is not updated. Next we
+         * initialize {@code int value} to 0, and wrapped in a try block intended to catch NumberFormatException
+         * in order to toast a "Bad value" error message we set {@code value} to the integer value of
+         * {@code valueString}. Now we branch depending on which of our preference widgets match our
+         * parameter {@code Preference preference}:
+         * <ul>
+         *     <li>
+         *         {@code mPasswordQuality} "Password quality" ListPreference -- we call the {@code setPasswordQuality}
+         *         method of {@code DevicePolicyManager mDPM} to set the password restrictions we are imposing
+         *         to {@code value}.
+         *     </li>
+         *     <li>
+         *         {@code mMinLength} "Minimum length" EditTextPreference -- we call the {@code setPasswordMinimumLength}
+         *         method of {@code DevicePolicyManager mDPM} to set the minimum allowed password length to {@code value}.
+         *     </li>
+         *     <li>
+         *         {@code mMinLetters} "Minimum letters" EditTextPreference -- we call the {@code setPasswordMinimumLetters}
+         *         method of {@code DevicePolicyManager mDPM} to set the minimum number of letters required in the password
+         *         to {@code value}.
+         *     </li>
+         *     <li>
+         *         {@code mMinNumeric} "Minimum numeric" EditTextPreference -- we call the {@code setPasswordMinimumNumeric}
+         *         method of {@code DevicePolicyManager mDPM} to set the minimum number of numerical digits required in the
+         *         password to {@code value}.
+         *     </li>
+         *     <li>
+         *         {@code mMinLowerCase} "Minimum lower case" EditTextPreference -- we call the {@code setPasswordMinimumLowerCase}
+         *         method of {@code DevicePolicyManager mDPM} to set the minimum number of lower case letters required in the
+         *         password to {@code value}.
+         *     </li>
+         *     <li>
+         *         {@code mMinUpperCase} "Minimum upper case" EditTextPreference -- we call the {@code setPasswordMinimumUpperCase}
+         *         method of {@code DevicePolicyManager mDPM} to set the minimum number of upper case letters required
+         *         in the password to {@code value}.
+         *     </li>
+         *     <li>
+         *         {@code mMinSymbols} "Minimum symbols" EditTextPreference -- we call the {@code setPasswordMinimumSymbols}
+         *         method of {@code DevicePolicyManager mDPM} to set the minimum number of symbols required in the password
+         *         to {@code value}.
+         *     </li>
+         *     <li>
+         *         {@code mMinNonLetter} "Minimum non-letter" EditTextPreference -- we call the {@code setPasswordMinimumNonLetter}
+         *         method of {@code DevicePolicyManager mDPM} to set the minimum number of non-letters required in the password
+         *         to {@code value}.
+         *     </li>
+         * </ul>
+         * We then call our method {@code postReloadSummaries} to post a call to {@code reloadSummaries}
+         * on the UI queue so that it won't run until after the preference change has been applied
+         * upon exiting this method. Finally we return true to update the state of the Preference with
+         * the new value.
+         *
+         * @param preference The changed Preference.
+         * @param newValue The new value of the Preference.
+         * @return True to update the state of the Preference with the new value.
+         */
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             if (super.onPreferenceChange(preference, newValue)) {
@@ -1210,6 +1393,14 @@ public class DeviceAdminSample extends PreferenceActivity {
             return true;
         }
 
+        /**
+         * Translates the {@code DevicePolicyManager} integer constant that is used to specify a password
+         * quality to a string to display.
+         *
+         * @param quality {@code DevicePolicyManager} integer constant that is used to specify a password
+         *                quality that is used by {@code getPasswordQuality} and {@code setPasswordQuality}
+         * @return a string describing the password quality corresponding to our parameter {@code int quality}
+         */
         private String qualityValueToString(int quality) {
             for (int i=  0; i < mPasswordQualityValues.length; i++) {
                 if (mPasswordQualityValues[i] == quality) {
