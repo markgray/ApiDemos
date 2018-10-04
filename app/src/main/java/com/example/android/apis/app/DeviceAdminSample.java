@@ -1395,7 +1395,12 @@ public class DeviceAdminSample extends PreferenceActivity {
 
         /**
          * Translates the {@code DevicePolicyManager} integer constant that is used to specify a password
-         * quality to a string to display.
+         * quality into a string to display. We loop through our field {@code int[] mPasswordQualityValues}
+         * using {@code int i} as the index, and if {@code mPasswordQualityValues[i]} is equal to our
+         * parameter {@code int quality} we initialize {@code String[] qualities} with the resource
+         * string array with id R.array.password_qualities and return {@code qualities[i]} to the caller.
+         * If we do not find {@code quality} in the {@code mPasswordQualityValues} array we format the
+         * radix 16 string value of {@code quality} into a string which we return to the caller.
          *
          * @param quality {@code DevicePolicyManager} integer constant that is used to specify a password
          *                quality that is used by {@code getPasswordQuality} and {@code setPasswordQuality}
@@ -1414,15 +1419,47 @@ public class DeviceAdminSample extends PreferenceActivity {
     }
 
     /**
-     * PreferenceFragment for "password expiration" preferences.
+     * PreferenceFragment for "password expiration" preferences, uses xml/device_admin_expiration.xml
+     * as its {@code PreferenceScreen}.
      */
     public static class ExpirationFragment extends AdminSampleFragment
             implements OnPreferenceChangeListener, OnPreferenceClickListener {
+        /**
+         * {@code PreferenceCategory} "Password history / Expiration" with the key key_category_expiration
+         * in the xml/device_admin_expiration.xml {@code PreferenceScreen}
+         */
         private PreferenceCategory mExpirationCategory;
+        /**
+         * {@code EditTextPreference} "Password history depth" with the key key_history
+         * in the xml/device_admin_expiration.xml {@code PreferenceScreen}
+         */
         private EditTextPreference mHistory;
+        /**
+         * {@code EditTextPreference} "Password expiration timeout (minutes)" with the key key_expiration_timeout
+         * in the xml/device_admin_expiration.xml {@code PreferenceScreen}
+         */
         private EditTextPreference mExpirationTimeout;
+        /**
+         * {@code PreferenceScreen} "Password expiration status" with the key key_expiration_status
+         * in the xml/device_admin_expiration.xml {@code PreferenceScreen}
+         */
         private PreferenceScreen mExpirationStatus;
 
+        /**
+         * Called to do initial creation of a fragment. First we call our super's implementation of
+         * {@code onCreate}, then we call the {@code addPreferencesFromResource} method to inflate
+         * the XML resource R.xml.device_admin_expiration and add its preference hierarchy to the
+         * current preference hierarchy. We initialize {@code PreferenceCategory mExpirationCategory}
+         * by finding the preference with key KEY_CATEGORY_EXPIRATION ("key_category_expiration"),
+         * initialize {@code EditTextPreference mHistory} by finding the preference with key KEY_HISTORY
+         * ("key_history"), initialize {@code EditTextPreference mExpirationTimeout} by finding the
+         * preference with key KEY_EXPIRATION_TIMEOUT ("key_expiration_timeout"), and initialize
+         * {@code PreferenceScreen mExpirationStatus} by finding the preference with key KEY_EXPIRATION_STATUS
+         * ("key_expiration_status"). We then set the {@code OnPreferenceChangeListener} of {@code mHistory},
+         * {@code mExpirationTimeout} and {@code mExpirationStatus} to this.
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+         */
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -1438,6 +1475,12 @@ public class DeviceAdminSample extends PreferenceActivity {
             mExpirationStatus.setOnPreferenceClickListener(this);
         }
 
+        /**
+         * Called when the fragment is visible to the user and actively running. First we call our
+         * super's implementation of {@code onResume}, then we call the {@code setEnabled} method of
+         * {@code PreferenceCategory mExpirationCategory} to enable the preference if {@code mAdminActive}
+         * is true or disable it if it is false.
+         */
         @Override
         public void onResume() {
             super.onResume();
@@ -1445,7 +1488,22 @@ public class DeviceAdminSample extends PreferenceActivity {
         }
 
         /**
-         * Update the summaries of each item to show the local setting and the global setting.
+         * Update the summaries of each item to show the local setting and the global setting. First
+         * we call our super's implementation of {@code reloadSummaries}. Then we declare {@code local}
+         * and {@code global}, set local to the local length of the password history returned by the
+         * {@code getPasswordHistoryLength} method of {@code DevicePolicyManager mDPM} and {@code global}
+         * to the global value it returns. We then set the summary of {@code EditTextPreference mHistory}
+         * to the string that our method {@code localGlobalSummary} constructs from {@code local} and
+         * {@code global}. We declare {@code long localLong} and {@code long globalLong}, set {@code localLong}
+         * to the local password expiration timeout returned by the {@code getPasswordExpirationTimeout}
+         * method of {@code DevicePolicyManager mDPM} and {@code globalLong} to the global value it returns.
+         * We then set the summary of {@code EditTextPreference mExpirationTimeout} to the string that our
+         * method {@code localGlobalSummary} constructs from {@code localLong} divided by the number
+         * of milliseconds in a minute and {@code globalLong} divided by the number of milliseconds
+         * in a minute. We initialize {@code String expirationStatus} with the string formed by our
+         * {@code getExpirationStatus} method from the current password expiration time for both local
+         * and global profiles, then set the summary of {@code PreferenceScreen mExpirationStatus}
+         * to it.
          */
         @Override
         protected void reloadSummaries() {
@@ -1466,6 +1524,35 @@ public class DeviceAdminSample extends PreferenceActivity {
             mExpirationStatus.setSummary(expirationStatus);
         }
 
+        /**
+         * Called when a Preference has been changed by the user. If our super's implementation of
+         * {@code onPreferenceChange} returns true, we return true having done nothing. Otherwise we
+         * initialize {@code String valueString} by casting our parameter {@code Object newValue} to
+         * string and if it is empty we return false so the preference is not updated. Next we initialize
+         * {@code int value} to 0, and wrapped in a try block intended to catch NumberFormatException
+         * in order to toast a "Bad value" error message we set {@code value} to the integer value of
+         * {@code valueString}. We then branch on the value of our parameter {@code Preference preference}:
+         * <ul>
+         *     <li>
+         *         {@code EditTextPreference mHistory} "Password history depth" we call the {@code setPasswordHistoryLength}
+         *         method of {@code DevicePolicyManager mDPM} to set the length of the password history
+         *         to {@code value}.
+         *     </li>
+         *     <li>
+         *         {@code EditTextPreference mExpirationTimeout} "Password expiration timeout (minutes)"
+         *         we call the {@code setPasswordExpirationTimeout} method of {@code DevicePolicyManager mDPM}
+         *         to set the password expiration timeout to {@code value}.
+         *     </li>
+         * </ul>
+         * We then call our method {@code postReloadSummaries} to post a call to {@code reloadSummaries}
+         * on the UI queue so that it won't run until after the preference change has been applied
+         * upon exiting this method. Finally we return true to update the state of the Preference with
+         * the new value.
+         *
+         * @param preference The changed Preference.
+         * @param newValue The new value of the Preference.
+         * @return True to update the state of the Preference with the new value.
+         */
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             if (super.onPreferenceChange(preference, newValue)) {
@@ -1492,6 +1579,18 @@ public class DeviceAdminSample extends PreferenceActivity {
             return true;
         }
 
+        /**
+         * Called when a Preference has been clicked. If our super's implementation of {@code onPreferenceClick}
+         * returns true, we return true having done nothing. If our parameter {@code Preference preference} is
+         * {@code PreferenceScreen mExpirationStatus} we initialize {@code String expirationStatus} with the
+         * string formed by our {@code getExpirationStatus} method from the current password expiration time
+         * for both local and global profiles, then set the summary of {@code PreferenceScreen mExpirationStatus}
+         * to it and return true to the caller having consumed the click. If {@code preference} is not
+         * equal to {@code mExpirationStatus} we return false to the caller.
+         *
+         * @param preference The Preference that was clicked.
+         * @return True if the click was handled.
+         */
         @Override
         public boolean onPreferenceClick(Preference preference) {
             if (super.onPreferenceClick(preference)) {
@@ -1506,8 +1605,32 @@ public class DeviceAdminSample extends PreferenceActivity {
         }
 
         /**
-         * Create a summary string describing the expiration status for the sample app,
-         * as well as the global (aggregate) status.
+         * Create a summary string describing the expiration status for the sample app, as well as
+         * the global (aggregate) status. We initialize {@code long localExpiration} with the local
+         * password expiration time returned by the {@code getPasswordExpiration} method of
+         * {@code DevicePolicyManager mDPM} and {@code long globalExpiration} to the global value,
+         * then initialize {@code long now} with the current time in milliseconds. We declare
+         * {@code String local} and if {@code localExpiration} is zero we set it to the string with
+         * resource id R.string.expiration_status_none ("None"), otherwise we subtract {@code now}
+         * from {@code localExpiration}. We initialize {@code String dms} to the string returned by our
+         * method {@code timeToDaysMinutesSeconds} creates from the absolute value of {@code localExpiration}.
+         * If {@code localExpiration} is greater than or equal to 0 we set {@code local} to the formatted
+         * string created from {@code dms} using the format string with resource id R.string.expiration_status_future
+         * ("Password will expire %1$s from now") otherwise we set it to the formatted string created from
+         * {@code dms} using the format string with resource id R.string.expiration_status_past
+         * ("Password expired %1$s ago").
+         * <p>
+         * We then declare {@code String global} and if {@code globalExpiration} is 0 we set it to the
+         * string with resource id R.string.expiration_status_none ("None"), otherwise we subtract
+         * {@code now} from {@code globalExpiration}. We initialize {@code String dms} to the string
+         * returned by our method {@code timeToDaysMinutesSeconds} creates from the absolute value of
+         * {@code globalExpiration}. If {@code globalExpiration} is greater than or equal to 0 we set
+         * {@code global} to the formatted string created from {@code dms} using the format string with
+         * resource id R.string.expiration_status_future ("Password will expire %1$s from now") otherwise
+         * we set it to the formatted string created from {@code dms} using the format string with resource
+         * id R.string.expiration_status_past ("Password expired %1$s ago"). Finally we return the formatted
+         * string created from {@code local} and {@code global} using the format string with resource id
+         * R.string.status_local_global ("Local=%1$s / Global=%2$s").
          */
         private String getExpirationStatus() {
             // expirations are absolute;  convert to relative for display
@@ -1547,17 +1670,53 @@ public class DeviceAdminSample extends PreferenceActivity {
     }
 
     /**
-     * PreferenceFragment for "lock screen & wipe" preferences.
+     * PreferenceFragment for "lock screen & wipe" preferences, uses the xml/device_admin_lock_wipe.xml
+     * file as its {@code PreferenceScreen}.
      */
     public static class LockWipeFragment extends AdminSampleFragment
             implements OnPreferenceChangeListener, OnPreferenceClickListener {
+        /**
+         * {@code PreferenceCategory} "Lock screen / Wipe" with the key key_category_lock_wipe in the
+         * xml/device_admin_lock_wipe.xml {@code PreferenceScreen}
+         */
         private PreferenceCategory mLockWipeCategory;
+        /**
+         * {@code EditTextPreference} "Max time to screen lock (minutes)" with the key key_max_time_screen_lock
+         * in the xml/device_admin_lock_wipe.xml {@code PreferenceScreen}
+         */
         private EditTextPreference mMaxTimeScreenLock;
+        /**
+         * {@code EditTextPreference} "Max password failures for local wipe" with the key key_max_fails_before_wipe
+         * in the xml/device_admin_lock_wipe.xml {@code PreferenceScreen}
+         */
         private EditTextPreference mMaxFailures;
+        /**
+         * {@code PreferenceScreen} "Lock screen now" with the key key_lock_screen in the
+         * xml/device_admin_lock_wipe.xml {@code PreferenceScreen}
+         */
         private PreferenceScreen mLockScreen;
+        /**
+         * {@code PreferenceScreen} "Wipe data" with the key key_wipe_data in the
+         * xml/device_admin_lock_wipe.xml {@code PreferenceScreen}
+         */
         private PreferenceScreen mWipeData;
+        /**
+         * {@code PreferenceScreen} "Wipe all data" with the key key_wipe_data_all in the
+         * xml/device_admin_lock_wipe.xml {@code PreferenceScreen}
+         */
         private PreferenceScreen mWipeAppData;
 
+        /**
+         * Called to do initial creation of a {@code PreferenceFragment}. First we call our super's
+         * implementation of {@code onCreate}, then we call the {@code addPreferencesFromResource}
+         * method to inflate our XML resource file R.xml.device_admin_lock_wipe and add its preference
+         * hierarchy to the current preference hierarchy. We then initialize the fields we use to
+         * access the various {@link Preference} widgets in our UI by finding them using the android:key
+         * strings they are identified by in the xml/device_admin_lock_wipe.xml file. After doing so we
+         * set their {@code OnPreferenceChangeListener} to this.
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+         */
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -1577,6 +1736,12 @@ public class DeviceAdminSample extends PreferenceActivity {
             mWipeAppData.setOnPreferenceClickListener(this);
         }
 
+        /**
+         * Called when the fragment is visible to the user and actively running. First we call our
+         * super's implementation of {@code onResume}. Then we enable or disable our UI element
+         * {@code PreferenceCategory mLockWipeCategory} depending on the value of {@code mAdminActive},
+         * enabling it if we are in an active admin capacity and disabling it if we are not.
+         */
         @Override
         public void onResume() {
             super.onResume();
@@ -1584,7 +1749,19 @@ public class DeviceAdminSample extends PreferenceActivity {
         }
 
         /**
-         * Update the summaries of each item to show the local setting and the global setting.
+         * Update the summaries of each item to show the local setting and the global setting. First
+         * we call our super's implementation of {@code reloadSummaries}. We then declare {@code long localLong}
+         * and {@code long globalLong}. Then we set {@code localLong} to the current local maximum time to unlock
+         * returned by the {@code getMaximumTimeToLock} method of {@code DevicePolicyManager mDPM} and
+         * {@code globalLong} to the global value returned. We then set the summary of {@code EditTextPreference mMaxTimeScreenLock}
+         * to the string that our method {@code localGlobalSummary} constructs from {@code localLong}
+         * divided by the number of milliseconds in a minute and {@code globalLong} divided by the number
+         * of milliseconds in a minute. Then we declare {@code int local} and {@code int global}, set {@code local}
+         * to the local current maximum number of login attempts that are allowed before the device or
+         * profile is wiped returned by the {@code getMaximumFailedPasswordsForWipe} method of
+         * {@code DevicePolicyManager mDPM} and {@code global} to the global value it returns. We then
+         * set the summary of {@code EditTextPreference mMaxFailures} to the string that our method
+         * {@code localGlobalSummary} constructs from {@code local} and {@code global}.
          */
         @Override
         protected void reloadSummaries() {
@@ -1602,6 +1779,41 @@ public class DeviceAdminSample extends PreferenceActivity {
             mMaxFailures.setSummary(localGlobalSummary(local, global));
         }
 
+        /**
+         * Called when a Preference has been changed by the user. If our super's implementation of
+         * {@code onPreferenceChange} returns true, we return true having done nothing. Otherwise we
+         * initialize {@code String valueString} by casting our parameter {@code Object newValue} to
+         * string, and if it is empty we return false so that the preference is not updated. Next we
+         * initialize {@code int value} to 0, and wrapped in a try block intended to catch NumberFormatException
+         * in order to toast a "Bad value" error message we set {@code value} to the integer value of
+         * {@code valueString}. Now we branch depending on which of our preference widgets match our
+         * parameter {@code Preference preference}:
+         * <ul>
+         *     <li>
+         *         {@code EditTextPreference mMaxTimeScreenLock} "Max time to screen lock (minutes)"
+         *         we call the {@code setMaximumTimeToLock} method of {@code DevicePolicyManager mDPM}
+         *         to set the maximum time for user activity until the device will lock to {@code value}
+         *         times the number of milliseconds in a minute.
+         *     </li>
+         *     <li>
+         *         {@code EditTextPreference mMaxFailures} "Max password failures for local wipe" we first
+         *         call our method {@code alertIfMonkey} to make sure we are not being run by an automated
+         *         test, toasting the message "You can't wipe my data, you are a monkey!" if so and returning
+         *         true without doing more if is returns true. If it returns false we call the
+         *         {@code setMaximumFailedPasswordsForWipe} method of {@code DevicePolicyManager mDPM}
+         *         to set the number of failed password attempts at which point the device or profile will
+         *         be wiped to {@code value}.
+         *     </li>
+         * </ul>
+         * We then call our method {@code postReloadSummaries} to post a call to {@code reloadSummaries}
+         * on the UI queue so that it won't run until after the preference change has been applied
+         * upon exiting this method. Finally we return true to update the state of the Preference with
+         * the new value.
+         *
+         * @param preference The changed Preference.
+         * @param newValue The new value of the Preference.
+         * @return True to update the state of the Preference with the new value.
+         */
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             if (super.onPreferenceChange(preference, newValue)) {
@@ -1631,6 +1843,26 @@ public class DeviceAdminSample extends PreferenceActivity {
             return true;
         }
 
+        /**
+         * Called when a Preference has been clicked. If our super's implementation of {@code onPreferenceClick}
+         * returns true, we return true having done nothing. If our parameter {@code Preference preference} is
+         * {@code PreferenceScreen mLockScreen} we call our method {@code alertIfMonkey} to check if we
+         * are being run by an automated test, toasting the message "You can't lock my screen, you are a monkey!"
+         * if so and if it returns true we return true having done nothing. If {@code alertIfMonkey} returned
+         * false (indicating we are being run by a user) we call the {@code lockNow} method of
+         * {@code DevicePolicyManager mDPM} to make the device lock immediately. If our parameter
+         * {@code Preference preference} is {@code PreferenceScreen mWipeData} or {@code PreferenceScreen mWipeAppData}
+         * we call our method {@code alertIfMonkey} to check if we are being run by an automated test,
+         * toasting the message "You can't wipe my data, you are a monkey!" if so and if it returns true
+         * we return true having done nothing. If {@code alertIfMonkey} returned false (indicating we are
+         * being run by a user) we call our method {@code promptForRealDeviceWipe} with true if {@code preference}
+         * is equal to {@code mWipeAppData} or false if it is {@code mWipeData}. Upon return from
+         * {@code promptForRealDeviceWipe} we return true consuming the click. For any other value of
+         * {@code preference} we return false indicating that we did not handle the click.
+         *
+         * @param preference The Preference that was clicked.
+         * @return True if the click was handled.         *
+         */
         @Override
         public boolean onPreferenceClick(Preference preference) {
             if (super.onPreferenceClick(preference)) {
@@ -1653,15 +1885,18 @@ public class DeviceAdminSample extends PreferenceActivity {
         }
 
         /**
-         * Wiping data is real, so we don't want it to be easy.  Show two alerts before wiping.
+         * Wiping data is real, so we don't want it to be easy. Show two alerts before wiping.
+         *
+         * @param wipeAllData if true, we pass the WIPE_EXTERNAL_STORAGE flag (also erase the device's
+         *                    external storage, such as SD cards) to the {@code wipeData} method of
+         *                    {@code DevicePolicyManager mDPM}, if false we pass 0.
          */
         private void promptForRealDeviceWipe(final boolean wipeAllData) {
             final DeviceAdminSample activity = mActivity;
 
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setMessage(R.string.wipe_warning_first);
-            builder.setPositiveButton(R.string.wipe_warning_first_ok,
-                    new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.wipe_warning_first_ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -1670,8 +1905,7 @@ public class DeviceAdminSample extends PreferenceActivity {
                     } else {
                         builder.setMessage(R.string.wipe_warning_second);
                     }
-                    builder.setPositiveButton(R.string.wipe_warning_second_ok,
-                            new DialogInterface.OnClickListener() {
+                    builder.setPositiveButton(R.string.wipe_warning_second_ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             boolean stillActive = mActivity.isActiveAdmin();
