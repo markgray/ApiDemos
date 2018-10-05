@@ -1885,7 +1885,21 @@ public class DeviceAdminSample extends PreferenceActivity {
         }
 
         /**
-         * Wiping data is real, so we don't want it to be easy. Show two alerts before wiping.
+         * Calls the {@code DevicePolicyManager mDPM} {@code wipeData} method to wipe data on the
+         * device after displaying two warning alert dialogs. Wiping data is real, so we don't want
+         * it to be easy, so we show two alerts before wiping. We initialize {@code DeviceAdminSample activity}
+         * with the value of our field {@code DeviceAdminSample mActivity}, and initialize {@code AlertDialog.Builder builder}
+         * with a new instance. We set the message of {@code builder} to the string with resource id
+         * R.string.wipe_warning_first ("This will erase all of your data.  Are you sure?") and set the
+         * text of its positive button to the string with resource id R.string.wipe_warning_first_ok
+         * ("Yes") and its {@code OnClickListener} to an anonymous class which builds and launches a
+         * second alert dialog when the positive button is clicked. We set the text of its negative button
+         * to the string with resource id R.string.wipe_warning_first_no ("No") then show this first
+         * alert dialog. The {@code OnClickListener} of the positive button of the second alert dialog
+         * that is displayed when the positive button of the first alert dialog is clicked will really
+         * call the {@code DevicePolicyManager mDPM} {@code wipeData} method to wipe data on the device
+         * passing the flag WIPE_EXTERNAL_STORAGE to wipe the external data also if our parameter
+         * {@code boolean wipeAllData} is true.
          *
          * @param wipeAllData if true, we pass the WIPE_EXTERNAL_STORAGE flag (also erase the device's
          *                    external storage, such as SD cards) to the {@code wipeData} method of
@@ -1897,6 +1911,25 @@ public class DeviceAdminSample extends PreferenceActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setMessage(R.string.wipe_warning_first);
             builder.setPositiveButton(R.string.wipe_warning_first_ok, new DialogInterface.OnClickListener() {
+                /**
+                 * This method will be invoked when the positive button in the dialog is clicked. We initialize
+                 * {@code AlertDialog.Builder builder} with a new instance. If the {@code wipeAllData}
+                 * parameter of the method {@code promptForRealDeviceWipe} was true we set the message
+                 * of {@code builder} to the string with resource id R.string.wipe_warning_second_full
+                 * ("This is not a test. This WILL erase all of your data, including external storage!
+                 * Are you really absolutely sure?"), if it was false we set the  message to the string
+                 * with resource id R.string.wipe_warning_second ("This is not a test. This WILL erase
+                 * all of your data! Are you really absolutely sure?"). We then set the text of the
+                 * positive button to the string with resource id R.string.wipe_warning_second_ok
+                 * ("BOOM!") and its {@code OnClickListener} to an anonymous class which calls the
+                 * {@code wipeData} method of {@code DevicePolicyManager mDPM} with the flag WIPE_EXTERNAL_STORAGE
+                 * if {@code wipeAllData} was true, or 0 if it was false. We then set the text of the
+                 * negative button to the string with resource id R.string.wipe_warning_second_no ("Oops, run away!")
+                 * and show the dialog of {@code builder}.
+                 *
+                 * @param dialog the dialog that received the click
+                 * @param which the button that was clicked, BUTTON_POSITIVE in our case
+                 */
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -1906,6 +1939,20 @@ public class DeviceAdminSample extends PreferenceActivity {
                         builder.setMessage(R.string.wipe_warning_second);
                     }
                     builder.setPositiveButton(R.string.wipe_warning_second_ok, new DialogInterface.OnClickListener() {
+                        /**
+                         * This method will be invoked when the positive button in the dialog is clicked.
+                         * We initialize {@code boolean stillActive} with the value returned by the
+                         * {@code isActiveAdmin} method of {@code DeviceAdminSample mActivity} (this
+                         * helper method just returns the value returned by the {@code isAdminActive}
+                         * method of {@code DevicePolicyManager mDPM} for {@code ComponentName mDeviceAdminSample}
+                         * (true if the given administrator component is currently active (enabled) in the system).
+                         * If {@code stillActive} is true we call the {@code wipeData} method of
+                         * {@code DevicePolicyManager mDPM} with the flag WIPE_EXTERNAL_STORAGE if
+                         * {@code wipeAllData} was true, or 0 if it was false.
+                         *
+                         * @param dialog the dialog that received the click
+                         * @param which the button that was clicked, BUTTON_POSITIVE in our case
+                         */
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             boolean stillActive = mActivity.isActiveAdmin();
@@ -1925,14 +1972,41 @@ public class DeviceAdminSample extends PreferenceActivity {
     }
 
     /**
-     * PreferenceFragment for "encryption" preferences.
+     * PreferenceFragment for "encryption" preferences, uses the xml/device_admin_encryption.xml
+     * {@code PreferenceScreen} to load its preference widgets.
      */
     public static class EncryptionFragment extends AdminSampleFragment
             implements OnPreferenceChangeListener, OnPreferenceClickListener {
+        /**
+         * {@code PreferenceCategory} "Encryption" with the key key_category_encryption in the
+         * xml/device_admin_encryption.xml {@code PreferenceScreen}
+         */
         private PreferenceCategory mEncryptionCategory;
+        /**
+         * {@code CheckBoxPreference} "Require encryption" with the key key_require_encryption in the
+         * xml/device_admin_encryption.xml {@code PreferenceScreen}
+         */
         private CheckBoxPreference mRequireEncryption;
+        /**
+         * {@code PreferenceScreen} "Activate encryption" with the key key_activate_encryption in the
+         * xml/device_admin_encryption.xml {@code PreferenceScreen}
+         */
         private PreferenceScreen mActivateEncryption;
 
+        /**
+         * Called to do initial creation of a fragment. First we call our super's implementation of
+         * {@code onCreate}, then we call the {@code addPreferencesFromResource} method to inflate
+         * the XML resource R.xml.device_admin_encryption and add its preference hierarchy to the
+         * current preference hierarchy. We initialize {@code PreferenceCategory mEncryptionCategory}
+         * by finding the preference with key KEY_CATEGORY_ENCRYPTION ("key_category_encryption"),
+         * initialize {@code CheckBoxPreference mRequireEncryption} by finding the preference with key
+         * KEY_REQUIRE_ENCRYPTION ("key_require_encryption"), and initialize {@code PreferenceScreen mActivateEncryption}
+         * by finding the preference with key KEY_ACTIVATE_ENCRYPTION ("key_activate_encryption"). We
+         * then set the {@code OnPreferenceChangeListener} of {@code mRequireEncryption} to this, and
+         * the {@code OnPreferenceClickListener} of {@code mActivateEncryption} to this.
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+         */
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -1946,6 +2020,13 @@ public class DeviceAdminSample extends PreferenceActivity {
             mActivateEncryption.setOnPreferenceClickListener(this);
         }
 
+        /**
+         * Called when the fragment is visible to the user and actively running. First we call our
+         * super's implementation of {@code onResume}, then we enable {@code PreferenceCategory mEncryptionCategory}
+         * if {@code mAdminActive} is true or disable it if it is false. Finally we set the checked state of
+         * {@code CheckBoxPreference mRequireEncryption} to the value returned by the {@code getStorageEncryption}
+         * method of {@code DevicePolicyManager mDPM} (true if the admin(s) are requesting encryption, false if not).
+         */
         @Override
         public void onResume() {
             super.onResume();
@@ -1954,7 +2035,25 @@ public class DeviceAdminSample extends PreferenceActivity {
         }
 
         /**
-         * Update the summaries of each item to show the local setting and the global setting.
+         * Update the summaries of each item to show the local setting and the global setting. First
+         * we call our super's implementation of {@code reloadSummaries}. Then we declare {@code local}
+         * and {@code global} to be boolean, set local to the value returned by the {@code getStorageEncryption}
+         * method of {@code DevicePolicyManager mDPM} and {@code global} to the global value it returns
+         * (true if the admin(s) are requesting encryption, false if not). We then set the summary of
+         * {@code CheckBoxPreference mRequireEncryption} to the string that our method {@code localGlobalSummary}
+         * constructs from {@code local} and {@code global}. We then initialize {@code int deviceStatusCode}
+         * with the value that the {@code getStorageEncryptionStatus} method of {@code DevicePolicyManager mDPM}
+         * returns (current status of encryption. The value will be one of ENCRYPTION_STATUS_UNSUPPORTED
+         * (indicates that encryption is not supported), ENCRYPTION_STATUS_INACTIVE (encryption is supported,
+         * but is not currently active), ENCRYPTION_STATUS_ACTIVATING (encryption is not currently active,
+         * but is currently being activated), ENCRYPTION_STATUS_ACTIVE_DEFAULT_KEY (encryption is active,
+         * but an encryption key has not been set by the user), ENCRYPTION_STATUS_ACTIVE (encryption is active),
+         * or ENCRYPTION_STATUS_ACTIVE_PER_USER (encryption is active and the encryption key is tied to the
+         * user or profile). We initialize {@code String deviceStatus} with the string that our method
+         * {@code statusCodeToString} retrieves to explain {@code deviceStatusCode}, then initialize
+         * {@code String status} with the string formatted using the string with resource id
+         * R.string.status_device_encryption ("Device encryption status=%1$s") from {@code deviceStatus}.
+         * Finally we set the summary of {@code PreferenceScreen mActivateEncryption} to {@code status}.
          */
         @Override
         protected void reloadSummaries() {
@@ -1971,6 +2070,23 @@ public class DeviceAdminSample extends PreferenceActivity {
             mActivateEncryption.setSummary(status);
         }
 
+        /**
+         * Called when a Preference has been changed by the user. If our super's implementation of
+         * {@code onPreferenceChange} returns true, we return true having done nothing. If our parameter
+         * {@code Preference preference} is equal to {@code CheckBoxPreference mRequireEncryption} we
+         * initialize {@code boolean newActive} by casting our parameter {@code Object newValue} to
+         * Boolean. We then call the {@code setStorageEncryption} method of {@code DevicePolicyManager mDPM}
+         * to request encryption if {@code newActive} is true or to release any previous request if it
+         * is false. We then call our method {@code postReloadSummaries} to post a call to {@code reloadSummaries}
+         * on the UI queue so that it won't run until after the preference change has been applied
+         * upon exiting this method. Finally we return true to update the state of the Preference with
+         * the new value. If our parameter {@code Preference preference} is not equal to {@code mRequireEncryption}
+         * we also return true.
+         *
+         * @param preference The changed Preference.
+         * @param newValue The new value of the Preference.
+         * @return True to update the state of the Preference with the new value.
+         */
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             if (super.onPreferenceChange(preference, newValue)) {
@@ -1986,6 +2102,26 @@ public class DeviceAdminSample extends PreferenceActivity {
             return true;
         }
 
+        /**
+         * Called when a Preference has been clicked. If our super's implementation of {@code onPreferenceClick}
+         * returns true, we return true having done nothing. If our parameter {@code Preference preference} is
+         * {@code PreferenceScreen mActivateEncryption} we check whether we are being called by an automated
+         * test by calling our method {@code alertIfMonkey}, which returns true if we are being run by an
+         * automated test in which case we return true having done nothing ({@code alertIfMonkey} will have
+         * displayed an alert dialog with the string with resource id R.string.monkey_encryption ("You can't
+         * start encryption, you are a monkey!"). If the {@code getStorageEncryptionStatus} method of
+         * {@code DevicePolicyManager mDPM} returns ENCRYPTION_STATUS_UNSUPPORTED (encryption is not supported)
+         * we initialize {@code AlertDialog.Builder builder} with a new instance, set its message to the
+         * string with resource id R.string.encryption_not_supported ("Encryption is not supported on this device."),
+         * set the text of its positive button to the string with resource id R.string.encryption_not_supported_ok
+         * ("OK"), show the dialog built from {@code builder} and return true to the caller. Otherwise
+         * we initialize {@code Intent intent} with an instance whose action is ACTION_START_ENCRYPTION
+         * (begin the process of encrypting data on the device). We then launch the activity of {@code intent}
+         * for a result and return true to the caller.
+         *
+         * @param preference The Preference that was clicked.
+         * @return True if the click was handled.
+         */
         @Override
         public boolean onPreferenceClick(Preference preference) {
             if (super.onPreferenceClick(preference)) {
@@ -2012,6 +2148,34 @@ public class DeviceAdminSample extends PreferenceActivity {
             return false;
         }
 
+        /**
+         * Translates a {@code DevicePolicyManager} encryption status code to a descriptive string.
+         * We initialize {@code int newStatus} to the resource id R.string.encryption_status_unknown
+         * (the string "unknown") then switch on our parameter {@code int newStatusCode}:
+         * <ul>
+         *     <li>
+         *         ENCRYPTION_STATUS_UNSUPPORTED we set {@code newStatus} to the resource id
+         *         R.string.encryption_status_unsupported (the string: "unsupported") and break.
+         *     </li>
+         *     <li>
+         *         ENCRYPTION_STATUS_INACTIVE we set {@code newStatus} to the resource id
+         *         R.string.encryption_status_inactive (the string: "inactive") and break.
+         *     </li>
+         *     <li>
+         *         ENCRYPTION_STATUS_ACTIVATING we set {@code newStatus} to the resource id
+         *         R.string.encryption_status_activating (the string: "activating") and break.
+         *     </li>
+         *     <li>
+         *         ENCRYPTION_STATUS_ACTIVE we set {@code newStatus} to the resource id
+         *         R.string.encryption_status_active (the string: "active") and break.
+         *     </li>
+         * </ul>
+         * Finally we return the string that the {@code getString} method of {@code DeviceAdminSample mActivity}
+         * returns for the resource id in {@code newStatus}.
+         *
+         * @param newStatusCode {@code DevicePolicyManager} encryption status code
+         * @return a string describing the meaning of {@code newStatusCode}
+         */
         private String statusCodeToString(int newStatusCode) {
             int newStatus = R.string.encryption_status_unknown;
             switch (newStatusCode) {
@@ -2033,7 +2197,19 @@ public class DeviceAdminSample extends PreferenceActivity {
     }
 
     /**
-     * Simple converter used for long expiration times reported in mSec.
+     * Simple converter used for long expiration times reported in mSec. We initialize {@code long days}
+     * by dividing our parameter {@code time} by the number of milliseconds in a day, {@code long hours}
+     * by dividing our parameter {@code time} by the number of milliseconds in an hour then applying
+     * modulo 24 to that value, {@code long minutes} by dividing our parameter {@code time} by the
+     * number of milliseconds in an minute then applying modulo 60 to that value, and {@code long minutes}
+     * by dividing our parameter {@code time} by the number of milliseconds in a minute then applying
+     * modulo 60 to that value. Finally we return the string formatted from {@code days}, {@code hours},
+     * and {@code minutes} using the format string with resource id R.string.status_days_hours_minutes
+     * ("%1$dd %2$dh %3$dm").
+     *
+     * @param context {@code Context} to use to access resources.
+     * @param time time in milliseconds.
+     * @return string representation of our parameter {@code time}
      */
     private static String timeToDaysMinutesSeconds(Context context, long time) {
         long days = time / MS_PER_DAY;
@@ -2043,8 +2219,18 @@ public class DeviceAdminSample extends PreferenceActivity {
     }
 
     /**
-     * If the "user" is a monkey, post an alert and notify the caller.  This prevents automated
-     * test frameworks from stumbling into annoying or dangerous operations.
+     * If the "user" is a monkey, post an alert and notify the caller. This prevents automated test
+     * frameworks from stumbling into annoying or dangerous operations. If the {@code isUserAMonkey}
+     * method of {@code ActivityManager} returns true (the user interface is currently being messed
+     * with by a monkey) we initialize {@code AlertDialog.Builder builder}, set its message to the
+     * string with the resource id of our parameter {@code int stringId}, set the text of its positive
+     * button to the string with resource id R.string.monkey_ok ("I admit defeat"), show the alert
+     * dialog built from {@code builder} and return true to the caller. Otherwise we return false to
+     * the caller.
+     *
+     * @param context {@code Context} to use to access resources.
+     * @param stringId resource id of the message to use in the alert dialog.
+     * @return Returns "true" if the user interface is currently being messed with by a monkey.
      */
     private static boolean alertIfMonkey(Context context, int stringId) {
         if (ActivityManager.isUserAMonkey()) {
@@ -2061,16 +2247,37 @@ public class DeviceAdminSample extends PreferenceActivity {
     /**
      * Sample implementation of a DeviceAdminReceiver.  Your controller must provide one,
      * although you may or may not implement all of the methods shown here.
-     *
+     * <p>
      * All callbacks are on the UI thread and your implementations should not engage in any
      * blocking operations, including disk I/O.
      */
     public static class DeviceAdminSampleReceiver extends DeviceAdminReceiver {
+        /**
+         * Convenience method to toast a {@code DeviceAdminSampleReceiver} status message. We initialize
+         * {@code String status} by using the format string with resource id R.string.admin_receiver_status
+         * ("Sample Device Admin: %1$s") to format our parameter {@code String msg}, then make and show
+         * a toast of {@code status}.
+         *
+         * @param context {@code Context} to use to access resources.
+         * @param msg string to format into a "Sample Device Admin: %1$s" toast message
+         */
         void showToast(Context context, String msg) {
             String status = context.getString(R.string.admin_receiver_status, msg);
             Toast.makeText(context, status, Toast.LENGTH_SHORT).show();
         }
 
+        /**
+         * Intercept standard device administrator broadcasts. This method is called when this
+         * BroadcastReceiver is receiving an Intent broadcast. If the action of our parameter
+         * {@code Intent intent} is ACTION_DEVICE_ADMIN_DISABLE_REQUESTED (Action sent to a device
+         * administrator when the user has requested to disable it, but before this has actually been
+         * done) we call the {@code abortBroadcast} method to set the flag indicating that this receiver
+         * should abort the current broadcast (This will prevent any other broadcast receivers from
+         * receiving the broadcast). Finally we call our super's implementation of {@code onReceive}.
+         *
+         * @param context The Context in which the receiver is running.
+         * @param intent The Intent being received.
+         */
         @Override
         public void onReceive(Context context, Intent intent) {
             //noinspection ConstantConditions
@@ -2080,11 +2287,35 @@ public class DeviceAdminSample extends PreferenceActivity {
             super.onReceive(context, intent);
         }
 
+        /**
+         * Called after the administrator is first enabled, as a result of receiving an intent with
+         * the action {@link #ACTION_DEVICE_ADMIN_ENABLED} (This is the primary action that a device
+         * administrator must implement to be allowed to manage a device. This will be sent to the
+         * receiver when the user enables it for administration). We call our method {@code showToast}
+         * to toast the string with resource id R.string.admin_receiver_status_enabled ("enabled").
+         *
+         * @param context The running context as per {@link #onReceive}.
+         * @param intent The received intent as per {@link #onReceive}.
+         */
         @Override
         public void onEnabled(Context context, Intent intent) {
             showToast(context, context.getString(R.string.admin_receiver_status_enabled));
         }
 
+        /**
+         * Called when the user has asked to disable the administrator, as a result of receiving
+         * {@link #ACTION_DEVICE_ADMIN_DISABLE_REQUESTED} (Action sent to a device administrator when
+         * the user has requested to disable it, but before this has actually been done), giving you
+         * a chance to present a warning message to them. The message is returned as the result; if
+         * null is returned (the default implementation), no message will be displayed. We return the
+         * string with resource id R.string.admin_receiver_status_disable_warning ("This is an optional
+         * message to warn the user about disabling").
+         *
+         * @param context The running context as per {@link #onReceive}.
+         * @param intent The received intent as per {@link #onReceive}.
+         * @return Return the warning message to display to the user before being disabled; if null
+         * is returned, no message is displayed.
+         */
         @Override
         public CharSequence onDisableRequested(Context context, Intent intent) {
             return context.getString(R.string.admin_receiver_status_disable_warning);
