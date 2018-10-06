@@ -2321,33 +2321,108 @@ public class DeviceAdminSample extends PreferenceActivity {
             return context.getString(R.string.admin_receiver_status_disable_warning);
         }
 
+        /**
+         * Called prior to the administrator being disabled, as a result of receiving
+         * {@link #ACTION_DEVICE_ADMIN_DISABLED}. Upon return, you can no longer use the
+         * protected parts of the {@link DevicePolicyManager} API. We call our method
+         * {@code showToast} with the string resource id R.string.admin_receiver_status_disabled
+         * ("disabled").
+         *
+         * @param context The running context as per {@link #onReceive}.
+         * @param intent The received intent as per {@link #onReceive}.
+         */
         @Override
         public void onDisabled(Context context, Intent intent) {
             showToast(context, context.getString(R.string.admin_receiver_status_disabled));
         }
 
+        /**
+         * Called after the user has changed their device or profile challenge password, as a result of
+         * receiving {@link #ACTION_PASSWORD_CHANGED}. At this point you can use
+         * {@link DevicePolicyManager#getPasswordQuality(android.content.ComponentName)}
+         * to retrieve the active password characteristics. We call our method {@code showToast}
+         * with the string resource id R.string.admin_receiver_status_pw_changed ("pw changed").
+         *
+         * @param context The running context as per {@link #onReceive}.
+         * @param intent The received intent as per {@link #onReceive}.
+         * @deprecated From {@code android.os.Build.VERSION_CODES.O}, use
+         * {@code onPasswordChanged(Context, Intent, UserHandle)} instead.
+         */
         @Override
         public void onPasswordChanged(Context context, Intent intent) {
             showToast(context, context.getString(R.string.admin_receiver_status_pw_changed));
         }
 
+        /**
+         * Called after the user has failed at entering their device or profile challenge password,
+         * as a result of receiving {@link #ACTION_PASSWORD_FAILED}.  At this point you can use
+         * {@link DevicePolicyManager#getCurrentFailedPasswordAttempts()} to retrieve the number of
+         * failed password attempts. We call our method {@code showToast} with the string resource
+         * id R.string.admin_receiver_status_pw_failed ("pw failed")
+         *
+         * @param context The running context as per {@link #onReceive}.
+         * @param intent The received intent as per {@link #onReceive}.
+         * @deprecated From {@link android.os.Build.VERSION_CODES#O}, use
+         * {@code onPasswordFailed(Context, Intent, UserHandle)} instead.
+         */
         @Override
         public void onPasswordFailed(Context context, Intent intent) {
             showToast(context, context.getString(R.string.admin_receiver_status_pw_failed));
         }
 
+        /**
+         * Called after the user has succeeded at entering their device or profile challenge password,
+         * as a result of receiving {@link #ACTION_PASSWORD_SUCCEEDED}.  This will only be received
+         * the first time they succeed after having previously failed. We call our method {@code showToast}
+         * with the string resource id R.string.admin_receiver_status_pw_succeeded ("pw succeeded").
+         *
+         * @param context The running context as per {@link #onReceive}.
+         * @param intent The received intent as per {@link #onReceive}.
+         * @deprecated From {@link android.os.Build.VERSION_CODES#O}, use
+         * {@code onPasswordSucceeded(Context, Intent, UserHandle)} instead.
+         */
         @Override
         public void onPasswordSucceeded(Context context, Intent intent) {
             showToast(context, context.getString(R.string.admin_receiver_status_pw_succeeded));
         }
 
+        /**
+         * Called periodically when the device or profile challenge password is about to expire
+         * or has expired.  It will typically be called at these times: on device boot, once per day
+         * before the password expires, and at the time when the password expires.
+         * <p>
+         * If the password is not updated by the user, this method will continue to be called
+         * once per day until the password is changed or the device admin disables password expiration.
+         * <p>
+         * The admin will typically post a notification requesting the user to change their password
+         * in response to this call. The actual password expiration time can be obtained by calling
+         * {@link DevicePolicyManager#getPasswordExpiration(ComponentName)}
+         * <p>
+         * The admin should be sure to take down any notifications it posted in response to this call
+         * when it receives {@link DeviceAdminReceiver#onPasswordChanged(Context, Intent) }.
+         * <p>
+         * We initialize {@code DevicePolicyManager dpm} with a handle to the DEVICE_POLICY_SERVICE
+         * system level service, then initialize {@code long expr} with the value returned by the
+         * {@code getPasswordExpiration} method of {@code dpm} for the component name whose class
+         * is {@code DeviceAdminSampleReceiver} ({@code getPasswordExpiration} returns the password
+         * expiration time, in milliseconds since epoch). We then initialize {@code long delta} by
+         * subtracting the current time in milliseconds from {@code expr}. We initialize {@code expired}
+         * to true if {@code delta} is less than 0, and if {@code expired} is true we initialize
+         * {@code String message} to the string with resource id R.string.expiration_status_past
+         * ("Password expired %1$s ago"), if false to the string with resource id R.string.expiration_status_future
+         * ("Password will expire %1$s from now"). We then call our method {@code showToast} with
+         * {@code message} and log {@code message} as well.
+         *
+         * @param context The running context as per {@link #onReceive}.
+         * @param intent The received intent as per {@link #onReceive}.
+         * @deprecated From {@link android.os.Build.VERSION_CODES#O}, use
+         * {@code onPasswordExpiring(Context, Intent, UserHandle)} instead.
+         */
         @Override
         public void onPasswordExpiring(Context context, Intent intent) {
-            DevicePolicyManager dpm = (DevicePolicyManager) context.getSystemService(
-                    Context.DEVICE_POLICY_SERVICE);
+            DevicePolicyManager dpm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
             //noinspection ConstantConditions
-            long expr = dpm.getPasswordExpiration(
-                    new ComponentName(context, DeviceAdminSampleReceiver.class));
+            long expr = dpm.getPasswordExpiration(new ComponentName(context, DeviceAdminSampleReceiver.class));
             long delta = expr - System.currentTimeMillis();
             boolean expired = delta < 0L;
             String message = context.getString(expired ?
@@ -2357,6 +2432,9 @@ public class DeviceAdminSample extends PreferenceActivity {
         }
     }
 
+    /**
+     * UNUSED.
+     */
     public static class DeviceAdminSampleReceiver2 extends DeviceAdminReceiver {
     }
 }
