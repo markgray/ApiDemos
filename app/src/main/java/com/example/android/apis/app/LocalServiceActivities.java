@@ -42,10 +42,19 @@ public class LocalServiceActivities {
      * all together; typically this code would appear in some separate class.
      */
     public static class Controller extends Activity {
+        /**
+         * Called when the activity is starting. First we call our super's implementation of {@code onCreate},
+         * then we set our content view to our layout file R.layout.local_service_controller. We initialize
+         * {@code Button button} by finding the view with id R.id.start ("Start Service") and set its
+         * {@code OnClickListener} to our field {@code OnClickListener mStartListener}, then find for
+         * {@code button} the view with id R.id.stop ("Stop Service") and set its {@code OnClickListener}
+         * to our field {@code OnClickListener mStopListener}.
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+         */
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
             setContentView(R.layout.local_service_controller);
 
             // Watch for button clicks.
@@ -55,51 +64,90 @@ public class LocalServiceActivities {
             button.setOnClickListener(mStopListener);
         }
 
+        /**
+         * {@code OnClickListener} for the {@code Button} with id id R.id.start ("Start Service"),
+         * the {@code onClick} override starts the {@code LocalService} {@code Service}.
+         */
         private OnClickListener mStartListener = new OnClickListener() {
+            /**
+             * Called when the {@code Button} with id id R.id.start ("Start Service") is clicked.
+             * We call the {@code startService} method to start the {@code Service} with the class
+             * name {@code LocalService} running in this context.
+             *
+             * @param v {@code View} that was clicked.
+             */
+            @Override
             public void onClick(View v) {
                 // Make sure the service is started.  It will continue running
                 // until someone calls stopService().  The Intent we use to find
                 // the service explicitly specifies our service component, because
                 // we want it running in our own process and don't want other
                 // applications to replace it.
-                startService(new Intent(Controller.this,
-                        LocalService.class));
+                startService(new Intent(Controller.this, LocalService.class));
             }
         };
 
+        /**
+         * {@code OnClickListener} for the {@code Button} with id id R.id.stop ("Stop Service"),
+         * the {@code onClick} override stops the {@code LocalService} {@code Service}.
+         */
         private OnClickListener mStopListener = new OnClickListener() {
+            /**
+             * Called when the {@code Button} with id id R.id.stop ("Stop Service") is clicked.
+             * We call the {@code stopService} method to stop the {@code Service} with the class
+             * name {@code LocalService} running.
+             *
+             * @param v {@code View} that was clicked.
+             */
+            @Override
             public void onClick(View v) {
                 // Cancel a previous call to startService().  Note that the
                 // service will not actually stop at this point if there are
                 // still bound clients.
-                stopService(new Intent(Controller.this,
-                        LocalService.class));
+                stopService(new Intent(Controller.this, LocalService.class));
             }
         };
     }
 
     // ----------------------------------------------------------------------
 
-// BEGIN_INCLUDE(bind)
     /**
      * Example of binding and unbinding to the local service.
      * bind to, receiving an object through which it can communicate with the service.
-     *
+     * <p>
      * Note that this is implemented as an inner class only keep the sample
      * all together; typically this code would appear in some separate class.
      */
     public static class Binding extends Activity {
-// BEGIN_INCLUDE(bind)
-        // Don't attempt to unbind from the service unless the client has received some
-        // information about the service's state.
+        /**
+         * Flag indicating that we have bound to the service. Don't attempt to unbind from the service
+         * unless the client has received some information about the service's state.
+         */
         private boolean mShouldUnbind;
 
-        // To invoke the bound service, first make sure that this value
-        // is not null.
-        @SuppressWarnings("unused")
+        /**
+         * Service object we use to interact with the service. Since {@code LocalService} service
+         * always runs in the same process as its clients, the {@code IBinder service} passed to
+         * our {@code onServiceConnected} callback can be cast to a concrete class to directly access
+         * it and its {@code getService} method just returns "this".
+         */
         private LocalService mBoundService;
 
+        /**
+         * {@code ServiceConnection} object passed to the {@code bindService}, receives information
+         * in its callbacks as the service is started and stopped.
+         */
         private ServiceConnection mConnection = new ServiceConnection() {
+            /**
+             * Called when a connection to the Service has been established, with the
+             * {@link android.os.IBinder} of the communication channel to the Service.
+             *
+             * @param className The concrete component name of the service that has
+             *                  been connected.
+             * @param service   The IBinder of the Service's communication channel,
+             *                  which you can now make calls on.
+             */
+            @Override
             public void onServiceConnected(ComponentName className, IBinder service) {
                 // This is called when the connection with the service has been
                 // established, giving us the service object we can use to
@@ -113,6 +161,7 @@ public class LocalServiceActivities {
                         Toast.LENGTH_SHORT).show();
             }
 
+            @Override
             public void onServiceDisconnected(ComponentName className) {
                 // This is called when the connection with the service has been
                 // unexpectedly disconnected -- that is, its process crashed.
@@ -152,7 +201,6 @@ public class LocalServiceActivities {
             super.onDestroy();
             doUnbindService();
         }
-// END_INCLUDE(bind)
 
         private OnClickListener mBindListener = new OnClickListener() {
             public void onClick(View v) {
@@ -177,6 +225,21 @@ public class LocalServiceActivities {
             button.setOnClickListener(mBindListener);
             button = findViewById(R.id.unbind);
             button.setOnClickListener(mUnbindListener);
+            button = findViewById(R.id.do_something);
+            button.setOnClickListener(new OnClickListener() {
+                /**
+                 * If {@code LocalService mBoundService} is not null (we have bound to {@code LocalService})
+                 * we use {@code mBoundService} to execute the method {@code LocalService.doSomeThing}.
+                 *
+                 * @param v View of Button that was clicked
+                 */
+                @Override
+                public void onClick(View v) {
+                    if (mBoundService != null) {
+                        mBoundService.doSomeThing();
+                    }
+                }
+            });
         }
     }
 }

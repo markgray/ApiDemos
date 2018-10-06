@@ -18,10 +18,12 @@ package com.example.android.apis.app;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -44,9 +46,13 @@ import com.example.android.apis.R;
  * interact with the user, rather than doing something more disruptive such as
  * calling startActivity().
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+@TargetApi(Build.VERSION_CODES.O)
 public class LocalService extends Service {
     private NotificationManager mNM; // handle to the system level NOTIFICATION_SERVICE service
+    /**
+     * The id of the primary notification channel
+     */
+    public static final String PRIMARY_CHANNEL = "default";
 
     // Unique Identification Number for the Notification.
     // We use it on Notification start, and to cancel it.
@@ -72,6 +78,11 @@ public class LocalService extends Service {
     @Override
     public void onCreate() {
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationChannel chan1 = new NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+                NotificationManager.IMPORTANCE_DEFAULT);
+        chan1.setLightColor(Color.GREEN);
+        chan1.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        mNM.createNotificationChannel(chan1);
 
         // Display a notification about us starting.  We put an icon in the status bar.
         showNotification();
@@ -114,6 +125,7 @@ public class LocalService extends Service {
      * {@code LocalBinder.getservice()}. We just toast a message to show we can be used to do
      * something.
      */
+    @SuppressWarnings("unused")
     public void doSomeThing() {
         Toast.makeText(this, "I AM doing something", Toast.LENGTH_SHORT).show();
     }
@@ -173,7 +185,7 @@ public class LocalService extends Service {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
         // Set the info for the views that show in the notification panel.
-        Notification notification = new Notification.Builder(this)
+        Notification notification = new Notification.Builder(this, PRIMARY_CHANNEL)
                 .setSmallIcon(R.drawable.stat_sample)  // the status icon
                 .setTicker(text)  // the status text
                 .setWhen(System.currentTimeMillis())  // the time stamp
