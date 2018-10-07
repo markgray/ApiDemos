@@ -17,7 +17,6 @@
 package com.example.android.apis.content;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -28,6 +27,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.DocumentsContract.Document;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,16 +38,15 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Example that exercises client side of {@link DocumentsContract}. Layout is created programmatically.
+ * Example that exercises client side of {@link DocumentsContract}.
  */
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 @SuppressLint("SetTextI18n")
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class DocumentsSample extends Activity {
     /**
      * TAG used for logging
@@ -57,7 +56,7 @@ public class DocumentsSample extends Activity {
     /**
      * Request code used when calling {@code startActivityForResult} when the Buttons with labels
      * "OPEN_DOC <b>&#42;/&#42;</b>" (as well as the mime types "image/&#42;", "audio/ogg",
-     * "text/plain, application/msword" and "GET_CONTENT <b>&#42;/&#42;</b>". In our
+     * "text/plain, application/msword" and "GET_CONTENT <b>&#42;/&#42;</b>" are clicked. In our
      * {@code onActivityResult} override we use it to branch to an area of code which requests
      * FLAG_GRANT_READ_URI_PERMISSION for the Uri returned in the {@code Intent data} result,
      * opens that Uri, calls our method {@code readFullyNoClose} to read the contents of the file
@@ -67,24 +66,24 @@ public class DocumentsSample extends Activity {
     private static final int CODE_READ = 42;
     /**
      * Request code used when calling {@code startActivityForResult} when the Buttons with label
-     * "CREATE_DOC <b>&#42;/&#42;</b>". In our {@code onActivityResult} override we use it to branch
-     * to an area of code which requests FLAG_GRANT_WRITE_URI_PERMISSION for the Uri returned in the
-     * {@code Intent data} result, and writes the String "THE COMPLETE WORKS OF SHAKESPEARE" to
-     * the URI.
+     * "CREATE_DOC <b>&#42;/&#42;</b>" is clicked. In our {@code onActivityResult} override we use it
+     * to branch to an area of code which requests FLAG_GRANT_WRITE_URI_PERMISSION for the Uri returned
+     * in the {@code Intent data} result, and writes the String "THE COMPLETE WORKS OF SHAKESPEARE"
+     * to the URI.
      */
     private static final int CODE_WRITE = 43;
     /**
-     * Request code used when calling {@code startActivityForResult} when the Buttons with label
-     * "OPEN_DOC_TREE". In our {@code onActivityResult} override we use it to branch to an area of
-     * code which reads through a directory tree, creates a directory and some files then deletes
-     * one of the files.
+     * Request code used when calling {@code startActivityForResult} when the Button with label
+     * "OPEN_DOC_TREE" is clicked. In our {@code onActivityResult} override we use it to branch to
+     * an area of code which reads through a directory tree, creates a directory and some files then
+     * deletes one of the files.
      */
     private static final int CODE_TREE = 44;
     /**
-     * Request code used when calling {@code startActivityForResult} when the Buttons with label
-     * "OPEN_DOC <b>&#42;/&#42;</b> for rename". In our {@code onActivityResult} override we use it to
-     * branch to an area of code which renames the Uri returned in the {@code Intent data} result to
-     * "MEOW.TEST", then opens and tries to read using the new name.
+     * Request code used when calling {@code startActivityForResult} when the Button with label
+     * "OPEN_DOC <b>&#42;/&#42;</b> for rename" is clicked. In our {@code onActivityResult} override
+     * we use it to branch to an area of code which renames the Uri returned in the {@code Intent data}
+     * result to "MEOW.TEST", then opens and tries to read using the new name.
      */
     private static final int CODE_RENAME = 45;
 
@@ -102,8 +101,8 @@ public class DocumentsSample extends Activity {
      * create a {@code CheckBox multiple}, set its text to "ALLOW_MULTIPLE" and add it to {@code view}.
      * We create a {@code CheckBox localOnly}, set its text to "LOCAL_ONLY" and add it to {@code view}.
      * <p>
-     * Now we create nine Buttons and set their {@code OnClickListener}'s to exercise various aspects
-     * of the DocumentsContract api:
+     * Now we create nine Buttons, set their {@code OnClickListener}'s to exercise various aspects
+     * of the DocumentsContract api and add them to {@code view}:
      * <ul>
      * <li>
      * "OPEN_DOC <b>&#42;/&#42;</b>" Creates an {@code Intent} for the action ACTION_OPEN_DOCUMENT
@@ -312,7 +311,7 @@ public class DocumentsSample extends Activity {
              * return one or more existing documents), add the category CATEGORY_OPENABLE to {@code intent}
              * (Categories provide additional detail about the action the intent performs, and when resolving
              * an intent, only activities that provide all of the requested categories will be used),
-             * and set the mime type to "<b>&#42;/&#42;</b>" and adds the extra EXTRA_MIME_TYPES consisting
+             * and set the mime type to "<b>&#42;/&#42;</b>" and add the extra EXTRA_MIME_TYPES consisting
              * of a String[] array containing the strings "text/plain", and "application/msword" . Then if
              * the {@code CheckBox multiple} is checked we add the extra EXTRA_ALLOW_MULTIPLE set to true
              * (indicate that the intent can allow the user to select and return multiple items), and if
@@ -329,8 +328,8 @@ public class DocumentsSample extends Activity {
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("*/*");
-                intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{
-                        "text/plain", "application/msword"});
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] {
+                        "text/plain", "application/msword" });
                 if (multiple.isChecked()) {
                     intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 }
@@ -513,7 +512,7 @@ public class DocumentsSample extends Activity {
      * "Intent {dat=content://com.android.providers.media.documents/* }". If {@code data} is not
      * null we set {@code Uri uri} to the URI data this intent is carrying (which would look like:
      * content://com.android.providers.media.documents/document/image%3A603) If {@code uri} is not
-     * null we log boolean result of a test of {@code uri} to see if the given URI represents a
+     * null we log the boolean result of a test of {@code uri} to see if the given URI represents a
      * {@code DocumentsContract.Document} backed by a {@code DocumentsProvider}.
      * <p>
      * Next we branch on the value of the request code {@code requestCode} used to launch the
@@ -555,19 +554,21 @@ public class DocumentsSample extends Activity {
      * {@code Cursor c} referencing the contents or the target directory. We then move the cursor
      * from row to row, using our method {@code log} to display the value of column 0 and column 1
      * of the {@code c} (COLUMN_DISPLAY_NAME and COLUMN_MIME_TYPE based on the projection requested).
-     * We then call our method {@code closeQuietly} to close {@code c}. Next we proceed to create
-     * a "image/png" file ("pic.png") inside of {@code Uri doc}, a directory "my dir" inside of
-     * {@code doc}, then using the {@code Uri dir} for "my dir" we create a "image/png" file
-     * ("pic2.png") inside of that new subdirectory. We display messages informing the user of our
-     * actions and the {@code Uri} for these new documents. Then we open and write the string
-     * "THE COMPLETE WORKS OF SHAKESPEARE" to the file  "pic2.png", display a message to this effect,
-     * and finally delete the empty file "pic.png" also displaying a message to this effect.
+     * We then call our method {@code closeQuietly} to close {@code c}. Next we call our method
+     * {@code createDocument} to create a "image/png" file ("pic.png") inside of {@code Uri doc}, a
+     * directory "my dir" inside of {@code doc}, then using the {@code Uri dir} for "my dir" we create
+     * a "image/png" file ("pic2.png") inside of that new subdirectory. We display messages informing
+     * the user of our actions and the {@code Uri} for these new documents. Then we open and write the
+     * string "THE COMPLETE WORKS OF SHAKESPEARE" to the file  "pic2.png", log a message to this effect,
+     * and finally call our method {@code deleteDocument} to delete the empty file "pic.png" then log
+     * a message to this effect.
      * </li>
      * <li>
-     * CODE_RENAME - We use the {@code ContentResolver cr} to resolve and rename the {@code Uri uri}
-     * selected by the user to "MEOW.TEST", then use the {@code Uri newUri} returned from this operation
-     * to open an {@code InputStream is} for this renamed file which we attempt to read using our
-     * method {@code readFullyNoClose}, displaying only the number of bytes read if this is successful.
+     * CODE_RENAME - We call our method {@code renameDocument} to use the {@code ContentResolver cr}
+     * to resolve and rename the {@code Uri uri} selected by the user to "MEOW.TEST", then use the
+     * {@code Uri newUri} returned from this operation to open an {@code InputStream is} for this
+     * renamed file which we attempt to read using our method {@code readFullyNoClose}, logging
+     * only the number of bytes read if this is successful.
      * </li>
      * </ul>
      *
@@ -631,10 +632,12 @@ public class DocumentsSample extends Activity {
             }
         } else if (requestCode == CODE_TREE) {
             // Find existing docs
-            Uri doc = DocumentsContract.buildDocumentUriUsingTree(uri, DocumentsContract.getTreeDocumentId(uri));
-            Uri child = DocumentsContract.buildChildDocumentsUriUsingTree(uri, DocumentsContract.getTreeDocumentId(uri));
-            final String[] projection = {Document.COLUMN_DISPLAY_NAME, Document.COLUMN_MIME_TYPE};
-            Cursor c = cr.query(child, projection, null, null, null);
+            Uri doc = DocumentsContract.buildDocumentUriUsingTree(uri,
+                    DocumentsContract.getTreeDocumentId(uri));
+            Uri child = DocumentsContract.buildChildDocumentsUriUsingTree(uri,
+                    DocumentsContract.getTreeDocumentId(uri));
+            Cursor c = cr.query(child, new String[] {
+                    Document.COLUMN_DISPLAY_NAME, Document.COLUMN_MIME_TYPE }, null, null, null);
             try {
                 //noinspection ConstantConditions
                 while (c.moveToNext()) {
@@ -645,24 +648,9 @@ public class DocumentsSample extends Activity {
             }
 
             // Create some documents
-            Uri pic = null;
-            try {
-                pic = DocumentsContract.createDocument(cr, doc, "image/png", "pic.png");
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            Uri dir = null;
-            try {
-                dir = DocumentsContract.createDocument(cr, doc, Document.MIME_TYPE_DIR, "my dir");
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            Uri dirPic = null;
-            try {
-                dirPic = DocumentsContract.createDocument(cr, dir, "image/png", "pic2.png");
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            Uri pic = createDocument(cr, doc, "image/png", "pic.png");
+            Uri dir = createDocument(cr, doc, Document.MIME_TYPE_DIR, "my dir");
+            Uri dirPic = createDocument(cr, dir, "image/png", "pic2.png");
 
             log("created " + pic);
             log("created " + dir);
@@ -671,7 +659,6 @@ public class DocumentsSample extends Activity {
             // Write to one of them
             OutputStream os = null;
             try {
-                //noinspection ConstantConditions
                 os = cr.openOutputStream(dirPic);
                 //noinspection ConstantConditions
                 os.write("THE COMPLETE WORKS OF SHAKESPEARE".getBytes());
@@ -683,22 +670,13 @@ public class DocumentsSample extends Activity {
             }
 
             // And delete the first pic
-            try {
-                if (DocumentsContract.deleteDocument(cr, pic)) {
-                    log("deleted untouched pic");
-                } else {
-                    log("FAILED TO DELETE PIC");
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            if (deleteDocument(cr, pic)) {
+                log("deleted untouched pic");
+            } else {
+                log("FAILED TO DELETE PIC");
             }
         } else if (requestCode == CODE_RENAME) {
-            Uri newUri = null;
-            try {
-                newUri = DocumentsContract.renameDocument(cr, uri, "MEOW.TEST");
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            final Uri newUri = renameDocument(cr, uri, "MEOW.TEST");
             log("rename result=" + newUri);
 
             InputStream is = null;
@@ -712,6 +690,66 @@ public class DocumentsSample extends Activity {
             } finally {
                 closeQuietly(is);
             }
+        }
+    }
+
+    /**
+     * Create a new document in a given directory with the given MIME type and display name. We declare
+     * {@code Uri uri} then wrapped in a try block intended to catch any exception in order to set
+     * {@code uri} to null, we set {@code uri} to the value returned by the {@code createDocument}
+     * method of {@code DocumentsContract} for our parameters (which will be a {@code Uri} pointing
+     * to the newly created document).
+     *
+     * @param resolver    {@code ContentResolver} instance for our application's package.
+     * @param documentUri directory with {@link Document#FLAG_DIR_SUPPORTS_CREATE} in which to place
+     *                    the new document
+     * @param mimeType    MIME type of new document
+     * @param displayName name of new document
+     * @return newly created document, or {@code null} if failed
+     */
+    private Uri createDocument(ContentResolver resolver, Uri documentUri, String mimeType, String displayName) {
+        Uri uri;
+        try {
+            uri = DocumentsContract.createDocument(resolver, documentUri, mimeType, displayName);
+        } catch (Exception e) {
+            uri = null;
+        }
+        return uri;
+    }
+
+    /**
+     * Delete the given document. Wrapped in a try block intended to catch any exception in order to
+     * return false, we call the {@code deleteDocument} method of {@code DocumentsContract} with our
+     * parameters, returning the value it returns.
+     *
+     * @param resolver    {@code ContentResolver} instance for our application's package.
+     * @param documentUri document with {@link Document#FLAG_SUPPORTS_DELETE}
+     * @return true if the delete succeeded, otherwise false.
+     */
+    private boolean deleteDocument(ContentResolver resolver, Uri documentUri) {
+        try {
+            return DocumentsContract.deleteDocument(resolver, documentUri);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Change the display name of an existing document. Wrapped in a try block intended to catch any
+     * exception in order to return null, we call the {@code renameDocument} method of {@code DocumentsContract}
+     * with our parameters, returning the value it returns.
+     *
+     * @param resolver {@code ContentResolver} instance for our application's package.
+     * @param uri      document with {@link Document#FLAG_SUPPORTS_RENAME}
+     * @param newName  updated name for document
+     * @return the existing or new document after the rename, or {@code null} if failed.
+     */
+    @SuppressWarnings("SameParameterValue")
+    private Uri renameDocument(ContentResolver resolver, Uri uri, String newName) {
+        try {
+            return DocumentsContract.renameDocument(resolver, uri, newName);
+        } catch (Exception e) {
+            return null;
         }
     }
 
