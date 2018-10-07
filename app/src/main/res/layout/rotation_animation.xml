@@ -19,7 +19,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/rotation_animation_description"
         android:textColor="#FFFFFFFF"
@@ -65,17 +65,25 @@
                 android:id="@+id/crossfade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
                 android:layout_marginStart="6dp"
+                android:layout_marginLeft="6dp"
                 android:text="@string/rotation_animation_crossfade" />
 
             <RadioButton
                 android:id="@+id/jumpcut"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
                 android:layout_marginStart="6dp"
+                android:layout_marginLeft="6dp"
                 android:text="@string/rotation_animation_jumpcut" />
+
+            <RadioButton
+                android:id="@+id/seamless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginLeft="6dp"
+                android:text="@string/rotation_animation_seamless" />
         </RadioGroup>
     </LinearLayout>
 </LinearLayout>

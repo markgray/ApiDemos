@@ -432,11 +432,11 @@ App
             through the history should begin with the newly-frontmost second reorder 
             activity, then the fourth, the third, and finally the first.
 
-    App/Activity/Rotation Animation        v18+ or crash
+    App/Activity/Rotation Animation        v26+ or crash
         .app.RotationAnimation
             Allows you to choose the animation that occurs when the screen is rotated:
-            either ROTATION_ANIMATION_ROTATE, ROTATION_ANIMATION_CROSSFADE, or 
-            ROTATION_ANIMATION_JUMPCUT.
+            either ROTATION_ANIMATION_ROTATE, ROTATION_ANIMATION_CROSSFADE, ROTATION_ANIMATION_JUMPCUT,
+            or ROTATION_ANIMATION_SEAMLESS.
 
     App/Activity/Save &amp; Restore State  all
         .app.SaveRestoreState              Broken? Or too much memory for a kill needed.
