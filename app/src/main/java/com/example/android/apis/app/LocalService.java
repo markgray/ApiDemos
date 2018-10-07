@@ -71,9 +71,16 @@ public class LocalService extends Service {
     }
 
     /**
-     * Called by the system when the service is first created. First we initialize {@code NotificationManager mNM}
-     * with a handle to the system level NOTIFICATION_SERVICE service, then we call our method {@code showNotification}
-     * to display the notification that we are running
+     * Called by the system when the service is first created. First we initialize our field
+     * {@code NotificationManager mNM} with a handle to the system level NOTIFICATION_SERVICE service.
+     * Then we initialize {@code NotificationChannel chan1} with a new instance using PRIMARY_CHANNEL
+     * ("default") as both the ID and the user visible name of the channel with its importance set to
+     * IMPORTANCE_DEFAULT (shows everywhere, makes noise, but does not visually intrude). We then set
+     * the notification light color of {@code chan1} to GREEN and its lock screen visibility to
+     * VISIBILITY_PRIVATE (show this notification on all lockscreens, but conceal sensitive or private
+     * information on secure lockscreens). Then we use {@code mNM} to create the notification channel
+     * {@code chan1}, and call our method {@code showNotification} to display the notification that
+     * we are running
      */
     @Override
     public void onCreate() {

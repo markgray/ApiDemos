@@ -141,6 +141,11 @@ public class LocalServiceActivities {
             /**
              * Called when a connection to the Service has been established, with the
              * {@link android.os.IBinder} of the communication channel to the Service.
+             * <p>
+             * We cast our parameter {@code IBinder service} to {@code LocalService.LocalBinder} and
+             * call its {@code getService} method which returns a pointer to its 'this' which we save
+             * in our field {@code LocalService mBoundService}. We then toast the string with resource
+             * id R.string.local_service_connected ("Connected to local service").
              *
              * @param className The concrete component name of the service that has
              *                  been connected.
@@ -161,6 +166,19 @@ public class LocalServiceActivities {
                         Toast.LENGTH_SHORT).show();
             }
 
+            /**
+             * Called when a connection to the Service has been lost. This typically
+             * happens when the process hosting the service has crashed or been killed.
+             * This does <em>not</em> remove the ServiceConnection itself -- this
+             * binding to the service will remain active, and you will receive a call
+             * to {@link #onServiceConnected} when the Service is next running.
+             * <p>
+             * We set our field {@code LocalService mBoundService} to null, and toast the string with
+             * resource id R.string.local_service_disconnected ("Disconnected from local service").
+             *
+             * @param className The concrete component name of the service whose
+             * connection has been lost.
+             */
             @Override
             public void onServiceDisconnected(ComponentName className) {
                 // This is called when the connection with the service has been
@@ -173,6 +191,16 @@ public class LocalServiceActivities {
             }
         };
 
+        /**
+         * Called from {@code OnClickListener mBindListener} which is the {@code OnClickListener} for
+         * the button with id R.id.bind ("Bind Service"), this method attempts to establish a connection
+         * with the service {@code LocalService.class}. We call the {@code bindService} method to bind
+         * to {@code LocalService} giving {@code ServiceConnection mConnection} as the callback object
+         * to receive information about the connection using the flag BIND_AUTO_CREATE (automatically
+         * create the service as long as the binding exists), and if it returns true (the system is
+         * in the process of bringing up a service that your client has permission to bind to) we set
+         * our flag {@code mShouldUnbind} to true, if it returns false we log an error message.
+         */
         void doBindService() {
             // Attempts to establish a connection with the service.  We use an
             // explicit class name because we want a specific service
@@ -188,6 +216,12 @@ public class LocalServiceActivities {
             }
         }
 
+        /**
+         * Called to disconnect from the application service we bound to in our {@code doBindService}
+         * method. If our flag {@code mShouldUnbind} is true we call the {@code unbindService} method
+         * with {@code ServiceConnection mConnection}, which is the same connection interface previously
+         * supplied to {@code bindService}.
+         */
         void doUnbindService() {
             if (mShouldUnbind) {
                 // Release information about the service's state.
@@ -196,28 +230,71 @@ public class LocalServiceActivities {
             }
         }
 
+        /**
+         * Perform any final cleanup before an activity is destroyed. First we call our super's
+         * implementation of {@code onDestroy}, then we call our {@code doUnbindService} method
+         * to disconnect from the application service if we are connected to it.
+         */
         @Override
         protected void onDestroy() {
             super.onDestroy();
             doUnbindService();
         }
 
+        /**
+         * {@code OnClickListener} for the button with id R.id.bind ("Bind Service"), the
+         * {@code onClick} override we just calls our {@code doBindService} method to attempt to
+         * establish a connection to the service {@code LocalService.class}.
+         */
         private OnClickListener mBindListener = new OnClickListener() {
+            /**
+             * Called when the button with id R.id.bind ("Bind Service") is clicked. We just call
+             * our {@code doBindService} method to attempt to establish a connection to the service
+             * {@code LocalService.class}.
+             *
+             * @param v {@code View} that was clicked.
+             */
+            @Override
             public void onClick(View v) {
                 doBindService();
             }
         };
 
+        /**
+         * {@code OnClickListener} for the button with id R.id.unbind ("Unbind Service"), the
+         * {@code onClick} override we just calls our {@code doUnbindService} method to disconnect
+         * from the service {@code LocalService.class} if need be.
+         */
         private OnClickListener mUnbindListener = new OnClickListener() {
+            /**
+             * Called when the button with id R.id.unbind ("Unbind Service") is clicked. We just call
+             * our {@code doUnbindService} method to disconnect from the service {@code LocalService.class}
+             * if need be.
+             *
+             * @param v {@code View} that was clicked.
+             */
+            @Override
             public void onClick(View v) {
                 doUnbindService();
             }
         };
 
+        /**
+         * Called when the activity is starting. First we call our super's implementation of {@code onCreate},
+         * then we set our content view to our layout file R.layout.local_service_binding. We initialize
+         * {@code Button button} by finding the view with id R.id.bind ("Bind Service") and set its
+         * {@code OnClickListener} to {@code mBindListener}, set {@code button} again by finding the
+         * view with id R.id.unbind ("Unbind Service") and set its {@code OnClickListener} to
+         * {@code mUnbindListener}. Finally we set {@code button} by finding the view with id
+         * R.id.do_something ("Do something") and set its {@code OnClickListener} to an anonymous
+         * class whose {@code onClick} override calls the {@code doSomeThing} method of our binding
+         * to the service in {@code LocalService mBoundService} if it is not null.
+         *
+         * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+         */
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
             setContentView(R.layout.local_service_binding);
 
             // Watch for button clicks.
