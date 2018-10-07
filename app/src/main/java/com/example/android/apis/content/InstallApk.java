@@ -18,22 +18,22 @@ package com.example.android.apis.content;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+import com.example.android.apis.R;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
-
-import com.example.android.apis.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,10 +42,12 @@ import java.io.InputStream;
 
 
 /**
- * Shows how to use Intent.ACTION_INSTALL_PACKAGE, and Intent.ACTION_UNINSTALL_PACKAGE to install
- * and uninstall packages.
+ * Demonstration of package installation and un-installation using the original (non-Session)
+ * package installation API that uses {@link Intent#ACTION_INSTALL_PACKAGE}.
+ *
+ * @see InstallApkSessionApi for a demo of the newer Session API.
  */
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+@RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class InstallApk extends Activity {
     /**
      * Request code used for {@code startActivityForResult} when starting the {@code Intent} with
@@ -64,14 +66,13 @@ public class InstallApk extends Activity {
      */
     private static final String TAG = "InstallApk";
 
-    /**
+    /*
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.install_apk. Next
      * we locate the {@code Button}'s in our layout and set their {@code OnClickListener} as follows:
      * <ul>
      * <li>R.id.unknown_source "UNKNOWN SOURCE" -- {@code mUnknownSourceListener}</li>
      * <li>R.id.my_source "MY SOURCE" -- {@code mMySourceListener}</li>
-     * <li>R.id.replace "REPLACE" -- {@code mReplaceListener}</li>
      * <li>R.id.uninstall "UNINSTALL" -- {@code mUninstallListener}</li>
      * <li>R.id.uninstall_result "UNINSTALL W/RESULT" -- {@code mUninstallResultListener}</li>
      * </ul>
@@ -85,15 +86,13 @@ public class InstallApk extends Activity {
         setContentView(R.layout.install_apk);
 
         // Watch for button clicks.
-        Button button = (Button) findViewById(R.id.unknown_source);
+        Button button = findViewById(R.id.unknown_source);
         button.setOnClickListener(mUnknownSourceListener);
-        button = (Button) findViewById(R.id.my_source);
+        button = findViewById(R.id.my_source);
         button.setOnClickListener(mMySourceListener);
-        button = (Button) findViewById(R.id.replace);
-        button.setOnClickListener(mReplaceListener);
-        button = (Button) findViewById(R.id.uninstall);
+        button = findViewById(R.id.uninstall);
         button.setOnClickListener(mUninstallListener);
-        button = (Button) findViewById(R.id.uninstall_result);
+        button = findViewById(R.id.uninstall_result);
         button.setOnClickListener(mUninstallResultListener);
     }
 
@@ -153,78 +152,48 @@ public class InstallApk extends Activity {
 
     /**
      * {@code OnClickListener} for the Button with ID R.id.unknown_source "UNKNOWN SOURCE". When
-     * clicked it creates an {@code Intent intent} with the action ACTION_INSTALL_PACKAGE, calls our
-     * method {@code prepareApk("HelloActivity.apk")} to create a file "tmp.apk" from our asset
-     * file "HelloActivity.apk", and return a {@code File} referencing this file, which the
-     * method {@code Uri.fromFile} converts to a "file:///" URI, which we can then use to set the
-     * data that {@code Intent intent} is operating on. Finally it uses {@code intent} to launch
-     * the activity requested.
+     * clicked it creates an {@code Intent intent} with the action ACTION_INSTALL_PACKAGE, sets the
+     * data of {@code intent} to the {@code Uri} our method {@code getApkUri} creates for the copy
+     * of the resource file with the name "HelloActivity.apk" it makes, sets the flags of {@code intent}
+     * to FLAG_GRANT_READ_URI_PERMISSION (the recipient of this Intent will be granted permission to
+     * perform read operations on the URI in the Intent's data and any URIs specified in its ClipData).
+     * Finally it uses {@code intent} to launch the activity requested.
      */
     private OnClickListener mUnknownSourceListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
-            intent.setData(Uri.fromFile(prepareApk("HelloActivity.apk")));
+            intent.setData(getApkUri("HelloActivity.apk"));
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(intent);
         }
     };
 
     /**
-     * {@code OnClickListener} for the Button with ID R.id.my_source "MY SOURCE". When
-     * clicked it creates an {@code Intent intent} with the action ACTION_INSTALL_PACKAGE, calls our
-     * method {@code prepareApk("HelloActivity.apk")} to create a file "tmp.apk" from our asset
-     * file "HelloActivity.apk", and return a {@code File} referencing this file, which the
-     * method {@code Uri.fromFile} converts to a "file:///" URI, which we can then use to set the
-     * data that {@code Intent intent} is operating on. Next it adds the extra EXTRA_NOT_UNKNOWN_SOURCE
-     * set to true (Specifies that the application being installed should not be treated as coming
-     * from an unknown source, but as coming from the app invoking the Intent), adds the extra
-     * EXTRA_RETURN_RESULT set to true (specifies that the installer UI should return to the application
-     * the result code of the install/uninstall. The returned result code will be RESULT_OK on success
-     * or RESULT_FIRST_USER on failure), adds the package name of the app under the key
-     * EXTRA_INSTALLER_PACKAGE_NAME (Specifies the installer package name; this package will receive
-     * the ACTION_APP_ERROR intent), and finally it uses {@code intent} to launch the activity requested
+     * {@code OnClickListener} for the Button with ID R.id.my_source "MY SOURCE". When clicked it
+     * creates an {@code Intent intent} with the action ACTION_INSTALL_PACKAGE, sets the data of
+     * {@code intent} to the {@code Uri} our method {@code getApkUri} creates for the copy of the
+     * resource file with the name "HelloActivity.apk" it makes, sets the flags of {@code intent} to
+     * FLAG_GRANT_READ_URI_PERMISSION (the recipient of this Intent will be granted permission to
+     * perform read operations on the URI in the Intent's data and any URIs specified in its ClipData),
+     * adds true as an extra under the key EXTRA_NOT_UNKNOWN_SOURCE (specifies that the application
+     * being installed should not be treated as coming from an unknown source, but as coming from the
+     * app invoking the Intent), adds true as an extra under the key EXTRA_RETURN_RESULT (the installer
+     * UI should return to the application the result code of the install/uninstall), adds our package
+     * name as an extra under the key EXTRA_INSTALLER_PACKAGE_NAME (specifies the installer package
+     * name), and finally it uses {@code intent} to launch the activity requested
      * asking for it to return a result.
      */
     private OnClickListener mMySourceListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
-            intent.setData(Uri.fromFile(prepareApk("HelloActivity.apk")));
+            intent.setData(getApkUri("HelloActivity.apk"));
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
             intent.putExtra(Intent.EXTRA_RETURN_RESULT, true);
-            intent.putExtra(Intent.EXTRA_INSTALLER_PACKAGE_NAME, getApplicationInfo().packageName);
-            startActivityForResult(intent, REQUEST_INSTALL);
-        }
-    };
-
-    /**
-     * {@code OnClickListener} for the Button with ID R.id.replace "REPLACE". When
-     * clicked it creates an {@code Intent intent} with the action ACTION_INSTALL_PACKAGE, calls our
-     * method {@code prepareApk("HelloActivity.apk")} to create a file "tmp.apk" from our asset
-     * file "HelloActivity.apk", and return a {@code File} referencing this file, which the
-     * method {@code Uri.fromFile} converts to a "file:///" URI, which we can then use to set the
-     * data that {@code Intent intent} is operating on. Next it adds the extra EXTRA_NOT_UNKNOWN_SOURCE
-     * set to true (Specifies that the application being installed should not be treated as coming
-     * from an unknown source, but as coming from the app invoking the Intent), adds the extra
-     * EXTRA_RETURN_RESULT set to true (specifies that the installer UI should return to the application
-     * the result code of the install/uninstall. The returned result code will be RESULT_OK on success
-     * or RESULT_FIRST_USER on failure), adds the extra EXTRA_ALLOW_REPLACE set to true (tells the
-     * installer UI to skip the confirmation with the user if the .apk is replacing an existing one),
-     * adds the package name of the app under the key EXTRA_INSTALLER_PACKAGE_NAME (Specifies the
-     * installer package name; this package will receive the ACTION_APP_ERROR intent), and finally
-     * it uses {@code intent} to launch the activity requested asking for it to return a result and
-     * specifying the request code to be REQUEST_UNINSTALL.
-     */
-    private OnClickListener mReplaceListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
-            intent.setData(Uri.fromFile(prepareApk("HelloActivity.apk")));
-            intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
-            intent.putExtra(Intent.EXTRA_RETURN_RESULT, true);
-            //noinspection deprecation
-            intent.putExtra(Intent.EXTRA_ALLOW_REPLACE, true);
-            intent.putExtra(Intent.EXTRA_INSTALLER_PACKAGE_NAME, getApplicationInfo().packageName);
+            intent.putExtra(Intent.EXTRA_INSTALLER_PACKAGE_NAME,
+                    getApplicationInfo().packageName);
             startActivityForResult(intent, REQUEST_INSTALL);
         }
     };
@@ -266,57 +235,61 @@ public class InstallApk extends Activity {
     };
 
     /**
-     * Copies the asset file with the name {@code String assetName} to the file system so that the
-     * installer UI can install it, and returning a {@code File} containing the absolute path on the
-     * filesystem where our assets file was copied to.
+     * Returns a Uri pointing to the APK to install, either a MODE_WORLD_READABLE file for devices
+     * with an SDK less than N, or a {@code FileProvider} created Uri for N and greater. We initialize
+     * {@code boolean useFileProvider} to true for SDK's greater than or equal to N, or false for less
+     * than N. We initialize {@code String tempFilename} to the string "tmp.apk", and allocate 16384
+     * bytes for {@code byte[] buffer}. We initialize {@code int fileMode} to MODE_PRIVATE (the created
+     * file can only be accessed by the calling application) if {@code useFileProvider} is true or to
+     * MODE_WORLD_READABLE ( allow all other applications to have read access) if it is false. Wrapped
+     * in a try with resources consisting of {@code InputStream is} opened to read our asset file
+     * {@code String assetName}, and {@code FileOutputStream fout} opened to write to {@code tempFilename}
+     * with file mode {@code fileMode} we declare {@code int n} then loop while reading from {@code is}
+     * into {@code buffer} as long as the number of bytes read (which we save in {@code n}) is greater
+     * than or equal to 0, writing the contents of {@code buffer} to {@code fout}.
      * <p>
-     * First we allocate {@code byte[] buffer} to read into and write out of, set {@code InputStream is}
-     * and {@code FileOutputStream fout} both to null prior to opening them. Then wrapped in a try
-     * block intended to catch IOException we open the asset {@code assetName} using ACCESS_STREAMING
-     * mode for {@code is}, and open the output file "tmp.apk" for {@code fout}. We proceed to copy
-     * every byte of {@code is} to {@code fout} until the EOF of {@code is}. In the finally block
-     * of our try block we close both {@code is} and {@code fout}.
-     * <p>
-     * Finally we return the absolute path on the filesystem where the file "tmp.apk" was created by
-     * the above code.
+     * When done, if {@code useFileProvider} is true we initialize {@code File toInstall} with a new
+     * instance created for the directory path of the directory on the filesystem where files created
+     * with {@link #openFileOutput} are stored and the filename {@code tempFilename}. We then return
+     * the {@code Uri} created by the {@code getUriForFile} method of {@code FileProvider} from
+     * {@code toInstall}. If {@code useFileProvider} is false we return the {@code Uri} that the
+     * {@code fromFile} method of {@code Uri} creates for the absolute path on the filesystem where
+     * {@code tempFilename} is located.
      *
      * @param assetName name of the file in our assets directory we wish to install
-     * @return the absolute path on the filesystem where our assets file was copied to
+     * @return {@code Uri} pointing to the temporary file copy of the {@code assetName} that we
+     * make.
      */
-    @SuppressLint("WorldReadableFiles")
-    private File prepareApk(String assetName) {
+    @SuppressWarnings("SameParameterValue")
+    private Uri getApkUri(String assetName) {
+        // Before N, a MODE_WORLD_READABLE file could be passed via the ACTION_INSTALL_PACKAGE
+        // Intent. Since N, MODE_WORLD_READABLE files are forbidden, and a FileProvider is
+        // recommended.
+        boolean useFileProvider = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
+
         // Copy the given asset out into a file so that it can be installed.
         // Returns the path to the file.
-        byte[] buffer = new byte[8192];
-        InputStream is = null;
-        FileOutputStream fout = null;
-        try {
-            is = getAssets().open(assetName);
-            //noinspection deprecation
-            fout = openFileOutput("tmp.apk", Context.MODE_WORLD_READABLE);
+        String tempFilename = "tmp.apk";
+        byte[] buffer = new byte[16384];
+        @SuppressLint("WorldReadableFiles")
+        int fileMode = useFileProvider ? Context.MODE_PRIVATE : Context.MODE_WORLD_READABLE;
+
+        try (InputStream is = getAssets().open(assetName);
+            FileOutputStream fout = openFileOutput(tempFilename, fileMode)) {
             int n;
-            while ((n = is.read(buffer)) >= 0) {
+            while ((n=is.read(buffer)) >= 0) {
                 fout.write(buffer, 0, n);
             }
         } catch (IOException e) {
-            Log.i("InstallApk", "Failed transferring", e);
-        } finally {
-            try {
-                if (is != null) {
-                    is.close();
-                }
-            } catch (IOException e) {
-                Log.i(TAG, e.getLocalizedMessage());
-            }
-            try {
-                if (fout != null) {
-                    fout.close();
-                }
-            } catch (IOException e) {
-                Log.i(TAG, e.getLocalizedMessage());
-            }
+            Log.i(TAG, "Failed to write temporary APK file", e);
         }
 
-        return getFileStreamPath("tmp.apk");
+        if (useFileProvider) {
+            File toInstall = new File(this.getFilesDir(), tempFilename);
+            return FileProvider.getUriForFile(
+                    this, "com.example.android.apis.installapkprovider", toInstall);
+        } else {
+            return Uri.fromFile(getFileStreamPath(tempFilename));
+        }
     }
 }

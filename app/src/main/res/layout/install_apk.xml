@@ -13,8 +13,8 @@
      limitations under the License.
 -->
 
-<!-- Demonstrates starting and stopping a local service.
-     See corresponding Java code com.android.sdk.app.LocalSerice.java. -->
+
+<!-- Demonstrates installing and uninstalling packages. -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -23,7 +23,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="4dip"
-    tools:ignore="HardcodedText,InefficientWeight" >
+    tools:ignore="HardcodedText,InefficientWeight">
 
     <TextView
         android:layout_width="match_parent"
@@ -31,36 +31,30 @@
         android:layout_weight="0"
         android:paddingBottom="4dip"
         android:text="Demonstrates using the INSTALL_PACKAGE Intent to install an application."
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
         android:id="@+id/unknown_source"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Unknown Source"/>
+        android:text="Unknown Source" />
 
     <Button
         android:id="@+id/my_source"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="My Source"/>
-
-    <Button
-        android:id="@+id/replace"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Replace"/>
+        android:text="My Source" />
 
     <Button
         android:id="@+id/uninstall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Uninstall"/>
+        android:text="Uninstall" />
 
     <Button
         android:id="@+id/uninstall_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Uninstall w/Result"/>
+        android:text="Uninstall w/Result" />
 
 </LinearLayout>
