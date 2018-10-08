@@ -18,13 +18,16 @@ package com.example.android.apis.graphics;
 
 import android.content.Context;
 import android.graphics.*;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.view.*;
 
 /**
  * Shows the use of Canvas.saveLayerAlpha() and Canvas.restore() to save and restore
  * Canvas settings while doing some drawing in an off screen buffer.
  */
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class Layers extends GraphicsActivity {
 
     /**
@@ -45,27 +48,6 @@ public class Layers extends GraphicsActivity {
      * method {@code saveLayerAlpha}, then displayed onscreen by {@code restore}.
      */
     private static class SampleView extends View {
-        /**
-         * Which layers {@code saveLayerAlpha} will save to be later restored:
-         * <ul>
-         * <li>
-         * MATRIX_SAVE_FLAG - Restore the current matrix when restore() is called.
-         * </li>
-         * <li>
-         * CLIP_SAVE_FLAG - Restore the current clip when restore() is called.
-         * </li>
-         * <li>
-         * HAS_ALPHA_LAYER_SAVE_FLAG - The layer requires a per-pixel alpha channel.
-         * </li>
-         * <li>
-         * FULL_COLOR_LAYER_SAVE_FLAG - The layer requires full 8-bit precision for each color channel.
-         * </li>
-         * <li>
-         * CLIP_TO_LAYER_SAVE_FLAG - Clip drawing to the bounds of the offscreen layer, omit at your own peril.
-         * </li>
-         * </ul>
-         */
-        private static final int LAYER_FLAGS = Canvas.ALL_SAVE_FLAG;
 
         /**
          * {@code Paint} used to draw in our {@code onDraw} method
@@ -94,8 +76,7 @@ public class Layers extends GraphicsActivity {
          * to allocate and redirect drawing instructions sent to {@code Canvas canvas} to an offscreen
          * bitmap until the matching restore displays that bitmap and restores the canvas to its
          * original settings. The bitmap is 200x200 with 0x88 specified as the alpha value to be used
-         * when {@code restore} draws the bitmap to the {@code Canvas canvas}, and LAYER_FLAGS detailing
-         * what information is to be restored when {@code restore} is called.
+         * when {@code restore} draws the bitmap to the {@code Canvas canvas}.
          * <p>
          * We then set the color of {@code Paint mPaint} to RED and use it to draw a circle of radius
          * 75 pixels centered at the point (75,75), set the color of {@code mPaint} to BLUE and use
@@ -113,7 +94,7 @@ public class Layers extends GraphicsActivity {
             canvas.translate(10, 10);
 
             // Saves future drawing commands to offscreen bitmap buffer
-            canvas.saveLayerAlpha(0, 0, 200, 200, 0x88, LAYER_FLAGS);
+            canvas.saveLayerAlpha(0, 0, 200, 200, 0x88);
 
             mPaint.setColor(Color.RED);
             canvas.drawCircle(75, 75, 75, mPaint);

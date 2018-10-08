@@ -9,6 +9,14 @@ atLeastJellyBeanMR1     v17
 atLeastJellyBeanMR2     v18
 atLeastKitKat           v19
 atLeastLRelease         v20
+LOLLIPOP                v21
+LOLLIPOP_MR1            v22
+M                       v23
+N                       v24
+N_MR1                   v25
+O                       v26
+O_MR1                   v27
+P                       v28
 
 Accessibility
   Accessibility/Accessibility Node Querying
