@@ -16,8 +16,6 @@
 
 package com.example.android.apis.media.projection;
 
-import com.example.android.apis.R;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -41,6 +39,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.example.android.apis.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,10 +67,10 @@ public class MediaProjectionDemo extends Activity {
      * which the user can select to set the resolution of the virtual display.
      */
     private static final List<Resolution> RESOLUTIONS = new ArrayList<Resolution>() {{
-        add(new Resolution(640, 360));
-        add(new Resolution(960, 540));
-        add(new Resolution(1366, 768));
-        add(new Resolution(1600, 900));
+        add(new Resolution(640,360));
+        add(new Resolution(960,540));
+        add(new Resolution(1366,768));
+        add(new Resolution(1600,900));
     }};
 
     /**
@@ -153,7 +153,8 @@ public class MediaProjectionDemo extends Activity {
      * to a new instance of our class {@code ResolutionSelector}, and set its selection to 0.
      * <p>
      * Finally we locate the {@code ToggleButton} with ID R.id.screen_sharing_toggle in our layout
-     * file in order to initialize our field {@code ToggleButton mToggle}.
+     * file in order to initialize our field {@code ToggleButton mToggle}, and call its method
+     * {@code setSaveEnabled(false)} to disable state saving.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
      */
@@ -166,19 +167,31 @@ public class MediaProjectionDemo extends Activity {
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         mScreenDensity = metrics.densityDpi;
 
-        mSurfaceView = (SurfaceView) findViewById(R.id.surface);
+        mSurfaceView = findViewById(R.id.surface);
         mSurface = mSurfaceView.getHolder().getSurface();
         mProjectionManager =
-                (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+            (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 
         ArrayAdapter<Resolution> arrayAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_list_item_1, RESOLUTIONS);
-        Spinner s = (Spinner) findViewById(R.id.spinner);
+        Spinner s = findViewById(R.id.spinner);
         s.setAdapter(arrayAdapter);
         s.setOnItemSelectedListener(new ResolutionSelector());
         s.setSelection(0);
 
-        mToggle = (ToggleButton) findViewById(R.id.screen_sharing_toggle);
+        mToggle = findViewById(R.id.screen_sharing_toggle);
+        mToggle.setSaveEnabled(false);
+    }
+
+    /**
+     * Called when you are no longer visible to the user. We call our method {@code stopScreenSharing}
+     * to release the virtual display and destroy its underlying surface. Finally we call our super's
+     * implementation of {@code onStop}.
+     */
+    @Override
+    protected void onStop() {
+        stopScreenSharing();
+        super.onStop();
     }
 
     /**
@@ -222,7 +235,8 @@ public class MediaProjectionDemo extends Activity {
             return;
         }
         if (resultCode != RESULT_OK) {
-            Toast.makeText(this, "User denied screen sharing permission", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,
+                    "User denied screen sharing permission", Toast.LENGTH_SHORT).show();
             return;
         }
         mMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
@@ -277,6 +291,7 @@ public class MediaProjectionDemo extends Activity {
         if (mToggle.isChecked()) {
             mToggle.setChecked(false);
         }
+
         mScreenSharing = false;
         if (mVirtualDisplay != null) {
             mVirtualDisplay.release();
@@ -331,7 +346,7 @@ public class MediaProjectionDemo extends Activity {
 
     /**
      * Re-sizes our {@code VirtualDisplay mVirtualDisplay} to be {@code mDisplayWidth} by {@code mDisplayHeight}
-     * with density {@code mScreenDensity} is {@code mVirtualDisplay} is not null. Called only from
+     * with density {@code mScreenDensity} if {@code mVirtualDisplay} is not null. Called only from
      * the {@code surfaceChanged} method of our class {@code SurfaceCallbacks} which is UNUSED, so this
      * is unused as well.
      */
@@ -364,6 +379,7 @@ public class MediaProjectionDemo extends Activity {
          * @param pos    The position of the view in the adapter
          * @param id     The row id of the item that is selected
          */
+        @SuppressWarnings("SuspiciousNameCombination")
         @Override
         public void onItemSelected(AdapterView<?> parent, View v, int pos, long id) {
             Resolution r = (Resolution) parent.getItemAtPosition(pos);
@@ -372,9 +388,7 @@ public class MediaProjectionDemo extends Activity {
                 mDisplayHeight = r.y;
                 mDisplayWidth = r.x;
             } else {
-                //noinspection SuspiciousNameCombination
                 mDisplayHeight = r.x;
-                //noinspection SuspiciousNameCombination
                 mDisplayWidth = r.y;
             }
             lp.height = mDisplayHeight;
@@ -485,6 +499,7 @@ public class MediaProjectionDemo extends Activity {
          * @param x x dimension of the resolution
          * @param y y dimension of the resolution
          */
+        @SuppressWarnings("WeakerAccess")
         public Resolution(int x, int y) {
             this.x = x;
             this.y = y;

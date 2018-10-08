@@ -63,6 +63,7 @@ public class Xfermodes extends GraphicsActivity {
      * @param h height of the {@code Bitmap}
      * @return {@code Bitmap} containing a circle
      */
+    @SuppressWarnings("SameParameterValue")
     static Bitmap makeDst(int w, int h) {
         Bitmap bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bm);
@@ -86,6 +87,7 @@ public class Xfermodes extends GraphicsActivity {
      * @param h height of the {@code Bitmap}
      * @return {@code Bitmap} containing a rect.
      */
+    @SuppressWarnings("SameParameterValue")
     static Bitmap makeSrc(int w, int h) {
         Bitmap bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bm);
