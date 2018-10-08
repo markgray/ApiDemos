@@ -40,7 +40,7 @@ public class Clipping extends GraphicsActivity {
     }
 
     /**
-     * Custom View which draws the same scene 6 times using different clip settings for the
+     * Custom View which draws the same scene 3 times using different clip settings for the
      * {@code Canvas} it is drawing to.
      */
     private static class SampleView extends View {
@@ -54,11 +54,17 @@ public class Clipping extends GraphicsActivity {
         private Path mPath;
 
         /**
+         * logical density of the screen
+         */
+        public float SCREEN_DENSITY;
+
+        /**
          * Basic constructor for our class. First we call our super's constructor, then we enable our
-         * view to receive focus. We allocate an instance of {@code Paint} for our field {@code Paint mPaint},
-         * set the ANTI_ALIAS_FLAG to true to enable antialiasing, set the stroke width to 6, the text
-         * size to 16, and set the text alignment to be Paint.Align.RIGHT. Finally we allocate a new
-         * instance of {@code Path} to initialize our field {@code Path mPath}.
+         * view to receive focus. We initialize our field {@code float SCREEN_DENSITY} with the logical
+         * density of the screen, then we allocate an instance of {@code Paint} for our field
+         * {@code Paint mPaint}, set the ANTI_ALIAS_FLAG to true to enable antialiasing, set the stroke
+         * width to 6, the text size to 16, and set the text alignment to be Paint.Align.RIGHT. Finally
+         * we allocate a new instance of {@code Path} to initialize our field {@code Path mPath}.
          *
          * @param context the {@code Context} to use to retrieve resources, "this" when called from
          *                {@code onCreate} override of our activity.
@@ -67,6 +73,7 @@ public class Clipping extends GraphicsActivity {
             super(context);
             setFocusable(true);
 
+            SCREEN_DENSITY = getResources().getDisplayMetrics().density;
             mPaint = new Paint();
             mPaint.setAntiAlias(true);
             mPaint.setStrokeWidth(6);
@@ -84,13 +91,13 @@ public class Clipping extends GraphicsActivity {
          * outside of this rectangle from having any effect, and will respect the "no draw" regions
          * of {@code canvas} specified by its current clip.) Then fill the entire canvas' bitmap
          * (restricted to the current clip) with the color white, using source over Porter-Duff mode.
-         *
+         * <p>
          * We set the color of our field {@code Paint mPaint} to red, and use it to draw a line on
          * {@code canvas} from (0,0) to (100,100).
-         *
+         * <p>
          * We set the color of {@code mPaint} to green and use it to draw a circle on {@code canvas}
          * centered at (30,70) with radius 30.
-         *
+         * <p>
          * Finally we set the color of {@code mPaint} to blue and use it to write the text "Clipping"
          * to {@code canvas} starting at (100,30). The origin is interpreted based on the Align
          * setting in the paint which in our case is Paint.Align.RIGHT, so the end of the text is
@@ -116,15 +123,16 @@ public class Clipping extends GraphicsActivity {
 
         /**
          * We implement this to do our drawing. We call our method {@code drawScene} to draw the same
-         * "scene" 6 times using different matrix and clip states applied to the {@code Canvas canvas}
+         * "scene" 3 times using different matrix and clip states applied to the {@code Canvas canvas}
          * passed us.
-         *
-         * First we set the entire {@code Canvas canvas} to the color GRAY. Then surrounded by matching
+         * <p>
+         * First we scale the {@code Canvas canvas} passed us to the logical density of the display.
+         * Next we set the entire {@code Canvas canvas} to the color GRAY. Then surrounded by matching
          * {@code Canvas.save} and {@code Canvas.restore} calls (which save the matrix and clips states
          * then restore them afterwards), we translate the {@code Canvas canvas} to the position we
          * want drawing to be directed to, apply all the clip state modifications (relative to the new
          * position) and call our method {@code drawScene} to draw to the translated and clipped
-         * {@code Canvas canvas} restoring it to the untranslated un-clipped state on return. The six
+         * {@code Canvas canvas} restoring it to the untranslated un-clipped state on return. The 3
          * "scenes" positions and clip states are:
          * <ul>
          *     <li>
@@ -138,29 +146,10 @@ public class Clipping extends GraphicsActivity {
          *     </li>
          *     <li>
          *         (10,160) We clear any lines and curves from {@code Path mPath}, making it empty,
-         *         and use it to empty the clip path of {@code Canvas canvas}. We add a circle centered
-         *         at (50,50), of radius 50 and direction Counter clock wise to {@code mPath}, then use
-         *         it to REPLACE the clip path of {@code canvas}. Since the circle was drawn in the
-         *         counter clockwise direction the clip will exclude areas outside of the circle from
-         *         the drawable canvas.
-         *     </li>
-         *     <li>
-         *         (160,160) We add a clip rectangle that excludes areas outside of (0,0,60,60), and
-         *         then we add a rectangle excluding areas outside of (40,40,100,100) using the
-         *         Region.Op.UNION. This results in the drawable area of the Canvas being constrained
-         *         to points inside of either of the two rectangles.
-         *     </li>
-         *     <li>
-         *         (10,310) We add a clip rectangle that excludes areas outside of (0,0,60,60), and
-         *         then we add a rectangle excluding areas outside of (40,40,100,100) using the
-         *         Region.Op.XOR. This results in the drawable area of the Canvas being constrained
-         *         to points inside one or the other of the two rectangles, but not both.
-         *     </li>
-         *     <li>
-         *         (160,310) We add a clip rectangle that excludes areas outside of (0,0,60,60), and
-         *         then we add a rectangle excluding areas outside of (40,40,100,100) using the
-         *         Region.Op.REVERSE_DIFFERENCE. This causes the second rectangle to subtract off
-         *         its interior from any drawable areas of the canvas that it is over.
+         *         then we add a circle centered at (50,50), of radius 50 and direction Counter clock
+         *         wise to {@code mPath}, then use it to replace the clip path of {@code canvas}.
+         *         Since the circle was drawn in the counter clockwise direction the clip will exclude
+         *         areas outside of the circle from the drawable canvas.
          *     </li>
          * </ul>
          *
@@ -168,6 +157,7 @@ public class Clipping extends GraphicsActivity {
          */
         @Override
         protected void onDraw(Canvas canvas) {
+            canvas.scale(SCREEN_DENSITY, SCREEN_DENSITY);
             canvas.drawColor(Color.GRAY);
 
             canvas.save();
@@ -185,30 +175,8 @@ public class Clipping extends GraphicsActivity {
             canvas.save();
             canvas.translate(10, 160);
             mPath.reset();
-            canvas.clipPath(mPath); // makes the clip empty
             mPath.addCircle(50, 50, 50, Path.Direction.CCW);
-            canvas.clipPath(mPath, Region.Op.REPLACE);
-            drawScene(canvas);
-            canvas.restore();
-
-            canvas.save();
-            canvas.translate(160, 160);
-            canvas.clipRect(0, 0, 60, 60);
-            canvas.clipRect(40, 40, 100, 100, Region.Op.UNION);
-            drawScene(canvas);
-            canvas.restore();
-
-            canvas.save();
-            canvas.translate(10, 310);
-            canvas.clipRect(0, 0, 60, 60);
-            canvas.clipRect(40, 40, 100, 100, Region.Op.XOR);
-            drawScene(canvas);
-            canvas.restore();
-
-            canvas.save();
-            canvas.translate(160, 310);
-            canvas.clipRect(0, 0, 60, 60);
-            canvas.clipRect(40, 40, 100, 100, Region.Op.REVERSE_DIFFERENCE);
+            canvas.clipPath(mPath);
             drawScene(canvas);
             canvas.restore();
         }
