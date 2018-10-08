@@ -29,8 +29,6 @@ import android.view.View;
  */
 public class Typefaces extends GraphicsActivity {
 
-    final static String TAG = "Typefaces";
-
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to a new instance of {@code SampleView}.
@@ -69,36 +67,31 @@ public class Typefaces extends GraphicsActivity {
         public SampleView(Context context) {
             super(context);
 
-/*
-            if (context != getContext()) {
-                Log.i(TAG, "context is NOT equal to getContext");
-            } else {
-                Log.i(TAG, "context IS equal to getContext");
-            }
-*/
-
             mFace = Typeface.createFromAsset(context.getAssets(), "fonts/samplefont.ttf");
-
             mPaint.setTextSize(64);
         }
 
         /**
          * We implement this to do our drawing. First we set the entire {@code Canvas canvas} to
          * {@code Color.WHITE}. We set the type face of {@code Paint mPaint} to null (so it will
-         * use the default), and use it to draw the text "Default" at (10,100) on {@code canvas}.
-         * Next we set the typeface of {@code mPaint} to our custom {@code Typeface mFace}, and use
-         * it to draw the text "Custom" at (10,200) on {@code canvas}.
+         * use the default), and use it to draw the text "Draw with Default:" at (10,100) on
+         * {@code canvas}, then draw the text "  SAMPLE TEXT" at (10,200), "Draw with Custom Font"
+         * at (10,400), and "(Custom Font draws 'A' with solid triangle.)" at (10,500). Next we set
+         * the typeface of {@code mPaint} to our custom {@code Typeface mFace}, and use it to draw
+         * the text "  SAMPLE TEXT" at (10,600) on {@code canvas}.
          *
          * @param canvas the canvas on which the background will be drawn
          */
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.WHITE);
-
             mPaint.setTypeface(null);
-            canvas.drawText("Default", 10, 100, mPaint);
+            canvas.drawText("Draw with Default:", 10, 100, mPaint);
+            canvas.drawText("  SAMPLE TEXT", 10, 200, mPaint);
+            canvas.drawText("Draw with Custom Font", 10, 400, mPaint);
+            canvas.drawText("(Custom Font draws 'A' with solid triangle.)", 10, 500, mPaint);
             mPaint.setTypeface(mFace);
-            canvas.drawText("Custom", 10, 200, mPaint);
+            canvas.drawText("  SAMPLE TEXT", 10, 600, mPaint);
         }
     }
 }
