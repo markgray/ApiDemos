@@ -743,7 +743,7 @@ App
             which on clicking the "Switch to App" button uses the same function as the 
             non-interstitial notification to launch IncomingMessageView.
 
-    App/Notification/Notifying Service Controller  -- all -> v16
+    App/Notification/Notifying Service Controller  -- all -> v26
         .app.NotifyingController controls:
         .app.NotifyingService
             Updates a notification every 5 seconds from a background thread. Note use of

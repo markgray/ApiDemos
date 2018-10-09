@@ -21,16 +21,19 @@ package com.example.android.apis.app;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Binder;
 import android.os.Build;
 import android.os.ConditionVariable;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
+import android.support.annotation.NonNull;
 
 import com.example.android.apis.R;
 
@@ -39,7 +42,7 @@ import com.example.android.apis.R;
  * a {@code ConditionVariable} to implement the condition variable locking paradigm, blocking
  * for 5*1000 milliseconds after every notification (very useful approach).
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+@TargetApi(Build.VERSION_CODES.O)
 public class NotifyingService extends Service {
 
     /**
@@ -56,18 +59,32 @@ public class NotifyingService extends Service {
      * Handle to the system level service NOTIFICATION_SERVICE
      */
     private NotificationManager mNM;
+    /**
+     * The id of the primary notification channel
+     */
+    public static final String PRIMARY_CHANNEL = "default";
 
     /**
      * Called by the system when the service is first created. First we initialize our field
      * {@code NotificationManager mNM} with a handle to the system level service NOTIFICATION_SERVICE.
-     * Next we create {@code Thread notifyingThread} to run our {@code Runnable mTask} using the name
-     * "NotifyingService". We initialize our field {@code ConditionVariable mCondition} to an instance
-     * of an initially closed {@code ConditionVariable}. Finally we start {@code notifyingThread}
-     * running.
+     * We initialize {@code NotificationChannel chan1} with a new instance whose id and user visible
+     * name are both PRIMARY_CHANNEL ("default"), and whose importance is IMPORTANCE_DEFAULT (shows
+     * everywhere, makes noise, but does not visually intrude). We set the notification light color
+     * of {@code chan1} to GREEN, and set its lock screen visibility to VISIBILITY_PRIVATE (shows
+     * this notification on all lockscreens, but conceal sensitive or private information on secure
+     * lockscreens). We then have {@code mNM} create notification channel {@code chan1}. Next we create
+     * {@code Thread notifyingThread} to run our {@code Runnable mTask} using the name "NotifyingService".
+     * We initialize our field {@code ConditionVariable mCondition} to an instance of an initially
+     * closed {@code ConditionVariable}. Finally we start {@code notifyingThread} running.
      */
     @Override
     public void onCreate() {
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationChannel chan1 = new NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+                NotificationManager.IMPORTANCE_DEFAULT);
+        chan1.setLightColor(Color.GREEN);
+        chan1.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        mNM.createNotificationChannel(chan1);
 
         // Start up the thread running the service.  Note that we create a
         // separate thread because the service normally runs in the process's
@@ -144,10 +161,11 @@ public class NotifyingService extends Service {
      * we fetch {@code CharSequence text} for the resource ID {@code textID}. Next we create a
      * {@code PendingIntent contentIntent} which will launch the Activity {@code NotifyingController}
      * if the {@code Notification} we post is selected by the user. We use a {@code Notification.Builder}
-     * to build {@code Notification notification} using our parameter {@code moodId} as the small icon,
-     * the current system time as the timestamp, the String "Mood ring" as the title, {@code text}
-     * as the contents, and {@code contentIntent} as the {@code PendingIntent} to be sent when the
-     * notification is clicked. Finally we post {@code notification} to be shown in the status bar.
+     * for {@code NotificationChannel} PRIMARY_CHANNEL to build {@code Notification notification} using
+     * our parameter {@code moodId} as the small icon, the current system time as the timestamp, the
+     * String "Mood ring" as the title, {@code text} as the contents, and {@code contentIntent} as
+     * the {@code PendingIntent} to be sent when the notification is clicked. Finally we post
+     * {@code notification} to be shown in the status bar.
      *
      * @param moodId Resource ID for small icon of the notification
      * @param textId Resource ID for String to use for second line of text in the platform
@@ -167,7 +185,7 @@ public class NotifyingService extends Service {
         // that you do this as well.  (Think of of the "New hardware found" or "Network connection
         // changed" messages that always pop up)
         // Set the info for the views that show in the notification panel.
-        Notification notification = new Notification.Builder(this)
+        Notification notification = new Notification.Builder(this, PRIMARY_CHANNEL)
                 .setSmallIcon(moodId)
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(getText(R.string.status_bar_notifications_mood_title))
@@ -186,7 +204,7 @@ public class NotifyingService extends Service {
     // TODO: study aidl example in the Remote Service applications first
     private final IBinder mBinder = new Binder() {
         @Override
-        protected boolean onTransact(int code, Parcel data, Parcel reply, int flags)
+        protected boolean onTransact(int code, @NonNull Parcel data, Parcel reply, int flags)
                 throws RemoteException {
             return super.onTransact(code, data, reply, flags);
         }
