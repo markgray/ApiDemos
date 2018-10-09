@@ -23,15 +23,18 @@ import com.example.android.apis.R;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -43,21 +46,37 @@ import android.widget.Toast;
  * @see AlarmService
  * @see AlarmService_Service
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+@TargetApi(Build.VERSION_CODES.O)
 public class AlarmService_Service extends Service {
+    /**
+     * Handle to the NOTIFICATION_SERVICE system level service.
+     */
     NotificationManager mNM; // Class used to notify the user of events that happen
+    /**
+     * The id of the primary notification channel
+     */
+    public static final String PRIMARY_CHANNEL = "default";
 
     /**
      * Called by the system when the service is first created. First we initialize our field
-     * NotificationManager mNM with a handle to the NotificationManager system service. Next we
-     * show our icon in the status bar by calling our method showNotification. Then we create a
-     * new Thread thr to run our Runnable mTask with the name "AlarmService_Service". Finally we
-     * start Thread thr.
+     * NotificationManager mNM with a handle to the NotificationManager system service. We initialize
+     * {@code NotificationChannel chan1} with a new instance whose id and user visible name are both
+     * PRIMARY_CHANNEL ("default"), and whose importance is IMPORTANCE_DEFAULT (shows everywhere,
+     * makes noise, but does not visually intrude). We set the notification light color of {@code chan1}
+     * to GREEN, and set its lock screen visibility to VISIBILITY_PRIVATE (shows this notification on
+     * all lockscreens, but conceal sensitive or private information on secure lockscreens). We then have
+     * {@code mNM} create notification channel {@code chan1}. Next we show our icon in the status bar
+     * by calling our method showNotification. Then we create a new Thread thr to run our Runnable mTask
+     * with the name "AlarmService_Service". Finally we start Thread thr.
      */
     @Override
     public void onCreate() {
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
+        NotificationChannel chan1 = new NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+                NotificationManager.IMPORTANCE_DEFAULT);
+        chan1.setLightColor(Color.GREEN);
+        chan1.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        mNM.createNotificationChannel(chan1);
         // show the icon in the status bar
         showNotification();
 
@@ -145,14 +164,14 @@ public class AlarmService_Service extends Service {
      * variable {@code CharSequence text}, then we create <b>PendingIntent contentIntent</b>
      * to start the Activity AlarmService (the Activity that launched us). Next we build our
      * <b>Notification notification</b> using a method chain starting with a new instance
-     * of <b>Notification.Builder</b>. It consists of a small icon R.drawable.stat_sample,
-     * {@code CharSequence text} as the "ticker" text which is sent to accessibility services, a
-     * timestamp of the current time in milliseconds, a title of R.string.alarm_service_label
-     * ("Sample Alarm Service"), {@code CharSequence text} as the second line of text in the
-     * platform notification template, and <b>PendingIntent contentIntent</b></b> as the
-     * PendingIntent to be sent when the notification is clicked. Finally we post our notification
-     * to be shown in the status bar using an <b>int id</b> id consisting of our resource id
-     * R.string.alarm_service_started.
+     * of <b>Notification.Builder</b> for {@code NotificationChannel} PRIMARY_CHANNEL. It consists
+     * of a small icon R.drawable.stat_sample, {@code CharSequence text} as the "ticker" text which
+     * is sent to accessibility services, a timestamp of the current time in milliseconds, a title
+     * of R.string.alarm_service_label ("Sample Alarm Service"), {@code CharSequence text} as the
+     * second line of text in the platform notification template, and <b>PendingIntent
+     * contentIntent</b> as the PendingIntent to be sent when the notification is clicked. Finally
+     * we post our notification to be shown in the status bar using an <b>int id</b> id consisting
+     * of our resource id R.string.alarm_service_started.
      */
     private void showNotification() {
         // In this sample, we'll use the same text for the ticker and the expanded notification
@@ -163,7 +182,7 @@ public class AlarmService_Service extends Service {
                 new Intent(this, AlarmService.class), 0);
 
         // Set the info for the views that show in the notification panel.
-        Notification notification = new Notification.Builder(this)
+        Notification notification = new Notification.Builder(this, PRIMARY_CHANNEL)
                 .setSmallIcon(R.drawable.stat_sample)  // the status icon
                 .setTicker(text)  // the status text
                 .setWhen(System.currentTimeMillis())  // the time stamp
@@ -185,7 +204,7 @@ public class AlarmService_Service extends Service {
     private final IBinder mBinder = new Binder() {
         /**
          * Default implementation is a stub that returns false. You will want to override this to do
-         * the appropriate unmarshalling of transactions. We simply return the return value of our
+         * the appropriate un-marshalling of transactions. We simply return the return value of our
          * super's implementation of onTransact.
          *
          * @param code The action to perform. This should be a number between FIRST_CALL_TRANSACTION
@@ -196,14 +215,13 @@ public class AlarmService_Service extends Service {
          *        interested in the return value.
          * @param flags Additional operation flags. Either 0 for a normal RPC, or FLAG_ONEWAY
          *        for a one-way RPC.
-         *
          * @return Our super's "reaction" to the request: true if code == INTERFACE_TRANSACTION or
          *         code == DUMP_TRANSACTION, false otherwise.
          *
-         * @throws RemoteException
+         * @throws RemoteException if there is a Binder remote-invocation error
          */
         @Override
-        protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
+        protected boolean onTransact(int code, @NonNull Parcel data, Parcel reply, int flags) throws RemoteException {
             return super.onTransact(code, data, reply, flags);
         }
     };
