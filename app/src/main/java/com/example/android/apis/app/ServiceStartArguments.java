@@ -19,10 +19,12 @@ package com.example.android.apis.app;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,7 +55,7 @@ import com.example.android.apis.R;
  * using the {@link android.app.IntentService} class, which takes care of all the
  * work of creating the extra thread and dispatching commands to it.
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+@TargetApi(Build.VERSION_CODES.O)
 public class ServiceStartArguments extends Service {
     /**
      * TAG for logging
@@ -63,6 +65,10 @@ public class ServiceStartArguments extends Service {
      * Handle to the system level {@code NotificationManager} service
      */
     private NotificationManager mNM;
+    /**
+     * The id of the primary notification channel
+     */
+    public static final String PRIMARY_CHANNEL = "default";
 
     /**
      * {@code Looper} for the {@code HandlerThread} background thread we create to run our service in
@@ -144,15 +150,25 @@ public class ServiceStartArguments extends Service {
     /**
      * Called by the system when the service is first created. First we initialize our field
      * {@code NotificationManager mNM} with a handle to the NOTIFICATION_SERVICE system level
-     * service, then we display a toast with the message "Service created." We next create
-     * {@code HandlerThread thread} with the thread name "ServiceStartArgumentsBackground", and
-     * the priority THREAD_PRIORITY_BACKGROUND. We start the {@code thread} running, then retrieve
-     * the {@code Looper mServiceLooper} of the thread and use it to construct an instance of
-     * {@code ServiceHandler} for {@code ServiceHandler mServiceHandler}.
+     * service. We initialize {@code NotificationChannel chan1} with a new instance whose id and
+     * user visible name are both PRIMARY_CHANNEL ("default"), and whose importance is IMPORTANCE_DEFAULT
+     * (shows everywhere, makes noise, but does not visually intrude). We set the notification light
+     * color of {@code chan1} to GREEN, and set its lock screen visibility to VISIBILITY_PRIVATE
+     * (shows this notification on all lockscreens, but conceal sensitive or private information on
+     * secure lockscreens). We then have {@code mNM} create notification channel {@code chan1}.
+     * Then we display a toast with the message "Service created." We next create {@code HandlerThread thread}
+     * with the thread name "ServiceStartArgumentsBackground", and the priority THREAD_PRIORITY_BACKGROUND.
+     * We start the {@code thread} running, then retrieve the {@code Looper mServiceLooper} of the thread
+     * and use it to construct an instance of {@code ServiceHandler} for {@code ServiceHandler mServiceHandler}.
      */
     @Override
     public void onCreate() {
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationChannel chan1 = new NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+                NotificationManager.IMPORTANCE_DEFAULT);
+        chan1.setLightColor(Color.GREEN);
+        chan1.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        mNM.createNotificationChannel(chan1);
 
         Toast.makeText(this, R.string.service_created, Toast.LENGTH_SHORT).show();
 
@@ -267,12 +283,12 @@ public class ServiceStartArguments extends Service {
 
     /**
      * Show a notification while this service is running. First we create {@code PendingIntent contentIntent}
-     * which will launch {@code Controller}. We then construct {@code Notification.Builder noteBuilder},
-     * setting its small icon to R.drawable.stat_sample, its ticker text to {@code text}, its timestamp
-     * to the current system time, its label to "Sample Service Start Arguments", its text to {@code text},
-     * and {@code contentIntent} as the {@code PendingIntent} to be sent when the notification is clicked.
-     * We set the ongoing flag to true so that it cannot be dismissed by the user, then build and post
-     * the notification with the ID R.string.service_created.
+     * which will launch {@code Controller}. We then construct {@code Notification.Builder noteBuilder}
+     * to use PRIMARY_CHANNEL as its {@code NotificationChannel}, setting its small icon to R.drawable.stat_sample,
+     * its ticker text to {@code text}, its timestamp to the current system time, its label to "Sample Service
+     * Start Arguments", its text to {@code text}, and {@code contentIntent} as the {@code PendingIntent}
+     * to be sent when the notification is clicked. We set the ongoing flag to true so that it cannot be
+     * dismissed by the user, then build and post the notification with the ID R.string.service_created.
      *
      * @param text text to display in our notification
      */
@@ -281,7 +297,7 @@ public class ServiceStartArguments extends Service {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, Controller.class), 0);
 
         // Set the info for the views that show in the notification panel.
-        Notification.Builder noteBuilder = new Notification.Builder(this)
+        Notification.Builder noteBuilder = new Notification.Builder(this, PRIMARY_CHANNEL)
                 .setSmallIcon(R.drawable.stat_sample)  // the status icon
                 .setTicker(text)  // the status text
                 .setWhen(System.currentTimeMillis())  // the time stamp
