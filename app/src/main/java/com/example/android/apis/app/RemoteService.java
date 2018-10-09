@@ -48,11 +48,10 @@ import com.example.android.apis.R;
 
 /**
  * This is an example of implementing an application service that runs in a
- * different process than the application.  Because it can be in another
- * process, we must use IPC to interact with it.  The
- * {@link Controller} and {@link Binding} classes
- * show how to interact with the service. Uses the aidl files  IRemoteService.aidl,
- * IRemoteServiceCallback.aidl and ISecondary.aidl
+ * different process than the application. Because it can be in another
+ * process, we must use IPC to interact with it. The {@link Controller} and
+ * {@link Binding} classes show how to interact with the service. Uses the
+ * aidl files  IRemoteService.aidl, IRemoteServiceCallback.aidl and ISecondary.aidl
  * <p>
  * Note that most applications <strong>do not</strong> need to deal with
  * the complexity shown here.  If your application simply has a service
@@ -377,9 +376,9 @@ public class RemoteService extends Service {
             setContentView(R.layout.remote_service_controller);
 
             // Watch for button clicks.
-            Button button = (Button) findViewById(R.id.start);
+            Button button = findViewById(R.id.start);
             button.setOnClickListener(mStartListener);
-            button = (Button) findViewById(R.id.stop);
+            button = findViewById(R.id.stop);
             button.setOnClickListener(mStopListener);
         }
 
@@ -477,15 +476,15 @@ public class RemoteService extends Service {
             setContentView(R.layout.remote_service_binding);
 
             // Watch for button clicks.
-            Button button = (Button) findViewById(R.id.bind);
+            Button button = findViewById(R.id.bind);
             button.setOnClickListener(mBindListener);
-            button = (Button) findViewById(R.id.unbind);
+            button = findViewById(R.id.unbind);
             button.setOnClickListener(mUnbindListener);
-            mKillButton = (Button) findViewById(R.id.kill);
+            mKillButton = findViewById(R.id.kill);
             mKillButton.setOnClickListener(mKillListener);
             mKillButton.setEnabled(false);
 
-            mCallbackText = (TextView) findViewById(R.id.callback);
+            mCallbackText = findViewById(R.id.callback);
             mCallbackText.setText("Not attached.");
         }
 
@@ -928,24 +927,24 @@ public class RemoteService extends Service {
             setContentView(R.layout.remote_binding_options);
 
             // Watch for button clicks.
-            Button button = (Button) findViewById(R.id.bind_normal);
+            Button button = findViewById(R.id.bind_normal);
             button.setOnClickListener(mBindNormalListener);
-            button = (Button) findViewById(R.id.bind_not_foreground);
+            button = findViewById(R.id.bind_not_foreground);
             button.setOnClickListener(mBindNotForegroundListener);
-            button = (Button) findViewById(R.id.bind_above_client);
+            button = findViewById(R.id.bind_above_client);
             button.setOnClickListener(mBindAboveClientListener);
-            button = (Button) findViewById(R.id.bind_allow_oom);
+            button = findViewById(R.id.bind_allow_oom);
             button.setOnClickListener(mBindAllowOomListener);
-            button = (Button) findViewById(R.id.bind_waive_priority);
+            button = findViewById(R.id.bind_waive_priority);
             button.setOnClickListener(mBindWaivePriorityListener);
-            button = (Button) findViewById(R.id.bind_important);
+            button = findViewById(R.id.bind_important);
             button.setOnClickListener(mBindImportantListener);
-            button = (Button) findViewById(R.id.bind_with_activity);
+            button = findViewById(R.id.bind_with_activity);
             button.setOnClickListener(mBindWithActivityListener);
-            button = (Button) findViewById(R.id.unbind);
+            button = findViewById(R.id.unbind);
             button.setOnClickListener(mUnbindListener);
 
-            mCallbackText = (TextView) findViewById(R.id.callback);
+            mCallbackText = findViewById(R.id.callback);
             mCallbackText.setText("Not attached.");
 
             mBindIntent = new Intent(this, RemoteService.class);
