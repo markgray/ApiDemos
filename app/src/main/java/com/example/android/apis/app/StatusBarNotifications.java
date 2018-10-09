@@ -16,32 +16,38 @@
 
 package com.example.android.apis.app;
 
-import com.example.android.apis.R;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RemoteViews;
 
+import com.example.android.apis.R;
+
 /**
  * Demonstrates adding notifications to the status bar. Displays icon, and text when
  * buttons pressed. Marquee does not work lollipop.
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+@TargetApi(Build.VERSION_CODES.O)
 public class StatusBarNotifications extends Activity {
 
     /**
      * Our Handle to the {@code NotificationManager} system-level service
      */
     private NotificationManager mNotificationManager;
+    /**
+     * The id of the primary notification channel
+     */
+    public static final String PRIMARY_CHANNEL = "default";
 
     /**
      * Use our layout id for a unique identifier for our notifications
@@ -53,6 +59,13 @@ public class StatusBarNotifications extends Activity {
      * {@code onCreate}, then we set our content view to our layout file R.layout.status_bar_notifications.
      * We declare {@code Button button} for later use, and fetch a handle to the {@code NotificationManager}
      * system-level service to initialize our field {@code NotificationManager mNotificationManager}.
+     * We initialize {@code NotificationChannel chan1} with a new instance whose id and user visible
+     * name are both PRIMARY_CHANNEL ("default"), and whose importance is IMPORTANCE_DEFAULT (shows
+     * everywhere, makes noise, but does not visually intrude). We set the notification light color
+     * of {@code chan1} to GREEN, and set its lock screen visibility to VISIBILITY_PRIVATE (shows
+     * this notification on all lockscreens, but conceal sensitive or private information on secure
+     * lockscreens). We then have {@code mNotificationManager} create notification channel {@code chan1}.
+     * <p>
      * Next we locate each of the {@code Button}'s in our layout and set their {@code OnClickListener}
      * to an anonymous class which will call one or another of our methods with parameters set to
      * accomplish their purpose:
@@ -120,8 +133,13 @@ public class StatusBarNotifications extends Activity {
 
         // Get the notification manager service.
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationChannel chan1 = new NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+                NotificationManager.IMPORTANCE_DEFAULT);
+        chan1.setLightColor(Color.GREEN);
+        chan1.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        mNotificationManager.createNotificationChannel(chan1);
 
-        button = (Button) findViewById(R.id.happy);
+        button = findViewById(R.id.happy);
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,7 +147,7 @@ public class StatusBarNotifications extends Activity {
             }
         });
 
-        button = (Button) findViewById(R.id.neutral);
+        button = findViewById(R.id.neutral);
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,7 +155,7 @@ public class StatusBarNotifications extends Activity {
             }
         });
 
-        button = (Button) findViewById(R.id.sad);
+        button = findViewById(R.id.sad);
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,7 +163,7 @@ public class StatusBarNotifications extends Activity {
             }
         });
 
-        button = (Button) findViewById(R.id.happyMarquee);
+        button = findViewById(R.id.happyMarquee);
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,7 +171,7 @@ public class StatusBarNotifications extends Activity {
             }
         });
 
-        button = (Button) findViewById(R.id.neutralMarquee);
+        button = findViewById(R.id.neutralMarquee);
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,7 +179,7 @@ public class StatusBarNotifications extends Activity {
             }
         });
 
-        button = (Button) findViewById(R.id.sadMarquee);
+        button = findViewById(R.id.sadMarquee);
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,7 +187,7 @@ public class StatusBarNotifications extends Activity {
             }
         });
 
-        button = (Button) findViewById(R.id.happyViews);
+        button = findViewById(R.id.happyViews);
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,7 +195,7 @@ public class StatusBarNotifications extends Activity {
             }
         });
 
-        button = (Button) findViewById(R.id.neutralViews);
+        button = findViewById(R.id.neutralViews);
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,7 +203,7 @@ public class StatusBarNotifications extends Activity {
             }
         });
 
-        button = (Button) findViewById(R.id.sadViews);
+        button = findViewById(R.id.sadViews);
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,7 +211,7 @@ public class StatusBarNotifications extends Activity {
             }
         });
 
-        button = (Button) findViewById(R.id.defaultSound);
+        button = findViewById(R.id.defaultSound);
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,7 +219,7 @@ public class StatusBarNotifications extends Activity {
             }
         });
 
-        button = (Button) findViewById(R.id.defaultVibrate);
+        button = findViewById(R.id.defaultVibrate);
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,7 +227,7 @@ public class StatusBarNotifications extends Activity {
             }
         });
 
-        button = (Button) findViewById(R.id.defaultAll);
+        button = findViewById(R.id.defaultAll);
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -217,7 +235,7 @@ public class StatusBarNotifications extends Activity {
             }
         });
 
-        button = (Button) findViewById(R.id.clear);
+        button = findViewById(R.id.clear);
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -302,15 +320,15 @@ public class StatusBarNotifications extends Activity {
      * the notification's second line. First we retrieve {@code CharSequence text} from the resource
      * ID specified by our parameter {@code textId}, then we retrieve {@code CharSequence title} from
      * resource ID R.string.status_bar_notifications_mood_title ("Mood ring"). We construct and configure
-     * {@code Notification.Builder notifBuilder} to use our parameter {@code moodId} as the resource
-     * ID for the small icon of a notification, the current time as the timestamp, {@code title} for
-     * the first line "title" of the notification, {@code text}, {@code text} as the second line "details"
-     * of the notification, and the {@code PendingIntent} returned by our method {@code makeMoodIntent}
-     * for the {@code Intent} to be fired when our notification is clicked. If our parameter
-     * {@code showTicker} is true we set the "ticker" text which is sent to accessibility services to
-     * use the resource ID {@code textId}. Finally we use our field {@code NotificationManager mNotificationManager}
-     * to post the notification we {@code build()} from {@code notifBuilder} using MOOD_NOTIFICATIONS
-     * as the ID.
+     * a {@code NotificationChannel} PRIMARY_CHANNEL {@code Notification.Builder notifBuilder} to use
+     * our parameter {@code moodId} as the resource ID for the small icon of a notification, the current
+     * time as the timestamp, {@code title} for the first line "title" of the notification, {@code text},
+     * {@code text} as the second line "details" of the notification, and the {@code PendingIntent}
+     * returned by our method {@code makeMoodIntent} for the {@code Intent} to be fired when our
+     * notification is clicked. If our parameter {@code showTicker} is true we set the "ticker" text
+     * which is sent to accessibility services to use the resource ID {@code textId}. Finally we use
+     * our field {@code NotificationManager mNotificationManager} to post the notification we
+     * {@code build()} from {@code notifBuilder} using MOOD_NOTIFICATIONS as the ID.
      *
      * @param moodId     Resource ID for the small icon of the notification
      * @param textId     Resource ID for the text of the notification
@@ -324,7 +342,7 @@ public class StatusBarNotifications extends Activity {
         CharSequence title = getText(R.string.status_bar_notifications_mood_title);
 
         // Set the info for the views that show in the notification panel.
-        Notification.Builder notifBuilder = new Notification.Builder(this) // the context to use
+        Notification.Builder notifBuilder = new Notification.Builder(this, PRIMARY_CHANNEL) // the context to use
                 .setSmallIcon(moodId)  // the status icon
                 .setWhen(System.currentTimeMillis())  // the timestamp for the notification
                 .setContentTitle(title)  // the title for the notification
@@ -343,13 +361,13 @@ public class StatusBarNotifications extends Activity {
 
     /**
      * Builds a {@code Notification} manually using a custom {@code RemoteViews} to display the icon
-     * and text passed us. First we create an empty {@code Notification notif}, set its field
-     * {@code contentIntent} (the {@code PendingIntent} that should be launched if our notification
-     * is clicked) to that returned by our method {@code makeMoodIntent(moodId)}. We retrieve
-     * {@code CharSequence text} from the resource string with ID {@code textId}, and set the field
-     * {@code notif.tickerText} to it. We set the field {@code notif.icon} to {@code moodId}. We
-     * create {@code RemoteViews contentView} using our layout file R.layout.status_bar_balloon, and
-     * set its text to {@code text}, and its icon to {@code moodId}. We then set the field
+     * and text passed us. First we create an empty {@code Notification notif} for {@code NotificationChannel}
+     * PRIMARY_CHANNEL, set its field {@code contentIntent} (the {@code PendingIntent} that should be
+     * launched if our notification is clicked) to that returned by our method {@code makeMoodIntent(moodId)}.
+     * We retrieve {@code CharSequence text} from the resource string with ID {@code textId}, and set
+     * the field {@code notif.tickerText} to it. We set the field {@code notif.icon} to {@code moodId}.
+     * We create {@code RemoteViews contentView} using our layout file R.layout.status_bar_balloon,
+     * and set its text to {@code text}, and its icon to {@code moodId}. We then set the field
      * {@code notif.contentView} to {@code contentView}. Finally we use our handle to the system
      * level NotificationManager service {@code NotificationManager mNotificationManager} to post the
      * {@code Notification notif} using the id MOOD_NOTIFICATIONS.
@@ -362,7 +380,7 @@ public class StatusBarNotifications extends Activity {
         // in all of the data ourselves.  The normal one uses the default layout for notifications.
         // You probably want that in most cases, but if you want to do something custom, you
         // can set the contentView field to your own RemoteViews object.
-        Notification notif = new Notification();
+        Notification notif = new Notification.Builder(this, PRIMARY_CHANNEL).build();
 
         // This is who should be launched if the user selects our notification.
         notif.contentIntent = makeMoodIntent(moodId);
@@ -394,15 +412,15 @@ public class StatusBarNotifications extends Activity {
      * a new back stack for a relaunch of our {@code StatusBarNotifications} activity when our
      * notification is clicked). We fetch {@code CharSequence text} from our resource ID
      * R.string.status_bar_notifications_happy_message, and {@code CharSequence title} from
-     * R.string.status_bar_notifications_mood_title. Then we use a {@code Notification.Builder} to
-     * build {@code Notification notification} setting the small icon to R.drawable.stat_happy,
-     * the ticker text to {@code text}, the timestamp to the current time, the first line of the
-     * notification to to {@code title}, the second line to {@code text}, we use {@code contentIntent}
-     * as the PendingIntent to be sent when the notification is clicked, set which notification
-     * properties will be inherited from system defaults to our parameter {@code defaults} and build
-     * the notification. Finally we use our handle to the system level NotificationManager service
-     * {@code NotificationManager mNotificationManager} to post the {@code Notification notification}
-     * using the id MOOD_NOTIFICATIONS.
+     * R.string.status_bar_notifications_mood_title. Then we use a {@code Notification.Builder} for
+     * {@code NotificationChannel} PRIMARY_CHANNEL to build {@code Notification notification} setting
+     * the small icon to R.drawable.stat_happy, the ticker text to {@code text}, the timestamp to the
+     * current time, the first line of the notification to to {@code title}, the second line to
+     * {@code text}, we use {@code contentIntent} as the PendingIntent to be sent when the notification
+     * is clicked, set which notification properties will be inherited from system defaults to our
+     * parameter {@code defaults} and build the notification. Finally we use our handle to the system
+     * level NotificationManager service {@code NotificationManager mNotificationManager} to post the
+     * {@code Notification notification} using the id MOOD_NOTIFICATIONS.
      *
      * @param defaults which notification properties will be inherited from system defaults
      */
@@ -418,7 +436,7 @@ public class StatusBarNotifications extends Activity {
         CharSequence title = getText(R.string.status_bar_notifications_mood_title);
 
         // Set the info for the views that show in the notification panel.
-        Notification notification = new Notification.Builder(this) // the context to use
+        Notification notification = new Notification.Builder(this, PRIMARY_CHANNEL) // the context to use
                 .setSmallIcon(R.drawable.stat_happy)  // the status icon
                 .setTicker(text)  // the text to display in the ticker
                 .setWhen(System.currentTimeMillis())  // the timestamp for the notification

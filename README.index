@@ -755,7 +755,7 @@ App
         .app.NotifyWithText
             Show notification in a Toast.
 
-    App/Notification/Status Bar            all -> v16
+    App/Notification/Status Bar            all -> v26
         .app.StatusBarNotifications
         .app.NotificationDisplay
             froyo crash -- sound/vibrate/all calls: Intent.makeRestartActivityTask() 
