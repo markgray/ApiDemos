@@ -63,6 +63,7 @@ public class ServiceStartArguments extends Service {
      * Handle to the system level {@code NotificationManager} service
      */
     private NotificationManager mNM;
+
     /**
      * {@code Looper} for the {@code HandlerThread} background thread we create to run our service in
      */
@@ -334,15 +335,15 @@ public class ServiceStartArguments extends Service {
             setContentView(R.layout.service_start_arguments_controller);
 
             // Watch for button clicks.
-            Button button = (Button) findViewById(R.id.start1);
+            Button button = findViewById(R.id.start1);
             button.setOnClickListener(mStart1Listener);
-            button = (Button) findViewById(R.id.start2);
+            button = findViewById(R.id.start2);
             button.setOnClickListener(mStart2Listener);
-            button = (Button) findViewById(R.id.start3);
+            button = findViewById(R.id.start3);
             button.setOnClickListener(mStart3Listener);
-            button = (Button) findViewById(R.id.startfail);
+            button = findViewById(R.id.startfail);
             button.setOnClickListener(mStartFailListener);
-            button = (Button) findViewById(R.id.kill);
+            button = findViewById(R.id.kill);
             button.setOnClickListener(mKillListener);
         }
 
