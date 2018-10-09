@@ -734,9 +734,10 @@ App
         .app.NotificationBackgroundService
             Example service that gets launched from a notification and runs in the background.
 
-    App/Notification/IncomingMessage       all -> v16
+    App/Notification/IncomingMessage       all -> v26
         .app.IncomingMessage               interstitial crashes froyo startActivities()
         .app.IncomingMessageView
+        .app.IncomingMessageInterstitial
             Allows you to choose between a regular app notification, and an interstitial
             notification and shows how to launch IncomingMessageView from either type of
             notification. The interstitial choice launches IncomingMessageInterstitial 
@@ -836,7 +837,7 @@ App
             Example of explicitly starting and stopping the local service. Starts 
             app.LocalService.java
 
-    App/Service/Messenger Service              -- all -> v16
+    App/Service/Messenger Service              -- all -> v26
         .app.MessengerServiceActivities$Binding
         .app.MessengerService --> service we bind to
             This is an example of implementing an application service that uses the
@@ -860,7 +861,7 @@ App
         Uses the aidl files IRemoteServiceCallback.aidl and ISecondary.aidl
             Need to make explicit.
 
-    App/Service/Service Start Arguments Controller -- all -> v16
+    App/Service/Service Start Arguments Controller -- all -> v26
         .app.ServiceStartArguments$Controller
             Shows how to send arguments to the service you are starting by adding them 
             to the Intent you give to ContextWrapper.startService(Intent service) using

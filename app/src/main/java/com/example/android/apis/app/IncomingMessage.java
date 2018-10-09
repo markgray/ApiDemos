@@ -23,11 +23,13 @@ import com.example.android.apis.R;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -40,8 +42,12 @@ import android.widget.Button;
  * on clicking the "Switch to App" button uses the same function as the non-interstitial notification
  * to launch {@code IncomingMessageView}.
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+@TargetApi(Build.VERSION_CODES.O)
 public class IncomingMessage extends Activity {
+    /**
+     * The id of the primary notification channel
+     */
+    public static final String PRIMARY_CHANNEL = "default";
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.incoming_message.
@@ -59,7 +65,7 @@ public class IncomingMessage extends Activity {
 
         setContentView(R.layout.incoming_message);
 
-        Button button = (Button) findViewById(R.id.notify_app);
+        Button button = findViewById(R.id.notify_app);
         button.setOnClickListener(new Button.OnClickListener() {
             /**
              * Called when the {@code Button} is clicked, we simply call the method
@@ -73,7 +79,7 @@ public class IncomingMessage extends Activity {
             }
         });
 
-        button = (Button) findViewById(R.id.notify_interstitial);
+        button = findViewById(R.id.notify_interstitial);
         button.setOnClickListener(new Button.OnClickListener() {
             /**
              * Called when the {@code Button} is clicked, we simply call the method
@@ -158,16 +164,23 @@ public class IncomingMessage extends Activity {
      * Shows a notification in the status bar, consisting of our icon and associated expanded entry.
      * We are called when the {@code Button} R.id.notify_app ("Show App Notification") is clicked.
      * First we fetch a handle to the system-level service NOTIFICATION_SERVICE and save it in our
-     * variable {@code NotificationManager nm}. We create a fake message to receive consisting of
-     * a {@code CharSequence from} and a random {@code CharSequence message}. Next we create a
-     * {@code PendingIntent contentIntent} which will be launched when our notification is clicked.
-     * It consists of a back stack of Intents created by our method {@code makeMessageIntentStack}
-     * and the flag FLAG_CANCEL_CURRENT (Flag indicating that if the described PendingIntent already
-     * exists, the current one should be canceled before generating a new one).
+     * variable {@code NotificationManager nm}. We initialize {@code NotificationChannel chan1} with
+     * a new instance whose id and user visible name are both PRIMARY_CHANNEL ("default"), and whose
+     * importance is IMPORTANCE_DEFAULT (shows everywhere, makes noise, but does not visually intrude).
+     * We set the notification light color of {@code chan1} to GREEN, and set its lock screen visibility
+     * to VISIBILITY_PRIVATE (shows this notification on all lockscreens, but conceal sensitive or
+     * private information on secure lockscreens). We then have {@code nm} create notification channel
+     * {@code chan1}. We create a fake message to receive consisting of a {@code CharSequence from}
+     * and a random {@code CharSequence message}. Next we create a {@code PendingIntent contentIntent}
+     * which will be launched when our notification is clicked. It consists of a back stack of Intents
+     * created by our method {@code makeMessageIntentStack} and the flag FLAG_CANCEL_CURRENT (Flag
+     * indicating that if the described PendingIntent already exists, the current one should be canceled
+     * before generating a new one).
      * <p>
      * We initialize the String {@code String tickerText} by using our resource string
-     * R.string.imcoming_message_ticker_text as the format for our {@code message}. We create a
-     * {@code Notification.Builder notifBuilder} and chain together methods which:
+     * R.string.incoming_message_ticker_text as the format for our {@code message}. We create a
+     * {@code Notification.Builder notifBuilder} for {@code NotificationChannel} PRIMARY_CHANNEL and
+     * chain together methods which:
      * <ul>
      * <li>
      * Set the small icon to R.drawable.stat_sample
@@ -197,6 +210,12 @@ public class IncomingMessage extends Activity {
     void showAppNotification() {
         // look up the notification manager service
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationChannel chan1 = new NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+                NotificationManager.IMPORTANCE_DEFAULT);
+        chan1.setLightColor(Color.GREEN);
+        chan1.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        //noinspection ConstantConditions
+        nm.createNotificationChannel(chan1);
 
         // The details of our fake message
         CharSequence from = "Joe";
@@ -225,7 +244,7 @@ public class IncomingMessage extends Activity {
         String tickerText = getString(R.string.imcoming_message_ticker_text, message);
 
         // Set the info for the views that show in the notification panel.
-        Notification.Builder notifBuilder = new Notification.Builder(this)
+        Notification.Builder notifBuilder = new Notification.Builder(this, PRIMARY_CHANNEL)
                 .setSmallIcon(R.drawable.stat_sample)  // the status icon
                 .setTicker(tickerText)  // the status text
                 .setWhen(System.currentTimeMillis())  // the time stamp
@@ -246,22 +265,25 @@ public class IncomingMessage extends Activity {
         nm.notify(R.string.imcoming_message_ticker_text, notifBuilder.build());
     }
 
-
     /**
      * Builds a notification which will launch the {@code IncomingMessageInterstitial} activity when
      * it is clicked on. First we fetch a handle to the system wide service NOTIFICATION_SERVICE to
-     * initialize {@code NotificationManager nm}. We create a fake message to receive consisting of
-     * a {@code CharSequence from} and a random {@code CharSequence message}. Next we create a
-     * {@code Intent intent} which will launch the Activity {@code IncomingMessageInterstitial} when
-     * our notification is clicked. We store our {@code from} as an extra in the Intent using the key
-     * KEY_FROM, and {@code message} as an extra using the key KEY_MESSAGE. We set the flags of the
-     * Intent for FLAG_ACTIVITY_NEW_TASK and FLAG_ACTIVITY_CLEAR_TASK. Next we create a new instance
-     * of {@code PendingIntent contentIntent} which will launch the {@code intent} we just created
-     * and configured,
-     *
-     * We initialize the String {@code String tickerText} by using our resource string
-     * R.string.imcoming_message_ticker_text as the format for our {@code message}. We create a
-     * {@code Notification.Builder notifBuilder} and chain together methods which:
+     * initialize {@code NotificationManager nm}. We initialize {@code NotificationChannel chan1} with
+     * a new instance whose id and user visible name are both PRIMARY_CHANNEL ("default"), and whose
+     * importance is IMPORTANCE_DEFAULT (shows everywhere, makes noise, but does not visually intrude).
+     * We set the notification light color of {@code chan1} to GREEN, and set its lock screen visibility
+     * to VISIBILITY_PRIVATE (shows this notification on all lockscreens, but conceal sensitive or
+     * private information on secure lockscreens). We then have {@code nm} create notification channel
+     * {@code chan1}. We create a fake message to receive consisting of a {@code CharSequence from}
+     * and a random {@code CharSequence message}. Next we create a {@code Intent intent} which will
+     * launch the Activity {@code IncomingMessageInterstitial} when our notification is clicked. We
+     * store our {@code from} as an extra in the Intent using the key KEY_FROM, and {@code message}
+     * as an extra using the key KEY_MESSAGE. We set the flags of the Intent for FLAG_ACTIVITY_NEW_TASK
+     * and FLAG_ACTIVITY_CLEAR_TASK. Next we create a new instance of {@code PendingIntent contentIntent}
+     * which will launch the {@code intent} we just created and configured, we initialize the String
+     * {@code String tickerText} by using our resource string R.string.incoming_message_ticker_text
+     * as the format for our {@code message}. We create a {@code Notification.Builder notifBuilder}
+     * for {@code NotificationChannel} PRIMARY_CHANNEL and chain together methods which:
      * <ul>
      * <li>
      * Set the small icon to R.drawable.stat_sample
@@ -291,6 +313,12 @@ public class IncomingMessage extends Activity {
     void showInterstitialNotification() {
         // look up the notification manager service
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationChannel chan1 = new NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+                NotificationManager.IMPORTANCE_DEFAULT);
+        chan1.setLightColor(Color.GREEN);
+        chan1.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        //noinspection ConstantConditions
+        nm.createNotificationChannel(chan1);
 
         // The details of our fake message
         CharSequence from = "Dianne";
@@ -322,7 +350,7 @@ public class IncomingMessage extends Activity {
         String tickerText = getString(R.string.imcoming_message_ticker_text, message);
 
         // Set the info for the views that show in the notification panel.
-        Notification.Builder notifBuilder = new Notification.Builder(this)
+        Notification.Builder notifBuilder = new Notification.Builder(this, PRIMARY_CHANNEL)
                 .setSmallIcon(R.drawable.stat_sample)  // the status icon
                 .setTicker(tickerText)  // the status text
                 .setWhen(System.currentTimeMillis())  // the time stamp
@@ -340,6 +368,7 @@ public class IncomingMessage extends Activity {
         // the convention of using a resource id for a string related to
         // the notification.  It will always be a unique number within your
         // application.
+        //noinspection ConstantConditions
         nm.notify(R.string.imcoming_message_ticker_text, notifBuilder.build());
     }
 
