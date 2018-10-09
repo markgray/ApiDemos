@@ -83,6 +83,30 @@ public class VideoViewDemo extends Activity {
      * our layout file).
      */
     private View.OnDragListener mDragListener = new View.OnDragListener() {
+        /**
+         * Called when a drag event is dispatched to our view. If the action of our parameter
+         * {@code DragEvent event} is not ACTION_DROP (which would signal to our View that the user
+         * has released the drag shadow, and the drag point is within the bounding box of the View and
+         * not within a descendant view that can accept the data) we return true to the caller as we
+         * are only interested in ACTION_DROP. If it is ACTION_DROP we initialize {@code ClipData clipData}
+         * with the {@code ClipData} object sent to the system by the caller of {@code startDragAndDrop}.
+         * If the number of items in {@code clipData} is not equal to 1 we return false to the caller.
+         * Otherwise we initialize {@code ClipData.Item item} with the item at index 0 in {@code clipData}.
+         * Then we initialize {@code Uri uri} with the raw URI contained in {@code item}. If {@code uri}
+         * is null we return false to the caller. We call the {@code requestDragAndDropPermissions} method
+         * to create a {@code DragAndDropPermissions} object bound to this activity and controlling the
+         * access permissions for content URIs associated with {@code event}, and if it returns null
+         * (no content URIs are associated with the event or if permissions could not be granted) we
+         * return false to the caller. Otherwise we call our method {@code initPlayer} to initialize
+         * our {@code VideoView mVideoView} player to play {@code uri}. We set the {@code OnPreparedListener}
+         * of {@code mVideoView} to an anonymous class which calls the {@code start} method of {@code mVideoView}
+         * to start it playing, then return true to the caller to consume the drag event.
+         *
+         * @param v     The View that received the drag event.
+         * @param event The {@link android.view.DragEvent} object for the drag event.
+         * @return {@code true} if the drag event was handled successfully, or {@code false}
+         * if the drag event was not handled.
+         */
         @Override
         public boolean onDrag(View v, DragEvent event) {
             if (event.getAction() != DragEvent.ACTION_DROP) {
@@ -102,6 +126,13 @@ public class VideoViewDemo extends Activity {
             }
             initPlayer(uri);
             mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                /**
+                 * Called when the media file is ready for playback. We just call the {@code start}
+                 * method of {@code mVideoView}.
+                 *
+                 * @param mediaPlayer the MediaPlayer that is ready for playback
+                 */
+                @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     mVideoView.start();
                 }
