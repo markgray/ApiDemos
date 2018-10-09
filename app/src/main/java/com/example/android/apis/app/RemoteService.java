@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -27,6 +28,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -58,7 +60,7 @@ import com.example.android.apis.R;
  * running in its own process, the {@link LocalService} sample shows a much
  * simpler way to interact with it.
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+@TargetApi(Build.VERSION_CODES.O)
 @SuppressLint("SetTextI18n")
 public class RemoteService extends Service {
     /**
@@ -76,17 +78,32 @@ public class RemoteService extends Service {
      * Handle to the system level NOTIFICATION_SERVICE service
      */
     NotificationManager mNM;
+    /**
+     * The id of the primary notification channel
+     */
+    public static final String PRIMARY_CHANNEL = "default";
 
     /**
      * Called by the system when the service is first created. First we initialize our field
      * {@code NotificationManager mNM} with a handle to the system level NOTIFICATION_SERVICE
-     * service, and call our method {@code showNotification} to post a notification that we
-     * are running. Then we use our {@code Handler mHandler} to send a message with the {@code what}
-     * field set to REPORT_MSG to all the clients registered with us.
+     * service. Then we initialize {@code NotificationChannel chan1} with a new instance whose id and
+     * user visible name are both PRIMARY_CHANNEL ("default"), and whose importance is IMPORTANCE_DEFAULT
+     * (shows everywhere, makes noise, but does not visually intrude). We set the notification light
+     * color of {@code chan1} to GREEN, and set its lock screen visibility to VISIBILITY_PRIVATE
+     * (shows this notification on all lockscreens, but conceal sensitive or private information on
+     * secure lockscreens). We then have {@code mNM} create notification channel {@code chan1}.
+     * Next we call our method {@code showNotification} to post a notification that we are running.
+     * Then we use our {@code Handler mHandler} to send a message with the {@code what} field set to
+     * REPORT_MSG to all the clients registered with us.
      */
     @Override
     public void onCreate() {
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationChannel chan1 = new NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+                NotificationManager.IMPORTANCE_DEFAULT);
+        chan1.setLightColor(Color.GREEN);
+        chan1.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        mNM.createNotificationChannel(chan1);
 
         // Display a notification about us starting.
         showNotification();
@@ -319,11 +336,11 @@ public class RemoteService extends Service {
      * Show a notification while this service is running. First we fetch the resource String "Remote
      * service has started" to initialize {@code CharSequence text}, then we create a PendingIntent
      * to launch the activity {@code Controller} for {@code PendingIntent contentIntent}. We build
-     * a {@code Notification notification} using R.drawable.stat_sample as the small icon, {@code text}
-     * for the ticker text, the current system time as the time stamp, "Sample Remote Service" as the
-     * first line of the notification, {@code text} as the second line, and {@code contentIntent} as
-     * the PendingIntent to be sent when the notification is clicked. Finally we use
-     * {@code NotificationManager mNM} to post the notification.
+     * a {@code Notification notification} for {@code NotificationChannel} PRIMARY_CHANNEL using
+     * R.drawable.stat_sample as the small icon, {@code text} for the ticker text, the current system
+     * time as the time stamp, "Sample Remote Service" as the first line of the notification, {@code text}
+     * as the second line, and {@code contentIntent} as the PendingIntent to be sent when the notification
+     * is clicked. Finally we use {@code NotificationManager mNM} to post the notification.
      */
     private void showNotification() {
         // In this sample, we'll use the same text for the ticker and the expanded notification
@@ -333,7 +350,7 @@ public class RemoteService extends Service {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, Controller.class), 0);
 
         // Set the info for the views that show in the notification panel.
-        Notification notification = new Notification.Builder(this)
+        Notification notification = new Notification.Builder(this, PRIMARY_CHANNEL)
                 .setSmallIcon(R.drawable.stat_sample)  // the status icon
                 .setTicker(text)  // the status text
                 .setWhen(System.currentTimeMillis())  // the time stamp
