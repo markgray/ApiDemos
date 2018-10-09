@@ -19,10 +19,12 @@ package com.example.android.apis.app;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -31,12 +33,12 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.widget.Toast;
 
+import com.example.android.apis.R;
+
 import java.util.ArrayList;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
-import com.example.android.apis.R;
-import com.example.android.apis.app.RemoteService.Controller;
 
 /**
  * This is an example of implementing an application service that uses the
@@ -49,12 +51,17 @@ import com.example.android.apis.app.RemoteService.Controller;
  * interact with the user, rather than doing something more disruptive such as
  * calling startActivity().
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+@TargetApi(Build.VERSION_CODES.O)
 public class MessengerService extends Service {
     /**
      * For showing and hiding our notification.
      */
     NotificationManager mNM;
+    /**
+     * The id of the primary notification channel
+     */
+    public static final String PRIMARY_CHANNEL = "default";
+
     /**
      * Keeps track of all current registered clients.
      */
@@ -153,12 +160,23 @@ public class MessengerService extends Service {
 
     /**
      * Called by the system when the service is first created. We initialize our field
-     * {@code NotificationManager mNM} with a handle to the system level service NOTIFICATION_SERVICE
-     * and call our method {@code showNotification} to display the notification that we are running.
+     * {@code NotificationManager mNM} with a handle to the system level service NOTIFICATION_SERVICE,
+     * then we initialize {@code NotificationChannel chan1} with a new instance whose id and user
+     * visible name are both PRIMARY_CHANNEL ("default"), and whose importance is IMPORTANCE_DEFAULT
+     * (shows everywhere, makes noise, but does not visually intrude). We set the notification light
+     * color of {@code chan1} to GREEN, and set its lock screen visibility to VISIBILITY_PRIVATE
+     * (shows this notification on all lockscreens, but conceal sensitive or private information on
+     * secure lockscreens). We then have {@code mNM} create notification channel {@code chan1}. Finally
+     * we call our method {@code showNotification} to display the notification that we are running.
      */
     @Override
     public void onCreate() {
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationChannel chan1 = new NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+                NotificationManager.IMPORTANCE_DEFAULT);
+        chan1.setLightColor(Color.GREEN);
+        chan1.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        mNM.createNotificationChannel(chan1);
 
         // Display a notification about us starting.
         showNotification();
@@ -200,12 +218,12 @@ public class MessengerService extends Service {
      * with a target Intent for {@code Controller.class} (NOTE: This was a mistake caused by code pasting,
      * my version uses {@code MessengerServiceActivities.Binding} instead.)
      * <p>
-     * We then build {@code Notification notification} using R.drawable.stat_sample as the small icon,
-     * {@code text} as the "ticker" text, the current system time as the timestamp, the resource String
-     * "Sample Local Service" as the first line of text, {@code text} as the second line of text, and
-     * {@code contentIntent} as the {@code PendingIntent} to be sent when the notification is clicked.
-     * Finally we use {@code NotificationManager mNM} to post the notification using R.string.remote_service_started
-     * as the ID.
+     * We then build a PRIMARY_CHANNEL {@code Notification notification} using R.drawable.stat_sample
+     * as the small icon, {@code text} as the "ticker" text, the current system time as the timestamp,
+     * the resource String "Sample Local Service" as the first line of text, {@code text} as the second
+     * line of text, and {@code contentIntent} as the {@code PendingIntent} to be sent when the notification
+     * is clicked. Finally we use {@code NotificationManager mNM} to post the notification using
+     * R.string.remote_service_started as the ID.
      */
     private void showNotification() {
         // In this sample, we'll use the same text for the ticker and the expanded notification
@@ -215,7 +233,7 @@ public class MessengerService extends Service {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MessengerServiceActivities.Binding.class), 0);
 
         // Set the info for the views that show in the notification panel.
-        Notification notification = new Notification.Builder(this)
+        Notification notification = new Notification.Builder(this, PRIMARY_CHANNEL)
                 .setSmallIcon(R.drawable.stat_sample)  // the status icon
                 .setTicker(text)  // the status text
                 .setWhen(System.currentTimeMillis())  // the time stamp
