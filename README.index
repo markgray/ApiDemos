@@ -2,8 +2,10 @@
 % fill-column: 9999 %
 % End:              %
 atLeastHoneycomb        v11
+HONEYCOMB_MR1           v12
 atLeastHoneycombMR2     v13
 atLeastIceCreamSandwich v14
+ICE_CREAM_SANDWICH_MR1  v15
 atLeastJellyBean        v16
 atLeastJellyBeanMR1     v17
 atLeastJellyBeanMR2     v18
@@ -19,22 +21,26 @@ O_MR1                   v27
 P                       v28
 
 Accessibility
-  Accessibility/Accessibility Node Querying
+  Accessibility/Accessibility Node Querying  v14
         .accessibility.TaskListActivity
         .accessibility.TaskListView (also contains TaskAdapter)
+        .layout.tasklist_main.xml
+        .layout.tasklist_row.xml
             Starts up the task list that will interact with the AccessibilityService sample.
             TaskListView acts as a go-between for all AccessibilityEvents sent from items in its
             ListView, providing the option of sending more context to an AccessibilityService
             by adding more AccessibilityRecords to an event.
 
-  Accessibility/Accessibility Service
+  Accessibility/Accessibility Service  v14
         .accessibility.ClockBackActivity
         .accessibility.ClockBackService
+        .layout.accessibility_service.xml
             This is the entry activity for a sample that demonstrates how to implement an
             AccessibilityService, namely the ClockBackService
 
-  Accessibility/Custom View
+  Accessibility/Custom View           v14
         .accessibility.CustomViewAccessibilityActivity
+        .layout.custom_view_accessibility.xml
             Demonstrates how to implement accessibility support of custom views. Custom view
             is a tailored widget developed by extending the base classes in the android.view
             package. This sample shows how to implement the accessibility behavior via both
@@ -46,10 +52,10 @@ Accessibility
             also implement accessibility support for that new functionality such that
             disabled users can leverage it.
 
-  Accessibility/MagnificationService
-        .accessibility./MagnificationService
-        xml/magnification_service.xml
-            This class is an {@link AccessibilityService} that controls the state of display 
+  Accessibility/MagnificationService v24
+        .accessibility.MagnificationService
+        xml.magnification_service.xml
+            This class is an AccessibilityService that controls the state of display 
             magnification in response to key events. It demonstrates the following key features
             of the Android accessibility APIs:
                Basic implementation of an AccessibilityService
@@ -60,10 +66,12 @@ Accessibility
             element in AndroidManifest.xml.
 
 Animation (disabled for froyo)
-  Animation/Activity Transition v20+
+  Animation/Activity Transition v21+
         .animation.ActivityTransition Becomes:
-    Animation/Details of a specific thingy v20+
+        .layout.image_block.xml
+    Animation/Details of a specific thingy v21+
         .animation.ActivityTransitionDetails
+        .layout.image_details.xml
             Uses ActivityOptions.makeSceneTransitionAnimation to transition using
             a shared view as the epicenter of the transition. The xml sets
             android:onClick="clicked" to use for each thumbnail in the GridLayout
@@ -77,6 +85,8 @@ Animation (disabled for froyo)
 
   Animation/Bouncing Balls v11+
         .animation.BouncingBalls
+        .animation.ShapeHolder
+        .layout.bouncing_balls.xml
             Uses several different kinds of ObjectAnimator to animate bouncing 
             color changing balls. When onTouchEvent is called with either a
             MotionEvent.ACTION_DOWN or MotionEvent.ACTION_MOVE a ball of random
@@ -91,6 +101,8 @@ Animation (disabled for froyo)
 
   Animation/Cloning v11 
         .animation.AnimationCloning
+        .layout.animation_cloning.xml
+        .animation.ShapeHolder
             Creates an ObjectAnimator to animate the y position of an object from 0 to the
             bottom of the View, .clones it and uses .setTarget to set it as the animation
             of a second View. Then it creates two ObjectAnimator's to: animate the y position
@@ -103,12 +115,13 @@ Animation (disabled for froyo)
 
   Animation/Custom Evaluator v11 
         .animation.CustomEvaluator
+        .layout.animator_custom_evaluator.xml
+        .animation.ShapeHolder
             Implements the TypeEvaluator interface to animate using a custom:
             "public Object evaluate(float fraction, Object startValue, Object endValue)"
             function. The x and y coordinates of an "animation.ShapeHolder ball" are 
             animated by calling evaluate, and onAnimationUpdate is called which calls
             invalidate() which causes the onDraw method to be called.
-            TODO: Scale using mDensity = getContext().getResources().getDisplayMetrics().density;
 
   Animation/Default Layout Animations v11 -- layout uses GridLayout so crash,  if < v14.
         .animation.LayoutAnimationsByDefault

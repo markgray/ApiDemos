@@ -24,6 +24,7 @@ import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -35,7 +36,6 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -57,11 +57,13 @@ import java.util.ArrayList;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class BouncingBalls extends Activity {
+    @SuppressWarnings("unused")
     String TAG = "BouncingBalls";
 
     /**
-     * Sets the activity content to the layout R.layout.bouncing_balls, locates the LinearLayout
-     * within the layout using its id R.id.container and when adds a MyAnimationView View to it.
+     * Called when the activity is starting. First we call our super's implementation of {@code onCreate},
+     * then we set our content view to the layout file R.layout.bouncing_balls, locate the LinearLayout
+     * within the layout with id R.id.container and add a new instance of {@code MyAnimationView} to it.
      *
      * @param savedInstanceState Always null since onSaveInstanceState is never called
      */
@@ -69,27 +71,44 @@ public class BouncingBalls extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bouncing_balls);
-        LinearLayout container = (LinearLayout) findViewById(R.id.container);
+        LinearLayout container = findViewById(R.id.container);
         container.addView(new MyAnimationView(this));
     }
 
     /**
-     * This class does all the work of creating and  animating the bouncing balls. The balls
-     * are placed inside a .animation.ShapeHolder as they are created and an animation set is
+     * This class does all the work of creating and animating the bouncing balls. The balls
+     * are placed inside an .animation.ShapeHolder as they are created and an animation set is
      * used to perform animation operations on that ShapeHolder.
      */
     public class MyAnimationView extends View {
 
+        /**
+         * The background color property of our {@code MyAnimationView} is animated between this
+         * color and BLUE
+         */
         private static final int RED = 0xffFF8080;
+        /**
+         * The background color property of our {@code MyAnimationView} is animated between this
+         * color and RED
+         */
         private static final int BLUE = 0xff8080FF;
-        @SuppressWarnings("unused")
-        private static final int CYAN = 0xff80ffff;
-        @SuppressWarnings("unused")
-        private static final int GREEN = 0xff80ff80;
 
+        /**
+         * {@code ArrayList} holding all our balls, each inside its own {@code ShapeHolder} container.
+         */
         public final ArrayList<ShapeHolder> balls = new ArrayList<>();
-        AnimatorSet animation = null;
 
+        /**
+         * Our constructor. First we call our super's constructor. We initialize {@code ValueAnimator colorAnim}
+         * with an {@code ObjectAnimator} that animates between int values of the "backgroundColor" property
+         * value of this {@code View} between RED and BLUE. Set its duration to 3000 milliseconds, set the
+         * evaluator to be used when calculating its animated values to a new instance of {@code ArgbEvaluator}
+         * (performs type interpolation between integer values that represent ARGB colors), set its repeat count
+         * to INFINITE, its repeat mode to REVERSE and then start it running.
+         *
+         * @param context {@code Context} to use to access resources, this in the {@code onCreate}
+         *                override or {@code BouncingBalls}.
+         */
         public MyAnimationView(Context context) {
             super(context);
 
@@ -117,6 +136,7 @@ public class BouncingBalls extends Activity {
          * @param event The motion event.
          * @return True if the event was handled, false otherwise.
          */
+        @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouchEvent(MotionEvent event) {
             if (event.getAction() != MotionEvent.ACTION_DOWN &&
@@ -174,6 +194,15 @@ public class BouncingBalls extends Activity {
             ValueAnimator fadeAnim = ObjectAnimator.ofFloat(newBall, "alpha", 1f, 0f);
             fadeAnim.setDuration(250);
             fadeAnim.addListener(new AnimatorListenerAdapter() {
+                /**
+                 * Notifies the end of the animation. This callback is not invoked for animations
+                 * with repeat count set to INFINITE. We use the {@code getTarget} method of our
+                 * parameter {@code Animator animation} to retrieve the target object whose property
+                 * is being animated by this animation, then call the {@code remove} method of
+                 * {@code ArrayList<ShapeHolder> balls} to remove it from the list.
+                 *
+                 * @param animation The animation which reached its end.
+                 */
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     //noinspection SuspiciousMethodCalls
@@ -194,7 +223,6 @@ public class BouncingBalls extends Activity {
 
         /**
          * Add a ball to the list of ArrayList<ShapeHolder> balls at location (x, y).
-         *
          * First create a ShapeDrawable of an OvalShape .resize()'d to 50px x 50px, create
          * a ShapeHolder containing this ShapeDrawable and configure that ShapeHolder to locate
          * it at (x, y), create a Paint with a random color, create a RadialGradient and install

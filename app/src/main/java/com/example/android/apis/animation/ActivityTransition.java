@@ -43,6 +43,7 @@ import java.util.Map;
  * AndroidManifest android:theme="@style/ActivityTransitionTheme" which contains elements which point
  * to files in res/transition
  */
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class ActivityTransition extends Activity {
 
     @SuppressWarnings("unused")
@@ -182,12 +183,11 @@ public class ActivityTransition extends Activity {
      * an anonymous class using the method {@code setEnterSharedElementCallback}. That anonymous
      * class adds {@code mHero} to the {@code sharedElements} map passed it under the key "hero".
      */
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setupHero() {
         String name = getIntent().getStringExtra(KEY_ID);
         mHero = null;
         if (name != null) {
-            mHero = (ImageView) findViewById(getIdForKey(name));
+            mHero = findViewById(getIdForKey(name));
             setEnterSharedElementCallback(new SharedElementCallback() {
                 /**
                  * Lets the SharedElementCallback adjust the mapping of shared element names to

@@ -73,11 +73,11 @@ public class AnimationCloning extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animation_cloning);
 
-        LinearLayout container = (LinearLayout) findViewById(R.id.container);
+        LinearLayout container = findViewById(R.id.container);
         final MyAnimationView animView = new MyAnimationView(this);
         container.addView(animView);
 
-        Button starter = (Button) findViewById(R.id.startButton);
+        Button starter = findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
             /**
              * Called when the button with id R.id.startButton ("Run") is clicked, we just call the

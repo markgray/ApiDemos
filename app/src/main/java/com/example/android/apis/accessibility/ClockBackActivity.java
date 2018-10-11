@@ -34,8 +34,7 @@ public class ClockBackActivity extends Activity {
     /**
      * An intent for launching the system settings.
      */
-    private static final Intent sSettingsIntent =
-            new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+    private static final Intent sSettingsIntent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -52,7 +51,7 @@ public class ClockBackActivity extends Activity {
         setContentView(R.layout.accessibility_service);
 
         // Add a shortcut to the accessibility settings.
-        ImageButton button = (ImageButton) findViewById(R.id.button);
+        ImageButton button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             /**
              * Called when the button with id R.id.button is clicked, we just launch the settings

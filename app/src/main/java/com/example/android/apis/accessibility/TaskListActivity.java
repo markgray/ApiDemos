@@ -33,8 +33,7 @@ public class TaskListActivity extends ListActivity {
     /**
      * An intent for launching the system settings.
      */
-    private static final Intent sSettingsIntent =
-            new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+    private static final Intent sSettingsIntent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of

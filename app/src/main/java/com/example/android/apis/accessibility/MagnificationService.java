@@ -41,6 +41,7 @@ import android.view.accessibility.AccessibilityEvent;
  * a meta-data android:name="android.accessibilityservice" android:resource="@xml/magnification_service"
  * element in AndroidManifest.xml.
  */
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class MagnificationService extends AccessibilityService {
     /**
      * TAG used for logging.
@@ -95,7 +96,6 @@ public class MagnificationService extends AccessibilityService {
      * @return If true then the event will be consumed and not delivered to
      *         applications, otherwise it will be delivered as usual.
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected boolean onKeyEvent(KeyEvent event) {
         // Only consume volume key events.
@@ -139,7 +139,6 @@ public class MagnificationService extends AccessibilityService {
      *         the key
      */
     @SuppressWarnings("UnusedReturnValue")
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private boolean handleVolumeKey(boolean isVolumeUp) {
         // Obtain the controller on-demand, which allows us to avoid
         // dependencies on the accessibility service's lifecycle.
@@ -179,7 +178,6 @@ public class MagnificationService extends AccessibilityService {
      * @see AccessibilityServiceInfo
      * @see #setServiceInfo(AccessibilityServiceInfo)
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onServiceConnected() {
         final AccessibilityServiceInfo info = getServiceInfo();

@@ -26,12 +26,27 @@ import android.graphics.drawable.shapes.Shape;
  * how the shape is drawn.
  */
 public class ShapeHolder {
+    /**
+     * Our x and y coordinates.
+     */
     private float x = 0, y = 0;
+    /**
+     * The {@code ShapeDrawable} object we are holding.
+     */
     private ShapeDrawable shape;
+    /**
+     * Color or the {@code ShapeDrawable} object we are holding.
+     */
     private int color;
+    /**
+     * {@code RadialGradient} of the {@code ShapeDrawable} object we are holding.
+     */
     private RadialGradient gradient;
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private float alpha = 1f;
+    /**
+     * {@code Paint} of the {@code ShapeDrawable} object we are holding.
+     */
     private Paint paint;
 
     /**
@@ -192,10 +207,11 @@ public class ShapeHolder {
     }
 
     /**
-     * Constructor which initializes a ShapeHolder instance's Shape shape with a ShaperDrawable s
+     * Constructor which initializes a ShapeHolder instance's Shape shape with a ShapeDrawable s
      *
      * @param s ShapeDrawable that the ShapeHolder will contain
      */
+    @SuppressWarnings("WeakerAccess")
     public ShapeHolder(ShapeDrawable s) {
         shape = s;
     }

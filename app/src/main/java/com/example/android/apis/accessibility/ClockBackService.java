@@ -44,21 +44,21 @@ import java.util.List;
  * for the Clock application that comes by default with Android devices. It
  * demonstrates the following key features of the Android accessibility APIs:
  * <ol>
- * <li>
- * Simple demonstration of how to use the accessibility APIs.
- * </li>
- * <li>
- * Hands-on example of various ways to utilize the accessibility API for
- * providing alternative and complementary feedback.
- * </li>
- * <li>
- * Providing application specific feedback &mdash; the service handles only
- * accessibility events from the clock application.
- * </li>
- * <li>
- * Providing dynamic, context-dependent feedback &mdash; feedback type changes
- * depending on the ringer state.
- * </li>
+ *     <li>
+ *         Simple demonstration of how to use the accessibility APIs.
+ *     </li>
+ *     <li>
+ *         Hands-on example of various ways to utilize the accessibility API for providing
+ *         alternative and complementary feedback.
+ *     </li>
+ *     <li>
+ *         Providing application specific feedback &mdash; the service handles only accessibility
+ *         events from the clock application.
+ *     </li>
+ *     <li>
+ *         Providing dynamic, context-dependent feedback &mdash; feedback type changes depending
+ *         on the ringer state.
+ *     </li>
  * </ol>
  */
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -218,18 +218,12 @@ public class ClockBackService extends AccessibilityService {
      * Initializes our {@code sSoundsResourceIds} {@code SparseArray}.
      */
     static {
-        sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_CLICKED,
-                R.raw.sound_view_clicked);
-        sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED,
-                R.raw.sound_view_clicked);
-        sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_SELECTED,
-                R.raw.sound_view_focused_or_selected);
-        sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_FOCUSED,
-                R.raw.sound_view_focused_or_selected);
-        sSoundsResourceIds.put(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
-                R.raw.sound_window_state_changed);
-        sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER,
-                R.raw.sound_view_hover_enter);
+        sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_CLICKED, R.raw.sound_view_clicked);
+        sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED, R.raw.sound_view_clicked);
+        sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_SELECTED, R.raw.sound_view_focused_or_selected);
+        sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_FOCUSED, R.raw.sound_view_focused_or_selected);
+        sSoundsResourceIds.put(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED, R.raw.sound_window_state_changed);
+        sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER, R.raw.sound_view_hover_enter);
         sSoundsResourceIds.put(INDEX_SCREEN_ON, R.raw.sound_screen_on);
         sSoundsResourceIds.put(INDEX_SCREEN_OFF, R.raw.sound_screen_off);
         sSoundsResourceIds.put(INDEX_RINGER_SILENT, R.raw.sound_ringer_silent);
@@ -292,44 +286,44 @@ public class ClockBackService extends AccessibilityService {
          * We implement this to receive messages. We switch on the {@code what} field of our parameter
          * {@code Message message}:
          * <ul>
-         * <li>
-         * MESSAGE_SPEAK - we initialize {@code String utterance} with the {@code obj} field of
-         * {@code message} (cast to {@code String}), call the {@code speak} method of our field
-         * {@code TextToSpeech mTts} to speak {@code utterance} using the queuing strategy
-         * QUEUING_MODE_INTERRUPT, then return
-         * </li>
-         * <li>
-         * MESSAGE_STOP_SPEAK - we call the {@code stop} method of our field {@code TextToSpeech mTts}
-         * to interrupt the current utterance and discard all utterances in the queue, then return.
-         * </li>
-         * <li>
-         * MESSAGE_START_TTS - we initialize our field {@code TextToSpeech mTts} with a new instance
-         * using an anonymous class for the {@code TextToSpeech.OnInitListener} which just registers
-         * us as a broadcast receiver, and we then return.
-         * </li>
-         * <li>
-         * MESSAGE_SHUTDOWN_TTS - we call the {@code shutdown} method of {@code mTts} and return.
-         * </li>
-         * <li>
-         * MESSAGE_PLAY_EARCON - we initialize {@code int resourceId} with the {@code arg1} field of
-         * our argument {@code message}, call our method {@code playEarcon} with it to play the
-         * earcon with that id (an earcon is a brief, distinctive sound used to represent a specific
-         * event or convey other information), then we return.
-         * </li>
-         * <li>
-         * MESSAGE_STOP_PLAY_EARCON - we call the {@code stop} method of {@code mTts} and return.
-         * </li>
-         * <li>
-         * MESSAGE_VIBRATE - we initialize {@code int key} with the {@code arg1} field of our argument
-         * {@code message}, initialize {@code long[] pattern} with the array stored at position {@code key}
-         * in {@code SparseArray<long[]> sVibrationPatterns}, and if that is not null we call the
-         * {@code vibrate} method of {@code Vibrator mVibrator} with that pattern. In either case we
-         * return to our caller.
-         * </li>
-         * <li>
-         * MESSAGE_STOP_VIBRATE - we call the {@code cancel} method of {@code Vibrator mVibrator} and
-         * return.
-         * </li>
+         *     <li>
+         *         MESSAGE_SPEAK - we initialize {@code String utterance} with the {@code obj} field of
+         *         {@code message} (cast to {@code String}), call the {@code speak} method of our field
+         *         {@code TextToSpeech mTts} to speak {@code utterance} using the queuing strategy
+         *         QUEUING_MODE_INTERRUPT, then return
+         *     </li>
+         *     <li>
+         *         MESSAGE_STOP_SPEAK - we call the {@code stop} method of our field {@code TextToSpeech mTts}
+         *         to interrupt the current utterance and discard all utterances in the queue, then return.
+         *     </li>
+         *     <li>
+         *         MESSAGE_START_TTS - we initialize our field {@code TextToSpeech mTts} with a new instance
+         *         using an anonymous class for the {@code TextToSpeech.OnInitListener} which just registers
+         *         us as a broadcast receiver, and we then return.
+         *     </li>
+         *     <li>
+         *         MESSAGE_SHUTDOWN_TTS - we call the {@code shutdown} method of {@code mTts} and return.
+         *     </li>
+         *     <li>
+         *         MESSAGE_PLAY_EARCON - we initialize {@code int resourceId} with the {@code arg1} field of
+         *         our argument {@code message}, call our method {@code playEarcon} with it to play the
+         *         earcon with that id (an earcon is a brief, distinctive sound used to represent a specific
+         *         event or convey other information), then we return.
+         *     </li>
+         *     <li>
+         *         MESSAGE_STOP_PLAY_EARCON - we call the {@code stop} method of {@code mTts} and return.
+         *     </li>
+         *     <li>
+         *         MESSAGE_VIBRATE - we initialize {@code int key} with the {@code arg1} field of our argument
+         *         {@code message}, initialize {@code long[] pattern} with the array stored at position {@code key}
+         *         in {@code SparseArray<long[]> sVibrationPatterns}, and if that is not null we call the
+         *         {@code vibrate} method of {@code Vibrator mVibrator} with that pattern. In either case we
+         *         return to our caller.
+         *     </li>
+         *     <li>
+         *         MESSAGE_STOP_VIBRATE - we call the {@code cancel} method of {@code Vibrator mVibrator}
+         *         and return.
+         *     </li>
          * </ul>
          *
          * @param message A {@code Message} object
@@ -347,6 +341,12 @@ public class ClockBackService extends AccessibilityService {
                     return;
                 case MESSAGE_START_TTS:
                     mTts = new TextToSpeech(mContext, new TextToSpeech.OnInitListener() {
+                        /**
+                         * Called to signal the completion of the TextToSpeech engine initialization.
+                         *
+                         * @param status {@link TextToSpeech#SUCCESS} or {@link TextToSpeech#ERROR}.
+                         */
+                        @Override
                         public void onInit(int status) {
                             // Register here since to add earcons the TTS must be initialized and
                             // the receiver is called immediately with the current ringer mode.
@@ -462,8 +462,7 @@ public class ClockBackService extends AccessibilityService {
                     mHandler.obtainMessage(MESSAGE_VIBRATE, feedbackIndex, 0).sendToTarget();
                     return;
                 default:
-                    throw new IllegalStateException("Unexpected feedback type "
-                            + mProvidedFeedbackType);
+                    throw new IllegalStateException("Unexpected feedback type " + mProvidedFeedbackType);
             }
         }
     };
@@ -592,27 +591,27 @@ public class ClockBackService extends AccessibilityService {
      * Configures the service according to a ringer mode. Possible
      * configurations:
      * <p>
-     * 1. {@code AudioManager#RINGER_MODE_SILENT}<br/>
-     * Goal:     Provide only custom haptic feedback.<br/>
+     * 1. {@code AudioManager#RINGER_MODE_SILENT}
+     * Goal:     Provide only custom haptic feedback.
      * Approach: Take over the haptic feedback by configuring this service to provide
      * such and do so. This way the system will not call the default haptic
-     * feedback service KickBack.<br/>
+     * feedback service KickBack.
      * Take over the audible and spoken feedback by configuring this
      * service to provide such feedback but not doing so. This way the system
      * will not call the default spoken feedback service TalkBack and the
      * default audible feedback service SoundBack.
      * </p>
      * <p>
-     * 2. {@code AudioManager#RINGER_MODE_VIBRATE}<br/>
-     * Goal:     Provide custom audible and default haptic feedback.<br/>
-     * Approach: Take over the audible feedback and provide custom one.<br/>
-     * Take over the spoken feedback but do not provide such.<br/>
+     * 2. {@code AudioManager#RINGER_MODE_VIBRATE}
+     * Goal:     Provide custom audible and default haptic feedback.
+     * Approach: Take over the audible feedback and provide custom one.
+     * Take over the spoken feedback but do not provide such.
      * Let some other service provide haptic feedback (KickBack).
      * </p>
      * <p>
      * 3. {@code AudioManager#RINGER_MODE_NORMAL}
-     * Goal:     Provide custom spoken, default audible and default haptic feedback.<br/>
-     * Approach: Take over the spoken feedback and provide custom one.<br/>
+     * Goal:     Provide custom spoken, default audible and default haptic feedback.
+     * Approach: Take over the spoken feedback and provide custom one.
      * Let some other services provide audible feedback (SoundBack) and haptic
      * feedback (KickBack).
      * </p>
@@ -742,11 +741,15 @@ public class ClockBackService extends AccessibilityService {
      * Formats an utterance from an {@code AccessibilityEvent}. We initialize {@code StringBuilder utterance}
      * by copying the reference from our field {@code StringBuilder mUtterance}, and clear it by setting
      * its length to 0. We initialize {@code List<CharSequence> eventText} by retrieving the text
-     * of the {@code AccessibilityEvent event}. If {@code eventText} we loop through all the
+     * of the {@code AccessibilityEvent event}. If {@code eventText} is not empty we loop through all the
      * {@code CharSequence subText} in {@code eventText} removing the character '0' if it is the first
      * character, appending {@code subText} to {@code utterance} followed by a SPACE character. When
      * we are done appending all the {@code CharSequence} into {@code utterance} we return the string
-     * value of {@code utterance} to the caller.
+     * value of {@code utterance} to the caller. If there is no event text in {@code event} we initialize
+     * {@code CharSequence contentDescription} with the content description of the source, and if it
+     * is not null we append it to {@code utterance} and return the string value of {@code utterance}
+     * to the caller. If there is not event text and no content description in {@code event} we just
+     * return the string value of {@code utterance} to the caller.
      *
      * @param event The event from which to format an utterance.
      * @return The formatted utterance.

@@ -93,15 +93,18 @@ final class TaskAdapter extends BaseAdapter {
     /**
      * Labels to use for our checkboxes, set by our constructor
      */
+    @SuppressWarnings("UnusedAssignment")
     private String[] mLabels = null;
     /**
      * Current state of our checkboxes (true if checked, false if unchecked)
      */
+    @SuppressWarnings("UnusedAssignment")
     private boolean[] mCheckboxes = null;
     /**
      * {@code Context} passed to our constructor ("this" in the {@code onCreate} method of
      * {@code TaskListActivity}
      */
+    @SuppressWarnings("UnusedAssignment")
     private Context mContext = null;
 
     /**
@@ -161,10 +164,10 @@ final class TaskAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.tasklist_row, parent, false);
         }
 
-        CheckBox checkbox = (CheckBox) convertView.findViewById(R.id.tasklist_finished);
+        CheckBox checkbox = convertView.findViewById(R.id.tasklist_finished);
         checkbox.setChecked(mCheckboxes[position]);
 
-        TextView label = (TextView) (convertView.findViewById(R.id.tasklist_label));
+        TextView label = convertView.findViewById(R.id.tasklist_label);
         label.setText(mLabels[position]);
 
         String contentDescription = new StringBuilder()

@@ -51,10 +51,17 @@ import android.widget.LinearLayout;
 public class CustomEvaluator extends Activity {
 
     /**
-     * Loads the animator_custom_evaluator layout as the content view, finds the LinearLayout
-     * container for our animation, creates a MyAnimationView and addView's it to the container.
-     * Then it finds the startButton and setOnClickListener's a callback to startAnimation our
-     * MyAnimationView.
+     * Logical density of our display.
+     */
+    float mDensity;
+    /**
+     * Called when the activity is starting. First we call our super's implementation of {@code onCreate},
+     * then we set our content view to our layout file R.layout.animator_custom_evaluator. We initialize
+     * our field {@code mDensity} with the logical density of our display, then initialize {@code LinearLayout container}
+     * by finding the view with id R.id.container. Next we create a new instance of {@code MyAnimationView} and
+     * add it to {@code container}. We initialize {@code Button starter} by finding the view with id
+     * R.id.startButton and set its {@code OnClickListener} to an anonymous class which calls the
+     * {@code startAnimation} method of {@code animView} to start the animation running.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
@@ -62,12 +69,21 @@ public class CustomEvaluator extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animator_custom_evaluator);
-        LinearLayout container = (LinearLayout) findViewById(R.id.container);
+
+        mDensity = getResources().getDisplayMetrics().density;
+
+        LinearLayout container = findViewById(R.id.container);
         final MyAnimationView animView = new MyAnimationView(this);
         container.addView(animView);
 
-        Button starter = (Button) findViewById(R.id.startButton);
+        Button starter = findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Called when our view has been clicked. We just call the {@code startAnimation} method
+             * of {@code animView} to start the animation running.
+             *
+             * @param v The view that was clicked.
+             */
             @Override
             public void onClick(View v) {
                 animView.startAnimation();
@@ -78,6 +94,7 @@ public class CustomEvaluator extends Activity {
     /**
      * Class used to hold x, y coordinates
      */
+    @SuppressWarnings("WeakerAccess")
     public class XYHolder {
         private float mX;
         private float mY;
@@ -160,6 +177,7 @@ public class CustomEvaluator extends Activity {
     /**
      * Class designed to hold a ball's ShapeHolder (and not much else)
      */
+    @SuppressWarnings("WeakerAccess")
     public class BallXYHolder {
 
         private ShapeHolder mBall;
@@ -193,7 +211,9 @@ public class CustomEvaluator extends Activity {
         @SuppressWarnings("unused")
         public final ArrayList<ShapeHolder> balls = new ArrayList<>();
         ValueAnimator bounceAnim = null;
+        @SuppressWarnings("UnusedAssignment")
         ShapeHolder ball = null;
+        @SuppressWarnings("UnusedAssignment")
         BallXYHolder ballHolder = null;
 
         /**
@@ -247,6 +267,7 @@ public class CustomEvaluator extends Activity {
          * @param y y coordinate for ball
          * @return ShapeHolder containing the new ball
          */
+        @SuppressWarnings("SameParameterValue")
         private ShapeHolder createBall(float x, float y) {
             OvalShape circle = new OvalShape();
             circle.resize(50f, 50f);
@@ -279,6 +300,7 @@ public class CustomEvaluator extends Activity {
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.save();
+            canvas.scale(mDensity, mDensity);
             canvas.translate(ball.getX(), ball.getY());
             ball.getShape().draw(canvas);
             canvas.restore();

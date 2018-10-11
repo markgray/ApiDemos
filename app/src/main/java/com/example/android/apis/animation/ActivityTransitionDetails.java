@@ -72,7 +72,7 @@ public class ActivityTransitionDetails extends Activity {
         super.onCreate(savedInstanceState);
         getWindow().setBackgroundDrawable(new ColorDrawable(randomColor()));
         setContentView(R.layout.image_details);
-        ImageView titleImage = (ImageView) findViewById(R.id.titleImage);
+        ImageView titleImage = findViewById(R.id.titleImage);
         titleImage.setImageDrawable(getHeroDrawable());
     }
 

@@ -1702,4 +1702,5 @@
     <string name="rotating_button">Rotating Button</string>
     <string name="run">Run</string>
     <string name="do_something">Do something</string>
+    <string name="settings_icon">Settings icon</string>
 </resources>

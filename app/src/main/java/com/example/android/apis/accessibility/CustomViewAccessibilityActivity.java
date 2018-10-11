@@ -16,6 +16,7 @@
 
 package com.example.android.apis.accessibility;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -48,7 +49,6 @@ import com.example.android.apis.R;
  * base view classes. While implementing the desired functionality a developer should
  * also implement accessibility support for that new functionality such that
  * disabled users can leverage it.
- * </p>
  */
 public class CustomViewAccessibilityActivity extends Activity {
 
@@ -193,6 +193,7 @@ public class CustomViewAccessibilityActivity extends Activity {
          * {@code onInitializeAccessibilityNodeInfo} and {@code onPopulateAccessibilityEvent} with
          * custom methods which add our custom accessibility features to the framework.
          */
+        @SuppressLint("ObsoleteSdkInt")
         public void tryInstallAccessibilityDelegate() {
             // If the API version of the platform we are running is too old
             // and does not support the AccessibilityDelegate APIs, do not
