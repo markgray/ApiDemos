@@ -33,17 +33,27 @@ import android.widget.GridLayout;
  */
 public class LayoutAnimationsByDefault extends Activity {
 
+    /**
+     * Counter we use as the label of the button we add, then increment for the next time.
+     */
     private int numButtons = 1;
 
     /**
-     * Sets the content view to the layout layout_animations_by_default, finds the gridContainer
-     * GridView, finds the ADD BUTTON Button and sets the OnClickListener to create a new Button
-     * and add it to the GridView at the location min(1, number of children in GridView). The
-     * onClickListener of the new Button is set to remove the Button. The GridView attribute
+     * Called when the activity is starting. First we call our super's implementation of {@code onCreate},
+     * then we set our content view to the layout layout_animations_by_default. We initialize our variable
+     * {@code GridLayout gridContainer} by finding the view with id R.id.gridContainer, and initialize our
+     * variable {@code Button addButton} by finding the view with id R.id.addNewButton ("Add Button").
+     * We set the {@code OnClickListener} of {@code addButton} to an anonymous class whose {@code onClick}
+     * override creates a new button, sets its text to the string value of {@code numButtons} (post
+     * incrementing {@code numButtons}), sets its {@code OnClickListener} to an anonymous class which
+     * will remove the button from {@code gridContainer} when the button is clicked. The {@code onClick}
+     * override of {@code addButton} then adds the new button to {@code gridContainer} at the location 0
+     * for the first button then at position 1 for all the following buttons. The GridView attribute
      * android:animateLayoutChanges="true" causes a default LayoutTransition object to be set
-     * on the ViewGroup container and default animations will run when layout changes occur.
+     * on the ViewGroup container and default animations will run when layout changes occur (both when
+     * adding and removing a button).
      *
-     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,15 +61,31 @@ public class LayoutAnimationsByDefault extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_animations_by_default);
 
-        final GridLayout gridContainer = (GridLayout) findViewById(R.id.gridContainer);
+        final GridLayout gridContainer = findViewById(R.id.gridContainer);
 
-        Button addButton = (Button) findViewById(R.id.addNewButton);
+        Button addButton = findViewById(R.id.addNewButton);
         addButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Called when the "Add Button" button is clicked. First we initialize {@code Button newButton}
+             * with a new instance, set its text to the string value of {@code numButtons} (post incrementing
+             * {@code numButtons}), and set its {@code OnClickListener} to an anonymous class which removes
+             * the button from {@code gridContainer} when it is clicked. We then add {@code newButton} to
+             * {@code gridContainer} at location 0 for the first button then at position 1 for all the
+             * following buttons.
+             *
+             * @param v {@code View} that was clicked.
+             */
             @Override
             public void onClick(View v) {
                 Button newButton = new Button(LayoutAnimationsByDefault.this);
                 newButton.setText(String.valueOf(numButtons++));
                 newButton.setOnClickListener(new View.OnClickListener() {
+                    /**
+                     * Called when {@code Button newButton} is clicked. We call the {@code removeView}
+                     * method of {@code GridLayout gridContainer} to remove our view from it.
+                     *
+                     * @param v {@code View} that was clicked.
+                     */
                     @Override
                     public void onClick(View v) {
                         gridContainer.removeView(v);

@@ -40,30 +40,42 @@ import android.widget.Button;
 
 /**
  * This application demonstrates how to use LayoutTransition to automate transition animations
- * as items are hidden or shown in a container.
+ * as items are hidden or shown in a container. Pressing the "Show Buttons" button while the
+ * "Custom Animations" CheckBox is checked causes a crash which blanks out the system wallpaper.
+ * (Sometimes?)
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class LayoutAnimationsHideShow extends Activity {
-
-    @SuppressWarnings("unused")
-    private int numButtons = 1;
+    /**
+     * {@code LinearLayout} into which we place the buttons we are hiding or showing.
+     */
     ViewGroup container = null;
+    /**
+     * {@code LayoutTransition} used by our {@code ViewGroup container}, either a default one or the
+     * custom one created when we check the "Custom Animations" CheckBox.
+     */
     private LayoutTransition mTransitioner;
 
-    /** Called when the activity is first created. */
     /**
-     * Set the content view to the Layout file layout_animations_hideshow, finds the hideGoneCB
-     * CheckBox in that layout to use later on in the creation of OnClickListener's. Creates a
-     * LinearLayout container programmatically and configures it. It then adds four Button's to
-     * that LinearLayout and sets the OnClickListener of each Button to change the visibility of
-     * the Button based on the state of the hideGoneCB CheckBox. If it is checked the View's
-     * visibility is changed to GONE, if unchecked it is changed to INVISIBLE. It creates a
-     * default LayoutTransition mTransitioner by calling resetTransition(). Next it finds
-     * the "Show Buttons" Button ("R.id.addNewButton") and sets its OnClickListener to set the
-     * visibility of the four Button's in the LinearLayout container to VISIBLE. It finds the
-     * "Custom Animations" CheckBox and sets its OnCheckedChangeListener to either create a
-     * custom LayoutTransition mTransitioner if the CheckBox is checked, or reset it to the default
-     * animation if unchecked.
+     * Called when the activity is starting. First we call our super's implementation of {@code onCreate},
+     * then we set our content view to our Layout file layout_animations_hideshow. We initialize our
+     * variable {@code CheckBox hideGoneCB} by finding the view with id R.id.hideGoneCB ("Hide (GONE)").
+     * We initialize our field {@code ViewGroup container} with a new instance and set its layout params
+     * to have both width and height set to MATCH_PARENT. We then loop over {@code int i} from 1 to 4
+     * creating a new instance for {@code Button newButton}, setting its text to the string value of
+     * {@code i}, adding it to {@code container} and setting its {@code OnClickListener} to an anonymous
+     * class whose {@code onClick} override sets the visibility of the button to GONE if {@code hideGoneCB}
+     * is checked or to INVISIBLE if it is not checked. When done adding the 4 buttons to {@code container}
+     * we call our method {@code resetTransition} which creates a new instance of {@code LayoutTransition}
+     * (the default LayoutTransition) for {@code LayoutTransition mTransitioner} and sets it to be the
+     * LayoutTransition used by {@code container}. We then initialize {@code ViewGroup parent} by finding
+     * the view with id R.id.parent and add {@code container} to it. We initialize {@code Button addButton}
+     * by finding the view with id R.id.addNewButton ("Show Buttons") and set its {@code OnClickListener}
+     * to an anonymous class whose {@code onClick} override loops through all the children in the view group
+     * {@code container} setting their visibility to VISIBLE. We initialize {@code CheckBox customAnimCB}
+     * by finding the view with id R.id.customAnimCB ("Custom Animations") and set its OnCheckedChangeListener
+     * to either create a  custom LayoutTransition mTransitioner if the CheckBox is checked, or reset it
+     * to the default animation if unchecked.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
@@ -72,7 +84,7 @@ public class LayoutAnimationsHideShow extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_animations_hideshow);
 
-        final CheckBox hideGoneCB = (CheckBox) findViewById(R.id.hideGoneCB);
+        final CheckBox hideGoneCB = findViewById(R.id.hideGoneCB);
 
         container = new LinearLayout(this);
         container.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -100,10 +112,10 @@ public class LayoutAnimationsHideShow extends Activity {
 
         resetTransition();
 
-        ViewGroup parent = (ViewGroup) findViewById(R.id.parent);
+        ViewGroup parent = findViewById(R.id.parent);
         parent.addView(container);
 
-        Button addButton = (Button) findViewById(R.id.addNewButton);
+        Button addButton = findViewById(R.id.addNewButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             /**
              * Set the visibility of all four Button's in the LinearLayout container to
@@ -120,7 +132,7 @@ public class LayoutAnimationsHideShow extends Activity {
             }
         });
 
-        CheckBox customAnimCB = (CheckBox) findViewById(R.id.customAnimCB);
+        CheckBox customAnimCB = findViewById(R.id.customAnimCB);
         customAnimCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             /**
              * This callback either configures the LayoutTransition mTransitioner to perform
@@ -165,7 +177,7 @@ public class LayoutAnimationsHideShow extends Activity {
     /**
      * This method creates complex CHANGE_APPEARING, CHANGE_DISAPPEARING, APPEARING, and
      * DISAPPEARING animations and configures the LayoutTransition mTransitioner to use them.
-     *
+     * <p>
      * For the CHANGE_APPEARING (Changing while Adding) part of the animation it defines property
      * value holders to animate property "left" from 0 to 1, "top" from 0 to 1, "right" from 0 to 1,
      * "bottom" from 0 to 1, "scaleX" from 1f to 0f to 1f, "scaleY" from 1f to 0f to 1f. It then
@@ -176,7 +188,7 @@ public class LayoutAnimationsHideShow extends Activity {
      * has the appearance of a card flipping right to left from the back side to the front side.
      * You can see this animation in action by clicking the SHOW BUTTONS Button after deleting
      * Button's with the "Hide (GONE)" CheckBox checked.
-     *
+     * <p>
      * For the CHANGE_DISAPPEARING (Changing while Removing) part of the animation it defines an
      * additional PropertyValueHolder for "rotation" constructed of three KeyFrame's (kf0 - a
      * starting value of the rotation of 0f lasting 0f, kf1 - a rotation of 360f degrees lasting
@@ -189,7 +201,7 @@ public class LayoutAnimationsHideShow extends Activity {
      * onAnimationEnd to set the rotation of the Button to 0f degrees. It has the effect of rotating
      * the Button's to the right of the Button removed clockwise when the "Hide (GONE)" CheckBox
      * is checked while moving them into their new positions.
-     *
+     * <p>
      * For the APPEARING (Adding) part of the animation it creates a simple "rotationY"
      * ObjectAnimator animIn which rotates the Button from 90f degrees to 0f degrees, sets
      * the duration of animIn to be the same as the current LayoutTransition mTransitioner, and
@@ -198,7 +210,7 @@ public class LayoutAnimationsHideShow extends Activity {
      * It has the effect of rotating the appearing Button's about the y axis when the SHOW BUTTONS
      * button is pressed (after removing a Button or two), starting from sticking directly out of
      * the plane of the View, to flat.
-     *
+     * <p>
      * For the DISAPPEARING (Removing) part of the animation it creates a simple "rotationX"
      * ObjectAnimator animOut which rotates the Button from 0f degrees (flat) to 90f degrees
      * (sticking out of the plane), sets the duration of animOut to be the same as the current
@@ -227,6 +239,13 @@ public class LayoutAnimationsHideShow extends Activity {
                 setDuration(mTransitioner.getDuration(LayoutTransition.CHANGE_APPEARING));
         mTransitioner.setAnimator(LayoutTransition.CHANGE_APPEARING, changeIn);
         changeIn.addListener(new AnimatorListenerAdapter() {
+            /**
+             * Notifies the end of the animation. We initialize {@code View view} with the target of
+             * our parameter {@code Animator anim} then set both the x and y scaling factor of
+             * {@code view} to 1f.
+             *
+             * @param anim The animation which reached its end.
+             */
             @SuppressWarnings("ConstantConditions")
             @Override
             public void onAnimationEnd(Animator anim) {
@@ -247,6 +266,12 @@ public class LayoutAnimationsHideShow extends Activity {
                 setDuration(mTransitioner.getDuration(LayoutTransition.CHANGE_DISAPPEARING));
         mTransitioner.setAnimator(LayoutTransition.CHANGE_DISAPPEARING, changeOut);
         changeOut.addListener(new AnimatorListenerAdapter() {
+            /**
+             * Notifies the end of the animation. We initialize {@code View view} with the target of
+             * our parameter {@code Animator anim} and set its rotation to 0.
+             *
+             * @param anim The animation which reached its end.
+             */
             @SuppressWarnings("ConstantConditions")
             @Override
             public void onAnimationEnd(Animator anim) {
@@ -260,6 +285,12 @@ public class LayoutAnimationsHideShow extends Activity {
                 setDuration(mTransitioner.getDuration(LayoutTransition.APPEARING));
         mTransitioner.setAnimator(LayoutTransition.APPEARING, animIn);
         animIn.addListener(new AnimatorListenerAdapter() {
+            /**
+             * Notifies the end of the animation. We initialize {@code View view} with the target of
+             * our parameter {@code Animator anim} and set its rotation around the vertical axis to 0.
+             *
+             * @param anim The animation which reached its end.
+             */
             @SuppressWarnings("ConstantConditions")
             @Override
             public void onAnimationEnd(Animator anim) {
@@ -273,6 +304,12 @@ public class LayoutAnimationsHideShow extends Activity {
                 setDuration(mTransitioner.getDuration(LayoutTransition.DISAPPEARING));
         mTransitioner.setAnimator(LayoutTransition.DISAPPEARING, animOut);
         animOut.addListener(new AnimatorListenerAdapter() {
+            /**
+             * Notifies the end of the animation. We initialize {@code View view} with the target of
+             * our parameter {@code Animator anim} and set its rotation around the horizontal axis to 0.
+             *
+             * @param anim The animation which reached its end.
+             */
             @SuppressWarnings("ConstantConditions")
             @Override
             public void onAnimationEnd(Animator anim) {
@@ -280,6 +317,32 @@ public class LayoutAnimationsHideShow extends Activity {
                 view.setRotationX(0f);
             }
         });
-
     }
+
+    // The following are here to silence an error warning.
+    @SuppressWarnings("unused")
+    public void setLeft(int duh) {
+        throw new RuntimeException("I should not be called");
+    }
+    @SuppressWarnings("unused")
+    public void setTop(int duh) {
+        throw new RuntimeException("I should not be called");
+    }
+    @SuppressWarnings("unused")
+    public void setRight(int duh) {
+        throw new RuntimeException("I should not be called");
+    }
+    @SuppressWarnings("unused")
+    public void setBottom(int duh) {
+        throw new RuntimeException("I should not be called");
+    }
+    @SuppressWarnings("unused")
+    public void setScaleX(float duh) {
+        throw new RuntimeException("I should not be called");
+    }
+    @SuppressWarnings("unused")
+    public void setScaleY(float duh) {
+        throw new RuntimeException("I should not be called");
+    }
+
 }

@@ -21,10 +21,6 @@ package com.example.android.apis.animation;
 import android.animation.ObjectAnimator;
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
-import com.example.android.apis.R;
-
-import java.util.ArrayList;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -39,6 +35,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
+import com.example.android.apis.R;
 
 /**
  * Implements the TypeEvaluator interface to animate using a custom:
@@ -96,11 +94,18 @@ public class CustomEvaluator extends Activity {
      */
     @SuppressWarnings("WeakerAccess")
     public class XYHolder {
+        /**
+         * X coordinate
+         */
         private float mX;
+        /**
+         * Y coordinate
+         */
         private float mY;
 
         /**
          * Create a XYHolder at x,y
+         *
          * @param x coordinate
          * @param y coordinate
          */
@@ -180,6 +185,9 @@ public class CustomEvaluator extends Activity {
     @SuppressWarnings("WeakerAccess")
     public class BallXYHolder {
 
+        /**
+         * Our {@code ShapeHolder}
+         */
         private ShapeHolder mBall;
 
         /**
@@ -191,12 +199,24 @@ public class CustomEvaluator extends Activity {
             mBall = ball;
         }
 
-        @SuppressWarnings("unused")
+        /**
+         * Sets the x and y coordinates of our {@code ShapeHolder mBall} to the x and y coordinates
+         * of our parameter.
+         *
+         * @param xyHolder {@code XYHolder} to use for the x and y coordinates.
+         */
+        @SuppressWarnings("unused") // Not true, it is used by ObjectAnimator behind our backs.
         public void setXY(XYHolder xyHolder) {
             mBall.setX(xyHolder.getX());
             mBall.setY(xyHolder.getY());
         }
 
+        /**
+         * Constructs and returns a new instance of {@code XYHolder} containing the x and y
+         * coordinates of our {@code ShapeHolder mBall}
+         *
+         * @return {@code XYHolder} holding the x and y coordinates of our {@code ShapeHolder mBall}
+         */
         @SuppressWarnings("unused")
         public XYHolder getXY() {
             return new XYHolder(mBall.getX(), mBall.getY());
@@ -208,17 +228,24 @@ public class CustomEvaluator extends Activity {
      */
     public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener {
 
-        @SuppressWarnings("unused")
-        public final ArrayList<ShapeHolder> balls = new ArrayList<>();
+        /**
+         * The {@code ValueAnimator} (XYEvaluator TypeEvaluator) we are using to animate our ball.
+         */
         ValueAnimator bounceAnim = null;
-        @SuppressWarnings("UnusedAssignment")
-        ShapeHolder ball = null;
-        @SuppressWarnings("UnusedAssignment")
-        BallXYHolder ballHolder = null;
+        /**
+         * The {@code ShapeHolder} holding our ball
+         */
+        ShapeHolder ball;
+        /**
+         * {@code BallXYHolder} holding the {@code ShapeHolder} holding our ball
+         */
+        BallXYHolder ballHolder;
 
         /**
-         * Creates a ShapeHolder containing a ball which is 25px by 25px and places it in a
-         * BallXYHolder
+         * Our constructor. First we call our super's constructor, then we call our method
+         * {@code createBall} to create a {@code ShapeHolder} holding a ball which is 25px by 25px
+         * which we use to initialize our field {@code ShapeHolder ball}. Then we initialize our
+         * field {@code BallXYHolder ballHolder} with a new instance holding {@code ball}.
          *
          * @param context Context which in our case is derived from super of Activity
          */
@@ -229,19 +256,24 @@ public class CustomEvaluator extends Activity {
         }
 
         /**
-         * If this is the first time the animation has run, an ValueAnimator is created
-         * that animates between Object values. The single value implies that that value is the
-         * one being animated to. The XYEvaluator TypeEvaluator will be called on each animation
-         * frame to provide the necessary interpolation between the Object values to derive the
-         * animated value. The duration of the animation is set to 1500 milliseconds
+         * If this is the first time the animation has run, a ValueAnimator is created that animates
+         * between Object values and saved in our field {@code ValueAnimator bounceAnim}. We initialize
+         * {@code XYHolder startXY} with a new instance positioned at (0,0), and {@code XYHolder endXY}
+         * with a new instance positioned at (300,500). We then initialize {@code bounceAnim} with an
+         * an {@code ObjectAnimator} that animates the "xY" property of {@code BallXYHolder ballHolder}
+         * between {@code startXY} and {@code endXY} using a new instance of {@code XYEvaluator} as the
+         * {@code TypeEvaluator} that will be called on each animation frame to provide the necessary
+         * interpolation between the Object values to derive the animated value. Then we set the duration
+         * of the animation to 1500 milliseconds, and add this as an {@code AnimatorUpdateListener}
+         * (our {@code onAnimationUpdate} override will be called on every animation frame, after the
+         * current frame's values have been calculated)
          */
         private void createAnimation() {
             if (bounceAnim == null) {
-                //noinspection unused
                 XYHolder startXY = new XYHolder(0f, 0f);
                 XYHolder endXY = new XYHolder(300f, 500f);
                 bounceAnim = ObjectAnimator.ofObject(ballHolder, "xY",
-                        new XYEvaluator(), endXY);
+                        new XYEvaluator(), startXY, endXY);
                 bounceAnim.setDuration(1500);
                 bounceAnim.addUpdateListener(this);
             }
@@ -261,7 +293,8 @@ public class CustomEvaluator extends Activity {
          * to 50px x 50px, placed in a ShapeDrawable and that ShapeDrawable is used in creating
          * a ShapeHolder to hold it. The ShapeHolder has its x and y coordinates set to the
          * method's arguments x,y. Random colors and a RadialGradient are used to initialize a
-         * Paint and that Paint is stored in the ShapeHolder.
+         * Paint and that Paint is stored in the ShapeHolder. Finally we return that
+         * {@code ShapeHolder} to the caller.
          *
          * @param x x coordinate for ball
          * @param y y coordinate for ball
@@ -290,10 +323,11 @@ public class CustomEvaluator extends Activity {
 
         /**
          * This callback draws the MyAnimationView after every invalidate() call. The current
-         * matrix and clip are saved onto a private stack, the current matrix is pre-concatenated
-         * with a translation to the coordinate x, y of the ball's ShapeHolder, and the
-         * ShapeDrawable in the ShapeHolder is told to draw itself. Canvas.restore() then removes
-         * all modifications to the matrix/clip state.
+         * matrix and clip are saved onto a private stack, the current matrix is scaled by the
+         * screen density {@code mDensity}, then the current matrix is pre-concatenated with a
+         * translation to the coordinate x, y of the ball's ShapeHolder, and the ShapeDrawable
+         * in the ShapeHolder is told to draw itself. Canvas.restore() then removes all
+         * modifications to the matrix/clip state.
          *
          * @param canvas the canvas on which the background will be drawn
          */

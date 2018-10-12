@@ -125,12 +125,14 @@ Animation (disabled for froyo)
 
   Animation/Default Layout Animations v11 -- layout uses GridLayout so crash,  if < v14.
         .animation.LayoutAnimationsByDefault
+        .layout.layout_animations_by_default.xml
             Uses android:animateLayoutChanges="true" in the GridLayout used to contain buttons,
             to automate transition animations using the default animations as Buttons are added
             to or removed from that ViewGroup.            .
 
   Animation/Events v11
         .animation.AnimatorEvents
+        .layout.animator_events.xml
             Supposed to show when the various Sequencer Events and Animator Events: 
             Start Repeat Cancel and End occur, but Repeat Events are not generated
             for the Sequencer because the api does not support setRepeatCount on a
@@ -138,6 +140,7 @@ Animation (disabled for froyo)
 
   Animation/Hide-Show Animations v11
         .animation.LayoutAnimationsHideShow
+        .layout_animations_hideshow.xml
             Uses setLayoutTransition to set default transitions, and setAnimator to 
             specify custom animations if checkbox is checked. Buttons disappear when
             touched using these animations. If "Gone" checkbox is checked, 
@@ -145,6 +148,8 @@ Animation (disabled for froyo)
             that it takes up no layout space, and the remaining buttons move together
             to fill the now empty space, otherwise it is set to View.INVISIBLE which
             makes it invisible, but it still occupies the same layout space.
+            Pressing the "Show Buttons" button while the "Custom Animations" CheckBox 
+            is checked causes a crash which blanks out the system wallpaper. (Sometimes?)
 
   Animation/Layout Animations v11
         .animation.LayoutAnimations

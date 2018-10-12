@@ -140,28 +140,28 @@ public class AnimatorEvents extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animator_events);
 
-        LinearLayout container = (LinearLayout) findViewById(R.id.container);
+        LinearLayout container = findViewById(R.id.container);
         final MyAnimationView animView = new MyAnimationView(this);
         container.addView(animView);
-        startText = (TextView) findViewById(R.id.startText);
+        startText = findViewById(R.id.startText);
         startText.setAlpha(.5f);
-        repeatText = (TextView) findViewById(R.id.repeatText);
+        repeatText = findViewById(R.id.repeatText);
         repeatText.setAlpha(.5f);
-        cancelText = (TextView) findViewById(R.id.cancelText);
+        cancelText = findViewById(R.id.cancelText);
         cancelText.setAlpha(.5f);
-        endText = (TextView) findViewById(R.id.endText);
+        endText = findViewById(R.id.endText);
         endText.setAlpha(.5f);
-        startTextAnimator = (TextView) findViewById(R.id.startTextAnimator);
+        startTextAnimator = findViewById(R.id.startTextAnimator);
         startTextAnimator.setAlpha(.5f);
-        repeatTextAnimator = (TextView) findViewById(R.id.repeatTextAnimator);
+        repeatTextAnimator = findViewById(R.id.repeatTextAnimator);
         repeatTextAnimator.setAlpha(.5f);
-        cancelTextAnimator = (TextView) findViewById(R.id.cancelTextAnimator);
+        cancelTextAnimator = findViewById(R.id.cancelTextAnimator);
         cancelTextAnimator.setAlpha(.5f);
-        endTextAnimator = (TextView) findViewById(R.id.endTextAnimator);
+        endTextAnimator = findViewById(R.id.endTextAnimator);
         endTextAnimator.setAlpha(.5f);
 
-        final CheckBox endCB = (CheckBox) findViewById(R.id.endCB);
-        Button starter = (Button) findViewById(R.id.startButton);
+        final CheckBox endCB = findViewById(R.id.endCB);
+        Button starter = findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
             /**
              * Start the animation of MyAnimationView, passing the state of the end immediately
@@ -175,7 +175,7 @@ public class AnimatorEvents extends Activity {
             }
         });
 
-        Button canceler = (Button) findViewById(R.id.cancelButton);
+        Button canceler = findViewById(R.id.cancelButton);
         canceler.setOnClickListener(new View.OnClickListener() {
             /**
              * Cancel the animation of MyAnimationView
@@ -188,7 +188,7 @@ public class AnimatorEvents extends Activity {
             }
         });
 
-        Button ender = (Button) findViewById(R.id.endButton);
+        Button ender = findViewById(R.id.endButton);
         ender.setOnClickListener(new View.OnClickListener() {
             /**
              * End the animation of MyAnimationView
@@ -222,7 +222,7 @@ public class AnimatorEvents extends Activity {
         /**
          * The ball which we move.
          */
-        ShapeHolder ball = null;
+        ShapeHolder ball;
         /**
          * Flag set when "End Immediately" checkbox is checked, if true in {@code onAnimationStart}
          * callback causes the {@code end} method of {@code Animator animation} to be called
