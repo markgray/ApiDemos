@@ -83,11 +83,11 @@ public class AnimationLoading extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animation_loading);
 
-        LinearLayout container = (LinearLayout) findViewById(R.id.container);
+        LinearLayout container = findViewById(R.id.container);
         final MyAnimationView animView = new MyAnimationView(this);
         container.addView(animView);
 
-        Button starter = (Button) findViewById(R.id.startButton);
+        Button starter = findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
             /**
              * Start the MyAnimationView animView animation running

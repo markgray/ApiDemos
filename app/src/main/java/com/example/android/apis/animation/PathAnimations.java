@@ -34,16 +34,14 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Property;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 
 import com.example.android.apis.R;
 
-/** This application demonstrates the use of Path animation. */
-
 /**
+ * This application demonstrates the use of Path animation.
  * Moves a frog around an android.graphics.Path using six different ways to move
  * the View: named_components (Uses the named "x" and "y" properties for individual
  * (x, y) coordinates of the Path and sets them on the view object. The setX(float)
@@ -69,7 +67,14 @@ import com.example.android.apis.R;
 public class PathAnimations extends Activity implements
         RadioGroup.OnCheckedChangeListener, View.OnLayoutChangeListener {
 
+    /**
+     * Smiley face path that our frog traces.
+     */
     final static Path sTraversalPath = new Path();
+    /**
+     * Scaling factor our {@code CanvasView} uses when scaling {@code Path sTraversalPath} into the
+     * {@code Path mPath} which it draws.
+     */
     final static float TRAVERSE_PATH_SIZE = 7.0f;
 
     /**
@@ -102,6 +107,9 @@ public class PathAnimations extends Activity implements
         }
     };
 
+    /*
+     * Here we set up the path of {@code Path sTraversalPath}
+     */
     static {
         float inverse_sqrt8 = (float) Math.sqrt(0.125);
         RectF bounds = new RectF(1, 1, 3, 3);
@@ -126,27 +134,35 @@ public class PathAnimations extends Activity implements
         sTraversalPath.addArc(new RectF(1, 2, 6, 6), 0, 180);
     }
 
+    /**
+     * The {@code CanvasView} with id R.id.canvas in our layout file, it contains the smiley face
+     * path and our frog.
+     */
     private CanvasView mCanvasView;
 
+    /**
+     * The {@code ObjectAnimator} which moves our frog.
+     */
     private ObjectAnimator mAnimator;
 
-    /** Called when the activity is first created. */
     /**
-     * Sets the content View to the layout R.layout.path_animations, locates the View our
-     * "CanvasView" will occupy (R.id.canvas) and stashes it away in "mCanvasView" and sets
-     * the OnLayoutChangeListener of mCanvasView to "this" (so our override of onLayoutChange
-     * will be called when the layout bounds of our view changes due to layout processing),
-     * locates the RadioGroup which selects one of six ways the frog is moved and sets the
-     * OnCheckedChangeListener to "this" (so our override of onCheckedChanged will be called
-     * when the user clicks a different RadioButton)
+     * Called when the activity is starting. First we call our super's implementation of {@code onCreate},
+     * then we set our content view to our layout file R.layout.path_animations. We initialize our field
+     * {@code CanvasView mCanvasView} by finding the view with id R.id.canvas and add this to its
+     * {@code OnLayoutChangeListener} list (so that our override of {@code onLayoutChange} will be
+     * called when the layout bounds of our view changes due to layout processing). Finally we locate
+     * the RadioGroup which selects one of six ways the frog is moved and set its
+     * {@code OnCheckedChangeListener} to "this" (so our override of {@code onCheckedChanged} will be
+     * called when the user clicks a different RadioButton)
      *
-     * @param savedInstanceState Always null since on onSaveInstanceState is not overridden
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.path_animations);
-        mCanvasView = (CanvasView) findViewById(R.id.canvas);
+
+        mCanvasView = findViewById(R.id.canvas);
         mCanvasView.addOnLayoutChangeListener(this);
         ((RadioGroup) findViewById(R.id.path_animation_type)).setOnCheckedChangeListener(this);
     }
@@ -230,71 +246,85 @@ public class PathAnimations extends Activity implements
      * empty returns (it is not empty because the PathAnimations Activity has already initialized
      * sTraversalPath when it is first instantiated, and our onLayout callback uses sTraversalPath
      * to set mPath using the method sTraversalPath.transform(scale, mPath))
-     *
+     * <p>
      * Then comes the big switch:
-     * R.id.named_components: "Named Components" Uses the named "x" and "y" properties for
-     *     individual (x, y) coordinates of the Path and sets them on the view object. The
-     *     setX(float) and setY(float) methods are called on view. An int version of this
-     *     method also exists for animating int Properties. This is accomplished by creating
-     *     an ObjectAnimator mAnimator by calling the method:
-     *     ObjectAnimator.ofFloat (Object view, String xPropertyName, String yPropertyName, Path path)
-     *     that animates coordinates along Path path using the two properties. A Path animation
-     *     moves in two dimensions, animating coordinates (x, y) together to follow the line.
-     *     In this variation, the coordinates are floats that are set to separate properties
-     *     designated by xPropertyName and yPropertyName.
-     * R.id.property_components: "Property Components" Use two Properties for individual (x, y)
-     *     coordinates of the Path and sets them on the view object. An int version of this method
-     *     also exists for animating int Properties. This is accomplished by creating an
-     *     ObjectAnimator mAnimator by calling the method:
-     *     ObjectAnimator.ofFloat(T target, android.util.Property<T, java.lang.Float> xProperty,
-     *           android.util.Property<T, java.lang.Float> yProperty, android.graphics.Path path)
-     *     which returns an ObjectAnimator that animates coordinates of the target along a Path
-     *     using the two properties. A Path animation moves in two dimensions, animating coordinates
-     *     (x, y) together to follow the line. In this variation, the coordinates are floats that
-     *     are set to separate properties, xProperty and yProperty.
-     * R.id.multi_int: "Multi-int" Use a multi-int setter to animate along a Path. The method
-     *     setCoordinates(int x, int y) is called on this during the animation. Either
-     *     "setCoordinates" or "coordinates" are acceptable parameters because the "set" can
-     *     be implied. This is accomplished by creating an ObjectAnimator mAnimator by calling
-     *     the method:
-     *     ObjectAnimator.ofMultiInt (Object target, String propertyName, Path path)
-     *     which returns an ObjectAnimator that animates the target using a multi-int setter along
-     *     the given Path. A Path animation moves in two dimensions, animating coordinates (x, y)
-     *     together to follow the line. In this variation, the coordinates are integer x and y
-     *     coordinates used in the first and second parameter of the setter, respectively.
-     * R.id.multi_float: "Multi-float" Use a multi-float setter to animate along a Path. The method
-     *     changeCoordinates(float x, float y) is called on this during the animation. This is
-     *     accomplished by creating an ObjectAnimator mAnimator by calling the method:
-     *     ObjectAnimator.ofMultiFloat(Object target, String propertyName, Path path) which
-     *     returns an ObjectAnimator that animates the target using a multi-float setter along
-     *     the given Path. A Path animation moves in two dimensions, animating coordinates
-     *     (x, y) together to follow the line. In this variation, the coordinates are float x
-     *     and y coordinates used in the first and second parameter of the setter, respectively.
-     * R.id.named_setter: "Named Property" Use the named "point" property to animate along the
-     *     Path. There must be a method setPoint(PointF) on the animated object. Because setPoint
-     *     takes a PointF parameter, no TypeConverter is necessary. In this case, the animated
-     *     object is PathAnimations. This is accomplished by creating an ObjectAnimator mAnimator
-     *     by calling the method:
-     *     ObjectAnimator.ofObject(Object target, String propertyName, TypeConverter<PointF, ?> converter, Path path)
-     *     which returns an ObjectAnimator that animates the target using a PointF to follow
-     *     the Path. If the Property associated with propertyName uses a type other than PointF,
-     *     converter can be used to change from PointF to the type associated with the Property.
-     * R.id.property_setter: "Property" Use the POINT_PROPERTY property to animate along the Path.
-     *     POINT_PROPERTY takes a Point, not a PointF, so the TypeConverter PointFToPointConverter
-     *     is necessary. This is accomplished by creating an ObjectAnimator mAnimator  by calling
-     *     the method:
-     *     ObjectAnimator.ofObject(T target, Property<T, V> property, TypeConverter<PointF, V> converter, Path path)
-     *     which returns an ObjectAnimator that animates the target using a PointF to follow the
-     *     Path. Since property uses a type other than PointF, TypeConverter PointFToPointConverter
-     *     is used to change from PointF to the type Point associated with the Property.
-     *
-     * Having created an ObjectAnimator mAnimator of the desired type based on the RadioButton
-     * selected, we set the duration of mAnimator to 10000 milliseconds. the repeat mode to
-     * RESTART, the repeat count to INFINITE, and the Interpolator to an instance of
-     * LinearInterpolator then start the animation running.
+     * <ul>
+     *     <li>
+     *         R.id.named_components: "Named Components" Uses the named "x" and "y" properties for
+     *         individual (x, y) coordinates of the Path and sets them on the view object. The
+     *         setX(float) and setY(float) methods are called on view. An int version of this
+     *         method also exists for animating int Properties. This is accomplished by creating
+     *         an ObjectAnimator mAnimator by calling the method:
+     *         ObjectAnimator.ofFloat (Object view, String xPropertyName, String yPropertyName, Path path)
+     *         that animates coordinates along Path path using the two properties. A Path animation
+     *         moves in two dimensions, animating coordinates (x, y) together to follow the line.
+     *         In this variation, the coordinates are floats that are set to separate properties
+     *         designated by xPropertyName and yPropertyName.
+     *     </li>
+     *     <li>
+     *         R.id.property_components: "Property Components" Use two Properties for individual (x, y)
+     *         coordinates of the Path and sets them on the view object. An int version of this method
+     *         also exists for animating int Properties. This is accomplished by creating an
+     *         ObjectAnimator mAnimator by calling the method:
+     *         ObjectAnimator.ofFloat(T target, android.util.Property<T, java.lang.Float> xProperty,
+     *         android.util.Property<T, java.lang.Float> yProperty, android.graphics.Path path)
+     *         which returns an ObjectAnimator that animates coordinates of the target along a Path
+     *         using the two properties. A Path animation moves in two dimensions, animating coordinates
+     *         (x, y) together to follow the line. In this variation, the coordinates are floats that
+     *         are set to separate properties, xProperty and yProperty.
+     *     </li>
+     *     <li>
+     *         R.id.multi_int: "Multi-int" Use a multi-int setter to animate along a Path. The method
+     *         setCoordinates(int x, int y) is called on this during the animation. Either
+     *         "setCoordinates" or "coordinates" are acceptable parameters because the "set" can
+     *         be implied. This is accomplished by creating an ObjectAnimator mAnimator by calling
+     *         the method:
+     *         ObjectAnimator.ofMultiInt (Object target, String propertyName, Path path)
+     *         which returns an ObjectAnimator that animates the target using a multi-int setter along
+     *         the given Path. A Path animation moves in two dimensions, animating coordinates (x, y)
+     *         together to follow the line. In this variation, the coordinates are integer x and y
+     *         coordinates used in the first and second parameter of the setter, respectively.
+     *     </li>
+     *     <li>
+     *         R.id.multi_float: "Multi-float" Use a multi-float setter to animate along a Path. The method
+     *         changeCoordinates(float x, float y) is called on this during the animation. This is
+     *         accomplished by creating an ObjectAnimator mAnimator by calling the method:
+     *         ObjectAnimator.ofMultiFloat(Object target, String propertyName, Path path) which
+     *         returns an ObjectAnimator that animates the target using a multi-float setter along
+     *         the given Path. A Path animation moves in two dimensions, animating coordinates
+     *         (x, y) together to follow the line. In this variation, the coordinates are float x
+     *         and y coordinates used in the first and second parameter of the setter, respectively.
+     *     </li>
+     *     <li>
+     *         R.id.named_setter: "Named Property" Use the named "point" property to animate along the
+     *         Path. There must be a method setPoint(PointF) on the animated object. Because setPoint
+     *         takes a PointF parameter, no TypeConverter is necessary. In this case, the animated
+     *         object is PathAnimations. This is accomplished by creating an ObjectAnimator mAnimator
+     *         by calling the method:
+     *         ObjectAnimator.ofObject(Object target, String propertyName, TypeConverter<PointF, ?> converter, Path path)
+     *         which returns an ObjectAnimator that animates the target using a PointF to follow
+     *         the Path. If the Property associated with propertyName uses a type other than PointF,
+     *         converter can be used to change from PointF to the type associated with the Property.
+     *     </li>
+     *     <li>
+     *         R.id.property_setter: "Property" Use the POINT_PROPERTY property to animate along the Path.
+     *         POINT_PROPERTY takes a Point, not a PointF, so the TypeConverter PointFToPointConverter
+     *         is necessary. This is accomplished by creating an ObjectAnimator mAnimator  by calling
+     *         the method:
+     *         ObjectAnimator.ofObject(T target, Property<T, V> property, TypeConverter<PointF, V> converter, Path path)
+     *         which returns an ObjectAnimator that animates the target using a PointF to follow the
+     *         Path. Since property uses a type other than PointF, TypeConverter PointFToPointConverter
+     *         is used to change from PointF to the type Point associated with the Property.
+     *     </li>
+     * </ul>
+     * Having created an {@code ObjectAnimator mAnimator} of the desired type based on the RadioButton
+     * selected, we set the duration of {@code mAnimator} to 10000 milliseconds, its repeat mode to
+     * RESTART, its repeat count to INFINITE, and its Interpolator to an instance of LinearInterpolator
+     * then start the animation running.
      *
      * @param checkedId RadioButton for animation type which is selected
      */
+    @SuppressLint("ObjectAnimatorBinding")
     private void startAnimator(int checkedId) {
         if (mAnimator != null) {
             mAnimator.cancel();
@@ -352,7 +382,7 @@ public class PathAnimations extends Activity implements
         }
 
         mAnimator.setDuration(10000);
-        mAnimator.setRepeatMode(Animation.RESTART);
+        mAnimator.setRepeatMode(ValueAnimator.RESTART);
         mAnimator.setRepeatCount(ValueAnimator.INFINITE);
         mAnimator.setInterpolator(new LinearInterpolator());
         mAnimator.start();
@@ -363,8 +393,14 @@ public class PathAnimations extends Activity implements
      */
     public static class CanvasView extends FrameLayout {
 
+        /**
+         * {@code Path sTraversalPath} scaled to fit the size of our view.
+         */
         Path mPath = new Path();
 
+        /**
+         * {@code Paint} we use to draw {@code Path mPath}.
+         */
         Paint mPathPaint = new Paint();
 
         /**
@@ -466,6 +502,7 @@ public class PathAnimations extends Activity implements
      * Class used to provide a TypeConverter<PointF, Point> for our property setter ("Property")
      * animation type.
      */
+    @SuppressWarnings("WeakerAccess")
     private static class PointFToPointConverter extends TypeConverter<PointF, Point> {
         Point mPoint = new Point();
 

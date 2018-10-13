@@ -45,23 +45,92 @@ import android.widget.Button;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class LayoutAnimations extends Activity {
 
-    private static final String TAG = "LayoutAnimations";
-    private int numButtons = 1;
-    ViewGroup container = null;
-    Animator defaultAppearingAnim, defaultDisappearingAnim;
-    Animator defaultChangingAppearingAnim, defaultChangingDisappearingAnim;
-    Animator customAppearingAnim, customDisappearingAnim;
-    Animator customChangingAppearingAnim, customChangingDisappearingAnim;
-    Animator currentAppearingAnim, currentDisappearingAnim;
-    Animator currentChangingAppearingAnim, currentChangingDisappearingAnim;
-
-    /** Called when the activity is first created. */
     /**
-     * Sets the content view to layout_animations. Creates a FixedGridLayout container instance
-     * and configures its cell height, and cell width, creates LayoutTransition transitioner with
-     * default animations, sets it as the LayoutTransition for container, and squirrels away the
-     * default animations for later use. It then calls the method createCustomAnimations to create
-     * custom animations using its argument transitioner only to fetch the default value of the
+     * TAG used for logging.
+     */
+    private static final String TAG = "LayoutAnimations";
+    /**
+     * Counter of the number of buttons that have been added, used as the button label.
+     */
+    private int numButtons = 1;
+    /**
+     * {@code FixedGridLayout} into which we place our buttons.
+     */
+    ViewGroup container = null;
+    /**
+     * Default {@code Animator} returned for {@code LayoutTransition.APPEARING} by the {@code getAnimator}
+     * method of {@code LayoutTransition}, it is the animation that runs on those items that are appearing
+     * in the container
+     */
+    Animator defaultAppearingAnim;
+    /**
+     * Default {@code Animator} returned for {@code LayoutTransition.DISAPPEARING} by the {@code getAnimator}
+     * method of {@code LayoutTransition}, it is the animation that runs on those items that are disappearing
+     * from the container
+     */
+    Animator defaultDisappearingAnim;
+    /**
+     * Default {@code Animator} returned for {@code LayoutTransition.CHANGE_APPEARING} by the {@code getAnimator}
+     * method of {@code LayoutTransition}, it is the animation that runs on those items that are changing
+     * due to a new item appearing in the container.
+     */
+    Animator defaultChangingAppearingAnim;
+    /**
+     * Default {@code Animator} returned for {@code LayoutTransition.CHANGE_DISAPPEARING} by the {@code getAnimator}
+     * method of {@code LayoutTransition}, it is the animation that runs on those items that are changing
+     * due to a new item disappearing from the container.
+     */
+    Animator defaultChangingDisappearingAnim;
+    /**
+     * Our custom {@code Animator} for the {@code LayoutTransition.APPEARING} animation, it is the
+     * animation that runs on those items that are appearing in the container.
+     */
+    Animator customAppearingAnim;
+    /**
+     * Our custom {@code Animator} for the {@code LayoutTransition.DISAPPEARING} animation, it is the
+     * animation that runs on those items that are disappearing from the container
+     */
+    Animator customDisappearingAnim;
+    /**
+     * Our custom {@code Animator} for the {@code LayoutTransition.CHANGE_APPEARING} animation, it is the
+     * animation that runs on those items that are changing due to a new item appearing in the container.
+     */
+    Animator customChangingAppearingAnim;
+    /**
+     * Our custom {@code Animator} for the {@code LayoutTransition.CHANGE_DISAPPEARING} animation, it is the
+     * animation that runs on those items that are changing due to a new item disappearing from the container.
+     */
+    Animator customChangingDisappearingAnim;
+    /**
+     * Just a copy of {@code defaultAppearingAnim} made for no apparent reason.
+     */
+    Animator currentAppearingAnim;
+    /**
+     * Just a copy of {@code defaultDisappearingAnim} made for no apparent reason.
+     */
+    Animator currentDisappearingAnim;
+    /**
+     * Just a copy of {@code defaultChangingAppearingAnim} made for no apparent reason.
+     */
+    Animator currentChangingAppearingAnim;
+    /**
+     * Just a copy of {@code defaultChangingDisappearingAnim} made for no apparent reason.
+     */
+    Animator currentChangingDisappearingAnim;
+    /**
+     * Logical screen density of our display.
+     */
+    float SCREEN_DENSITY;
+
+    /**
+     * Called when the activity is starting. First we call our super's implementation of {@code onCreate},
+     * the we set the content view to our layout file R.layout.layout_animations. We then initialize
+     * our field SCREEN_DENSITY with the logical screen density of our display. We initialize our
+     * field {@code ViewGroup container} with a new instance of {@code FixedGridLayout}, and
+     * configure its cell height, and cell width scaled for SCREEN_DENSITY. We create LayoutTransition
+     * transitioner with default animations, set it as the LayoutTransition for container, and squirrels
+     * away the default animations for later use. It then calls the method createCustomAnimations to
+     * create custom animations using its argument transitioner only to fetch the default value of the
      * duration of the animations (see createCustomAnimations). setupTransition() is used to
      * switch LayoutTransition transitioner between the default and custom animations for the four
      * different animations used in a layout transition based on the state of the CheckBox's and is
@@ -69,17 +138,18 @@ public class LayoutAnimations extends Activity {
      * custom instead of default animations, as well as the 4 CheckBox's selecting "In", "Out",
      * "Changing-In" and "Changing-Out" animations or disabling them if un-checked."
      *
-     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_animations);
+        SCREEN_DENSITY = getResources().getDisplayMetrics().density;
 
         container = new FixedGridLayout(this);
         container.setClipChildren(false);
-        ((FixedGridLayout)container).setCellHeight(200);
-        ((FixedGridLayout)container).setCellWidth(400);
+        ((FixedGridLayout)container).setCellHeight((int) (90 * SCREEN_DENSITY));
+        ((FixedGridLayout)container).setCellWidth((int) (100 * SCREEN_DENSITY));
         final LayoutTransition transitioner = new LayoutTransition();
         container.setLayoutTransition(transitioner);
         defaultAppearingAnim = transitioner.getAnimator(LayoutTransition.APPEARING);
@@ -95,15 +165,14 @@ public class LayoutAnimations extends Activity {
         currentChangingAppearingAnim = defaultChangingAppearingAnim;
         currentChangingDisappearingAnim = defaultChangingDisappearingAnim;
 
-        ViewGroup parent = (ViewGroup) findViewById(R.id.parent);
+        ViewGroup parent = findViewById(R.id.parent);
         parent.addView(container);
         parent.setClipChildren(false);
-        Button addButton = (Button) findViewById(R.id.addNewButton);
+        Button addButton = findViewById(R.id.addNewButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             /**
-             * Creates a new Button using this activity as its context, sets the minimum height
-             * to 64 pixels and minimum width to 64 pixels, sets the text displayed in the button
-             * to the number of buttons created and increments that number, sets the OnClickListener
+             * Creates a new Button using this activity as its context, sets the text displayed in the
+             * button to the number of buttons created and increments that number, sets the OnClickListener
              * of the Button to remove itself when clicked. It then adds the Button to the ViewGroup
              * (FixedGridLayout) container at position 1 (or 0 if no Button's have been created yet.
              *
@@ -112,8 +181,6 @@ public class LayoutAnimations extends Activity {
             @Override
             public void onClick(View v) {
                 Button newButton = new Button(LayoutAnimations.this);
-                newButton.setMinHeight(64);
-                newButton.setMinWidth(64);
                 newButton.setText(String.valueOf(numButtons++));
                 newButton.setOnClickListener(new View.OnClickListener() {
                     /**
@@ -130,7 +197,7 @@ public class LayoutAnimations extends Activity {
             }
         });
 
-        CheckBox customAnimCB = (CheckBox) findViewById(R.id.customAnimCB);
+        CheckBox customAnimCB = findViewById(R.id.customAnimCB);
         customAnimCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             /**
              * Called when the checked state of the "Custom Animations" CheckBox has changed,
@@ -148,7 +215,7 @@ public class LayoutAnimations extends Activity {
         });
 
         // Check for disabled animations
-        CheckBox appearingCB = (CheckBox) findViewById(R.id.appearingCB);
+        CheckBox appearingCB = findViewById(R.id.appearingCB);
         appearingCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             /**
              * Called when the checked state of the "In" (appearing) CheckBox has changed,
@@ -164,7 +231,7 @@ public class LayoutAnimations extends Activity {
                 setupTransition(transitioner);
             }
         });
-        CheckBox disappearingCB = (CheckBox) findViewById(R.id.disappearingCB);
+        CheckBox disappearingCB = findViewById(R.id.disappearingCB);
         disappearingCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             /**
              * Called when the checked state of the "Out" (disappearing) CheckBox has changed,
@@ -180,7 +247,7 @@ public class LayoutAnimations extends Activity {
                 setupTransition(transitioner);
             }
         });
-        CheckBox changingAppearingCB = (CheckBox) findViewById(R.id.changingAppearingCB);
+        CheckBox changingAppearingCB = findViewById(R.id.changingAppearingCB);
         changingAppearingCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             /**
              * Called when the checked state of the "Changing In" (CHANGING_APPEARING) CheckBox
@@ -196,7 +263,7 @@ public class LayoutAnimations extends Activity {
                 setupTransition(transitioner);
             }
         });
-        CheckBox changingDisappearingCB = (CheckBox) findViewById(R.id.changingDisappearingCB);
+        CheckBox changingDisappearingCB = findViewById(R.id.changingDisappearingCB);
         changingDisappearingCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             /**
              * Called when the checked state of the "Changing Out" (CHANGING_DISAPPEARING) CheckBox
@@ -227,11 +294,11 @@ public class LayoutAnimations extends Activity {
      * @param transition LayoutTransition to be modified
      */
     private void setupTransition(LayoutTransition transition) {
-        CheckBox customAnimCB = (CheckBox) findViewById(R.id.customAnimCB);
-        CheckBox appearingCB = (CheckBox) findViewById(R.id.appearingCB);
-        CheckBox disappearingCB = (CheckBox) findViewById(R.id.disappearingCB);
-        CheckBox changingAppearingCB = (CheckBox) findViewById(R.id.changingAppearingCB);
-        CheckBox changingDisappearingCB = (CheckBox) findViewById(R.id.changingDisappearingCB);
+        CheckBox customAnimCB = findViewById(R.id.customAnimCB);
+        CheckBox appearingCB = findViewById(R.id.appearingCB);
+        CheckBox disappearingCB = findViewById(R.id.disappearingCB);
+        CheckBox changingAppearingCB = findViewById(R.id.changingAppearingCB);
+        CheckBox changingDisappearingCB = findViewById(R.id.changingDisappearingCB);
         transition.setAnimator(LayoutTransition.APPEARING, appearingCB.isChecked() ?
                 (customAnimCB.isChecked() ? customAppearingAnim : defaultAppearingAnim) : null);
         transition.setAnimator(LayoutTransition.DISAPPEARING, disappearingCB.isChecked() ?
@@ -248,7 +315,7 @@ public class LayoutAnimations extends Activity {
     /**
      * This method creates the four different custom animations which can be selected to be used
      * by when the appropriate CheckBox's are "checked"
-     *
+     * <p>
      * For the CHANGE_APPEARING (Changing while Adding) part of the animation it defines property
      * value holders to animate property "left" from 0 to 1, "top" from 0 to 1, "right" from 0 to 1,
      * "bottom" from 0 to 1, "scaleX" from 1f to 0f to 1f, "scaleY" from 1f to 0f to 1f. It then
@@ -260,7 +327,7 @@ public class LayoutAnimations extends Activity {
      * flipping right to left from the back side to the front side. You can see this animation in
      * action by clicking the ADD BUTTON Button when both the "Custom Animations" and "In"
      * CheckBox are checked.
-     *
+     * <p>
      * For the CHANGE_DISAPPEARING (Changing while Removing) part of the animation it defines an
      * additional PropertyValueHolder for "rotation" constructed of three KeyFrame's (kf0 - a
      * starting value of the rotation of 0f lasting 0f, kf1 - a rotation of 360f degrees lasting
@@ -274,7 +341,7 @@ public class LayoutAnimations extends Activity {
      * overrides onAnimationEnd to set the rotation of the Button to 0f degrees. It has the
      * effect of rotating the Button's to the right of the Button removed clockwise while moving
      * them into their new positions when both the "Custom Animations" and "Out" CheckBox are checked.
-     *
+     * <p>
      * For the APPEARING (Adding) part of the animation it creates a simple "rotationY"
      * ObjectAnimator customAppearingAnim which rotates the Button from 90f degrees to 0f degrees,
      * sets the duration of customAppearingAnim to be the same as the current LayoutTransition
@@ -284,7 +351,7 @@ public class LayoutAnimations extends Activity {
      * Button's about the y axis when the ADD BUTTON button is pressed, starting from sticking
      * directly out of the plane of the View, to flat when both the "Custom Animations" and
      * "Changing In" CheckBox are checked.
-     *
+     * <p>
      * For the DISAPPEARING (Removing) part of the animation it creates a simple "rotationX"
      * ObjectAnimator customDisappearingAnim which rotates the Button from 0f degrees (flat) to
      * 90f degrees (sticking out of the plane), sets the duration of customDisappearingAnim to
@@ -313,7 +380,7 @@ public class LayoutAnimations extends Activity {
                 PropertyValuesHolder.ofFloat("scaleY", 1f, 0f, 1f);
         customChangingAppearingAnim = ObjectAnimator.ofPropertyValuesHolder(
                         this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhScaleX, pvhScaleY).
-                setDuration(transition.getDuration(LayoutTransition.CHANGE_APPEARING));
+                setDuration(transition.getDuration(LayoutTransition.CHANGE_APPEARING) * 100);
         customChangingAppearingAnim.addListener(new AnimatorListenerAdapter() {
             @SuppressWarnings("ConstantConditions")
             @Override
@@ -332,7 +399,7 @@ public class LayoutAnimations extends Activity {
                 PropertyValuesHolder.ofKeyframe("rotation", kf0, kf1, kf2);
         customChangingDisappearingAnim = ObjectAnimator.ofPropertyValuesHolder(
                         this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhRotation).
-                setDuration(transition.getDuration(LayoutTransition.CHANGE_DISAPPEARING));
+                setDuration(transition.getDuration(LayoutTransition.CHANGE_DISAPPEARING) * 100);
         customChangingDisappearingAnim.addListener(new AnimatorListenerAdapter() {
             @SuppressWarnings("ConstantConditions")
             @Override
@@ -344,7 +411,7 @@ public class LayoutAnimations extends Activity {
 
         // Adding
         customAppearingAnim = ObjectAnimator.ofFloat(null, "rotationY", 90f, 0f).
-                setDuration(transition.getDuration(LayoutTransition.APPEARING));
+                setDuration(transition.getDuration(LayoutTransition.APPEARING) * 100);
         customAppearingAnim.addListener(new AnimatorListenerAdapter() {
             @SuppressWarnings("ConstantConditions")
             @Override
@@ -356,7 +423,7 @@ public class LayoutAnimations extends Activity {
 
         // Removing
         customDisappearingAnim = ObjectAnimator.ofFloat(null, "rotationX", 0f, 90f).
-                setDuration(transition.getDuration(LayoutTransition.DISAPPEARING));
+                setDuration(transition.getDuration(LayoutTransition.DISAPPEARING) * 100);
         customDisappearingAnim.addListener(new AnimatorListenerAdapter() {
             @SuppressWarnings("ConstantConditions")
             @Override
@@ -366,5 +433,31 @@ public class LayoutAnimations extends Activity {
             }
         });
 
+    }
+
+    // These are added to silence error warning.
+    @SuppressWarnings("unused")
+    public void setLeft(int left) {
+        throw new RuntimeException("This should not be called");
+    }
+    @SuppressWarnings("unused")
+    public void setTop(int top) {
+        throw new RuntimeException("This should not be called");
+    }
+    @SuppressWarnings("unused")
+    public void setRight(int right) {
+        throw new RuntimeException("This should not be called");
+    }
+    @SuppressWarnings("unused")
+    public void setBottom(int bottom) {
+        throw new RuntimeException("This should not be called");
+    }
+    @SuppressWarnings("unused")
+    public void setScaleX(float scaleX) {
+        throw new RuntimeException("This should not be called");
+    }
+    @SuppressWarnings("unused")
+    public void setScaleY(float scaleY) {
+        throw new RuntimeException("This should not be called");
     }
 }

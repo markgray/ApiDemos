@@ -153,14 +153,14 @@ Animation (disabled for froyo)
 
   Animation/Layout Animations v11
         .animation.LayoutAnimations
-            Adds and removes buttons using custom or default animations. Buttons are 
-            too small for the number on ub->htc_one, and i7->Nexus 5 I recall, but 
-            perfect on quad->nexus 7, and i7->Excite 10, ub->Nexus 9, k7->LG G pad 8.3,
-            and bizarre but true k7->Nexus 4. This problem is due to bug in FixedGridlayout?
-            TODO: Scale all use of pixels to dp
+        .animation.FixedGridLayout
+        .layout.layout_animations.xml
+            Adds and removes buttons using custom or default animations. Custom animations crash
+            badly, causing temporary problem for system wallpaper on Pixel
 
   Animation/Loading v11 -> v23 or higher required due to android:fraction="0"
         .animation.AnimationLoading
+        .layout.animation_loading.xml
             Loads animations from Xml files: R.animator.object_animator (animates ball[0] "y"
             from 0 to 200, and reverses), R.animator.animator (animates ball[1] alpha from 1 to
             0 and reverses), R.animator.animator_set (an animator set which animates ball[2]'s
@@ -178,6 +178,7 @@ Animation (disabled for froyo)
 
   Animation/Multiple Properties v11
         .animation.MultiPropertyAnimation
+        .layout.animation_multi_property.xml
             Uses AnimatorSet.playTogether(Animator... items) to play four different 
             animations at once: yBouncer (animates y using a BounceInterpolator), yAlphaBouncer
             (animates y and alpha using an AccelerateInterpolator), whxyBouncer (animates width,
@@ -190,6 +191,7 @@ Animation (disabled for froyo)
         uses android.animation.ObjectAnimator crashes if < v21. Also extends abstract
         class android.animation.TypeConverter crashes if < v21.
         .animation.PathAnimations
+        .layout.path_animations.xml
             Moves a frog around an android.graphics.Path using six different ways to move
             the View: named_components (Uses the named "x" and "y" properties for individual
             (x, y) coordinates of the Path and sets them on the view object. The setX(float)
@@ -213,6 +215,7 @@ Animation (disabled for froyo)
 
   Animation/Reversing v11
         .animation.ReversingAnimation
+        .layout.animation_reversing.xml
             Demonstrates the use of android.animation.ValueAnimator.reverse() method
             to play an animation in "reverse".
 

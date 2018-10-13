@@ -63,11 +63,11 @@ public class MultiPropertyAnimation extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animation_multi_property);
-        LinearLayout container = (LinearLayout) findViewById(R.id.container);
+        LinearLayout container = findViewById(R.id.container);
         final MyAnimationView animView = new MyAnimationView(this);
         container.addView(animView);
 
-        Button starter = (Button) findViewById(R.id.startButton);
+        Button starter = findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
             /**
              * When the RUN Button is clicked, start the animation of MyAnimationView animView.
@@ -217,6 +217,7 @@ public class MultiPropertyAnimation extends Activity {
          * @param y y coordinate of ball
          * @return ShapeHolder containing a ball at (x,y) with a random color.
          */
+        @SuppressWarnings({"UnusedReturnValue", "SameParameterValue"})
         private ShapeHolder addBall(float x, float y) {
             OvalShape circle = new OvalShape();
             circle.resize(BALL_SIZE, BALL_SIZE);

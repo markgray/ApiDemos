@@ -33,11 +33,17 @@ import android.view.ViewGroup;
  * more information on using the layout.</p>
  */
 public class FixedGridLayout extends ViewGroup {
+    /**
+     * Width of each of our children's views.
+     */
     int mCellWidth;
+    /**
+     * Height of each of our children's views.
+     */
     int mCellHeight;
 
     /**
-     * Creates a FixedGridLayout with the Context context
+     * Creates a FixedGridLayout with the Context context. We just call our super's constructor.
      *
      * @param context Context of the activity creating the ViewGroup
      */

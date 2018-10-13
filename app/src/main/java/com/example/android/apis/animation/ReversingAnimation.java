@@ -64,11 +64,11 @@ public class ReversingAnimation extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animation_reversing);
-        LinearLayout container = (LinearLayout) findViewById(R.id.container);
+        LinearLayout container = findViewById(R.id.container);
         final MyAnimationView animView = new MyAnimationView(this);
         container.addView(animView);
 
-        Button starter = (Button) findViewById(R.id.startButton);
+        Button starter = findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
             /**
              * Starts our MyAnimationView animation running
@@ -82,7 +82,7 @@ public class ReversingAnimation extends Activity {
             }
         });
 
-        Button reverser = (Button) findViewById(R.id.reverseButton);
+        Button reverser = findViewById(R.id.reverseButton);
         reverser.setOnClickListener(new View.OnClickListener() {
             /**
              * Starts our MyAnimationView animation running in reverse
@@ -109,6 +109,7 @@ public class ReversingAnimation extends Activity {
         @SuppressWarnings("unused")
         public final ArrayList<ShapeHolder> balls = new ArrayList<>();
         ValueAnimator bounceAnim = null;
+        @SuppressWarnings("UnusedAssignment")
         ShapeHolder ball = null;
 
         /**
@@ -190,6 +191,7 @@ public class ReversingAnimation extends Activity {
          * @param y y coordinate of ball's ShapeHolder (offset by 25px)
          * @return ShapeHolder containing a ball
          */
+        @SuppressWarnings("SameParameterValue")
         private ShapeHolder createBall(float x, float y) {
             OvalShape circle = new OvalShape();
             circle.resize(50f, 50f);
