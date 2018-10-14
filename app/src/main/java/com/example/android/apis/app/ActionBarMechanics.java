@@ -38,7 +38,7 @@ public class ActionBarMechanics extends Activity {
      * The Action Bar replaces the title bar and provides an alternate location for an on-screen
      * menu button on some devices.
      *
-     * @param savedInstanceState
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class ActionBarMechanics extends Activity {
      * Initialize the contents of the Activity's standard options menu. We first add a "Normal Item"
      * to our menu using the default to never show in the action bar (it will instead appear in the
      * Action overflow menu in a cascading menu). Next we add a "Action Button" to the menu and save
-     * the newly added menu item in MenuItem actionItem returned for later use. We call
+     * the newly added menu item in the MenuItem actionItem returned for later use. We call
      * setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM) on MenuItem actionItem to set how this
      * item should display in the presence of an Action Bar (Shows this item as a button in an
      * Action Bar if the system decides there is room for it). actionItem.setIcon is called to

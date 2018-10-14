@@ -35,9 +35,6 @@ import android.widget.Toast;
 /**
  * This demonstrates the use of action bar tabs and how they interact
  * with other action bar features.
- */
-
-/**
  * You need to toggle tab mode before tabs show in action bar. Crashes when rotated
  * because it needs a zero argument constructor. The text should be passed in a bundle.
  * Working on doing this Right. Did so, but need to use retained fragments in order
@@ -185,6 +182,7 @@ public class ActionBarTabs extends Activity {
      * Look at the FragmentTabs example for how to do a more complete
      * implementation.
      */
+    @SuppressWarnings("WeakerAccess")
     private class TabListener implements ActionBar.TabListener {
         private TabContentFragment mFragment;
 
@@ -302,7 +300,7 @@ public class ActionBarTabs extends Activity {
             if (savedInstanceState != null) {
                 mText = savedInstanceState.getString("mText");
             }
-            textView = (TextView) fragView.findViewById(R.id.text);
+            textView = fragView.findViewById(R.id.text);
             textView.setText(mText);
 
             return fragView;

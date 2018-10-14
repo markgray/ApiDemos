@@ -46,7 +46,7 @@ public class ActionBarNavigation extends Activity {
      * either set the text of "text" to "This was launched from ApiDemos" if it does or "This
      * was created from up navigation" if it does not.
      *
-     * @param savedInstanceState always null since onSaveInstanceState is not overridden.
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class ActionBarNavigation extends Activity {
         bar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP, ActionBar.DISPLAY_HOME_AS_UP);
 
         setContentView(R.layout.action_bar_navigation);
-        TextView text = (TextView)findViewById(R.id.launchedfrom);
+        TextView text = findViewById(R.id.launchedfrom);
         if (getIntent().hasCategory(Intent.CATEGORY_SAMPLE_CODE)) {
             text.setText("This was launched from ApiDemos");
         } else {

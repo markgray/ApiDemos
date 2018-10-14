@@ -18,23 +18,22 @@ package com.example.android.apis.animation;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
-import android.animation.AnimatorListenerAdapter;
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.os.Build;
+import android.os.Bundle;
+import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import com.example.android.apis.R;
-
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.SeekBar;
+import android.widget.ListView;
+
+import com.example.android.apis.R;
 
 /**
  * Uses fancy custom ObjectAnimator to swap two list views occupying the same space in a LinearLayout,
@@ -45,11 +44,9 @@ import android.widget.SeekBar;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ListFlipper extends Activity {
 
-    @SuppressWarnings("unused")
-    private static final int DURATION = 1500;
-    @SuppressWarnings("unused")
-    private SeekBar mSeekBar;
-
+    /**
+     * Our list of english numbers.
+     */
     private static final String[] LIST_STRINGS_EN = new String[] {
             "One",
             "Two",
@@ -58,6 +55,9 @@ public class ListFlipper extends Activity {
             "Five",
             "Six"
     };
+    /**
+     * Our list of french numbers.
+     */
     private static final String[] LIST_STRINGS_FR = new String[] {
             "Un",
             "Deux",
@@ -67,30 +67,38 @@ public class ListFlipper extends Activity {
             "Six"
     };
 
+    /**
+     * {@code ListView} in our layout with id R.id.list_en, hold our english numbers.
+     */
     ListView mEnglishList;
+    /**
+     * {@code ListView} in our layout with id R.id.list_fr, hold our french numbers.
+     */
     ListView mFrenchList;
 
-    /** Called when the activity is first created. */
     /**
-     * First we call through to our super's implementation of onCreate, the we set our content
-     * view to our layout file R.layout.rotating_list. We set our fields ListView mEnglishList, and
-     * ListView mFrenchList to the respective ListView's R.id.list_en and R.id.list_fr. We create
-     * the Adapter's for our ListView's: ArrayAdapter<String> adapterEn, and ArrayAdapter<String>
+     * Called when the activity starting. First we call through to our super's implementation of
+     * onCreate, the we set our content view to our layout file R.layout.rotating_list. We set our
+     * fields ListView mEnglishList, and ListView mFrenchList to the respective ListView's
+     * R.id.list_en and R.id.list_fr. We create the Adapter's for our ListView's:
+     * <p>
+     * ArrayAdapter<String> adapterEn, and ArrayAdapter<String>
+     * <p>
      * adapterFr from the String[]'s LIST_STRINGS_EN and LIST_STRINGS_FR, and setAdapter them to
      * their ListView. Then we set the degrees that the mFrenchList ListView (currently GONE) is
      * rotated around the vertical axis to -90f (face down). Finally we locate the "FLIP" Button
      * in our layout (R.id.button) and set its OnClickListener to a callback which will call our
      * method flipit() which will animate between the two ListView's.
      *
-     * @param savedInstanceState always null since onSaveInstanceState is not called
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rotating_list);
         //FrameLayout container = (LinearLayout) findViewById(R.id.container);
-        mEnglishList = (ListView) findViewById(R.id.list_en);
-        mFrenchList = (ListView) findViewById(R.id.list_fr);
+        mEnglishList = findViewById(R.id.list_en);
+        mFrenchList = findViewById(R.id.list_fr);
 
         // Prepare the ListView
         final ArrayAdapter<String> adapterEn = new ArrayAdapter<>(this,
@@ -103,7 +111,7 @@ public class ListFlipper extends Activity {
         mFrenchList.setAdapter(adapterFr);
         mFrenchList.setRotationY(-90f);
 
-        Button starter = (Button) findViewById(R.id.button);
+        Button starter = findViewById(R.id.button);
         starter.setOnClickListener(new View.OnClickListener() {
             /**
              * When the "FLIP" Button is clicked we call the method flipit() which runs an
@@ -118,8 +126,17 @@ public class ListFlipper extends Activity {
         });
     }
 
+    /**
+     * {@code AccelerateInterpolator} used for {@code ObjectAnimator visToInvis} which rotates the
+     * visible {@code ListView} around the "y" axis until it becomes invisible.
+     */
     private Interpolator accelerator = new AccelerateInterpolator();
+    /**
+     * {@code DecelerateInterpolator} used for {@code ObjectAnimator invisToVis} which rotates the
+     * invisible {@code ListView} around the "y" axis until it becomes visible.
+     */
     private Interpolator decelerator = new DecelerateInterpolator();
+
     /**
      * This method creates and start's the animation to flip between the two ListView's. First we
      * determine which of our two ListView's (mEnglishList or mFrenchList) is currently GONE and

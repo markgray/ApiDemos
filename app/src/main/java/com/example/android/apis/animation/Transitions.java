@@ -35,8 +35,25 @@ import com.example.android.apis.R;
 @TargetApi(Build.VERSION_CODES.KITKAT)
 public class Transitions extends Activity {
 
-    Scene mScene1, mScene2, mScene3;
+    /**
+     * {@code Scene} created from the layout file R.layout.transition_scene1
+     */
+    Scene mScene1;
+    /**
+     * {@code Scene} created from the layout file R.layout.transition_scene2
+     */
+    Scene mScene2;
+    /**
+     * {@code Scene} created from the layout file R.layout.transition_scene3
+     */
+    Scene mScene3;
+    /**
+     * {@code LinearLayout} in our layout file which we use to display our "Scenes".
+     */
     ViewGroup mSceneRoot;
+    /**
+     * {@link TransitionManager} object loaded from the xml file R.transition.transitions_mgr
+     */
     TransitionManager mTransitionManager;
 
     /**
@@ -59,7 +76,7 @@ public class Transitions extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.transition);
 
-        mSceneRoot = (ViewGroup) findViewById(R.id.sceneRoot);
+        mSceneRoot = findViewById(R.id.sceneRoot);
 
         TransitionInflater inflater = TransitionInflater.from(this);
 
@@ -125,6 +142,7 @@ public class Transitions extends Activity {
      * @param width new width of View
      * @param height new height of View
      */
+    @SuppressWarnings("SameParameterValue")
     private void setNewSize(int id, int width, int height) {
         View view = findViewById(id);
         ViewGroup.LayoutParams params = view.getLayoutParams();

@@ -39,8 +39,18 @@ import com.example.android.apis.R;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ActionBarUsage extends Activity implements OnQueryTextListener {
+    /**
+     * TAG used for logging.
+     */
     private static final String TAG = "ActionBarUsage";
+    /**
+     * The {@code TextView} we use as our content view, we set its text in our {@code onQueryTextChange}
+     * to the new content of the query text, which happens for every key stroke.
+     */
     TextView mSearchText;
+    /**
+     *
+     */
     int mSortMode = -1;
 
     /**
@@ -48,7 +58,7 @@ public class ActionBarUsage extends Activity implements OnQueryTextListener {
      * of onCreate, then we set our field TextView mSearchText to a new instance of TextView and
      * set our content view to this TextView.
      *
-     * @param savedInstanceState always null since onSaveInstanceState is not overridden.
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

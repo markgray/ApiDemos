@@ -78,7 +78,7 @@ public class AnimationSeeking extends Activity {
      * id R.id.seekBar, set its maximum value to {@code DURATION} (1500), and set its
      * {@code OnSeekBarChangeListener} to an anonymous class whose {@code onProgressChanged} override
      * calls the {@code seek} method of {@code MyAnimationView animView} to set the animation to the
-     * time indicated by the position of the seekbar (0-1500ms)whenever the user changes the setting.
+     * time indicated by the position of the seekbar (0-1500ms) whenever the user changes the setting.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
@@ -87,11 +87,11 @@ public class AnimationSeeking extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animation_seeking);
 
-        LinearLayout container = (LinearLayout) findViewById(R.id.container);
+        LinearLayout container = findViewById(R.id.container);
         final MyAnimationView animView = new MyAnimationView(this);
         container.addView(animView);
 
-        Button starter = (Button) findViewById(R.id.startButton);
+        Button starter = findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
             /**
              * Starts the animation when Button is clicked by calling the {@code startAnimation} method
@@ -105,7 +105,7 @@ public class AnimationSeeking extends Activity {
             }
         });
 
-        mSeekBar = (SeekBar) findViewById(R.id.seekBar);
+        mSeekBar = findViewById(R.id.seekBar);
         mSeekBar.setMax(DURATION);
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             /**
@@ -171,10 +171,10 @@ public class AnimationSeeking extends Activity {
         /**
          * The one and only ball, which bounces and whose animation is controlled by the seekbar
          */
-        ShapeHolder ball = null;
+        ShapeHolder ball;
 
         /**
-         * Our constructor. First we Call through to our super's constructor, then we create a
+         * Our constructor. First we call through to our super's constructor, then we create a
          * {@code ShapeHolder ball} located at (200,0) (adding it to the list of balls contained in
          * {@code ArrayList<ShapeHolder> balls} for no apparent reason (cut and paste can be odd).
          *

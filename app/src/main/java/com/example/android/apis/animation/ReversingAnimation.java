@@ -20,10 +20,6 @@ package com.example.android.apis.animation;
 // class is in a sub-package.
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import com.example.android.apis.R;
-
-import java.util.ArrayList;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -39,6 +35,8 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
+import com.example.android.apis.R;
 
 /**
  * Demonstrates the use of android.animation.ValueAnimator.reverse() method to play an
@@ -106,11 +104,14 @@ public class ReversingAnimation extends Activity {
      */
     public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener {
 
-        @SuppressWarnings("unused")
-        public final ArrayList<ShapeHolder> balls = new ArrayList<>();
+        /**
+         * {@code ObjectAnimator} which animates our {@code ShapeHolder ball}
+         */
         ValueAnimator bounceAnim = null;
-        @SuppressWarnings("UnusedAssignment")
-        ShapeHolder ball = null;
+        /**
+         * {@code ShapeHolder} holding our ball, it is the object which is moved via its "y" property
+         */
+        ShapeHolder ball;
 
         /**
          * Initializes a new instance of MyAnimationView. First calls our super's constructor,
@@ -133,8 +134,8 @@ public class ReversingAnimation extends Activity {
          */
         private void createAnimation() {
             if (bounceAnim == null) {
-                bounceAnim = ObjectAnimator.ofFloat(ball, "y", ball.getY(), getHeight() - 50f).
-                        setDuration(1500);
+                bounceAnim = ObjectAnimator.ofFloat(ball, "y", ball.getY(), getHeight() - 50f)
+                        .setDuration(1500);
                 bounceAnim.setInterpolator(new AccelerateInterpolator(2f));
                 bounceAnim.addUpdateListener(this);
             }

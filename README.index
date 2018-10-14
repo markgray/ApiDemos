@@ -215,12 +215,15 @@ Animation (disabled for froyo)
 
   Animation/Reversing v11
         .animation.ReversingAnimation
+        .animation.ShapeHolder
         .layout.animation_reversing.xml
             Demonstrates the use of android.animation.ValueAnimator.reverse() method
             to play an animation in "reverse".
 
   Animation/Seeking v11
         .animation.AnimationSeeking
+        .animation.ShapeHolder
+        .layout.animation_seeking.xml
             Uses a SeekBar to allow user to set the animation to a particular position
             using android.animation.ValueAnimator.setCurrentPlayTime(long playTime)
             Pressing the Run button will play from the current position of the animation.
@@ -228,6 +231,11 @@ Animation (disabled for froyo)
   Animation/Simple Transitions v11 -- TransitionInflater.from(this) requires v19 as does
         Scene.getSceneForLayout, as does android.transition itself.
         .animation.Transitions
+        .layout.transition.xml
+        .layout.transition_scene1.xml
+        .layout.transition_scene2.xml
+        .layout.transition_scene3.xml
+        .transition.transitions_mgr.xml
             Uses classes from android.transition to animate transitions between 4 (or 3) 
             different layouts. scene4 is not an actual 'Scene', but rather a dynamic
             change in the UI, transitioned to using beginDelayedTransition() to tell
@@ -237,6 +245,7 @@ Animation (disabled for froyo)
 
   Animation/View Flip v11
         .animation.ListFlipper
+        .layout.rotating_list.xml
             Uses fancy custom ObjectAnimator to swap two list views occupying the same
             space in a LinearLayout, by setting one to android:visibility="gone" and the
             other to android:visibility="visible" when they are to be "flipped", the
@@ -252,13 +261,18 @@ App
     App/Action Bar/Action Bar Navigation v16 (new Document Flag requires v21)
         .app.ActionBarNavigation goes to:
         .app.ActionBarNavigationTarget
-            Shows how to use "Up" button in Action Bar, new Document is created in a 
-            separate activity, so you have to use "recent" to switch to it, and then
-            the "up" button works as "up", otherwise it works as "Back". Uses the
-            attribute android:taskAffinity=":bar_navigation" to associate the activities.
+        .layout.action_bar_navigation.xml
+        .layout.action_bar_navigation_target.xml
+            Shows how to use "Up" button in the ActionBar. A new Document is created in a 
+            separate activity, so you have to use "recent" to swipe away the activity that
+            launched it, switch to the new "Document", and then the "up" button works as "up",
+            otherwise it works as "Back". Uses the attribute android:taskAffinity=":bar_navigation" 
+            to associate the activities.
 
     App/Action Bar/Action Bar Tabs v11
         .app.ActionBarTabs
+        .layout.action_bar_tabs.xml
+        .layout.action_bar_tab_content.xml
             You need to toggle tab mode before tabs show in action bar. Crashes when rotated
             because it needs a zero argument constructor. The text should be passed in a bundle.
             Working on doing this Right. Did so, but need to use retained fragments in order
@@ -266,6 +280,7 @@ App
 
     App/Action Bar/Action Bar Usage v11
         .app.ActionBarUsage
+        .menu.actions.xml
             This demonstrates idiomatic usage of the Action Bar. The default Honeycomb theme
             includes the action bar by default and a menu resource is used to populate the
             menu data itself. If you'd like to see how these things work under the hood, see
