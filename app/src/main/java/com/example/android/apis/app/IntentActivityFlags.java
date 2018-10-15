@@ -37,7 +37,7 @@ public class IntentActivityFlags extends Activity {
      * R.id.flag_activity_clear_task_pi ("FLAG_ACTIVITY_CLEAR_TASK (PI)") and set its OnClickListener
      * to mFlagActivityClearTaskPIListener.
      *
-     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +46,9 @@ public class IntentActivityFlags extends Activity {
         setContentView(R.layout.intent_activity_flags);
 
         // Watch for button clicks.
-        Button button = (Button)findViewById(R.id.flag_activity_clear_task);
+        Button button = findViewById(R.id.flag_activity_clear_task);
         button.setOnClickListener(mFlagActivityClearTaskListener);
-        button = (Button)findViewById(R.id.flag_activity_clear_task_pi);
+        button = findViewById(R.id.flag_activity_clear_task_pi);
         button.setOnClickListener(mFlagActivityClearTaskPIListener);
     }
 
@@ -95,7 +95,6 @@ public class IntentActivityFlags extends Activity {
         intents[2] = intent;
         return intents;
     }
-
 
     /**
      * OnClickListener for the R.id.flag_activity_clear_task ("FLAG_ACTIVITY_CLEAR_TASK") Button

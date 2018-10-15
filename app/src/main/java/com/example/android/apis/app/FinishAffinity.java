@@ -37,6 +37,9 @@ import com.example.android.apis.R;
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 @SuppressLint("SetTextI18n")
 public class FinishAffinity extends Activity {
+    /**
+     * Nesting level for this instance of {@code FinishAffinity}.
+     */
     int mNesting;
     /**
      * OnClickListener for the R.id.nest ("Nest some more") Button, it starts another instance of
@@ -83,8 +86,7 @@ public class FinishAffinity extends Activity {
      * mNesting. Finally we locate the Button R.id.nest in our layout and set its OnClickListener to
      * mNestListener, and find the Button R.id.finish and set its OnClickListener to mFinishListener.
      *
-     *
-     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,9 +98,9 @@ public class FinishAffinity extends Activity {
         ((TextView) findViewById(R.id.seq)).setText("Current nesting: " + mNesting);
 
         // Watch for button clicks.
-        Button button = (Button) findViewById(R.id.nest);
+        Button button = findViewById(R.id.nest);
         button.setOnClickListener(mNestListener);
-        button = (Button) findViewById(R.id.finish);
+        button = findViewById(R.id.finish);
         button.setOnClickListener(mFinishListener);
     }
 }

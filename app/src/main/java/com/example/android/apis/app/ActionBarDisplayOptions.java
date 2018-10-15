@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -76,7 +77,8 @@ public class ActionBarDisplayOptions extends Activity implements View.OnClickLis
 
         ((Spinner) findViewById(R.id.toggle_navigation)).setOnItemSelectedListener(this);
 
-        mCustomView = getLayoutInflater().inflate(R.layout.action_bar_display_options_custom, null);
+        mCustomView = getLayoutInflater().inflate(R.layout.action_bar_display_options_custom,
+                (ViewGroup)findViewById(android.R.id.content), false);
         // Configure several action bar elements that will be toggled by display options.
         final ActionBar bar = getActionBar();
         //noinspection ConstantConditions
@@ -87,8 +89,7 @@ public class ActionBarDisplayOptions extends Activity implements View.OnClickLis
         bar.addTab(bar.newTab().setText("Tab 2").setTabListener(this));
         bar.addTab(bar.newTab().setText("Tab 3").setTabListener(this));
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         adapter.add("Item 1");
         adapter.add("Item 2");
         adapter.add("Item 3");

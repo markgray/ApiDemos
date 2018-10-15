@@ -302,6 +302,9 @@ App
 
     App/Action Bar/Display Options v16
         .app.ActionBarDisplayOptions
+        .layout.action_bar_display_options.xml
+        .layout.action_bar_display_options_custom.xml
+        .menu.display_options_actions.xml
             Shows how various action bar display option flags can be combined and their
             effects. The flags are: DISPLAY_HOME_AS_UP, DISPLAY_SHOW_HOME, DISPLAY_USE_LOGO,
             DISPLAY_SHOW_TITLE, DISPLAY_SHOW_CUSTOM, all fields in ActionBar. Also you
@@ -314,6 +317,7 @@ App
   Activity
     App/Activity/Animation                 all
         .app.Animation
+        .layout.activity_animation
         JELLY_BEAN (v16+) required for "modern animations" by java code if/else statement
         animates in to:
         .app.AlertDialogSamples
@@ -331,17 +335,22 @@ App
 
     App/Activity/Custom Dialog             all
         .app.CustomDialogActivity
+        .layout.custom_dialog_activity.xml
+        style name="Theme.CustomDialog" -- element in values/styles.xml
             Creates a pop-up activity over the App/Activity list which looks like a dialog, and
             uses a android:theme="@style/Theme.CustomDialog" set in the AndroidManifest.
 
     App/Activity/Custom Title              all
         .app.CustomTitle
+        .layout.custom_title.xml
+        .layout.custom_title_1.xml
             How to use a custom title. Uses Window.FEATURE_CUSTOM_TITLE to create a 
             custom title bar from layout/custom_title_1 for the activity, and allows
             the user to change the title.
 
     App/Activity/Dialog                    all
         .app.DialogActivity
+        .layout.dialog_activity.xml
             Creates a Dialog using a style derived from a theme that is appropriate 
             and available given the Api level: style/ThemeCurrentDialog is defined in
             each: values/styles.xml values-v11/styles.xml values-v19/styles.xml and
@@ -351,6 +360,7 @@ App
 
     App/Activity/Finish Affinity           v16
         .app.FinishAffinity
+        .layout.activity_finish_affinity.xml
             Show how to end a deeply nested stack of activities, returning to the 
             activity at the very top. It does this by calling finishAffinity() which
             finishes this activity as well as all activities immediately below it in 
@@ -358,16 +368,21 @@ App
 
     App/Activity/Forwarding                all
         .app.Forwarding
+        .layout.forwarding.xml
+        .app.ForwardTarget
+        .layout.forward_target.xml
             Example of removing yourself from the history stack after forwarding to 
             another activity. This is simply done by calling finish() after calling 
             startActivity(Intent).
 
     App/Activity/<b>Hello <i>World</i></b> all
         .app.HelloWorld
+        .layout.hello_world.xml
             Simple app which only displays a layout containing a single TextView.
 
     App/Activity/Intent Activity Flags     all -> v11
         .app.IntentActivityFlags
+        .layout.intent_activity_flags.xml
             This activity demonstrates how to build a backstack of activities into an
             array of Intent[] and use it to replace the current backstack by using 
             makeRestartActivityTask() to create Intent[0] with the flags set to 
@@ -381,6 +396,7 @@ App
 
     App/Activity/Intents                   all
         .app.Intents
+        .layout.intents.xml
             Uses Intent.createChooser(Intent, "title") to create a "chooser intent" 
             from three different mime types ("audio/*", "image/*", and "*/*") of
             Intent.ACTION_GET_CONTENT Intents based on which button the user clicks,
@@ -403,22 +419,25 @@ App
 
     App/Activity/Overscan                  v18
         .app.OverscanActivity
+        .layout.overscan_activity.xml
             Uses @android:style/Theme.Holo.NoActionBar.Overscan set in AndroidManifest,
             and android:fitsSystemWindows="true" in its layout/overscan_activity.xml to
             place a surrounding "white box" in the overscan region of the display, and
             displays a picture in a FrameLayout offset to avoid the overscan region.
 
-    App/Activity/Picture in Picture        v24
-        .app.PictureInPicture
-            Minimal demo of Picture in Picture mode, just enters that mode with current
-            content view when button is clicked.
-
-    App/Activity/Persistent State          all
+   App/Activity/Persistent State          all
         .app.PersistentState
+        .layout.save_restore_state
             Demonstrates saving and restoring activity state by using a
             SharedPreferences.Editor to save state in the onPause() callback, then 
             restoring the state in the onResume callback.
 
+    App/Activity/Picture in Picture        v24
+        .app.PictureInPicture
+        .layout.picture_in_picture.xml
+            Minimal demo of Picture in Picture mode, just enters that mode with current
+            content view when button is clicked.
+ 
     App/Activity/Presentation -- registerDisplayListener v17 getSupportedModes v23
         .app.PresentationActivity
             Presents a presentation on a secondary display. (Needs secondary display.)

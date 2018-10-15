@@ -40,7 +40,7 @@ public class OverscanActivity extends Activity {
      * of onCreate, and then we set our content view to our layout file R.layout.overscan_activity.
      * The entire demo is created by the xml.
      *
-     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

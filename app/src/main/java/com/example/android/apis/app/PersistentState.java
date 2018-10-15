@@ -65,6 +65,11 @@ import android.widget.TextView;
  */
 public class PersistentState extends Activity {
     /**
+     * {@code EditText} whose text we save in our {@code SharedPreferences} under the key "text"
+     */
+    private EditText mSaved;
+
+    /**
      * Initialization of the Activity after it is first created.  Here we use
      * {@link android.app.Activity#setContentView setContentView()} to set up
      * the Activity's content to our layout file R.layout.save_restore_state,
@@ -88,7 +93,7 @@ public class PersistentState extends Activity {
         ((TextView)findViewById(R.id.msg)).setText(R.string.persistent_msg);
 
         // Retrieve the EditText widget whose state we will save.
-        mSaved = (EditText)findViewById(R.id.saved);
+        mSaved = findViewById(R.id.saved);
     }
 
     /**
@@ -143,8 +148,6 @@ public class PersistentState extends Activity {
         editor.putString("text", mSaved.getText().toString());
         editor.putInt("selection-start", mSaved.getSelectionStart());
         editor.putInt("selection-end", mSaved.getSelectionEnd());
-        editor.commit();
+        editor.apply();
     }
-
-    private EditText mSaved;
 }

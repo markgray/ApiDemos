@@ -44,6 +44,9 @@ import java.io.InputStream;
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class ActionBarShareActionProviderActivity extends Activity {
 
+    /**
+     * Name of the shared world readable file that we copy our raw resource R.raw.robot to.
+     */
     private static final String SHARED_FILE_NAME = "shared.png";
 
     /**
@@ -79,7 +82,6 @@ public class ActionBarShareActionProviderActivity extends Activity {
      * Intent. Finally we return true so that our menu will be displayed.
      *
      * @param menu The options menu in which you place your items.
-     *
      * @return You must return true for the menu to be displayed.
      */
     @Override
@@ -142,6 +144,7 @@ public class ActionBarShareActionProviderActivity extends Activity {
     private void copyPrivateRawResourceToPubliclyAccessibleFile() {
         InputStream inputStream = null;
         FileOutputStream outputStream = null;
+        //noinspection TryFinallyCanBeTryWithResources
         try {
             inputStream = getResources().openRawResource(R.raw.robot);
             //noinspection deprecation

@@ -156,12 +156,12 @@ public class PresentationActivity extends Activity
         setContentView(R.layout.presentation_activity);
 
         // Set up checkbox to toggle between showing all displays or only presentation displays.
-        mShowAllDisplaysCheckbox = (CheckBox)findViewById(R.id.show_all_displays);
+        mShowAllDisplaysCheckbox = findViewById(R.id.show_all_displays);
         mShowAllDisplaysCheckbox.setOnCheckedChangeListener(this);
 
         // Set up the list of displays.
         mDisplayListAdapter = new DisplayListAdapter(this);
-        mListView = (ListView)findViewById(R.id.display_list);
+        mListView = findViewById(R.id.display_list);
         mListView.setAdapter(mDisplayListAdapter);
     }
 
@@ -582,7 +582,7 @@ public class PresentationActivity extends Activity
          * item View v and save it in CheckBox cb. We set the tag of "cb" to Display display, set the
          * OnCheckedChangeListener to "this", and set the checked state of "cd" if "contents" is not
          * null, unchecked otherwise. Next we find the TextView tv (R.id.display_id) and set its
-         * text to a formated String containing the displayId and the name of the Display. We locate
+         * text to a formatted String containing the displayId and the name of the Display. We locate
          * Button b (R.id.info "INFO" Button), set its tag to Display display, and its OnClickListener
          * to "this". We locate Spinner s (R.id.modes) and if there is no content, or the Display only
          * has one mode we set the visibility of "s" to "GONE" and set the adapter of s to null.
@@ -632,20 +632,20 @@ public class PresentationActivity extends Activity
                 contents = mSavedPresentationContents.get(displayId);
             }
 
-            CheckBox cb = (CheckBox)v.findViewById(R.id.checkbox_presentation);
+            CheckBox cb = v.findViewById(R.id.checkbox_presentation);
             cb.setTag(display);
             cb.setOnCheckedChangeListener(PresentationActivity.this);
             cb.setChecked(contents != null);
 
-            TextView tv = (TextView)v.findViewById(R.id.display_id);
+            TextView tv = v.findViewById(R.id.display_id);
             tv.setText(v.getContext().getResources().getString(
                     R.string.presentation_display_id_text, displayId, display.getName()));
 
-            Button b = (Button)v.findViewById(R.id.info);
+            Button b = v.findViewById(R.id.info);
             b.setTag(display);
             b.setOnClickListener(PresentationActivity.this);
 
-            Spinner s = (Spinner)v.findViewById(R.id.modes);
+            Spinner s = v.findViewById(R.id.modes);
             Display.Mode[] modes = display.getSupportedModes();
             if (contents == null || modes.length == 1) {
                 s.setVisibility(View.GONE);
@@ -803,12 +803,12 @@ public class PresentationActivity extends Activity
             final int photo = mContents.photo;
 
             // Show a caption to describe what's going on.
-            TextView text = (TextView)findViewById(R.id.text);
+            TextView text = findViewById(R.id.text);
             text.setText(r.getString(R.string.presentation_photo_text,
                     photo, displayId, display.getName()));
 
             // Show a n image for visual interest.
-            ImageView image = (ImageView)findViewById(R.id.image);
+            ImageView image = findViewById(R.id.image);
             //noinspection deprecation
             image.setImageDrawable(r.getDrawable(PHOTOS[photo]));
 

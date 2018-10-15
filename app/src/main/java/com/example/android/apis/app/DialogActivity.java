@@ -69,7 +69,6 @@ public class DialogActivity extends Activity {
 
         requestWindowFeature(Window.FEATURE_LEFT_ICON);
 
-
         // See assets/res/any/layout/dialog_activity.xml for this
         // view layout definition, which is being set here as
         // the content of our screen.
@@ -79,9 +78,9 @@ public class DialogActivity extends Activity {
         getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,
                 android.R.drawable.ic_dialog_alert);
 
-        Button button = (Button)findViewById(R.id.add);
+        Button button = findViewById(R.id.add);
         button.setOnClickListener(mAddContentListener);
-        button = (Button)findViewById(R.id.remove);
+        button = findViewById(R.id.remove);
         button.setOnClickListener(mRemoveContentListener);
     }
 
@@ -97,7 +96,7 @@ public class DialogActivity extends Activity {
          */
         @Override
         public void onClick(View v) {
-            LinearLayout layout = (LinearLayout)findViewById(R.id.inner_content);
+            LinearLayout layout = findViewById(R.id.inner_content);
             ImageView iv = new ImageView(DialogActivity.this);
             //noinspection deprecation
             iv.setImageDrawable(getResources().getDrawable(R.drawable.icon48x48_1));
@@ -117,7 +116,7 @@ public class DialogActivity extends Activity {
          */
         @Override
         public void onClick(View v) {
-            LinearLayout layout = (LinearLayout)findViewById(R.id.inner_content);
+            LinearLayout layout = findViewById(R.id.inner_content);
             int num = layout.getChildCount();
             if (num > 0) {
                 layout.removeViewAt(num-1);

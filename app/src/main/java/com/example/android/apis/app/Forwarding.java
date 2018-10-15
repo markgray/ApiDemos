@@ -60,7 +60,7 @@ public class Forwarding extends Activity {
      * onCreate, then we set our content view to our layout file R.layout.forwarding. We locate the
      * Button goButton (R.id.go "GO") in our layout, then set its OnClickListener to mGoListener.
      *
-     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -70,7 +70,7 @@ public class Forwarding extends Activity {
         setContentView(R.layout.forwarding);
 
         // Watch for button clicks.
-        Button goButton = (Button)findViewById(R.id.go);
+        Button goButton = findViewById(R.id.go);
         goButton.setOnClickListener(mGoListener);
     }
 

@@ -87,20 +87,20 @@ public class Animation extends Activity {
         setContentView(R.layout.activity_animation);
 
         // Watch for button clicks.
-        Button button = (Button)findViewById(R.id.fade_animation);
+        Button button = findViewById(R.id.fade_animation);
         button.setOnClickListener(mFadeListener);
-        button = (Button)findViewById(R.id.zoom_animation);
+        button = findViewById(R.id.zoom_animation);
         button.setOnClickListener(mZoomListener);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            button = (Button)findViewById(R.id.modern_fade_animation);
+            button = findViewById(R.id.modern_fade_animation);
             button.setOnClickListener(mModernFadeListener);
-            button = (Button)findViewById(R.id.modern_zoom_animation);
+            button = findViewById(R.id.modern_zoom_animation);
             button.setOnClickListener(mModernZoomListener);
-            button = (Button)findViewById(R.id.scale_up_animation);
+            button = findViewById(R.id.scale_up_animation);
             button.setOnClickListener(mScaleUpListener);
-            button = (Button)findViewById(R.id.zoom_thumbnail_animation);
+            button = findViewById(R.id.zoom_thumbnail_animation);
             button.setOnClickListener(mZoomThumbnailListener);
-            button = (Button)findViewById(R.id.no_animation);
+            button = findViewById(R.id.no_animation);
             button.setOnClickListener(mNoAnimationListener);
         } else {
             findViewById(R.id.modern_fade_animation).setEnabled(false);

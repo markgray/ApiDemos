@@ -43,7 +43,7 @@ public class CustomDialogActivity extends Activity {
      *         surrounded by a border of a different color
      *     layout/custom_dialog_activity Layout file containing a TextView
      *
-     * @param savedInstanceState always null since we do not override onSaveInstanceState
+     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
     @Override
 	protected void onCreate(Bundle savedInstanceState) {

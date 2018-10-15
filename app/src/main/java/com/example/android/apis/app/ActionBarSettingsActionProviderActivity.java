@@ -43,18 +43,19 @@ import com.example.android.apis.R;
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class ActionBarSettingsActionProviderActivity extends Activity {
 
+    /**
+     * TAG used for logging.
+     */
     private static final String TAG = "ActionBarSettings";
 
     /**
      * Initialize the contents of the Activity's standard options menu. First we call through
-     * to our super's implementation of onCreateOptionsMenu. Then we fetch a MenuInflater
-     * and use it to inflate our menu from R.menu.action_bar_settings_action_provider into
-     * the Menu menu given us. Finally we return true so the menu will be displayed.
+     * to our super's implementation of {@code onCreateOptionsMenu}. Then we fetch a {@code MenuInflater}
+     * and use it to inflate our menu from R.menu.action_bar_settings_action_provider into the
+     * {@code Menu menu} given us. Finally we return true so the menu will be displayed.
      *
      * @param menu The options menu in which you place your items.
-     *
-     * @return You must return true for the menu to be displayed;
-     *         if you return false it will not be shown.
+     * @return You must return true for the menu to be displayed; if you return false it will not be shown.
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -72,9 +73,7 @@ public class ActionBarSettingsActionProviderActivity extends Activity {
      * just called.
      *
      * @param item The menu item that was selected.
-     *
-     * @return boolean Return false to allow normal menu processing to
-     *         proceed, true to consume it here.
+     * @return boolean Return false to allow normal menu processing to proceed, true to consume it here.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -128,7 +127,7 @@ public class ActionBarSettingsActionProviderActivity extends Activity {
             LayoutInflater layoutInflater = LayoutInflater.from(mContext);
             @SuppressLint("InflateParams")
             View view = layoutInflater.inflate(R.layout.action_bar_settings_action_provider, null);
-            ImageButton button = (ImageButton) view.findViewById(R.id.button);
+            ImageButton button = view.findViewById(R.id.button);
             // Attach a click listener for launching the system settings.
             button.setOnClickListener(new View.OnClickListener() {
                 /**
