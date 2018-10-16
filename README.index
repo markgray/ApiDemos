@@ -440,6 +440,9 @@ App
  
     App/Activity/Presentation -- registerDisplayListener v17 getSupportedModes v23
         .app.PresentationActivity
+        .layout.presentation_activity.xml
+        .layout.presentation_content.xml
+        .layout.presentation_list_item.xml
             Presents a presentation on a secondary display. (Needs secondary display.)
 
     App/Activity/Presentation with Media Router MediaRouter needs v17
