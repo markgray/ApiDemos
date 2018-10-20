@@ -53,11 +53,8 @@
          of some sort but not one with autofocus capability.
     -->
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-feature android:name="android.hardware.camera" />
-    <uses-feature
-        android:name="android.hardware.camera.autofocus"
-        android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 
     <application
         android:name=".ApiDemosApplication"
@@ -324,15 +321,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".app.PresentationActivity"
-            android:label="@string/activity_presentation">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-
         <activity android:name=".app.PictureInPicture"
             android:label="@string/activity_picture_in_picture"
             android:resizeableActivity="true"
@@ -374,6 +362,15 @@
             android:resizeableActivity="true"
             android:theme="@android:style/Theme.DeviceDefault.Settings"
             tools:targetApi="26">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".app.PresentationActivity"
+            android:label="@string/activity_presentation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -881,6 +878,7 @@
                 <!-- category android:name="android.intent.category.SAMPLE_CODE" / -->
             </intent-filter>
         </activity>
+
         <activity
             android:name=".app.ContactsFilter"
             android:label="@string/activity_contacts_filter">
@@ -1129,6 +1127,17 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".app.DeviceAdminSample$DeviceAdminSampleReceiver2"
+            android:label="@string/sample_device_admin2"
+            android:description="@string/sample_device_admin_description2"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data android:name="android.app.device_admin"
+                android:resource="@xml/device_admin_sample" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+
         <!-- Voice Recognition Samples -->
 
         <activity
@@ -1230,7 +1239,8 @@
             android:enabled="@bool/atLeastJellyBean"
             android:label="@string/action_bar_navigation_target"
             android:parentActivityName=".app.ActionBarNavigation"
-            android:taskAffinity=":bar_navigation"></activity>
+            android:taskAffinity=":bar_navigation">
+        </activity>
 
         <activity
             android:name=".app.PrintBitmap"
@@ -1238,7 +1248,6 @@
             android:label="@string/print_bitmap">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
@@ -1280,6 +1289,7 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
+
         <receiver android:name=".app.AppUpdateSspReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
@@ -1522,6 +1532,17 @@
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+
+        <!-- A FileProvider for passing the APK to be installed to the system. -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.android.apis.installapkprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <activity android:name=".content.InstallApkSessionApi"
             android:label="@string/activity_install_apk_session_api"
