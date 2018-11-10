@@ -43,7 +43,7 @@ public class AskForPermissions extends Activity {
      * {@code onCreate}, then we set our content view to our layout file R.layout.activity_ask_for_permissions.
      * We locate {@code Button askUser} with ID R.id.ask_for_permission ("ASK USER FOR PERMISSIONS")
      * and set its {@code OnClickListener} to an anonymous class which toasts a message "Going to ask
-     * user for permission", then creates a {@code Snackbar} with the message "Do you want grant this
+     * user for permission", then creates a {@code SnackBar} with the message "Do you want grant this
      * app some dangerous permissions?", and an action which calls the method {@code ActivityCompat.requestPermissions}
      * with our list of {@code String[] permissions} we need granted to us.
      *
@@ -54,7 +54,7 @@ public class AskForPermissions extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ask_for_permissions);
 
-        Button askUser = (Button) findViewById(R.id.ask_for_permission);
+        Button askUser = findViewById(R.id.ask_for_permission);
         if (askUser != null) {
             askUser.setOnClickListener(new View.OnClickListener() {
                 @Override
