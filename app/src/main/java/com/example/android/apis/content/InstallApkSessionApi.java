@@ -28,7 +28,7 @@ import android.content.IntentSender;
 import android.content.pm.PackageInstaller;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;

@@ -61,7 +61,7 @@ public class VideoPlayerActivity extends Activity
      * using system UI flags to transition in and out of modes where the entire
      * screen can be filled with content (at the expense of no user interaction).
      */
-    public static class Content extends android.support.v7.widget.AppCompatImageView implements
+    public static class Content extends androidx.appcompat.widget.AppCompatImageView implements
             View.OnSystemUiVisibilityChangeListener, View.OnClickListener,
             ActionBar.OnMenuVisibilityListener {
         /**

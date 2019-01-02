@@ -20,7 +20,7 @@ import android.content.Context;
 import android.graphics.*;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import android.view.*;
 
 /**

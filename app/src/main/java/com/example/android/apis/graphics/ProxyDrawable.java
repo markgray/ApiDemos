@@ -21,7 +21,7 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Only used by {@code AnimateDrawable}, which extends us. We implement all the methods required by

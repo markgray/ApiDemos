@@ -21,7 +21,7 @@ import com.example.android.apis.R;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 /**
  * A demo for tooltips, it is implemented almost entirely in the layout file layout/tooltips.xml using

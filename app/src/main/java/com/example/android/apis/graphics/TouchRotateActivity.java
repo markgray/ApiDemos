@@ -22,7 +22,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;

@@ -61,7 +61,7 @@ public class SystemUIModes extends Activity
     /**
      * {@code ImageView} which is used as the background of our window.
      */
-    public static class IV extends android.support.v7.widget.AppCompatImageView
+    public static class IV extends androidx.appcompat.widget.AppCompatImageView
             implements View.OnSystemUiVisibilityChangeListener {
         /**
          * {@code SystemUIModes} activity containing us. We use it to access its methods in

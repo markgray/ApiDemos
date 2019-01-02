@@ -33,7 +33,7 @@ import android.util.AttributeSet;
  * android.R.styleable#TextView TextView Attributes,
  * android.R.styleable#View View Attributes
  */
-public class LogTextBox extends android.support.v7.widget.AppCompatTextView {
+public class LogTextBox extends androidx.appcompat.widget.AppCompatTextView {
     /**
      * Unused constructor.
      *
