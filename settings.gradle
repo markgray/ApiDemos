@@ -1,1 +1,1 @@
-include ':app', ':libmms'
+include ':app'

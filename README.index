@@ -19,6 +19,7 @@ N_MR1                   v25
 O                       v26
 O_MR1                   v27
 P                       v28
+Q                       v29
 
 Accessibility
   Accessibility/Accessibility Node Querying  v14
@@ -1607,11 +1608,12 @@ NFC
             look like it does anything at all
 
 OS
-    OS/MMS Messaging                       v21 or crash
-        .os.MmsMessagingDemo
-        .os.MmsWapPushReceiver
-        .os.MmsFileProvider
-            Shows how to send and receive mms messaging (test using real phone)
+************** Removed to ease targeting API 29
+*   OS/MMS Messaging                       v21 or crash
+*       .os.MmsMessagingDemo
+*       .os.MmsWapPushReceiver
+*       .os.MmsFileProvider
+*           Shows how to send and receive mms messaging (test using real phone)
 
     OS/Morse Code                          all
         .os.MorseCode
@@ -1624,11 +1626,12 @@ OS
             Uses output from Sensor.TYPE_ROTATION_VECTOR to change the rotation matrix
             of an openGL Cube.
 
-    OS/SMS Messaging                       all
-        .os.SmsMessagingDemo
-        .os.SmsReceivedDialog
-        .os.SmsMessageReceiver
-            Shows how to send and receive SMS messages. Nifty use of tts as well.
+************** Removed to ease targeting API 29
+*   OS/SMS Messaging                       all
+*       .os.SmsMessagingDemo
+*       .os.SmsReceivedDialog
+*       .os.SmsMessageReceiver
+*           Shows how to send and receive SMS messages. Nifty use of tts as well.
 
     OS/TriggerSensors                      all -- v18+ or crash
         .os.TriggerSensors
