@@ -18,13 +18,15 @@ package com.example.android.apis.graphics;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Picture;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
 import android.os.Bundle;
 import android.view.View;
-
-import java.io.*;
 
 /**
  * Shows how to use the Picture class to record drawing instructions performed on the Canvas returned
@@ -154,13 +156,15 @@ public class Pictures extends GraphicsActivity {
             mDrawable.setBounds(0, 200, getWidth(), 300);
             mDrawable.draw(canvas);
 
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            //noinspection deprecation
-            mPicture.writeToStream(os);
-            InputStream is = new ByteArrayInputStream(os.toByteArray());
-            canvas.translate(0, 300);
-            //noinspection deprecation
-            canvas.drawPicture(Picture.createFromStream(is));
+/* ***** ***** ******* writeToStream and createFromStream have been removed in API 29
+ *          ByteArrayOutputStream os = new ByteArrayOutputStream();
+ *          //noinspection deprecation
+ *          mPicture.writeToStream(os);
+ *          InputStream is = new ByteArrayInputStream(os.toByteArray());
+ *          canvas.translate(0, 300);
+ *          //noinspection deprecation
+ *          canvas.drawPicture(Picture.createFromStream(is));
+*/
         }
     }
 }
