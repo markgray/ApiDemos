@@ -5,11 +5,12 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.app.ActivityCompat;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
+
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * This {@code Activity} just asks the user for permissions when the app is first run.
@@ -55,7 +56,6 @@ public class AskForPermissions extends Activity {
             askUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Going to ask user for permission", Toast.LENGTH_LONG).show();
                     Snackbar.make(v, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                             .setAction(R.string.ok, new View.OnClickListener() {
                                 @Override
