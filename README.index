@@ -1416,9 +1416,11 @@ Graphics
             the Picture using the Canvas.drawPicture(Picture) method then it stretches
             the Picture when drawing using the Canvas.drawPicture(Picture,RectF) method,
             then it draws the Drawable it created with PictureDrawable(Picture) to draw
-            using Drawable.draw(Canvas), then it writes the Picture to a ByteArrayOutputStream
-            and draws it by reading that ByteArrayOutputStream back in and then drawing it
-            using Canvas.drawPicture(Picture.createFromStream(is))
+            using Drawable.draw(Canvas).
+            Prior to API 29 then it wrote the Picture to a ByteArrayOutputStream and drew
+            it by reading that ByteArrayOutputStream back in and then drew it using
+            Canvas.drawPicture(Picture.createFromStream(is)), but API 29 removed both
+            Picture.writeToStream and Picture.createFromStream
 
   Points
     Graphics/Points                        all

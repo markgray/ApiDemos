@@ -34,9 +34,11 @@ import android.view.View;
  * turned into a Drawable by calling PictureDrawable(Picture). Then in the onDraw method it first
  * draws the Picture using the Canvas.drawPicture(Picture) method then it stretches the Picture when
  * drawing using the Canvas.drawPicture(Picture,RectF) method, then it draws the Drawable it created
- * with PictureDrawable(Picture) to draw using Drawable.draw(Canvas), then it writes the Picture to
- * a ByteArrayOutputStream and draws it by reading that ByteArrayOutputStream back in and then drawing
- * it using Canvas.drawPicture(Picture.createFromStream(is))
+ * with PictureDrawable(Picture) to draw using Drawable.draw(Canvas). Before API 29 it would then
+ * write the Picture to a ByteArrayOutputStream and draw it by reading that ByteArrayOutputStream
+ * back in and drawing it using Canvas.drawPicture(Picture.createFromStream(is)) but API 29 removed
+ * the long deprecated Picture.writeToStream and Picture.createFromStream. The preferred method now
+ * is to draw the Picture into a Bitmap.
  */
 public class Pictures extends GraphicsActivity {
 
@@ -114,7 +116,7 @@ public class Pictures extends GraphicsActivity {
 
         /**
          * We implement this to do our drawing. First we set the entire {@code Canvas canvas} to the
-         * color WHITE. Then we draw our {@code Picture mPicture} 4 different ways:
+         * color WHITE. Then we draw our {@code Picture mPicture} 3 different ways:
          * <ul>
          * <li>
          * Using the {@code canvas} method {@code drawPicture}
@@ -130,12 +132,6 @@ public class Pictures extends GraphicsActivity {
          * Setting the bounds of our {@code Drawable mDrawable} version of {@code mPicture} to
          * left of 0, top of 200, right of {@code getWidth} and bottom of 300, then using the
          * {@code draw} method of {@code mDrawable} to draw to the {@code Canvas canvas}
-         * </li>
-         * <li>
-         * Finally we open {@code ByteArrayOutputStream os}, write {@code Picture mPicture} to it,
-         * open {@code InputStream is}, translate the {@code Canvas canvas} to (0,300) and use the
-         * {@code drawPicture} method of {@code canvas} to draw the {@code Picture} read in from
-         * {@code is} by the method {@code Picture.createFromStream}.
          * </li>
          * </ul>
          * Notice the three different ways the {@code Picture} is located on the canvas, using
