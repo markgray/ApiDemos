@@ -25,6 +25,11 @@ import android.widget.SimpleAdapter
 import java.text.Collator
 import java.util.*
 
+/**
+ * This is the controlling activity for the entire application and is responsible for parsing the
+ * information returned by the `PackageManager` and using this information to populate the `ListView`
+ * it creates with entries allowing one to navigate to the various demo activities included in the app.
+ */
 @Suppress("MemberVisibilityCanBePrivate")
 open class ApiDemos : ListActivity() {
 
@@ -42,7 +47,7 @@ open class ApiDemos : ListActivity() {
      * the list entry is selected under the key "intent"). Finally we enable type filtering
      * for our `ListView`.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
