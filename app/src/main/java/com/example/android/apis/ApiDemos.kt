@@ -28,7 +28,8 @@ import java.util.*
 /**
  * This is the controlling activity for the entire application and is responsible for parsing the
  * information returned by the `PackageManager` and using this information to populate the `ListView`
- * it creates with entries allowing one to navigate to the various demo activities included in the app.
+ * it creates with entries allowing one to navigate to the various demo activities included in the
+ * app.
  */
 @Suppress("MemberVisibilityCanBePrivate")
 open class ApiDemos : ListActivity() {
@@ -79,7 +80,6 @@ open class ApiDemos : ListActivity() {
      * `onCreate` method to use when calling us to create the data used by its adapter.
      * (Very clever! Needs careful explanation).
      *
-     *
      * First we initialize our variable `List<Map<String, Object>> myData` with an instance of
      * `ArrayList` (this is the list we will return to our caller). We initialize our variable
      * `Intent mainIntent` with an intent with the action ACTION_MAIN (Start as a main entry
@@ -91,13 +91,11 @@ open class ApiDemos : ListActivity() {
      * saving the results in `List<ResolveInfo> list`. If `list` is null we return `myData`
      * to the caller.
      *
-     *
      * We declare `String[] prefixPath`, and set our variable `String prefixWithSlash` to
      * our parameter `prefix`. If `prefix` is equal to "" (the empty string, as it will be
      * at the beginning of our app) we set `prefixPath` to null, otherwise we split `prefixPath`
      * on the "/" character saving the results in `String[] prefixPath`, and set `prefixWithSlash`
      * to the string formed by adding an "/" to the end of `prefix`.
-     *
      *
      * We initialize `int len` to the length of `List<ResolveInfo> list`, and create a new
      * instance of `HashMap` to initialize our  variable `Map<String, Boolean> entries`.
@@ -108,7 +106,6 @@ open class ApiDemos : ListActivity() {
      * `labelSeq`, or if it is null we use the `name` field of the `activityInfo`
      * field of `info` to initialize `label`.
      *
-     *
      * If the length of `prefixWithSlash` is 0, or `label` starts with the string
      * `prefixWithSlash` we have found an activity we want to process further. We split
      * `label` on the "/" character and save the results in `String[] labelPath`. If
@@ -116,7 +113,6 @@ open class ApiDemos : ListActivity() {
      * of `labelPath[0]` (this happens the first time `onCreate` calls us), otherwise
      * we initialize it to the contents of `labelPath[ prefixPath.length ]` (the path segment in
      * the activities label which follows `prefixPath`).
-     *
      *
      * If our `prefixPath` array is one shorter than our `labelPath` array (we have found
      * a leaf "node" activity with no further segments in its path) we call our method `addItem`
@@ -126,7 +122,6 @@ open class ApiDemos : ListActivity() {
      * of the `activityInfo` field of `info` for the name of the package implementing the
      * desired component, and the `name` field of the `activityInfo` field of `info`
      * for the name of the class inside of the application package that will be used for the Intent.
-     *
      *
      * If there are more than one segments left in the `labelPath` array path compared to the
      * `prefixPath` array we first check to see if our map `entries` is null, skipping this
@@ -142,7 +137,6 @@ open class ApiDemos : ListActivity() {
      * Finally we store true under the `nextLabel` key in our map `entries` so we will skip
      * duplicate list entries for activities which share this sub-path, and then we loop back to process
      * the next `ResolveInfo` object in `list`.
-     *
      *
      * After processing all of `list` we sort `myData` using our `Comparator`
      * `sDisplayNameComparator` and return `myData` to our caller.
@@ -209,9 +203,9 @@ open class ApiDemos : ListActivity() {
      * Creates and returns an `Intent` created from the `activityInfo.applicationInfo.packageName`
      * and `activityInfo.name` fields of a `ResolveInfo` object returned by the `PackageManager`
      * method `queryIntentActivities`. We initialize our variable `Intent result` with a new
-     * instance, then call its `setClassName` method using our parameters `pkg` and
-     * `componentName` to set its explicit application package name and class name. Finally we return
-     * `result` to the caller.
+     * instance, then call its `setClassName` method using our parameters `pkg` and `componentName`
+     * to set its explicit application package name and class name. Finally we return `result` to
+     * the caller.
      *
      * @param pkg           The name of the package implementing the desired component.
      * @param componentName The name of a class inside of the application package that will be
