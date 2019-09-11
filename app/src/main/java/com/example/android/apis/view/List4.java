@@ -72,7 +72,7 @@ public class List4 extends ListActivity {
          */
         @Override
         public int getCount() {
-            return Shakespeare.TITLES.length;
+            return Shakespeare.INSTANCE.getTITLES().length;
         }
 
         /**
@@ -120,12 +120,12 @@ public class List4 extends ListActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             SpeechView sv;
             if (convertView == null) {
-                sv = new SpeechView(mContext, Shakespeare.TITLES[position],
-                        Shakespeare.DIALOGUE[position]);
+                sv = new SpeechView(mContext, Shakespeare.INSTANCE.getTITLES()[position],
+                        Shakespeare.INSTANCE.getDIALOGUE()[position]);
             } else {
                 sv = (SpeechView) convertView;
-                sv.setTitle(Shakespeare.TITLES[position]);
-                sv.setDialogue(Shakespeare.DIALOGUE[position]);
+                sv.setTitle(Shakespeare.INSTANCE.getTITLES()[position]);
+                sv.setDialogue(Shakespeare.INSTANCE.getDIALOGUE()[position]);
             }
 
             return sv;

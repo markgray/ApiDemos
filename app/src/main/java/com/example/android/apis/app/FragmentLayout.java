@@ -142,7 +142,7 @@ public class FragmentLayout extends Activity {
 
             // Populate list with our static array of titles.
             setListAdapter(new ArrayAdapter<>(getActivity(),
-                    android.R.layout.simple_list_item_activated_1, Shakespeare.TITLES));
+                    android.R.layout.simple_list_item_activated_1, Shakespeare.INSTANCE.getTITLES()));
 
             // Check to see if we have a frame in which to embed the details
             // fragment directly in the containing UI.
@@ -344,7 +344,7 @@ public class FragmentLayout extends Activity {
                     4, getActivity().getResources().getDisplayMetrics());
             text.setPadding(padding, padding, padding, padding);
             scroller.addView(text);
-            text.setText(Shakespeare.DIALOGUE[getShownIndex()]);
+            text.setText(Shakespeare.INSTANCE.getDIALOGUE()[getShownIndex()]);
             return scroller;
         }
     }

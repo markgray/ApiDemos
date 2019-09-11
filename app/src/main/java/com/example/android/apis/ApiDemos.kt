@@ -283,7 +283,8 @@ open class ApiDemos : ListActivity() {
          * Custom `Comparator` to sort our `List<Map<String, Object>> myData` list using
          * the strings stored under the key "title" as the alphabetical sort key.
          */
-        private val sDisplayNameComparator = object : Comparator<Map<String, Any>> {
+        private val sDisplayNameComparator =
+                object : Comparator<Map<String, Any>> {
             /**
              * `Collator` instance for the current default locale
              * that we use to compare two strings
