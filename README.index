@@ -24,7 +24,8 @@ Q                       v29
 Accessibility
   Accessibility/Accessibility Node Querying  v14
         .accessibility.TaskListActivity
-        .accessibility.TaskListView (also contains TaskAdapter)
+        .accessibility.TaskListView
+        .accessibility.TaskAdapter new so that kotlin can find it
         .layout.tasklist_main.xml
         .layout.tasklist_row.xml
             Starts up the task list that will interact with the AccessibilityService sample.
