@@ -36,7 +36,7 @@ import java.util.Locale;
 public class TaskBackService extends AccessibilityService implements OnInitListener {
 
     /** Tag for logging. */
-    private static final String LOG_TAG = "TaskBackService/onAccessibilityEvent";
+    private static final String LOG_TAG = "TaskBackService";
 
     /** Comma separator. */
     private static final String SEPARATOR = ", ";
@@ -113,7 +113,7 @@ public class TaskBackService extends AccessibilityService implements OnInitListe
         CharSequence taskLabel = labelNode.getText();
         final boolean isComplete = completeNode.isChecked();
 
-        String completeStr = null;
+        String completeStr;
         if (isComplete) {
             completeStr = getString(R.string.task_complete);
         } else {
@@ -147,7 +147,7 @@ public class TaskBackService extends AccessibilityService implements OnInitListe
             if (parent == null) {
                 return null;
             }
-            if (TASK_LIST_VIEW_CLASS_NAME.equals(parent.getClassName())) {
+            if (TASK_LIST_VIEW_CLASS_NAME.contentEquals(parent.getClassName())) {
                 return current;
             }
             // NOTE: Recycle the infos.
