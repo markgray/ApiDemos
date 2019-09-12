@@ -56,9 +56,9 @@ class TaskAdapter
     }
 
     /**
-     * Get a View that displays the data at the specified position in the data set. Expands the views
-     * for individual list entries, and sets content descriptions for use by the TaskBackAccessibilityService.
-     *
+     * Get a [View] that displays the data at the specified position in the data set. Expands the
+     * views for individual list entries, and sets content descriptions for use by the
+     * `TaskBackAccessibilityService`.
      *
      * If our parameter `View convertView` is null we initialize `LayoutInflater inflater`
      * with the LayoutInflater from context `mContext` and use it to inflate the layout file
@@ -102,8 +102,8 @@ class TaskAdapter
     }
 
     /**
-     * Get the data item associated with the specified position in the data set. We return the contents
-     * of `mLabels[position]` to the caller.
+     * Get the data item associated with the specified position in the data set. We return the
+     * contents of `mLabels[position]` to the caller.
      *
      * @param position Position of the item whose data we want
      * @return The data at the specified position.
@@ -113,8 +113,8 @@ class TaskAdapter
     }
 
     /**
-     * Get the row id associated with the specified position in the list. We just return our parameter
-     * `position` to the caller.
+     * Get the row id associated with the specified position in the list. We just return our
+     * parameter `position` to the caller.
      *
      * @param position The position of the item within the data set whose row id we want.
      * @return The id of the item at the specified position.
