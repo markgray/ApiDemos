@@ -46,7 +46,6 @@ class TaskListView
      * the code is grabbing the position of the item in the list, and assuming that to be the
      * priority for the task.
      *
-     *
      * We initialize our variable `AccessibilityEvent record` by retrieving a cached instance
      * if available or a new instance if not. We then pass `record` to our super's method
      * `onInitializeAccessibilityEvent` which will initialize it with information about the
