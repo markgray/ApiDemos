@@ -33,8 +33,7 @@ class ClockBackActivity : Activity() {
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.accessibility_service.
      * We initialize our variable `ImageButton button` by finding the view with the id R.id.button
-     * and set its `OnClickListener` to an anonymous class which starts the system settings
-     * activity.
+     * and set its `OnClickListener` to lambda which starts the system settings activity.
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
