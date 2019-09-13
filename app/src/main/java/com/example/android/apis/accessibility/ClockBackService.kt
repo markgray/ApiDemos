@@ -109,45 +109,25 @@ class ClockBackService : AccessibilityService() {
          * We implement this to receive messages. We switch on the `what` field of our parameter
          * `Message message`:
          *
-         *  *
-         * MESSAGE_SPEAK - we initialize `String utterance` with the `obj` field of
-         * `message` (cast to `String`), call the `speak` method of our field
-         * `TextToSpeech mTts` to speak `utterance` using the queuing strategy
-         * QUEUING_MODE_INTERRUPT, then return
-         *
-         *  *
-         * MESSAGE_STOP_SPEAK - we call the `stop` method of our field `TextToSpeech mTts`
-         * to interrupt the current utterance and discard all utterances in the queue, then return.
-         *
-         *  *
-         * MESSAGE_START_TTS - we initialize our field `TextToSpeech mTts` with a new instance
-         * using an anonymous class for the `TextToSpeech.OnInitListener` which just registers
-         * us as a broadcast receiver, and we then return.
-         *
-         *  *
-         * MESSAGE_SHUTDOWN_TTS - we call the `shutdown` method of `mTts` and return.
-         *
-         *  *
-         * MESSAGE_PLAY_EARCON - we initialize `int resourceId` with the `arg1` field of
-         * our argument `message`, call our method `playEarcon` with it to play the
-         * earcon with that id (an earcon is a brief, distinctive sound used to represent a specific
-         * event or convey other information), then we return.
-         *
-         *  *
-         * MESSAGE_STOP_PLAY_EARCON - we call the `stop` method of `mTts` and return.
-         *
-         *  *
-         * MESSAGE_VIBRATE - we initialize `int key` with the `arg1` field of our argument
-         * `message`, initialize `long[] pattern` with the array stored at position `key`
-         * in `SparseArray<long[]> sVibrationPatterns`, and if that is not null we call the
-         * `vibrate` method of `Vibrator mVibrator` with that pattern. In either case we
-         * return to our caller.
-         *
-         *  *
-         * MESSAGE_STOP_VIBRATE - we call the `cancel` method of `Vibrator mVibrator`
-         * and return.
-         *
-         *
+         *  - MESSAGE_SPEAK - we initialize `String utterance` with the `obj` field of `message`
+         *  (cast to `String`), call the `speak` method of our field `TextToSpeech mTts` to speak
+         *  `utterance` using the queuing strategy QUEUING_MODE_INTERRUPT, then return
+         *  - MESSAGE_STOP_SPEAK - we call the `stop` method of our field `TextToSpeech mTts` to
+         *  interrupt the current utterance and discard all utterances in the queue, then return.
+         *  - MESSAGE_START_TTS - we initialize our field `TextToSpeech mTts` with a new instance
+         *  using an anonymous class for the `TextToSpeech.OnInitListener` which just registers
+         *  us as a broadcast receiver, and we then return.
+         *  - MESSAGE_SHUTDOWN_TTS - we call the `shutdown` method of `mTts` and return.
+         *  - MESSAGE_PLAY_EARCON - we initialize `int resourceId` with the `arg1` field of our
+         *  argument `message`, call our method `playEarcon` with it to play the earcon with that
+         *  id (an earcon is a brief, distinctive sound used to represent a specific event or convey
+         *  other information), then we return.
+         *  - MESSAGE_STOP_PLAY_EARCON - we call the `stop` method of `mTts` and return.
+         *  - MESSAGE_VIBRATE - we initialize `int key` with the `arg1` field of our argument
+         *  `message`, initialize `long[] pattern` with the array stored at position `key` in
+         *  `SparseArray<long[]> sVibrationPatterns`, and if that is not null we call the `vibrate`
+         *  method of `Vibrator mVibrator` with that pattern. In either case we return to our caller.
+         *  - MESSAGE_STOP_VIBRATE - we call the `cancel` method of `Vibrator mVibrator` and return.
          *
          * @param message A `Message` object
          */
@@ -244,29 +224,18 @@ class ClockBackService : AccessibilityService() {
          * Provides feedback to announce the screen state change. Such a change is turning the screen
          * on or off. We switch on our field `int mProvidedFeedbackType`:
          *
-         *  *
-         * FEEDBACK_SPOKEN - we initialize `String utterance` with the string returned
-         * by our method `generateScreenOnOrOffUtternace` for our argument `feedbackIndex`,
-         * use `Handler mHandler` to load a `Message` with the `what` field of
-         * MESSAGE_SPEAK, and the `obj` field of `utterance` then send this `Message`
-         * to `Handler mHandler`, and return to our caller.
-         *
-         *  *
-         * FEEDBACK_AUDIBLE - we use `Handler mHandler` to load a `Message` with
-         * the `what` field of MESSAGE_PLAY_EARCON, the `arg1` field of `feedbackIndex`,
-         * and the `arg2` field of 0, then send this `Message` to `Handler mHandler`,
-         * and return to our caller.
-         *
-         *  *
-         * FEEDBACK_HAPTIC - we use `Handler mHandler` to load a `Message` with
-         * the `what` field of MESSAGE_VIBRATE, the `arg1` field of `feedbackIndex`,
-         * and the `arg2` field of 0, then send this `Message` to `Handler mHandler`,
-         * and return to our caller.
-         *
-         *  *
-         * default - we throw an IllegalStateException.
-         *
-         *
+         *  - FEEDBACK_SPOKEN - we initialize `String utterance` with the string returned
+         *  by our method `generateScreenOnOrOffUtternace` for our argument `feedbackIndex`,
+         *  use `Handler mHandler` to load a `Message` with the `what` field of MESSAGE_SPEAK,
+         *  and the `obj` field of `utterance` then send this `Message` to `Handler mHandler`,
+         *  and return to our caller.
+         *  - FEEDBACK_AUDIBLE - we use `Handler mHandler` to load a `Message` with the `what`
+         *  field of MESSAGE_PLAY_EARCON, the `arg1` field of `feedbackIndex`, and the `arg2`
+         *  field of 0, then send this `Message` to `Handler mHandler`, and return to our caller.
+         *  - FEEDBACK_HAPTIC - we use `Handler mHandler` to load a `Message` with the `what`
+         *  field of MESSAGE_VIBRATE, the `arg1` field of `feedbackIndex`, and the `arg2` field
+         *  of 0, then send this `Message` to `Handler mHandler`, and return to our caller.
+         *  - default - we throw an IllegalStateException.
          *
          * @param feedbackIndex The index of the feedback in the statically
          * mapped feedback resources.
@@ -416,33 +385,20 @@ class ClockBackService : AccessibilityService() {
      * Configures the service according to a ringer mode. Possible
      * configurations:
      *
-     *
-     * 1. `AudioManager#RINGER_MODE_SILENT`
-     * Goal:     Provide only custom haptic feedback.
-     * Approach: Take over the haptic feedback by configuring this service to provide
-     * such and do so. This way the system will not call the default haptic
-     * feedback service KickBack.
-     * Take over the audible and spoken feedback by configuring this
-     * service to provide such feedback but not doing so. This way the system
-     * will not call the default spoken feedback service TalkBack and the
-     * default audible feedback service SoundBack.
-     *
-     *
-     *
-     * 2. `AudioManager#RINGER_MODE_VIBRATE`
-     * Goal:     Provide custom audible and default haptic feedback.
-     * Approach: Take over the audible feedback and provide custom one.
-     * Take over the spoken feedback but do not provide such.
-     * Let some other service provide haptic feedback (KickBack).
-     *
-     *
-     *
-     * 3. `AudioManager#RINGER_MODE_NORMAL`
-     * Goal:     Provide custom spoken, default audible and default haptic feedback.
-     * Approach: Take over the spoken feedback and provide custom one.
-     * Let some other services provide audible feedback (SoundBack) and haptic
-     * feedback (KickBack).
-     *
+     *  1. `AudioManager#RINGER_MODE_SILENT` Goal: Provide only custom haptic feedback.
+     *  Approach: Take over the haptic feedback by configuring this service to provide
+     *  such and do so. This way the system will not call the default haptic feedback
+     *  service KickBack. Take over the audible and spoken feedback by configuring this
+     *  service to provide such feedback but not doing so. This way the system will not
+     *  call the default spoken feedback service TalkBack and the default audible feedback
+     *  service SoundBack.
+     *  2. `AudioManager#RINGER_MODE_VIBRATE` Goal: Provide custom audible and default
+     *  haptic feedback. Approach: Take over the audible feedback and provide custom one.
+     *  Take over the spoken feedback but do not provide such. Let some other service provide
+     *  haptic feedback (KickBack).
+     *  3. `AudioManager#RINGER_MODE_NORMAL` Goal: Provide custom spoken, default audible and
+     *  default haptic feedback. Approach: Take over the spoken feedback and provide custom one.
+     *  Let some other services provide audible feedback (SoundBack) and haptic feedback (KickBack).
      *
      * @param ringerMode The device ringer mode.
      */
@@ -673,7 +629,11 @@ class ClockBackService : AccessibilityService() {
          *
          * This works with AlarmClock and Clock whose package name changes in different releases
          */
-        private val PACKAGE_NAMES = arrayOf("com.android.alarmclock", "com.google.android.deskclock", "com.android.deskclock")
+        private val PACKAGE_NAMES = arrayOf(
+                "com.android.alarmclock",
+                "com.google.android.deskclock",
+                "com.android.deskclock"
+        )
 
         // Message types we are passing around.
 
@@ -764,9 +724,9 @@ class ClockBackService : AccessibilityService() {
          */
         private val sVibrationPatterns = SparseArray<LongArray>()
 
-        /*
-     * Initializes our {@code sVibrationPatterns} {@code SparseArray}.
-     */
+        /**
+         * Initializes our `sVibrationPatterns` `SparseArray`.
+         */
         init {
             sVibrationPatterns.put(AccessibilityEvent.TYPE_VIEW_CLICKED, longArrayOf(0L, 100L))
             sVibrationPatterns.put(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED, longArrayOf(0L, 100L))
@@ -784,9 +744,9 @@ class ClockBackService : AccessibilityService() {
         @SuppressLint("UseSparseArrays")
         private val sSoundsResourceIds = SparseArray<Int>()
 
-        /*
-     * Initializes our {@code sSoundsResourceIds} {@code SparseArray}.
-     */
+        /**
+         * Initializes our `sSoundsResourceIds` `SparseArray`.
+         */
         init {
             sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_CLICKED, R.raw.sound_view_clicked)
             sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED, R.raw.sound_view_clicked)
