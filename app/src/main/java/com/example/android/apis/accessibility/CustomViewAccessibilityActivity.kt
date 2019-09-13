@@ -43,7 +43,6 @@ import kotlin.math.max
  * package. This sample shows how to implement the accessibility behavior via both
  * inheritance (non backwards compatible) and composition (backwards compatible).
  *
- *
  * While the Android framework has a diverse portfolio of views tailored for various
  * use cases, sometimes a developer needs a specific functionality not implemented
  * by the standard views. A solution is to write a custom view that extends one of the
@@ -67,7 +66,6 @@ class CustomViewAccessibilityActivity : Activity() {
     /**
      * Demonstrates how to enhance the accessibility support via inheritance.
      *
-     *
      * **Note:** Using inheritance may break your application's
      * backwards compatibility. In particular, overriding a method that takes as
      * an argument or returns a class not present on an older platform
@@ -77,7 +75,6 @@ class CustomViewAccessibilityActivity : Activity() {
      * `View.onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo)`
      * will prevent you application from running on a platform older than
      * `ICE_CREAM_SANDWICH API 14`.
-     *
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     class AccessibleCompoundButtonInheritance
@@ -157,11 +154,9 @@ class CustomViewAccessibilityActivity : Activity() {
     /**
      * Demonstrates how to enhance the accessibility support via composition.
      *
-     *
      * **Note:** Using composition ensures that your application is
      * backwards compatible. The android-support-v4 library has API that allow
      * using the accessibility APIs in a backwards compatible manner.
-     *
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     class AccessibleCompoundButtonComposition
@@ -277,11 +272,9 @@ class CustomViewAccessibilityActivity : Activity() {
      * This is a base toggle button class whose accessibility is not tailored
      * to reflect the new functionality it implements.
      *
-     *
      * **Note:** This is not a sample implementation of a toggle
      * button, rather a simple class needed to demonstrate how to refine the
      * accessibility support of a custom View.
-     *
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     open class BaseToggleButton
@@ -296,18 +289,15 @@ class CustomViewAccessibilityActivity : Activity() {
      * `int textSize` and initialize `DisplayMetrics displayMetrics` with the current
      * display metrics that are in effect for the resources of `context`.
      *
-     *
      * If `valid` is true (it is never so!) we set `textSize` to the data of `typedValue`
      * as a dimension, scaled by the display density and scaling information of `displayMetrics`
      * and cast to `int`. If `valid` is false we set `textSize` to 15 times the
      * logical density of the display, cast to `int`. In either case we set the text size of
      * `mTextPaint` to `textSize`.
      *
-     *
      * We fetch the resolved attribute android.R.attr.textColorPrimary (most prominent text color)
      * into `typedValue`, then initialize `int textColor` by retrieving the color from
      * the resource id of it. We then set the color of `mTextPaint` to `textColor`.
-     *
      *
      * We set `mTextOn` to the string with resource id R.string.accessibility_custom_on ("On"),
      * and `mTextOff` to the string with resource id R.string.accessibility_custom_off ("Off").
@@ -321,11 +311,9 @@ class CustomViewAccessibilityActivity : Activity() {
      */
     @JvmOverloads constructor(context: Context, attrs: AttributeSet, defStyle: Int = android.R.attr.buttonStyle) : View(context, attrs, defStyle) {
         /**
-         * Flag to indicate whether our toggle button is checked (true) or not checked (false)
-         */
-        /**
-         * Returns whether our toggle button is checked (true) or not (false). We just return the value
-         * of our field `boolean mChecked` to the caller.
+         * Flag to indicate whether our toggle button is checked (true) or not checked (false).
+         * Returns whether our toggle button is checked (true) or not (false). We just return the
+         * value of our field `boolean mChecked` to the caller.
          *
          * @return value of our field `boolean mChecked`
          */
@@ -389,10 +377,10 @@ class CustomViewAccessibilityActivity : Activity() {
         }
 
         /**
-         * Call this view's OnClickListener, if it is defined. First we call our super's implementation
-         * of `performClick` saving the return value in `boolean handled`. If `handled`
-         * is false we toggle the value of `mChecked` and invalidate our view. In either case we
-         * return `handled` to the caller.
+         * Call this view's `OnClickListener`, if it is defined. First we call our super's
+         * implementation of `performClick` saving the return value in `boolean handled`. If
+         * `handled` is false we toggle the value of `mChecked` and invalidate our view. In
+         * either case we return `handled` to the caller.
          *
          * @return True there was an assigned OnClickListener that was called, false
          * otherwise is returned.
