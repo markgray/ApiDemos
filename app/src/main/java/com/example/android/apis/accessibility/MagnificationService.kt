@@ -66,18 +66,15 @@ class MagnificationService : AccessibilityService() {
      * are first delivered here before they are passed to the device policy, the
      * input method, or applications.
      *
-     *
      * **Note:** It is important that key events are handled in such
      * a way that the event stream that would be passed to the rest of the system
      * is well-formed. For example, handling the down event but not the up event
      * and vice versa would generate an inconsistent event stream.
      *
-     *
      * **Note:** The key events delivered in this method are copies
      * and modifying them will have no effect on the events that will be passed
      * to the system. This method is intended to perform purely filtering
      * functionality.
-     *
      *
      * We initialize our variable `int keyCode` with the keycode of our parameter
      * `KeyEvent event`. If `keyCode` is not KEYCODE_VOLUME_UP or KEYCODE_VOLUME_DOWN
@@ -157,7 +154,6 @@ class MagnificationService : AccessibilityService() {
      * called after the system has successfully bound to the service. If is
      * convenient to use this method for setting the [AccessibilityServiceInfo].
      *
-     *
      * First we initialize `AccessibilityServiceInfo info` with an [AccessibilityServiceInfo]
      * describing this [AccessibilityService]. If `info` is null, we are not really connected
      * so we return having done nothing. Otherwise we or in the FLAG_REQUEST_FILTER_KEY_EVENTS flag
@@ -167,10 +163,6 @@ class MagnificationService : AccessibilityService() {
      * this service to `info`. Finally we add an anonymous `OnMagnificationChangedListener`
      * to receive notification of changes in the state of magnification. Its `onMagnificationChanged`
      * override just logs the new magnification scale.
-     *
-     * @see AccessibilityServiceInfo
-     *
-     * @see .setServiceInfo
      */
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     public override fun onServiceConnected() {
