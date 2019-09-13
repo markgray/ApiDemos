@@ -95,12 +95,11 @@ public class ActivityTransitionDetails extends Activity {
         String name = getIntent().getStringExtra(KEY_ID);
         if (name != null) {
             mName = name;
-            mImageResourceId = ActivityTransition.getDrawableIdForKey(name);
+            mImageResourceId = ActivityTransition.Companion.getDrawableIdForKey(name);
         }
 
         Drawable drawable;
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
-            //noinspection deprecation
             drawable = getResources().getDrawable(mImageResourceId);
         } else {
             drawable = getResources().getDrawable(mImageResourceId, null);
