@@ -82,7 +82,7 @@ class ActivityTransitionDetails : Activity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`. We set the background to a random color, and then we set our content view
-     * to our layout file R.layout.titleImage. We initialize `ImageView titleImage` by finding
+     * to our layout file R.layout.image_details. We initialize `ImageView titleImage` by finding
      * the view with the id R.id.titleImage, then set its drawable to the image that our method
      * `getHeroDrawable` finds that corresponds to the name string stored under the key KEY_ID
      * in the Intent which launched our activity.
@@ -104,7 +104,6 @@ class ActivityTransitionDetails : Activity() {
      * an ActivityOptions.makeSceneTransitionAnimation into the bundle used with the Intent
      * to launch ActivityTransition.class
      *
-     *
      * First we create `Intent intent` with `ActivityTransition` as the target activity
      * to launch. Then we add `mName` as an extra under the key KEY_ID. We create the scene
      * transition animation `ActivityOptions activityOptions` using the shared element name
@@ -117,12 +116,22 @@ class ActivityTransitionDetails : Activity() {
     fun clicked(v: View) {
         val intent = Intent(this, ActivityTransition::class.java)
         intent.putExtra(KEY_ID, mName)
-        val activityOptions = ActivityOptions.makeSceneTransitionAnimation(this, v, "hero")
+        val activityOptions = ActivityOptions.makeSceneTransitionAnimation(
+                this,
+                v,
+                "hero"
+        )
         startActivity(intent, activityOptions.toBundle())
     }
 
+    /**
+     * Contains our static constants and methods.
+     */
     companion object {
 
+        /**
+         * TAG that could be used for logging (but isn't)
+         */
         @Suppress("unused")
         private const val TAG = "ActivityTransitionDetails"
 
