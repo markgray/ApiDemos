@@ -76,11 +76,11 @@ class BouncingBalls : Activity() {
      * with an `ObjectAnimator` that animates between int values of the "backgroundColor" property
      * value of this `View` between RED and BLUE. Set its duration to 3000 milliseconds, set the
      * evaluator to be used when calculating its animated values to a new instance of `ArgbEvaluator`
-     * (performs type interpolation between integer values that represent ARGB colors), set its repeat count
-     * to INFINITE, its repeat mode to REVERSE and then start it running.
+     * (performs type interpolation between integer values that represent ARGB colors), set its repeat
+     * count to INFINITE, its repeat mode to REVERSE and then start it running.
      *
-     * @param context `Context` to use to access resources, this in the `onCreate`
-     * override or `BouncingBalls`.
+     * @param context `Context` to use to access resources, *this* in the `onCreate`
+     * override of `BouncingBalls`.
      */
     (context: Context) : View(context) {
 
@@ -95,7 +95,11 @@ class BouncingBalls : Activity() {
             // Note that setting the background color will automatically invalidate the
             // view, so that the animated color, and the bouncing balls, get redisplayed on
             // every frame of the animation.
-            val colorAnim = ObjectAnimator.ofInt(this, "backgroundColor", RED, BLUE)
+            val colorAnim = ObjectAnimator.ofInt(
+                    this,
+                    "backgroundColor",
+                    RED,
+                    BLUE)
             colorAnim.duration = 3000
             colorAnim.setEvaluator(ArgbEvaluator())
             colorAnim.repeatCount = ValueAnimator.INFINITE
@@ -262,6 +266,9 @@ class BouncingBalls : Activity() {
          */
         private const val BLUE = -0x7f7f01
 
+        /**
+         * TAG that could be used for logging (but isn't).
+         */
         @Suppress("unused")
         private const val TAG = "BouncingBalls"
     }
