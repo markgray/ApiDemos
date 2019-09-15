@@ -239,16 +239,16 @@ class BouncingBalls : Activity() {
          * this by first saving the current matrix and clip onto a private stack using canvas.save(),
          * then it moves the canvas to the location of the current ball, calls the .draw(Canvas) of
          * the ball's shape to draw it, and then restores the canvas from the stack (repeat for each
-         * ball in ArrayList<ShapeHolder> balls.
+         * ball in `ArrayList<ShapeHolder> balls`.
          *
          * @param canvas the canvas on which the background will be drawn
-        </ShapeHolder> */
+         */
         override fun onDraw(canvas: Canvas) {
             for (i in balls.indices) {
                 val shapeHolder = balls[i]
                 canvas.save()
                 canvas.translate(shapeHolder.x, shapeHolder.y)
-                shapeHolder.shape.draw(canvas)
+                shapeHolder.shape!!.draw(canvas)
                 canvas.restore()
             }
         }
