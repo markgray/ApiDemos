@@ -61,7 +61,7 @@ class AnimationCloning : Activity() {
      * We initialize `LinearLayout container` by finding the view with id R.id.container, then
      * we initialize `MyAnimationView animView` with a new instance and add that view to
      * `container`. We initialize `Button starter` by finding the view with the id
-     * R.id.startButton ("Run") and set its `OnClickListener` to an anonymous class which calls
+     * R.id.startButton ("Run") and set its `OnClickListener` to a lambda which calls
      * the `startAnimation` method of `animView` which creates the animation if this is
      * the first time it is called then starts the animation running.
      *
