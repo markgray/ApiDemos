@@ -42,15 +42,14 @@ class LayoutAnimationsByDefault : Activity() {
      * then we set our content view to the layout layout_animations_by_default. We initialize our variable
      * `GridLayout gridContainer` by finding the view with id R.id.gridContainer, and initialize our
      * variable `Button addButton` by finding the view with id R.id.addNewButton ("Add Button").
-     * We set the `OnClickListener` of `addButton` to an anonymous class whose `onClick`
-     * override creates a new button, sets its text to the string value of `numButtons` (post
-     * incrementing `numButtons`), sets its `OnClickListener` to an anonymous class which
-     * will remove the button from `gridContainer` when the button is clicked. The `onClick`
-     * override of `addButton` then adds the new button to `gridContainer` at the location 0
-     * for the first button then at position 1 for all the following buttons. The GridView attribute
-     * android:animateLayoutChanges="true" causes a default LayoutTransition object to be set
-     * on the ViewGroup container and default animations will run when layout changes occur (both when
-     * adding and removing a button).
+     * We set the `OnClickListener` of `addButton` to a lambda whose `onClick` override creates a
+     * new button, sets its text to the string value of `numButtons` (post incrementing `numButtons`),
+     * sets its `OnClickListener` to a lambda which will remove the button from `gridContainer` when
+     * the button is clicked. The `onClick` override of `addButton` then adds the new button to
+     * `gridContainer` at the location 0 for the first button then at position 1 for all the following
+     * buttons. The GridView attribute android:animateLayoutChanges="true" causes a default
+     * LayoutTransition object to be set on the ViewGroup container and default animations will run
+     * when layout changes occur (both when adding and removing a button).
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
