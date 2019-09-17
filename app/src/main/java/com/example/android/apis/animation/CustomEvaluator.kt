@@ -60,8 +60,8 @@ class CustomEvaluator : Activity() {
      * our field `mDensity` with the logical density of our display, then initialize `LinearLayout container`
      * by finding the view with id R.id.container. Next we create a new instance of `MyAnimationView` and
      * add it to `container`. We initialize `Button starter` by finding the view with id
-     * R.id.startButton and set its `OnClickListener` to an anonymous class which calls the
-     * `startAnimation` method of `animView` to start the animation running.
+     * R.id.startButton and set its `OnClickListener` to a lambda which calls the `startAnimation`
+     * method of `animView` to start the animation running.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
@@ -190,7 +190,7 @@ class CustomEvaluator : Activity() {
          * between `startXY` and `endXY` using a new instance of `XYEvaluator` as the
          * `TypeEvaluator` that will be called on each animation frame to provide the necessary
          * interpolation between the Object values to derive the animated value. Then we set the duration
-         * of the animation to 1500 milliseconds, and add this as an `AnimatorUpdateListener`
+         * of the animation to 1500 milliseconds, and add *this* as an `AnimatorUpdateListener`
          * (our `onAnimationUpdate` override will be called on every animation frame, after the
          * current frame's values have been calculated)
          */
