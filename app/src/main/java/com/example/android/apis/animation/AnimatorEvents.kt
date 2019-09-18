@@ -117,17 +117,14 @@ class AnimatorEvents : Activity() {
      * its alpha to .5f, and initialize our field `TextView endTextAnimator` by finding the view
      * with id R.id.endTextAnimator and set its alpha to .5f.
      *
-     *
      * We initialize `CheckBox endCB` by finding the view with id R.id.endCB ("End Immediately").
      * We initialize `Button starter` by finding the view with id R.id.startButton ("Play") and
      * set its `OnClickListener` to an anonymous class which calls the `startAnimation`
      * method of `MyAnimationView animView` with the checked state of `CheckBox endCB`.
      *
-     *
      * We initialize `Button canceler` by finding the view with id R.id.cancelButton ("Cancel")
      * and set its `OnClickListener` to an anonymous class which calls the `cancelAnimation`
      * method of `MyAnimationView animView`.
-     *
      *
      * Finally we initialize `Button ender` by finding the view with id R.id.endButton ("End")
      * and set its `OnClickListener` to an anonymous class which calls the `endAnimation`
@@ -225,7 +222,6 @@ class AnimatorEvents : Activity() {
          * We add "this" as an `AnimatorUpdateListener` for `yAnim`, and also add "this"
          * as a `AnimatorListener`.
          *
-         *
          * We create `ObjectAnimator xAnim` to animates the "x" property name (the y coordinate)
          * of the ball from the current position to the current position plus 300px with a duration
          * of 1000 milliseconds. We set its repeat count to 2, its repeatMode to REVERSE, and set
@@ -234,7 +230,6 @@ class AnimatorEvents : Activity() {
          * strange in that they are played during the creation of the `AnimatorSet animation`
          * and do not participate with the event demonstration. Together they animate the alpha of
          * the `ShapeHolder ball` from 1f to .5f with a duration of 1000 milliseconds.
-         *
          *
          * The finish of the process is to create the `AnimatorSet animation`, configure it to
          * play together `yAnim`, and `xAnim`. We then add "this" as an `AnimatorListener`
@@ -271,11 +266,11 @@ class AnimatorEvents : Activity() {
          * Starts `Animator animation` running. First we set our field `endImmediately`
          * to our argument `endImmediately` for later use by the callback onAnimationStart.
          * Then we set the alpha of the text used to display the occurrence of events to .5f
-         * (`startText`, `repeatText`, `cancelText`, `endText`,
-         * `startTextAnimator`, `repeatTextAnimator`, `cancelTextAnimator`, and
-         * `endTextAnimator`) to signify that they have not occurred yet. Then we call our
-         * method `createAnimation` to create the `Animator animation`. Finally we call
-         * the `start` method of `animation` to start the animation running.
+         * (`startText`, `repeatText`, `cancelText`, `endText`, `startTextAnimator`,
+         * `repeatTextAnimator`, `cancelTextAnimator`, and `endTextAnimator`) to signify that
+         * they have not occurred yet. Then we call our method `createAnimation` to create the
+         * `Animator animation`. Finally we call the `start` method of `animation` to start the
+         * animation running.
          *
          * @param endImmediately used to set the field `endImmediately` for use by the callback
          * `onAnimationStart` (which will call the `end` method of
