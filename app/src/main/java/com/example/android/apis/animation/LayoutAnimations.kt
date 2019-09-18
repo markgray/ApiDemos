@@ -89,7 +89,8 @@ class LayoutAnimations : Activity() {
     internal lateinit var customChangingAppearingAnim: Animator
     /**
      * Our custom `Animator` for the `LayoutTransition.CHANGE_DISAPPEARING` animation, it is the
-     * animation that runs on those items that are changing due to a new item disappearing from the container.
+     * animation that runs on those items that are changing due to a new item disappearing from
+     * the container.
      */
     internal lateinit var customChangingDisappearingAnim: Animator
     /**
@@ -283,7 +284,6 @@ class LayoutAnimations : Activity() {
      * This method creates the four different custom animations which can be selected to be used
      * by when the appropriate CheckBox's are "checked"
      *
-     *
      * For the CHANGE_APPEARING (Changing while Adding) part of the animation it defines property
      * value holders to animate property "left" from 0 to 1, "top" from 0 to 1, "right" from 0 to 1,
      * "bottom" from 0 to 1, "scaleX" from 1f to 0f to 1f, "scaleY" from 1f to 0f to 1f. It then
@@ -295,7 +295,6 @@ class LayoutAnimations : Activity() {
      * flipping right to left from the back side to the front side. You can see this animation in
      * action by clicking the ADD BUTTON Button when both the "Custom Animations" and "In"
      * CheckBox are checked.
-     *
      *
      * For the CHANGE_DISAPPEARING (Changing while Removing) part of the animation it defines an
      * additional PropertyValueHolder for "rotation" constructed of three KeyFrame's (kf0 - a
@@ -311,7 +310,6 @@ class LayoutAnimations : Activity() {
      * effect of rotating the Button's to the right of the Button removed clockwise while moving
      * them into their new positions when both the "Custom Animations" and "Out" CheckBox are checked.
      *
-     *
      * For the APPEARING (Adding) part of the animation it creates a simple "rotationY"
      * ObjectAnimator customAppearingAnim which rotates the Button from 90f degrees to 0f degrees,
      * sets the duration of customAppearingAnim to be the same as the current LayoutTransition
@@ -321,7 +319,6 @@ class LayoutAnimations : Activity() {
      * Button's about the y axis when the ADD BUTTON button is pressed, starting from sticking
      * directly out of the plane of the View, to flat when both the "Custom Animations" and
      * "Changing In" CheckBox are checked.
-     *
      *
      * For the DISAPPEARING (Removing) part of the animation it creates a simple "rotationX"
      * ObjectAnimator customDisappearingAnim which rotates the Button from 0f degrees (flat) to
@@ -345,7 +342,8 @@ class LayoutAnimations : Activity() {
         val pvhScaleX = PropertyValuesHolder.ofFloat("scaleX", 1f, 0f, 1f)
         val pvhScaleY = PropertyValuesHolder.ofFloat("scaleY", 1f, 0f, 1f)
         customChangingAppearingAnim = ObjectAnimator.ofPropertyValuesHolder(
-                this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhScaleX, pvhScaleY).setDuration(transition.getDuration(LayoutTransition.CHANGE_APPEARING) * 100)
+                this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhScaleX, pvhScaleY)
+                .setDuration(transition.getDuration(LayoutTransition.CHANGE_APPEARING) * 100)
         customChangingAppearingAnim.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(anim: Animator) {
                 val view = (anim as ObjectAnimator).target as View?
@@ -360,7 +358,8 @@ class LayoutAnimations : Activity() {
         val kf2 = Keyframe.ofFloat(1f, 0f)
         val pvhRotation = PropertyValuesHolder.ofKeyframe("rotation", kf0, kf1, kf2)
         customChangingDisappearingAnim = ObjectAnimator.ofPropertyValuesHolder(
-                this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhRotation).setDuration(transition.getDuration(LayoutTransition.CHANGE_DISAPPEARING) * 100)
+                this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhRotation)
+                .setDuration(transition.getDuration(LayoutTransition.CHANGE_DISAPPEARING) * 100)
         customChangingDisappearingAnim.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(anim: Animator) {
                 val view = (anim as ObjectAnimator).target as View?
@@ -369,7 +368,9 @@ class LayoutAnimations : Activity() {
         })
 
         // Adding
-        customAppearingAnim = ObjectAnimator.ofFloat(null, "rotationY", 90f, 0f).setDuration(transition.getDuration(LayoutTransition.APPEARING) * 100)
+        customAppearingAnim = ObjectAnimator.ofFloat(
+                null, "rotationY", 90f, 0f)
+                .setDuration(transition.getDuration(LayoutTransition.APPEARING) * 100)
         customAppearingAnim.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(anim: Animator) {
                 val view = (anim as ObjectAnimator).target as View?
@@ -378,7 +379,9 @@ class LayoutAnimations : Activity() {
         })
 
         // Removing
-        customDisappearingAnim = ObjectAnimator.ofFloat(null, "rotationX", 0f, 90f).setDuration(transition.getDuration(LayoutTransition.DISAPPEARING) * 100)
+        customDisappearingAnim = ObjectAnimator.ofFloat(
+                null, "rotationX", 0f, 90f)
+                .setDuration(transition.getDuration(LayoutTransition.DISAPPEARING) * 100)
         customDisappearingAnim.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(anim: Animator) {
                 val view = (anim as ObjectAnimator).target as View?
