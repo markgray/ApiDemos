@@ -36,7 +36,7 @@ import com.example.android.apis.R
  * This application demonstrates how to use LayoutTransition to automate transition animations
  * as items are hidden or shown in a container. Pressing the "Show Buttons" button while the
  * "Custom Animations" CheckBox is checked causes a crash which blanks out the system wallpaper.
- * (Sometimes?)
+ * (Sometimes? This may be fixed as of Android Q -- at least it doesn't seem to happen anymore).
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class LayoutAnimationsHideShow : Activity() {
@@ -156,7 +156,6 @@ class LayoutAnimationsHideShow : Activity() {
      * This method creates complex CHANGE_APPEARING, CHANGE_DISAPPEARING, APPEARING, and
      * DISAPPEARING animations and configures the LayoutTransition mTransitioner to use them.
      *
-     *
      * For the CHANGE_APPEARING (Changing while Adding) part of the animation it defines property
      * value holders to animate property "left" from 0 to 1, "top" from 0 to 1, "right" from 0 to 1,
      * "bottom" from 0 to 1, "scaleX" from 1f to 0f to 1f, "scaleY" from 1f to 0f to 1f. It then
@@ -167,7 +166,6 @@ class LayoutAnimationsHideShow : Activity() {
      * has the appearance of a card flipping right to left from the back side to the front side.
      * You can see this animation in action by clicking the SHOW BUTTONS Button after deleting
      * Button's with the "Hide (GONE)" CheckBox checked.
-     *
      *
      * For the CHANGE_DISAPPEARING (Changing while Removing) part of the animation it defines an
      * additional PropertyValueHolder for "rotation" constructed of three KeyFrame's (kf0 - a
@@ -182,7 +180,6 @@ class LayoutAnimationsHideShow : Activity() {
      * the Button's to the right of the Button removed clockwise when the "Hide (GONE)" CheckBox
      * is checked while moving them into their new positions.
      *
-     *
      * For the APPEARING (Adding) part of the animation it creates a simple "rotationY"
      * ObjectAnimator animIn which rotates the Button from 90f degrees to 0f degrees, sets
      * the duration of animIn to be the same as the current LayoutTransition mTransitioner, and
@@ -191,7 +188,6 @@ class LayoutAnimationsHideShow : Activity() {
      * It has the effect of rotating the appearing Button's about the y axis when the SHOW BUTTONS
      * button is pressed (after removing a Button or two), starting from sticking directly out of
      * the plane of the View, to flat.
-     *
      *
      * For the DISAPPEARING (Removing) part of the animation it creates a simple "rotationX"
      * ObjectAnimator animOut which rotates the Button from 0f degrees (flat) to 90f degrees
@@ -212,7 +208,8 @@ class LayoutAnimationsHideShow : Activity() {
         val pvhScaleX = PropertyValuesHolder.ofFloat("scaleX", 1f, 0f, 1f)
         val pvhScaleY = PropertyValuesHolder.ofFloat("scaleY", 1f, 0f, 1f)
         val changeIn = ObjectAnimator.ofPropertyValuesHolder(
-                this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhScaleX, pvhScaleY).setDuration(mTransitioner!!.getDuration(LayoutTransition.CHANGE_APPEARING))
+                this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhScaleX, pvhScaleY)
+                .setDuration(mTransitioner!!.getDuration(LayoutTransition.CHANGE_APPEARING))
         mTransitioner!!.setAnimator(LayoutTransition.CHANGE_APPEARING, changeIn)
         changeIn.addListener(object : AnimatorListenerAdapter() {
             /**
@@ -233,9 +230,11 @@ class LayoutAnimationsHideShow : Activity() {
         val kf0 = Keyframe.ofFloat(0f, 0f)
         val kf1 = Keyframe.ofFloat(.9999f, 360f)
         val kf2 = Keyframe.ofFloat(1f, 0f)
-        val pvhRotation = PropertyValuesHolder.ofKeyframe("rotation", kf0, kf1, kf2)
+        val pvhRotation = PropertyValuesHolder
+                .ofKeyframe("rotation", kf0, kf1, kf2)
         val changeOut = ObjectAnimator.ofPropertyValuesHolder(
-                this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhRotation).setDuration(mTransitioner!!.getDuration(LayoutTransition.CHANGE_DISAPPEARING))
+                this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhRotation)
+                .setDuration(mTransitioner!!.getDuration(LayoutTransition.CHANGE_DISAPPEARING))
         mTransitioner!!.setAnimator(LayoutTransition.CHANGE_DISAPPEARING, changeOut)
         changeOut.addListener(object : AnimatorListenerAdapter() {
             /**
@@ -251,7 +250,8 @@ class LayoutAnimationsHideShow : Activity() {
         })
 
         // Adding
-        val animIn = ObjectAnimator.ofFloat(null, "rotationY", 90f, 0f)
+        val animIn = ObjectAnimator.ofFloat(
+                null, "rotationY", 90f, 0f)
                 .setDuration(mTransitioner!!.getDuration(LayoutTransition.APPEARING))
         mTransitioner!!.setAnimator(LayoutTransition.APPEARING, animIn)
         animIn.addListener(object : AnimatorListenerAdapter() {
@@ -268,7 +268,9 @@ class LayoutAnimationsHideShow : Activity() {
         })
 
         // Removing
-        val animOut = ObjectAnimator.ofFloat(null, "rotationX", 0f, 90f).setDuration(mTransitioner!!.getDuration(LayoutTransition.DISAPPEARING))
+        val animOut = ObjectAnimator.ofFloat(
+                null, "rotationX", 0f, 90f)
+                .setDuration(mTransitioner!!.getDuration(LayoutTransition.DISAPPEARING))
         mTransitioner!!.setAnimator(LayoutTransition.DISAPPEARING, animOut)
         animOut.addListener(object : AnimatorListenerAdapter() {
             /**
