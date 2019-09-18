@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.example.android.apis.animation;
+package com.example.android.apis.animation
 
-import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
+import android.content.Context
+import android.view.View
+import android.view.ViewGroup
 
 /**
  * A layout that arranges its children in a grid.  The size of the
@@ -29,36 +29,35 @@ import android.view.ViewGroup;
  * child order (the order in which they were added, or the index
  * in addViewAt.  Views can not span multiple cells.
  *
- * <p>This class was copied from the FixedGridLayout Api demo; see that demo for
- * more information on using the layout.</p>
+ *
+ * This class was copied from the FixedGridLayout Api demo; see that demo for
+ * more information on using the layout.
  */
-public class FixedGridLayout extends ViewGroup {
+@Suppress("MemberVisibilityCanBePrivate")
+class FixedGridLayout
+/**
+ * Creates a FixedGridLayout with the Context context. We just call our super's constructor.
+ *
+ * @param context Context of the activity creating the ViewGroup
+ */
+(context: Context) : ViewGroup(context) {
     /**
      * Width of each of our children's views.
      */
-    int mCellWidth;
+    internal var mCellWidth: Int = 0
     /**
      * Height of each of our children's views.
      */
-    int mCellHeight;
-
-    /**
-     * Creates a FixedGridLayout with the Context context. We just call our super's constructor.
-     *
-     * @param context Context of the activity creating the ViewGroup
-     */
-    public FixedGridLayout(Context context) {
-        super(context);
-    }
+    internal var mCellHeight: Int = 0
 
     /**
      * Sets the mCellWidth field and schedules a layout pass of the view tree.
      *
      * @param px cell width in pixels
      */
-    public void setCellWidth(int px) {
-        mCellWidth = px;
-        requestLayout();
+    fun setCellWidth(px: Int) {
+        mCellWidth = px
+        requestLayout()
     }
 
     /**
@@ -66,14 +65,14 @@ public class FixedGridLayout extends ViewGroup {
      *
      * @param px cell height in pixels
      */
-    public void setCellHeight(int px) {
-        mCellHeight = px;
-        requestLayout();
+    fun setCellHeight(px: Int) {
+        mCellHeight = px
+        requestLayout()
     }
 
     /**
      * Measure the view and its content to determine the measured width and the
-     * measured height. This method is invoked by {@link #measure(int, int)} and
+     * measured height. This method is invoked by [.measure] and
      * should be overridden by subclasses to provide accurate and efficient
      * measurement of their contents. It first creates MeasureSpec's encoding
      * mCellWidth and mCellHeight for the mode AT_MOST, it then tells each child
@@ -86,29 +85,28 @@ public class FixedGridLayout extends ViewGroup {
      * setMeasuredDimension.
      *
      * @param widthMeasureSpec horizontal space requirements as imposed by the parent.
-     *                         The requirements are encoded with
-     *                         {@link android.view.View.MeasureSpec}.
+     * The requirements are encoded with
+     * [android.view.View.MeasureSpec].
      * @param heightMeasureSpec vertical space requirements as imposed by the parent.
-     *                         The requirements are encoded with
-     *                         {@link android.view.View.MeasureSpec}.
+     * The requirements are encoded with
+     * [android.view.View.MeasureSpec].
      */
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int cellWidthSpec = MeasureSpec.makeMeasureSpec(mCellWidth,
-                MeasureSpec.AT_MOST);
-        int cellHeightSpec = MeasureSpec.makeMeasureSpec(mCellHeight,
-                MeasureSpec.AT_MOST);
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val cellWidthSpec = MeasureSpec.makeMeasureSpec(mCellWidth,
+                MeasureSpec.AT_MOST)
+        val cellHeightSpec = MeasureSpec.makeMeasureSpec(mCellHeight,
+                MeasureSpec.AT_MOST)
 
-        int count = getChildCount();
-        for (int index=0; index<count; index++) {
-            final View child = getChildAt(index);
-            child.measure(cellWidthSpec, cellHeightSpec);
+        val count = childCount
+        for (index in 0 until count) {
+            val child = getChildAt(index)
+            child.measure(cellWidthSpec, cellHeightSpec)
         }
         // Use the size our parents gave us, but default to a minimum size to avoid
         // clipping transitioning children
-        int minCount =  count > 3 ? count : 3;
-        setMeasuredDimension(resolveSize(mCellWidth * minCount, widthMeasureSpec),
-                resolveSize(mCellHeight * minCount, heightMeasureSpec));
+        val minCount = if (count > 3) count else 3
+        setMeasuredDimension(View.resolveSize(mCellWidth * minCount, widthMeasureSpec),
+                View.resolveSize(mCellHeight * minCount, heightMeasureSpec))
     }
 
     /**
@@ -129,36 +127,35 @@ public class FixedGridLayout extends ViewGroup {
      * @param r       Right position, relative to parent
      * @param b       Bottom position, relative to parent
      */
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        int cellWidth = mCellWidth;
-        int cellHeight = mCellHeight;
-        int columns = (r - l) / cellWidth;
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        val cellWidth = mCellWidth
+        val cellHeight = mCellHeight
+        var columns = (r - l) / cellWidth
         if (columns < 0) {
-            columns = 1;
+            columns = 1
         }
-        int x = 0;
-        int y = 0;
-        int i = 0;
-        int count = getChildCount();
-        for (int index=0; index<count; index++) {
-            final View child = getChildAt(index);
+        var x = 0
+        var y = 0
+        var i = 0
+        val count = childCount
+        for (index in 0 until count) {
+            val child = getChildAt(index)
 
-            int w = child.getMeasuredWidth();
-            int h = child.getMeasuredHeight();
+            val w = child.measuredWidth
+            val h = child.measuredHeight
 
-            int left = x + ((cellWidth-w)/2);
-            int top = y + ((cellHeight-h)/2);
+            val left = x + (cellWidth - w) / 2
+            val top = y + (cellHeight - h) / 2
 
-            child.layout(left, top, left+w, top+h);
-            if (i >= (columns-1)) {
+            child.layout(left, top, left + w, top + h)
+            if (i >= columns - 1) {
                 // advance to next row
-                i = 0;
-                x = 0;
-                y += cellHeight;
+                i = 0
+                x = 0
+                y += cellHeight
             } else {
-                i++;
-                x += cellWidth;
+                i++
+                x += cellWidth
             }
         }
     }
