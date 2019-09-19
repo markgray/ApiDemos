@@ -76,10 +76,10 @@ class MultiPropertyAnimation : Activity() {
      */
     inner class MyAnimationView
     /**
-     * Adds four balls to the ArrayList<ShapeHolder> balls.
+     * Adds four balls to the `ArrayList<ShapeHolder> balls`.
      *
      * @param context the MultiPropertyAnimation Activity context
-    </ShapeHolder> */
+     */
     (context: Context) : View(context), ValueAnimator.AnimatorUpdateListener {
 
         val balls = ArrayList<ShapeHolder>()
@@ -96,28 +96,27 @@ class MultiPropertyAnimation : Activity() {
 
         /**
          * Create the animations used for the four balls.
-         *
-         * balls[0] ObjectAnimator yBouncer is an ObjectAnimator of the "y" coordinate of the
+         *  - `balls[0]` ObjectAnimator yBouncer is an ObjectAnimator of the "y" coordinate of the
          * ShapeHolder holding balls[0]. It uses a BounceInterpolator with a Duration
          * of "DURATION" (1500 milliseconds). It results in a ball which falls from
          * the top of the screen and bounces several times at the bottom of the screen.
          * The AnimatorUpdateListener is set to "this" and the overridden callback
          * this.onAnimationUpdate merely invalidates the View causing our onDraw callback
          * to be called for every frame of this animation in order to draw all four balls.
-         * balls[1] ObjectAnimator yAlphaBouncer is an ObjectAnimator constructed from two
+         *  - `balls[1]` ObjectAnimator yAlphaBouncer is an ObjectAnimator constructed from two
          * PropertyValuesHolder's pvhY (animates "y" from the top to bottom of the View)
          * and pvhAlpha (animates "alpha" from 1.0f to 0.0f). Its duration is set to
          * "DURATION/2" (750 milliseconds), its TimeInterpolator is set to an instance
          * of AccelerateInterpolator, its repeat count is 1, and the repeat mode is REVERSE.
          * This results in a ball which drops from the top to the bottom while fading out
          * at the same time, then returning to the top while fading in.
-         * balls[2] ObjectAnimator whxyBouncer is an ObjectAnimator created from 4 PropertyValuesHolder's
+         *  - `balls[2]` ObjectAnimator whxyBouncer is an ObjectAnimator created from 4 PropertyValuesHolder's
          * pvhW ("width"), pvhH ("height"), pvTX ("x"), and pvTY ("y") using the method
          * ObjectAnimator.ofPropertyValuesHolder with a duration of DURATION/2 (750
          * milliseconds), a repeat count of 1 and a repeat mode of REVERSE. It has the
          * effect of expanding the size of the ball then shrinking it back to the
          * original size without moving.
-         * balls[3] ObjectAnimator yxBouncer is an ObjectAnimator created from PropertyValuesHolder's
+         *  - `balls[3]` ObjectAnimator yxBouncer is an ObjectAnimator created from PropertyValuesHolder's
          * for "x" and "y" (pvhX and pvhY). pvhY animates "y" from the top to the bottom
          * of the View using the default linear animation, pvhX is a PropertyValuesHolder
          * created from three Keyframe's (kf0, kf1, and kf2) which divides the animation of
@@ -134,52 +133,97 @@ class MultiPropertyAnimation : Activity() {
         private fun createAnimation() {
             if (bounceAnim == null) {
                 var ball: ShapeHolder = balls[0]
-                val yBouncer = ObjectAnimator.ofFloat(ball, "y",
-                        ball.y, height - BALL_SIZE).setDuration(DURATION.toLong())
+                val yBouncer = ObjectAnimator.ofFloat(
+                        ball,
+                        "y",
+                        ball.y,
+                        height - BALL_SIZE
+                ).setDuration(DURATION.toLong())
                 yBouncer.interpolator = BounceInterpolator()
                 yBouncer.addUpdateListener(this)
 
                 ball = balls[1]
-                var pvhY = PropertyValuesHolder.ofFloat("y", ball.y,
-                        height - BALL_SIZE)
-                val pvhAlpha = PropertyValuesHolder.ofFloat("alpha", 1.0f, 0f)
-                val yAlphaBouncer = ObjectAnimator.ofPropertyValuesHolder(ball,
-                        pvhY, pvhAlpha).setDuration((DURATION / 2).toLong())
+                var pvhY = PropertyValuesHolder.ofFloat(
+                        "y",
+                        ball.y,
+                        height - BALL_SIZE
+                )
+                val pvhAlpha = PropertyValuesHolder.ofFloat(
+                        "alpha",
+                        1.0f,
+                        0f
+                )
+                val yAlphaBouncer = ObjectAnimator.ofPropertyValuesHolder(
+                        ball,
+                        pvhY,
+                        pvhAlpha
+                ).setDuration((DURATION / 2).toLong())
                 yAlphaBouncer.interpolator = AccelerateInterpolator()
                 yAlphaBouncer.repeatCount = 1
                 yAlphaBouncer.repeatMode = ValueAnimator.REVERSE
 
 
                 ball = balls[2]
-                val pvhW = PropertyValuesHolder.ofFloat("width", ball.width,
-                        ball.width * 2)
-                val pvhH = PropertyValuesHolder.ofFloat("height", ball.height,
-                        ball.height * 2)
-                val pvTX = PropertyValuesHolder.ofFloat("x", ball.x,
-                        ball.x - BALL_SIZE / 2f)
-                val pvTY = PropertyValuesHolder.ofFloat("y", ball.y,
-                        ball.y - BALL_SIZE / 2f)
-                val whxyBouncer = ObjectAnimator.ofPropertyValuesHolder(ball, pvhW, pvhH,
-                        pvTX, pvTY).setDuration((DURATION / 2).toLong())
+                val pvhW = PropertyValuesHolder.ofFloat(
+                        "width",
+                        ball.width, ball.width * 2
+                )
+                val pvhH = PropertyValuesHolder.ofFloat(
+                        "height",
+                        ball.height,
+                        ball.height * 2
+                )
+                val pvTX = PropertyValuesHolder.ofFloat(
+                        "x",
+                        ball.x,
+                        ball.x - BALL_SIZE / 2f
+                )
+                val pvTY = PropertyValuesHolder.ofFloat(
+                        "y",
+                        ball.y,
+                        ball.y - BALL_SIZE / 2f
+                )
+                val whxyBouncer = ObjectAnimator.ofPropertyValuesHolder(
+                        ball, pvhW,
+                        pvhH,
+                        pvTX,
+                        pvTY
+                ).setDuration((DURATION / 2).toLong())
                 whxyBouncer.repeatCount = 1
                 whxyBouncer.repeatMode = ValueAnimator.REVERSE
 
                 ball = balls[3]
-                pvhY = PropertyValuesHolder.ofFloat("y", ball.y, height - BALL_SIZE)
+                pvhY = PropertyValuesHolder.ofFloat(
+                        "y",
+                        ball.y,
+                        height - BALL_SIZE
+                )
                 val ballX = ball.x
                 val kf0 = Keyframe.ofFloat(0f, ballX)
                 val kf1 = Keyframe.ofFloat(.5f, ballX + 100f)
                 val kf2 = Keyframe.ofFloat(1f, ballX + 50f)
-                val pvhX = PropertyValuesHolder.ofKeyframe("x", kf0, kf1, kf2)
-                val yxBouncer = ObjectAnimator.ofPropertyValuesHolder(ball, pvhY,
-                        pvhX).setDuration((DURATION / 2).toLong())
+                val pvhX = PropertyValuesHolder.ofKeyframe(
+                        "x",
+                        kf0,
+                        kf1,
+                        kf2
+                )
+                val yxBouncer = ObjectAnimator.ofPropertyValuesHolder(
+                        ball,
+                        pvhY,
+                        pvhX
+                ).setDuration((DURATION / 2).toLong())
                 yxBouncer.repeatCount = 1
                 yxBouncer.repeatMode = ValueAnimator.REVERSE
 
 
                 bounceAnim = AnimatorSet()
-                (bounceAnim as AnimatorSet).playTogether(yBouncer, yAlphaBouncer, whxyBouncer,
-                        yxBouncer)
+                (bounceAnim as AnimatorSet).playTogether(
+                        yBouncer,
+                        yAlphaBouncer,
+                        whxyBouncer,
+                        yxBouncer
+                )
             }
         }
 
@@ -195,12 +239,12 @@ class MultiPropertyAnimation : Activity() {
         /**
          * Creates a circle, and places it in a ShapeHolder that it configures with the (x,y)
          * coordinates that it is called with and a random color, then adds that ShapeHolder
-         * to the ArrayList<ShapeHolder> balls, returning the new ShapeHolder to allow chaining.
+         * to the `ArrayList<ShapeHolder> balls`, returning the new ShapeHolder to allow chaining.
          *
          * @param x x coordinate of ball
          * @param y y coordinate of ball
          * @return ShapeHolder containing a ball at (x,y) with a random color.
-        </ShapeHolder> */
+         */
         @Suppress("SameParameterValue")
         private fun addBall(x: Float, y: Float): ShapeHolder {
             val circle = OvalShape()
@@ -225,7 +269,7 @@ class MultiPropertyAnimation : Activity() {
 
         /**
          * Called when the View needs to draw itself. For each of the ShapeHolder ball's in the
-         * ArrayList<ShapeHolder> balls the canvas has a translation to the current (x,y) ball
+         * `ArrayList<ShapeHolder> balls` the canvas has a translation to the current (x,y) ball
          * location pre-concatenated to it (the x,y coordinates are fetched from the ShapeHolder),
          * the Shape contained in the ShapeHolder is then fetched and instructed to draw itself.
          * The canvas is then restored to its previous state by pre-concatenating a translation
@@ -233,7 +277,7 @@ class MultiPropertyAnimation : Activity() {
          * location.
          *
          * @param canvas Canvas that we will draw our View on
-        </ShapeHolder> */
+         */
         override fun onDraw(canvas: Canvas) {
             for (ball in balls) {
                 canvas.translate(ball.x, ball.y)
