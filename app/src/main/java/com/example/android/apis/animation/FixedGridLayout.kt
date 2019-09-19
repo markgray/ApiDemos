@@ -21,17 +21,14 @@ import android.view.View
 import android.view.ViewGroup
 
 /**
- * A layout that arranges its children in a grid.  The size of the
- * cells is set by the setCellSize method and the
- * android:cell_width and android:cell_height attributes in XML.
- * The number of rows and columns is determined at runtime.  Each
- * cell contains exactly one view, and they flow in the natural
- * child order (the order in which they were added, or the index
- * in addViewAt.  Views can not span multiple cells.
+ * A layout that arranges its children in a grid.  The size of the cells is set by the setCellSize
+ * method and the android:cell_width and android:cell_height attributes in XML. The number of rows
+ * and columns is determined at runtime. Each cell contains exactly one view, and they flow in the
+ * natural child order (the order in which they were added, or the index in addViewAt. Views can
+ * not span multiple cells.
  *
- *
- * This class was copied from the FixedGridLayout Api demo; see that demo for
- * more information on using the layout.
+ * This class was copied from the FixedGridLayout Api demo; see that demo for more information on
+ * using the layout.
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class FixedGridLayout
@@ -72,7 +69,7 @@ class FixedGridLayout
 
     /**
      * Measure the view and its content to determine the measured width and the
-     * measured height. This method is invoked by [.measure] and
+     * measured height. This method is invoked by [measure] and
      * should be overridden by subclasses to provide accurate and efficient
      * measurement of their contents. It first creates MeasureSpec's encoding
      * mCellWidth and mCellHeight for the mode AT_MOST, it then tells each child
