@@ -301,10 +301,11 @@ class PathAnimations : Activity(), RadioGroup.OnCheckedChangeListener, View.OnLa
                 // There must be a method setPoint(PointF) on the animated object.
                 // Because setPoint takes a PointF parameter, no TypeConverter is necessary.
                 // In this case, the animated object is PathAnimations.
+
                 mAnimator = ObjectAnimator.ofObject(
                         this,
                         "point",
-                        null as TypeConverter<PointF, *>,
+                        hack, // a null TypeConverter<PointF, *> (pitiful!)
                         path
                 )
             R.id.property_setter ->
@@ -449,6 +450,7 @@ class PathAnimations : Activity(), RadioGroup.OnCheckedChangeListener, View.OnLa
 
     companion object {
 
+        val hack: TypeConverter<PointF, *>? = null
         /**
          * Smiley face path that our frog traces.
          */
