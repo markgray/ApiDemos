@@ -123,62 +123,45 @@ class AnimationLoading : Activity() {
          * Loads, creates and configures the Animator animation used for the 8 balls. If this is
          * the first time it is called (animation == null) it creates animators for the balls as
          * follows:
-         *
-         *  *
-         * balls[0] (50,50) Uses an ObjectAnimator anim created by loading the animation from
-         * the file R.animator.object_animator which animates "y" from the starting point
-         * to 200 with a repeat count of 1 and a repeatMode of "reverse", uses "this" as
-         * the UpdateListener which causes our classes override of onAnimationUpdate to
-         * be called which invalidates the View and sets the "y" value of the ShapeHolder
-         * holding balls[0] to the current value of the animation.
-         *
-         *  *
-         * balls[1] (200,50) Uses a ValueAnimator fader which it creates by loading the file
-         * R.animator.animator which animates a value from 1 to 0 with a repeat count
-         * of 1 and a repeatMode of "reverse", and sets the UpdateListener to an
-         * AnimatorUpdateListener which sets the alpha of the ShapeHolder holding
-         * balls[1] to the current value of the animation (relying on the call to
-         * invalidate() for balls[0] to trigger a re-draw of the View.)
-         *
-         *  *
-         * balls[2] (350,50) Uses an AnimatorSet seq which it creates by loading the file
-         * R.animator.animator_set which creates two objectAnimator's to animate the "x"
-         * value from the current value to 200, and the "y" value from the current value
-         * to 400 with a repeat count of 1 and a repeatMode of "reverse"
-         *
-         *  *
-         * balls[3] (500,50) Color.GREEN Uses an ObjectAnimator colorizer which it creates by
-         * loading the file R.animator.color_animator which animates the value "color"
-         * of the ShapeHolder holding balls[3] from "#0f0" to "#00ffff" with a repeat
-         * count of 1 and a repeatMode of "reverse"
-         *
-         *  *
-         * balls[4] (650,50) Use an ObjectAnimator animPvh which it loads from the file
-         * R.animator.object_animator_pvh which animates "x" from 0 to 400, and "y"
-         * from 0 to 200 using propertyValuesHolder's
-         *
-         *  *
-         * balls[5] (800,50) Uses an ObjectAnimator animPvhKf which it creates by loading the file
-         * R.animator.object_animator_pvh_kf which uses propertyValuesHolder to hold
-         * keyframe specs for x and y and uses the default linear interpolator
-         *
-         *  *
-         * balls[6] (950,50) Uses a ValueAnimator faderKf which it loads from the file
-         * R.animator.value_animator_pvh_kf which uses propertyValuesHolder to hold
-         * keyframe specs for a value, it then sets the UpdateListener to an
-         * AnimatorUpdateListener which sets the alpha of the ShapeHolder holding balls[6]
-         * to the current animated value.
-         *
-         *  *
-         * balls[7] (800,50) Color.YELLOW Uses an ObjectAnimator animPvhKfInterpolated which
-         * it loads from R.animator.object_animator_pvh_kf_interpolated which uses
-         * propertyValuesHolder's to hold keyframe specs for "x" and "y" and has an
-         * accelerate interpolator applied on each keyframe interval. In comparison,
-         * the animation defined in R.anim.object_animator_pvh_kf for balls[5] uses
-         * the default linear interpolator throughout the animation. As these two
-         * animations use the exact same path, the effect of the per-keyframe interpolator
-         * has been made obvious.
-         *
+         *  - balls[0] (50,50) Uses an ObjectAnimator anim created by loading the animation from
+         *  the file R.animator.object_animator which animates "y" from the starting point
+         *  to 200 with a repeat count of 1 and a repeatMode of "reverse", uses "this" as
+         *  the UpdateListener which causes our classes override of onAnimationUpdate to
+         *  be called which invalidates the View and sets the "y" value of the ShapeHolder
+         *  holding balls[0] to the current value of the animation.
+         *  - balls[1] (200,50) Uses a ValueAnimator fader which it creates by loading the file
+         *  R.animator.animator which animates a value from 1 to 0 with a repeat count
+         *  of 1 and a repeatMode of "reverse", and sets the UpdateListener to an
+         *  AnimatorUpdateListener which sets the alpha of the ShapeHolder holding
+         *  balls[1] to the current value of the animation (relying on the call to
+         *  invalidate() for balls[0] to trigger a re-draw of the View.)
+         *  - balls[2] (350,50) Uses an AnimatorSet seq which it creates by loading the file
+         *  R.animator.animator_set which creates two objectAnimator's to animate the "x"
+         *  value from the current value to 200, and the "y" value from the current value
+         *  to 400 with a repeat count of 1 and a repeatMode of "reverse"
+         *  - balls[3] (500,50) Color.GREEN Uses an ObjectAnimator colorizer which it creates by
+         *  loading the file R.animator.color_animator which animates the value "color"
+         *  of the ShapeHolder holding balls[3] from "#0f0" to "#00ffff" with a repeat
+         *  count of 1 and a repeatMode of "reverse"
+         *  - balls[4] (650,50) Use an ObjectAnimator animPvh which it loads from the file
+         *  R.animator.object_animator_pvh which animates "x" from 0 to 400, and "y"
+         *  from 0 to 200 using propertyValuesHolder's
+         *  - balls[5] (800,50) Uses an ObjectAnimator animPvhKf which it creates by loading the file
+         *  R.animator.object_animator_pvh_kf which uses propertyValuesHolder to hold
+         *  keyframe specs for x and y and uses the default linear interpolator
+         *  - balls[6] (950,50) Uses a ValueAnimator faderKf which it loads from the file
+         *  R.animator.value_animator_pvh_kf which uses propertyValuesHolder to hold
+         *  keyframe specs for a value, it then sets the UpdateListener to an
+         *  AnimatorUpdateListener which sets the alpha of the ShapeHolder holding balls[6]
+         *  to the current animated value.
+         *  - balls[7] (800,50) Color.YELLOW Uses an ObjectAnimator animPvhKfInterpolated which
+         *  it loads from R.animator.object_animator_pvh_kf_interpolated which uses
+         *  propertyValuesHolder's to hold keyframe specs for "x" and "y" and has an
+         *  accelerate interpolator applied on each keyframe interval. In comparison,
+         *  the animation defined in R.anim.object_animator_pvh_kf for balls[5] uses
+         *  the default linear interpolator throughout the animation. As these two
+         *  animations use the exact same path, the effect of the per-keyframe interpolator
+         *  has been made obvious.
          *
          * It then creates the `AnimatorSet animation` configures it to playTogether the
          * 8 Animator's created for the 8 balls.
@@ -296,11 +279,9 @@ class AnimationLoading : Activity() {
          * It sets `gradient` as the shader of `paint`, adds `shapeHolder` to
          * `ArrayList<ShapeHolder> balls` and returns `shapeHolder` to the caller.
          *
-         *
-         * The Paint instance "paint" is fetched from
-         * "shapeHolder" and Random colors and a RadialGradient created and are used to set the
-         * Shader used by the ShapeHolder's Paint instance, and the ShapeHolder is then add()'ed
-         * to the balls List.
+         * The Paint instance "paint" is fetched from "shapeHolder" and Random colors and a
+         * RadialGradient created and are used to set the Shader used by the ShapeHolder's Paint
+         * instance, and the ShapeHolder is then add()'ed to the balls List.
          *
          * @param x x coordinate for ball
          * @param y y coordinate for ball
