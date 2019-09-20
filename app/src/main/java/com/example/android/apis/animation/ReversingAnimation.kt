@@ -14,36 +14,36 @@
  * limitations under the License.
  */
 
-package com.example.android.apis.animation;
+package com.example.android.apis.animation
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.RadialGradient;
-import android.graphics.Shader;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
-import com.example.android.apis.R;
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
+import android.annotation.TargetApi
+import android.app.Activity
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.RadialGradient
+import android.graphics.Shader
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.OvalShape
+import android.os.Build
+import android.os.Bundle
+import android.view.View
+import android.view.animation.AccelerateInterpolator
+import android.widget.Button
+import android.widget.LinearLayout
+import com.example.android.apis.R
 
 /**
  * Demonstrates the use of android.animation.ValueAnimator.reverse() method to play an
  * animation in "reverse".
  */
+@Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class ReversingAnimation extends Activity {
+class ReversingAnimation : Activity() {
 
     /**
      * Called when the activity is starting. First we call through to the super class's
@@ -58,41 +58,22 @@ public class ReversingAnimation extends Activity {
      *
      * @param savedInstanceState always null since onSaveInstanceState is not called
      */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.animation_reversing);
-        LinearLayout container = findViewById(R.id.container);
-        final MyAnimationView animView = new MyAnimationView(this);
-        container.addView(animView);
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.animation_reversing)
+        val container = findViewById<LinearLayout>(R.id.container)
+        val animView = MyAnimationView(this)
+        container.addView(animView)
 
-        Button starter = findViewById(R.id.startButton);
-        starter.setOnClickListener(new View.OnClickListener() {
-            /**
-             * Starts our MyAnimationView animation running
-             * (creating it first if necessary)
-             *
-             * @param v Button View which was clicked
-             */
-            @Override
-            public void onClick(View v) {
-                animView.startAnimation();
-            }
-        });
+        val starter = findViewById<Button>(R.id.startButton)
+        starter.setOnClickListener {
+            animView.startAnimation()
+        }
 
-        Button reverser = findViewById(R.id.reverseButton);
-        reverser.setOnClickListener(new View.OnClickListener() {
-            /**
-             * Starts our MyAnimationView animation running in reverse
-             * (creating it first if necessary)
-             *
-             * @param v Button View which was clicked
-             */
-            @Override
-            public void onClick(View v) {
-                animView.reverseAnimation();
-            }
-        });
+        val reverser = findViewById<Button>(R.id.reverseButton)
+        reverser.setOnClickListener {
+            animView.reverseAnimation()
+        }
 
     }
 
@@ -102,26 +83,26 @@ public class ReversingAnimation extends Activity {
      * and stays there. If MyAnimationView.reverseAnimation is called it "falls" from the bottom
      * to the top of the View (no matter where it starts) and stays there.
      */
-    public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener {
+    inner class MyAnimationView
+    /**
+     * Initializes a new instance of MyAnimationView. First calls our super's constructor,
+     * then creates a ShapeHolder ball containing a 25px by 25px ball.
+     *
+     * @param context ReversingAnimation Activity Context
+     */
+    (context: Context) : View(context), ValueAnimator.AnimatorUpdateListener {
 
         /**
-         * {@code ObjectAnimator} which animates our {@code ShapeHolder ball}
+         * `ObjectAnimator` which animates our `ShapeHolder ball`
          */
-        ValueAnimator bounceAnim = null;
+        internal var bounceAnim: ValueAnimator? = null
         /**
-         * {@code ShapeHolder} holding our ball, it is the object which is moved via its "y" property
+         * `ShapeHolder` holding our ball, it is the object which is moved via its "y" property
          */
-        ShapeHolder ball;
+        internal var ball: ShapeHolder
 
-        /**
-         * Initializes a new instance of MyAnimationView. First calls our super's constructor,
-         * then creates a ShapeHolder ball containing a 25px by 25px ball.
-         *
-         * @param context ReversingAnimation Activity Context
-         */
-        public MyAnimationView(Context context) {
-            super(context);
-            ball = createBall(25, 25);
+        init {
+            ball = createBall(25f, 25f)
         }
 
         /**
@@ -132,21 +113,21 @@ public class ReversingAnimation extends Activity {
          * callback override of onAnimationUpdate is called for every frame of the animation.
          * (It just invalidates the View causing it to be redrawn every frame.)
          */
-        private void createAnimation() {
+        private fun createAnimation() {
             if (bounceAnim == null) {
-                bounceAnim = ObjectAnimator.ofFloat(ball, "y", ball.getY(), getHeight() - 50f)
-                        .setDuration(1500);
-                bounceAnim.setInterpolator(new AccelerateInterpolator(2f));
-                bounceAnim.addUpdateListener(this);
+                bounceAnim = ObjectAnimator.ofFloat(ball, "y", ball.y, height - 50f)
+                        .setDuration(1500)
+                bounceAnim!!.interpolator = AccelerateInterpolator(2f)
+                bounceAnim!!.addUpdateListener(this)
             }
         }
 
         /**
          * Create the animation bounceAnim (if necessary) and start it running.
          */
-        public void startAnimation() {
-            createAnimation();
-            bounceAnim.start();
+        fun startAnimation() {
+            createAnimation()
+            bounceAnim!!.start()
         }
 
         /**
@@ -157,9 +138,9 @@ public class ReversingAnimation extends Activity {
          * the current animation; future playing of the animation will use the default behavior
          * of playing forward.
          */
-        public void reverseAnimation() {
-            createAnimation();
-            bounceAnim.reverse();
+        fun reverseAnimation() {
+            createAnimation()
+            bounceAnim!!.reverse()
         }
 
         /**
@@ -173,10 +154,9 @@ public class ReversingAnimation extends Activity {
          *
          * @param seekTime The time, in milliseconds, to which the animation is advanced or rewound.
          */
-        @SuppressWarnings("unused")
-        public void seek(long seekTime) {
-            createAnimation();
-            bounceAnim.setCurrentPlayTime(seekTime);
+        fun seek(seekTime: Long) {
+            createAnimation()
+            bounceAnim!!.currentPlayTime = seekTime
         }
 
         /**
@@ -192,25 +172,25 @@ public class ReversingAnimation extends Activity {
          * @param y y coordinate of ball's ShapeHolder (offset by 25px)
          * @return ShapeHolder containing a ball
          */
-        @SuppressWarnings("SameParameterValue")
-        private ShapeHolder createBall(float x, float y) {
-            OvalShape circle = new OvalShape();
-            circle.resize(50f, 50f);
-            ShapeDrawable drawable = new ShapeDrawable(circle);
-            ShapeHolder shapeHolder = new ShapeHolder(drawable);
-            shapeHolder.setX(x - 25f);
-            shapeHolder.setY(y - 25f);
-            int red = (int)(Math.random() * 255);
-            int green = (int)(Math.random() * 255);
-            int blue = (int)(Math.random() * 255);
-            int color = 0xff000000 | red << 16 | green << 8 | blue;
-            Paint paint = drawable.getPaint(); //new Paint(Paint.ANTI_ALIAS_FLAG);
-            int darkColor = 0xff000000 | red/4 << 16 | green/4 << 8 | blue/4;
-            RadialGradient gradient = new RadialGradient(37.5f, 12.5f,
-                    50f, color, darkColor, Shader.TileMode.CLAMP);
-            paint.setShader(gradient);
-            shapeHolder.setPaint(paint);
-            return shapeHolder;
+        @Suppress("SameParameterValue")
+        private fun createBall(x: Float, y: Float): ShapeHolder {
+            val circle = OvalShape()
+            circle.resize(50f, 50f)
+            val drawable = ShapeDrawable(circle)
+            val shapeHolder = ShapeHolder(drawable)
+            shapeHolder.x = x - 25f
+            shapeHolder.y = y - 25f
+            val red = (Math.random() * 255).toInt()
+            val green = (Math.random() * 255).toInt()
+            val blue = (Math.random() * 255).toInt()
+            val color = -0x1000000 or (red shl 16) or (green shl 8) or blue
+            val paint = drawable.paint //new Paint(Paint.ANTI_ALIAS_FLAG);
+            val darkColor = -0x1000000 or (red / 4 shl 16) or (green / 4 shl 8) or blue / 4
+            val gradient = RadialGradient(37.5f, 12.5f,
+                    50f, color, darkColor, Shader.TileMode.CLAMP)
+            paint.shader = gradient
+            shapeHolder.paint = paint
+            return shapeHolder
         }
 
         /**
@@ -222,12 +202,12 @@ public class ReversingAnimation extends Activity {
          *
          * @param canvas the canvas on which the background will be drawn
          */
-        @Override
-        protected void onDraw(Canvas canvas) {
-            canvas.save();
-            canvas.translate(ball.getX(), ball.getY());
-            ball.getShape().draw(canvas);
-            canvas.restore();
+        override fun onDraw(canvas: Canvas) {
+            canvas.save()
+            canvas.translate(ball.x, ball.y)
+
+            ball.shape!!.draw(canvas)
+            canvas.restore()
         }
 
         /**
@@ -237,9 +217,8 @@ public class ReversingAnimation extends Activity {
          *
          * @param animation The animation which has moved to another frame
          */
-        @Override
-        public void onAnimationUpdate(ValueAnimator animation) {
-            invalidate();
+        override fun onAnimationUpdate(animation: ValueAnimator) {
+            invalidate()
         }
 
     }
