@@ -13,48 +13,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.apis.animation;
+package com.example.android.apis.animation
 
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.transition.Scene;
-import android.transition.TransitionInflater;
-import android.transition.TransitionManager;
-import com.example.android.apis.R;
+import android.annotation.TargetApi
+import android.app.Activity
+import android.os.Build
+import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import android.transition.Scene
+import android.transition.TransitionInflater
+import android.transition.TransitionManager
+import com.example.android.apis.R
 
 /**
  * This application demonstrates some of the capabilities and uses of the
- * {@link android.transition transitions} APIs. Scenes and a TransitionManager
+ * [transitions][android.transition] APIs. Scenes and a TransitionManager
  * are loaded from resource files and transitions are run between those scenes
  * as well as a dynamically-configured scene.
  */
+@Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.KITKAT)
-public class Transitions extends Activity {
+class Transitions : Activity() {
 
     /**
-     * {@code Scene} created from the layout file R.layout.transition_scene1
+     * `Scene` created from the layout file R.layout.transition_scene1
      */
-    Scene mScene1;
+    internal lateinit var mScene1: Scene
     /**
-     * {@code Scene} created from the layout file R.layout.transition_scene2
+     * `Scene` created from the layout file R.layout.transition_scene2
      */
-    Scene mScene2;
+    internal lateinit var mScene2: Scene
     /**
-     * {@code Scene} created from the layout file R.layout.transition_scene3
+     * `Scene` created from the layout file R.layout.transition_scene3
      */
-    Scene mScene3;
+    internal lateinit var mScene3: Scene
     /**
-     * {@code LinearLayout} in our layout file which we use to display our "Scenes".
+     * `LinearLayout` in our layout file which we use to display our "Scenes".
      */
-    ViewGroup mSceneRoot;
+    internal lateinit var mSceneRoot: ViewGroup
     /**
-     * {@link TransitionManager} object loaded from the xml file R.transition.transitions_mgr
+     * [TransitionManager] object loaded from the xml file R.transition.transitions_mgr
      */
-    TransitionManager mTransitionManager;
+    internal lateinit var mTransitionManager: TransitionManager
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation
@@ -71,25 +72,24 @@ public class Transitions extends Activity {
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.transition);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.transition)
 
-        mSceneRoot = findViewById(R.id.sceneRoot);
+        mSceneRoot = findViewById(R.id.sceneRoot)
 
-        TransitionInflater inflater = TransitionInflater.from(this);
+        val inflater = TransitionInflater.from(this)
 
         // Note that this is not the only way to create a Scene object, but that
         // loading them from layout resources cooperates with the
         // TransitionManager that we are also loading from resources, and which
         // uses the same layout resource files to determine the scenes to transition
         // from/to.
-        mScene1 = Scene.getSceneForLayout(mSceneRoot, R.layout.transition_scene1, this);
-        mScene2 = Scene.getSceneForLayout(mSceneRoot, R.layout.transition_scene2, this);
-        mScene3 = Scene.getSceneForLayout(mSceneRoot, R.layout.transition_scene3, this);
+        mScene1 = Scene.getSceneForLayout(mSceneRoot, R.layout.transition_scene1, this)
+        mScene2 = Scene.getSceneForLayout(mSceneRoot, R.layout.transition_scene2, this)
+        mScene3 = Scene.getSceneForLayout(mSceneRoot, R.layout.transition_scene3, this)
         mTransitionManager = inflater.inflateTransitionManager(R.transition.transitions_mgr,
-                mSceneRoot);
+                mSceneRoot)
     }
 
     /**
@@ -107,27 +107,21 @@ public class Transitions extends Activity {
      *
      * @param view View (RadioButton) which has been clicked
      */
-    public void selectScene(View view) {
-        switch (view.getId()) {
-            case R.id.scene1:
-                mTransitionManager.transitionTo(mScene1);
-                break;
-            case R.id.scene2:
-                mTransitionManager.transitionTo(mScene2);
-                break;
-            case R.id.scene3:
-                mTransitionManager.transitionTo(mScene3);
-                break;
-            case R.id.scene4:
+    fun selectScene(view: View) {
+        when (view.id) {
+            R.id.scene1 -> mTransitionManager.transitionTo(mScene1)
+            R.id.scene2 -> mTransitionManager.transitionTo(mScene2)
+            R.id.scene3 -> mTransitionManager.transitionTo(mScene3)
+            R.id.scene4 -> {
                 // scene4 is not an actual 'Scene', but rather a dynamic change in the UI,
                 // transitioned to using beginDelayedTransition() to tell the TransitionManager
                 // to get ready to run a transition at the next frame
-                TransitionManager.beginDelayedTransition(mSceneRoot);
-                setNewSize(R.id.view1, 150, 25);
-                setNewSize(R.id.view2, 150, 25);
-                setNewSize(R.id.view3, 150, 25);
-                setNewSize(R.id.view4, 150, 25);
-                break;
+                TransitionManager.beginDelayedTransition(mSceneRoot)
+                setNewSize(R.id.view1, 150, 25)
+                setNewSize(R.id.view2, 150, 25)
+                setNewSize(R.id.view3, 150, 25)
+                setNewSize(R.id.view4, 150, 25)
+            }
         }
     }
 
@@ -142,12 +136,12 @@ public class Transitions extends Activity {
      * @param width new width of View
      * @param height new height of View
      */
-    @SuppressWarnings("SameParameterValue")
-    private void setNewSize(int id, int width, int height) {
-        View view = findViewById(id);
-        ViewGroup.LayoutParams params = view.getLayoutParams();
-        params.width = width;
-        params.height = height;
-        view.setLayoutParams(params);
+    @Suppress("SameParameterValue")
+    private fun setNewSize(id: Int, width: Int, height: Int) {
+        val view = findViewById<View>(id)
+        val params = view.layoutParams
+        params.width = width
+        params.height = height
+        view.layoutParams = params
     }
 }
