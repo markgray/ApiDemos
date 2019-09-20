@@ -168,8 +168,12 @@ class AnimationSeeking : Activity() {
          */
         private fun createAnimation() {
             if (bounceAnim == null) {
-                bounceAnim = ObjectAnimator.ofFloat(ball, "y",
-                        ball.y, height - BALL_SIZE).setDuration(1500)
+                bounceAnim = ObjectAnimator.ofFloat(
+                        ball,
+                        "y",
+                        ball.y,
+                        height - BALL_SIZE
+                ).setDuration(1500)
                 bounceAnim!!.interpolator = BounceInterpolator()
                 bounceAnim!!.addUpdateListener(this)
                 bounceAnim!!.addListener(this)
