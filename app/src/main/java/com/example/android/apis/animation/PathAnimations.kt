@@ -162,8 +162,8 @@ class PathAnimations : Activity(), RadioGroup.OnCheckedChangeListener, View.OnLa
      * @param oldRight The previous value of the view's right property.
      * @param oldBottom The previous value of the view's bottom property.
      */
-    override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int,
-                                oldTop: Int, oldRight: Int, oldBottom: Int) {
+    override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int,
+                                oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
         val checkedId = (findViewById<View>(R.id.path_animation_type) as RadioGroup).checkedRadioButtonId
         if (checkedId != RadioGroup.NO_ID) {
             startAnimator(checkedId)
@@ -180,11 +180,8 @@ class PathAnimations : Activity(), RadioGroup.OnCheckedChangeListener, View.OnLa
      * sTraversalPath when it is first instantiated, and our onLayout callback uses sTraversalPath
      * to set mPath using the method sTraversalPath.transform(scale, mPath))
      *
-     *
      * Then comes the big switch:
-     *
-     *  *
-     * R.id.named_components: "Named Components" Uses the named "x" and "y" properties for
+     *  - R.id.named_components: "Named Components" Uses the named "x" and "y" properties for
      * individual (x, y) coordinates of the Path and sets them on the view object. The
      * setX(float) and setY(float) methods are called on view. An int version of this
      * method also exists for animating int Properties. This is accomplished by creating
@@ -194,9 +191,7 @@ class PathAnimations : Activity(), RadioGroup.OnCheckedChangeListener, View.OnLa
      * moves in two dimensions, animating coordinates (x, y) together to follow the line.
      * In this variation, the coordinates are floats that are set to separate properties
      * designated by xPropertyName and yPropertyName.
-     *
-     *  *
-     * R.id.property_components: "Property Components" Use two Properties for individual (x, y)
+     *  - R.id.property_components: "Property Components" Use two Properties for individual (x, y)
      * coordinates of the Path and sets them on the view object. An int version of this method
      * also exists for animating int Properties. This is accomplished by creating an
      * ObjectAnimator mAnimator by calling the method:
@@ -206,21 +201,16 @@ class PathAnimations : Activity(), RadioGroup.OnCheckedChangeListener, View.OnLa
      * using the two properties. A Path animation moves in two dimensions, animating coordinates
      * (x, y) together to follow the line. In this variation, the coordinates are floats that
      * are set to separate properties, xProperty and yProperty.
-     *
-     *  *
-     * R.id.multi_int: "Multi-int" Use a multi-int setter to animate along a Path. The method
+     *  - R.id.multi_int: "Multi-int" Use a multi-int setter to animate along a Path. The method
      * setCoordinates(int x, int y) is called on this during the animation. Either
      * "setCoordinates" or "coordinates" are acceptable parameters because the "set" can
      * be implied. This is accomplished by creating an ObjectAnimator mAnimator by calling
-     * the method:
-     * ObjectAnimator.ofMultiInt (Object target, String propertyName, Path path)
+     * the method: ObjectAnimator.ofMultiInt (Object target, String propertyName, Path path)
      * which returns an ObjectAnimator that animates the target using a multi-int setter along
      * the given Path. A Path animation moves in two dimensions, animating coordinates (x, y)
      * together to follow the line. In this variation, the coordinates are integer x and y
      * coordinates used in the first and second parameter of the setter, respectively.
-     *
-     *  *
-     * R.id.multi_float: "Multi-float" Use a multi-float setter to animate along a Path. The method
+     *  - R.id.multi_float: "Multi-float" Use a multi-float setter to animate along a Path. The method
      * changeCoordinates(float x, float y) is called on this during the animation. This is
      * accomplished by creating an ObjectAnimator mAnimator by calling the method:
      * ObjectAnimator.ofMultiFloat(Object target, String propertyName, Path path) which
@@ -228,28 +218,23 @@ class PathAnimations : Activity(), RadioGroup.OnCheckedChangeListener, View.OnLa
      * the given Path. A Path animation moves in two dimensions, animating coordinates
      * (x, y) together to follow the line. In this variation, the coordinates are float x
      * and y coordinates used in the first and second parameter of the setter, respectively.
-     *
-     *  *
-     * R.id.named_setter: "Named Property" Use the named "point" property to animate along the
+     *  - R.id.named_setter: "Named Property" Use the named "point" property to animate along the
      * Path. There must be a method setPoint(PointF) on the animated object. Because setPoint
      * takes a PointF parameter, no TypeConverter is necessary. In this case, the animated
      * object is PathAnimations. This is accomplished by creating an ObjectAnimator mAnimator
      * by calling the method:
-     * ObjectAnimator.ofObject(Object target, String propertyName, TypeConverter<PointF></PointF>, ?> converter, Path path)
+     * `ObjectAnimator.ofObject(Object target, String propertyName, TypeConverter<PointF>, ?> converter, Path path)`
      * which returns an ObjectAnimator that animates the target using a PointF to follow
      * the Path. If the Property associated with propertyName uses a type other than PointF,
      * converter can be used to change from PointF to the type associated with the Property.
-     *
-     *  *
-     * R.id.property_setter: "Property" Use the POINT_PROPERTY property to animate along the Path.
+     *  - R.id.property_setter: "Property" Use the POINT_PROPERTY property to animate along the Path.
      * POINT_PROPERTY takes a Point, not a PointF, so the TypeConverter PointFToPointConverter
      * is necessary. This is accomplished by creating an ObjectAnimator mAnimator  by calling
      * the method:
-     * ObjectAnimator.ofObject(T target, Property<T></T>, V> property, TypeConverter<PointF></PointF>, V> converter, Path path)
+     * `ObjectAnimator.ofObject(T target, Property<T></T>, V> property, TypeConverter<PointF>, V> converter, Path path)`
      * which returns an ObjectAnimator that animates the target using a PointF to follow the
      * Path. Since property uses a type other than PointF, TypeConverter PointFToPointConverter
      * is used to change from PointF to the type Point associated with the Property.
-     *
      *
      * Having created an `ObjectAnimator mAnimator` of the desired type based on the RadioButton
      * selected, we set the duration of `mAnimator` to 10000 milliseconds, its repeat mode to
@@ -295,7 +280,11 @@ class PathAnimations : Activity(), RadioGroup.OnCheckedChangeListener, View.OnLa
             R.id.multi_float ->
                 // Use a multi-float setter to animate along a Path. The method
                 // changeCoordinates(float x, float y) is called on this during the animation.
-                mAnimator = ObjectAnimator.ofMultiFloat(this, "changeCoordinates", path)
+                mAnimator = ObjectAnimator.ofMultiFloat(
+                        this,
+                        "changeCoordinates",
+                        path
+                )
             R.id.named_setter ->
                 // Use the named "point" property to animate along the Path.
                 // There must be a method setPoint(PointF) on the animated object.
@@ -328,9 +317,6 @@ class PathAnimations : Activity(), RadioGroup.OnCheckedChangeListener, View.OnLa
      */
     class CanvasView : FrameLayout {
 
-        /**
-         * `Path sTraversalPath` scaled to fit the size of our view.
-         */
         /**
          * Getter for our field Path mPath
          *
@@ -426,13 +412,12 @@ class PathAnimations : Activity(), RadioGroup.OnCheckedChangeListener, View.OnLa
     }
 
     /**
-     * Class used to provide a TypeConverter<PointF></PointF>, Point> for our property setter ("Property")
+     * Class used to provide a `TypeConverter<PointF, Point>` for our property setter ("Property")
      * animation type.
      */
-    /**
-     * Initialize this instance of PointFToPointConverter by calling our super's constructor
-     */
-    private class PointFToPointConverter : TypeConverter<PointF, Point>(PointF::class.java, Point::class.java) {
+    private class PointFToPointConverter : TypeConverter<PointF, Point>(
+            PointF::class.java, Point::class.java
+    ) {
         internal var mPoint = Point()
 
         /**
@@ -450,6 +435,9 @@ class PathAnimations : Activity(), RadioGroup.OnCheckedChangeListener, View.OnLa
 
     companion object {
 
+        /**
+         * A silly hack to help the kotlin compiler disambiguate between ambiguous overloads.
+         */
         val hack: TypeConverter<PointF, *>? = null
         /**
          * Smiley face path that our frog traces.
@@ -481,17 +469,17 @@ class PathAnimations : Activity(), RadioGroup.OnCheckedChangeListener, View.OnLa
              * set the value on the target object it will throw an UnsupportedOperationException
              * exception.
              *
-             * @param object the PathAnimations instance in question ("this" essentially)
+             * @param targetObject the PathAnimations instance in question ("this" essentially)
              * @param value a Point containing the (x,y) coordinates to set out animation to
              */
-            override fun set(`object`: PathAnimations, value: Point) {
-                `object`.setCoordinates(value.x, value.y)
+            override fun set(targetObject: PathAnimations, value: Point) {
+                targetObject.setCoordinates(value.x, value.y)
             }
         }
 
         /*
-     * Here we set up the path of {@code Path sTraversalPath}
-     */
+         * Here we set up the path of `Path sTraversalPath`
+         */
         init {
             val inverseSqrt8 = sqrt(0.125).toFloat()
             val bounds = RectF(1f, 1f, 3f, 3f)
