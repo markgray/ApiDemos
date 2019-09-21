@@ -70,16 +70,12 @@ class ListFlipper : Activity() {
      * onCreate, the we set our content view to our layout file R.layout.rotating_list. We set our
      * fields ListView mEnglishList, and ListView mFrenchList to the respective ListView's
      * R.id.list_en and R.id.list_fr. We create the Adapter's for our ListView's:
-     *
-     *
-     * ArrayAdapter<String> adapterEn, and ArrayAdapter<String>
-    </String></String> *
-     *
-     * adapterFr from the String[]'s LIST_STRINGS_EN and LIST_STRINGS_FR, and setAdapter them to
-     * their ListView. Then we set the degrees that the mFrenchList ListView (currently GONE) is
-     * rotated around the vertical axis to -90f (face down). Finally we locate the "FLIP" Button
-     * in our layout (R.id.button) and set its OnClickListener to a callback which will call our
-     * method flipit() which will animate between the two ListView's.
+     * `ArrayAdapter<String> adapterEn`, and `ArrayAdapter<String> adapterFr` from the String[]'s
+     * LIST_STRINGS_EN and LIST_STRINGS_FR, and setAdapter them to their ListView. Then we set the
+     * degrees that the mFrenchList ListView (currently GONE) is rotated around the vertical axis
+     * to -90f (face down). Finally we locate the "FLIP" Button in our layout (R.id.button) and set
+     * its OnClickListener to a callback which will call our method flipit() which will animate
+     * between the two ListView's.
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
