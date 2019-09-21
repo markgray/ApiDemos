@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.apis.app;
+package com.example.android.apis.app
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
+import android.annotation.SuppressLint
+import android.annotation.TargetApi
+import android.app.ActionBar
+import android.app.Activity
+import android.content.Intent
+import android.os.Build
+import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 
-import com.example.android.apis.R;
+import com.example.android.apis.R
 
 /**
  * This demonstrates implementing common navigation flows with the action bar.
@@ -36,7 +36,7 @@ import com.example.android.apis.R;
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 @SuppressLint("SetTextI18n")
-public class ActionBarNavigation extends Activity {
+class ActionBarNavigation : Activity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation
      * of onCreate. Then we get a reference to this activity's ActionBar and set the display option
@@ -46,23 +46,22 @@ public class ActionBarNavigation extends Activity {
      * either set the text of "text" to "This was launched from ApiDemos" if it does or "This
      * was created from up navigation" if it does not.
      *
-     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         // Turn on the up affordance.
-        final ActionBar bar = getActionBar();
-        //noinspection ConstantConditions
-        bar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP, ActionBar.DISPLAY_HOME_AS_UP);
+        val bar = actionBar
 
-        setContentView(R.layout.action_bar_navigation);
-        TextView text = findViewById(R.id.launchedfrom);
-        if (getIntent().hasCategory(Intent.CATEGORY_SAMPLE_CODE)) {
-            text.setText("This was launched from ApiDemos");
+        bar!!.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP, ActionBar.DISPLAY_HOME_AS_UP)
+
+        setContentView(R.layout.action_bar_navigation)
+        val text = findViewById<TextView>(R.id.launchedfrom)
+        if (intent.hasCategory(Intent.CATEGORY_SAMPLE_CODE)) {
+            text.text = "This was launched from ApiDemos"
         } else {
-            text.setText("This was created from up navigation");
+            text.text = "This was created from up navigation"
         }
     }
 
@@ -74,9 +73,10 @@ public class ActionBarNavigation extends Activity {
      *
      * @param button "New in-task activity" Button
      */
-    public void onNewActivity(View button) {
-        Intent intent = new Intent(this, ActionBarNavigationTarget.class);
-        startActivity(intent);
+    @Suppress("UNUSED_PARAMETER")
+    fun onNewActivity(button: View) {
+        val intent = Intent(this, ActionBarNavigationTarget::class.java)
+        startActivity(intent)
     }
 
     /**
@@ -88,9 +88,10 @@ public class ActionBarNavigation extends Activity {
      *
      * @param button "New document" Button
      */
-    public void onNewDocument(View button) {
-        Intent intent = new Intent(this, ActionBarNavigationTarget.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-        startActivity(intent);
+    @Suppress("UNUSED_PARAMETER")
+    fun onNewDocument(button: View) {
+        val intent = Intent(this, ActionBarNavigationTarget::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
+        startActivity(intent)
     }
 }
