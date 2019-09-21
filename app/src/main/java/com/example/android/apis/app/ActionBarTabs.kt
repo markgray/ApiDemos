@@ -13,24 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.apis.app;
+@file:Suppress("DEPRECATION")
 
-import com.example.android.apis.R;
+package com.example.android.apis.app
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
+import com.example.android.apis.R
+
+import android.annotation.SuppressLint
+import android.annotation.TargetApi
+import android.app.ActionBar
+import android.app.ActionBar.Tab
+import android.app.Activity
+import android.app.Fragment
+import android.app.FragmentTransaction
+import android.os.Build
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 
 /**
  * This demonstrates the use of action bar tabs and how they interact
@@ -40,11 +42,11 @@ import android.widget.Toast;
  * Working on doing this Right. Did so, but need to use retained fragments in order
  * to keep tabs (TODO: add retained fragments to this)
  */
-@SuppressWarnings("deprecation")
+@Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class ActionBarTabs extends Activity {
+class ActionBarTabs : Activity() {
 
-    public boolean tabsMode = false;
+    var tabsMode = false
     /**
      * Called when the activity is starting or restarting after being killed.
      * First we call through to our super's implementation of onCreate. Next
@@ -54,42 +56,39 @@ public class ActionBarTabs extends Activity {
      * TODO: Restore contents of tabs, number of tabs and which is selected.
      *
      * @param savedInstanceState If the activity is being re-initialized after
-     *     previously being shut down (as happens when rotated) then this Bundle
-     *     contains the data it most recently supplied in onSaveInstanceState.
+     * previously being shut down (as happens when rotated) then this Bundle
+     * contains the data it most recently supplied in onSaveInstanceState.
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.action_bar_tabs);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.action_bar_tabs)
         if (savedInstanceState != null) {
-            tabsMode = savedInstanceState.getBoolean("tabsMode");
+            tabsMode = savedInstanceState.getBoolean("tabsMode")
         }
         if (tabsMode) {
-            //noinspection ConstantConditions
-            getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-            getActionBar().setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
+
+            actionBar!!.navigationMode = ActionBar.NAVIGATION_MODE_TABS
+            actionBar!!.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE)
         } else {
-            //noinspection ConstantConditions
-            getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-            getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE, ActionBar.DISPLAY_SHOW_TITLE);
+
+            actionBar!!.navigationMode = ActionBar.NAVIGATION_MODE_STANDARD
+            actionBar!!.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE, ActionBar.DISPLAY_SHOW_TITLE)
         }
     }
 
     /**
      * Called to retrieve per-instance state from an activity before being killed
-     * so that the state can be restored in {@link #onCreate} or
-     * {@link #onRestoreInstanceState} (the {@link Bundle} populated by this method
-     * will be passed to both).
+     * so that the state can be restored in [onCreate] or [onRestoreInstanceState]
+     * (the [Bundle] populated by this method will be passed to both).
      *
      * We just store the value of the Boolean tabsMode under the key "tabsMode", then
      * call through to our super's implementation of onSaveInstanceState.
      *
      * @param outState Bundle in which to place your saved state.
      */
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean("tabsMode", tabsMode);
-        super.onSaveInstanceState(outState);
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean("tabsMode", tabsMode)
+        super.onSaveInstanceState(outState)
     }
 
     /**
@@ -103,16 +102,17 @@ public class ActionBarTabs extends Activity {
      *
      * @param v Button "ADD NEW TAB" which was clicked
      */
-    public void onAddTab(View v) {
-        final ActionBar bar = getActionBar();
-        //noinspection ConstantConditions
-        final int tabCount = bar.getTabCount();
-        final String text = "Tab " + tabCount;
-        TabContentFragment fragment = new TabContentFragment();
+    @Suppress("UNUSED_PARAMETER")
+    fun onAddTab(v: View) {
+        val bar = actionBar
+
+        val tabCount = bar!!.tabCount
+        val text = "Tab $tabCount"
+        val fragment = TabContentFragment()
         bar.addTab(bar.newTab()
                 .setText(text)
-                .setTabListener(new TabListener(fragment)));
-        fragment.putText(text);
+                .setTabListener(TabListener(fragment)))
+        fragment.putText(text)
     }
 
     /**
@@ -123,11 +123,12 @@ public class ActionBarTabs extends Activity {
      *
      * @param v Button "REMOVE LAST TAB" which was clicked
      */
-    public void onRemoveTab(View v) {
-        final ActionBar bar = getActionBar();
-        //noinspection ConstantConditions
-        if (bar.getTabCount() > 0) {
-            bar.removeTabAt(bar.getTabCount() - 1);
+    @Suppress("UNUSED_PARAMETER")
+    fun onRemoveTab(v: View) {
+        val bar = actionBar
+
+        if (bar!!.tabCount > 0) {
+            bar.removeTabAt(bar.tabCount - 1)
         }
     }
 
@@ -142,18 +143,19 @@ public class ActionBarTabs extends Activity {
      *
      * @param v Button "TOGGLE TAB MODE" which was clicked
      */
-    public void onToggleTabs(View v) {
-        final ActionBar bar = getActionBar();
+    @Suppress("UNUSED_PARAMETER")
+    fun onToggleTabs(v: View) {
+        val bar = actionBar
 
-        //noinspection ConstantConditions
-        if (bar.getNavigationMode() == ActionBar.NAVIGATION_MODE_TABS) {
-            tabsMode = false;
-            bar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-            bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE, ActionBar.DISPLAY_SHOW_TITLE);
+
+        if (bar!!.navigationMode == ActionBar.NAVIGATION_MODE_TABS) {
+            tabsMode = false
+            bar.navigationMode = ActionBar.NAVIGATION_MODE_STANDARD
+            bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE, ActionBar.DISPLAY_SHOW_TITLE)
         } else {
-            tabsMode = true;
-            bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-            bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
+            tabsMode = true
+            bar.navigationMode = ActionBar.NAVIGATION_MODE_TABS
+            bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE)
         }
     }
 
@@ -164,9 +166,10 @@ public class ActionBarTabs extends Activity {
      *
      * @param v Button "REMOVE ALL TABS" which was clicked
      */
-    public void onRemoveAllTabs(View v) {
-        //noinspection ConstantConditions
-        getActionBar().removeAllTabs();
+    @Suppress("UNUSED_PARAMETER")
+    fun onRemoveAllTabs(v: View) {
+
+        actionBar!!.removeAllTabs()
     }
 
     /**
@@ -182,60 +185,52 @@ public class ActionBarTabs extends Activity {
      * Look at the FragmentTabs example for how to do a more complete
      * implementation.
      */
-    @SuppressWarnings("WeakerAccess")
-    private class TabListener implements ActionBar.TabListener {
-        private TabContentFragment mFragment;
-
-        /**
-         * Initializes our TabContentFragment mFragment which we use when FragmentTransaction.add'ing
-         * and FragmentTransaction.remove'ing when our tab is selected and unselected.
-         *
-         * @param fragment TabContentFragment which this tab will contain
-         */
-        public TabListener(TabContentFragment fragment) {
-            mFragment = fragment;
-        }
+    private inner class TabListener
+    /**
+     * Initializes our TabContentFragment mFragment which we use when FragmentTransaction.add'ing
+     * and FragmentTransaction.remove'ing when our tab is selected and unselected.
+     *
+     * @param mFragment TabContentFragment which this tab will contain
+     */
+    (private val mFragment: TabContentFragment) : ActionBar.TabListener {
 
         /**
          * Our tab has been selected, so FragmentTransaction.add our TabContentFragment mFragment
          * so it will be displayed.
          *
          * @param tab The tab that was selected
-         * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
-         *        during a tab switch. The previous tab's unselected and this tab's selected will be
-         *        executed in a single transaction. This FragmentTransaction does not support
-         *        being added to the back stack.
+         * @param ft A [FragmentTransaction] for queuing fragment operations to execute
+         * during a tab switch. The previous tab's unselected and this tab's selected will be
+         * executed in a single transaction. This FragmentTransaction does not support
+         * being added to the back stack.
          */
-        @Override
-        public void onTabSelected(Tab tab, FragmentTransaction ft) {
-            ft.add(R.id.fragment_content, mFragment, mFragment.getText());
+        override fun onTabSelected(tab: Tab, ft: FragmentTransaction) {
+            ft.add(R.id.fragment_content, mFragment, mFragment.text)
         }
 
         /**
          * Our tab has been unselected, so FragmentTransaction.remove our TabContentFragment mFragment
          *
          * @param tab The tab that was unselected
-         * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
-         *        during a tab switch. This tab's unselected and the newly selected tab's select
-         *        will be executed in a single transaction. This FragmentTransaction does not
-         *        support being added to the back stack.
+         * @param ft A [FragmentTransaction] for queuing fragment operations to execute
+         * during a tab switch. This tab's unselected and the newly selected tab's select
+         * will be executed in a single transaction. This FragmentTransaction does not
+         * support being added to the back stack.
          */
-        @Override
-        public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-            ft.remove(mFragment);
+        override fun onTabUnselected(tab: Tab, ft: FragmentTransaction) {
+            ft.remove(mFragment)
         }
 
         /**
          * Our tab has been reselected, we simply toast a message stating this.
          *
          * @param tab The tab that was reselected.
-         * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
-         *        once this method returns. This FragmentTransaction does not support
-         *        being added to the back stack.
+         * @param ft A [FragmentTransaction] for queuing fragment operations to execute
+         * once this method returns. This FragmentTransaction does not support
+         * being added to the back stack.
          */
-        @Override
-        public void onTabReselected(Tab tab, FragmentTransaction ft) {
-            Toast.makeText(ActionBarTabs.this, "Reselected!", Toast.LENGTH_SHORT).show();
+        override fun onTabReselected(tab: Tab, ft: FragmentTransaction) {
+            Toast.makeText(this@ActionBarTabs, "Reselected!", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -244,33 +239,24 @@ public class ActionBarTabs extends Activity {
      * The Fragment we add to a tab
      */
     @SuppressLint("ValidFragment")
-    static public class TabContentFragment extends Fragment {
-
-        private String mText = "new tab";
-        private TextView textView;
-
-        /**
-         * Required zero argument constructor.
-         */
-        public TabContentFragment() {
-        }
+    class TabContentFragment : Fragment() {
 
         /**
          * Get function for our text content.
          *
          * @return Text this TabContentFragment is displaying
          */
-        public String getText() {
-            return mText;
-        }
+        var text: String? = "new tab"
+            private set
+        private var textView: TextView? = null
 
         /**
          * Sets the text we display.
          *
          * @param text String to set our text content to
          */
-        public void putText(String text) {
-            mText = text;
+        fun putText(text: String) {
+            this.text = text
         }
 
         /**
@@ -293,17 +279,16 @@ public class ActionBarTabs extends Activity {
          *
          * @return Return the View for the fragment's UI, or null.
          */
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View fragView = inflater.inflate(R.layout.action_bar_tab_content, container, false);
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+            val fragView = inflater.inflate(R.layout.action_bar_tab_content, container, false)
 
             if (savedInstanceState != null) {
-                mText = savedInstanceState.getString("mText");
+                text = savedInstanceState.getString("mText")
             }
-            textView = fragView.findViewById(R.id.text);
-            textView.setText(mText);
+            textView = fragView.findViewById(R.id.text)
+            textView!!.text = text
 
-            return fragView;
+            return fragView
         }
 
         /**
@@ -314,10 +299,9 @@ public class ActionBarTabs extends Activity {
          *
          * @param outState Bundle in which to place your saved state.
          */
-        @Override
-        public void onSaveInstanceState(Bundle outState) {
-            outState.putString("mText", mText);
-            super.onSaveInstanceState(outState);
+        override fun onSaveInstanceState(outState: Bundle) {
+            outState.putString("mText", text)
+            super.onSaveInstanceState(outState)
         }
     }
 }
