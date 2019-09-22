@@ -14,54 +14,48 @@
  * limitations under the License.
  */
 
-package com.example.android.apis.app;
+package com.example.android.apis.app
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
-import android.provider.Settings;
-import android.util.Log;
-import android.view.ActionProvider;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.Toast;
+import android.annotation.SuppressLint
+import android.annotation.TargetApi
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
+import android.util.Log
+import android.view.ActionProvider
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.ImageButton
+import android.widget.Toast
 
-import com.example.android.apis.R;
+import com.example.android.apis.R
 
 /**
- * This activity demonstrates how to implement an {@link android.view.ActionProvider}
+ * This activity demonstrates how to implement an [android.view.ActionProvider]
  * for adding functionality to the Action Bar. In particular this demo creates an
  * ActionProvider for launching the system settings and adds a menu item with that
  * provider.
  */
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-public class ActionBarSettingsActionProviderActivity extends Activity {
-
-    /**
-     * TAG used for logging.
-     */
-    private static final String TAG = "ActionBarSettings";
+class ActionBarSettingsActionProviderActivity : Activity() {
 
     /**
      * Initialize the contents of the Activity's standard options menu. First we call through
-     * to our super's implementation of {@code onCreateOptionsMenu}. Then we fetch a {@code MenuInflater}
+     * to our super's implementation of `onCreateOptionsMenu`. Then we fetch a `MenuInflater`
      * and use it to inflate our menu from R.menu.action_bar_settings_action_provider into the
-     * {@code Menu menu} given us. Finally we return true so the menu will be displayed.
+     * `Menu menu` given us. Finally we return true so the menu will be displayed.
      *
      * @param menu The options menu in which you place your items.
      * @return You must return true for the menu to be displayed; if you return false it will not be shown.
      */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.action_bar_settings_action_provider, menu);
-        return true;
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.action_bar_settings_action_provider, menu)
+        return true
     }
 
     /**
@@ -75,15 +69,14 @@ public class ActionBarSettingsActionProviderActivity extends Activity {
      * @param item The menu item that was selected.
      * @return boolean Return false to allow normal menu processing to proceed, true to consume it here.
      */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // If this callback does not handle the item click, onPerformDefaultAction
         // of the ActionProvider is invoked. Hence, the provider encapsulates the
         // complete functionality of the menu item.
-        Log.i(TAG, "onOptionsItemSelected has been called");
+        Log.i(TAG, "onOptionsItemSelected has been called")
         Toast.makeText(this, R.string.action_bar_settings_action_provider_no_handling,
-                Toast.LENGTH_SHORT).show();
-        return false;
+                Toast.LENGTH_SHORT).show()
+        return false
     }
 
     /**
@@ -91,24 +84,14 @@ public class ActionBarSettingsActionProviderActivity extends Activity {
      * xml file. It extends the abstract class ActionProvider, implementing the abstract callbacks
      * onCreateActionView and onPerformDefaultAction
      */
-    public static class SettingsActionProvider extends ActionProvider {
-
-        /** An intent for launching the system settings. */
-        private static final Intent sSettingsIntent = new Intent(Settings.ACTION_SETTINGS);
-
-        /** Context for accessing resources. */
-        private final Context mContext;
-
-        /**
-         * Creates a new instance. We first call through to our super's constructor, then save the
-         * Context passed us for use in onCreateActionView.
-         *
-         * @param context Context for accessing resources.
-         */
-        public SettingsActionProvider(Context context) {
-            super(context);
-            mContext = context;
-        }
+    class SettingsActionProvider
+    /**
+     * Creates a new instance. We first call through to our super's constructor, then save the
+     * Context passed us for use in onCreateActionView.
+     */
+    (
+            /** Context for accessing resources.  */
+            private val mContext: Context) : ActionProvider(mContext) {
 
         /**
          * Factory method called by the Android framework to create new action views. First we fetch
@@ -121,27 +104,17 @@ public class ActionBarSettingsActionProviderActivity extends Activity {
          *
          * @return A new action view.
          */
-        @Override
-        public View onCreateActionView() {
+        override fun onCreateActionView(): View {
             // Inflate the action view to be shown on the action bar.
-            LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+            val layoutInflater = LayoutInflater.from(mContext)
             @SuppressLint("InflateParams")
-            View view = layoutInflater.inflate(R.layout.action_bar_settings_action_provider, null);
-            ImageButton button = view.findViewById(R.id.button);
+            val view = layoutInflater.inflate(R.layout.action_bar_settings_action_provider, null)
+            val button = view.findViewById<ImageButton>(R.id.button)
             // Attach a click listener for launching the system settings.
-            button.setOnClickListener(new View.OnClickListener() {
-                /**
-                 * Called when a view has been clicked. When clicked we simply use our saved Context
-                 * mContext to start the system settings Activity.
-                 *
-                 * @param v Button which was clicked
-                 */
-                @Override
-                public void onClick(View v) {
-                    mContext.startActivity(sSettingsIntent);
-                }
-            });
-            return view;
+            button.setOnClickListener {
+                mContext.startActivity(sSettingsIntent)
+            }
+            return view
         }
 
         /**
@@ -151,13 +124,26 @@ public class ActionBarSettingsActionProviderActivity extends Activity {
          *
          * @return true if the Action has been handled.
          */
-        @Override
-        public boolean onPerformDefaultAction() {
+        override fun onPerformDefaultAction(): Boolean {
             // This is called if the host menu item placed in the overflow menu of the
             // action bar is clicked and the host activity did not handle the click.
-            Log.i(TAG, "onPerformDefaultAction has been called");
-            mContext.startActivity(sSettingsIntent);
-            return true;
+            Log.i(TAG, "onPerformDefaultAction has been called")
+            mContext.startActivity(sSettingsIntent)
+            return true
         }
+
+        companion object {
+
+            /** An intent for launching the system settings.  */
+            private val sSettingsIntent = Intent(Settings.ACTION_SETTINGS)
+        }
+    }
+
+    companion object {
+
+        /**
+         * TAG used for logging.
+         */
+        private const val TAG = "ActionBarSettings"
     }
 }
