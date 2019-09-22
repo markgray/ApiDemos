@@ -14,41 +14,28 @@
  * limitations under the License.
  */
 
-package com.example.android.apis.app;
+package com.example.android.apis.app
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ShareActionProvider;
-
-import com.example.android.apis.R;
-
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.view.Menu
+import android.widget.ShareActionProvider
+import com.example.android.apis.R
+import java.io.*
 
 /**
- * This activity demonstrates how to use an {@link android.view.ActionProvider}
+ * This activity demonstrates how to use an android.view.ActionProvider
  * for adding functionality to the Action Bar. In particular this demo is adding
  * a menu item with ShareActionProvider as its action provider. The
  * ShareActionProvider is responsible for managing the UI for sharing actions.
  */
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-public class ActionBarShareActionProviderActivity extends Activity {
+class ActionBarShareActionProviderActivity : Activity() {
 
-    /**
-     * Name of the shared world readable file that we copy our raw resource R.raw.robot to.
-     */
-    private static final String SHARED_FILE_NAME = "shared.png";
-
+    private lateinit var context : Context
     /**
      * Called when the activity is starting. First we call our super's implementation of onCreate,
      * then we call our method copyPrivateRawResourceToPubliclyAccessibleFile which copies our
@@ -57,74 +44,75 @@ public class ActionBarShareActionProviderActivity extends Activity {
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        copyPrivateRawResourceToPubliclyAccessibleFile();
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        context = applicationContext
+        copyPrivateRawResourceToPubliclyAccessibleFile()
     }
 
     /**
      * Initialize the contents of the Activity's standard options menu. You should place your
-     * menu items into <var>menu</var>. First we get a MenuInflater with this context and use it
+     * menu items into menu. First we get a MenuInflater with this context and use it
      * to inflate a menu hierarchy from our menu R.menu.action_bar_share_action_provider into the
      * options "menu" passed us. Then we set MenuItem actionItem to the "Share with..." action
      * found at R.id.menu_item_share_action_provider_action_bar in our menu. We fetch the action
      * provider specified for actionItem into ShareActionProvider actionProvider, set the file
      * name of the file for persisting the share history to DEFAULT_SHARE_HISTORY_FILE_NAME (the
      * default name for storing share history), then use our method createShareIntent to create a
-     * sharing Intent and set the share Intent of ShareActionProvider actionProvider to this 
+     * sharing Intent and set the share Intent of ShareActionProvider actionProvider to this
      * Intent. Then we set MenuItem overflowItem to the "Share with..." action in the overflow menu
      * found at R.id.menu_item_share_action_provider_overflow in our menu. We fetch the action
      * provider specified for overflowItem into ShareActionProvider overflowProvider, set the file
      * name of the file for persisting the share history to DEFAULT_SHARE_HISTORY_FILE_NAME (the
      * default name for storing share history), then use our method createShareIntent to create a
-     * sharing Intent and set the share Intent of ShareActionProvider overflowProvider to this 
+     * sharing Intent and set the share Intent of ShareActionProvider overflowProvider to this
      * Intent. Finally we return true so that our menu will be displayed.
      *
      * @param menu The options menu in which you place your items.
      * @return You must return true for the menu to be displayed.
      */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate your menu.
-        getMenuInflater().inflate(R.menu.action_bar_share_action_provider, menu);
+        menuInflater.inflate(R.menu.action_bar_share_action_provider, menu)
 
         // Set file with share history to the provider and set the share intent.
-        MenuItem actionItem = menu.findItem(R.id.menu_item_share_action_provider_action_bar);
-        ShareActionProvider actionProvider = (ShareActionProvider) actionItem.getActionProvider();
-        actionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+        val actionItem = menu.findItem(R.id.menu_item_share_action_provider_action_bar)
+        val actionProvider = actionItem.actionProvider as ShareActionProvider
+        actionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME)
         // Note that you can set/change the intent any time,
         // say when the user has selected an image.
-        actionProvider.setShareIntent(createShareIntent());
+        actionProvider.setShareIntent(createShareIntent())
 
         // Set file with share history to the provider and set the share intent.
-        MenuItem overflowItem = menu.findItem(R.id.menu_item_share_action_provider_overflow);
-        ShareActionProvider overflowProvider =
-            (ShareActionProvider) overflowItem.getActionProvider();
+        val overflowItem = menu.findItem(R.id.menu_item_share_action_provider_overflow)
+        val overflowProvider = overflowItem.actionProvider as ShareActionProvider
         overflowProvider.setShareHistoryFileName(
-            ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+                ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME)
         // Note that you can set/change the intent any time,
         // say when the user has selected an image.
-        overflowProvider.setShareIntent(createShareIntent());
+        overflowProvider.setShareIntent(createShareIntent())
 
-        return true;
+        return true
     }
 
     /**
-     * Creates a sharing {@link Intent}. We first create the Intent shareIntent with the action
-     * ACTION_SEND, and we set an explicit MIME data type of "image/*". We create Uri uri for the
+     * Creates a sharing Intent. We first create the Intent shareIntent with the action
+     * ACTION_SEND, and we set an explicit MIME data type of any kind of `image`. We create Uri uri for the
      * file created by copyPrivateRawResourceToPubliclyAccessibleFile using the absolute path on
      * the filesystem where the file was created, and add this Uri as extended data to the Intent
      * shareIntent. Finally we return the Intent shareIntent.
      *
      * @return The sharing intent.
      */
-    private Intent createShareIntent() {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("image/*");
-        Uri uri = Uri.fromFile(getFileStreamPath("shared.png"));
-        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-        return shareIntent;
+    @SuppressLint("SetWorldReadable")
+    private fun createShareIntent():Intent {
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        val path = context.filesDir.absolutePath + "shared.png"
+        val f = File(path)
+        f.setReadable(true, false)
+        shareIntent.type = "image/*"
+        shareIntent.data = Uri.fromFile(f)
+        return shareIntent
     }
 
     /**
@@ -140,40 +128,49 @@ public class ActionBarShareActionProviderActivity extends Activity {
      * Our "finally" block for the outer try for catching FileNotFoundException closes inputStream
      * and outputStream (both calls surrounded by their own try intended to catch IOException.
      */
+    @Suppress("DEPRECATION")
     @SuppressLint("WorldReadableFiles")
-    private void copyPrivateRawResourceToPubliclyAccessibleFile() {
-        InputStream inputStream = null;
-        FileOutputStream outputStream = null;
-        //noinspection TryFinallyCanBeTryWithResources
+    private fun copyPrivateRawResourceToPubliclyAccessibleFile() {
+        var inputStream: InputStream? = null
+        var outputStream: FileOutputStream? = null
+
         try {
-            inputStream = getResources().openRawResource(R.raw.robot);
-            //noinspection deprecation
+            inputStream = resources.openRawResource(R.raw.robot)
             outputStream = openFileOutput(SHARED_FILE_NAME,
-                    Context.MODE_WORLD_READABLE | Context.MODE_APPEND);
-            byte[] buffer = new byte[1024];
-            int length;
+                    Context.MODE_PRIVATE or Context.MODE_APPEND)
+            val buffer = ByteArray(1024)
+            var length: Int
             try {
-                while ((length = inputStream.read(buffer)) > 0){
-                    outputStream.write(buffer, 0, length);
+                length = inputStream.read(buffer)
+                while (length > 0) {
+                    outputStream!!.write(buffer, 0, length)
+                    length = inputStream.read(buffer)
                 }
-            } catch (IOException ioe) {
+            } catch (ioe: IOException) {
                 /* ignore */
             }
-        } catch (FileNotFoundException fnfe) {
+
+        } catch (fnfe: FileNotFoundException) {
             /* ignore */
         } finally {
             try {
-                //noinspection ConstantConditions
-                inputStream.close();
-            } catch (IOException ioe) {
-               /* ignore */
+                inputStream!!.close()
+            } catch (ioe: IOException) {
+                /* ignore */
             }
             try {
-                //noinspection ConstantConditions
-                outputStream.close();
-            } catch (IOException ioe) {
-               /* ignore */
+                outputStream?.close()
+            } catch (ioe: IOException) {
+                /* ignore */
             }
         }
+    }
+
+    companion object {
+
+        /**
+         * Name of the shared world readable file that we copy our raw resource R.raw.robot to.
+         */
+        private const val SHARED_FILE_NAME = "shared.png"
     }
 }
