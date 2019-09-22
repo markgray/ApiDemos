@@ -117,7 +117,7 @@ class ActionBarUsage : Activity(), OnQueryTextListener {
      * the item selection is considered to have been consumed.
      *
      * @param item The menu item that was selected
-     * @return boolean Return false to allow normal menu processing to proceed, true to consume it here.
+     * @return Return false to allow normal menu processing to proceed, true to consume it here.
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Toast.makeText(this, "Selected Item: " + item.title, Toast.LENGTH_SHORT).show()
