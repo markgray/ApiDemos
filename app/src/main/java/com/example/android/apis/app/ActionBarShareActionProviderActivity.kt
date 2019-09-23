@@ -16,21 +16,17 @@
 
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
-import android.content.Context
+import android.content.ClipData
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Menu
 import android.widget.ShareActionProvider
 import com.example.android.apis.R
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
 
 /**
  * This activity demonstrates how to use an [android.view.ActionProvider]
@@ -42,23 +38,19 @@ import java.io.InputStream
 class ActionBarShareActionProviderActivity : Activity() {
 
     /**
-     * Called when the activity is starting. First we call our super's implementation of onCreate,
-     * then we call our method copyPrivateRawResourceToPubliclyAccessibleFile which copies our
-     * demo photo from our private raw resource content to a publicly readable file so that the
-     * latter can be shared with other applications.
+     * Called when the activity is starting. We just call our super's implementation of `onCreate`
      *
-     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     * @param savedInstanceState always null since [onSaveInstanceState] is not overridden
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        copyPrivateRawResourceToPubliclyAccessibleFile()
     }
 
     /**
      * Initialize the contents of the Activity's standard options menu. You should place your
-     * menu items into <var>menu</var>. First we get a MenuInflater with this context and use it
+     * menu items into [menu]. First we get a `MenuInflater` with this context and use it
      * to inflate a menu hierarchy from our menu R.menu.action_bar_share_action_provider into the
-     * options "menu" passed us. Then we set MenuItem actionItem to the "Share with..." action
+     * options "menu" passed us. Then we set `MenuItem actionItem` to the "Share with..." action
      * found at R.id.menu_item_share_action_provider_action_bar in our menu. We fetch the action
      * provider specified for actionItem into ShareActionProvider actionProvider, set the file
      * name of the file for persisting the share history to DEFAULT_SHARE_HISTORY_FILE_NAME (the
@@ -100,83 +92,39 @@ class ActionBarShareActionProviderActivity : Activity() {
     }
 
     /**
-     * Creates a sharing [Intent]. We first create the Intent shareIntent with the action
-     * ACTION_SEND, and we set an explicit MIME data type of any type of "image". We create Uri uri
-     * for the file created by copyPrivateRawResourceToPubliclyAccessibleFile using the absolute path
-     * on the filesystem where the file was created, and add this Uri as extended data to the Intent
-     * shareIntent. Finally we return the Intent shareIntent.
+     * Creates a sharing [Intent]. We first create the `Intent shareIntent` with the action
+     * ACTION_SEND, and then add the flag [Intent.FLAG_GRANT_READ_URI_PERMISSION] to it. We
+     * initialize our `val b` to a new instance of [Uri.Builder], set the scheme of `b` to
+     * "content", and set its authority to our "com.example.android.apis.content.FileProvider"
+     * (our content/FileProvider `ContentProvider` which provides access to resources in our
+     * apk to other apps). We initialize our `val tv` to a new instance of [TypedValue], and use
+     * it to hold the resource data for our raw asset png file with id R.raw.robot. We then append
+     * to our [Uri.Builder] `b` the encoded path of the asset cookie of `tv` for asset R.raw.robot
+     * followed by the encoded path of the string value for R.raw.robot. We then initialize our
+     * `val uri` to the [Uri] that results from building `b`. We next set the mime type of `shareIntent`
+     * to "image/png", add `uri` as an extra under the key [Intent.EXTRA_STREAM], and set the clip
+     * data of `shareIntent` to a new instance of [ClipData] holding a [Uri] whose `ContentResolver`
+     * is a `ContentResolver` instance for our application's package, whose user-visible label for
+     * the clip data is "image", and whose [Uri] is our `uri`. Finally we return `shareIntent` to
+     * the caller.
      *
      * @return The sharing intent.
      */
     private fun createShareIntent(): Intent {
         val shareIntent = Intent(Intent.ACTION_SEND)
-        shareIntent.type = "image/*"
-        val uri = Uri.fromFile(getFileStreamPath("shared.png"))
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        val b: Uri.Builder = Uri.Builder()
+        b.scheme("content")
+        b.authority("com.example.android.apis.content.FileProvider")
+        val tv = TypedValue()
+        resources.getValue(R.raw.robot, tv, true)
+        b.appendEncodedPath(tv.assetCookie.toString())
+        b.appendEncodedPath(tv.string.toString())
+        val uri: Uri = b.build()
+        shareIntent.type = "image/png"
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+        shareIntent.clipData = ClipData.newUri(contentResolver, "image", uri)
         return shareIntent
     }
 
-    /**
-     * Copies a private raw resource content to a publicly readable file such that the latter can
-     * be shared with other applications. First we initialize our variables InputStream inputStream
-     * and FileOutputStream outputStream to null, then wrapped in a try intended to catch a possible
-     * FileNotFoundException we open the data stream InputStream inputStream for reading the raw
-     * resource R.raw.robot, and open the private file SHARED_FILE_NAME ("shared.png") associated
-     * with this Context's application package for writing using FileOutputStream outputStream,
-     * (creating the file if it doesn't already exist). Then in a loop surrounded by a try intended
-     * to catch IOException we read up to 1024 bytes at a time from inputStream into "byte[] buffer"
-     * and write the bytes read to outputStream as long as InputStream.read returns > 0 bytes read.
-     * Our "finally" block for the outer try for catching FileNotFoundException closes inputStream
-     * and outputStream (both calls surrounded by their own try intended to catch IOException.
-     */
-    @SuppressLint("WorldReadableFiles")
-    private fun copyPrivateRawResourceToPubliclyAccessibleFile() {
-        var inputStream: InputStream? = null
-        var outputStream: FileOutputStream? = null
-
-        try {
-            inputStream = resources.openRawResource(R.raw.robot)
-
-            @Suppress("DEPRECATION")
-            outputStream = openFileOutput(SHARED_FILE_NAME,
-                    Context.MODE_WORLD_READABLE or Context.MODE_APPEND)
-            val buffer = ByteArray(1024)
-            var length: Int
-            try {
-                length = inputStream.read(buffer)
-                while ((length) > 0) {
-                    outputStream!!.write(buffer, 0, length)
-                    length = inputStream.read(buffer)
-                }
-            } catch (ioe: IOException) {
-                /* ignore */
-            }
-
-        } catch (fnfe: FileNotFoundException) {
-            /* ignore */
-        } finally {
-            try {
-
-                inputStream!!.close()
-            } catch (ioe: IOException) {
-                /* ignore */
-            }
-
-            try {
-
-                outputStream!!.close()
-            } catch (ioe: IOException) {
-                /* ignore */
-            }
-
-        }
-    }
-
-    companion object {
-
-        /**
-         * Name of the shared world readable file that we copy our raw resource R.raw.robot to.
-         */
-        private const val SHARED_FILE_NAME = "shared.png"
-    }
 }

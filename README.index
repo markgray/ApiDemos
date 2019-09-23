@@ -297,10 +297,9 @@ App
 
     App/Action Bar/Action Provider/Share Action Provider v14
         .app.ActionBarShareActionProviderActivity
+        .content.FileProvider
             Shows how to add a Share Action Provider to the Action Bar. Shares robot.png
-            packaged with the app in res/raw by copying it to shared.png in the apps 
-            private storage area. TODO: replace startActivity with startActivityForResult FOR Gmail
-            http://stackoverflow.com/questions/26883259/gmail-5-0-app-fails-with-permission-denied-for-the-attachment-when-it-receives
+            packaged with the app in res/raw by using content.FileProvider
 
     App/Action Bar/Display Options v16
         .app.ActionBarDisplayOptions
