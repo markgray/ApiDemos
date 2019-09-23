@@ -17,25 +17,30 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.widget.ShareActionProvider
 import com.example.android.apis.R
-import java.io.*
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
 
 /**
- * This activity demonstrates how to use an android.view.ActionProvider
+ * This activity demonstrates how to use an [android.view.ActionProvider]
  * for adding functionality to the Action Bar. In particular this demo is adding
  * a menu item with ShareActionProvider as its action provider. The
  * ShareActionProvider is responsible for managing the UI for sharing actions.
  */
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class ActionBarShareActionProviderActivity : Activity() {
 
-    private lateinit var context : Context
     /**
      * Called when the activity is starting. First we call our super's implementation of onCreate,
      * then we call our method copyPrivateRawResourceToPubliclyAccessibleFile which copies our
@@ -46,13 +51,12 @@ class ActionBarShareActionProviderActivity : Activity() {
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        context = applicationContext
         copyPrivateRawResourceToPubliclyAccessibleFile()
     }
 
     /**
      * Initialize the contents of the Activity's standard options menu. You should place your
-     * menu items into menu. First we get a MenuInflater with this context and use it
+     * menu items into <var>menu</var>. First we get a MenuInflater with this context and use it
      * to inflate a menu hierarchy from our menu R.menu.action_bar_share_action_provider into the
      * options "menu" passed us. Then we set MenuItem actionItem to the "Share with..." action
      * found at R.id.menu_item_share_action_provider_action_bar in our menu. We fetch the action
@@ -96,22 +100,19 @@ class ActionBarShareActionProviderActivity : Activity() {
     }
 
     /**
-     * Creates a sharing Intent. We first create the Intent shareIntent with the action
-     * ACTION_SEND, and we set an explicit MIME data type of any kind of `image`. We create Uri uri for the
-     * file created by copyPrivateRawResourceToPubliclyAccessibleFile using the absolute path on
-     * the filesystem where the file was created, and add this Uri as extended data to the Intent
+     * Creates a sharing [Intent]. We first create the Intent shareIntent with the action
+     * ACTION_SEND, and we set an explicit MIME data type of any type of "image". We create Uri uri
+     * for the file created by copyPrivateRawResourceToPubliclyAccessibleFile using the absolute path
+     * on the filesystem where the file was created, and add this Uri as extended data to the Intent
      * shareIntent. Finally we return the Intent shareIntent.
      *
      * @return The sharing intent.
      */
-    @SuppressLint("SetWorldReadable")
-    private fun createShareIntent():Intent {
+    private fun createShareIntent(): Intent {
         val shareIntent = Intent(Intent.ACTION_SEND)
-        val path = context.filesDir.absolutePath + "shared.png"
-        val f = File(path)
-        f.setReadable(true, false)
         shareIntent.type = "image/*"
-        shareIntent.data = Uri.fromFile(f)
+        val uri = Uri.fromFile(getFileStreamPath("shared.png"))
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
         return shareIntent
     }
 
@@ -128,7 +129,6 @@ class ActionBarShareActionProviderActivity : Activity() {
      * Our "finally" block for the outer try for catching FileNotFoundException closes inputStream
      * and outputStream (both calls surrounded by their own try intended to catch IOException.
      */
-    @Suppress("DEPRECATION")
     @SuppressLint("WorldReadableFiles")
     private fun copyPrivateRawResourceToPubliclyAccessibleFile() {
         var inputStream: InputStream? = null
@@ -136,13 +136,15 @@ class ActionBarShareActionProviderActivity : Activity() {
 
         try {
             inputStream = resources.openRawResource(R.raw.robot)
+
+            @Suppress("DEPRECATION")
             outputStream = openFileOutput(SHARED_FILE_NAME,
-                    Context.MODE_PRIVATE or Context.MODE_APPEND)
+                    Context.MODE_WORLD_READABLE or Context.MODE_APPEND)
             val buffer = ByteArray(1024)
             var length: Int
             try {
                 length = inputStream.read(buffer)
-                while (length > 0) {
+                while ((length) > 0) {
                     outputStream!!.write(buffer, 0, length)
                     length = inputStream.read(buffer)
                 }
@@ -154,15 +156,19 @@ class ActionBarShareActionProviderActivity : Activity() {
             /* ignore */
         } finally {
             try {
+
                 inputStream!!.close()
             } catch (ioe: IOException) {
                 /* ignore */
             }
+
             try {
-                outputStream?.close()
+
+                outputStream!!.close()
             } catch (ioe: IOException) {
                 /* ignore */
             }
+
         }
     }
 
