@@ -98,7 +98,7 @@ class ActionBarDisplayOptions : Activity(), View.OnClickListener, ActionBar.TabL
     }
 
     /**
-     * Initialize the contents of the Activity's standard options menu. We simply fetch a  MenuInflater
+     * Initialize the contents of the Activity's standard options menu. We simply fetch a MenuInflater
      * with this context and use it to inflate our menu R.menu.display_options_actions into the
      * options menu "Menu menu" passed to us.
      *
@@ -121,19 +121,19 @@ class ActionBarDisplayOptions : Activity(), View.OnClickListener, ActionBar.TabL
      * The first five Button's set "int flags" to toggle the appropriate flag at the end of the
      * switch statement:
      *
-     * R.id.toggle_home_as_up ("DISPLAY_HOME_AS_UP") flag: ActionBar.DISPLAY_HOME_AS_UP
+     *  - R.id.toggle_home_as_up ("DISPLAY_HOME_AS_UP") flag: ActionBar.DISPLAY_HOME_AS_UP
      * Display the 'home' element such that it appears as an 'up' affordance. e.g. show an
      * arrow to the left indicating the action that will be taken. Set this flag if selecting
      * the 'home' button in the action bar to return up by a single level in your UI rather
      * than back to the top level or front page.
-     * R.id.toggle_show_home ("DISPLAY_SHOW_HOME") flag: ActionBar.DISPLAY_SHOW_HOME
+     *  - R.id.toggle_show_home ("DISPLAY_SHOW_HOME") flag: ActionBar.DISPLAY_SHOW_HOME
      * Show 'home' elements in this action bar, leaving more space for other navigation
      * elements. This includes logo and icon.
-     * R.id.toggle_use_logo ("DISPLAY_USE_LOGO") flag: ActionBar.DISPLAY_USE_LOGO
+     *  - R.id.toggle_use_logo ("DISPLAY_USE_LOGO") flag: ActionBar.DISPLAY_USE_LOGO
      * Show the logo defined as the attribute android:logo="@drawable/apidemo_androidlogo"
      * in AndroidManifest.xml for the Activity (Shown only if ActionBar.DISPLAY_SHOW_HOME
      * is also set.)
-     * R.id.toggle_show_title ("DISPLAY_SHOW_TITLE") flag: ActionBar.DISPLAY_SHOW_TITLE
+     *  - R.id.toggle_show_title ("DISPLAY_SHOW_TITLE") flag: ActionBar.DISPLAY_SHOW_TITLE
      * Show the activity title and subtitle, if present.
      * R.id.toggle_show_custom ("DISPLAY_SHOW_CUSTOM") flag: ActionBar.DISPLAY_SHOW_CUSTOM
      * Show the custom view if one has been set.
@@ -141,26 +141,28 @@ class ActionBarDisplayOptions : Activity(), View.OnClickListener, ActionBar.TabL
      * The other Button's perform more complex operations than toggling using int flags and return
      * after doing them rather than fall through to end of the outer switch:
      *
-     * R.id.cycle_custom_gravity ("Cycle Custom View Gravity") first fetches the current layout
+     *  - R.id.cycle_custom_gravity ("Cycle Custom View Gravity") first fetches the current layout
      * parameters for the View mCustomView to the variable ActionBar.LayoutParams lp, then
      * it switches based on the current value of the field lp.gravity masked with
-     * Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK (the Binary mask for horizontal gravity and
+     *  - Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK (the Binary mask for horizontal gravity and
      * script specific direction bit), and changes newGravity if the current value is:
-     * Gravity.START (Push object to x-axis position at the start of its container, not
+     *  - Gravity.START (Push object to x-axis position at the start of its container, not
      * changing its size) changes to Gravity.CENTER_HORIZONTAL
-     * Gravity.CENTER_HORIZONTAL (Place object in the horizontal center of its container,
+     *  - Gravity.CENTER_HORIZONTAL (Place object in the horizontal center of its container,
      * not changing its size) changes to Gravity.END
-     * Gravity.END (Push object to x-axis position at the end of its container, not
+     *  - Gravity.END (Push object to x-axis position at the end of its container, not
      * changing its size) changes to Gravity.START
+     *
      * After deciding what newGravity is to be in the switch statement we set the appropriate
      * bit in lp.gravity, then call bar.setCustomView(mCustomView, lp) to install our custom
      * View (mCustomView) with our modified layout parameters "ActionBar.LayoutParams lp" as
      * the the ActionBar's custom View. (The display option DISPLAY_SHOW_CUSTOM must be set
      * for the custom view to be displayed). We then return.
-     * R.id.toggle_visibility ("Toggle Visibility") We check if the ActionBar is showing and if
+     *
+     *  - R.id.toggle_visibility ("Toggle Visibility") We check if the ActionBar is showing and if
      * it is we call bar.hide() to hide the ActionBar, and if it is not we call bar.show()
      * to show the ActionBar. In either case we then return.
-     * R.id.toggle_system_ui ("Toggle System UI") If the View.SYSTEM_UI_FLAG_FULLSCREEN bit of the
+     *  - R.id.toggle_system_ui ("Toggle System UI") If the View.SYSTEM_UI_FLAG_FULLSCREEN bit of the
      * last setSystemUiVisibility(int) that this view has requested is set we clear all bits
      * of the system ui visibility, if it is not set we set the View.SYSTEM_UI_FLAG_FULLSCREEN
      * bit. In either case we then return
