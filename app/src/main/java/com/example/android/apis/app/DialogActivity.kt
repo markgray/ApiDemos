@@ -29,8 +29,7 @@ import android.widget.LinearLayout
 import com.example.android.apis.R
 
 /**
- * <h3>Dialog Activity</h3>
- *
+ * Dialog Activity
  *
  * This demonstrates the how to write an activity that looks like
  * a pop-up dialog.
@@ -81,10 +80,10 @@ class DialogActivity : Activity() {
      * using a style style derived from a theme that is appropriate and available given the Api
      * level: style/ThemeCurrentDialog is defined in each:
      *
-     * values/styles.xml uses android:Theme.Dialog
-     * values-v11/styles.xml uses android:Theme.Holo.Dialog
-     * values-v19/styles.xml uses android:Theme.Material.Dialog
-     * values-v20/styles.xml uses android:Theme.Material.Light.Dialog
+     *  - values/styles.xml uses android:Theme.Dialog
+     *  - values-v11/styles.xml uses android:Theme.Holo.Dialog
+     *  - values-v19/styles.xml uses android:Theme.Material.Dialog
+     *  - values-v20/styles.xml uses android:Theme.Material.Light.Dialog
      *
      * Then we try to set the title to "This is just a test" but nothing happens?
      *
