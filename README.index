@@ -433,11 +433,13 @@ App
             SharedPreferences.Editor to save state in the onPause() callback, then 
             restoring the state in the onResume callback.
 
-    App/Activity/Picture in Picture        v24
+    App/Activity/Picture in Picture        v26
         .app.PictureInPicture
         .layout.picture_in_picture.xml
             Minimal demo of Picture in Picture mode, just enters that mode with current
-            content view when button is clicked.
+            content view when button is clicked. Weird - cannot get rid of app window
+            even by removing the app using the package manager - needed to restart test
+            device.
  
     App/Activity/Presentation -- registerDisplayListener v17 getSupportedModes v23
         .app.PresentationActivity
