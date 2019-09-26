@@ -14,31 +14,28 @@
  * limitations under the License.
  */
 
-package com.example.android.apis.app;
+package com.example.android.apis.app
 
-import android.app.Activity;
+import android.app.Activity
 
 /**
  * This is an empty Activity which demonstrates the use of the android:maxAspectRatio attribute in
  * the AndroidManifest.xml entry for an Activity
  */
-public abstract class MaxAspectRatio extends Activity {
+abstract class MaxAspectRatio : Activity() {
 
     /**
      * Used in the entry for "App/Activity/Max Aspect Ratio/1:1" with an android:maxAspectRatio="1"
      */
-    public static class Square extends MaxAspectRatio {
-    }
+    class Square : MaxAspectRatio()
 
     /**
      * Used in the entry for "App/Activity/Max Aspect Ratio/16:9" with an android:maxAspectRatio="1.77777778"
      */
-    public static class SixteenToNine extends MaxAspectRatio {
-    }
+    class SixteenToNine : MaxAspectRatio()
 
     /**
      * Used in the entry for "App/Activity/Max Aspect Ratio/Any" with no android:maxAspectRatio attribute
      */
-    public static class Any extends MaxAspectRatio {
-    }
+    class Any : MaxAspectRatio()
 }
