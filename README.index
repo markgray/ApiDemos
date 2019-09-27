@@ -466,6 +466,7 @@ App
 
     App/Activity/Receive Result            all
         .app.ReceiveResult
+        .app.SendResult
             Show how to start a second activity (.app.SendResult) to generate a result,
             receive it using startActivityForResult(intent, GET_CODE), followed on completion
             by the callback onActivityResult(int requestCode, int resultCode, Intent data).
