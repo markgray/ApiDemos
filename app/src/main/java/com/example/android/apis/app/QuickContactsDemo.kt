@@ -60,8 +60,13 @@ class QuickContactsDemo : ListActivity() {
         val select = ("((" + Contacts.DISPLAY_NAME + " NOTNULL) AND ("
                 + Contacts.HAS_PHONE_NUMBER + "=1) AND ("
                 + Contacts.DISPLAY_NAME + " != '' ))")
-        val c = contentResolver.query(Contacts.CONTENT_URI, CONTACTS_SUMMARY_PROJECTION, select,
-                null, Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC")
+        val c = contentResolver.query(
+                Contacts.CONTENT_URI,
+                CONTACTS_SUMMARY_PROJECTION,
+                select,
+                null,
+                Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC"
+        )
 
         @Suppress("DEPRECATION")
         startManagingCursor(c)
