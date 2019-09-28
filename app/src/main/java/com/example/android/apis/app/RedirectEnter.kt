@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package com.example.android.apis.app;
+package com.example.android.apis.app
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
-import com.example.android.apis.R;
+import com.example.android.apis.R
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import android.view.View.OnClickListener
+import android.widget.Button
 
 
 /**
@@ -41,9 +41,23 @@ import android.widget.Button;
  * codes INIT_TEXT_REQUEST, and NEW_TEXT_REQUEST that it sends in the Intent to
  * RedirectGetter to determine what to do if the result code was RESULT_CANCELED,
  * either finish() back to RedirectEnter, or just display the old text.
- *
  */
-public class RedirectEnter extends Activity {
+class RedirectEnter : Activity() {
+
+    /**
+     * Called when a view has been clicked. We create an Intent intent intended to start the
+     * Activity RedirectMain, and then we startActivity that intent which will launch the
+     * Activity.
+     *
+     * Parameter: v View of Button that was clicked
+     */
+    private val mGoListener = OnClickListener {
+        // Here we start up the main entry point of our redirection
+        // example.
+        val intent = Intent(this@RedirectEnter, RedirectMain::class.java)
+        startActivity(intent)
+    }
+
     /**
      * Called when the activity is starting. First we call through to our super's implementation
      * of onCreate, then we set our content view to our layout file R.layout.redirect_enter. Next
@@ -52,32 +66,14 @@ public class RedirectEnter extends Activity {
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
-    @Override
-	protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.redirect_enter);
+        setContentView(R.layout.redirect_enter)
 
         // Watch for button clicks.
-        Button goButton = (Button)findViewById(R.id.go);
-        goButton.setOnClickListener(mGoListener);
+        val goButton = findViewById<View>(R.id.go) as Button
+        goButton.setOnClickListener(mGoListener)
     }
-
-    private OnClickListener mGoListener = new OnClickListener() {
-        /**
-         * Called when a view has been clicked. We create an Intent intent intended to start the
-         * Activity RedirectMain, and then we startActivity that intent which will launch the
-         * Activity.
-         *
-         * @param v View of Button that was clicked
-         */
-        @Override
-        public void onClick(View v) {
-            // Here we start up the main entry point of our redirection
-            // example.
-            Intent intent = new Intent(RedirectEnter.this, RedirectMain.class);
-            startActivity(intent);
-        }
-    };
 }
 

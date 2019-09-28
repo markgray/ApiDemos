@@ -482,6 +482,8 @@ App
 
     App/Activity/Redirection               all
         .app.RedirectEnter
+        .app.RedirectGetter
+        .app.RedirectMain
             Consists of three activities: RedirectEnter, RedirectGetter, and RedirectMain.
             RedirectGetter stores user input in the shared preference file "RedirectData"
             RedirectEnter just describes what will happen, and when the "Go" button is 
