@@ -35,10 +35,8 @@ class ActivityRecreate : Activity() {
     internal var mCurTheme: Int = 0 // Theme in use for this instance of the Activity
 
     /**
-     * OnClickListener used the our "Recreate" Button (R.id.recreate) in our layout
-     */
-    /**
-     * Called when a view has been clicked. We simply call Activity.recreate() to cause this
+     * OnClickListener used the our "Recreate" Button (R.id.recreate) in our layout.
+     * Called when the view has been clicked. We simply call Activity.recreate() to cause this
      * Activity to be recreated with a new instance. This results in essentially the same flow
      * as when the Activity is created due to a configuration change -- the current instance
      * will go through its lifecycle to onDestroy() and a new instance then created after it.
