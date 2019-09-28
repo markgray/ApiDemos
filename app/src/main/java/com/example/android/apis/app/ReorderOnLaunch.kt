@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package com.example.android.apis.app;
+package com.example.android.apis.app
 
-import com.example.android.apis.R;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
+import android.view.View.OnClickListener
+import android.widget.Button
+import com.example.android.apis.R
 
 /**
  * ReorderOnLaunch is the first of a sequence of four Activities: ReorderTwo, ReorderThree, and
@@ -32,7 +30,19 @@ import android.widget.Button;
  * proceeding back through the history should begin with the newly front most second reorder
  * activity, then the fourth, the third, and finally the first.
  */
-public class ReorderOnLaunch extends Activity {
+class ReorderOnLaunch : Activity() {
+
+    /**
+     * Called when the "Go to the second" Button (R.id.reorder_launch_two) is clicked.
+     * We simply create an Intent to launch the ReorderTwo Activity and start that
+     * Activity.
+     *
+     * Parameter: View of the Button that was clicked
+     */
+    private val mClickListener = OnClickListener {
+        startActivity(Intent(this@ReorderOnLaunch, ReorderTwo::class.java))
+    }
+
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * onCreate, then we set our content view to our layout file R.layout.reorder_on_launch. Then
@@ -41,30 +51,12 @@ public class ReorderOnLaunch extends Activity {
      *
      * @param savedState always null since onSaveInstanceState is not overridden
      */
-    @Override
-    protected void onCreate(Bundle savedState) {
-        super.onCreate(savedState);
-        
-        setContentView(R.layout.reorder_on_launch);
-        
-        Button twoButton = (Button) findViewById(R.id.reorder_launch_two);
-        twoButton.setOnClickListener(mClickListener);
-    }
+    override fun onCreate(savedState: Bundle?) {
+        super.onCreate(savedState)
 
-    /**
-     * OnClickListener for the "Go to the second" Button (R.id.reorder_launch_two)
-     */
-    private final OnClickListener mClickListener = new OnClickListener() {
-        /**
-         * Called when the "Go to the second" Button (R.id.reorder_launch_two) is clicked.
-         * We simply create an Intent to launch the ReorderTwo Activity and start that
-         * Activity.
-         *
-         * @param v View of the Button that was clicked
-         */
-        @Override
-        public void onClick(View v) {
-            startActivity(new Intent(ReorderOnLaunch.this, ReorderTwo.class));
-        }
-    };
+        setContentView(R.layout.reorder_on_launch)
+
+        val twoButton = findViewById<Button>(R.id.reorder_launch_two)
+        twoButton.setOnClickListener(mClickListener)
+    }
 }

@@ -497,6 +497,9 @@ App
 
     App/Activity/Reorder Activities        all
         .app.ReorderOnLaunch
+        .app.ReorderTwo
+        .app.ReorderThree
+        .app.ReoderFour
             ReorderOnLaunch is the first of a sequence of four Activities: ReorderTwo,
             ReorderThree, and ReoderFour follow.  A button on the fourth will use the 
             Intent.FLAG_ACTIVITY_REORDER_TO_FRONT flag to bring the second of the 
