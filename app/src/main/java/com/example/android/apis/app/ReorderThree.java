@@ -47,20 +47,18 @@ public class ReorderThree extends Activity {
         
         setContentView(R.layout.reorder_three);
         
-        Button twoButton = (Button) findViewById(R.id.reorder_launch_four);
+        Button twoButton = findViewById(R.id.reorder_launch_four);
         twoButton.setOnClickListener(mClickListener);
     }
 
     /**
-     * OnClickListener for the "Go to the fourth" Button R.id.reorder_launch_four.
+     * Called when the "Go to the fourth" Button R.id.reorder_launch_four is clicked.
+     * We create an Intent to launch the Activity ReorderFour and start that Activity.
+     *
+     * Parameter: View of the Button that was clicked
      */
     private final OnClickListener mClickListener = new OnClickListener() {
-        /**
-         * Called when the "Go to the fourth" Button R.id.reorder_launch_four is clicked.
-         * We create an Intent to launch the Activity ReorderFour and start that Activity.
-         *
-         * @param v View of the Button that was clicked
-         */
+
         @Override
         public void onClick(View v) {
             startActivity(new Intent(ReorderThree.this, ReorderFour.class));
