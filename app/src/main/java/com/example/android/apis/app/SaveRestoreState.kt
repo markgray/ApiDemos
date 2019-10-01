@@ -61,7 +61,7 @@ class SaveRestoreState : Activity() {
      * change the text that is currently in the "saved" editor.
      */
     @Suppress("unused")
-    internal var savedText: CharSequence
+    var savedText: CharSequence
         get() = (findViewById<View>(R.id.saved) as EditText).text
         set(text) = (findViewById<View>(R.id.saved) as EditText).setText(text)
 
