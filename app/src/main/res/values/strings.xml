@@ -1675,4 +1675,6 @@
     <string name="run">Run</string>
     <string name="do_something">Do something</string>
     <string name="settings_icon">Settings icon</string>
+    <string name="current_orientation">Current Orientation</string>
+    <string name="requested_orientation">Requested orientation</string>
 </resources>

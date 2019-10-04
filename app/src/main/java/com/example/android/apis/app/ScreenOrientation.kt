@@ -25,6 +25,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
 
 import com.example.android.apis.R
@@ -38,6 +39,10 @@ import com.example.android.apis.R
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class ScreenOrientation : Activity() {
     lateinit var mOrientation: Spinner // Spinner in layout used for choosing orientation
+
+    var mCurrentOrientation: Int = -2 //
+
+    var mNewOrientation: Int = -2
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -59,6 +64,8 @@ class ScreenOrientation : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.screen_orientation)
 
+        val applyButton = findViewById<Button>(R.id.apply_button)
+        applyButton.setOnClickListener { v -> applyNewOrientation(v) }
         mOrientation = findViewById(R.id.orientation)
         val adapter = ArrayAdapter.createFromResource(
                 this, R.array.screen_orientations, android.R.layout.simple_spinner_item)
@@ -81,7 +88,7 @@ class ScreenOrientation : Activity() {
                     position: Int,
                     id: Long
             ) {
-                requestedOrientation = mOrientationValues[position]
+                selectNewOrientation(position)
             }
 
             /**
@@ -93,9 +100,21 @@ class ScreenOrientation : Activity() {
              * @param parent The AdapterView that now contains no selected item.
              */
             override fun onNothingSelected(parent: AdapterView<*>) {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                selectNewOrientation(0) // SCREEN_ORIENTATION_UNSPECIFIED
             }
         }
+    }
+
+    fun selectNewOrientation(position: Int) {
+        mCurrentOrientation = requestedOrientation
+        mNewOrientation = mOrientationValues[position]
+        if(mNewOrientation == mCurrentOrientation) return
+        requestedOrientation = mNewOrientation
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun applyNewOrientation(view: View) {
+        requestedOrientation = mNewOrientation
     }
 
     companion object {

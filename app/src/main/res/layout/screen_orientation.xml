@@ -13,31 +13,52 @@
      limitations under the License.
 -->
 
-<!-- Demonstrates implementation of a DeviceAdmin. -->
+<!-- Demonstrates choosing screen orientation programmatically -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="4dip"
-    tools:ignore="InefficientWeight">
+    android:layout_width="match_parent">
 
-    <TextView
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:paddingBottom="4dip"
-        android:text="@string/screen_orientation_summary"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="4dip"
+        tools:ignore="InefficientWeight">
 
-    <!--suppress CheckTagEmptyBody -->
-    <Spinner
-        android:id="@+id/orientation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawSelectorOnTop="true"
-        android:prompt="@string/screen_orientation"></Spinner>
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:paddingBottom="4dip"
+            android:text="@string/screen_orientation_summary"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Spinner
+            android:id="@+id/orientation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/screen_orientation" />
+
+        <Button
+            android:id="@+id/apply_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/apply" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/current_orientation" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/requested_orientation" />
+
+    </LinearLayout>
+</ScrollView>
 
