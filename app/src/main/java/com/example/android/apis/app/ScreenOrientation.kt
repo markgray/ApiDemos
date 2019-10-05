@@ -16,17 +16,15 @@
 
 package com.example.android.apis.app
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
+import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
 
 import com.example.android.apis.R
 
@@ -43,6 +41,9 @@ class ScreenOrientation : Activity() {
     var mCurrentOrientation: Int = -2 //
 
     var mNewOrientation: Int = -2
+
+    lateinit var mCurrentTextView: TextView
+    lateinit var mRequestedTextView: TextView
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -64,6 +65,8 @@ class ScreenOrientation : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.screen_orientation)
 
+        mCurrentTextView = findViewById(R.id.current_orientation)
+        mRequestedTextView = findViewById(R.id.requested_orientation)
         val applyButton = findViewById<Button>(R.id.apply_button)
         applyButton.setOnClickListener { v -> applyNewOrientation(v) }
         mOrientation = findViewById(R.id.orientation)
@@ -105,16 +108,24 @@ class ScreenOrientation : Activity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     fun selectNewOrientation(position: Int) {
         mCurrentOrientation = requestedOrientation
+        mCurrentTextView.text = "Current Orientation:\n ${orientationDesciption(mCurrentOrientation)}"
         mNewOrientation = mOrientationValues[position]
-        if(mNewOrientation == mCurrentOrientation) return
-        requestedOrientation = mNewOrientation
+        mRequestedTextView.text = "Requested Orientation:\n ${orientationDesciption(mNewOrientation)}"
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun applyNewOrientation(view: View) {
         requestedOrientation = mNewOrientation
+    }
+
+    fun orientationDesciption(orient: Int) : String {
+        for(i in mOrientationValues.indices) {
+            if(mOrientationValues[i] == orient) return mOrientationDescriptions[i]
+        }
+        return "Unknown orientation: $orient"
     }
 
     companion object {
@@ -138,6 +149,24 @@ class ScreenOrientation : Activity() {
                 ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT,
                 ActivityInfo.SCREEN_ORIENTATION_FULL_USER,
                 ActivityInfo.SCREEN_ORIENTATION_LOCKED
+        )
+        val mOrientationDescriptions = arrayOf(
+                "SCREEN_ORIENTATION_UNSPECIFIED",
+                "SCREEN_ORIENTATION_LANDSCAPE",
+                "SCREEN_ORIENTATION_PORTRAIT",
+                "SCREEN_ORIENTATION_USER",
+                "SCREEN_ORIENTATION_BEHIND",
+                "SCREEN_ORIENTATION_SENSOR",
+                "SCREEN_ORIENTATION_NOSENSOR",
+                "SCREEN_ORIENTATION_SENSOR_LANDSCAPE",
+                "SCREEN_ORIENTATION_SENSOR_PORTRAIT",
+                "SCREEN_ORIENTATION_REVERSE_LANDSCAPE",
+                "SCREEN_ORIENTATION_REVERSE_PORTRAIT",
+                "SCREEN_ORIENTATION_FULL_SENSOR",
+                "SCREEN_ORIENTATION_USER_LANDSCAPE",
+                "SCREEN_ORIENTATION_USER_PORTRAIT",
+                "SCREEN_ORIENTATION_FULL_USER",
+                "SCREEN_ORIENTATION_LOCKED"
         )
     }
 }
