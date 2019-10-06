@@ -111,9 +111,9 @@ class ScreenOrientation : Activity() {
     @SuppressLint("SetTextI18n")
     fun selectNewOrientation(position: Int) {
         mCurrentOrientation = requestedOrientation
-        mCurrentTextView.text = "Current Orientation:\n ${orientationDesciption(mCurrentOrientation)}"
+        mCurrentTextView.text = orientationDesciption(mCurrentOrientation)
         mNewOrientation = mOrientationValues[position]
-        mRequestedTextView.text = "Requested Orientation:\n ${orientationDesciption(mNewOrientation)}"
+        mRequestedTextView.text = orientationDesciption(mNewOrientation)
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -121,9 +121,9 @@ class ScreenOrientation : Activity() {
         requestedOrientation = mNewOrientation
     }
 
-    fun orientationDesciption(orient: Int) : String {
-        for(i in mOrientationValues.indices) {
-            if(mOrientationValues[i] == orient) return mOrientationDescriptions[i]
+    fun orientationDesciption(orient: Int): String {
+        for (i in mOrientationValues.indices) {
+            if (mOrientationValues[i] == orient) return mOrientationDescriptions[i]
         }
         return "Unknown orientation: $orient"
     }
@@ -151,22 +151,22 @@ class ScreenOrientation : Activity() {
                 ActivityInfo.SCREEN_ORIENTATION_LOCKED
         )
         val mOrientationDescriptions = arrayOf(
-                "SCREEN_ORIENTATION_UNSPECIFIED",
-                "SCREEN_ORIENTATION_LANDSCAPE",
-                "SCREEN_ORIENTATION_PORTRAIT",
-                "SCREEN_ORIENTATION_USER",
-                "SCREEN_ORIENTATION_BEHIND",
-                "SCREEN_ORIENTATION_SENSOR",
-                "SCREEN_ORIENTATION_NOSENSOR",
-                "SCREEN_ORIENTATION_SENSOR_LANDSCAPE",
-                "SCREEN_ORIENTATION_SENSOR_PORTRAIT",
-                "SCREEN_ORIENTATION_REVERSE_LANDSCAPE",
-                "SCREEN_ORIENTATION_REVERSE_PORTRAIT",
-                "SCREEN_ORIENTATION_FULL_SENSOR",
-                "SCREEN_ORIENTATION_USER_LANDSCAPE",
-                "SCREEN_ORIENTATION_USER_PORTRAIT",
-                "SCREEN_ORIENTATION_FULL_USER",
-                "SCREEN_ORIENTATION_LOCKED"
+                "SCREEN_ORIENTATION_UNSPECIFIED\nNo preference specified: let the system decide the best orientation. This will either be the orientation selected by the activity below, or the user's preferred orientation if this activity is the bottom of a task. If the user explicitly turned off sensor based orientation through settings sensor based device rotation will be ignored. If not by default sensor based orientation will be taken into account and the orientation will changed based on how the user rotates the device",
+                "SCREEN_ORIENTATION_LANDSCAPE\nWould like to have the screen in a landscape orientation: that is, with the display wider than it is tall, ignoring sensor data",
+                "SCREEN_ORIENTATION_PORTRAIT\nWould like to have the screen in a portrait orientation: that is, with the display taller than it is wide, ignoring sensor data",
+                "SCREEN_ORIENTATION_USER\nUse the user's current preferred orientation of the handset",
+                "SCREEN_ORIENTATION_BEHIND\nKeep the screen in the same orientation as whatever is behind this activity",
+                "SCREEN_ORIENTATION_SENSOR\nOrientation is determined by a physical orientation sensor: the display will rotate based on how the user moves the device. Ignores user's setting to turn off sensor-based rotation",
+                "SCREEN_ORIENTATION_NOSENSOR\nAlways ignore orientation determined by orientation sensor: the display will not rotate when the user moves the device.",
+                "SCREEN_ORIENTATION_SENSOR_LANDSCAPE\nWould like to have the screen in landscape orientation, but can use the sensor to change which direction the screen is facing",
+                "SCREEN_ORIENTATION_SENSOR_PORTRAIT\nWould like to have the screen in portrait orientation, but can use the sensor to change which direction the screen is facing",
+                "SCREEN_ORIENTATION_REVERSE_LANDSCAPE\nWould like to have the screen in landscape orientation, turned in the opposite direction from normal landscape",
+                "SCREEN_ORIENTATION_REVERSE_PORTRAIT\nWould like to have the screen in portrait orientation, turned in the opposite direction from normal portrait.",
+                "SCREEN_ORIENTATION_FULL_SENSOR\nOrientation is determined by a physical orientation sensor: the display will rotate based on how the user moves the device. This allows any of the 4 possible rotations, regardless of what the device will normally do (for example some devices won't normally use 180 degree rotation)",
+                "SCREEN_ORIENTATION_USER_LANDSCAPE\nWould like to have the screen in landscape orientation, but if the user has enabled sensor-based rotation then we can use the sensor to change which direction the screen is facing",
+                "SCREEN_ORIENTATION_USER_PORTRAIT\nWould like to have the screen in portrait orientation, but if the user has enabled sensor-based rotation then we can use the sensor to change which direction the screen is facing",
+                "SCREEN_ORIENTATION_FULL_USER\nRespect the user's sensor-based rotation preference, but if sensor-based rotation is enabled then allow the screen to rotate in all 4 possible directions regardless of what the device will normally do (for example some devices won't normally use 180 degree rotation)",
+                "SCREEN_ORIENTATION_LOCKED\nScreen is locked to its current rotation, whatever that is"
         )
     }
 }

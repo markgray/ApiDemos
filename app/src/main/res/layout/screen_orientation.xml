@@ -50,16 +50,26 @@
             android:text="@string/apply" />
 
         <TextView
-            android:id="@+id/current_orientation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
             android:text="@string/current_orientation" />
+
+        <TextView
+            android:id="@+id/current_orientation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="@string/requested_orientation" />
 
         <TextView
             android:id="@+id/requested_orientation"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/requested_orientation" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 </ScrollView>
