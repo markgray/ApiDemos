@@ -88,7 +88,7 @@ class SecureDialogActivity : Activity(), View.OnClickListener {
                 .create()
 
         // Make the dialog secure.  This must be done at the time the dialog is
-        // created.  It cannot be changed after the dialog has been shown.
+        // created. It cannot be changed after the dialog has been shown.
         dialog.window!!.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE)
 
