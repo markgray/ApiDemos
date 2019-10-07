@@ -36,28 +36,48 @@ import com.example.android.apis.R
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class ScreenOrientation : Activity() {
-    lateinit var mOrientation: Spinner // Spinner in layout used for choosing orientation
+    /**
+     * [Spinner] in layout used for choosing orientation
+     */
+    lateinit var mOrientation: Spinner
 
-    var mCurrentOrientation: Int = -2 //
+    /**
+     * The current orientation.
+     */
+    var mCurrentOrientation: Int = -2
 
+    /**
+     * Orientation chosen by the [mOrientation] orientation [Spinner]
+     */
     var mNewOrientation: Int = -2
 
+    /**
+     * [TextView] displaying information about the current orientation.
+     */
     lateinit var mCurrentTextView: TextView
+    /**
+     * [TextView] displaying information about the requested orientation.
+     */
     lateinit var mRequestedTextView: TextView
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, then we set our content view to our layout file R.layout.screen_orientation. We
-     * locate the Spinner in the layout (R.id.orientation) and save a reference to it in our field
-     * mOrientation. We create `ArrayAdapter<CharSequence>` adapter using the xml defined String array
+     * `onCreate`, then we set our content view to our layout file R.layout.screen_orientation.
+     * We initialize our [TextView] field [mCurrentTextView] by finding the view in our layout file
+     * with id R.id.current_orientation, and our [TextView] field [mRequestedTextView] by finding
+     * the view in our layout file with id R.id.requested_orientation. We initialize our [Button]
+     * variable `val applyButton` by finding the view with id R.id.apply_button, and set its
+     * `OnClickListener` to a lambda which calls our method [applyNewOrientation] to apply the
+     * orientation requested by the [Spinner] item that was last selected. We locate the [Spinner]
+     * in the layout (R.id.orientation) and save a reference to it in our field [mOrientation]. We
+     * create a `ArrayAdapter<CharSequence>` variable `val adapter` using the xml defined String array
      * R.array.screen_orientations, and using for the item layout the system defined layout file
      * android.R.layout.simple_spinner_item. Then we set the layout resource to create the drop down
      * views to R.layout.simple_spinner_dropdown_item (the list displays the items using a different
      * layout from the single item layout specified in the constructor). We set the SpinnerAdapter
-     * used to provide the data which backs the Spinner mOrientation to **adapter**, and
-     * finally we set the OnItemSelectedListener of **mOrientation** to an anonymous class
-     * which calls setRequestedOrientation with the appropriate orientation constant for the item
-     * selected in the Spinner.
+     * used to provide the data which backs the Spinner mOrientation to **adapter**, and finally we
+     * set the `OnItemSelectedListener` of [mOrientation] to an anonymous class which calls our method
+     * [selectNewOrientation] with the position of the item that was selected in the Spinner.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not called
      */
@@ -77,8 +97,8 @@ class ScreenOrientation : Activity() {
         mOrientation.onItemSelectedListener = object : OnItemSelectedListener {
             /**
              * Callback method to be invoked when an item in this view has been selected.
-             * We simply call setRequestedOrientation to set the desired orientation of
-             * the activity to the type requested in the Spinner.
+             * We simply call our method [selectNewOrientation] to set the desired
+             * orientation of the activity to the type requested in the Spinner.
              *
              * @param parent The AdapterView where the selection happened
              * @param view The view within the AdapterView that was clicked
@@ -97,8 +117,8 @@ class ScreenOrientation : Activity() {
             /**
              * Callback method to be invoked when the selection disappears from this view.
              * The selection can disappear for instance when touch is activated or when the
-             * adapter becomes empty. We simply call setRequestedOrientation to set the
-             * desired orientation of the activity to SCREEN_ORIENTATION_UNSPECIFIED.
+             * adapter becomes empty. We simply call our method [selectNewOrientation] to set
+             * the desired orientation of the activity to SCREEN_ORIENTATION_UNSPECIFIED.
              *
              * @param parent The AdapterView that now contains no selected item.
              */
@@ -108,20 +128,49 @@ class ScreenOrientation : Activity() {
         }
     }
 
+    /**
+     * Called when a new orientation has been selected by the [Spinner]. We set our field
+     * [mCurrentOrientation] to the devices current orientation setting, and then set the
+     * text of our [TextView] field [mCurrentTextView] to the description of that setting
+     * that is returned by our [orientationDescription] method. We then set our field
+     * [mNewOrientation] to the orientation constant for the item in position [position],
+     * and set the text of our [TextView] field [mRequestedTextView] to the description of
+     * that setting that is returned by our [orientationDescription] method.
+     *
+     * @param position Position of the item that was selected in the [Spinner]
+     */
     @SuppressLint("SetTextI18n")
     fun selectNewOrientation(position: Int) {
         mCurrentOrientation = requestedOrientation
-        mCurrentTextView.text = orientationDesciption(mCurrentOrientation)
+        mCurrentTextView.text = orientationDescription(mCurrentOrientation)
         mNewOrientation = mOrientationValues[position]
-        mRequestedTextView.text = orientationDesciption(mNewOrientation)
+        mRequestedTextView.text = orientationDescription(mNewOrientation)
     }
 
+    /**
+     * Called to apply the orientation requested by the [Spinner]. We set the text of our [TextView]
+     * field [mCurrentTextView] to the description of the setting chosen in our field [mNewOrientation]
+     * that is returned by our [orientationDescription] method, then change the orientation of this
+     * activity to that orientation.
+     *
+     * @param view Unused (I originally intended this to be an `OnClickListener`)
+     */
     @Suppress("UNUSED_PARAMETER")
     fun applyNewOrientation(view: View) {
+        mCurrentTextView.text = orientationDescription(mNewOrientation)
         requestedOrientation = mNewOrientation
     }
 
-    fun orientationDesciption(orient: Int): String {
+    /**
+     * Returns a description of the orientation constant passed us. We search through all of the
+     * orientation constants in our [mOrientationValues] array until we find our parameter [orient],
+     * at which point we return the [String] in our [mOrientationDescriptions] array which has the
+     * same index. If we do not find it we return the string "Unknown orientation".
+     *
+     * @param orient the orientation constant
+     * @return the [String] in our [mOrientationDescriptions] field describing [orient].
+     */
+    fun orientationDescription(orient: Int): String {
         for (i in mOrientationValues.indices) {
             if (mOrientationValues[i] == orient) return mOrientationDescriptions[i]
         }
@@ -130,8 +179,10 @@ class ScreenOrientation : Activity() {
 
     companion object {
 
-        // Orientation spinner choices
-        // This list must match the list found in samples/ApiDemos/res/values/arrays.xml
+        /**
+         * Orientation spinner choices This list must match the string array found in
+         * ApiDemos/res/values/arrays.xml with the ID R.array.screen_orientations
+         */
         val mOrientationValues = intArrayOf(
                 ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED,
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE,
@@ -150,6 +201,9 @@ class ScreenOrientation : Activity() {
                 ActivityInfo.SCREEN_ORIENTATION_FULL_USER,
                 ActivityInfo.SCREEN_ORIENTATION_LOCKED
         )
+        /**
+         * Descriptions of the orientation constants in [mOrientationValues].
+         */
         val mOrientationDescriptions = arrayOf(
                 "SCREEN_ORIENTATION_UNSPECIFIED\nNo preference specified: let the system decide the best orientation. This will either be the orientation selected by the activity below, or the user's preferred orientation if this activity is the bottom of a task. If the user explicitly turned off sensor based orientation through settings sensor based device rotation will be ignored. If not by default sensor based orientation will be taken into account and the orientation will changed based on how the user rotates the device",
                 "SCREEN_ORIENTATION_LANDSCAPE\nWould like to have the screen in a landscape orientation: that is, with the display wider than it is tall, ignoring sensor data",
