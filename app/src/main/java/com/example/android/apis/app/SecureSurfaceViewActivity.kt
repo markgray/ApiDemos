@@ -14,46 +14,47 @@
  * limitations under the License.
  */
 
-package com.example.android.apis.app;
+package com.example.android.apis.app
 
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.opengl.GLSurfaceView;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.SurfaceView;
-
-import com.example.android.apis.R;
-import com.example.android.apis.graphics.CubeRenderer;
+import android.annotation.TargetApi
+import android.app.Activity
+import android.opengl.GLSurfaceView
+import android.os.Build
+import android.os.Bundle
+import android.view.SurfaceView
+import com.example.android.apis.R
+import com.example.android.apis.graphics.CubeRenderer
 
 /**
  * <h3>Secure Window Activity</h3>
  *
- * <p>
- * This activity demonstrates how to create a {@link SurfaceView} backed by
- * a secure surface using {@link SurfaceView#setSecure}.
+ *
+ *
+ * This activity demonstrates how to create a [SurfaceView] backed by
+ * a secure surface using [SurfaceView.setSecure].
  * Because the surface is secure, its contents cannot be captured in screenshots
  * and will not be visible on non-secure displays even when mirrored.
- * </p><p>
+ *
+ *
  * Here are a few things you can do to experiment with secure surfaces and
  * observe their behavior.
- * <ul>
- * <li>Try taking a screenshot.  Either the system will prevent you from taking
+ *
+ *  * Try taking a screenshot.  Either the system will prevent you from taking
  * a screenshot altogether or the screenshot should not contain the contents
  * of the secure surface.
- * <li>Try mirroring the secure surface onto a non-secure display such as an
+ *  * Try mirroring the secure surface onto a non-secure display such as an
  * "Overlay Display" created using the "Simulate secondary displays" option in
  * the "Developer options" section of the Settings application.  The non-secure
  * secondary display should not show the contents of the secure surface.
- * <li>Try mirroring the secure surface onto a secure display such as an
+ *  * Try mirroring the secure surface onto a secure display such as an
  * HDMI display with HDCP enabled.  The contents of the secure surface should appear
  * on the display.
- * </ul>
- * </p>
+ *
+ *
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-public class SecureSurfaceViewActivity extends Activity {
-    private GLSurfaceView mSurfaceView; // GLSurfaceView in our layout
+class SecureSurfaceViewActivity : Activity() {
+    private var mSurfaceView: GLSurfaceView? = null // GLSurfaceView in our layout
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -65,59 +66,56 @@ public class SecureSurfaceViewActivity extends Activity {
      *
      * @param savedInstanceState always null since onSaveInstanceState is not called
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         // Be sure to call the super class.
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState)
 
         // See assets/res/any/layout/secure_surface_view_activity.xml for this
         // view layout definition, which is being set here as
         // the content of our screen.
-        setContentView(R.layout.secure_surface_view_activity);
+        setContentView(R.layout.secure_surface_view_activity)
 
         // Set up the surface view.
         // We use a GLSurfaceView in this demonstration but ordinary
         // SurfaceViews also support the same secure surface functionality.
-        mSurfaceView = (GLSurfaceView)findViewById(R.id.surface_view);
-        mSurfaceView.setRenderer(new CubeRenderer(false));
+        mSurfaceView = findViewById(R.id.surface_view)
+        mSurfaceView!!.setRenderer(CubeRenderer(false))
 
         // Make the surface view secure.  This must be done at the time the surface view
         // is created before the surface view's containing window is attached to
         // the window manager which happens after onCreate returns.
         // It cannot be changed later.
-        mSurfaceView.setSecure(true);
+        mSurfaceView!!.setSecure(true)
     }
 
     /**
-     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or
-     * {@link #onPause}, for your activity to start interacting with the user.
+     * Called after [.onRestoreInstanceState], [.onRestart], or
+     * [.onPause], for your activity to start interacting with the user.
      *
      * First we call through to our super's implementation of onResume, then we call the onResume
      * callback of our GLSurfaceView mSurfaceView.
      */
-    @Override
-    protected void onResume() {
+    override fun onResume() {
         // Be sure to call the super class.
-        super.onResume();
+        super.onResume()
 
         // Resume rendering.
-        mSurfaceView.onResume();
+        mSurfaceView!!.onResume()
     }
 
     /**
      * Called as part of the activity lifecycle when an activity is going into
      * the background, but has not (yet) been killed.  The counterpart to
-     * {@link #onResume}.
+     * [.onResume].
      *
      * First we call through to our super's implementation of onPause, then we call the onPause
      * callback of our GLSurfaceView mSurfaceView.
      */
-    @Override
-    protected void onPause() {
+    override fun onPause() {
         // Be sure to call the super class.
-        super.onPause();
+        super.onPause()
 
         // Pause rendering.
-        mSurfaceView.onPause();
+        mSurfaceView!!.onPause()
     }
 }
