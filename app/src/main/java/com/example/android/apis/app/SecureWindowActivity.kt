@@ -41,8 +41,6 @@ import android.view.WindowManager
  *  - Try mirroring the secure surface onto a secure display such as an
  * HDMI display with HDCP enabled.  The contents of the secure surface should appear
  * on the display.
- *
- *
  */
 class SecureWindowActivity : Activity() {
     /**
