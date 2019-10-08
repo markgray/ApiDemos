@@ -26,42 +26,37 @@ import com.example.android.apis.R
 import com.example.android.apis.graphics.CubeRenderer
 
 /**
- * <h3>Secure Window Activity</h3>
+ * Secure Window Activity
  *
- *
- *
- * This activity demonstrates how to create a [SurfaceView] backed by
- * a secure surface using [SurfaceView.setSecure].
- * Because the surface is secure, its contents cannot be captured in screenshots
- * and will not be visible on non-secure displays even when mirrored.
- *
+ * This activity demonstrates how to create a [SurfaceView] backed by a secure surface using
+ * [SurfaceView.setSecure]. Because the surface is secure, its contents cannot be captured in
+ * screenshots and will not be visible on non-secure displays even when mirrored.
  *
  * Here are a few things you can do to experiment with secure surfaces and
- * observe their behavior.
- *
- *  * Try taking a screenshot.  Either the system will prevent you from taking
+ * observe their behavior:
+ *  - Try taking a screenshot. Either the system will prevent you from taking
  * a screenshot altogether or the screenshot should not contain the contents
  * of the secure surface.
- *  * Try mirroring the secure surface onto a non-secure display such as an
+ *  - Try mirroring the secure surface onto a non-secure display such as an
  * "Overlay Display" created using the "Simulate secondary displays" option in
  * the "Developer options" section of the Settings application.  The non-secure
  * secondary display should not show the contents of the secure surface.
- *  * Try mirroring the secure surface onto a secure display such as an
+ *  - Try mirroring the secure surface onto a secure display such as an
  * HDMI display with HDCP enabled.  The contents of the secure surface should appear
- * on the display.
- *
- *
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 class SecureSurfaceViewActivity : Activity() {
-    private var mSurfaceView: GLSurfaceView? = null // GLSurfaceView in our layout
+    /**
+     * GLSurfaceView in our layout
+     */
+    private var mSurfaceView: GLSurfaceView? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, then we set our content view to our layout file R.layout.secure_surface_view_activity.
-     * We initialize our field GLSurfaceView mSurfaceView by locating the GLSurfaceView in our layout
-     * (R.id.surface_view) and set the renderer associated with this view to a new instance of
-     * CubeRenderer (two rotating cubes) which also starts the thread that will call the renderer,
+     * `onCreate`, then we set our content view to our layout file R.layout.secure_surface_view_activity.
+     * We initialize our [GLSurfaceView] field [mSurfaceView] by locating the [GLSurfaceView] in our
+     * layout (R.id.surface_view) and set the renderer associated with this view to a new instance
+     * of [CubeRenderer] (two rotating cubes) which also starts the thread that will call the renderer,
      * which in turn causes the rendering to start. Finally we set the surface view to be secure.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not called
@@ -89,11 +84,9 @@ class SecureSurfaceViewActivity : Activity() {
     }
 
     /**
-     * Called after [.onRestoreInstanceState], [.onRestart], or
-     * [.onPause], for your activity to start interacting with the user.
-     *
-     * First we call through to our super's implementation of onResume, then we call the onResume
-     * callback of our GLSurfaceView mSurfaceView.
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for your activity to start
+     * interacting with the user. First we call through to our super's implementation of `onResume`,
+     * then we call the `onResume` callback of our [GLSurfaceView] field [mSurfaceView].
      */
     override fun onResume() {
         // Be sure to call the super class.
@@ -104,12 +97,10 @@ class SecureSurfaceViewActivity : Activity() {
     }
 
     /**
-     * Called as part of the activity lifecycle when an activity is going into
-     * the background, but has not (yet) been killed.  The counterpart to
-     * [.onResume].
-     *
-     * First we call through to our super's implementation of onPause, then we call the onPause
-     * callback of our GLSurfaceView mSurfaceView.
+     * Called as part of the activity lifecycle when an activity is going into the background, but
+     * has not (yet) been killed. The counterpart to [onResume]. First we call through to our super's
+     * implementation of `onPause`, then we call the `onPause` callback of our [GLSurfaceView] field
+     * [mSurfaceView].
      */
     override fun onPause() {
         // Be sure to call the super class.

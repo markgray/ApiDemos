@@ -534,6 +534,7 @@ App
 
     App/Activity/Secure Surfaces/Secure Surface View    all
         .app.SecureSurfaceViewActivity                  v17+ or Crash
+        .graphics.CubeRenderer
             This activity demonstrates how to make a SurfaceView use a secure surface so 
             that its contents will only be visible on secure displays. The surface view's
             window has been made secure using setSecure(true) to make it use a secure 
