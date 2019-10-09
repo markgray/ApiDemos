@@ -32,9 +32,7 @@ import java.io.IOException
 import kotlin.math.floor
 
 /**
- * <h3>SetWallpaper Activity</h3>
- *
- *
+ * SetWallpaper Activity
  *
  * This demonstrates the how to write an activity that gets the current system wallpaper,
  * modifies it and sets the modified bitmap as system wallpaper.
@@ -43,19 +41,20 @@ class SetWallpaperActivity : Activity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, then we set our content view to our layout file R.layout.wallpaper_2. Next we set
-     * our variable WallpaperManager wallpaperManager to an instance of WallpaperManager associated
-     * with our Activity's Context. We use **wallpaperManager** to retrieve the current
-     * system wallpaper to our variable **Drawable wallpaperDrawable**. We set our variable
-     * **ImageView imageView** to the ImageView in our layout R.id.imageview, enable the
-     * drawing cache for imageView, and then set the drawable wallpaperDrawable as the content of
-     * imageView. Next we locate the Button "Randomize" (R.id.randomize) and set its OnClickListener
-     * to an anonymous class which sets a random color filter for wallpaperDrawable, sets the
-     * modified drawable as the new content of imageView and invalidates imageView causing it to
-     * redraw itself with the new content. Finally we locate the Button "Set Wallpaper"
-     * (R.id.setwallpaper) and set its OnClickListener to an anonymous class which instructs our
-     * instance of WallpaperManager wallpaperManager to change the current system wallpaper to the
-     * bitmap cached in **imageView**.
+     * `onCreate`, then we set our content view to our layout file R.layout.wallpaper_2. Next we set
+     * our [WallpaperManager] variable `val wallpaperManager` to an instance of [WallpaperManager]
+     * associated with our Activity's Context. We use `wallpaperManager` to retrieve the current
+     * system wallpaper to our variable `Drawable` variable `val wallpaperDrawable`. We set our
+     * [ImageView] variable `val imageView` to the [ImageView] in our layout file with the ID
+     * R.id.imageview, enable the drawing cache for `imageView`, and then set the drawable
+     * `wallpaperDrawable` as the content of `imageView`. Next we locate the [Button] "Randomize"
+     * (R.id.randomize) to initialize our [Button] variable `val randomize` and set its `OnClickListener`
+     * to a lambda which sets a random color filter for `wallpaperDrawable`, sets the modified drawable
+     * as the new content of `imageView` and invalidates `imageView` causing it to redraw itself with
+     * the new content. Finally we locate the [Button] "Set Wallpaper" (R.id.setwallpaper) to initialie
+     * our variable `val setWallpaper` and set its `OnClickListener`] to a lambda which instructs our
+     * instance of [WallpaperManager] `wallpaperManager` to change the current system wallpaper to the
+     * bitmap cached in `imageView`.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
@@ -113,7 +112,13 @@ class SetWallpaperActivity : Activity() {
         }
     }
 
+    /**
+     * Our static constants.
+     */
     companion object {
+        /**
+         * Array of colors to be used as the random filter applied to our wallpaper.
+         */
         private val mColors = intArrayOf(Color.BLUE, Color.GREEN, Color.RED,
                 Color.LTGRAY, Color.MAGENTA, Color.CYAN, Color.YELLOW, Color.WHITE)
     }
