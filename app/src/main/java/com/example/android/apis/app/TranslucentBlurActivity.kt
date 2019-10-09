@@ -14,24 +14,26 @@
  * limitations under the License.
  */
 
-package com.example.android.apis.app;
+package com.example.android.apis.app
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
-import com.example.android.apis.R;
+import com.example.android.apis.R
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.WindowManager;
+import android.app.Activity
+import android.os.Bundle
+import android.view.WindowManager
 
 
 /**
  * <h3>Fancy Blur Activity</h3>
- * <p>
- * <p>This demonstrates the how to write an activity that is translucent,
+ *
+ *
+ *
+ * This demonstrates the how to write an activity that is translucent,
  * allowing windows underneath to show through, with a fancy blur
- * compositing effect.</p>
+ * compositing effect.
  *
  * This is the same as .app.TranslucentActivity, with the background blurred on
  * older api's - WindowManager.LayoutParams.FLAG_BLUR_BEHIND is no longer
@@ -39,7 +41,7 @@ import android.view.WindowManager;
  * is just to leave the background even more visible than the foreground --
  * TranslucentActivity has a much better look.
  */
-public class TranslucentBlurActivity extends Activity {
+class TranslucentBlurActivity : Activity() {
     /**
      * Initialization of the Activity after it is first created. First we call through to our
      * super's implementation of onCreate, then we set the flag FLAG_BLUR_BEHIND of or our
@@ -48,19 +50,19 @@ public class TranslucentBlurActivity extends Activity {
      *
      * @param icicle always null since onSaveInstanceState is not overridden
      */
-    @Override
-    protected void onCreate(Bundle icicle) {
+    override fun onCreate(icicle: Bundle?) {
         // Be sure to call the super class.
-        super.onCreate(icicle);
+        super.onCreate(icicle)
 
         // Have the system blur any windows behind this one.
-        //noinspection deprecation
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
-                WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+
+        @Suppress("DEPRECATION")
+        window.setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
+                WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
 
         // See assets/res/any/layout/translucent_background.xml for this
         // view layout definition, which is being set here as
         // the content of our screen.
-        setContentView(R.layout.translucent_background);
+        setContentView(R.layout.translucent_background)
     }
 }
