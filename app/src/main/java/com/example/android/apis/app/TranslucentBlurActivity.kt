@@ -27,13 +27,10 @@ import android.view.WindowManager
 
 
 /**
- * <h3>Fancy Blur Activity</h3>
+ * Fancy Blur Activity
  *
- *
- *
- * This demonstrates the how to write an activity that is translucent,
- * allowing windows underneath to show through, with a fancy blur
- * compositing effect.
+ * This demonstrates the how to write an activity that is translucent, allowing windows underneath
+ * to show through, with a fancy blur compositing effect.
  *
  * This is the same as .app.TranslucentActivity, with the background blurred on
  * older api's - WindowManager.LayoutParams.FLAG_BLUR_BEHIND is no longer
@@ -44,11 +41,11 @@ import android.view.WindowManager
 class TranslucentBlurActivity : Activity() {
     /**
      * Initialization of the Activity after it is first created. First we call through to our
-     * super's implementation of onCreate, then we set the flag FLAG_BLUR_BEHIND of or our
+     * super's implementation of `onCreate`, then we set the flag FLAG_BLUR_BEHIND of or our
      * window (Blurring is no longer supported however, so the result is just to leave the
      * background even more visible than the foreground.
      *
-     * @param icicle always null since onSaveInstanceState is not overridden
+     * @param icicle always null since `onSaveInstanceState` is not overridden
      */
     override fun onCreate(icicle: Bundle?) {
         // Be sure to call the super class.
