@@ -36,34 +36,22 @@ import com.example.android.apis.R
 import java.util.*
 
 /**
- * Example of scheduling one-shot and repeating alarms.  See
- * [OneShotAlarm] for the code run when the one-shot alarm goes off, and
- * [RepeatingAlarm] for the code run when the repeating alarm goes off.
- * <h4>Demo</h4>
+ * Example of scheduling one-shot and repeating alarms. See [OneShotAlarm] for the code run when the
+ * one-shot alarm goes off, and [RepeatingAlarm] for the code run when the repeating alarm goes off.
+ *
+ * Demo
  * App/Service/Alarm Controller
  *
- * <h4>Source files</h4>
- * <table class="LinkTable">
- * <tr>
- * <td class="LinkColumn">src/com.example.android.apis/app/AlarmController.java</td>
- * <td class="DescrColumn">The activity that lets you schedule alarms</td>
-</tr> *
- * <tr>
- * <td class="LinkColumn">src/com.example.android.apis/app/OneShotAlarm.java</td>
- * <td class="DescrColumn">This is an intent receiver that executes when the
- * one-shot alarm goes off</td>
-</tr> *
- * <tr>
- * <td class="LinkColumn">src/com.example.android.apis/app/RepeatingAlarm.java</td>
- * <td class="DescrColumn">This is an intent receiver that executes when the
- * repeating alarm goes off</td>
-</tr> *
- * <tr>
- * <td class="LinkColumn">/res/any/layout/alarm_controller.xml</td>
- * <td class="DescrColumn">Defines contents of the screen</td>
-</tr> *
-</table> *
- *
+ * Source files:
+ *  - src/com.example.android.apis/app/AlarmController.kt
+ *  The activity that lets you schedule alarms
+ *  - src/com.example.android.apis/app/OneShotAlarm.kt
+ *  This is an intent receiver that executes when the
+ *  one-shot alarm goes off
+ *  - src/com.example.android.apis/app/RepeatingAlarm.kt
+ *  This is an intent receiver that executes when the repeating alarm goes off
+ *  - /res/any/layout/alarm_controller.xml
+ *  Defines contents of the screen<
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @RequiresApi(api = Build.VERSION_CODES.M)
