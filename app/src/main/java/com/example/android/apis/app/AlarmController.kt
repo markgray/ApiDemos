@@ -75,49 +75,14 @@ class AlarmController : Activity() {
          * with a new instance, set its time to the current time in milliseconds, then add 30 seconds to
          * it. We initialize `AlarmManager am` with a handle to the ALARM_SERVICE system level service.
          * We then switch on the id of our parameter `View view`:
-         *
-         *  *
-         * R.id.one_shot: ("One Shot Alarm" button) we call the `set` method of `am`
-         * to schedule an RTC_WAKEUP alarm (wall clock time in UTC which will wake up the device
-         * when it goes off) to fire at the time in milliseconds of `calendar` when it will
-         * broadcast `sender`.
-         *
-         *  *
-         * default: ("One Shot While-Idle Alarm" button in our case) we call the `setExactAndAllowWhileIdle`
-         * method of `am` to schedule an RTC_WAKEUP alarm (wall clock time in UTC which will wake up the device
-         * when it goes off) to fire at the time in milliseconds of `calendar` when it will broadcast `sender`.
-         * This is like the call to `AlarmManager.set` but is also allowed even when the system is in low-power
-         * idle modes.
-         *
-         *
-         * If our field `Toast mToast` is not null we cancel it. We then set `mToast` to
-         * an instance that will display the string with id R.string.one_shot_scheduled ("One-shot alarm
-         * will go off in 30 seconds...") and show it to the user.
-         *
-         * @param v The view that was clicked.
-         */
-        /**
-         * Called when our view has been clicked. We initialize `Intent intent` with an instance
-         * intended for the `BroadcastReceiver` with the class `OneShotAlarm.class`, then
-         * initialize `PendingIntent sender` with an instance that will perform a broadcast of
-         * `intent` using the request code of 0, and no flags. We initialize `Calendar calendar`
-         * with a new instance, set its time to the current time in milliseconds, then add 30 seconds to
-         * it. We initialize `AlarmManager am` with a handle to the ALARM_SERVICE system level service.
-         * We then switch on the id of our parameter `View view`:
-         *
-         *  *
-         * R.id.one_shot: ("One Shot Alarm" button) we call the `set` method of `am`
-         * to schedule an RTC_WAKEUP alarm (wall clock time in UTC which will wake up the device
-         * when it goes off) to fire at the time in milliseconds of `calendar` when it will
-         * broadcast `sender`.
-         *
-         *  *
-         * default: ("One Shot While-Idle Alarm" button in our case) we call the `setExactAndAllowWhileIdle`
-         * method of `am` to schedule an RTC_WAKEUP alarm (wall clock time in UTC which will wake up the device
-         * when it goes off) to fire at the time in milliseconds of `calendar` when it will broadcast `sender`.
-         * This is like the call to `AlarmManager.set` but is also allowed even when the system is in low-power
-         * idle modes.
-         *
+         *  - R.id.one_shot: ("One Shot Alarm" button) we call the `set` method of `am` to schedule
+         *  an RTC_WAKEUP alarm (wall clock time in UTC which will wake up the device when it goes
+         *  off) to fire at the time in milliseconds of `calendar` when it will broadcast `sender`.
+         *  - default: ("One Shot While-Idle Alarm" button in our case) we call the
+         *  `setExactAndAllowWhileIdle` method of `am` to schedule an RTC_WAKEUP alarm (wall clock
+         *  time in UTC which will wake up the device when it goes off) to fire at the time in
+         *  milliseconds of `calendar` when it will broadcast `sender`. This is like the call to
+         *  `AlarmManager.set` but is also allowed even when the system is in low-power idle modes
          *
          * If our field `Toast mToast` is not null we cancel it. We then set `mToast` to
          * an instance that will display the string with id R.string.one_shot_scheduled ("One-shot alarm
@@ -159,10 +124,6 @@ class AlarmController : Activity() {
         mToast!!.show()
     }
 
-    /**
-     * `OnClickListener` used for the button R.id.start_repeating ("Start Repeating Alarm")
-     *
-     */
     /**
      * Called when the button with id R.id.start_repeating ("Start Repeating Alarm") is clicked.
      * We initialize `Intent intent` with an instance intended for the `BroadcastReceiver`
@@ -212,9 +173,6 @@ class AlarmController : Activity() {
     }
 
     /**
-     * `OnClickListener` used for the button R.id.stop_repeating ("Stop Repeating Alarm")
-     */
-    /**
      * Called when the button with id R.id.stop_repeating ("Stop Repeating Alarm") is clicked.
      * We initialize `Intent intent` with an instance intended for the `BroadcastReceiver`
      * with the class `RepeatingAlarm.class`, then initialize `PendingIntent sender`
@@ -252,25 +210,15 @@ class AlarmController : Activity() {
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
      * then we set our content view to our layout file R.layout.alarm_controller. Next we find the three
      * buttons in our layout by their id and set their `OnClickListener` as follows:
-     *
-     *  *
-     * R.id.one_shot ("One Shot Alarm") set to `OnClickListener mOneShotListener`, its
-     * `onClick` override will call `AlarmManager.set` for this button id.
-     *
-     *  *
-     * R.id.one_shot_while_idle ("One Shot While-Idle Alarm") set to `OnClickListener mOneShotListener`,
-     * its `onClick` override will call `AlarmManager.setExactAndAllowWhileIdle` for this button id.
-     *
-     *  *
-     * R.id.start_repeating ("Start Repeating Alarm") set to `OnClickListener mStartRepeatingListener`,
-     * its `onClick` override will call `AlarmManager.setRepeating`
-     *
-     *  *
-     * R.id.stop_repeating ("Stop Repeating Alarm") set to `OnClickListener mStopRepeatingListener`,
-     * its `onClick` override will call `AlarmManager.cancel` for the `PendingIntent`
-     * started by the "Start Repeating Alarm" button.
-     *
-     *
+     *  - R.id.one_shot ("One Shot Alarm") set to `OnClickListener mOneShotListener`, its `onClick`
+     *  override will call `AlarmManager.set` for this button id.
+     *  - R.id.one_shot_while_idle ("One Shot While-Idle Alarm") set to `OnClickListener mOneShotListener`,
+     *  its `onClick` override will call `AlarmManager.setExactAndAllowWhileIdle` for this button id.
+     *  - R.id.start_repeating ("Start Repeating Alarm") set to `OnClickListener mStartRepeatingListener`,
+     *  its `onClick` override will call `AlarmManager.setRepeating`
+     *  - R.id.stop_repeating ("Stop Repeating Alarm") set to `OnClickListener mStopRepeatingListener`,
+     *  its `onClick` override will call `AlarmManager.cancel` for the `PendingIntent`
+     *  started by the "Start Repeating Alarm" button.
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
