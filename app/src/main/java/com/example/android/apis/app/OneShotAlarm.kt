@@ -28,7 +28,6 @@ import com.example.android.apis.R
  * This is an example of implement an [BroadcastReceiver] for an alarm that
  * should occur once.
  *
- *
  * When the alarm goes off, we show a *Toast*, a quick message.
  *
  * This class is flagged as a BroadcastReceiver in AndroidManifest.xml using the element:
@@ -45,20 +44,16 @@ class OneShotAlarm : BroadcastReceiver() {
      * [android.content.Context.registerReceiver]. When it runs on the main
      * thread you should never perform long-running operations in it (there
      * is a timeout of 10 seconds that the system allows before considering
-     * the receiver to be blocked and a candidate to be killed). You cannot l
-     * aunch a popup dialog in your implementation of onReceive().
+     * the receiver to be blocked and a candidate to be killed). You cannot
+     * launch a popup dialog in your implementation of onReceive().
      *
-     *
-     * **If this BroadcastReceiver was launched through a &lt;receiver&gt; tag,
+     * **If this BroadcastReceiver was launched through a `<receiver>` tag,
      * then the object is no longer alive after returning from this
      * function.**  This means you should not perform any operations that
      * return a result to you asynchronously -- in particular, for interacting
-     * with services, you should use
-     * [Context.startService] instead of
-     * [Context.bindService].  If you wish
-     * to interact with a service that is already running, you can use
-     * [.peekService].
-     *
+     * with services, you should use [Context.startService] instead of
+     * [Context.bindService]. If you wish to interact with a service that is
+     * already running, you can use [peekService].
      *
      * The Intent filters used in [android.content.Context.registerReceiver]
      * and in application manifests are *not* guaranteed to be exclusive. They
