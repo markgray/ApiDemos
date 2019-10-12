@@ -103,7 +103,7 @@ class AlarmService : Activity() {
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.alarm_service. Next we
      * initialize our [PendingIntent] field [mAlarmSender] to a new instance intended to launch
-     * the `Service` [AlarmService_Service] which is declared to be a service in AndroidManifest.xml
+     * the `Service` [AlarmServiceService] which is declared to be a service in AndroidManifest.xml
      * using the element:
      *
      * `<service android:name=".app.AlarmService_Service" android:process=":remote"></service>`
@@ -123,7 +123,7 @@ class AlarmService : Activity() {
         // Create an IntentSender that will launch our service, to be scheduled
         // with the alarm manager.
         mAlarmSender = PendingIntent.getService(this@AlarmService,
-                0, Intent(this@AlarmService, AlarmService_Service::class.java), 0)
+                0, Intent(this@AlarmService, AlarmServiceService::class.java), 0)
 
 
         // Watch for button clicks.
