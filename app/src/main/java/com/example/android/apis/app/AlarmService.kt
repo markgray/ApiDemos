@@ -34,7 +34,7 @@ import com.example.android.apis.R
 
 /**
  * This demonstrates how you can schedule an alarm that causes a service to
- * be started.  This is useful when you want to schedule alarms that initiate
+ * be started. This is useful when you want to schedule alarms that initiate
  * long-running operations, such as retrieving recent e-mails.
  *
  * Note: as of API 19, all repeating alarms are inexact. If your application needs
@@ -44,23 +44,22 @@ import com.example.android.apis.R
  */
 @SuppressLint("ShortAlarm")
 class AlarmService : Activity() {
-    private var mAlarmSender: PendingIntent? = null // IntentSender used to launch our service
+    /**
+     * IntentSender used to launch our service
+     */
+    private var mAlarmSender: PendingIntent? = null
 
     /**
-     * OnClickListener for Button R.id.start_alarm ("Start Alarm Service") starts the alarm service
-     */
-    /**
-     * Called when the Button R.id.start_alarm is clicked. We first fetch the milliseconds since
-     * boot, including time spent in sleep to our variable long firstTime. Then we get a handle
-     * to the AlarmManager system service in AlarmManager am, and use it to schedule a repeating
-     * alarm  of type ELAPSED_REALTIME_WAKEUP (which will wake up the device when it goes off),
-     * with the current milliseconds contained in firstTime as the time that the alarm should
-     * first go off, the interval in milliseconds between subsequent repeats of the alarm set to
-     * 30 seconds, and PendingIntent mAlarmSender as the action to perform when the alarm goes
-     * off. Finally we display a Toast stating:
-     *
-     * Repeating alarm will go off in 15 seconds and every
-     * 15 seconds after based on the elapsed realtime clock
+     * OnClickListener for Button R.id.start_alarm ("Start Alarm Service") starts the alarm service.
+     * We first fetch the milliseconds since boot, including time spent in sleep to our [Long] variable
+     * `val firstTime`. Then we get a handle to the [AlarmManager] system service to initialize our
+     * [AlarmManager] variable `val am`, and use it to schedule a repeating alarm of type
+     * ELAPSED_REALTIME_WAKEUP (which will wake up the device when it goes off), with the current
+     * milliseconds contained in firstTime` as the time that the alarm should first go off, the
+     * interval in milliseconds between subsequent repeats of the alarm set to 30 seconds, and our
+     * [PendingIntent] field [mAlarmSender] as the action to perform when the alarm goes off.
+     * Finally we display a Toast stating: "Repeating alarm will go off in 15 seconds and every 15
+     * seconds after based on the elapsed realtime clock"
      *
      * The message is wrong of course, but who cares.
      *
@@ -82,14 +81,10 @@ class AlarmService : Activity() {
     }
 
     /**
-     * OnClickListener for Button R.id.stop_alarm ("Stop Alarm Service") stops the alarm service
-     */
-    /**
-     * Called when the Button R.id.stop_alarm is clicked. First we get a handle to the
-     * AlarmManager system service in AlarmManager am, and use it to cancel any alarms with
-     * an Intent matching PendingIntent mAlarmSender. Finally we show a Toast stating:
-     *
-     * Repeating alarm has been unscheduled
+     * OnClickListener for Button R.id.stop_alarm ("Stop Alarm Service") stops the alarm service.
+     * First we get a handle to the [AlarmManager] system service to initialize our [AlarmManager]
+     * variable `val am`, and use it to cancel any alarms with an [Intent] matching our [PendingIntent]
+     * field [mAlarmSender]. Finally we show a Toast stating: "Repeating alarm has been unscheduled".
      *
      * Parameter: View of Button that was clicked
      */
@@ -106,16 +101,18 @@ class AlarmService : Activity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, then we set our content view to our layout file R.layout.alarm_service. Next we
-     * create PendingIntent mAlarmSender which is intended to launch Service AlarmService_Service
-     * which is declared to be a service in AndroidManifest.xml using the element:
+     * `onCreate`, then we set our content view to our layout file R.layout.alarm_service. Next we
+     * initialize our [PendingIntent] field [mAlarmSender] to a new instance intended to launch
+     * the `Service` [AlarmService_Service] which is declared to be a service in AndroidManifest.xml
+     * using the element:
      *
-     * <service android:name=".app.AlarmService_Service" android:process=":remote"></service>
+     * `<service android:name=".app.AlarmService_Service" android:process=":remote"></service>`
      *
-     * Then we locate Button R.id.start_alarm ("Start Alarm Service") and set its OnClickListener to
-     * OnClickListener mStartAlarmListener which starts the alarm service when the Button is clicked,
-     * and locate the Button R.id.stop_alarm ("Stop Alarm Service") and set its OnClickListener to
-     * OnClickListener mStopAlarmListener which stops the alarm service when the Button is clicked.
+     * Then we locate [Button] R.id.start_alarm ("Start Alarm Service") and set its [OnClickListener]
+     * to our [OnClickListener] field [mStartAlarmListener] which starts the alarm service when the
+     * Button is clicked, and locate the Button R.id.stop_alarm ("Stop Alarm Service") and set its
+     * [OnClickListener] to our [OnClickListener] field [mStopAlarmListener] which stops the alarm
+     * service when the [Button] is clicked.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
