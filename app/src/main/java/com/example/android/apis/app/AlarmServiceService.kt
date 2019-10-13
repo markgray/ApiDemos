@@ -50,20 +50,18 @@ import android.widget.Toast
 @TargetApi(Build.VERSION_CODES.O)
 class AlarmServiceService : Service() {
     /**
-     * Handle to the NOTIFICATION_SERVICE system level service.
+     * Handle to the NOTIFICATION_SERVICE system level service,
+     * used to notify the user of events that happen
      */
-    internal lateinit var mNM: NotificationManager // Class used to notify the user of events that happen
+    internal lateinit var mNM: NotificationManager
 
     /**
-     * The function that runs in our worker thread
-     */
-    /**
-     * Starts executing the active part of the class' code. This method is
-     * called when a thread is started that has been created with a class which
-     * implements `Runnable`.
+     * The function that runs in our worker thread. Starts executing the active part of the class'
+     * code. This method is called when a thread is started that has been created with a class which
+     * implements [Runnable].
      *
-     * We set our variable long endTime to the current time in milliseconds plus 15 seconds,
-     * then we loop until the current time is greater than or equal to endTime (15 seconds have
+     * We set our [Long] variable `val endTime` to the current time in milliseconds plus 15 seconds,
+     * then we loop until the current time is greater than or equal to `endTime` (15 seconds have
      * elapsed). In the loop we call wait to wait that 15 seconds, but the loop is necessary
      * just in case we are interrupted. After the wait is up we stop this service.
      */
@@ -88,15 +86,15 @@ class AlarmServiceService : Service() {
     }
 
     /**
-     * This is the object that receives interactions from clients.  See RemoteService
-     * for a more complete example. We just implement **onTransact** to call
-     * through to our super's implementation of **onTransact**.
+     * This is the object that receives interactions from clients.  See `RemoteService`
+     * for a more complete example. We just implement `onTransact` to call
+     * through to our super's implementation of `onTransact`.
      */
     private val mBinder = object : Binder() {
         /**
          * Default implementation is a stub that returns false. You will want to override this to do
          * the appropriate un-marshalling of transactions. We simply return the return value of our
-         * super's implementation of onTransact.
+         * super's implementation of `onTransact`.
          *
          * @param code The action to perform. This should be a number between FIRST_CALL_TRANSACTION
          * and LAST_CALL_TRANSACTION.
@@ -118,16 +116,17 @@ class AlarmServiceService : Service() {
     }
 
     /**
-     * Called by the system when the service is first created. First we initialize our field
-     * NotificationManager mNM with a handle to the NotificationManager system service. We initialize
-     * `NotificationChannel chan1` with a new instance whose id and user visible name are both
-     * PRIMARY_CHANNEL ("default"), and whose importance is IMPORTANCE_DEFAULT (shows everywhere,
-     * makes noise, but does not visually intrude). We set the notification light color of `chan1`
-     * to GREEN, and set its lock screen visibility to VISIBILITY_PRIVATE (shows this notification on
-     * all lockscreens, but conceal sensitive or private information on secure lockscreens). We then have
-     * `mNM` create notification channel `chan1`. Next we show our icon in the status bar
-     * by calling our method showNotification. Then we create a new Thread thr to run our Runnable mTask
-     * with the name "AlarmService_Service". Finally we start Thread thr.
+     * Called by the system when the service is first created. First we initialize our
+     * [NotificationManager] field [mNM] with a handle to the NotificationManager system service.
+     * We initialize our [NotificationChannel] variable `val chan1` with a new instance whose id
+     * and user visible name are both PRIMARY_CHANNEL ("default"), and whose importance is
+     * IMPORTANCE_DEFAULT (shows everywhere, makes noise, but does not visually intrude). We set
+     * the notification light color of `chan1` to GREEN, and set its lock screen visibility to
+     * VISIBILITY_PRIVATE (shows this notification on all lockscreens, but conceal sensitive or
+     * private information on secure lockscreens). We then have [mNM] create notification channel
+     * `chan1`. Next we show our icon in the status bar by calling our method [showNotification].
+     * Then we create a new [Thread] variable `val thr` to run our [Runnable] field [mTask] with
+     * the name "AlarmService_Service". Finally we start `thr`.
      */
     override fun onCreate() {
         mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -152,12 +151,10 @@ class AlarmServiceService : Service() {
      * point. Upon return, there will be no more calls in to this Service object and it is
      * effectively dead. Do not call this method directly.
      *
+     * We use our [NotificationManager] field [mNM] to cancel our notification using the same
+     * identifier we used to start it in the method [showNotification], then we show a Toast stating:
      *
-     * We use our NotificationManager mNM to cancel our notification using the same identifier
-     * we used to start it in the method showNotification(), then we show a Toast stating:
-     *
-     *
-     * The alarm service has finished running
+     * "The alarm service has finished running"
      */
     override fun onDestroy() {
         // Cancel the notification -- we use the same ID that we had used to start it
@@ -169,14 +166,13 @@ class AlarmServiceService : Service() {
 
     /**
      * Return the communication channel to the service. We simply return our minimalist
-     * **IBinder mBinder** field.
+     * [IBinder] field [mBinder].
      *
-     * @param intent The Intent that was used to bind to this service,
-     * as given to [               Context.bindService][android.content.Context.bindService].  Note that any extras that were
-     * included with the Intent at that point will
-     * *not* be seen here.
-     * @return Return an IBinder through which clients can call on to the
-     * service.
+     * @param intent The Intent that was used to bind to this service, as given to
+     * [android.content.Context.bindService]. Note that any extras that were included with the
+     * [Intent] at that point will *not* be seen here.
+     *
+     * @return Return an [IBinder] through which clients can call on to the service.
      */
     override fun onBind(intent: Intent): IBinder? {
         return mBinder
@@ -185,17 +181,17 @@ class AlarmServiceService : Service() {
     /**
      * Show a notification while this service is running. First we fetch the resource String
      * R.string.alarm_service_started ("The alarm service has started running") into our
-     * variable `CharSequence text`, then we create **PendingIntent contentIntent**
-     * to start the Activity AlarmService (the Activity that launched us). Next we build our
-     * **Notification notification** using a method chain starting with a new instance
-     * of **Notification.Builder** for `NotificationChannel` PRIMARY_CHANNEL. It consists
-     * of a small icon R.drawable.stat_sample, `CharSequence text` as the "ticker" text which
-     * is sent to accessibility services, a timestamp of the current time in milliseconds, a title
-     * of R.string.alarm_service_label ("Sample Alarm Service"), `CharSequence text` as the
-     * second line of text in the platform notification template, and **PendingIntent
-     * contentIntent** as the PendingIntent to be sent when the notification is clicked. Finally
-     * we post our notification to be shown in the status bar using an **int id** id consisting
-     * of our resource id R.string.alarm_service_started.
+     * [CharSequence] variable `val text`, then we create a [PendingIntent] for our variable
+     * `val contentIntent` to start the Activity AlarmService (the Activity that launched us).
+     * Next we build our [Notification] variable `val notification` using a method chain starting
+     * with a new instance of [Notification.Builder] for [NotificationChannel] PRIMARY_CHANNEL. It
+     * consists of a small icon R.drawable.stat_sample, [CharSequence] `text` as the "ticker" text
+     * which is sent to accessibility services, a timestamp of the current time in milliseconds, a
+     * title of R.string.alarm_service_label ("Sample Alarm Service"), `text` as the second line of
+     * text in the platform notification template, and our [PendingIntent] variable `contentIntent`
+     * as the [PendingIntent] to be sent when the notification is clicked. Finally we post our
+     * notification to be shown in the status bar using an `id` consisting of our resource id
+     * R.string.alarm_service_started.
      */
     private fun showNotification() {
         // In this sample, we'll use the same text for the ticker and the expanded notification
@@ -220,6 +216,9 @@ class AlarmServiceService : Service() {
         mNM.notify(R.string.alarm_service_started, notification)
     }
 
+    /**
+     * Our static constant.
+     */
     companion object {
         /**
          * The id of the primary notification channel
