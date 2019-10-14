@@ -39,46 +39,41 @@ import android.widget.Toast
 import com.example.android.apis.R
 
 /**
- * Example of how to use an [android.app.AlertDialog].
- * <h3>AlertDialogSamples</h3>
- *
- *
+ * Example of how to use an [android.app.AlertDialog]. AlertDialogSamples
  *
  * This demonstrates the different ways the AlertDialog can be used.
  *
- *
- * <h4>Demo</h4>
- * App/Dialog/Alert Dialog
- *
- *
- * <h4>Source files</h4>
- * <table class="LinkTable">
- * <tr>
- * <td>src/com.example.android.apis/app/AlertDialogSamples.java</td>
- * <td>The Alert Dialog Samples implementation</td>
-</tr> *
- * <tr>
- * <td>/res/any/layout/alert_dialog.xml</td>
- * <td>Defines contents of the screen</td>
-</tr> *
-</table> *
+ * Source files:
+ *  - src/com.example.android.apis/app/AlertDialogSamples.java The Alert Dialog Samples implementation
+ *  - /res/any/layout/alert_dialog.xml Defines contents of the screen
  */
 @Suppress("MemberVisibilityCanBePrivate", "UNUSED_ANONYMOUS_PARAMETER")
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class AlertDialogSamples : Activity() {
-
-    private var mProgressSpinnerDialog: ProgressDialog? = null // ProgressDialog used for DIALOG_PROGRESS_SPINNER
-    private var mProgressDialog: ProgressDialog? = null // ProgressDialog used for DIALOG_PROGRESS
-    private var mProgress: Int = 0 // Count used by mProgressHandler for the two ProgressDialog's
+    /**
+     * ProgressDialog used for DIALOG_PROGRESS_SPINNER
+     */
+    private var mProgressSpinnerDialog: ProgressDialog? = null
+    /**
+     * ProgressDialog used for DIALOG_PROGRESS
+     */
+    private var mProgressDialog: ProgressDialog? = null
+    /**
+     * Count used by [mProgressHandler] for the two [ProgressDialog]'s
+     */
+    private var mProgress: Int = 0
+    /**
+     * Root View used for inflation, initialize by finding android.R.id.content View in [onCreate]
+     */
     internal lateinit var mRoot: ViewGroup
 
     /**
      * Callback for creating dialogs that are managed (saved and restored) for you by the activity.
-     * We switch based on the id passed us which is the int parameter that the onClickListener for
-     * the Button clicked in our layout gave when calling showDialog. In each case statement an
-     * AlertDialog.Builder is used to build a Dialog which it returns to the caller. If the int id
-     * is not among the ones defined above (DIALOG_*) we return null. See each case statement for
-     * comments about what is done.
+     * We switch based on the id passed us which is the [Int] parameter that the `onClickListener`
+     * for the [Button] clicked in our layout gave when calling `showDialog`. In each when branch
+     * an [AlertDialog.Builder] is used to build a [Dialog] which it returns to the caller. If the
+     * [id] is not among the ones defined below (DIALOG_*) we return null. See each case statement
+     * for comments about what is done.
      *
      * @param id The id of the dialog.
      * @return The dialog. If you return null, the dialog will not be created.
