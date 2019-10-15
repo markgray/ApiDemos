@@ -32,15 +32,16 @@ import com.example.android.apis.R
 
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-/*
- * Demonstrates how to show an AlertDialog that is managed by a Fragment. Uses DialogFragment
- * as the base class and overrides onCreateDialog in which it builds the AlertDialog using an
- * AlertDialog.Builder
- */ class FragmentAlertDialog : FragmentActivity() {
+/**
+ * Demonstrates how to show an [AlertDialog] that is managed by a `Fragment`. Uses [DialogFragment]
+ * as the base class and overrides [onCreateDialog] in which it builds the [AlertDialog] using an
+ * [AlertDialog.Builder]
+ */
+class FragmentAlertDialog : FragmentActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, then we set our content view to our layout file R.layout.fragment_dialog. Then we
+     * `onCreate`, then we set our content view to our layout file R.layout.fragment_dialog. Then we
      * find the **View tv** in the layout (R.id.text) and set its text to the String
      * R.string.example_alert_dialogfragment:
      *
