@@ -16,13 +16,12 @@
 
 package com.example.android.apis.app;
 
-import com.example.android.apis.R;
-
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,14 +33,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+
+import com.example.android.apis.R;
+
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-/**
+/*
  * Demonstrates how to show an AlertDialog that is managed by a Fragment. Uses DialogFragment
  * as the base class and overrides onCreateDialog in which it builds the AlertDialog using an
  * AlertDialog.Builder
  */
-public class FragmentAlertDialog extends Activity {
+public class FragmentAlertDialog extends FragmentActivity {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -65,7 +68,7 @@ public class FragmentAlertDialog extends Activity {
         ((TextView)tv).setText(R.string.example_alert_dialogfragment);
 
         // Watch for button clicks.
-        Button button = (Button)findViewById(R.id.show);
+        Button button = findViewById(R.id.show);
         button.setOnClickListener(new OnClickListener() {
             /**
              * Called when the Button R.id.show ("Show") is clicked. We simply call our method
@@ -88,7 +91,7 @@ public class FragmentAlertDialog extends Activity {
      */
     void showDialog() {
         DialogFragment newFragment = MyAlertDialogFragment.newInstance(R.string.alert_dialog_two_buttons_title);
-        newFragment.show(getFragmentManager(), "dialog");
+        newFragment.show(getSupportFragmentManager(), "dialog");
     }
 
     /**
@@ -110,6 +113,7 @@ public class FragmentAlertDialog extends Activity {
     /**
      * Minimalist DialogFragment
      */
+    @SuppressWarnings("WeakerAccess")
     public static class MyAlertDialogFragment extends DialogFragment {
 
         /**
@@ -161,8 +165,10 @@ public class FragmentAlertDialog extends Activity {
          *
          * @return Return a new Dialog instance to be displayed by the Fragment.
          */
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            @SuppressWarnings("ConstantConditions")
             int title = getArguments().getInt("title");
             
             return new AlertDialog.Builder(getActivity())
@@ -170,6 +176,7 @@ public class FragmentAlertDialog extends Activity {
                     .setTitle(title)
                     .setPositiveButton(R.string.alert_dialog_ok,
                         new DialogInterface.OnClickListener() {
+                            @SuppressWarnings("ConstantConditions")
                             @Override
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 ((FragmentAlertDialog)getActivity()).doPositiveClick();
@@ -178,6 +185,7 @@ public class FragmentAlertDialog extends Activity {
                     )
                     .setNegativeButton(R.string.alert_dialog_cancel,
                         new DialogInterface.OnClickListener() {
+                            @SuppressWarnings("ConstantConditions")
                             @Override
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 ((FragmentAlertDialog)getActivity()).doNegativeClick();
