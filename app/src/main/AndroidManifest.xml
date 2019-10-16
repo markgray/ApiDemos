@@ -414,7 +414,8 @@
         <activity
             android:name=".app.FragmentAlertDialog"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="@string/fragment_alert_dialog">
+            android:label="@string/fragment_alert_dialog"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

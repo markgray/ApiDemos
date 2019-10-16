@@ -17,7 +17,7 @@
 package com.example.android.apis.app
 
 import android.annotation.TargetApi
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
@@ -42,15 +42,16 @@ class FragmentAlertDialog : FragmentActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.fragment_dialog. Then we
-     * find the **View tv** in the layout (R.id.text) and set its text to the String
-     * R.string.example_alert_dialogfragment:
+     * initialize our [View] variable `val tv` by finding the view in our layout with id (R.id.text)
+     * and set its text to the [String] R.string.example_alert_dialogfragment:
      *
      * "Example of displaying an alert dialog with a DialogFragment"
      *
-     * Finally we locate the **Button button** R.id.show ("Show") and set its OnClickListener
-     * to an anonymous class which calls our method **showDialog()** to show our AlertDialog.
+     * Finally we locate our [Button] variable `val button` by finding the [Button] in our layout
+     * with ID R.id.show ("Show") and set its `OnClickListener` to a lambda which calls our method
+     * [showDialog] to show our [AlertDialog].
      *
-     * @param savedInstanceState we do not override onSaveInstanceState so do not use this
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use this
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,18 +74,20 @@ class FragmentAlertDialog : FragmentActivity() {
     }
 
     /**
-     * Create and show a MyAlertDialogFragment DialogFragment. We create a new instance of
-     * MyAlertDialogFragment by calling its method newInstance with the resource id for the
-     * nonsense String R.string.alert_dialog_two_buttons_title, and then invoke the method
-     * DialogFragment.show to show it.
+     * Create and show a [MyAlertDialogFragment] `DialogFragment`. We create a new instance of
+     * [MyAlertDialogFragment] by calling its method `newInstance` with the resource id for the
+     * nonsense [String] R.string.alert_dialog_two_buttons_title, and then invoke the method
+     * [DialogFragment.show] to show it.
      */
     internal fun showDialog() {
-        val newFragment = MyAlertDialogFragment.newInstance(R.string.alert_dialog_two_buttons_title)
+        val newFragment = MyAlertDialogFragment.newInstance(
+                R.string.alert_dialog_two_buttons_title
+        )
         newFragment.show(supportFragmentManager, "dialog")
     }
 
     /**
-     * OnClickListener Callback for when the positive Button of the MyAlertDialogFragment
+     * `OnClickListener` Callback for the positive [Button] of the [MyAlertDialogFragment]
      */
     fun doPositiveClick() {
         // Do stuff here.
@@ -92,7 +95,7 @@ class FragmentAlertDialog : FragmentActivity() {
     }
 
     /**
-     * OnClickListener Callback for when the negative Button of the MyAlertDialogFragment
+     * `OnClickListener` Callback for the negative [Button] of the [MyAlertDialogFragment]
      */
     fun doNegativeClick() {
         // Do stuff here.
@@ -105,24 +108,19 @@ class FragmentAlertDialog : FragmentActivity() {
     class MyAlertDialogFragment : DialogFragment() {
 
         /**
-         * Override to build your own custom Dialog container.  This is typically
-         * used to show an AlertDialog instead of a generic Dialog; when doing so,
-         * [.onCreateView] does not need
-         * to be implemented since the AlertDialog takes care of its own content.
+         * Override to build your own custom Dialog container. This is typically
+         * used to show an [AlertDialog to be implemented since the [AlertDialog]
+         * takes care of its own content.
          *
-         *
-         * This method will be called after [.onCreate] and
-         * before [.onCreateView].  The
-         * default implementation simply instantiates and returns a [Dialog]
-         * class.
-         *
+         * This method will be called after [onCreate] and before [onCreateView]. The
+         * default implementation simply instantiates and returns a [Dialog] class
          *
          * *Note: DialogFragment needs to use the [ Dialog.setOnCancelListener][Dialog.setOnCancelListener] and [ Dialog.setOnDismissListener][Dialog.setOnDismissListener] callbacks.  You must not set them yourself.*
-         * To find out about these events, override [.onCancel]
-         * and [.onDismiss].
+         * To find out about these events, override [onCancel] and [onDismiss].
          *
-         * First we retrieve the **int title** String resource id from our arguments, then
-         * we use an AlertDialog.Builder to create a Dialog instance with the icon set to the
+         * First we initialize our [Int] variable `val title` by retrieving the [String] resource id
+         * from our arguments that is stored under the key "title", then we use an [AlertDialog.Builder]
+         * to create a [Dialog] instance with the icon set to the
          * resource R.drawable.alert_dialog_icon, the title set to **title**, the positive
          * Button labeled using the String R.string.alert_dialog_ok ("OK") with an anonymous class
          * DialogInterface.OnClickListener which calls our method doPositiveClick, and the negative
@@ -138,7 +136,7 @@ class FragmentAlertDialog : FragmentActivity() {
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val title = arguments!!.getInt("title")
 
-            return AlertDialog.Builder(activity)
+            return AlertDialog.Builder(this.context!!)
                     .setIcon(R.drawable.alert_dialog_icon)
                     .setTitle(title)
                     .setPositiveButton(R.string.alert_dialog_ok
