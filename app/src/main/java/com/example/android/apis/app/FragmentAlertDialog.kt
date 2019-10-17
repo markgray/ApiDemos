@@ -108,25 +108,23 @@ class FragmentAlertDialog : FragmentActivity() {
     class MyAlertDialogFragment : DialogFragment() {
 
         /**
-         * Override to build your own custom Dialog container. This is typically
-         * used to show an [AlertDialog to be implemented since the [AlertDialog]
-         * takes care of its own content.
+         * Override to build your own custom Dialog container. This is typically used to show an
+         * [AlertDialog] since the [AlertDialog] takes care of its own content. This method will be
+         * called after [onCreate] and before [onCreateView]. The default implementation simply
+         * instantiates and returns a [Dialog] class
          *
-         * This method will be called after [onCreate] and before [onCreateView]. The
-         * default implementation simply instantiates and returns a [Dialog] class
-         *
-         * *Note: DialogFragment needs to use the [ Dialog.setOnCancelListener][Dialog.setOnCancelListener] and [ Dialog.setOnDismissListener][Dialog.setOnDismissListener] callbacks.  You must not set them yourself.*
+         * Note: [DialogFragment] needs to use the [Dialog.setOnCancelListener] and
+         * [Dialog.setOnDismissListener] callbacks.  You must not set them yourself.
          * To find out about these events, override [onCancel] and [onDismiss].
          *
          * First we initialize our [Int] variable `val title` by retrieving the [String] resource id
          * from our arguments that is stored under the key "title", then we use an [AlertDialog.Builder]
-         * to create a [Dialog] instance with the icon set to the
-         * resource R.drawable.alert_dialog_icon, the title set to **title**, the positive
-         * Button labeled using the String R.string.alert_dialog_ok ("OK") with an anonymous class
-         * DialogInterface.OnClickListener which calls our method doPositiveClick, and the negative
-         * Button labeled using the String R.string.alert_dialog_cancel ("Cancel") with an anonymous
-         * class DialogInterface.OnClickListener which calls our method doNegativeClick -- which
-         * we return to the caller.
+         * to create a [Dialog] instance with the icon set to the resource R.drawable.alert_dialog_icon,
+         * the title set to `title`, the positive [Button] labeled using the [String] with resource
+         * ID R.string.alert_dialog_ok ("OK") with a lambda for its `OnClickListener` which calls our
+         * method [doPositiveClick], and the negative [Button] labeled using the [String] with the
+         * ID R.string.alert_dialog_cancel ("Cancel") with an a lambda as its `OnClickListener`
+         * which calls our method [doNegativeClick] -- which we return to the caller.
          *
          * @param savedInstanceState we do not override onSaveInstanceState so do not use this
          *
@@ -149,15 +147,14 @@ class FragmentAlertDialog : FragmentActivity() {
         companion object {
 
             /**
-             * Factory method to create a new instance of MyAlertDialogFragment and set its arguments.
-             * First we create a new instance **MyAlertDialogFragment frag**, then we create
-             * a **Bundle args**, add our parameter **int title** to it under the
-             * key "title", and then set the argmuments of **frag** to our **Bundle args**.
-             * Finally we return **MyAlertDialogFragment frag** to the caller.
+             * Factory method to create a new instance of [MyAlertDialogFragment] and set its arguments.
+             * First we construct a new instance of [MyAlertDialogFragment] to initialize our variable
+             * `val frag`, then we construct a new instance of [Bundle] to initialize our variable
+             * `val args`, store our parameter [Int] parameter [title] in `args` under the key "title",
+             * and then set the arguments of `frag` to `args`. Finally we return `frag` to the caller.
              *
-             * @param title resource id for a String to use as the DialogFragment's title
-             *
-             * @return New instance of MyAlertDialogFragment with its arguments set to
+             * @param title resource id for a [String] to use as the [DialogFragment]'s title
+             * @return New instance of [MyAlertDialogFragment] whose arguments contain [title].
              */
             fun newInstance(title: Int): MyAlertDialogFragment {
                 val frag = MyAlertDialogFragment()
