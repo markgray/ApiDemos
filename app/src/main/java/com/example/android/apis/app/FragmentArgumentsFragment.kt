@@ -30,9 +30,24 @@ import com.example.android.apis.R
  * and layout attributes.
  */
 @Suppress("unused") // It really is used!
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 class FragmentArgumentsFragment : Fragment() {
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    /**
+     * Called to do initial creation of a fragment. This is called after [onAttach] and before
+     * [onCreateView]. Note that this can be called while the fragment's activity is still in the
+     * process of being created. As such, you can not rely on things like the activity's content
+     * view hierarchy being initialized at this point. If you want to do work once the activity
+     * itself is created, see [onActivityCreated]. Any restored child fragments will be created
+     * before the base [Fragment.onCreate] method returns.
+     *
+     * First we call our super's implementation of `onCreate`, then if our [Bundle] parameter
+     * [savedInstanceState] is *null* this is the first-time init, so we need to create our child
+     * fragment to embed in the activity. To do this we
+     *
+     * @param savedInstanceState If the fragment is being re-created from a previous saved state,
+     * this is the state. We do no override [onSaveInstanceState] but use the fact that it is
+     * non-null to indicated we have been restarted and do not need to recreate our child fragment.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,8 +62,10 @@ class FragmentArgumentsFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_arguments_fragment, container, false)
     }
 
