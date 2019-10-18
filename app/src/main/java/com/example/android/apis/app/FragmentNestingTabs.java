@@ -35,9 +35,10 @@ import android.widget.Toast;
 @SuppressWarnings("deprecation")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 public class FragmentNestingTabs extends Activity {
-    final static String TAG = "FragmentNestingTabs";
+    // Commented out to allow converting other Fragment examples to androidx
+/*    final static String TAG = "FragmentNestingTabs";
 
-    /**
+    *//**
      * Called when the activity is starting. First we turn on the framework's internal fragment manager
      * debugging logs, then we call through to our super's implementation of onCreate. Next we set
      * our local variable <b>ActionBar bar</b> to a reference to this activity's ActionBar. Because
@@ -67,7 +68,7 @@ public class FragmentNestingTabs extends Activity {
      * @param savedInstanceState if we are being recreated after an orientation change this will
      *                           include the selected navigation item which was saved by our override
      *                           of onSaveInstanceState under the key "tab".
-     */
+     *//*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FragmentManager.enableDebugLogging(true);
@@ -113,7 +114,7 @@ public class FragmentNestingTabs extends Activity {
         }
     }
 
-    /**
+    *//**
      * Called to retrieve per-instance state from an activity before being killed
      * so that the state can be restored in {@link #onCreate} or
      * {@link #onRestoreInstanceState} (the {@link Bundle} populated by this method
@@ -124,7 +125,7 @@ public class FragmentNestingTabs extends Activity {
      * using the key "tab".
      *
      * @param outState Bundle in which to place your saved state.
-     */
+     *//*
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -132,13 +133,13 @@ public class FragmentNestingTabs extends Activity {
         outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
     }
 
-    /**
+    *//**
      * This subclass of <b>ActionBar.TabListener</b> will create (or re-attach) a <b>Fragment</b>
      * specified by the arguments passed to its constructors.
      *
      * @param <T> A subclass of <b>Fragment</b> which we will create when the tab we are "listening"
      *            to is selected.
-     */
+     *//*
     public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
         private final Activity mActivity; // FragmentNestingTabs Activity passed as this to constructors
         private final String mTag; // tag to use as name of fragment for later use by findFragmentByTag
@@ -146,7 +147,7 @@ public class FragmentNestingTabs extends Activity {
         private final Bundle mArgs; // Bundle of arguments to be passed to Fragment we create
         private Fragment mFragment; // Fragment instance we create (or find if already created)
 
-        /**
+        *//**
          * This constructor merely hands off to the TabListener(Activity, String, Class, Bundle)
          * constructor using null as the Bundle that will be used to initialize our field
          * <b>Bundle mArgs</b>.
@@ -154,12 +155,12 @@ public class FragmentNestingTabs extends Activity {
          * @param activity the Activity FragmentNestingTabs onCreate override calls using "this"
          * @param tag      Tag we wish to have the FragmentManager to use for this Fragment
          * @param clz      Class of the Fragment to instantiate in our tab
-         */
+         *//*
         TabListener(Activity activity, String tag, Class<T> clz) {
             this(activity, tag, clz, null);
         }
 
-        /**
+        *//**
          * Constructor for a new instance of TabListener. First we use our parameters to initialize
          * our fields <b>Activity mActivity</b>, <b>String mTag</b>, <b>Class mClass</b>, and
          * <b>Bundle mArgs</b>. Then we search for a pre-existing Fragment for the tab by using the
@@ -172,7 +173,7 @@ public class FragmentNestingTabs extends Activity {
          * @param tag      name for this Fragment to later find the Fragment using <b>findFragmentByTag</b>
          * @param clz      Fragment subclass class that we want to instantiate
          * @param args     argument Bundle to pass to the new Fragment when it is instantiated.
-         */
+         *//*
         TabListener(Activity activity, String tag, Class<T> clz, Bundle args) {
             mActivity = activity;
             mTag = tag;
@@ -190,7 +191,7 @@ public class FragmentNestingTabs extends Activity {
             }
         }
 
-        /**
+        *//**
          * Called when a tab enters the selected state. If this is the first time this tab has been
          * selected (our field <b>mFragment</b> is null), we instantiate a Fragment using the class
          * specified in our field <b>Class mClass</b> and using the <b>Bundle mArgs</b> field to
@@ -207,7 +208,7 @@ public class FragmentNestingTabs extends Activity {
          *            during a tab switch. The previous tab's un-select and this tab's select will be
          *            executed in a single transaction. This FragmentTransaction does not support
          *            being added to the back stack.
-         */
+         *//*
         @Override
         public void onTabSelected(Tab tab, FragmentTransaction ft) {
             if (mFragment == null) {
@@ -218,7 +219,7 @@ public class FragmentNestingTabs extends Activity {
             }
         }
 
-        /**
+        *//**
          * Called when a tab exits the selected state. If our field <b>Fragment mFragment</b> is not
          * null, we use our parameter <b>FragmentTransaction ft</b> to detach it. If <b>mFragment</b>
          * is null we do nothing, although I cannot think of a reason why it would be null.
@@ -228,7 +229,7 @@ public class FragmentNestingTabs extends Activity {
          *            during a tab switch. This tab's un-select and the newly selected tab's select
          *            will be executed in a single transaction. This FragmentTransaction does not
          *            support being added to the back stack.
-         */
+         *//*
         @Override
         public void onTabUnselected(Tab tab, FragmentTransaction ft) {
             if (mFragment != null) {
@@ -238,7 +239,7 @@ public class FragmentNestingTabs extends Activity {
             }
         }
 
-        /**
+        *//**
          * Called when a tab that is already selected is chosen again by the user.
          * Some applications may use this action to return to the top level of a category.
          * <p>
@@ -248,11 +249,11 @@ public class FragmentNestingTabs extends Activity {
          * @param ft  A {@link FragmentTransaction} for queuing fragment operations to execute
          *            once this method returns. This FragmentTransaction does not support
          *            being added to the back stack.
-         */
+         *//*
         @Override
         public void onTabReselected(Tab tab, FragmentTransaction ft) {
             Toast.makeText(mActivity, "Reselected!", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 }
 
