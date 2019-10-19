@@ -42,7 +42,15 @@ class FragmentArgumentsFragment : Fragment() {
      *
      * First we call our super's implementation of `onCreate`, then if our [Bundle] parameter
      * [savedInstanceState] is *null* this is the first-time init, so we need to create our child
-     * fragment to embed in the activity. To do this we
+     * fragment to embed in the activity. To do this we fetch a private `FragmentManager` for
+     * placing and managing `Fragments` inside of this Fragment by calling the method
+     * `getChildFragmentManager` and use it to begin a `FragmentTransaction` in order to initialize
+     * our `FragmentTransaction` variable `val ft`. We then initialize our [Fragment] variable
+     * `var newFragment` with a new instance of [FragmentArguments.MyFragment] whose label is
+     * "From Arguments 1", and use `ft` to add it to the container with the id R.id.created1.
+     * We then set `newFragment` to a new instance of [FragmentArguments.MyFragment] whose label is
+     * "From Arguments 2", and use `ft` to add it to the container with the id R.id.created2.
+     * Finally we commit the `FragmentTransaction`.
      *
      * @param savedInstanceState If the fragment is being re-created from a previous saved state,
      * this is the state. We do no override [onSaveInstanceState] but use the fact that it is
@@ -62,6 +70,23 @@ class FragmentArgumentsFragment : Fragment() {
         }
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view. This will be called between
+     * [onCreate] and [onActivityCreated]. A default [View] can be returned by calling [Fragment] in
+     * your constructor. We just return the [View] that our [LayoutInflater] parameter [inflater]
+     * inflates from our layout file R.layout.fragment_arguments_fragment using our [ViewGroup]
+     * parameter [container] for the layout parameters without attaching to it.
+     *
+     * @param inflater The [LayoutInflater] object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to. The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return Return the View for the fragment's UI, or null.
+     */
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
