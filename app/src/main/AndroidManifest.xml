@@ -1739,7 +1739,8 @@
         <activity
             android:name=".animation.ReversingAnimation"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="Animation/Reversing">
+            android:label="Animation/Reversing"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
