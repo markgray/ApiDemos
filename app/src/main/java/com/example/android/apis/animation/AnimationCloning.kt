@@ -23,7 +23,6 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.RadialGradient
@@ -37,6 +36,7 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import java.util.*
 
@@ -53,7 +53,7 @@ import java.util.*
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-class AnimationCloning : Activity() {
+class AnimationCloning : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of

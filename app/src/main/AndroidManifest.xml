@@ -1674,7 +1674,8 @@
         <activity
             android:name=".animation.AnimationCloning"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="Animation/Cloning">
+            android:label="Animation/Cloning"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
