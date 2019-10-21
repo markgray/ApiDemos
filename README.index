@@ -1001,6 +1001,7 @@ AskForPermission/Marshmallow
   Marshmallow
     AskForPermission/Marshmallow
         .AskForPermissions
+        .layout.activity_ask_for_permissions.xml
             Just asks for all permissions listed in AndroidManifest.xml using Marshmallow api
 
 Content

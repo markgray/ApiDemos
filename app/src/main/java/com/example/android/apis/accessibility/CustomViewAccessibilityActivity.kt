@@ -18,7 +18,6 @@ package com.example.android.apis.accessibility
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -33,6 +32,7 @@ import android.util.TypedValue
 import android.view.View
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import kotlin.math.ceil
 import kotlin.math.max
@@ -50,7 +50,7 @@ import kotlin.math.max
  * also implement accessibility support for that new functionality such that
  * disabled users can leverage it.
  */
-class CustomViewAccessibilityActivity : Activity() {
+class CustomViewAccessibilityActivity : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
