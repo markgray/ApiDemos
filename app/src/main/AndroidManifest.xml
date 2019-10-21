@@ -1686,7 +1686,8 @@
         <activity
             android:name=".animation.AnimationSeeking"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="Animation/Seeking">
+            android:label="Animation/Seeking"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

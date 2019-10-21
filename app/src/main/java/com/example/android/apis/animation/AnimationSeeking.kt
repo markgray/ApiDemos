@@ -23,7 +23,6 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.RadialGradient
@@ -38,6 +37,7 @@ import android.view.animation.BounceInterpolator
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.SeekBar
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import java.util.*
 
@@ -48,7 +48,7 @@ import java.util.*
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-class AnimationSeeking : Activity() {
+class AnimationSeeking : AppCompatActivity() {
     /**
      * The `SeekBar` in our layout with id R.id.seekBar used by the user to adjust the position
      * of the animation.
