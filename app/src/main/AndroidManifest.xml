@@ -1803,7 +1803,8 @@
         <activity
             android:name=".animation.PathAnimations"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="Animation/Path Animations">
+            android:label="Animation/Path Animations"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

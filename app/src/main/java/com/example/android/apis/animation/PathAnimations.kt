@@ -20,15 +20,8 @@ import android.animation.TypeConverter
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Matrix
-import android.graphics.Paint
-import android.graphics.Path
-import android.graphics.Point
-import android.graphics.PointF
-import android.graphics.RectF
+import android.graphics.*
 import android.os.Build
 import android.os.Bundle
 import android.util.AttributeSet
@@ -37,7 +30,7 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
 import android.widget.RadioGroup
-
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
@@ -67,7 +60,7 @@ import kotlin.math.sqrt
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-class PathAnimations : Activity(), RadioGroup.OnCheckedChangeListener, View.OnLayoutChangeListener {
+class PathAnimations : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, View.OnLayoutChangeListener {
 
     /**
      * The `CanvasView` with id R.id.canvas in our layout file, it contains the smiley face
