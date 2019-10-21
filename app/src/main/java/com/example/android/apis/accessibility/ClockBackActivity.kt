@@ -16,18 +16,18 @@
 
 package com.example.android.apis.accessibility
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.ImageButton
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
  * This is the entry activity for a sample that demonstrates how to implement an
  * `AccessibilityService`, namely the ClockBackService.
  */
-class ClockBackActivity : Activity() {
+class ClockBackActivity : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
