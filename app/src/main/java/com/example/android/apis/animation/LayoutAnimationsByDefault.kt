@@ -19,10 +19,10 @@ package com.example.android.apis.animation
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
-import android.app.Activity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.GridLayout
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import kotlin.math.min
 
@@ -30,7 +30,7 @@ import kotlin.math.min
  * This application demonstrates how to use the animateLayoutChanges="true" attribute in XML
  * to automate transition animations as items are removed from or added to a container.
  */
-class LayoutAnimationsByDefault : Activity() {
+class LayoutAnimationsByDefault : AppCompatActivity() {
 
     /**
      * Counter we use as the label of the button we add, then increment for the next time.
