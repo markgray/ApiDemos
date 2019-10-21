@@ -17,15 +17,12 @@
 
 package com.example.android.apis.app
 
-import com.example.android.apis.R
-
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.ActionBar
-import android.app.ActionBar.Tab
-import android.app.Activity
-import android.app.Fragment
-import android.app.FragmentTransaction
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.ActionBar.Tab
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -33,6 +30,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * This demonstrates the use of action bar tabs and how they interact
@@ -44,7 +43,7 @@ import android.widget.Toast
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-class ActionBarTabs : Activity() {
+class ActionBarTabs : AppCompatActivity() {
 
     var tabsMode = false
     /**
@@ -67,12 +66,12 @@ class ActionBarTabs : Activity() {
         }
         if (tabsMode) {
 
-            actionBar!!.navigationMode = ActionBar.NAVIGATION_MODE_TABS
-            actionBar!!.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE)
+            supportActionBar!!.navigationMode = ActionBar.NAVIGATION_MODE_TABS
+            supportActionBar!!.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE)
         } else {
 
-            actionBar!!.navigationMode = ActionBar.NAVIGATION_MODE_STANDARD
-            actionBar!!.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE, ActionBar.DISPLAY_SHOW_TITLE)
+            supportActionBar!!.navigationMode = ActionBar.NAVIGATION_MODE_STANDARD
+            supportActionBar!!.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE, ActionBar.DISPLAY_SHOW_TITLE)
         }
     }
 
@@ -104,7 +103,7 @@ class ActionBarTabs : Activity() {
      */
     @Suppress("UNUSED_PARAMETER")
     fun onAddTab(v: View) {
-        val bar = actionBar
+        val bar = supportActionBar
 
         val tabCount = bar!!.tabCount
         val text = "Tab $tabCount"
@@ -125,7 +124,7 @@ class ActionBarTabs : Activity() {
      */
     @Suppress("UNUSED_PARAMETER")
     fun onRemoveTab(v: View) {
-        val bar = actionBar
+        val bar = supportActionBar
 
         if (bar!!.tabCount > 0) {
             bar.removeTabAt(bar.tabCount - 1)
@@ -145,7 +144,7 @@ class ActionBarTabs : Activity() {
      */
     @Suppress("UNUSED_PARAMETER")
     fun onToggleTabs(v: View) {
-        val bar = actionBar
+        val bar = supportActionBar
 
 
         if (bar!!.navigationMode == ActionBar.NAVIGATION_MODE_TABS) {
@@ -169,7 +168,7 @@ class ActionBarTabs : Activity() {
     @Suppress("UNUSED_PARAMETER")
     fun onRemoveAllTabs(v: View) {
 
-        actionBar!!.removeAllTabs()
+        supportActionBar!!.removeAllTabs()
     }
 
     /**
@@ -204,8 +203,8 @@ class ActionBarTabs : Activity() {
          * executed in a single transaction. This FragmentTransaction does not support
          * being added to the back stack.
          */
-        override fun onTabSelected(tab: Tab, ft: FragmentTransaction) {
-            ft.add(R.id.fragment_content, mFragment, mFragment.text)
+        override fun onTabSelected(tab: Tab?, ft: FragmentTransaction?) {
+            ft!!.add(R.id.fragment_content, mFragment as Fragment, mFragment.text)
         }
 
         /**
@@ -217,8 +216,8 @@ class ActionBarTabs : Activity() {
          * will be executed in a single transaction. This FragmentTransaction does not
          * support being added to the back stack.
          */
-        override fun onTabUnselected(tab: Tab, ft: FragmentTransaction) {
-            ft.remove(mFragment)
+        override fun onTabUnselected(tab: Tab?, ft: FragmentTransaction?) {
+            ft!!.remove(mFragment as Fragment)
         }
 
         /**
@@ -229,7 +228,7 @@ class ActionBarTabs : Activity() {
          * once this method returns. This FragmentTransaction does not support
          * being added to the back stack.
          */
-        override fun onTabReselected(tab: Tab, ft: FragmentTransaction) {
+        override fun onTabReselected(tab: Tab?, ft: FragmentTransaction?) {
             Toast.makeText(this@ActionBarTabs, "Reselected!", Toast.LENGTH_SHORT).show()
         }
 
