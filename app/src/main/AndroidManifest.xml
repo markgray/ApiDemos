@@ -1716,7 +1716,8 @@
         <activity
             android:name=".animation.CustomEvaluator"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="Animation/Custom Evaluator">
+            android:label="Animation/Custom Evaluator"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

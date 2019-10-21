@@ -25,7 +25,6 @@ import android.animation.ObjectAnimator
 import android.animation.TypeEvaluator
 import android.animation.ValueAnimator
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.RadialGradient
@@ -37,6 +36,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
@@ -47,7 +47,7 @@ import com.example.android.apis.R
  * invalidate() which causes the onDraw method to be called.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-class CustomEvaluator : Activity() {
+class CustomEvaluator : AppCompatActivity() {
 
     /**
      * Logical density of our display.
