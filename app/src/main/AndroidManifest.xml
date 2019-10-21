@@ -1227,7 +1227,8 @@
             android:enabled="@bool/atLeastJellyBean"
             android:label="@string/action_bar_navigation"
             android:launchMode="singleTask"
-            android:taskAffinity=":bar_navigation">
+            android:taskAffinity=":bar_navigation"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -1239,7 +1240,8 @@
             android:enabled="@bool/atLeastJellyBean"
             android:label="@string/action_bar_navigation_target"
             android:parentActivityName=".app.ActionBarNavigation"
-            android:taskAffinity=":bar_navigation">
+            android:taskAffinity=":bar_navigation"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
         </activity>
 
         <activity

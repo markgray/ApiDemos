@@ -16,11 +16,10 @@
 package com.example.android.apis.app
 
 import android.annotation.TargetApi
-import android.app.ActionBar
-import android.app.Activity
+import androidx.appcompat.app.ActionBar
 import android.os.Build
 import android.os.Bundle
-
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
@@ -31,7 +30,7 @@ import com.example.android.apis.R
  * attribute android:taskAffinity=":bar_navigation" to associate the activities.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-class ActionBarNavigationTarget : Activity() {
+class ActionBarNavigationTarget : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation
      * of onCreate. The content view is set to our layout file R.layout.action_bar_navigation_target.
@@ -44,7 +43,7 @@ class ActionBarNavigationTarget : Activity() {
         setContentView(R.layout.action_bar_navigation_target)
 
         // Turn on the up affordance.
-        val bar = actionBar
+        val bar = supportActionBar
 
         bar!!.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP, ActionBar.DISPLAY_HOME_AS_UP)
     }

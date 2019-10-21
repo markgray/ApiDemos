@@ -17,14 +17,13 @@ package com.example.android.apis.app
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.ActionBar
-import android.app.Activity
+import androidx.appcompat.app.ActionBar
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
@@ -36,7 +35,7 @@ import com.example.android.apis.R
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 @SuppressLint("SetTextI18n")
-class ActionBarNavigation : Activity() {
+class ActionBarNavigation : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation
      * of onCreate. Then we get a reference to this activity's ActionBar and set the display option
@@ -52,7 +51,7 @@ class ActionBarNavigation : Activity() {
         super.onCreate(savedInstanceState)
 
         // Turn on the up affordance.
-        val bar = actionBar
+        val bar = supportActionBar
 
         bar!!.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP, ActionBar.DISPLAY_HOME_AS_UP)
 
