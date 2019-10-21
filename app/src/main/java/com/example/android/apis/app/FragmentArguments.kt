@@ -38,15 +38,14 @@ class FragmentArguments : FragmentActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, then we set our content view to our layout file R.layout.fragment_arguments. If the
-     * parameter **Bundle savedInstanceState** is not null we are being recreated after an
-     * orientation change or other occurrence and need do nothing more. If it is null, this is the
-     * first time our activity is being started so we fetch the FragmentManager used for interacting
+     * onCreate, then we set our content view to our layout file R.layout.fragment_arguments. If our
+     * [Bundle] parameter [savedInstanceState] is not *null* we are being recreated after an
+     * orientation change or other occurrence and need do nothing more. If it is *null*, this is the
+     * first time our activity is being started so we fetch the support `FragmentManager` used for
      * with fragments associated with this activity and use it to begin fragment transactions using
-     * **FragmentTransaction ft**. We create an instance of MyFragment by calling its
-     * factory method **newInstance**, and call it **Fragment newFragment**, then
-     * we add **newFragment** to **FragmentTransaction ft** and finally schedule a
-     * commit of the **FragmentTransaction ft**.
+     * our `FragmentTransaction` variable `val ft`. We create an instance of [MyFragment] by calling
+     * its factory method `newInstance` to initialize our [Fragment] variable `val newFragment`,
+     * then we add `newFragment` to `ft` and schedule a commit of `ft`.
      *
      * @param savedInstanceState if null we need to create our fragment and embed it in the activity.
      */
@@ -69,8 +68,8 @@ class FragmentArguments : FragmentActivity() {
     @Suppress("MemberVisibilityCanBePrivate")
     class MyFragment : Fragment() {
         /**
-         * text to display in fragment as read from xml attributes in onInflate or from arguments
-         * Bundle during onCreate if we were created by newInstance.
+         * text to display in fragment as read from xml attributes in [onInflate] or from arguments
+         * [Bundle] during [onCreate] if we were created by [newInstance].
          */
         internal var mLabel: CharSequence? = null
 
