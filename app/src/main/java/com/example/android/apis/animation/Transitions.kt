@@ -16,14 +16,14 @@
 package com.example.android.apis.animation
 
 import android.annotation.TargetApi
-import android.app.Activity
 import android.os.Build
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
 import android.transition.Scene
 import android.transition.TransitionInflater
 import android.transition.TransitionManager
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
@@ -34,7 +34,7 @@ import com.example.android.apis.R
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.KITKAT)
-class Transitions : Activity() {
+class Transitions : AppCompatActivity() {
 
     /**
      * `Scene` created from the layout file R.layout.transition_scene1
