@@ -30,6 +30,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
@@ -39,7 +40,7 @@ import com.example.android.apis.R
  * (Sometimes? This may be fixed as of Android Q -- at least it doesn't seem to happen anymore).
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-class LayoutAnimationsHideShow : Activity() {
+class LayoutAnimationsHideShow : AppCompatActivity() {
     /**
      * `LinearLayout` into which we place the buttons we are hiding or showing.
      */
