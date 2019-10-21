@@ -34,6 +34,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import java.util.*
 
@@ -55,7 +56,7 @@ import java.util.*
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-class AnimationLoading : Activity() {
+class AnimationLoading : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
