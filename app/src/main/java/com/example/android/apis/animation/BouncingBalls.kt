@@ -22,7 +22,6 @@ package com.example.android.apis.animation
 import android.animation.*
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.RadialGradient
@@ -36,6 +35,7 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import java.util.*
 
@@ -49,7 +49,7 @@ import java.util.*
  * the animation is done.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-class BouncingBalls : Activity() {
+class BouncingBalls : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
