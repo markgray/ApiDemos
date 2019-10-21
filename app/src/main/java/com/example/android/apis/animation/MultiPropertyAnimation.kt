@@ -35,6 +35,7 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.BounceInterpolator
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import java.util.*
 
@@ -45,7 +46,7 @@ import java.util.*
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-class MultiPropertyAnimation : Activity() {
+class MultiPropertyAnimation : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. Sets the content view to the layout file

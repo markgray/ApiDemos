@@ -1749,7 +1749,8 @@
         <activity
             android:name=".animation.MultiPropertyAnimation"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="Animation/Multiple Properties">
+            android:label="Animation/Multiple Properties"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
