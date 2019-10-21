@@ -24,7 +24,6 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.RadialGradient
@@ -39,6 +38,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import java.util.*
 
@@ -50,7 +50,7 @@ import java.util.*
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-class AnimatorEvents : Activity() {
+class AnimatorEvents : AppCompatActivity() {
     /**
      * `TextView` with id R.id.startText ("Start") in "Sequencer Events:" row of the animation
      * event display, it has its alpha increased from .5f to 1f in the `onAnimationStart`

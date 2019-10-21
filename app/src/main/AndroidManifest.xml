@@ -1695,7 +1695,8 @@
         <activity
             android:name=".animation.AnimatorEvents"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="Animation/Events">
+            android:label="Animation/Events"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
