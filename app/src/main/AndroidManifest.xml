@@ -1730,7 +1730,8 @@
         <activity
             android:name=".animation.ListFlipper"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="Animation/View Flip">
+            android:label="Animation/View Flip"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

@@ -25,7 +25,6 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.annotation.TargetApi
-import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -34,6 +33,7 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
@@ -43,7 +43,7 @@ import com.example.android.apis.R
  * Layout xml file.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-class ListFlipper : Activity() {
+class ListFlipper : AppCompatActivity() {
 
     /**
      * `ListView` in our layout with id R.id.list_en, hold our english numbers.
