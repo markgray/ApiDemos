@@ -1758,7 +1758,8 @@
         <activity
             android:name=".animation.LayoutAnimations"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="Animation/Layout Animations">
+            android:label="Animation/Layout Animations"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

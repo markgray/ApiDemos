@@ -22,7 +22,6 @@ package com.example.android.apis.animation
 import android.animation.*
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -30,6 +29,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import kotlin.math.min
 
@@ -39,7 +39,7 @@ import kotlin.math.min
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-class LayoutAnimations : Activity() {
+class LayoutAnimations : AppCompatActivity() {
     /**
      * Counter of the number of buttons that have been added, used as the button label.
      */
