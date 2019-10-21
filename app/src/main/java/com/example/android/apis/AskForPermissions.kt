@@ -2,10 +2,10 @@ package com.example.android.apis
 
 import android.Manifest
 import android.annotation.TargetApi
-import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.material.snackbar.Snackbar
 
@@ -13,7 +13,7 @@ import com.google.android.material.snackbar.Snackbar
  * This `Activity` just asks the user for permissions when the app is first run.
  */
 @TargetApi(Build.VERSION_CODES.KITKAT)
-class AskForPermissions : Activity() {
+class AskForPermissions : AppCompatActivity() {
     /**
      * List of permissions requested in AndroidManifest.xml
      */
