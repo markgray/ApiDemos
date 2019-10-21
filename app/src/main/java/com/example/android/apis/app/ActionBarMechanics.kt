@@ -16,13 +16,13 @@
 package com.example.android.apis.app
 
 import android.annotation.TargetApi
-import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.Window
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * This demonstrates the basics of the Action Bar and how it inter-operates with the
@@ -30,7 +30,7 @@ import android.widget.Toast
  * an example of using the Action Bar in a more idiomatic manner.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-class ActionBarMechanics : Activity() {
+class ActionBarMechanics : AppCompatActivity() {
     /**
      * Called when the activity is starting. We first call through to our super's implementation
      * of onCreate, then we enable the extended screen feature Window.FEATURE_ACTION_BAR which
