@@ -56,7 +56,7 @@ Accessibility
 
   Accessibility/MagnificationService v24
         .accessibility.MagnificationService
-        xml.magnification_service.xml
+        .xml.magnification_service.xml
             This class is an AccessibilityService that controls the state of display 
             magnification in response to key events. It demonstrates the following key features
             of the Android accessibility APIs:

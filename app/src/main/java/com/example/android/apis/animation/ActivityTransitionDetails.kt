@@ -15,10 +15,7 @@
  */
 package com.example.android.apis.animation
 
-import com.example.android.apis.R
-
 import android.annotation.TargetApi
-import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
@@ -27,13 +24,15 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * This is the companion activity for the `ActivityTransition` demo, and displays an enlarged
  * version of an `ImageView` when it is clicked, with fancy activity transition between the
  * two activities.
  */
-class ActivityTransitionDetails : Activity() {
+class ActivityTransitionDetails : AppCompatActivity() {
 
     /**
      * Resource id of the image we were launched to display, we look it up using the method

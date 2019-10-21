@@ -15,10 +15,7 @@
  */
 package com.example.android.apis.animation
 
-import com.example.android.apis.R
-
 import android.annotation.TargetApi
-import android.app.Activity
 import android.app.ActivityOptions
 import android.app.SharedElementCallback
 import android.content.Intent
@@ -27,6 +24,8 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * Uses ActivityOptions.makeSceneTransitionAnimation to transition using a
@@ -42,7 +41,7 @@ import android.widget.ImageView
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-class ActivityTransition : Activity() {
+class ActivityTransition : AppCompatActivity() {
 
     /**
      * This is the [ImageView] in our `GridView` which was clicked, and which we
