@@ -1174,7 +1174,8 @@
         <activity
             android:name=".app.ActionBarUsage"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="@string/action_bar_usage">
+            android:label="@string/action_bar_usage"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

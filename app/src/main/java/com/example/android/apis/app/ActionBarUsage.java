@@ -16,7 +16,6 @@
 package com.example.android.apis.app;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,10 +23,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.SearchView;
-import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.SearchView.OnQueryTextListener;
 
 import com.example.android.apis.R;
 
@@ -38,7 +40,7 @@ import com.example.android.apis.R;
  * ActionBarMechanics.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class ActionBarUsage extends Activity implements OnQueryTextListener {
+public class ActionBarUsage extends AppCompatActivity implements OnQueryTextListener {
     /**
      * TAG used for logging.
      */
@@ -54,6 +56,7 @@ public class ActionBarUsage extends Activity implements OnQueryTextListener {
      */
     int mSortMode = -1;
 
+    ActionBar mActionBar;
     /**
      * Called when the activity is starting. First we call through to our super's implementation
      * of {@code onCreate}, then we set our field {@code TextView mSearchText} to a new instance of
@@ -66,6 +69,9 @@ public class ActionBarUsage extends Activity implements OnQueryTextListener {
         super.onCreate(savedInstanceState);
         mSearchText = new TextView(this);
         setContentView(mSearchText);
+        mActionBar = getSupportActionBar();
+        //noinspection ConstantConditions
+        mActionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
     }
 
     /**
@@ -87,7 +93,8 @@ public class ActionBarUsage extends Activity implements OnQueryTextListener {
         Log.i(TAG, "onCreateOptionsMenu has been called");
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actions, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) item.getActionView();
         searchView.setOnQueryTextListener(this);
         return true;
     }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 Google Inc.
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2010 Google Inc.
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,39 +12,46 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<menu xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    tools:ignore="AppCompatResource"
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:targetApi="honeycomb">
-    <item android:id="@+id/action_search"
-          android:icon="@android:drawable/ic_menu_search"
-          android:title="@string/action_bar_search"
-          android:showAsAction="ifRoom"
-          android:actionViewClass="android.widget.SearchView" />
-    <item android:id="@+id/action_add"
-          android:icon="@android:drawable/ic_menu_add"
-          android:title="@string/action_bar_add" />
-    <item android:id="@+id/action_edit"
-          android:icon="@android:drawable/ic_menu_edit"
-          android:showAsAction="always"
-          android:title="@string/action_bar_edit" />
-    <item android:id="@+id/action_share"
-          android:icon="@android:drawable/ic_menu_share"
-          android:title="@string/action_bar_share"
-          android:showAsAction="ifRoom" />
-    <item android:id="@+id/action_sort"
-          android:icon="@android:drawable/ic_menu_sort_by_size"
-          android:title="@string/action_bar_sort"
-          android:showAsAction="ifRoom">
+    <item
+        android:id="@+id/action_search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="@string/action_bar_search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_add"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="@string/action_bar_add" />
+    <item
+        android:id="@+id/action_edit"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="@string/action_bar_edit"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_share"
+        android:icon="@android:drawable/ic_menu_share"
+        android:title="@string/action_bar_share"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_sort"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title="@string/action_bar_sort"
+        app:showAsAction="ifRoom">
         <menu>
-            <item android:id="@+id/action_sort_size"
-                  android:icon="@android:drawable/ic_menu_sort_by_size"
-                  android:title="@string/action_bar_sort_size"
-                  android:onClick="onSort" />
-            <item android:id="@+id/action_sort_alpha"
-                  android:icon="@android:drawable/ic_menu_sort_alphabetically"
-                  android:title="@string/action_bar_sort_alpha"
-                  android:onClick="onSort" />
+            <item
+                android:id="@+id/action_sort_size"
+                android:icon="@android:drawable/ic_menu_sort_by_size"
+                android:onClick="onSort"
+                android:title="@string/action_bar_sort_size" />
+            <item
+                android:id="@+id/action_sort_alpha"
+                android:icon="@android:drawable/ic_menu_sort_alphabetically"
+                android:onClick="onSort"
+                android:title="@string/action_bar_sort_alpha" />
         </menu>
     </item>
 </menu>
