@@ -56,11 +56,16 @@ public class ActionBarUsage extends AppCompatActivity implements OnQueryTextList
      */
     int mSortMode = -1;
 
+    /**
+     * A reference to the ActionBar for setting its display options.
+     */
     ActionBar mActionBar;
     /**
      * Called when the activity is starting. First we call through to our super's implementation
      * of {@code onCreate}, then we set our field {@code TextView mSearchText} to a new instance of
-     * {@code TextView} and set our content view to this {@code TextView}.
+     * {@code TextView} and set our content view to this {@code TextView}. Then we initialize our
+     * field mActionBar to a reference to the ActionBar and use it to disable the DISPLAY_SHOW_TITLE
+     * display option.
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
