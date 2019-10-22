@@ -34,7 +34,7 @@ import androidx.core.view.ActionProvider
 import com.example.android.apis.R
 
 /**
- * This activity demonstrates how to implement an [android.view.ActionProvider]
+ * This activity demonstrates how to implement an [androidx.core.view.ActionProvider]
  * for adding functionality to the Action Bar. In particular this demo creates an
  * ActionProvider for launching the system settings and adds a menu item with that
  * provider.

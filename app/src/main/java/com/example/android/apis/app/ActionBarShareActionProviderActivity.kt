@@ -17,7 +17,6 @@
 package com.example.android.apis.app
 
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.ClipData
 import android.content.Intent
 import android.net.Uri
@@ -25,7 +24,11 @@ import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Menu
-import android.widget.ShareActionProvider
+
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.ShareActionProvider
+import androidx.core.view.MenuItemCompat
+
 import com.example.android.apis.R
 
 /**
@@ -35,7 +38,7 @@ import com.example.android.apis.R
  * ShareActionProvider is responsible for managing the UI for sharing actions.
  */
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-class ActionBarShareActionProviderActivity : Activity() {
+class ActionBarShareActionProviderActivity : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. We just call our super's implementation of `onCreate`
@@ -73,7 +76,7 @@ class ActionBarShareActionProviderActivity : Activity() {
 
         // Set file with share history to the provider and set the share intent.
         val actionItem = menu.findItem(R.id.menu_item_share_action_provider_action_bar)
-        val actionProvider = actionItem.actionProvider as ShareActionProvider
+        val actionProvider = MenuItemCompat.getActionProvider(actionItem) as ShareActionProvider
         actionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME)
         // Note that you can set/change the intent any time,
         // say when the user has selected an image.
@@ -81,8 +84,8 @@ class ActionBarShareActionProviderActivity : Activity() {
 
         // Set file with share history to the provider and set the share intent.
         val overflowItem = menu.findItem(R.id.menu_item_share_action_provider_overflow)
-        val overflowProvider = overflowItem.actionProvider as ShareActionProvider
-        overflowProvider.setShareHistoryFileName(
+        val overflowProvider = MenuItemCompat.getActionProvider(overflowItem) as ShareActionProvider
+                overflowProvider.setShareHistoryFileName(
                 ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME)
         // Note that you can set/change the intent any time,
         // say when the user has selected an image.
