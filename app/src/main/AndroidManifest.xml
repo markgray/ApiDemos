@@ -1207,7 +1207,8 @@
         <activity
             android:name=".app.ActionBarSettingsActionProviderActivity"
             android:enabled="@bool/atLeastIceCreamSandwich"
-            android:label="@string/action_bar_settings_action_provider">
+            android:label="@string/action_bar_settings_action_provider"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

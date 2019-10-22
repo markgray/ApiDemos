@@ -18,19 +18,18 @@ package com.example.android.apis.app
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
-import android.view.ActionProvider
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.ImageButton
 import android.widget.Toast
+
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.ActionBar
+import androidx.core.view.ActionProvider
 
 import com.example.android.apis.R
 
@@ -40,8 +39,14 @@ import com.example.android.apis.R
  * ActionProvider for launching the system settings and adds a menu item with that
  * provider.
  */
+@Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-class ActionBarSettingsActionProviderActivity : Activity() {
+class ActionBarSettingsActionProviderActivity : AppCompatActivity() {
+
+    /**
+     * A reference to our activity's [ActionBar] for setting its display options.
+     */
+    internal var mActionBar: ActionBar? = null
 
     /**
      * Initialize the contents of the Activity's standard options menu. First we call through
@@ -55,6 +60,8 @@ class ActionBarSettingsActionProviderActivity : Activity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.action_bar_settings_action_provider, menu)
+        mActionBar = supportActionBar
+        mActionBar!!.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE)
         return true
     }
 
