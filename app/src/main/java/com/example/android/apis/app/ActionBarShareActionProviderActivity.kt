@@ -32,10 +32,11 @@ import androidx.core.view.MenuItemCompat
 import com.example.android.apis.R
 
 /**
- * This activity demonstrates how to use an [android.view.ActionProvider]
+ * This activity demonstrates how to use an [android.view.ActionProvider] (or when
+ * using [AppCompatActivity] how to use an [androidx.core.view.ActionProvider])
  * for adding functionality to the Action Bar. In particular this demo is adding
- * a menu item with ShareActionProvider as its action provider. The
- * ShareActionProvider is responsible for managing the UI for sharing actions.
+ * a menu item with [ShareActionProvider] as its action provider. The
+ * [ShareActionProvider] is responsible for managing the UI for sharing actions.
  */
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class ActionBarShareActionProviderActivity : AppCompatActivity() {
@@ -53,19 +54,21 @@ class ActionBarShareActionProviderActivity : AppCompatActivity() {
      * Initialize the contents of the Activity's standard options menu. You should place your
      * menu items into [menu]. First we get a `MenuInflater` with this context and use it
      * to inflate a menu hierarchy from our menu R.menu.action_bar_share_action_provider into the
-     * options "menu" passed us. Then we set `MenuItem actionItem` to the "Share with..." action
-     * found at R.id.menu_item_share_action_provider_action_bar in our menu. We fetch the action
-     * provider specified for actionItem into ShareActionProvider actionProvider, set the file
-     * name of the file for persisting the share history to DEFAULT_SHARE_HISTORY_FILE_NAME (the
-     * default name for storing share history), then use our method createShareIntent to create a
-     * sharing Intent and set the share Intent of ShareActionProvider actionProvider to this
-     * Intent. Then we set MenuItem overflowItem to the "Share with..." action in the overflow menu
-     * found at R.id.menu_item_share_action_provider_overflow in our menu. We fetch the action
-     * provider specified for overflowItem into ShareActionProvider overflowProvider, set the file
-     * name of the file for persisting the share history to DEFAULT_SHARE_HISTORY_FILE_NAME (the
-     * default name for storing share history), then use our method createShareIntent to create a
-     * sharing Intent and set the share Intent of ShareActionProvider overflowProvider to this
-     * Intent. Finally we return true so that our menu will be displayed.
+     * options "menu" passed us. Then we initialize our `MenuItem` variable `val actionItem` to the
+     * "Share with..." action found at ID R.id.menu_item_share_action_provider_action_bar in our
+     * menu. We use the [MenuItemCompat.getActionProvider] method to fetch the action provider
+     * specified for `actionItem` to initialize our [ShareActionProvider] variable `val actionProvider`,
+     * set the file name of the file for persisting the share history to DEFAULT_SHARE_HISTORY_FILE_NAME
+     * (the default name for storing share history: "share_history.xml"), then use our method
+     * [createShareIntent] to create a sharing [Intent] and set the share [Intent] of `actionProvider`
+     * to this [Intent]. Then we initialize our `MenuItem` variable `overflowItem` to the "Share
+     * with..." action in the overflow menu found at R.id.menu_item_share_action_provider_overflow
+     * in our [menu]. We initialize our [ShareActionProvider] variable `val overflowProvider` by using
+     * the [MenuItemCompat.getActionProvider] method to fetch the action provider specified for
+     * `overflowItem`, set the file name of the file for persisting the share history to
+     * DEFAULT_SHARE_HISTORY_FILE_NAME, then use our method [createShareIntent] to create a
+     * sharing [Intent] and set the share [Intent] of `overflowProvider` to this [Intent]. Finally
+     * we return *true* so that our menu will be displayed.
      *
      * @param menu The options menu in which you place your items.
      * @return You must return true for the menu to be displayed.
@@ -95,9 +98,9 @@ class ActionBarShareActionProviderActivity : AppCompatActivity() {
     }
 
     /**
-     * Creates a sharing [Intent]. We first create the `Intent shareIntent` with the action
-     * ACTION_SEND, and then add the flag [Intent.FLAG_GRANT_READ_URI_PERMISSION] to it. We
-     * initialize our `val b` to a new instance of [Uri.Builder], set the scheme of `b` to
+     * Creates a sharing [Intent]. We first initalize our [Intent] variable `val shareIntent` with
+     * a new instance with the action ACTION_SEND, and add the flag [Intent.FLAG_GRANT_READ_URI_PERMISSION]
+     * to it. We initialize our `val b` to a new instance of [Uri.Builder], set the scheme of `b` to
      * "content", and set its authority to our "com.example.android.apis.content.FileProvider"
      * (our content/FileProvider `ContentProvider` which provides access to resources in our
      * apk to other apps). We initialize our `val tv` to a new instance of [TypedValue], and use
