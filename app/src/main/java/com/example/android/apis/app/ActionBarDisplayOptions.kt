@@ -85,6 +85,7 @@ class ActionBarDisplayOptions : AppCompatActivity(), View.OnClickListener, Actio
         val bar = supportActionBar
         bar!!.setIcon(R.drawable.app_sample_code)
         bar.setDisplayShowHomeEnabled(true)
+        bar.setDisplayUseLogoEnabled(false)
 
         bar.setCustomView(mCustomView,
                 ActionBar.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
@@ -184,7 +185,15 @@ class ActionBarDisplayOptions : AppCompatActivity(), View.OnClickListener, Actio
         when (v.id) {
             R.id.toggle_home_as_up -> flags = ActionBar.DISPLAY_HOME_AS_UP
             R.id.toggle_show_home -> flags = ActionBar.DISPLAY_SHOW_HOME
-            R.id.toggle_use_logo -> flags = ActionBar.DISPLAY_USE_LOGO
+            R.id.toggle_use_logo -> {
+                flags = ActionBar.DISPLAY_USE_LOGO
+                if(flags and bar!!.displayOptions == 0) {
+                    bar.setIcon(R.drawable.apidemo_androidlogo)
+                } else {
+                    bar.setIcon(R.drawable.app_sample_code)
+                }
+
+            }
             R.id.toggle_show_title -> flags = ActionBar.DISPLAY_SHOW_TITLE
             R.id.toggle_show_custom -> flags = ActionBar.DISPLAY_SHOW_CUSTOM
             R.id.cycle_custom_gravity -> {
