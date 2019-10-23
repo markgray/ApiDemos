@@ -280,7 +280,7 @@ class ActionBarDisplayOptions : AppCompatActivity(), View.OnClickListener, Actio
      * @param position The position of the view in the adapter
      * @param id The row id of the item that is selected
      */
-    override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
         val bar = supportActionBar
 
         when (parent.id) {
