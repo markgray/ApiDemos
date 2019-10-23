@@ -20,7 +20,6 @@ package com.example.android.apis.app
 // class is in a sub-package.
 
 import android.annotation.TargetApi
-import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Intent
 import android.graphics.Canvas
@@ -30,15 +29,15 @@ import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-
 
 /**
  *
  * Example of using a custom animation when transitioning between activities.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-class Animation : Activity() {
+class Animation : AppCompatActivity() {
 
     /**
      * Called when the R.id.fade_animation ("Fade in") Button is clicked. We start the
