@@ -17,13 +17,7 @@
 
 package com.example.android.apis.app
 
-import com.example.android.apis.R
-
 import android.annotation.TargetApi
-import android.app.ActionBar
-import android.app.ActionBar.Tab
-import android.app.Activity
-import android.app.FragmentTransaction
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
@@ -35,13 +29,20 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.ActionBar.Tab
+import androidx.fragment.app.FragmentTransaction
+
+import com.example.android.apis.R
+
 /**
  * This demo shows how various action bar display option flags can be combined
  * and their effects.
  */
 @Suppress("DEPRECATION")
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-class ActionBarDisplayOptions : Activity(), View.OnClickListener, ActionBar.TabListener,
+class ActionBarDisplayOptions : AppCompatActivity(), View.OnClickListener, ActionBar.TabListener,
         AdapterView.OnItemSelectedListener, ActionBar.OnNavigationListener {
     private var mCustomView: View? = null
 
@@ -81,7 +82,7 @@ class ActionBarDisplayOptions : Activity(), View.OnClickListener, ActionBar.TabL
         mCustomView = layoutInflater.inflate(R.layout.action_bar_display_options_custom,
                 findViewById<View>(android.R.id.content) as ViewGroup, false)
         // Configure several action bar elements that will be toggled by display options.
-        val bar = actionBar
+        val bar = supportActionBar
 
         bar!!.setCustomView(mCustomView,
                 ActionBar.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
@@ -176,7 +177,7 @@ class ActionBarDisplayOptions : Activity(), View.OnClickListener, ActionBar.TabL
      * @param v Button which was clicked
      */
     override fun onClick(v: View) {
-        val bar = actionBar
+        val bar = supportActionBar
         var flags = 0
         when (v.id) {
             R.id.toggle_home_as_up -> flags = ActionBar.DISPLAY_HOME_AS_UP
@@ -280,7 +281,7 @@ class ActionBarDisplayOptions : Activity(), View.OnClickListener, ActionBar.TabL
      * @param id The row id of the item that is selected
      */
     override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-        val bar = actionBar
+        val bar = supportActionBar
 
         when (parent.id) {
             R.id.toggle_navigation -> {

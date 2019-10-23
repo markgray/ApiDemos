@@ -1186,7 +1186,8 @@
             android:name=".app.ActionBarDisplayOptions"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="@string/action_bar_display_options"
-            android:logo="@drawable/apidemo_androidlogo">
+            android:logo="@drawable/apidemo_androidlogo"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
