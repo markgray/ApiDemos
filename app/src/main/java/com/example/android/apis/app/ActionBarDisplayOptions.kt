@@ -83,8 +83,10 @@ class ActionBarDisplayOptions : AppCompatActivity(), View.OnClickListener, Actio
                 findViewById<View>(android.R.id.content) as ViewGroup, false)
         // Configure several action bar elements that will be toggled by display options.
         val bar = supportActionBar
+        bar!!.setIcon(R.drawable.app_sample_code)
+        bar.setDisplayShowHomeEnabled(true)
 
-        bar!!.setCustomView(mCustomView,
+        bar.setCustomView(mCustomView,
                 ActionBar.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
 
         bar.addTab(bar.newTab().setText("Tab 1").setTabListener(this))
