@@ -65,7 +65,7 @@
 
     <!-- A theme for a custom dialog appearance.  Here we use an ugly
          custom frame. -->
-    <style name="Theme.CustomDialog" parent="android:style/Theme.Dialog">
+    <style name="Theme.CustomDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:windowBackground">@drawable/filled_box</item>
     </style>
 
