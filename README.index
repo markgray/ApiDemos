@@ -341,7 +341,7 @@ App
             Creates a pop-up activity over the App/Activity list which looks like a dialog, and
             uses a android:theme="@style/Theme.CustomDialog" set in the AndroidManifest.
 
-    App/Activity/Custom Title              all
+    App/Activity/Custom Title              v21 due to AppCompatActivity migration oddly enough
         .app.CustomTitle
         .layout.custom_title.xml
         .layout.custom_title_1.xml

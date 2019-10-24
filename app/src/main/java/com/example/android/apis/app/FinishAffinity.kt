@@ -26,6 +26,7 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 
 import com.example.android.apis.R
 
@@ -37,7 +38,7 @@ import com.example.android.apis.R
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 @SuppressLint("SetTextI18n")
-class FinishAffinity : Activity() {
+class FinishAffinity : AppCompatActivity() {
     /**
      * Nesting level for this instance of `FinishAffinity`.
      */
