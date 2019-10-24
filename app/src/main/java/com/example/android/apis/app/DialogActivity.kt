@@ -19,13 +19,13 @@ package com.example.android.apis.app
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.View.OnClickListener
 import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
@@ -34,7 +34,7 @@ import com.example.android.apis.R
  * This demonstrates the how to write an activity that looks like
  * a pop-up dialog.
  */
-class DialogActivity : Activity() {
+class DialogActivity : AppCompatActivity() {
 
     /**
      * Called when the Button R.id.add ("ADD CONTENT") is clicked. First we locate the

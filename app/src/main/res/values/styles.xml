@@ -39,7 +39,7 @@
          selected when the holographic theme is available, or look at
          values-XX/styles.xml for a variation that is selected when the material
          theme is available. -->
-    <style name="ThemeCurrentDialog" parent="android:Theme.Dialog" />
+    <style name="ThemeCurrentDialog" parent="Theme.AppCompat.Dialog" />
 
     <!-- Older platforms don't have Theme.Holo.DialogWhenLarge; we will define
          our own wrapper theme that uses it only when running on the appropriate

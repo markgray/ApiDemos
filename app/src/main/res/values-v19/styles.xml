@@ -18,7 +18,7 @@
     <style name="ThemeCurrent" parent="android:Theme.Material" tools:ignore="NewApi" />
 
     <!-- For API level XX or later, the Holo theme is available and we prefer that. -->
-    <style name="ThemeCurrentDialog" parent="android:Theme.Material.Dialog" tools:ignore="NewApi" />
+    <style name="ThemeCurrentDialog" parent="Theme.AppCompat.Light.Dialog.MinWidth" tools:ignore="NewApi" />
 
     <!-- For API level XX or later, we can use the magical DialogWhenLarge theme. -->
     <style name="ThemeCurrentDialogWhenLarge" parent="android:style/Theme.Material.DialogWhenLarge" />
