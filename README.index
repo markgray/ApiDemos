@@ -345,9 +345,15 @@ App
         .app.CustomTitle
         .layout.custom_title.xml
         .layout.custom_title_1.xml
-            How to use a custom title. Uses Window.FEATURE_CUSTOM_TITLE to create a 
-            custom title bar from layout/custom_title_1 for the activity, and allows
-            the user to change the title.
+            Used to be an example of how to use a custom title. Used Window.FEATURE_CUSTOM_TITLE
+            to create a custom title bar from layout/custom_title_1 for the activity, and allowed
+            the user to change the title. But when migrating to [AppCompatActivity] I found out that
+            new versions will always throw a runtime exception: "You cannot combine custom titles
+            with other title features", and there is no way to turn back the clock to the days when
+            title bars were used instead of [ActionBar]'s (apart from targeting Api 7.0 instead of
+            the latest). What I did instead is embed a CustomView in the Activity's [ActionBar].
+            Looks and acts the same, but allows you to use all the other neat features of
+            [AppCompatActivity].
 
     App/Activity/Dialog                    all
         .app.DialogActivity

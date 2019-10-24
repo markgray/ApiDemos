@@ -33,26 +33,40 @@ import com.example.android.apis.R
 /**
  * ### CustomTitle
  *
- * Example of how to use a custom title [android.view.Window.FEATURE_CUSTOM_TITLE].
- * This demonstrates how a custom title can be used.
+ * Used to be an example of how to use a custom title [android.view.Window.FEATURE_CUSTOM_TITLE].
+ * It used to demonstrate how a custom title could be used, but when migrating to [AppCompatActivity]
+ * I found out that new versions will always throw a runtime exception: "You cannot combine custom
+ * titles with other title features", and there is no way to turn back the clock to the days when
+ * title bars were used instead of [ActionBar]'s (apart from targeting Api 7.0 instead of the latest).
+ * What I did instead is embed a CustomView in the Activity's [ActionBar]. Looks and acts the same,
+ * but allows you to use all the neat features of [AppCompatActivity].
  *
  * Demo path: App/Title/Custom Title
  *
  * Source files:
  *  - src/com.example.android.apis/app/CustomTitle.java The Custom Title implementation
  *  - /res/any/layout/custom_title.xml Defines contents of the screen
+ *  - /res/any/layout/custom_title_1.xml The layout file for the custom title we display.
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class CustomTitle : AppCompatActivity() {
 
+    /**
+     * A handle to our Activity's [ActionBar].
+     */
     lateinit var mActionBar: ActionBar
+    /**
+     * The custom title [View] that we insert as a CustomView in our [ActionBar] field [mActionBar]
+     */
     var mCustomView: View? = null
+
     /**
      * Called when the activity is starting. First we call through to our super's implementation
-     * of onCreate. Then we request the window feature FEATURE_CUSTOM_TITLE, set our content view
-     * to our layout file R.layout.custom_title, retrieve the current Window for the activity and
-     * use it to set the value of the Window's FEATURE_CUSTOM_TITLE to the layout file we want it
-     * to use: R.layout.custom_title_1. Next we locate the input and output View's of our layout:
+     * of onCreate. Then we set our content view to our layout file R.layout.custom_title, and use
+     * a `LayoutInflater` for our context to inflate the custom title layout with resource ID
+     * R.layout.custom_title_1 into a [View] using the root [View] android.R.id.content for the
+     * layout params without attaching to it, which we then use to initialize our [View] field
+     * [mCustomView]. Next we locate the input and output View's of our layout:
      *
      *  - TextView leftText (R.id.left_text) the left TextView of our custom title
      *  - TextView rightText (R.id.right_text) the right TextView of our custom title
@@ -65,7 +79,7 @@ class CustomTitle : AppCompatActivity() {
      *  - Button rightButton (R.id.right_text_button) the Button used to set "rightText" to the contents
      * of "rightTextEdit"
      *
-     * Finally we set the onClickListener of "leftButton" to set the text of "leftText" to the
+     * Finally we set the `onClickListener` of "leftButton" to set the text of "leftText" to the
      * contents of "leftTextEdit" when pressed, and "rightButton" to set the text of "rightText"
      * to the contents of "rightTextEdit" when pressed.
      *
@@ -104,7 +118,13 @@ class CustomTitle : AppCompatActivity() {
         rightButton.setOnClickListener { rightText.text = rightTextEdit.text }
     }
 
+    /**
+     * Our static constant
+     */
     companion object {
+        /**
+         * TAG to use for logging.
+         */
         const val TAG: String = "CustomTitle"
     }
 }
