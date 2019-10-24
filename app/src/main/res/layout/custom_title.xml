@@ -36,7 +36,8 @@
             android:layout_gravity="center_vertical"
             android:maxEms="10"
             android:minEms="10"
-            android:text="@string/custom_title_left" />
+            android:text="@string/custom_title_left"
+            tools:ignore="Autofill,LabelFor" />
 
         <Button
             android:id="@+id/left_text_button"
@@ -58,7 +59,8 @@
             android:layout_gravity="center_vertical"
             android:maxEms="10"
             android:minEms="10"
-            android:text="@string/custom_title_right" />
+            android:text="@string/custom_title_right"
+            tools:ignore="Autofill,LabelFor" />
 
         <Button
             android:id="@+id/right_text_button"

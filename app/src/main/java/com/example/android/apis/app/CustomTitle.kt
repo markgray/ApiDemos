@@ -16,12 +16,17 @@
 
 package com.example.android.apis.app
 
-import android.app.Activity
+import android.os.Build
 import android.os.Bundle
-import android.view.Window
+import android.util.Log
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 
@@ -37,7 +42,11 @@ import com.example.android.apis.R
  *  - src/com.example.android.apis/app/CustomTitle.java The Custom Title implementation
  *  - /res/any/layout/custom_title.xml Defines contents of the screen
  */
-class CustomTitle : Activity() {
+@Suppress("MemberVisibilityCanBePrivate")
+class CustomTitle : AppCompatActivity() {
+
+    lateinit var mActionBar: ActionBar
+    var mCustomView: View? = null
     /**
      * Called when the activity is starting. First we call through to our super's implementation
      * of onCreate. Then we request the window feature FEATURE_CUSTOM_TITLE, set our content view
@@ -62,13 +71,28 @@ class CustomTitle : Activity() {
      *
      * @param savedInstanceState always null since we not override onSaveInstanceState
      */
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE)
         setContentView(R.layout.custom_title)
-        window.setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title_1)
+        mCustomView = layoutInflater.inflate(R.layout.custom_title_1,
+                findViewById<View>(android.R.id.content) as ViewGroup, false)
+        mActionBar = supportActionBar!!
+        mActionBar.setDisplayShowHomeEnabled(false)
+        mActionBar.setDisplayUseLogoEnabled(false)
+        mActionBar.setDisplayShowTitleEnabled(false)
+        mActionBar.setDisplayShowCustomEnabled(true)
 
+        mActionBar.setCustomView(
+                mCustomView,
+                ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+        )
+
+        Log.i(TAG, "Before first call to findViewById")
         val leftText = findViewById<TextView>(R.id.left_text)
         val rightText = findViewById<TextView>(R.id.right_text)
         val leftTextEdit = findViewById<EditText>(R.id.left_text_edit)
@@ -78,5 +102,9 @@ class CustomTitle : Activity() {
 
         leftButton.setOnClickListener { leftText.text = leftTextEdit.text }
         rightButton.setOnClickListener { rightText.text = rightTextEdit.text }
+    }
+
+    companion object {
+        const val TAG: String = "CustomTitle"
     }
 }
