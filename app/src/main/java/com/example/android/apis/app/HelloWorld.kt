@@ -18,10 +18,10 @@ package com.example.android.apis.app
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
-import com.example.android.apis.R
 
-import android.app.Activity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 
 /**
@@ -36,10 +36,10 @@ import android.os.Bundle
  *  - src/com.example.android.apis/app/HelloWorld.java The Hello World Screen implementation
  *  - res/any/layout/hello_world.xml</td> Defines contents of the screen
  */
-class HelloWorld : Activity() {
+class HelloWorld : AppCompatActivity() {
     /**
-     * Initialization of the Activity after it is first created.  Must at least
-     * call [setContentView()][android.app.Activity.setContentView] to
+     * Initialization of the Activity after it is first created.  Must at least call
+     * [setContentView()][androidx.appcompat.app.AppCompatActivity.setContentView] to
      * describe what is to be displayed in the screen.
      *
      * First we call through to our super's implementation of onCreate, then we set out content
