@@ -19,11 +19,11 @@ package com.example.android.apis.app
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View.OnClickListener
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 
@@ -47,7 +47,7 @@ import com.example.android.apis.R
  *   - /res/any/layout/forwarding.xml
  *   Defines contents of the Forwarding screen
  */
-class Forwarding : Activity() {
+class Forwarding : AppCompatActivity() {
 
     /**
      * Used as the OnClickListener for the Button R.id.go "GO"

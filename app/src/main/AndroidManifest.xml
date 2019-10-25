@@ -239,14 +239,16 @@
 
         <activity
             android:name=".app.Forwarding"
-            android:label="@string/activity_forwarding">
+            android:label="@string/activity_forwarding"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".app.ForwardTarget" />
+        <activity android:name=".app.ForwardTarget"
+            android:theme="@style/Theme.AppCompat.Light" />
 
         <activity
             android:name=".app.RedirectEnter"
