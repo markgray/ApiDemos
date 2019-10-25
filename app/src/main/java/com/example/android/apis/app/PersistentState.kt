@@ -19,11 +19,11 @@ package com.example.android.apis.app
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
@@ -63,7 +63,7 @@ import com.example.android.apis.R
 </table> *
  *
  */
-class PersistentState : Activity() {
+class PersistentState : AppCompatActivity() {
     /**
      * `EditText` whose text we save in our `SharedPreferences` under the key "text"
      */
@@ -71,8 +71,8 @@ class PersistentState : Activity() {
 
     /**
      * Initialization of the Activity after it is first created.  Here we use
-     * [setContentView()][android.app.Activity.setContentView] to set up
-     * the Activity's content to our layout file R.layout.save_restore_state,
+     * [setContentView()][androidx.appcompat.app.AppCompatActivity.setContentView]
+     * to set up the Activity's content to our layout file R.layout.save_restore_state,
      * set the TextView R.id.msg to the string R.string.persistent_msg, and
      * retrieve the EditText widget (R.id.saved) whose state we will persistent
      * and save a reference to it in our field EditText mSaved.
