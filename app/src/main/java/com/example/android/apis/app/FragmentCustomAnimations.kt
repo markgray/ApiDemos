@@ -30,39 +30,43 @@ import androidx.fragment.app.FragmentActivity
 import com.example.android.apis.R
 
 /**
- * Demonstrates the use of custom animations in a FragmentTransaction when
+ * Demonstrates the use of custom animations in a `FragmentTransaction` when
  * pushing and popping a stack.
  *
- * Uses FragmentTransaction.setCustomAnimations to cause animations to be used
+ * Uses `FragmentTransaction.setCustomAnimations` to cause animations to be used
  * when replacing one fragment with the next. The "POP" button does the same thing
- * as the back button by calling onBackPressed, it takes you back through the numbered
+ * as the back button by calling `onBackPressed`, it takes you back through the numbered
  * fragments on the stack after you "Push" them, again using the same animation.
- * onSaveInstanceState saves the mStackLevel in an int "level" which is used when
- * the Activity is recreated to remember the stack level, mStackLevel is then used
+ * [onSaveInstanceState] saves the [mStackLevel] field in an int "level" which is used when
+ * the [FragmentActivity] is recreated to remember the stack level, [mStackLevel] is then used
  * to set the int argument "num" passed to the new fragment when it is created.
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 @SuppressLint("DefaultLocale")
 class FragmentCustomAnimations : FragmentActivity() {
-    internal var mStackLevel = 1 // Stack level for the next fragment
+    /**
+     * Stack level for the next fragment
+     */
+    internal var mStackLevel = 1
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, then we set our content view to our layout file R.layout.fragment_stack. Next we
-     * locate **Button button** in our layout with id R.id.new_fragment ("Push"), and set
-     * its onClickListener to an anonymous class which calls our method addFragmentToStack when the
-     * Button is clicked. We locate the **Button** R.id.delete_fragment ("Pop") and set its
-     * OnClickListener to an anonymous class which invokes Activity.onBackPressed when clicked and
-     * "finishes" the Fragment thereby returning to the Fragment behind it. If our parameter
-     * savedInstanceState is null this is the first time we have been created so we create a new
-     * instance of CountingFragment with the initial stack level of mStackLevel = 1. Then we create
-     * a **FragmentTransaction ft** and begin a series of Fragment transactions using it
-     * by calling **getFragmentManager().beginTransaction()**. We add **newFragment**
-     * using the view id of the FrameLayout in our layout file: R.id.simple_fragment, and then commit
-     * **FragmentTransaction ft**. If it is not null we are being recreated after an
-     * orientation change so we retrieve the value for our field **int mStackLevel** which
-     * was stored under the key "level" by our callback onSaveInstanceState.
+     * `onCreate`, then we set our content view to our layout file R.layout.fragment_stack. Next we
+     * initialize our [Button] variable `var button` to the [View] in our layout with id
+     * R.id.new_fragment ("Push"), and set its `onClickListener` to a lambda which calls our method
+     * [addFragmentToStack] when the [Button] is clicked. We set `button` to the [View] with the ID
+     * R.id.delete_fragment ("Pop") and set its `OnClickListener` to a lambda which invokes the method
+     * [onBackPressed] when clicked and "finishes" the [Fragment] thereby returning to the [Fragment]
+     * behind it. If our parameter [savedInstanceState] is null this is the first time we have been
+     * created so we create a new instance of [CountingFragment] with the initial stack level of
+     * [mStackLevel] of 1. Then we initialize our `FragmentTransaction` variable `ft` by using the
+     * support `FragmentManager` to `begin()` a series of Fragment transactions. We add `newFragment`
+     * using the view id of the `FrameLayout` in our layout file with ID R.id.simple_fragment, and
+     * then commit `FragmentTransaction ft`. If [savedInstanceState] is not null on the other hand
+     * we are being recreated after an orientation change, so we retrieve the value for our [Int]
+     * field [mStackLevel] from [savedInstanceState] which was stored under the key "level" by our
+     * callback [onSaveInstanceState].
      *
      * @param savedInstanceState if null it is first time, otherwise will contain the value of
      * mStackLevel to use under the key "level"
