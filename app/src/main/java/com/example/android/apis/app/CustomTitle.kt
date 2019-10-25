@@ -66,7 +66,14 @@ class CustomTitle : AppCompatActivity() {
      * a `LayoutInflater` for our context to inflate the custom title layout with resource ID
      * R.layout.custom_title_1 into a [View] using the root [View] android.R.id.content for the
      * layout params without attaching to it, which we then use to initialize our [View] field
-     * [mCustomView]. Next we locate the input and output View's of our layout:
+     * [mCustomView]. We initialize our [ActionBar] field [mActionBar] with a reference to this
+     * activity's [ActionBar] retrieved by the support library version of `Activity.getActionBar`,
+     * and disable the showing of the application home affordance in the action bar with a call to
+     * the `setDisplayShowHomeEnabled` of [mActionBar], disable the showing of a logo, disable the
+     * showing of a title, and enable the showing of a custom view. We then set the action bar into
+     * custom navigation mode, supplying [mCustomView] as the [View] to use for custom navigation,
+     * with its layout parameters both set to WRAP_CONTENT. Next we locate the input and output
+     * View's of our layout:
      *
      *  - TextView leftText (R.id.left_text) the left TextView of our custom title
      *  - TextView rightText (R.id.right_text) the right TextView of our custom title
@@ -88,8 +95,8 @@ class CustomTitle : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.custom_title)
+
         mCustomView = layoutInflater.inflate(R.layout.custom_title_1,
                 findViewById<View>(android.R.id.content) as ViewGroup, false)
         mActionBar = supportActionBar!!
