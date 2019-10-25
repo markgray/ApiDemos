@@ -16,13 +16,13 @@
 
 package com.example.android.apis.app
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * This is an empty Activity which demonstrates the use of the android:maxAspectRatio attribute in
  * the AndroidManifest.xml entry for an Activity
  */
-abstract class MaxAspectRatio : Activity() {
+abstract class MaxAspectRatio : AppCompatActivity() {
 
     /**
      * Used in the entry for "App/Activity/Max Aspect Ratio/1:1" with an android:maxAspectRatio="1"

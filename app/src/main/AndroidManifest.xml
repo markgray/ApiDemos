@@ -336,7 +336,7 @@
         <activity android:name=".app.MaxAspectRatio$Square"
             android:label="@string/activity_max_aspect_ratio_square"
             android:resizeableActivity="false"
-            android:theme="@android:style/Theme.DeviceDefault.Settings"
+            android:theme="@style/Theme.AppCompat.Light"
             android:maxAspectRatio="1"
             tools:targetApi="26">
             <intent-filter>
@@ -348,7 +348,7 @@
         <activity android:name=".app.MaxAspectRatio$SixteenToNine"
             android:label="@string/activity_max_aspect_ratio_16to9"
             android:resizeableActivity="false"
-            android:theme="@android:style/Theme.DeviceDefault.Settings"
+            android:theme="@style/Theme.AppCompat.Light"
             android:maxAspectRatio="1.77777778"
             tools:targetApi="26">
             <intent-filter>
@@ -360,7 +360,7 @@
         <activity android:name=".app.MaxAspectRatio$Any"
             android:label="@string/activity_max_aspect_ratio_any"
             android:resizeableActivity="true"
-            android:theme="@android:style/Theme.DeviceDefault.Settings"
+            android:theme="@style/Theme.AppCompat.Light"
             tools:targetApi="26">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
