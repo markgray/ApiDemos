@@ -657,6 +657,7 @@ App
 
     App/Fragment/Context Menu              v11
         .app.FragmentContextMenu
+        .layout.fragment_context_menu.xml
             Demonstration of displaying a context menu from a fragment.
 
     App/Fragment/Custom Animations         v11 -> v21 due to getDrawable call

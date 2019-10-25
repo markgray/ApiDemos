@@ -17,8 +17,8 @@
 package com.example.android.apis.app;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.Fragment;
+
+import androidx.annotation.NonNull;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -30,13 +30,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.Fragment;
+
 import com.example.android.apis.R;
 
 /**
  * Demonstration of displaying a context menu from a fragment.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class FragmentContextMenu extends Activity {
+public class FragmentContextMenu extends FragmentActivity {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -55,7 +58,7 @@ public class FragmentContextMenu extends Activity {
 
         // Create the list fragment and add it as our sole content.
         ContextMenuFragment content = new ContextMenuFragment();
-        getFragmentManager().beginTransaction().add(android.R.id.content, content).commit();
+        getSupportFragmentManager().beginTransaction().add(android.R.id.content, content).commit();
     }
 
     /**
@@ -103,7 +106,7 @@ public class FragmentContextMenu extends Activity {
          *            depending on the class of v.
          */
         @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, ContextMenuInfo menuInfo) {
             super.onCreateContextMenu(menu, v, menuInfo);
             menu.add(Menu.NONE, R.id.a_item, Menu.NONE, "Menu A");
             menu.add(Menu.NONE, R.id.b_item, Menu.NONE, "Menu B");
