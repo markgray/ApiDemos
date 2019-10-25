@@ -20,9 +20,6 @@ import com.example.android.apis.R;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,6 +28,11 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 /**
  * Demonstrates the use of custom animations in a FragmentTransaction when
@@ -46,7 +48,7 @@ import android.widget.TextView;
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 @SuppressLint("DefaultLocale")
-public class FragmentCustomAnimations extends Activity {
+public class FragmentCustomAnimations extends FragmentActivity {
     int mStackLevel = 1; // Stack level for the next fragment
 
     /**
@@ -75,7 +77,7 @@ public class FragmentCustomAnimations extends Activity {
         setContentView(R.layout.fragment_stack);
 
         // Watch for button clicks.
-        Button button = (Button)findViewById(R.id.new_fragment);
+        Button button = findViewById(R.id.new_fragment);
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,7 +85,7 @@ public class FragmentCustomAnimations extends Activity {
             }
         });
 
-        button = (Button) findViewById(R.id.delete_fragment);
+        button = findViewById(R.id.delete_fragment);
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +96,7 @@ public class FragmentCustomAnimations extends Activity {
         if (savedInstanceState == null) {
             // Do first time initialization -- add initial fragment.
             Fragment newFragment = CountingFragment.newInstance(mStackLevel);
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.add(R.id.simple_fragment, newFragment).commit();
         } else {
             mStackLevel = savedInstanceState.getInt("level");
@@ -114,7 +116,7 @@ public class FragmentCustomAnimations extends Activity {
      * @param outState Bundle in which to place your saved state.
      */
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("level", mStackLevel);
     }
@@ -145,7 +147,7 @@ public class FragmentCustomAnimations extends Activity {
 
         // Add the fragment to the activity, pushing this transaction
         // on to the back stack.
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.animator.fragment_slide_left_enter,
                 R.animator.fragment_slide_left_exit,
                 R.animator.fragment_slide_right_enter,
