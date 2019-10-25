@@ -16,11 +16,10 @@
 
 package com.example.android.apis.app
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
@@ -30,7 +29,7 @@ import com.example.android.apis.R
  * Note: occurrences of slash star in comments are replace by /(any) to avoid kotlin compiler bug.
  */
 @Suppress("UNUSED_PARAMETER")
-class Intents : Activity() {
+class Intents : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * onCreate, then we set our content view to our layout file R.layout.intents.

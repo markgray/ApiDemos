@@ -623,7 +623,8 @@
 
         <activity
             android:name=".app.Intents"
-            android:label="@string/activity_intents">
+            android:label="@string/activity_intents"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
