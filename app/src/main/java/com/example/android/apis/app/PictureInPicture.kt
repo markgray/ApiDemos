@@ -16,19 +16,19 @@
 
 package com.example.android.apis.app
 
-import android.app.Activity
 import android.app.PictureInPictureParams
 import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
  * Minimal demo of Picture in Picture mode
  */
 @RequiresApi(Build.VERSION_CODES.O)
-class PictureInPicture : Activity() {
+class PictureInPicture : AppCompatActivity() {
 
     /**
      * Button with id R.id.enter_pip, its `OnClickListener` calls the method

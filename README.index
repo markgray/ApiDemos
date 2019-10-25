@@ -443,9 +443,9 @@ App
         .app.PictureInPicture
         .layout.picture_in_picture.xml
             Minimal demo of Picture in Picture mode, just enters that mode with current
-            content view when button is clicked. Weird - cannot get rid of app window
-            even by removing the app using the package manager - needed to restart test
-            device.
+            content view when button is clicked. You have to drag the PIP down instead of
+            up in order to dismiss it -- well guarded secret until Android Q revealed it
+            to me in a Toast.
  
     App/Activity/Presentation -- registerDisplayListener v17 getSupportedModes v23
         .app.PresentationActivity
