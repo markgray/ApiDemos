@@ -811,7 +811,8 @@
 
         <activity
             android:name=".accessibility.ClockBackActivity"
-            android:label="@string/accessibility_service">
+            android:label="@string/accessibility_service"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -863,7 +864,8 @@
         <activity
             android:name=".accessibility.CustomViewAccessibilityActivity"
             android:enabled="@bool/atLeastIceCreamSandwich"
-            android:label="@string/accessibility_custom_view">
+            android:label="@string/accessibility_custom_view"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
