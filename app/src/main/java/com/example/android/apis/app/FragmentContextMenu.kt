@@ -41,14 +41,14 @@ class FragmentContextMenu : FragmentActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, Then we create an instance of the Fragment **ContextMenuFragment content**.
-     * We use the FragmentManager for interacting with fragments associated with this activity to
-     * start a series of edit operations on the Fragments associated with this FragmentManager and
-     * chaining on the **FragmentTransaction** returned by **beginTransaction**
-     * we add our **ContextMenuFragment content** to the Activity state, and finally, again
-     * chaining on the same **FragmentTransaction** returned we commit that transaction.
+     * `onCreate`, Then we initialize our [ContextMenuFragment] variable `val content` with a new
+     * instance, and use the support `FragmentManager` for interacting with fragments associated
+     * with this activity to start a series of edit operations on the Fragments associated with this
+     * `FragmentManager` and chaining on the `FragmentTransaction` returned by the `beginTransaction`
+     * method we add `content` to the Activity state, and finally, again chaining on the same
+     * `FragmentTransaction` we commit that transaction.
      *
-     * @param savedInstanceState we do not override onSaveInstanceState so do not use this
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use this
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,18 +65,19 @@ class FragmentContextMenu : FragmentActivity() {
     class ContextMenuFragment : Fragment() {
 
         /**
-         * Called to have the fragment instantiate its user interface view. First we use the parameter
-         * **LayoutInflater inflater** to inflate our layout file R.layout.fragment_context_menu
-         * into **View view**, then we register the View of the Button in the layout with the
-         * id R.id.long_press ("Long press me") for a context menu to be shown. This will set the
-         * View.OnCreateContextMenuListener on the view to this fragment, so that the callback
-         * onCreateContextMenu(ContextMenu, View, ContextMenuInfo) will be called when it is time to
-         * show the context menu. Finally we return **View view** to the caller.
+         * Called to have the fragment instantiate its user interface view. First we use our
+         * [LayoutInflater] parameter [inflater] to inflate our layout file R.layout.fragment_context_menu
+         * into our [View] variable `view`, then we register the `View` of the `Button` in `view`
+         * with the id R.id.long_press ("Long press me") for a context menu to be shown. This will
+         * set the [View.OnCreateContextMenuListener] on `view` to this fragment, so that the callback
+         * `onCreateContextMenu(ContextMenu, View, ContextMenuInfo)` will be called when it is time
+         * to show the context menu. Finally we return `view` to the caller.
          *
-         * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment,
-         * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
-         * Used to generate the LayoutParams of the view.
-         * @param savedInstanceState we do not override onSaveInstanceState so do not use
+         * @param inflater The [LayoutInflater] object that can be used to inflate any views in the
+         * fragment.
+         * @param container If non-null, this is the parent view that the fragment's UI should be
+         * attached to. Used to generate the LayoutParams of the view.
+         * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
          *
          * @return View for the fragment's UI
          */
@@ -88,10 +89,10 @@ class FragmentContextMenu : FragmentActivity() {
 
         /**
          * Called when a context menu for the `view` is about to be shown. Unlike
-         * [.onCreateOptionsMenu], this will be called every time the context menu
+         * [onCreateOptionsMenu], this will be called every time the context menu
          * is about to be shown and should be populated for the view.
          *
-         * First we call through to our super's implementation of onCreateContextMenu, then we add
+         * First we call through to our super's implementation of `onCreateContextMenu`, then we add
          * two items to the menu: "Menu A" with id R.id.a_item, and "Menu B" with id R.id.b_item,
          * specifying no group for the items, and no order.
          *
@@ -114,24 +115,22 @@ class FragmentContextMenu : FragmentActivity() {
          * as appropriate). You can use this method for any items for which you
          * would like to do processing without those other facilities.
          *
-         *
          * Use [MenuItem.getMenuInfo] to get extra information set by the
          * View that added this menu item.
-         *
          *
          * Derived classes should call through to the base class for it to perform
          * the default menu handling.
          *
-         * We fetch the identifier for this **MenuItem item** and switch on the id
+         * We fetch the identifier for our [MenuItem] parameter [item] and switch on the id
          * displaying a Toast depending on the id: R.id.a_item "Item 1a was chosen", or
          * R.id.b_item "Item 1b was chosen" then return true to indicate we have consumed the
-         * context menu selection. If the identifier of the **MenuItem item** matches
-         * neither of our id's then we return the value returned by our super's implementation of
-         * onContextItemSelected (which returns false).
+         * context menu selection. If the identifier of the [item] matches neither of our id's
+         * then we return the value returned by our super's implementation of `onContextItemSelected`
+         * (which returns false).
          *
          * @param item The context menu item that was selected.
-         * @return boolean Return false to allow normal context menu processing to
-         * proceed, true to consume it here.
+         * @return boolean Return *false* to allow normal context menu processing to
+         * proceed, *true* to consume it here.
          */
         override fun onContextItemSelected(item: MenuItem): Boolean {
             when (item.itemId) {
