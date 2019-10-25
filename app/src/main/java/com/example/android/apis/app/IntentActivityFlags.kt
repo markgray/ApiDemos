@@ -1,7 +1,6 @@
 package com.example.android.apis.app
 
 import android.annotation.TargetApi
-import android.app.Activity
 import android.app.PendingIntent
 import android.app.PendingIntent.CanceledException
 import android.content.ComponentName
@@ -11,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View.OnClickListener
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
@@ -25,7 +25,7 @@ import com.example.android.apis.R
  * "later" calls using PendingIntent.send()
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-class IntentActivityFlags : Activity() {
+class IntentActivityFlags : AppCompatActivity() {
 
     /**
      * OnClickListener for the R.id.flag_activity_clear_task ("FLAG_ACTIVITY_CLEAR_TASK") Button
