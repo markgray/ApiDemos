@@ -18,9 +18,9 @@ package com.example.android.apis.app
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
-import android.app.Activity
-import android.os.Bundle
 
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
@@ -35,7 +35,7 @@ import com.example.android.apis.R
  * surrounding "white box" in the overscan region of the display, and displays a
  * picture in a FrameLayout offset to avoid the overscan region.
  */
-class OverscanActivity : Activity() {
+class OverscanActivity : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation
      * of onCreate, and then we set our content view to our layout file R.layout.overscan_activity.

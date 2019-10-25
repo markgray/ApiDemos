@@ -117,7 +117,7 @@
             android:name=".app.OverscanActivity"
             android:enabled="@bool/atLeastJellyBeanMR2"
             android:label="@string/activity_overscan"
-            android:theme="@android:style/Theme.Holo.NoActionBar.Overscan"
+            android:theme="@style/Theme.MyOverscanStyle"
             tools:targetApi="jelly_bean_mr2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

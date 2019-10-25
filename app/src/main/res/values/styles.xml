@@ -137,4 +137,11 @@
         <item name="android:windowAllowEnterTransitionOverlap">false</item>
     </style>
 
+    <style name="Theme.MyOverscanStyle"
+        parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowOverscan" tools:ignore="NewApi">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
 </resources>
