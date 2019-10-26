@@ -30,10 +30,19 @@ import com.example.android.apis.R
  * This demonstrates the how to write an activity that extends into the
  * overscan region.
  *
- * Uses @android:style/Theme.Holo.NoActionBar.Overscan set in AndroidManifest, and
+ * Uses android:theme="@style/Theme.MyOverscanStyle" set in AndroidManifest, and
  * android:fitsSystemWindows="true" in its layout/overscan_activity.xml to place a
  * surrounding "white box" in the overscan region of the display, and displays a
  * picture in a FrameLayout offset to avoid the overscan region.
+ *
+ * Theme.MyOverscanStyle is defined in values/styles.xml and consists of:
+ *
+ *         <style name="Theme.MyOverscanStyle"
+ *             parent="Theme.AppCompat.Light.NoActionBar">
+ *             <item name="android:windowFullscreen">true</item>
+ *             <item name="android:windowOverscan" tools:ignore="NewApi">true</item>
+ *             <item name="android:windowContentOverlay">@null</item>
+ *         </style>
  */
 class OverscanActivity : AppCompatActivity() {
     /**
