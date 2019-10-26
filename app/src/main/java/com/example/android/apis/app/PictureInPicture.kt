@@ -42,7 +42,7 @@ class PictureInPicture : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
      * then we set our content view to our layout file R.layout.picture_in_picture. We initialize our
-     * field `Button mEnterPip` by finding the view with id R.id.enter_pip then set its
+     * [Button] field ` mEnterPip` by finding the view with id R.id.enter_pip then set its
      * `OnClickListener` to an anonymous class whose `onClick` override calls the method
      * `enterPictureInPictureMode` to enter picture-in-picture mode.
      *
