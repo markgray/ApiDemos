@@ -42,9 +42,10 @@ class PictureInPicture : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
      * then we set our content view to our layout file R.layout.picture_in_picture. We initialize our
-     * [Button] field ` mEnterPip` by finding the view with id R.id.enter_pip then set its
-     * `OnClickListener` to an anonymous class whose `onClick` override calls the method
-     * `enterPictureInPictureMode` to enter picture-in-picture mode.
+     * [Button] field `[mEnterPip] by finding the view with id R.id.enter_pip, then set its
+     * `OnClickListener` to a lambda whose `onClick` override builds a default [PictureInPictureParams]
+     * to initialize our variable `val pictureInPictureParams` then calls the [enterPictureInPictureMode]
+     * system method with it to enter picture-in-picture mode.
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
@@ -63,7 +64,8 @@ class PictureInPicture : AppCompatActivity() {
     /**
      * Called as part of the activity lifecycle when an activity is about to go
      * into the background as the result of user choice. We just call the method
-     * `enterPictureInPictureMode` to enter picture-in-picture mode.
+     * `enterPictureInPictureMode` to enter picture-in-picture mode with a default
+     * [PictureInPictureParams].
      */
     override fun onUserLeaveHint() {
         val pictureInPictureParams: PictureInPictureParams =
