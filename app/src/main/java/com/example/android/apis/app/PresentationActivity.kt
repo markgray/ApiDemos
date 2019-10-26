@@ -21,7 +21,6 @@ package com.example.android.apis.app
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.Presentation
 import android.content.Context
@@ -42,6 +41,9 @@ import android.view.ViewGroup
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.CompoundButton.OnCheckedChangeListener
+
+import androidx.appcompat.app.AppCompatActivity
+
 import com.example.android.apis.R
 import kotlin.math.max
 
@@ -77,7 +79,7 @@ import kotlin.math.max
 @Suppress("UNUSED_ANONYMOUS_PARAMETER")
 @TargetApi(Build.VERSION_CODES.M)
 class PresentationActivity
-    : Activity(), OnCheckedChangeListener, OnClickListener, OnItemSelectedListener {
+    : AppCompatActivity(), OnCheckedChangeListener, OnClickListener, OnItemSelectedListener {
 
     /**
      * Used to manage the properties of attached displays
@@ -620,7 +622,7 @@ class PresentationActivity
         </default> */
         @SuppressLint("InflateParams", "DefaultLocale")
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val v: View = convertView ?: (mContext as Activity)
+            val v: View = convertView ?: (mContext as AppCompatActivity)
                     .layoutInflater
                     .inflate(R.layout.presentation_list_item, null)
 
