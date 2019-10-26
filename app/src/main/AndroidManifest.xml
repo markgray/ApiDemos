@@ -382,7 +382,8 @@
 
         <activity
             android:name=".app.PresentationWithMediaRouterActivity"
-            android:label="@string/activity_presentation_with_media_router">
+            android:label="@string/activity_presentation_with_media_router"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

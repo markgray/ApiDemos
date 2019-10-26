@@ -17,13 +17,9 @@
 package com.example.android.apis.app
 
 import android.annotation.TargetApi
-import android.app.Activity
-import android.app.MediaRouteActionProvider
 import android.app.Presentation
 import android.content.Context
 import android.content.DialogInterface
-import android.media.MediaRouter
-import android.media.MediaRouter.RouteInfo
 import android.opengl.GLSurfaceView
 import android.os.Build
 import android.os.Bundle
@@ -33,6 +29,15 @@ import android.view.Menu
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
+
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuItemCompat
+import androidx.mediarouter.media.MediaRouter
+import androidx.mediarouter.media.MediaRouter.RouteInfo
+import androidx.mediarouter.app.MediaRouteActionProvider
+import androidx.mediarouter.media.MediaControlIntent
+import androidx.mediarouter.media.MediaRouteSelector
+
 import com.example.android.apis.R
 import com.example.android.apis.graphics.CubeRenderer
 
@@ -62,19 +67,21 @@ import com.example.android.apis.graphics.CubeRenderer
  * simultaneous presentations on different displays.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-class PresentationWithMediaRouterActivity : Activity() {
+class PresentationWithMediaRouterActivity : AppCompatActivity() {
 
     private var mMediaRouter: MediaRouter? = null // MediaRouter we will use control the routing of media channels
     private var mPresentation: DemoPresentation? = null // The presentation to show on the secondary display.
     private var mSurfaceView: GLSurfaceView? = null // GLSurfaceView in our layout for our openGL demo
     private var mInfoTextView: TextView? = null // text view where we will show information about what's happening.
     private var mPaused: Boolean = false // Flag set in onPause to true, set to false in onResume so updateContents
+    private var mSelector: MediaRouteSelector? = null
 
     /**
      * Interface for receiving events about media routing changes. All methods of this interface
      * will be called from the application's main thread. Added in onResume, removed in onPause.
      */
-    private val mMediaRouterCallback = object : MediaRouter.SimpleCallback() {
+    private val mMediaRouterCallback = object : MediaRouter.Callback() {
+
 
         /**
          * Called when the supplied route becomes selected as the active route
@@ -82,11 +89,10 @@ class PresentationWithMediaRouterActivity : Activity() {
          * the routing for the presentation.
          *
          * @param router the MediaRouter reporting the event
-         * @param type Type flag set indicating the routes that have been selected
          * @param info Route that has been selected for the given route types
          */
-        override fun onRouteSelected(router: MediaRouter, type: Int, info: RouteInfo) {
-            Log.d(TAG, "onRouteSelected: type=$type, info=$info")
+        override fun onRouteSelected(router: MediaRouter?,info: RouteInfo?) {
+            Log.d(TAG, "onRouteSelected: type=do not know, info=$info")
             updatePresentation()
         }
 
@@ -96,11 +102,10 @@ class PresentationWithMediaRouterActivity : Activity() {
          * the routing for the presentation.
          *
          * @param router the MediaRouter reporting the event
-         * @param type Type flag set indicating the routes that have been unselected
          * @param info Route that has been unselected for the given route types
          */
-        override fun onRouteUnselected(router: MediaRouter, type: Int, info: RouteInfo) {
-            Log.d(TAG, "onRouteUnselected: type=$type, info=$info")
+        override fun onRouteUnselected(router: MediaRouter, info: RouteInfo) {
+            Log.d(TAG, "onRouteUnselected: type=do not know, info=$info")
             updatePresentation()
         }
 
@@ -144,7 +149,7 @@ class PresentationWithMediaRouterActivity : Activity() {
 
     /**
      * Initialization of the Activity after it is first created.  Must at least
-     * call [setContentView()][android.app.Activity.setContentView] to
+     * call [setContentView()][androidx.appcompat.app.AppCompatActivity.setContentView] to
      * describe what is to be displayed in the screen.
      *
      * First we call through to our super's implementation of onCreate. Then we fetch the handle to
@@ -163,7 +168,11 @@ class PresentationWithMediaRouterActivity : Activity() {
         super.onCreate(savedInstanceState)
 
         // Get the media router service.
-        mMediaRouter = getSystemService(Context.MEDIA_ROUTER_SERVICE) as MediaRouter
+        mMediaRouter = MediaRouter.getInstance(this)
+
+        mSelector = MediaRouteSelector.Builder()
+                .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
+                .build()
 
         // See assets/res/any/layout/presentation_with_media_router_activity.xml for this
         // view layout definition, which is being set here as
@@ -192,7 +201,7 @@ class PresentationWithMediaRouterActivity : Activity() {
         super.onResume()
 
         // Listen for changes to media routes.
-        mMediaRouter!!.addCallback(MediaRouter.ROUTE_TYPE_LIVE_VIDEO, mMediaRouterCallback)
+        mMediaRouter!!.addCallback(mSelector, mMediaRouterCallback)
 
         // Update the presentation based on the currently selected route.
         mPaused = false
@@ -262,8 +271,10 @@ class PresentationWithMediaRouterActivity : Activity() {
         menuInflater.inflate(R.menu.presentation_with_media_router_menu, menu)
 
         val mediaRouteMenuItem = menu.findItem(R.id.menu_media_route)
-        val mediaRouteActionProvider = mediaRouteMenuItem.actionProvider as MediaRouteActionProvider
-        mediaRouteActionProvider.setRouteTypes(MediaRouter.ROUTE_TYPE_LIVE_VIDEO)
+        val mediaRouteActionProvider =
+                MenuItemCompat.getActionProvider(mediaRouteMenuItem) as MediaRouteActionProvider
+        mediaRouteActionProvider.routeSelector = mSelector!!
+        //mediaRouteActionProvider.setRouteTypes(MediaRouter.ROUTE_TYPE_LIVE_VIDEO)
 
         // Return true to show the menu.
         return true
@@ -287,9 +298,8 @@ class PresentationWithMediaRouterActivity : Activity() {
      */
     private fun updatePresentation() {
         // Get the current route and its presentation display.
-        val route = mMediaRouter!!.getSelectedRoute(
-                MediaRouter.ROUTE_TYPE_LIVE_VIDEO)
-        val presentationDisplay = route?.presentationDisplay
+        val route = mMediaRouter!!.selectedRoute
+        val presentationDisplay = route.presentationDisplay
 
         // Dismiss the current presentation if the display has changed.
         if (mPresentation != null && mPresentation!!.display != presentationDisplay) {
@@ -384,8 +394,8 @@ class PresentationWithMediaRouterActivity : Activity() {
             private set // The GLSurfaceView in the presentation layout
 
         /**
-         * Similar to [Activity.onCreate], you should initialize your dialog
-         * in this method, including calling [.setContentView].
+         * Similar to [androidx.appcompat.app.AppCompatActivity.onCreate], you should initialize
+         * your dialog in this method, including calling [setContentView].
          *
          * We set our content view to our layout file R.layout.presentation_with_media_router_content,
          * locate the GLSurfaceView in that layout (R.id.surface_view) and save it in our field
