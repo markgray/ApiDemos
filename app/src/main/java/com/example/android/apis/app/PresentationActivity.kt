@@ -49,32 +49,26 @@ import kotlin.math.max
 
 
 /**
- * <h3>Presentation Activity</h3>
- *
- *
+ * Presentation Activity
  *
  * This demonstrates how to create an activity that shows some content
  * on a secondary display using a [Presentation].
  *
- *
  * The activity uses the [DisplayManager] API to enumerate displays.
  * When the user selects a display, the activity opens a [Presentation]
- * on that display.  We show a different photograph in each presentation
+ * on that display. We show a different photograph in each presentation
  * on a unique background along with a label describing the display.
  * We also write information about displays and display-related events to
  * the Android log which you can read using **adb logcat**.
  *
- *
  * You can try this out using an HDMI or Wifi display or by using the
  * "Simulate secondary displays" feature in Development Settings to create a few
- * simulated secondary displays.  Each display will appear in the list along with a
+ * simulated secondary displays. Each display will appear in the list along with a
  * checkbox to show a presentation on that display.
- *
  *
  * See also the [PresentationWithMediaRouterActivity] sample which
  * uses the media router to automatically select a secondary display
  * on which to show content based on the currently selected route.
- *
  */
 @Suppress("UNUSED_ANONYMOUS_PARAMETER")
 @TargetApi(Build.VERSION_CODES.M)
@@ -86,15 +80,15 @@ class PresentationActivity
      */
     private var mDisplayManager: DisplayManager? = null
     /**
-     * An ArrayAdapter<Display> to list displays
-    </Display> */
+     * An `ArrayAdapter<Display>` to list displays
+     */
     private var mDisplayListAdapter: DisplayListAdapter? = null
     /**
-     * Checkbox in layout for displaying all displays
+     * `Checkbox` in layout for displaying all displays
      */
     private var mShowAllDisplaysCheckbox: CheckBox? = null
     /**
-     * ListView in layout in which we display our list of displays.
+     * `ListView` in layout in which we display our list of displays.
      */
     private var mListView: ListView? = null
     /**
@@ -114,10 +108,10 @@ class PresentationActivity
     private val mActivePresentations = SparseArray<DemoPresentation>()
 
     /**
-     * Returns the `mNextImageNumber` to use to index into the `int PHOTOS[]` array of
-     * resource id's in order choose a photo resource id to display, then performs a modular increment
-     * of `mNextImageNumber` modulus `PHOTOS.length` in order to wrap around to 0 when all
-     * photos have been used.
+     * Returns the [mNextImageNumber] field to use to index into the `Int PHOTOS[]` array of
+     * resource id's in order choose a photo resource id to display, then performs a modular
+     * increment of [mNextImageNumber] modulus `PHOTOS.length` in order to wrap around to 0
+     * when all photos have been used.
      *
      * @return index to int PHOTOS[] array of resource id's that is next to be displayed
      */
@@ -133,9 +127,8 @@ class PresentationActivity
      * We use it to update the list and show a new [Presentation] when a
      * display is connected.
      *
-     *
      * Note that we don't bother dismissing the [Presentation] when a
-     * display is removed, although we could.  The presentation API takes care
+     * display is removed, although we could. The presentation API takes care
      * of doing that automatically for us.
      */
     private val mDisplayListener = object : DisplayManager.DisplayListener {
@@ -143,7 +136,6 @@ class PresentationActivity
          * Called whenever a logical display has been added to the system.
          * Use [DisplayManager.getDisplay] to get more information about
          * the display.
-         *
          *
          * We simply instruct our `DisplayListAdapter mDisplayListAdapter` to update
          * its contents to show information about all current displays.
@@ -158,7 +150,6 @@ class PresentationActivity
         /**
          * Called whenever the properties of a logical display have changed.
          *
-         *
          * We simply instruct our `DisplayListAdapter mDisplayListAdapter` to update
          * its contents to show information about all current displays.
          *
@@ -171,7 +162,6 @@ class PresentationActivity
 
         /**
          * Called whenever a logical display has been removed from the system.
-         *
          *
          * We simply instruct our `DisplayListAdapter mDisplayListAdapter` to update
          * its contents to show information about all current displays.
@@ -206,7 +196,7 @@ class PresentationActivity
 
     /**
      * Initialization of the Activity after it is first created.  Must at least
-     * call [setContentView()][android.app.Activity.setContentView] to
+     * call [setContentView()][androidx.appcompat.app.AppCompatActivity.setContentView] to
      * describe what is to be displayed in the screen.
      *
      * First we call through to our super's implementation of `onCreate`. Then if our parameter
@@ -257,9 +247,8 @@ class PresentationActivity
     }
 
     /**
-     * Called after [.onRestoreInstanceState], [.onRestart], or
-     * [.onPause], for your activity to start interacting with the user.
-     *
+     * Called after [onRestoreInstanceState], [onRestart], or
+     * [onPause], for your activity to start interacting with the user.
      *
      * First we call through to our super's implementation of `onResume`. Then we update the
      * contents of the display list adapter to show information about all current displays by calling
@@ -300,8 +289,7 @@ class PresentationActivity
     /**
      * Called as part of the activity lifecycle when an activity is going into
      * the background, but has not (yet) been killed.  The counterpart to
-     * [.onResume].
-     *
+     * [onResume].
      *
      * First we call through to our super's implementation of `onPause`. Then we unregister
      * our display listener `DisplayManager.DisplayListener mDisplayListener`. Then we loop
@@ -336,7 +324,6 @@ class PresentationActivity
      * [.onRestoreInstanceState] (the [Bundle] populated by this method
      * will be passed to both).
      *
-     *
      * First we call through to our super's implementation of `onSaveInstanceState`, then we
      * insert our `SparseArray<DemoPresentationContents> mSavedPresentationContents` into the
      * mapping of the `Bundle outState` using the key PRESENTATION_KEY ("presentation").
@@ -351,7 +338,6 @@ class PresentationActivity
 
     /**
      * Shows a [Presentation] on the specified display.
-     *
      *
      * First we retrieve the `displayId` from the `Display display` passed us, if there
      * is already a `DemoPresentation` in `mActivePresentations` for that display we
@@ -382,7 +368,6 @@ class PresentationActivity
     /**
      * Hides a [Presentation] on the specified display.
      *
-     *
      * First we fetch the display Id of the `Display display` into `displayId`, then we
      * retrieve the `DemoPresentation presentation` stored under the key `displayId` in
      * `SparseArray<DemoPresentation> mActivePresentations`, and if there is no presentation
@@ -406,7 +391,6 @@ class PresentationActivity
      * Sets the display mode of the [Presentation] on the specified display
      * if it is already shown.
      *
-     *
      * First we fetch the `int displayId` display Id from the `Display display`, and if
      * there is no `DemoPresentation presentation` stored in the `SparseArray` referenced
      * by `mActivePresentations` under that key we return having done nothing. Otherwise we call
@@ -426,7 +410,6 @@ class PresentationActivity
     /**
      * Called when the show all displays checkbox is toggled or when an item in the list of
      * displays is checked or unchecked.
-     *
      *
      * First we check if it was the "show all displays checkbox" whose checked state changed and if
      * it is we call `mDisplayListAdapter.updateContents()` to update the contents of the display
@@ -567,9 +550,8 @@ class PresentationActivity
          * Get a View that displays the data at the specified position in the data set. You can either
          * create a View manually or inflate it from an XML layout file. When the View is inflated, the
          * parent View (GridView, ListView...) will apply default layout parameters unless you use
-         * [android.view.LayoutInflater.inflate]
-         * to specify a root view and to prevent attachment to the root.
-         *
+         * [android.view.LayoutInflater.inflate] to specify a root view and to prevent attachment to
+         * the root.
          *
          * First we check if the `View convertView` is null (View is not being recycled) and
          * if so we inflate the layout file for our list item (R.layout.presentation_list_item) into
@@ -600,7 +582,7 @@ class PresentationActivity
          * and the system layout file android.R.layout.simple_list_item_1, set the visibility of `s`
          * to "VISIBLE", set the adapter of `s` to `modeAdapter`, set the tag of `s` to
          * `Display display`, and set "this" as the `OnItemSelectedListener` for `s`.
-         * Then we load up `modeAdapter` with "<default mode>" as the 0'th entry, and every
+         * Then we load up `modeAdapter` with `<default mode>` as the 0'th entry, and every
          * `Display.Mode mode` in the array of supported modes for the Display we fetched earlier
          * to `Display.Mode[] modes` (using a formatted text String which contains the mode Id,
          * physical width, physical height, and refresh rate for the mode). While adding the supported
@@ -619,7 +601,7 @@ class PresentationActivity
          * @param parent The parent that this view will eventually be attached to
          *
          * @return A View corresponding to the data at the specified position.
-        </default> */
+         */
         @SuppressLint("InflateParams", "DefaultLocale")
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v: View = convertView ?: (mContext as AppCompatActivity)
@@ -708,7 +690,6 @@ class PresentationActivity
 
     /**
      * The presentation to show on the secondary display.
-     *
      *
      * Note that the presentation display may have different metrics from the display on which
      * the main activity is showing so we must be careful to use the presentation's
