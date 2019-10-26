@@ -194,6 +194,7 @@ class PresentationActivity
      */
     private val mOnDismissListener = DialogInterface.OnDismissListener { dialog ->
 
+        if(dialog == null) return@OnDismissListener
         val presentation = dialog as DemoPresentation
         val displayId = presentation.display.displayId
         Log.d(TAG, "Presentation on display #$displayId was dismissed.")
@@ -772,7 +773,7 @@ class PresentationActivity
          * @param savedInstanceState holds the result from the most recent call to
          * [.onSaveInstanceState], or null if this is the first time.
          */
-        override fun onCreate(savedInstanceState: Bundle) {
+        override fun onCreate(savedInstanceState: Bundle?) {
             // Be sure to call the super class.
             super.onCreate(savedInstanceState)
 
