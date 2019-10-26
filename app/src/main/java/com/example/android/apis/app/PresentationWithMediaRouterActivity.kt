@@ -395,7 +395,7 @@ class PresentationWithMediaRouterActivity : Activity() {
          *
          * @param savedInstanceState always null since onSaveInstanceState is not overridden
          */
-        override fun onCreate(savedInstanceState: Bundle) {
+        override fun onCreate(savedInstanceState: Bundle?) {
             // Be sure to call the super class.
             super.onCreate(savedInstanceState)
 
