@@ -198,7 +198,8 @@
         <activity
             android:name=".app.ActivityRecreate"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="@string/activity_recreate">
+            android:label="@string/activity_recreate"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

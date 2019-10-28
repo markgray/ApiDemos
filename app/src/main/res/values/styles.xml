@@ -145,7 +145,7 @@
     </style>
 
     <style name="Theme.MyThemeDialogWhenLarge"
-        parent="Theme.AppCompat.Light">
+        parent="Theme.AppCompat.DialogWhenLarge">
     </style>
 
 </resources>
