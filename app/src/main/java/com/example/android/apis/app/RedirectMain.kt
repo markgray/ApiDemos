@@ -16,12 +16,14 @@
 
 package com.example.android.apis.app
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.TextView
+
+import androidx.appcompat.app.AppCompatActivity
+
 import com.example.android.apis.R
 
 /**
@@ -33,7 +35,7 @@ import com.example.android.apis.R
  * RedirectGetter to determine what to do if the result code was RESULT_CANCELED,
  * either finish() back to RedirectEnter, or just display the old text.
  */
-class RedirectMain : Activity() {
+class RedirectMain : AppCompatActivity() {
 
     private var mTextPref: String? = null // String stored in shared preferences file by RedirectGetter
 
@@ -128,7 +130,8 @@ class RedirectMain : Activity() {
      * @param data An Intent, which can return result data to the caller
      * (various data can be attached to Intent "extras"). (Unused)
      */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == INIT_TEXT_REQUEST) {
 
             // If the request was cancelled, then we are cancelled as well.

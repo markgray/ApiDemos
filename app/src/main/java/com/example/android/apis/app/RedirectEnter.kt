@@ -16,16 +16,17 @@
 
 package com.example.android.apis.app
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-import com.example.android.apis.R
-
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Button
+
+import androidx.appcompat.app.AppCompatActivity
+
+// Need the following import to get access to the app resources, since this
+// class is in a sub-package.
+import com.example.android.apis.R
 
 
 /**
@@ -42,7 +43,7 @@ import android.widget.Button
  * RedirectGetter to determine what to do if the result code was RESULT_CANCELED,
  * either finish() back to RedirectEnter, or just display the old text.
  */
-class RedirectEnter : Activity() {
+class RedirectEnter : AppCompatActivity() {
 
     /**
      * Called when a view has been clicked. We create an Intent intent intended to start the

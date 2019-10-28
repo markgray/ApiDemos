@@ -256,16 +256,19 @@
 
         <activity
             android:name=".app.RedirectEnter"
-            android:label="@string/activity_redirect">
+            android:label="@string/activity_redirect"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".app.RedirectMain" />
+        <activity android:name=".app.RedirectMain"
+            android:theme="@style/Theme.AppCompat.Light" />
 
-        <activity android:name=".app.RedirectGetter" />
+        <activity android:name=".app.RedirectGetter"
+            android:theme="@style/Theme.AppCompat.Light" />
 
         <!--
              This sample doesn't work with the new action bar, so use

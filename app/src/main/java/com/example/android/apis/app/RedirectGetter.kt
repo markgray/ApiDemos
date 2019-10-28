@@ -16,18 +16,20 @@
 
 package com.example.android.apis.app
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.TextView
+
+import androidx.appcompat.app.AppCompatActivity
+
 import com.example.android.apis.R
 
 /**
  * Sub-activity that is executed by the redirection example when input is needed
  * from the user.
  */
-class RedirectGetter : Activity() {
+class RedirectGetter : AppCompatActivity() {
     private var mTextPref: String? = null // text loaded from shared preference file
     private var mText: TextView? = null   // EditText in layout used for text entry
 
