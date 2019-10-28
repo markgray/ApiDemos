@@ -307,23 +307,20 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
 
     /**
      * Update the routing for the demonstration. First we retrieve the the currently selected route
-     * of our [MediaRouter] field [mMediaRouter] and save in our [MediaRouter.RouteInfo] varible
+     * of our [MediaRouter] field [mMediaRouter] and save it in our [MediaRouter.RouteInfo] varible
      * `var route`. Then we retrieve the [Display] that should be used by our application to show
      * a [Presentation] on an external display when this `route` is selected to initialize our
-     * [Display] variable `val presentationDisplay`. ***To be continued***
-     *
-     * set Display presentationDisplay to the external Display that is being used by the application,
-     * otherwise we set presentationDisplay to null. If the display has changed (mPresentation is
-     * not null, and the display used by mPresentation is not the same as Display presentationDisplay
-     * we dismiss the old mPresentation and set mPresentation to null. Then if mPresentation is null
-     * and there is an external display available in presentationDisplay we create a new
-     * DemoPresentation mPresentation for presentationDisplay, set the DialogInterface.OnDismissListener
-     * of mPresentation to mOnDismissListener, and wrapped in a try block intended to catch
-     * WindowManager.InvalidDisplayException we instruct mPresentation to start the presentation and
-     * display it on the external display. If mPresentation.show() fails to connect to the Display
-     * it will throw WindowManager.InvalidDisplayException and we set mPresentation to null. Finally
-     * we call updateContents which will display our rotating cubes either in the main activity or
-     * on the external display and will display some text explaining what is happening.
+     * [Display] variable `val presentationDisplay`. If our [DemoPresentation] field [mPresentation]
+     * is not *null* and its display field is not equal to `presentationDisplay` we need to dismiss
+     * the current presentation and set the field [mPresentation] to *null* because the current route
+     * no longer has a presentation display. Then if [mPresentation] is *null* and `presentationDisplay`
+     * is not *null*, we set [mPresentation] to a new instance of [DemoPresentation] constructed to
+     * display on `presentationDisplay`, set the [DialogInterface.OnDismissListener] of [mPresentation]
+     * to our field [mOnDismissListener], and then wrapped in a try block intended to catch and Log
+     * [WindowManager.InvalidDisplayException] (if the display has been removed while we were busy)
+     * we call the `show` method of [mPresentation] to have it connect to the display. Finally we
+     * call our method [updateContents] which will display our rotating cubes either in the main
+     * activity or on the external display and will display some text explaining what is happening.
      */
     private fun updatePresentation() {
         // Get the current route and its presentation display.
@@ -357,18 +354,19 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
 
     /**
      * Show either the content in the main activity or the content in the presentation along with
-     * some descriptive text about what is happening. If mPresentation is not null we are meant to
-     * display on an external display, so we set the text in the TextView mInfoTextView to a
-     * formatted string: "Now playing on secondary display" with the name of the external display
-     * added to it, we set the visibility of the GLSurfaceView mSurfaceView in the main view to
-     * invisible and call mSurfaceView's onPause callback. Then if the Activity has been paused
-     * (mPaused == true) we call the onPause callback of the SurfaceView being used by
-     * DemoPresentation mPresentation, otherwise we call its onResume callback. On the other hand
-     * if mPresentation is null we are to display on the main display so we set the text in the
-     * TextView mInfoTextView to a formatted string: "Now playing on main display" with the name of
-     * the default display added to it, we set the visibility of the GLSurfaceView mSurfaceView in
-     * the main view to VISIBLE, and if the Activity has been paused (mPaused == true) we call the
-     * onPause callback of the SurfaceView mSurfaceView, otherwise we call its onResume callback.
+     * some descriptive text about what is happening. If [mPresentation] is not null we are meant to
+     * display on an external display, so we set the text in the [TextView] field [mInfoTextView] to
+     * a formatted string: "Now playing on secondary display" with the name of the external display
+     * added to it, we set the visibility of the [GLSurfaceView] field [mSurfaceView] in the main
+     * view to invisible and call [mSurfaceView]'s `onPause` callback. Then if the Activity has been
+     * paused ([mPaused] == *true*) we call the `onPause` callback of the `SurfaceView` being used by
+     * [DemoPresentation] field [mPresentation], otherwise we call its `onResume` callback. On the
+     * other hand if [mPresentation] is *null* we are to display on the main display so we set the
+     * text in the [TextView] field [mInfoTextView] to a formatted string: "Now playing on main
+     * display" with the name of the default display added to it, we set the visibility of the
+     * [GLSurfaceView] field [mSurfaceView] in the main view to VISIBLE, and if the Activity has
+     * been paused ([mPaused] == *true*) we call the `onPause` callback of the [GLSurfaceView] field
+     * [mSurfaceView], otherwise we call its `onResume` callback.
      */
     private fun updateContents() {
         // Show either the content in the main activity or the content in the presentation
@@ -409,15 +407,15 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
      * Creates a new presentation that is attached to the specified display using the default theme.
      *
      * @param context The context of the application that is showing the presentation. The
-     * presentation will create its own context (see getContext()) based on
+     * presentation will create its own context (see `getContext()`) based on
      * this context and information about the associated display.
      * @param display The display to which the presentation should be attached.
      */
     (context: Context, display: Display) : Presentation(context, display) {
         /**
-         * Getter method for our field GLSurfaceView mSurfaceView, used in updateContents().
+         * Getter method for our [GLSurfaceView] field [mSurfaceView], used in [updateContents].
          *
-         * @return contents of our field GLSurfaceView mSurfaceView
+         * @return contents of our field [GLSurfaceView] field [mSurfaceView]
          */
         var surfaceView: GLSurfaceView? = null
             private set // The GLSurfaceView in the presentation layout
@@ -426,13 +424,14 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
          * Similar to [androidx.appcompat.app.AppCompatActivity.onCreate], you should initialize
          * your dialog in this method, including calling [setContentView].
          *
-         * We set our content view to our layout file R.layout.presentation_with_media_router_content,
-         * locate the GLSurfaceView in that layout (R.id.surface_view) and save it in our field
-         * GLSurfaceView mSurfaceView, then set the renderer of mSurfaceView to a new instance of
-         * CubeRenderer which also starts the thread that will call the renderer, which in turn
-         * causes the rendering to start.
+         * First we call our super's implementation of `onCreate`, then we set our content view to
+         * our layout file R.layout.presentation_with_media_router_content, locate the [GLSurfaceView]
+         * in that layout with ID R.id.surface_view and save it in our [GLSurfaceView] field
+         * [mSurfaceView], then set the renderer of [mSurfaceView] to a new instance of [CubeRenderer]
+         * which also starts the thread that will call the renderer, which in turn causes the
+         * rendering to start.
          *
-         * @param savedInstanceState always null since onSaveInstanceState is not overridden
+         * @param savedInstanceState always null since [onSaveInstanceState] is not overridden
          */
         override fun onCreate(savedInstanceState: Bundle?) {
             // Be sure to call the super class.
@@ -453,8 +452,14 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Our static constant
+     */
     companion object {
-        private const val TAG = "PresentationWMRActivity" // TAG for logging
+        /**
+         * TAG for logging
+         */
+        private const val TAG = "PresentationWMRActivity"
     }
 }
 
