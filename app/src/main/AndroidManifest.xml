@@ -228,7 +228,8 @@
 
         <activity
             android:name=".app.ReceiveResult"
-            android:label="@string/activity_receive_result">
+            android:label="@string/activity_receive_result"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -237,7 +238,7 @@
 
         <activity
             android:name=".app.SendResult"
-            android:theme="@style/ThemeDialogWhenLarge" />
+            android:theme="@style/Theme.MyThemeDialogWhenLarge" />
 
         <activity
             android:name=".app.Forwarding"

@@ -16,16 +16,17 @@
 
 package com.example.android.apis.app
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.TextView
+
+import androidx.appcompat.app.AppCompatActivity
+
+// Need the following import to get access to the app resources, since this
+// class is in a sub-package.
 import com.example.android.apis.R
 
 /**
@@ -54,7 +55,7 @@ import com.example.android.apis.R
  *  - /res/any/layout/receive_result.xml DescrColumn">Defines contents of the ReceiveResult screen
  *  - /res/any/layout/send_result.xml Defines contents of the SendResult screen
  */
-class ReceiveResult : Activity() {
+class ReceiveResult : AppCompatActivity() {
 
     private var mResults: TextView? = null // TextView in our layout for displaying results
 
@@ -132,6 +133,7 @@ class ReceiveResult : Activity() {
      * @param data From sending activity as per setResult().
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         // You can use the requestCode to select between multiple child
         // activities you may have started.  Here there is only one thing
         // we launch.

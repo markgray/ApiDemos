@@ -144,4 +144,8 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="Theme.MyThemeDialogWhenLarge"
+        parent="Theme.AppCompat.Light">
+    </style>
+
 </resources>

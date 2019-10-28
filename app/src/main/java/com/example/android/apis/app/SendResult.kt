@@ -16,21 +16,22 @@
 
 package com.example.android.apis.app
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View.OnClickListener
 import android.widget.Button
+
+import androidx.appcompat.app.AppCompatActivity
+
+// Need the following import to get access to the app resources, since this
+// class is in a sub-package.
 import com.example.android.apis.R
 
 
 /**
  * Example of sending a result back to another activity.
  */
-class SendResult : Activity() {
+class SendResult : AppCompatActivity() {
 
     /**
      * OnClickListener for the Button R.id.corky ("CORKY") When clicked we setResult to an Intent
