@@ -287,12 +287,22 @@
 
         <activity
             android:name=".app.ReorderOnLaunch"
-            android:label="@string/activity_reorder">
+            android:label="@string/activity_reorder"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".app.ReorderTwo"
+            android:theme="@style/Theme.AppCompat.Light" />
+
+        <activity android:name=".app.ReorderThree"
+            android:theme="@style/Theme.AppCompat.Light" />
+
+        <activity android:name=".app.ReorderFour"
+            android:theme="@style/Theme.AppCompat.Light" />
 
         <activity
             android:name=".app.RotationAnimation"
@@ -302,12 +312,6 @@
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".app.ReorderTwo" />
-
-        <activity android:name=".app.ReorderThree" />
-
-        <activity android:name=".app.ReorderFour" />
 
         <activity
             android:name=".app.SetWallpaperActivity"

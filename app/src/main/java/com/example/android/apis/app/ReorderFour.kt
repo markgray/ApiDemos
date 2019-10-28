@@ -16,11 +16,13 @@
 
 package com.example.android.apis.app
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View.OnClickListener
 import android.widget.Button
+
+import androidx.appcompat.app.AppCompatActivity
+
 import com.example.android.apis.R
 
 /**
@@ -30,7 +32,7 @@ import com.example.android.apis.R
  * proceeding back through the history should begin with the newly front most second reorder
  * activity, then the fourth, the third, and finally the first.
  */
-class ReorderFour : Activity() {
+class ReorderFour : AppCompatActivity() {
 
     /**
      * Called when the "Bring the second in front" (R.id.reorder_second_to_front) Button is clicked.
