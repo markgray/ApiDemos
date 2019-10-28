@@ -61,7 +61,7 @@ class SendResult : AppCompatActivity() {
 
     /**
      * Initialization of the Activity after it is first created.  Must at least
-     * call [setContentView()][android.app.Activity.setContentView] to
+     * call [setContentView()][androidx.appcompat.app.AppCompatActivity.setContentView] to
      * describe what is to be displayed in the screen.
      *
      * First we call through to our super's implementation of onCreate. Then we set our content

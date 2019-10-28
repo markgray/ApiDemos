@@ -36,13 +36,12 @@ import com.example.android.apis.R
  * pick an e-mail address or image -- the picking activity sends the selected
  * data back to the originating activity when done.
  *
- * The example here is composed of two activities: ReceiveResult launches
- * the picking activity and receives its results; SendResult allows the user
+ * The example here is composed of two activities: [ReceiveResult] launches
+ * the picking activity and receives its results; [SendResult] allows the user
  * to pick something and sends the selection back to its caller.  Implementing
  * this functionality involves the
- * [setResult()][android.app.Activity.setResult] method for sending a
- * result and
- * [onActivityResult()][android.app.Activity.onActivityResult] to
+ * [setResult()][android.app.Activity.setResult] method for sending a result and
+ * [onActivityResult()][androidx.fragment.app.FragmentActivity.onActivityResult] to
  * receive it.
  *
  * Demo App/Activity/Receive Result
@@ -56,18 +55,20 @@ import com.example.android.apis.R
  *  - /res/any/layout/send_result.xml Defines contents of the SendResult screen
  */
 class ReceiveResult : AppCompatActivity() {
-
-    private var mResults: TextView? = null // TextView in our layout for displaying results
+    /**
+     * [TextView] in our layout for displaying results
+     */
+    private var mResults: TextView? = null
 
     /**
-     * Set as the OnClickListener for the Button "GET RESULT" (R.id.get) is lauNches the Activity
-     * SendResult using startActivityForResult and the result intent will be handled in the callback
-     * OnActivityResult. First we create an Intent to start the Activity SendResult, then we use that
-     * Intent to launch the Activity using startActivityForResult with the requestCode GET_CODE.
-     * SendResult will call setResult with an Intent containing the result of that Activity which
-     * we will receive in the callback onActivityResult.
+     * Set as the [OnClickListener] for the [Button] "GET RESULT" (R.id.get) is launches the Activity
+     * [SendResult] using [startActivityForResult] and the result intent will be handled in the callback
+     * [onActivityResult]. First we create an [Intent] to start the Activity [SendResult], then we use
+     * that [Intent] to launch the Activity using [startActivityForResult] with the requestCode GET_CODE.
+     * [SendResult] will call [setResult] with an [Intent] containing the result of that Activity which
+     * we will receive in the callback [onActivityResult].
      *
-     * Parameter: v The View of the Button "GET RESULT" (R.id.get)
+     * Parameter: The View of the [Button] "GET RESULT" (R.id.get)
      */
     private val mGetListener = OnClickListener {
         // Start the activity whose result we want to retrieve.  The
@@ -78,18 +79,18 @@ class ReceiveResult : AppCompatActivity() {
 
     /**
      * Initialization of the Activity after it is first created.  Must at least
-     * call [setContentView()][android.app.Activity.setContentView] to
+     * call [setContentView()][androidx.appcompat.app.AppCompatActivity.setContentView] to
      * describe what is to be displayed in the screen.
      *
-     * First we call through to our super's implementation of onCreate. Then we set our content
-     * view to our layout file R.layout.receive_result. Then we set our field TextView mResults
-     * to the TextView in our layout for displaying results returned by the Activity SendResult
-     * (R.id.results). We set the text in mResults to the current contents of the TextView using
-     * the TextView.BufferType TextView.BufferType.EDITABLE so that the text buffer can be extended
-     * as we add more text. Finally we locate the Button R.id.get and set the OnClickListener for
-     * it to the OnClickListener mGetListener.
+     * First we call through to our super's implementation of `onCreate`. Then we set our content
+     * view to our layout file R.layout.receive_result. Then we set our [TextView] field [mResults]
+     * to the [TextView] in our layout for displaying results returned by the Activity [SendResult]
+     * (R.id.results). We set the text in [mResults] to the current contents of the [TextView] using
+     * the [TextView.BufferType] flag [TextView.BufferType.EDITABLE] so that the text buffer can be
+     * extended as we add more text. Finally we locate the [Button] R.id.get and set the [OnClickListener]
+     * for it to the [OnClickListener] field [mGetListener].
      *
-     * @param savedInstanceState always null since onSaveInstanceState is not overridden
+     * @param savedInstanceState always null since [onSaveInstanceState] is not overridden
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         // Be sure to call the super class.
