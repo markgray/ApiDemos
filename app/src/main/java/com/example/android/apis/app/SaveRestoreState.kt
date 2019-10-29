@@ -16,15 +16,16 @@
 
 package com.example.android.apis.app
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-import com.example.android.apis.R
-
-import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+
+import androidx.appcompat.app.AppCompatActivity
+
+// Need the following import to get access to the app resources, since this
+// class is in a sub-package.
+import com.example.android.apis.R
 
 /**
  *
@@ -38,7 +39,7 @@ import android.widget.TextView
  * [onSaveInstanceState()][android.app.Activity.onSaveInstanceState] method is
  * called before an activity is paused, allowing it to supply its current state.
  * If that activity then needs to be stopped, upon restarting it will receive its
- * last saved state in [android.app.Activity.onCreate].
+ * last saved state in [androidx.appcompat.app.AppCompatActivity.onCreate].
  *
  * In this example we are currently saving and restoring the state of the
  * top text editor, but not of the bottom text editor.  You can see the difference
@@ -54,7 +55,7 @@ import android.widget.TextView
  *  - app/SaveRestoreState.java The Save/Restore Screen implementation
  *  - /res/any/layout/save_restore_state.xml Defines contents of the screen
  */
-class SaveRestoreState : Activity() {
+class SaveRestoreState : AppCompatActivity() {
 
     /**
      * Retrieve the text that is currently in the "saved" editor, and
@@ -67,7 +68,7 @@ class SaveRestoreState : Activity() {
 
     /**
      * Initialization of the Activity after it is first created.  Here we use
-     * [setContentView()][android.app.Activity.setContentView] to set up
+     * [setContentView()][androidx.appcompat.app.AppCompatActivity.setContentView] to set up
      * the Activity's content, and retrieve the EditText widget whose state we
      * will save/restore.
      *
