@@ -157,7 +157,7 @@
         <activity
             android:name=".app.TranslucentBlurActivity"
             android:label="@string/activity_translucent_blur"
-            android:theme="@style/Theme.Transparent">
+            android:theme="@style/Theme.MyThemeTranslucent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

@@ -610,6 +610,7 @@ App
 
     App/Activity/Translucent Blur          all Not Blurred enough on lollipop
         .app.TranslucentBlurActivity
+        .layout.translucent_background.xml
             This is the same as .app.TranslucentActivity, with the background blurred on
             older api's - WindowManager.LayoutParams.FLAG_BLUR_BEHIND is no longer 
             supported as of API level 14, so Lollipop does not blur at all.

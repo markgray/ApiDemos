@@ -19,11 +19,10 @@ package com.example.android.apis.app
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
-import com.example.android.apis.R
-
-import android.app.Activity
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 
 /**
@@ -38,7 +37,7 @@ import android.view.WindowManager
  * is just to leave the background even more visible than the foreground --
  * TranslucentActivity has a much better look.
  */
-class TranslucentBlurActivity : Activity() {
+class TranslucentBlurActivity : AppCompatActivity() {
     /**
      * Initialization of the Activity after it is first created. First we call through to our
      * super's implementation of `onCreate`, then we set the flag FLAG_BLUR_BEHIND of or our
