@@ -424,7 +424,8 @@
 
         <activity
             android:name=".app.SecureSurfaceViewActivity"
-            android:label="@string/activity_secure_surface_view">
+            android:label="@string/activity_secure_surface_view"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

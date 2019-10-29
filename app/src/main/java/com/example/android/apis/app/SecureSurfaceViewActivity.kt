@@ -17,11 +17,11 @@
 package com.example.android.apis.app
 
 import android.annotation.TargetApi
-import android.app.Activity
 import android.opengl.GLSurfaceView
 import android.os.Build
 import android.os.Bundle
 import android.view.SurfaceView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import com.example.android.apis.graphics.CubeRenderer
 
@@ -45,7 +45,7 @@ import com.example.android.apis.graphics.CubeRenderer
  * HDMI display with HDCP enabled.  The contents of the secure surface should appear
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-class SecureSurfaceViewActivity : Activity() {
+class SecureSurfaceViewActivity : AppCompatActivity() {
     /**
      * GLSurfaceView in our layout
      */
