@@ -326,7 +326,8 @@
 
         <activity
             android:name=".app.ScreenOrientation"
-            android:label="@string/activity_screen_orientation">
+            android:label="@string/activity_screen_orientation"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

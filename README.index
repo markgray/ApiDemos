@@ -544,6 +544,7 @@ App
 
     App/Activity/Screen Orientation        all -- v18+ required for full use
         .app.ScreenOrientation
+        .layout.screen_orientation.xml
             Lets the user choose the screen orientation programmatically -- some orientations
             are only available for v9+, and some only for v18+ but froyo ignores them rather 
             than crashes. Very nice example of spinner layout and use.

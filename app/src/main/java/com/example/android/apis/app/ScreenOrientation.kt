@@ -18,14 +18,13 @@ package com.example.android.apis.app
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
-
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
@@ -35,7 +34,7 @@ import com.example.android.apis.R
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-class ScreenOrientation : Activity() {
+class ScreenOrientation : AppCompatActivity() {
     /**
      * [Spinner] in layout used for choosing orientation
      */
