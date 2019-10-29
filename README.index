@@ -551,6 +551,7 @@ App
 
     App/Activity/Secure Surfaces/Secure Dialog          all
         .app.SecureDialogActivity
+        .layout.secure_dialog_activity.xml
             Shows a secure dialog by setting WindowManager.LayoutParams.FLAG_SECURE on an
             AlertDialog before calling dialog.show()
 

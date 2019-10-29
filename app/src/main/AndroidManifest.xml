@@ -414,7 +414,8 @@
 
         <activity
             android:name=".app.SecureDialogActivity"
-            android:label="@string/activity_secure_dialog">
+            android:label="@string/activity_secure_dialog"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

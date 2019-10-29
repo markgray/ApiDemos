@@ -16,14 +16,13 @@
 
 package com.example.android.apis.app
 
-import com.example.android.apis.R
-
-import android.app.Activity
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * Secure Dialog Activity
@@ -46,7 +45,7 @@ import android.widget.Button
  * display with HDCP enabled. The contents of the secure surface should appear
  * on the display.
  */
-class SecureDialogActivity : Activity(), View.OnClickListener {
+class SecureDialogActivity : AppCompatActivity(), View.OnClickListener {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.secure_dialog_activity.
