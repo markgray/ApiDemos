@@ -566,6 +566,7 @@ App
 
     App/Activity/Secure Surfaces/Secure Window          all
         .app.SecureWindowActivity
+        .layout.secure_window_activity.xml
             This activity demonstrates how to make an activity use a secure surface so
             that its contents will only be visible on secure displays. The activity's 
             window has been marked with FLAG_SECURE by calling:

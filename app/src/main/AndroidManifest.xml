@@ -405,7 +405,8 @@
 
         <activity
             android:name=".app.SecureWindowActivity"
-            android:label="@string/activity_secure_window">
+            android:label="@string/activity_secure_window"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
