@@ -1,7 +1,6 @@
 package com.example.android.apis.app
 
 import android.annotation.TargetApi
-import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -10,7 +9,7 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
@@ -30,7 +29,7 @@ import com.example.android.apis.R
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-class SoftInputModes : Activity() {
+class SoftInputModes : AppCompatActivity() {
     /**
      * spinner used to select the soft input mode
      */
@@ -93,7 +92,7 @@ class SoftInputModes : Activity() {
              * @param position The position of the [View] in the adapter
              * @param id The row id of the item that is selected
              */
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 window.setSoftInputMode(mResizeModeValues[position])
             }
 

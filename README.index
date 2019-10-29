@@ -588,6 +588,7 @@ App
 
     App/Activity/Soft Input Modes          all
         .app.SoftInputModes
+        .layout.soft_input_modes.xml
             Shows how the various soft input modes: "Unspecified" (The system will try to
             pick one or the other depending on the contents of the window); "Resize"
             (allow the window to be resized when an input method is shown, so that its
