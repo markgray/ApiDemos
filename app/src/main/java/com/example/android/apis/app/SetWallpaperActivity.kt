@@ -19,7 +19,6 @@ package com.example.android.apis.app
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
-import android.app.Activity
 import android.app.WallpaperManager
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -27,6 +26,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import java.io.IOException
 import kotlin.math.floor
@@ -37,7 +37,7 @@ import kotlin.math.floor
  * This demonstrates the how to write an activity that gets the current system wallpaper,
  * modifies it and sets the modified bitmap as system wallpaper.
  */
-class SetWallpaperActivity : Activity() {
+class SetWallpaperActivity : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
