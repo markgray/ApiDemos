@@ -148,4 +148,13 @@
         parent="Theme.AppCompat.DialogWhenLarge">
     </style>
 
+    <style name="Theme.MyThemeTranslucent"
+        parent="Theme.AppCompat">
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@drawable/translucent_background</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:colorForeground">#fff</item>
+    </style>
+
 </resources>

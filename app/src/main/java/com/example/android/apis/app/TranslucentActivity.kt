@@ -19,10 +19,9 @@ package com.example.android.apis.app
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
-import com.example.android.apis.R
-
-import android.app.Activity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * Translucent Activity
@@ -30,11 +29,12 @@ import android.os.Bundle
  * This demonstrates the how to write an activity that is translucent,
  * allowing windows underneath to show through.
  *
- * Sets the theme on the window in AndroidManifest to @style/Theme.Translucent
- * which is derived in styles.xml from android:style/Theme.Translucent, thereby
- * causing the window to be composited over whatever is behind it.
+ * Sets the theme on the window in AndroidManifest to @style/Theme.MyThemeTranslucent which is
+ * defined in values/styles.xml its parent is "Theme.AppCompat" with attribute items copied from
+ * android:style/Theme.Translucent, thereby causing the window to be composited over whatever is
+ * behind it.
  */
-class TranslucentActivity : Activity() {
+class TranslucentActivity : AppCompatActivity() {
     /**
      * Initialization of the Activity after it is first created. First we call through
      * to our super's implementation of `onCreate`, then we set our content view to

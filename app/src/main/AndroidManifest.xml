@@ -147,7 +147,7 @@
         <activity
             android:name=".app.TranslucentActivity"
             android:label="@string/activity_translucent"
-            android:theme="@style/Theme.Translucent">
+            android:theme="@style/Theme.MyThemeTranslucent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
