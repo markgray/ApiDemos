@@ -16,7 +16,6 @@
 
 package com.example.android.apis.app
 
-import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -24,6 +23,7 @@ import android.view.WindowManager.LayoutParams
 import android.widget.CheckBox
 import android.widget.RadioGroup
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
@@ -32,7 +32,7 @@ import com.example.android.apis.R
  * ROTATION_ANIMATION_JUMPCUT, or ROTATION_ANIMATION_SEAMLESS.
  */
 @RequiresApi(api = Build.VERSION_CODES.O)
-class RotationAnimation : Activity() {
+class RotationAnimation : AppCompatActivity() {
 
     /**
      * Current rotationAnimation to use when setting WindowManager.LayoutParams.rotationAnimation

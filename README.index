@@ -456,6 +456,7 @@ App
 
     App/Activity/Presentation with Media Router MediaRouter needs v17
         .app.PresentationWithMediaRouterActivity
+        .layout.presentation_with_media_router_activity.xml
             The activity uses the MediaRouter API to automatically detect when a 
             presentation display is available and to allow the user to control the
             media routes using a menu item.  When a presentation display is available,
@@ -464,6 +465,7 @@ App
 
     App/Activity/QuickContactsDemo         all
         .app.QuickContactsDemo
+        .layout.quick_contacts.xml
             Shows how to query the contacts database using a cursor, and display the
             results in a ListActivity hosted ListView. It uses a deprecated api which
             queries the database on the UI thread -- it is better to use LoaderManager
@@ -472,7 +474,9 @@ App
 
     App/Activity/Receive Result            all
         .app.ReceiveResult
+        .layout.receive_result.xml
         .app.SendResult
+        .layout.send_result.xml
             Show how to start a second activity (.app.SendResult) to generate a result,
             receive it using startActivityForResult(intent, GET_CODE), followed on completion
             by the callback onActivityResult(int requestCode, int resultCode, Intent data).
@@ -482,14 +486,18 @@ App
 
     App/Activity/Recreate                  v11
         .app.ActivityRecreate
+        .layout.activity_recreate.xml
             Uses setTheme(theme) followed by recreate() to cycle through three different 
             Holo themes (original version did not initialize the field that the current 
             theme is kept in, causing it to crash on Material Light default devices.)
 
     App/Activity/Redirection               all
         .app.RedirectEnter
+        .layout.redirect_enter.xml
         .app.RedirectGetter
+        .layout.redirect_getter.xml
         .app.RedirectMain
+        .layout.redirect_main.xml
             Consists of three activities: RedirectEnter, RedirectGetter, and RedirectMain.
             RedirectGetter stores user input in the shared preference file "RedirectData"
             RedirectEnter just describes what will happen, and when the "Go" button is 
@@ -503,9 +511,13 @@ App
 
     App/Activity/Reorder Activities        all
         .app.ReorderOnLaunch
+        .layout.reorder_on_launch.xml
         .app.ReorderTwo
+        .layout.reorder_two.xml
         .app.ReorderThree
+        .layout.reorder_three.xml
         .app.ReoderFour
+        .layout.reorder_four.xml
             ReorderOnLaunch is the first of a sequence of four Activities: ReorderTwo,
             ReorderThree, and ReoderFour follow.  A button on the fourth will use the 
             Intent.FLAG_ACTIVITY_REORDER_TO_FRONT flag to bring the second of the 
@@ -515,6 +527,7 @@ App
 
     App/Activity/Rotation Animation        v26+ or crash
         .app.RotationAnimation
+        .layout.rotation_animation.xml
             Allows you to choose the animation that occurs when the screen is rotated:
             either ROTATION_ANIMATION_ROTATE, ROTATION_ANIMATION_CROSSFADE, ROTATION_ANIMATION_JUMPCUT,
             or ROTATION_ANIMATION_SEAMLESS.

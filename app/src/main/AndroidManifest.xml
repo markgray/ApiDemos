@@ -306,7 +306,8 @@
 
         <activity
             android:name=".app.RotationAnimation"
-            android:label="@string/activity_rotation_animation">
+            android:label="@string/activity_rotation_animation"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
