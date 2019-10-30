@@ -17,7 +17,6 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
@@ -27,6 +26,8 @@ import android.os.SystemClock
 import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 import com.example.android.apis.R
@@ -43,7 +44,7 @@ import com.example.android.apis.R
  * continue to have all of their alarms, including repeating alarms, treated as exact.
  */
 @SuppressLint("ShortAlarm")
-class AlarmService : Activity() {
+class AlarmService : AppCompatActivity() {
     /**
      * IntentSender used to launch our service
      */

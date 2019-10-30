@@ -644,7 +644,7 @@ App
 
     App/Alarm/Alarm Service                v26
         .app.AlarmService
-        .app.AlarmService_Service
+        .app.AlarmServiceService
             This demonstrates how you can schedule an alarm that causes a service to be
             started (.app.AlarmService_Service)  This is useful when you want to schedule 
             alarms that initiate long-running operations, such as retrieving recent e-mails.

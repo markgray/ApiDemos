@@ -67,6 +67,7 @@ class AlarmServiceService : Service() {
      */
     @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
     internal var mTask: Runnable = Runnable {
+        Log.i(TAG, "Our task has started running")
         // Normally we would do some work here...  for our sample, we will
         // just sleep for 30 seconds.
         val endTime = System.currentTimeMillis() + 15 * 1000
@@ -129,6 +130,7 @@ class AlarmServiceService : Service() {
      * the name "AlarmService_Service". Finally we start `thr`.
      */
     override fun onCreate() {
+        Log.i(TAG, "onCreate has been called")
         mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val chan1 = NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
                 NotificationManager.IMPORTANCE_DEFAULT)
@@ -157,6 +159,7 @@ class AlarmServiceService : Service() {
      * "The alarm service has finished running"
      */
     override fun onDestroy() {
+        Log.i(TAG, "onDestroy has been called")
         // Cancel the notification -- we use the same ID that we had used to start it
         mNM.cancel(R.string.alarm_service_started)
 
@@ -175,6 +178,7 @@ class AlarmServiceService : Service() {
      * @return Return an [IBinder] through which clients can call on to the service.
      */
     override fun onBind(intent: Intent): IBinder? {
+        Log.i(TAG, "onBind has been called")
         return mBinder
     }
 
@@ -194,6 +198,7 @@ class AlarmServiceService : Service() {
      * R.string.alarm_service_started.
      */
     private fun showNotification() {
+        Log.i(TAG, "showNotification has been called")
         // In this sample, we'll use the same text for the ticker and the expanded notification
         val text = getText(R.string.alarm_service_started)
 
@@ -224,6 +229,10 @@ class AlarmServiceService : Service() {
          * The id of the primary notification channel
          */
         const val PRIMARY_CHANNEL = "default"
+        /**
+         * TAG used for logging.
+         */
+        const val TAG = "AlarmServiceService"
     }
 }
 
