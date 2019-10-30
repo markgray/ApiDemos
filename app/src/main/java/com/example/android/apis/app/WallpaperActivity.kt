@@ -30,7 +30,15 @@ import com.example.android.apis.R
  *
  * This is an app which has the system wallpaper behind it. It does this by setting the theme
  * on the window in AndroidManifest to Theme.MyThemeWallpaper, which copies attributes from
- * the system theme android:style/Theme.Wallpaper, which has android:windowShowWallpaper = "true".
+ * the system theme android:style/Theme.Wallpaper, which has android:windowShowWallpaper = "true":
+ *
+ *    <style name="Theme.MyThemeWallpaper"
+ *        parent="Theme.AppCompat">
+ *        <item name="android:windowBackground">@android:color/transparent</item>
+ *        <item name="android:colorBackgroundCacheHint">@null</item>
+ *        <item name="android:windowShowWallpaper">true</item>
+ *        <item name="android:colorForeground">#fff</item>
+ *    </style>
  *
  * Our style/Theme.MyThemeWallpaper also defines the element:
  *    <item name="android:colorForeground">#fff</item>
