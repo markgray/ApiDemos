@@ -60,7 +60,7 @@ class FragmentCustomAnimations : FragmentActivity() {
      * [onBackPressed] when clicked and "finishes" the [Fragment] thereby returning to the [Fragment]
      * behind it. If our parameter [savedInstanceState] is null this is the first time we have been
      * created so we create a new instance of [CountingFragment] with the initial stack level of
-     * [mStackLevel] of 1. Then we initialize our `FragmentTransaction` variable `ft` by using the
+     * ([mStackLevel]) of 1. Then we initialize our `FragmentTransaction` variable `ft` by using the
      * support `FragmentManager` to `begin()` a series of Fragment transactions. We add `newFragment`
      * using the view id of the `FrameLayout` in our layout file with ID R.id.simple_fragment, and
      * then commit `FragmentTransaction ft`. If [savedInstanceState] is not null on the other hand
@@ -68,8 +68,8 @@ class FragmentCustomAnimations : FragmentActivity() {
      * field [mStackLevel] from [savedInstanceState] which was stored under the key "level" by our
      * callback [onSaveInstanceState].
      *
-     * @param savedInstanceState if null it is first time, otherwise will contain the value of
-     * mStackLevel to use under the key "level"
+     * @param savedInstanceState if *null* it is first time, otherwise will contain the value of
+     * [mStackLevel] to use stored under the key "level"
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,13 +93,12 @@ class FragmentCustomAnimations : FragmentActivity() {
     }
 
     /**
-     * Called to retrieve per-instance state from an activity before being killed
-     * so that the state can be restored in [.onCreate] or
-     * [.onRestoreInstanceState] (the [Bundle] populated by this method
-     * will be passed to both).
+     * Called to retrieve per-instance state from an activity before being killed so that the state
+     * can be restored in [onCreate] or [onRestoreInstanceState] (the [Bundle] populated by this
+     * method will be passed to both).
      *
-     * First we call through to our super's implementation of onSaveInstanceState, then we insert the
-     * value of mStackLevel into the mapping of our parameter **Bundle outState** using the
+     * First we call through to our super's implementation of `onSaveInstanceState`, then we insert
+     * the value of [mStackLevel] into the mapping of our [Bundle] parameter [outState] using the
      * key "level".
      *
      * @param outState Bundle in which to place your saved state.
@@ -111,21 +110,20 @@ class FragmentCustomAnimations : FragmentActivity() {
 
     /**
      * This method adds a new fragment to the stack when the R.id.new_fragment ("Push") Button is
-     * clicked. First we increment the stack level **mStackLevel**, then we create a new
-     * instance of **CountingFragment** with this level: **Fragment newFragment**.
-     * Then we begin a series of fragment transactions using **FragmentTransaction ft**
-     * which is created by calling **getFragmentManager().beginTransaction()**. The first
-     * transaction sets specific animation resources to run for the fragments that are entering and
+     * clicked. First we increment the stack level [mStackLevel], then we create a new
+     * instance of [CountingFragment] with this level to initialize our [Fragment] variable
+     * `newFragment`. Then we initialize our `FragmentTransaction` variable `ft` by using the
+     * support fragment manager to begin a series of fragment transactions. The first transaction
+     * sets specific animation resources to run for the fragments that are entering and
      * exiting in this transaction:
      *
-     * R.animator.fragment_slide_left_enter is used as a new fragment is entering (pushed)
-     * R.animator.fragment_slide_left_exit when a fragment is exiting (being replaced)
-     * R.animator.fragment_slide_right_enter when a fragment is returning from a stack pop
-     * R.animator.fragment_slide_right_exit when a fragment is leaving because it was popped.
+     *  - R.animator.fragment_slide_left_enter is used as a new fragment is entering (pushed)
+     *  - R.animator.fragment_slide_left_exit when a fragment is exiting (being replaced)
+     *  - R.animator.fragment_slide_right_enter when a fragment is returning from a stack pop
+     *  - R.animator.fragment_slide_right_exit when a fragment is leaving because it was popped.
      *
-     * The next transaction replaces the old fragment with **newFragment**, followed by
-     * one adding this transaction to the back stack, and finally we schedule a commit of this
-     * transaction.
+     * The next transaction replaces the old fragment with `newFragment`, followed by one adding
+     * this transaction to the back stack, and finally we schedule a commit of the transaction.
      */
     internal fun addFragmentToStack() {
         mStackLevel++
@@ -149,13 +147,16 @@ class FragmentCustomAnimations : FragmentActivity() {
      * Simple Fragment which displays only the instance number in its UI.
      */
     class CountingFragment : Fragment() {
-        internal var mNum: Int = 0 // Instance number of Fragment
+        /**
+         * Instance number of *this* [Fragment]
+         */
+        internal var mNum: Int = 0
 
         /**
          * When creating, retrieve this instance's number from its arguments. First we call through
-         * to our super's implementation of onCreate, then if have arguments we set our field
-         * **int mNum** to the value stored in the arguments under the key "num", otherwise
-         * we set it to 1.
+         * to our super's implementation of `onCreate`, then if we have arguments we set our [Int]
+         * field [mNum] to the value stored in the arguments under the key "num", otherwise we set
+         * it to 1.
          *
          * @param savedInstanceState we do not use anything in here
          */
@@ -166,13 +167,12 @@ class FragmentCustomAnimations : FragmentActivity() {
 
         /**
          * The Fragment's UI is just a simple text view showing its instance number. First we inflate
-         * our layout R.layout.hello_world into **View v**, set **View tv** to the
-         * **TextView** in our layout with id R.id.text, set the text of **tv** to
-         * the formatted String containing the value of this instance's instance number **mNum**,
-         * set the background of **tv**, and finally return **View v** to the
-         * caller.
+         * our layout R.layout.hello_world into our [View] variable `val v`, set our [View] variable
+         * `val tv` to the [TextView] in our layout with id R.id.text, set the text of `tv` to the
+         * formatted String containing the value of this instance's instance number [mNum], set the
+         * background of `tv`, and finally return `v` to the caller.
          *
-         * @param inflater The LayoutInflater object that can be used to inflate
+         * @param inflater The [LayoutInflater] object that can be used to inflate
          * any views in the fragment,
          * @param container If non-null, this is the parent view that the fragment's
          * UI should be attached to, used to generate the LayoutParams of the view.
@@ -189,6 +189,9 @@ class FragmentCustomAnimations : FragmentActivity() {
             return v
         }
 
+        /**
+         * Our static factory method.
+         */
         companion object {
 
             /**

@@ -700,6 +700,8 @@ App
 
     App/Fragment/Custom Animations         v11 -> v21 due to getDrawable call
         .app.FragmentCustomAnimations
+        .layout.fragment_stack.xml
+        .layout.hello_world.xml
             Uses FragmentTransaction.setCustomAnimations to cause animations to be used
             when replacing one fragment with the next. The "POP" button does the same thing
             as the back button by calling onBackPressed, it takes you back through the numbered
