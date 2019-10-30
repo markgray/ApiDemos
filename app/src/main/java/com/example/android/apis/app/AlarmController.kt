@@ -16,11 +16,8 @@
 
 package com.example.android.apis.app
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
@@ -32,8 +29,12 @@ import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.example.android.apis.R
+import androidx.appcompat.app.AppCompatActivity
 import java.util.*
+
+// Need the following import to get access to the app resources, since this
+// class is in a sub-package.
+import com.example.android.apis.R
 
 /**
  * Example of scheduling one-shot and repeating alarms. See [OneShotAlarm] for the code run when the
@@ -55,7 +56,7 @@ import java.util.*
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @RequiresApi(api = Build.VERSION_CODES.M)
-class AlarmController : Activity() {
+class AlarmController : AppCompatActivity() {
     /**
      * Latest Toast we have shown.
      */
