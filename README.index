@@ -644,6 +644,7 @@ App
 
     App/Alarm/Alarm Service                v26
         .app.AlarmService
+        .layout.alarm_service.xml
         .app.AlarmServiceService
             This demonstrates how you can schedule an alarm that causes a service to be
             started (.app.AlarmService_Service)  This is useful when you want to schedule 
@@ -656,6 +657,7 @@ App
   Alert Dialogs
     App/Alert Dialogs                      all (v11+ or crash for some)
         .app.AlertDialogSamples
+        .layout.alert_dialog.xml
             Allows you to create different types of dialogs: DIALOG_YES_NO_MESSAGE = 1;
             DIALOG_YES_NO_LONG_MESSAGE = 2; DIALOG_LIST = 3; DIALOG_PROGRESS = 4;
             DIALOG_SINGLE_CHOICE = 5; DIALOG_MULTIPLE_CHOICE = 6; DIALOG_TEXT_ENTRY = 7;

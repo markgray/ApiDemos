@@ -20,7 +20,6 @@ package com.example.android.apis.app
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.ProgressDialog
@@ -36,6 +35,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+
+import androidx.appcompat.app.AppCompatActivity
+
 import com.example.android.apis.R
 
 /**
@@ -49,7 +51,7 @@ import com.example.android.apis.R
  */
 @Suppress("MemberVisibilityCanBePrivate", "UNUSED_ANONYMOUS_PARAMETER")
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-class AlertDialogSamples : Activity() {
+class AlertDialogSamples : AppCompatActivity() {
     /**
      * ProgressDialog used for DIALOG_PROGRESS_SPINNER
      */
