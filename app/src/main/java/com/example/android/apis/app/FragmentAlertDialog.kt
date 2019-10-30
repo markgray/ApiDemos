@@ -17,7 +17,6 @@
 package com.example.android.apis.app
 
 import android.annotation.TargetApi
-import androidx.appcompat.app.AlertDialog
 import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
@@ -25,8 +24,11 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import androidx.fragment.app.DialogFragment
+
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AlertDialog
+
 import com.example.android.apis.R
 
 
