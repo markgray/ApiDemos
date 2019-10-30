@@ -16,13 +16,7 @@
 
 package com.example.android.apis.app;
 
-import com.example.android.apis.R;
-
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,6 +25,15 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.DialogFragment;
+
+import com.example.android.apis.R;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Example of displaying dialogs with a DialogFragment. Press the show button
@@ -43,7 +46,7 @@ import android.widget.TextView;
  * theme; STYLE_NORMAL with light fullscreen theme; and STYLE_NORMAL.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class FragmentDialog extends Activity {
+public class FragmentDialog extends AppCompatActivity {
     int mStackLevel = 0; // Level used to choose style of dialog (and stack level)
 
     /**
@@ -77,7 +80,7 @@ public class FragmentDialog extends Activity {
         ((TextView) tv).setText(R.string.dialog_fragment_example_instructions);
 
         // Watch for button clicks.
-        Button button = (Button) findViewById(R.id.show);
+        Button button = findViewById(R.id.show);
         button.setOnClickListener(new OnClickListener() {
             /**
              * Called when a view has been clicked. We simply call our method showDialog() when
@@ -108,7 +111,7 @@ public class FragmentDialog extends Activity {
      * @param outState Bundle in which to place your saved state.
      */
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("level", mStackLevel);
     }
@@ -130,9 +133,9 @@ public class FragmentDialog extends Activity {
         // DialogFragment.show() will take care of adding the fragment
         // in a transaction.  We also want to remove any currently showing
         // dialog, so make our own transaction and take care of that here.
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.addToBackStack(null);
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {
             ft.remove(prev);
         }
@@ -213,9 +216,11 @@ public class FragmentDialog extends Activity {
          *
          * @param savedInstanceState we do not override onSaveInstanceState so do not use
          */
+        @SuppressWarnings("DuplicateBranchesInSwitch")
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            //noinspection ConstantConditions
             mNum = getArguments().getInt("num");
 
             // Pick a style based on the num.
@@ -294,7 +299,7 @@ public class FragmentDialog extends Activity {
             ((TextView) tv).setText(dialogLabel);
 
             // Watch for button clicks.
-            Button button = (Button) v.findViewById(R.id.show);
+            Button button = v.findViewById(R.id.show);
             button.setOnClickListener(new OnClickListener() {
                 /**
                  * Called when the R.id.show ("Show") <b>Button</b> is clicked. We simply call our
@@ -306,6 +311,7 @@ public class FragmentDialog extends Activity {
                 @Override
                 public void onClick(View v) {
                     // When button is clicked, call up to owning activity.
+                    //noinspection ConstantConditions
                     ((FragmentDialog) getActivity()).showDialog();
                 }
             });
