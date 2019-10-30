@@ -617,10 +617,11 @@ App
 
     App/Activity/Wallpaper                 all
         .app.WallpaperActivity
+        .layout.translucent_background.xml
             This is an app which has the system wallpaper behind it. It does this by 
-            setting the theme on the window in AndroidManifest to Theme.Wallpaper,
-            which inherits from the system theme android:style/Theme.Wallpaper, which
-            has android:windowShowWallpaper = "true".
+            setting the theme on the window in AndroidManifest to Theme.MyThemeWallpaper,
+            which copies attributes from the system theme android:style/Theme.Wallpaper,
+            which has android:windowShowWallpaper = "true".
 
   Alarm
     App/Alarm/Alarm Controller             v23

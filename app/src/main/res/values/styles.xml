@@ -171,4 +171,14 @@
         <item name="android:colorForeground">#fff</item>
     </style>
 
+    <!-- A theme that has a wallpaper background.  Here we explicitly copy
+         various attributes from the system's wallpaper theme -->
+    <style name="Theme.MyThemeWallpaper"
+        parent="Theme.AppCompat">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowShowWallpaper">true</item>
+        <item name="android:colorForeground">#fff</item>
+    </style>
+
 </resources>

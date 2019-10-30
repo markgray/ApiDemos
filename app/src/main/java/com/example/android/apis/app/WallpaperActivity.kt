@@ -18,10 +18,10 @@ package com.example.android.apis.app
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
-import com.example.android.apis.R
 
-import android.app.Activity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * Wallpaper Activity
@@ -29,12 +29,13 @@ import android.os.Bundle
  * This demonstrates the how to write an activity that has the system wallpaper behind it.
  *
  * This is an app which has the system wallpaper behind it. It does this by setting the theme
- * on the window in AndroidManifest to Theme.Wallpaper, which inherits from the system theme
- * android:style/Theme.Wallpaper, which has android:windowShowWallpaper = "true".
+ * on the window in AndroidManifest to Theme.MyThemeWallpaper, which copies attributes from
+ * the system theme android:style/Theme.Wallpaper, which has android:windowShowWallpaper = "true".
  *
- * Our style/Theme.WallPaper also defines the element: <item name="android:colorForeground">#fff</item>
+ * Our style/Theme.MyThemeWallpaper also defines the element:
+ *    <item name="android:colorForeground">#fff</item>
  */
-class WallpaperActivity : Activity() {
+class WallpaperActivity : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.translucent_background.
