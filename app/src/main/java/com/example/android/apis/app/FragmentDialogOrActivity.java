@@ -17,9 +17,6 @@
 package com.example.android.apis.app;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.DialogFragment;
-import android.app.FragmentTransaction;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,13 +26,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.DialogFragment;
+
 import com.example.android.apis.R;
 
 /**
  * Shows how to show the same DialogFragment embedded in the activity layout, and as a dialog.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class FragmentDialogOrActivity extends Activity {
+public class FragmentDialogOrActivity extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * onCreate, then we set our content view to our layout file R.layout.fragment_dialog_or_activity.
@@ -63,7 +64,7 @@ public class FragmentDialogOrActivity extends Activity {
         if (savedInstanceState == null) {
             // First-time init; create fragment to embed in activity.
 
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             DialogFragment newFragment = MyDialogFragment.newInstance();
             ft.add(R.id.embedded, newFragment);
             ft.commit();
@@ -71,7 +72,7 @@ public class FragmentDialogOrActivity extends Activity {
         }
 
         // Watch for button clicks.
-        Button button = (Button) findViewById(R.id.show_dialog);
+        Button button = findViewById(R.id.show_dialog);
         button.setOnClickListener(new OnClickListener() {
             /**
              * Called when a view has been clicked. We simply call our method <b>showDialog()</b>.
@@ -90,7 +91,7 @@ public class FragmentDialogOrActivity extends Activity {
      */
     void showDialog() {
         DialogFragment newFragment = MyDialogFragment.newInstance();
-        newFragment.show(getFragmentManager(), "dialog");
+        newFragment.show(getSupportFragmentManager(), "dialog");
     }
 
     /**

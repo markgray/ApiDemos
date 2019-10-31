@@ -503,7 +503,8 @@
         <activity
             android:name=".app.FragmentDialogOrActivity"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="@string/fragment_dialog_or_activity">
+            android:label="@string/fragment_dialog_or_activity"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

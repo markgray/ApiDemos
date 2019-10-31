@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_weight="0"
-        android:background="#ff303030"
+        android:background="#ff707070"
         android:gravity="top|center_horizontal"
         android:padding="6dp" />
 

@@ -712,6 +712,7 @@ App
 
     App/Fragment/Dialog                    v11
         .app.FragmentDialog
+        .layout.fragment_dialog.xml
             Example of displaying dialogs with a DialogFragment. Press the show button
             at the bottom to see the first dialog; pressing successive show buttons on 
             the dialogs will display other dialog styles as a stack, with back going to
@@ -723,6 +724,7 @@ App
 
     App/Fragment/Dialog or Activity        v11
         .app.FragmentDialogOrActivity
+        .layout.fragment_dialog_or_activity.xml
             Shows how to show the same DialogFragment embedded in the activity layout,
             and as a dialog.
 
