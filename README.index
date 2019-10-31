@@ -734,7 +734,11 @@ App
         .layout.labeled_text_edit.xml
             Demonstration of hiding and showing fragments while keeping fragment state
             using FragmentTransaction.hide(Fragment), and FragmentTransaction.show(Fragment).
-            The Fragment's are created in the layout using the <fragment> xml element.
+            The Fragment's used to be created in the layout using the <fragment> xml element,
+            which works when using the Activity class, but with the AppCompatActivity class
+            you need to use a FragmentTransaction to add the fragments if you want to hide/show
+            them, otherwise we get a null pointer exception when you try to find them using the
+            FragmentManager (for some reason).
             TODO: fix display of show/hide Button text after rotation.
 
     App/Fragment/Layout                    v11
