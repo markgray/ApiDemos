@@ -29,29 +29,29 @@ import androidx.fragment.app.DialogFragment
 import com.example.android.apis.R
 
 /**
- * Shows how to show the same DialogFragment embedded in the activity layout, and as a dialog.
+ * Shows how to show the same [DialogFragment] embedded in the activity layout, and as a dialog.
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentDialogOrActivity : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, then we set our content view to our layout file R.layout.fragment_dialog_or_activity.
-     * Next we check to see if our parameter **Bundle savedInstanceState** is null, which means
-     * this is our first time being called so we need to embed our Fragment in our layout ourselves
-     * rather than rely on the system to recreate it. If null then we create **FragmentTransaction ft**
-     * by using the FragmentManager for interacting with fragments associated with this activity to
-     * start a series of edit operations on the Fragments associated with this FragmentManager. We
-     * create an instance of **DialogFragment newFragment**, use **ft** to add **newFragment**
-     * in the **FrameLayout** R.id.embedded inside our layout, and then commit **ft**. Having
-     * taken care of our embedded Fragment we locate **Button button** R.id.show_dialog ("Show")
-     * in our layout file and set its OnClickListener to an anonymous class which will call our method
-     * **showDialog()** when the Button is clicked.
+     * `onCreate`, then we set our content view to our layout file R.layout.fragment_dialog_or_activity.
+     * Next we check to see if our [Bundle] parameter [savedInstanceState] is *null*, which means
+     * this is our first time being called, so we need to embed our `Fragment` in our layout ourselves
+     * rather than rely on the system to recreate it. If *null* then we initialize our
+     * `FragmentTransaction` variable `val ft` by using the support `FragmentManager` for interacting
+     * with fragments associated with this activity to start a series of edit operations on the
+     * Fragments associated with this `FragmentManager`. We create an instance of [DialogFragment]
+     * to initialize our variable `val newFragment`, use `ft` to add `newFragment` as the contents
+     * of the `FrameLayout` with ID R.id.embedded inside our content view, and then commit `ft`.
+     * Having taken care of our embedded `Fragment` we initialize our [Button] variable `val button`
+     * by finding the view with ID R.id.show_dialog ("Show") and set its `OnClickListener` to a
+     * lambda which will call our method [showDialog] when the [Button] is clicked.
      *
      * @param savedInstanceState if the activity is being recreated after an orientation change this
-     * will contain information for the FragmentManager to use, otherwise
-     * it is null. We use this to decide whether it is the first time that
-     * onCreate has been called (it will be null)
+     * will contain information for the `FragmentManager` to use, otherwise it is *null*. We use
+     * this to decide whether it is the first time that `onCreate` has been called (it will be *null*)
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,7 +80,10 @@ class FragmentDialogOrActivity : AppCompatActivity() {
     }
 
     /**
-     * Create the fragment and show it as a dialog.
+     * Create the fragment and show it as a dialog. We initialize our [MyDialogFragment] variable
+     * `val newFragment` with the new instance returned by [MyDialogFragment.newInstance]. We then
+     * call the `show` method of `newFragment` to have it use the support `FragmentManager` to show
+     * the dialog fragment using the tag "dialog".
      */
     internal fun showDialog() {
         val newFragment = MyDialogFragment.newInstance()
@@ -88,30 +91,27 @@ class FragmentDialogOrActivity : AppCompatActivity() {
     }
 
     /**
-     * Simple **DialogFragment** which only displays a String in a **TextView**
+     * Simple [DialogFragment] which only displays a [String] in a [TextView]
      */
     class MyDialogFragment : DialogFragment() {
 
         /**
-         * Called to have the fragment instantiate its user interface view. First we use our parameter
-         * **LayoutInflater inflater** to inflate our layout file R.layout.hello_world into the
-         * variable **View v**. Then we locate **View tv** R.id.text in **v**, and set the
-         * text in this **TextView** to the String R.string.my_dialog_fragment_label:
+         * Called to have the fragment instantiate its user interface view. First we use our
+         * [LayoutInflater] parameter [inflater] to inflate our layout file R.layout.hello_world
+         * into the [View] variable `val v`. Then we initialize our [View] variable `val tv` by
+         * finding the view with ID R.id.text in `v`, and set the text in this [TextView] to the
+         * [String] with ID R.string.my_dialog_fragment_label:
          *
+         *     This is an instance of MyDialogFragment
          *
-         * <center>This is an instance of MyDialogFragment</center>
+         * Finally we return `v` to the caller.
          *
-         *
-         * Finally we return **View v** to the caller.
-         *
-         * @param inflater           The LayoutInflater object that can be used to inflate
-         * any views in the fragment,
-         * @param container          If non-null, this is the parent view that the fragment's
-         * UI should be attached to.  The fragment should not add the view itself,
-         * but this can be used to generate the LayoutParams of the view.
+         * @param inflater The [LayoutInflater] object that can be used to inflate any views.
+         * @param container If non-null, this is the parent view that the fragment's UI should be
+         * attached to. The fragment should not add the view itself, but this can be used to generate
+         * the `LayoutParams` of the view.
          * @param savedInstanceState If non-null, this fragment is being re-constructed
          * from a previous saved state as given here.
-         *
          * @return Return the View for the fragment's UI
          */
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -121,6 +121,9 @@ class FragmentDialogOrActivity : AppCompatActivity() {
             return v
         }
 
+        /**
+         * Our static factory method.
+         */
         companion object {
             /**
              * Simply creates and returns a new instance of **MyDialogFragment**
