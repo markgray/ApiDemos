@@ -730,6 +730,8 @@ App
 
     App/Fragment/Hide and Show             v11
         .app.FragmentHideShow
+        .layout.fragment_hide_show.xml
+        .layout.labeled_text_edit.xml
             Demonstration of hiding and showing fragments while keeping fragment state
             using FragmentTransaction.hide(Fragment), and FragmentTransaction.show(Fragment).
             The Fragment's are created in the layout using the <fragment> xml element.

@@ -19,12 +19,9 @@ package com.example.android.apis.app;
 import com.example.android.apis.R;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,11 +29,18 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Demonstration of hiding and showing fragments.
  */
 @SuppressLint("SetTextI18n")
-public class FragmentHideShow extends Activity {
+public class FragmentHideShow extends AppCompatActivity {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of {@code onCreate},
@@ -67,13 +71,18 @@ public class FragmentHideShow extends Activity {
 
         // The content view embeds two fragments; now retrieve them and attach
         // their "hide" button.
-        FragmentManager fm = getFragmentManager();
-        Fragment fragment1 = fm.findFragmentById(R.id.fragment1);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment fragment1 = new FirstFragment();
+        ft.add(R.id.fragment1, fragment1);
+        Fragment fragment2 = new SecondFragment();
+        ft.add(R.id.fragment2, fragment2);
+        ft.commit();
+
         addShowHideListener(R.id.frag1hide, fragment1);
         final Button button1 = findViewById(R.id.frag1hide);
         button1.setText(fragment1.isHidden() ? "Show" : "Hide");
 
-        Fragment fragment2 = fm.findFragmentById(R.id.fragment2);
         addShowHideListener(R.id.frag2hide, fragment2);
         final Button button2 = findViewById(R.id.frag2hide);
         button2.setText(fragment2.isHidden() ? "Show" : "Hide");
@@ -107,7 +116,7 @@ public class FragmentHideShow extends Activity {
              */
             @Override
             public void onClick(View v) {
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
                 if (fragment.isHidden()) {
                     ft.show(fragment);
@@ -180,7 +189,7 @@ public class FragmentHideShow extends Activity {
          * @param outState Bundle in which to place your saved state.
          */
         @Override
-        public void onSaveInstanceState(Bundle outState) {
+        public void onSaveInstanceState(@NotNull Bundle outState) {
             super.onSaveInstanceState(outState);
 
             // Remember the current text, to restore if we later restart.
