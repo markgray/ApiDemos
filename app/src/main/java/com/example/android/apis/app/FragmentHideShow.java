@@ -20,6 +20,8 @@ import com.example.android.apis.R;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import android.view.LayoutInflater;
@@ -167,16 +169,30 @@ public class FragmentHideShow extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View v = inflater.inflate(R.layout.labeled_text_edit, container, false);
-            View tv = v.findViewById(R.id.msg);
+            return inflater.inflate(R.layout.labeled_text_edit, container, false);
+        }
+
+        /**
+         * Called immediately after {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}
+         * has returned, but before any saved state has been restored in to the view.
+         * This gives subclasses a chance to initialize themselves once
+         * they know their view hierarchy has been completely created.  The fragment's
+         * view hierarchy is not however attached to its parent at this point.
+         *
+         * @param view               The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+         * @param savedInstanceState If non-null, this fragment is being re-constructed
+         */
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            View tv = view.findViewById(R.id.msg);
             ((TextView)tv).setText("The fragment saves and restores this text.");
 
             // Retrieve the text editor, and restore the last saved state if needed.
-            mTextView = v.findViewById(R.id.saved);
+            mTextView = view.findViewById(R.id.saved);
             if (savedInstanceState != null) {
                 mTextView.setText(savedInstanceState.getCharSequence("text"));
             }
-            return v;
         }
 
         /**
@@ -226,16 +242,30 @@ public class FragmentHideShow extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View v = inflater.inflate(R.layout.labeled_text_edit, container, false);
-            View tv = v.findViewById(R.id.msg);
+            return inflater.inflate(R.layout.labeled_text_edit, container, false);
+        }
+
+        /**
+         * Called immediately after {@link #(LayoutInflater, ViewGroup, Bundle)}
+         * has returned, but before any saved state has been restored in to the view.
+         * This gives subclasses a chance to initialize themselves once
+         * they know their view hierarchy has been completely created.  The fragment's
+         * view hierarchy is not however attached to its parent at this point.
+         *
+         * @param view               The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+         * @param savedInstanceState If non-null, this fragment is being re-constructed
+         */
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            View tv = view.findViewById(R.id.msg);
             ((TextView)tv).setText("The TextView saves and restores this text.");
 
             // Retrieve the text editor and tell it to save and restore its state.
             // Note that you will often set this in the layout XML, but since
             // we are sharing our layout with the other fragment we will customize
             // it here.
-            v.findViewById(R.id.saved).setSaveEnabled(true);
-            return v;
+            view.findViewById(R.id.saved).setSaveEnabled(true);
         }
     }
 }
