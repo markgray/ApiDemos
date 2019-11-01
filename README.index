@@ -735,11 +735,17 @@ App
             Demonstration of hiding and showing fragments while keeping fragment state
             using FragmentTransaction.hide(Fragment), and FragmentTransaction.show(Fragment).
             The Fragment's used to be created in the layout using the <fragment> xml element,
-            which works when using the Activity class, but with the AppCompatActivity class
-            you need to use a FragmentTransaction to add the fragments if you want to hide/show
-            them, otherwise we get a null pointer exception when you try to find them using the
-            FragmentManager (for some reason).
-            TODO: fix display of show/hide Button text after rotation.
+            which works when using the Activity class, but with the AppCompatActivity or the
+            FragmentActivity class you need to use a FragmentTransaction to add the fragments
+            the first time the app is run if you want to hide/show them, otherwise we get a null
+            pointer exception when you try to find them using the FragmentManager for some
+            reason, but the android docs do mention a problem, see:
+            https://developer.android.com/training/basics/fragments/creating
+            Where it says:
+            Note: When you add a fragment to an activity layout by defining the fragment in the
+            layout XML file, you cannot remove the fragment at runtime. If you plan to swap your
+            fragments in and out during user interaction, you must add the fragment to the activity
+            when the activity first starts, as shown in Build a flexible UI.
 
     App/Fragment/Layout                    v11
         .app.FragmentLayout                CRASHES both Xcite and Nexus 7 (fixed)

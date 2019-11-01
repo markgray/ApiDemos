@@ -28,6 +28,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.android.apis.R
+import java.lang.RuntimeException
 
 /**
  * Demonstration of hiding and showing fragments.
@@ -39,22 +40,29 @@ class FragmentHideShow : FragmentActivity() {
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
      * then we set our content view to our layout file R.layout.fragment_hide_show. We initialize
-     * `FragmentManager fm` with the FragmentManager for interacting with fragments associated
-     * with this activity, use it to find the fragment with id R.id.fragment1 in order to initialize
-     * `Fragment fragment1` with it. We call our method `addShowHideListener` to add an
-     * `OnClickListener` to the button with id R.id.frag1hide which will toggle the show/hide
-     * state of `fragment1` when it is clicked and set the text of the button to "Hide" or
-     * "Show" whichever is then appropriate. We initialize `Button button1` by finding the
-     * view with id R.id.frag1hide and set its text to "Show" if the `isHidden` method of
-     * `fragment1` returns true (fragment is hidden) or to "Hide" if it is false (fragment is
-     * not hidden). We then use `fm` to find the fragment with id R.id.fragment2 in order to
-     * initialize `Fragment fragment2` with it. We call our method `addShowHideListener`
-     * to add an `OnClickListener` to the button with id R.id.frag2hide which will toggle the
-     * show/hide state of `fragment2` when it is clicked and set the text of the button to "Hide"
-     * or "Show" whichever is then appropriate. We initialize `Button button2` by finding the
-     * view with id R.id.frag2hide and set its text to "Show" if the `isHidden` method of
-     * `fragment2` returns true (fragment is hidden) or to "Hide" if it is false (fragment is
-     * not hidden).
+     * our [FragmentManager] variable `val fm` with the support [FragmentManager] for interacting
+     * with fragments associated with this activity, and declare our [Fragment] variables
+     * `val fragment1` and `val fragment2`. If our [Bundle] parameter [savedInstanceState] is not
+     * *null* we are being recreated after an orientation change and our fragments will have been
+     * recreated by the system so we initialize `fragment1` by using `fm` to find the fragment with
+     * ID R.id.fragment1, and `fragment2` by using `fm` to find the fragment with ID R.id.fragment2.
+     * If [savedInstanceState] is *null* this is the first time we have started so we use `fm` to
+     * begin a [FragmentTransaction] to initialize our [FragmentTransaction] variable `val ft`, set
+     * `fragment1` to a new instance of [FirstFragment], use `ft` to add `fragment1` to the View in
+     * our content view with ID R.id.fragment1, and set `fragment2` to a new instance of
+     * [SecondFragment], and use `ft` to add `fragment2` to the View in our content view with ID
+     * R.id.fragment2. We then commit the `ft` [FragmentTransaction]. We call our method
+     * [addShowHideListener] to add an `OnClickListener` to the button with id R.id.frag1hide which
+     * will toggle the show/hide state of `fragment1` when it is clicked and set the text of the
+     * button to "Hide" or "Show" whichever is then appropriate. We initialize our [Button] variable
+     * `val button1` by finding the view with id R.id.frag1hide and set its text to "Show" if the
+     * `isHidden` method of `fragment1` returns true (fragment is hidden) or to "Hide" if it is
+     * false (fragment is not hidden). We then [addShowHideListener] to add an `OnClickListener` to
+     * the button with id R.id.frag2hide which will toggle the show/hide state of `fragment2` when
+     * it is clicked and set the text of the button to "Hide" or "Show" whichever is then appropriate.
+     * We initialize our [Button] variable `val button2` by finding the view with id R.id.frag2hide
+     * and set its text to "Show" if the `isHidden` method of `fragment2` returns true (fragment is
+     * hidden) or to "Hide" if it is false (fragment is not hidden).
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
      */
@@ -67,7 +75,9 @@ class FragmentHideShow : FragmentActivity() {
         val fragment2: Fragment?
         if (savedInstanceState != null) {
             fragment1 = fm.findFragmentById(R.id.fragment1)
+                    ?: throw RuntimeException("fragment1 is null")
             fragment2 = fm.findFragmentById(R.id.fragment2)
+                    ?: throw RuntimeException("fragment2 is null")
         } else {
             val ft: FragmentTransaction = fm.beginTransaction()
             fragment1 = FirstFragment()
@@ -77,22 +87,20 @@ class FragmentHideShow : FragmentActivity() {
             ft.commit()
         }
 
-        // The content view embeds two fragments; now retrieve them and attach
-        // their "hide" button.
-
-
-        addShowHideListener(R.id.frag1hide, fragment1!!)
+        // The content view now embeds our two fragments, now we attach their "hide" button.
+        addShowHideListener(R.id.frag1hide, fragment1)
         val button1 = findViewById<Button>(R.id.frag1hide)
         button1.text = if (fragment1.isHidden) "Show" else "Hide"
 
-        addShowHideListener(R.id.frag2hide, fragment2!!)
+        addShowHideListener(R.id.frag2hide, fragment2)
         val button2 = findViewById<Button>(R.id.frag2hide)
         button2.text = if (fragment2.isHidden) "Show" else "Hide"
     }
 
     /**
-     * Locates the button whose resource id is `int buttonId` and sets its `OnClickListener`
-     * to an anonymous class which will toggle the hide/show state of `Fragment fragment`.
+     * Locates the button whose resource id is given by our [Int] parameter [buttonId] and sets its
+     * `OnClickListener` to an a lambda which will toggle the hide/show state of our [Fragment]
+     * parameter [fragment].
      *
      * @param buttonId resource id of the button we are to add our `OnClickListener` to
      * @param fragment `Fragment` whose hide/show state is to be toggled by the button.
@@ -100,23 +108,23 @@ class FragmentHideShow : FragmentActivity() {
     internal fun addShowHideListener(buttonId: Int, fragment: Fragment) {
         val button = findViewById<Button>(buttonId)
         /**
-         * Called when the `View` we are the `OnClickListener` for is clicked. We
-         * initialize `FragmentTransaction ft` by using the the FragmentManager for interacting
-         * with fragments associated with this activity to begin a transaction. We call the
-         * `setCustomAnimations` of `ft` to specify the animation resources to run for
+         * Called when the `View` we are the `OnClickListener` for is clicked. We initialize our
+         * [FragmentTransaction] variable `val ft` by using the the support [FragmentManager] for
+         * interacting with fragments associated with this activity to begin a transaction. We call
+         * the `setCustomAnimations` method of `ft` to specify the animation resources to run for
          * the fragments that are entering and exiting in this transaction to be
-         * android.R.animator.fade_in and android.R.animator.fade_out (these are objectAnimator
+         * android.R.animator.fade_in and android.R.animator.fade_out (these are `objectAnimator`
          * objects which manipulate the alpha value of their views). If the `isHidden` method
-         * of `fragment` returns true (the fragment is currently hidden) we call the `show`
+         * of [fragment] returns true (the fragment is currently hidden) we call the `show`
          * method of `ft` to show the fragment and set the text of our `button` to "Hide".
-         * If returns false (the fragment is currently shown) we call the `hide` method of
+         * If it returns false (the fragment is currently shown) we call the `hide` method of
          * `ft` to hide the fragment and set the text of our `button` to "Show". Finally
-         * we commit `FragmentTransaction ft`.
+         * we commit [FragmentTransaction] `ft`.
          *
          * Parameter: `View` that was clicked.
          */
         button.setOnClickListener {
-            val ft = supportFragmentManager.beginTransaction()
+            val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
             ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
             if (fragment.isHidden) {
                 ft.show(fragment)
@@ -130,15 +138,16 @@ class FragmentHideShow : FragmentActivity() {
     }
 
     /**
-     * First fragment in our layout file layout/fragment_hide_show.xml, has id R.id.fragment1. It uses
-     * an `onSaveInstanceState` override to save the text of the `EditText` in its layout
-     * file, then restores the text in its `onCreateView` override.
+     * First fragment in our content view, it is added to the `FrameLayout` in our layout file
+     * layout/fragment_hide_show.xml, with the ID R.id.fragment1. It uses an `onSaveInstanceState`
+     * override to save the text of the `EditText` in its layout file, then restores the text in
+     * its `onViewCreated` override.
      */
     class FirstFragment : Fragment() {
         /**
          * The `EditText` in our layout file with id R.id.saved whose contents we save in the
          * `Bundle` passed to our `onSaveInstanceState` override, then restore in our
-         * `onCreateView` override.
+         * `onViewCreated` override.
          */
         internal lateinit var mTextView: TextView
 
