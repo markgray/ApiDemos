@@ -20,10 +20,6 @@ import com.example.android.apis.R;
 import com.example.android.apis.Shakespeare;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.app.ListFragment;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -37,6 +33,14 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.ListFragment;
+
+import androidx.fragment.app.FragmentActivity;
+
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Demonstration of using fragments to implement different activity layouts.
  * This sample provides a different layout (and activity flow) when run in
@@ -49,7 +53,7 @@ import android.widget.TextView;
  * id should be R.id.details
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class FragmentLayout extends Activity {
+public class FragmentLayout extends FragmentActivity {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -68,7 +72,7 @@ public class FragmentLayout extends Activity {
      * This is a secondary activity, to show what the user has selected
      * when the screen is not large enough to show it all in one activity.
      */
-    public static class DetailsActivity extends Activity {
+    public static class DetailsActivity extends FragmentActivity {
 
         /**
          * Called when the activity is starting. First we call through to our super's implementation
@@ -104,7 +108,7 @@ public class FragmentLayout extends Activity {
                 // During initial setup, plug in the details fragment.
                 DetailsFragment details = new DetailsFragment();
                 details.setArguments(getIntent().getExtras());
-                getFragmentManager().beginTransaction().add(android.R.id.content, details).commit();
+                getSupportFragmentManager().beginTransaction().add(android.R.id.content, details).commit();
             }
         }
     }
@@ -141,6 +145,7 @@ public class FragmentLayout extends Activity {
             super.onActivityCreated(savedInstanceState);
 
             // Populate list with our static array of titles.
+            //noinspection ConstantConditions
             setListAdapter(new ArrayAdapter<>(getActivity(),
                     android.R.layout.simple_list_item_activated_1, Shakespeare.INSTANCE.getTITLES()));
 
@@ -171,9 +176,8 @@ public class FragmentLayout extends Activity {
          * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}, and
          * {@link #onActivityCreated(Bundle)}.
          * <p>
-         * <p>This corresponds to {@link Activity#onSaveInstanceState(Bundle)
-         * Activity.onSaveInstanceState(Bundle)} and most of the discussion there
-         * applies here as well.  Note however: <em>this method may be called
+         * <p>This corresponds to {@code onSaveInstanceState(Bundle)} and most of the discussion
+         * there applies here as well.  Note however: <em>this method may be called
          * at any time before {@link #onDestroy()}</em>.  There are many situations
          * where a fragment may be mostly torn down (such as when placed on the
          * back stack with no UI showing), but its state will not be saved until
@@ -186,7 +190,7 @@ public class FragmentLayout extends Activity {
          * @param outState Bundle in which to place your saved state.
          */
         @Override
-        public void onSaveInstanceState(Bundle outState) {
+        public void onSaveInstanceState(@NotNull Bundle outState) {
             super.onSaveInstanceState(outState);
             outState.putInt("curChoice", mCurCheckPosition);
         }
@@ -202,7 +206,7 @@ public class FragmentLayout extends Activity {
          * @param id       The row id of the item that was clicked
          */
         @Override
-        public void onListItemClick(ListView l, View v, int position, long id) {
+        public void onListItemClick(@NotNull ListView l, @NotNull View v, int position, long id) {
             showDetails(position);
         }
 
@@ -240,14 +244,16 @@ public class FragmentLayout extends Activity {
                 getListView().setItemChecked(index, true);
 
                 // Check what fragment is currently shown, replace if needed.
+                //noinspection ConstantConditions
                 DetailsFragment details = (DetailsFragment)
-                        getFragmentManager().findFragmentById(R.id.details);
+                        getActivity().getSupportFragmentManager().findFragmentById(R.id.details);
                 if (details == null || details.getShownIndex() != index) {
                     // Make new fragment to show this selection.
                     details = DetailsFragment.newInstance(index);
 
                     // Execute a transaction, replacing any existing fragment
                     // with this one inside the frame.
+                    //noinspection ConstantConditions
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     if (index == 0) {
                         ft.replace(R.id.details, details);
@@ -262,6 +268,7 @@ public class FragmentLayout extends Activity {
                 // Otherwise we need to launch a new activity to display
                 // the dialog fragment with selected text.
                 Intent intent = new Intent();
+                //noinspection ConstantConditions
                 intent.setClass(getActivity(), DetailsActivity.class);
                 intent.putExtra("index", index);
                 startActivity(intent);
@@ -272,6 +279,7 @@ public class FragmentLayout extends Activity {
     /**
      * This is the secondary fragment, displaying the details of a particular item.
      */
+    @SuppressWarnings("WeakerAccess")
     public static class DetailsFragment extends Fragment {
         /**
          * Create a new instance of DetailsFragment, initialized to show the text at 'index'. First
@@ -302,6 +310,7 @@ public class FragmentLayout extends Activity {
          * @return integer argument which was stored under the key "index" or 0
          */
         public int getShownIndex() {
+            //noinspection ConstantConditions
             return getArguments().getInt("index", 0);
         }
 
@@ -326,7 +335,7 @@ public class FragmentLayout extends Activity {
          * @return Return the View for the fragment's UI, or null
          */
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             if (container == null) {
                 // We have different layouts, and in one of them this
                 // fragment's containing frame doesn't exist.  The fragment
@@ -340,6 +349,7 @@ public class FragmentLayout extends Activity {
 
             ScrollView scroller = new ScrollView(getActivity());
             TextView text = new TextView(getActivity());
+            //noinspection ConstantConditions
             int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     4, getActivity().getResources().getDisplayMetrics());
             text.setPadding(padding, padding, padding, padding);
