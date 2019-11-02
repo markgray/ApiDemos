@@ -14,46 +14,46 @@
  * limitations under the License.
  */
 
-package com.example.android.apis.app;
+package com.example.android.apis.app
 
-import com.example.android.apis.R;
-import com.example.android.apis.Shakespeare;
+import com.example.android.apis.R
+import com.example.android.apis.Shakespeare
 
-import android.annotation.TargetApi;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Build;
-import android.os.Bundle;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.annotation.TargetApi
+import android.content.Intent
+import android.content.res.Configuration
+import android.os.Build
+import android.os.Bundle
+import android.util.TypedValue
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.ListView
+import android.widget.ScrollView
+import android.widget.TextView
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.fragment.app.ListFragment;
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.ListFragment
 
-import androidx.fragment.app.FragmentActivity;
-
-import org.jetbrains.annotations.NotNull;
+import androidx.fragment.app.FragmentActivity
 
 /**
  * Demonstration of using fragments to implement different activity layouts.
  * This sample provides a different layout (and activity flow) when run in
  * landscape. It crashes as it was in landscape mode because of a reference
  * to the non-existent containerViewId R.id.a_item in the call at line 156:
- * <p>
+ *
+ *
  * (FragmentTransaction) ft.replace(R.id.a_item, details)
- * <p>
+ *
+ *
  * This was obviously added by a runaway modification script, and the container
  * id should be R.id.details
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class FragmentLayout extends FragmentActivity {
+class FragmentLayout : FragmentActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -62,17 +62,16 @@ public class FragmentLayout extends FragmentActivity {
      *
      * @param savedInstanceState we do not use
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_layout);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.fragment_layout)
     }
 
     /**
      * This is a secondary activity, to show what the user has selected
      * when the screen is not large enough to show it all in one activity.
      */
-    public static class DetailsActivity extends FragmentActivity {
+    class DetailsActivity : FragmentActivity() {
 
         /**
          * Called when the activity is starting. First we call through to our super's implementation
@@ -82,33 +81,31 @@ public class FragmentLayout extends FragmentActivity {
          * to Configuration.ORIENTATION_LANDSCAPE in which case this Activity is not needed since
          * a dual pane version is in use, so we finish this Activity and return to caller. Otherwise
          * we are in Configuration.ORIENTATION_PORTRAIT and are needed. If we are being recreated
-         * <b>savedInstanceState</b> is not null and the system will have taken care of restoring our
+         * **savedInstanceState** is not null and the system will have taken care of restoring our
          * Fragment so we are done. If it is null this is the first time and we need to add a new
          * instance of our Fragment. To do this we first create a new instance of the Fragment
-         * <b>DetailsFragment details</b>, set its arguments to a map of the extras added to the
+         * **DetailsFragment details**, set its arguments to a map of the extras added to the
          * Intent which launched this Activity, and finally using the FragmentManager for interacting
          * with fragments associated with this activity we create a FragmentTransaction, use it to
-         * add <b>details</b> to the activity state, and then commit that FragmentTransaction.
+         * add **details** to the activity state, and then commit that FragmentTransaction.
          *
          * @param savedInstanceState if null, first time initializations are needed
          */
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
 
-            if (getResources().getConfiguration().orientation
-                    == Configuration.ORIENTATION_LANDSCAPE) {
+            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 // If the screen is now in landscape mode, we can show the
                 // dialog in-line with the list so we don't need this activity.
-                finish();
-                return;
+                finish()
+                return
             }
 
             if (savedInstanceState == null) {
                 // During initial setup, plug in the details fragment.
-                DetailsFragment details = new DetailsFragment();
-                details.setArguments(getIntent().getExtras());
-                getSupportFragmentManager().beginTransaction().add(android.R.id.content, details).commit();
+                val details = DetailsFragment()
+                details.arguments = intent.extras
+                supportFragmentManager.beginTransaction().add(android.R.id.content, details).commit()
             }
         }
     }
@@ -118,52 +115,52 @@ public class FragmentLayout extends FragmentActivity {
      * user can pick.  Upon picking an item, it takes care of displaying the
      * data to the user as appropriate based on the current UI layout.
      */
-    public static class TitlesFragment extends ListFragment {
-        boolean mDualPane; // Flag to indicate whether we are in ORIENTATION_LANDSCAPE dual pane mode
-        int mCurCheckPosition = 0; // Currently selected title to be displayed
+    @Suppress("MemberVisibilityCanBePrivate")
+    class TitlesFragment : ListFragment() {
+        internal var mDualPane: Boolean = false // Flag to indicate whether we are in ORIENTATION_LANDSCAPE dual pane mode
+        internal var mCurCheckPosition = 0 // Currently selected title to be displayed
 
         /**
          * Called when the fragment's activity has been created and this fragment's view hierarchy
          * instantiated. First we call through to our super's implementation of onActivityCreated.
-         * Next we set the cursor for the list view of this ListFragment to an <b>ArrayAdapter</b>
+         * Next we set the cursor for the list view of this ListFragment to an **ArrayAdapter**
          * consisting of the String[] array Shakespeare.TITLES. Then we determine whether we are
          * in ORIENTATION_LANDSCAPE (dual pane mode) by searching our Activity's content view for
-         * a view with the id R.id.details, saving a reference to it in <b>View detailsFrame</b>.
-         * If <b>detailsFrame</b> is not null and the View is VISIBLE we set our field <b>mDualPane</b>
-         * to true. If <b>savedInstanceState</b> is not null we use it to retrieve the value of our
+         * a view with the id R.id.details, saving a reference to it in **View detailsFrame**.
+         * If **detailsFrame** is not null and the View is VISIBLE we set our field **mDualPane**
+         * to true. If **savedInstanceState** is not null we use it to retrieve the value of our
          * field mCurCheckPosition which our callback onSaveInstanceState saved under the key
          * "curChoice". If we have determined that we are in dual pane mode (ORIENTATION_LANDSCAPE)
          * we set the choice mode for our ListView to CHOICE_MODE_SINGLE so that the currently
-         * selected item is highlighted, and then call our method <b>showDetails(mCurCheckPosition)</b>
+         * selected item is highlighted, and then call our method **showDetails(mCurCheckPosition)**
          * to display the details of the selected item in the other pane.
          *
          * @param savedInstanceState If not null it contains mCurCheckPosition saved by our callback
-         *                           onSaveInstanceState under the key "curChoice"
+         * onSaveInstanceState under the key "curChoice"
          */
-        @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
+        override fun onActivityCreated(savedInstanceState: Bundle?) {
+            super.onActivityCreated(savedInstanceState)
 
             // Populate list with our static array of titles.
-            //noinspection ConstantConditions
-            setListAdapter(new ArrayAdapter<>(getActivity(),
-                    android.R.layout.simple_list_item_activated_1, Shakespeare.INSTANCE.getTITLES()));
+
+            listAdapter = ArrayAdapter(activity!!,
+                    android.R.layout.simple_list_item_activated_1, Shakespeare.TITLES)
 
             // Check to see if we have a frame in which to embed the details
             // fragment directly in the containing UI.
-            View detailsFrame = getActivity().findViewById(R.id.details);
-            mDualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
+            val detailsFrame = activity!!.findViewById<View>(R.id.details)
+            mDualPane = detailsFrame != null && detailsFrame.visibility == View.VISIBLE
 
             if (savedInstanceState != null) {
                 // Restore last state for checked position.
-                mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
+                mCurCheckPosition = savedInstanceState.getInt("curChoice", 0)
             }
 
             if (mDualPane) {
                 // In dual-pane mode, the list view highlights the selected item.
-                getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                listView.choiceMode = ListView.CHOICE_MODE_SINGLE
                 // Make sure our UI is in the correct state.
-                showDetails(mCurCheckPosition);
+                showDetails(mCurCheckPosition)
             }
         }
 
@@ -172,32 +169,34 @@ public class FragmentLayout extends FragmentActivity {
          * can later be reconstructed in a new instance of its process is
          * restarted.  If a new instance of the fragment later needs to be
          * created, the data you place in the Bundle here will be available
-         * in the Bundle given to {@link #onCreate(Bundle)},
-         * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}, and
-         * {@link #onActivityCreated(Bundle)}.
-         * <p>
-         * <p>This corresponds to {@code onSaveInstanceState(Bundle)} and most of the discussion
-         * there applies here as well.  Note however: <em>this method may be called
-         * at any time before {@link #onDestroy()}</em>.  There are many situations
+         * in the Bundle given to [.onCreate],
+         * [.onCreateView], and
+         * [.onActivityCreated].
+         *
+         *
+         *
+         * This corresponds to `onSaveInstanceState(Bundle)` and most of the discussion
+         * there applies here as well.  Note however: *this method may be called
+         * at any time before [.onDestroy]*.  There are many situations
          * where a fragment may be mostly torn down (such as when placed on the
          * back stack with no UI showing), but its state will not be saved until
          * its owning activity actually needs to save its state.
-         * <p>
+         *
+         *
          * First we call through to our super's implementation of onSaveInstanceState, then we
-         * insert the value of our field <b>int mCurCheckPosition</b> into the mapping of the
-         * <b>Bundle outState</b> parameter under the key "curChoice".
+         * insert the value of our field **int mCurCheckPosition** into the mapping of the
+         * **Bundle outState** parameter under the key "curChoice".
          *
          * @param outState Bundle in which to place your saved state.
          */
-        @Override
-        public void onSaveInstanceState(@NotNull Bundle outState) {
-            super.onSaveInstanceState(outState);
-            outState.putInt("curChoice", mCurCheckPosition);
+        override fun onSaveInstanceState(outState: Bundle) {
+            super.onSaveInstanceState(outState)
+            outState.putInt("curChoice", mCurCheckPosition)
         }
 
         /**
          * This method will be called when an item in the list is selected. We simply call our method
-         * <b>showDetails</b> using the position of the view in the list that was selected as the
+         * **showDetails** using the position of the view in the list that was selected as the
          * index to the String[] Shakespeare.DIALOGUE array we wish to have displayed.
          *
          * @param l        The ListView where the click happened
@@ -205,73 +204,72 @@ public class FragmentLayout extends FragmentActivity {
          * @param position The position of the view in the list
          * @param id       The row id of the item that was clicked
          */
-        @Override
-        public void onListItemClick(@NotNull ListView l, @NotNull View v, int position, long id) {
-            showDetails(position);
+        override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
+            showDetails(position)
         }
 
         /**
          * Helper function to show the details of a selected item, either by displaying a fragment
          * in-place in the current UI if we are in dual pane landscape mode, or starting a whole
          * new activity in which it is displayed for portrait mode.
-         * <p>
-         * First we save our parameter <b>int index</b> in our field <b>int mCurCheckPosition</b>.
-         * Then if we are in dual pane mode (<b>boolean mDualPane</b> is true: device is using
+         *
+         *
+         * First we save our parameter **int index** in our field **int mCurCheckPosition**.
+         * Then if we are in dual pane mode (**boolean mDualPane** is true: device is using
          * layout-land/fragment_layout.xml) we set the checked state of the specified position
-         * <b>index</b>, then we use the FragmentManager to search for a fragment with the id
+         * **index**, then we use the FragmentManager to search for a fragment with the id
          * R.id.details (the id we use when adding DetailFragment), and if no Fragment with that id
          * is found, or the method DetailsFragment.getShownIndex() returns an index different from
-         * the one just selected we need to add a DetailsFragment for the new <b>index</b>. To do
+         * the one just selected we need to add a DetailsFragment for the new **index**. To do
          * this we first create a new instance of DetailsFragment with the new index into the
          * String[] Shakespeare.DIALOGUE array, use the FragmentManager for interacting with
-         * fragments associated with this fragment's activity to begin <b>FragmentTransaction ft</b>
-         * then use <b>ft</b> to replace the existing fragment with id R.id.details (if any) with
-         * our new <b>DetailsFragment details</b>, set a transition animation of TRANSIT_FRAGMENT_FADE,
+         * fragments associated with this fragment's activity to begin **FragmentTransaction ft**
+         * then use **ft** to replace the existing fragment with id R.id.details (if any) with
+         * our new **DetailsFragment details**, set a transition animation of TRANSIT_FRAGMENT_FADE,
          * and finally commit the FragmentTransaction. If we are not in dual pane mode (i.e.
-         * <b>boolean mDualPane</b> is false: device is using layout/fragment_layout.xml) we create
-         * an <b>Intent intent</b>, set its class to DetailsActivity.class, add extended data for the
-         * parameter <b>int index</b> under the key "index" to the intent, and start that Intent as
+         * **boolean mDualPane** is false: device is using layout/fragment_layout.xml) we create
+         * an **Intent intent**, set its class to DetailsActivity.class, add extended data for the
+         * parameter **int index** under the key "index" to the intent, and start that Intent as
          * a new Activity.
          *
          * @param index index into the String[] Shakespeare.DIALOGUE we wish to have displayed
          */
-        void showDetails(int index) {
-            mCurCheckPosition = index;
+        internal fun showDetails(index: Int) {
+            mCurCheckPosition = index
 
             if (mDualPane) {
                 // We can display everything in-place with fragments, so update
                 // the list to highlight the selected item and show the data.
-                getListView().setItemChecked(index, true);
+                listView.setItemChecked(index, true)
 
                 // Check what fragment is currently shown, replace if needed.
-                //noinspection ConstantConditions
-                DetailsFragment details = (DetailsFragment)
-                        getActivity().getSupportFragmentManager().findFragmentById(R.id.details);
-                if (details == null || details.getShownIndex() != index) {
+
+                var details = activity!!.supportFragmentManager.findFragmentById(R.id.details) as DetailsFragment?
+                if (details == null || details.shownIndex != index) {
                     // Make new fragment to show this selection.
-                    details = DetailsFragment.newInstance(index);
+                    details = DetailsFragment.newInstance(index)
 
                     // Execute a transaction, replacing any existing fragment
                     // with this one inside the frame.
-                    //noinspection ConstantConditions
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+                    val ft = fragmentManager!!.beginTransaction()
                     if (index == 0) {
-                        ft.replace(R.id.details, details);
+                        ft.replace(R.id.details, details)
                     } else {
-                        ft.replace(R.id.details, details);
+                        ft.replace(R.id.details, details)
                     }
-                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                    ft.commit();
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    ft.commit()
                 }
 
             } else {
                 // Otherwise we need to launch a new activity to display
                 // the dialog fragment with selected text.
-                Intent intent = new Intent();
-                //noinspection ConstantConditions
-                intent.setClass(getActivity(), DetailsActivity.class);
-                intent.putExtra("index", index);
-                startActivity(intent);
+                val intent = Intent()
+
+                intent.setClass(activity!!, DetailsActivity::class.java)
+                intent.putExtra("index", index)
+                startActivity(intent)
             }
         }
     }
@@ -279,50 +277,26 @@ public class FragmentLayout extends FragmentActivity {
     /**
      * This is the secondary fragment, displaying the details of a particular item.
      */
-    @SuppressWarnings("WeakerAccess")
-    public static class DetailsFragment extends Fragment {
-        /**
-         * Create a new instance of DetailsFragment, initialized to show the text at 'index'. First
-         * we create a new instance of <b>DetailsFragment f</b>, then we create a <b>Bundle args</b>
-         * and add our parameter <b>int index</b> to it using the key "index". We set the arguments
-         * of <b>f</b> to <b>args</b> and return <b>f</b> to the caller.
-         *
-         * @param index index into the String[] Shakespeare.DIALOGUE array to display
-         *
-         * @return a new instance of DetailsFragment with its arguments set to include the value of
-         *         <b>int index</b> stored under the key "index".
-         */
-        public static DetailsFragment newInstance(int index) {
-            DetailsFragment f = new DetailsFragment();
-
-            // Supply index input as an argument.
-            Bundle args = new Bundle();
-            args.putInt("index", index);
-            f.setArguments(args);
-
-            return f;
-        }
+    class DetailsFragment : Fragment() {
 
         /**
-         * Return the <b>int</b> argument supplied to setArguments(Bundle), (if any) which were
+         * Return the **int** argument supplied to setArguments(Bundle), (if any) which were
          * stored under the key "index".
          *
          * @return integer argument which was stored under the key "index" or 0
          */
-        public int getShownIndex() {
-            //noinspection ConstantConditions
-            return getArguments().getInt("index", 0);
-        }
+        val shownIndex: Int
+            get() = arguments!!.getInt("index", 0)
 
         /**
          * Called to have the fragment instantiate its user interface view. First we check to see if
          * we have a containing frame, and if we do not it means we do not need to inflate our View
          * because in the present layout (portrait orientation) we would not be displayed, so we just
-         * return null to the caller. Otherwise we create a <b>ScrollView scroller</b>, create a
-         * <b>TextView text</b> to place inside <b>scroller</b>, configure the padding of <b>text</b>,
-         * add the <b>TextView text</b> to <b>ScrollView scroller</b>, set the text of <b>text</b> to
-         * the element of the <b>String[] Shakespeare.DIALOGUE</b> selected by our arguments when we
-         * were created, and finally we return <b>ScrollView scroller</b> to the caller.
+         * return null to the caller. Otherwise we create a **ScrollView scroller**, create a
+         * **TextView text** to place inside **scroller**, configure the padding of **text**,
+         * add the **TextView text** to **ScrollView scroller**, set the text of **text** to
+         * the element of the **String[] Shakespeare.DIALOGUE** selected by our arguments when we
+         * were created, and finally we return **ScrollView scroller** to the caller.
          *
          * @param inflater The LayoutInflater object that can be used to inflate
          * any views in the fragment,
@@ -334,8 +308,7 @@ public class FragmentLayout extends FragmentActivity {
          *
          * @return Return the View for the fragment's UI, or null
          */
-        @Override
-        public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
             if (container == null) {
                 // We have different layouts, and in one of them this
                 // fragment's containing frame doesn't exist.  The fragment
@@ -344,18 +317,42 @@ public class FragmentLayout extends FragmentActivity {
                 // won't be displayed.  Note this is not needed -- we could
                 // just run the code below, where we would create and return
                 // the view hierarchy; it would just never be used.
-                return null;
+                return null
             }
 
-            ScrollView scroller = new ScrollView(getActivity());
-            TextView text = new TextView(getActivity());
-            //noinspection ConstantConditions
-            int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                    4, getActivity().getResources().getDisplayMetrics());
-            text.setPadding(padding, padding, padding, padding);
-            scroller.addView(text);
-            text.setText(Shakespeare.INSTANCE.getDIALOGUE()[getShownIndex()]);
-            return scroller;
+            val scroller = ScrollView(activity)
+            val text = TextView(activity)
+
+            val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                    4f, activity!!.resources.displayMetrics).toInt()
+            text.setPadding(padding, padding, padding, padding)
+            scroller.addView(text)
+            text.text = Shakespeare.DIALOGUE[shownIndex]
+            return scroller
+        }
+
+        companion object {
+            /**
+             * Create a new instance of DetailsFragment, initialized to show the text at 'index'. First
+             * we create a new instance of **DetailsFragment f**, then we create a **Bundle args**
+             * and add our parameter **int index** to it using the key "index". We set the arguments
+             * of **f** to **args** and return **f** to the caller.
+             *
+             * @param index index into the String[] Shakespeare.DIALOGUE array to display
+             *
+             * @return a new instance of DetailsFragment with its arguments set to include the value of
+             * **int index** stored under the key "index".
+             */
+            fun newInstance(index: Int): DetailsFragment {
+                val f = DetailsFragment()
+
+                // Supply index input as an argument.
+                val args = Bundle()
+                args.putInt("index", index)
+                f.arguments = args
+
+                return f
+            }
         }
     }
 
