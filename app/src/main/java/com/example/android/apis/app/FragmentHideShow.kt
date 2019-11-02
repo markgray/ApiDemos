@@ -152,21 +152,15 @@ class FragmentHideShow : FragmentActivity() {
         internal lateinit var mTextView: TextView
 
         /**
-         * Called to have the fragment instantiate its user interface view. We use our parameter
-         * `LayoutInflater inflater` to inflate our layout file R.layout.labeled_text_edit into
-         * `View v` using our parameter `ViewGroup container` for the LayoutParams without
-         * attaching to it. We initialize `View tv` by finding the view in `v` with id
-         * R.id.msg, then set its text to the string "The fragment saves and restores this text."
-         * We initialize our field `TextView mTextView` by finding the view in `v` with
-         * id R.id.saved, then if our parameter `Bundle savedInstanceState` is not null we set
-         * the text of `mTextView` to the string stored under the key "text" in `savedInstanceState`.
-         * Finally we return `v` to the caller.
+         * Called to have the fragment instantiate its user interface view. We use our [LayoutInflater]
+         * parameter [inflater] to inflate our layout file R.layout.labeled_text_edit using our
+         * [ViewGroup] parameter [container] for its layout parameters without attaching to it, and
+         * return the inflated [View] to the caller.
          *
-         * @param inflater           The LayoutInflater object that can be used to inflate
-         * any views in the fragment,
-         * @param container          If non-null, this is the parent view that the fragment's
-         * UI should be attached to. The fragment should not add the view itself,
-         * but this can be used to generate the LayoutParams of the view.
+         * @param inflater The LayoutInflater object that can be used to inflate any views.
+         * @param container If non-null, this is the parent view that the fragment's UI will be
+         * attached to. The fragment should not add the view itself, but this can be used to generate
+         * the LayoutParams of the view.
          * @param savedInstanceState If non-null, this fragment is being re-constructed
          * from a previous saved state as given here.
          *
@@ -177,13 +171,20 @@ class FragmentHideShow : FragmentActivity() {
         }
 
         /**
-         * Called immediately after [.onCreateView]
-         * has returned, but before any saved state has been restored in to the view.
-         * This gives subclasses a chance to initialize themselves once
-         * they know their view hierarchy has been completely created.  The fragment's
-         * view hierarchy is not however attached to its parent at this point.
+         * Called immediately after [onCreateView]  has returned, but before any saved state has been
+         * restored in to the view. This gives subclasses a chance to initialize themselves once they
+         * know their view hierarchy has been completely created. The fragment's view hierarchy is
+         * not however attached to its parent at this point.
          *
-         * @param view               The View returned by [.onCreateView].
+         * First we call our super's implementation of `onViewCreated`, then we initialize our [View]
+         * variable `val tv` by finding the view in our [View] parameter [view] with the ID R.id.msg
+         * and set its text to: "The fragment saves and restores this text." We then initialize our
+         * [TextView] field [mTextView] by finding the view in our [View] parameter [view] with the
+         * ID R.id.saved, and if our [Bundle] parameter [savedInstanceState] is not *null* we set the
+         * text of [mTextView] to the [String] stored in [savedInstanceState] under the key "text"
+         * by our [onSaveInstanceState] override.
+         *
+         * @param view               The View returned by [onCreateView].
          * @param savedInstanceState If non-null, this fragment is being re-constructed
          */
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -201,9 +202,8 @@ class FragmentHideShow : FragmentActivity() {
         /**
          * Called to ask the fragment to save its current dynamic state, so it can later be reconstructed
          * in a new instance if its process is restarted. First we call our super's implementation of
-         * `onSaveInstanceState` then we retrieve the text of our field `TextView mTextView`
-         * and store that `CharSequence` in our parameter `Bundle outState` under the key
-         * "text".
+         * `onSaveInstanceState` then we retrieve the text of our [TextView] field [mTextView] and
+         * store that `CharSequence` in our [Bundle] parameter [outState] under the key "text".
          *
          * @param outState Bundle in which to place your saved state.
          */
@@ -216,26 +216,22 @@ class FragmentHideShow : FragmentActivity() {
     }
 
     /**
-     * Second fragment in our layout file layout/fragment_hide_show.xml, has id R.id.fragment2. It
-     * calls the `setSaveEnabled(true)` method of the `EditText` in its layout to have it
-     * save and restore its text.
+     * Second fragment in our content view, it is added to the `FrameLayout` in our layout file
+     * layout/fragment_hide_show.xml, with the ID R.id.fragment2. It calls the `setSaveEnabled(true)`
+     * method of the `EditText` in its layout to have it save and restore its text.
      */
     class SecondFragment : Fragment() {
 
         /**
-         * Called to have the fragment instantiate its user interface view. We use our parameter
-         * `LayoutInflater inflater` to inflate our layout file R.layout.labeled_text_edit into
-         * `View v` using our parameter `ViewGroup container` for the LayoutParams without
-         * attaching to it. We initialize `View tv` by finding the view in `v` with id
-         * R.id.msg, then set its text to the string "The TextView saves and restores this text."
-         * We then find the view in `v` with id R.id.saved and call its `setSaveEnabled(true)`
-         * method to allow it to save its state. Finally we return `v` to the caller.
+         * Called to have the fragment instantiate its user interface view. We use our [LayoutInflater]
+         * parameter [inflater] to inflate our layout file R.layout.labeled_text_edit using our
+         * [ViewGroup] parameter [container] for its layout parameters without attaching to it, and
+         * return the inflated [View] to the caller.
          *
-         * @param inflater           The LayoutInflater object that can be used to inflate
-         * any views in the fragment,
-         * @param container          If non-null, this is the parent view that the fragment's
-         * UI should be attached to. The fragment should not add the view itself,
-         * but this can be used to generate the LayoutParams of the view.
+         * @param inflater The LayoutInflater object that can be used to inflate any views.
+         * @param container If non-null, this is the parent view that the fragment's UI will be
+         * attached to. The fragment should not add the view itself, but this can be used to generate
+         * the LayoutParams of the view.
          * @param savedInstanceState If non-null, this fragment is being re-constructed
          * from a previous saved state as given here.
          *
@@ -246,13 +242,18 @@ class FragmentHideShow : FragmentActivity() {
         }
 
         /**
-         * Called immediately after [.]
-         * has returned, but before any saved state has been restored in to the view.
-         * This gives subclasses a chance to initialize themselves once
-         * they know their view hierarchy has been completely created.  The fragment's
-         * view hierarchy is not however attached to its parent at this point.
+         * Called immediately after [onCreateView]  has returned, but before any saved state has been
+         * restored in to the view. This gives subclasses a chance to initialize themselves once they
+         * know their view hierarchy has been completely created. The fragment's view hierarchy is
+         * not however attached to its parent at this point.
          *
-         * @param view               The View returned by [.onCreateView].
+         * First we call our super's implementation of `onViewCreated`, then we initialize our [View]
+         * variable `val tv` by finding the view in our [View] parameter [view] with the ID R.id.msg
+         * and set its text to: "The fragment saves and restores this text." We then find the [View]
+         * in our [View] parameter [view] with the ID R.id.saved and set its `isSaveEnabled` attribute
+         * to *true* so that it will save and restore its state.
+         *
+         * @param view               The View returned by [onCreateView].
          * @param savedInstanceState If non-null, this fragment is being re-constructed
          */
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
