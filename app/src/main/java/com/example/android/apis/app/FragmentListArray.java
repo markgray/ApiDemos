@@ -16,17 +16,20 @@
 
 package com.example.android.apis.app;
 
-import com.example.android.apis.Shakespeare;
-
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.ListFragment;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.ListFragment;
+
+import com.example.android.apis.Shakespeare;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Demonstration of using ListFragment to show a list of items from a canned array.
@@ -40,7 +43,7 @@ import android.widget.ListView;
  * It overrides onListItemClick simply to log the id of the item clicked.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class FragmentListArray extends Activity {
+public class FragmentListArray extends FragmentActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * onCreate. Then we use the FragmentManager to see if there is not already a Fragment using the
@@ -57,9 +60,9 @@ public class FragmentListArray extends Activity {
         super.onCreate(savedInstanceState);
 
         // Create the list fragment and add it as our sole content.
-        if (getFragmentManager().findFragmentById(android.R.id.content) == null) {
+        if (getSupportFragmentManager().findFragmentById(android.R.id.content) == null) {
             ArrayListFragment list = new ArrayListFragment();
-            getFragmentManager().beginTransaction().add(android.R.id.content, list).commit();
+            getSupportFragmentManager().beginTransaction().add(android.R.id.content, list).commit();
         }
     }
 
@@ -82,6 +85,7 @@ public class FragmentListArray extends Activity {
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
+            //noinspection ConstantConditions
             setListAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, Shakespeare.INSTANCE.getTITLES()));
         }
 
@@ -95,7 +99,7 @@ public class FragmentListArray extends Activity {
          * @param id The row id of the item that was clicked
          */
         @Override
-        public void onListItemClick(ListView l, View v, int position, long id) {
+        public void onListItemClick(@NotNull ListView l, @NotNull View v, int position, long id) {
             Log.i("FragmentList", "Item clicked: " + id);
         }
     }
