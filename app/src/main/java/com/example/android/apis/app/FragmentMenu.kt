@@ -35,25 +35,29 @@ import com.example.android.apis.R
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentMenu : FragmentActivity() {
-    internal var mFragment1: Fragment? = null // MenuFragment instance for our app
-    internal var mFragment2: Fragment? = null // Menu2Fragment instance for our app
-    internal lateinit var mCheckBox1: CheckBox // CheckBox in layout used to show/hide mFragment1
-    internal lateinit var mCheckBox2: CheckBox // CheckBox in layout used to show/hide mFragment2
+    /**
+     * [MenuFragment] instance for our app
+     */
+    internal var mFragment1: Fragment? = null
+    /**
+     * [Menu2Fragment] instance for our app
+     */
+    internal var mFragment2: Fragment? = null
+    /**
+     * [CheckBox] in layout used to show/hide [mFragment1]
+     */
+    internal lateinit var mCheckBox1: CheckBox
+    /**
+     * [CheckBox] in layout used to show/hide [mFragment2]
+     */
+    internal lateinit var mCheckBox2: CheckBox
 
     // Update fragment visibility when check boxes are changed.
     /**
-     * This is used for both of the CheckBox's in our layout, We simply call our method
-     * **updateFragmentVisibility()** to update our menu given the new state of the two
-     * CheckBox's.
+     * This is used for both of the [CheckBox]'s in our layout, We simply call our method
+     * [updateFragmentVisibility] to update our menu given the new state of the two [CheckBox]'s.
      *
-     * Parameter: View of CheckBox which was clicked
-     */
-    /**
-     * This is used for both of the CheckBox's in our layout, We simply call our method
-     * **updateFragmentVisibility()** to update our menu given the new state of the two
-     * CheckBox's.
-     *
-     * Parameter: View of CheckBox which was clicked
+     * Parameter: View of [CheckBox] which was clicked
      */
     internal val mClickListener: OnClickListener = OnClickListener {
         updateFragmentVisibility()
@@ -61,34 +65,27 @@ class FragmentMenu : FragmentActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, then we set our content view to our layout file R.layout.fragment_menu.
-     *
-     *
-     * Next we get a handle to the FragmentManager for interacting with fragments associated with
-     * this activity **FragmentManager fm**. We then use **fm** to start a new series of
-     * FragmentTransaction's **FragmentTransaction ft**. We use **fm** to search for any
-     * Fragment's with the tag we use for our **MenuFragment** instance: "f1", be they currently
-     * currently attached to the Activity or on the back stack, in order to initialize our field
-     * **Fragment mFragment1**. If none is found we create a new instance of **MenuFragment**
-     * for **mFragment1** and use **ft** to add it to the Activity state with the tag "f1".
-     *
-     *
-     * Then we use **fm** to search for any Fragment's with the tag we use for our **Menu2Fragment**
+     * `onCreate`, then we set our content view to our layout file R.layout.fragment_menu.
+     * Next we get a handle to the support `FragmentManager` for interacting with fragments
+     * associated with this activity to initialize our variable `val fm`. We then use `fm` to begin
+     * a new series of `FragmentTransaction`'s to initialize our variable `val ft`. We use `fm` to
+     * search for any `Fragment`'s with the tag we use for our `MenuFragment` instance: "f1", be
+     * they currently attached to the Activity or on the back stack, in order to initialize our field
+     * `Fragment` field [mFragment1]. If none is found we create a new instance of [MenuFragment]
+     * for [mFragment1] and use `ft` to add it to the Activity state with the tag "f1".
+     * Then we use `fm` to search for any [Fragment]'s with the tag we use for our [Menu2Fragment]
      * instance: "f2", be they currently currently attached to the Activity or on the back stack, in
-     * order to initialize our field **Fragment mFragment2**. If none is found we create a new
-     * instance of **Menu2Fragment** for **mFragment2** and use **ft** to add it to the
-     * Activity state with the tag "f2". We then schedule a commit for **FragmentTransaction ft**.
+     * order to initialize our [Fragment] field [mFragment2]. If none is found we create a new
+     * instance of [Menu2Fragment] for [mFragment2] and use `ft` to add it to the Activity state
+     * with the tag "f2". We then schedule a commit for `FragmentTransaction ft`.
      *
-     *
-     * We initialize our field **CheckBox mCheckBox1** by searching for the CheckBox in our layout
-     * with id R.id.menu1, and set its OnClickListener to **OnClickListener mClickListener**. We
-     * initialize our field **CheckBox mCheckBox2** by searching for the CheckBox in our layout
-     * with id R.id.menu2, and set its OnClickListener to **OnClickListener mClickListener**.
-     * **mClickListener** updates the visibility of the two menu Fragment's whenever either
-     * CheckBox changes state by calling our method **updateFragmentVisibility()**.
-     *
-     *
-     * Finally we call our method **updateFragmentVisibility()** ourselves in order to make sure
+     * We initialize our [CheckBox] field [mCheckBox1] by searching for the [CheckBox] in our layout
+     * with id R.id.menu1, and set its `OnClickListener` to our field [mClickListener]. We
+     * initialize our [CheckBox] field [mCheckBox2] by searching for the [CheckBox] in our layout
+     * with id R.id.menu2, and set its `OnClickListener` to our field [mClickListener]
+     * ([mClickListener] updates the visibility of the two menu [Fragment]'s whenever either
+     * [CheckBox] changes state by calling our method [updateFragmentVisibility]).
+     * Finally we call our method [updateFragmentVisibility] ourselves in order to make sure
      * that our fragments start out with correct visibility.
      *
      * @param savedInstanceState we do not override onSaveInstanceState so do not use
@@ -123,26 +120,24 @@ class FragmentMenu : FragmentActivity() {
     }
 
     /**
-     * This method is called after [.onStart] when the activity is
+     * This method is called after [onStart] when the activity is
      * being re-initialized from a previously saved state, given here in
-     * <var>savedInstanceState</var>.  Most implementations will simply use [.onCreate]
+     * [savedInstanceState]. Most implementations will simply use [onCreate]
      * to restore their state, but it is sometimes convenient to do it here
      * after all of the initialization has been done or to allow subclasses to
-     * decide whether to use your default implementation.  The default
+     * decide whether to use your default implementation. The default
      * implementation of this method performs a restore of any view state that
-     * had previously been frozen by [.onSaveInstanceState].
+     * had previously been frozen by [onSaveInstanceState].
+     * This method is called between [onStart] and [onPostCreate].
      *
+     * First we call through to our super's implementation of `onRestoreInstanceState`, and then we
+     * call our method [updateFragmentVisibility] to make sure our menu fragments are updated
+     * after the [CheckBox]'s View state has been restored by our super. Note: this causes
+     * [updateFragmentVisibility] to be called twice after a device rotation, once in [onCreate]
+     * and once here but that is necessary because the state of the [CheckBox]'s is not restored
+     * yet when [onCreate] calls [updateFragmentVisibility].
      *
-     * This method is called between [.onStart] and [.onPostCreate].
-     *
-     *
-     * First we call through to our super's implementation of onRestoreInstanceState, and then we
-     * call our method **updateFragmentVisibility()** to make sure our menu fragments are updated
-     * after CheckBox View state is restored by our super. Note: this causes updateFragmentVisibility
-     * to be called twice after a device rotation, once in onCreate and once here but that is necessary
-     * because the state of the CheckBox's is not restored yet when onCreate calls updateFragmentVisibility.
-     *
-     * @param savedInstanceState we do not override onSaveInstanceState so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
