@@ -45,9 +45,7 @@ import androidx.fragment.app.FragmentActivity
  * landscape. It crashes as it was in landscape mode because of a reference
  * to the non-existent containerViewId R.id.a_item in the call at line 156:
  *
- *
  * (FragmentTransaction) ft.replace(R.id.a_item, details)
- *
  *
  * This was obviously added by a runaway modification script, and the container
  * id should be R.id.details
@@ -57,8 +55,8 @@ class FragmentLayout : FragmentActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, then we set our content view to our layout file R.layout.fragment_layout which is
-     * either layout-land/fragment_layout.xml or layout/fragment_layout depending on orientation.
+     * `onCreate`, then we set our content view to our layout file R.layout.fragment_layout which is
+     * either layout-land/fragment_layout.xml or layout/fragment_layout.xml depending on orientation.
      *
      * @param savedInstanceState we do not use
      */
@@ -75,19 +73,20 @@ class FragmentLayout : FragmentActivity() {
 
         /**
          * Called when the activity is starting. First we call through to our super's implementation
-         * of onCreate. Then using a Resources instance for the application's package we get the
+         * of `onCreate`. Then using a `Resources` instance for the application's package we get the
          * current configuration that is in effect for this resource object and check whether the
-         * orientation of the screen given by the field Configuration.orientation is currently set
+         * orientation of the screen given by the field [Configuration.orientation] is currently set
          * to Configuration.ORIENTATION_LANDSCAPE in which case this Activity is not needed since
          * a dual pane version is in use, so we finish this Activity and return to caller. Otherwise
          * we are in Configuration.ORIENTATION_PORTRAIT and are needed. If we are being recreated
-         * **savedInstanceState** is not null and the system will have taken care of restoring our
-         * Fragment so we are done. If it is null this is the first time and we need to add a new
-         * instance of our Fragment. To do this we first create a new instance of the Fragment
-         * **DetailsFragment details**, set its arguments to a map of the extras added to the
-         * Intent which launched this Activity, and finally using the FragmentManager for interacting
-         * with fragments associated with this activity we create a FragmentTransaction, use it to
-         * add **details** to the activity state, and then commit that FragmentTransaction.
+         * [savedInstanceState] is not *null* and the system will have taken care of restoring our
+         * [Fragment] so we are done. If it is *null* this is the first time and we need to add a new
+         * instance of our [Fragment]. To do this we first create a new instance of [DetailsFragment]
+         * to initialize our variable `var details`, set its arguments to a map of the extended data
+         * added to the [Intent] which launched this Activity, and finally using the support
+         * `FragmentManager` for interacting with fragments associated with this activity we begin
+         * a [FragmentTransaction], use it to add `details` to the activity state, and then commit
+         * that [FragmentTransaction].
          *
          * @param savedInstanceState if null, first time initializations are needed
          */
@@ -117,26 +116,32 @@ class FragmentLayout : FragmentActivity() {
      */
     @Suppress("MemberVisibilityCanBePrivate")
     class TitlesFragment : ListFragment() {
-        internal var mDualPane: Boolean = false // Flag to indicate whether we are in ORIENTATION_LANDSCAPE dual pane mode
-        internal var mCurCheckPosition = 0 // Currently selected title to be displayed
+        /**
+         * Flag to indicate whether we are in ORIENTATION_LANDSCAPE dual pane mode
+         */
+        internal var mDualPane: Boolean = false
+        /**
+         * Currently selected title to be displayed
+         */
+        internal var mCurCheckPosition = 0
 
         /**
          * Called when the fragment's activity has been created and this fragment's view hierarchy
-         * instantiated. First we call through to our super's implementation of onActivityCreated.
-         * Next we set the cursor for the list view of this ListFragment to an **ArrayAdapter**
-         * consisting of the String[] array Shakespeare.TITLES. Then we determine whether we are
+         * instantiated. First we call through to our super's implementation of `onActivityCreated`.
+         * Next we set the cursor for the list view of this [ListFragment] to an [ArrayAdapter]
+         * consisting of the `String[]` array [Shakespeare.TITLES]. Then we determine whether we are
          * in ORIENTATION_LANDSCAPE (dual pane mode) by searching our Activity's content view for
-         * a view with the id R.id.details, saving a reference to it in **View detailsFrame**.
-         * If **detailsFrame** is not null and the View is VISIBLE we set our field **mDualPane**
-         * to true. If **savedInstanceState** is not null we use it to retrieve the value of our
-         * field mCurCheckPosition which our callback onSaveInstanceState saved under the key
-         * "curChoice". If we have determined that we are in dual pane mode (ORIENTATION_LANDSCAPE)
-         * we set the choice mode for our ListView to CHOICE_MODE_SINGLE so that the currently
-         * selected item is highlighted, and then call our method **showDetails(mCurCheckPosition)**
-         * to display the details of the selected item in the other pane.
+         * a view with the id R.id.details, saving a reference to it in our [View] variable
+         * `val detailsFrame`. If `detailsFrame` is not *null* and the View is VISIBLE we set our
+         * [Boolean] field [mDualPane] to *true*. If [savedInstanceState] is not *null* we use it to
+         * retrieve the value of our field [mCurCheckPosition] which our callback [onSaveInstanceState]
+         * saved under the key "curChoice". If we have determined that we are in dual pane mode
+         * (ORIENTATION_LANDSCAPE) we set the choice mode for our [ListView] to CHOICE_MODE_SINGLE
+         * so that the currently selected item is highlighted, and then call our method [showDetails]
+         * with [mCurCheckPosition] to display the details of this selected item in the other pane.
          *
-         * @param savedInstanceState If not null it contains mCurCheckPosition saved by our callback
-         * onSaveInstanceState under the key "curChoice"
+         * @param savedInstanceState If not *null* it contains [mCurCheckPosition] saved by our
+         * callback [onSaveInstanceState] under the key "curChoice"
          */
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
@@ -166,28 +171,22 @@ class FragmentLayout : FragmentActivity() {
 
         /**
          * Called to ask the fragment to save its current dynamic state, so it
-         * can later be reconstructed in a new instance of its process is
+         * can later be reconstructed in a new instance of its process when
          * restarted.  If a new instance of the fragment later needs to be
          * created, the data you place in the Bundle here will be available
-         * in the Bundle given to [.onCreate],
-         * [.onCreateView], and
-         * [.onActivityCreated].
+         * in the Bundle given to [onCreate], [onCreateView], and [onActivityCreated].
          *
-         *
-         *
-         * This corresponds to `onSaveInstanceState(Bundle)` and most of the discussion
-         * there applies here as well.  Note however: *this method may be called
-         * at any time before [.onDestroy]*.  There are many situations
-         * where a fragment may be mostly torn down (such as when placed on the
-         * back stack with no UI showing), but its state will not be saved until
+         * This corresponds to [FragmentActivity.onSaveInstanceState] and most of the discussion
+         * there applies here as well.  Note however: this method may be called at any time before
+         * [onDestroy]. There are many situations where a fragment may be mostly torn down (such as
+         * when placed on the back stack with no UI showing), but its state will not be saved until
          * its owning activity actually needs to save its state.
          *
+         * First we call through to our super's implementation of `onSaveInstanceState`, then we
+         * insert the value of our [Int] field [mCurCheckPosition] into the mapping of the [Bundle]
+         * parameter [outState] under the key "curChoice".
          *
-         * First we call through to our super's implementation of onSaveInstanceState, then we
-         * insert the value of our field **int mCurCheckPosition** into the mapping of the
-         * **Bundle outState** parameter under the key "curChoice".
-         *
-         * @param outState Bundle in which to place your saved state.
+         * @param outState [Bundle] in which to place your saved state.
          */
         override fun onSaveInstanceState(outState: Bundle) {
             super.onSaveInstanceState(outState)
@@ -196,10 +195,10 @@ class FragmentLayout : FragmentActivity() {
 
         /**
          * This method will be called when an item in the list is selected. We simply call our method
-         * **showDetails** using the position of the view in the list that was selected as the
-         * index to the String[] Shakespeare.DIALOGUE array we wish to have displayed.
+         * [showDetails] using the position of the view in the list that was selected as the
+         * index to the `String[]` array [Shakespeare.DIALOGUE] we wish to have displayed.
          *
-         * @param l        The ListView where the click happened
+         * @param l        The [ListView] where the click happened
          * @param v        The view that was clicked within the ListView
          * @param position The position of the view in the list
          * @param id       The row id of the item that was clicked
@@ -213,24 +212,25 @@ class FragmentLayout : FragmentActivity() {
          * in-place in the current UI if we are in dual pane landscape mode, or starting a whole
          * new activity in which it is displayed for portrait mode.
          *
-         *
-         * First we save our parameter **int index** in our field **int mCurCheckPosition**.
-         * Then if we are in dual pane mode (**boolean mDualPane** is true: device is using
+         * First we save our [Int] parameter [index] in our [Int] field [mCurCheckPosition].
+         * Then if we are in dual pane mode ([mDualPane] is true: device is using the layout file
          * layout-land/fragment_layout.xml) we set the checked state of the specified position
-         * **index**, then we use the FragmentManager to search for a fragment with the id
-         * R.id.details (the id we use when adding DetailFragment), and if no Fragment with that id
-         * is found, or the method DetailsFragment.getShownIndex() returns an index different from
-         * the one just selected we need to add a DetailsFragment for the new **index**. To do
-         * this we first create a new instance of DetailsFragment with the new index into the
-         * String[] Shakespeare.DIALOGUE array, use the FragmentManager for interacting with
-         * fragments associated with this fragment's activity to begin **FragmentTransaction ft**
-         * then use **ft** to replace the existing fragment with id R.id.details (if any) with
-         * our new **DetailsFragment details**, set a transition animation of TRANSIT_FRAGMENT_FADE,
-         * and finally commit the FragmentTransaction. If we are not in dual pane mode (i.e.
-         * **boolean mDualPane** is false: device is using layout/fragment_layout.xml) we create
-         * an **Intent intent**, set its class to DetailsActivity.class, add extended data for the
-         * parameter **int index** under the key "index" to the intent, and start that Intent as
-         * a new Activity.
+         * [index], then we use the support `FragmentManager` to search for a fragment with the id
+         * R.id.details (the id we use when adding a [DetailsFragment]) and use the value returned
+         * to initialize our [DetailsFragment] variable `var details`, and if no Fragment with that
+         * id is found, or the `getShownIndex` method of `details` returns an index different from
+         * the one just selected we need to add a [DetailsFragment] for the new [index]. To do
+         * this we first create a new instance of [DetailsFragment] with the new [index] into the
+         * `String[]` array [Shakespeare.DIALOGUE] and save the reference in `details`, use the
+         * support `FragmentManager` for interacting with fragments associated with this fragment's
+         * activity to begin a [FragmentTransaction] to initialize our variable `val ft`, then use
+         * `ft` to replace the existing fragment with id R.id.details (if any) with
+         * our new `details` [DetailsFragment], set a transition animation of TRANSIT_FRAGMENT_FADE,
+         * and finally commit the [FragmentTransaction]. If we are not in dual pane mode (i.e.
+         * [mDualPane] is false: device is using layout/fragment_layout.xml) we create an [Intent]
+         * to initialize our variable `var intent`, set its class to [DetailsActivity.class], add
+         * extended data for the parameter [index] under the key "index" to the intent, and start
+         * that Intent as a new Activity.
          *
          * @param index index into the String[] Shakespeare.DIALOGUE we wish to have displayed
          */
@@ -280,7 +280,7 @@ class FragmentLayout : FragmentActivity() {
     class DetailsFragment : Fragment() {
 
         /**
-         * Return the **int** argument supplied to setArguments(Bundle), (if any) which were
+         * Return the [Int] argument supplied to `setArguments(Bundle)`, (if any) which were
          * stored under the key "index".
          *
          * @return integer argument which was stored under the key "index" or 0
@@ -292,11 +292,11 @@ class FragmentLayout : FragmentActivity() {
          * Called to have the fragment instantiate its user interface view. First we check to see if
          * we have a containing frame, and if we do not it means we do not need to inflate our View
          * because in the present layout (portrait orientation) we would not be displayed, so we just
-         * return null to the caller. Otherwise we create a **ScrollView scroller**, create a
-         * **TextView text** to place inside **scroller**, configure the padding of **text**,
-         * add the **TextView text** to **ScrollView scroller**, set the text of **text** to
-         * the element of the **String[] Shakespeare.DIALOGUE** selected by our arguments when we
-         * were created, and finally we return **ScrollView scroller** to the caller.
+         * return *null* to the caller. Otherwise we create a [ScrollView] instance to initialize our
+         * variable `val scroller`, create a [TextView] to initialize our variable `val text`,
+         * configure the padding of `text`, add `text` to `scroller`, set the text of `text` to
+         * the element of the `String[]` array [Shakespeare.DIALOGUE] selected by our arguments when
+         * we were created, and finally we return `scroller` to the caller.
          *
          * @param inflater The LayoutInflater object that can be used to inflate
          * any views in the fragment,
@@ -331,17 +331,21 @@ class FragmentLayout : FragmentActivity() {
             return scroller
         }
 
+        /**
+         * Our static factory method.
+         */
         companion object {
             /**
-             * Create a new instance of DetailsFragment, initialized to show the text at 'index'. First
-             * we create a new instance of **DetailsFragment f**, then we create a **Bundle args**
-             * and add our parameter **int index** to it using the key "index". We set the arguments
-             * of **f** to **args** and return **f** to the caller.
+             * Create a new instance of [DetailsFragment], initialized to show the text at [index].
+             * First we create a new instance of [DetailsFragment] to initialize our variable `val f`,
+             * then we create a [Bundle] to initialize our variable `val args` and add our parameter
+             * [index] to it under the key "index". We set the arguments of `f` to `args` and return
+             * `f` to the caller.
              *
-             * @param index index into the String[] Shakespeare.DIALOGUE array to display
+             * @param index index into the `String[]` array [Shakespeare.DIALOGUE] to display
              *
-             * @return a new instance of DetailsFragment with its arguments set to include the value of
-             * **int index** stored under the key "index".
+             * @return a new instance of [DetailsFragment] with its arguments set to include the
+             * value of [index] stored under the key "index".
              */
             fun newInstance(index: Int): DetailsFragment {
                 val f = DetailsFragment()
