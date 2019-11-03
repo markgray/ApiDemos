@@ -19,9 +19,6 @@ package com.example.android.apis.app;
 import com.example.android.apis.R;
 
 import android.annotation.TargetApi;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,9 +27,14 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 /**
  * Demonstrates how fragments can participate in the options menu.
  */
+@SuppressWarnings({"WeakerAccess", "unused"}) // it is used by FragmentNestingTabs
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentMenuFragment extends Fragment {
     Fragment mFragment1;
@@ -69,9 +71,9 @@ public class FragmentMenuFragment extends Fragment {
         ft.commit();
         
         // Watch check box clicks.
-        mCheckBox1 = (CheckBox)v.findViewById(R.id.menu1);
+        mCheckBox1 = v.findViewById(R.id.menu1);
         mCheckBox1.setOnClickListener(mClickListener);
-        mCheckBox2 = (CheckBox)v.findViewById(R.id.menu2);
+        mCheckBox2 = v.findViewById(R.id.menu2);
         mCheckBox2.setOnClickListener(mClickListener);
         
         // Make sure fragments start out with correct visibility.

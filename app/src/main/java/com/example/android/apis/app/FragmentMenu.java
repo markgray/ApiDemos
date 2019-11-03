@@ -16,30 +16,31 @@
 
 package com.example.android.apis.app;
 
-import com.example.android.apis.R;
-
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.example.android.apis.R;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Demonstrates how fragments can participate in the options menu. Builds menus from two fragments,
  * allowing you to hide them to remove them.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class FragmentMenu extends Activity {
+public class FragmentMenu extends FragmentActivity {
     Fragment mFragment1; // MenuFragment instance for our app
     Fragment mFragment2; // Menu2Fragment instance for our app
     CheckBox mCheckBox1; // CheckBox in layout used to show/hide mFragment1
@@ -96,7 +97,7 @@ public class FragmentMenu extends Activity {
         setContentView(R.layout.fragment_menu);
 
         // Make sure the two menu fragments are created.
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         mFragment1 = fm.findFragmentByTag("f1");
         if (mFragment1 == null) {
@@ -111,9 +112,9 @@ public class FragmentMenu extends Activity {
         ft.commit();
 
         // Watch check box clicks.
-        mCheckBox1 = (CheckBox) findViewById(R.id.menu1);
+        mCheckBox1 = findViewById(R.id.menu1);
         mCheckBox1.setOnClickListener(mClickListener);
-        mCheckBox2 = (CheckBox) findViewById(R.id.menu2);
+        mCheckBox2 = findViewById(R.id.menu2);
         mCheckBox2.setOnClickListener(mClickListener);
 
         // Make sure fragments start out with correct visibility.
@@ -141,7 +142,7 @@ public class FragmentMenu extends Activity {
      * @param savedInstanceState we do not override onSaveInstanceState so do not use.
      */
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NotNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         // Make sure fragments are updated after check box view state is restored.
         updateFragmentVisibility();
@@ -157,7 +158,7 @@ public class FragmentMenu extends Activity {
      * to be committed.
      */
     void updateFragmentVisibility() {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (mCheckBox1.isChecked()) {
             ft.show(mFragment1);
         } else {
@@ -180,8 +181,8 @@ public class FragmentMenu extends Activity {
 
         /**
          * Called to do initial creation of a fragment.  This is called after
-         * {@link #onAttach(Activity)} and before
-         * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+         * {@code onAttach(Activity)} and before
+         * {@code onCreateView(LayoutInflater, ViewGroup, Bundle)}.
          * <p>
          *  Note that this can be called while the fragment's activity is
          * still in the process of being created.  As such, you can not rely
@@ -214,7 +215,7 @@ public class FragmentMenu extends Activity {
          * @param inflater could be used to instantiate menu XML files into Menu objects.
          */
         @Override
-        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        public void onCreateOptionsMenu(Menu menu, @NotNull MenuInflater inflater) {
             menu.add("Menu 1a").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
             menu.add("Menu 1b").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         }
@@ -227,8 +228,8 @@ public class FragmentMenu extends Activity {
 
         /**
          * Called to do initial creation of a fragment.  This is called after
-         * {@link #onAttach(Activity)} and before
-         * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+         * {@code onAttach(Activity)} and before
+         * {@code onCreateView(LayoutInflater, ViewGroup, Bundle)}.
          * <p>
          *  Note that this can be called while the fragment's activity is
          * still in the process of being created.  As such, you can not rely
@@ -260,7 +261,7 @@ public class FragmentMenu extends Activity {
          * @param inflater could be used to instantiate menu XML files into Menu objects.
          */
         @Override
-        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        public void onCreateOptionsMenu(Menu menu, @NotNull MenuInflater inflater) {
             menu.add("Menu 2").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         }
     }
