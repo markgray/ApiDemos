@@ -40,12 +40,14 @@ import com.example.android.apis.Shakespeare
 class FragmentListArray : FragmentActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate. Then we use the FragmentManager to see if there is not already a Fragment using the
-     * id we use (android.R.id.content), and if there is, we do nothing. If there is not (findFragmentById
-     * returns null) it is the first time we are being created so we need to create a new instance
-     * of **ArrayListFragment list** and then use the FragmentManager used for interacting with
-     * fragments associated with this activity to begin a new **FragmentTransaction** which we
-     * use to add **list** to the Activity state. We then commit the **FragmentTransaction**.
+     * `onCreate`. Then we use the support `FragmentManager` to see if there is not already a
+     * `Fragment` using the id we use (android.R.id.content), and if there is, we do nothing. If
+     * there is not (`findFragmentById` returns null) it is the first time we are being created so
+     * we need to create a new instance of [ArrayListFragment] to initialize our variable `val list`
+     * and then use the `FragmentManager`] used for interacting with fragments associated with this
+     * activity to begin a new `FragmentTransaction` which we use to add `list` to the Activity state
+     * as the contents of the container with ID android.R.id.content (the root element of our content
+     * view). We then commit the `FragmentTransaction`.
      *
      * @param savedInstanceState we do not override onSaveInstanceState so do not use this
      */
@@ -60,33 +62,37 @@ class FragmentListArray : FragmentActivity() {
     }
 
     /**
-     * This ListFragment uses **String[] Shakespeare.TITLES** as the contents of its List, and
-     * Log's the **long id** of any item that is clicked.
+     * This [ListFragment] uses the `String[]` array [Shakespeare.TITLES] as the contents of its
+     * List, and Log's the ID of any item that is clicked.
      */
     class ArrayListFragment : ListFragment() {
 
         /**
          * Called when the fragment's activity has been created and this fragment's view hierarchy
-         * instantiated. First we call through to our super's implementation of onActivityCreated.
-         * Then we set the cursor for our list view to an instance of **ArrayAdapter<String></String>**
-         * which uses the system layout file android.R.layout.simple_list_item_1 (a **TextView**
-         * with the id "@android:id/text1" as the per item layout and **String[] Shakespeare.TITLES**
-         * as the Object's with which to populate the List.
+         * instantiated. First we call through to our super's implementation of `onActivityCreated`.
+         * Then we set the cursor for our list view to an instance of `ArrayAdapter<String>`
+         * which uses the system layout file android.R.layout.simple_list_item_1 (a `TextView`
+         * with the id "@android:id/text1" as the per item layout) and [Shakespeare.TITLES] as the
+         * Object's with which to populate the List.
          *
          * @param savedInstanceState we do not override onSaveInstanceState so do not use
          */
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
 
-            listAdapter = ArrayAdapter(activity!!, android.R.layout.simple_list_item_1, Shakespeare.TITLES)
+            listAdapter = ArrayAdapter(
+                    activity!!,
+                    android.R.layout.simple_list_item_1,
+                    Shakespeare.TITLES
+            )
         }
 
         /**
          * This method will be called when an item in the list is selected. We simply write the id
          * that was clicked to the Log.
          *
-         * @param l The ListView where the click happened
-         * @param v The view that was clicked within the ListView
+         * @param l The [ListView] where the click happened
+         * @param v The view that was clicked within the [ListView]
          * @param position The position of the view in the list
          * @param id The row id of the item that was clicked
          */
