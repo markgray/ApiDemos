@@ -749,6 +749,8 @@ App
 
     App/Fragment/Layout                    v11
         .app.FragmentLayout                CRASHES both Xcite and Nexus 7 (fixed)
+        .layout-land/fragment_layout.xml
+        .layout/fragment_layout.xml
             Demonstration of using fragments to implement different activity layouts.
             This sample provides a different layout (and activity flow) when run in
             landscape. It crashes as is in landscape mode because of a reference to the
@@ -769,6 +771,7 @@ App
 
     App/Fragment/Menu                      v11
         .app.FragmentMenu
+        .layout.fragment_menu.xml
             Builds menus from two fragments, allowing you to hide them to remove them.
 
     App/Fragment/Nesting Tabs              v17
@@ -781,6 +784,8 @@ App
 
     App/Fragment/Receive Result            v11
         .app.FragmentReceiveResult
+        .app.SendResult
+        .layout.receive_result.xml
             FragmentReceiveResult builds a FrameLayout in java -- no xml layout. To this it adds
             the Fragment ReceiveResultFragment which uses the layout R.layout.receive_result. Then
             it starts the activity SendResult (startActivityForResult) which returns the

@@ -35,33 +35,35 @@ import androidx.fragment.app.FragmentActivity
 import com.example.android.apis.R
 
 /**
- * FragmentReceiveResult builds a FrameLayout in java -- no xml layout. To this it adds
- * the Fragment ReceiveResultFragment which uses the layout R.layout.receive_result. Then
- * it starts the activity SendResult (startActivityForResult) which returns the users
- * input in an intent setResult(RESULT_OK, (new Intent()).setAction("Corky!")) which
- * FragmentReceiveResult receives in the callback onActivityResult and then appends
- * it to the Editable TextView id R.id.results contained in the layout R.layout.receive_result.
+ * [FragmentReceiveResult] builds a [FrameLayout] in java -- no xml layout. To this it adds
+ * a [ReceiveResultFragment] fragment which uses the layout R.layout.receive_result. Then
+ * it starts the activity [SendResult] using the method [startActivityForResult] which returns
+ * the users input in an intent passed to the [setResult] method which [FragmentReceiveResult]
+ * receives in the callback [onActivityResult] and then appends it to the Editable [TextView]
+ * with the ID R.id.results contained in the layout R.layout.receive_result.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentReceiveResult : FragmentActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate. We then create a **FrameLayout.LayoutParams lp** with both width and height set
-     * to MATCH_PARENT. We create a **FrameLayout frame**, set its id to R.id.simple_fragment,
-     * and then set our content view to **frame** using **lp** for the Layout parameters.
-     * If our parameter **Bundle savedInstanceState** is null this is the first time we are being
-     * created so we create and instance of **ReceiveResultFragment**: **Fragment newFragment**,
-     * begin a **FragmentTransaction ft**, which we use to add **newFragment** to the view with
-     * id R.id.simple_fragment (the id we have given to our FrameLayout programmatically), and then
-     * we commit the **FragmentTransaction**. If **savedInstanceState** is not null then we are
-     * being recreated after an orientation change and the framework will take care of restoring the
-     * Fragment contained in our content view because its view has an id, but that Fragment will need
-     * to do something about restoring its own view using onSaveInstanceState
+     * `onCreate`. We then create a [FrameLayout.LayoutParams] to initialize our variable `val lp`
+     * with both width and height set to MATCH_PARENT. We create a [FrameLayout] to initialize our
+     * variable `val frame`, set its id to R.id.simple_fragment, and then set our content view to
+     * `frame` using `lp` for the Layout parameters. If our [Bundle] parameter [savedInstanceState]
+     * is *null* this is the first time we are being created so we create an instance of
+     * [ReceiveResultFragment] to initialize our variable `val newFragment`, and use the support
+     * `FragmentManager` to begin a `FragmentTransaction` to initialize our variable `val ft`, which
+     * we use to add `newFragment` to the view with the ID R.id.simple_fragment (the ID we have
+     * given to our [FrameLayout] programmatically), and then we commit `ft`. If [savedInstanceState]
+     * is not *null* then we are being recreated after an orientation change and the framework will
+     * will have taken care of restoring the Fragment contained in our content view because its view
+     * has an ID, but that Fragment will need to do something about restoring its own view using
+     * its override of `onSaveInstanceState`.
      *
      * @param savedInstanceState If the activity is being re-initialized after previously being shut
-     * down then this Bundle contains the data it most recently supplied
-     * in [.onSaveInstanceState].  ***Note: Otherwise it is null.***
+     * down then this Bundle contains the data it most recently supplied in [onSaveInstanceState].
+     * The framework also saves state in [savedInstanceState] for fragments.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,18 +85,24 @@ class FragmentReceiveResult : FragmentActivity() {
     }
 
     /**
-     * Fragment that launches the SendResult Activity using startActivityForResult, then retrieves and
-     * displays the results returned by SendResult
+     * [Fragment] that launches the [SendResult] Activity using [startActivityForResult], then
+     * retrieves and displays the results returned by [SendResult]
      */
     class ReceiveResultFragment : Fragment() {
-        private var mResults: TextView? = null // TextView we use to write results to (R.id.results)
-        private var mLastString: String? = "" // String saved and restored
+        /**
+         * [TextView] we use to write results to (R.id.results)
+         */
+        private var mResults: TextView? = null
+        /**
+         * [String] saved and restored
+         */
+        private var mLastString: String? = ""
 
         /**
-         * OnClickListener used for the Button R.id.get, launches the SendResult Activity for a
-         * result. We create an **Intent intent** designed to start the Activity SendResult, then
-         * call `startActivityForResult(Intent, int)` from the fragment's containing Activity using
-         * the request code GET_CODE.
+         * [OnClickListener] used for the Button R.id.get, launches the [SendResult] Activity for a
+         * result. We create an [Intent] to initialize our variable `val intent` designed to start
+         * the Activity [SendResult], then call `startActivityForResult(Intent, int)` from the
+         * fragment's containing Activity using the request code GET_CODE.
          *
          * Parameter: View of the Button that was clicked.
          */
@@ -106,9 +114,10 @@ class FragmentReceiveResult : FragmentActivity() {
         }
 
         /**
-         * Called to do initial creation of a fragment. First we call through to our super's implementation
-         * of onCreate, and then if our parameter **Bundle savedInstanceState** is not null we retrieve
-         * the value of **String mLastString** that our onSaveInstanceState saved under the key "savedText"
+         * Called to do initial creation of a fragment. First we call through to our super's
+         * implementation of `onCreate`, and then if our [Bundle] parameter [savedInstanceState]
+         * is not *null* we retrieve the value of our [String] field [mLastString] that our
+         * [onSaveInstanceState] override saved in it under the key "savedText"
          *
          * @param savedInstanceState if not null we are being recreated after an orientation change
          * so we retrieve the value of **String mLastString** that our
@@ -124,17 +133,14 @@ class FragmentReceiveResult : FragmentActivity() {
         /**
          * Called to ask the fragment to save its current dynamic state, so it
          * can later be reconstructed in a new instance of its process is
-         * restarted.  If a new instance of the fragment later needs to be
+         * restarted. If a new instance of the fragment later needs to be
          * created, the data you place in the Bundle here will be available
-         * in the Bundle given to [.onCreate],
-         * [.onCreateView], and
-         * [.onActivityCreated].
+         * in the Bundle given to [onCreate], [onCreateView], and [onActivityCreated].
          *
-         *
-         * First we call through to our super's implementation of onSaveInstanceState, then we retrieve
-         * the text currently being displayed in our output **TextView mResults** to our field
-         * **String mLastString** and then we insert this String value into the mapping of  the
-         * **Bundle outState**.
+         * First we call through to our super's implementation of `onSaveInstanceState`, then we
+         * retrieve the text currently being displayed in our output [TextView] field [mResults]
+         * to reinitialize our [String] field [mLastString] and then we insert this [String] value
+         * into the mapping of our [Bundle] parameter [outState] under the key "savedText"
          *
          * @param outState Bundle in which to place your saved state.
          */
@@ -146,20 +152,20 @@ class FragmentReceiveResult : FragmentActivity() {
 
         /**
          * Called to have the fragment instantiate its user interface view. First we inflate our
-         * layout file R.layout.receive_result into **View v**. Then we initialize our field
-         * **TextView mResults** to the TextView in our layout with the id R.id.results, and we
-         * set the text of this TextView to our field **String mLastString** with the BufferType
-         * EDITABLE so that we can extend the contents later. Next we locate **Button getButton**
-         * with id R.id.get and set its OnClickListener to our field **OnClickListener mGetListener**.
-         * Finally we return our inflated layout **View v**.
+         * layout file R.layout.receive_result into our [View] variable `val v`. Then we initialize
+         * our [TextView] field [mResults] to the [TextView] in our layout with the ID R.id.results,
+         * and we set the text of this [TextView] to our [String] field [mLastString] with the
+         * [TextView.BufferType] specified to be [TextView.BufferType.EDITABLE] so that we can
+         * extend the contents later. Next we locate the [Button] with id R.id.get to initialize
+         * our variable `val getButton` and set its [OnClickListener] to our [OnClickListener] field
+         * [mGetListener]. Finally we return our inflated layout contained in `v`.
          *
-         * @param inflater           The LayoutInflater object that can be used to inflate
-         * any views in the fragment,
-         * @param container          If non-null, this is the parent view that the fragment's
-         * UI should be attached to.  The fragment should not add the view itself,
-         * but this can be used to generate the LayoutParams of the view.
+         * @param inflater The [LayoutInflater] object that can be used to inflate any views
+         * @param container If non-null, this is the parent view that the fragment's UI will be
+         * attached to. The fragment should not add the view itself, but this can be used to
+         * generate the `LayoutParams` of the view.
          * @param savedInstanceState We do not use in this method.
-         * @return Return the View for the fragment's UI, or null.
+         * @return the [View] for the fragment's UI.
          */
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
             val v = inflater.inflate(R.layout.receive_result, container, false)
@@ -178,22 +184,22 @@ class FragmentReceiveResult : FragmentActivity() {
         }
 
         /**
-         * This method is called when the sending activity has finished, with the
-         * result it supplied. First we check to see if the result is for the request
-         * we sent (requestCode == GET_CODE), and if not we do nothing. (This is merely
+         * This method is called when the sending activity has finished, with the result it
+         * supplied. First we check to see if the result is for the request we sent (our
+         * [requestCode] parameter is GET_CODE), and if not we do nothing. (This is merely
          * a formality which is only necessary when an Activity makes multiple kinds of
-         * requests.) If it is the result from a GET_CODE request, we retrieve an Editable
-         * reference to the current text in our results **TextView mResults**. If the
-         * resultCode == RESULT_CANCELED (the back button was pressed instead of an "answer"
-         * Button), we append the String "(cancelled)" to the text being displayed, otherwise
-         * we append the String "(okay " followed by the value of **resultCode**, followed
-         * by ") ", followed by the value that the **SendResult** Activity returned as the
-         * action of the result using Intent.setAction(String) (with the String being either
-         * "Corky!" or "Violet!" depending on the Button pressed by the user. (We are careful
-         * to check whether the **Intent data** returned to us is not null before calling
-         * **getAction** on it, but only an unforeseen bug would cause it to be null in our
-         * case.) Finally we append a newline to the end of **text** for both cases of
-         * **resultCode** we consider.
+         * requests.) If it is the result from a GET_CODE request, we retrieve an [Editable]
+         * reference to the current text in our results [TextView] field [mResults] to initialise
+         * our variable `val text`. If the [resultCode] parameter is RESULT_CANCELED (the back
+         * button was pressed instead of an "answer" [Button]), we append the [String] "(cancelled)"
+         * to the `text` being displayed, otherwise we append the String "(okay " followed by the
+         * value of [resultCode], followed by ") ", followed by the value that the [SendResult]
+         * Activity returned as the action of the result using `Intent.setAction(String)` (with the
+         * [String] being either "Corky!" or "Violet!" depending on the Button pressed by the user.
+         * (We are careful to check whether the [Intent] parameter [data] returned to us is not
+         * *null* before calling `getAction` on it, but only an unforeseen bug would cause it to
+         * be *null* in our case.) Finally we append a newline to the end of `text` for both cases
+         * of [resultCode] we consider.
          *
          * @param requestCode The integer request code originally supplied to
          * startActivityForResult(), allowing you to identify who this
@@ -233,13 +239,24 @@ class FragmentReceiveResult : FragmentActivity() {
             }
         }
 
+        /**
+         * Our static constant
+         */
         companion object {
-
-            private const val GET_CODE = 0 // Definition of the one requestCode we use for receiving results.
+            /**
+             * Definition of the one requestCode we use for receiving results.
+             */
+            private const val GET_CODE = 0
         }
     }
 
+    /**
+     * Our static constant
+     */
     companion object {
-        internal const val TAG = "FragmentReceiveResult" // TAG for logging
+        /**
+         * TAG for logging
+         */
+        internal const val TAG = "FragmentReceiveResult"
     }
 }
