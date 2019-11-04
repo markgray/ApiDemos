@@ -19,9 +19,6 @@ package com.example.android.apis.app;
 import com.example.android.apis.R;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,7 +32,12 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import org.jetbrains.annotations.NotNull;
+
 /**
  *  FragmentReceiveResult builds a FrameLayout in java -- no xml layout. To this it adds
  *  the Fragment ReceiveResultFragment which uses the layout R.layout.receive_result. Then
@@ -44,7 +46,8 @@ import android.widget.TextView;
  *  FragmentReceiveResult receives in the callback onActivityResult and then appends
  *  it to the Editable TextView id R.id.results contained in the layout R.layout.receive_result.
  */
-public class FragmentReceiveResult extends Activity {
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+public class FragmentReceiveResult extends FragmentActivity {
     static final String TAG = "FragmentReceiveResult"; // TAG for logging
 
     /**
@@ -78,7 +81,7 @@ public class FragmentReceiveResult extends Activity {
         if (savedInstanceState == null) {
             // Do first time initialization -- add fragment. 
             Fragment newFragment = new ReceiveResultFragment();
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.add(R.id.simple_fragment, newFragment).commit();
         } else {
             Log.i(TAG, "savedInstanceState is not null");
@@ -149,7 +152,7 @@ public class FragmentReceiveResult extends Activity {
          * @param outState Bundle in which to place your saved state.
          */
         @Override
-        public void onSaveInstanceState(Bundle outState) {
+        public void onSaveInstanceState(@NotNull Bundle outState) {
             super.onSaveInstanceState(outState);
             mLastString = mResults.getText().toString();
             outState.putString("savedText", mLastString);
@@ -177,13 +180,13 @@ public class FragmentReceiveResult extends Activity {
             View v = inflater.inflate(R.layout.receive_result, container, false);
 
             // Retrieve the TextView widget that will display results.
-            mResults = (TextView) v.findViewById(R.id.results);
+            mResults = v.findViewById(R.id.results);
 
             // This allows us to later extend the text buffer.
             mResults.setText(mLastString, TextView.BufferType.EDITABLE);
 
             // Watch for button clicks.
-            Button getButton = (Button) v.findViewById(R.id.get);
+            Button getButton = v.findViewById(R.id.get);
             getButton.setOnClickListener(mGetListener);
 
             return v;
