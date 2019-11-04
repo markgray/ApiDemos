@@ -146,13 +146,14 @@ class FragmentMenu : FragmentActivity() {
     }
 
     /**
-     * Update fragment visibility based on current check box state. First we use  the FragmentManager
-     * for interacting with fragments associated with this activity to begin a new series of fragment
-     * transactions: **FragmentTransaction ft**. If **CheckBox mCheckBox1** is checked we use
-     * **ft** to show **MenuFragment mFragment1**, if it is not checked we hide the Fragment.
-     * If **CheckBox mCheckBox2** is checked we use **ft** to show **Menu2Fragment mFragment2**,
-     * if it is not checked we hide the Fragment. Finally we schedule **FragmentTransaction ft**
-     * to be committed.
+     * Update fragment visibility based on current check box state. First we use the support
+     * `FragmentManager` for interacting with fragments associated with this activity to begin
+     * a new series of fragment transactions to initialize our `FragmentTransaction` variable
+     * `val ft`. If our [CheckBox] field [mCheckBox1] is checked we use `ft` to show our
+     * [MenuFragment] field [mFragment1], if it is not checked we hide the [Fragment].
+     * If our [CheckBox] field [mCheckBox2] is checked we use `ft` to show our [Menu2Fragment]
+     * field [mFragment2], if it is not checked we hide the [Fragment]. Finally we schedule
+     * `ft` to be committed.
      */
     internal fun updateFragmentVisibility() {
         val ft = supportFragmentManager.beginTransaction()
@@ -170,28 +171,25 @@ class FragmentMenu : FragmentActivity() {
     }
 
     /**
-     * A fragment that displays a menu.  This fragment happens to not have a UI (it does not implement
-     * onCreateView), but it could also have one if it wanted. Its entire effect when added to the
-     * Activity is caused by the overriding of **onCreateOptionsMenu**
+     * A fragment that displays a menu. This fragment happens to not have a UI (it does not implement
+     * [onCreateView]), but it could also have one if it wanted. Its entire effect when added to the
+     * Activity is caused by the overriding of [onCreateOptionsMenu].
      */
     class MenuFragment : Fragment() {
 
         /**
-         * Called to do initial creation of a fragment.  This is called after
-         * `onAttach(Activity)` and before
-         * `onCreateView(LayoutInflater, ViewGroup, Bundle)`.
-         *
+         * Called to do initial creation of a fragment. This is called after `onAttach(Activity)`
+         * and before `onCreateView(LayoutInflater, ViewGroup, Bundle)`.
          *
          * Note that this can be called while the fragment's activity is
          * still in the process of being created.  As such, you can not rely
          * on things like the activity's content view hierarchy being initialized
          * at this point.  If you want to do work once the activity itself is
-         * created, see [.onActivityCreated].
+         * created, see [onActivityCreated].
          *
-         *
-         * First we call through to our super's implementation of onCreate, and then we report that
-         * this fragment would like to participate in populating the options menu by receiving a
-         * call to onCreateOptionsMenu(Menu, MenuInflater) and related methods.
+         * First we call through to our super's implementation of `onCreate`, and then we report
+         * that this fragment would like to participate in populating the options menu by receiving
+         * a call to `onCreateOptionsMenu(Menu, MenuInflater)` and related methods.
          *
          * @param savedInstanceState we do not override onSaveInstanceState so do not use
          */
@@ -202,7 +200,7 @@ class FragmentMenu : FragmentActivity() {
 
         /**
          * Initialize the contents of the Activity's standard options menu.  You
-         * should place your menu items in to <var>menu</var>.
+         * should place your menu items into the [Menu] parameter [menu].
          *
          * First we add a menu item with the title "Menu 1a" to the menu, and set how the menu should
          * be displayed to SHOW_AS_ACTION_IF_ROOM (Show this item as a button in an Action Bar if the
@@ -224,21 +222,18 @@ class FragmentMenu : FragmentActivity() {
     class Menu2Fragment : Fragment() {
 
         /**
-         * Called to do initial creation of a fragment.  This is called after
-         * `onAttach(Activity)` and before
-         * `onCreateView(LayoutInflater, ViewGroup, Bundle)`.
-         *
+         * Called to do initial creation of a fragment.  This is called after `onAttach(Activity)`
+         * and before `onCreateView(LayoutInflater, ViewGroup, Bundle)`.
          *
          * Note that this can be called while the fragment's activity is
-         * still in the process of being created.  As such, you can not rely
+         * still in the process of being created. As such, you can not rely
          * on things like the activity's content view hierarchy being initialized
          * at this point.  If you want to do work once the activity itself is
-         * created, see [.onActivityCreated].
+         * created, see [onActivityCreated].
          *
-         *
-         * First we call through to our super's implementation of onCreate, and then we report that
-         * this fragment would like to participate in populating the options menu by receiving a
-         * call to onCreateOptionsMenu(Menu, MenuInflater) and related methods.
+         * First we call through to our super's implementation of `onCreate`, and then we report
+         * that this fragment would like to participate in populating the options menu by receiving
+         * a call to `onCreateOptionsMenu(Menu, MenuInflater)` and related methods.
          *
          * @param savedInstanceState we do not override onSaveInstanceState so do not use
          */
@@ -249,7 +244,7 @@ class FragmentMenu : FragmentActivity() {
 
         /**
          * Initialize the contents of the Activity's standard options menu.  You
-         * should place your menu items in to <var>menu</var>.
+         * should place your menu items into the [Menu] parameter [menu].
          *
          * We add a menu item with the title "Menu 2" to the menu, and set how the menu should be
          * displayed to SHOW_AS_ACTION_IF_ROOM (Show this item as a button in an Action Bar if the
