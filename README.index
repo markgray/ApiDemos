@@ -796,6 +796,7 @@ App
 
     App/Fragment/Retain Instance           v11
         .app.FragmentRetainInstance
+        .layout.fragment_retain_instance.xml
             Work fragment/thread calls setRetainInstance(true) in its onCreate callback, 
             causing it and the thread it is running to be retained when the device configuration
             changes. Shows how you can use a Fragment to easily propagate state (such as 

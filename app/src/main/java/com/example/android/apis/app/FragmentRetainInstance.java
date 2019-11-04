@@ -19,9 +19,6 @@ package com.example.android.apis.app;
 import com.example.android.apis.R;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,6 +28,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 /**
  * Work fragment/thread calls setRetainInstance(true) in its onCreate callback,
  * causing it and the thread it is running to be retained when the device configuration
@@ -39,7 +40,7 @@ import android.widget.ProgressBar;
  * a lot easier than using the raw Activity.onRetainNonConfigurationInstance() API.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class FragmentRetainInstance extends Activity {
+public class FragmentRetainInstance extends FragmentActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * onCreate, then if <b>savedInstanceState</b> is null (first time init) we use a handle to the
@@ -59,7 +60,7 @@ public class FragmentRetainInstance extends Activity {
 
         // First time init, create the UI.
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .add(android.R.id.content, new UiFragment())
                     .commit();
         }
@@ -94,7 +95,7 @@ public class FragmentRetainInstance extends Activity {
             View v = inflater.inflate(R.layout.fragment_retain_instance, container, false);
 
             // Watch for button clicks.
-            Button button = (Button) v.findViewById(R.id.restart);
+            Button button = v.findViewById(R.id.restart);
             button.setOnClickListener(new OnClickListener() {
                 /**
                  * When the "RESTART" Button is clicked we simply call the method <b>mWorkFragment.restart()</b>
@@ -141,7 +142,8 @@ public class FragmentRetainInstance extends Activity {
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
 
-            FragmentManager fm = getFragmentManager();
+            //noinspection ConstantConditions
+            FragmentManager fm = getActivity().getSupportFragmentManager();
 
             // Check to see if we have retained the worker fragment.
             mWorkFragment = (RetainedFragment) fm.findFragmentByTag("work");
@@ -286,7 +288,7 @@ public class FragmentRetainInstance extends Activity {
 
             // Retrieve the progress bar from the target's view hierarchy.
             //noinspection ConstantConditions
-            mProgressBar = (ProgressBar) getTargetFragment()
+            mProgressBar = getTargetFragment()
                     .getView()
                     .findViewById(R.id.progress_horizontal);
 
