@@ -32,43 +32,42 @@ import com.example.android.apis.R
 
 /**
  * Shows how to push and pop fragments using the system backstack.
- * FragmentTransaction.addToBackStack() adds the fragement to the backstack, and
- * getFragmentManager().popBackStack() (or simply pressing "back" button) goes back
+ * `FragmentTransaction.addToBackStack()` adds the fragment to the backstack, and
+ * `getSupportFragmentManager().popBackStack()` (or simply pressing "back" button) goes back
  * one fragment, using a fancy animation for push and pop. (Not really visible on
  * Nexus 6 Marshmallow, but striking on Excite 10.)
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 class FragmentStack : FragmentActivity() {
-    internal var mStackLevel = 1 // stack level of next {@code CountingFragment} to add to back stack
+    /**
+     * stack level of next [CountingFragment] to add to back stack
+     */
+    internal var mStackLevel = 1
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, then we set our content view to our layout file R.layout.fragment_stack. Next we
-     * find the `Button` R.id.new_fragment ("PUSH") and set its `OnClickListener` to an
-     * anonymous class which calls our method `addFragmentToStack()` when the Button is
-     * clicked, and we locate the `Button` R.id.delete_fragment ("POP") and set its
-     * `OnClickListener` to an anonymous class which uses the FragmentManager for interacting
-     * with fragments associated with this activity Pop the top state off the back stack. This
-     * function is asynchronous -- it enqueues the request to pop, but the action will not be
-     * performed until the application returns to its event loop.
-     *
-     *
-     * Then if our parameter `Bundle savedInstanceState` is null we need to do first time
-     * initialization, so we create `Fragment newFragment` by calling `CountingFragment`'s
-     * `newInstance` method, use the FragmentManager for interacting with fragments associated
-     * with this activity to start `FragmentTransaction ft` which we use to add the fragment
-     * `newFragment` to the activity state and commit the FragmentTransaction.
-     *
-     *
-     * If our parameter `Bundle savedInstanceState` is not null, we are being recreated, so
-     * we retrieve the value of our field `int mStackLevel` (which was saved by our override of
-     * onSaveInstanceState using the key "level") from `savedInstanceState`.
+     * `onCreate`, then we set our content view to our layout file R.layout.fragment_stack. Next we
+     * find the [Button] with ID R.id.new_fragment ("PUSH") to initialize our variable `var button`
+     * and set its `OnClickListener` to a lambda which calls our method [addFragmentToStack] when
+     * the [Button] is clicked, and then set `button` to the [Button] with ID R.id.delete_fragment
+     * ("POP") and set its `OnClickListener` to a lambda which uses the support `FragmentManager`
+     * for interacting with fragments associated with this activity Pop the top state off the back
+     * stack. This function is asynchronous -- it enqueues the request to pop, but the action will
+     * not be performed until the application returns to its event loop. Then if our [Bundle]
+     * parameter [savedInstanceState] is *null* we need to do first time initialization, so we
+     * initialize our [CountingFragment] variable `val newFragment` by calling [CountingFragment]'s
+     * `newInstance` method, use the support FragmentManager for interacting with fragments
+     * associated with this activity to begin a [FragmentTransaction] which we use to initialize our
+     * variable `val ft`, and we then use `ft` add the fragment `newFragment` to the activity state
+     * and commit the [FragmentTransaction]. If our [Bundle] parameter [savedInstanceState] is not
+     * *null*, we are being recreated, so we retrieve the value for our [mStackLevel] field which
+     * was saved by our override of [onSaveInstanceState] using the key "level" from
+     * [savedInstanceState].
      *
      * @param savedInstanceState If the activity is being re-initialized after previously being shut
-     * down then this Bundle contains the data it most recently supplied
-     * in [.onSaveInstanceState].
-     * ***Note: Otherwise it is null.***
+     * down then this [Bundle] contains the data it most recently supplied in [onSaveInstanceState],
+     * otherwise it is *null*.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +78,7 @@ class FragmentStack : FragmentActivity() {
         /**
          * When the "PUSH" Button is clicked we simply call our method `addFragmentToStack()`
          * which will create a new instance of `CountingFragment`, replace the current
-         * Fragment with it and add the whole `FragmentTransaction` used to do this to the
+         * Fragment with it and add the whole [FragmentTransaction] used to do this to the
          * back stack.
          *
          * Parameter: View of Button that was clicked
@@ -110,15 +109,14 @@ class FragmentStack : FragmentActivity() {
 
     /**
      * Called to retrieve per-instance state from an activity before being killed so that the state
-     * can be restored in [.onCreate] or [.onRestoreInstanceState] (the [Bundle]
-     * populated by this method will be passed to both).
-     *
+     * can be restored in [onCreate] or [onRestoreInstanceState] (the [Bundle] populated by this
+     * method will be passed to both).
      *
      * First we call through to our super's implementation of `onSaveInstanceState`, then we
-     * insert the value of our field `int mStackLevel` into the mapping of our parameter
-     * `Bundle outState`, using the key "level".
+     * insert the value of our [Int] field [mStackLevel] into the mapping of our [Bundle] parameter
+     * [outState], using the key "level".
      *
-     * @param outState Bundle in which to place your saved state.
+     * @param outState [Bundle] in which to place your saved state.
      */
     public override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -126,16 +124,17 @@ class FragmentStack : FragmentActivity() {
     }
 
     /**
-     * Create a new instance of `CountingFragment` and use it to replace the current Fragment
-     * while adding the whole `FragmentTransaction` used to do this to the back stack so that
-     * it may later be reversed by calling `FragmentManager.popBackStack()`. First we increment
-     * our field `int mStackLevel` (stack level of next `CountingFragment` to add to back
-     * stack), then we create a new instance of `CountingFragment` `Fragment newFragment`
-     * using `mStackLevel` as its level. We use the FragmentManager for interacting with
-     * fragments associated with this activity to start a `FragmentTransaction ft` which we use
-     * to replace the current fragment occupying view R.id.simple_fragment with `newFragment`,
-     * specify a transition of TRANSIT_FRAGMENT_OPEN for the transaction, add the transaction to the
-     * back stack and finally commit the `FragmentTransaction`.
+     * Create a new instance of [CountingFragment] and use it to replace the current [Fragment]
+     * while adding the whole [FragmentTransaction] used to do this to the back stack so that it
+     * may later be reversed by calling the `popBackStack` method of the support `FragmentManager`.
+     * First we increment our field [mStackLevel] (stack level of next [CountingFragment] to add to
+     * the back stack), then we create a new instance of [CountingFragment] to initialize our
+     * variable `val newFragment` using [mStackLevel] as its level. We use the support
+     * `FragmentManager` for interacting with fragments associated with this activity to start a
+     * [FragmentTransaction] to initialize our variable `val ft` which we then use to replace the
+     * current fragment occupying view R.id.simple_fragment with `newFragment`, specify a transition
+     * of TRANSIT_FRAGMENT_OPEN for the transaction, add the transaction to the back stack and
+     * finally commit the [FragmentTransaction].
      */
     internal fun addFragmentToStack() {
         mStackLevel++
@@ -153,18 +152,20 @@ class FragmentStack : FragmentActivity() {
     }
 
     /**
-     * This is a minimalist Fragment whose only UI consists of a `TextView` displaying the
-     * formatted stack level number passed to its factory method `newInstance`.
+     * This is a minimalist [Fragment] whose only UI consists of a [TextView] displaying the
+     * formatted stack level number passed to its factory method [newInstance].
      */
     class CountingFragment : Fragment() {
+        /**
+         * The stack level number we are to display.
+         */
         internal var mNum: Int = 0
 
         /**
          * When creating, retrieve this instance's number from its arguments. First we call through
-         * to our super's implementation of onCreate, then if arguments have been passed us using
-         * `setArguments` we retrieve the int stored in the argument `Bundle` under the
-         * key "num" to set our field `int mNum`, and if no arguments were passed we default
-         * to 1.
+         * to our super's implementation of `onCreate`, then if arguments have been passed us using
+         * `setArguments` we retrieve the [Int] stored in the argument [Bundle] under the key "num"
+         * to set our [Int] field [mNum], and if no arguments were passed we default to 1.
          *
          * @param savedInstanceState since we do not override onSaveInstanceState we do not use
          */
@@ -175,24 +176,20 @@ class FragmentStack : FragmentActivity() {
 
         /**
          * Called to have the fragment instantiate its user interface view. The Fragment's UI is
-         * just a simple text view showing its instance number.
+         * just a simple text view showing its instance number. First we use our [LayoutInflater]
+         * parameter [inflater] to inflate our layout file R.layout.hello_world into a [View] to
+         * initialize our varible `val v`, locate the [TextView] with ID R.id.text in `v`
+         * to to initialize our  `val tv`, set the text of `tv` to a formatted String containing our
+         * field [mNum] (the stack level we represent), and set the background of `tv` to the
+         * system `Drawable` android.R.drawable.gallery_thumb. Finally we return `v` to our caller.
          *
-         *
-         * First we use our parameter `LayoutInflater inflater` to inflate our layout file
-         * R.layout.hello_world into `View v`, locate the `TextView` R.id.text in `v`
-         * to set `View tv`, set the text of `tv` to a formatted String containing our
-         * field `int mNum` (the stack level we represent), and set the background of `tv`
-         * to the `Drawable` android.R.drawable.gallery_thumb. Finally we return `View v`
-         * to our caller.
-         *
-         * @param inflater           The LayoutInflater object that can be used to inflate
-         * any views in the fragment,
-         * @param container          If non-null, this is the parent view that the fragment's
-         * UI should be attached to.  The fragment should not add the view itself,
-         * but this can be used to generate the LayoutParams of the view.
+         * @param inflater The LayoutInflater object that can be used to inflate  any views
+         * @param container If non-null, this is the parent view that the fragment's UI will be
+         * attached to. The fragment should not add the view itself, but this can be used to
+         * generate the LayoutParams of the view.
          * @param savedInstanceState If non-null, this fragment is being re-constructed
          * from a previous saved state as given here.
-         * @return Return the View for the fragment's UI, or null.
+         * @return Return the [View] for the fragment's UI, or null.
          */
         @SuppressLint("DefaultLocale")
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -204,20 +201,22 @@ class FragmentStack : FragmentActivity() {
             return v
         }
 
+        /**
+         * Our static method.
+         */
         companion object {
-
             /**
-             * Create a new instance of CountingFragment, providing "num" as an argument. First we create
-             * a new instance of `CountingFragment f`, then we create a `Bundle args` and
-             * then we insert our parameter `int num` into the mapping of this Bundle under the key
-             * "num", we set the arguments of `CountingFragment f` to `args` and return the
-             * configured `CountingFragment` instance `f` to the caller.
+             * Create a new instance of [CountingFragment], providing "num" as an argument. First
+             * we create a new instance of [CountingFragment] to initialize our variable `val f`,
+             * then we create a [Bundle] to initialize our variable `val args` and then we insert
+             * our [Int] parameter [num] into the mapping of this [Bundle] under the key "num", we
+             * set the arguments of `f` to `args` and return the configured [CountingFragment]
+             * instance `f` to the caller.
              *
              * @param num Stack level number to pass as argument to new instance of
-             * `CountingFragment` we create.
-             * @return New instance of `CountingFragment` with the argument
-             * Bundle containing our parameter `int num` stored using the key
-             * "num"
+             * [CountingFragment] we create.
+             * @return New instance of [CountingFragment] with the argument [Bundle] containing our
+             * parameter [num] stored under the key "num"
              */
             fun newInstance(num: Int): CountingFragment {
                 val f = CountingFragment()
