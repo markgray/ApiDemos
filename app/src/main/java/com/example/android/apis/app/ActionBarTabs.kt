@@ -19,7 +19,6 @@ package com.example.android.apis.app
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import androidx.fragment.app.FragmentTransaction
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -32,6 +31,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBar.Tab
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+
 import com.example.android.apis.R
 
 /**
