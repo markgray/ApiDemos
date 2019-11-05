@@ -36,6 +36,7 @@ import android.widget.TabHost;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentTabsFragment extends Fragment {
+/*
     TabManager mTabManager;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -82,13 +83,15 @@ public class FragmentTabsFragment extends Fragment {
         mTabManager.handleSaveInstanceState(outState);
     }
 
-    /**
+    */
+/**
      * This is a helper class that implements a generic mechanism for
      * associating fragments with the tabs in a tab host.  DO NOT USE THIS.
      * If you want tabs in a fragment, use the support v13 library's
      * FragmentTabHost class, which takes care of all of this for you (in
      * a simpler way even).
-     */
+     *//*
+
     public static class TabManager implements TabHost.OnTabChangeListener {
         private final Context mContext;
         private final FragmentManager mManager;
@@ -251,5 +254,6 @@ public class FragmentTabsFragment extends Fragment {
             return ft;
         }
     }
+*/
 }
 

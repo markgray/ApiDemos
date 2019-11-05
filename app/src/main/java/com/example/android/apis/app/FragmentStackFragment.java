@@ -19,8 +19,6 @@ package com.example.android.apis.app;
 import com.example.android.apis.R;
 
 import android.annotation.TargetApi;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,6 +27,12 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import org.jetbrains.annotations.NotNull;
+
+@SuppressWarnings("WeakerAccess")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FragmentStackFragment extends Fragment {
     int mStackLevel = 1;
@@ -54,13 +58,13 @@ public class FragmentStackFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_stack, container, false);
 
         // Watch for button clicks.
-        Button button = (Button)v.findViewById(R.id.new_fragment);
+        Button button = v.findViewById(R.id.new_fragment);
         button.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 addFragmentToStack();
             }
         });
-        button = (Button)v.findViewById(R.id.delete_fragment);
+        button = v.findViewById(R.id.delete_fragment);
         button.setOnClickListener(new OnClickListener() {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
             public void onClick(View v) {
@@ -72,7 +76,7 @@ public class FragmentStackFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("level", mStackLevel);
     }

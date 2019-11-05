@@ -20,9 +20,6 @@ import com.example.android.apis.R;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,6 +29,12 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Shows how to push and pop fragments using the system backstack.
  * FragmentTransaction.addToBackStack() adds the fragement to the backstack, and
@@ -40,7 +43,7 @@ import android.widget.TextView;
  * Nexus 6 Marshmallow, but striking on Excite 10.)
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-public class FragmentStack extends Activity {
+public class FragmentStack extends FragmentActivity {
     int mStackLevel = 1; // stack level of next {@code CountingFragment} to add to back stack
 
     /**
@@ -75,7 +78,7 @@ public class FragmentStack extends Activity {
         setContentView(R.layout.fragment_stack);
 
         // Watch for button clicks.
-        Button button = (Button) findViewById(R.id.new_fragment);
+        Button button = findViewById(R.id.new_fragment);
         button.setOnClickListener(new OnClickListener() {
             /**
              * When the "PUSH" Button is clicked we simply call our method {@code addFragmentToStack()}
@@ -90,7 +93,7 @@ public class FragmentStack extends Activity {
                 addFragmentToStack();
             }
         });
-        button = (Button) findViewById(R.id.delete_fragment);
+        button = findViewById(R.id.delete_fragment);
         button.setOnClickListener(new OnClickListener() {
             /**
              * When the "POP" Button is clicked we simply use he FragmentManager for interacting
@@ -100,14 +103,14 @@ public class FragmentStack extends Activity {
              */
             @Override
             public void onClick(View v) {
-                getFragmentManager().popBackStack();
+                getSupportFragmentManager().popBackStack();
             }
         });
 
         if (savedInstanceState == null) {
             // Do first time initialization -- add initial fragment.
             Fragment newFragment = CountingFragment.newInstance(mStackLevel);
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.add(R.id.simple_fragment, newFragment).commit();
         } else {
             mStackLevel = savedInstanceState.getInt("level");
@@ -126,7 +129,7 @@ public class FragmentStack extends Activity {
      * @param outState Bundle in which to place your saved state.
      */
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("level", mStackLevel);
     }
@@ -151,7 +154,7 @@ public class FragmentStack extends Activity {
 
         // Add the fragment to the activity, pushing this transaction
         // on to the back stack.
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.simple_fragment, newFragment);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.addToBackStack(null);
@@ -224,7 +227,6 @@ public class FragmentStack extends Activity {
          *                           from a previous saved state as given here.
          * @return Return the View for the fragment's UI, or null.
          */
-        @SuppressWarnings("deprecation")
         @SuppressLint("DefaultLocale")
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

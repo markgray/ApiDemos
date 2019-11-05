@@ -18,8 +18,6 @@ package com.example.android.apis.app;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.ListFragment;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -41,6 +39,12 @@ import android.widget.SearchView.OnCloseListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.SearchView.OnQueryTextListener;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.ListFragment;
+
+import java.util.List;
+
 /**
  * Demonstration of the use of a CursorLoader to load and display contacts data in a fragment.
  * Creates a custom class CursorLoaderListFragment which extends ListFragment, with the necessary
@@ -48,10 +52,11 @@ import android.widget.SearchView.OnQueryTextListener;
  * Includes the use of a SearchView which might come in handy for MarkovChain
  */
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-public class LoaderCursor extends Activity {
+public class LoaderCursor extends FragmentActivity {
+/*
     final static String TAG = "LoaderCursor";
 
-    /**
+*
      * Called when the activity is starting. First we call through to our super's implementation of
      * onCreate, then we initialize {@code FragmentManager fm} with a reference to the FragmentManager
      * for interacting with fragments associated with this activity. We check whether this is the
@@ -64,12 +69,13 @@ public class LoaderCursor extends Activity {
      * do not need to do anything.
      *
      * @param savedInstanceState we do not override onSaveInstanceState so do not use
-     */
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
 
         // Create the list fragment and add it as our sole content.
         if (fm.findFragmentById(android.R.id.content) == null) {
@@ -80,9 +86,10 @@ public class LoaderCursor extends Activity {
         }
     }
 
-    /**
+*
      * This {@code ListFragment} fills its {@code List} with data returned from a {@code SimpleCursorAdapter}
-     */
+
+
     public static class CursorLoaderListFragment extends ListFragment
             implements OnQueryTextListener, OnCloseListener,
             LoaderManager.LoaderCallbacks<Cursor> {
@@ -96,7 +103,7 @@ public class LoaderCursor extends Activity {
         // If non-null, this is the current filter the user has provided.
         String mCurFilter;
 
-        /**
+*
          * Called when the fragment's activity has been created and this fragment's view hierarchy
          * instantiated. First we call through to our super's implementaton of {@code onActivityCreated},
          * Then we set the text for the {@code TextView} of the default content for our {@code ListFragment}
@@ -111,7 +118,8 @@ public class LoaderCursor extends Activity {
          * interface provider.
          *
          * @param savedInstanceState we do not override onSaveInstanceState so do not use
-         */
+
+
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
@@ -138,23 +146,25 @@ public class LoaderCursor extends Activity {
             getLoaderManager().initLoader(0, null, this);
         }
 
-        /**
+*
          * Custom {@code SearchView} which clears the search text when the {@code SearchView} is
          * collapsed by the user.
-         */
+
+
         public static class MySearchView extends SearchView {
-            /**
+*
              * Constructor which simply calls our super's constructor.
              *
              * @param context Context used by super ({@code getActivity()} called from menu of our
              *                {@code CursorLoaderListFragment} would return {@code LoaderCurstor}
              *                as the Activity Context in our case)
-             */
+
+
             public MySearchView(Context context) {
                 super(context);
             }
 
-            /**
+*
              * Called when this view is collapsed as an action view.
              * See {@link MenuItem#collapseActionView()}.
              * <p>
@@ -162,7 +172,8 @@ public class LoaderCursor extends Activity {
              * this for it. We simply call {@code setQuery} with an empty String, and false to
              * prevent it being looked up. Finally we call through to our super's implementation
              * of {@code onActionViewCollapsed}.
-             */
+
+
             @Override
             public void onActionViewCollapsed() {
                 setQuery("", false);
@@ -170,7 +181,7 @@ public class LoaderCursor extends Activity {
             }
         }
 
-        /**
+*
          * Initialize the contents of the Activity's standard options menu.  You
          * should place your menu items in to <var>menu</var>.  For this method
          * to be called, you must have first called {@link #setHasOptionsMenu}.  See
@@ -197,7 +208,8 @@ public class LoaderCursor extends Activity {
          * @see #setHasOptionsMenu
          * @see #onPrepareOptionsMenu
          * @see #onOptionsItemSelected
-         */
+
+
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             // Place an action bar item for searching.
@@ -212,7 +224,7 @@ public class LoaderCursor extends Activity {
             item.setActionView(mSearchView);
         }
 
-        /**
+*
          * Called when the query text is changed by the user. If the new text is not empty we set
          * {@code String newFilter} to it otherwise we set it to null. If both {@code newFilter}
          * and our current filter {@code String mCurFilter} are null we do nothing and return true
@@ -228,7 +240,8 @@ public class LoaderCursor extends Activity {
          * @return false if the SearchView should perform the default action of showing any
          * suggestions if available, true if the action was handled by the listener. We always
          * return true.
-         */
+
+
         @Override
         public boolean onQueryTextChange(String newText) {
             // Called when the action bar search text has changed.  Update
@@ -248,21 +261,22 @@ public class LoaderCursor extends Activity {
             return true;
         }
 
-        /**
+*
          * Called when the user submits the query. We do not use this feature so we just return true
          * to the caller to signify that we have "handled" the query.
          *
          * @param query the query text that is to be submitted
          * @return true if the query has been handled by the listener, false to let the
          * SearchView perform the default action.
-         */
+
+
         @Override
         public boolean onQueryTextSubmit(String query) {
             // Don't care about this.
             return true;
         }
 
-        /**
+*
          * The user is attempting to close the SearchView. We check to see if there are currently any
          * characters in the text field of our {@code SearchView mSearchView} and if there are we
          * set the query of {@code SearchView mSearchView} to null and submit the query. Finally we
@@ -270,7 +284,8 @@ public class LoaderCursor extends Activity {
          *
          * @return true if the listener wants to override the default behavior of clearing the
          * text field and dismissing it, false otherwise.
-         */
+
+
         @Override
         public boolean onClose() {
             if (!TextUtils.isEmpty(mSearchView.getQuery())) {
@@ -279,7 +294,7 @@ public class LoaderCursor extends Activity {
             return true;
         }
 
-        /**
+*
          * This method will be called when an item in the list is selected.
          * Subclasses should override. Subclasses can call
          * getListView().getItemAtPosition(position) if they need to access the
@@ -291,16 +306,18 @@ public class LoaderCursor extends Activity {
          * @param v        The view that was clicked within the ListView
          * @param position The position of the view in the list
          * @param id       The row id of the item that was clicked
-         */
+
+
         @Override
         public void onListItemClick(ListView l, View v, int position, long id) {
             // Insert desired behavior here.
             Log.i("FragmentComplexList", "Item clicked: " + id);
         }
 
-        /**
+*
          * These are the Contacts rows that we will retrieve.
-         */
+
+
         static final String[] CONTACTS_SUMMARY_PROJECTION = new String[]{
                 Contacts._ID,              // The unique ID for a row
                 Contacts.DISPLAY_NAME,     // The display name for the contact
@@ -310,7 +327,7 @@ public class LoaderCursor extends Activity {
                 Contacts.LOOKUP_KEY,       // An opaque value that contains hints on how to find the contact
         };
 
-        /**
+*
          * Instantiate and return a new Loader for the given ID. Part of the {@code LoaderCallbacks<D>}
          * interface. First we construct the {@code Uri baseUri} that will be used to query the
          * contacts database: if we have a filter defined by user use of our {@code SearchView} we
@@ -337,7 +354,8 @@ public class LoaderCursor extends Activity {
          * @param id   The ID whose loader is to be created.
          * @param args Any arguments supplied by the caller.
          * @return Return a new Loader instance that is ready to start loading.
-         */
+
+
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             // This is called when a new Loader needs to be created.  This
@@ -362,7 +380,7 @@ public class LoaderCursor extends Activity {
                     Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
         }
 
-        /**
+*
          * Called when a previously created loader has finished its load.  Note
          * that normally an application is <em>not</em> allowed to commit fragment
          * transactions while in this call, since it can happen after an
@@ -398,12 +416,14 @@ public class LoaderCursor extends Activity {
          * </ul>
          * First we instruct our {@code SimpleCursorAdapter mAdapter} to swap in the newly loaded
          * {@code Cursor data}, and then if our {@code Fragment} is in the resumed state we toggle
-         * our {@code List} to be shown now. If we are not in the resumed state we toggle our
+         * our {@code List
+    } to be shown now. If we are not in the resumed state we toggle our
          * {@code List} to be shown ommitting the animation.
          *
          * @param loader The Loader that has finished.
          * @param data   The data generated by the Loader.
-         */
+
+
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             // Swap the new cursor in.  (The framework will take care of closing the
@@ -418,7 +438,7 @@ public class LoaderCursor extends Activity {
             }
         }
 
-        /**
+*
          * Called when a previously created loader is being reset, and thus
          * making its data unavailable.  The application should at this point
          * remove any references it has to the Loader's data.
@@ -426,7 +446,8 @@ public class LoaderCursor extends Activity {
          * We simply instruct our {@code SimpleCursorAdapter mAdapter} to swap in a null {@code Cursor}.
          *
          * @param loader The Loader that is being reset.
-         */
+
+
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
             // This is called when the last Cursor provided to onLoadFinished()
@@ -436,4 +457,5 @@ public class LoaderCursor extends Activity {
         }
     }
 
+*/
 }

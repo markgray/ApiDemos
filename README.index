@@ -805,6 +805,8 @@ App
 
     App/Fragment/Stack                     v11 -> crashes less than v16
         .app.FragmentStack
+        .layout.fragment_stack.xml
+        .layout.hello_world.xml
             Shows how to push and pop fragments using the system backstack. 
             FragmentTransaction.addToBackStack() adds the fragement to the backstack, and
             getFragmentManager().popBackStack() (or simply pressing "back" button) goes back
