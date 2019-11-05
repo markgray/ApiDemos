@@ -44,7 +44,7 @@ public class FragmentStackFragment extends Fragment {
 
         if (savedInstanceState == null) {
             // Do first time initialization -- add initial fragment.
-            Fragment newFragment = FragmentStack.CountingFragment.newInstance(mStackLevel);
+            Fragment newFragment = FragmentStack.CountingFragment.Companion.newInstance(mStackLevel);
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
             ft.add(R.id.simple_fragment, newFragment).commit();
         } else {
@@ -86,7 +86,7 @@ public class FragmentStackFragment extends Fragment {
         mStackLevel++;
 
         // Instantiate a new fragment.
-        Fragment newFragment = FragmentStack.CountingFragment.newInstance(mStackLevel);
+        Fragment newFragment = FragmentStack.CountingFragment.Companion.newInstance(mStackLevel);
 
         // Add the fragment to the activity, pushing this transaction
         // on to the back stack.
