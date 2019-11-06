@@ -16,7 +16,6 @@
 
 package com.example.android.apis.app;
 
-import android.app.Activity;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.app.job.JobWorkItem;
@@ -25,9 +24,11 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
-import androidx.annotation.RequiresApi;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -35,7 +36,7 @@ import com.example.android.apis.R;
  * Example of interacting with {@link JobWorkService}.
  */
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class JobWorkServiceActivity extends Activity {
+public class JobWorkServiceActivity extends AppCompatActivity {
     /**
      * Handle to the JOB_SCHEDULER_SERVICE system level service
      */

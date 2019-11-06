@@ -827,6 +827,7 @@ App
   Job
     App/Job/Job Work Service Controller   v26
         .app.JobWorkServiceActivity
+        .layout.job_work_service_activity.xml
         .app.JobWorkService
             Example of interacting with JobWorkService.
 

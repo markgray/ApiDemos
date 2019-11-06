@@ -753,7 +753,8 @@
 
         <activity android:name=".app.JobWorkServiceActivity"
             android:label="@string/activity_job_work_service"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
