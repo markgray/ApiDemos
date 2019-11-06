@@ -23,12 +23,10 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBar.Tab
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 
 /**
@@ -171,7 +169,7 @@ class FragmentTabs : AppCompatActivity() {
          * @param clz      Class name of the Fragment instance we create and control
          */
         constructor(
-                activity: FragmentActivity,
+                activity: AppCompatActivity,
                 tag: String,
                 clz: Class<T>
         ) : this(activity, tag, clz, null)
@@ -181,7 +179,7 @@ class FragmentTabs : AppCompatActivity() {
             // Check to see if we already have a fragment for this tab, probably
             // from a previously saved state.  If so, deactivate it, because our
             // initial state is that a tab isn't shown.
-            mFragment = (mActivity as FragmentActivity).supportFragmentManager.findFragmentByTag(mTag)
+            mFragment = (mActivity as AppCompatActivity).supportFragmentManager.findFragmentByTag(mTag)
             if (mFragment != null && !mFragment!!.isDetached) {
                 val ft = mActivity.supportFragmentManager.beginTransaction()
                 ft.detach(mFragment!!)
