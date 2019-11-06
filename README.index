@@ -835,14 +835,14 @@ App
 
   Loader
     App/Loader/Cursor                      v11
-        .app.LoaderCursor
+        .app.LoaderCursor ***** Update FragmentTabs after fixing this *****
             Creates a custom class CursorLoaderListFragment which extends ListFragment, 
             with the necessary callbacks to serve as a CursorLoader to load and display 
             contacts data in the ListFragment. Includes the use of a SearchView which
             might come in handy for MarkovChain
 
     App/Loader/Custom                      v11 -> v14
-        .app.LoaderCustom
+        .app.LoaderCustom ***** Update FragmentTabs after fixing this *****
             Shows how to implement a custom AsyncTaskLoader, it uses the system function
             PackageManager.getInstalledApplications to retrieve a List<ApplicationInfo> 
             containing the AndroidManifest information for all the installed apps.
@@ -854,7 +854,7 @@ App
             setRetainInstance(true) in the onActivityCreated callback.
 
     App/Loader/Throttle                    v11
-        .app.LoaderThrottle
+        .app.LoaderThrottle ***** Update FragmentTabs after fixing this *****
             Demonstration of bottom to top implementation of a content provider holding
             structured data through displaying it in the UI, using throttling to reduce
             the number of queries done when its data changes. Implements a custom CursorLoader
