@@ -123,7 +123,7 @@ class FragmentTabs : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putInt("tab", actionBar!!.selectedNavigationIndex)
+        outState.putInt("tab", supportActionBar!!.selectedNavigationIndex)
     }
 
     /**
