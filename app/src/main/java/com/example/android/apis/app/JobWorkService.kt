@@ -58,7 +58,7 @@ class JobWorkService : JobService() {
     @SuppressLint("StaticFieldLeak") // We may indeed leak instances! TODO: check this out.
     internal inner class CommandProcessor
     /**
-     * Our constructor, we just save our parameters in our field `JobParameters mParams`.
+     * Our constructor, we just save our parameters in our [JobParameters] field [mParams].
      *
      * Parameter: the `JobParameters` passed to the `onStartJob` override
      */
@@ -74,35 +74,20 @@ class JobWorkService : JobService() {
          * saving the return value in `canceled` and if we have not been canceled we dequeue
          * the next pending [JobWorkItem] from our field `JobParameters mParams` into
          * `work` and if that is not null we continue:
-         *
-         *  *
-         * We initialize `String txt` by retrieving the `Intent` from `work`
+         *  - We initialize our [String] variable `val txt` by retrieving the [Intent] from `work`
          * and fetching the string extra stored under the key "name" in it.
-         *
-         *  *
-         * We log a message describing what we are doing with `text`
-         *
-         *  *
-         * We call our `showNotification` method to display a notification about `txt`
-         *
-         *  *
-         * Wrapped in a try block intended to catch and log `InterruptedException` we
+         *  - We log a message describing what we are doing with `text`
+         *  - We call our [showNotification] method to display a notification about `txt`
+         *  - Wrapped in a try block intended to catch and log `InterruptedException` we
          * sleep for 5 seconds.
-         *
-         *  *
-         * We call our `hideNotification` method to cancel our notification.
-         *
-         *  *
-         * We log the fact that we are done processing `work`
-         *
-         *  *
-         * We call the `completeWork` method of `mParams` report the completion of
-         * executing `JobWorkItem work` (tells the system you are done with the work
+         *  - We call our [hideNotification] method to cancel our notification.
+         *  - We log the fact that we are done processing `work`
+         *  - We call the `completeWork` method of `mParams` report the completion of
+         * executing the [JobWorkItem] `work` (tells the system you are done with the work
          * associated with that item, so it will not be returned again).
          *
-         *
-         * When we exit the while loop we check if that was because we were canceled and if so we log
-         * this fact. Then we return null to the caller.
+         * When we exit the while loop we check if that was because we were canceled and if so we
+         * log this fact. Then we return *null* to the caller.
          *
          * @param params we do not have any
          * @return we do not have a return value.
@@ -160,15 +145,16 @@ class JobWorkService : JobService() {
     }
 
     /**
-     * Called by the system when the service is first created. First We initialize our field
-     * `NotificationManager mNM` with a handle to the NOTIFICATION_SERVICE system level
-     * service. We initialize `NotificationChannel chan1` with a new instance whose id and
-     * user visible name are both PRIMARY_CHANNEL ("default"), and whose importance is IMPORTANCE_DEFAULT
-     * (shows everywhere, makes noise, but does not visually intrude). We set the notification light
-     * color of `chan1` to GREEN, and set its lock screen visibility to VISIBILITY_PRIVATE
-     * (shows this notification on all lockscreens, but conceal sensitive or private information on
-     * secure lockscreens). We then have `mNM` create notification channel `chan1`.
-     * Finally we toast the string with resource id R.string.service_created ("Service created.")
+     * Called by the system when the service is first created. First We initialize our
+     * [NotificationManager] field [mNM] with a handle to the NOTIFICATION_SERVICE system level
+     * service. We initialize our [NotificationChannel] variable `val chan1` with a new instance
+     * whose id and user visible name are both PRIMARY_CHANNEL ("default"), and whose importance is
+     * IMPORTANCE_DEFAULT (shows everywhere, makes noise, but does not visually intrude). We set the
+     * notification light color of `chan1` to GREEN, and set its lock screen visibility to
+     * VISIBILITY_PRIVATE (shows this notification on all lockscreens, but conceals sensitive or
+     * private information on secure lockscreens). We then have [mNM] create notification channel
+     * `chan1`. Finally we toast the string with resource id R.string.service_created:
+     * ("Service created.")
      */
     override fun onCreate() {
         mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -182,7 +168,7 @@ class JobWorkService : JobService() {
 
     /**
      * Called by the system to notify a Service that it is no longer used and is being removed. We
-     * call our method `hideNotification` to cancel our notification then we toast the string
+     * call our method [hideNotification] to cancel our notification then we toast the string
      * with resource id R.string.service_destroyed ("Service destroyed.").
      */
     override fun onDestroy() {
@@ -191,16 +177,16 @@ class JobWorkService : JobService() {
     }
 
     /**
-     * Called to indicate that the job has begun executing. First we initialize our field
-     * `CommandProcessor mCurProcessor` with an instance constructed to process our parameter
-     * `JobParameters params`. Then we call its `executeOnExecutor` method to start it
-     * running in the background using the executor THREAD_POOL_EXECUTOR (an executor which allows
-     * multiple tasks to run in parallel on a pool of threads managed by AsyncTask). Finally we
-     * return true so that our job will continue running while we process work.
+     * Called to indicate that the job has begun executing. First we initialize our [CommandProcessor]
+     * field [mCurProcessor] with an instance constructed to process our [JobParameters] parameter
+     * [params]. Then we call its `executeOnExecutor` method to start it running in the background
+     * using the executor THREAD_POOL_EXECUTOR (an executor which allows multiple tasks to run in
+     * parallel on a pool of threads managed by AsyncTask). Finally we return *true* so that our job
+     * will continue running while we process work.
      *
      * @param params Parameters specifying info about this job.
-     * @return `true` if your service will continue running, using a separate thread
-     * when appropriate.  `false` means that this job has completed its work.
+     * @return *true* if your service will continue running, using a separate thread
+     * when appropriate.  *false* means that this job has completed its work.
      */
     override fun onStartJob(params: JobParameters): Boolean {
         // Start task to pull work out of the queue and process it.
@@ -213,13 +199,13 @@ class JobWorkService : JobService() {
 
     /**
      * This method is called if the system has determined that you must stop execution of your job
-     * even before you've had a chance to call [.jobFinished].
+     * even before you've had a chance to call [jobFinished].
      *
      * @param params The parameters identifying this job, as supplied to
-     * the job in the [.onStartJob] callback.
-     * @return `true` to indicate to the JobManager whether you'd like to reschedule
-     * this job based on the retry criteria provided at job creation-time; or `false`
-     * to end the job entirely.  Regardless of the value returned, your job must stop executing.
+     * the job in the [onStartJob] callback.
+     * @return *true* to indicate to the `JobManager` whether you'd like to reschedule
+     * this job based on the retry criteria provided at job creation-time; or *false*
+     * to end the job entirely. Regardless of the value returned, your job must stop executing.
      */
     override fun onStopJob(params: JobParameters): Boolean {
         // Have the processor cancel its current work.
@@ -232,16 +218,17 @@ class JobWorkService : JobService() {
     }
 
     /**
-     * Show a notification while this service is running. We initialize `PendingIntent contentIntent`
-     * with an instance intended to launch the activity `JobWorkServiceActivity` with request code
-     * 0. We initialize `Notification.Builder noteBuilder` with a new instance using notification
-     * channel PRIMARY_CHANNEL ("default"), set its small icon to R.drawable.stat_sample, its ticker
-     * text to our parameter `String text`, its time stamp to now, its second line of text to
-     * `text` and its [PendingIntent] to be sent when the notification is clicked to
-     * `contentIntent`. We then set it to be an "ongoing" notification (ongoing notifications
-     * cannot be dismissed by the user, so your application or service must take care of canceling them).
-     * Finally we use `NotificationManager mNM` to post the notification build from `noteBuilder`
-     * using the resource id R.string.job_service_created as its id.
+     * Show a notification while this service is running. We initialize our [PendingIntent] variable
+     * `val contentIntent` with an instance intended to launch the activity [JobWorkServiceActivity]
+     * with request code 0. We initialize our [Notification.Builder] variable `val noteBuilder` with
+     * a new instance using notification channel PRIMARY_CHANNEL ("default"), set its small icon to
+     * R.drawable.stat_sample, its ticker text to our [String] parameter [text], its time stamp to
+     * now, its second line of text to [text] and its [PendingIntent] to be sent when the notification
+     * is clicked to `contentIntent`. We then set it to be an "ongoing" notification (ongoing
+     * notifications cannot be dismissed by the user, so your application or service must take care
+     * of canceling them).  Finally we use our [NotificationManager] field [mNM] to post the
+     * notification built from `noteBuilder` using the resource id R.string.job_service_created as
+     * its id.
      *
      * @param text string to use as both the ticker text (for accessibility) and content text
      */
