@@ -112,7 +112,7 @@ public class LoaderCursor extends AppCompatActivity {
          * field {@code SimpleCursorAdapter mAdapter}, which we then use to set our ListView's adapter.
          * We call {@code setListShown(false)} so that a indeterminate progress bar will be displayed
          * while we wait fot our Adapter to have data available for the List. Finally we start a
-         * loader (or reconnect) specifying {@code this} as the {@code LoaderManager.LoaderCallbacks<Cursor>}
+         * loader (or reconnect) specifying {@code this} as the {@code LoaderManager.LoaderCallbacks}
          * interface provider.
          *
          * @param savedInstanceState we do not override onSaveInstanceState so do not use
@@ -162,7 +162,7 @@ public class LoaderCursor extends AppCompatActivity {
             /**
              * Called when this view is collapsed as an action view.
              * See {@link MenuItem#collapseActionView()}.
-             * <p>
+             *
              * The normal SearchView doesn't clear its search text when collapsed, so we will do
              * this for it. We simply call {@code setQuery} with an empty String, and false to
              * prevent it being looked up. Finally we call through to our super's implementation
@@ -177,23 +177,23 @@ public class LoaderCursor extends AppCompatActivity {
 
         /**
          * Initialize the contents of the Activity's standard options menu.  You
-         * should place your menu items in to <var>menu</var>.  For this method
+         * should place your menu items in to menu.  For this method
          * to be called, you must have first called {@link #setHasOptionsMenu}.  See
          * {@link Activity#onCreateOptionsMenu(Menu) Activity.onCreateOptionsMenu}
          * for more information.
-         * <p>
+         *
          * First we add a new {@code MenuItem item} to {@code Menu menu} with the title "Search", we
          * set the icon for {@code item} to the android system drawable ic_menu_search, set the options
          * for {@code item} to SHOW_AS_ACTION_IF_ROOM and SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW (the
          * items action view will collapse to a normal menu item).
-         * <p>
+         *
          * Next we initialize our field {@code SearchView mSearchView} with a new instance of
          * {@code MySearchView}, set its {@code SearchView.OnQueryTextListener} to "this", set its
          * {@code SearchView.OnCloseListener} to this, and set the default or resting state of the
          * search field to iconified (a single search icon is shown by default and expands to show
          * the text field and other buttons when pressed. Also, if the default state is iconified,
          * then it collapses to that state when the close button is pressed.
-         * <p>
+         *
          * Finally we set the action view of {@code MenuItem item} to {@code mSearchView}.
          *
          * @param menu     The options menu in which you place your items.
@@ -223,7 +223,7 @@ public class LoaderCursor extends AppCompatActivity {
          * and our current filter {@code String mCurFilter} are null we do nothing and return true
          * to the caller. If {@code mCurFilter} is not null and {@code newFilter} is equal to it
          * we also do nothing and return true to the caller.
-         * <p>
+         *
          * If we get this far, the user has changed the filter that we should be using, so we set
          * {@code mCurFilter} to {@code newFilter}, and use the {@code LoaderManager} for this
          * Fragment to restart our loader (which eventually will result in our override of
@@ -289,7 +289,7 @@ public class LoaderCursor extends AppCompatActivity {
          * Subclasses should override. Subclasses can call
          * getListView().getItemAtPosition(position) if they need to access the
          * data associated with the selected item.
-         * <p>
+         *
          * Since we are not an actual application, we do not do anything when a list item is clicked.
          *
          * @param l        The ListView where the click happened
@@ -316,23 +316,23 @@ public class LoaderCursor extends AppCompatActivity {
         };
 
         /**
-         * Instantiate and return a new Loader for the given ID. Part of the {@code LoaderCallbacks<D>}
+         * Instantiate and return a new Loader for the given ID. Part of the {@code LoaderCallbacks}
          * interface. First we construct the {@code Uri baseUri} that will be used to query the
          * contacts database: if we have a filter defined by user use of our {@code SearchView} we
          * create a {@code Uri baseUri} that uses an appended path of an encoding of our filter
          * {@code String mCurFilter}
-         * <ul>
-         * (ala content://com.android.contacts/contacts/filter/<b>{@code value of mCurFilter}</b>
-         * </ul>
+         *
+         * (ala content://com.android.contacts/contacts/filter/{@code value of mCurFilter}
+         *
          * If there is no filter at present {@code Uri baseUri} is
-         * <ul>
+         *
          * content://com.android.contacts/contacts
-         * </ul>
+         *
          * Then we construct {@code String select}, the filter declaring which rows to return,
          * formatted as an SQL WHERE clause (excluding the WHERE itself) which consists of:
-         * <ul>
+         *
          * ((display_name NOTNULL) AND (has_phone_number=1) AND (display_name != '' ))
-         * </ul>
+         *
          * Finally we return an instance of {@code CursorLoader} constructed using the {@code Uri baseUri}
          * we calculated for the content to retrieve, our {@code String[] CONTACTS_SUMMARY_PROJECTION}
          * as the projection (list of columns to return), {@code String select} as the selection (rows
@@ -371,38 +371,38 @@ public class LoaderCursor extends AppCompatActivity {
 
         /**
          * Called when a previously created loader has finished its load.  Note
-         * that normally an application is <em>not</em> allowed to commit fragment
+         * that normally an application is not allowed to commit fragment
          * transactions while in this call, since it can happen after an
          * activity's state is saved.  See {@link FragmentManager#beginTransaction()
          * FragmentManager.openTransaction()} for further discussion on this.
-         * <p>
+         *
          * This function is guaranteed to be called prior to the release of
          * the last data that was supplied for this Loader.  At this point
          * you should remove all use of the old data (since it will be released
          * soon), but should not do your own release of the data since its Loader
          * owns it and will take care of that.  The Loader will take care of
          * management of its data so you don't have to.  In particular:
-         * <ul>
-         * <li>The Loader will monitor for changes to the data, and report
+         *
+         * The Loader will monitor for changes to the data, and report
          * them to you through new calls here.  You should not monitor the
          * data yourself.  For example, if the data is a {@link android.database.Cursor}
          * and you place it in a {@link android.widget.CursorAdapter}, use
          * the {@link android.widget.CursorAdapter#CursorAdapter(android.content.Context,
-         * android.database.Cursor, int)} constructor <em>without</em> passing
+         * android.database.Cursor, int)} constructor without passing
          * in either {@link android.widget.CursorAdapter#FLAG_AUTO_REQUERY}
          * or {@link android.widget.CursorAdapter#FLAG_REGISTER_CONTENT_OBSERVER}
          * (that is, use 0 for the flags argument).  This prevents the CursorAdapter
          * from doing its own observing of the Cursor, which is not needed since
          * when a change happens you will get a new Cursor throw another call
          * here.
-         * <li>The Loader will release the data once it knows the application
+         * The Loader will release the data once it knows the application
          * is no longer using it.  For example, if the data is
          * a {@link android.database.Cursor} from a {@link android.content.CursorLoader},
          * you should not call close() on it yourself.  If the Cursor is being placed in a
          * {@link android.widget.CursorAdapter}, you should use the
          * {@link android.widget.CursorAdapter#swapCursor(android.database.Cursor)}
          * method so that the old Cursor is not closed.
-         * </ul>
+         *
          * First we instruct our {@code SimpleCursorAdapter mAdapter} to swap in the newly loaded
          * {@code Cursor data}, and then if our {@code Fragment} is in the resumed state we toggle
          * our {@code List} to be shown now. If we are not in the resumed state we toggle our
