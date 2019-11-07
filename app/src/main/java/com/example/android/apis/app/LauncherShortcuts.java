@@ -16,11 +16,12 @@
 
 package com.example.android.apis.app;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -49,7 +50,7 @@ import com.example.android.apis.R;
  * In a real application, you would probably use the shortcut intent to display specific content
  * or start a particular operation.
  */
-public class LauncherShortcuts extends Activity {
+public class LauncherShortcuts extends AppCompatActivity {
 
     private static final String EXTRA_KEY = "com.example.android.apis.app.LauncherShortcuts";
 
@@ -79,7 +80,7 @@ public class LauncherShortcuts extends Activity {
 
         // Provide a lightweight view of the Intent that launched us
 
-        TextView intentInfo = (TextView) findViewById(R.id.txt_shortcut_intent);
+        TextView intentInfo = findViewById(R.id.txt_shortcut_intent);
         String info = intent.toString();
         String extra = intent.getStringExtra(EXTRA_KEY);
         if (extra != null) {

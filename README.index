@@ -834,6 +834,7 @@ App
   Launcher Shortcuts
     App/Launcher Shortcuts                 all
         .app.LauncherShortcuts
+        .layout.launcher_shortcuts.xml
             Supposed to show all that goes into creating a shortcut, and responding 
             to it, but could not get it to work.
             TODO: separate Activity into its own Application
