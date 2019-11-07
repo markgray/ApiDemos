@@ -137,7 +137,7 @@ class JobWorkServiceActivity : AppCompatActivity() {
                 ComponentName(this, JobWorkService::class.java)).setOverrideDeadline(0).build()
 
         // Watch for button clicks.
-        var button = findViewById<Button>(R.id.enqueue1)
+        var button: Button = findViewById(R.id.enqueue1)
         button.setOnClickListener(mEnqueue1Listener)
         button = findViewById(R.id.enqueue2)
         button.setOnClickListener(mEnqueue2Listener)
