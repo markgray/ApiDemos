@@ -51,6 +51,20 @@ import com.example.android.apis.R
 @Suppress("DEPRECATION")
 class LauncherShortcuts : AppCompatActivity() {
 
+    /**
+     * Called when the activity is starting. First we call through to our super's implementation of
+     * `onCreate`. We initialize our [Intent] variable `val intent` to the intent that started this
+     * activity and initialize our [String] variable `val action` to the general action to be
+     * performed by `intent`. It `action` is [Intent.ACTION_CREATE_SHORTCUT] we call our method
+     * [setupShortcut] to set up the shortcut [Intent] and set it as our activity result, then call
+     * the [finish] method to end our activity. If `action` is not [Intent.ACTION_CREATE_SHORTCUT]
+     * we set our content view to our layout file R.layout.launcher_shortcuts, then initialize our
+     * [TextView] variable `val intentInfo` by finding the view with the ID R.id.txt_shortcut_intent,
+     * initialize our [String] variable `var info` to the string value of `intent`, initialize our
+     * [String] variable `val extra` to the extra stored in `intent` under the key EXTRA_KEY (if any)
+     * and if `extra` is not *null* we append it to the end of `info`. Finally we set the text of
+     * `intentInfo` to `info`.
+     */
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
 
@@ -91,15 +105,12 @@ class LauncherShortcuts : AppCompatActivity() {
      *
      * The first intent serves as a container for the shortcut and is returned to the launcher by
      * setResult().  This intent must contain three fields:
-     *
-     *
      *  * [android.content.Intent.EXTRA_SHORTCUT_INTENT] The shortcut intent.
      *  * [android.content.Intent.EXTRA_SHORTCUT_NAME] The text that will be displayed with
      * the shortcut.
      *  * [android.content.Intent.EXTRA_SHORTCUT_ICON] The shortcut's icon, if provided as a
      * bitmap, *or* [android.content.Intent.EXTRA_SHORTCUT_ICON_RESOURCE] if provided as
      * a drawable resource.
-     *
      *
      * If you use a simple drawable resource, note that you must wrapper it using
      * [android.content.Intent.ShortcutIconResource], as shown below.  This is required so
@@ -136,8 +147,13 @@ class LauncherShortcuts : AppCompatActivity() {
         setResult(Activity.RESULT_OK, intent)
     }
 
+    /**
+     * Our static constant.
+     */
     companion object {
-
+        /**
+         * The extra key used for the storing of an extra in the [Intent] that launches us.
+         */
         private const val EXTRA_KEY = "com.example.android.apis.app.LauncherShortcuts"
     }
 }
