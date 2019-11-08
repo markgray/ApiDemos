@@ -31,9 +31,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ListView
-import android.widget.SearchView
-import android.widget.SearchView.OnCloseListener
-import android.widget.SearchView.OnQueryTextListener
 import android.widget.SimpleCursorAdapter
 
 import androidx.appcompat.app.AppCompatActivity
@@ -42,12 +39,15 @@ import androidx.fragment.app.ListFragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.SearchView.OnCloseListener
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 
 /**
  * Demonstration of the use of a CursorLoader to load and display contacts data in a fragment.
- * Creates a custom class CursorLoaderListFragment which extends ListFragment, with the necessary
- * callbacks to serve as a CursorLoader to load and display contacts data in the ListFragment.
- * Includes the use of a SearchView which might come in handy for MarkovChain
+ * Creates a custom class [CursorLoaderListFragment] which extends [ListFragment], with the
+ * necessary callbacks to serve as a [CursorLoader] to load and display contacts data in the
+ * [ListFragment]. Includes the use of a [SearchView] which might come in handy for MarkovChain
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -55,15 +55,16 @@ class LoaderCursor : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, then we initialize `FragmentManager fm` with a reference to the FragmentManager
-     * for interacting with fragments associated with this activity. We check whether this is the
-     * first time we are being created by using `fm` to search for a Fragment with the container
-     * view ID android.R.id.content (our root view) and if it does not find one we create an instance
-     * of `CursorLoaderListFragment list` and use `fm` begin a `FragmentTransaction`
-     * to add the fragment `list` to the Activity's state using the container view
-     * android.R.id.content, and commit the `FragmentTransaction`. If there was already a
-     * Fragment occupying android.R.id.content we are being recreated after an orientation change and
-     * do not need to do anything.
+     * `onCreate`, then we initialize our [FragmentManager] variable `val fm` with a reference to
+     * the support [FragmentManager] for interacting with fragments associated with this activity.
+     * We check whether this is the first time we are being created by using `fm` to search for a
+     * `Fragment` with the container view ID android.R.id.content (our root view) and if it does not
+     * find one we create an instance of [CursorLoaderListFragment] to initialize our variable
+     * `val list` and use `fm` begin a `FragmentTransaction` to which we chain an add of the fragment
+     * `list` to the Activity's state using the container view android.R.id.content, followed by a
+     * commit of the `FragmentTransaction`. On the other hand if there was already a Fragment
+     * occupying android.R.id.content we are being recreated after an orientation change and do not
+     * need to do anything.
      *
      * @param savedInstanceState we do not override onSaveInstanceState so do not use
      */
@@ -82,17 +83,27 @@ class LoaderCursor : AppCompatActivity() {
     }
 
     /**
-     * This `ListFragment` fills its `List` with data returned from a `SimpleCursorAdapter`
+     * This [ListFragment] fills its `List` with data returned from a [SimpleCursorAdapter]
      */
-    class CursorLoaderListFragment : ListFragment(), OnQueryTextListener, OnCloseListener, LoaderManager.LoaderCallbacks<Cursor> {
+    class CursorLoaderListFragment
+        : ListFragment(),
+            OnQueryTextListener,
+            OnCloseListener, LoaderManager.LoaderCallbacks<Cursor>
+    {
 
-        // This is the Adapter being used to display the list's data.
+        /**
+         * This is the Adapter being used to display the list's data.
+         */
         internal lateinit var mAdapter: SimpleCursorAdapter
 
-        // The SearchView for doing filtering.
+        /**
+         * The SearchView for doing filtering.
+         */
         internal lateinit var mSearchView: SearchView
 
-        // If non-null, this is the current filter the user has provided.
+        /**
+         * If non-null, this is the current filter the user has provided.
+         */
         internal var mCurFilter: String? = null
 
         /**
@@ -100,16 +111,16 @@ class LoaderCursor : AppCompatActivity() {
          * instantiated. First we call through to our super's implementaton of `onActivityCreated`,
          * Then we set the text for the `TextView` of the default content for our `ListFragment`
          * to the String "No phone numbers". Then we report that this fragment would like to participate
-         * in populating the options menu by receiving a call to onCreateOptionsMenu(Menu, MenuInflater)
-         * and related methods. Next we create an instance of `SimpleCursorAdapter` with a null
-         * cursor (we will set the cursor for the adapter later) and save a reference to it in our
-         * field `SimpleCursorAdapter mAdapter`, which we then use to set our ListView's adapter.
-         * We call `setListShown(false)` so that a indeterminate progress bar will be displayed
-         * while we wait fot our Adapter to have data available for the List. Finally we start a
-         * loader (or reconnect) specifying `this` as the `LoaderManager.LoaderCallbacks`
-         * interface provider.
+         * in populating the options menu by receiving a call to [onCreateOptionsMenu] and related
+         * methods. Next we create an instance of [SimpleCursorAdapter] with a *null* cursor (we
+         * will set the cursor for the adapter later) and save a reference to it in our
+         * [SimpleCursorAdapter] field [mAdapter], which we then use to set our ListView's adapter.
+         * We call the [ListFragment] method `setListShown(false)` so that a indeterminate progress
+         * bar will be displayed while we wait for our Adapter to have data available for the List.
+         * Finally we start a loader (or reconnect) specifying *this* as the interface provider for
+         * [LoaderManager.LoaderCallbacks].
          *
-         * @param savedInstanceState we do not override onSaveInstanceState so do not use
+         * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
          */
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
@@ -138,7 +149,7 @@ class LoaderCursor : AppCompatActivity() {
         }
 
         /**
-         * Custom `SearchView` which clears the search text when the `SearchView` is
+         * Custom [SearchView] which clears the search text when the [SearchView] is
          * collapsed by the user.
          */
         class MySearchView
@@ -146,8 +157,8 @@ class LoaderCursor : AppCompatActivity() {
          * Constructor which simply calls our super's constructor.
          *
          * @param context Context used by super (`getActivity()` called from menu of our
-         * `CursorLoaderListFragment` would return `LoaderCurstor`
-         * as the Activity Context in our case)
+         * `CursorLoaderListFragment` would return `LoaderCurstor` as the Activity Context
+         * in our case)
          */
         (context: Context) : SearchView(context) {
 
@@ -167,25 +178,21 @@ class LoaderCursor : AppCompatActivity() {
         }
 
         /**
-         * Initialize the contents of the Activity's standard options menu.  You
-         * should place your menu items in to menu.  For this method
-         * to be called, you must have first called [.setHasOptionsMenu].  See
-         * [Activity.onCreateOptionsMenu]
-         * for more information.
+         * Initialize the contents of the Activity's standard options menu. You should place your
+         * menu items in to the [Menu] parameter [menu]. For this method to be called, you must have
+         * first called [setHasOptionsMenu]. See [Activity.onCreateOptionsMenu] for more information.
          *
-         * First we add a new `MenuItem item` to `Menu menu` with the title "Search", we
-         * set the icon for `item` to the android system drawable ic_menu_search, set the options
-         * for `item` to SHOW_AS_ACTION_IF_ROOM and SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW (the
-         * items action view will collapse to a normal menu item).
-         *
-         * Next we initialize our field `SearchView mSearchView` with a new instance of
-         * `MySearchView`, set its `SearchView.OnQueryTextListener` to "this", set its
-         * `SearchView.OnCloseListener` to this, and set the default or resting state of the
+         * First we add a new [MenuItem] to our [Menu] parameter [menu] with the title "Search",
+         * saving a reference to it in our variable `val item`. We set the icon for `item` to the
+         * android system drawable ic_menu_search, set the options for `item` to SHOW_AS_ACTION_IF_ROOM
+         * and SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW (the items action view will collapse to a normal
+         * menu item). Next we initialize our [SearchView] field [mSearchView] with a new instance
+         * of [MySearchView], set its [SearchView.OnQueryTextListener] to *this*, set its
+         * [SearchView.OnCloseListener] to *this*, and set the default or resting state of the
          * search field to iconified (a single search icon is shown by default and expands to show
-         * the text field and other buttons when pressed. Also, if the default state is iconified,
-         * then it collapses to that state when the close button is pressed.
-         *
-         * Finally we set the action view of `MenuItem item` to `mSearchView`.
+         * the text field and other buttons when pressed). Also, if the default state is iconified,
+         * then it collapses to that state when the close button is pressed. Finally we set the
+         * action view of `item` to [mSearchView].
          *
          * @param menu     The options menu in which you place your items.
          * @param inflater could be used to instantiate menu XML files into Menu objects, but we do
@@ -204,7 +211,7 @@ class LoaderCursor : AppCompatActivity() {
             mSearchView = MySearchView(activity as Context)
             mSearchView.setOnQueryTextListener(this)
             mSearchView.setOnCloseListener(this)
-            mSearchView.isIconifiedByDefault = true
+            mSearchView.setIconifiedByDefault(true)
             item.actionView = mSearchView
         }
 
