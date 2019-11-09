@@ -612,7 +612,8 @@
         <activity
             android:name=".app.LoaderCustom"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="@string/loader_custom">
+            android:label="@string/loader_custom"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

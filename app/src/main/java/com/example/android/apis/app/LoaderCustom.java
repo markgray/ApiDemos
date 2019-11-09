@@ -16,6 +16,7 @@
 
 package com.example.android.apis.app;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -54,6 +55,8 @@ import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 
 import com.example.android.apis.R;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.text.Collator;
@@ -196,7 +199,6 @@ public class LoaderCustom extends Activity {
                 return mIcon;
             }
 
-            //noinspection deprecation
             return mLoader.getContext()
                     .getResources()
                     .getDrawable(android.R.drawable.sym_def_app_icon);
@@ -210,6 +212,7 @@ public class LoaderCustom extends Activity {
          * which is the current textual label associated with the application we describe, or the
          * packageName if none could be loaded.
          */
+        @NotNull
         @Override
         public String toString() {
             return mLabel;
@@ -243,6 +246,7 @@ public class LoaderCustom extends Activity {
                 } else {
                     mMounted = true;
                     CharSequence label = mInfo.loadLabel(context.getPackageManager());
+                    //noinspection ConstantConditions
                     mLabel = label != null ? label.toString() : mInfo.packageName;
                 }
             }
@@ -476,9 +480,11 @@ public class LoaderCustom extends Activity {
         public List<AppEntry> loadInBackground() {
             // Retrieve all known applications.
             //noinspection WrongConstant
+            @SuppressLint("InlinedApi")
             List<ApplicationInfo> apps = mPm.getInstalledApplications(
-                    PackageManager.GET_UNINSTALLED_PACKAGES |
-                            PackageManager.GET_DISABLED_COMPONENTS);
+                    PackageManager.MATCH_UNINSTALLED_PACKAGES |
+                            PackageManager.MATCH_DISABLED_COMPONENTS);
+            //noinspection ConstantConditions
             if (apps == null) {
                 apps = new ArrayList<>();
             }
@@ -756,6 +762,7 @@ public class LoaderCustom extends Activity {
      * The {@code ListFragment} which displays the data from our custom {@code AppListAdapter} in
      * its list.
      */
+    @SuppressWarnings("deprecation")
     public static class AppListFragment extends ListFragment
             implements OnQueryTextListener, OnCloseListener,
             LoaderManager.LoaderCallbacks<List<AppEntry>> {
