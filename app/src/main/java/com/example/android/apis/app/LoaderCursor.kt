@@ -217,20 +217,20 @@ class LoaderCursor : AppCompatActivity() {
 
         /**
          * Called when the query text is changed by the user. If the new text is not empty we set
-         * `String newFilter` to it otherwise we set it to null. If both `newFilter`
-         * and our current filter `String mCurFilter` are null we do nothing and return true
-         * to the caller. If `mCurFilter` is not null and `newFilter` is equal to it
-         * we also do nothing and return true to the caller.
+         * [String] variable `val newFilter` to it, otherwise we set it to null. If both `newFilter`
+         * and our current [String] filter in field [mCurFilter] are null we do nothing and return
+         * *true* to the caller. If [mCurFilter] is not *null* and `newFilter` is equal to it we
+         * also do nothing and return *true* to the caller.
          *
          * If we get this far, the user has changed the filter that we should be using, so we set
-         * `mCurFilter` to `newFilter`, and use the `LoaderManager` for this
-         * Fragment to restart our loader (which eventually will result in our override of
-         * `onCreateLoader` being called). Finally we return true to the caller.
+         * [mCurFilter] to `newFilter`, and use the [LoaderManager] for this `Fragment` to restart
+         * our loader (which eventually will result in our override of [onCreateLoader] being called).
+         * Finally we return *true* to the caller.
          *
          * @param newText the new content of the query text field.
-         * @return false if the SearchView should perform the default action of showing any
-         * suggestions if available, true if the action was handled by the listener. We always
-         * return true.
+         * @return *false* if the [SearchView] should perform the default action of showing any
+         * suggestions if available, *true* if the action was handled by the listener. We always
+         * return *true*.
          */
         override fun onQueryTextChange(newText: String): Boolean {
             // Called when the action bar search text has changed.  Update
@@ -252,12 +252,12 @@ class LoaderCursor : AppCompatActivity() {
         }
 
         /**
-         * Called when the user submits the query. We do not use this feature so we just return true
+         * Called when the user submits the query. We do not use this feature so we just return *true*
          * to the caller to signify that we have "handled" the query.
          *
          * @param query the query text that is to be submitted
-         * @return true if the query has been handled by the listener, false to let the
-         * SearchView perform the default action.
+         * @return *true* if the query has been handled by the listener, *false* to let the
+         * [SearchView] perform the default action.
          */
         override fun onQueryTextSubmit(query: String): Boolean {
             // Don't care about this.
@@ -265,13 +265,13 @@ class LoaderCursor : AppCompatActivity() {
         }
 
         /**
-         * The user is attempting to close the SearchView. We check to see if there are currently any
-         * characters in the text field of our `SearchView mSearchView` and if there are we
-         * set the query of `SearchView mSearchView` to null and submit the query. Finally we
-         * return true to the caller (since we wanted to override the default behavior).
+         * The user is attempting to close the [SearchView]. We check to see if there are currently
+         * any characters in the text field of our [SearchView] field [mSearchView] and if there are
+         * we set the query of [mSearchView] to *null* and submit the query. Finally we return *true*
+         * to the caller (since we wanted to override the default behavior).
          *
-         * @return true if the listener wants to override the default behavior of clearing the
-         * text field and dismissing it, false otherwise.
+         * @return *true* if the listener wants to override the default behavior of clearing the
+         * text field and dismissing it, *false* otherwise.
          */
         override fun onClose(): Boolean {
             if (!TextUtils.isEmpty(mSearchView.query)) {
@@ -281,10 +281,9 @@ class LoaderCursor : AppCompatActivity() {
         }
 
         /**
-         * This method will be called when an item in the list is selected.
-         * Subclasses should override. Subclasses can call
-         * getListView().getItemAtPosition(position) if they need to access the
-         * data associated with the selected item.
+         * This method will be called when an item in the list is selected. Subclasses should
+         * override. Subclasses can call getListView().getItemAtPosition(position) if they need
+         * to access the data associated with the selected item.
          *
          * Since we are not an actual application, we do not do anything when a list item is clicked.
          *
@@ -300,27 +299,27 @@ class LoaderCursor : AppCompatActivity() {
 
         /**
          * Instantiate and return a new Loader for the given ID. Part of the `LoaderCallbacks`
-         * interface. First we construct the `Uri baseUri` that will be used to query the
-         * contacts database: if we have a filter defined by user use of our `SearchView` we
-         * create a `Uri baseUri` that uses an appended path of an encoding of our filter
-         * `String mCurFilter`
+         * interface. First we construct the [Uri] variable `val baseUri` that will be used to
+         * query the contacts database: if we have a filter defined by user use of our [SearchView]
+         * we create a `baseUri` that uses an appended path of an encoding of our filter [String]
+         * field [mCurFilter].
          *
-         * (ala content://com.android.contacts/contacts/filter/`value of mCurFilter`
+         * (ala content://com.android.contacts/contacts/filter/value of mCurFilter)
          *
-         * If there is no filter at present `Uri baseUri` is
+         * If there is no filter at present `baseUri` is
          *
          * content://com.android.contacts/contacts
          *
-         * Then we construct `String select`, the filter declaring which rows to return,
-         * formatted as an SQL WHERE clause (excluding the WHERE itself) which consists of:
+         * Then we construct [String] variable `val select`, the filter declaring which rows to
+         * return, formatted as an SQL WHERE clause (excluding the WHERE itself) which consists of:
          *
          * ((display_name NOTNULL) AND (has_phone_number=1) AND (display_name != '' ))
          *
-         * Finally we return an instance of `CursorLoader` constructed using the `Uri baseUri`
+         * Finally we return an instance of [CursorLoader] constructed using the [Uri] `baseUri`
          * we calculated for the content to retrieve, our `String[] CONTACTS_SUMMARY_PROJECTION`
-         * as the projection (list of columns to return), `String select` as the selection (rows
-         * which match the selection will be returned), null for the selection arguments, and the
-         * `String` "display_name COLLATE LOCALIZED ASC" as the sort order for the rows.
+         * as the projection (list of columns to return), [String] `select` as the selection (rows
+         * which match the selection will be returned), *null* for the selection arguments, and the
+         * [String] "display_name COLLATE LOCALIZED ASC" as the sort order for the rows.
          *
          * @param id   The ID whose loader is to be created.
          * @param args Any arguments supplied by the caller.
@@ -350,13 +349,14 @@ class LoaderCursor : AppCompatActivity() {
         }
 
         /**
-         * Called when a previously created loader has finished its load.  Note
-         * that normally an application is not allowed to commit fragment
-         * transactions while in this call, since it can happen after an
-         * activity's state is saved.  See [ FragmentManager.openTransaction()][FragmentManager.beginTransaction] for further discussion on this.
+         * Called when a previously created loader has finished its load. Note that normally an
+         * application is not allowed to commit fragment transactions while in this call, since
+         * it can happen after an activity's state is saved.
+         * See [FragmentManager.openTransaction()][FragmentManager.beginTransaction] for further
+         * discussion on this.
          *
          * This function is guaranteed to be called prior to the release of
-         * the last data that was supplied for this Loader.  At this point
+         * the last data that was supplied for this Loader. At this point
          * you should remove all use of the old data (since it will be released
          * soon), but should not do your own release of the data since its Loader
          * owns it and will take care of that.  The Loader will take care of
@@ -369,21 +369,21 @@ class LoaderCursor : AppCompatActivity() {
          * the [android.widget.CursorAdapter] constructor without passing
          * in either [android.widget.CursorAdapter.FLAG_AUTO_REQUERY]
          * or [android.widget.CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER]
-         * (that is, use 0 for the flags argument).  This prevents the CursorAdapter
+         * (that is, use 0 for the flags argument). This prevents the CursorAdapter
          * from doing its own observing of the Cursor, which is not needed since
          * when a change happens you will get a new Cursor throw another call
          * here.
-         * The Loader will release the data once it knows the application
-         * is no longer using it.  For example, if the data is
-         * a [android.database.Cursor] from a [android.content.CursorLoader],
-         * you should not call close() on it yourself.  If the Cursor is being placed in a
-         * [android.widget.CursorAdapter], you should use the
-         * [android.widget.CursorAdapter.swapCursor]
-         * method so that the old Cursor is not closed.
          *
-         * First we instruct our `SimpleCursorAdapter mAdapter` to swap in the newly loaded
-         * `Cursor data`, and then if our `Fragment` is in the resumed state we toggle
-         * our `List` to be shown now. If we are not in the resumed state we toggle our
+         * The Loader will release the data once it knows the application is no longer
+         * using it. For example, if the data is a [android.database.Cursor] from a
+         * [android.content.CursorLoader], you should not call close() on it yourself.
+         * If the Cursor is being placed in a [android.widget.CursorAdapter], you should
+         * use the [android.widget.CursorAdapter.swapCursor] method so that the old Cursor
+         * is not closed.
+         *
+         * First we instruct our [SimpleCursorAdapter] field [mAdapter] to swap in our newly
+         * loaded [Cursor] parameter [data], and then if our `Fragment` is in the resumed state
+         * we toggle our `List` to be shown now. If we are not in the resumed state we toggle our
          * `List` to be shown ommitting the animation.
          *
          * @param loader The Loader that has finished.
@@ -404,10 +404,10 @@ class LoaderCursor : AppCompatActivity() {
 
         /**
          * Called when a previously created loader is being reset, and thus
-         * making its data unavailable.  The application should at this point
+         * making its data unavailable. The application should at this point
          * remove any references it has to the Loader's data.
          *
-         * We simply instruct our `SimpleCursorAdapter mAdapter` to swap in a null `Cursor`.
+         * We simply instruct our [SimpleCursorAdapter] field [mAdapter] to swap in a null [Cursor].
          *
          * @param loader The Loader that is being reset.
          */
@@ -418,6 +418,9 @@ class LoaderCursor : AppCompatActivity() {
             mAdapter.swapCursor(null)
         }
 
+        /**
+         * Our static constant
+         */
         companion object {
 
             /**
@@ -432,7 +435,13 @@ class LoaderCursor : AppCompatActivity() {
         }
     }
 
+    /**
+     * Our static constant
+     */
     companion object {
+        /**
+         * TAG used for logging.
+         */
         internal const val TAG = "LoaderCursor"
     }
 
