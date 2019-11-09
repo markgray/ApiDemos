@@ -54,8 +54,8 @@ import java.util.*
 
 /**
  * Demonstration of the implementation of a custom Loader. Shows how to implement a custom
- * AsyncTaskLoader, it uses the system function PackageManager.getInstalledApplications to
- * retrieve a `List<ApplicationInfo>` containing the AndroidManifest information for
+ * [AsyncTaskLoader], it uses the system function [PackageManager.getInstalledApplications]
+ * to retrieve a `List<ApplicationInfo>` containing the AndroidManifest information for
  * all the installed apps.
  */
 @Suppress("MemberVisibilityCanBePrivate")
@@ -64,16 +64,16 @@ class LoaderCustom : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * onCreate, Then we retrieve a handle for the FragmentManager for interacting with fragments
-     * associated with this activity to `FragmentManager fm`. Then if when using `fm` to
+     * `onCreate`, Then we retrieve a handle for the `FragmentManager` for interacting with fragments
+     * associated with this activity to initialize our variable `val fm`. Then if when using `fm` to
      * find a Fragment with the ID android.R.id.content we find none (first time running), we create
-     * a new instance of our Fragment `AppListFragment list`, use `fm` to start a new
-     * `FragmentTransaction` which we use to add `list` to the activity state with the
-     * ID android.R.id.content, and then commit the `FragmentTransaction`. If `fm` did
-     * find a Fragment with ID android.R.id.content then we are being recreated after an orientation
-     * change and need do nothing.
+     * a new instance of our [AppListFragment] fragment to initialize our variable `val list`, use
+     * `fm` to begin a new `FragmentTransaction` which we use to add `list` to the activity state
+     * with the ID android.R.id.content (our root view), and then commit the `FragmentTransaction`.
+     * If `fm` did find a Fragment with ID android.R.id.content then we are being recreated after an
+     * orientation change and need do nothing.
      *
-     * @param savedInstanceState we do not override onSaveInstanceState so do not use
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,7 +95,7 @@ class LoaderCustom : AppCompatActivity() {
     class AppEntry
     /**
      * Constructor for an instance holding `ApplicationInfo info` describing a particular
-     * package. We initialize our field `AppListLoader mLoader` with the value of our
+     * package. We initialize our [AppListLoader] field [mLoader] with the value of our
      * parameter `AppListLoader loader`, and our field `ApplicationInfo mInfo` with
      * the value of our parameter `ApplicationInfo info`. Finally we initialize our field
      * `File mApkFile` with a new `File` instance derived from the pathname given in
@@ -105,57 +105,61 @@ class LoaderCustom : AppCompatActivity() {
      * Parameter: info   one of the `ApplicationInfo` instances of the list that is returned
      * from the call to `PackageManager.getInstalledApplications`
      */
-    (private val mLoader: AppListLoader // AppListLoader which created us using "this"
-     ,
-     /**
-      * Getter method for our field `ApplicationInfo mInfo`, simply returns `mInfo`.
-      *
-      * @return contents of our field `ApplicationInfo mInfo`
-      */
-     val applicationInfo: ApplicationInfo // ApplicationInfo for package we are assigned to
+    (
+            /**
+             * [AppListLoader] which created us using its *this*
+             */
+            private val mLoader: AppListLoader,
+            /**
+             * ApplicationInfo for package we are assigned to
+             */
+            val applicationInfo: ApplicationInfo
     ) {
-        private val mApkFile: File = File(applicationInfo.sourceDir) // Full path to the base APK for the package
         /**
-         * Getter method for our field `String mLabel`, simply returns `mLabel`.
-         *
-         * @return contents of our field `String mLabel`
+         * Full path to the base APK for the package
+         */
+        private val mApkFile: File = File(applicationInfo.sourceDir)
+        /**
+         * Application label as discovered by the method loadLabel
          */
         var label: String? = null
-            private set // Application label as discovered by the method loadLabel
-
-        private var mIcon: Drawable? = null // Icon loaded from application apk by the method getIcon
-
-        private var mMounted: Boolean = false // Flag indicating whether we found an apk for the package
+            private set
 
         /**
-         * Getter method for our field `Drawable mIcon` (loading it from the apk or supplying
+         * Icon loaded from application apk by the method getIcon
+         */
+        private var mIcon: Drawable? = null
+
+        /**
+         * Flag indicating whether we found an apk for the package
+         */
+        private var mMounted: Boolean = false
+
+        /**
+         * Getter method for our [Drawable] field [mIcon] (loading it from the apk or supplying
          * a default icon if necessary.)
          *
-         *
-         * If the current value of {`Drawable mIcon`} is null (our first time being called, or
-         * the apk was not found to load an Icon from) we check to see if our `File mApkFile`
-         * exists, and if it does we set `mIcon` to the drawable returned by calling the method
-         * `loadIcon` using our instance of `ApplicationInfo mInfo` and return
-         * `Drawable mIcon` to the caller. If the `File mApkFile` does not exist we set
-         * our flag `boolean mMounted` to false and fall through to return the system drawable
-         * android.R.drawable.sym_def_app_icon. (Never setting `mIcon` notice, so the same code
-         * path will likely be followed again -- might be more efficient to set `mIcon` to the
+         * If the current value of [mIcon] is null (our first time being called, or the apk was not
+         * found to load an Icon from) we check to see if our [File] field [mApkFile] exists, and if
+         * it does we set [mIcon] to the drawable returned by calling the method `loadIcon` using
+         * our instance of [ApplicationInfo] in our field [applicationInfo] and return [mIcon] to
+         * the caller. If our [File] field [mApkFile] does not exist we set
+         * our [Boolean] flag field [mMounted] to *false* and fall through to return the system
+         * drawable android.R.drawable.sym_def_app_icon. (Never setting [mIcon] notice, so the same
+         * code path will likely be followed again -- might be more efficient to set [mIcon] to the
          * default icon for the next time, or does this logic allow for an apk file to suddenly
          * appear between calls to this method?)
          *
+         * If [mIcon] is not *null*, we check to see if our flag [mMounted] is *false* and if so
+         * we check to see if our [File] field [mApkFile] exists, and if it does we set our flag
+         * [mMounted] to *true*, set [mIcon] to the drawable returned by calling the method
+         * `loadIcon` using our instance of [ApplicationInfo] in our field [applicationInfo]
+         * and return the [Drawable] in our field [mIcon] to the caller. If [mMounted] was *true*
+         * we simply return [mIcon] to the caller.
          *
-         * If `mIcon` is not null, we check to see if our flag `boolean mMounted` is false
-         * and if so we check to see if our `File mApkFile` exists, and if it does we set our
-         * flag `boolean mMounted` to true, set  `mIcon` to the drawable returned by
-         * calling the method `loadIcon` using our instance of `ApplicationInfo mInfo`
-         * and return `Drawable mIcon` to the caller. If `mMounted` was true we simply
-         * return `mIcon` to the caller.
-         *
-         * @return either the contents of our field `Drawable mIcon` or the system default app
+         * @return either the contents of our [Drawable] field [mIcon] or the system default app
          * icon android.R.drawable.sym_def_app_icon
          */
-        // If the app wasn't mounted but is now mounted, reload
-        // its icon.
         val icon: Drawable?
             get() {
                 if (mIcon == null) {
@@ -166,6 +170,8 @@ class LoaderCustom : AppCompatActivity() {
                         mMounted = false
                     }
                 } else if (!mMounted) {
+                    // If the app wasn't mounted but is now mounted, reload
+                    // its icon.
                     if (mApkFile.exists()) {
                         mMounted = true
                         mIcon = applicationInfo.loadIcon(mLoader.mPm)
@@ -183,9 +189,9 @@ class LoaderCustom : AppCompatActivity() {
 
         /**
          * Returns a string containing a concise, human-readable description of this object, which
-         * in our case is the field `String mLabel` which is set by our method `loadLabel`.
+         * in our case is the [String] field [label] which is set by our method [loadLabel].
          *
-         * @return a printable representation of this object, in our case the field `String mLabel`
+         * @return a printable representation of this object, in our case the [String] field [label]
          * which is the current textual label associated with the application we describe, or the
          * packageName if none could be loaded.
          */
@@ -194,29 +200,25 @@ class LoaderCustom : AppCompatActivity() {
         }
 
         /**
-         * Makes sure our field `String mLabel` is loaded, either from the apk, or the contents
-         * of the field `packageName` of our field `ApplicationInfo mInfo`.
+         * Makes sure our [String] field [label] is loaded, either from the apk, or the contents
+         * of the field `packageName` of our [ApplicationInfo] field [applicationInfo].
          *
+         * If [label] is currently *null*, or the apk has not been mounted (our flag
+         * field [mMounted] is *false*) we check to see if our [File] field [mApkFile] exists
+         * and if it does not we set [mMounted] to *false* and set [label] to the contents
+         * of the `packageName` field our our [ApplicationInfo] field [applicationInfo]. If the
+         * apk file does exist we set [mMounted] to *true* and try to load the label from the apk
+         * to initialize our [CharSequence] variable `val label`. If successful we set [label] to
+         * the [String] value of `label`, otherwise we set [label] to the contents of the
+         * `packageName` field our our [ApplicationInfo] field [applicationInfo].
          *
-         * If `String mLabel` is currently null, or the apk has not been mounted (our flag
-         * `boolean mMounted` is false) we check to see if the `File mApkFile` exists
-         * and if it does not we set `mMounted` to false and set `mLabel` to the contents
-         * of the `packageName` field our our field `ApplicationInfo mInfo`. If the apk
-         * file does exist we set `mMounted` to true and try to load the `CharSequence label`
-         * from the apk. If successful we set `mLabel` to the String value of `label`,
-         * otherwise we set `mLabel` to the contents of the `packageName` field our our
-         * field `ApplicationInfo mInfo`.
-         *
-         *
-         * If `String mLabel` is currently not null, and the apk has been mounted (our flag
-         * `boolean mMounted` is true) we do nothing.
+         * If [label] is currently not *null*, and the apk has been mounted (our flag [mMounted] is
+         * *true*) we do nothing.
          *
          * @param context traces back to the an application context retrieved from the Context
-         * passed to the constructor, which is called with `getActivity()` in
-         * our case
+         * passed to the constructor, which is called with `getActivity()` in our case
          */
         internal fun loadLabel(context: Context) {
-            @Suppress("SENSELESS_COMPARISON")
             if (label == null || !mMounted) {
                 if (!mApkFile.exists()) {
                     mMounted = false
@@ -234,18 +236,18 @@ class LoaderCustom : AppCompatActivity() {
     /**
      * Helper for determining if the configuration has changed in an interesting way so we need to
      * rebuild the app list. To use this class one creates an instance of this class when your loader
-     * class is instantiated such as is done in our `AppListLoader` class:
-     * `InterestingConfigChanges mLastConfig`
-     * Then when you need to decide whether a configuration change has necessitated a reload of your
-     * data, call `mLastConfig.applyNewConfig(getContext().getResources())`, and if the result
-     * returned is true, a change has occurred in screen density, or the `Configuration` fields
-     * for CONFIG_LOCALE, CONFIG_UI_MODE, and/or CONFIG_SCREEN_LAYOUT have changed since last updated.
-     * If the result is false, no interesting Configuration changes have occurred.
+     * class is instantiated such as is done in our [AppListLoader] class, where it uses an instance
+     * of [InterestingConfigChanges] in its `mLastConfig` field for this purpose. Then when you need
+     * to decide whether a configuration change has necessitated a reload of your data, call
+     * `mLastConfig.applyNewConfig(getContext().getResources())`, and if the result returned is
+     * true, a change has occurred in screen density, or the `Configuration` fields for CONFIG_LOCALE,
+     * CONFIG_UI_MODE, and/or CONFIG_SCREEN_LAYOUT have changed since last updated. If the result is
+     * false, no interesting Configuration changes have occurred.
      */
     class InterestingConfigChanges {
         /**
-         * Starts out as an invalid `Configuration` and is updated using the current
-         * `Resources` by our method `applyNewConfig`
+         * Starts out as an invalid [Configuration] and is updated using the current
+         * [Resources] by our method [applyNewConfig]
          */
         internal val mLastConfiguration = Configuration()
 
@@ -256,23 +258,23 @@ class LoaderCustom : AppCompatActivity() {
         internal var mLastDensity: Int = 0
 
         /**
-         * Called to update our field `Configuration mLastConfiguration` with the latest values
+         * Called to update our [Configuration] field [mLastConfiguration] with the latest values
          * of application resources, and to determine if any changes in the configuration necessitate
          * action on the part of the caller. First we update our field containing the previous values
-         * of configuration `Configuration mLastConfiguration`, saving the bit mask of changed
-         * fields in `int configChanges`. Then we fetch the current display metrics for screen
-         * density in dpi, and compare it with the previous value stored `int mLastDensity` to
-         * set the flag `boolean densityChanged`. Then we check whether the density changed, or
-         * whether the bit fields for CONFIG_LOCALE, CONFIG_UI_MODE, and/or CONFIG_SCREEN_LAYOUT are
-         * set in `configChanges` and if so we update `mLastDensity` and return true to
-         * the caller in order to indicate that an "interesting config change" has occurred. Otherwise
-         * we return false to indicate that no change of interest has occurred.
+         * of configuration [mLastConfiguration], saving the bit mask of changed fields in our [Int]
+         * variable `val configChanges`. Then we fetch the current display metrics for screen
+         * density in dpi, and compare it with the previous value stored our [mLastDensity] field to
+         * set our [Boolean] variable `val densityChanged`. Then we check whether the density changed,
+         * or whether the bit fields for CONFIG_LOCALE, CONFIG_UI_MODE, and/or CONFIG_SCREEN_LAYOUT
+         * are set in `configChanges` and if so we update [mLastDensity] and return *true* to the
+         * caller in order to indicate that an "interesting config change" has occurred. Otherwise
+         * we return *false* to indicate that no change of interest has occurred.
          *
          * @param res Class for accessing an application's resources, it is acquired by calling
-         * `getContext().getResources()` in the `onStartLoading` callback of
-         * `AppListLoader` (our custom `AsyncTaskLoader<List<AppEntry>>`
-         * @return true if a change has occurred which requires us to reload our list of application
-         * entries.
+         * `getContext().getResources()` in the `onStartLoading` callback of [AppListLoader] (our
+         * custom `AsyncTaskLoader<List<AppEntry>>`
+         * @return *true* if a change has occurred which requires us to reload our list of
+         * application entries.
          */
         internal fun applyNewConfig(res: Resources): Boolean {
             val configChanges = mLastConfiguration.updateFrom(res.configuration)
@@ -288,8 +290,8 @@ class LoaderCustom : AppCompatActivity() {
 
     /**
      * Helper class to look for interesting changes to the installed apps so that the loader can be
-     * updated. It does this by registering itself as a `BroadcastReceiver` for the various
-     * package change broadcast `Intent`'s using `IntentFilter`'s for the actions:
+     * updated. It does this by registering itself as a [BroadcastReceiver] for the various
+     * package change broadcast [Intent]'s using [IntentFilter]'s for the actions:
      *
      *  * `Intent.ACTION_PACKAGE_ADDED`
      *  * `Intent.ACTION_PACKAGE_REMOVED`
@@ -297,9 +299,9 @@ class LoaderCustom : AppCompatActivity() {
      *  * `Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE`
      *  * `Intent.ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE`
      *
-     * Then it calls the `AppListLoader mLoader` method `onContentChanged` (which it
-     * inherits unchanged from its superclass `AsyncTaskLoader`) when it receives one of these
-     * `Intent`'s in its `onReceive` override.
+     * Then it calls the `onContentChanged` method of our [AppListLoader] field [mLoader] (which it
+     * inherits unchanged from its superclass [AsyncTaskLoader]) when it receives one of these
+     * [Intent]'s in its [onReceive] override.
      */
     class PackageIntentReceiver
     /**
