@@ -623,7 +623,8 @@
         <activity
             android:name=".app.LoaderThrottle"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="@string/loader_throttle">
+            android:label="@string/loader_throttle"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

@@ -17,18 +17,13 @@
 package com.example.android.apis.app;
 
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.ListFragment;
-import android.app.LoaderManager;
 import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.CursorLoader;
-import android.content.Loader;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -41,7 +36,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.BaseColumns;
-import androidx.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -49,7 +43,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.ListFragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.cursoradapter.widget.SimpleCursorAdapter;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -61,7 +65,7 @@ import java.util.HashMap;
  * {@code SimpleProvider}
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class LoaderThrottle extends Activity {
+public class LoaderThrottle extends AppCompatActivity {
     // Debugging.
     static final String TAG = "LoaderThrottle";
 
@@ -86,7 +90,7 @@ public class LoaderThrottle extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
 
         // Create the list fragment and add it as our sole content.
         if (fm.findFragmentById(android.R.id.content) == null) {
@@ -204,8 +208,8 @@ public class LoaderThrottle extends Activity {
          * should use this method to drop tables, add tables, or do anything else it
          * needs to upgrade to the new schema version.
          * <p>
-         * The SQLite ALTER TABLE documentation can be found
-         * <a href="http://sqlite.org/lang_altertable.html">here</a>. If you add new columns
+         * The SQLite ALTER TABLE documentation can be found at http://sqlite.org/lang_altertable.html
+         * If you add new columns
          * you can use ALTER TABLE to insert them into a live table. If you rename or remove columns
          * you can use ALTER TABLE to rename the old table, then create the new table and then
          * populate the new table with the contents of the old table.
@@ -580,8 +584,6 @@ public class LoaderThrottle extends Activity {
          *                  from whereArgs, in order that they appear in the selection. The
          *                  values will be bound as Strings.
          * @return The number of rows affected.
-         * @throws IllegalArgumentException
-         * @throws SQLException
          */
         @Override
         public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
@@ -694,6 +696,7 @@ public class LoaderThrottle extends Activity {
     /**
      * This is our content fragment which does all the UI work.
      */
+    @SuppressWarnings("deprecation")
     public static class ThrottledLoaderListFragment extends ListFragment
             implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -757,6 +760,7 @@ public class LoaderThrottle extends Activity {
             setHasOptionsMenu(true);
 
             // Create an empty adapter we will use to display the loaded data.
+            //noinspection ConstantConditions
             mAdapter = new SimpleCursorAdapter(getActivity(),
                     android.R.layout.simple_list_item_1, null,
                     new String[]{MainTable.COLUMN_NAME_DATA},
@@ -786,7 +790,7 @@ public class LoaderThrottle extends Activity {
          *                 (we do not use it, since we build the menu using code).
          */
         @Override
-        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        public void onCreateOptionsMenu(Menu menu, @NotNull MenuInflater inflater) {
             menu.add(Menu.NONE, POPULATE_ID, 0, "Populate")
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
             menu.add(Menu.NONE, CLEAR_ID, 0, "Clear")
@@ -829,8 +833,10 @@ public class LoaderThrottle extends Activity {
          * @return boolean Return false to allow normal menu processing to
          * proceed, true to consume it here. (We always return true)
          */
+        @SuppressLint("StaticFieldLeak")
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
+            //noinspection ConstantConditions
             final ContentResolver cr = getActivity().getContentResolver();
 
             switch (item.getItemId()) {
@@ -929,7 +935,7 @@ public class LoaderThrottle extends Activity {
          * @param id       The row id of the item that was clicked
          */
         @Override
-        public void onListItemClick(ListView l, View v, int position, long id) {
+        public void onListItemClick(@NotNull ListView l, @NotNull View v, int position, long id) {
             // Insert desired behavior here.
             Log.i(TAG, "Item clicked: " + id);
         }
@@ -951,7 +957,9 @@ public class LoaderThrottle extends Activity {
          * @param args Any arguments supplied by the caller. (We do not use arguments)
          * @return Return a new Loader instance that is ready to start loading.
          */
+        @NotNull
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            //noinspection ConstantConditions
             CursorLoader cl = new CursorLoader(getActivity(),
                     MainTable.CONTENT_URI,
                     PROJECTION,
@@ -971,7 +979,7 @@ public class LoaderThrottle extends Activity {
          * @param loader The Loader that has finished.
          * @param data   The data generated by the Loader.
          */
-        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        public void onLoadFinished(@NotNull Loader<Cursor> loader, Cursor data) {
             mAdapter.swapCursor(data);
 
             // The list should now be shown.
@@ -990,7 +998,7 @@ public class LoaderThrottle extends Activity {
          *
          * @param loader The Loader that is being reset.
          */
-        public void onLoaderReset(Loader<Cursor> loader) {
+        public void onLoaderReset(@NotNull Loader<Cursor> loader) {
             mAdapter.swapCursor(null);
         }
     }
