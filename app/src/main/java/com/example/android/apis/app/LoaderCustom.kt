@@ -305,25 +305,28 @@ class LoaderCustom : AppCompatActivity() {
      */
     class PackageIntentReceiver
     /**
-     * Constructor that initializes our field `AppListLoader mLoader` with the parameter
+     * Constructor that initializes our [AppListLoader] field [mLoader] with the parameter
      * passed it, and registers itself to receive the broadcast `Intent`'s we are interested
-     * in. First we save our parameter `AppListLoader loader` which we will use later on
-     * in our field `AppListLoader mLoader`. Then we create `IntentFilter filter` for
-     * the action ACTION_PACKAGE_ADDED, then add the additional actions ACTION_PACKAGE_REMOVED,
-     * and ACTION_PACKAGE_CHANGED to `filter`. We use our field `AppListLoader mLoader`
-     * to obtain its `Context` which we use to register "this" as a `BroadcastReceiver`
-     * for the actions in `filter`. We create an empty filter `IntentFilter sdFilter`
-     * and add to this empty filter the actions ACTION_EXTERNAL_APPLICATIONS_AVAILABLE and
-     * ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE. We use our field `AppListLoader mLoader`
-     * to obtain its `Context` which we use to register "this" as a `BroadcastReceiver`
+     * in. The default constructor saves its parameter in our [AppListLoader] field [mLoader].
+     * Then in our *init* block we create an [IntentFilter] instance that matches the action
+     * ACTION_PACKAGE_ADDED to initialize our variable `val filter`, then add the additional
+     * actions ACTION_PACKAGE_REMOVED, and ACTION_PACKAGE_CHANGED to `filter`. We use our field
+     * [mLoader] to obtain its [Context] which we use to register *this* as a [BroadcastReceiver]
+     * for the actions in `filter`. We create an empty [IntentFilter] to initialize our variable
+     * `val sdFilter` and add to this empty filter the actions ACTION_EXTERNAL_APPLICATIONS_AVAILABLE
+     * and ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE. We use our [AppListLoader] field [mLoader]
+     * to obtain its [Context] which we use to register *this* as a [BroadcastReceiver]
      * for the actions in `sdFilter`.
      *
-     * @param mLoader used to obtain `Context` where needed and to call the callback method
-     * `onContentChanged` (which it  inherits unchanged from its superclass
-     * `AsyncTaskLoader`) when the `AppListLoader` needs to reload its
-     * data.
+     * @param mLoader used to obtain [Context] where needed and to call the callback method
+     * `onContentChanged` (which it  inherits unchanged from its superclass `AsyncTaskLoader`)
+     * when the [AppListLoader] needs to reload its data.
      */
-    (internal val mLoader: AppListLoader // Loader that is interested in changes made to installed apps.
+    (
+            /**
+             * [Loader] that is interested in changes made to installed apps.
+             */
+            internal val mLoader: AppListLoader
     ) : BroadcastReceiver() {
 
         init {
@@ -340,13 +343,13 @@ class LoaderCustom : AppCompatActivity() {
         }
 
         /**
-         * This method is called when the BroadcastReceiver is receiving an Intent broadcast.
-         * We merely inform `AppListLoader mLoader` that the data it is handling may have
+         * This method is called when the [BroadcastReceiver] is receiving an [Intent] broadcast.
+         * We merely inform our [AppListLoader] field [mLoader] that the data it is handling may have
          * changed by calling its callback method `onContentChanged` (which it inherits
          * unchanged from its superclass `AsyncTaskLoader`).
          *
-         * @param context The Context in which the receiver is running.
-         * @param intent  The Intent being received.
+         * @param context The [Context] in which the receiver is running.
+         * @param intent  The [Intent] being received.
          */
         override fun onReceive(context: Context, intent: Intent) {
             // Tell the loader about the change.
@@ -355,12 +358,12 @@ class LoaderCustom : AppCompatActivity() {
     }
 
     /**
-     * A custom Loader that loads all of the installed applications.
+     * A custom [Loader] that loads all of the installed applications.
      */
     open class AppListLoader
     /**
-     * Constructor which initializes our field `PackageManager mPm` with an
-     * `PackageManager` instance.
+     * Constructor which initializes our [PackageManager] field [mPm] with a
+     * [PackageManager] instance.
      *
      * @param context used only to pass on to our super's constructor
      */
@@ -373,38 +376,38 @@ class LoaderCustom : AppCompatActivity() {
         internal val mLastConfig = InterestingConfigChanges()
 
         /**
-         * `PackageManager` instance we use to retrieve package information for the installed
+         * [PackageManager] instance we use to retrieve package information for the installed
          * packages.
          */
         @Suppress("LeakingThis")
         internal val mPm: PackageManager = getContext().packageManager
 
         /**
-         * Our list of `AppEntry` Objects describing the installed applications which we supply
-         * to those using us as a `Loader`.
+         * Our list of [AppEntry] Objects describing the installed applications which we supply
+         * to those using us as a [Loader].
          */
         internal var mApps: List<AppEntry>? = null
 
         /**
-         * Helper class to look for interesting changes to the installed apps so that the loader can be
-         * updated, it registers itself for package changing broadcast Intents and calls our super's
-         * method `onContentChanged` when it receives one in its `onReceive` method.
+         * Helper class to look for interesting changes to the installed apps so that the loader can
+         * be updated, it registers itself for package changing broadcast Intents and calls our
+         * super's method `onContentChanged` when it receives one in its `onReceive` method.
          * (The super then arranges for new data to be loaded by calling `onForceLoad` which
          * creates a new `LoadTask` and executes it.)
          */
         internal var mPackageObserver: PackageIntentReceiver? = null
 
         /**
-         * This is where the bulk of our work is done.  This function is called in a background
+         * This is where the bulk of our work is done. This function is called in a background
          * thread and should generate a new set of data to be published by the loader. First we
-         * use our `PackageManager mPm` to retrieve all known applications to our variable
-         * `List<ApplicationInfo> apps`. If no apps are returned (result is null) we allocate
-         * an empty `ArrayList<>` for `apps`. We initialize `Context context` with
-         * an application context retrieved from the Context passed to the constructor. We create
-         * our return list `List<AppEntry> entries`, and populate it with an `AppEntry`
-         * for each of the `ApplicationInfo` instances in `List<ApplicationInfo> apps`.
-         * When done we sort `entries` using our `Comparator<AppEntry> ALPHA_COMPARATOR`.
-         * Finally we return `entries` to the caller.
+         * use our [PackageManager] field [mPm] to retrieve all known applications to our variable
+         * `List<ApplicationInfo> apps`. If no apps are returned (`apps` is null) we allocate
+         * an empty `ArrayList<>` for `apps`. We initialize our [Context] variable `val context`
+         * with an application context retrieved from the [Context] passed to the constructor. We
+         * create our return list `List<AppEntry>` to initialize our variable `val entries`, and
+         * populate it with an [AppEntry] for each of the [ApplicationInfo] instances in `apps`.
+         * When done we sort `entries` using our `Comparator<AppEntry> ALPHA_COMPARATOR`. Finally
+         * we return `entries` to the caller.
          *
          * @return The result of the load operation.
          */
@@ -437,25 +440,23 @@ class LoaderCustom : AppCompatActivity() {
         }
 
         /**
-         * Called when there is new data to deliver to the client.  The super class will take care
+         * Called when there is new data to deliver to the client. The super class will take care
          * of delivering it; the implementation here just adds a little more logic. Must be called
          * from the process's main thread.
          *
-         *
          * First we check whether this load has been reset. That is, either the loader has not yet
-         * been started for the first time, or its reset() has been called. If so, we call our method
-         * `onReleaseResources(apps)` if `apps` is currently holding data we do not need.
+         * been started for the first time, or its `reset()` method has been called. If so, we call
+         * our method `onReleaseResources(apps)` if `apps` is currently holding data we do not need.
          * (Since we are using only a `List`, `onReleaseResources` does nothing, but in
          * an app using a cursor it would close the cursor.)
          *
-         *
-         * We save our field `List<AppEntry> mApps` in `List<AppEntry> oldApps` and set
-         * `mApps` to the value of our parameter `List<AppEntry> apps`. If our load has
-         * been started (i.e. startLoading() has been called and no calls to stopLoading() or reset()
-         * have yet been made) we call our super's implementation of `deliverResult` to do the
-         * actual delivering of the data in `List<AppEntry> apps` to the client. Finally if
-         * `oldApps` is not null, we call our method `onReleaseResources(oldApps)` to
-         * release resources (again, not needed in our case).
+         * We save our `List<AppEntry>` field [mApps] in our variable `val oldApps` and set
+         * [mApps] to the value of our `List<AppEntry>` parameter [apps]. If our load has
+         * been started (i.e. `startLoading()` has been called and no calls to `stopLoading()` or
+         * `reset()` have yet been made) we call our super's implementation of `deliverResult` to
+         * do the actual delivering of the data in [apps] to the client. Finally if `oldApps` is
+         * not null, we call our method `onReleaseResources(oldApps)` to release resources (again,
+         * not needed in our case).
          *
          * @param apps the result of the load
          */
@@ -486,24 +487,23 @@ class LoaderCustom : AppCompatActivity() {
         }
 
         /**
-         * Handles a request to start the Loader. Subclasses of `Loader` (via our extension
-         * of `AsyncTaskLoader`) must implement this to take care of loading their data, as
-         * per [.startLoading]. This is not called by clients directly, but as a result of
-         * a call to [.startLoading].
+         * Handles a request to start the Loader. Subclasses of [Loader] (via our extension
+         * of [AsyncTaskLoader]) must implement this to take care of loading their data, as
+         * per [startLoading]. This is not called by clients directly, but as a result of
+         * a call to [startLoading].
          *
-         *
-         * If we currently have a result available, we deliver it immediately by calling our override
-         * of  `deliverResult(mApps)`. Then if it is currently null, we create an instance of
-         * `PackageIntentReceiver mPackageObserver` which will register us for broadcast Intents
-         * for changes in the installed packages which will (probably) invalidate our results thereby
-         * necessitating a forced reload. Then we check whether configuration changes might have
-         * occurred which would require our data to be redisplayed and save the result in the flag
-         * `boolean configChange`.
-         *
+         * If we currently have a result available in our `List<AppEntry>` field [mApps], we deliver
+         * it immediately by calling our override of [deliverResult] with [mApps] as its parameter.
+         * Then if it is currently *null*, we create an instance of [PackageIntentReceiver] to
+         * initialize our field [mPackageObserver] which will register us for broadcast [Intent]'s
+         * for changes in the installed packages which will (probably) invalidate our results
+         * thereby necessitating a forced reload. Then we check whether configuration changes might
+         * have occurred which would require our data to be redisplayed and save the result in the
+         * [Boolean] flag variable `val configChange`.
          *
          * Finally based on whether the current flag indicating whether the loader's content had
-         * changed while it was stopped is set, or `mApps` is still null, or `configChange`
-         * is true we force an asynchronous load by calling `forceLoad()`. This will ignore a
+         * changed while it was stopped is set, or [mApps] is still *null*, or `configChange`
+         * is *true* we force an asynchronous load by calling `forceLoad()`. This will ignore a
          * previously loaded data set and load a new one. It does this by calling through to the
          * implementation's `onForceLoad()`.
          */
@@ -531,10 +531,10 @@ class LoaderCustom : AppCompatActivity() {
         }
 
         /**
-         * Subclasses of `Loader` must implement this to take care of stopping their loader,
-         * as per [.stopLoading].  This is not called by clients directly, but as a result
-         * of a call to [.stopLoading]. This will always be called from the process's main
-         * thread. We simply call the method `cancelLoad()`
+         * Subclasses of [Loader] must implement this to take care of stopping their loader,
+         * as per [stopLoading].  This is not called by clients directly, but as a result
+         * of a call to [stopLoading]. This will always be called from the process's main
+         * thread. We simply call the method [cancelLoad].
          */
         override fun onStopLoading() {
             // Attempt to cancel the current load task if possible.
@@ -547,14 +547,14 @@ class LoaderCustom : AppCompatActivity() {
         }
 
         /**
-         * Called if the task was canceled before it was completed.  Gives the class a chance
+         * Called if the task was canceled before it was completed. Gives the class a chance
          * to clean up post-cancellation and to properly dispose of the result. First we call
          * through to our super's implementation of `onCanceled`, then we call our method
-         * `onReleaseResources` (which does nothing, but serves as an example in case the
+         * [onReleaseResources] (which does nothing, but serves as an example in case the
          * code is reused in an application which has resources which need to released.)
          *
-         * @param apps The value that was returned by [.loadInBackground], or null
-         * if the task threw [OperationCanceledException].
+         * @param apps The value that was returned by [loadInBackground], or *null* if the task
+         * threw [OperationCanceledException].
          */
         override fun onCanceled(apps: List<AppEntry>?) {
             super.onCanceled(apps)
@@ -566,12 +566,11 @@ class LoaderCustom : AppCompatActivity() {
 
         /**
          * Handles a request to completely reset the Loader. First we call through to our super's
-         * implementation of `onReset`, then we call our override of `onStopLoading` to
-         * cancel the load, then we call our method `onReleaseResources` (which does nothing,
-         * but serves as an example in case the code is reused in an application which has resources
-         * which need to released.) Finally if `PackageIntentReceiver mPackageObserver` is
-         * listening for package change broadcasts, we unregister `mPackageObserver` and set
-         * it to null.
+         * implementation of `onReset`, then we call our override of [onStopLoading] to
+         * cancel the load, then we call our method [onReleaseResources] (which does nothing, but
+         * serves as an example in case the code is reused in an application which has resources
+         * which need to released.) Finally if our [PackageIntentReceiver] field [mPackageObserver]
+         * is listening for package change broadcasts, we unregister it and set it to null.
          */
         override fun onReset() {
             super.onReset()
@@ -595,8 +594,8 @@ class LoaderCustom : AppCompatActivity() {
 
         /**
          * Helper function to take care of releasing resources associated with an actively loaded
-         * data set. For a simple `List<>` there is nothing to do, so we do nothing.  For
-         * something like a Cursor, we would close it here.
+         * data set. For a simple `List<>` there is nothing to do, so we do nothing. For
+         * something like a `Cursor`, we would close it here.
          */
         @Suppress("UNUSED_PARAMETER")
         private fun onReleaseResources(apps: List<AppEntry>?) {
@@ -606,18 +605,18 @@ class LoaderCustom : AppCompatActivity() {
     }
 
     /**
-     * `ListAdapter` used as cursor to populate the `ListFragment`'s list of our Fragment
-     * `AppListFragment`
+     * [ListAdapter] used as cursor to populate the [ListFragment]'s list of our Fragment
+     * [AppListFragment]
      */
     class AppListAdapter
     /**
-     * Constructor for a new instance of `AppListAdapter`. First we call through to our super's
+     * Constructor for a new instance of [AppListAdapter]. First we call through to our super's
      * constructor supplying a stock system layout for a `TwoLineListItem` (for no apparent
      * reason since we use our own layout file for our list item Views), and then we initialize our
-     * field `LayoutInflater mInflater` with the `LayoutInflater` returned from the
-     * system-level service LAYOUT_INFLATER_SERVICE.
+     * [LayoutInflater] field [mInflater] with the [LayoutInflater] returned from the system-level
+     * service LAYOUT_INFLATER_SERVICE.
      *
-     * @param context This is the `Context` to use, in our case it is the `Activity`
+     * @param context This is the [Context] to use, in our case it is the [Activity]
      * returned by `getActivity()`
      */
     (context: Context) : ArrayAdapter<AppEntry>(context, android.R.layout.simple_list_item_2) {
@@ -632,9 +631,9 @@ class LoaderCustom : AppCompatActivity() {
         private val mInflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         /**
-         * Sets the contents of our `ArrayAdapter`. First we remove all elements from our list,
-         * and then if our parameter `List<AppEntry> data` is not null, we add all the elements
-         * in `data` to the end of our `ArrayAdapter`.
+         * Sets the contents of our [ArrayAdapter]. First we remove all elements from our list,
+         * and then if our `List<AppEntry>` parameter [data] is not *null*, we add all the elements
+         * in [data] to the end of our [ArrayAdapter].
          *
          * @param data list of package information returned from package manager by our background
          * loader (or null if it is being invalidated after a loader reset.)
@@ -647,14 +646,14 @@ class LoaderCustom : AppCompatActivity() {
         }
 
         /**
-         * Get a View that displays the data at the specified position in the data set. First we declare
-         * a `View view`, and if the `View convertView` passed us is null we use our field
-         * `LayoutInflater mInflater` to inflate list item layout file R.layout.list_item_icon_text
-         * into `view`. If `convertView` is not null we recycle it by setting `view` to
-         * it. Next we fetch the item at `int position` to `AppEntry item`, set the
-         * `ImageView` at R.id.icon in `view` to the icon associated with the data in
-         * `item` and set the text of the `TextView` R.id.text in `view` to the
-         * label associated with `item`. Finally we return `view` to the caller.
+         * Get a [View] that displays the data at the specified position in the data set. First we
+         * declare a [View] variable `val view`, and if our [View] parameter [convertView] is *null*
+         * we use our [LayoutInflater] field [mInflater] to inflate the list item layout file
+         * R.layout.list_item_icon_text into `view`. If [convertView] is not *null* we recycle it
+         * by setting `view` to it. Next we fetch the item at [position] to initialize our [AppEntry]
+         * variable `val item`, set the [ImageView] with ID R.id.icon in `view` to the icon associated
+         * with the data in `item` and set the text of the [TextView] with ID R.id.text in `view` to
+         * the `label` associated with `item`. Finally we return `view` to the caller.
          *
          * @param position    The position of the item within the adapter's data set of the item
          * whose view we want.
@@ -679,10 +678,13 @@ class LoaderCustom : AppCompatActivity() {
     }
 
     /**
-     * The `ListFragment` which displays the data from our custom `AppListAdapter` in
-     * its list.
+     * The [ListFragment] which displays the data from our custom [AppListAdapter] in its list.
      */
-    class AppListFragment : ListFragment(), OnQueryTextListener, OnCloseListener, LoaderManager.LoaderCallbacks<List<AppEntry>> {
+    class AppListFragment : ListFragment(),
+            OnQueryTextListener,
+            OnCloseListener,
+            LoaderManager.LoaderCallbacks<List<AppEntry>>
+    {
 
         /**
          * This is the Adapter being used to display the list's data.
@@ -690,7 +692,7 @@ class LoaderCustom : AppCompatActivity() {
         internal lateinit var mAdapter: AppListAdapter
 
         /**
-         * The SearchView for doing filtering.
+         * The [SearchView] for doing filtering.
          */
         internal lateinit var mSearchView: SearchView
 
@@ -701,19 +703,19 @@ class LoaderCustom : AppCompatActivity() {
 
         /**
          * Called when the fragment's activity has been created and this fragment's view hierarchy
-         * instantiated. First we call through to our super's implementation of `onActivityCreated`.
-         * then we set the empty text to be shown in our `ListView` if we are unable to load
-         * any data. Then we report that this fragment would like to participate in populating the options
-         * menu by receiving a call to `onCreateOptionsMenu(Menu, MenuInflater)` and related
-         * methods. We initialize our field `AppListAdapter mAdapter` with an instance of our
-         * custom adapter `AppListAdapter` using the `Activity` our Fragment is associated
-         * with as the `Context`. and set our list adapter to `mAdapter`. We set our
-         * `ListView` to display an indeterminate progress indicator while we wait for our
-         * loader to finish loading its data. Then we initialize the loader using "this" for the
-         * `LoaderManager.LoaderCallbacks` parameter (so our methods `onCreateLoader`,
-         * `onLoadFinished` and `onLoaderReset` will be called.)
+         * instantiated. First we call through to our super's implementation of `onActivityCreated`,
+         * then we set the empty text to be shown in our [ListView] if we are unable to load any
+         * data to the string "No applications". Then we report that this fragment would like to
+         * participate in populating the options menu by receiving a call to [onCreateOptionsMenu]
+         * and related methods. We initialize our [AppListAdapter] field [mAdapter] with an instance
+         * of our custom adapter [AppListAdapter] using the [Activity] our Fragment is associated
+         * with as the [Context]. and set our list adapter to [mAdapter]. We set our [ListView] to
+         * display an indeterminate progress indicator while we wait for our loader to finish
+         * loading its data. Then we initialize the loader using *this* for the
+         * [LoaderManager.LoaderCallbacks] parameter (so our methods [onCreateLoader],
+         * [onLoadFinished], and [onLoaderReset] will be called.)
          *
-         * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+         * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
          */
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
@@ -739,7 +741,7 @@ class LoaderCustom : AppCompatActivity() {
         }
 
         /**
-         * Custom `SearchView` which clears its search text when it is collapsed.
+         * Custom [SearchView] which clears its search text when it is collapsed.
          */
         class MySearchView
         /**
@@ -753,10 +755,9 @@ class LoaderCustom : AppCompatActivity() {
              * Called when this view is collapsed as an action view.
              * See [MenuItem.collapseActionView].
              *
-             *
-             * The normal SearchView doesn't clear its search text when collapsed,
+             * The normal [SearchView] doesn't clear its search text when collapsed,
              * so we will do this for it. We set the query string in the text field
-             * to the empty String (passing false to not submit it), and then call
+             * to the empty [String] (passing *false* to not submit it), and then call
              * our super's implementation of `onActionViewCollapsed`.
              */
             override fun onActionViewCollapsed() {
@@ -767,28 +768,28 @@ class LoaderCustom : AppCompatActivity() {
 
         /**
          * Initialize the contents of the Activity's standard options menu.  You
-         * should place your menu items in to <var>menu</var>.  For this method
-         * to be called, you must have first called [.setHasOptionsMenu].  See
-         * [Activity.onCreateOptionsMenu]
-         * for more information.
+         * should place your menu items in to the [Menu] parameter [menu]. For this method
+         * to be called, you must have first called [setHasOptionsMenu].
+         * See [Activity.onCreateOptionsMenu] for more information.
          *
-         *
-         * First we create a `MenuItem item` by adding a `MenuItem` with the title
-         * "search" to our `Menu menu` parameter. We set the ICON of `item` to the
+         * First we create a [MenuItem] to initialize our variable `val item` by adding a [MenuItem]
+         * with the title "Search" to our [Menu] parameter [menu]. We set the ICON of `item` to the
          * system drawable ic_menu_search, and set the show as action flags SHOW_AS_ACTION_IF_ROOM
-         * and SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW. We initialize our field `SearchView mSearchView`
-         * with a new instance of `MySearchView`, set its `OnQueryTextListener` to "this",
-         * set its `OnCloseListener` to "this", and set its iconified by default to true. Finally
-         * we set the action view of `MenuItem item` to our `mSearchView`.
+         * and SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW. We initialize our [SearchView] field [mSearchView]
+         * with a new instance of [MySearchView], set its [OnQueryTextListener] to *this*, set its
+         * [OnCloseListener] to *this*, and set its iconified by default property to *true*. Finally
+         * we set the action view of `item` to our [mSearchView] field.
          *
          * @param menu     The options menu in which you place your items.
-         * @param inflater Inflater to use to inflate xml layout file (unused)
+         * @param inflater [MenuInflater] to use to inflate xml layout file (unused)
          */
         override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
             // Place an action bar item for searching.
             val item = menu.add("Search")
             item.setIcon(android.R.drawable.ic_menu_search)
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
+            item.setShowAsAction(
+                    MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW
+            )
             mSearchView = MySearchView(activity as Context)
             mSearchView.setOnQueryTextListener(this)
             mSearchView.setOnCloseListener(this)
@@ -797,17 +798,17 @@ class LoaderCustom : AppCompatActivity() {
         }
 
         /**
-         * Called when the query text is changed by the user. If the `newText` entered by the
-         * user is not empty, we set our field `String mCurFilter` to it, otherwise we set
-         * `mCurFilter` to null. We get a `Filter` for our `AppListAdapter mAdapter`
-         * and then use it to start an asynchronous filtering operation using `mCurFilter`
+         * Called when the query text is changed by the user. If the [newText] entered by the
+         * user is not empty, we set our [String] field [mCurFilter] to it, otherwise we set
+         * [mCurFilter] to *null*. We get a [Filter] for our [AppListAdapter] field [mAdapter]
+         * and then use it to start an asynchronous filtering operation using [mCurFilter]
          * (canceling all previous non-executed filtering requests and posting a new filtering
-         * request that will be executed later.) Finally we return true to indicate that the action
-         * was handled by us.
+         * request that will be executed later.) Finally we return *true* to indicate that the
+         * action was handled by us.
          *
          * @param newText the new content of the query text field.
-         * @return false if the SearchView should perform the default action of showing any
-         * suggestions if available, true if the action was handled by the listener.
+         * @return *false* if the [SearchView] should perform the default action of showing any
+         * suggestions if available, *true* if the action was handled by the listener.
          */
         override fun onQueryTextChange(newText: String): Boolean {
             // Called when the action bar search text has changed.  Since this
@@ -818,18 +819,16 @@ class LoaderCustom : AppCompatActivity() {
         }
 
         /**
-         * Called when the user submits the query. This could be due to a key press on the
-         * keyboard or due to pressing a submit button.
-         * The listener can override the standard behavior by returning true
-         * to indicate that it has handled the submit request. Otherwise return false to
-         * let the SearchView handle the submission by launching any associated intent.
+         * Called when the user submits the query. This could be due to a key press on the keyboard
+         * or due to pressing a submit button. The listener can override the standard behavior by
+         * returning *true* to indicate that it has handled the submit request. Otherwise return
+         * *false* to let the [SearchView] handle the submission by launching any associated intent.
          *
-         *
-         * We don't care about this.
+         * We don't care about this, so we just return *true*
          *
          * @param query the query text that is to be submitted
-         * @return true if the query has been handled by the listener, false to let the
-         * SearchView perform the default action.
+         * @return *true* if the query has been handled by the listener, *false* to let the
+         * [SearchView] perform the default action.
          */
         override fun onQueryTextSubmit(query: String): Boolean {
             // Don't care about this.
@@ -837,12 +836,12 @@ class LoaderCustom : AppCompatActivity() {
         }
 
         /**
-         * The user is attempting to close the SearchView. If the query in `SearchView mSearchView`
-         * is not empty, we set the query to null and submit it. Finally we return true to indicate we
-         * have consumed the event.
+         * The user is attempting to close the [SearchView]. If the query in our [SearchView] field
+         * [mSearchView] is not empty, we set the query to null and submit it. Finally we return
+         * *true* to indicate we have consumed the event.
          *
-         * @return true if the listener wants to override the default behavior of clearing the
-         * text field and dismissing it, false otherwise.
+         * @return *true* if the listener wants to override the default behavior of clearing the
+         * text field and dismissing it, *false* otherwise.
          */
         override fun onClose(): Boolean {
             if (!TextUtils.isEmpty(mSearchView.query)) {
@@ -852,16 +851,15 @@ class LoaderCustom : AppCompatActivity() {
         }
 
         /**
-         * This method will be called when an item in the list is selected.
+         * This method will be called when an item in the list of the [ListView] is selected.
          * Subclasses should override. Subclasses can call
-         * getListView().getItemAtPosition(position) if they need to access the
-         * data associated with the selected item.
-         *
+         * `getListView().getItemAtPosition(position)` if they need to access the data associated
+         * with the selected item.
          *
          * We just log the event having happened.
          *
-         * @param l        The ListView where the click happened
-         * @param v        The view that was clicked within the ListView
+         * @param l        The [ListView] where the click happened
+         * @param v        The [View] that was clicked within the ListView
          * @param position The position of the view in the list
          * @param id       The row id of the item that was clicked
          */
@@ -871,12 +869,12 @@ class LoaderCustom : AppCompatActivity() {
         }
 
         /**
-         * Instantiate and return a new Loader for the given ID. We just return an `AppListLoader`
-         * created using the `LoaderCustom Activity` as its `Context`.
+         * Instantiate and return a new [Loader] for the given ID. We just return an [AppListLoader]
+         * created using the [Activity] of [LoaderCustom] as its [Context].
          *
          * @param id   The ID whose loader is to be created.
          * @param args Any arguments supplied by the caller.
-         * @return Return a new Loader instance that is ready to start loading.
+         * @return Return a new [Loader] instance that is ready to start loading.
          */
         override fun onCreateLoader(id: Int, args: Bundle?): Loader<List<AppEntry>> {
             // This is called when a new Loader needs to be created.  This
@@ -886,12 +884,12 @@ class LoaderCustom : AppCompatActivity() {
 
         /**
          * Called when a previously created loader has finished its load. We set the data of our
-         * `AppListAdapter mAdapter` to the `List<AppEntry> data`. If our Fragment is
-         * in the `Resumed` state (newly created) we set our `List` to be shown, otherwise
-         * (an orientation change has occurred) we set our `List` to be shown without the
+         * [AppListAdapter] field [mAdapter] to our `List<AppEntry>` parameter [data]. If our
+         * Fragment is in the `Resumed` state (newly created) we set our `List` to be shown,
+         * otherwise (an orientation change has occurred) we set our `List` to be shown without the
          * animation from the previous state (don't know why, because the animation looks nifty).
          *
-         * @param loader The Loader that has finished.
+         * @param loader The [Loader] that has finished.
          * @param data   The data generated by the Loader.
          */
         override fun onLoadFinished(loader: Loader<List<AppEntry>>, data: List<AppEntry>) {
@@ -908,11 +906,10 @@ class LoaderCustom : AppCompatActivity() {
 
         /**
          * Called when a previously created loader is being reset, and thus
-         * making its data unavailable.  The application should at this point
+         * making its data unavailable. The application should at this point
          * remove any references it has to the Loader's data.
          *
-         *
-         * We simply set the data of our `AppListAdapter mAdapter` to null.
+         * We simply set the data of our [AppListAdapter] field [mAdapter] to null.
          *
          * @param loader The Loader that is being reset.
          */
@@ -922,11 +919,17 @@ class LoaderCustom : AppCompatActivity() {
         }
     }
 
+    /**
+     * Our static constants.
+     */
     companion object {
+        /**
+         * TAG used for logging.
+         */
         internal var TAG = "LoaderCustom"
 
         /**
-         * Perform alphabetical comparison of application `AppEntry` objects.
+         * Perform alphabetical comparison of application [AppEntry] objects.
          */
         val ALPHA_COMPARATOR: Comparator<AppEntry> = object : Comparator<AppEntry> {
             /**
@@ -935,27 +938,26 @@ class LoaderCustom : AppCompatActivity() {
             private val sCollator = Collator.getInstance()
 
             /**
-             * Compares the two specified `AppEntry` Objects to determine their relative ordering.
+             * Compares the two specified [AppEntry] Objects to determine their relative ordering.
              * The ordering implied by the return value of this method for all possible pairs of
              * `(object1, object2)` should form an *equivalence relation*.
-             * This means that
+             * This means that:
              *
              *  * `compare(a,a)` returns zero for all `a`
              *  * the sign of `compare(a,b)` must be the opposite of the sign of `compare(b,a)`
-             * for all pairs of (a,b)
+             *    for all pairs of (a,b)
              *  * From `compare(a,b) > 0` and `compare(b,c) > 0` it must follow
-             * `compare(a,c) > 0` for all possible combinations of `(a,b,c)`
+             *    `compare(a,c) > 0` for all possible combinations of `(a,b,c)`
              *
+             * We simply return the results of applying our [Collator] field [sCollator] to the
+             * labels fetched from `object1` and `object2` respectively, thereby defining an
+             * alphabetical ordering of [AppEntry] Objects based on the alphabetical ordering of
+             * their labels as fetched from their [String] field `mLabel`.
              *
-             * We simply return the results of applying our `Collator sCollator` to the labels
-             * fetched from `object1` and `object2` respectively, thereby defining an
-             * alphabetical ordering or `AppEntry` Objects based on the alphabetical ordering of
-             * their labels as fetched from their field `String mLabel`.
-             *
-             * @param object1 an `AppEntry`.
-             * @param object2 a second `AppEntry` to compare with `object1`.
-             * @return an integer < 0 if `object1` is less than `object2`, 0 if they are
-             * equal, and > 0 if `object1` is greater than `object2`.
+             * @param object1 an [AppEntry].
+             * @param object2 a second [AppEntry] to compare with [object1].
+             * @return an integer < 0 if [object1] is less than [object2], 0 if they are
+             * equal, and > 0 if [object1] is greater than [object2].
              * @throws ClassCastException if objects are not of the correct type.
              */
             override fun compare(object1: AppEntry, object2: AppEntry): Int {
