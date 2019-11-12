@@ -20,7 +20,6 @@ package com.example.android.apis.app;
 // class is in a sub-package.
 import com.example.android.apis.R;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -32,11 +31,12 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import androidx.annotation.RequiresApi;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 /**
  * Example service that gets launched from a notification and runs in the background.
  * Its label is "App/Notification/Background Service"
@@ -86,7 +86,7 @@ public class NotificationBackgroundService extends Service {
     /**
      * Demo UI that allows the user to post the notification.
      */
-    public static class Controller extends Activity {
+    public static class Controller extends AppCompatActivity {
         /**
          * Handle to the NOTIFICATION_SERVICE system level service.
          */

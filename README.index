@@ -890,6 +890,7 @@ App
   Notification
     App/Notification/Background Service    v26
         .app.NotificationBackgroundService
+        .layout.notification_background_service.xml
             Example service that gets launched from a notification and runs in the background.
 
     App/Notification/IncomingMessage       all -> v26
