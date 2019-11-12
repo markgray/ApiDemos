@@ -847,7 +847,7 @@ class LoaderThrottle : AppCompatActivity() {
         }
 
         /**
-         * This method is called when an item in the list is selected. We simply log the `long id`
+         * This method is called when an item in the list is selected. We simply log the row [id]
          * of the row that was clicked.
          *
          * @param l        The ListView where the click happened
@@ -862,25 +862,31 @@ class LoaderThrottle : AppCompatActivity() {
 
         /**
          * Instantiate and return a new Loader for the given ID. We create a fully specified cursor
-         * loader `CursorLoader cl` for the `Uri MainTable.CONTENT_URI`, set the amount
-         * to throttle updates to 2000 milliseconds, and return it to the caller.
+         * loader [CursorLoader] for the content [Uri] given in [MainTable.CONTENT_URI] to initialize
+         * our variable `val cl`, set the amount to throttle updates to 2000 milliseconds, and return
+         * it to the caller.
          *
          * @param id   The ID whose loader is to be created. (We only use one, so ignore this)
          * @param args Any arguments supplied by the caller. (We do not use arguments)
-         * @return Return a new Loader instance that is ready to start loading.
+         * @return Return a new [Loader] instance that is ready to start loading.
          */
         override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
 
-            val cl = CursorLoader(activity!!,
+            val cl = CursorLoader(
+                    activity!!,
                     MainTable.CONTENT_URI,
-                    PROJECTION, null, null, null)
+                    PROJECTION,
+                    null,
+                    null,
+                    null
+            )
             cl.setUpdateThrottle(2000) // update at most every 2 seconds.
             return cl
         }
 
         /**
-         * Called when a previously created loader has finished its load. We swap in the new Cursor,
-         * then cause our `ListView` to be shown. If the state of the Fragment is "Resumed"
+         * Called when a previously created loader has finished its load. We swap in the new [Cursor],
+         * then cause our [ListView] to be shown. If the state of the `Fragment` is "Resumed"
          * we use the call `setListShown(true)` (normal case), and after an orientation change
          * we use the call `setListShownNoAnimation(true)`
          *
@@ -900,9 +906,9 @@ class LoaderThrottle : AppCompatActivity() {
 
         /**
          * Called when a previously created loader is being reset, and thus
-         * making its data unavailable.  The application should at this point
+         * making its data unavailable. The application should at this point
          * remove any references it has to the Loader's data. We just swap in
-         * a null cursor to our `SimpleCursorAdapter mAdapter`.
+         * a null [Cursor] for our [SimpleCursorAdapter] field [mAdapter] to use.
          *
          * @param loader The Loader that is being reset.
          */
@@ -910,6 +916,9 @@ class LoaderThrottle : AppCompatActivity() {
             mAdapter.swapCursor(null)
         }
 
+        /**
+         * Our static constants
+         */
         companion object {
 
             // Menu identifiers
@@ -929,6 +938,9 @@ class LoaderThrottle : AppCompatActivity() {
         }
     }
 
+    /**
+     * Our static constants
+     */
     companion object {
         // Debugging.
         internal const val TAG = "LoaderThrottle"
