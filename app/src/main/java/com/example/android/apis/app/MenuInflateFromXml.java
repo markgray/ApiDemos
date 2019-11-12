@@ -19,7 +19,6 @@ package com.example.android.apis.app;
 import com.example.android.apis.R;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -33,6 +32,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 /**
  * Demonstrates inflating menus from XML. There are 6 different menu XML resources that the user can
  * choose to inflate: R.menu.title_only, R.menu.title_icon, R.menu.submenu, R.menu.groups,
@@ -44,11 +45,11 @@ import android.widget.Toast;
  * another, back out of the activity and start over.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class MenuInflateFromXml extends Activity {
+public class MenuInflateFromXml extends AppCompatActivity {
     /**
      * Different example menu resources.
      */
-    private static final int sMenuExampleResources[] = {
+    private static final int[] sMenuExampleResources = {
             R.menu.title_icon, R.menu.title_only, R.menu.submenu, R.menu.groups,
             R.menu.checkable, R.menu.shortcuts, R.menu.order, R.menu.category_order,
             R.menu.visible, R.menu.disabled
@@ -57,7 +58,7 @@ public class MenuInflateFromXml extends Activity {
     /**
      * Names corresponding to the different example menu resources.
      */
-    private static final String sMenuExampleNames[] = {
+    private static final String[] sMenuExampleNames = {
             "Title and Icon", "Title only", "Submenu", "Groups",
             "Checkable", "Shortcuts", "Order", "Category and Order",
             "Visible", "Disabled"

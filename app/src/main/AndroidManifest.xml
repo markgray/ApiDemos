@@ -1138,7 +1138,8 @@
 
         <activity
             android:name=".app.MenuInflateFromXml"
-            android:label="@string/menu_from_xml_title">
+            android:label="@string/menu_from_xml_title"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
