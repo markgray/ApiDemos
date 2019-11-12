@@ -870,6 +870,16 @@ App
   Menu
     App/Menu/Inflate from XML              all -> v14
         .app.MenuInflateFromXml            crashes froyo invalidateOptionsMenu()
+        .menu.title_icon.xml
+        .menu.title_only.xml
+        .menu.submenu.xml
+        .menu.groups.xml
+        .menu.checkable.xml
+        .menu.shortcuts.xml
+        .menu.order.xml
+        .menu.category_order.xml
+        .menu.visible.xml
+        .menu.disabled.xml
             Lets you choose from a bunch of different xml menus: R.menu.title_only, 
             R.menu.title_icon, R.menu.submenu, R.menu.groups, R.menu.checkable, 
             R.menu.shortcuts, R.menu.order, R.menu.category_order, R.menu.visible, 
