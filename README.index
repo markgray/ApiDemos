@@ -816,9 +816,9 @@ App
     App/Fragment/Tabs                      v11 -> v13 because of .detach
         .app.FragmentTabs *** TODO: Revise to non-deprecated API
         .app.FragmentStack
-        .app.LoaderCursor *** TODO: Usage commented out until LoaderCursor is updated
-        .app.LoaderCustom *** TODO: Usage commented out until LoaderCustom is updated
-        .app.LoaderThrottle  *** TODO: Usage commented out until LoaderThrottle is updated
+        .app.LoaderCursor
+        .app.LoaderCustom
+        .app.LoaderThrottle
             This demonstrates the use of action bar tabs and how they interact with other
             action bar features. The Activities chosen to populate the tabs all have 
             their own uses for the action bar, and they are switched in and out by a 
@@ -841,14 +841,14 @@ App
 
   Loader
     App/Loader/Cursor                      v11
-        .app.LoaderCursor ***** TODO: Update FragmentTabs after fixing this *****
+        .app.LoaderCursor
             Creates a custom class CursorLoaderListFragment which extends ListFragment, 
             with the necessary callbacks to serve as a CursorLoader to load and display 
             contacts data in the ListFragment. Includes the use of a SearchView which
             might come in handy for MarkovChain
 
     App/Loader/Custom                      v11 -> v14
-        .app.LoaderCustom ***** TODO: Update FragmentTabs after fixing this *****
+        .app.LoaderCustom
             Shows how to implement a custom AsyncTaskLoader, it uses the system function
             PackageManager.getInstalledApplications to retrieve a List<ApplicationInfo> 
             containing the AndroidManifest information for all the installed apps.
@@ -860,7 +860,7 @@ App
             setRetainInstance(true) in the onActivityCreated callback.
 
     App/Loader/Throttle                    v11
-        .app.LoaderThrottle ***** TODO: Update FragmentTabs after fixing this *****
+        .app.LoaderThrottle
             Demonstration of bottom to top implementation of a content provider holding
             structured data through displaying it in the UI, using throttling to reduce
             the number of queries done when its data changes. Implements a custom CursorLoader

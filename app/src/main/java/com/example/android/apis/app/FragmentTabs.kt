@@ -71,34 +71,32 @@ class FragmentTabs : AppCompatActivity() {
         bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE)
 
         bar.addTab(bar.newTab()
-                .setText("Simple 1")
+                .setText("Simple")
                 .setTabListener(TabListener(
-                        this, "simple1", FragmentStack.CountingFragment::class.java)))
-        bar.addTab(bar.newTab()
-                .setText("Simple 2")
-                .setTabListener(TabListener(
-                        this, "simple2", FragmentStack.CountingFragment::class.java)))
-        bar.addTab(bar.newTab()
-                .setText("Simple 3")
-                .setTabListener(TabListener(
-                        this, "simple3", FragmentStack.CountingFragment::class.java)))
-        bar.addTab(bar.newTab()
-                .setText("Simple 4")
-                .setTabListener(TabListener(
-                        this, "simple4", FragmentStack.CountingFragment::class.java)))
+                        this,
+                        "simple1",
+                        FragmentStack.CountingFragment::class.java)))
 
-        //        bar.addTab(bar.newTab()
-        //                .setText("Contacts")
-        //                .setTabListener(new TabListener<>(
-        //                        this, "contacts", LoaderCursor.CursorLoaderListFragment.class)));
-        //        bar.addTab(bar.newTab()
-        //                .setText("Apps")
-        //                .setTabListener(new TabListener<>(
-        //                        this, "apps", LoaderCustom.AppListFragment.class)));
-        //        bar.addTab(bar.newTab()
-        //                .setText("Throttle")
-        //                .setTabListener(new TabListener<>(
-        //                        this, "throttle", LoaderThrottle.ThrottledLoaderListFragment.class)));
+        bar.addTab(bar.newTab()
+                .setText("Contacts")
+                .setTabListener(TabListener(
+                        this,
+                        "contacts",
+                        LoaderCursor.CursorLoaderListFragment::class.java)))
+
+        bar.addTab(bar.newTab()
+                .setText("Apps")
+                .setTabListener(TabListener(
+                        this,
+                        "apps",
+                        LoaderCustom.AppListFragment::class.java)))
+
+        bar.addTab(bar.newTab()
+                .setText("Throttle")
+                .setTabListener(TabListener(
+                        this,
+                        "throttle",
+                        LoaderThrottle.ThrottledLoaderListFragment::class.java)))
 
         if (savedInstanceState != null) {
             bar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0))
