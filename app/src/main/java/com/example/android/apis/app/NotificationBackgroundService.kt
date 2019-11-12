@@ -16,9 +16,6 @@
 
 package com.example.android.apis.app
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-
 import android.app.*
 import android.content.Context
 import android.content.Intent
@@ -28,8 +25,12 @@ import android.os.Bundle
 import android.os.IBinder
 import android.view.View.OnClickListener
 import android.widget.Button
+
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+
+// Need the following import to get access to the app resources, since this
+// class is in a sub-package.
 import com.example.android.apis.R
 
 /**
@@ -41,21 +42,22 @@ class NotificationBackgroundService : Service() {
     /**
      * Called by the system every time a client explicitly starts the service by calling
      * [android.content.Context.startService], providing the arguments it supplied and a
-     * unique integer token representing the start request. We fetch a handle to the NOTIFICATION_SERVICE
-     * system level service and use it to cancel the notification with id `layout.notification_background_service`
-     * (the one that launched us). We then call the `stopSelf` method with our parameter `startId`
-     * to stop this service. Finally we return START_NOT_STICKY to take the service out of the started state and
-     * prevent it from being recreated until a future explicit call to [Context.startService(Intent)][Context.startService].
+     * unique integer token representing the start request. We fetch a handle to the
+     * NOTIFICATION_SERVICE system level service and use it to cancel the notification with
+     * id `R.layout.notification_background_service` (the one that launched us). We then call
+     * the [stopSelf] method with our parameter [startId] to stop this service. Finally we
+     * return START_NOT_STICKY to take the service out of the started state and prevent it
+     * from being recreated until a future explicit call to [Context.startService].
      *
-     * @param intent The Intent supplied to [android.content.Context.startService], Unused
+     * @param intent The [Intent] supplied to [android.content.Context.startService]. Unused
      * @param flags Additional data about this start request. Unused
      * @param startId A unique integer representing this specific request to start.
      * @return The return value indicates what semantics the system should use for the service's
      * current started state. It may be one of the constants associated with the
-     * [.START_CONTINUATION_MASK] bits. We return START_NOT_STICKY (if this service's process
-     * is killed while it is started (after returning from `onStartCommand`), and there are
-     * no new start intents to deliver to it, then take the service out of the started state and
-     * don't recreate until a future explicit call to [Context.startService(Intent)][Context.startService].
+     * [Service.START_CONTINUATION_MASK] bits. We return [Service.START_NOT_STICKY] (if this
+     * service's process is killed while it is started (after returning from `onStartCommand`),
+     * and there are no new start intents to deliver to it, then take the service out of the
+     * started state and don't recreate until a future explicit call to [Context.startService].
      */
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
 
@@ -66,11 +68,12 @@ class NotificationBackgroundService : Service() {
     }
 
     /**
-     * Return the communication channel to the service. We return null because clients cannot bind to us.
+     * Return the communication channel to the service. We return *null* because clients cannot
+     * bind to us.
      *
-     * @param intent The Intent that was used to bind to this service
-     * @return Return an IBinder through which clients can call on to the service, we return null
-     * because clients cannot bind to us
+     * @param intent The [Intent] that was used to bind to this service
+     * @return Return an [IBinder] through which clients can call on to the service, we return
+     * *null* because clients cannot bind to us
      */
     override fun onBind(intent: Intent): IBinder? {
         return null
@@ -87,7 +90,7 @@ class NotificationBackgroundService : Service() {
 
         /**
          * Called when the button with id R.id.notify is clicked. We just call our method
-         * `showNotification` with the text "Selecting this will cause a background
+         * [showNotification] with the text "Selecting this will cause a background
          * service to run."
          *
          * Parameter: the `View` that was clicked
@@ -97,17 +100,19 @@ class NotificationBackgroundService : Service() {
         }
 
         /**
-         * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-         * then we set our content view to our layout file R.layout.notification_background_service.
-         * We then initialize our field `NotificationManager mNM` with a handle to the NOTIFICATION_SERVICE
-         * system level service. We initialize `NotificationChannel chan1` with a new instance whose id and
-         * user visible name are both PRIMARY_CHANNEL ("default"), and whose importance is IMPORTANCE_DEFAULT
-         * (shows everywhere, makes noise, but does not visually intrude). We set the notification light
-         * color of `chan1` to GREEN, and set its lock screen visibility to VISIBILITY_PRIVATE
-         * (shows this notification on all lockscreens, but conceal sensitive or private information on
-         * secure lockscreens). We then have `mNM` create notification channel `chan1`.
-         * Finally we initialize `Button button` by finding the view with id R.id.notify and set
-         * its `OnClickListener` to our field `mNotify`.
+         * Called when the activity is starting. First we call our super's implementation of
+         * `onCreate`, then we set our content view to our layout file
+         * R.layout.notification_background_service. We then initialize our [NotificationManager]
+         * field [mNM] with a handle to the NOTIFICATION_SERVICE system level service. We initialize
+         * our [NotificationChannel] variable `val chan1` with a new instance whose id and user
+         * visible name are both PRIMARY_CHANNEL ("default"), and whose importance is
+         * IMPORTANCE_DEFAULT (shows everywhere, makes noise, but does not visually intrude).
+         * We set the notification light color of `chan1` to GREEN, and set its lock screen
+         * visibility to VISIBILITY_PRIVATE (shows this notification on all lockscreens, but
+         * conceal sensitive or private information on secure lockscreens). We then have [mNM]
+         * create notification channel `chan1`. Finally we initialize our [Button] variable
+         * `val button` by finding the view with id R.id.notify and set its `OnClickListener`
+         * to our field [mNotify].
          *
          * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
          */
