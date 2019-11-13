@@ -36,13 +36,14 @@ class IncomingMessageView : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.incoming_message_view.
-     * We locate the `TextView` in the layout with ID R.id.from and set its text to the String
+     * We locate the [TextView] in the layout with ID R.id.from and set its text to the String
      * stored as an extra in the Intent that launched us under the key KEY_FROM and the text of
-     * R.id.message to that stored under the key KEY_MESSAGE. We fetch a handle to the system service
-     * NOTIFICATION_SERVICE for `NotificationManager nm` and use it to cancel the notification
-     * which was originally posted by `IncomingMessage`.
+     * the [TextView] with ID R.id.message to that stored under the key KEY_MESSAGE. We fetch a
+     * handle to the system service NOTIFICATION_SERVICE [NotificationManager] to initialize our
+     * variable `val nm` and use it to cancel the notification which was originally posted by
+     * [IncomingMessage].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +61,9 @@ class IncomingMessageView : AppCompatActivity() {
         nm.cancel(R.string.imcoming_message_ticker_text)
     }
 
+    /**
+     * Our static constants.
+     */
     companion object {
         /**
          * Extra that can be supplied to Intent: who the message is from.
