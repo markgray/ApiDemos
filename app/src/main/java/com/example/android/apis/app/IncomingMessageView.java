@@ -18,17 +18,18 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * This activity is run as the click activity for {@link IncomingMessage}, and also
  * {@link IncomingMessageInterstitial}. When it comes up, it also clears the notification, because
  * the "message" has been "read."
  */
-public class IncomingMessageView extends Activity {
+public class IncomingMessageView extends AppCompatActivity {
     /**
      * Extra that can be supplied to Intent: who the message is from.
      */
@@ -64,6 +65,7 @@ public class IncomingMessageView extends Activity {
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         // cancel the notification that we started in IncomingMessage
+        //noinspection ConstantConditions
         nm.cancel(R.string.imcoming_message_ticker_text);
     }
 }

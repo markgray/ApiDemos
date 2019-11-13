@@ -21,7 +21,6 @@ import java.util.Random;
 import com.example.android.apis.R;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -35,6 +34,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 /**
  * UI for posting an example notification. Allows you to choose between a regular app notification,
  * and an interstitial notification and shows how to launch {@code IncomingMessageView} from either
@@ -43,7 +44,7 @@ import android.widget.Button;
  * to launch {@code IncomingMessageView}.
  */
 @TargetApi(Build.VERSION_CODES.O)
-public class IncomingMessage extends Activity {
+public class IncomingMessage extends AppCompatActivity {
     /**
      * The id of the primary notification channel
      */
@@ -368,7 +369,6 @@ public class IncomingMessage extends Activity {
         // the convention of using a resource id for a string related to
         // the notification.  It will always be a unique number within your
         // application.
-        //noinspection ConstantConditions
         nm.notify(R.string.imcoming_message_ticker_text, notifBuilder.build());
     }
 

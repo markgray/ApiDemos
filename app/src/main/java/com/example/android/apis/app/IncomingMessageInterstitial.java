@@ -17,12 +17,13 @@
 package com.example.android.apis.app;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -32,7 +33,7 @@ import com.example.android.apis.R;
  * to the app in its appropriate state if they want.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class IncomingMessageInterstitial extends Activity {
+public class IncomingMessageInterstitial extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.incoming_message_interstitial.
@@ -47,7 +48,7 @@ public class IncomingMessageInterstitial extends Activity {
 
         setContentView(R.layout.incoming_message_interstitial);
 
-        Button button = (Button) findViewById(R.id.notify_app);
+        Button button = findViewById(R.id.notify_app);
         button.setOnClickListener(new Button.OnClickListener() {
             /**
              * Called when the R.id.notify_app Button ("Switch to app") is clicked, we simply call

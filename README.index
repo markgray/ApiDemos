@@ -895,8 +895,12 @@ App
 
     App/Notification/IncomingMessage       all -> v26
         .app.IncomingMessage               interstitial crashes froyo startActivities()
-        .app.IncomingMessageView
+        .layout.incoming_message.xml
+        .layout.incoming_message_panel.xml
         .app.IncomingMessageInterstitial
+        .layout.incoming_message_interstitial.xml
+        .app.IncomingMessageView
+        .layout.incoming_message_view.xml
             Allows you to choose between a regular app notification, and an interstitial
             notification and shows how to launch IncomingMessageView from either type of
             notification. The interstitial choice launches IncomingMessageInterstitial 

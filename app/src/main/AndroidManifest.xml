@@ -940,7 +940,8 @@
 
         <activity
             android:name=".app.IncomingMessage"
-            android:label="App/Notification/IncomingMessage">
+            android:label="App/Notification/IncomingMessage"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -949,7 +950,8 @@
 
         <activity
             android:name=".app.IncomingMessageView"
-            android:label="App/Notification/IncomingMessageView" />
+            android:label="App/Notification/IncomingMessageView"
+            android:theme="@style/Theme.AppCompat.Light" />
 
         <activity
             android:name=".app.IncomingMessageInterstitial"
