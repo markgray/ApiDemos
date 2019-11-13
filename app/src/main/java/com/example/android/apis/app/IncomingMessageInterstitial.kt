@@ -25,7 +25,7 @@ import com.example.android.apis.R
 
 /**
  * This is an activity that provides an interstitial UI for the notification
- * that is posted by [IncomingMessage].  It allows the user to switch
+ * that is posted by [IncomingMessage]. It allows the user to switch
  * to the app in its appropriate state if they want.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -33,8 +33,9 @@ class IncomingMessageInterstitial : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.incoming_message_interstitial.
-     * We then locate `Button button` with ID R.id.notify_app in our layout and set its `OnClickListener`
-     * to an anonymous class which will call our method `switchToApp()` when the Button is clicked.
+     * We then locate the [Button] with ID R.id.notify_app to initialize our variable `val button`
+     * and set its `OnClickListener` to an a lambda which will call our method [switchToApp] when
+     * the Button is clicked.
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
      */
@@ -46,25 +47,26 @@ class IncomingMessageInterstitial : AppCompatActivity() {
         val button = findViewById<Button>(R.id.notify_app)
         /**
          * Called when the R.id.notify_app Button ("Switch to app") is clicked, we simply call
-         * our method `switchToApp()` to build an appropriate back stack and switch to
-         * the Activity `IncomingMessageView`.
+         * our method [switchToApp] to build an appropriate back stack and switch to
+         * the Activity [IncomingMessageView].
          *
          * Parameter: View of the Button that was clicked
          */
         button.setOnClickListener {
-                switchToApp()
-            }
+            switchToApp()
+        }
     }
 
 
     /**
-     * Perform a switch to the app.  A new activity stack is started, replacing whatever is currently
-     * running, and this activity is finished. First we retrieve `CharSequence from` which was
-     * stored as an extra in the Intent which launched us under the key KEY_FROM, and `CharSequence msg`
-     * stored under the key KEY_MESSAGE. We then use the method `IncomingMessage.makeMessageIntentStack`
-     * to build a back stack for `Intent[] stack` which includes an Intent to launch
-     * `IncomingMessageView`, start the activities in `stack`, and close this Activity by
-     * calling `finish()`.
+     * Perform a switch to the app. A new activity stack is started, replacing whatever is currently
+     * running, and this activity is finished. First we retrieve the [CharSequence] which was stored
+     * as an extra in the Intent which launched us under the key KEY_FROM to initialize our variable
+     * `val from`, and the [CharSequence] stored under the key KEY_MESSAGE to initialize our variable
+     * `val msg`. We then use the method [IncomingMessage.makeMessageIntentStack] to build a back
+     * stack which includes an `Intent` to launch [IncomingMessageView] to initialize our array of
+     * `Intent`'s `val stack`, start the activities in `stack`, and close this Activity by calling
+     * [finish].
      */
     @Suppress("MemberVisibilityCanBePrivate")
     internal fun switchToApp() {
