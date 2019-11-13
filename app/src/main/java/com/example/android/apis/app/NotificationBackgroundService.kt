@@ -109,7 +109,7 @@ class NotificationBackgroundService : Service() {
          * IMPORTANCE_DEFAULT (shows everywhere, makes noise, but does not visually intrude).
          * We set the notification light color of `chan1` to GREEN, and set its lock screen
          * visibility to VISIBILITY_PRIVATE (shows this notification on all lockscreens, but
-         * conceal sensitive or private information on secure lockscreens). We then have [mNM]
+         * conceals sensitive or private information on secure lockscreens). We then have [mNM]
          * create notification channel `chan1`. Finally we initialize our [Button] variable
          * `val button` by finding the view with id R.id.notify and set its `OnClickListener`
          * to our field [mNotify].
@@ -132,16 +132,16 @@ class NotificationBackgroundService : Service() {
         }
 
         /**
-         * Called by the `onClick` override of our field `OnClickListener mNotify`, we
-         * build and post a notification using our parameter `CharSequence text` as the text.
-         * We initialize `PendingIntent contentIntent` with an instance intended to launch the
-         * service  `NotificationBackgroundService` with request code 0. We initialize
-         * `Notification notification` by building a `Notification.Builder` for notification
-         * channel PRIMARY_CHANNEL ("default"), set its small icon to R.drawable.stat_sample, its ticker
-         * text to our parameter `String text`, its time stamp to now, its second line of text to
-         * `text` and its [PendingIntent] to be sent when the notification is clicked to
-         * `contentIntent`. Finally we use `NotificationManager mNM` to post `notification`
-         * using the resource id R.string.notification_background_service as its id.
+         * Called by the `onClick` override of our [OnClickListener] field [mNotify], we
+         * build and post a notification using our [CharSequence] parameter [text] as the text.
+         * We initialize our [PendingIntent] variable `val contentIntent` with an instance intended
+         * to launch the service [NotificationBackgroundService] with request code 0. We initialize
+         * our [Notification] variable `val notification` by building a [Notification.Builder] for
+         * notification channel PRIMARY_CHANNEL ("default"), set its small icon to R.drawable.stat_sample,
+         * its ticker text to our [CharSequence] parameter [text], its time stamp to now, its second
+         * line of text to [text] and its [PendingIntent] to be sent when the notification is clicked
+         * to `contentIntent`. Finally we use our [NotificationManager] field [mNM] to post
+         * `notification` using the resource id R.string.notification_background_service as its id.
          *
          * @param text text to display in our notification.
          */
@@ -166,6 +166,9 @@ class NotificationBackgroundService : Service() {
             mNM!!.notify(R.layout.notification_background_service, notification)
         }
 
+        /**
+         * Our static constant.
+         */
         companion object {
             /**
              * The id of the primary notification channel
