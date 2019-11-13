@@ -80,7 +80,8 @@ public class IncomingMessageInterstitial extends AppCompatActivity {
         CharSequence from = getIntent().getCharSequenceExtra(IncomingMessageView.KEY_FROM);
         CharSequence msg = getIntent().getCharSequenceExtra(IncomingMessageView.KEY_MESSAGE);
         // Build the new activity stack, launch it, and finish this UI.
-        Intent[] stack = IncomingMessage.makeMessageIntentStack(this, from, msg);
+        //noinspection ConstantConditions
+        Intent[] stack = IncomingMessage.Companion.makeMessageIntentStack(this, from, msg);
         startActivities(stack);
         finish();
     }
