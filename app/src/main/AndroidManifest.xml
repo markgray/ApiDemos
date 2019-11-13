@@ -988,7 +988,8 @@
 
         <activity
             android:name=".app.NotifyingController"
-            android:label="App/Notification/Notifying Service Controller">
+            android:label="App/Notification/Notifying Service Controller"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

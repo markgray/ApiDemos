@@ -910,6 +910,7 @@ App
     App/Notification/Notifying Service Controller  -- all -> v26
         .app.NotifyingController controls:
         .app.NotifyingService
+        .layout.notifying_controller.xml
             Updates a notification every 5 seconds from a background thread. Note use of
             ConditionVariable to implement the condition variable locking paradigm, blocking
             for 5*1000 milliseconds after every notification (very useful approach).

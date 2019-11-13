@@ -21,18 +21,19 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 /**
  * Controller to start and stop a service. The service will update a status bar
  * notification every 5 seconds for a minute.
  */
-public class NotifyingController extends Activity {
+public class NotifyingController extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.notifying_controller.
@@ -49,9 +50,9 @@ public class NotifyingController extends Activity {
 
         setContentView(R.layout.notifying_controller);
 
-        Button button = (Button) findViewById(R.id.notifyStart);
+        Button button = findViewById(R.id.notifyStart);
         button.setOnClickListener(mStartListener);
-        button = (Button) findViewById(R.id.notifyStop);
+        button = findViewById(R.id.notifyStop);
         button.setOnClickListener(mStopListener);
     }
 
