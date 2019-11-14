@@ -918,6 +918,7 @@ App
 
     App/Notification/NotifyWithText        all
         .app.NotifyWithText
+        .layout.notify_with_text.xml
             Show notification in a Toast.
 
     App/Notification/Status Bar            all -> v26

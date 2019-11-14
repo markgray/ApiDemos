@@ -25,23 +25,22 @@ import com.example.android.apis.R
 /**
  * When you push the button on this Activity, it creates a [Toast] object and shows it.
  * @see Toast
- *
- * @see Toast.makeText
  * @see Toast.makeText
  * @see Toast.LENGTH_SHORT
- *
  * @see Toast.LENGTH_LONG
  */
 class NotifyWithText : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.notify_with_text.
-     * We declare `Button button`, then locate the Button R.id.short_notify in our the layout
-     * and set its `OnClickListener` to an anonymous class which makes a `Toast` with
-     * the text R.string.short_notification_text ("Short notification") and shows it. Next we locate
-     * the Button R.id.long_notify in our layout and set its `OnClickListener` to an anonymous
-     * class which makes a `Toast` with the text R.string.long_notification_text ("This is a
-     * long notification. See, you might need a second more to read it.")
+     * We locate the [Button] with ID R.id.short_notify in our layout to initialize our variable
+     * `var button` and set its `OnClickListener` to a lambda which makes a [Toast] with the text
+     * coming from the [String] with ID R.string.short_notification_text ("Short notification"), and
+     * a duration of [Toast.LENGTH_SHORT] then shows it . Next we set `button` to the [Button] with
+     * ID R.id.long_notify in our layout and set its `OnClickListener` to an a lambda which makes a
+     * [Toast] with the text coming from the [String] with ID R.string.long_notification_text ("This
+     * is a long notification. See, you might need a second more to read it.") and a duration of
+     * [Toast.LENGTH_LONG] then shows it .
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
      */
@@ -56,12 +55,12 @@ class NotifyWithText : AppCompatActivity() {
         button.setOnClickListener {
 
             // Note that we create the Toast object and call the show() method
-            // on it all on one line.  Most uses look like this, but there
+            // on it all on one line. Most uses look like this, but there
             // are other methods on Toast that you can call to configure how
             // it appears.
             //
             // Note also that we use the version of makeText that takes a
-            // resource id (R.string.short_notification_text).  There is also
+            // resource id (R.string.short_notification_text). There is also
             // a version that takes a CharSequence if you must construct
             // the text yourself.
             Toast.makeText(this@NotifyWithText, R.string.short_notification_text,
