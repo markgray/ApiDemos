@@ -18,11 +18,12 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
-import android.app.Activity;
 import android.widget.Button;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * When you push the button on this Activity, it creates a {@link Toast} object and shows it.
@@ -32,7 +33,7 @@ import android.widget.Toast;
  * @see Toast#LENGTH_SHORT
  * @see Toast#LENGTH_LONG
  */
-public class NotifyWithText extends Activity {
+public class NotifyWithText extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.notify_with_text.
@@ -54,7 +55,7 @@ public class NotifyWithText extends Activity {
         Button button;
 
         // short notification
-        button = (Button) findViewById(R.id.short_notify);
+        button = findViewById(R.id.short_notify);
         button.setOnClickListener(new Button.OnClickListener() {
             /**
              * Show the toast "Short notification"
@@ -81,7 +82,7 @@ public class NotifyWithText extends Activity {
         // The only difference here is that the notification stays up longer.
         // You might want to use this if there is more text that they're going
         // to read.
-        button = (Button) findViewById(R.id.long_notify);
+        button = findViewById(R.id.long_notify);
         button.setOnClickListener(new Button.OnClickListener() {
             /**
              * Shows the toast "This is a long notification. See, you might need a second more to read it."
