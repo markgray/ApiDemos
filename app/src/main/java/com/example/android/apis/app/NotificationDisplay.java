@@ -20,7 +20,6 @@ package com.example.android.apis.app;
 // class is in a sub-package.
 import com.example.android.apis.R;
 
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,10 +28,12 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 /**
  * Activity used by StatusBarNotification to show the notification to the user.
  */
-public class NotificationDisplay extends Activity implements View.OnClickListener {
+public class NotificationDisplay extends AppCompatActivity implements View.OnClickListener {
     /**
      * Initialization of the Activity after it is first created. First we call through to our super's
      * implementation of {@code onCreate}. Then we set the flag FLAG_DIM_BEHIND to dim any windows
@@ -83,6 +84,7 @@ public class NotificationDisplay extends Activity implements View.OnClickListene
      */
     public void onClick(View v) {
         // The user has confirmed this notification, so remove it.
+        //noinspection ConstantConditions
         ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
                 .cancel(R.layout.status_bar_notifications);
         
