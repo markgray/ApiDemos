@@ -33,26 +33,18 @@ import com.example.android.apis.R
 class NotifyingController : AppCompatActivity() {
 
     /**
-     * `OnClickListener` for the Button R.id.notifyStart, it starts the service `NotifyingService`
-     * running in its `onClick` callback.
-     */
-    /**
-     * Called when the R.id.notifyStart Button is clicked, it simply creates an `Intent` to
-     * start the service `NotifyingService` and starts it running.
+     * Called when the R.id.notifyStart Button is clicked, it simply creates an [Intent] to
+     * start the service [NotifyingService] and starts it running.
      *
-     * Parameter: View of the Button that was clicked
+     * Parameter: View of the [Button] that was clicked
      */
     private val mStartListener = OnClickListener {
         startService(Intent(this@NotifyingController, NotifyingService::class.java))
     }
 
     /**
-     * `OnClickListener` for the Button R.id.notifyStop, it stops the service `NotifyingService`
-     * running in its `onClick` callback.
-     */
-    /**
-     * Called when the R.id.notifyStopButton is clicked, it simply creates an `Intent` for
-     * the service `NotifyingService` and stops it running.
+     * Called when the R.id.notifyStopButton is clicked, it simply creates an [Intent] for
+     * the service [NotifyingService] and stops it running.
      *
      * Parameter: View of the Button that was clicked
      */
@@ -63,12 +55,13 @@ class NotifyingController : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.notifying_controller.
-     * We locate `Button button` at ID R.id.notifyStart and set its `OnClickListener` to
-     * `OnClickListener mStartListener` which will start the service `NotifyingService`
-     * running when clicked, and set the `OnClickListener` of the Button with ID R.id.notifyStop
-     * to `OnClickListener mStopListener` which will stop the service `NotifyingService`
+     * We locate the [Button] with ID R.id.notifyStart to initialize our variabel `var button` and
+     * set its [OnClickListener] to our [OnClickListener] field [mStartListener] which will start
+     * the service [NotifyingService] running when clicked, and set the [OnClickListener] of the
+     * [Button] with ID R.id.notifyStop to our [OnClickListener] field [mStopListener] which will
+     * stop the service [NotifyingService]
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
