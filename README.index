@@ -924,6 +924,7 @@ App
     App/Notification/Status Bar            all -> v26
         .app.StatusBarNotifications
         .app.NotificationDisplay
+        .layout.status_bar_notifications.xml
             froyo crash -- sound/vibrate/all calls: Intent.makeRestartActivityTask() 
             and PendingIntent.getActivities() -> v11+ only. Displays icon, and text when
             buttons pressed. Marquee does not work lollipop.
