@@ -17,7 +17,6 @@
 package com.example.android.apis.app;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -31,6 +30,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RemoteViews;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.android.apis.R;
 
 /**
@@ -38,7 +39,7 @@ import com.example.android.apis.R;
  * buttons pressed. Marquee does not work lollipop.
  */
 @TargetApi(Build.VERSION_CODES.O)
-public class StatusBarNotifications extends Activity {
+public class StatusBarNotifications extends AppCompatActivity {
 
     /**
      * Our Handle to the {@code NotificationManager} system-level service
@@ -390,7 +391,6 @@ public class StatusBarNotifications extends Activity {
         notif.tickerText = text;
 
         // the icon for the status bar
-        //noinspection deprecation
         notif.icon = moodId;
 
         // our custom view

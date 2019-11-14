@@ -181,4 +181,13 @@
         <item name="android:colorForeground">#fff</item>
     </style>
 
+    <style name="Theme.MyTransparent"
+        parent="Theme.AppCompat.Light">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
+        <item name="android:windowBackground">@drawable/transparent_background</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:colorForeground">#fff</item>
+    </style>
+
 </resources>

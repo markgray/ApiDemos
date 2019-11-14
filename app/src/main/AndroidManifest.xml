@@ -973,12 +973,13 @@
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:taskAffinity=""
-            android:theme="@style/Theme.Transparent" />
+            android:theme="@style/Theme.MyTransparent" />
 
         <activity
             android:name=".app.StatusBarNotifications"
             android:label="App/Notification/Status Bar"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
