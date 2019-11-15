@@ -15,16 +15,17 @@ package com.example.android.apis.app;
  * limitations under the License.
  */
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.print.PrintManager;
-import androidx.print.PrintHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.print.PrintHelper;
 
 import com.example.android.apis.R;
 
@@ -42,7 +43,7 @@ import com.example.android.apis.R;
  * @see PrintManager
  * @see WebView
  */
-public class PrintBitmap extends Activity {
+public class PrintBitmap extends AppCompatActivity {
 
     private ImageView mImageView;
 
@@ -58,7 +59,7 @@ public class PrintBitmap extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.print_bitmap);
-        mImageView = (ImageView) findViewById(R.id.image);
+        mImageView = findViewById(R.id.image);
     }
 
     /**
