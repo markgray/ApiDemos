@@ -38,14 +38,12 @@ import java.util.*
 /**
  * This class demonstrates how to implement custom printing support.
  *
- *
  * This activity shows the list of the MotoGp champions by year and
  * brand. The print option in the overflow menu allows the user to
  * print the content. The list of items is laid out so that it fits
  * the options selected by the user from the UI such as page size.
  * Hence, for different page sizes the printed content will have
  * different page count.
- *
  *
  * This sample demonstrates how to completely implement a [PrintDocumentAdapter]
  * in which:
@@ -58,9 +56,7 @@ import java.util.*
  *  * Both Layout and write respond to cancellation.
  *  * Layout and render of views is demonstrated.
  *
- *
  * @see PrintManager
- *
  * @see PrintDocumentAdapter
  */
 @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -81,13 +77,13 @@ class PrintCustomContent : ListActivity() {
 
     /**
      * Initialize the contents of the Activity's standard options menu by inflating a menu resource
-     * xml file into <var>menu</var> using a `MenuInflater`. First we call through to our
-     * super's implementation of `onCreateOptionsMenu`, then we use a `MenuInflater`
-     * to inflate our menu xml file R.menu.print_custom_content into `Menu menu`. Finally we
-     * return true so that the menu will be displayed.
+     * xml file into our [Menu] parameter [menu] using a `MenuInflater`. First we call through to
+     * our super's implementation of `onCreateOptionsMenu`, then we use a `MenuInflater` for our
+     * [Context] to inflate our menu xml file R.menu.print_custom_content into our [Menu] parameter
+     * [menu]. Finally we return *true* so that the menu will be displayed.
      *
      * @param menu The options menu in which you place your items.
-     * @return You must return true for the menu to be displayed.
+     * @return You must return *true* for the menu to be displayed.
      */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
@@ -97,7 +93,7 @@ class PrintCustomContent : ListActivity() {
 
     /**
      * This hook is called whenever an item in your options menu is selected. If the item ID is
-     * R.id.menu_print we call our method `print()` and return true to consume the item click
+     * R.id.menu_print we call our method `print()` and return *true* to consume the item click
      * here. Otherwise we return the return value of our super's implementation of
      * `onOptionsItemSelected`.
      *
@@ -113,10 +109,11 @@ class PrintCustomContent : ListActivity() {
     }
 
     /**
-     * Prints the contents of our `ListView`. First we initialize `PrintManager printManager`
-     * with a handle to the PRINT_SERVICE system wide service. Then we request it to create a print job
-     * with the job name "MotoGp stats", an `PrintMotoGpAdapter` `PrintDocumentAdapter`
-     * class instance to emit the document to print, and null for the `PrintAttributes`.
+     * Prints the contents of our `ListView`. First we initialize our variable `val printManager`
+     * with a [PrintManager] handle to the PRINT_SERVICE system wide service. Then we request it
+     * to create a print job with the job name "MotoGp stats", using a [PrintMotoGpAdapter] subclass
+     * of [PrintDocumentAdapter] instance to emit the document to print, and *null* for the
+     * `PrintAttributes`.
      */
     private fun print() {
         val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
@@ -124,15 +121,16 @@ class PrintCustomContent : ListActivity() {
     }
 
     /**
-     * Reads in string-array resources containing the years, champions, and constructors for the MotoGp
-     * winners then creates a list of `MotoGpStatItem`'s from the three. First we read in
-     * `String[] years` from the string-array R.array.motogp_years, `String[] champions`
-     * from the string-array R.array.motogp_champions and  `String[] years` from the string-array
-     * R.array.motogp_constructors. We allocate an `ArrayList<>` for `List<MotoGpStatItem> items`.
-     * Then for every entry in our three string-array's we allocate a `MotoGpStatItem item`  set the
-     * fields of `item` to the respective entry in the arrays `years, champions, and constructors`.
-     * We then add the `MotoGpStatItem item` to `List<MotoGpStatItem> items`. Finally we
-     * return `items` to the caller.
+     * Reads in string-array resources containing the years, champions, and constructors for the
+     * MotoGp winners then creates a list of [MotoGpStatItem]'s from the three. First we read in
+     * the `String[]` array `val years` from the string-array R.array.motogp_years, `String[]` array
+     * `val champions` from the string-array R.array.motogp_champions and  `String[]` array
+     * `val constructors` from the string-array R.array.motogp_constructors. We allocate an
+     * `ArrayList<>` for the `MutableList<MotoGpStatItem>` variable `val items`. Then for every
+     * entry in our three string-array's we allocate a `MotoGpStatItem` for `val item`, set the
+     * fields of `item` to the respective entry in the arrays `years`, `champions`, and `constructors`.
+     * We then add the `MotoGpStatItem` in `item` to the `List<MotoGpStatItem>` in `items`. Finally
+     * we return `items` to the caller.
      *
      * @return list of `MotoGpStatItem`'s as read from our string-array resources
      */
@@ -163,7 +161,7 @@ class PrintCustomContent : ListActivity() {
 
     /**
      * `ListAdapter` used to hold the List of `MotoGpStatItem`'s for display in our
-     * `ListView` and to for `PrintMotoGpAdapter` to use to supply information when it
+     * `ListView` and for `PrintMotoGpAdapter` to use to supply information when it
      * is acting as a `PrintDocumentAdapter`
      */
     private inner class MotoGpStatAdapter
@@ -174,7 +172,8 @@ class PrintCustomContent : ListActivity() {
      *
      * Parameter: items    `List` of `MotoGpStatItem` data items for MotoGp winners
      * Parameter: inflater `LayoutInflater` to use in `getView` override
-     */(
+     */
+    (
             /**
              * `List` of data Objects for MotoGp winners initialized in constructor
              */
@@ -215,7 +214,7 @@ class PrintCustomContent : ListActivity() {
 
         /**
          * Get the row id associated with the specified position in the list. Our row id is the same
-         * as th position.
+         * as the position.
          *
          * @param position The position of the item within the adapter's data set whose row id we want.
          * @return The id of the item at the specified position.
@@ -225,24 +224,24 @@ class PrintCustomContent : ListActivity() {
         }
 
         /**
-         * Get a View that displays the data at the specified position in the data set. You can either
-         * create a View manually or inflate it from an XML layout file. When the View is inflated, the
-         * parent View (GridView, ListView...) will apply default layout parameters unless you use
-         * [android.view.LayoutInflater.inflate]
-         * to specify a root view and to prevent attachment to the root.
+         * Get a View that displays the data at the specified position in the data set. You can
+         * either create a View manually or inflate it from an XML layout file. When the View is
+         * inflated, the parent View (GridView, ListView...) will apply default layout parameters
+         * unless you use [android.view.LayoutInflater.inflate] to specify a root view and to
+         * prevent attachment to the root.
          *
-         *
-         * First we check to see if there is a `View convertView` we can reuse, and if not we
-         * use our field `LayoutInflater mInflater` to set `convertView` to our inflated
-         * layout file R.layout.motogp_stat_item, using `ViewGroup parent` for layout parameters
-         * but not attaching it to that root. Then we fetch the `MotoGpStatItem item` at the
-         * position `position`. We locate `TextView yearView` at ID R.id.year in our
-         * layout `convertView` and set its text to the `year` field of `item`,
-         * locate `TextView championView` at ID R.id.champion in our layout `convertView`
-         * and set its text to the `champion` field of `item`, and locate
-         * `TextView constructorView` at ID R.id.constructor in our layout `convertView`
-         * and set its text to the `year` field of `constructor`. Finally we return
-         * `convertView` to the caller.
+         * First we copy our [View] parameter [convertView] into our variable `var convertViewLocal`,
+         * then we check to see if `convertViewLocal` can be reused, and if not we use our
+         * [LayoutInflater] field [mInflater] to set `convertViewLocal` to our inflated layout file
+         * R.layout.motogp_stat_item, using our [ViewGroup] parameter [parent] for layout parameters
+         * but not attaching it to that root. Then we fetch the `MotoGpStatItem` at the position
+         * [position] to initialize our variable `val item`. We locate the [TextView] at ID R.id.year
+         * in our `convertViewLocal` to initialize our variable `val yearView` and set its text to the
+         * `year` field of `item`, locate the [TextView] at ID R.id.champion in our `convertViewLocal`
+         * to initialize our variable `val championView` and set its text to the `champion` field
+         * of `item`, and locate the [TextView] at ID R.id.constructor in our `convertViewLocal` to
+         * initialize our variable `val constructorView` and set its text to the `constructor` field
+         * of `item`. Finally we return `convertViewLocal` to the caller.
          *
          * @param position    The position of the item within the adapter's data set of the item whose view
          * we want.
@@ -307,7 +306,6 @@ class PrintCustomContent : ListActivity() {
          * Called when the print attributes (page size, density, etc) changed
          * giving you a chance to layout the content such that it matches the
          * new constraints. This method is invoked on the main thread.
-         *
          *
          * After you are done laying out, you **must** invoke: `LayoutResultCallback.onLayoutFinished`
          * with the last argument `true` or `false` depending on

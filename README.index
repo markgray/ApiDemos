@@ -940,6 +940,7 @@ App
 
     App/Print/Print Custom Layout          v19
         .app.PrintCustomContent
+        .menu.print_custom_content.xml
             Nifty example of a ListActivity with a custom ListAdapter, but it also shows
             how to allow the user to specify options for the printout, and then re-layout
             the pdf canvas View to reflect those changes when it comes time to print.
