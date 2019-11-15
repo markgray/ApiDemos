@@ -32,20 +32,21 @@ import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 
 /**
- * Activity used by StatusBarNotification to show the notification to the user.
+ * Activity used by [StatusBarNotifications] to show the notification to the user.
  */
 class NotificationDisplay : AppCompatActivity(), View.OnClickListener {
     /**
      * Initialization of the Activity after it is first created. First we call through to our super's
      * implementation of `onCreate`. Then we set the flag FLAG_DIM_BEHIND to dim any windows
-     * behind our window. We create `RelativeLayout container`, create `ImageButton button`
-     * set its image to the resource ID sent us as an extra in our `Intent` using the key
-     * "moodimg", and set the `OnClickListener` of `button` to "this". We create
-     * `RelativeLayout.LayoutParams lp` to have WRAP_CONTENT as its x and y dimensions, and
-     * add the layout rule CENTER_IN_PARENT to it. We add `button` to `container` using
-     * `lp` as its layout parameters, and finally set our content view to `container`.
+     * behind our window. We create a [RelativeLayout] to initialize our variable `val container`,
+     * create an [ImageButton] to initialize our variable `val button`, set its image to the resource
+     * ID sent us as an extra in the [Intent] that launched us using the key "moodimg", and set the
+     * `OnClickListener` of `button` to "this". We create a [RelativeLayout.LayoutParams] to initialize
+     * our variable `val lp` with WRAP_CONTENT as its x and y dimensions, and add the layout rule
+     * CENTER_IN_PARENT to it. We add `button` to `container` using `lp` as its layout parameters,
+     * and finally set our content view to `container`.
      *
-     * @param icicle We do not override `onSaveInstanceState` so do not use
+     * @param icicle We do not override [onSaveInstanceState] so do not use
      */
     override fun onCreate(icicle: Bundle?) {
         // Be sure to call the super class.
@@ -73,12 +74,12 @@ class NotificationDisplay : AppCompatActivity(), View.OnClickListener {
 
     /**
      * Called when the user clicks on us. First we cancel the notification, then we create an
-     * `Intent intent` to launch `StatusBarNotifications`, set the action to ACTION_MAIN
-     * to start it as a main entry point, (does not expect to receive data), set the flag
-     * FLAG_ACTIVITY_NEW_TASK (since task is already running for the `StatusBarNotifications`
-     * activity a new activity will not be started; instead, the current task will simply be brought to
-     * the front of the screen with the state it was last in), and we start the activity using
-     * `intent`. Finally we call `finish()` to close our own activity.
+     * [Intent] to initialize our variable `val intent` which launches [StatusBarNotifications],
+     * set the action to ACTION_MAIN to start it as a main entry point, (does not expect to receive
+     * data), set the flag FLAG_ACTIVITY_NEW_TASK (since task is already running for the
+     * [StatusBarNotifications] activity a new activity will not be started; instead, the current
+     * task will simply be brought to the front of the screen with the state it was last in), and
+     * we start the activity using `intent`. Finally we call [finish] to close our own activity.
      *
      * @param v View that was clicked on.
      */
