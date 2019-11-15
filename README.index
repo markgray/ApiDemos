@@ -932,6 +932,8 @@ App
   Print
     App/Print/Print Bitmap                 v19
         .app.PrintBitmap
+        .layout.print_bitmap.xml
+        .menu.print_custom_content.xml
             Shows how to print a Bitmap. Uses ImageView.getDrawable()).getBitmap(); to
             retrieve a bitmap of the drawable used in the screen, then to print it uses:
             PrintHelper.printBitmap("Print Bitmap", bitmap);
