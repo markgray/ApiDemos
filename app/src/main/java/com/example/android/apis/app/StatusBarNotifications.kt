@@ -335,19 +335,19 @@ class StatusBarNotifications : AppCompatActivity() {
      * Builds and posts a notification with the addition of a call to `setDefaults` when
      * building it in order to dictate which notification properties will be inherited from system
      * defaults: DEFAULT_SOUND, DEFAULT_VIBRATE, or DEFAULT_ALL. First we use our method
-     * [makeDefaultIntent] to create `PendingIntent contentIntent` (it is composed of
-     * a new back stack for a relaunch of our `StatusBarNotifications` activity when our
-     * notification is clicked). We fetch `CharSequence text` from our resource ID
-     * R.string.status_bar_notifications_happy_message, and `CharSequence title` from
-     * R.string.status_bar_notifications_mood_title. Then we use a `Notification.Builder` for
-     * `NotificationChannel` PRIMARY_CHANNEL to build `Notification notification` setting
-     * the small icon to R.drawable.stat_happy, the ticker text to `text`, the timestamp to the
-     * current time, the first line of the notification to to `title`, the second line to
-     * `text`, we use `contentIntent` as the PendingIntent to be sent when the notification
-     * is clicked, set which notification properties will be inherited from system defaults to our
-     * parameter `defaults` and build the notification. Finally we use our handle to the system
-     * level NotificationManager service `NotificationManager mNotificationManager` to post the
-     * `Notification notification` using the id MOOD_NOTIFICATIONS.
+     * [makeDefaultIntent] to create a [PendingIntent] to initialize our variable `val contentIntent`
+     * (it is composed of a new back stack for a relaunch of our [StatusBarNotifications] activity
+     * when our notification is clicked). We fetch the [CharSequence] from our resource ID
+     * R.string.status_bar_notifications_happy_message to initialize our variable `val text`, and
+     * the [CharSequence] from R.string.status_bar_notifications_mood_title to initialize our variable
+     * `val title`. Then we use a [Notification.Builder] for [NotificationChannel] PRIMARY_CHANNEL
+     * to build a [Notification] for our variable `val notification` setting the small icon to
+     * R.drawable.stat_happy, the ticker text to `text`, the timestamp to the current time, the
+     * first line of the notification to to `title`, the second line to `text`, we use `contentIntent`
+     * as the [PendingIntent] to be sent when the notification is clicked, set which notification
+     * properties will be inherited from system defaults to our parameter `defaults` and build the
+     * notification. Finally we use our handle to the system level [NotificationManager] service in
+     * our field [mNotificationManager] to post the `notification` using the id MOOD_NOTIFICATIONS.
      *
      * @param defaults which notification properties will be inherited from system defaults
      */
@@ -380,6 +380,9 @@ class StatusBarNotifications : AppCompatActivity() {
                 notification)
     }
 
+    /**
+     * Our static constants.
+     */
     companion object {
         /**
          * The id of the primary notification channel
