@@ -17,7 +17,6 @@
 package com.example.android.apis.app;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +30,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -47,7 +48,7 @@ import com.example.android.apis.R;
  * @see WebView
  */
 @TargetApi(Build.VERSION_CODES.KITKAT)
-public class PrintHtmlOffScreen extends Activity {
+public class PrintHtmlOffScreen extends AppCompatActivity {
 
     private WebView mWebView; // WebView we load our HTML file into and print
 
@@ -146,7 +147,6 @@ public class PrintHtmlOffScreen extends Activity {
 
         // Create a wrapper PrintDocumentAdapter to clean up when done.
         PrintDocumentAdapter adapter = new PrintDocumentAdapter() {
-            @SuppressWarnings("deprecation")
             private final PrintDocumentAdapter mWrappedInstance = mWebView.createPrintDocumentAdapter();
 
             /**
@@ -210,6 +210,7 @@ public class PrintHtmlOffScreen extends Activity {
         };
 
         // Pass in the ViewView's document adapter.
+        //noinspection ConstantConditions
         printManager.print("MotoGP stats", adapter, null);
     }
 }

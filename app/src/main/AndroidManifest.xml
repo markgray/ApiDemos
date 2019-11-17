@@ -1324,7 +1324,8 @@
         <activity
             android:name=".app.PrintHtmlOffScreen"
             android:enabled="@bool/atLeastKitKat"
-            android:label="@string/print_html_off_screen">
+            android:label="@string/print_html_off_screen"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
