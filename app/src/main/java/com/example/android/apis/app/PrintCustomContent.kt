@@ -862,18 +862,42 @@ class PrintCustomContent : ListActivity() {
         /**
          * Background task launched from `PrintDocumentAdapter.onWrite` callback which is
          * called when specific pages of the content should be written in the form of a PDF file to
-         * the given file descriptor `ParcelFileDescriptor destination`.
+         * the given [ParcelFileDescriptor] file descriptor [destination].
          */
         @SuppressLint("StaticFieldLeak")
         private inner class MotoGpOnWriteAsyncTask internal constructor(
+                /**
+                 * Signal for observing cancel writing requests. It is used to propagate requests
+                 * from the system to your application for canceling the current write operation.
+                 */
                 private val cancellationSignal: CancellationSignal,
+                /**
+                 * List of MotoGp winners data Objects for our [MotoGpStatAdapter] to hold for this
+                 * [MotoGpOnWriteAsyncTask] to format and write.
+                 */
                 private val items: List<MotoGpStatItem>,
+                /**
+                 * The pages that we should print.
+                 */
                 private val pages: Array<PageRange>,
+                /**
+                 * The destination file descriptor to write to.
+                 */
                 private val destination: ParcelFileDescriptor,
+                /**
+                 * Callback to inform the system of the write result.
+                 */
                 private val callback: WriteResultCallback
         ) : AsyncTask<Void?, Void?, Void?>() {
+            /**
+             * [SparseIntArray] holding the page numbers of the pages we have printed.
+             */
             private val mWrittenPages: SparseIntArray = SparseIntArray()
-            private val mPdfDocument: PrintedPdfDocument = PrintedPdfDocument(this@PrintCustomContent, (mPrintAttributes)!!)
+            /**
+             * [PrintedPdfDocument] we use to hold the canvases we draw our views on.
+             */
+            private val mPdfDocument: PrintedPdfDocument
+                    = PrintedPdfDocument(this@PrintCustomContent, (mPrintAttributes)!!)
             /**
              * Runs on the UI thread before [doInBackground]. We simply set the
              * `OnCancelListener` of our [CancellationSignal] field [cancellationSignal]
@@ -887,97 +911,127 @@ class PrintCustomContent : ListActivity() {
             }
 
             /**
-             * Started by our `onWrite` callback to render, draw and write pdf using our field
-             * `PrintedPdfDocument mPdfDocument` on a background thread. First we create an
-             * `MotoGpStatAdapter adapter` using our clone of the UI's content data list
-             * `List<MotoGpStatItem> items`, and a `LayoutInflater` retrieved from the
-             * system. We set the current page number `currentPage` to -1, and the height of
-             * the page we are working on `pageContentHeight` to 0. We set `viewType` to
-             * -1 to indicate that we do not currently have a `View view` or the correct type
-             * for our `adapter` to reuse and need to request one when calling `getView`.
-             * We initialize the data item View that we will be using for each of the data items
-             * (`View view`) to null, and the `Page page` whose canvas we are currently
-             * drawing to for the current page to null. We create `LinearLayout dummyParent` in
-             * order to use it for LayoutParams when calling `adapter.getView`, and set its
-             * orientation to VERTICAL. We compute a scaling factor `float scale` in order to
-             * convert our layout and rendering which is done in pixels to points (1/72") which is
-             * used by the PDF canvas. We set `int itemCount` to the total number of data items
-             * contained in our `MotoGpStatAdapter adapter` and then loop for each of these using
-             * `i` as the index.
+             * Started by our `onWrite` callback to render, draw and write pdf using our
+             * [PrintedPdfDocument] field [mPdfDocument] on a background thread. First we create
+             * an [MotoGpStatAdapter] for `val adapter` using our clone of the UI's content data
+             * list in our `List<MotoGpStatItem>` field [items], and a [LayoutInflater] retrieved
+             * from the system. We set the current page number: `var currentPage` to -1, and the
+             * height of the page we are working on: `var pageContentHeight` to 0. We set our
+             * item view type `var viewType` to -1 to indicate that we do not currently have a
+             * `View view` of the correct type for our `adapter` to reuse and need to request one
+             * by passing *null* for the `convertView` when calling `getView`. We initialize the
+             * data item [View] that we will be using for each of the data items ([View] `var view`)
+             * to null, and the [PdfDocument.Page] `var page` whose canvas we are currently
+             * drawing to for the current page to *null*. We construct a [LinearLayout] for our
+             * `val dummyParent` in order to use it for `LayoutParams` when calling `adapter.getView`,
+             * and set its orientation to VERTICAL. We compute a [Float] scaling factor `val scale`
+             * in order to convert our layout and rendering which is done in pixels to points (1/72")
+             * which is used by the PDF canvas. We set [Int] `val itemCount` to the total number of
+             * data items contained in our [MotoGpStatAdapter] `adapter` and then loop for each of
+             * these using `i` as the index.
              *
-             * After making sure we have not been canceled first, for each item `i` contained
-             * in `adapter` we fetch the type of the view to `nextViewType`, and if it
-             * is the same as `viewType` (the type of the current `View view`) we pass
-             * `view` to `adapter.getView` to be recycled when requesting it to render
-             * the item `i` into `View view`, otherwise we pass null so that it will
-             * allocate and layout a new `View` before rendering item `i`. We set
-             * `viewType` to `newViewType` to cause the `View` to be recycled for
-             * the next pass. We then call our method `measureView` to instruct `view`
-             * to measure itself based on the printer page dimensions, and add the measured height
-             * of the `View view` to `pageContentHeight`.
+             * After making sure we have not been canceled first, for each item `i` contained in
+             * `adapter` we fetch the type of the view to `val nextViewType`, and if it is the same
+             * as `viewType` (the type of the current [View] in `view`) we pass `view` to
+             * `adapter.getView` to be recycled when requesting it to render the item `i` into a
+             * [View] we can set `view` to, otherwise we pass *null* so that it will allocate and
+             * layout a new [View] before rendering item `i`. We set `viewType` to `newViewType` to
+             * cause the [View] to be recycled on the next pass. We then call our method `measureView`
+             * to instruct `view` to measure itself based on the printer page dimensions, and add the
+             * measured height of the [View] in `view` to `pageContentHeight`.
              *
-             * Then if this is the first time through the loop (`currentPage` < 0) or the size
-             * of the current page is greater than the size of the printer page
-             * (`pageContentHeight > mRenderPageHeight`) we set `pageContentHeight` to
-             * the height of the `View view`, increment `currentPage`, and if we have
-             * a page ready to print (not the first time through the loop, and the last page was
-             * among those requested to be printed) we finish the `Page page` we have been
-             * working on in `PrintedPdfDocument mPdfDocument`.
+             * Then if this is the first time through the loop (`currentPage` < 0) or the size of
+             * the current page is greater than the size of the printer page ( that is:
+             * `pageContentHeight > mRenderPageHeight`) we set `pageContentHeight` to the height
+             * of the [View] `view`, increment `currentPage`, and if we have a page ready to print
+             * (not the first time through the loop, and the last page was among those requested to
+             * be printed) we finish the [PdfDocument.Page] `page` we have been working on in our
+             * [PrintedPdfDocument] field [mPdfDocument].
              *
-             * We look through the `PageRanges[] pages` for the `currentPage` using our
-             * method `containsPage`, and if it is a wanted page number we start a new
-             * `Page page`, fetch its `Canvas` in order to scale it using our pixels to
-             * points scaling factor `scale` and append `currentPage` to our list of
-             * written pages `SparseIntArray mWrittenPages`. If it is not a wanted page we
-             * set `page` to null.
+             * We look through the `PageRanges[]` parmater [pages] for the `currentPage` using our
+             * method [containsPage], and if it is a wanted page number we start a new
+             * [PdfDocument.Page] for `page`, fetch its `Canvas` in order to scale it using our
+             * pixels to points scaling factor `scale` and append `currentPage` to our list of
+             * written pages in the [SparseIntArray] field [mWrittenPages]. If it is not a wanted
+             * page we set `page` to *null*.
              *
-             * Then if `page` is not null, we layout `View view` and instruct it to draw
-             * itself into the `Canvas` of `page`. Then we translate the `Canvas`
-             * of `page` to get ready for the next view.
+             * Then if `page` is not *null*, we layout [View] `view` and instruct it to draw
+             * itself into the `Canvas` of `page`. Then we translate the `Canvas` of `page` to
+             * get ready for the next view.
              *
              * Once done with all the items in our `adapter`, if `page` is not null we
              * finish that page.
              *
-             * Once done rendering the `PrintedPdfDocument mPdfDocument`, wrapped in a try block
-             * we instruct `mPdfDocument` to write itself to a `FileOutputStream` created
-             * from the `FileDescriptor` or `ParcelFileDescriptor destination`. If we
-             * catch an IOException we call `callback.onWriteFailed`. We close `mPdfDocument`
-             * in a finally block and return null to our caller.
+             * Once done rendering the [PrintedPdfDocument] field [mPdfDocument], wrapped in a
+             * try block intended to catch [IOException], we instruct [mPdfDocument] to write
+             * itself to a [FileOutputStream] created from the `FileDescriptor` of our
+             * [ParcelFileDescriptor] field [destination]. If we catch an [IOException] we call
+             * `callback.onWriteFailed`. In any case we close [mPdfDocument] in a finally block and
+             * return *null* to our caller.
              *
              * TODO: fix "WrongThread" warning
              *
              * @param params we have no parameters
-             * @return we return null
+             * @return we return *null*
              */
             @SuppressLint("WrongThread")
-            override fun doInBackground(vararg params: Void?): Void? { // Go over all the pages and write only the requested ones.
-// Create an adapter with the stats and an inflater
-// to load resources for the printer density.
+            override fun doInBackground(vararg params: Void?): Void? {
+                /**
+                 * Go over all the pages and write only the requested ones.
+                 * Create an adapter with the stats and an inflater
+                 * to load resources for the printer density.
+                 */
                 val adapter = MotoGpStatAdapter(items,
                         mPrintContext!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-                var currentPage = -1 // Current page number that we are working on
-                var pageContentHeight = 0 // Height of the current page so far
-                var viewType = -1 // Set to -1 so we only request a new View the first time (getItemViewType returns > 0)
-                var view: View? = null // View for item that we are laying out, then drawing to the pdf Canvas
-                var page: PdfDocument.Page? = null // Page of the pdf that we are drawing to.
-                // This dummy LinearLayout is used to provide LayoutParams for rendering the data item View
+                /**
+                 * Current page number that we are working on
+                 */
+                var currentPage = -1
+                /**
+                 * Height of the current page so far
+                 */
+                var pageContentHeight = 0
+                /**
+                 * Set to -1 so we only request a new [View] the first time
+                 * (`getItemViewType` returns > 0)
+                 */
+                var viewType = -1
+                /**
+                 * View for item that we are laying out, then drawing to the pdf `Canvas`
+                 */
+                var view: View? = null
+                /**
+                 * [PdfDocument.Page] page of the pdf that we are drawing to.
+                 */
+                var page: PdfDocument.Page? = null
+                /**
+                 * This dummy [LinearLayout] is used to provide `LayoutParams` for rendering the
+                 * data item [View].
+                 */
                 val dummyParent = LinearLayout(mPrintContext)
                 dummyParent.orientation = LinearLayout.VERTICAL
-                // The content is laid out and rendered in screen pixels with
-// the width and height of the paper size times the print
-// density but the PDF canvas size is in points which are 1/72",
-// so we will scale down the content.
+                /**
+                 * The content is laid out and rendered in screen pixels with
+                 * the width and height of the paper size times the print
+                 * density but the PDF canvas size is in points which are 1/72",
+                 * so we will scale down the content.
+                 */
                 val scale = (
                         mPdfDocument.pageContentRect.width().toFloat()
                                 / mRenderPageWidth).coerceAtMost((
                         mPdfDocument.pageContentRect.height().toFloat()
                                 / mRenderPageHeight))
                 val itemCount = adapter.count
-                for (i in 0 until itemCount) { // Be nice and respond to cancellation.
+                for (i in 0 until itemCount) {
+                    /**
+                     * Be nice and respond to cancellation.
+                     */
                     if (isCancelled) {
                         return null
                     }
-                    // Get the next view.
+                    /**
+                     * Get the next view.
+                     */
                     val nextViewType = adapter.getItemViewType(i)
                     view = if (viewType == nextViewType) {
                         adapter.getView(i, (view)!!, dummyParent)
@@ -985,45 +1039,68 @@ class PrintCustomContent : ListActivity() {
                         adapter.getView(i, null, dummyParent)
                     }
                     viewType = nextViewType
-                    // Measure the next view
+                    /**
+                     * Measure the next view
+                     */
                     measureView(view)
-                    // Add the height but if the view crosses the page
-// boundary we will put it to the next one.
+                    /**
+                     * Add the height but if the view crosses the page
+                     * boundary we will put it to the next one.
+                     */
                     pageContentHeight += view.measuredHeight
                     if (currentPage < 0 || pageContentHeight > mRenderPageHeight) {
                         pageContentHeight = view.measuredHeight
                         currentPage++
-                        // Done with the current page - finish it.
+                        /**
+                         * Done with the current page - finish it.
+                         */
                         if (page != null) {
                             mPdfDocument.finishPage(page)
                         }
-                        // If the page is requested, render it.
+                        /**
+                         * If the page is requested, render it.
+                         */
                         if (containsPage(pages, currentPage)) {
                             page = mPdfDocument.startPage(currentPage)
                             page.canvas.scale(scale, scale)
-                            // Keep track which pages are written.
+                            /**
+                             * Keep track which pages are written.
+                             */
                             mWrittenPages.append(mWrittenPages.size(), currentPage)
                         } else {
                             page = null
                         }
                     }
-                    // If the current view is on a requested page, render it.
-                    if (page != null) { // Layout and render the content.
+                    /**
+                     * If the current view is on a requested page, render it.
+                     */
+                    if (page != null) {
+                        /**
+                         * Layout and render the content.
+                         */
                         view.layout(0, 0, view.measuredWidth, view.measuredHeight)
                         view.draw(page.canvas)
-                        // Move the canvas for the next view.
+                        /**
+                         * Move the canvas for the next view.
+                         */
                         page.canvas.translate(0f, view.height.toFloat())
                     }
                 }
-                // Done with the last page.
+                /**
+                 * Done with the last page.
+                 */
                 if (page != null) {
                     mPdfDocument.finishPage(page)
                 }
-                // Write the data and return success or failure.
+                /**
+                 * Write the data and return success or failure.
+                 */
                 try {
                     mPdfDocument.writeTo(FileOutputStream(destination.fileDescriptor))
-                    // Compute which page ranges were written based on
-// the bookkeeping we maintained.
+                    /**
+                     * Compute which page ranges were written based on
+                     * the bookkeeping we maintained.
+                     */
                     val pageRanges = computeWrittenPageRanges(mWrittenPages)
                     callback.onWriteFinished(pageRanges)
                 } catch (ioe: IOException) {
@@ -1035,9 +1112,9 @@ class PrintCustomContent : ListActivity() {
             }
 
             /**
-             * Runs on the UI thread after [.cancel] is invoked and
+             * Runs on the UI thread after [cancel] is invoked and
              * `doInBackground(Object[])` has finished. We call `callback.onWriteCancelled`
-             * and close `PrintedPdfDocument mPdfDocument`
+             * and close the [PrintedPdfDocument] field [mPdfDocument]
              *
              * @param result no result used
              */
@@ -1049,6 +1126,9 @@ class PrintCustomContent : ListActivity() {
         }
     }
 
+    /**
+     * Our static constants
+     */
     companion object {
         /**
          * How many mils in an inch
