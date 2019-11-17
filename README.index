@@ -947,6 +947,8 @@ App
 
     App/Print/Print HTML from screen       v21
         .app.PrintHtmlFromScreen
+        .layout.print_html_from_screen.xml
+        .menu.print_custom_content.xml
             Uses a WebView as the View for the app, which allows it to use 
             WebView.createPrintDocumentAdapter() to print using PrintManager.print()
 
