@@ -945,7 +945,7 @@ App
             how to allow the user to specify options for the printout, and then re-layout
             the pdf canvas View to reflect those changes when it comes time to print.
 
-    App/Print/Print HTML from screen       v19
+    App/Print/Print HTML from screen       v21
         .app.PrintHtmlFromScreen
             Uses a WebView as the View for the app, which allows it to use 
             WebView.createPrintDocumentAdapter() to print using PrintManager.print()
