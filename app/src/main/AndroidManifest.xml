@@ -1313,7 +1313,8 @@
         <activity
             android:name=".app.PrintHtmlFromScreen"
             android:enabled="@bool/atLeastKitKat"
-            android:label="@string/print_html_from_screen">
+            android:label="@string/print_html_from_screen"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

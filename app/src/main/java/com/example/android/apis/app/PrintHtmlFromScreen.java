@@ -17,7 +17,6 @@
 package com.example.android.apis.app;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +25,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -42,7 +43,7 @@ import com.example.android.apis.R;
  * @see WebView
  */
 @TargetApi(Build.VERSION_CODES.KITKAT)
-public class PrintHtmlFromScreen extends Activity {
+public class PrintHtmlFromScreen extends AppCompatActivity {
 
     private WebView mWebView; // WebView in our layout file
 
@@ -63,7 +64,7 @@ public class PrintHtmlFromScreen extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.print_html_from_screen);
-        mWebView = (WebView) findViewById(R.id.web_view);
+        mWebView = findViewById(R.id.web_view);
 
         // Important: Only enable the print option after the page is loaded.
         mWebView.setWebViewClient(new WebViewClient() {
@@ -136,7 +137,7 @@ public class PrintHtmlFromScreen extends Activity {
         // Get the print manager.
         PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
         // Pass in the ViewView's document adapter.
-        //noinspection deprecation
+        //noinspection ConstantConditions
         printManager.print("MotoGP stats", mWebView.createPrintDocumentAdapter(), null);
     }
 }
