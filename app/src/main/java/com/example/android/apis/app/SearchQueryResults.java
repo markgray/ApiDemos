@@ -64,9 +64,9 @@ public class SearchQueryResults extends Activity {
         setContentView(R.layout.search_query_results);
 
         // Get active display items for later updates
-        mQueryText = (TextView) findViewById(R.id.txt_query);
-        mAppDataText = (TextView) findViewById(R.id.txt_appdata);
-        mDeliveredByText = (TextView) findViewById(R.id.txt_deliveredby);
+        mQueryText = findViewById(R.id.txt_query);
+        mAppDataText = findViewById(R.id.txt_appdata);
+        mDeliveredByText = findViewById(R.id.txt_deliveredby);
 
         // get and process search query here
         final Intent queryIntent = getIntent();

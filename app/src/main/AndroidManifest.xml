@@ -1029,7 +1029,8 @@
 
         <activity
             android:name=".app.SearchInvoke"
-            android:label="@string/search_invoke">
+            android:label="@string/search_invoke"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

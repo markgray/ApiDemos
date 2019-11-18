@@ -18,7 +18,6 @@ package com.example.android.apis.app;
 
 import com.example.android.apis.R;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.os.Bundle;
@@ -34,6 +33,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 /**
  * This activity shows a few different ways to invoke search, and inserts context-specific data for
  * use by the search activity. The search activity is defined in AndroidManifest.xml using a meta-data
@@ -46,7 +47,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
  * The definition of android.app.default_searchable is more typically handled at the application
  * level, where it can serve as a default for all of your activities.
  */
-public class SearchInvoke extends Activity {
+public class SearchInvoke extends AppCompatActivity {
     // UI elements
     Button mStartSearch; // Button used to start search - Without a keyboard, you need to press this to get a soft keyboard to use.
     Spinner mMenuMode; // Spinner used to select between "Search Key", "Menu Item", "Type-To-Search" or "Disabled"
@@ -86,10 +87,10 @@ public class SearchInvoke extends Activity {
         setContentView(R.layout.search_invoke);
 
         // Get display items for later interaction
-        mStartSearch = (Button) findViewById(R.id.btn_start_search);
-        mMenuMode = (Spinner) findViewById(R.id.spinner_menu_mode);
-        mQueryPrefill = (EditText) findViewById(R.id.txt_query_prefill);
-        mQueryAppData = (EditText) findViewById(R.id.txt_query_appdata);
+        mStartSearch = findViewById(R.id.btn_start_search);
+        mMenuMode = findViewById(R.id.spinner_menu_mode);
+        mQueryPrefill = findViewById(R.id.txt_query_prefill);
+        mQueryAppData = findViewById(R.id.txt_query_appdata);
 
         // Populate items
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(

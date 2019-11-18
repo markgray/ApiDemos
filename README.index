@@ -963,6 +963,7 @@ App
   Search
     App/Search/Invoke Search               all
         .app.SearchInvoke
+        .layout.search_invoke.xml
         .app.SearchQueryResults
         .app.SearchSuggestionSampleProvider (A provider specified in AndroidManifest.xml)
             This activity shows a few different ways to invoke search, and inserts context-specific
