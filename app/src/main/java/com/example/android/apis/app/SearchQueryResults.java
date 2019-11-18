@@ -19,12 +19,13 @@ package com.example.android.apis.app;
 import com.example.android.apis.R;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * This activity represents the "search" activity in your application, in which search results are
@@ -36,7 +37,7 @@ import android.widget.TextView;
  * Note: that although this is intended to only be called by {@code SearchInvoke} it also can be
  * launched using the "App/Search/Query Search Results" path of the {@code ApiDemos} app.
  */
-public class SearchQueryResults extends Activity {
+public class SearchQueryResults extends AppCompatActivity {
     // UI elements
     TextView mQueryText; // TextView we will display our query text in
     TextView mAppDataText; // TextView we will display our application-specific context (if any)

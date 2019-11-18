@@ -1057,7 +1057,8 @@
 
         <activity
             android:name=".app.SearchQueryResults"
-            android:label="@string/search_query_results">
+            android:label="@string/search_query_results"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
