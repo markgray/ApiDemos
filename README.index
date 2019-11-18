@@ -955,6 +955,7 @@ App
     App/Print/Print HTML off screen        v21
         .app.PrintHtmlOffScreen
         .layout.print_html_off_screen.xml
+        .menu.print_custom_content.xml
             This activity shows a text prompt and when the user chooses the print option
             from the overflow menu an HTML page with content that is not on the screen
             is printed via an off-screen WebView.
