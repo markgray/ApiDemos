@@ -952,7 +952,7 @@ App
             Uses a WebView as the View for the app, which allows it to use 
             WebView.createPrintDocumentAdapter() to print using PrintManager.print()
 
-    App/Print/Print HTML off screen        v19
+    App/Print/Print HTML off screen        v21
         .app.PrintHtmlOffScreen
         .layout.print_html_off_screen.xml
             This activity shows a text prompt and when the user chooses the print option
