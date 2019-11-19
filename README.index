@@ -977,6 +977,7 @@ App
 
     App/Search/Query Search Results        all
         .app.SearchQueryResults
+        .layout.search_query_results.xml
             This activity accepts query strings via the ACTION_SEARCH intent.  In a 
             full implementation, you would use the query string to select results from
             your data source, and present a list of those results to the user. Does not
