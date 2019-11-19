@@ -19,11 +19,14 @@ import android.content.SearchRecentSuggestionsProvider
 
 /**
  * To create a search suggestions provider using the built-in recent queries mode,
- * simply extend SearchRecentSuggestionsProvider as shown here, and configure with
+ * simply extend [SearchRecentSuggestionsProvider] as shown here, and configure with
  * a unique authority and the mode you wish to use. For more information, see
  * [android.content.SearchRecentSuggestionsProvider].
  */
 class SearchSuggestionSampleProvider : SearchRecentSuggestionsProvider() {
+    /**
+     * Our static constants
+     */
     companion object {
         /**
          * This is the provider authority identifier.  The same string must appear in your
@@ -40,7 +43,7 @@ class SearchSuggestionSampleProvider : SearchRecentSuggestionsProvider() {
     }
 
     /**
-     * The main job of the constructor is to call [.setupSuggestions] with the
+     * The main job of the constructor is to call `setupSuggestions` with the
      * appropriate configuration values.
      */
     init {
