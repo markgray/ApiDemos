@@ -989,6 +989,7 @@ App
     App/Service/Foreground Service Controller  -- all -> v26
         .app.ForegroundServiceController
         .layout.foreground_service_controller.xml
+        .app.ForegroundService
         .app.ForegroundService2
             This demonstrates how you can implement services that run in the foreground
             when needed. Informative use of new Class[] TODO: Study reflection!
