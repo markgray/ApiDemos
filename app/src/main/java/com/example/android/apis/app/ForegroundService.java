@@ -44,6 +44,7 @@ import com.example.android.apis.R;
  * Android 1.0.
  */
 @SuppressWarnings("FieldCanBeLocal")
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class ForegroundService extends Service {
     /**
      * Action of the {@code Intent} that will launch us in the foreground.
@@ -106,7 +107,6 @@ public class ForegroundService extends Service {
      * or private information on secure lockscreens). Finally we use {@code mNM} to create the notification
      * channel {@code chan1}.
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate() {
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
@@ -125,7 +125,6 @@ public class ForegroundService extends Service {
      * provided to {@link #startForeground} will be removed) removing this service from foreground state,
      * allowing it to be killed.
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onDestroy() {
         handleDestroy();
@@ -188,7 +187,6 @@ public class ForegroundService extends Service {
      * {@link #START_CONTINUATION_MASK} bits. We return START_STICKY since we want this service to
      * continue running until it is explicitly stopped.
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (ACTION_FOREGROUND.equals(intent.getAction())

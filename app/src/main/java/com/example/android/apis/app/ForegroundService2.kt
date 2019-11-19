@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.app
 
-package com.example.android.apis.app;
+import android.os.Build
+import androidx.annotation.RequiresApi
 
 /**
- * Dummy service which is identifiably different from {@code ForegroundService}.
+ * Dummy service which is identifiably different from `ForegroundService`.
  */
-public class ForegroundService2 extends ForegroundService {
-}
+@RequiresApi(Build.VERSION_CODES.O)
+class ForegroundService2 : ForegroundService()

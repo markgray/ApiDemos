@@ -987,7 +987,7 @@ App
 
   Service
     App/Service/Foreground Service Controller  -- all -> v26
-        .app.ForegroundService$Controller
+        .app.ForegroundServiceController
         .layout.foreground_service_controller.xml
         .app.ForegroundService2
             This demonstrates how you can implement services that run in the foreground
