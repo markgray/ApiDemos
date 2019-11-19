@@ -16,7 +16,6 @@
 
 package com.example.android.apis.app;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -32,11 +31,13 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.SystemClock;
-import androidx.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 // Need the preceding import to get access to the app resources, since this
@@ -171,7 +172,7 @@ public class ForegroundService extends Service {
      *         null: We initialize {@code mWakeLock} by using a handle to the system level service with
      *         class {@code PowerManager.class} to create a new wake lock with the level PARTIAL_WAKE_LOCK
      *         (Ensures that the CPU is running; the screen and keyboard back-light will be allowed to go off)
-     *         and the tag "wake-service" (for debugging purposes). We then call the {@code acquire} method
+     *         and the tag "myapp:wake-service" (for debugging purposes). We then call the {@code acquire} method
      *         of {@code mWakeLock} to acquire the wake lock with a timeout of 30 seconds.
      *     </li>
      *     <li>
@@ -228,7 +229,7 @@ public class ForegroundService extends Service {
             if (mWakeLock == null) {
                 //noinspection ConstantConditions
                 mWakeLock = getSystemService(PowerManager.class).newWakeLock(
-                        PowerManager.PARTIAL_WAKE_LOCK, "wake-service");
+                        PowerManager.PARTIAL_WAKE_LOCK, "myapp:wake-service");
                 mWakeLock.acquire(30000);
             } else {
                 releaseWakeLock();
@@ -284,7 +285,7 @@ public class ForegroundService extends Service {
      * <p>Note that this is implemented as an inner class only to keep the sample
      * all together; typically this code would appear in some separate class.
      */
-    public static class Controller extends Activity {
+    public static class Controller extends AppCompatActivity {
         /**
          * Called when the activity is starting. First we call our super's implementation of {@code onCreate},
          * then we set our content view to our layout file R.layout.foreground_service_controller. We

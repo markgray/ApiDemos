@@ -771,7 +771,8 @@
         <activity
             android:name=".app.ForegroundService$Controller"
             android:label="@string/activity_foreground_service_controller"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
