@@ -19,7 +19,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 
 /**
- * Dummy service which is identifiably different from `ForegroundService`.
+ * Dummy service which is identifiably different from [ForegroundService].
  */
 @RequiresApi(Build.VERSION_CODES.O)
 class ForegroundService2 : ForegroundService()
