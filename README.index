@@ -995,7 +995,10 @@ App
             when needed. Informative use of new Class[] TODO: Study reflection!
 
     App/Service/Isolated Service Controller    -- v16
-        .app.IsolatedService$Controller
+        .app.IsolatedServiceController
+        .layout.isolated_service_controller.xml
+        .app.IsolatedService
+        .app.IsolatedService2
             Show how to use android:isolatedProcess="true" AndroidManifest option for
             a service -- the "two" services .app.IsolatedService and .app.IsolatedService2
             do absolutely nothing so there is no way to tell.
