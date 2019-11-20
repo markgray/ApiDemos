@@ -23,8 +23,6 @@ import android.os.RemoteCallbackList
 import android.os.RemoteException
 import android.util.Log
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
 /**
  * This is an example if implementing a Service that uses android:isolatedProcess. When set to true,
  * this service will run under a special process that is isolated from the rest of the system.
@@ -39,8 +37,11 @@ open class IsolatedService : Service() {
      * that it can be accessed more efficiently from inner classes.
      */
     val mCallbacks = RemoteCallbackList<IRemoteServiceCallback>()
+    /**
+     * No idea what this was intended for, suspect it to be a relic of code pasting.
+     */
     @Suppress("unused")
-    var mValue = 0 // No idea
+    var mValue = 0
     /**
      * Called by the system when the service is first created. We simply log the fact that we have
      * been created.
@@ -51,11 +52,11 @@ open class IsolatedService : Service() {
 
     /**
      * Called by the system to notify a Service that it is no longer used and is being removed. We
-     * log the fact that we are being destroyed, then disable the callback list
-     * `RemoteCallbackList<IRemoteServiceCallback> mCallbacks`. All registered callbacks are
-     * unregistered, and the list is disabled so that future calls to register(E) will fail. This
-     * should be used when a Service is stopping, to prevent clients from registering callbacks
-     * after it is stopped.
+     * log the fact that we are being destroyed, then disable the callback list of
+     * `RemoteCallbackList<IRemoteServiceCallback>` objects in our field [mCallbacks]. All
+     * registered callbacks are unregistered, and the list is disabled so that future calls to
+     * `register(E)` will fail. This should be used when a [Service] is stopping, to prevent
+     * clients from registering callbacks after it is stopped.
      */
     override fun onDestroy() {
         Log.i("IsolatedService", "Destroying IsolatedService: $this")
@@ -65,19 +66,18 @@ open class IsolatedService : Service() {
 
     /**
      * Return the communication channel to the service. We simply return our field
-     * `IRemoteService.Stub mBinder` which is defined in the aidl file
+     * [IRemoteService.Stub] field [mBinder] which is defined in the aidl file
      * IRemoteService.aidl
      *
-     * @param intent The Intent that was used to bind to this service,
-     * @return Return an IBinder through which clients can call on to the
-     * service.
+     * @param intent The [Intent] that was used to bind to this service,
+     * @return Return an [IBinder] through which clients can call on to the service.
      */
     override fun onBind(intent: Intent): IBinder? {
         return mBinder
     }
 
     /**
-     * The `IRemoteService` interface is defined through IDL in the file IRemoteService.aidl
+     * The [IRemoteService] interface is defined through IDL in the file IRemoteService.aidl
      */
     @Suppress("SENSELESS_COMPARISON")
     private val mBinder: IRemoteService.Stub = object : IRemoteService.Stub() {
@@ -97,10 +97,9 @@ open class IsolatedService : Service() {
      * then you will not receive this callback; instead, the service will simply
      * be stopped.
      *
-     *
      * We log the fact that a task has been removed, then stop our service.
      *
-     * @param rootIntent The original root Intent that was used to launch
+     * @param rootIntent The original root [Intent] that was used to launch
      * the task that is being removed.
      */
     override fun onTaskRemoved(rootIntent: Intent) {
@@ -110,14 +109,14 @@ open class IsolatedService : Service() {
 
     /**
      * Example of how to broadcast to all the callbacks that have been registered with your service.
-     * (NOT USED). First we prepare `RemoteCallbackList<IRemoteServiceCallback> mCallbacks` to
-     * start making calls to the currently registered callbacks, saving the number of callbacks in
-     * the broadcast in `N` to use to end our loop. Then we loop through each of the items
+     * (NOT USED). First we prepare `RemoteCallbackList<IRemoteServiceCallback>` field [mCallbacks]
+     * to start making calls to the currently registered callbacks, saving the number of callbacks
+     * in the broadcast in `val n` to use to end our loop. Then we loop through each of the items
      * calling their overload of `valueChanged`. When done we clean up the state of the
      * broadcast of `mCallbacks`.
      *
-     * @param value an int that should be broadcast to all the currently registered callbacks override
-     * of the `valueChanged(int)` method defined in IRemoteServiceCallback.aidl
+     * @param value an [Int] that should be broadcast to all the currently registered callbacks
+     * override of the `valueChanged(int)` method defined in IRemoteServiceCallback.aidl
      */
     @Suppress("unused")
     private fun broadcastValue(value: Int) { // Broadcast to all clients the new value.
@@ -125,8 +124,10 @@ open class IsolatedService : Service() {
         for (i in 0 until n) {
             try {
                 mCallbacks.getBroadcastItem(i).valueChanged(value)
-            } catch (e: RemoteException) { // The RemoteCallbackList will take care of removing
-// the dead object for us.
+            } catch (e: RemoteException) {
+                /**
+                 * The RemoteCallbackList will take care of removing the dead object for us.
+                 */
             }
         }
         mCallbacks.finishBroadcast()
