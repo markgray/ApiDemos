@@ -1021,6 +1021,7 @@ App
 
     App/Service/Messenger Service              -- all -> v26
         .app.MessengerServiceActivities$Binding
+        .layout.messenger_service_binding.xml
         .app.MessengerService --> service we bind to
             This is an example of implementing an application service that uses the
             Messenger class for communicating with clients.  This allows for remote

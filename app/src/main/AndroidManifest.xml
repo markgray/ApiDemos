@@ -619,7 +619,8 @@
 
         <activity
             android:name=".app.MessengerServiceActivities$Binding"
-            android:label="@string/activity_messenger_service_binding">
+            android:label="@string/activity_messenger_service_binding"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

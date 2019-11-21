@@ -1,7 +1,6 @@
 package com.example.android.apis.app;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +17,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.android.apis.R;
 
 @SuppressLint("SetTextI18n")
@@ -28,7 +29,7 @@ public class MessengerServiceActivities {
      * needing to define an AIDL interface. Uses {@code MessengerService.java} as the service we
      * bind to.
      */
-    public static class Binding extends Activity {
+    public static class Binding extends AppCompatActivity {
 
         /**
          * Messenger for communicating with service.
@@ -77,12 +78,10 @@ public class MessengerServiceActivities {
              */
             @Override
             public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case MessengerService.MSG_SET_VALUE:
-                        mCallbackText.setText("Received from service: " + msg.arg1);
-                        break;
-                    default:
-                        super.handleMessage(msg);
+                if (msg.what == MessengerService.MSG_SET_VALUE) {
+                    mCallbackText.setText("Received from service: " + msg.arg1);
+                } else {
+                    super.handleMessage(msg);
                 }
             }
         }
@@ -252,12 +251,12 @@ public class MessengerServiceActivities {
             setContentView(R.layout.messenger_service_binding);
 
             // Watch for button clicks.
-            Button button = (Button) findViewById(R.id.bind);
+            Button button = findViewById(R.id.bind);
             button.setOnClickListener(mBindListener);
-            button = (Button) findViewById(R.id.unbind);
+            button = findViewById(R.id.unbind);
             button.setOnClickListener(mUnbindListener);
 
-            mCallbackText = (TextView) findViewById(R.id.callback);
+            mCallbackText = findViewById(R.id.callback);
             mCallbackText.setText("Not attached.");
         }
 
