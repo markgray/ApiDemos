@@ -1006,6 +1006,7 @@ App
 
     App/Service/Local Service Binding          -- all
         .app.LocalServiceActivities$Binding
+        .layout.local_service_binding.xml
         .app.LocalService
             This demonstrates the implementation of a service that runs in the same 
             process as the rest of the application, which is explicitly started and 
@@ -1013,6 +1014,7 @@ App
 
     App/Service/Local Service Controller       -- all
         .app.LocalServiceActivities$Controller
+        .layout.local_service_controller.xml
         .app.LocalService.java
             Example of explicitly starting and stopping the local service. Starts 
             app.LocalService.java
