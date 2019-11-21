@@ -596,7 +596,8 @@
         <activity
             android:name=".app.LocalServiceActivities$Controller"
             android:label="@string/activity_local_service_controller"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -604,7 +605,8 @@
         </activity>
         <activity
             android:name=".app.LocalServiceActivities$Binding"
-            android:label="@string/activity_local_service_binding">
+            android:label="@string/activity_local_service_binding"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
