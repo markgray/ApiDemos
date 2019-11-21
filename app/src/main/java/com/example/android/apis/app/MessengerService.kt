@@ -23,22 +23,23 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.*
 import android.widget.Toast
-import com.example.android.apis.R
-import java.util.*
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+import com.example.android.apis.R
+
+import java.util.*
+
 /**
  * This is an example of implementing an application service that uses the
- * [Messenger] class for communicating with clients.  This allows for
+ * [Messenger] class for communicating with clients. This allows for
  * remote interaction with a service, without needing to define an AIDL
  * interface.
  *
- *
  * Notice the use of the [NotificationManager] when interesting things
- * happen in the service.  This is generally how background services should
+ * happen in the service. This is generally how background services should
  * interact with the user, rather than doing something more disruptive such as
- * calling startActivity().
+ * calling `startActivity()`.
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.O)
@@ -65,28 +66,19 @@ class MessengerService : Service() {
          * Subclasses must implement this to receive messages. We switch based on the `what`
          * field of the `Message msg` we have received:
          *
-         *  *
-         * MSG_REGISTER_CLIENT - we add the value contained in the `replyTo` field to the
-         * list of clients we maintain in `ArrayList<Messenger> mClients`
+         *  * MSG_REGISTER_CLIENT - we add the value contained in the `replyTo` field to the
+         *  list of clients we maintain in `ArrayList<Messenger>` field [mClients].
+         *  * MSG_UNREGISTER_CLIENT - we remove the value contained in the `replyTo` field from
+         *  the list of clients we maintain in `ArrayList<Messenger>` field [mClients].
+         *  * MSG_SET_VALUE - we store the value sent in the field `arg1` of `Message msg`
+         *  in our field `int mValue`, then looping backwards through all the clients
+         *  in `ArrayList<Messenger>` field [mClients] we try to send a message with the `what`
+         *  field set to MSG_SET_VALUE, and `arg1` field set to `mValue`. If we
+         *  catch a [RemoteException] we remove that client from [mClients] (safe because
+         *  we are going through the list in backwards order).
+         *  * default - we pass the `msg` on to our super's implementation of `handleMessage`.
          *
-         *  *
-         * MSG_UNREGISTER_CLIENT - we remove the value contained in the `replyTo` field from
-         * the list of clients we maintain in `ArrayList<Messenger> mClients`
-         *
-         *  *
-         * MSG_SET_VALUE - we store the value sent in the field `arg1` of `Message msg`
-         * in our field `int mValue`, then looping backwards through all the clients
-         * in `ArrayList<Messenger> mClients` we try to send a message with the `what`
-         * field set to MSG_SET_VALUE, and `arg1` field set to `mValue`. If we
-         * catch a RemoteException we remove that client from `mClients` (safe because
-         * we are going through the list in backwards order).
-         *
-         *  *
-         * default - we pass the `msg` on to our super's implementation of `handleMessage`.
-         *
-         *
-         *
-         * @param msg `Message` received by the `Messenger` we are the `Handler` for
+         * @param msg [Message] received by the [Messenger] we are the [Handler] for
          */
         override fun handleMessage(msg: Message) {
             when (msg.what) {
@@ -98,9 +90,12 @@ class MessengerService : Service() {
                     while (i >= 0) {
                         try {
                             mClients[i].send(Message.obtain(null, MSG_SET_VALUE, mValue, 0))
-                        } catch (e: RemoteException) { // The client is dead.  Remove it from the list;
-// we are going through the list from back to front
-// so this is safe to do inside the loop.
+                        } catch (e: RemoteException) {
+                            /**
+                             * The client is dead. Remove it from the list;
+                             * we are going through the list from back to front
+                             * so this is safe to do inside the loop.
+                             */
                             mClients.removeAt(i)
                         }
                         i--
@@ -112,20 +107,21 @@ class MessengerService : Service() {
     }
 
     /**
-     * Target we publish for clients to send messages to IncomingHandler.
+     * Target we publish for clients to send messages to [IncomingHandler].
      */
     val mMessenger = Messenger(IncomingHandler())
 
     /**
      * Called by the system when the service is first created. We initialize our field
-     * `NotificationManager mNM` with a handle to the system level service NOTIFICATION_SERVICE,
-     * then we initialize `NotificationChannel chan1` with a new instance whose id and user
-     * visible name are both PRIMARY_CHANNEL ("default"), and whose importance is IMPORTANCE_DEFAULT
-     * (shows everywhere, makes noise, but does not visually intrude). We set the notification light
-     * color of `chan1` to GREEN, and set its lock screen visibility to VISIBILITY_PRIVATE
-     * (shows this notification on all lockscreens, but conceal sensitive or private information on
-     * secure lockscreens). We then have `mNM` create notification channel `chan1`. Finally
-     * we call our method `showNotification` to display the notification that we are running.
+     * [NotificationManager] field [mNM] with a handle to the system level service
+     * NOTIFICATION_SERVICE, then we initialize [NotificationChannel] variable `val chan1` with a
+     * new instance whose id and user visible name are both PRIMARY_CHANNEL ("default"), and whose
+     * importance is IMPORTANCE_DEFAULT (shows everywhere, makes noise, but does not visually
+     * intrude). We set the notification light color of `chan1` to GREEN, and set its lock screen
+     * visibility to VISIBILITY_PRIVATE (shows this notification on all lockscreens, but conceals
+     * sensitive or private information on secure lockscreens). We then have [mNM] create
+     * notification channel `chan1`. Finally we call our method [showNotification] to display the
+     * notification that we are running.
      */
     override fun onCreate() {
         mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -142,46 +138,60 @@ class MessengerService : Service() {
      * Called by the system to notify a Service that it is no longer used and is being removed. We
      * cancel our notification, and toast the message "Remote service has stopped".
      */
-    override fun onDestroy() { // Cancel the persistent notification.
+    override fun onDestroy() {
+        /**
+         * Cancel the persistent notification.
+         */
         mNM!!.cancel(R.string.remote_service_started)
-        // Tell the user we stopped.
+        /**
+         * Tell the user we stopped.
+         */
         Toast.makeText(this, R.string.remote_service_stopped, Toast.LENGTH_SHORT).show()
     }
 
     /**
      * Return the communication channel to the service. When a client binds to our service, we return
-     * the `IBinder` interface to our `Messenger mMessenger` for sending messages to this
+     * the [IBinder] interface to our [Messenger] vield [mMessenger] for sending messages to this
      * service.
      *
-     * @param intent The Intent that was used to bind to this service,
-     * as given to [               Context.bindService][android.content.Context.bindService].  Note that any extras that were included with
-     * the Intent at that point will *not* be seen here.
-     * @return Return an IBinder through which clients can call on to the
-     * service.
+     * @param intent The [Intent] that was used to bind to this service, as given to
+     * [android.content.Context.bindService]. Note that any extras that were included with
+     * the [Intent] at that point will *not* be seen here.
+     * @return Return an [IBinder] through which clients can call on to the service.
      */
     override fun onBind(intent: Intent): IBinder? {
         return mMessenger.binder
     }
 
     /**
-     * Show a notification while this service is running. First we initialize `CharSequence text`
-     * with the resource String "Remote service has started". The we create `PendingIntent contentIntent`
-     * with a target Intent for `Controller.class` (NOTE: This was a mistake caused by code pasting,
-     * my version uses `MessengerServiceActivities.Binding` instead.)
+     * Show a notification while this service is running. First we initialize [CharSequence] variable
+     * `val text` with the resource String "Remote service has started". The we create [PendingIntent]
+     * variable `val contentIntent` with a target [Intent] for `MessengerServiceActivities.Binding`.)
      *
-     *
-     * We then build a PRIMARY_CHANNEL `Notification notification` using R.drawable.stat_sample
-     * as the small icon, `text` as the "ticker" text, the current system time as the timestamp,
-     * the resource String "Sample Local Service" as the first line of text, `text` as the second
-     * line of text, and `contentIntent` as the `PendingIntent` to be sent when the notification
-     * is clicked. Finally we use `NotificationManager mNM` to post the notification using
-     * R.string.remote_service_started as the ID.
+     * We then build a PRIMARY_CHANNEL [Notification] for variable `val notification` using
+     * R.drawable.stat_sample as the small icon, `text` as the "ticker" text, the current system
+     * time as the timestamp, the resource [String] "Sample Local Service" as the first line of text,
+     * `text` as the second line of text, and `contentIntent` as the [PendingIntent] to be sent when
+     * the notification is clicked. Finally we use [NotificationManager] field [mNM] to post the
+     * notification using R.string.remote_service_started as the ID.
      */
-    private fun showNotification() { // In this sample, we'll use the same text for the ticker and the expanded notification
+    private fun showNotification() {
+        /**
+         * In this sample, we'll use the same text for the ticker and the expanded notification
+         */
         val text = getText(R.string.remote_service_started)
-        // The PendingIntent to launch our activity if the user selects this notification
-        val contentIntent = PendingIntent.getActivity(this, 0, Intent(this, MessengerServiceActivities.Binding::class.java), 0)
-        // Set the info for the views that show in the notification panel.
+        /**
+         * The PendingIntent to launch our controlling activity if the user selects this notification
+         */
+        val contentIntent = PendingIntent.getActivity(
+                this,
+                0,
+                Intent(this, MessengerServiceActivities.Binding::class.java),
+                0
+        )
+        /**
+         * Set the info for the views that show in the notification panel.
+         */
         val notification = Notification.Builder(this, PRIMARY_CHANNEL)
                 .setSmallIcon(R.drawable.stat_sample) // the status icon
                 .setTicker(text) // the status text
@@ -190,11 +200,16 @@ class MessengerService : Service() {
                 .setContentText(text) // the contents of the entry
                 .setContentIntent(contentIntent) // The intent to send when the entry is clicked
                 .build()
-        // Send the notification.
-// We use a string id because it is a unique number.  We use it later to cancel.
+        /**
+         * Send the notification. We use a string id because it is a unique number.
+         * We use it later to cancel.
+         */
         mNM!!.notify(R.string.remote_service_started, notification)
     }
 
+    /**
+     * Our static constants
+     */
     companion object {
         /**
          * The id of the primary notification channel
