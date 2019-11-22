@@ -18,7 +18,6 @@ package com.example.android.apis.app;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -43,6 +42,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
@@ -303,31 +304,26 @@ public class RemoteService extends Service {
          */
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
+            // It is time to bump the value!
+            if (msg.what == REPORT_MSG) {// Up it goes.
+                int value = ++mValue;
 
-                // It is time to bump the value!
-                case REPORT_MSG: {
-                    // Up it goes.
-                    int value = ++mValue;
-
-                    // Broadcast to all clients the new value.
-                    final int N = mCallbacks.beginBroadcast();
-                    for (int i = 0; i < N; i++) {
-                        try {
-                            mCallbacks.getBroadcastItem(i).valueChanged(value);
-                        } catch (RemoteException e) {
-                            // The RemoteCallbackList will take care of removing
-                            // the dead object for us.
-                        }
+                // Broadcast to all clients the new value.
+                final int N = mCallbacks.beginBroadcast();
+                for (int i = 0; i < N; i++) {
+                    try {
+                        mCallbacks.getBroadcastItem(i).valueChanged(value);
+                    } catch (RemoteException e) {
+                        // The RemoteCallbackList will take care of removing
+                        // the dead object for us.
                     }
-                    mCallbacks.finishBroadcast();
-
-                    // Repeat every 1 second.
-                    sendMessageDelayed(obtainMessage(REPORT_MSG), 1000);
                 }
-                break;
-                default:
-                    super.handleMessage(msg);
+                mCallbacks.finishBroadcast();
+
+                // Repeat every 1 second.
+                sendMessageDelayed(obtainMessage(REPORT_MSG), 1000);
+            } else {
+                super.handleMessage(msg);
             }
         }
     };
@@ -375,7 +371,7 @@ public class RemoteService extends Service {
      * Note that this is implemented as an inner class only to keep the sample
      * all together; typically this code would appear in some separate class.
      */
-    public static class Controller extends Activity {
+    public static class Controller extends AppCompatActivity {
         /**
          * Called when the activity is starting. First we call through to our super's implementation
          * of {@code onCreate}, then we set our content view to our layout file R.layout.remote_service_controller.
@@ -447,7 +443,7 @@ public class RemoteService extends Service {
      * Note that this is implemented as an inner class only keep the sample
      * all together; typically this code would appear in some separate class.
      */
-    public static class Binding extends Activity {
+    public static class Binding extends AppCompatActivity {
         /**
          * The primary interface we will be calling on the service.
          */
@@ -804,12 +800,10 @@ public class RemoteService extends Service {
              */
             @Override
             public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case BUMP_MSG:
-                        mCallbackText.setText("Received from service: " + msg.arg1);
-                        break;
-                    default:
-                        super.handleMessage(msg);
+                if (msg.what == BUMP_MSG) {
+                    mCallbackText.setText("Received from service: " + msg.arg1);
+                } else {
+                    super.handleMessage(msg);
                 }
             }
 
@@ -822,7 +816,7 @@ public class RemoteService extends Service {
     /**
      * Examples of behavior of different bind flags.</p>
      */
-    public static class BindingOptions extends Activity {
+    public static class BindingOptions extends AppCompatActivity {
         /**
          * {@code ServiceConnection} we use to receive information as the service is started and stopped after calling {@code bindService}
          */

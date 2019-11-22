@@ -634,7 +634,8 @@
         <activity
             android:name=".app.RemoteService$Controller"
             android:label="@string/activity_remote_service_controller"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -642,7 +643,8 @@
         </activity>
         <activity
             android:name=".app.RemoteService$Binding"
-            android:label="@string/activity_remote_service_binding">
+            android:label="@string/activity_remote_service_binding"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -650,7 +652,8 @@
         </activity>
         <activity
             android:name=".app.RemoteService$BindingOptions"
-            android:label="@string/activity_remote_service_binding_options">
+            android:label="@string/activity_remote_service_binding_options"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
