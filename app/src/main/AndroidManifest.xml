@@ -1065,7 +1065,8 @@
         </receiver> <!-- Voice Recognition Samples -->
         <activity
             android:name=".app.VoiceRecognition"
-            android:label="@string/voice_recognition">
+            android:label="@string/voice_recognition"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

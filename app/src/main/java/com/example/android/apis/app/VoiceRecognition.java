@@ -39,6 +39,8 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +48,7 @@ import java.util.List;
  * Sample code that invokes the speech recognition intent API.
  */
 @SuppressLint("SetTextI18n")
-public class VoiceRecognition extends Activity implements OnClickListener {
+public class VoiceRecognition extends AppCompatActivity implements OnClickListener {
     /**
      * TAG for logging
      */
@@ -103,11 +105,11 @@ public class VoiceRecognition extends Activity implements OnClickListener {
         setContentView(R.layout.voice_recognition);
 
         // Get display items for later interaction
-        Button speakButton = (Button) findViewById(R.id.btn_speak);
+        Button speakButton = findViewById(R.id.btn_speak);
 
-        mList = (ListView) findViewById(R.id.list);
+        mList = findViewById(R.id.list);
 
-        mSupportedLanguageView = (Spinner) findViewById(R.id.supported_languages);
+        mSupportedLanguageView = findViewById(R.id.supported_languages);
 
         // Check to see if a recognition activity is present
         PackageManager pm = getPackageManager();
@@ -154,6 +156,7 @@ public class VoiceRecognition extends Activity implements OnClickListener {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 
         // Specify the calling package to identify your application
+        //noinspection ConstantConditions
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getClass().getPackage().getName());
 
         // Display an hint to the user about what he should say.
@@ -198,6 +201,7 @@ public class VoiceRecognition extends Activity implements OnClickListener {
         if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
             // Fill the list view with the strings the recognizer thought it could have heard
             ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            //noinspection ConstantConditions
             mList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, matches));
         }
 
@@ -211,8 +215,15 @@ public class VoiceRecognition extends Activity implements OnClickListener {
      */
     private void refreshVoiceSettings() {
         Log.i(TAG, "Sending broadcast");
-        sendOrderedBroadcast(RecognizerIntent.getVoiceDetailsIntent(this), null,
-                new SupportedLanguageBroadcastReceiver(), null, Activity.RESULT_OK, null, null);
+        sendOrderedBroadcast(
+                RecognizerIntent.getVoiceDetailsIntent(this),
+                null,
+                new SupportedLanguageBroadcastReceiver(),
+                null,
+                Activity.RESULT_OK,
+                null,
+                null
+        );
     }
 
     /**
@@ -239,7 +250,7 @@ public class VoiceRecognition extends Activity implements OnClickListener {
 
         SpinnerAdapter adapter = new ArrayAdapter<CharSequence>(this,
                 android.R.layout.simple_spinner_item,
-                languages.toArray(new String[languages.size()]));
+                languages.toArray(new String[0]));
         mSupportedLanguageView.setAdapter(adapter);
     }
 
@@ -254,7 +265,7 @@ public class VoiceRecognition extends Activity implements OnClickListener {
      *                 recognizer activity,
      */
     private void updateLanguagePreference(String language) {
-        TextView textView = (TextView) findViewById(R.id.language_preference);
+        TextView textView = findViewById(R.id.language_preference);
         textView.setText(language);
     }
 
@@ -320,7 +331,10 @@ public class VoiceRecognition extends Activity implements OnClickListener {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        updateSupportedLanguages(extra.getStringArrayList(RecognizerIntent.EXTRA_SUPPORTED_LANGUAGES));
+                        //noinspection ConstantConditions
+                        updateSupportedLanguages(
+                                extra.getStringArrayList(RecognizerIntent.EXTRA_SUPPORTED_LANGUAGES)
+                        );
                     }
                 });
             }
@@ -329,7 +343,9 @@ public class VoiceRecognition extends Activity implements OnClickListener {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        updateLanguagePreference(extra.getString(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE));
+                        updateLanguagePreference(
+                                extra.getString(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE)
+                        );
                     }
                 });
             }
