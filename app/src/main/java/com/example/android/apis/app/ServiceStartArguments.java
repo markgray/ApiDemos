@@ -17,7 +17,6 @@
 package com.example.android.apis.app;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -38,6 +37,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -134,6 +135,7 @@ public class ServiceStartArguments extends Service {
                     try {
                         wait(endTime - System.currentTimeMillis());
                     } catch (Exception e) {
+                        //noinspection ConstantConditions
                         Log.i(TAG, e.getLocalizedMessage());
                     }
                 }
@@ -327,7 +329,7 @@ public class ServiceStartArguments extends Service {
      * Note that this is implemented as an inner class only keep the sample
      * all together; typically this code would appear in some separate class.
      */
-    public static class Controller extends Activity {
+    public static class Controller extends AppCompatActivity {
         /**
          * Called when the activity is starting. First we call through to our super's implementation
          * of {@code onCreate}, then we set our content view to our layout file

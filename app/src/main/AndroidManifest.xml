@@ -665,7 +665,8 @@
         <activity
             android:name=".app.ServiceStartArguments$Controller"
             android:label="@string/activity_service_start_arguments_controller"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
