@@ -17,13 +17,14 @@
 package com.example.android.apis.app;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -43,7 +44,7 @@ import java.util.Random;
  * http://developer.android.com/reference/android/speech/tts/package-summary.html
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-public class TextToSpeechActivity extends Activity implements TextToSpeech.OnInitListener {
+public class TextToSpeechActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
     /**
      * TAG for logging
@@ -86,7 +87,7 @@ public class TextToSpeechActivity extends Activity implements TextToSpeech.OnIni
         Log.i(TAG, "getMaxSpeechInputLength: " + TextToSpeech.getMaxSpeechInputLength());
         // The button is disabled in the layout.
         // It will be enabled upon initialization of the TTS engine.
-        mAgainButton = (Button) findViewById(R.id.again_button);
+        mAgainButton = findViewById(R.id.again_button);
 
         mAgainButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -168,9 +169,9 @@ public class TextToSpeechActivity extends Activity implements TextToSpeech.OnIni
       "Howdy",
       "What's crack-a-lackin?",
       "That explains the stench!",
-      "And God said, Behold, I have given you every herb bearing\n" +
-      "seed, which is upon the face of all the earth, and every tree,\n" +
-      "in the which is the fruit of a tree yielding seed; to you it\n" +
+      "And God said, Behold, I have given you every herb bearing " +
+      "seed, which is upon the face of all the earth, and every tree, " +
+      "in the which is the fruit of a tree yielding seed; to you it " +
       "shall be for meat."
     };
 
@@ -186,7 +187,6 @@ public class TextToSpeechActivity extends Activity implements TextToSpeech.OnIni
         // Select a random hello.
         int helloLength = HELLOS.length;
         String hello = HELLOS[RANDOM.nextInt(helloLength)];
-        //noinspection deprecation
         mTts.speak(hello,
             TextToSpeech.QUEUE_FLUSH,  // Drop all pending entries in the playback queue.
             null);
