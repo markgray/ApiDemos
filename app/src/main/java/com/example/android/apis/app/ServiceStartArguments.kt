@@ -33,15 +33,13 @@ import com.example.android.apis.app.ServiceStartArguments.Controller
 
 /**
  * This is an example of implementing an application service that runs locally
- * in the same process as the application.  The [Controller]
- * class shows how to interact with the service.
- *
+ * in the same process as the application. The [Controller] class shows how to
+ * interact with the service.
  *
  * Notice the use of the [NotificationManager] when interesting things
- * happen in the service.  This is generally how background services should
+ * happen in the service. This is generally how background services should
  * interact with the user, rather than doing something more disruptive such as
  * calling startActivity().
- *
  *
  * For applications targeting Android 1.5 or beyond, you may want consider
  * using the [android.app.IntentService] class, which takes care of all the
@@ -51,43 +49,42 @@ import com.example.android.apis.app.ServiceStartArguments.Controller
 @TargetApi(Build.VERSION_CODES.O)
 class ServiceStartArguments : Service() {
     /**
-     * Handle to the system level `NotificationManager` service
+     * Handle to the system level [NotificationManager] service
      */
     private var mNM: NotificationManager? = null
     /**
-     * `Looper` for the `HandlerThread` background thread we create to run our service in
+     * [Looper] for the `HandlerThread` background thread we create to run our service in
      */
     @Volatile
     private var mServiceLooper: Looper? = null
     /**
-     * `Handler` for messages sent to our service thread
+     * Our instance of the custom [ServiceHandler] subclass of [Handler] for messages
+     * sent to our service thread
      */
     @Volatile
     private var mServiceHandler: ServiceHandler? = null
 
     /**
-     * This is a `Handler` class which is used to receive messages sent to the thread that is
+     * This is a [Handler] class which is used to receive messages sent to the thread that is
      * running our service.
-     */
-    private inner class ServiceHandler
-    /**
-     * We just pass our parameter through to our super's constructor so that it uses this
-     * `Looper` instead of the default one.
+     *
+     * Our constructor just passes our [Looper] parameter `looper` through to our super's
+     * constructor so that it uses it instead of the default one.
      *
      * @param looper `Looper` for `HandlerThread` that is running our service
-     */(looper: Looper?) : Handler(looper!!) {
+     */
+    private inner class ServiceHandler(looper: Looper?) : Handler(looper!!) {
         /**
-         * Subclasses must implement this to receive messages. First we retrieve `Bundle arguments`
-         * from the `Object obj` of our `Message msg` parameter. Then we extract `String txt`
-         * which is stored in `arguments` under the key "name", and `boolean redeliver` which
-         * is stored under the key "redeliver" (if set, otherwise we default to false). We then log the
-         * `msg` we have received. If `redeliver` is false we prepend "New cmd #" to txt,
-         * otherwise we prepend "Re-delivered #". We call our method `showNotification` to display
-         * a notification containing `txt`.
-         *
-         *
-         * Then we wait for 5 seconds before calling our method `hideNotification` to dismiss our
-         * notification, log a message "Done with #", and stop ourselves.
+         * Subclasses must implement this to receive messages. First we retrieve the [Bundle]
+         * stored in `obj` field of our [Message] parameter [msg] to initialize our variable
+         * `var arguments`. Then we extract the [String] which is stored in `arguments` under
+         * the key "name" to initialize variable `var txt`, and the [Boolean] which is stored
+         * under the key "redeliver" to initialize variable `val redeliver` (if set, otherwise
+         * we default to *false*). We then log the [msg] we have received. If `redeliver` is
+         * *false* we prepend "New cmd #" to txt, otherwise we prepend "Re-delivered #". We call
+         * our method [showNotification] to display a notification containing `txt`. Then we wait
+         * for 5 seconds before calling our method [hideNotification] to dismiss our notification,
+         * log a message "Done with #", and stop ourselves.
          *
          * @param msg A [Message][android.os.Message] object
          */
@@ -102,8 +99,9 @@ class ServiceStartArguments : Service() {
                 "Re-delivered #" + msg.arg1 + ": " + txt
             }
             showNotification(txt)
-            // Normally we would do some work here...  for our sample, we will
-// just sleep for 5 seconds.
+            /**
+             * Normally we would do some work here. For our sample, we will just sleep for 5 seconds
+             */
             val endTime = System.currentTimeMillis() + 5 * 1000
             while (System.currentTimeMillis() < endTime) {
                 synchronized(this) {
@@ -121,18 +119,20 @@ class ServiceStartArguments : Service() {
     }
 
     /**
-     * Called by the system when the service is first created. First we initialize our field
-     * `NotificationManager mNM` with a handle to the NOTIFICATION_SERVICE system level
-     * service. We initialize `NotificationChannel chan1` with a new instance whose id and
-     * user visible name are both PRIMARY_CHANNEL ("default"), and whose importance is IMPORTANCE_DEFAULT
-     * (shows everywhere, makes noise, but does not visually intrude). We set the notification light
-     * color of `chan1` to GREEN, and set its lock screen visibility to VISIBILITY_PRIVATE
-     * (shows this notification on all lockscreens, but conceal sensitive or private information on
-     * secure lockscreens). We then have `mNM` create notification channel `chan1`.
-     * Then we display a toast with the message "Service created." We next create `HandlerThread thread`
-     * with the thread name "ServiceStartArgumentsBackground", and the priority THREAD_PRIORITY_BACKGROUND.
-     * We start the `thread` running, then retrieve the `Looper mServiceLooper` of the thread
-     * and use it to construct an instance of `ServiceHandler` for `ServiceHandler mServiceHandler`.
+     * Called by the system when the service is first created. First we initialize our
+     * [NotificationManager] field [mNM] with a handle to the NOTIFICATION_SERVICE system level
+     * service. We initialize [NotificationChannel] variable `val chan1` with a new instance whose
+     * id and user visible name are both PRIMARY_CHANNEL ("default"), and whose importance is
+     * IMPORTANCE_DEFAULT (shows everywhere, makes noise, but does not visually intrude). We set
+     * the notification light color of `chan1` to GREEN, and set its lock screen visibility to
+     * VISIBILITY_PRIVATE (shows this notification on all lockscreens, but conceals sensitive or
+     * private information on secure lockscreens). We then have [mNM] create notification channel
+     * `chan1`. Then we display a toast with the message "Service created." We next create a
+     * [HandlerThread] to initialize our variable `val thread` with the thread name
+     * "ServiceStartArgumentsBackground", and the priority THREAD_PRIORITY_BACKGROUND.
+     * We start `thread` running, then retrieve the [Looper] of the thread to initialize our field
+     * [mServiceLooper] and use it to construct an instance of [ServiceHandler] for our field
+     * [mServiceHandler].
      */
     override fun onCreate() {
         mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -158,39 +158,34 @@ class ServiceStartArguments : Service() {
      * unique integer token representing the start request. Note that the system calls this on your
      * service's main thread. First we log a message informing the user that we are "Starting #",
      * with the `startId` request number, and the contents of the extras included in the
-     * `Intent intent` that started us. We obtain `Message msg` from our background
-     * `ServiceHandler mServiceHandler`, set field `arg1` to `startId`, field
-     * `arg2` to `flags` and field `obj` to the extras in `intent`. We then
-     * push `msg` onto the end of the message queue for `mServiceHandler` after all
-     * pending messages before the current time. It will be received in handleMessage(Message), in
-     * the thread attached to this handler. Then we log as message "Sending: " with `msg`
-     * appended to it.
+     * [Intent] parameter [intent] that started us. We obtain a [Message] from our background
+     * [ServiceHandler] in field [mServiceHandler] to initialize variable `val msg`, set its field
+     * `arg1` to our parameter [startId] push `msg` onto the end of the message queue for
+     * [mServiceHandler] after all pending messages before the current time. It will be received
+     * in `handleMessage(Message)`, in the thread attached to this handler. Then we log the message
+     * "Sending: " with `msg` appended to it.
      *
-     *
-     * Then we check to see if we were started using the "Start Failed Delivery" `Button`, and
+     * Then we check to see if we were started using the "Start Failed Delivery" [Button], and
      * if so we kill our process to simulate a failed delivery (but only if this is not a retry
-     * call to `onStartCommand` as indicated by `flags` having the START_FLAG_RETRY bits
-     * set.)
+     * call to [onStartCommand] as indicated by `flags` having the START_FLAG_RETRY bits set.)
      *
-     *
-     * Finally if the extras contain a "redeliver" flag set to true we return START_REDELIVER_INTENT
+     * Finally if the extras contain a "redeliver" flag set to *true* we return START_REDELIVER_INTENT
      * (if this service's process is killed while it is started, it will be scheduled for a restart
      * and the last delivered Intent re-delivered to it again), otherwise we return START_NOT_STICKY
      * (if this service's process is killed while it is started and there are no new start intents
      * to deliver to it, then take the service out of the started state and don't recreate until a
      * future explicit call).
      *
-     * @param intent  The Intent supplied to [android.content.Context.startService],
-     * as given.  This may be null if the service is being restarted after
-     * its process has gone away, and it had previously returned anything
-     * except [.START_STICKY_COMPATIBILITY].
-     * @param flags   Additional data about this start request.  Currently either
-     * 0, [.START_FLAG_REDELIVERY], or [.START_FLAG_RETRY].
+     * @param intent The [Intent] supplied to [android.content.Context.startService], as given.
+     * This may be null if the service is being restarted after its process has gone away, and
+     * it had previously returned anything except START_STICKY_COMPATIBILITY.
+     * @param flags Additional data about this start request. Currently either 0,
+     * START_FLAG_REDELIVERY, or START_FLAG_RETRY.
      * @param startId A unique integer representing this specific request to
-     * start.  Use with [.stopSelfResult].
+     * start.  Use with [stopSelfResult].
      * @return The return value indicates what semantics the system should
      * use for the service's current started state.  It may be one of the
-     * constants associated with the [.START_CONTINUATION_MASK] bits.
+     * constants associated with the START_CONTINUATION_MASK bits.
      */
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.i(TAG, "Starting #" + startId + ": " + intent.extras)
@@ -200,62 +195,86 @@ class ServiceStartArguments : Service() {
         msg.obj = intent.extras
         mServiceHandler!!.sendMessage(msg)
         Log.i(TAG, "Sending: $msg")
-        // For the start fail button, we will simulate the process dying
-// for some reason in onStartCommand().
-        if (intent.getBooleanExtra("fail", false)) { // Don't do this if we are in a retry... the system will
-// eventually give up if we keep crashing.
-            if (flags and START_FLAG_RETRY == 0) { // Since the process hasn't finished handling the command,
-// it will be restarted with the command again, regardless of
-// whether we return START_REDELIVER_INTENT.
+        /**
+         * For the start fail button, we will simulate the process dying
+         * for some reason in onStartCommand().
+         */
+        if (intent.getBooleanExtra("fail", false)) {
+            /**
+             * Don't do this if we are in a retry... the system will
+             * eventually give up if we keep crashing.
+             */
+            if (flags and START_FLAG_RETRY == 0) {
+                /**
+                 * Since the process hasn't finished handling the command,
+                 * it will be restarted with the command again, regardless of
+                 * whether we return START_REDELIVER_INTENT.
+                 */
                 Process.killProcess(Process.myPid())
             }
         }
-        // Normally we would consistently return one kind of result...
-// however, here we will select between these two, so you can see
-// how they impact the behavior.  Try killing the process while it
-// is in the middle of executing the different commands.
-        return if (intent.getBooleanExtra("redeliver", false)) START_REDELIVER_INTENT else START_NOT_STICKY
+        /**
+         * Normally we would consistently return one kind of result...
+         * however, here we will select between these two, so you can see
+         * how they impact the behavior. Try killing the process while it
+         * is in the middle of executing the different commands.
+         */
+        return if (intent.getBooleanExtra("redeliver", false))
+            START_REDELIVER_INTENT else START_NOT_STICKY
     }
 
     /**
-     * Called by the system to notify a Service that it is no longer used and is being removed. First
-     * we tell our `Looper mServiceLooper` which is receiving messages to terminate without
-     * processing any more messages in the message queue. Then we call our method `hideNotification`
-     * which cancels our notification, and toast the message "Service destroyed."
+     * Called by the system to notify a Service that it is no longer used and is being removed.
+     * First we tell our [Looper] field [mServiceLooper] which is receiving messages to terminate
+     * without processing any more messages in the message queue. Then we call our method
+     * [hideNotification] which cancels our notification, and toast the message "Service destroyed."
      */
     override fun onDestroy() {
         mServiceLooper!!.quit()
         hideNotification()
-        // Tell the user we stopped.
+        /**
+         * Tell the user we stopped.
+         */
         Toast.makeText(this@ServiceStartArguments, R.string.service_destroyed, Toast.LENGTH_SHORT).show()
     }
 
     /**
-     * Return the communication channel to the service.  May return null if
+     * Return the communication channel to the service. May return null if
      * clients can not bind to the service, and that is what we do.
      *
-     * @param intent The Intent that was used to bind to this service.
-     * @return Return an IBinder through which clients can call on to the
-     * service.
+     * @param intent The [Intent] that was used to bind to this service.
+     * @return Return an [IBinder] through which clients can call on to the service.
      */
     override fun onBind(intent: Intent): IBinder? {
         return null
     }
 
     /**
-     * Show a notification while this service is running. First we create `PendingIntent contentIntent`
-     * which will launch `Controller`. We then construct `Notification.Builder noteBuilder`
-     * to use PRIMARY_CHANNEL as its `NotificationChannel`, setting its small icon to R.drawable.stat_sample,
-     * its ticker text to `text`, its timestamp to the current system time, its label to "Sample Service
-     * Start Arguments", its text to `text`, and `contentIntent` as the `PendingIntent`
-     * to be sent when the notification is clicked. We set the ongoing flag to true so that it cannot be
-     * dismissed by the user, then build and post the notification with the ID R.string.service_created.
+     * Show a notification while this service is running. First we create a [PendingIntent] for
+     * variable `val contentIntent` which will launch [Controller]. We then construct a
+     * [Notification.Builder] for varible `val noteBuilder` that uses PRIMARY_CHANNEL as its
+     * [NotificationChannel], set its small icon to R.drawable.stat_sample, its ticker text to
+     * our [String] parameter [text], its timestamp to the current system time, its label to
+     * "Sample Service Start Arguments", its text to [text], and set `contentIntent` as the
+     * [PendingIntent] to be sent when the notification is clicked. We set the ongoing flag to
+     * *true* so that it cannot be dismissed by the user, then build and post the notification
+     * with the ID R.string.service_created.
      *
      * @param text text to display in our notification
      */
-    private fun showNotification(text: String) { // The PendingIntent to launch our activity if the user selects this notification
-        val contentIntent = PendingIntent.getActivity(this, 0, Intent(this, Controller::class.java), 0)
-        // Set the info for the views that show in the notification panel.
+    private fun showNotification(text: String) {
+        /**
+         * The PendingIntent to launch our activity if the user selects this notification
+         */
+        val contentIntent = PendingIntent.getActivity(
+                this,
+                0,
+                Intent(this, Controller::class.java),
+                0
+        )
+        /**
+         * Set the info for the views that show in the notification panel.
+         */
         val noteBuilder = Notification.Builder(this, PRIMARY_CHANNEL)
                 .setSmallIcon(R.drawable.stat_sample) // the status icon
                 .setTicker(text) // the status text
@@ -263,10 +282,14 @@ class ServiceStartArguments : Service() {
                 .setContentTitle(getText(R.string.service_start_arguments_label)) // the label
                 .setContentText(text) // the contents of the entry
                 .setContentIntent(contentIntent) // The intent to send when the entry is clicked
-        // We show this for as long as our service is processing a command.
+        /**
+         * We show this for as long as our service is processing a command.
+         */
         noteBuilder.setOngoing(true)
-        // Send the notification.
-// We use a string id because it is a unique number.  We use it later to cancel.
+        /**
+         * Send the notification. We use a string id because it is a unique number.
+         * We use it later to cancel.
+         */
         mNM!!.notify(R.string.service_created, noteBuilder.build())
     }
 
@@ -276,9 +299,11 @@ class ServiceStartArguments : Service() {
     private fun hideNotification() {
         mNM!!.cancel(R.string.service_created)
     }
+
     // ----------------------------------------------------------------------
+
     /**
-     * Example of explicitly starting the [ServiceStartArguments].
+     * Example of explicitly starting the [ServiceStartArguments] service.
      * Note that this is implemented as an inner class only keep the sample
      * all together; typically this code would appear in some separate class.
      */
@@ -288,14 +313,12 @@ class ServiceStartArguments : Service() {
          * of `onCreate`, then we set our content view to our layout file
          * R.layout.service_start_arguments_controller.
          *
-         *
          * We locate the `Button`'s in our layout and set their `OnClickListener`'s:
-         *
-         *  * R.id.start1 "Start One no redeliver" `mStart1Listener`
-         *  * R.id.start2 "Start Two no redeliver" `mStart2Listener`
-         *  * R.id.start3 "Start Three w/redeliver" `mStart3Listener`
-         *  * R.id.startfail "Start failed delivery" `mStartFailListener`
-         *  * R.id.kill "Kill Process" `mKillListener`
+         *  * R.id.start1 "Start One no redeliver" [mStart1Listener]
+         *  * R.id.start2 "Start Two no redeliver" [mStart2Listener]
+         *  * R.id.start3 "Start Three w/redeliver" [mStart3Listener]
+         *  * R.id.startfail "Start failed delivery" [mStartFailListener]
+         *  * R.id.kill "Kill Process" [mKillListener]
          *
          *
          * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
@@ -317,21 +340,30 @@ class ServiceStartArguments : Service() {
         }
 
         /**
-         * `OnClickListener` for the R.id.start1 "Start One no redeliver" Button
+         * `OnClickListener` for the R.id.start1 "Start One no redeliver" Button, calls the
+         * [startService] method with an explicit [Intent] for the [ServiceStartArguments]
+         * class with an extra added to the [Intent] storing the [String] "One" under the
+         * key "name".
          */
         private val mStart1Listener = View.OnClickListener {
             startService(Intent(this@Controller, ServiceStartArguments::class.java)
                     .putExtra("name", "One"))
         }
         /**
-         * `OnClickListener` for the R.id.start2 "Start Two no redeliver" Button
+         * `OnClickListener` for the R.id.start2 "Start Two no redeliver" Button, calls the
+         * [startService] method with an explicit [Intent] for the [ServiceStartArguments]
+         * class with an extra added to the [Intent] storing the [String] "Two" under the
+         * key "name".
          */
         private val mStart2Listener = View.OnClickListener {
             startService(Intent(this@Controller, ServiceStartArguments::class.java)
                     .putExtra("name", "Two"))
         }
         /**
-         * `OnClickListener` for the R.id.start3 "Start Three w/redeliver" Button
+         * `OnClickListener` for the R.id.start3 "Start Three w/redeliver" Button, calls the
+         * [startService] method with an explicit [Intent] for the [ServiceStartArguments]
+         * class with an extra added to the [Intent] storing the [String] "Three" under the
+         * key "name", and an [Boolean] extra *true* stored under the key "redeliver"
          */
         private val mStart3Listener = View.OnClickListener {
             startService(Intent(this@Controller, ServiceStartArguments::class.java)
@@ -339,7 +371,10 @@ class ServiceStartArguments : Service() {
                     .putExtra("redeliver", true))
         }
         /**
-         * `OnClickListener` for the R.id.startfail "Start failed delivery" Button
+         * `OnClickListener` for the R.id.startfail "Start failed delivery" Button, calls the
+         * [startService] method with an explicit [Intent] for the [ServiceStartArguments]
+         * class with an extra added to the [Intent] storing the [String] "Failure" under the
+         * key "name", and an [Boolean] extra *true* stored under the key "fail"
          */
         private val mStartFailListener = View.OnClickListener {
             startService(Intent(this@Controller, ServiceStartArguments::class.java)
@@ -347,15 +382,20 @@ class ServiceStartArguments : Service() {
                     .putExtra("fail", true))
         }
         /**
-         * `OnClickListener` for the R.id.kill "Kill Process" Button
+         * `OnClickListener` for the R.id.kill "Kill Process" Button, calls the [Process.killProcess]
+         * method with the PID of our process which the [Process.myPid] returns
          */
         private val mKillListener = View.OnClickListener {
-            // This is to simulate the service being killed while it is
-// running in the background.
+            /**
+             * This is to simulate the service being killed while it is running in the background.
+             */
             Process.killProcess(Process.myPid())
         }
     }
 
+    /**
+     * Our static constants
+     */
     companion object {
         /**
          * TAG for logging

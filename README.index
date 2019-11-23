@@ -1050,6 +1050,7 @@ App
 
     App/Service/Service Start Arguments Controller -- all -> v26
         .app.ServiceStartArguments$Controller
+        .layout.service_start_arguments_controller.xml
             Shows how to send arguments to the service you are starting by adding them 
             to the Intent you give to ContextWrapper.startService(Intent service) using
             Intent.putExtra
