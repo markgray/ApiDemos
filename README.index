@@ -1109,6 +1109,7 @@ App
   Voice Recognition
     App/Voice Recognition                  all
         .app.VoiceRecognition
+        .layout.voice_recognition.xml
             Sample code that invokes the speech recognition intent API. Contains excellent example
             of creating a Handler in the onCreate method for other threads to use to run code on
             the UI thread.
