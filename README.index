@@ -1125,6 +1125,8 @@ Content
   Assets
     Content/Assets/Read Asset              all
         .content.ReadAsset
+        .layout.read_asset.xml
+        .main.assets.read_asset.txt
             Shows how to read a data file contained in the app's apk "assets" directory
             using getAssets() to get an AssetManager and AssetManager.open(String filename)
             to open the "file" as an InputStream.

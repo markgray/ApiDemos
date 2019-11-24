@@ -20,9 +20,10 @@ package com.example.android.apis.content;
 // class is in a sub-package.
 import com.example.android.apis.R;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +32,7 @@ import java.io.InputStream;
  * Shows how to read a data file contained in the app's apk "assets" directory using getAssets() to
  * get an AssetManager and AssetManager.open(String filename) to open the "file" as an InputStream.
  */
-public class ReadAsset extends Activity {
+public class ReadAsset extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.read_asset.
@@ -72,7 +73,7 @@ public class ReadAsset extends Activity {
             String text = new String(buffer);
             
             // Finally stick the string into the text view.
-            TextView tv = (TextView)findViewById(R.id.text);
+            TextView tv = findViewById(R.id.text);
             tv.setText(text);
         } catch (IOException e) {
             // Should never happen!
