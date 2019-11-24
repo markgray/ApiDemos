@@ -1291,13 +1291,16 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- ************************************* -->
+        </activity>
+
+        <!-- ************************************* -->
         <!-- CONTENT PACKAGE SAMPLES -->
         <!-- ************************************* -->
         <activity
             android:name=".content.ClipboardSample"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="@string/activity_clipboard">
+            android:label="@string/activity_clipboard"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

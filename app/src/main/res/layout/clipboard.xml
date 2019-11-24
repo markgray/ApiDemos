@@ -102,14 +102,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="pasteIntent"
-                android:text="@string/copy_intent" />
+                android:text="@string/copy_intent"
+                tools:ignore="ButtonStyle" />
 
             <Button
                 android:id="@+id/copy_uri"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="pasteUri"
-                android:text="@string/copy_uri" />
+                android:text="@string/copy_uri"
+                tools:ignore="ButtonStyle" />
 
         </LinearLayout>
 
@@ -151,7 +153,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#ff303030"
+                android:background="#ff808080"
                 android:padding="4dp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -168,7 +170,7 @@
             android:id="@+id/clip_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ff303030"
+            android:background="#ff808080"
             android:padding="4dp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 

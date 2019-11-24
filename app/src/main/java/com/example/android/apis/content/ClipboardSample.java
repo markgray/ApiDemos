@@ -18,7 +18,6 @@ package com.example.android.apis.content;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
@@ -33,6 +32,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.android.apis.R;
 
 /**
@@ -40,7 +41,7 @@ import com.example.android.apis.R;
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 @SuppressLint("SetTextI18n")
-public class ClipboardSample extends Activity {
+public class ClipboardSample extends AppCompatActivity {
     /**
      * Handle to the CLIPBOARD_SERVICE system-level service (Interface to the clipboard service,
      * for placing and retrieving text in the global clipboard)
@@ -145,19 +146,19 @@ public class ClipboardSample extends Activity {
         TextView tv;
 
         mStyledText = getText(R.string.styled_text);
-        tv = (TextView) findViewById(R.id.styled_text);
+        tv = findViewById(R.id.styled_text);
         tv.setText(mStyledText);
 
         mPlainText = mStyledText.toString();
-        tv = (TextView) findViewById(R.id.plain_text);
+        tv = findViewById(R.id.plain_text);
         tv.setText(mPlainText);
 
         mHtmlText = "<b>Link:</b> <a href=\"http://www.android.com\">Android</a>";
         mHtmlPlainText = "Link: http://www.android.com";
-        tv = (TextView) findViewById(R.id.html_text);
+        tv = findViewById(R.id.html_text);
         tv.setText(mHtmlText);
 
-        mSpinner = (Spinner) findViewById(R.id.clip_type);
+        mSpinner = findViewById(R.id.clip_type);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.clip_data_types,
                 android.R.layout.simple_spinner_item);
@@ -175,8 +176,8 @@ public class ClipboardSample extends Activity {
                     }
                 });
 
-        mMimeTypes = (TextView) findViewById(R.id.clip_mime_types);
-        mDataText = (TextView) findViewById(R.id.clip_text);
+        mMimeTypes = findViewById(R.id.clip_mime_types);
+        mDataText = findViewById(R.id.clip_text);
 
         mClipboard.addPrimaryClipChangedListener(mPrimaryChangeListener);
         updateClipData(true);

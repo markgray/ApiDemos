@@ -1134,6 +1134,7 @@ Content
   Clipboard
     Content/Clipboard/Data Types           v11 - newHtmlText, getHtmlText, coerceToStyledText,
     .content.ClipboardSample               coerceToHtmlText requires v16
+    .layout.clipboard.xml
             Shows how to copy to, and paste from the clipboard using the different conversion methods
             available
 
