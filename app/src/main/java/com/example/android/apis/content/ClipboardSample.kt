@@ -48,47 +48,45 @@ class ClipboardSample : AppCompatActivity() {
      */
     var mClipboard: ClipboardManager? = null
     /**
-     * `Spinner` in our UI with ID R.id.clip_type, it is filled from the string array resource
+     * [Spinner] in our UI with ID R.id.clip_type, it is filled from the string array resource
      * R.array.clip_data_types and allows the user to choose options as to how to deal with the
      * contents of the clipboard.
      */
     var mSpinner: Spinner? = null
     /**
-     * Mime types describing the current primary clip on the clipboard
+     * Displays the Mime types describing the current primary clip on the clipboard
      */
     var mMimeTypes: TextView? = null
     /**
-     * Output `TextView` for displaying the contents of the clipboard as coerced by the selection
-     * in the `Spinner mSpinner`.
+     * Output [TextView] for displaying the contents of the clipboard as coerced by the selection
+     * in the [Spinner] field [mSpinner].
      */
     var mDataText: TextView? = null
     /**
-     * `CharSequence` used to hold the styled text resource String R.string.styled_text
+     * [CharSequence] used to hold the styled text resource String R.string.styled_text
      * ("`Plain, <b>bold</b>, <i>italic</i>, <b><i>bold-italic</i></b>`")
      */
     var mStyledText: CharSequence? = null
     /**
-     * `String` containing the result of converting `CharSequence mStyledText` to a
-     * plain text string using `toString`.
+     * [String] containing the result of converting [CharSequence] field [mStyledText] to a
+     * plain text string using `toString` method.
      */
     var mPlainText: String? = null
     /**
-     * The constant HTML String `"<b>Link:</b> <a href=\"http://www.android.com\">Android</a>"`
+     * The constant HTML [String] `"<b>Link:</b> <a href=\"http://www.android.com\">Android</a>"`
      */
     var mHtmlText: String? = null
     /**
-     * The constant String "Link: http://www.android.com"
+     * The constant [String] "Link: http://www.android.com"
      */
     var mHtmlPlainText: String? = null
-    /**
-     * Listener callback that is invoked when the primary clip on the clipboard changes.
-     */
+
     /**
      * Callback that is invoked by [android.content.ClipboardManager] when the primary clip
-     * changes. We just call our method `updateClipData(true)`, which retrieves the current
-     * primary clip on the clipboard, extracts the mime types of the `ClipData` in order to
-     * display them, positions the `Spinner mSpinner` appropriately, and updates the contents
-     * of the various `TextView`'s in the UI.
+     * changes. We just call our method [updateClipData] with *true* as the update data type
+     * argument, which retrieves the current primary clip on the clipboard, extracts the mime
+     * types of the [ClipData] in order to display them, positions the [Spinner] field [mSpinner]
+     * appropriately, and updates the contents of the various [TextView]'s in the UI.
      */
     var mPrimaryChangeListener: OnPrimaryClipChangedListener = OnPrimaryClipChangedListener {
         updateClipData(true)
@@ -97,44 +95,39 @@ class ClipboardSample : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.clipboard. Next we
-     * initialize our field `ClipboardManager mClipboard` with a handle to the system level
-     * CLIPBOARD_SERVICE service. We declare `TextView tv` to use later on when setting the
-     * text of the various `TextView`'s in our UI.
+     * initialize our [ClipboardManager] field [mClipboard] with a handle to the system level
+     * CLIPBOARD_SERVICE service. We declare [TextView] variable `var tv` to use later on when
+     * setting the text of the various [TextView]'s in our UI.
      *
-     *
-     * We initialize our field `CharSequence mStyledText` with the contents of our resource
+     * We initialize our [CharSequence] field [mStyledText] with the contents of our resource
      * String R.string.styled_text ("`Plain, <b>bold</b>, <i>italic</i>, <b><i>bold-italic</i></b>`"),
-     * find the `TextView` with ID R.id.styled_text and set its text to `mStyledText`.
+     * find the [TextView] with ID R.id.styled_text and set its text to [mStyledText].
      *
+     * We initialize our [String] field [mPlainText] by converting [mStyledText] to a [String],
+     * find the [TextView] with ID R.id.plain_text and set its text to [mPlainText].
      *
-     * We initialize our field `String mPlainText` by converting `CharSequence mStyledText`
-     * to a String, find the `TextView` with ID R.id.plain_text and set its text to `mPlainText`.
+     * We initialize our [String] field [mHtmlText] with the constant String
+     * "`<b>Link:</b> <a href=\"http://www.android.com\">Android</a>`", and our [String]
+     * field [mHtmlPlainText] with the constant String "Link: http://www.android.com", find
+     * the [TextView] with ID R.id.html_text and set its text to [mHtmlText].
      *
+     * We initialize our [Spinner] field [mSpinner] with the location in the UI of the [Spinner]
+     * with ID R.id.clip_type. We create an `ArrayAdapter<CharSequence>` for variable `val adapter`
+     * using the [String] resource array R.array.clip_data_types, set its layout resource to create
+     * the drop down views to android.R.layout.simple_spinner_dropdown_item, and set `adapter` to
+     * be the `SpinnerAdapter` of [Spinner] field [mSpinner].
      *
-     * We initialize our field `String mHtmlText` with the constant String
-     * "`<b>Link:</b> <a href=\"http://www.android.com\">Android</a>`", and our field
-     * `String mHtmlPlainText` with the constant String "Link: http://www.android.com", find
-     * the `TextView` with ID R.id.html_text and set its text to `mHtmlText`.
+     * We set the `OnItemSelectedListener` of [mSpinner] to an anonymous class which calls
+     * our method `updateClipData(false)` when a new item is selected in the [Spinner].
      *
+     * We initialize our [TextView] field [mMimeTypes] with the location of the [TextView]
+     * with ID R.id.clip_mime_types, and [TextView] field [mDataText] with the location of the
+     * [TextView] with ID R.id.clip_text. We set the [OnPrimaryClipChangedListener]
+     * of [ClipboardManager] field [mClipboard] to our [OnPrimaryClipChangedListener] field
+     * [mPrimaryChangeListener], and finally call our method `updateClipData(true)` to initialize
+     * the contents of the UI.
      *
-     * We initialize our field `Spinner mSpinner` with the location in the UI of the `Spinner`
-     * with ID R.id.clip_type. We create `ArrayAdapter<CharSequence> adapter` using the String
-     * array resource R.array.clip_data_types, set its layout resource to create the drop down views
-     * to android.R.layout.simple_spinner_dropdown_item, and set `adapter` to be the `SpinnerAdapter`
-     * of `Spinner mSpinner`.
-     *
-     *
-     * We set the `OnItemSelectedListener` of `mSpinner` to an anonymous class which calls
-     * our method `updateClipData(false)` when a new item is selected in the `Spinner`.
-     *
-     *
-     * We initialize our field `TextView mMimeTypes` with the location of the `TextView`
-     * with ID R.id.clip_mime_types, and `TextView mDataText` with the location of the
-     * `TextView` with ID R.id.clip_text. We set the `OnPrimaryClipChangedListener`
-     * of `ClipboardManager mClipboard` to `OnPrimaryClipChangedListener mPrimaryChangeListener`,
-     * and finally call our method `updateClipData(true)` to initialize the contents of the UI.
-     *
-     * @param savedInstanceState we do not override `onCreateInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -157,10 +150,30 @@ class ClipboardSample : AppCompatActivity() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mSpinner!!.adapter = adapter
         mSpinner!!.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
+            /**
+             * Callback method to be invoked when an item in this view has been selected. This
+             * callback is invoked only when the newly selected position is different from the
+             * previously selected position or if there was no selected item. Implementers can
+             * call getItemAtPosition(position) if they need to access the data associated with
+             * the selected item. We just call our [updateClipData] method with the `updateType`
+             * argument set to *false* so that is does not change the selection of [Spinner] field
+             * [mSpinner].
+             *
+             * @param parent The [AdapterView] where the selection happened
+             * @param view The view within the [AdapterView] that was clicked
+             * @param position The position of the view in the adapter
+             * @param id The row id of the item that is selected
+             */
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 updateClipData(false)
             }
-
+            /**
+             * Callback method to be invoked when the selection disappears from this view. The
+             * selection can disappear for instance when touch is activated or when the adapter
+             * becomes empty. We just ignore.
+             *
+             * @param parent The [AdapterView] that now contains no selected item.
+             */
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
         mMimeTypes = findViewById(R.id.clip_mime_types)
@@ -171,8 +184,8 @@ class ClipboardSample : AppCompatActivity() {
 
     /**
      * Perform any final cleanup before an activity is destroyed. First we call through to our super's
-     * implementation of `onDestroy`, then we remove our `OnPrimaryClipChangedListener`
-     * from `ClipboardManager mClipboard`.
+     * implementation of `onDestroy`, then we remove our [OnPrimaryClipChangedListener] from
+     * our [ClipboardManager] field [mClipboard].
      */
     override fun onDestroy() {
         super.onDestroy()
@@ -182,12 +195,11 @@ class ClipboardSample : AppCompatActivity() {
     /**
      * The `Button` with the ID "copy_styled_text" specifies this method to be its
      * `OnClickListener` using the attribute android:onClick="pasteStyledText".
-     * It creates a `ClipData` holding data of the type MIMETYPE_TEXT_PLAIN, with
-     * the user-visible label for the clip data "Styled Text" out of our field
-     * `CharSequence mStyledText`, and sets the current primary clip on the clipboard
-     * to it.
+     * It creates a [ClipData] holding data of the type MIMETYPE_TEXT_PLAIN, with
+     * the user-visible label for the clip data "Styled Text" out of our [CharSequence]
+     * field [mStyledText], and sets the current primary clip on the clipboard to it.
      *
-     * @param button View of the button that was clicked.
+     * @param button [View] of the button that was clicked.
      */
     @Suppress("UNUSED_PARAMETER")
     fun pasteStyledText(button: View?) {
@@ -197,12 +209,11 @@ class ClipboardSample : AppCompatActivity() {
     /**
      * The `Button` with the ID "copy_plain_text" specifies this method to be its
      * `OnClickListener` using the attribute android:onClick="pastePlainText".
-     * It creates a `ClipData` holding data of the type MIMETYPE_TEXT_PLAIN, with
-     * the user-visible label for the clip data "Styled Text" out of our field
-     * `CharSequence mPlainText`, and sets the current primary clip on the clipboard
-     * to it.
+     * It creates a [ClipData] holding data of the type MIMETYPE_TEXT_PLAIN, with
+     * the user-visible label for the clip data "Styled Text" out of our [CharSequence]
+     * field [mPlainText], and sets the current primary clip on the clipboard to it.
      *
-     * @param button View of the button that was clicked.
+     * @param button [View] of the button that was clicked.
      */
     @Suppress("UNUSED_PARAMETER")
     fun pastePlainText(button: View?) {
@@ -212,13 +223,13 @@ class ClipboardSample : AppCompatActivity() {
     /**
      * The `Button` with the ID "copy_html_text" specifies this method to be its
      * `OnClickListener` using the attribute android:onClick="pasteHtmlText".
-     * It creates a `ClipData` holding data of the type MIMETYPE_TEXT_HTML, with
-     * the user-visible label for the clip data "HTML Text" out of our field
-     * `CharSequence mHtmlPlainText` (for the plain text version for receivers that
-     * don't handle html) and our field `String mHtmlText` (the actual HTML text in
-     * the clip) and sets the current primary clip on the clipboard to it.
+     * It creates a [ClipData] holding data of the type MIMETYPE_TEXT_HTML, with
+     * the user-visible label for the clip data "HTML Text" out of our [CharSequence]
+     * field [mHtmlPlainText] (for the plain text version for receivers that don't
+     * handle html) and our [String] field [mHtmlText] (the actual HTML text in the clip)
+     * and sets the current primary clip on the clipboard to it.
      *
-     * @param button View of the button that was clicked.
+     * @param button [View] of the button that was clicked.
      */
     @Suppress("UNUSED_PARAMETER")
     fun pasteHtmlText(button: View?) {
@@ -226,14 +237,14 @@ class ClipboardSample : AppCompatActivity() {
     }
 
     /**
-     * The `Button` with the ID "copy_intent" specifies this method to be its
-     * `OnClickListener` using the attribute android:onClick="pasteIntent".
-     * It creates an `Intent intent` with the action ACTION_VIEW and the Intent data uri
-     * "http://www.android.com/". It then creates a `ClipData` holding data of the
-     * type MIMETYPE_TEXT_INTENT, with the user-visible label for the clip data "VIEW intent",
-     * and this `Intent intent` and sets the current primary clip on the clipboard to it.
+     * The `Button` with the ID "copy_intent" specifies this method to be its `OnClickListener`
+     * using the attribute android:onClick="pasteIntent". It creates an [Intent] variable
+     * `val intent` with the action ACTION_VIEW and the [Intent] data uri "http://www.android.com/".
+     * It then creates a [ClipData] holding data of the type MIMETYPE_TEXT_INTENT, with the
+     * user-visible label for the clip data "VIEW intent", and this [Intent] `intent` and sets the
+     * current primary clip on the clipboard to it.
      *
-     * @param button View of the button that was clicked.
+     * @param button [View] of the button that was clicked.
      */
     @Suppress("UNUSED_PARAMETER")
     fun pasteIntent(button: View?) {
@@ -242,14 +253,13 @@ class ClipboardSample : AppCompatActivity() {
     }
 
     /**
-     * The `Button` with the ID "copy_uri" specifies this method to be its
-     * `OnClickListener` using the attribute android:onClick="pasteUri".
-     * It creates a `ClipData` holding data of the type  MIMETYPE_TEXT_URILIST, with
-     * the user-visible label for the clip data "URI" with a `Uri` created from the
-     * String "http://www.android.com/", and sets the current primary clip on the clipboard
-     * to it.
+     * The `Button` with the ID "copy_uri" specifies this method to be its `OnClickListener` using
+     * the attribute android:onClick="pasteUri". It creates a [ClipData] holding data of the type
+     * MIMETYPE_TEXT_URILIST, with the user-visible label for the clip data "URI" with a [Uri]
+     * created from the [String] "http://www.android.com/", and sets the current primary clip on
+     * the clipboard to it.
      *
-     * @param button View of the button that was clicked.
+     * @param button [View] of the button that was clicked.
      */
     @Suppress("UNUSED_PARAMETER")
     fun pasteUri(button: View?) {
@@ -258,22 +268,21 @@ class ClipboardSample : AppCompatActivity() {
 
     /**
      * Called to update our UI to reflect the current contents of the clipboard and the selection
-     * chosen in the `Spinner mSpinner`. It is called from the callback `onPrimaryClipChanged`
-     * with `updateType` set to true when the primary clipboard contents changes, from the
-     * `onItemSelected` callback of the `Spinner mSpinner` with `updateType` set to
-     * false when an item in the Spinner is selected, and from the `onCreate` callback with
-     * `updateType` set to true when the activity is first created.
+     * chosen in the [Spinner] field [mSpinner]. It is called from the callback `onPrimaryClipChanged`
+     * with `updateType` set to *true* when the primary clipboard contents changes, from the
+     * `onItemSelected` callback of the [Spinner] field [mSpinner] with `updateType` set to *false*
+     * when an item in the [Spinner] is selected, and from the [onCreate] callback with `updateType`
+     * set to *true* when the activity is first created.
      *
+     * First we set [ClipData] variable `val clip` to the current primary clip on the clipboard.
+     * Then if `clip` is not *null* we set `String[]` variable `val mimeTypes` to all the mime
+     * types in the clip, otherwise we set `mimeTypes` to null. Then if `mimeTypes` is not null
+     * we append all the mime types Strings to the [TextView] field [mMimeTypes] (otherwise we set
+     * it to the String "NULL".
      *
-     * First we set `ClipData clip` to the current primary clip on the clipboard. Then if `clip`
-     * is not null we set `String[] mimeTypes` to all the mime types in the clip, otherwise we set
-     * `mimeTypes` to null. Then if `mimeTypes` is not null we append all the mime types
-     * Strings to the `TextView mMimeTypes` (otherwise we set it to the String "NULL".
-     *
-     *
-     * Next we check if `updateType` is true indicating that the caller wants us to update the
-     * selection of `Spinner mSpinner` based on the contents of `ClipData clip`. If so, and
-     * `clip` is not null, we fetch the first item inside the clip data to `ClipData.Item`
+     * Next we check if `updateType` is *true* indicating that the caller wants us to update the
+     * selection of [Spinner] field [mSpinner] based on the contents of [ClipData] `clip`. If so,
+     * and `clip` is not null, we fetch the first item inside the clip data to `ClipData.Item`
      * and set the selection as follows:
      *
      *  * `getHtmlText` is not null -- 2 "HTML Text clip"
@@ -282,9 +291,9 @@ class ClipboardSample : AppCompatActivity() {
      *  * `getUri` is not null -- 4 "Uri clip"
      *  * Otherwise we set it to 0 "No data in clipboard"
      *
-     * Then if `ClipData clip` is not null we fetch the contents of the first item inside the
-     * clip data to `ClipData.Item` and display it in `TextView mDataText` based on the
-     * selection of `Spinner mSpinner` as follows:
+     * Then if [ClipData] `clip` is not *null* we fetch the contents of the first item inside the
+     * clip data to `ClipData.Item` and display it in `TextView mDataText` based on the selection
+     * of [Spinner] field [mSpinner] as follows:
      *
      *  * 0: No data in clipboard -- "(No data)"
      *  * 1: Text clip -- the value returned by `getText`
@@ -298,14 +307,13 @@ class ClipboardSample : AppCompatActivity() {
      *
      * If `clip` is null we display "(NULL clip)".
      *
-     *
      * Finally if the device has a keyboard, we set the movement method (arrow key handler) to be
-     * used for `TextView mDataText` to an instance of `LinkMovementMethod` (A movement
+     * used for [TextView] field [mDataText] to an instance of [LinkMovementMethod] (A movement
      * method that traverses links in the text buffer and scrolls if necessary. Supports clicking
      * on links with DPad Center or Enter.)
      *
-     * @param updateType if true it will update the selection of `Spinner mSpinner` to point to
-     * the type of the current clipboard contents.
+     * @param updateType if *true* it will update the selection of [Spinner] field [mSpinner] to
+     * point to the type of the current clipboard contents.
      */
     fun updateClipData(updateType: Boolean) {
         val clip = mClipboard!!.primaryClip
