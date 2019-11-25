@@ -28,6 +28,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import android.util.Log;
 import android.view.View;
@@ -48,7 +49,7 @@ import java.io.InputStream;
  * @see InstallApkSessionApi for a demo of the newer Session API.
  */
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-public class InstallApk extends Activity {
+public class InstallApk extends AppCompatActivity {
     /**
      * Request code used for {@code startActivityForResult} when starting the {@code Intent} with
      * the action ACTION_INSTALL_PACKAGE, and checked for in {@code onActivityResult} when the
@@ -131,6 +132,7 @@ public class InstallApk extends Activity {
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == REQUEST_INSTALL) {
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(this, "Install succeeded!", Toast.LENGTH_SHORT).show();
