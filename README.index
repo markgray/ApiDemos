@@ -1141,6 +1141,8 @@ Content
   Packages
     Content/Packages/Install Apk           v13 -- v14 needed for some fields and methods.
     .content.InstallApk
+    .layout.install_apk
+    .assets.HelloActivity.apk
             Shows how to use Intent.ACTION_INSTALL_PACKAGE, and Intent.ACTION_UNINSTALL_PACKAGE
             to install and uninstall packages.
 
