@@ -1429,7 +1429,8 @@
         <activity
             android:name=".content.InstallApk"
             android:enabled="@bool/atLeastHoneycombMR2"
-            android:label="@string/activity_install_apk">
+            android:label="@string/activity_install_apk"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
