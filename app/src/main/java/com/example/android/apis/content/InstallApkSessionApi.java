@@ -20,7 +20,6 @@ package com.example.android.apis.content;
 // class is in a sub-package.
 import com.example.android.apis.R;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -28,16 +27,18 @@ import android.content.IntentSender;
 import android.content.pm.PackageInstaller;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.RequiresApi;
+
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
 
 /**
  * Demonstration of package installation and un-installation using the package installer Session
@@ -46,7 +47,7 @@ import java.io.OutputStream;
  * @see InstallApk for a demo of the original (non-Session) API.
  */
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public class InstallApkSessionApi extends Activity {
+public class InstallApkSessionApi extends AppCompatActivity {
     /**
      * Action of the {@code Intent} used for the install status receiver.
      */
@@ -264,6 +265,7 @@ public class InstallApkSessionApi extends Activity {
      */
     @Override
     protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
         Bundle extras = intent.getExtras();
         if (PACKAGE_INSTALLED_ACTION.equals(intent.getAction())) {
             //noinspection ConstantConditions
