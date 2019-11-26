@@ -209,25 +209,23 @@ class InstallApk : AppCompatActivity() {
      * "tmp.apk", and allocate 16384 bytes for [Byte] array variable `val buffer`. We initialize
      * [Int] variable`val fileMode` to MODE_PRIVATE (the created file can only be accessed by the
      * calling application) if `useFileProvider` is *true* or to MODE_WORLD_READABLE ( allow all
-     * other applications to have read access) if it is *false*. Wrapped in a try with resources
-     * consisting of `val inputStream` opened to read our asset file
-     * `String assetName`, and `FileOutputStream fout` opened to write to `tempFilename`
-     * with file mode `fileMode` we declare `int n` then loop while reading from `is`
-     * into `buffer` as long as the number of bytes read (which we save in `n`) is greater
-     * than or equal to 0, writing the contents of `buffer` to `fout`.
+     * other applications to have read access) if it is *false*. Wrapped in a try intended to catch
+     * and Log [IOException] we open an `InputStream` for variable `val inputStream` opened to read
+     * our asset file [String] parameter [assetName], and a `FileOutputStream` for variable
+     * `val fout` opened to write to `tempFilename` with file mode `fileMode` we declare variable
+     * `var n` then loop while reading from `inputStream` into `buffer` as long as the number of
+     * bytes read (which we save in `n`) is greater than or equal to 0, writing the contents of
+     * `buffer` to `fout`.
      *
-     *
-     * When done, if `useFileProvider` is true we initialize `File toInstall` with a new
-     * instance created for the directory path of the directory on the filesystem where files created
-     * with [.openFileOutput] are stored and the filename `tempFilename`. We then return
-     * the `Uri` created by the `getUriForFile` method of `FileProvider` from
-     * `toInstall`. If `useFileProvider` is false we return the `Uri` that the
-     * `fromFile` method of `Uri` creates for the absolute path on the filesystem where
-     * `tempFilename` is located.
+     * When done, if `useFileProvider` is *true* we initialize [File] variable `val toInstall` with
+     * a new instance created for the directory path of the directory on the filesystem where files
+     * created with [openFileOutput] are stored and the filename `tempFilename`. We then return
+     * the [Uri] created by the `getUriForFile` method of [FileProvider] from `toInstall`. If
+     * `useFileProvider` is *false* we return the [Uri] that the `fromFile` method of [Uri] creates
+     * for the absolute path on the filesystem where `tempFilename` is located.
      *
      * @param assetName name of the file in our assets directory we wish to install
-     * @return `Uri` pointing to the temporary file copy of the `assetName` that we
-     * make.
+     * @return [Uri] pointing to the temporary file copy of the [assetName] asset file that we make.
      */
     @Suppress("SameParameterValue")
     private fun getApkUri(assetName: String): Uri {
@@ -267,6 +265,9 @@ class InstallApk : AppCompatActivity() {
         }
     }
 
+    /**
+     * Our static constants
+     */
     companion object {
         /**
          * Request code used for `startActivityForResult` when starting the `Intent` with
