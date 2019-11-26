@@ -18,7 +18,6 @@ package com.example.android.apis.content;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -41,6 +40,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 /**
  * Shows how to access the contacts database and list those that have changed or been deleted since
  * a certain time. Layout is created by java code, includes instructive use of a ListView to contain
@@ -48,7 +49,7 @@ import android.widget.Toast;
  */
 @SuppressWarnings("WeakerAccess")
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-public class ChangedContacts extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ChangedContacts extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     /**
      * Used for the preferences file 'name' when accessing shared preferences
@@ -295,6 +296,7 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
      * @param time timestamp to save in shared preferences file
      * @param key  key to save the timestamp under
      */
+    @SuppressLint("ApplySharedPref")
     private void saveLastTimestamp(long time, String key) {
         SharedPreferences pref = getSharedPreferences(CLASS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
@@ -312,6 +314,7 @@ public class ChangedContacts extends Activity implements LoaderManager.LoaderCal
      * @param time timestamp to save in shared preferences file
      * @param key  key to save the timestamp under
      */
+    @SuppressWarnings("SameParameterValue")
     private long getLastTimestamp(long time, String key) {
         SharedPreferences pref = getSharedPreferences(CLASS, Context.MODE_PRIVATE);
         return pref.getLong(key, time);

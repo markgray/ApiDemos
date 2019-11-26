@@ -1404,7 +1404,8 @@
         </activity>
         <activity
             android:name=".content.ChangedContacts"
-            android:label="@string/activity_changed_contact">
+            android:label="@string/activity_changed_contact"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
