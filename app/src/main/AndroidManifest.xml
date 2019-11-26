@@ -1482,21 +1482,23 @@
 
         <activity
             android:name=".content.ProcessTextLauncher"
-            android:label="@string/process_text_title">
+            android:label="@string/process_text_title"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-        <activity android:name=".content.ProcessText">
+        <activity android:name=".content.ProcessText"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="text/plain" />
             </intent-filter>
-        </activity> <!-- ************************************* -->
+        </activity>
+
+        <!-- ************************************* -->
         <!-- HARDWARE PACKAGE SAMPLES -->
         <!-- ************************************* -->
         <activity

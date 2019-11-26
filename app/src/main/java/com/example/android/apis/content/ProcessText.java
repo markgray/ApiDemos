@@ -2,11 +2,9 @@ package com.example.android.apis.content;
 
 //Need the following import to get access to the app resources, since this
 //class is in a sub-package.
-
 import com.example.android.apis.R;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +13,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Shows how to handle text selection intents, when text in .content.ProcessTextLauncher is selected,
@@ -27,7 +27,7 @@ import android.widget.EditText;
  * android:mimeType="text/plain".
  */
 @TargetApi(Build.VERSION_CODES.M)
-public class ProcessText extends Activity {
+public class ProcessText extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.process_text_main.
@@ -56,11 +56,11 @@ public class ProcessText extends Activity {
         CharSequence text = getIntent().getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT);
         boolean readonly = getIntent().getBooleanExtra(Intent.EXTRA_PROCESS_TEXT_READONLY, false);
 
-        EditText edit = (EditText) findViewById(R.id.process_text_received_text_editable);
+        EditText edit = findViewById(R.id.process_text_received_text_editable);
         edit.setText(text);
         edit.setSelection(edit.getText().length());
 
-        Button finishButton = (Button) findViewById(R.id.process_text_finish_button);
+        Button finishButton = findViewById(R.id.process_text_finish_button);
         finishButton.setText(readonly ? R.string.process_text_finish_readonly : R.string.process_text_finish);
         finishButton.setOnClickListener(
                 new OnClickListener() {
@@ -91,7 +91,7 @@ public class ProcessText extends Activity {
      */
     @Override
     public void finish() {
-        EditText edit = (EditText) findViewById(R.id.process_text_received_text_editable);
+        EditText edit = findViewById(R.id.process_text_received_text_editable);
         Intent intent = getIntent();
         intent.putExtra(Intent.EXTRA_PROCESS_TEXT, edit.getText());
         setResult(RESULT_OK, intent);

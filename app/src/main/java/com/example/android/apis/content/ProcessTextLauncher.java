@@ -1,8 +1,9 @@
 package com.example.android.apis.content;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 //Need the following import to get access to the app resources, since this
 //class is in a sub-package.
@@ -18,7 +19,7 @@ import com.example.android.apis.R;
  * android:name="android.intent.category.DEFAULT", and a {@code <data>} element with the attribute
  * android:mimeType="text/plain".
  */
-public class ProcessTextLauncher extends Activity {
+public class ProcessTextLauncher extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.process_text_send

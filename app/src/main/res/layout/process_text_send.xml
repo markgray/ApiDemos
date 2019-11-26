@@ -19,6 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/process_text_send_description"
-        tools:ignore="TextFields" />
+        tools:ignore="Autofill,LabelFor,TextFields" />
 
 </LinearLayout>
