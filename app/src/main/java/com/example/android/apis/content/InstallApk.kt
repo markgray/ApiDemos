@@ -211,11 +211,12 @@ class InstallApk : AppCompatActivity() {
      * calling application) if `useFileProvider` is *true* or to MODE_WORLD_READABLE ( allow all
      * other applications to have read access) if it is *false*. Wrapped in a try intended to catch
      * and Log [IOException] we open an `InputStream` for variable `val inputStream` opened to read
-     * our asset file [String] parameter [assetName], and a `FileOutputStream` for variable
-     * `val fout` opened to write to `tempFilename` with file mode `fileMode` we declare variable
-     * `var n` then loop while reading from `inputStream` into `buffer` as long as the number of
-     * bytes read (which we save in `n`) is greater than or equal to 0, writing the contents of
-     * `buffer` to `fout`.
+     * our asset file [String] parameter [assetName] and `use` it along with a `FileOutputStream`
+     * for variable `val fout` opened to write to `tempFilename` with file mode `fileMode` which we
+     * `use` in a block where we declare variable `var n` then loop while reading from `inputStream`
+     * into `buffer` as long as the number of bytes read (which we save in `n`) is greater than or
+     * equal to 0, writing the contents of `buffer` to `fout`. **Note:** The two `use` functions
+     * replace the `try` with resources construct of java closing both `inputStream` and `fout`
      *
      * When done, if `useFileProvider` is *true* we initialize [File] variable `val toInstall` with
      * a new instance created for the directory path of the directory on the filesystem where files
