@@ -33,66 +33,70 @@ import androidx.appcompat.app.AppCompatActivity
 
 /**
  * Shows how to access the contacts database and list those that have changed or been deleted since
- * a certain time. Layout is created by java code, includes instructive use of a ListView to contain
- * the results of the Cursor queries.
+ * a certain time. Layout is created by java code, includes instructive use of a [ListView] to
+ * contain the results of the [Cursor] queries.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
     /**
      * To see this in action, "clear data" for the contacts storage app in the system settings.
-     * Then come into this app and hit any of the delta buttons.  This will cause the contacts
+     * Then come into this app and hit any of the delta buttons. This will cause the contacts
      * database to be re-created.
      */
     private val mReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val toast = Toast.makeText(context, "Contacts database created.", Toast.LENGTH_SHORT)
+            val toast = Toast.makeText(
+                    context,
+                    "Contacts database created.",
+                    Toast.LENGTH_SHORT
+            )
             toast.show()
         }
     }
     /**
-     * `CursorAdapter` subclass used to fill `ListView mList` with data from the
-     * ID_DELETE_LOADER `CursorLoader` which is configured to query the contacts data base
-     * deleted contact table with the selection based on those whose CONTACT_DELETED_TIMESTAMP is
-     * greater than `long mSearchTime` which is read from our preference file at start of
-     * search, and updated to the newest contact change received after every "Deleted since" Button
-     * click. The deleted contact table holds a log of deleted contacts.
+     * [CursorAdapter] subclass used to fill [ListView] field [mList] with data from the
+     * ID_DELETE_LOADER [CursorLoader] which is configured to query the contacts data base
+     * deleted contact table with the selection based on those whose CONTACT_DELETED_TIMESTAMP
+     * is greater than our [Long] field [mSearchTime] which is read from our preference file at
+     * start of search, and updated to the newest contact change received after every "Deleted
+     * since" Button click. The deleted contact table holds a log of deleted contacts.
      */
     private var mDeleteAdapter: DeleteAdapter? = null
     /**
-     * `CursorAdapter` subclass used to fill `ListView mList` with data from the
-     * ID_CHANGE_LOADER `CursorLoader` which is configured to query the contacts data base
-     * with the selection based on those whose last changed timestamp is greater than
-     * `long mSearchTime` which is read from our preference file at start of search, and
+     * [CursorAdapter] subclass used to fill [ListView] field [mList] with data from the
+     * ID_CHANGE_LOADER [CursorLoader] which is configured to query the contacts data base
+     * with the selection based on those whose last changed timestamp is greater than [Long]
+     * field [mSearchTime] which is read from our preference file at start of search, and
      * updated to the newest contact change received after every "Changed Since" Button click.
      */
     private var mChangeAdapter: ChangeAdapter? = null
     /**
      * Last time stamp, which is read from the preferences data base using key PREF_KEY_CHANGE or
      * PREF_KEY_DELETE depending on whether the "Changed Since" or "Deleted Since" `CursorLoader`
-     * is being configured. Both values are saved and retrieved by the same routines: saveLastTimestamp,
-     * and getLastTimestamp.
+     * is being configured. Both values are saved and retrieved by the same routines:
+     * [saveLastTimestamp], and [getLastTimestamp].
      */
     private var mSearchTime: Long = 0
     /**
-     * `TextView` used to display number of contact changes or number of contact deletes since
-     * `mSearchTime`
+     * [TextView] used to display number of contact changes or number of contact deletes since
+     * [mSearchTime]
      */
     private var mDisplayView: TextView? = null
     /**
-     * `ListView` used to display changed or deleted contacts retrieved by the
-     * `ChangeAdapter mChangeAdapter` or `DeleteAdapter mDeleteAdapter`
+     * [ListView] used to display changed or deleted contacts retrieved by the [ChangeAdapter] field
+     * [mChangeAdapter] or [DeleteAdapter] field [mDeleteAdapter]
      */
     private var mList: ListView? = null
     /**
-     * `Button` used to search the contacts database for deleted contacts
+     * [Button] used to search the contacts database for deleted contacts
      */
     private var mDeleteButton: Button? = null
     /**
-     * `Button` used to search the contacts database for changed contacts
+     * [Button] used to search the contacts database for changed contacts
      */
     private var mChangeButton: Button? = null
     /**
-     * `Button` used to reset PREF_KEY_CHANGE, and PREF_KEY_DELETE timestamps in the preferences
+     * [Button] used to reset PREF_KEY_CHANGE, and PREF_KEY_DELETE timestamps in the preferences
      * data base to 0
      */
     private var mClearPreferences: Button? = null
