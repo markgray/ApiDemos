@@ -113,11 +113,10 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      * appended to it, and then set its `OnClickListener` to a lambda which calls our method
      * `changeClick()`.
      *
-     * We initialize our field `Button mDeleteButton`, setting its text to "Deleted since" with
-     * the value of the timestamp stored in our preference file under the key PREF_KEY_DELETE appended
-     * to it, and then set its `OnClickListener` to an anonymous function which calls our method
+     * We initialize our [Button] field [mDeleteButton], setting its text to "Deleted since" with
+     * the value of the timestamp stored in our preference file under the key PREF_KEY_DELETE
+     * appended to it, and then set its `OnClickListener` to an a lambda which calls our method
      * `deleteClick()`.
-     *
      *
      * We initialize our [Button] field [mClearPreferences], setting its text to "Clear Preferences",
      * and then set its `OnClickListener` to an a lambda which resets both PREF_KEY_CHANGE and
@@ -172,15 +171,13 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     }
 
     /**
-     * Called after [.onRestoreInstanceState], [.onRestart], or
-     * [.onPause], for your activity to start interacting with the user.
-     * This is a good place to begin animations, open exclusive-access devices
-     * (such as the camera), etc.
-     *
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for your activity to start
+     * interacting with the user. This is a good place to begin animations, open exclusive-access
+     * devices (such as the camera), etc.
      *
      * First we call through to our super's implementation of `onResume`. Then we create
-     * `IntentFilter filter`, set its action to CONTACTS_DATABASE_CREATED and register our
-     * `BroadcastReceiver mReceiver` field to receive broadcasts that match `filter`.
+     * [IntentFilter] variable `val filter`, set its action to CONTACTS_DATABASE_CREATED and
+     * register our [BroadcastReceiver] field [mReceiver] to receive broadcasts that match `filter`.
      */
     override fun onResume() {
         super.onResume()
@@ -190,13 +187,11 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     }
 
     /**
-     * Called as part of the activity lifecycle when an activity is going into
-     * the background, but has not (yet) been killed. The counterpart to
-     * [.onResume].
-     *
+     * Called as part of the activity lifecycle when an activity is going into the background, but
+     * has not (yet) been killed. The counterpart to [onResume].
      *
      * First we call through to our super's implementation of `onPause`, then we unregister
-     * our field `BroadcastReceiver mReceiver` as a broadcast receiver.
+     * our [BroadcastReceiver] field [mReceiver] as a broadcast receiver.
      */
     override fun onPause() {
         super.onPause()
@@ -204,8 +199,8 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     }
 
     /**
-     * `OnClickListener` for the `Button mChangeButton`, it causes the ID_CHANGE_LOADER
-     * `CursorLoader` to re-fetch its data using the latest timestamp.
+     * `OnClickListener` for the [Button] field [mChangeButton], it causes the ID_CHANGE_LOADER
+     * [CursorLoader] to re-fetch its data using the latest timestamp.
      */
     private fun changeClick() {
         mChangeAdapter!!.swapCursor(null)
@@ -215,8 +210,8 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     }
 
     /**
-     * `OnClickListener` for the `Button mDeleteButton`, it causes the ID_DELETE_LOADER
-     * `CursorLoader` to re-fetch its data using the latest timestamp.
+     * `OnClickListener` for the [Button] field [mDeleteButton], it causes the ID_DELETE_LOADER
+     * [CursorLoader] to re-fetch its data using the latest timestamp.
      */
     private fun deleteClick() {
         mDeleteAdapter!!.swapCursor(null)
@@ -226,11 +221,12 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     }
 
     /**
-     * Saves a timestamp `long time` in the shared preferences file under the key `String key`
-     * (PREF_KEY_CHANGE or PREF_KEY_DELETE in our case). First we retrieve a `SharedPreferences pref`
-     * for our CLASS name ("ChangedContacts"), and we create an `SharedPreferences.Editor editor`
-     * for `pref`. We use `editor` to store our parameter `time` under the key `key`
-     * and commit the change to the preference file.
+     * Saves a [Long] timestamp [time] in the shared preferences file under the [String] key [key]
+     * (PREF_KEY_CHANGE or PREF_KEY_DELETE in our case). First we retrieve a [SharedPreferences] to
+     * initialize variable `val pref` for our CLASS name ("ChangedContacts"), and we create an
+     * [SharedPreferences.Editor] to initialize variable `val editor` for `pref`. We use `editor`
+     * to store our parameter `time` under the key `key` and commit the change to the preference
+     * file.
      *
      * @param time timestamp to save in shared preferences file
      * @param key  key to save the timestamp under
@@ -244,14 +240,14 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     }
 
     /**
-     * Retrieves a timestamp `long time` from the shared preferences file that was stored under the
-     * key `String key` (PREF_KEY_CHANGE or PREF_KEY_DELETE in our case). First we retrieve a
-     * `SharedPreferences pref` for our CLASS name ("ChangedContacts"), and we use it to retrieve
-     * and return the value stored under the key `key` (defaulting to our parameter `time`
-     * if none was stored yet.)
+     * Retrieves a [Long] timestamp from the shared preferences file that was stored under the
+     * [String] key [key] (PREF_KEY_CHANGE or PREF_KEY_DELETE in our case) defaulting to the [Long]
+     * parameter [time]. First we retrieve a [SharedPreferences] to initialize variable `val pref`
+     * for our CLASS name ("ChangedContacts"), and we use it to retrieve and return the value
+     * stored under the key [key] (defaulting to our parameter [time] if none was stored yet.)
      *
-     * @param time timestamp to save in shared preferences file
-     * @param key  key to save the timestamp under
+     * @param time default timestamp to return if none is stored yet.
+     * @param key  key of the timestamp in our [SharedPreferences] file
      */
     @Suppress("SameParameterValue")
     private fun getLastTimestamp(time: Long, key: String): Long {
@@ -266,8 +262,8 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      *  * ID_CHANGE_LOADER -- `getChangeLoader()`
      *  * ID_DELETE_LOADER -- `getDeleteLoader()`
      *
-     * This is called by the `LoaderManager` for this activity as a callback as a result of
-     * a call to `restartLoader` (start a new or restarts an existing Loader, register the
+     * This is called by the [LoaderManager] for this activity as a callback as a result of
+     * a call to `restartLoader` (starts a new or restarts an existing Loader, register the
      * callbacks -- "this" in our case. See `changeClick` and `deleteClick`.)
      *
      * @param id   The ID whose loader is to be created.
@@ -283,17 +279,18 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     }
 
     /**
-     * Creates a `CursorLoader` configured to retrieve contacts from the contacts provider which
-     * have been changed after the timestamp `mSearchTime`. First we create `String[] projection`
-     * containing the names of the columns we want to retrieve: _ID, CONTACT_ID, DISPLAY_NAME and
-     * CONTACT_LAST_UPDATED_TIMESTAMP. Then we fetch `mSearchTime` from the value stored in the
-     * preferences file under the key PREF_KEY_CHANGE. We create `String selection` as the selection
-     * query string, requesting that the CONTACT_LAST_UPDATED_TIMESTAMP be greater than the value supplied
-     * by the selection arguments `String[] bindArgs` (`mSearchTime` formatted as a String).
-     * Finally we return a `CursorLoader` configured for this selection criteria, and sorted
-     * in descending order based on the CONTACT_LAST_UPDATED_TIMESTAMP, and CONTACT_ID columns.
+     * Creates a [CursorLoader] configured to retrieve contacts from the contacts provider which
+     * have been changed after the timestamp [mSearchTime]. First we create `String[]` variable
+     * `val projection` containing the names of the columns we want to retrieve: _ID, CONTACT_ID,
+     * DISPLAY_NAME and CONTACT_LAST_UPDATED_TIMESTAMP. Then we fetch [mSearchTime] from the value
+     * stored in the preferences file under the key PREF_KEY_CHANGE. We create [String] variable
+     * `val selection` as the selection query string, requesting that the CONTACT_LAST_UPDATED_TIMESTAMP
+     * be greater than the value supplied by the selection arguments `String[]` variable `var bindArgs`
+     * ([mSearchTime] formatted as a [String]). Finally we return a [CursorLoader] configured for this
+     * selection criteria, and sorted in descending order based on the CONTACT_LAST_UPDATED_TIMESTAMP,
+     * and CONTACT_ID columns.
      *
-     * @return `CursorLoader` configured to retrieve selected contacts from the contacts provider
+     * @return [CursorLoader] configured to retrieve selected contacts from the contacts provider
      */
     private val changeLoader: CursorLoader
         get() {
@@ -312,15 +309,15 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         }
 
     /**
-     * Creates a `CursorLoader` configured to retrieve contacts from the contacts provider deleted
-     * contact table which have been deleted after the timestamp `mSearchTime`. First we create
-     * `String[] projection` containing the names of the columns we want to retrieve: _ID, and
-     * CONTACT_DELETED_TIMESTAMP. Then we fetch `mSearchTime` from the value stored in the
-     * preferences file under the key PREF_KEY_DELETE. We create `String selection` as the selection
-     * query string, requesting that the CONTACT_DELETED_TIMESTAMP be greater than the value supplied
-     * by the selection arguments `String[] bindArgs` (`mSearchTime` formatted as a String).
-     * Finally we return a `CursorLoader` configured for this selection criteria, and sorted
-     * in descending order based on the CONTACT_DELETED_TIMESTAMP column.
+     * Creates a [CursorLoader] configured to retrieve contacts from the contacts provider deleted
+     * contact table which have been deleted after the timestamp [mSearchTime]. First we create
+     * `String[]` variable `val projection` containing the names of the columns we want to retrieve:
+     * _ID, and CONTACT_DELETED_TIMESTAMP. Then we fetch [mSearchTime] from the value stored in the
+     * preferences file under the key PREF_KEY_DELETE. We create [String] variable `val selection`
+     * as the selection query string, requesting that the CONTACT_DELETED_TIMESTAMP be greater than
+     * the value supplied by the selection arguments `String[]` variable `val bindArgs` ([mSearchTime]
+     * formatted as a [String]). Finally we return a [CursorLoader] configured for this selection
+     * criteria, and sorted in descending order based on the CONTACT_DELETED_TIMESTAMP column.
      *
      * @return `CursorLoader` configured to retrieve selected contacts from the contacts provider
      * deleted contact table. (This table holds a log of deleted contacts.)
@@ -340,38 +337,34 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         }
 
     /**
-     * Called when a previously created loader has finished its load. First we initialize `timestamp`
-     * to zero, then we switch based on the ID of the loader:
+     * Called when a previously created loader has finished its load. First we initialize [Long]
+     * variable `var timestamp` to zero, then we switch based on the ID of the loader:
      *
-     *  *
-     * ID_CHANGE_LOADER - we set the text of `TextView mDisplayView` to display the number of
-     * rows ("Changes") in the cursor and the value of `mSearchTime` we used to filter for
-     * changes. We set the adapter for `ListView mList` to `ChangeAdapter mChangeAdapter`,
-     * and instruct `mChangeAdapter` to swap in the new `Cursor data`. We try to move
-     * `data` to the first row and if successful set `timestamp` to the value stored in
-     * the column CONTACT_LAST_UPDATED_TIMESTAMP, then move `data` back to the previous row.
-     * If `timestamp` is now nonzero we save its value as the new value for the key PREF_KEY_CHANGE
-     * in our preference file and update the text of the `Button mChangeButton` to reflect the
-     * new time that will be used as the filter when the Button is clicked. (Because of the descending
-     * sort of the cursor, the timestamp of the first row will be the latest.)
+     *  * ID_CHANGE_LOADER - we set the text of [TextView] field [mDisplayView] to display the
+     *  number of rows ("Changes") in the cursor and the value of [mSearchTime] we used to filter
+     *  for changes. We set the adapter for [ListView] field [mList] to [ChangeAdapter]  field
+     *  [mChangeAdapter], and instruct [mChangeAdapter] to swap in the new [Cursor] parameter
+     *  [data]. We try to move [data] to the first row and if successful set `timestamp` to the
+     *  value stored in the column CONTACT_LAST_UPDATED_TIMESTAMP, then move [data] back to the
+     *  previous row. If `timestamp` is now nonzero we save its value as the new value for the key
+     *  PREF_KEY_CHANGE in our preference file and update the text of the [Button] field [mChangeButton]
+     *  to reflect the new time that will be used as the filter when the [Button] is clicked again.
+     *  (Because of the descending sort of the cursor, the timestamp of the first row will be the
+     *  latest.)
+     *  * ID_DELETE_LOADER - we set the text of [TextView] field [mDisplayView] to display the
+     *  number of rows ("deletes") in the cursor and the value of [mSearchTime] we used to filter
+     *  for deletes. We set the adapter for [ListView] field [mList] to [DeleteAdapter] field
+     *  [mDeleteAdapter], and instruct [mDeleteAdapter] to swap in the new [Cursor] parameter [data]
+     *  wrapped in a new instance of [DeleteCursorWrapper]. We try to move [data] to the first row
+     *  and if successful set `timestamp` to the value stored in the column CONTACT_DELETED_TIMESTAMP,
+     *  then move [data] back to the previous row. If `timestamp` is now nonzero we save its value
+     *  as the new value for the key PREF_KEY_DELETE in our preference file and update the text of
+     *  the [Button] field [mDeleteButton] to reflect the new time that will be used as the filter
+     *  when the Button is clicked. (Because of the descending sort of the cursor, the timestamp of
+     *  the first row will be the latest.)
      *
-     *  *
-     * ID_DELETE_LOADER - we set the text of `TextView mDisplayView` to display the number of
-     * rows ("deletes") in the cursor and the value of `mSearchTime` we used to filter for
-     * deletes. We set the adapter for `ListView mList` to `DeleteAdapter mDeleteAdapter`,
-     * and instruct `mChangeAdapter` to swap in the new `Cursor data` wrapped in a new
-     * instance of `DeleteCursorWrapper`. We try to move `data` to the first row and if
-     * successful set `timestamp` to the value stored in the column CONTACT_DELETED_TIMESTAMP,
-     * then move `data` back to the previous row. If `timestamp` is now nonzero we save
-     * its value as the new value for the key PREF_KEY_DELETE in our preference file and update the
-     * text of the `Button mDeleteButton` to reflect the new time that will be used as the
-     * filter when the Button is clicked. (Because of the descending sort of the cursor, the timestamp
-     * of the first row will be the latest.)
-     *
-     *
-     *
-     * @param cursorLoader The Loader that has finished.
-     * @param data         The data generated by the Loader.
+     * @param cursorLoader The [Loader] that has finished.
+     * @param data         The [Cursor] data generated by the [Loader].
      */
     @SuppressLint("SetTextI18n")
     override fun onLoadFinished(cursorLoader: Loader<Cursor>, data: Cursor) {
@@ -381,8 +374,9 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                 mDisplayView!!.text = data.count.toString() + " change(s) since " + mSearchTime
                 mList!!.adapter = mChangeAdapter
                 mChangeAdapter!!.swapCursor(data)
-                // Save the largest timestamp returned.  Only need the first one due to the sort
-// order.
+                /**
+                 * Save the largest timestamp returned. Only need the first one due to the sort order.
+                 */
                 if (data.moveToNext()) {
                     timestamp = data.getLong(data.getColumnIndex(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP))
                     data.moveToPrevious()
@@ -409,19 +403,16 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     }
 
     /**
-     * Called when a previously created loader is being reset, and thus
-     * making its data unavailable.  The application should at this point
-     * remove any references it has to the Loader's data.
+     * Called when a previously created [Loader] is being reset, and thus making its data unavailable.
+     * The application should at this point remove any references it has to the [Loader]'s data.
      *
-     *
-     * We set the text of `TextView mDisplayView` to the empty string, then switch based on the
-     * ID of `Loader<Cursor> cursorLoader`:
+     * We set the text of [TextView] field [mDisplayView] to the empty string, then switch based on
+     * the ID of `Loader<Cursor>` parameter [cursorLoader]:
      *
      *  * ID_CHANGE_LOADER - we swap in a null Cursor for `ChangeAdapter mChangeAdapter`
      *  * ID_DELETE_LOADER - we swap in a null Cursor for `ChangeAdapter mDeleteAdapter`
      *
-     *
-     * @param cursorLoader The Loader that is being reset.
+     * @param cursorLoader The [Loader] that is being reset.
      */
     override fun onLoaderReset(cursorLoader: Loader<Cursor>) {
         mDisplayView!!.text = ""
@@ -433,25 +424,24 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
 
     /**
      * Wrapper class for Cursor that delegates all calls to the actual cursor object. We use this to
-     * extend a cursor while overriding only the method `getColumnIndexOrThrow`.
+     * extend a cursor while overriding only the method [getColumnIndexOrThrow].
      */
     private inner class DeleteCursorWrapper
     /**
      * Creates a cursor wrapper.
      *
      * @param cursor The underlying cursor to wrap.
-     */(cursor: Cursor?) : CursorWrapper(cursor) {
+     */
+    (cursor: Cursor?) : CursorWrapper(cursor) {
         /**
          * The super's implementation of this returns the zero-based index for the given column name,
          * or throws [IllegalArgumentException] if the column doesn't exist.
-         *
          *
          * We override this in order to replace attempts to reference the `columnName` "_id"
          * (which does not exit in our data) with a call to our super's implementation of
          * `getColumnIndex` asking for the column name CONTACT_ID ("contact_id") which serves
          * the same purpose in our data set. If the call is for another column, we simply pass the
          * call through to our super's implementation of `getColumnIndex`.
-         *
          *
          * No exception is thrown even if the column does not exist (-1 is returned instead).
          *
@@ -466,8 +456,8 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     }
 
     /**
-     * A subclass of `CursorAdapter` customized to display the contents of a `DeleteCursorWrapper`
-     * wrapped `CursorLoader` configured to retrieve the deleted contact table of the contacts
+     * A subclass of [CursorAdapter] customized to display the contents of a [DeleteCursorWrapper]
+     * wrapped [CursorLoader] configured to retrieve the deleted contact table of the contacts
      * provider.
      */
     private class DeleteAdapter
@@ -475,22 +465,18 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      * Recommended constructor. First we call through to our super's constructor, then we save
      * the `Context context` parameter in our field `Context mContext` for later use.
      *
-     * @param c       The cursor from which to get the data.
      * @param mContext The context
+     * @param c       The cursor from which to get the data.
      * @param flags   Flags used to determine the behavior of the adapter; may
      * be any combination of [.FLAG_AUTO_REQUERY] and
      * [.FLAG_REGISTER_CONTENT_OBSERVER].
-     */(
-            /**
-             * Context passed to our constructor, used to create a `LinearLayout` to hold the
-             * `TextView`'s we display individual items in.
-             */
-            private val mContext: Context, c: Cursor?, flags: Int) : CursorAdapter(mContext, c, flags) {
+     */
+    (private val mContext: Context, c: Cursor?, flags: Int) : CursorAdapter(mContext, c, flags) {
 
         /**
-         * Makes a new view to hold the data pointed to by cursor. We create a `LinearLayout item`
-         * then we add two `TextView`'s to it created by our method `buildText(context)`.
-         * Finally we return `item` to the caller.
+         * Makes a new view to hold the data pointed to by cursor. We create a [LinearLayout] for
+         * variable `val item` then we add two [TextView]'s to it created by our method
+         * `buildText(context)`. Finally we return `item` to the caller.
          *
          * @param context Interface to application's global information
          * @param cursor  The cursor from which to get the data. The cursor is already
@@ -506,11 +492,11 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         }
 
         /**
-         * Bind an existing view to the data pointed to by cursor. We cast our parameter `View view`
-         * to `LinearLayout item`. Next we fetch `String id` from `Cursor cursor` column
-         * CONTACT_ID, and `String timestamp` from its column CONTACT_DELETED_TIMESTAMP. We use
-         * `id` to set the text of child 0 of `item`, and `timestamp` to set
-         * the text of child 1.
+         * Bind an existing view to the data pointed to by cursor. We cast our [View] parameter [view]
+         * to [LinearLayout] variable `val item`. Next we fetch [String] variable `val id` from
+         * [Cursor] parameter [cursor]'s column CONTACT_ID, and [String] variable `val timestamp`
+         * from its column CONTACT_DELETED_TIMESTAMP. We use `id` to set the text of child 0 of `item`,
+         * and `timestamp` to set the text of child 1.
          *
          * @param view    Existing view, returned earlier by newView
          * @param context Interface to application's global information
@@ -528,7 +514,7 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     }
 
     /**
-     * A subclass of `CursorAdapter` customized to display the contents of a `CursorLoader`
+     * A subclass of [CursorAdapter] customized to display the contents of a [CursorLoader]
      * configured to retrieve the "changed after" contacts from the contacts provider
      */
     private class ChangeAdapter
@@ -541,17 +527,13 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      * @param flags   Flags used to determine the behavior of the adapter; may
      * be any combination of [.FLAG_AUTO_REQUERY] and
      * [.FLAG_REGISTER_CONTENT_OBSERVER].
-     */(
-            /**
-             * Context passed to our constructor, used to create a `LinearLayout` to hold the
-             * `TextView`'s we display individual items in.
-             */
-            private val mContext: Context, c: Cursor?, flags: Int) : CursorAdapter(mContext, c, flags) {
+     */
+    (private val mContext: Context, c: Cursor?, flags: Int) : CursorAdapter(mContext, c, flags) {
 
         /**
-         * Makes a new view to hold the data pointed to by cursor. We create a `LinearLayout item`
-         * then we add three `TextView`'s to it created by our method `buildText(context)`.
-         * Finally we return `item` to the caller.
+         * Makes a new view to hold the data pointed to by cursor. We create a [LinearLayout] for
+         * variable `val item` then we add three [TextView]'s to it created by our method
+         * `buildText(context)`. Finally we return `item` to the caller.
          *
          * @param context Interface to application's global information
          * @param cursor  The cursor from which to get the data. The cursor is already
@@ -592,38 +574,47 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
 
     }
 
+    /**
+     * Our static constants.
+     */
     companion object {
 
+        /**
+         * Copy of the WRAP_CONTENT field of [ViewGroup.LayoutParams]
+         */
         const val WRAP = ViewGroup.LayoutParams.WRAP_CONTENT
         /**
          * Used for the preferences file 'name' when accessing shared preferences
          */
         private val CLASS = ChangedContacts::class.java.simpleName
         /**
-         * Preference file key for the timestamp of the latest change to the contact database (Starts at 0)
-         * and is updated when the database is read for the first time
+         * Preference file key for the timestamp of the latest change to the contact database
+         * (Starts at 0 and is updated when the database is read for the first time)
          */
         private const val PREF_KEY_CHANGE = "timestamp_change"
         /**
-         * Preference file key for the timestamp of the latest delete from the contact database (Starts at 0)
-         * and is updated when the database is read for the first time
+         * Preference file key for the timestamp of the latest delete from the contact database
+         * (Starts at 0 and is updated when the database is read for the first time)
          */
         private const val PREF_KEY_DELETE = "timestamp_delete"
         /**
-         * ID for the `CursorLoader` used to feed data about changed contacts to fill `ListView mList`
+         * ID for the [CursorLoader] used to feed data about changed contacts to fill [ListView]
+         * field [mList]
          */
         private const val ID_CHANGE_LOADER = 1
         /**
-         * ID for the `CursorLoader` used to feed data about deleted contacts to fill `ListView mList`
+         * ID for the [CursorLoader] used to feed data about deleted contacts to fill [ListView]
+         * field [mList]
          */
         private const val ID_DELETE_LOADER = 2
 
         /**
-         * Convenience function that casts the `View view` returned by a call to `getChildAt` to
-         * a `TextView text`, and then sets the text of `text` to our parameter `value`.
+         * Convenience function that casts the [View] parameter [view] returned by a call to
+         * `getChildAt` to a [TextView] variable `val text`, and then sets the text of `text`
+         * to our parameter [value].
          *
-         * @param view  `View` of `TextView` whose text we wish to set
-         * @param value `String` to set the text to
+         * @param view  [View] of [TextView] whose text we wish to set
+         * @param value [String] to set the text to
          */
         private fun setText(view: View, value: String) {
             val text = view as TextView
@@ -631,10 +622,10 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         }
 
         /**
-         * Convenience function to create a `TextView` and set its padding to 3 pixels on each side.
+         * Convenience function to create a [TextView] and set its padding to 3 pixels on each side.
          *
-         * @param context `Context` to use when constructing our `TextView`
-         * @return a configured `TextView`
+         * @param context [Context] to use when constructing our [TextView]
+         * @return a configured [TextView]
          */
         private fun buildText(context: Context): TextView {
             val view = TextView(context)
