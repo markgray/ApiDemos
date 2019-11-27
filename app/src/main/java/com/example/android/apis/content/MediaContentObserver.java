@@ -17,23 +17,25 @@
 package com.example.android.apis.content;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.android.apis.R;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
-public class MediaContentObserver extends Activity {
+public class MediaContentObserver extends AppCompatActivity {
     /**
      * Request code passed to {@code requestPermissions} when we request READ_EXTERNAL_STORAGE,
      * later passed to our {@code onRequestPermissionsResult} callback when the use responds.
