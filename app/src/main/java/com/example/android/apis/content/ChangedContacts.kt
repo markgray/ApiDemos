@@ -103,19 +103,15 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we initialize our fields `DeleteAdapter mDeleteAdapter` and
-     * `ChangeAdapter mChangeAdapter` with new instances of their respective `CursorAdapter`
+     * `onCreate`, then we initialize our [DeleteAdapter] field [mDeleteAdapter] and our
+     * [ChangeAdapter] field [mChangeAdapter] with new instances of their respective [CursorAdapter]
      * subclasses.
      *
-     *
-     * Next we create `LinearLayout main` and set its orientation to VERTICAL.
-     *
-     *
-     * We initialize our field `Button mChangeButton`, setting its text to "Changed since" with
-     * the value of the timestamp stored in our preference file under the key PREF_KEY_CHANGE appended
-     * to it, and then set its `OnClickListener` to an anonymous function which calls our method
+     * Next we create [LinearLayout] variable `val main` and set its orientation to VERTICAL.
+     * We initialize our [Button] field [mChangeButton], setting its text to "Changed since" with
+     * the value of the timestamp stored in our preference file under the key PREF_KEY_CHANGE
+     * appended to it, and then set its `OnClickListener` to a lambda which calls our method
      * `changeClick()`.
-     *
      *
      * We initialize our field `Button mDeleteButton`, setting its text to "Deleted since" with
      * the value of the timestamp stored in our preference file under the key PREF_KEY_DELETE appended
@@ -123,28 +119,24 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      * `deleteClick()`.
      *
      *
-     * We initialize our field `Button mClearPreferences`, setting its text to "Clear Preferences",
-     * and then set its `OnClickListener` to an anonymous function which resets both PREF_KEY_CHANGE
-     * and PREF_KEY_DELETE to zero and updates the text contained in `mChangeButton` and
-     * `mDeleteButton` to reflect this.
+     * We initialize our [Button] field [mClearPreferences], setting its text to "Clear Preferences",
+     * and then set its `OnClickListener` to an a lambda which resets both PREF_KEY_CHANGE and
+     * PREF_KEY_DELETE to zero and updates the text contained in [mChangeButton] and [mDeleteButton]
+     * to reflect this.
      *
+     * We now add [mChangeButton], [mDeleteButton] and [mClearPreferences] to the [LinearLayout]
+     * `main`.
      *
-     * We now add `mChangeButton`, `mDeleteButton` and `mClearPreferences` to the
-     * `LinearLayout main`.
+     * We create a new [TextView] for our [TextView] field [mDisplayView], configure the padding to
+     * have 5 pixels around its sides, and add it to [LinearLayout] `main`.
      *
+     * We create a new [ListView] for our [ListView] field [mList], set its layout params to be
+     * WRAP_CONTENT for both width and height, with its weight set to 1.0, and add it to
+     * [LinearLayout] `main`.
      *
-     * We create a new `TextView` for our field `TextView mDisplayView`, configure the
-     * padding to have 5 pixels around its sides, and add it to `LinearLayout main`.
+     * Finally we set our content view to [LinearLayout] `main`.
      *
-     *
-     * We create a new `ListView` for our field `ListView mList`, set its layout params
-     * to be WRAP_CONTENT for both width and height, with its weight set to 1.0, and add it to
-     * `LinearLayout main`.
-     *
-     *
-     * Finally we set our content view to `LinearLayout main`.
-     *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
      */
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
