@@ -1179,6 +1179,7 @@ Content
 
     Content/Provider/Media Content Observer v24
     .content.MediaContentObserver
+    .layout.media_content_observer.xml
     .content.MediaContentJob
     .content.PhotosContentJob
             Shows how to use a JobService and TriggerContentUri to monitor when there is a 
