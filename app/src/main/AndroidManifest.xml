@@ -1388,7 +1388,8 @@
         </activity>
         <activity
             android:name=".content.PickContact"
-            android:label="@string/activity_pick_contact">
+            android:label="@string/activity_pick_contact"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

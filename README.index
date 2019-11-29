@@ -1187,6 +1187,7 @@ Content
 
     Content/Provider/Pick Contact          all
         .content.PickContact
+        .layout.pick_contact.xml
             Demonstrates launching the contacts app to pick a contact.  Does not require
             permission to read contacts, as that permission will be granted when the 
             selected contact is returned.

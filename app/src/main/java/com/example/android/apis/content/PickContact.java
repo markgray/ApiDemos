@@ -16,10 +16,6 @@
 
 package com.example.android.apis.content;
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -30,6 +26,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
+// Need the following import to get access to the app resources, since this
+// class is in a sub-package.
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.android.apis.R;
 
 /**
@@ -37,7 +37,7 @@ import com.example.android.apis.R;
  * require permission to read contacts, as that permission will be granted
  * when the selected contact is returned.
  */
-public class PickContact extends Activity {
+public class PickContact extends AppCompatActivity {
     /**
      * The MIME type of a CONTENT_URI subdirectory of a single person.
      * Constant Value: "vnd.android.cursor.item/contact"
@@ -77,7 +77,6 @@ public class PickContact extends Activity {
      * shown by {@code onActivityResult}, as well as the MIME data type used in the {@code Intent}
      * which launches the contact data base query.
      */
-    @SuppressWarnings("WeakerAccess")
     class ResultDisplayer implements OnClickListener {
         /**
          * String to use as part of the toast displayed when the result of the contact database query
@@ -184,10 +183,12 @@ public class PickContact extends Activity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (data != null) {
             Uri uri = data.getData();
             if (uri != null) {
                 Cursor c = null;
+                //noinspection TryFinallyCanBeTryWithResources
                 try {
                     c = getContentResolver().query(uri, new String[]{BaseColumns._ID}, null, null, null);
                     if (c != null && c.moveToFirst()) {
