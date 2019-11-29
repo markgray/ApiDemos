@@ -17,7 +17,6 @@
 package com.example.android.apis.content;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
 import android.net.Uri;
@@ -26,6 +25,8 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.android.apis.R;
 
 /**
@@ -33,7 +34,7 @@ import com.example.android.apis.R;
  * ".content.FileProvider" to pipe the image/jpeg to the app that the user selects to handle it.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-public class ShareContent extends Activity {
+public class ShareContent extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.share_content.

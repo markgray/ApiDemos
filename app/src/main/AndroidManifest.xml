@@ -1397,7 +1397,8 @@
         </activity>
         <activity
             android:name=".content.ShareContent"
-            android:label="@string/activity_share_content">
+            android:label="@string/activity_share_content"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
