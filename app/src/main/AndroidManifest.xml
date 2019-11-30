@@ -1361,7 +1361,8 @@
         <activity
             android:name=".content.ResourcesSmallestWidth"
             android:enabled="@bool/atLeastHoneycombMR2"
-            android:label="@string/activity_resources_smallest_width">
+            android:label="@string/activity_resources_smallest_width"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

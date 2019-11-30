@@ -18,8 +18,9 @@ package com.example.android.apis.content;
 
 import com.example.android.apis.R;
 
-import android.app.Activity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Layout file {@code <includes \> layouts from layout, and layout-sw**} in order to create custom
@@ -27,7 +28,7 @@ import android.os.Bundle;
  * {@code <include\>} other FrameLayout's also with different versions for the smallest width
  * (cute - huh?)
  */
-public class ResourcesSmallestWidth extends Activity {
+public class ResourcesSmallestWidth extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.resources_smallest_width.

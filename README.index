@@ -1226,6 +1226,15 @@ Content
 
     Content/Resources/Smallest Width       v13
         .content.ResourcesSmallestWidth
+        .layout.resources_smallest_width.xml
+        .layout.resources_smallest_width_inner.xml
+        .layout-sw480dp.resources_smallest_width_inner.xml
+        .layout-sw600dp.resources_smallest_width_inner.xml
+        .layout-sw720dp.resources_smallest_width_inner.xml
+        .layout.resources_smallest_width_row.xml
+        .layout-sw480dp.resources_smallest_width_row.xml
+        .layout-sw600dp.resources_smallest_width_row.xml
+        .layout-sw720dp.resources_smallest_width_row.xml
             Layout file <includes \> layouts from layout, and layout-sw***/ in order to create custom
             FrameLayout area for different smallest width (sw480dp, sw600dp, and sw720dp). These in
             turn <include\> other FrameLayout's also with different versions for the smallest width
