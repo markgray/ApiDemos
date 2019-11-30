@@ -18,15 +18,14 @@ package com.example.android.apis.content;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
-
 import com.example.android.apis.R;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Demonstration of loading resources.
@@ -38,7 +37,7 @@ import android.widget.TextView;
  * see content.StyledText for more depth about using styled text, both with getString()
  * and in the layout xml files.
  */
-public class ResourcesSample extends Activity {
+public class ResourcesSample extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.resources. We declare
@@ -86,13 +85,13 @@ public class ResourcesSample extends Activity {
         // resource that happens to have style information.  Note the use of
         // CharSequence instead of String so we don't lose the style info.
         cs = getText(R.string.styled_text);
-        tv = (TextView) findViewById(R.id.styled_text);
+        tv = findViewById(R.id.styled_text);
         tv.setText(cs);
 
         // Use the same resource, but convert it to a string, which causes it
         // to lose the style information.
         str = getString(R.string.styled_text);
-        tv = (TextView) findViewById(R.id.plain_text);
+        tv = findViewById(R.id.plain_text);
         tv.setText(str);
 
         // ====== Using the Resources object =================================
@@ -107,7 +106,7 @@ public class ResourcesSample extends Activity {
 
         // Get the string resource, like above.
         cs = res.getText(R.string.styled_text);
-        tv = (TextView) findViewById(R.id.res1);
+        tv = findViewById(R.id.res1);
         tv.setText(cs);
 
         // Note that the Resources class has methods like getColor(),

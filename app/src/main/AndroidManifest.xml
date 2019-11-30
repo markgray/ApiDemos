@@ -1364,7 +1364,6 @@
             android:label="@string/activity_resources_smallest_width">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.SAMPLE_CODE" />
                 <category android:name="android.intent.category.EMBED" />
             </intent-filter>
@@ -1381,7 +1380,8 @@
         </activity>
         <activity
             android:name=".content.ResourcesSample"
-            android:label="@string/activity_resources">
+            android:label="@string/activity_resources"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
