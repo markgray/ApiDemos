@@ -1217,11 +1217,12 @@ Content
 
     Content/Resources/Resources            all
         .content.ResourcesSample
+        .layout.resources.xml
             Shows how to fetch R.string.styled_text from values*/strings.xml as styled
             text using Context.getText (int resId), as a string stripped of its style
             using Context.getString(int resId), and as styled text again using this 
             time Resources.getText (int id). The styled text uses html markup <b>, <i>,
-            and <b><i> surrounding the text to set the style used TODO: use this
+            and <b><i> surrounding the text to set the style used
 
     Content/Resources/Smallest Width       v13
         .content.ResourcesSmallestWidth
