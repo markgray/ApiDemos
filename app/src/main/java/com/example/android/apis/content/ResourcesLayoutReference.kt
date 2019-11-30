@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.content
 
-package com.example.android.apis.content;
-
-import com.example.android.apis.R;
-import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * Shows how to write layout resource references in values-* directories, so that you can define
@@ -29,27 +27,27 @@ import androidx.appcompat.app.AppCompatActivity;
  * respectively (uh... both same file.) There is also a default resources_layout_reference.xml file in
  * res/layout/ which is used for other size screens.
  */
-public class ResourcesLayoutReference extends AppCompatActivity {
+class ResourcesLayoutReference : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * {@code onCreate}. Then we set our content view to one of our layout files depending on the
+     * `onCreate`. Then we set our content view to one of our layout files depending on the
      * screen size:
-     * <ul>
-     *     <li>res/layout/resources_layout_reference.xml for the default screen sizes</li>
-     *     <li>res/layout/resources_layout_reference_tablet.xml for sw600dp screens (smallest width 600dpi)</li>
-     *     <li>res/layout/resources_layout_reference_tablet.xml for xlarge screens (at least 960dp x 720dp)</li>
-     * </ul>
+     *
+     *  * res/layout/resources_layout_reference.xml for the default screen sizes
+     *  * res/layout/resources_layout_reference_tablet.xml for sw600dp screens (smallest width 600dpi)
+     *  * res/layout/resources_layout_reference_tablet.xml for xlarge screens (at least 960dp x 720dp)
+     *
      * The choice of using resources_layout_reference_tablet.xml is made by using the resource references
      * contained in the files res/values-xlarge/layout.xml, and res/values-sw600dp/layout.xml
      *
-     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // This layout uses different configurations to adjust
-        // what is shown based on the smallest width that will occur.
-        setContentView(R.layout.resources_layout_reference);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        /**
+         * This layout uses different configurations to adjust
+         * what is shown based on the smallest width that will occur.
+         */
+        setContentView(R.layout.resources_layout_reference)
     }
 }
