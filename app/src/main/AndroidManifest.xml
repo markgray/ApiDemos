@@ -1338,7 +1338,8 @@
         </activity>
         <activity
             android:name=".content.ResourcesLayoutReference"
-            android:label="@string/activity_resources_layout_reference">
+            android:label="@string/activity_resources_layout_reference"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

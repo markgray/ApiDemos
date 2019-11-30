@@ -17,9 +17,9 @@
 package com.example.android.apis.content;
 
 import com.example.android.apis.R;
-
-import android.app.Activity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Shows how to write layout resource references in values-* directories, so that you can define
@@ -29,7 +29,7 @@ import android.os.Bundle;
  * respectively (uh... both same file.) There is also a default resources_layout_reference.xml file in
  * res/layout/ which is used for other size screens.
  */
-public class ResourcesLayoutReference extends Activity {
+public class ResourcesLayoutReference extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}. Then we set our content view to one of our layout files depending on the

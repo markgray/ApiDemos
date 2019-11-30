@@ -1202,6 +1202,10 @@ Content
   Resources
     Content/Resources/Layout Reference     all
         .content.ResourcesLayoutReference
+        .layout.resources_layout_reference.xml
+        .layout.resources_layout_reference_tablet.xml
+        .values-xlarge.layout.xml
+        .values-sw600dp.layout.xml
             Shows how to write layout resource references in values-* directories,
             so that you can define multiple different configurations of a layout
             resource that refer to one actual XML definition. References are defined
