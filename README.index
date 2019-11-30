@@ -1194,6 +1194,7 @@ Content
 
     Content/Provider/Share Content         v16 required for setClipData v11 for newUri
         .content.ShareContent
+        .layout.share_content.xml
         .content.FileProvider
             Demonstrates the share content api, uses the <provider> ".content.FileProvider" to
             pipe the image/jpeg to the app that the user selects to handle it.
