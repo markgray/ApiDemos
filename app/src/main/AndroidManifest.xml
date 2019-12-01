@@ -1318,10 +1318,10 @@
         </activity>
         <activity
             android:name=".content.StyledText"
-            android:label="@string/activity_styled_text">
+            android:label="@string/activity_styled_text"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.SAMPLE_CODE" />
                 <category android:name="android.intent.category.EMBED" />
             </intent-filter>
@@ -1331,7 +1331,6 @@
             android:label="@string/activity_text_undo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.SAMPLE_CODE" />
                 <category android:name="android.intent.category.EMBED" />
             </intent-filter>

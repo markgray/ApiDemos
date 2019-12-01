@@ -1242,6 +1242,7 @@ Content
 
     Content/Resources/<i>Styled</i> <b>Text</b>  -- all
         .content.StyledText
+        .layout.styled_text.xml
             Shows a resource string being used directly in the layout, and by being 
             retrieved and assigned programmatically.
 

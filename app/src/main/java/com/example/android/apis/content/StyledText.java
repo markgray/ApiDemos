@@ -20,16 +20,17 @@ package com.example.android.apis.content;
 // class is in a sub-package.
 import com.example.android.apis.R;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
 /**
  * Demonstration of styled text resources. Shows a resource string being used directly in the layout,
  * and by being retrieved and assigned programmatically.
  */
-public class StyledText extends Activity {
+public class StyledText extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.styled_text which
@@ -53,7 +54,7 @@ public class StyledText extends Activity {
         // use of CharSequence instead of String so we don't lose
         // the style info.
         CharSequence str = getText(R.string.styled_text);
-        TextView tv = (TextView)findViewById(R.id.text);
+        TextView tv = findViewById(R.id.text);
         tv.setText(str);
     }
 }
