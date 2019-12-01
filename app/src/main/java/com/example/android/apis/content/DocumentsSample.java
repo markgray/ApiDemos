@@ -17,7 +17,6 @@
 package com.example.android.apis.content;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +27,8 @@ import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.DocumentsContract.Document;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,7 +48,7 @@ import java.io.OutputStream;
  */
 @SuppressLint("SetTextI18n")
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public class DocumentsSample extends Activity {
+public class DocumentsSample extends AppCompatActivity {
     /**
      * TAG used for logging
      */
@@ -582,12 +583,13 @@ public class DocumentsSample extends Activity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         final ContentResolver cr = getContentResolver();
 
         clearLog();
 
         log("resultCode=" + resultCode);
-        log("data=" + String.valueOf(data));
+        log("data=" + data);
 
         final Uri uri = data != null ? data.getData() : null;
         if (uri != null) {
@@ -636,8 +638,8 @@ public class DocumentsSample extends Activity {
                     DocumentsContract.getTreeDocumentId(uri));
             Uri child = DocumentsContract.buildChildDocumentsUriUsingTree(uri,
                     DocumentsContract.getTreeDocumentId(uri));
-            Cursor c = cr.query(child, new String[] {
-                    Document.COLUMN_DISPLAY_NAME, Document.COLUMN_MIME_TYPE }, null, null, null);
+            Cursor c = cr.query(child, new String[]{
+                    Document.COLUMN_DISPLAY_NAME, Document.COLUMN_MIME_TYPE}, null, null, null);
             try {
                 //noinspection ConstantConditions
                 while (c.moveToNext()) {

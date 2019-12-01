@@ -1471,7 +1471,8 @@
         <activity
             android:name=".content.DocumentsSample"
             android:enabled="@bool/atLeastKitKat"
-            android:label="@string/activity_documents">
+            android:label="@string/activity_documents"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
