@@ -18,8 +18,9 @@ package com.example.android.apis.content;
 
 import com.example.android.apis.R;
 
-import android.app.Activity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * The layouts included by the {@code FrameLayout} inside R.layout.resources_width_and_height use
@@ -27,7 +28,7 @@ import android.os.Bundle;
  * screen. Those from layout-hNNNdp are included first using @layout/resources_height and these
  * different layouts in turn include layouts from layout-hNNNdp by asking for @layout/resources_width.
  */
-public class ResourcesWidthAndHeight extends Activity {
+public class ResourcesWidthAndHeight extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to R.layout.resources_width_and_height (our

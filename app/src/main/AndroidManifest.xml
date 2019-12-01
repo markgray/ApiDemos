@@ -1341,7 +1341,6 @@
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.SAMPLE_CODE" />
                 <category android:name="android.intent.category.EMBED" />
             </intent-filter>
@@ -1349,7 +1348,8 @@
         <activity
             android:name=".content.ResourcesWidthAndHeight"
             android:enabled="@bool/atLeastHoneycombMR2"
-            android:label="@string/activity_resources_width_and_height">
+            android:label="@string/activity_resources_width_and_height"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1248,6 +1248,14 @@ Content
 
     Content/Resources/Width and Height     v13
         .content.ResourcesWidthAndHeight
+        .layout.resources_width_and_height.xml
+        .layout-w600dp.resources_width.xml
+        .layout-w720dp.resources_width.xml
+        .layout-w1024dp.resources_width.xml
+        .layout.resources_height.xml
+        .layout-h550dp.resources_height.xml
+        .layout-h670dp.resources_height.xml
+        .layout-h974dp.resources_height.xml
             The layouts included by the {@code FrameLayout} inside R.layout.resources_width_and_height
             use layout-wNNNdp and layout-hNNNdp to select between different versions based on the size
             of the screen. Those from layout-hNNNdp are included first using @layout/resources_height
