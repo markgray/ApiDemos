@@ -247,6 +247,72 @@ class DocumentsSample : AppCompatActivity() {
         setContentView(scroll)
     }
 
+/**
+ * Called when an activity you launched exits, giving you the requestCode you started it with, the
+ * resultCode it returned, and any additional data from it. First we call our super's implementation
+ * of `onActivityResult`. Then we set [ContentResolver] `val cr` to a [ContentResolver] instance for
+ * our application's package. We call our method [clearLog] to clear the text from our result
+ * reporting [TextView] field [mResult]. Next we use our method [log] to display the result code and
+ * the [String] representation of the [Intent] parameter [data] (Which will be an URI which looks
+ * like: "Intent {dat=content://com.android.providers.media.documents/&#42;}". If [data] is not
+ * *null* we set [Uri] `val uri` to the URI data this intent is carrying (which would look like:
+ * content://com.android.providers.media.documents/document/image%3A603). If `uri` is not *null*
+ * we log the [Boolean] result of a test of `uri` to see if the given URI represents a
+ * [DocumentsContract.Document] backed by a `DocumentsProvider`.
+ *
+ * Next we branch on the value of the request code parameter [requestCode] used to launch the
+ * activity whose results we have received:
+ *
+ *  * CODE_READ - wrapped in try block intended to catch [SecurityException], we use [ContentResolver]
+ *  `cr` to take the persistable URI permission grant FLAG_GRANT_READ_URI_PERMISSION that has been
+ *  offered for `uri` (Once taken, the permission grant will be remembered across device reboots.
+ *  Only URI permissions granted with FLAG_GRANT_PERSISTABLE_URI_PERMISSION can be persisted.) We
+ *  then declare [InputStream] `var inputStream` as *null*, and wrapped in *try* block intended to
+ *  catch any [Exception], we use `cr` to open the input stream `inputStream` using the content
+ *  associated with content URI `uri`, and then call our method [readFullyNoClose] to read the
+ *  entire contents of `inputStream` into a [Byte] array which we use only to display the length.
+ *  In our *finally* block we call our method [closeQuietly] to close `inputStream`.
+ *  * CODE_WRITE - wrapped in try block intended to catch [SecurityException], we use [ContentResolver]
+ *  `cr` to take the persistable URI permission grant FLAG_GRANT_WRITE_URI_PERMISSION that has been
+ *  offered for `uri` (Once taken, the permission grant will be remembered across device reboots.
+ *  Only URI permissions granted with FLAG_GRANT_PERSISTABLE_URI_PERMISSION can be persisted.) We
+ *  then declare [OutputStream] `var os` as *null*, and wrapped in *try* block intended to catch any
+ *  [Exception], we use `cr` to open the output stream `os` using the content associated with content
+ *  URI `uri`. We write the [String] "THE COMPLETE WORKS OF SHAKESPEARE" to `os`. In our *finally*
+ *  block we call our method [closeQuietly] to close `os`
+ *  * CODE_TREE - We build [Uri] `val doc` to be an URI representing COLUMN_DOCUMENT_ID from the
+ *  [Uri] `uri` (This can then be used to access documents under a user-selected directory tree,
+ *  since it doesn't require the user to separately confirm each new document access.) We build
+ *  [Uri] `val child` to be an URI representing the children of the target directory [Uri] `uri`.
+ *  We use [ContentResolver] `cr` to query the content provider for `child` using a projection
+ *  consisting of the two columns DocumentsContract.Document.COLUMN_DISPLAY_NAME and
+ *  DocumentsContract.Document.COLUMN_MIME_TYPE, with the selection *null* (all rows), selection
+ *  arguments of *null*, and sort order of *null* and store the `Cursor` returned in `val c`
+ *  (the `Cursor` will reference the contents or the target directory). We then move the cursor
+ *  from row to row, using our method [log] to display the value of column 0 and column 1 of the
+ *  row pointed to by `c` (COLUMN_DISPLAY_NAME and COLUMN_MIME_TYPE based on the projection
+ *  requested). We then call our method [closeQuietly] to close `c`. Next we call our method
+ *  [createDocument] to create a "image/png" file ("pic.png") inside of [Uri] `doc` saving the [Uri]
+ *  returned that points to the file in `val pic`, a directory  "my dir" inside of `doc` saving the
+ *  [Uri] returned that points to the directory in `val dir`, then using the [Uri] `dir` for "my dir"
+ *  we create a "image/png" file ("pic2.png") inside of that new subdirectory saving the [Uri] returned
+ *  that points to that file in `val dirPic`. We display messages informing the user of our actions
+ *  and the [Uri] for each of these new documents. Then we open [OutputStream] `var os` using the
+ *  [Uri] `dirPic` and write the string "THE COMPLETE  WORKS OF SHAKESPEARE" to the file "pic2.png",
+ *  log a message to this effect, and finally call our method [deleteDocument] to delete the empty
+ *  file "pic.png" using its [Uri] `pic` then log a message to this effect.
+ *  * CODE_RENAME - We call our method [renameDocument] to use the [ContentResolver] `cr` to resolve
+ *  and rename the [Uri] `uri` selected by the user to "MEOW.TEST", then use the [Uri] `val newUri`
+ *  returned from this operation to open an [InputStream] `var inputStream` for this renamed file
+ *  which we attempt to read using our method [readFullyNoClose], logging only the number of bytes
+ *  read if this is successful.
+ *
+ * @param requestCode The integer request code originally supplied to [startActivityForResult],
+ * allowing you to identify who this result came from.
+ * @param resultCode The integer result code returned by the child activity through its [setResult].
+ * @param data An [Intent], which can return result data to the caller (various data can be attached
+ * to the [Intent] as "extras").
+*/
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val cr = contentResolver
@@ -266,14 +332,14 @@ class DocumentsSample : AppCompatActivity() {
             } catch (e: SecurityException) {
                 log("FAILED TO TAKE PERMISSION", e)
             }
-            var `is`: InputStream? = null
+            var inputStream: InputStream? = null
             try {
-                `is` = cr.openInputStream(uri)
-                log("read length=" + readFullyNoClose(`is`).size)
+                inputStream = cr.openInputStream(uri)
+                log("read length=" + readFullyNoClose(inputStream).size)
             } catch (e: Exception) {
                 log("FAILED TO READ", e)
             } finally {
-                closeQuietly(`is`)
+                closeQuietly(inputStream)
             }
         } else if (requestCode == CODE_WRITE) {
             try {
@@ -292,12 +358,24 @@ class DocumentsSample : AppCompatActivity() {
                 closeQuietly(os)
             }
         } else if (requestCode == CODE_TREE) { // Find existing docs
-            val doc = DocumentsContract.buildDocumentUriUsingTree(uri,
-                    DocumentsContract.getTreeDocumentId(uri))
-            val child = DocumentsContract.buildChildDocumentsUriUsingTree(uri,
-                    DocumentsContract.getTreeDocumentId(uri))
-            val c = cr.query(child, arrayOf(
-                    DocumentsContract.Document.COLUMN_DISPLAY_NAME, DocumentsContract.Document.COLUMN_MIME_TYPE), null, null, null)
+            val doc = DocumentsContract.buildDocumentUriUsingTree(
+                    uri,
+                    DocumentsContract.getTreeDocumentId(uri)
+            )
+            val child = DocumentsContract.buildChildDocumentsUriUsingTree(
+                    uri,
+                    DocumentsContract.getTreeDocumentId(uri)
+            )
+            val c = cr.query(
+                    child,
+                    arrayOf(
+                            DocumentsContract.Document.COLUMN_DISPLAY_NAME,
+                            DocumentsContract.Document.COLUMN_MIME_TYPE
+                    ),
+                    null,
+                    null,
+                    null
+            )
             try {
                 while (c!!.moveToNext()) {
                     log("found child=" + c.getString(0) + ", mime=" + c.getString(1))
@@ -305,7 +383,9 @@ class DocumentsSample : AppCompatActivity() {
             } finally {
                 closeQuietly(c)
             }
-            // Create some documents
+            /**
+             * Create some documents
+             */
             val pic = createDocument(cr, doc, "image/png", "pic.png")
             val dir = createDocument(cr, doc, DocumentsContract.Document.MIME_TYPE_DIR, "my dir")
             val dirPic = createDocument(cr, dir, "image/png", "pic2.png")
@@ -323,7 +403,9 @@ class DocumentsSample : AppCompatActivity() {
             } finally {
                 closeQuietly(os)
             }
-            // And delete the first pic
+            /**
+             * And delete the first pic
+             */
             if (deleteDocument(cr, pic)) {
                 log("deleted untouched pic")
             } else {
@@ -332,19 +414,38 @@ class DocumentsSample : AppCompatActivity() {
         } else if (requestCode == CODE_RENAME) {
             val newUri = renameDocument(cr, uri, "MEOW.TEST")
             log("rename result=$newUri")
-            var `is`: InputStream? = null
+            var inputStream: InputStream? = null
             try {
-                `is` = cr.openInputStream((newUri)!!)
-                log("read length=" + readFullyNoClose(`is`).size)
+                inputStream = cr.openInputStream((newUri)!!)
+                log("read length=" + readFullyNoClose(inputStream).size)
             } catch (e: Exception) {
                 log("FAILED TO READ", e)
             } finally {
-                closeQuietly(`is`)
+                closeQuietly(inputStream)
             }
         }
     }
 
-    private fun createDocument(resolver: ContentResolver, documentUri: Uri?, mimeType: String, displayName: String): Uri? {
+    /**
+     * Create a new document in a given directory with the given MIME type and display name. We
+     * return the [Uri] that a *try* block intended to catch any [Exception] thrown by a call to
+     * [DocumentsContract.createDocument] with our parameters, which will either be the [Uri] that
+     * the method returns when it succeeds (which will be a [Uri] pointing to the newly created
+     * document) or *null* if an [Exception] is thrown.
+     *
+     * @param resolver [ContentResolver] instance for our application's package.
+     * @param documentUri directory [Uri] with flag Document.FLAG_DIR_SUPPORTS_CREATE in which to
+     * place the new document
+     * @param mimeType MIME type of new document
+     * @param displayName name of new document
+     * @return [Uri] pointing to the newly created document, or *null* if we failed
+     */
+    private fun createDocument(
+            resolver: ContentResolver,
+            documentUri: Uri?,
+            mimeType: String,
+            displayName: String
+    ): Uri? {
         return try {
             DocumentsContract.createDocument(resolver, documentUri!!, mimeType, displayName)
         } catch (e: Exception) {
@@ -352,6 +453,15 @@ class DocumentsSample : AppCompatActivity() {
         }
     }
 
+    /**
+     * Delete the given document. We return the value returned by a *try* block intended to catch
+     * any [Exception] which will be the value returned by [DocumentsContract.deleteDocument] for
+     * our parameters, or *false* if the call throws an [Exception].
+     *
+     * @param resolver [ContentResolver] instance for our application's package.
+     * @param documentUri [Uri] pointing to the document with flag Document.FLAG_SUPPORTS_DELETE
+     * @return *true* if the delete succeeded, otherwise *false*.
+     */
     private fun deleteDocument(resolver: ContentResolver, documentUri: Uri?): Boolean {
         return try {
             DocumentsContract.deleteDocument(resolver, documentUri!!)
@@ -360,6 +470,17 @@ class DocumentsSample : AppCompatActivity() {
         }
     }
 
+    /**
+     * Change the display name of an existing document. We return the value returned by a *try*
+     * block intended to catch any [Exception] which will be the [Uri] returned by the method
+     * [DocumentsContract.renameDocument] when passed our parameters or *null* if the method throws
+     * an [Exception].
+     *
+     * @param resolver {@code ContentResolver} instance for our application's package.
+     * @param uri      document with {@link Document#FLAG_SUPPORTS_RENAME}
+     * @param newName  updated name for document
+     * @return the existing or new document after the rename, or {@code null} if failed.
+     */
     @Suppress("SameParameterValue")
     private fun renameDocument(resolver: ContentResolver, uri: Uri, newName: String): Uri? {
         return try {
@@ -375,11 +496,10 @@ class DocumentsSample : AppCompatActivity() {
     private fun clearLog() {
         mResult!!.text = null
     }
+
     /**
-     * Calls `Log.d` to log our parameters, and also displays the `String msg` in
-     * `TextView mResult`.
-     * Displays the `String msg` in `TextView mResult`. We just call our method
-     * `log(String msg, Throwable t)` with null for `t`.
+     * Calls [Log.d] to log our parameters, and also displays the [String] parameter [msg] in
+     * [TextView] field [mResult].
      *
      * @param msg String to `Log.d` and display in `TextView mResult`
      * @param t   An exception to log
@@ -390,30 +510,36 @@ class DocumentsSample : AppCompatActivity() {
         mResult!!.text = mResult!!.text.toString() + "\n" + msg
     }
 
+    /**
+     * Our static constants and methods
+     */
     companion object {
         /**
          * TAG used for logging
          */
         private const val TAG = "DocumentsSample"
+
         /**
          * Request code used when calling [startActivityForResult] when the Buttons with labels
          * "OPEN_DOC &#42;/&#42;" (as well as the mime types "image/&#42;", "audio/ogg",
          * "text/plain, application/msword" and "GET_CONTENT &#42;/&#42;" are clicked. In our
          * [onActivityResult] override we use it to branch to an area of code which requests
-         * FLAG_GRANT_READ_URI_PERMISSION for the Uri returned in the `data` [Intent] result,
-         * opens that Uri, calls our method [readFullyNoClose] to read the contents of the file
+         * FLAG_GRANT_READ_URI_PERMISSION for the [Uri] returned in the `data` [Intent] result,
+         * opens that [Uri], calls our method [readFullyNoClose] to read the contents of the file
          * into a `Byte[]` array, which we use only to determine the number of bytes read which
          * we then display in our UI.
          */
         private const val CODE_READ = 42
+
         /**
-         * Request code used when calling [startActivityForResult] when the Buttons with label
+         * Request code used when calling [startActivityForResult] when the [Button] with label
          * "CREATE_DOC &#42;/&#42;" is clicked. In our [onActivityResult] override we use it
          * to branch to an area of code which requests FLAG_GRANT_WRITE_URI_PERMISSION for the [Uri]
          * returned in the [Intent] `data`, and writes the String "THE COMPLETE WORKS OF SHAKESPEARE"
          * to the URI.
          */
         private const val CODE_WRITE = 43
+
         /**
          * Request code used when calling [startActivityForResult] when the Button with label
          * "OPEN_DOC_TREE" is clicked. In our [onActivityResult] override we use it to branch to an
@@ -421,10 +547,11 @@ class DocumentsSample : AppCompatActivity() {
          * then deletes one of the files.
          */
         private const val CODE_TREE = 44
+
         /**
          * Request code used when calling [startActivityForResult] when the Button with label
          * "OPEN_DOC &#42;/&#42; for rename" is clicked. In our [onActivityResult] override
-         * we use it to branch to an area of code which renames the Uri returned in the [Intent]
+         * we use it to branch to an area of code which renames the [Uri] returned in the [Intent]
          * `data` result to "MEOW.TEST", then opens and tries to read using the new name.
          */
         private const val CODE_RENAME = 45
