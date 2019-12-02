@@ -16,10 +16,6 @@
 
 package com.example.android.apis.content;
 
-//Need the following import to get access to the app resources, since this
-//class is in a sub-package.
-
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +31,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+//Need the following import to get access to the app resources, since this
+//class is in a sub-package.
 import com.example.android.apis.R;
 
 import java.io.File;
@@ -47,7 +47,7 @@ import java.io.OutputStream;
 /**
  * Shows how to use the external storage directory api for both public and app private directories.
  */
-public class ExternalStorage extends Activity {
+public class ExternalStorage extends AppCompatActivity {
     /**
      * The {@code LinearLayout} R.id.layout inside of our layout file R.layout.external_storage into
      * which we add the three "storage controls" (inflated and configured instances of the layout file
@@ -144,7 +144,7 @@ public class ExternalStorage extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.external_storage);
-        mLayout = (ViewGroup) findViewById(R.id.layout);
+        mLayout = findViewById(R.id.layout);
 
         mExternalStoragePublicPicture = createStorageControls(
                 "Picture: getExternalStoragePublicDirectory",
@@ -670,16 +670,17 @@ public class ExternalStorage extends Activity {
                                View.OnClickListener deleteClick) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         Item item = new Item();
+        //noinspection ConstantConditions
         item.mRoot = inflater.inflate(R.layout.external_storage_item, mLayout, false);
-        TextView tv = (TextView) item.mRoot.findViewById(R.id.label);
+        TextView tv = item.mRoot.findViewById(R.id.label);
         tv.setText(label);
         if (path != null) {
-            tv = (TextView) item.mRoot.findViewById(R.id.path);
+            tv = item.mRoot.findViewById(R.id.path);
             tv.setText(path.toString());
         }
-        item.mCreate = (Button) item.mRoot.findViewById(R.id.create);
+        item.mCreate = item.mRoot.findViewById(R.id.create);
         item.mCreate.setOnClickListener(createClick);
-        item.mDelete = (Button) item.mRoot.findViewById(R.id.delete);
+        item.mDelete = item.mRoot.findViewById(R.id.delete);
         item.mDelete.setOnClickListener(deleteClick);
         return item;
     }
