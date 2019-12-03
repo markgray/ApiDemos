@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -388,6 +389,11 @@ public class ExternalStorage extends AppCompatActivity {
             // Unable to create file, likely because external storage is
             // not currently mounted.
             Log.w("ExternalStorage", "Error writing " + file, e);
+            Toast.makeText(
+                    this,
+                    this.getString(R.string.public_storage_failure),
+                    Toast.LENGTH_LONG
+            ).show();
         }
     }
 

@@ -1275,7 +1275,10 @@ Content
         .layout.external_storage.xml
         .layout.external_storage_item.xml
             Shows how to use the external storage directory api for both public and 
-            app private directories.
+            app private directories. Note: as of Android Q the public storage is no
+            longer usable without android:requestLegacyExternalStorage="true", go it
+            is best to switch public storage use to the Content/Storage/Documents aka
+            DocumentsContract api above.
 
   Undo
     Content/Undo                           android:allowUndo="false" requires v23 ("m")
