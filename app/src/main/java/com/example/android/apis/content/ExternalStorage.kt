@@ -15,6 +15,10 @@
  */
 package com.example.android.apis.content
 
+//Need the following import to get access to the app resources, since this
+//class is in a sub-package.
+import com.example.android.apis.R
+
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -29,32 +33,29 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.example.android.apis.R
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
+import android.widget.LinearLayout
 
-//Need the following import to get access to the app resources, since this
-//class is in a sub-package.
+import androidx.appcompat.app.AppCompatActivity
+import java.io.*
+
+
 /**
  * Shows how to use the external storage directory api for both public and app private directories.
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class ExternalStorage : AppCompatActivity() {
     /**
-     * The `LinearLayout` R.id.layout inside of our layout file R.layout.external_storage into
-     * which we add the three "storage controls" (inflated and configured instances of the layout file
+     * The [LinearLayout] R.id.layout inside of our layout file R.layout.external_storage into which
+     * we add the three "storage controls" (inflated and configured instances of the layout file
      * R.layout.external_storage_item) which we use to exercise the external storage directory api.
      */
     var mLayout: ViewGroup? = null
 
     /**
      * Class which is used to hold references to the three important Views (the root view itself, and
-     * the two control `Button`'s: CREATE and DELETE) contained in each of our three "storage
-     * controls": `mExternalStoragePublicPicture`, `mExternalStoragePrivatePicture` and
-     * `mExternalStoragePrivateFile`.
+     * the two control [Button]'s: CREATE and DELETE) contained in each of our three "storage
+     * controls": [mExternalStoragePublicPicture], [mExternalStoragePrivatePicture] and
+     * [mExternalStoragePrivateFile].
      */
     class Item {
         var mRoot: View? = null
@@ -64,14 +65,16 @@ class ExternalStorage : AppCompatActivity() {
 
     /**
      * Storage control used to create and delete a picture in the DIRECTORY_PICTURES of the public
-     * storage of the device.
+     * storage of the device. **Note:** This will not work on Android Q and above.
      */
     var mExternalStoragePublicPicture: Item? = null
+
     /**
      * Storage control used to create and delete a picture in the DIRECTORY_PICTURES of the private
      * storage of the device (internal to the application, and not visible to the user).
      */
     var mExternalStoragePrivatePicture: Item? = null
+
     /**
      * Storage control used to create and delete a picture in the root directory of the private
      * storage of the device (internal to the application, and not visible to the user).
@@ -81,60 +84,45 @@ class ExternalStorage : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to R.layout.external_storage (our layout file).
-     * We initialize our field `ViewGroup mLayout` by locating the `LinearLayout` in our
-     * UI with ID R.id.layout. This is the `ViewGroup` into which we will place our three
-     * "storage controls". To create these controls we call our method `createStorageControls`
+     * We initialize our [ViewGroup] field [mLayout] by locating the [LinearLayout] in our
+     * UI with ID R.id.layout. This is the [ViewGroup] into which we will place our three
+     * "storage controls". To create these controls we call our method [createStorageControls]
      * which inflates the layout file R.layout.external_storage_item, sets the text of the two
-     * `TextView`'s in it to the first two arguments we pass it, locates the two Buttons in
+     * [TextView]'s in it to the first two arguments we pass it, locates the two Buttons in
      * the layout and sets their `OnClickListener`'s to the next two parameters. It then
-     * returns an `Item` instance which contains references to the inflated layout `View`
-     * (field `mRoot`) and the two `Button`'s in `mRoot`, fields `mCreate`
-     * and `mDelete`. The parameters passed to `createStorageControls` for our three
-     * controls are as follows:
+     * returns an [Item] instance which contains references to the inflated layout [View]
+     * (field `mRoot`) and the two [Button]'s in `mRoot`, the fields `mCreate` and `mDelete`.
+     * The parameters passed to [createStorageControls] for our three controls are as follows:
      *
-     *  *
-     * mExternalStoragePublicPicture
+     *  * mExternalStoragePublicPicture
+     *      * Picture: getExternalStoragePublicDirectory
+     *      * /storage/emulated/0/Pictures
+     *      * Create: an `OnclickListener` which calls our methods [createExternalStoragePublicPicture]
+     *      and [updateExternalStorageState]
+     *      * Delete: an `OnclickListener` which calls our methods [deleteExternalStoragePublicPicture]
+     *      and [updateExternalStorageState]
+     *  * mExternalStoragePrivatePicture
+     *      * Picture getExternalFilesDir
+     *      * /storage/emulated/0/Android/data/com.example.android.apis/files/Pictures
+     *      * Create: an `OnclickListener` which calls our methods
+     *      [createExternalStoragePrivatePicture] and [updateExternalStorageState]
+     *      * Delete: an `OnclickListener` which calls our methods
+     *      [deleteExternalStoragePrivatePicture] and [updateExternalStorageState]
+     *  * mExternalStoragePrivateFile
+     *      * File getExternalFilesDir
+     *      * /storage/emulated/0/Android/data/com.example.android.apis/files
+     *      * Create: an `OnclickListener` which calls our methods
+     *      [createExternalStoragePrivateFile] and [updateExternalStorageState]
+     *      * Delete: an `OnclickListener` which calls our methods
+     *      [deleteExternalStoragePrivateFile] and [updateExternalStorageState]
      *
-     *  * Picture: getExternalStoragePublicDirectory
-     *  * /storage/emulated/0/Pictures
-     *  * Create: an `OnclickListener` which calls our methods
-     * `createExternalStoragePublicPicture` and `updateExternalStorageState`
-     *  * Delete: an `OnclickListener` which calls our methods
-     * `deleteExternalStoragePublicPicture` and `updateExternalStorageState`
-     *
-     *
-     *  *
-     * mExternalStoragePrivatePicture
-     *
-     *  * Picture getExternalFilesDir
-     *  * /storage/emulated/0/Android/data/com.example.android.apis/files/Pictures
-     *  * Create: an `OnclickListener` which calls our methods
-     * `createExternalStoragePrivatePicture` and `updateExternalStorageState`
-     *  * Delete: an `OnclickListener` which calls our methods
-     * `deleteExternalStoragePrivatePicture` and `updateExternalStorageState`
-     *
-     *
-     *  *
-     * mExternalStoragePrivateFile
-     *
-     *  * File getExternalFilesDir
-     *  * /storage/emulated/0/Android/data/com.example.android.apis/files
-     *  * Create: an `OnclickListener` which calls our methods
-     * `createExternalStoragePrivateFile` and `updateExternalStorageState`
-     *  * Delete: an `OnclickListener` which calls our methods
-     * `deleteExternalStoragePrivateFile` and `updateExternalStorageState`
-     *
-     *
-     *
-     * Upon return from `createStorageControls` after creating each of these controls, we add
-     * the `View Item.mRoot` of the `Item` returned to `ViewGroup mLayout`.
-     *
-     *
-     * Finally we call our method `startWatchingExternalStorage` which creates and registers
-     * `BroadcastReceiver mExternalStorageReceiver` to receive broadcasts about changes in
+     * Upon return from [createStorageControls] after creating each of these controls, we add
+     * the [View] in [Item.mRoot] of the [Item] returned to [ViewGroup] field [mLayout].
+     * Finally we call our method [startWatchingExternalStorage] which creates and registers
+     * [BroadcastReceiver] field [mExternalStorageReceiver] to receive broadcasts about changes in
      * the file system state which require us to call our method `updateExternalStorageState`
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -181,9 +169,9 @@ class ExternalStorage : AppCompatActivity() {
     }
 
     /**
-     * Perform any final cleanup before an activity is destroyed. First we call through to our super's
-     * implementation of `onDestroy`, then we call our method `stopWatchingExternalStorage`
-     * which unregisters the receiver `BroadcastReceiver mExternalStorageReceiver`.
+     * Perform any final cleanup before an activity is destroyed. First we call through to our
+     * super's implementation of `onDestroy`, then we call our method [stopWatchingExternalStorage]
+     * which unregisters the [BroadcastReceiver] field [mExternalStorageReceiver].
      */
     override fun onDestroy() {
         super.onDestroy()
@@ -191,24 +179,22 @@ class ExternalStorage : AppCompatActivity() {
     }
 
     /**
-     * We are called only from our method `updateExternalStorageState` to update the state of
-     * the `Button`'s in our three "storage controls" to be enabled or disabled based on the
-     * state of the storage system. First we call our method `hasExternalStoragePublicPicture`
-     * which checks to see if the file we want to write to in the external storage public picture
-     * directory already exists and returns true if it does to set `boolean has`. Then we
-     * enable the "CREATE" Button of the "Picture getExternalPublicDirectory" controls if the file
-     * system is `writeable` and there is no picture already there (`!has`), and then
-     * we enable the "DELETE" Button if the file system is `writeable` and there **is** a
-     * picture already there.
-     *
+     * We are called only from our method [updateExternalStorageState] to update the state of the
+     * [Button]'s in our three "storage controls" to be enabled or disabled based on the state of
+     * the storage system. First we call our method [hasExternalStoragePublicPicture] which checks
+     * to see if the file we want to write to in the external storage public picture directory
+     * already exists and returns *true* if it does to set [Boolean] `var has`. Then we enable the
+     * "CREATE" Button of the "Picture getExternalPublicDirectory" controls if the file system is
+     * [writeable] and there is no picture already there (ie: `!has`), and then we enable the "DELETE"
+     * [Button] if the file system is [writeable] and there **is** a picture already there.
      *
      * We do much the same thing for the other two "storage controls", except for them we set
-     * `boolean has` by calling the methods `hasExternalStoragePrivatePicture` and
-     * `hasExternalStoragePrivateFile` respectively.
+     * `has` by calling the methods [hasExternalStoragePrivatePicture] and
+     * [hasExternalStoragePrivateFile] respectively.
      *
      * @param available Unused
-     * @param writeable True if we have permission to write to external storage ie. the system method
-     * `getExternalStorageState` returns MEDIA_MOUNTED
+     * @param writeable *true* if we have permission to write to external storage ie. the system
+     * method `getExternalStorageState` returns MEDIA_MOUNTED
      */
     @Suppress("UNUSED_PARAMETER")
     fun handleExternalStorageState(available: Boolean, writeable: Boolean) {
@@ -224,31 +210,33 @@ class ExternalStorage : AppCompatActivity() {
     }
 
     /**
-     * `BroadcastReceiver` for the actions ACTION_MEDIA_MOUNTED, and ACTION_MEDIA_REMOVED, it
-     * just calls our method `updateExternalStorageState`
+     * [BroadcastReceiver] for the actions ACTION_MEDIA_MOUNTED, and ACTION_MEDIA_REMOVED, it
+     * just calls our method [updateExternalStorageState] once created.
      */
     var mExternalStorageReceiver: BroadcastReceiver? = null
+
     /**
-     * External storage is present (but not necessarily writeable). Set to true in our method
-     * `updateExternalStorageState` if the current state of the primary shared/external
-     * storage media returned by `getExternalStorageState` is either MEDIA_MOUNTED or
-     * MEDIA_MOUNTED_READ_ONLY. (Otherwise false). Used only as the argument to a call to our
-     * method `handleExternalStorageState`
+     * External storage is present (but not necessarily writeable). Set to *true* in our method
+     * [updateExternalStorageState] if the current state of the primary shared/external storage
+     * media returned by `getExternalStorageState` is either MEDIA_MOUNTED or MEDIA_MOUNTED_READ_ONLY.
+     * (Otherwise *false*). Used only as the argument to a call to our method
+     * [handleExternalStorageState]
      */
     var mExternalStorageAvailable = false
+
     /**
-     * External storage is present and writeable. Set to true in our method
-     * `updateExternalStorageState` if the current state of the primary shared/external
+     * External storage is present and writeable. Set to *true* in our method
+     * [updateExternalStorageState] if the current state of the primary shared/external
      * storage media returned by `getExternalStorageState` is MEDIA_MOUNTED. (Otherwise
-     * false). Used only as the argument to a call to our method `handleExternalStorageState`
+     * *false*). Used only as the argument to a call to our method [handleExternalStorageState]
      */
     var mExternalStorageWriteable = false
 
     /**
-     * Queries the current state of the primary shared/external storage media, setting our fields
-     * `boolean mExternalStorageAvailable`, and `boolean mExternalStorageWriteable` to
-     * reflect that state and then calling our method `handleExternalStorageState` to update
-     * the enabled/disabled state of the three "storage controls" in our UI.
+     * Queries the current state of the primary shared/external storage media, setting our [Boolean]
+     * fields [mExternalStorageAvailable], and [mExternalStorageWriteable] to reflect that state and
+     * then calling our method [handleExternalStorageState] to update the enabled/disabled state of
+     * the three "storage controls" in our UI.
      */
     fun updateExternalStorageState() {
         val state = Environment.getExternalStorageState()
@@ -270,13 +258,14 @@ class ExternalStorage : AppCompatActivity() {
     }
 
     /**
-     * Called from `onCreate`, we initialize our field `BroadcastReceiver mExternalStorageReceiver`
-     * with an anonymous class whose `onReceive` override calls our method `updateExternalStorageState`
-     * whenever it receives a broadcast intent. We create an `IntentFilter filter`, add the actions
-     * ACTION_MEDIA_MOUNTED, and ACTION_MEDIA_REMOVED to `filter` and then register `mExternalStorageReceiver`
-     * to be run in the main activity thread and called with any broadcast Intent that matches `filter`.
-     * Finally we call our method `updateExternalStorageState` to update the enabled/disabled state
-     * of our "storage controls" Buttons based on the state of the external storage.
+     * Called from `onCreate`, we initialize our [BroadcastReceiver] field [mExternalStorageReceiver]
+     * with an anonymous class whose `onReceive` override calls our method [updateExternalStorageState]
+     * whenever it receives a broadcast intent. We create an [IntentFilter] `val filter`, add the
+     * actions ACTION_MEDIA_MOUNTED, and ACTION_MEDIA_REMOVED to `filter` and then register
+     * [mExternalStorageReceiver] to be run in the main activity thread and called with any broadcast
+     * [Intent] that matches `filter`. Finally we call our method [updateExternalStorageState] to
+     * update the enabled/disabled state of our "storage controls" Buttons based on the state of the
+     * external storage.
      */
     fun startWatchingExternalStorage() {
         mExternalStorageReceiver = object : BroadcastReceiver() {
@@ -293,61 +282,72 @@ class ExternalStorage : AppCompatActivity() {
     }
 
     /**
-     * Called from our `onDestroy` override as part of the cleanup before our activity is
-     * destroyed, we just unregister our previously registered `BroadcastReceiver mExternalStorageReceiver`.
-     * All filters that have been registered for this `BroadcastReceiver` will be removed.
+     * Called from our [onDestroy] override as part of the cleanup before our activity is destroyed,
+     * we just unregister our previously registered [BroadcastReceiver] field [mExternalStorageReceiver].
+     * All filters that have been registered for this [BroadcastReceiver] will be removed.
      */
     fun stopWatchingExternalStorage() {
         unregisterReceiver(mExternalStorageReceiver)
     }
 
     /**
-     * Called when the "CREATE" Button of the "Picture: getExternalStoragePublicDirectory" "storage
+     * Called when the "CREATE" [Button] of the "Picture: getExternalStoragePublicDirectory" "storage
      * control" is clicked, it creates a "DemoPicture.jpg" in the standard directory in which to
-     * place pictures that are available to the user: DIRECTORY_PICTURES. First we set `File path`
-     * to the top-level shared/external storage directory for placing files of the type DIRECTORY_PICTURES
-     * (/storage/emulated/0/Pictures on my Nexus 6). Then we create a `File file` using `path`
-     * as the directory path, and "DemoPicture.jpg" as the name of the file.
+     * place pictures that are available to the user: DIRECTORY_PICTURES. First we initiailize [File]
+     * variable `val  path` to the top-level shared/external storage directory for placing files of
+     * the type DIRECTORY_PICTURES (/storage/emulated/0/Pictures on my Pixel). Then we create a
+     * [File] `val file` using `path` as the directory path, and "DemoPicture.jpg" as the name of
+     * the file.
      *
+     * Next, wrapped in a try block intended to catch [IOException] in order to log and [Toast] any
+     * IO error we use `path`'s method `mkdirs()` to create the directory named by this abstract
+     * pathname (if necessary), including any necessary but nonexistent parent directories. Then we
+     * create [InputStream] `val inputStream` opening a data stream for reading the raw resource
+     * R.raw.balloons located in our apk. Now we create [OutputStream] `val os`, a file output stream
+     * to write to the file represented by the specified [File] `file` object, allocate [Byte] array
+     * `var data` to have room for the number of bytes that can be read  from `inputStream`, read all
+     * of `inputStream` into `data`, write all of `data` to `os` and then close both `is` and `os`.
      *
-     * Next, wrapped in a try block intended to catch IOException we use `path`'s method `mkdirs()`
-     * to create the directory named by this abstract pathname (if necessary), including any necessary
-     * but nonexistent parent directories. Then we create `InputStream is` opening a data stream for
-     * reading the raw resource R.raw.balloons located in our apk. Now we create `OutputStream os`,
-     * a file output stream to write to the file represented by the specified `File file` object,
-     * allocate `byte[] data` to have room for the number of bytes that can be read that can be read
-     * from `is`, read all of `is` into `data`, write all of `data` to `os`
-     * and then close both `is` and `os`.
-     *
-     *
-     * Finally we call `MediaScannerConnection.scanFile` to Tell the media scanner about the
-     * new file so that it is immediately available to the user.
+     * Finally we call [MediaScannerConnection.scanFile] to tell the media scanner about the new
+     * file so that it is immediately available to the user. **Note:** Running on Android Q and
+     * above will just throw an [IOException]: "EACCES (Permission denied)"
      */
-    fun createExternalStoragePublicPicture() { // Create a path where we will place our picture in the user's
-// public pictures directory.  Note that you should be careful about
-// what you place here, since the user often manages these files.  For
-// pictures and other media owned by the application, consider
-// Context.getExternalMediaDirs().
+    fun createExternalStoragePublicPicture() {
+        /**
+         * Create a path where we will place our picture in the user's public pictures directory.
+         * Note that you should be careful about what you place here, since the user often manages
+         * these files. For pictures and other media owned by the application, consider
+         * Context.getExternalMediaDirs().
+         */
         @Suppress("DEPRECATION")
         val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
         val file = File(path, "DemoPicture.jpg")
-        try { // Make sure the Pictures directory exists.
+        try {
+            /**
+             * Make sure the Pictures directory exists.
+             */
             path.mkdirs()
-            // Very simple code to copy a picture from the application's
-// resource into the external file.  Note that this code does
-// no error checking, and assumes the picture is small (does not
-// try to copy it in chunks).  Note that if external storage is
-// not currently mounted this will silently fail.
-            val `is` = resources.openRawResource(R.raw.balloons)
+            /**
+             * Very simple code to copy a picture from the application's resource into the external
+             * file. Note that this code does no error checking, and assumes the picture is small
+             * (does not try to copy it in chunks). Note that if external storage is not currently
+             * mounted or the device is running Anroid Q and above this will silently fail.
+             */
+            val inputStream: InputStream = resources.openRawResource(R.raw.balloons)
             val os: OutputStream = FileOutputStream(file)
-            val data = ByteArray(`is`.available())
-            `is`.read(data)
+            val data = ByteArray(inputStream.available())
+            inputStream.read(data)
             os.write(data)
-            `is`.close()
+            inputStream.close()
             os.close()
-            // Tell the media scanner about the new file so that it is
-// immediately available to the user.
-            MediaScannerConnection.scanFile(this, arrayOf(file.toString()), null
+            /**
+             * Tell the media scanner about the new file so
+             * that it is immediately available to the user.
+             */
+            MediaScannerConnection.scanFile(
+                    this,
+                    arrayOf(file.toString()),
+                    null
             ) { pathScanned, uri ->
                 /**
                  * Called to notify the client when the media scanner has finished
@@ -362,8 +362,12 @@ class ExternalStorage : AppCompatActivity() {
                 Log.i("ExternalStorage", "Scanned $pathScanned:")
                 Log.i("ExternalStorage", "-> uri=$uri")
             }
-        } catch (e: IOException) { // Unable to create file, likely because external storage is
-// not currently mounted.
+        } catch (e: IOException) {
+            /**
+             * Unable to create file, likely because external storage is not currently mounted, we
+             * forgot to ask the user for permission to write to external storage, or the device is
+             * running Android Q and above.
+             */
             Log.w("ExternalStorage", "Error writing $file", e)
             Toast.makeText(
                     this,
@@ -376,15 +380,17 @@ class ExternalStorage : AppCompatActivity() {
     /**
      * Called when the "DELETE" Button of the "Picture: getExternalStoragePublicDirectory" "storage
      * control" is clicked, it deletes "DemoPicture.jpg" from the standard directory in which to
-     * place pictures that are available to the user: DIRECTORY_PICTURES. First we set `File path`
-     * to the top-level shared/external storage directory for placing files of the type DIRECTORY_PICTURES
-     * (/storage/emulated/0/Pictures on my Nexus 6). Then we create a `File file` using `path`
-     * as the directory path, and "DemoPicture.jpg" as the name of the file. Finally we delete the file
-     * denoted by the pathname `File file`.
+     * place pictures that are available to the user: DIRECTORY_PICTURES. First we initialize [File]
+     * variable `val path` to the top-level shared/external storage directory for placing files of
+     * the type DIRECTORY_PICTURES (/storage/emulated/0/Pictures on my Pixel). Then we create a [File]
+     * `val file` using `path` as the directory path, and "DemoPicture.jpg" as the name of the file.
+     * Finally we delete the file denoted by the pathname `file`.
      */
-    fun deleteExternalStoragePublicPicture() { // Create a path where we will place our picture in the user's
-// public pictures directory and delete the file.  If external
-// storage is not currently mounted this will fail.
+    fun deleteExternalStoragePublicPicture() {
+        /**
+         * Create a path where we will place our picture in the user's public pictures directory
+         * and delete the file. If external storage is not currently mounted this will fail.
+         */
         @Suppress("DEPRECATION")
         val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
         val file = File(path, "DemoPicture.jpg")
@@ -392,21 +398,25 @@ class ExternalStorage : AppCompatActivity() {
     }
 
     /**
-     * Called from our `handleExternalStorageState` method to determine whether the file we want
-     * our "Picture: getExternalStoragePublicDirectory" storage control "CREATE" Button to create
-     * already exists, and if so the "CREATE" Button will be disabled and the "DELETE" Button enabled.
-     * First we set `File path` to the top-level shared/external storage directory for placing
-     * files of the type DIRECTORY_PICTURES (/storage/emulated/0/Pictures on my Nexus 6). Then we
-     * create a `File file` using `path` as the directory path, and "DemoPicture.jpg"
-     * as the name of the file. Finally we return true if and only if the file or directory denoted
-     * by abstract pathname `file` exists; false otherwise.
+     * Called from our [handleExternalStorageState] method to determine whether the file we want
+     * our "Picture: getExternalStoragePublicDirectory" storage control "CREATE" [Button] to create
+     * already exists, and if so the "CREATE" [Button] will be disabled and the "DELETE" [Button]
+     * enabled. First we initialize [File] `val path` to the top-level shared/external storage
+     * directory for placing files of the type DIRECTORY_PICTURES (/storage/emulated/0/Pictures on
+     * my Pixel). Then we create a [File] `val file` using `path` as the directory path, and
+     * "DemoPicture.jpg" as the name of the file. Finally we return *true* if and only if the file
+     * or directory denoted by abstract pathname `file` exists; *false* otherwise. **Note:** This
+     * will work even if the app lacks the permission to do anything with the file.
      *
-     * @return true if the file "DemoPicture.jpg" exists already in the user's public pictures directory
+     * @return *true* if the file "DemoPicture.jpg" exists already in the user's public
+     * pictures directory
      */
-    fun hasExternalStoragePublicPicture(): Boolean { // Create a path where we will place our picture in the user's
-// public pictures directory and check if the file exists.  If
-// external storage is not currently mounted this will think the
-// picture doesn't exist.
+    fun hasExternalStoragePublicPicture(): Boolean {
+        /**
+         * Create a path where we will place our picture in the user's public pictures directory
+         * and check if the file exists. If external storage is not currently mounted this will
+         * think the picture doesn't exist.
+         */
         @Suppress("DEPRECATION")
         val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
         val file = File(path, "DemoPicture.jpg")
@@ -414,51 +424,59 @@ class ExternalStorage : AppCompatActivity() {
     }
 
     /**
-     * Called when the "CREATE" Button of the "Picture getExternalFilesDir" storage control is clicked,
-     * it creates a "DemoPicture.jpg" in the directory where the application can place persistent files
-     * of type DIRECTORY_PICTURES that it owns. These files are internal to the application.
-     * First we set `File path` to the path to the directory on the primary shared/external
-     * storage device where the application can place persistent files it owns of type DIRECTORY_PICTURES
-     * ("/storage/emulated/0/Android/data/com.example.android.apis/files/Pictures" on my Nexus 6).
-     * Then we create a `File file` using `path` as the directory path, and "DemoPicture.jpg"
+     * Called when the "CREATE" [Button] of the "Picture getExternalFilesDir" storage control is
+     * clicked, it creates a "DemoPicture.jpg" in the directory where the application can place
+     * persistent files of type DIRECTORY_PICTURES that it owns. These files are internal to the
+     * application. First we initialize [File] `val path` to the path to the directory on the
+     * primary shared/external storage device where the application can place persistent files it
+     * owns of type DIRECTORY_PICTURES
+     * ("/storage/emulated/0/Android/data/com.example.android.apis/files/Pictures" on my Pixel).
+     * Then we create a [File] `val file` using `path` as the directory path, and "DemoPicture.jpg"
      * as the name of the file.
      *
+     * Next, wrapped in a try block intended to catch [IOException] and log the error, we use `path`'s
+     * method `mkdirs()` to create the directory named by this abstract pathname (if necessary),
+     * including any necessary but nonexistent parent directories. Then we create [InputStream]
+     * `val inputStream` opening a data stream for reading the raw resource R.raw.balloons located
+     * in our apk. Now we create [OutputStream] `val os`, a file output stream to write to the file
+     * represented by the specified [File] `file` object, allocate [Byte] array `val data` to have
+     * room for the number of bytes that can be read that can be read from `inputStream`, read all
+     * of `inputStream` into `data`, write all of `data` to `os` and then close both `inputStream`
+     * and `os`.
      *
-     * Next, wrapped in a try block intended to catch IOException we use `path`'s method `mkdirs()`
-     * to create the directory named by this abstract pathname (if necessary), including any necessary
-     * but nonexistent parent directories. Then we create `InputStream is` opening a data stream for
-     * reading the raw resource R.raw.balloons located in our apk. Now we create `OutputStream os`,
-     * a file output stream to write to the file represented by the specified `File file` object,
-     * allocate `byte[] data` to have room for the number of bytes that can be read that can be read
-     * from `is`, read all of `is` into `data`, write all of `data` to `os`
-     * and then close both `is` and `os`.
-     *
-     *
-     * Finally we call `MediaScannerConnection.scanFile` to Tell the media scanner about the
-     * new file so that it is immediately available to the user.
+     * Finally we call [MediaScannerConnection.scanFile] to tell the media scanner about the new
+     * file so that it is immediately available to the user.
      */
-    fun createExternalStoragePrivatePicture() { // Create a path where we will place our picture in our own private
-// pictures directory.  Note that we don't really need to place a
-// picture in DIRECTORY_PICTURES, since the media scanner will see
-// all media in these directories; this may be useful with other
-// media types such as DIRECTORY_MUSIC however to help it classify
-// your media for display to the user.
+    fun createExternalStoragePrivatePicture() {
+        /**
+         * Create a path where we will place our picture in our own private
+         * pictures directory.  Note that we don't really need to place a
+         * picture in DIRECTORY_PICTURES, since the media scanner will see
+         * all media in these directories; this may be useful with other
+         * media types such as DIRECTORY_MUSIC however to help it classify
+         * your media for display to the user.
+         */
         val path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val file = File(path, "DemoPicture.jpg")
-        try { // Very simple code to copy a picture from the application's
-// resource into the external file.  Note that this code does
-// no error checking, and assumes the picture is small (does not
-// try to copy it in chunks).  Note that if external storage is
-// not currently mounted this will silently fail.
-            val `is` = resources.openRawResource(R.raw.balloons)
+        try {
+            /**
+             * Very simple code to copy a picture from the application's
+             * resource into the external file. Note that this code does
+             * no error checking, and assumes the picture is small (does not
+             * try to copy it in chunks). Note that if external storage is
+             * not currently mounted this will silently fail.
+             */
+            val inputStream = resources.openRawResource(R.raw.balloons)
             val os: OutputStream = FileOutputStream(file)
-            val data = ByteArray(`is`.available())
-            `is`.read(data)
+            val data = ByteArray(inputStream.available())
+            inputStream.read(data)
             os.write(data)
-            `is`.close()
+            inputStream.close()
             os.close()
-            // Tell the media scanner about the new file so that it is
-// immediately available to the user.
+            /**
+             * Tell the media scanner about the new file so
+             * that it is immediately available to the user.
+             */
             MediaScannerConnection.scanFile(this, arrayOf(file.toString()), null
             ) { pathScanned, uri ->
                 /**
@@ -474,24 +492,30 @@ class ExternalStorage : AppCompatActivity() {
                 Log.i("ExternalStorage", "Scanned $pathScanned:")
                 Log.i("ExternalStorage", "-> uri=$uri")
             }
-        } catch (e: IOException) { // Unable to create file, likely because external storage is
-// not currently mounted.
+        } catch (e: IOException) {
+            /**
+             * Unable to create file, likely because external storage is not currently mounted.
+             */
             Log.w("ExternalStorage", "Error writing $file", e)
         }
     }
 
     /**
-     * Called when the "DELETE" Button of the "Picture getExternalFilesDir" storage control is clicked,
-     * it deletes "DemoPicture.jpg" from the directory where the application can place persistent files
-     * of type DIRECTORY_PICTURES that it owns. First we set `File path` to the path to the
-     * directory where the application can place persistent files it owns of type DIRECTORY_PICTURES
-     * ("/storage/emulated/0/Android/data/com.example.android.apis/files/Pictures" on my Nexus 6).
-     * Then we create a `File file` using `path` as the directory path, and "DemoPicture.jpg"
-     * as the name of the file. Finally we delete the file denoted by the pathname `File file`.
+     * Called when the "DELETE" [Button] of the "Picture getExternalFilesDir" storage control is
+     * clicked, it deletes "DemoPicture.jpg" from the directory where the application can place
+     * persistent files of type DIRECTORY_PICTURES that it owns. First we set [File] `val path` to
+     * the path to the directory where the application can place persistent files it owns of type
+     * DIRECTORY_PICTURES ("/storage/emulated/0/Android/data/com.example.android.apis/files/Pictures"
+     * on my Pixel). Then we create a [File] `val file` using `path` as the directory path, and
+     * "DemoPicture.jpg" as the name of the file. Finally we delete the file denoted by the pathname
+     * [File] `file`.
      */
-    fun deleteExternalStoragePrivatePicture() { // Create a path where we will place our picture in the user's
-// public pictures directory and delete the file.  If external
-// storage is not currently mounted this will fail.
+    fun deleteExternalStoragePrivatePicture() {
+        /**
+         * Create a path where we will place our picture in the user's
+         * public pictures directory and delete the file If external
+         * storage is not currently mounted this will fail.
+         */
         val path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         if (path != null) {
             val file = File(path, "DemoPicture.jpg")
@@ -500,22 +524,25 @@ class ExternalStorage : AppCompatActivity() {
     }
 
     /**
-     * Called from our `handleExternalStorageState` method to determine whether the file we want
-     * our "Picture getExternalFilesDir" storage control "CREATE" Button to create already exists, and
-     * if so the "CREATE" Button will be disabled and the "DELETE" Button enabled. First we set
-     * `File path` the directory where the application can place persistent files it owns of
+     * Called from our [handleExternalStorageState] method to determine whether the file we want our
+     * "Picture getExternalFilesDir" storage control "CREATE" [Button] to create already exists, and
+     * if so the "CREATE" [Button] will be disabled and the "DELETE" [Button] enabled. First we set
+     * [File] `val path` the directory where the application can place persistent files it owns of
      * type DIRECTORY_PICTURES ("/storage/emulated/0/Android/data/com.example.android.apis/files/Pictures"
-     * on my Nexus 6). Then we create a `File file` using `path` as the directory path, and
-     * "DemoPicture.jpg" as the name of the file. Finally we return true if and only if the file or directory
-     * denoted by abstract pathname `file` exists; false otherwise.
+     * on my Pixel). Then we create a [File] `val file` using `path` as the directory path, and
+     * "DemoPicture.jpg" as the name of the file. Finally we return *true* if and only if the file
+     * or directorydenoted by abstract pathname `file` exists; *false* otherwise.
      *
-     * @return true if the file "DemoPicture.jpg" exists already in the applications persistent directory
-     * for files of type DIRECTORY_PICTURES
+     * @return *true* if the file "DemoPicture.jpg" exists already in the applications persistent
+     * directory for files of type DIRECTORY_PICTURES
      */
-    fun hasExternalStoragePrivatePicture(): Boolean { // Create a path where we will place our picture in the user's
-// public pictures directory and check if the file exists.  If
-// external storage is not currently mounted this will think the
-// picture doesn't exist.
+    fun hasExternalStoragePrivatePicture(): Boolean {
+        /**
+         * Create a path where we will place our picture in the user's
+         * public pictures directory and check if the file exists. If
+         * external storage is not currently mounted this will think the
+         * picture doesn't exist.
+         */
         val path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         if (path != null) {
             val file = File(path, "DemoPicture.jpg")
@@ -534,12 +561,12 @@ class ExternalStorage : AppCompatActivity() {
      * "DemoPicture.jpg" as the name of the file.
      *
      *
-     * Next, wrapped in a try block intended to catch IOException, we create `InputStream is`
+     * Next, wrapped in a try block intended to catch IOException, we create `InputStream inputStream`
      * opening a data stream for reading the raw resource R.raw.balloons located in our apk. Now we
      * create `OutputStream os`, a file output stream to write to the file represented by the
      * specified `File file` object, allocate `byte[] data` to have room for the number
-     * of bytes that can be read that can be read from `is`, read all of `is` into
-     * `data`, write all of `data` to `os` and then close both `is` and
+     * of bytes that can be read that can be read from `inputStream`, read all of `inputStream` into
+     * `data`, write all of `data` to `os` and then close both `inputStream` and
      * `os`.
      */
     fun createExternalStoragePrivateFile() { // Create a path where we will place our private file on external
@@ -550,12 +577,12 @@ class ExternalStorage : AppCompatActivity() {
 // no error checking, and assumes the picture is small (does not
 // try to copy it in chunks).  Note that if external storage is
 // not currently mounted this will silently fail.
-            val `is` = resources.openRawResource(R.raw.balloons)
+            val inputStream = resources.openRawResource(R.raw.balloons)
             val os: OutputStream = FileOutputStream(file)
-            val data = ByteArray(`is`.available())
-            `is`.read(data)
+            val data = ByteArray(inputStream.available())
+            inputStream.read(data)
             os.write(data)
-            `is`.close()
+            inputStream.close()
             os.close()
         } catch (e: IOException) { // Unable to create file, likely because external storage is
 // not currently mounted.
