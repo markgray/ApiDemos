@@ -554,29 +554,32 @@ class ExternalStorage : AppCompatActivity() {
     /**
      * Called when the "CREATE" Button of the "File getExternalFilesDir" storage control is clicked,
      * it creates a "DemoPicture.jpg" in the base directory where the application can place persistent
-     * files that it owns. These files are internal to the application. First we create a
-     * `File file` using the absolute path to the directory on the primary shared/external
-     * storage device where the application can place persistent files it owns as the directory path,
-     * ("/storage/emulated/0/Android/data/com.example.android.apis/files" on my Nexus 6) and
+     * files that it owns. These files are internal to the application. First we create a [File]
+     * `val file` using the absolute path to the directory on the primary shared/external storage
+     * device where the application can place persistent files it owns as the directory path,
+     * ("/storage/emulated/0/Android/data/com.example.android.apis/files" on my Pixel) and
      * "DemoPicture.jpg" as the name of the file.
      *
-     *
-     * Next, wrapped in a try block intended to catch IOException, we create `InputStream inputStream`
-     * opening a data stream for reading the raw resource R.raw.balloons located in our apk. Now we
-     * create `OutputStream os`, a file output stream to write to the file represented by the
-     * specified `File file` object, allocate `byte[] data` to have room for the number
-     * of bytes that can be read that can be read from `inputStream`, read all of `inputStream` into
-     * `data`, write all of `data` to `os` and then close both `inputStream` and
-     * `os`.
+     * Next, wrapped in a *try* block intended to catch and log [IOException], we create [InputStream]
+     * `val inputStream` opening a data stream for reading the raw resource R.raw.balloons located
+     * in our apk. Now we create [OutputStream] `val os`, a file output stream to write to the file
+     * represented by the specified `file` [File], allocate [Byte] array `val data` to have room for
+     * the number of bytes that can be read from `inputStream`, read all of `inputStream` into `data`,
+     * write all of `data` to `os` and then close both `inputStream` and `os`.
      */
-    fun createExternalStoragePrivateFile() { // Create a path where we will place our private file on external
-// storage.
+    fun createExternalStoragePrivateFile() {
+        /**
+         * Create a path where we will place our private file on external storage.
+         */
         val file = File(getExternalFilesDir(null), "DemoFile.jpg")
-        try { // Very simple code to copy a picture from the application's
-// resource into the external file.  Note that this code does
-// no error checking, and assumes the picture is small (does not
-// try to copy it in chunks).  Note that if external storage is
-// not currently mounted this will silently fail.
+        try {
+            /**
+             * Very simple code to copy a picture from the application's
+             * resource into the external file.  Note that this code does
+             * no error checking, and assumes the picture is small (does not
+             * try to copy it in chunks).  Note that if external storage is
+             * not currently mounted this will silently fail.
+             */
             val inputStream = resources.openRawResource(R.raw.balloons)
             val os: OutputStream = FileOutputStream(file)
             val data = ByteArray(inputStream.available())
@@ -584,8 +587,10 @@ class ExternalStorage : AppCompatActivity() {
             os.write(data)
             inputStream.close()
             os.close()
-        } catch (e: IOException) { // Unable to create file, likely because external storage is
-// not currently mounted.
+        } catch (e: IOException) {
+            /**
+             * Unable to create file, likely because external storage is not currently mounted.
+             */
             Log.w("ExternalStorage", "Error writing $file", e)
         }
     }
@@ -599,60 +604,69 @@ class ExternalStorage : AppCompatActivity() {
      * on my Nexus 6) and "DemoPicture.jpg" as the name of the file. Finally we delete the file denoted
      * by the pathname `File file`.
      */
-    fun deleteExternalStoragePrivateFile() { // Get path for the file on external storage.  If external
-// storage is not currently mounted this will fail.
+    fun deleteExternalStoragePrivateFile() {
+        /**
+         * Get path for the file on external storage. If external
+         * storage is not currently mounted this will fail.
+         */
         val file = File(getExternalFilesDir(null), "DemoFile.jpg")
         @Suppress("UNNECESSARY_SAFE_CALL")
         file?.delete()
     }
 
     /**
-     * Called from our `handleExternalStorageState` method to determine whether the file we want
+     * Called from our [handleExternalStorageState] method to determine whether the file we want
      * our "File getExternalFilesDir" storage control "CREATE" Button to create already exists, and
      * if so the "CREATE" Button will be disabled and the "DELETE" Button enabled. First we create a
-     * `File file` using the absolute path to the directory on the primary shared/external storage
-     * device where the application can place persistent files it owns as the directory path,
-     * ("/storage/emulated/0/Android/data/com.example.android.apis/files" on my Nexus 6) and
-     * "DemoPicture.jpg" as the name of the file. Finally we return true if and only if the file or
+     * [File] `val file` using the absolute path to the directory on the primary shared/external
+     * storage device where the application can place persistent files it owns as the directory path,
+     * ("/storage/emulated/0/Android/data/com.example.android.apis/files" on my Pixel) and
+     * "DemoPicture.jpg" as the name of the file. Finally we return *true* if and only if the file or
      * directory denoted by abstract pathname `file` exists; false otherwise.
      *
-     * @return true if the file "DemoPicture.jpg" exists already in the applications persistent directory
-     * for files
+     * @return *true* if the file "DemoPicture.jpg" exists already in the applications persistent directory
+     * for files, otherwise *false*.
      */
-    fun hasExternalStoragePrivateFile(): Boolean { // Get path for the file on external storage.  If external
-// storage is not currently mounted this will fail.
+    fun hasExternalStoragePrivateFile(): Boolean {
+        /**
+         * Get path for the file on external storage. If external
+         * storage is not currently mounted this will fail.
+         */
         val file = File(getExternalFilesDir(null), "DemoFile.jpg")
         @Suppress("UNNECESSARY_SAFE_CALL", "USELESS_ELVIS")
         return file?.exists() ?: false
     }
 
     /**
-     * Inflates the layout file R.layout.external_storage_item, configures that `View`, then
-     * creates and returns an `Item` instance containing references to the important `View`'s
-     * in that `View`. First we fetch a handle to the system level service LAYOUT_INFLATER_SERVICE
-     * to initialize `LayoutInflater inflater`. We create a new instance of `Item item`,
-     * and set its field `mRoot` to the `View` that results when we inflate the layout file
-     * R.layout.external_storage_item. We locate the `TextView tv` with ID R.id.label in the `View`
-     * `item.mRoot` and set its text to our parameter `CharSequence label`, and if `path`
-     * is not null, we locate the `TextView` with ID R.id.path and set its text to the pathname string
-     * of our parameter `File path`. We set the field `item.mCreate` to the Button with ID
-     * R.id.create, and set its `OnClickListener` to our parameter `View.OnClickListener createClick`.
-     * We set the field `item.mDelete` to the Button with ID R.id.delete, and set its `OnClickListener`
-     * to our parameter `View.OnClickListener deleteClick`. Finally we return `Item item` to the
-     * caller.
+     * Inflates the layout file R.layout.external_storage_item, configures that [View], then
+     * creates and returns an [Item] instance containing references to the important [View]'s
+     * in that [View]. First we fetch a handle to the system level service LAYOUT_INFLATER_SERVICE
+     * to initialize [LayoutInflater] `val inflater`. We create a new instance of [Item] `val item`,
+     * and set its field `mRoot` to the [View] that results when we inflate the layout file
+     * R.layout.external_storage_item. We locate the [TextView] `val tv` with ID R.id.label in the
+     * [View] `item.mRoot` and set its text to our [CharSequence] parameter [label], and if our
+     * [path] parameter is not *null*, we locate the [TextView] with ID R.id.path and set its text
+     * to the pathname string of our [File] parameter [path]. We set the field `item.mCreate` to the
+     * [Button] with ID R.id.create, and set its `OnClickListener` to our [View.OnClickListener]
+     * parameter  [createClick]. We set the field `item.mDelete` to the [Button] with ID R.id.delete,
+     * and set its [View.OnClickListener] to our [View.OnClickListener] parameter [deleteClick].
+     * Finally we return [Item] `item` to the caller.
      *
-     * @param label       String to use for the label of the R.id.label `TextView` of the layout
-     * @param path        File to convert to a String to display in the R.id.path `TextView` of the layout
-     * @param createClick `OnClickListener` for the "CREATE" Button
-     * @param deleteClick `OnClickListener` for the "DELETE" Button
-     * @return An `Item` instance containing references to the `View` inflated from the
-     * layout file R.layout.external_storage_item (field `mRoot`), the "CREATE" Button R.id.create
-     * in the View `mRoot` (field `mCreate`), and the "DELETE" Button R.id.delete in the View
-     * `mRoot` (field `mDelete`).
+     * @param label       [String] to use for the label of the R.id.label [TextView] of the layout
+     * @param path        [File] to convert to a [String] to display in the R.id.path [TextView]
+     * of the layout
+     * @param createClick [View.OnClickListener] for the "CREATE" Button
+     * @param deleteClick [View.OnClickListener] for the "DELETE" Button
+     * @return An [Item] instance containing references to the [View] inflated from the layout file
+     * R.layout.external_storage_item (field `mRoot`), the "CREATE" [Button] R.id.create in the [View]
+     * `mRoot` (field `mCreate`), and the "DELETE" [Button] R.id.delete in the [View] `mRoot` (field
+     * `mDelete`).
      */
-    fun createStorageControls(label: CharSequence?, path: File?,
+    fun createStorageControls(label: CharSequence?,
+                              path: File?,
                               createClick: View.OnClickListener?,
-                              deleteClick: View.OnClickListener?): Item {
+                              deleteClick: View.OnClickListener?
+    ): Item {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val item = Item()
         item.mRoot = inflater.inflate(R.layout.external_storage_item, mLayout, false)
