@@ -22,6 +22,7 @@ import android.text.InputFilter
 import android.text.InputFilter.LengthFilter
 import android.text.TextWatcher
 import android.text.method.DigitsKeyListener
+import android.text.method.KeyListener
 import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -49,20 +50,19 @@ class TextUndoActivity : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to the R.layout.text_undo layout file. We
-     * initialize our field `EditText mDefaultText` to the `EditText` with ID R.id.default_text,
+     * initialize our [EditText] field [mDefaultText] to the [EditText] with ID R.id.default_text,
      * then we set the `OnClickListener`'s of the three Buttons below `mDefaultText`:
      *
-     *  * R.id.set_text "SetText" will set the text of `mDefaultText`
-     *  * R.id.append_text "Append" will append some text to `mDefaultText`
-     *  * R.id.insert_text "Insert" will insert some text into `mDefaultText`
+     *  * R.id.set_text "SetText" will set the text of [mDefaultText]
+     *  * R.id.append_text "Append" will append some text to [mDefaultText]
+     *  * R.id.insert_text "Insert" will insert some text into [mDefaultText]
      *
-     * We initialize our field `EditText mLengthLimitText` to be the R.id.length_limit_text
-     * `EditText` and set its filters to an `InputFilter.LengthFilter` that will constrain
-     * its length to 4 characters. We initialize our field `EditText mCreditCardText` to be the
-     * R.id.credit_card_text `EditText`, set its `KeyListener` to an instance of
-     * `DigitsKeyListener` which accepts only the characters that appear in the String
-     * CREDIT_CARD_CHARS, and add to it a `TextWatcher` instance created from our class
-     * `CreditCardTextWatcher`.
+     * We initialize our [EditText] field [mLengthLimitText] to be the R.id.length_limit_text
+     * [EditText] and set its filters to an [InputFilter.LengthFilter] that will constrain
+     * its length to 4 characters. We initialize our [EditText] field [mCreditCardText] to be the
+     * R.id.credit_card_text [EditText], set its [KeyListener] to an instance of [DigitsKeyListener]
+     * which accepts only the characters that appear in the [String] constant [CREDIT_CARD_CHARS],
+     * and add to it a [TextWatcher] instance created from our class [CreditCardTextWatcher].
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
      */
@@ -88,13 +88,11 @@ class TextUndoActivity : AppCompatActivity() {
      */
     private class CreditCardTextWatcher : TextWatcher {
         /**
-         * This method is called to notify you that, within `s`,
-         * the `count` characters beginning at `start`
-         * are about to be replaced by new text with length `after`.
-         * It is an error to attempt to make changes to `s` from
-         * this callback. We ignore it.
+         * This method is called to notify you that, within our [CharSequence] parameter [s], the
+         * [count] characters beginning at [start] are about to be replaced by new text with length
+         * [after]. It is an error to attempt to make changes to [s] in this callback. We ignore it.
          *
-         * @param s     The String that is going to be changed
+         * @param s     The [String] that is going to be changed
          * @param start Beginning index of characters to be changed
          * @param count Number of characters to be changed
          * @param after Length of new text that will replace that span of characters
@@ -102,11 +100,9 @@ class TextUndoActivity : AppCompatActivity() {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
         /**
-         * This method is called to notify you that, within `s`,
-         * the `count` characters beginning at `start`
-         * have just replaced old text that had length `before`.
-         * It is an error to attempt to make changes to `s` from
-         * this callback. We ignore it.
+         * This method is called to notify you that, within our [CharSequence] parameter [s], the
+         * [count] characters beginning at [start] have just replaced old text that had length
+         * [before]. It is an error to attempt to make changes to [s] in this callback. We ignore it.
          *
          * @param s      The String that has changed
          * @param start  Beginning index of characters that were changed
@@ -116,42 +112,44 @@ class TextUndoActivity : AppCompatActivity() {
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
         /**
-         * This method is called to notify you that, somewhere within
-         * `s`, the text has been changed.
-         * It is legitimate to make further changes to `s` from
-         * this callback, but be careful not to get yourself into an infinite
-         * loop, because any changes you make will cause this method to be
-         * called again recursively.
+         * This method is called to notify you that, somewhere within our [CharSequence] parameter
+         * [s], the text has been changed. It is legitimate to make further changes to [s] in this
+         * callback, but be careful not to get yourself into an infinite loop, because any changes
+         * you make will cause this method to be called again recursively.
          *
-         *
-         * First we set `String original` to the String version of `Editable s`. Then we
-         * use our method `getNumbers` to extract only the numbers from `original` and
-         * pass this `CharSequence` to our method `addSpaces` to place a space character
-         * every 4 characters, saving the result in `String formatted`. If `formatted` is
-         * not equal to the `original` String, we replace every character of `Editable s`
-         * with the contents of `formatted`.
+         * First we initialize [String] `val original` to the [String] version of our [Editable]
+         * parameter [s]. Then we use our method [getNumbers] to extract only the numbers from
+         * `original` and pass this [CharSequence] to our method [addSpaces] to place a space
+         * character every 4 characters, saving the result in [String] `val formatted`. If `formatted`
+         * is not equal to the `original` [String], we replace every character of [s] with the
+         * contents of `formatted`.
          *
          * @param s Text which has changed somewhere.
          */
         override fun afterTextChanged(s: Editable) {
             val original = s.toString()
             val formatted = addSpaces(getNumbers(original))
-            // This is an ugly way to avoid infinite recursion, but it's common in app code.
+            /**
+             * This is an ugly way to avoid infinite recursion, but it's common in app code.
+             */
             if (formatted != original) {
                 s.replace(0, s.length, formatted)
             }
         }
 
+        /**
+         * Our static methods.
+         */
         companion object {
             /**
-             * Adds spaces every 4 characters. First we create an instance of `StringBuilder builder`,
-             * then stepping 4 characters at a time for the length of `CharSequence str` we append
-             * the next 4 characters to `builder` followed by a space (so long as there are more than
-             * than 4 characters remaining in `str` -- we are careful to not add a space to the end
-             * of the String we are building). finally we return a string representing the data in
-             * `builder`.
+             * Adds spaces every 4 characters. First we create an instance of [StringBuilder] for
+             * `val builder`, then stepping 4 characters at a time for the length of [CharSequence]
+             * parameter [str] we append the next 4 characters to `builder` followed by a space (so
+             * long as there are more than than 4 characters remaining in [str] -- we are careful to
+             * not add a space to the end of the String we are building). Finally we return a string
+             * representing the data in `builder`.
              *
-             * @param str CharSequence to have spaces inserted into
+             * @param str [CharSequence] to have spaces inserted into
              * @return Returns a string with a space added every 4 characters.
              */
             private fun addSpaces(str: CharSequence): String {
@@ -171,12 +169,12 @@ class TextUndoActivity : AppCompatActivity() {
             }
 
             /**
-             * Returns a String consisting only of the digits contained in its input parameter. First we
-             * create a `StringBuilder sb` with an initial capacity of 16 characters. Then starting
-             * from character 0, for the length of our input parameter `CharSequence cc` we fetch
-             * `char c` from the next character in `cc` and if our method `isNumber`
-             * determines that it is a digit, we append `c` to `sb`. Finally we return a
-             * string representing the data in `StringBuilder sb`.
+             * Returns a [String] consisting only of the digits contained in its input parameter.
+             * First we create a [StringBuilder] `val sb` with an initial capacity of 16 characters.
+             * Then starting from character 0, for the length of our [CharSequence] input parameter
+             * [cc] we fetch [Char] `val c` from the next character in [cc] and if our [isNumber]
+             * method determines that it is a digit, we append `c` to `sb`. Finally we return a
+             * [String] representing the data in `sb`.
              *
              * @return Returns a string containing only the digits from a character sequence.
              */
@@ -195,10 +193,12 @@ class TextUndoActivity : AppCompatActivity() {
             }
 
             /**
-             * Returns true if the `char c` lies in the range of characters 0-9, false otherwise.
+             * Returns *true* if the [Char] parameter [c] lies in the range of characters 0-9,
+             * *false* otherwise.
              *
              * @param c character to check wheter it is a digit or not
-             * @return true if the `char c` lies in the range of characters 0-9, false otherwise
+             * @return *true* if the [Char] parameter [c] lies in the range of characters 0-9,
+             * *false* otherwise
              */
             private fun isNumber(c: Char): Boolean {
                 return c in '0'..'9'
@@ -206,6 +206,9 @@ class TextUndoActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Our static constant.
+     */
     companion object {
         /**
          * Characters allowed as input in the credit card field.
