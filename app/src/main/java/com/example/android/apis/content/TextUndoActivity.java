@@ -17,7 +17,6 @@
 package com.example.android.apis.content;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -26,13 +25,15 @@ import android.text.method.DigitsKeyListener;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.android.apis.R;
 
 /**
  * Simple example of using an UndoManager for editing text in a TextView.
  */
 @SuppressLint("SetTextI18n")
-public class TextUndoActivity extends Activity {
+public class TextUndoActivity extends AppCompatActivity {
     /**
      * Characters allowed as input in the credit card field.
      */
@@ -76,7 +77,7 @@ public class TextUndoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.text_undo);
 
-        mDefaultText = (EditText) findViewById(R.id.default_text);
+        mDefaultText = findViewById(R.id.default_text);
         findViewById(R.id.set_text).setOnClickListener(new View.OnClickListener() {
             /**
              * Sets the text of {@code EditText mDefaultText} to "some text"
@@ -112,10 +113,10 @@ public class TextUndoActivity extends Activity {
             }
         });
 
-        mLengthLimitText = (EditText) findViewById(R.id.length_limit_text);
+        mLengthLimitText = findViewById(R.id.length_limit_text);
         mLengthLimitText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
 
-        mCreditCardText = (EditText) findViewById(R.id.credit_card_text);
+        mCreditCardText = findViewById(R.id.credit_card_text);
         mCreditCardText.setKeyListener(DigitsKeyListener.getInstance(CREDIT_CARD_CHARS));
         mCreditCardText.addTextChangedListener(new CreditCardTextWatcher());
     }
