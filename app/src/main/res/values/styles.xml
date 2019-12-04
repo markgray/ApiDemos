@@ -190,4 +190,9 @@
         <item name="android:colorForeground">#fff</item>
     </style>
 
+    <style name="Theme.MyThemeNotitleBar"
+        parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
 </resources>

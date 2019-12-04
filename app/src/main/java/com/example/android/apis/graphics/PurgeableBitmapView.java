@@ -213,6 +213,7 @@ public class PurgeableBitmapView extends View {
      *                compress for max quality.
      * @return {@code Byte[]} array containing compressed version of the {@code Bitmap src}
      */
+    @SuppressLint("WrongThread")
     private byte[] generateBitstream(Bitmap src, Bitmap.CompressFormat format, int quality) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         src.compress(format, quality, os);

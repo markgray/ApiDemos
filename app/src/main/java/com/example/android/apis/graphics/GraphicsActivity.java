@@ -16,10 +16,12 @@
 
 package com.example.android.apis.graphics;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Wrapper around {@code Activity} which optionally places the {@code View} that is passed to
@@ -27,7 +29,8 @@ import android.view.ViewGroup;
  * inside an instance of {@code PictureLayout} if TEST_PICTURE is true. {@code PictureLayout} is
  * a {@code ViewGroup} which displays its one and only child in the four corners of the display.
  */
-class GraphicsActivity extends Activity {
+@SuppressLint("Registered")
+class GraphicsActivity extends AppCompatActivity {
     // set to true to test Picture
     private static final boolean TEST_PICTURE = false;
 

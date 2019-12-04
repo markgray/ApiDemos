@@ -3006,7 +3006,8 @@
         <activity
             android:name=".graphics.kube.Kube"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
-            android:label="Graphics/OpenGL ES/Kube">
+            android:label="Graphics/OpenGL ES/Kube"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3014,7 +3015,8 @@
         </activity>
         <activity
             android:name=".graphics.Compass"
-            android:label="Graphics/Compass">
+            android:label="Graphics/Compass"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3023,7 +3025,8 @@
         <activity
             android:name=".graphics.CameraPreview"
             android:label="Graphics/CameraPreview"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3033,7 +3036,7 @@
             android:name=".graphics.CompressedTextureActivity"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/Compressed Texture"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@style/Theme.MyThemeNotitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3043,7 +3046,7 @@
             android:name=".graphics.CubeMapActivity"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/Cube Map"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@style/Theme.MyThemeNotitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3053,7 +3056,7 @@
             android:name=".graphics.FrameBufferObjectActivity"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/Frame Buffer Object"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@style/Theme.MyThemeNotitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3063,7 +3066,7 @@
             android:name=".graphics.GLSurfaceViewActivity"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/GLSurfaceView"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@style/Theme.MyThemeNotitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3073,7 +3076,7 @@
             android:name=".graphics.GLES20Activity"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/OpenGL ES 2.0"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@style/Theme.MyThemeNotitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3082,7 +3085,8 @@
         <activity
             android:name=".graphics.MatrixPaletteActivity"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
-            android:label="Graphics/OpenGL ES/Matrix Palette Skinning">
+            android:label="Graphics/OpenGL ES/Matrix Palette Skinning"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3092,7 +3096,7 @@
             android:name=".graphics.TranslucentGLSurfaceViewActivity"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/Translucent GLSurfaceView"
-            android:theme="@style/Theme.Translucent">
+            android:theme="@style/Theme.MyThemeTranslucent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3112,7 +3116,7 @@
             android:name=".graphics.spritetext.SpriteTextActivity"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/Sprite Text"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@style/Theme.MyThemeNotitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3122,7 +3126,7 @@
             android:name=".graphics.TouchRotateActivity"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/Touch Rotate"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@style/Theme.MyThemeNotitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3130,7 +3134,8 @@
         </activity>
         <activity
             android:name=".graphics.PolyToPoly"
-            android:label="Graphics/PolyToPoly">
+            android:label="Graphics/PolyToPoly"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3138,7 +3143,8 @@
         </activity>
         <activity
             android:name=".graphics.ScaleToFit"
-            android:label="Graphics/ScaleToFit">
+            android:label="Graphics/ScaleToFit"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3146,7 +3152,8 @@
         </activity>
         <activity
             android:name=".graphics.RoundRects"
-            android:label="Graphics/RoundRects">
+            android:label="Graphics/RoundRects"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3154,7 +3161,8 @@
         </activity>
         <activity
             android:name=".graphics.ShapeDrawable1"
-            android:label="Graphics/Drawable/ShapeDrawable">
+            android:label="Graphics/Drawable/ShapeDrawable"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3162,7 +3170,8 @@
         </activity>
         <activity
             android:name=".graphics.SurfaceViewOverlay"
-            android:label="Graphics/SurfaceView Overlay">
+            android:label="Graphics/SurfaceView Overlay"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3171,7 +3180,7 @@
         <activity
             android:name=".graphics.ShadowCardStack"
             android:label="Graphics/Shadow Card Stack"
-            android:theme="@android:style/Theme.Material.Light"
+            android:theme="@style/Theme.AppCompat.Light"
             tools:targetApi="lollipop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -3181,7 +3190,7 @@
         <activity
             android:name=".graphics.ShadowCardDrag"
             android:label="Graphics/Shadow Card Drag"
-            android:theme="@android:style/Theme.Material.Light"
+            android:theme="@style/Theme.AppCompat.Light"
             tools:targetApi="lollipop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -3190,7 +3199,8 @@
         </activity>
         <activity
             android:name=".graphics.WindowSurface"
-            android:label="Graphics/Surface Window">
+            android:label="Graphics/Surface Window"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3199,7 +3209,8 @@
         <activity
             android:name=".graphics.TextAlign"
             android:hardwareAccelerated="false"
-            android:label="Graphics/Text Align">
+            android:label="Graphics/Text Align"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3207,7 +3218,8 @@
         </activity>
         <activity
             android:name=".graphics.Arcs"
-            android:label="Graphics/Arcs">
+            android:label="Graphics/Arcs"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3215,7 +3227,8 @@
         </activity>
         <activity
             android:name=".graphics.Patterns"
-            android:label="Graphics/Patterns">
+            android:label="Graphics/Patterns"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3224,7 +3237,8 @@
         <activity
             android:name=".graphics.Clipping"
             android:hardwareAccelerated="false"
-            android:label="Graphics/Clipping">
+            android:label="Graphics/Clipping"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3232,7 +3246,8 @@
         </activity>
         <activity
             android:name=".graphics.Layers"
-            android:label="Graphics/Layers">
+            android:label="Graphics/Layers"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3241,7 +3256,8 @@
         <activity
             android:name=".graphics.UnicodeChart"
             android:hardwareAccelerated="false"
-            android:label="Graphics/UnicodeChart">
+            android:label="Graphics/UnicodeChart"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3249,7 +3265,8 @@
         </activity>
         <activity
             android:name=".graphics.PathFillTypes"
-            android:label="Graphics/PathFillTypes">
+            android:label="Graphics/PathFillTypes"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3258,7 +3275,8 @@
         <activity
             android:name=".graphics.Pictures"
             android:hardwareAccelerated="false"
-            android:label="Graphics/Pictures">
+            android:label="Graphics/Pictures"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3267,7 +3285,8 @@
         <activity
             android:name=".graphics.Vertices"
             android:hardwareAccelerated="false"
-            android:label="Graphics/Vertices">
+            android:label="Graphics/Vertices"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3275,7 +3294,8 @@
         </activity>
         <activity
             android:name=".graphics.AnimateDrawables"
-            android:label="Graphics/AnimateDrawables">
+            android:label="Graphics/AnimateDrawables"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3283,7 +3303,8 @@
         </activity>
         <activity
             android:name=".graphics.SensorTest"
-            android:label="Graphics/SensorTest">
+            android:label="Graphics/SensorTest"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3291,7 +3312,8 @@
         </activity>
         <activity
             android:name=".graphics.AlphaBitmap"
-            android:label="Graphics/AlphaBitmap">
+            android:label="Graphics/AlphaBitmap"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3299,7 +3321,8 @@
         </activity>
         <activity
             android:name=".graphics.Regions"
-            android:label="Graphics/Regions">
+            android:label="Graphics/Regions"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3307,7 +3330,8 @@
         </activity>
         <activity
             android:name=".graphics.Sweep"
-            android:label="Graphics/Sweep">
+            android:label="Graphics/Sweep"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3315,7 +3339,8 @@
         </activity>
         <activity
             android:name=".graphics.BitmapMesh"
-            android:label="Graphics/BitmapMesh">
+            android:label="Graphics/BitmapMesh"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3323,7 +3348,8 @@
         </activity>
         <activity
             android:name=".graphics.MeasureText"
-            android:label="Graphics/MeasureText">
+            android:label="Graphics/MeasureText"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3331,7 +3357,8 @@
         </activity>
         <activity
             android:name=".graphics.Typefaces"
-            android:label="Graphics/Typefaces">
+            android:label="Graphics/Typefaces"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3339,7 +3366,8 @@
         </activity>
         <activity
             android:name=".graphics.FingerPaint"
-            android:label="Graphics/FingerPaint">
+            android:label="Graphics/FingerPaint"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3347,7 +3375,8 @@
         </activity>
         <activity
             android:name=".graphics.ColorMatrixSample"
-            android:label="Graphics/ColorMatrix">
+            android:label="Graphics/ColorMatrix"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3356,7 +3385,8 @@
         <activity
             android:name=".graphics.BitmapDecode"
             android:hardwareAccelerated="false"
-            android:label="Graphics/BitmapDecode">
+            android:label="Graphics/BitmapDecode"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3364,7 +3394,8 @@
         </activity>
         <activity
             android:name=".graphics.ColorFilters"
-            android:label="Graphics/ColorFilters">
+            android:label="Graphics/ColorFilters"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3372,7 +3403,8 @@
         </activity>
         <activity
             android:name=".graphics.CreateBitmap"
-            android:label="Graphics/CreateBitmap">
+            android:label="Graphics/CreateBitmap"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3381,7 +3413,8 @@
         <activity
             android:name=".graphics.DrawPoints"
             android:hardwareAccelerated="false"
-            android:label="Graphics/Points">
+            android:label="Graphics/Points"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3390,7 +3423,8 @@
         <activity
             android:name=".graphics.TouchPaint"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize"
-            android:label="Graphics/Touch Paint">
+            android:label="Graphics/Touch Paint"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3398,7 +3432,8 @@
         </activity>
         <activity
             android:name=".graphics.BitmapPixels"
-            android:label="Graphics/BitmapPixels">
+            android:label="Graphics/BitmapPixels"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3406,7 +3441,8 @@
         </activity>
         <activity
             android:name=".graphics.Xfermodes"
-            android:label="Graphics/Xfermodes">
+            android:label="Graphics/Xfermodes"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3414,7 +3450,8 @@
         </activity>
         <activity
             android:name=".graphics.PathEffects"
-            android:label="Graphics/PathEffects">
+            android:label="Graphics/PathEffects"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3422,7 +3459,8 @@
         </activity>
         <activity
             android:name=".graphics.GradientDrawable1"
-            android:label="Graphics/Drawable/GradientDrawable">
+            android:label="Graphics/Drawable/GradientDrawable"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3430,7 +3468,8 @@
         </activity>
         <activity
             android:name=".graphics.PurgeableBitmap"
-            android:label="Graphics/PurgeableBitmap/NonPurgeable">
+            android:label="Graphics/PurgeableBitmap/NonPurgeable"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3440,7 +3479,8 @@
         <activity-alias
             android:name=".Purgeable"
             android:label="Graphics/PurgeableBitmap/Purgeable"
-            android:targetActivity=".graphics.PurgeableBitmap">
+            android:targetActivity=".graphics.PurgeableBitmap"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3449,7 +3489,8 @@
 
         <activity
             android:name=".graphics.DensityActivity"
-            android:label="Graphics/Density">
+            android:label="Graphics/Density"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
