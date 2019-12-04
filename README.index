@@ -1283,6 +1283,7 @@ Content
   Undo
     Content/Undo                           android:allowUndo="false" requires v23 ("m")
         .content.TextUndoActivity
+        .layout.text_undo.xml
             Simple example of using an UndoManager for editing text in a TextView. (Or so it says)
             Actually an example of using InputFilter.LengthFilter to limit the length of text entered,
             a DigitsKeyListener, and a TextWatcher.
