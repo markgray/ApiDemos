@@ -37,12 +37,9 @@ import com.example.android.apis.R
  * Where alpha is a value [0..1], and color is substituted once per channel (so use
  * the formula once for each of red, green and blue)
  *
- *
  * The resulting values are specified as a pair in square braces as follows:
  *
- *
  * [`<alpha-value>,<color-value>`]
- *
  *
  * Where alpha-value and color-value are formulas for generating the resulting
  * alpha channel and each color channel respectively.
@@ -50,7 +47,7 @@ import com.example.android.apis.R
 class AlphaBitmap : GraphicsActivity() {
     /**
      * Called when the Activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to a new instance of our class `SampleView`.
+     * `onCreate`, then we set our content view to a new instance of our class [SampleView].
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
      */
@@ -60,80 +57,76 @@ class AlphaBitmap : GraphicsActivity() {
     }
 
     /**
-     * This is a `View` which draws our three `Bitmap`'s into the `Canvas` its
+     * This is a [View] which draws our three [Bitmap]'s into the [Canvas] its
      * `onDraw` override is passed.
      */
     private class SampleView(context: Context) : View(context) {
         /**
-         * Contains the Bitmap decoded from our raw png image file R.raw.app_sample_code.
+         * Contains the [Bitmap] decoded from our raw png image file R.raw.app_sample_code.
          */
         private val mBitmap: Bitmap
         /**
-         * The alpha values of `Bitmap mBitmap`. This may be drawn with `Canvas.drawBitmap()`,
+         * The alpha values of [Bitmap] field [mBitmap]. This may be drawn with [Canvas.drawBitmap],
          * where the color(s) will be taken from the paint that is passed to the draw call.
          */
         private val mBitmap2: Bitmap
         /**
-         * `Bitmap` into which we draw a `LinerGradient` colored circle and text into
-         * using `Canvas.drawCircle` and `Canvas.drawText`.
+         * [Bitmap] into which we draw a [android.graphics.LinearGradient] colored circle and text
+         * using [Canvas.drawCircle] and [Canvas.drawText].
          */
         private val mBitmap3: Bitmap
         /**
-         * `LinearGradient` `Shader` used to draw `mBitmap3`
+         * [android.graphics.LinearGradient] instance [Shader] used to draw [mBitmap3]
          */
         private val mShader: Shader
         /**
-         * `Paint` instance used in call to `drawBitmap` for all the Bitmaps
+         * [Paint] instance used in call to [Canvas.drawBitmap] for all the Bitmaps
          */
         private val p: Paint
 
         /**
          * Implement this to do your drawing. First we fill the entire canvas' bitmap with the color
-         * WHITE, then we initialize our variable `float y` to 10 (we will use this as the y
-         * pixel dimension within the `Canvas canvas` at which we draw the next `Bitmap`
-         * to be drawn.)
+         * WHITE, then we initialize our [Float] variable `var y` to 10 (we will use this as the y
+         * pixel dimension within the [Canvas] parameter [canvas] at which we draw the next [Bitmap]
+         * that we draw).
          *
+         * Then we set the color of [Paint] field [p] to RED and draw [Bitmap] field [mBitmap]
+         * at location (10,y) in [Canvas] parameter [canvas] using [p] as the [Paint]. We advance
+         * `y` by the height of [mBitmap] plus 10, set color of [Paint] field [p] to GREEN and
+         * draw [Bitmap] field [mBitmap] at location (10,y) in [Canvas] parameter [canvas] using [p]
+         * as the [Paint]. This demonstrates that the colors in the [Bitmap] override the color of
+         * the [Paint] used to draw it.
          *
-         * Then we set the color of `Paint p` to RED and draw `Bitmap mBitmap`
-         * at location (10,y) in `Canvas canvas` using `p` as the `Paint`. We advance
-         * `y` by the height of `mBitmap + 10`, set color of `Paint p` to GREEN and
-         * draw `Bitmap mBitmap` at location (10,y) in `Canvas canvas` using `p` as
-         * the `Paint`. This demonstrates that the colors in the `Bitmap` override the
-         * color of the `Paint` used to draw it.
+         * We now advance `y` by the height of [mBitmap] plus 10, and draw [Bitmap] field [mBitmap2]
+         * at location (10,y) in [Canvas] parameter [canvas] using [p] as the [Paint]. Because
+         * [mBitmap2] consists only of the alpha channel copied from [mBitmap] the image drawn will
+         * be drawn in the GREEN color setting of [Paint] field [p].
          *
+         * We now advance `y` by the height of [mBitmap2] plus 10, set the [Shader] of [Paint] field
+         * [p] to [Shader] field [mShader] and draw [Bitmap] field [mBitmap3] at location (10,y) in
+         * [Canvas] parameter [canvas] using [p] as the [Paint].
          *
-         * We now advance `y` by the height of `mBitmap + 10`, and draw `Bitmap mBitmap2`
-         * at location (10,y) in `Canvas canvas` using `p` as the `Paint`. Because
-         * `mBitmap2` consists only of the alpha channel copied from `mBitmap` the image
-         * drawn will be drawn in the GREEN color setting of `Paint p`.
+         * To demonstrate the [Shader] of a [Paint] overrides the color, we advance `y` by the height
+         * of [mBitmap3] plus 10, set the color of [Paint] field [p] to RED again and draw [Bitmap]
+         * field [mBitmap3] at location (10,y) in [Canvas] parameter [canvas] using [p] as the
+         * [Paint]. The image is identical to the one above it.
          *
-         *
-         * We now advance `y` by the height of `mBitmap2 + 10`, set the `Shader` of
-         * `Paint p` to `Shader mShader` and draw `Bitmap mBitmap3` at location (10,y)
-         * in `Canvas canvas` using `p` as the `Paint`.
-         *
-         *
-         * To demonstrate the the `Shader` of a `Paint` overrides the color, we advance
-         * `y` by the height of `mBitmap3 + 10`, set the color of `Paint p` to RED
-         * again and draw `Bitmap mBitmap3` at location (10,y) in `Canvas canvas` using
-         * `p` as the `Paint`. The image is identical to the one above it.
-         *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(Color.WHITE)
             var y = 10f
             p.color = Color.RED
             canvas.drawBitmap(mBitmap, 10f, y, p)
-            y += mBitmap.height + 10.toFloat()
+            y += mBitmap.height + 10f
             p.color = Color.GREEN
             canvas.drawBitmap(mBitmap, 10f, y, p)
-            y += mBitmap.height + 10.toFloat()
+            y += mBitmap.height + 10f
             canvas.drawBitmap(mBitmap2, 10f, y, p)
-            y += mBitmap2.height + 10.toFloat()
+            y += mBitmap2.height + 10f
             p.shader = mShader
             canvas.drawBitmap(mBitmap3, 10f, y, p)
-            y += mBitmap3.height + 10.toFloat()
+            y += mBitmap3.height + 10f
             p.color = Color.RED
             canvas.drawBitmap(mBitmap3, 10f, y, p)
         }
