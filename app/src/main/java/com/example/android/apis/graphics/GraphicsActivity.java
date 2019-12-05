@@ -30,7 +30,7 @@ import androidx.appcompat.app.AppCompatActivity;
  * a {@code ViewGroup} which displays its one and only child in the four corners of the display.
  */
 @SuppressLint("Registered")
-class GraphicsActivity extends AppCompatActivity {
+public class GraphicsActivity extends AppCompatActivity {
     // set to true to test Picture
     private static final boolean TEST_PICTURE = false;
 

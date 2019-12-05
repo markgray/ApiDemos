@@ -1607,8 +1607,8 @@ Graphics
             translate (1 point); rotate/uniform-scale (2 points); rotate/skew (3 points); and
             perspective (4 points).
 
-  PurgeableBitmap
-   NonPurgeable
+  PurgeableBitmap *** Both NonPurgeable and Purgeable CRASH on Q but not on Api 16 "JellyBean"
+   NonPurgeable CRASHES ON Q
     Graphics/PurgeableBitmap/NonPurgeable  all
         .graphics.PurgeableBitmap
         .graphics.PurgeableBitmapView
@@ -1616,7 +1616,7 @@ Graphics
             out of memory, but it is deprecated as of LOLLIPOP, and is ignored. Use 
             inBitmap or other bitmap memory tricks instead.
 
-   Purgeable
+   Purgeable CRASHES ON Q
     Graphics/PurgeableBitmap/Purgeable     all
         .graphics.PurgeableBitmap
         .graphics.PurgeableBitmapView
