@@ -131,33 +131,35 @@ class AlphaBitmap : GraphicsActivity() {
             canvas.drawBitmap(mBitmap3, 10f, y, p)
         }
 
+        /**
+         * Our static method
+         */
         companion object {
             /**
-             * Draws a circle and text into the `Bitmap` it is passed. We fetch the width of our
-             * `Bitmap bm` to `float x`, and the height to `float y`. We construct a
-             * `Canvas c` that will use `bm` to draw into, and allocate a new instance of
-             * `Paint p`.
+             * Draws a circle and text into the [Bitmap] it is passed. We fetch the width of our
+             * [Bitmap] parameter [bm] to [Float] variable `val x`, and the height to [Float]
+             * variable `val y`. We construct a [Canvas] `val c` that will use [bm] to draw into,
+             * and allocate a new instance of [Paint] for `val p`.
              *
+             * We set the ANTI_ALIAS_FLAG of `p` to *true*, and set the alpha component of the
+             * paint's color to 0x80 (1/2) and draw a circle into the [Canvas] `c` centered in the
+             * middle with radius of half the width of the [Bitmap] parameter [bm] (x/2) using `p`
+             * as the [Paint].
              *
-             * We set the ANTI_ALIAS_FLAG of `Paint p` to true, and set the alpha component of the
-             * paint's color to 0x80 (1/2) and draw a circle into the `Canvas c` centered in the
-             * middle with radius of half the width of the `Bitmap bm` using `p` as the
-             * `Paint`.
-             *
-             *
-             * Then we set the alpha component of `p` to 0x30, set the xfermode object of `p`
-             * to the porter-duff mode SRC ([Sa, Sc] -- source alpha, and source color, the source pixels
+             * Then we set the alpha component of `p` to 0x30, set the xfermode object of `p` to the
+             * porter-duff mode SRC ([Sa, Sc] -- source alpha, and source color, the source pixels
              * replace the destination pixels.)
              * See: https://developer.android.com/reference/android/graphics/PorterDuff.Mode.html
-             * Then we set the text size of `p` to 60, paint's text alignment to CENTER. Next we
-             * use `Paint p` to allocate a new `FontMetrics` object for `Paint.FontMetrics fm`,
-             * getFontMetrics(fm) is called by this version of the constructor, which returns the font's recommended
-             * interline spacing to `fm`, given the Paint's settings for typeface, textSize, etc. We use `fm.ascent`
-             * (the recommended distance above the baseline for singled spaced text) to calculate how far
-             * down we have to move our `y` in order to center the text in the `Bitmap bm` when
-             * we call `Canvas.drawText` to write the string "Alpha" using the `Paint p`.
+             * Then we set the text size of `p` to 60, and its text alignment to CENTER. Next we use
+             * [Paint] `p` to allocate a new [Paint.FontMetrics] object for `val fm` (getFontMetrics(fm)
+             * is called by this version of the constructor, which returns the font's recommended
+             * interline spacing to `fm`), given the Paint's settings for typeface, textSize, etc.
+             * We use `fm.ascent` (the recommended distance above the baseline for singled spaced
+             * text) to calculate how far down we have to move our `y` in order to center the text
+             * in the [Bitmap] parameter [bm] when we call [Canvas.drawText] to write the string
+             * "Alpha" using the [Paint] `p`.
              *
-             * @param bm mutable `Bitmap` whose `Canvas` we want to draw into
+             * @param bm mutable [Bitmap] whose [Canvas] we want to draw into
              */
             private fun drawIntoBitmap(bm: Bitmap) {
                 val x = bm.width.toFloat()
@@ -179,37 +181,34 @@ class AlphaBitmap : GraphicsActivity() {
         /**
          * Initializes the fields contained in this instance of `SampleView`. First we call
          * through to our super's constructor, then we set our `View` to be focusable. We
-         * initialize our field `Shader mShader` to be a `LinearGradient` shader that
+         * initialize our `Shader` field `mShader` to be a `LinearGradient` shader that
          * draws a linear gradient along the line `(0,0)->(100,70)`, using the colors RED,
          * GREEN, and BLUE distributed evenly along the gradient line, using the tile mode MIRROR
          * (repeating the shader's image horizontally and vertically, alternating mirror images so
-         * that adjacent images always seam). We initialize our field `Paint p` with a new
+         * that adjacent images always seam). We initialize our `Paint` field `p` with a new
          * instance.
          *
-         *
-         * Next we open `InputStream is` to read our raw resource file R.raw.app_sample_code,
-         * and use `BitmapFactory.decodeStream` to read and decode `is` into our field
-         * `Bitmap mBitmap`. We extract only the Alpha channel from `mBitmap` to initialize
-         * our field `Bitmap mBitmap2`.
-         *
+         * Next we open `InputStream` variable `val inputStream` to read our raw resource file
+         * R.raw.app_sample_code, and use `BitmapFactory.decodeStream` to read and decode
+         * `inputStream` into our `Bitmap` field `mBitmap`. We extract only the Alpha channel from
+         * `mBitmap` to initialize our `Bitmap` field `mBitmap2`.
          *
          * Now we create an empty 200x200 `Bitmap` using Bitmap.Config.ALPHA_8 as the
          * `Bitmap.Config` (Each pixel is stored as a single translucency (alpha) channel.
          * no color information is stored. With this configuration, each pixel requires 1 byte of
-         * memory), and set our field `Bitmap mBitmap3` to it, Finally we call our method
-         * `drawIntoBitmap` to use `mBitmap3` for the canvas to draw its circle and text
-         * into.
+         * memory), and set our `Bitmap` field `mBitmap3` to it, Finally we call our method
+         * `drawIntoBitmap` to use `mBitmap3` for the canvas to draw its circle and text into.
          *
          * Parameter: `Context` to use to fetch resources
          */
         init {
             isFocusable = true
-            mShader = LinearGradient(0F, 0F, 100F, 70F, intArrayOf(
-                    Color.RED, Color.GREEN, Color.BLUE),
+            mShader = LinearGradient(0F, 0F, 100F, 70F,
+                    intArrayOf(Color.RED, Color.GREEN, Color.BLUE),
                     null, Shader.TileMode.MIRROR)
             p = Paint()
-            val `is` = context.resources.openRawResource(R.raw.app_sample_code)
-            mBitmap = BitmapFactory.decodeStream(`is`)
+            val inputStream = context.resources.openRawResource(R.raw.app_sample_code)
+            mBitmap = BitmapFactory.decodeStream(inputStream)
             mBitmap2 = mBitmap.extractAlpha()
             mBitmap3 = Bitmap.createBitmap(200, 200, Bitmap.Config.ALPHA_8)
             drawIntoBitmap(mBitmap3)
