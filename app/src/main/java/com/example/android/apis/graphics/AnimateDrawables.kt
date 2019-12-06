@@ -25,16 +25,16 @@ import android.view.animation.TranslateAnimation
 import com.example.android.apis.R
 
 /**
- * Shows how to use the Animation api (in this case TranslateAnimation) in order  to move a jpg
- * around a Canvas. Uses AnimateDrawable which extends ProxyDrawable (A neat way to package the
- * methods required when extending Drawable, overriding only draw in AnimateDrawable)
+ * Shows how to use the [Animation] api (in this case [TranslateAnimation]) in order to move a jpg
+ * around a [Canvas]. Uses [AnimateDrawable] which extends [ProxyDrawable] (A neat way to package
+ * the methods required when extending `Drawable`, overriding only `draw` in [AnimateDrawable])
  */
 class AnimateDrawables : GraphicsActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to a new instance of `SampleView`.
+     * `onCreate`, then we set our content view to a new instance of [SampleView].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,23 +42,23 @@ class AnimateDrawables : GraphicsActivity() {
     }
 
     /**
-     * Custom View which contains an instance of `AnimateDrawable` which it creates from a
-     * resource drawable (R.drawable.beach) and an `TranslateAnimation` which will move the
+     * Custom View which contains an instance of [AnimateDrawable] which it creates from a
+     * resource drawable (R.drawable.beach) and an [TranslateAnimation] which will move the
      * drawable from (0,0) to (100,200)
      */
     private class SampleView(context: Context) : View(context) {
         /**
-         * The instance of `AnimateDrawable` that does all the work of moving our drawable around.
+         * The instance of [AnimateDrawable] that does all the work of moving our drawable around.
          */
         private val mDrawable: AnimateDrawable
 
         /**
-         * Called when the system needs us to draw our view. First we draw the entire bitmap of the
-         * `Canvas canvas` to the color white, then we instruct our `AnimateDrawable mDrawable`
-         * to draw itself. Finally we call `invalidate` to invalidate our entire view, causing
-         * this method to be called again in the sweet by and by.
+         * Called when the system needs us to draw our view. First we fill the entire bitmap of the
+         * [Canvas] parameter [canvas] with the color white, then we instruct our [AnimateDrawable]
+         * field [mDrawable] to draw itself. Finally we call [invalidate] to invalidate our entire
+         * view, causing this method to be called again in the sweet by and by.
          *
-         * @param canvas `Canvas` we are to draw our view in
+         * @param canvas [Canvas] we are to draw our view to
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(Color.WHITE)
@@ -67,18 +67,18 @@ class AnimateDrawables : GraphicsActivity() {
         }
 
         /**
-         * Configures our `View`, and creates and configures an instance of `AnimateDrawable`
-         * which will move around our view's canvas. First we call through to our super's constructor,
-         * then we enable this view to receive focus, and to be focusable in touch mode. Next we retrieve
-         * our resource drawable R.drawable.beach to `Drawable dr`, and set the bounding rectangle
-         * of `dr` to the intrinsic size of `dr` (the size that the drawable would like to be
-         * laid out, including any inherent padding). We create `Animation an` to be a
-         * `TranslateAnimation` that moves from (0,0) to (100,200), set its duration to 2000 milliseconds,
-         * set its repeat count to INFINITE, and call `initialize` to set the size of the object
-         * being animated and its parent both to 10 x 10.
+         * Configures our `View`, and creates and configures an instance of `AnimateDrawable` which
+         * will move around our view's canvas. First we call through to our super's constructor,
+         * then we enable this view to receive focus, and to be focusable in touch mode. Next we
+         * retrieve our resource `Drawable` R.drawable.beach to `val dr`, and set the bounding
+         * rectangle of `dr` to the intrinsic size of `dr` (the size that the drawable would like
+         * to be laid out, including any inherent padding). We create `Animation` variable `val an`
+         * to be a `TranslateAnimation` that moves from (0,0) to (100,200), set its duration to 2000
+         * milliseconds, set its repeat count to INFINITE, and call its `initialize` method to set
+         * the size of the object being animated and its parent both to 10 x 10.
          *
-         * Now we initialize our field `AnimateDrawable mDrawable` with a new instance of
-         * `AnimateDrawable` created using `Drawable dr` and `Animation an`.
+         * Now we initialize our `AnimateDrawable` field `mDrawable` with a new instance of
+         * `AnimateDrawable` created using `Drawable` variable `dr` and `Animation` variable `an`.
          * Finally we start the animation `an` at the current time in milliseconds.
          *
          * Parameter: context `Context` to use to fetch resources
