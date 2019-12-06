@@ -100,7 +100,7 @@ class AnimateDrawable : ProxyDrawable {
      * @param canvas The [Canvas] to draw into
      */
     override fun draw(canvas: Canvas) {
-        val dr = proxy
+        val dr = mProxy
         if (dr != null) {
             val sc = canvas.save()
             val anim = mAnimation
