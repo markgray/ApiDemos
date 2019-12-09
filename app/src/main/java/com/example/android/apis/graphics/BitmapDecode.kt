@@ -45,7 +45,7 @@ class BitmapDecode : GraphicsActivity() {
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to a new instance of `SampleView`.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +53,8 @@ class BitmapDecode : GraphicsActivity() {
     }
 
     /**
-     * Custom View which draws 4 `Bitmap`'s, one `Drawable`, and an animated gif in a
-     * `Movie` instance.
+     * Custom View which draws 4 [Bitmap]'s, one [Drawable], and an animated gif in a
+     * [Movie] instance.
      */
     private class SampleView(context: Context) : View(context) {
         /**
@@ -66,49 +66,49 @@ class BitmapDecode : GraphicsActivity() {
          */
         private val mBitmap2: Bitmap
         /**
-         * Deep copy of the pixels of `mBitmap2` using the Bitmap.Config ARGB_8888
+         * Deep copy of the pixels of [mBitmap2] using the Bitmap.Config ARGB_8888
          */
         private val mBitmap3: Bitmap
         /**
-         * Deep copy of the pixels of `mBitmap2` using the Bitmap.Config ARGB_4444
+         * Deep copy of the pixels of [mBitmap2] using the Bitmap.Config ARGB_4444
          */
         private val mBitmap4: Bitmap
         /**
-         * R.drawable.button.9.png `Drawable`
+         * R.drawable.button.9.png [Drawable]
          */
         private val mDrawable: Drawable
         /**
-         * `Movie` used to play the animated gif R.raw.animated_gif
+         * [Movie] used to play the animated gif R.raw.animated_gif
          */
         @Suppress("DEPRECATION")
         private var mMovie: Movie? = null
         /**
-         * Start time in milliseconds of the `Movie` animation, used to calculate the relative
-         * time of the animation before asking `mMovie` to draw the frame that is scheduled for
-         * that relative time.
+         * Start time in milliseconds of the [Movie] used to calculate the relative time of the
+         * animation before asking [mMovie] to draw the frame that is scheduled for that time.
          */
         private var mMovieStart: Long = 0
 
         /**
          * We implement this to do our drawing when requested to do so. First we set the entire
-         * `Canvas canvas` to the color 0xFFCCCCCC (a darkish gray). Then if `Bitmap mBitmap`
-         * is not null we draw it at location (10,10) on the `Canvas canvas`, and draw
-         * `Bitmap mBitmap2` at (10,170), `Bitmap mBitmap3` at (110,170), and
-         * `Bitmap mBitmap4` at (210,170). We draw `Drawable mDrawable` to `canvas`
-         * (its bounds already position is correctly).
+         * [Canvas] parameter [canvas] to the color 0xFFCCCCCC (a darkish gray). Then if [Bitmap]
+         * field [mBitmap] is not *null* we draw it at location (10,10) on the `[Canvas] parameter
+         * [canvas], and draw [Bitmap] field [mBitmap2] at (10,170), [Bitmap] field [mBitmap3] at
+         * (110,170), and [Bitmap] field [mBitmap4] at (210,170). We draw [Drawable] field [mDrawable]
+         * to [canvas] (its bounds already position it correctly).
          *
-         * Next we fetch the current system time to `long now`, and if our field `long mMovieStart`
-         * is zero (first time we are called) we set `mMovieStart` to `now`. If `Movie mMovie`
-         * is not null, we fetch the duration of `mMovie` to `int dur` (1000 for our gif), making
-         * sure it is 1000 if `Movie.duration` returned zero. We calculate `int relTime` to be
-         * modulo `dur` of the time in milliseconds since `mMovieStart`, set the time of `mMovie`
-         * to `relTime` and instruct it to draw the current frame of the animated gif at the
-         * bottom right corner of `Canvas canvas`.
+         * Next we fetch the current system time to [Long] variable `val now`, and if our [Long]
+         * field [mMovieStart] is zero (first time we are called) we set [mMovieStart] to `now`.
+         * If [Movie] field [mMovie] is not *null*, we fetch the duration of [mMovie] to [Int]
+         * variable `var dur` (1000 for our gif), making sure it is 1000 if [Movie.duration] returned
+         * zero. We calculate [Int] variable `val relTime` to be modulo `dur` of the time in
+         * milliseconds since [mMovieStart], set the time of [mMovie] to `relTime` and instruct it
+         * to draw the current frame of the animated gif at the bottom right corner of [Canvas]
+         * parameter [canvas].
          *
-         * Finally we invalidate our `View` which will schedule us to run again for the next refresh
+         * Finally we invalidate our [View] which will schedule us to run again for the next refresh
          * of the screen.
          *
-         * @param canvas `Canvas` to draw our `View` onto
+         * @param canvas [Canvas] to draw our [View] onto
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(-0x333334)
@@ -138,25 +138,28 @@ class BitmapDecode : GraphicsActivity() {
             }
         }
 
+        /**
+         * Our static constants and method
+         */
         companion object {
             /**
              * TAG for logging
              */
             private const val TAG = "BitMapDecode"
             /**
-             * Set to false to use `Movie.decodeByteArray` instead of `Movie.decodeStream`
+             * Set to *false* to use [Movie.decodeByteArray] instead of [Movie.decodeStream]
              */
             private const val DECODE_STREAM = true
 
             /**
-             * Used to read an `InputStream` into a `byte[]` array. First we allocate a
-             * `ByteArrayOutputStream os` with an initial buffer capacity of 1024, and a
-             * `byte[] buffer` with a capacity of 1024. Then wrapped in a try block intended to
-             * catch IOException we read up to 1024 bytes at a time from `inputStream` into
-             * `buffer` and write them to `os`, stopping when the read from `inputStream` is
-             * less than 0 (end of file). Finally we return the current contents of the output stream
-             * `os`, in a newly allocated byte array as returned by
-             * `ByteArrayOutputStream.toByteArray()`.
+             * Used to read an [InputStream] into a [Byte] array. First we allocate a
+             * [ByteArrayOutputStream] for `val os` with an initial buffer capacity of 1024, and a
+             * [Byte] array `val buffer` with a capacity of 1024. Then wrapped in a *try* block
+             * intended to catch and log [IOException] we read up to 1024 bytes at a time from
+             * [inputStream] into `buffer` and write them to `os`, stopping when the read from
+             * `inputStream` is less than 0 (end of file). Finally we return the current contents
+             * of the output stream `os`, in a newly allocated byte array as returned by
+             * [ByteArrayOutputStream.toByteArray].
              *
              * @param inputStream `InputStream` to read bytes from
              * @return a `byte[]` array containing the raw data from `inputStream`
@@ -178,30 +181,30 @@ class BitmapDecode : GraphicsActivity() {
 
         /**
          * Constructs and initializes an instance of `SampleView`. First we call through to our
-         * super's constructor, then we enable this View to receive focus. We declare `InputStream inputStream`
-         * and use it to open the resource jpg R.raw.beach. We create `BitmapFactory.Options opts`,
-         * and declare `Bitmap bm`. We set the `inJustDecodeBounds` field of `opts` to
-         * true (the decoder will return null (no bitmap), but the out... fields will still be set,
-         * allowing the caller to query the bitmap without having to allocate the memory for its pixels),
-         * and use it as the `Options` parameter when we call `decodeStream` on `inputStream`
-         * after which the fields `opts.outWidth` and `opts.outHeight` contain the dimensions
-         * of the bitmap that would be created from `inputStream` (null is returned instead of a bitmap).
-         * We now set the `opts.inJustDecodeBounds` field to false, and `opts.inSampleSize`
-         * to 4, rewind `inputStream` and decode it again this time into our `Bitmap bm`. This results
-         * in a bitmap version of `inputStream` scaled down by 4. We set our field `Bitmap mBitmap` to
-         * `bm`.
+         * super's constructor, then we enable this View to receive focus. We declare `InputStream`
+         * variable `var inputStream` and use it to open the resource jpg R.raw.beach. We create
+         * a `BitmapFactory.Options` for variable `val opts`, and declare `var bm` to be a `Bitmap`.
+         * We set the `inJustDecodeBounds` field of `opts` to true (the decoder will return null (no
+         * bitmap), but the out... fields will still be set, allowing the caller to query the bitmap
+         * without having to allocate the memory for its pixels), and use it as the `Options`
+         * parameter when we call `decodeStream` on `inputStream` after which the fields `opts.outWidth`
+         * and `opts.outHeight` contain the dimensions of the bitmap that would be created from
+         * `inputStream` (null is returned instead of a bitmap). We now set the `opts.inJustDecodeBounds`
+         * field to false, and `opts.inSampleSize` to 4, rewind `inputStream` and decode it again
+         * this time into our `Bitmap` variable `bm`. This results in a bitmap version of `inputStream`
+         * scaled down by 4. We set our [`Bitmap`] field `mBitmap` to `bm`.
          *
-         *
-         * Now we use `inputStream` to open our resource gif R.raw.frog, and decode it into our field
-         * `Bitmap mBitmap2`. We fetch the width of `mBitmap2` to `int w` and the
-         * height to `int h` and allocate `int[] pixels` to contain `w*h` ints.
-         * We copy all of the pixels from `Bitmap2` into `pixels`, then use `pixels`
-         * to create `Bitmap mBitmap3` using a config of ARGB_8888, and create `Bitmap mBitmap4`
-         * using a config of ARGB_4444. Then we load `Drawable mDrawable` from our resource file
-         * R.drawable.button and set its bounds to (150, 20, 300, 100) (left,top,right,bottom). We open
-         * our resource animated gif file R.raw.animated_gif using `inputStream`, and decode this stream
-         * into `Movie mMovie` (If DECODE_STREAM is true that is, otherwise we read the raw bytes
-         * of `inputStream` into `byte[] array` and decode that byte array into `Movie mMovie`).
+         * Now we use `inputStream` to open our resource gif R.raw.frog, and decode it into our `Bitmap`
+         * field `mBitmap2`. We fetch the width of `mBitmap2` to `Int` variable `val w` and the
+         * height to `Int` variable `val h` and allocate `Int` variable `val pixels` to contain
+         * `w*h` ints. We copy all of the pixels from `Bitmap2` into `pixels`, then use `pixels`
+         * to create `Bitmap` field `mBitmap3` using a config of ARGB_8888, and create `Bitmap` field
+         * `mBitmap4` using a config of ARGB_4444. Then we load `Drawable` field `mDrawable` from our
+         * resource file R.drawable.button and set its bounds to (150, 20, 300, 100) (left,top,right,
+         * bottom). We open our resource animated gif file R.raw.animated_gif using `inputStream`,
+         * and decode this stream into `Movie` field `mMovie` (If DECODE_STREAM is true that is,
+         * otherwise we read the raw bytes of `inputStream` into `Byte` array variable `val array`
+         * and decode that byte array into `Movie` field `mMovie`).
          *
          * Parameter: `Context` to use to fetch resources, "this" when called from our
          * `onCreate` override
@@ -214,21 +217,33 @@ class BitmapDecode : GraphicsActivity() {
             opts.inJustDecodeBounds = true
             @Suppress("UNUSED_VALUE")
             bm = BitmapFactory.decodeStream(inputStream, null, opts)
-            // now opts.outWidth and opts.outHeight are the dimension of the
-// bitmap, even though bm is null
-            opts.inJustDecodeBounds = false // this will request the bm
-            opts.inSampleSize = 4 // scaled down by 4
+            /**
+             * now opts.outWidth and opts.outHeight are the dimension of the
+             * bitmap, even though bm is null
+             */
+            opts.inJustDecodeBounds = false
+            /**
+             * this will request the bm scaled down by 4
+             */
+            opts.inSampleSize = 4
             try {
-                inputStream.reset() // Need to rewind is in order to read it again.
+                /**
+                 * Need to rewind inputStream in order to read it again.
+                 */
+                inputStream.reset()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
             bm = BitmapFactory.decodeStream(inputStream, null, opts)
             mBitmap = bm
-            // decode an image with transparency
+            /**
+             * decode an image with transparency
+             */
             inputStream = context.resources.openRawResource(R.raw.frog)
             mBitmap2 = BitmapFactory.decodeStream(inputStream)
-            // create a deep copy of it using getPixels() into different configs
+            /**
+             * create a deep copy of it using getPixels() into different configs
+             */
             val w = mBitmap2.width
             val h = mBitmap2.height
             val pixels = IntArray(w * h)
