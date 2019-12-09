@@ -102,23 +102,25 @@ public class BitmapDecode extends GraphicsActivity {
          * Used to read an {@code InputStream} into a {@code byte[]} array. First we allocate a
          * {@code ByteArrayOutputStream os} with an initial buffer capacity of 1024, and a
          * {@code byte[] buffer} with a capacity of 1024. Then wrapped in a try block intended to
-         * catch IOException we read up to 1024 bytes at a time from {@code is} into {@code buffer}
-         * and write them to {@code os}, stopping when the read from {@code is} is less than 0 (end
-         * of file). Finally we return the current contents of the output stream {@code os}, in a
-         * newly allocated byte array as returned by {@code ByteArrayOutputStream.toByteArray()}.
+         * catch IOException we read up to 1024 bytes at a time from {@code inputStream} into
+         * {@code buffer} and write them to {@code os}, stopping when the read from {@code inputStream} is
+         * less than 0 (end of file). Finally we return the current contents of the output stream
+         * {@code os}, in a newly allocated byte array as returned by
+         * {@code ByteArrayOutputStream.toByteArray()}.
          *
-         * @param is {@code InputStream} to read bytes from
-         * @return a {@code byte[]} array containing the raw data from {@code is}
+         * @param inputStream {@code InputStream} to read bytes from
+         * @return a {@code byte[]} array containing the raw data from {@code inputStream}
          */
-        private static byte[] streamToBytes(InputStream is) {
+        private static byte[] streamToBytes(InputStream inputStream) {
             ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
             byte[] buffer = new byte[1024];
             int len;
             try {
-                while ((len = is.read(buffer)) >= 0) {
+                while ((len = inputStream.read(buffer)) >= 0) {
                     os.write(buffer, 0, len);
                 }
             } catch (java.io.IOException e) {
+                //noinspection ConstantConditions
                 Log.i(TAG, e.getLocalizedMessage());
             }
             return os.toByteArray();
@@ -126,29 +128,29 @@ public class BitmapDecode extends GraphicsActivity {
 
         /**
          * Constructs and initializes an instance of {@code SampleView}. First we call through to our
-         * super's constructor, then we enable this View to receive focus. We declare {@code InputStream is}
+         * super's constructor, then we enable this View to receive focus. We declare {@code InputStream inputStream}
          * and use it to open the resource jpg R.raw.beach. We create {@code BitmapFactory.Options opts},
          * and declare {@code Bitmap bm}. We set the {@code inJustDecodeBounds} field of {@code opts} to
          * true (the decoder will return null (no bitmap), but the out... fields will still be set,
          * allowing the caller to query the bitmap without having to allocate the memory for its pixels),
-         * and use it as the {@code Options} parameter when we call {@code decodeStream} on {@code is}
+         * and use it as the {@code Options} parameter when we call {@code decodeStream} on {@code inputStream}
          * after which the fields {@code opts.outWidth} and {@code opts.outHeight} contain the dimensions
-         * of the bitmap that would be created from {@code is} (null is returned instead of a bitmap).
+         * of the bitmap that would be created from {@code inputStream} (null is returned instead of a bitmap).
          * We now set the {@code opts.inJustDecodeBounds} field to false, and {@code opts.inSampleSize}
-         * to 4, rewind {@code is} and decode it again this time into our {@code Bitmap bm}. This results
-         * in a bitmap version of {@code is} scaled down by 4. We set our field {@code Bitmap mBitmap} to
+         * to 4, rewind {@code inputStream} and decode it again this time into our {@code Bitmap bm}. This results
+         * in a bitmap version of {@code inputStream} scaled down by 4. We set our field {@code Bitmap mBitmap} to
          * {@code bm}.
          * <p>
-         * Now we use {@code is} to open our resource gif R.raw.frog, and decode it into our field
+         * Now we use {@code inputStream} to open our resource gif R.raw.frog, and decode it into our field
          * {@code Bitmap mBitmap2}. We fetch the width of {@code mBitmap2} to {@code int w} and the
          * height to {@code int h} and allocate {@code int[] pixels} to contain {@code w*h} ints.
          * We copy all of the pixels from {@code Bitmap2} into {@code pixels}, then use {@code pixels}
          * to create {@code Bitmap mBitmap3} using a config of ARGB_8888, and create {@code Bitmap mBitmap4}
          * using a config of ARGB_4444. Then we load {@code Drawable mDrawable} from our resource file
          * R.drawable.button and set its bounds to (150, 20, 300, 100) (left,top,right,bottom). We open
-         * our resource animated gif file R.raw.animated_gif using {@code is}, and decode this stream
+         * our resource animated gif file R.raw.animated_gif using {@code inputStream}, and decode this stream
          * into {@code Movie mMovie} (If DECODE_STREAM is true that is, otherwise we read the raw bytes
-         * of {@code is} into {@code byte[] array} and decode that byte array into {@code Movie mMovie}).
+         * of {@code inputStream} into {@code byte[] array} and decode that byte array into {@code Movie mMovie}).
          *
          * @param context {@code Context} to use to fetch resources, "this" when called from our
          *                {@code onCreate} override
@@ -157,15 +159,15 @@ public class BitmapDecode extends GraphicsActivity {
             super(context);
             setFocusable(true);
 
-            java.io.InputStream is;
-            is = context.getResources().openRawResource(R.raw.beach);
+            java.io.InputStream inputStream;
+            inputStream = context.getResources().openRawResource(R.raw.beach);
 
             BitmapFactory.Options opts = new BitmapFactory.Options();
             Bitmap bm;
 
             opts.inJustDecodeBounds = true;
             //noinspection UnusedAssignment
-            bm = BitmapFactory.decodeStream(is, null, opts);
+            bm = BitmapFactory.decodeStream(inputStream, null, opts);
 
             // now opts.outWidth and opts.outHeight are the dimension of the
             // bitmap, even though bm is null
@@ -173,17 +175,17 @@ public class BitmapDecode extends GraphicsActivity {
             opts.inJustDecodeBounds = false;    // this will request the bm
             opts.inSampleSize = 4;             // scaled down by 4
             try {
-                is.reset(); // Need to rewind is in order to read it again.
+                inputStream.reset(); // Need to rewind is in order to read it again.
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            bm = BitmapFactory.decodeStream(is, null, opts);
+            bm = BitmapFactory.decodeStream(inputStream, null, opts);
 
             mBitmap = bm;
 
             // decode an image with transparency
-            is = context.getResources().openRawResource(R.raw.frog);
-            mBitmap2 = BitmapFactory.decodeStream(is);
+            inputStream = context.getResources().openRawResource(R.raw.frog);
+            mBitmap2 = BitmapFactory.decodeStream(inputStream);
 
             // create a deep copy of it using getPixels() into different configs
             int w = mBitmap2.getWidth();
@@ -193,17 +195,15 @@ public class BitmapDecode extends GraphicsActivity {
             mBitmap3 = Bitmap.createBitmap(pixels, 0, w, w, h, Bitmap.Config.ARGB_8888);
             mBitmap4 = Bitmap.createBitmap(pixels, 0, w, w, h, Bitmap.Config.ARGB_4444);
 
-            //noinspection deprecation
             mDrawable = context.getResources().getDrawable(R.drawable.button);
-            //noinspection ConstantConditions
             mDrawable.setBounds(150, 20, 300, 100);
 
-            is = context.getResources().openRawResource(R.raw.animated_gif);
+            inputStream = context.getResources().openRawResource(R.raw.animated_gif);
 
             if (DECODE_STREAM) {
-                mMovie = Movie.decodeStream(is);
+                mMovie = Movie.decodeStream(inputStream);
             } else {
-                byte[] array = streamToBytes(is);
+                byte[] array = streamToBytes(inputStream);
                 mMovie = Movie.decodeByteArray(array, 0, array.length);
             }
         }
