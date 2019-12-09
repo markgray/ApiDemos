@@ -1332,12 +1332,13 @@ Graphics
             slows down frame rate -- I'm guessing something inside native_drawArc
 
   BitmapDecode
-    Graphics/BitmapDecode                  all crashes LG-8.3, works: froyo, Nexus 7. Nexus 4, Nexus 9
-        .graphics.BitmapDecode             Crash in android.graphics.Movie.java native method draw line 40.
-            Shows how to decode various image file formats into displayable bitmaps: drawable/beach.jpg,
-            drawable/frog.gif (creates also an Bitmap.Config.ARGB_8888 bitmap, and a Bitmap.Config.ARGB_4444
-            bitmap from that bitmap), drawable/button.9.png, and drawable/animated_gif.gif which it animates
-            using android.graphics.Movie.java
+    Graphics/BitmapDecode               all crashes LG-8.3, works: froyo, Nexus 7. Nexus 4, Nexus 9
+        .graphics.BitmapDecode             Crash in android.graphics.Movie.java native method draw
+            line 40. Shows how to decode various image file formats into displayable bitmaps:
+            drawable/beach.jpg, drawable/frog.gif (creates also an Bitmap.Config.ARGB_8888 bitmap,
+            and a Bitmap.Config.ARGB_4444 bitmap from that bitmap), drawable/button.9.png, and
+            drawable/animated_gif.gif which it animates using android.graphics.Movie.java
+            TODO: replace Movie with android.graphics.drawable.AnimatedImageDrawable
 
   BitmapMesh
     Graphics/BitmapMesh                    all
