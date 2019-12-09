@@ -23,19 +23,16 @@ import android.graphics.RectF
 import android.os.Bundle
 import android.view.View
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-//import com.example.android.apis.R;
 /**
- * Shows how to draw arcs and rectangles to a Canvas -- need to figure out what slows down
+ * Shows how to draw arcs and rectangles to a [Canvas] -- need to figure out what slows down
  * frame rate -- I'm guessing something inside native_drawArc
  */
 class Arcs : GraphicsActivity() {
     /**
      * Called when the activity is staring. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to an instance of `SampleView`.
+     * `onCreate`, then we set our content view to an instance of [SampleView].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,16 +47,16 @@ class Arcs : GraphicsActivity() {
      */
     private class SampleView(context: Context?) : View(context) {
         /**
-         * The four `Paint` objects used for the small circles, and cycled through for the big one
+         * The four [Paint] objects used for the small circles, and cycled through for the big one
          */
         private val mPaints: Array<Paint?> = arrayOfNulls(4)
         /**
-         * `Paint` used for the rectangles drawn around the 5 circles.
+         * [Paint] used for the rectangles drawn around the 5 circles.
          */
         private val mFramePaint: Paint
         /**
-         * Boolean flag passed to `drawArc` for each of the circles, it is true for 2 and
-         * false for 2. If true, includes the center of the oval in the arc, and close it if it
+         * [Boolean] flag passed to `drawArc` for each of the circles, it is *true* for 2 and
+         * false for 2. If *true*, includes the center of the oval in the arc, and close it if it
          * is being stroked. This will draw a wedge.
          */
         private val mUseCenters: BooleanArray = BooleanArray(4)
@@ -75,7 +72,7 @@ class Arcs : GraphicsActivity() {
         private val mBigOval: RectF
         /**
          * Starting angle for the arcs being drawn, starts at 0 degrees, incremented by 15 degrees
-         * every time `mSweep` reaches 360 degrees
+         * every time [mSweep] reaches 360 degrees
          */
         private var mStart = 0f
         /**
@@ -91,16 +88,17 @@ class Arcs : GraphicsActivity() {
         private var mBigIndex = 0
 
         /**
-         * Draws the rectangle `RectF oval` passed it using `Paint mFramePaint` as the
-         * `Paint`, then draws an arc of the circle enclosed by `oval` between `mStart`
-         * and `mSweep` using `Paint paint` as the `Paint` and passing the value of
-         * `useCenter` to `Canvas.drawArc()` to instruct it where to include the center when
+         * Draws the [RectF] rectangle [oval] passed it using [Paint] field [mFramePaint] as the
+         * [Paint], then draws an arc of the circle enclosed by [oval] between [mStart] and [mSweep]
+         * using [Paint] parameter [paint] as the [Paint] and passing the [Boolean] value of the
+         * [useCenter] paramete to [Canvas.drawArc] to instruct it when to include the center when
          * drawing.
          *
-         * @param canvas `Canvas` we are to draw to
-         * @param oval `Rectangle` and enclosed circle we want to draw
-         * @param useCenter if true, we are to include the center of the oval in the arc, and close it
-         * @param paint `Paint` to use for drawing
+         * @param canvas [Canvas] we are to draw to
+         * @param oval Rectangle and enclosed circle we want to draw
+         * @param useCenter if *true*, we are to include the center of the oval in the arc, and
+         * close it drawing a wedge.
+         * @param paint [Paint] to use for drawing
          */
         private fun drawArcs(canvas: Canvas, oval: RectF?, useCenter: Boolean, paint: Paint?) {
             canvas.drawRect(oval!!, mFramePaint)
@@ -108,21 +106,20 @@ class Arcs : GraphicsActivity() {
         }
 
         /**
-         * We implement this to do our drawing. First we fill the entire `Canvas canvas` passed
-         * us with the color WHITE. Next we call our method `drawArcs` to draw the big circle in
-         * a rectangle `RectF[] mOvals` using the `mUseCenters` and `mPaints` for
-         * the current value of `mBigIndex` (cycles every 360 degrees through the values used
-         * by the small circles described by `RectF[] mOvals`). Next we call our method
-         * `drawArcs` to draw each of the four small circles in rectangles using the values
-         * of `mUseCenters` and `mPaints` assigned to each. Then we increment the value
-         * of `mSweep` (the end value of the arcs drawn) by `SWEEP_INC`, and if it is
-         * greater than 360 degrees we subtract 360 from it, and increment `mStart` (the start
-         * angle of the arcs drawn) by `START_INC`, and if it is greater than 360 degrees we
-         * subtract 360 from it. The we increment `mBigIndex` (the value of small circle parameters
-         * used by the big circle) modulo 4. Finally we invalidate our `View` so that our
-         * `onDraw` method will be called again in the sweet by and by.
+         * We implement this to do our drawing. First we fill the entire [Canvas] parameter [canvas]
+         * passed us with the color WHITE. Next we call our method [drawArcs] to draw the big circle
+         * in the rectangle [mBigOval] using the [mUseCenters] and [mPaints] for the current value
+         * of [mBigIndex] (cycles every 360 degrees through the values used by the small circles
+         * described by the [RectF] array field [mOvals]). Next we call our method [drawArcs] to
+         * draw each of the four small circles in rectangles using the values of [mUseCenters] and
+         * [mPaints] assigned to each. Then we increment the value of [mSweep] (the end value of the
+         * arcs drawn) by [SWEEP_INC], and if it is greater than 360 degrees we subtract 360 from
+         * it, and increment [mStart] (the start angle of the arcs drawn) by [START_INC], and if it
+         * is greater than 360 degrees we subtract 360 from it. The we increment [mBigIndex] (the
+         * value of small circle parameters used by the big circle) modulo 4. Finally we invalidate
+         * our [View] so that our [onDraw] method will be called again in the sweet by and by.
          *
-         * @param canvas `Canvas` of our View to draw to
+         * @param canvas [Canvas] of our [View] to draw to
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(Color.WHITE)
@@ -142,13 +139,16 @@ class Arcs : GraphicsActivity() {
             invalidate()
         }
 
+        /**
+         * Our static constants
+         */
         companion object {
             /**
-             * Number of degrees that `mSweep` is incremented every time `onDraw` is called
+             * Number of degrees that [mSweep] is incremented every time [onDraw] is called
              */
             private const val SWEEP_INC = 2f
             /**
-             * Number of degrees that `mStart` is incremented every 360 degrees of arc sweep
+             * Number of degrees that [mStart] is incremented every 360 degrees of arc sweep
              */
             private const val START_INC = 15f
         }
@@ -156,35 +156,28 @@ class Arcs : GraphicsActivity() {
         /**
          * Constructor, allocates and initializes fields needed by our `onDraw` override. First
          * we call through to our super's constructor, next we allocate an array of four references
-         * for each of the fields used by our small circles: `Paint[] mPaints`,
-         * `boolean[] mUseCenters` and `RectF[] mOvals`. We configure the entries for
-         * `mPaints` and `mUseCenters` as follows:
+         * for each of the fields used by our small circles: `Paint` array `mPaints`, `Boolean`
+         * array `mUseCenters` and `RectF` array `mOvals`. We configure the entries for `mPaints`
+         * and `mUseCenters` as follows:
          *
-         *  *
-         * [0] Sets its `mPaints[0]` to a `Paint` with antialias enabled, style FILL,
-         * and color 0x88FF0000 (RED), and sets its `mUseCenters[0]` to false
+         *  * [0] Sets its `mPaints[0]` to a `Paint` with antialias enabled, style FILL,
+         *  and color 0x88FF0000 (RED), and sets its `mUseCenters[0]` to false
+         *  * [1] Sets its `mPaints[1]` to a `Paint` with color 0x8800FF00 (GREEN), and sets
+         *  its `mUseCenters[0]` to true.
+         *  * [2] Sets its `mPaints[2]` to a `Paint` with style STROKE, a stroke width
+         *  of 4 and color 0x880000FF (BLUE), and sets its `mUseCenters[0]` to false
+         *  * [3] Sets its `mPaints[3]` to a `Paint` with color 0x88888888 (GRAY),
+         *  and sets its `mUseCenters[0]` to true
          *
-         *  *
-         * [1] Sets its `mPaints[1]` to a `Paint` with color 0x8800FF00 (GREEN),
-         * and sets its `mUseCenters[0]` to true.
+         * Next we allocate a rectangle for `Rect` field `mBigOval` with the values: left 40, top 10,
+         * right 280, bottom 250 (a 240x240 rectangle whose top corner is at (40,10)), and for each
+         * of the small circles in `RectF` array `mOvals` we allocate a 60x60 rectangle with the top
+         * corners located at (10,270), (90,270), (170,270) and (250,270) respectively. Finally we
+         * allocate a `Paint` for the `Paint` used to draw the rectangle around all five circles
+         * `Paint` field `mFramePaint`, set its antialias flag to true, style to STROKE, and stroke
+         * width to 0.
          *
-         *  *
-         * [2] Sets its `mPaints[2]` to a `Paint` with style STROKE, a stroke width
-         * of 4 and color 0x880000FF (BLUE), and sets its `mUseCenters[0]` to false
-         *
-         *  *
-         * [3] Sets its `mPaints[3]` to a `Paint` with color 0x88888888 (GRAY),
-         * and sets its `mUseCenters[0]` to true
-         *
-         *
-         * Next we allocate a rectangle for `RectF mBigOval` left 40, top 10, right 280, bottom
-         * 250 (a 240x240 rectangle whose top corner is at (40,10)), and for each of the small circles
-         * in `RectF[] mOvals` we allocate a 60x60 rectangle with the top corners located at
-         * (10,270), (90,270), (170,270) and (250,270) respectively. Finally we allocate a `Paint`
-         * for the `Paint` used to draw the rectangle around all five circles `Paint mFramePaint`,
-         * set its antialias flag to true, style to STROKE, and stroke width to 0.
-         *
-         * Parameter: `Context` passed to super's constructor for resource access, "this"
+         * Parameter: `Context` passed to super's constructor for resource access, *this*
          * is used from `onCreate` override of `Arcs`
          */
         init {
