@@ -34,7 +34,7 @@ import kotlin.math.sqrt
 class BitmapMesh : GraphicsActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to a new instance of `SampleView`
+     * `onCreate`, then we set our content view to a new instance of [SampleView]
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
@@ -44,71 +44,76 @@ class BitmapMesh : GraphicsActivity() {
     }
 
     /**
-     * Custom `View` which contains a jpg which is warped by touch events received in our
-     * `onTouchEvent` override.
+     * Custom [View] which contains a jpg which is warped by touch events received in our
+     * [onTouchEvent] override.
      */
     private class SampleView(context: Context?) : View(context) {
         /**
-         * `Bitmap` that contains our jpg to be displayed and warped.
+         * [Bitmap] that contains our jpg to be displayed and warped.
          */
         private val mBitmap: Bitmap
         /**
-         * Warped Bitmap mesh array of (x,y) vertices
+         * Warped [Bitmap] mesh array of (x,y) vertices
          */
         private val mVerts = FloatArray(COUNT * 2)
         /**
-         * Original un-warped Bitmap mesh array of (x,y) vertices
+         * Original un-warped [Bitmap] mesh array of (x,y) vertices
          */
         private val mOrig = FloatArray(COUNT * 2)
         /**
-         * `Matrix` used to translate the `Canvas canvas` to (10,10) before drawing the
-         * `Bitmap`
+         * [Matrix] used to translate the [Canvas] parameter passed to our [onDraw] override to
+         * (10,10) before drawing the [Bitmap]
          */
         private val mMatrix = Matrix()
         /**
-         * The inverse of `Matrix mMatrix` used to translate points received in touch events
-         * to a (0,0) origin (ie. it converts points in the `Canvas canvas` coordinate space
-         * to points in the `Matrix mMatrix` translated `Bitmap` coordinate space).
+         * The inverse of [Matrix] field [mMatrix] used to translate points received in touch events
+         * to a (0,0) origin (ie. it converts points in the [Canvas] `canvas` coordinate space to
+         * points in the [Matrix] field [mMatrix] translated [Bitmap] coordinate space).
          */
         private val mInverse = Matrix()
 
         /**
-         * We implement this to do our drawing. First we set the color of the entire `Canvas canvas`
-         * to 0xFFCCCCCC (a darkish gray). Then we pre-concatenate `Matrix mMatrix` to the current
-         * `Matrix` of `canvas` and draw the bitmap `mBitmap` through the mesh
-         * `float[] mVerts`.
+         * We implement this to do our drawing. First we set the color of the [Canvas] parameter
+         * [canvas] to 0xFFCCCCCC (a darkish gray). Then we pre-concatenate [Matrix] field [mMatrix]
+         * to the current [Matrix] of [canvas] and draw the [Bitmap] field [mBitmap] through the
+         * mesh in our [Float] array field [mVerts].
          *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(-0x333334)
             canvas.concat(mMatrix)
-            canvas.drawBitmapMesh(mBitmap, WIDTH, HEIGHT, mVerts, 0, null, 0, null)
+            canvas.drawBitmapMesh(
+                    mBitmap,
+                    WIDTH, HEIGHT,
+                    mVerts, 0,
+                    null, 0,
+                    null
+            )
         }
 
         /**
-         * Creates a warped bitmap mesh version `float[] mVerts` of the un-warped bitmap mesh
-         * `float[] mOrig` with the vertices closest to the point (cx,cy) being "pulled" hardest
-         * towards that point.
+         * Creates a warped bitmap mesh version [Float] array field [mVerts] of the un-warped bitmap
+         * mesh [Float] array field [mOrig] with the vertices closest to the point (cx,cy) being
+         * "pulled" hardest towards that point.
          *
-         * For notational cleanliness we copy the reference `float[] mOrig` to `float[] src`, and
-         * `float[] mVerts` to `float[] dst`.
+         * For notational cleanliness we copy the [Float] array reference [mOrig] to a local variable
+         * `val src`, and [mVerts] to local variable `val dst`.
          *
          * Then we loop through each of the vertex coordinates in `src`, fetching the x coordinate
-         * to `float x` and the y coordinate to `float y`, determine the x distance
-         * `float dx` of this point from `cx`, and the y distance `float dy` of
-         * this point from `cy`, set `float dd` to the sum of the squares of `dx`
-         * and `dy`, and set `float d` to the square root (distance) of `dd`.
+         * to `val x` and the y coordinate to `val y`, determine the x distance `val dx` of this
+         * point from `cx`, and the y distance `val dy` of this point from `cy`, set `val dd` to
+         * the sum of the squares of `dx` and `dy`, and set `val d` to the square root (distance)
+         * of `dd`.
          *
-         * The pull `float pull` on the point is then `K/(dd+0.000001f)` (with
-         * the 0.000001f added to avoid possible divide by zero) with this divided again by
-         * `(d + 0.000001f)` to allow multiplication by `dx` and `dy` later.
+         * The pull `var pull` on the point is then `K/(dd+0.000001f)` (with the 0.000001f added to
+         * avoid possible divide by zero) with this divided again by `(d + 0.000001f)` to allow
+         * multiplication by `dx` and `dy` later.
          *
-         * Then if the `pull` is greater than or equal to 1 we are very close to the point
-         * `(cx,cy)` so we set the vertex of the `dst` bitmap mesh to `(cx,cy)`,
-         * otherwise we set the x coordinate to the `x` of the original plus `pull` times
-         * the `dx` distance from `cx`, and the y coordinate to the `y` of the original
-         * plus `pull` times the `dy` distance from `cy`.
+         * Then if the `pull` is greater than or equal to 1 we are very close to the point `(cx,cy)`
+         * so we set the vertex of the `dst` bitmap mesh to `(cx,cy)`, otherwise we set the x
+         * coordinate to the `x` of the original plus `pull` times the `dx` distance from `cx`, and
+         * the y coordinate to the `y` of the original plus `pull` times the `dy` distance from `cy`.
          *
          * @param cx x coordinate of the point we are space warping around
          * @param cy y coordinate of the point we are space warping around
@@ -149,20 +154,19 @@ class BitmapMesh : GraphicsActivity() {
 
         /**
          * We implement this method to handle touch screen motion events. First we fetch the x and
-         * y coordinates of the `MotionEvent event` to initialize `float[] pt`, then we
-         * use `Matrix mInverse` to translate this point from the `Canvas` coordinate
-         * system to the coordinate system of the `Bitmap mBitmap` (which is translated to
-         * (10,10) by the `Matrix mMatrix`). We cast the x coordinate of `pt` to an int
-         * in order to set `int x`, and the y coordinate of `pt` to an int in order to
-         * set `int y`, then compare `x` and `y` to `mLastWarpX` and
-         * `mLastWarpY` to see if the touch has moved, and if it has we set `mLastWarpX`
-         * to `x` and `mLastWarpY` to `y`, call our method `warp` to "warp"
-         * the bitmap mesh `float[] mVerts` around `pt` and finally invalidate our view
-         * so that our `onDraw` method will be called to render our bitmap through our warped
-         * bitmap mesh.
+         * y coordinates of our [MotionEvent] parameter [event] to initialize [Float] array `val pt`,
+         * then we use [Matrix] field [mInverse] to translate this point from the [Canvas] coordinate
+         * system to the coordinate system of the [Bitmap] field [mBitmap] (which is translated to
+         * (10,10) by the [Matrix] field [mMatrix]). We cast the x coordinate of `pt` to an [Int]
+         * in order to set `val x`, and the y coordinate of `pt` to an [Int] in order to set `val y`,
+         * then compare `x` and `y` to [mLastWarpX] and [mLastWarpY] to see if the touch has moved,
+         * and if it has we set [mLastWarpX] to `x` and [mLastWarpY] to `y`, call our method [warp]
+         * to "warp" the bitmap mesh in [Float] array [mVerts] around `pt` and finally invalidate
+         * our [View] so that our [onDraw] method will be called to render our bitmap through our
+         * warped bitmap mesh.
          *
          * @param event The motion event.
-         * @return True if the event was handled, false otherwise. (We always return true)
+         * @return *true* if the event was handled, *false* otherwise. (We always return *true*)
          */
         @SuppressLint("ClickableViewAccessibility")
         override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -179,6 +183,9 @@ class BitmapMesh : GraphicsActivity() {
             return true
         }
 
+        /**
+         * Our static constants and method
+         */
         companion object {
             /**
              * Gravitational constant used in [warp] method.
@@ -200,7 +207,7 @@ class BitmapMesh : GraphicsActivity() {
             /**
              * Convenience method to set the (x,y) values for a vertex, it simply calculates the array
              * indices for the x and y values of the vertex in question based on two floats per vertex
-             * and stores the parameters `x` and `y` where they belong.
+             * and stores the parameters [x] and [y] where they belong.
              *
              * @param array Vertices array
              * @param index address of vertex to set the (x,y) coordinates of
@@ -216,22 +223,20 @@ class BitmapMesh : GraphicsActivity() {
         /**
          * Basic constructor that initializes the `View` and fields used by this instance of
          * `SampleView`. First we call through to our super's constructor, then we enable our
-         * `View` to receive focus. Next we initialize our field `Bitmap mBitmap` by
-         * decoding the jpg resource file R.drawable.beach.
+         * `View` to receive focus. Next we initialize our `Bitmap` field mBitmap` by decoding
+         * the jpg resource file R.drawable.beach.
          *
+         * We fetch the `Float` width of `mBitmap` to `val w` and the `Float` height to `val h`.
+         * Then starting from `var index` of 0 we proceed to fill our two `Float` mesh vertex
+         * arrays `mVerts` and `mOrig` with (x,y) vertex coordinates by looping through the HEIGHT
+         * y dimension values (each y value being y/HEIGHT of the height of the `Bitmap` field
+         * `mBitmap`), and for each of these values calculating the WIDTH x values possible (each
+         * x value being x/WIDTH of the width of the `Bitmap` field `mBitmap`).
          *
-         * We fetch the width of `mBitmap` to `float w` and the height to `float h`.
-         * Then starting from `int index` of 0 we proceed to fill our two Bitmap mesh vertex
-         * arrays `float[] mVerts` and `float[] mOrig` with (x,y) vertex coordinates by
-         * looping through the HEIGHT y dimension values (each y value being y/HEIGHT of the height
-         * of the `Bitmap mBitmap`), and for each of these values calculating the WIDTH x
-         * values possible (each x value being x/WIDTH of the width of the `Bitmap mBitmap`).
+         * Then we initialize our `Matrix` field `mMatrix` with a matrix to translate the canvas
+         * to (10,10), and initialize `Matrix` field `mInverse` to be the inverse of this.
          *
-         *
-         * Then we initialize our field `Matrix mMatrix` with a matrix to translate the canvas
-         * to (10,10), and initialize `Matrix mInverse` to be the inverse of this.
-         *
-         * Parameter: `Context` of `View` to use to fetch resources, "this" called from
+         * Parameter: `Context` of `View` to use to fetch resources, `this` called from
          * `onCreate` override of the activity in our case
          */
         init {
