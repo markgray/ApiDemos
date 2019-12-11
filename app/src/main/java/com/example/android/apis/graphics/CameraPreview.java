@@ -17,7 +17,6 @@
 package com.example.android.apis.graphics;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.hardware.Camera;
@@ -36,6 +35,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -49,7 +50,7 @@ import com.example.android.apis.R;
  * Shows how to create a SurfaceView for the deprecated Camera api (use android.hardware.camera2)
  */
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-public class CameraPreview extends Activity {
+public class CameraPreview extends AppCompatActivity {
     /**
      * Our instance of our class {@code Preview}
      */
@@ -57,7 +58,6 @@ public class CameraPreview extends Activity {
     /**
      * Our instance of the {@code Camera} class
      */
-    @SuppressWarnings("deprecation")
     Camera mCamera;
     /**
      * The number of physical cameras available on this device
@@ -101,16 +101,12 @@ public class CameraPreview extends Activity {
         setContentView(mPreview);
 
         // Find the total number of cameras available
-        //noinspection deprecation
         numberOfCameras = Camera.getNumberOfCameras();
 
         // Find the ID of the default camera
-        @SuppressWarnings("deprecation")
         CameraInfo cameraInfo = new CameraInfo();
         for (int i = 0; i < numberOfCameras; i++) {
-            //noinspection deprecation
             Camera.getCameraInfo(i, cameraInfo);
-            //noinspection deprecation
             if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
                 defaultCameraId = i;
             }
@@ -133,7 +129,6 @@ public class CameraPreview extends Activity {
         super.onResume();
 
         // Open the default i.e. the first rear facing camera.
-        //noinspection deprecation
         mCamera = Camera.open();
         cameraCurrentlyLocked = defaultCameraId;
         mPreview.setCamera(mCamera);
@@ -203,6 +198,7 @@ public class CameraPreview extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
+        //noinspection SwitchStatementWithTooFewBranches
         switch (item.getItemId()) {
             case R.id.switch_cam:
                 // check for availability of multiple cameras
@@ -225,7 +221,6 @@ public class CameraPreview extends Activity {
 
                 // Acquire the next camera and request Preview to reconfigure
                 // parameters.
-                //noinspection deprecation
                 mCamera = Camera.open((cameraCurrentlyLocked + 1) % numberOfCameras);
                 cameraCurrentlyLocked = (cameraCurrentlyLocked + 1) % numberOfCameras;
                 mPreview.switchCamera(mCamera);
