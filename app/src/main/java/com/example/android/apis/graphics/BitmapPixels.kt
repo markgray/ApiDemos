@@ -33,23 +33,44 @@ import java.nio.ShortBuffer
  * if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) kludge to make it work on newer versions.
  */
 class BitmapPixels : GraphicsActivity() {
+    /**
+     * Called when the activity is starting. We call through to our super's implementation of
+     * `onCreate`, then set our content view to a new instance of [SampleView].
+     *
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(SampleView(this))
     }
 
+    /**
+     * Custom [View] subclass which displays three [Bitmap]'s displaying the same color ramp using
+     * different values for their [Bitmap.Config]
+     *
+     */
     private class SampleView(context: Context?) : View(context) {
+        /**
+         * Color ramp [Bitmap] using [Bitmap.Config.ARGB_8888] as its resolution
+         */
         private val mBitmap1: Bitmap
+        /**
+         * Color ramp [Bitmap] using [Bitmap.Config.RGB_565] as its resolution
+         */
         private val mBitmap2: Bitmap
+        /**
+         * Color ramp [Bitmap] using [Bitmap.Config.ARGB_4444] as its resolution (since KITKAT this
+         * resolution does not work, so we use [Bitmap.Config.RGB_565] again instead).
+         */
         private var mBitmap3: Bitmap? = null
         /**
-         * We implement this to do our drawing. First we set our entire canvas to 0xFFCCCCCC (a darkish
-         * gray). We initialize the `y` coordinate we use to draw our bitmaps to 10, then draw
-         * `Bitmap mBitmap1` on the `Canvas canvas` at (10,y), increment `y` by 10
-         * and draw `Bitmap mBitmap2` at (10,y), and increment `y` by 10 and draw
-         * `Bitmap mBitmap3` at (10,y).
+         * We implement this to do our drawing. First we set our entire [Canvas] parameter [canvas]
+         * to 0xFFCCCCCC (a darkish gray). We initialize the `y` coordinate we use to draw our bitmaps
+         * to 10, then draw [Bitmap] field [mBitmap1] on [canvas] at (10,y), increment `y` by 10 and
+         * draw [Bitmap] field [mBitmap2] at (10,y), and increment `y` by 10 and draw [Bitmap] field
+         * [mBitmap3] at (10,y).
          *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(-0x333334)
@@ -61,12 +82,15 @@ class BitmapPixels : GraphicsActivity() {
             canvas.drawBitmap(mBitmap3!!, 10f, y.toFloat(), null)
         }
 
+        /**
+         * Our static methods
+         */
         companion object {
             /**
              * access the red component from a pre-multiplied color
              *
              * @param c 32 bit color
-             * @return 8 bit red component of `c`
+             * @return 8 bit red component of [c]
              */
             private fun getR32(c: Int): Int {
                 return c shr 0 and 0xFF
@@ -76,7 +100,7 @@ class BitmapPixels : GraphicsActivity() {
              * access the green component from a pre-multiplied color
              *
              * @param c 32 bit color
-             * @return 8 bit green component of `c`
+             * @return 8 bit green component of [c]
              */
             private fun getG32(c: Int): Int {
                 return c shr 8 and 0xFF
@@ -86,7 +110,7 @@ class BitmapPixels : GraphicsActivity() {
              * access the blue component from a pre-multiplied color
              *
              * @param c 32 bit color
-             * @return 8 bit blue component of `c`
+             * @return 8 bit blue component of [c]
              */
             private fun getB32(c: Int): Int {
                 return c shr 16 and 0xFF
@@ -96,7 +120,7 @@ class BitmapPixels : GraphicsActivity() {
              * access the alpha component from a pre-multiplied color
              *
              * @param c 32 bit color
-             * @return 8 bit alpha component of `c`
+             * @return 8 bit alpha component of [c]
              */
             private fun getA32(c: Int): Int {
                 return c shr 24 and 0xFF
@@ -140,8 +164,8 @@ class BitmapPixels : GraphicsActivity() {
             }
 
             /**
-             * Scales the color `c` by the alpha `a`. Rather unnecessary in our case since
-             * `a` is always 255, and `c` is either 0 of 255, but what the hay.
+             * Scales the color [c] by the alpha [a]. Rather unnecessary in our case since
+             * [a] is always 255, and [c] is either 0 or 255, but what the hay.
              *
              * @param c color value (0-255)
              * @param a alpha value (0-255)
@@ -153,9 +177,9 @@ class BitmapPixels : GraphicsActivity() {
             }
 
             /**
-             * Turn a color int into a pre-multiplied device color. Does nothing in our case since it is
-             * only called with the values Color.RED, and Color.GREEN where the alpha is 255 and the
-             * red and green color components are 255 as well, but what the hay.
+             * Turn a color int into a pre-multiplied device color. Does nothing in our case since
+             * it is only called with the values Color.RED, and Color.GREEN where the alpha is 255
+             * and the red and green color components are 255 as well, but what the hay.
              *
              * @param c color value
              * @return color with each color component pre-multiplied by the alpha value
@@ -165,29 +189,31 @@ class BitmapPixels : GraphicsActivity() {
                 var g = Color.green(c)
                 var b = Color.blue(c)
                 val a = Color.alpha(c)
-                // now apply the alpha to r, g, b
+                /**
+                 * now apply the alpha to r, g, b
+                 */
                 r = mul255(r, a)
                 g = mul255(g, a)
                 b = mul255(b, a)
-                // now pack it in the correct order
+                /**
+                 * now pack it in the correct order
+                 */
                 return pack8888(r, g, b, a)
             }
 
             /**
              * Produces arrays containing smooth color transitions from a starting color to an ending
-             * color for the three different color formats: ARGB_8888, RGB_565, and ARGB_4444. First we
-             * extract the four components `r, g, b, and a` of the `from` color and multiply
-             * them by 2**23, we do the same for the components of the `to` color, subtract the
-             * `from` component and divide by `n-1` to create the "color steps" to use:
-             * `dr, dg, db, and da`.
+             * color for the three different color formats: ARGB_8888, RGB_565, and ARGB_4444. First
+             * we extract the four components `r, g, b, and a` of the [from] color and multiply them
+             * by 2**23, we do the same for the components of the [to] color, subtract the [from]
+             * component and divide by `n-1` to create the "color steps" to use: `dr, dg, db, and da`.
              *
-             *
-             * Then we loop for the `n` colors in our ramps, filling our output arrays `ramp8888`,
-             * `ramp565` and `ramp4444` filling them with the ARGB_8888, RGB_565, and ARGB_4444
-             * color format value produced using our methods `pack8888`, `pack565`, and
-             * `pack4444` from the current values of `r, g, b, and a`, rounded and normalized
-             * by dividing by 2**23. We then advance `r, g, b, and a` by `dr, dg, db, and da`
-             * to get ready for the next pass through the loop.
+             * Then we loop for the [n] colors in our ramps, filling our output arrays [ramp8888],
+             * [ramp565] and [ramp4444] with the ARGB_8888, RGB_565, and ARGB_4444 color format
+             * valuea produced using our methods [pack8888], [pack565], and [pack4444] from the
+             * current values of `r, g, b, and a`, rounded and normalized by dividing by 2**23. We
+             * then advance `r, g, b, and a` by `dr, dg, db, and da` to get ready for the next pass
+             * through the loop.
              *
              * @param from     start color of the ramp
              * @param to       end color of the ramp
@@ -221,16 +247,16 @@ class BitmapPixels : GraphicsActivity() {
             }
 
             /**
-             * Creates and returns an `IntBuffer` consisting of `n` copies of its parameter
-             * `int[] src` (in our case, `n` rows of our ARGB_8888 color ramp). First we
-             * allocate `IntBuffer dst` with a capacity of `n*n`. Then we loop for `n`
-             * rows "bulk putting" our parameter `int[] src`}. We rewind `dst` and
-             * return it to the caller.
+             * Creates and returns an [IntBuffer] consisting of [n] copies of its [IntArray]
+             * parameter [src] (in our case, [n] rows of our ARGB_8888 color ramp). First we
+             * allocate an [IntBuffer] for `val dst` with a capacity of [n] by [n]. Then we loop
+             * for [n] rows "bulk putting" our parameter [src]. We rewind `dst` and return it to
+             * the caller.
              *
              * @param src array of ARGB_8888 colors to make buffer from
-             * @param n   Number of colors in the `src` array, and number of times to write that array
-             * to the `IntBuffer` we return
-             * @return an `IntBuffer` consisting of `n` copies of our parameter `int[] src`.
+             * @param n   Number of colors in the [src] array, and number of times to write that
+             * array to the [IntBuffer] we return
+             * @return an [IntBuffer] consisting of [n] copies of our parameter [src].
              */
             @Suppress("SameParameterValue")
             private fun makeBuffer(src: IntArray, n: Int): IntBuffer {
@@ -243,16 +269,16 @@ class BitmapPixels : GraphicsActivity() {
             }
 
             /**
-             * Creates and returns an `ShortBuffer` consisting of `n` copies of its parameter
-             * `short[] src` (in our case, `n` rows of our RGB_565 or ARGB_4444 color ramps).
-             * First we allocate `ShortBuffer dst` with a capacity of `n*n`. Then we loop for
-             * `n` rows "bulk putting" our parameter `short[] src`}. We rewind `dst` and
+             * Creates and returns a [ShortBuffer] consisting of [n] copies of its [ShortArray]
+             * parameter [src] (in our case, [n] rows of our RGB_565 or ARGB_4444 color ramps).
+             * First we allocate a [ShortBuffer] for `val dst` with a capacity of [n] times [n].
+             * Then we loop for [n] rows "bulk putting" our parameter [src]. We rewind `dst` and
              * return it to the caller.
              *
-             * @param src array of RGB_565 or ARGB_4444 colors to make buffer from
-             * @param n   Number of colors in the `src` array, and number of times to write that array
-             * to the `ShortBuffer` we return
-             * @return a `ShortBuffer` consisting of `n` copies of our parameter `short[] src`.
+             * @param src [ShortArray] of RGB_565 or ARGB_4444 colors to make buffer from
+             * @param n   Number of colors in the [src] array, and number of times to write that
+             * array to the [ShortBuffer] we return
+             * @return a [ShortBuffer] consisting of [n] copies of our parameter [src].
              */
             @Suppress("SameParameterValue")
             private fun makeBuffer(src: ShortArray, n: Int): ShortBuffer {
@@ -271,7 +297,7 @@ class BitmapPixels : GraphicsActivity() {
          * and allocate `n` entries for each of our color ramp arrays: `Int` array `val data8888`,
          * `short` array `val data565` and `short` array `val data4444`, then we call our method
          * `makeRamp` to produce smooth color ramps from RED to GREEN in them. We initialize our
-         * `Bitmap` field `mBitmap1` with an `n by nN` ARGB_8888 `Bitmap`, `Bitmap` field `mBitmap2`
+         * `Bitmap` field `mBitmap1` with an `n by n` ARGB_8888 `Bitmap`, `Bitmap` field `mBitmap2`
          * with an `n by n` RGB_565 `Bitmap`, and `Bitmap` field `mBitmap3` with an `n by n` ARGB_4444
          * `Bitmap` for versions before KITKAT, and RGB_565 for KITKAT and later versions.
          *
