@@ -44,11 +44,11 @@ import kotlin.math.abs
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 class CameraPreview : AppCompatActivity() {
     /**
-     * Our instance of our class `Preview`
+     * Our instance of our class [Preview]
      */
     private var mPreview: Preview? = null
     /**
-     * Our instance of the `Camera` class
+     * Our instance of the [Camera] class
      */
     var mCamera: Camera? = null
     /**
@@ -68,15 +68,14 @@ class CameraPreview : AppCompatActivity() {
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we request the FEATURE_NO_TITLE feature for our window, and add
      * FLAG_FULLSCREEN to its flags so that we have full use of the screen (apart from the navigation
-     * bar at the bottom of the screen). Next we initialize our field `Preview mPreview` with
-     * a new instance of `Preview` and set it as our content view. We initialize our field
-     * `int numberOfCameras` with the number of physical cameras available on this device. We
-     * create an instance of `CameraInfo cameraInfo` and loop through the number of cameras of
-     * the device retrieving the camera information for each camera in turn to `cameraInfo`,
-     * and if the camera is a CAMERA_FACING_BACK type we save its id to our field
-     * `int defaultCameraId`.
+     * bar at the bottom of the screen). Next we initialize our [Preview] field [mPreview] with
+     * a new instance of [Preview] and set it as our content view. We initialize our [Int] field
+     * [numberOfCameras] with the number of physical cameras available on this device. We create an
+     * instance of [CameraInfo] for `val cameraInfo` and loop through the number of cameras of
+     * the device retrieving the camera information for each camera in turn to `cameraInfo`, and if
+     * the camera is a CAMERA_FACING_BACK type we save its id to our [Int] field [defaultCameraId].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState`, so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState], so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
