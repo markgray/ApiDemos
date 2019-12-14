@@ -27,9 +27,9 @@ import android.view.View
 class Clipping : GraphicsActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to a new instance of `SampleView`.
+     * `onCreate`, then we set our content view to a new instance of [SampleView].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,16 +37,16 @@ class Clipping : GraphicsActivity() {
     }
 
     /**
-     * Custom View which draws the same scene 3 times using different clip settings for the
-     * `Canvas` it is drawing to.
+     * Custom [View] which draws the same scene 3 times using different clip settings for the
+     * [Canvas] it is drawing to.
      */
     private class SampleView(context: Context?) : View(context) {
         /**
-         * `Paint` we use to draw to the `Canvas`
+         * [Paint] we use to draw to the [Canvas]
          */
         private val mPaint: Paint
         /**
-         * `Path` we create for a clip, and set on our `Canvas` using `Canvas.clipPath`
+         * [Path] we create for a clip, and set on our [Canvas] using [Canvas.clipPath]
          */
         private val mPath: Path
         /**
@@ -57,24 +57,21 @@ class Clipping : GraphicsActivity() {
 
         /**
          * Draws a "scene" consisting of a red line, a green circle, and the blue text "Clipping".
-         * First we intersect the current clip of our parameter `Canvas canvas` with the
-         * rectangle (0,0,100,100) ((left,top,right,bottom) -- this is relative to the already
-         * translated `Canvas canvas` passed us and will prevent all drawing instructions
-         * outside of this rectangle from having any effect, and will respect the "no draw" regions
-         * of `canvas` specified by its current clip.) Then fill the entire canvas' bitmap
+         * First we intersect the current clip of our [Canvas] parameter [canvas] with the rectangle
+         * (0,0,100,100) ((left,top,right,bottom) -- this is relative to the already translated
+         * [Canvas] parameter [canvas] passed us and will prevent all drawing instructions outside
+         * of this rectangle from having any effect, and will respect the "no draw" regions of
+         * [canvas] specified by its current clip.) Then fill the entire bitmap of [canvas]
          * (restricted to the current clip) with the color white, using source over Porter-Duff mode.
          *
+         * We set the color of our [Paint] field [mPaint] to red, and use it to draw a line on
+         * [canvas] from (0,0) to (100,100).
          *
-         * We set the color of our field `Paint mPaint` to red, and use it to draw a line on
-         * `canvas` from (0,0) to (100,100).
+         * We set the color of [mPaint] to green and use it to draw a circle on [canvas] centered at
+         * (30,70) with radius 30.
          *
-         *
-         * We set the color of `mPaint` to green and use it to draw a circle on `canvas`
-         * centered at (30,70) with radius 30.
-         *
-         *
-         * Finally we set the color of `mPaint` to blue and use it to write the text "Clipping"
-         * to `canvas` starting at (100,30). The origin is interpreted based on the Align
+         * Finally we set the color of [mPaint] to blue and use it to write the text "Clipping"
+         * to [canvas] starting at (100,30). The origin is interpreted based on the Align
          * setting in the paint which in our case is Paint.Align.RIGHT, so the end of the text is
          * at (100,30) not the beginning.
          *
