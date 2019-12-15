@@ -90,39 +90,31 @@ class Clipping : GraphicsActivity() {
         }
 
         /**
-         * We implement this to do our drawing. We call our method `drawScene` to draw the same
-         * "scene" 3 times using different matrix and clip states applied to the `Canvas canvas`
-         * passed us.
+         * We implement this to do our drawing. We call our method [drawScene] to draw the same
+         * "scene" 3 times using different matrix and clip states applied to the [Canvas] parameter
+         * [canvas] passed us.
          *
+         * First we scale the [Canvas] parameter [canvas] passed us to the logical density of the
+         * display. Next we set the entire [canvas] to the color GRAY. Then surrounded by matching
+         * [Canvas.save] and [Canvas.restore] calls (which save the matrix and clips states then
+         * restore them afterwards), we translate [canvas] to the position we want drawing to be
+         * directed to, apply all the clip state modifications (relative to the new position) and
+         * call our method [drawScene] to draw to the translated and clipped [canvas] restoring it
+         * to the untranslated un-clipped state on return. The 3 "scenes" positions and clip states
+         * are:
          *
-         * First we scale the `Canvas canvas` passed us to the logical density of the display.
-         * Next we set the entire `Canvas canvas` to the color GRAY. Then surrounded by matching
-         * `Canvas.save` and `Canvas.restore` calls (which save the matrix and clips states
-         * then restore them afterwards), we translate the `Canvas canvas` to the position we
-         * want drawing to be directed to, apply all the clip state modifications (relative to the new
-         * position) and call our method `drawScene` to draw to the translated and clipped
-         * `Canvas canvas` restoring it to the untranslated un-clipped state on return. The 3
-         * "scenes" positions and clip states are:
+         *  * (10,10) No clipping added (apart from the clip rectangle used in `drawScene`
+         *  * (160,10) We start with a clip rectangle excluding areas outside of (10,10,90,90) then
+         *  we add a clip rectangle which excludes areas inside of (30,30,70,70) (The
+         *  `Region.Op.DIFFERENCE` parameter to `clipRectangle` subtracts the inside of the
+         *  rectangle from the drawable canvas instead of the outside)
+         *  * (10,160) We clear any lines and curves from [Path] field [mPath], making it empty,
+         *  then we add a circle centered at (50,50), of radius 50 and direction Counter clock
+         *  wise to [mPath], then use it to replace the clip path of [canvas]. Since the circle
+         *  was drawn in the counter clockwise direction the clip will exclude areas outside of
+         *  the circle from the drawable canvas.
          *
-         *  *
-         * (10,10) No clipping added (apart from the clip rectangle used in `drawScene`
-         *
-         *  *
-         * (160,10) We start with a clip rectangle excluding areas outside of (10,10,90,90)
-         * then we add a clip rectangle which excludes areas inside of (30,30,70,70) (The
-         * `Region.Op.DIFFERENCE` parameter to `clipRectangle` subtracts the
-         * inside of the rectangle from the drawable canvas instead of the outside)
-         *
-         *  *
-         * (10,160) We clear any lines and curves from `Path mPath`, making it empty,
-         * then we add a circle centered at (50,50), of radius 50 and direction Counter clock
-         * wise to `mPath`, then use it to replace the clip path of `canvas`.
-         * Since the circle was drawn in the counter clockwise direction the clip will exclude
-         * areas outside of the circle from the drawable canvas.
-         *
-         *
-         *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
             canvas.scale(SCREEN_DENSITY, SCREEN_DENSITY)
@@ -149,11 +141,11 @@ class Clipping : GraphicsActivity() {
 
         /**
          * Basic constructor for our class. First we call our super's constructor, then we enable our
-         * view to receive focus. We initialize our field `float SCREEN_DENSITY` with the logical
-         * density of the screen, then we allocate an instance of `Paint` for our field
-         * `Paint mPaint`, set the ANTI_ALIAS_FLAG to true to enable antialiasing, set the stroke
-         * width to 6, the text size to 16, and set the text alignment to be Paint.Align.RIGHT. Finally
-         * we allocate a new instance of `Path` to initialize our field `Path mPath`.
+         * view to receive focus. We initialize our `Float` field SCREEN_DENSITY` with the logical
+         * density of the screen, then we allocate an instance of `Paint` for our field `mPaint`,
+         * set the ANTI_ALIAS_FLAG to true to enable antialiasing, set the stroke width to 6, the
+         * text size to 16, and set the text alignment to be Paint.Align.RIGHT. Finally we allocate
+         * a new instance of `Path` to initialize our field `mPath`.
          *
          * Parameter: the `Context` to use to retrieve resources, "this" when called from
          * `onCreate` override of our activity.
