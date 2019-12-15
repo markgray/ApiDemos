@@ -3395,6 +3395,7 @@
         <activity
             android:name=".graphics.ColorFilters"
             android:label="Graphics/ColorFilters"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
