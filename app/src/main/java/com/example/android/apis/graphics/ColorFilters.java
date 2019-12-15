@@ -16,16 +16,23 @@
 
 package com.example.android.apis.graphics;
 
-import com.example.android.apis.R;
-
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.*;
-import android.graphics.drawable.*;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.*;
+import android.view.MotionEvent;
+import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
 
 /**
  * Applies a PorterDuffColorFilter to tint some button like drawables using several
@@ -60,7 +67,7 @@ public class ColorFilters extends GraphicsActivity {
         /**
          * {@code Activity} used to construct us, we use it to set the title bar of its window
          */
-        private Activity mActivity;
+        private AppCompatActivity mActivity;
         /**
          * The resource button R.drawable.btn_default_normal
          */
@@ -179,25 +186,21 @@ public class ColorFilters extends GraphicsActivity {
          * @param activity used for the {@code Context} when fetching resources, "this" when called
          *                 from {@code onCreate} of our activity.
          */
-        public SampleView(Activity activity) {
+        public SampleView(AppCompatActivity activity) {
             super(activity);
             mActivity = activity;
             @SuppressWarnings("UnnecessaryLocalVariable")
             Context context = activity;
             setFocusable(true);
 
-            //noinspection deprecation
             mDrawable = context.getResources().getDrawable(R.drawable.btn_default_normal);
             mHeightOffset = 55;
-            //noinspection ConstantConditions
             int heightOfDrawable = mDrawable.getIntrinsicHeight();
             Log.i(TAG, "Height of drawable: " + heightOfDrawable);
             if (heightOfDrawable > 55) {
                 mHeightOffset = heightOfDrawable + 5;
             }
-            //noinspection ConstantConditions
             mDrawable.setBounds(0, 0, 150, 48);
-            //noinspection deprecation
             mDrawable.setDither(true);
 
             int[] resIDs = new int[]{
@@ -208,9 +211,7 @@ public class ColorFilters extends GraphicsActivity {
             mDrawables = new Drawable[resIDs.length];
             Drawable prev = mDrawable;
             for (int i = 0; i < resIDs.length; i++) {
-                //noinspection deprecation
                 mDrawables[i] = context.getResources().getDrawable(resIDs[i]);
-                //noinspection deprecation
                 mDrawables[i].setDither(true);
                 addToTheRight(mDrawables[i], prev);
                 prev = mDrawables[i];
@@ -361,6 +362,8 @@ public class ColorFilters extends GraphicsActivity {
          * @param event The motion event.
          * @return True to indicate the event was handled
          */
+        @SuppressWarnings("DuplicateBranchesInSwitch")
+        @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouchEvent(MotionEvent event) {
             switch (event.getAction()) {
