@@ -175,11 +175,11 @@ class ColorMatrixSample : GraphicsActivity() {
             }
 
             /**
-             * Modifies its parameter `ColorMatrix cm` to be a `ColorMatrix` which changes
-             * the colors according to the current contrast factor `float contrast` by calculating
-             * a `float translate` to add to each color.
+             * Modifies its [ColorMatrix] parameter [cm] to be a [ColorMatrix] which changes
+             * the colors according to the current [Float] contrast factor [contrast] by calculating
+             * a [Float] `val translate` to add to each color.
              *
-             * @param cm `ColorMatrix` we are to modify
+             * @param cm [ColorMatrix] we are to modify
              * @param contrast contrast factor (-1 .. 1)
              */
             private fun setContrastTranslateOnly(cm: ColorMatrix, contrast: Float) {
@@ -189,11 +189,11 @@ class ColorMatrixSample : GraphicsActivity() {
             }
 
             /**
-             * Modifies its parameter `ColorMatrix cm` to be a `ColorMatrix` which changes
-             * the colors according to the current contrast factor `float contrast` by calculating
-             * a `float scale` to multiply each color by.
+             * Modifies its [ColorMatrix] parameter [cm] to be a [ColorMatrix] which changes
+             * the colors according to the current [Float] contrast factor [contrast] by calculating
+             * a [Float] `val scale` to multiply each color by.
              *
-             * @param cm `ColorMatrix` we are to modify
+             * @param cm [ColorMatrix] we are to modify
              * @param contrast contrast factor (-1 .. 1)
              */
             private fun setContrastScaleOnly(cm: ColorMatrix, contrast: Float) {
