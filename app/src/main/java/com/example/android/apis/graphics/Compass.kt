@@ -36,42 +36,44 @@ import android.view.View
  */
 class Compass : GraphicsActivity() {
     /**
-     * Handle to an instance of the system service Context.SENSOR_SERVICE. A `SensorManager`
+     * Handle to an instance of the system service Context.SENSOR_SERVICE. A [SensorManager]
      * lets you access the device's sensors.
      */
     private var mSensorManager: SensorManager? = null
     /**
-     * Default `Sensor` for the type Sensor.TYPE_ORIENTATION, an orientation sensor type.
+     * Default [Sensor] for the type Sensor.TYPE_ORIENTATION, an orientation sensor type.
      */
     private var mSensor: Sensor? = null
     /**
-     * An instance of `SampleView` which is used as our content view and displays the compass
+     * An instance of [SampleView] which is used as our content view and displays the compass
      * pointer which is updated as our orientation sensor changes directions.
      */
     private var mView: SampleView? = null
     /**
-     * Rotation vector returned in the latest `SensorEvent` received from our orientation sensor.
+     * Rotation vector returned in the latest [SensorEvent] received from our orientation sensor.
      * It consists of values[0]: Azimuth, angle between the magnetic north direction and the y-axis,
-     * around the z-axis (0 to 359). 0=North, 90=East, 180=South, 270=West; values[1]: Pitch, rotation
-     * around x-axis (-180 to 180), with positive values when the z-axis moves toward the y-axis;
-     * values[2]: Roll, rotation around the y-axis (-90 to 90) increasing as the device moves clockwise.
+     * around the z-axis (0 to 359). 0=North, 90=East, 180=South, 270=West; values[1]: Pitch,
+     * rotation around x-axis (-180 to 180), with positive values when the z-axis moves toward the
+     * y-axis; values[2]: Roll, rotation around the y-axis (-90 to 90) increasing as the device
+     * moves clockwise.
      */
     private var mValues: FloatArray? = null
     /**
-     * Listener we register for updates to our `Sensor mSensor` orientation sensor
+     * Listener we register for updates to our [Sensor] field [mSensor] orientation sensor
      */
     @Suppress("ConstantConditionIf")
     private val mListener: SensorEventListener = object : SensorEventListener {
         /**
-         * Called when sensor values have changed. First we save a copy of the `SensorEvent event`
-         * field `float SensorEvent.values` in our field `float[] mValues`, then is our
-         * field `SampleView mView` is not null we invalidate the whole view so it will be redrawn.
+         * Called when sensor values have changed. First we save a reference to our [SensorEvent]
+         * parameter [event]'s field [SensorEvent.values] in our [Float] array field [mValues], then
+         * if our [SampleView] field  [mView] is not *null* we invalidate the whole view so it will
+         * be redrawn.
          *
          * @param event the [SensorEvent][android.hardware.SensorEvent].
          */
         override fun onSensorChanged(event: SensorEvent) {
             if (false) {
-                Log.d(TAG, "sensorChanged (" + event.values[0] + ", " + event.values[1] + ", " + event.values[2] + ")")
+                Log.d(TAG, "sensorChanged (${event.values[0]}, ${event.values[1]}, ${event.values[2]})")
             }
             mValues = event.values
             if (mView != null) {
@@ -82,21 +84,20 @@ class Compass : GraphicsActivity() {
         /**
          * Called when the accuracy of the registered sensor has changed.
          *
-         * @param sensor `Sensor` whose accuracy has changed
-         * @param accuracy The new accuracy of this sensor, one of
-         * `SensorManager.SENSOR_STATUS_*`
+         * @param sensor [Sensor] whose accuracy has changed
+         * @param accuracy The new accuracy of this sensor, one of `SensorManager.SENSOR_STATUS_*`
          */
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
     }
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we initialize our field `SensorManager mSensorManager` with a
-     * handle to an instance of the system service SENSOR_SERVICE, and our field `Sensor mSensor`
-     * with the default sensor for the type TYPE_ORIENTATION. We initialize our field `SampleView mView`
-     * with an instance of our view subclass `SampleView` and set our content view to it.
+     * `onCreate`, then we initialize our [SensorManager] field [mSensorManager] with a handle to an
+     * instance of the system service SENSOR_SERVICE, and our [Sensor] field [mSensor] with the
+     * default sensor for the type TYPE_ORIENTATION. We initialize our [SampleView] field [mView]
+     * with an instance of our view subclass [SampleView] and set our content view to it.
      *
-     * @param icicle We do not override `onSaveInstanceState` so do not use
+     * @param icicle We do not override [onSaveInstanceState] so do not use
      */
     override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
@@ -108,13 +109,12 @@ class Compass : GraphicsActivity() {
     }
 
     /**
-     * Called after [.onRestoreInstanceState], [.onRestart], or
-     * [.onPause], for your activity to start interacting with the user.
-     *
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for your activity to start
+     * interacting with the user.
      *
      * First we call through to our  super's implementation of `onResume`, then we register
-     * our `SensorEventListener mListener` as a listener for the `Sensor mSensor` with
-     * SENSOR_DELAY_GAME as the rate to deliver sensor at.
+     * our [SensorEventListener] field [mListener] as a listener for the [Sensor] field [mSensor]
+     * with SENSOR_DELAY_GAME as the rate to deliver sensor data at.
      */
     override fun onResume() {
         @Suppress("ConstantConditionIf")
