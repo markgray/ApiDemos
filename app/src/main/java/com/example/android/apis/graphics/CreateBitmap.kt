@@ -29,7 +29,8 @@ import java.io.ByteArrayOutputStream
 class CreateBitmap : GraphicsActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to a new instance of `SampleView`.
+     * `onCreate`, and initialize our static variable [SCREEN_DENSITY] to the logical screen density
+     * of our display. Then we set our content view to a new instance of [SampleView].
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
@@ -44,46 +45,46 @@ class CreateBitmap : GraphicsActivity() {
      */
     private class SampleView(context: Context?) : View(context) {
         /**
-         * Six `BitMap`'s created from array of colors, the first three using `Bitmap.createBitmap`
-         * directly for formats ARGB_8888, RGB_565, and ARGB_4444, the second three using `Bitmap.setPixels`.
+         * Six [Bitmap]'s created from array of colors, the first three using [Bitmap.createBitmap]
+         * directly for formats ARGB_8888, RGB_565, and ARGB_4444, the second three using
+         * [Bitmap.setPixels].
          */
         private val mBitmaps: Array<Bitmap?>
         /**
-         * `Bitmap`'s created from `mBitmaps[ i ]` using our method codec to first encode
-         * and compress our original `Bitmap` using Bitmap.CompressFormat.JPEG, then decoding
-         * it into `Bitmap` format again.
+         * [Bitmap]'s created from [mBitmaps] six [Bitmap]'s using our method [codec] to first
+         * encode and compress our original [Bitmap] using [Bitmap.CompressFormat.JPEG],
+         * then decoding it into [Bitmap] format again.
          */
         private val mJPEG: Array<Bitmap?>
         /**
-         * `Bitmap`'s created from `mBitmaps[ i ]` using our method codec to first encode
-         * and compress our original `Bitmap` using Bitmap.CompressFormat.PNG, then decoding
-         * it into `Bitmap` format again.
+         * [Bitmap]'s created from [mBitmaps] six [Bitmap]'s using our method [codec] to first
+         * encode and compress our original [Bitmap] using [Bitmap.CompressFormat.PNG], then
+         * decoding it into [Bitmap] format again.
          */
         private val mPNG: Array<Bitmap?>
         /**
-         * The array of colors that we use to create our `Bitmap`'s from
+         * The array of colors that we use to create our [Bitmap]'s from
          */
         private val mColors: IntArray
         /**
-         * `Paint` instance we use to draw our `Bitmap`'s in our `onDraw` override
+         * [Paint] instance we use to draw our [Bitmap]'s in our [onDraw] override
          */
         private val mPaint: Paint
 
         /**
-         * We implement this to do our drawing. First we set the color of the entire `Canvas canvas`
-         * to WHITE. Then for each of the 6 `Bitmap`'s in our three arrays we first draw the
-         * `mBitmaps` `Bitmap`, then the `mJPEG` `Bitmap` and `mPNG`
-         * `Bitmap` in a row, translate the `Canvas canvas` down by the height of the
-         * `mBitmaps` to get ready to draw the next row of the six.
+         * We implement this to do our drawing. First we set the color of the entire [Canvas]
+         * parameter [canvas] to WHITE, and scale [canvas] by the SCREEN_DENSITY of our display.
+         * Then for each of the 6 [Bitmap]'s in our three arrays we first draw the [Bitmap] in
+         * [mBitmaps], then the [Bitmap] in [mJPEG]  and the [Bitmap] in [mPNG] in a row, translate
+         * the [Canvas] parameter [canvas] down by the height of the [Bitmap] in [mBitmaps] sub `i`
+         * to get ready to draw the next row of the six.
          *
-         *
-         * When done with the 18 `Bitmap`'s we created in our constructor, we next draw our
+         * When done with the 18 [Bitmap]'s we created in our constructor, we next draw our
          * color array directly, w/o creating a bitmap object, first specifying that the array of
-         * colors contains an alpha channel, but without using a `Paint` object, then
-         * specifying that there is no alpha channel and using the `Paint mPaint` as the
-         * `Paint` object.
+         * colors contains an alpha channel, but without using a [Paint] object, then specifying
+         * that there is no alpha channel and using the [Paint] field [mPaint] as the [Paint].
          *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(Color.WHITE)
@@ -102,26 +103,29 @@ class CreateBitmap : GraphicsActivity() {
             canvas.drawBitmap(mColors, 0, STRIDE, 0, 0, WIDTH, HEIGHT, false, mPaint)
         }
 
+        /**
+         * Our static method.
+         */
         companion object {
             /**
-             * Compresses its input `Bitmap src` using the `Bitmap.CompressFormat format`
-             * compression codec (JPEG, or PNG in our case), then decoding that compressed `Bitmap`
-             * into a new `Bitmap` which it returns.
+             * Compresses its input [Bitmap] parameter [src] using the [Bitmap.CompressFormat]
+             * compression codec in the [format] parmeter (JPEG, or PNG in our case), then decoding
+             * that compressed [Bitmap] into a new [Bitmap] which it returns.
              *
-             *
-             * First we create `ByteArrayOutputStream os`, then we write a compressed version of
-             * the `Bitmap src` to it, compressed using `Bitmap.CompressFormat format` using
-             * a quality setting of `int quality`. Then we convert `os` to a byte array
-             * `byte[] array`. Finally we return the `Bitmap` created by decoding the byte
+             * First we create a [ByteArrayOutputStream] for our variable `val os`, then we write a
+             * compressed version of our [Bitmap] parameter [src] to it, compressed using the
+             * [Bitmap.CompressFormat] in our parameter [format], and using an [Int] quality setting
+             * of our parameter [quality]. Then we convert `os` to a byte array to initialize our
+             * variable `val array`. Finally we return the [Bitmap] created by decoding the byte
              * array `array` to the caller.
              *
-             * @param src     `Bitmap` we want to compress, then decode again into a new `Bitmap`
+             * @param src     [Bitmap] we want to compress, then decode again into a new [Bitmap]
              * @param format  compression format we want to use
              * @param quality Hint to the compressor, 0-100. 0 meaning compress for small size, 100
-             * meaning compress for max quality. Some formats, like PNG which is loss
-             * less, will ignore the quality setting
-             * @return New `Bitmap` created from `Bitmap src` after first compressing then
-             * decoding it.
+             * meaning compress for max quality. Some formats, like PNG which is loss less, will
+             * ignore the quality setting
+             * @return New [Bitmap] created from [Bitmap] parameter [src] after first compressing
+             * then decoding it.
              */
             private fun codec(src: Bitmap?, format: CompressFormat, quality: Int): Bitmap {
                 val os = ByteArrayOutputStream()
@@ -135,26 +139,22 @@ class CreateBitmap : GraphicsActivity() {
          * Constructor for our `SampleView` instance. First we call through to our super's
          * constructor, and enable our View to receive focus.
          *
-         *
-         * We initialize our field `int[] mColors` using our method `createColors`, and
+         * We initialize our `IntArray` field `mColors` using our method `createColors`, and
          * then for some reason which escapes me, we make a local copy of `mColors` in
-         * `int[] colors`.
+         * `val colors`.
          *
-         *
-         * We allocate 6 `Bitmap`'s for our field `Bitmap[] mBitmaps`, then fill the first
+         * We allocate 6 `Bitmap`'s for our field `Bitmap[]` field `mBitmaps`, then fill the first
          * three of these by directly initializing ARGB_8888, RGB_565, and ARGB_4444 `Bitmap`'s
-         * using colors. The second three we create empty `Bitmap`'s of the same types, then
+         * using `colors`. The second three we create empty `Bitmap`'s of the same types, then
          * use `Bitmap.setPixels` to set their pixels to `colors`.
          *
-         *
-         * We initialize our field `Paint mPaint` with an instance of `Paint` and set its
+         * We initialize our `Paint` field `mPaint` with an instance of `Paint` and set its
          * dither flag to true.
          *
-         *
-         * Next we allocate 6 `Bitmap`'s for our field `Bitmap[] mJPEG` and our field
-         * `Bitmap[] mPNG` and fill each of them with `Bitmap`'s created from their
-         * corresponding `Bitmap[] mBitmaps` by our method `codec` using JPEG compression
-         * for the `mJPEG` `Bitmap` and PNG compression for the `mPNG` `Bitmap`.
+         * Next we allocate 6 `Bitmap`'s for our field `Bitmap[]` field `mJPEG` and our `Bitmap[]`
+         * field `mPNG` and fill each of them with `Bitmap`'s created from their corresponding
+         * `Bitmap[]` field `mBitmaps` by our method `codec` using JPEG compression for the `mJPEG`
+         * `Bitmap` and PNG compression for the `mPNG` `Bitmap`.
          *
          * Parameter: `Context` to use for resources, "this" `Activity` when called
          * from `onCreate` in our case.
@@ -189,41 +189,43 @@ class CreateBitmap : GraphicsActivity() {
         }
     }
 
+    /**
+     * Our static constants and methods.
+     */
     companion object {
         /**
-         * Logical screen density, used to scale the `Canvas` of the view to correctly display
+         * Logical screen density, used to scale the [Canvas] of the view to correctly display
          * the demo on high density screens.
          */
         var SCREEN_DENSITY = 0f
         /**
-         * Width of the `Bitmap`'s being created and displayed
+         * Width of the [Bitmap]'s being created and displayed
          */
         private const val WIDTH = 50
         /**
-         * Height of the `Bitmap`'s being created and displayed
+         * Height of the [Bitmap]'s being created and displayed
          */
         private const val HEIGHT = 50
         /**
-         * Number of colors in the array between rows (must be >= width or <= -width). Colors are pulled
-         * from the array in order until WIDTH pixels have been assigned, then we skip the rest of STRIDE
-         * to start the next row of pixels.
+         * Number of colors in the array between rows (must be >= width or <= -width). Colors are
+         * pulled from the array in order until WIDTH pixels have been assigned, then we skip the
+         * rest of STRIDE to start the next row of pixels.
          */
-        private const val STRIDE = 64 // must be >= WIDTH
+        private const val STRIDE = 64
 
         /**
-         * Creates an `int[]` array of colors designed to be fed to `Bitmap.createBitmap` or
-         * `Bitmap.setPixels`.
+         * Creates an [IntArray] of colors designed to be fed to [Bitmap.createBitmap] or
+         * [Bitmap.setPixels].
          *
+         * First we allocate [IntArray] variable `val colors` to hold STRIDE*HEIGHT colors. Then for
+         * the number of rows HEIGHT, we move column to column calculating a 32 bit ARGB color for
+         * each value in `colors`, using STRIDE to skip to the next row when WIDTH columns have been
+         * calculated. The color assigned is a function of the row and column position designed to
+         * produce a pleasing color ramp (from the looks of it) and we will leave it at that.
          *
-         * First we allocate `int[] colors` to hold STRIDE*HEIGHT colors. Then for the number
-         * of rows HEIGHT, we move column to column calculating a 32 bit ARGB color for each value in
-         * `colors`, using STRIDE to skip to the next row when WIDTH columns have been calculated.
-         * The color assigned is a function of the row and column position designed to produce a pleasing
-         * color ramp (from the looks of it) and we will leave it at that.
-         *
-         * @return an `int[]` array of colors filled with enough colors to specify a WIDTH*HEIGHT
-         * Bitmap with a stride of STRIDE between rows (ie. only the first WIDTH of the STRIDE per row
-         * colors are defined, after which the rest of STRIDE is skipped to move to the next row.)
+         * @return an [IntArray] array of colors filled with enough colors to specify a WIDTH*HEIGHT
+         * [Bitmap] with a stride of STRIDE between rows (ie. only the first WIDTH of the STRIDE per
+         * row colors are defined, after which the rest of STRIDE is skipped to move to the next row.)
          */
         private fun createColors(): IntArray {
             val colors = IntArray(STRIDE * HEIGHT)
