@@ -38,9 +38,15 @@ public class CreateBitmap extends GraphicsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SCREEN_DENSITY = getResources().getDisplayMetrics().density;
         setContentView(new SampleView(this));
     }
 
+    /**
+     * Logical screen density, used to scale the {@code Canvas} of the view to correctly display
+     * the demo on high density screens.
+     */
+    public static float SCREEN_DENSITY;
     /**
      * Width of the {@code Bitmap}'s being created and displayed
      */
@@ -216,6 +222,7 @@ public class CreateBitmap extends GraphicsActivity {
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(Color.WHITE);
+            canvas.scale(SCREEN_DENSITY, SCREEN_DENSITY);
 
             for (int i = 0; i < mBitmaps.length; i++) {
                 canvas.drawBitmap(mBitmaps[i], 0, 0, null);
@@ -225,10 +232,8 @@ public class CreateBitmap extends GraphicsActivity {
             }
 
             // draw the color array directly, w/o creating a bitmap object
-            //noinspection deprecation
             canvas.drawBitmap(mColors, 0, STRIDE, 0, 0, WIDTH, HEIGHT, true, null);
             canvas.translate(0, HEIGHT);
-            //noinspection deprecation
             canvas.drawBitmap(mColors, 0, STRIDE, 0, 0, WIDTH, HEIGHT, false, mPaint);
         }
     }
