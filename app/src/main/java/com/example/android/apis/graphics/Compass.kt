@@ -124,13 +124,11 @@ class Compass : GraphicsActivity() {
     }
 
     /**
-     * Called when you are no longer visible to the user.  You will next
-     * receive either [.onRestart], [.onDestroy], or nothing,
-     * depending on later user activity.
+     * Called when you are no longer visible to the user. You will next receive either [onRestart],
+     * [onDestroy], or nothing, depending on later user activity.
      *
-     *
-     * We unregister our `SensorEventListener mListener` as a listener, and call through to our
-     * super's implementation of `onStop`.
+     * We unregister our [SensorEventListener] field [mListener] as a listener, and call through to
+     * our super's implementation of `onStop`.
      */
     override fun onStop() {
         @Suppress("ConstantConditionIf")
@@ -144,7 +142,7 @@ class Compass : GraphicsActivity() {
      */
     private inner class SampleView(context: Context?) : View(context) {
         /**
-         * `Paint` instance we use in our `onDraw` method
+         * [Paint] instance we use in our [onDraw] method
          */
         private val mPaint = Paint()
         /**
@@ -152,28 +150,26 @@ class Compass : GraphicsActivity() {
          */
         private val mPath = Path()
         /**
-         * Boolean flag which is set to true in `onAttachedToWindow` and to false in
-         * `onDetachedFromWindow` which we do not actually use for anything?
+         * [Boolean] flag which is set to *true* in [onAttachedToWindow] and to *false* in
+         * [onDetachedFromWindow] which we do not actually use for anything?
          */
         private var mAnimate = false
 
         /**
-         * We implement this to do our drawing. We copy the reference to the `Paint mPaint` to
-         * `Paint paint` (for no good reason I can discern?), we set the color of the entire
-         * `Canvas canvas` to WHITE, set the antialias flag for `paint`, set its color
-         * to BLACK and set its style to FILL. We fetch the width of `canvas` to `int w`
-         * and the height to `int h` and calculate the center point of `canvas` (cx,cy)
-         * and translate the `Canvas` to that point. If our field `float[] mValues` is
-         * not null (we have received an orientation reading already) we rotate the canvas by the
-         * value of `-mValues[0]` (which is the Azimuth, angle between the magnetic north
-         * direction and the y-axis, around the z-axis (0 to 359). 0=North, 90=East, 180=South,
-         * 270=West)
+         * We implement this to do our drawing. We copy the reference to the [Paint] field [mPaint]
+         * to `val paint` (for no good reason I can discern?), we set the color of the entire
+         * [Canvas] parameter [canvas] to WHITE, set the antialias flag for `paint`, set its color
+         * to BLACK and set its style to FILL. We fetch the width of [canvas] to [Int] `val w`
+         * and the height to [Int] `val h` and calculate the center point of [canvas] (cx,cy)
+         * and translate the [Canvas] to that point. If our [Float] array field [mValues] is not
+         * *null* (we have received an orientation reading already) we rotate [canvas] by the value
+         * of `-mValues[0]` (which is the Azimuth, angle between the magnetic north direction and
+         * the y-axis, around the z-axis (0 to 359). 0=North, 90=East, 180=South, 270=West)
          *
+         * Finally we instruct the [Canvas] parameter [canvas] to draw the path [Path] field [mPath]
+         * using [Paint] field [mPaint] as the paint.
          *
-         * Finally we instruct the `Canvas canvas` to draw the path `Path mPath` using
-         * `Paint mPaint` as the paint.
-         *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         @SuppressLint("CanvasSize")
         override fun onDraw(canvas: Canvas) {
@@ -194,15 +190,13 @@ class Compass : GraphicsActivity() {
         }
 
         /**
-         * This is called when the view is attached to a window.  At this point it
-         * has a Surface and will start drawing.  Note that this function is
-         * guaranteed to be called before [.onDraw],
-         * however it may be called any time before the first onDraw -- including
-         * before or after [.onMeasure].
+         * This is called when the view is attached to a window. At this point it has a `Surface`
+         * and will start drawing. Note that this function is guaranteed to be called before
+         * [onDraw], however it may be called any time before the first call to [onDraw] --
+         * including before or after [onMeasure].
          *
-         *
-         * We simply set our (unused) flag `boolean mAnimate` to true and call through to our
-         * super's implementation of `onAttachedToWindow`.
+         * We simply set our (unused) [Boolean] flag field [mAnimate] to *true* and call through to
+         * our super's implementation of `onAttachedToWindow`.
          */
         override fun onAttachedToWindow() {
             mAnimate = true
@@ -212,12 +206,11 @@ class Compass : GraphicsActivity() {
         }
 
         /**
-         * This is called when the view is detached from a window.  At this point it
-         * no longer has a surface for drawing.
+         * This is called when the view is detached from a window. At this point it no longer has a
+         * surface for drawing.
          *
-         *
-         * We simply set our (unused) flag `boolean mAnimate` to false and call through to our
-         * super's implementation of `onDetachedFromWindow`
+         * We simply set our (unused) [Boolean] flag field [mAnimate] to *false* and call through to
+         * our super's implementation of `onDetachedFromWindow`
          */
         override fun onDetachedFromWindow() {
             mAnimate = false
@@ -228,7 +221,7 @@ class Compass : GraphicsActivity() {
 
         /**
          * Constructs and initializes our `View`. First we call our super's constructor, then
-         * we initialize our field `Path mPath` using `Path` methods to draw a wedge-shaped
+         * we initialize our `Path` field `mPath` using `Path` methods to draw a wedge-shaped
          * path which we will use as our compass pointer.
          *
          * Parameter: Activity `Context` of "this" when called from `onCreate`
@@ -243,6 +236,9 @@ class Compass : GraphicsActivity() {
         }
     }
 
+    /**
+     * Our static constants
+     */
     companion object {
         /**
          * TAG used for logging
