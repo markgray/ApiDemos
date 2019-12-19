@@ -15,7 +15,6 @@
  */
 package com.example.android.apis.graphics
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -29,6 +28,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 //Need the following import to get access to the app resources, since this
@@ -38,7 +38,7 @@ import com.example.android.apis.R
  * bitmaps and drawables. Includes sample code for different ways to get
  * drawables onto the different dpi screens.
  */
-class DensityActivity : Activity() {
+class DensityActivity : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we fetch a handle to the system-level service LAYOUT_INFLATER_SERVICE
