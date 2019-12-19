@@ -28,11 +28,13 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+
 import androidx.appcompat.app.AppCompatActivity
-import com.example.android.apis.R
 
 //Need the following import to get access to the app resources, since this
 //class is in a sub-package.
+import com.example.android.apis.R
+
 /**
  * This activity demonstrates various ways density can cause the scaling of
  * bitmaps and drawables. Includes sample code for different ways to get
@@ -41,9 +43,9 @@ import com.example.android.apis.R
 class DensityActivity : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we fetch a handle to the system-level service LAYOUT_INFLATER_SERVICE
-     * to `LayoutInflater li`. We set our title to R.string.density_title, and the system
-     * chooses the title from 5 different strings depending on the screen density:
+     * `onCreate`, then we fetch a handle to the system-level service LAYOUT_INFLATER_SERVICE to
+     * initialize our [LayoutInflater] variable `val li`. We set our title to R.string.density_title,
+     * and the system chooses the title from 5 different strings depending on the screen density:
      *
      *  * values/strings.xml "Density: Unknown Screen"
      *  * values-hdpi/strings.xml "Density: High"
@@ -51,72 +53,50 @@ class DensityActivity : AppCompatActivity() {
      *  * values-mdpi/strings.xml "Density: Medium"
      *  * values-xhdpi/strings.xml "Density: Extra High"
      *
-     * We create an instance of `LinearLayout root` and set its orientation to VERTICAL. This is
-     * the `ViewGroup` we will add 9 rows of `LinearLayout layout`'s to, each row consisting
-     * of 120dpi, 160dpi and 240dpi images stored and loaded using different approaches:
+     * We create an instance of [LinearLayout] for `val root` and set its orientation to VERTICAL.
+     * This is the `ViewGroup` we will add 9 rows of [LinearLayout] `var layout`'s to, each row
+     * consisting of 120dpi, 160dpi and 240dpi images stored and loaded using different approaches:
      *
-     *  *
-     * "Pre-scaled bitmap in drawable" uses our method `addBitmapDrawable` to add the
-     * resource images logo120dpi.png, logo160dpi.png, and logo240dpi.png (loaded using scaling)
-     * to `LinearLayout layout` which we then add to `root` using our method
-     * `addChildToRoot`
+     *  * "Pre-scaled bitmap in drawable" uses our method [addBitmapDrawable] to add the resource
+     *  images logo120dpi.png, logo160dpi.png, and logo240dpi.png (loaded using scaling) to
+     *  [LinearLayout] `var layout` which we then add to `root` using our method [addChildToRoot]     *
+     *  * "Auto-scaled bitmap in drawable" uses our method [addBitmapDrawable] to add the resource
+     *  images logo120dpi.png, logo160dpi.png, and logo240dpi.png (loaded without scaling) to
+     *  [LinearLayout] `layout` which we then add to `root` using our method [addChildToRoot]
+     *  * "Pre-scaled resource drawable" uses our method [addResourceDrawable] to load the resource
+     *  images logo120dpi.png, logo160dpi.png, and logo240dpi.png, loaded using [getDrawable] and
+     *  used to set the background of a view which it adds to [LinearLayout] `layout` which we then
+     *  add to `root` using our method [addChildToRoot]
+     *  * "Inflated layout" inflates the layout file R.layout.density_image_views which creates a
+     *  [LinearLayout] for `layout` containing three `ImageView`'s which use the resource images
+     *  logo120dpi.png, logo160dpi.png, and logo240dpi.png as their content which we then add to
+     *  `root` using our method [addChildToRoot]
+     *  * "Inflated styled layout" inflates the layout file R.layout.density_styled_image_views
+     *  which creates a [LinearLayout] for `layout` containing three `ImageView`'s which use
+     *  style/ImageView120dpi, style/ImageView160dpi, and style/ImageView240dpi to access images
+     *  stylogo120dpi.png, stylogo160dpi.png and stylogo240dpi.png as their content which we then
+     *  add to `root` using our method [addChildToRoot]
+     *  * "Pre-scaled bitmap" uses our method [addCanvasBitmap] to load the resource images
+     *  logo120dpi.png, logo160dpi.png, and logo240dpi.png, (loaded using scaling) into instances
+     *  of our custom [View] subclass [ScaledBitmapView] which it adds to [LinearLayout] `layout`
+     *  which we then add to `root` using our method [addChildToRoot]
+     *  * "Auto-scaled bitmap" uses our method [addCanvasBitmap] to load the resource images
+     *  logo120dpi.png, logo160dpi.png, and logo240dpi.png, (loaded without scaling) into instances
+     *  of our custom [View] subclass [ScaledBitmapView] which it adds to [LinearLayout] `layout`
+     *  which we then add to `root` using our method [addChildToRoot]
+     *  * "No-dpi resource drawable" uses our method [addResourceDrawable] to load the resource
+     *  images R.drawable.logonodpi120.png, R.drawable.logonodpi160.png, and R.drawable.logonodpi240.png,
+     *  loaded using [getDrawable] and used to set the background of a view which it adds to
+     *  [LinearLayout] `layout` which we then add to `root` using our method [addChildToRoot]
+     *  * "Pre-scaled 9-patch resource drawable" uses our method [addNinePatchResourceDrawable] to
+     *  add R.drawable.smlnpatch120dpi.9.png, R.drawable.smlnpatch160dpi.9.png, and
+     *  R.drawable.smlnpatch240dpi.9.png to [LinearLayout] `layout` which we then add to `root`
+     *  using our method [addChildToRoot]
      *
-     *  *
-     * "Auto-scaled bitmap in drawable" uses our method `addBitmapDrawable` to add the
-     * resource images logo120dpi.png, logo160dpi.png, and logo240dpi.png (loaded without scaling)
-     * to `LinearLayout layout` which we then add to `root` using our method
-     * `addChildToRoot`
+     * Finally we set our content view to [LinearLayout] `root` wrapped in a [ScrollView] by our
+     * method [scrollWrap].
      *
-     *  *
-     * "Pre-scaled resource drawable" uses our method `addResourceDrawable` to load the
-     * resource images logo120dpi.png, logo160dpi.png, and logo240dpi.png, loaded using
-     * `getDrawable` and used to set the background of a view which it adds
-     * to `LinearLayout layout` which we then add to `root` using our method
-     * `addChildToRoot`
-     *
-     *  *
-     * "Inflated layout" inflates the layout file R.layout.density_image_views which creates a
-     * `LinearLayout layout` containing three `ImageView`'s which use the resource
-     * images logo120dpi.png, logo160dpi.png, and logo240dpi.png as their content which we then
-     * add to `root` using our method `addChildToRoot`
-     *
-     *  *
-     * "Inflated styled layout" inflates the layout file R.layout.density_styled_image_views
-     * which creates a `LinearLayout layout` containing three `ImageView`'s which
-     * use style/ImageView120dpi, style/ImageView160dpi, and style/ImageView240dpi to access
-     * images stylogo120dpi.png, stylogo160dpi.png and stylogo240dpi.png as their content
-     * which we then add to `root` using our method `addChildToRoot`
-     *
-     *  *
-     * "Pre-scaled bitmap" uses our method `addCanvasBitmap` to load the resource images
-     * logo120dpi.png, logo160dpi.png, and logo240dpi.png, (loaded using scaling) into instances
-     * of our custom `View` `ScaledBitmapView` which it adds to `LinearLayout layout`
-     * which we then add to `root` using our method `addChildToRoot`
-     *
-     *  *
-     * "Auto-scaled bitmap" uses our method `addCanvasBitmap` to load the resource images
-     * logo120dpi.png, logo160dpi.png, and logo240dpi.png, (loaded without scaling) into instances
-     * of our custom `View` `ScaledBitmapView` which it adds to `LinearLayout layout`
-     * which we then add to `root` using our method `addChildToRoot`
-     *
-     *  *
-     * "No-dpi resource drawable" uses our method `addResourceDrawable` to load the resource
-     * images R.drawable.logonodpi120.png, R.drawable.logonodpi160.png, and R.drawable.logonodpi240.png,
-     * loaded using `getDrawable` and used to set the background of a view which it adds to
-     * `LinearLayout layout` which we then add to `root` using our method
-     * `addChildToRoot`
-     *
-     *  *
-     * "Pre-scaled 9-patch resource drawable" uses our method `addNinePatchResourceDrawable`
-     * to add R.drawable.smlnpatch120dpi.9.png, R.drawable.smlnpatch160dpi.9.png, and
-     * R.drawable.smlnpatch240dpi.9.png to `Layout layout` which we then add to `root`
-     * using our method `addChildToRoot`
-     *
-     *
-     * Finally we set our content view to `LinearLayout root` wrapped in a `ScrollView` by
-     * our method `scrollWrap`.
-     *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -176,13 +156,13 @@ class DensityActivity : AppCompatActivity() {
     }
 
     /**
-     * Wraps the `View` it is passed inside a `ScrollView`, which it returns. First we
-     * create `ScrollView scroller`, then we add our parameter `View view` to `scroller`
+     * Wraps the [View] it is passed inside a [ScrollView], which it returns. First we create
+     * [ScrollView] for `val scroller`, then we add our [View] parameter [view] to `scroller`
      * using MATCH_PARENT for the layout parameters for both width and height. Finally we return
      * `scroller` to the caller.
      *
-     * @param view `View` we are to add to a `ScrollView` which we return
-     * @return a `ScrollView` containing our parameter `View view` as its only child
+     * @param view [View] we are to add to a [ScrollView] which we return
+     * @return a [ScrollView] containing our [View] parameter [view] as its only child
      */
     private fun scrollWrap(view: View): View {
         val scroller = ScrollView(this)
