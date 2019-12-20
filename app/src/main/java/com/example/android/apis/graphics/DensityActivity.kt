@@ -172,13 +172,14 @@ class DensityActivity : AppCompatActivity() {
     }
 
     /**
-     * Adds a `TextView` displaying the text `String text` to the `LinearLayout root`.
-     * First we create a new instance of `TextView label`, set the text of `label` to
-     * `String text` and add `label` to `LinearLayout root` using MATCH_PARENT for
-     * the width, and WRAP_CONTENT for the height `LayoutParams`.
+     * Adds a [TextView] displaying the text of [String] parameter [text] to the [LinearLayout]
+     * parameter [root]. First we create a new instance of [TextView] for our variable `val label`,
+     * set the text of `label` to [String] parameter [text] and add `label` to [LinearLayout]
+     * parameter [root] using MATCH_PARENT for the width, and WRAP_CONTENT for the height of its
+     * [LinearLayout.LayoutParams] layout parameters.
      *
-     * @param root The `LinearLayout` we are to add a label to
-     * @param text The text for the `TextView` we will add to `root`
+     * @param root The [LinearLayout] we are to add a label to
+     * @param text The text for the [TextView] we will add to our [LinearLayout] parameter [root]
      */
     private fun addLabelToRoot(root: LinearLayout, text: String) {
         val label = TextView(this)
@@ -188,12 +189,12 @@ class DensityActivity : AppCompatActivity() {
     }
 
     /**
-     * Adds the `LinearLayout layout` to `LinearLayout root` using the layout parameters
-     * MATCH_PARENT for width, and WRAP_CONTENT for height
+     * Adds the [LinearLayout] parameter [layout] to our [LinearLayout] parameter [root] using the
+     * layout parameters MATCH_PARENT for width, and WRAP_CONTENT for height
      *
-     * @param root   `LinearLayout` `ViewGroup` which we want to add
-     * `LinearLayout layout` to
-     * @param layout `LinearLayout` we are to add to `LinearLayout root`
+     * @param root   [LinearLayout] parameter `ViewGroup` which we want to add [LinearLayout]
+     * parameter [layout] to
+     * @param layout [LinearLayout] we are to add to [LinearLayout] parameter [root]
      */
     private fun addChildToRoot(root: LinearLayout, layout: LinearLayout) {
         root.addView(layout, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -201,19 +202,20 @@ class DensityActivity : AppCompatActivity() {
     }
 
     /**
-     * Adds a `Bitmap` decoded from resource ID `resource` to `LinearLayout layout`,
-     * optionally using scaling if the flag `boolean scale` is true. First we declare the
-     * variable `Bitmap bitmap`, then we use our method `loadAndPrintDpi` to load the
-     * resource image with resource ID `resource` using the flag `scale` to determine
-     * whether the image should be decoded using the no scaling option. We create `View view`
-     * create `BitmapDrawable d` from `bitmap`, and if scale is false (no scaling) we
-     * set the density scale that it should be rendered at to the current display metrics. We set the
-     * background of `view` to `BitmapDrawable d`, set the layout parameters of `view`
-     * to the intrinsic height and width of `d`, and finally add `view` to `layout`.
+     * Adds a [Bitmap] decoded from resource ID parameter [resource] to [LinearLayout] parameter
+     * [layout], optionally using scaling if the [Boolean] flag parameeter [scale] is true. First
+     * we declare the [Bitmap] variable `val bitmap`, then we use our method [loadAndPrintDpi] to
+     * load the resource image with resource ID parameter [resource] using the [Boolean] flag
+     * parameter [scale] to determine whether the image should be decoded using the no scaling
+     * option. We create [View] variable `val view` create [BitmapDrawable] variable `val d` from
+     * `bitmap`, and if `scale` is false (no scaling) we set the density scale that it should be
+     * rendered at to the current display metrics. We set the background of `view` to `d`, set the
+     * layout parameters of `view` to the intrinsic height and width of `d`, and finally add `view`
+     * to [layout].
      *
-     * @param layout   `LinearLayout` we are to add the resource `Drawable` to
+     * @param layout   [LinearLayout] we are to add the resource `Drawable` to
      * @param resource resource ID of a `Drawable` to read and use from our resources
-     * @param scale    flag indicating whether our method `loadAndPrintDpi` should use scaling when
+     * @param scale    flag indicating whether our method [loadAndPrintDpi] should use scaling when
      * decoding the resource image.
      */
     private fun addBitmapDrawable(layout: LinearLayout, resource: Int, scale: Boolean) {
@@ -227,13 +229,13 @@ class DensityActivity : AppCompatActivity() {
     }
 
     /**
-     * Creates a `View view`, loads the resource drawable with resource ID `resource` into
-     * a `Drawable d` and sets the background drawable of `view` to it. Sets the layout
-     * parameters of `view` to the intrinsic width and height of `d` then adds `view`
-     * to `LinearLayout layout`.
+     * Creates a [View] variable `val view`, loads the resource drawable with resource ID of our
+     * parameter [resource] into a `Drawable` variable `val d` and sets the background drawable of
+     * `view` to it. Sets the layout parameters of `view` to the intrinsic width and height of `d`
+     * then adds `view` to [LinearLayout] parameter [layout].
      *
-     * @param layout   `LinearLayout` `ViewGroup` we are to add the resource image with
-     * resource ID `resource` to.
+     * @param layout   [LinearLayout] `ViewGroup` we are to add the resource image with resource ID
+     * [resource] to.
      * @param resource resource ID of an resource image to load.
      */
     private fun addResourceDrawable(layout: LinearLayout, resource: Int) {
@@ -246,15 +248,15 @@ class DensityActivity : AppCompatActivity() {
     }
 
     /**
-     * Adds a `ScaledBitmapView` to our parameter `LinearLayout layout`, created using a
-     * `Bitmap` loaded from the resource image given by the resource ID `resource`, and
-     * optionally scaled first if `scale` is true.
+     * Adds a [ScaledBitmapView] to our [LinearLayout] parameter [layout], created using a [Bitmap]
+     * loaded from the resource image given by the resource ID parameter [resource], and optionally
+     * scaled first if our [scale] parameter is *true*.
      *
-     * @param layout   `LinearLayout` we are to add the `Bitmap` we load from the resource
-     * image given by the resource ID `resource` to.
-     * @param resource resource ID of png image we should load into a `Bitmap` and add to `layout`
-     * @param scale    if true we want to allow `loadAndPrintDpi` to scale the image when loading it into
-     * a `Bitmap`, false if we want it unscaled
+     * @param layout   [LinearLayout] we are to add the [Bitmap] we load from the resource image
+     * given by the resource ID parameter [resource] to.
+     * @param resource resource ID of png image we should load into a [Bitmap] and add to [layout]
+     * @param scale    if *true* we want to allow [loadAndPrintDpi] to scale the image when loading
+     * it into a [Bitmap], *false* if we want it unscaled
      */
     private fun addCanvasBitmap(layout: LinearLayout, resource: Int, scale: Boolean) {
         val bitmap: Bitmap = loadAndPrintDpi(resource, scale)
@@ -265,13 +267,13 @@ class DensityActivity : AppCompatActivity() {
     }
 
     /**
-     * Loads a nine-patch png image with resource ID `resource` from our resources, and adds a
-     * `View` using it as the background drawable to the `LinearLayout layout`.
+     * Loads a nine-patch png image with resource ID of our parameter [resource] from our resources,
+     * and adds a [View] using it as the background drawable to the [LinearLayout] parameter [layout]
      *
-     * @param layout   `LinearLayout` to which we will add the `Drawable` we load from the resource
-     * image with resource ID `resource`
+     * @param layout   [LinearLayout] to which we will add the `Drawable` we load from the resource
+     * image with resource ID [resource]
      * @param resource resource ID for a nine-patch png image to load into a `Drawable` and then
-     * use as the background for a view which we add to `LinearLayout layout`
+     * use as the background for a view which we add to [LinearLayout] parameter [layout]
      */
     private fun addNinePatchResourceDrawable(layout: LinearLayout, resource: Int) {
         val view = View(this)
