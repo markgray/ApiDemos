@@ -287,12 +287,25 @@ class DensityActivity : AppCompatActivity() {
     }
 
     /**
-     * Decodes the resource image with the resource ID `id` into a `Bitmap` which it returns,
-     * optionally applying scaling when decoding it if `boolean scale` is true.
+     * Decodes the resource image with the resource ID [id] into a [Bitmap] which it returns,
+     * optionally applying scaling when decoding it if our [Boolean] parameter [scale] is *true*.
+     * We declare our [Bitmap] variable `val bitmap` then branch on the value of our parameter
+     * scale:
+     *  * *true* we set `bitmap` to the [Bitmap] that the [BitmapFactory.decodeResource] method
+     *  returns when called with a Resources instance for our application's package and our
+     *  resource ID parameter [id].
+     *  * *false* we initialize our [BitmapFactory.Options] variable `val opts` to a new instance
+     *  then set its `inScaled` field to *true* (when this flag is set the bitmap will be scaled to
+     *  match `inTargetDensity` when loaded, rather than relying on the graphics system scaling it
+     *  each time it is drawn to a Canvas). Then we set `bitmap` to the [Bitmap] that the
+     *  [BitmapFactory.decodeResource] method returns when called with a Resources instance for our
+     *  application's package, our resource ID parameter [id] and our `Options` variable `opts`.
      *
-     * @param id    resource ID of an image to load into the `Bitmap` we return
-     * @param scale if true we allow `decodeResource` to scale the image, false if we want it unscaled
-     * @return `Bitmap` decoded from resource ID `id` resource image
+     *  In either case we return `bitmap` to the caller.
+     *
+     * @param id    resource ID of an image to load into the [Bitmap] we return
+     * @param scale if *true* we allow `decodeResource` to scale the image, if *false* it's unscaled
+     * @return [Bitmap] decoded from resource ID [id] resource image
      */
     private fun loadAndPrintDpi(id: Int, scale: Boolean): Bitmap {
         val bitmap: Bitmap
@@ -307,7 +320,7 @@ class DensityActivity : AppCompatActivity() {
     }
 
     /**
-     * Custom `View` which uses the scaled width and height of the `Bitmap` it contains
+     * Custom [View] which uses the scaled width and height of the [Bitmap] it contains
      * given the target density of the current display metrics.
      */
     private inner class ScaledBitmapView
