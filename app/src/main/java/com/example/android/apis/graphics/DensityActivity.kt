@@ -332,30 +332,26 @@ class DensityActivity : AppCompatActivity() {
      * Parameter: bitmap `Bitmap` we are to hold and Display.
      */(context: Context?,
         /**
-         * `Bitmap` we were created to hold and draw when our `onDraw` override is called.
+         * [Bitmap] we were created to hold and draw when our [onDraw] override is called.
          */
         private val mBitmap: Bitmap) : View(context) {
 
         /**
-         * Measure the view and its content to determine the measured width and the
-         * measured height. This method is invoked by [.measure] and
-         * should be overridden by subclasses to provide accurate and efficient
-         * measurement of their contents.
-         *
+         * Measure the view and its content to determine the measured width and the measured height.
+         * This method is invoked by [measure] and should be overridden by subclasses to provide
+         * accurate and efficient measurement of their contents.
          *
          * First we call through to our super's implementation of `onMeasure`, then we set
-         * `DisplayMetrics metrics` to the current display metrics that are in effect for
-         * the resources associated with this view. We use `metrics` to determine the width
-         * and height of `Bitmap mBitmap` given the target density of the current display
-         * metrics, which we then pass to the method `setMeasuredDimension` to store as our
-         * width and height.
+         * our `DisplayMetrics` variable `val metrics` to the current display metrics that are
+         * in effect for the resources associated with this view. We use `metrics` to determine
+         * the width and height of our [Bitmap] field [mBitmap] given the target density of the
+         * current display metrics, which we then pass to the method `setMeasuredDimension` to
+         * store as our width and height.
          *
          * @param widthMeasureSpec  horizontal space requirements as imposed by the parent.
-         * The requirements are encoded with
-         * [android.view.View.MeasureSpec].
+         * The requirements are encoded with [android.view.View.MeasureSpec].
          * @param heightMeasureSpec vertical space requirements as imposed by the parent.
-         * The requirements are encoded with
-         * [android.view.View.MeasureSpec].
+         * The requirements are encoded with [android.view.View.MeasureSpec].
          */
         override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -366,9 +362,9 @@ class DensityActivity : AppCompatActivity() {
         }
 
         /**
-         * We implement this to do our drawing. First we call through to our super's implementation of
-         * `onDraw`, then we instruct `Canvas canvas` to draw `Bitmap mBitmap` at
-         * (0,0) using a null `Paint`.
+         * We implement this to do our drawing. First we call through to our super's implementation
+         * of `onDraw`, then we instruct our [Canvas] parameter [canvas] to draw our [Bitmap] field
+         * [mBitmap] at (0,0) using a *null* `Paint`.
          *
          * @param canvas the canvas on which the background will be drawn
          */
