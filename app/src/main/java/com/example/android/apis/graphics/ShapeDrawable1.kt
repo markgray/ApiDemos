@@ -47,20 +47,20 @@ class ShapeDrawable1 : GraphicsActivity() {
         private val mDrawables: Array<ShapeDrawable?>
 
         /**
-         * Custom `ShapeDrawable` which draws its shape twice, once using the `Paint`
-         * passed to its `onDraw` method, and once using its private `Paint` (which is
+         * Custom [ShapeDrawable] which draws its shape twice, once using the [Paint]
+         * passed to its [onDraw] method, and once using its private [Paint] (which is
          * configured to be a stroked style paint, and can be accessed and customized using the
          * getter method `getStrokePaint`)
          */
         private class MyShapeDrawable(s: Shape?) : ShapeDrawable(s) {
             /**
-             * Returns a reference to our private field `Paint mStrokePaint` so that the user
+             * Returns a reference to our private [Paint] field `mStrokePaint` so that the user
              * can modify (or use) it.
              *
-             * @return reference to our private field `Paint mStrokePaint`.
+             * @return reference to our private [Paint] field `mStrokePaint`.
              */
             /**
-             * `Paint` used to draw the shape a second time in our `onDraw` method. It is
+             * [Paint] used to draw the shape a second time in our [onDraw] method. It is
              * configured to use the STROKE style, and can be accessed and customized using the
              * getter method `getStrokePaint`)
              */
@@ -71,14 +71,13 @@ class ShapeDrawable1 : GraphicsActivity() {
              * draw the shape at (0,0). Subclasses can override for special effects such
              * as multiple layers, stroking, etc.
              *
+             * First we instruct the [Shape] parameter [s] to draw itself on [Canvas] parameter [c]
+             * using [Paint] parameter [p], then instruct the [s] to draw itself again on [c] using
+             * our [Paint] field `mStrokePaint`
              *
-             * First we instruct the `Shape s` to draw itself on `Canvas c` using
-             * `Paint p`, then instruct the `Shape s` to draw itself again on
-             * `Canvas c` using our `Paint mStrokePaint`
-             *
-             * @param s `Shape` we are to draw
-             * @param c `Canvas` we are to draw our `Shape s` to positioned to draw at (0,0)
-             * @param p `Paint` we are supposed to use.
+             * @param s [Shape] we are to draw
+             * @param c [Canvas] we are to draw our [Shape] parameter [s] to position (0,0)
+             * @param p [Paint] we are supposed to use.
              */
             override fun onDraw(s: Shape, c: Canvas, p: Paint) {
                 s.draw(c, p)
@@ -87,7 +86,7 @@ class ShapeDrawable1 : GraphicsActivity() {
 
             /**
              * Our constructor. First we call through to our super's constructor, then we set the
-             * style of our field `Paint mStrokePaint` to STROKE (Geometry and text drawn with
+             * style of our `Paint` field `mStrokePaint` to STROKE (Geometry and text drawn with
              * this style will be stroked, respecting the stroke-related fields on the paint)
              *
              * Parameter: `Shape` we are to draw (an `ArcShape` in our case)
@@ -107,7 +106,6 @@ class ShapeDrawable1 : GraphicsActivity() {
          * into pixels. We initialize `int width` (the width of our `ShapeDrawable`) to
          * 300 dp scaled by `scale` into pixels, and `int height` (the height of our
          * `ShapeDrawable`) to 50 dp scaled by `scale` into pixels.
-         *
          *
          * Then for each of the `Drawable dr` in `ShapeDrawable[] mDrawables` we set the
          * bounds of `dr` to `(x,y,x+width,y+height)` ((left,top,right,bottom) positions
