@@ -97,23 +97,23 @@ class ShapeDrawable1 : GraphicsActivity() {
         }
 
         /**
-         * We implement this to do our drawing. First we fetch the logical density of the display from
-         * the current display metrics that are in effect for the resources associated with this view
-         * into `float scale`. This is a rough conversion factor which can used to convert dp
-         * measurements to pixels. We initialize `int x` (the x coordinate to use for each
-         * `ShapeDrawable`) to 10 dp scaled by `scale` into pixels, and `int y`
-         * (the y coordinate to use for the next `ShapeDrawable`) to 10 dp scaled by `scale`
-         * into pixels. We initialize `int width` (the width of our `ShapeDrawable`) to
-         * 300 dp scaled by `scale` into pixels, and `int height` (the height of our
-         * `ShapeDrawable`) to 50 dp scaled by `scale` into pixels.
+         * We implement this to do our drawing. First we fetch the logical density of the display
+         * from the current display metrics that are in effect for the resources associated with
+         * this view into our [Float] variable `val scale` (this is a rough conversion factor which
+         * can be used to convert dp measurements to pixels). We initialize [Int] variable `val x`
+         * (the x coordinate to use for each [ShapeDrawable]) to 10 dp scaled by `scale` into pixels,
+         * and [Int] variable `val y` (the y coordinate to use for the next [ShapeDrawable]) to
+         * 10 dp scaled by `scale` into pixels. We initialize [Int] variable `val width` (the width
+         * of our [ShapeDrawable]) to 300 dp scaled by `scale` into pixels, and [Int] variable
+         * `val height` (the height of our [ShapeDrawable]) to 50 dp scaled by `scale` into pixels.
          *
-         * Then for each of the `Drawable dr` in `ShapeDrawable[] mDrawables` we set the
-         * bounds of `dr` to `(x,y,x+width,y+height)` ((left,top,right,bottom) positions
-         * of the bounding rectangle for `dr`). We instruct `dr` to draw itself on the
-         * `Canvas canvas` and then advance `y` by the `height` and 5 dp for padding
-         * between `Drawable`'s in order to get ready for the next pass through the loop.
+         * Then for each of the [ShapeDrawable] `dr` in our [ShapeDrawable] array field [mDrawables]
+         * we set the bounds of `dr` to `(x,y,x+width,y+height)` ((left,top,right,bottom) positions
+         * of the bounding rectangle for `dr`). We instruct `dr` to draw itself on our [Canvas]
+         * parameter [canvas] and then advance `y` by the `height` plus 5 dp for padding between
+         * `Drawable`'s in order to get ready for the next pass through the loop.
          *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
             val scale = resources.displayMetrics.density
@@ -128,41 +128,50 @@ class ShapeDrawable1 : GraphicsActivity() {
             }
         }
 
+        /**
+         * Our static methods
+         */
         companion object {
             /**
-             * Creates and returns a `SweepGradient` `Shader` that draws a sweep gradient
+             * Creates and returns a [SweepGradient] type of [Shader] that draws a sweep gradient
              * around a center point (150,25), with the colors red, green, blue, red.
              *
-             * @return Shader that draws a sweep gradient around a center point (150,25), with the colors
-             * red, green, blue, red.
+             * @return [Shader] that draws a sweep gradient around a center point (150,25), with the
+             * colors red, green, blue, red.
              */
             private fun makeSweep(): Shader {
-                return SweepGradient(150f, 25f, intArrayOf(-0x10000, -0xff0100, -0xffff01, -0x10000),
-                        null)
+                return SweepGradient(
+                        150f, 25f,
+                        intArrayOf(-0x10000, -0xff0100, -0xffff01, -0x10000),
+                        null
+                )
             }
 
             /**
-             * Creates and returns a shader that draws a linear gradient along the line (0,0) to (50,50)
-             * using the colors red, green, and blue evenly distributed along the line, and using the tile
-             * mode MIRROR (repeats the shader's image horizontally and vertically, alternating mirror
-             * images so that adjacent images always seam)
+             * Creates and returns a [Shader] that draws a [LinearGradient] along the line (0,0) to
+             * (50,50) using the colors red, green, and blue evenly distributed along the line, and
+             * using the tile mode MIRROR (repeats the shader's image horizontally and vertically,
+             * alternating mirror images so that adjacent images always seam)
              *
-             * @return a `LinearGradient` `Shader` shader that draws a linear gradient along
-             * the line (0,0) to (50,50) using the colors red, green, and blue evenly distributed along
+             * @return a [LinearGradient] type of [Shader] that draws a linear gradient along the
+             * line (0,0) to (50,50) using the colors red, green, and blue evenly distributed along
              * the line, and using the tile mode MIRROR (repeats the shader's image horizontally and
              * vertically, alternating mirror images so that adjacent images always seam)
              */
             private fun makeLinear(): Shader {
-                return LinearGradient(0f, 0f, 50f, 50f, intArrayOf(-0x10000, -0xff0100, -0xffff01),
-                        null, Shader.TileMode.MIRROR)
+                return LinearGradient(
+                        0f, 0f, 50f, 50f,
+                        intArrayOf(-0x10000, -0xff0100, -0xffff01),
+                        null, Shader.TileMode.MIRROR
+                )
             }
 
             /**
-             * Creates and returns a `BitmapShader` `Shader` which "tiles" a shape using a
-             * `Bitmap`. First we allocate `int[] pixels` with the four colors Red, Green,
-             * Blue, and Black. Then we create the 2 by 2 `Bitmap bm` from `pixels` using
-             * the type ARGB_8888. Finally we return a `BitmapShader` created from `bm` with
-             * a tile mode of REPEAT for both x and y directions.
+             * Creates and returns a [BitmapShader] type [Shader] which "tiles" a shape using a
+             * [Bitmap]. First we allocate and initialize an [Int] array `val pixels` c containing
+             * the four colors Red, Green, Blue, and Black. Then we create the 2 by 2 [Bitmap]
+             * `val bm` from `pixels` using the type ARGB_8888. Finally we return a [BitmapShader]
+             * constructed from `bm` with a tile mode of REPEAT for both x and y directions.
              *
              * @return a `BitmapShader` `Shader` which "tiles" a shape using a `Bitmap`
              */
@@ -178,67 +187,53 @@ class ShapeDrawable1 : GraphicsActivity() {
          * and then we enable our `View` to receive focus. Then we allocate and initialize 3
          * arrays we use later for defining `RoundRectShape`'s:
          *
-         *  *
-         * `float[] outerR` is an array  of 8 radius values, for the outer round rect.
-         * The first two floats are for the top-left corner (remaining pairs correspond
-         * clockwise).
+         *  * `float[] outerR` is an array  of 8 radius values, for the outer round rect.
+         *  The first two floats are for the top-left corner (remaining pairs correspond
+         *  clockwise).
          *
-         *  *
-         * `RectF inset` A RectF that specifies the distance from the inner rect to
-         * each side of the outer rect. For no inner, we pass null.
+         *  * `RectF inset` A RectF that specifies the distance from the inner rect to
+         *  each side of the outer rect. For no inner, we pass null.
          *
-         *  *
-         * `float[] innerR` An array of 8 radius values, for the inner round rect. The
-         * first two floats are for the top-left corner (remaining pairs correspond clockwise).
-         * For no rounded corners on the inner rectangle, we pass null. If inset parameter is
-         * null, this parameter is ignored.
+         *  * `float[] innerR` An array of 8 radius values, for the inner round rect. The
+         *  first two floats are for the top-left corner (remaining pairs correspond clockwise).
+         *  For no rounded corners on the inner rectangle, we pass null. If inset parameter is
+         *  null, this parameter is ignored.
          *
+         * Next we define `Path` variable `val path` to be a diamond shaped rectangle which we will
+         * later use for the `PathShape` used for `mDrawables[5]`. We initialize our field
+         * `ShapeDrawable[] field `mDrawables` by allocating 7 `ShapeDrawable`'s. Then we initialize
+         * each of these:
          *
-         * Next we define `Path path` to be a diamond shaped rectangle which we will later use
-         * for the `PathShape` used for `mDrawables[5]`.
+         *  * `mDrawables[0]` is a new instance of `RectShape`, we will later set the
+         *  color of its `Paint` to Red.
          *
+         *  * `mDrawables[1]` is a new instance of `OvalShape`, we will later set the
+         *  color of its `Paint` to Blue.
          *
-         * We initialize our field `ShapeDrawable[] mDrawables` by allocating 7 `ShapeDrawable`'s.
-         * Then we initialize each of these:
+         *  * `mDrawables[2]` is a new instance of `RoundRectShape` defined using only
+         *  `outerR` as the outer round rect, we will later set the color of its `Paint`
+         *  to Green.
          *
-         *  *
-         * `mDrawables[0]` is a new instance of `RectShape`, we will later set the
-         * color of its `Paint` to Red.
+         *  * `mDrawables[3]` is a new instance of `RoundRectShape` defined using
+         *  `outerR` as the outer round rect, and `inset` as the `RectF`
+         *  that specifies the distance from the inner rect to each side of the outer rect.
+         *  We will later set its `Shader` to a `SweepGradient Shader` created by
+         *  our method `makeSweep`.
          *
-         *  *
-         * `mDrawables[1]` is a new instance of `OvalShape`, we will later set the
-         * color of its `Paint` to Blue.
+         *  * `mDrawables[4]` is a new instance of `RoundRectShape` defined using
+         *  `outerR` as the outer round rect, `inset` as the `RectF` that
+         *  specifies the distance from the inner rect to each side of the outer rect, and
+         *  `innerR` as the inner round rect. We will later set its `Shader` to a
+         *  `LinearGradient Shader` created by our method `makeLinear`
          *
-         *  *
-         * `mDrawables[2]` is a new instance of `RoundRectShape` defined using only
-         * `outerR` as the outer round rect, we will later set the color of its `Paint`
-         * to Green.
+         *  * `mDrawables[5]` is a `PathShape` using `Path path` as its `Path`
+         *  and 100 for both the standard width and standard height. We will later set its
+         *  `Shader` to a `BitmapShader Shader` created by our method `makeTiling`.
          *
-         *  *
-         * `mDrawables[3]` is a new instance of `RoundRectShape` defined using
-         * `outerR` as the outer round rect, and `inset` as the `RectF`
-         * that specifies the distance from the inner rect to each side of the outer rect.
-         * We will later set its `Shader` to a `SweepGradient Shader` created by
-         * our method `makeSweep`.
-         *
-         *  *
-         * `mDrawables[4]` is a new instance of `RoundRectShape` defined using
-         * `outerR` as the outer round rect, `inset` as the `RectF` that
-         * specifies the distance from the inner rect to each side of the outer rect, and
-         * `innerR` as the inner round rect. We will later set its `Shader` to a
-         * `LinearGradient Shader` created by our method `makeLinear`
-         *
-         *  *
-         * `mDrawables[5]` is a `PathShape` using `Path path` as its `Path`
-         * and 100 for both the standard width and standard height. We will later set its
-         * `Shader` to a `BitmapShader Shader` created by our method `makeTiling`.
-         *
-         *  *
-         * `mDrawables[6]` is a custom `MyShapeDrawable` wrapping an `ArcShape`
-         * spanning 45 degrees to -270 degrees. We later set the color of its `Paint` to
-         * 0x88FF8844 (A Brown), and set the stroke width of the private `Paint` used to
-         * draw the `ArcShape` a second time after the native `Paint` is used to 4.
-         *
+         *  * `mDrawables[6]` is a custom `MyShapeDrawable` wrapping an `ArcShape`
+         *  spanning 45 degrees to -270 degrees. We later set the color of its `Paint` to
+         *  0x88FF8844 (A Brown), and set the stroke width of the private `Paint` used to
+         *  draw the `ArcShape` a second time after the native `Paint` is used to 4.
          *
          * For `mDrawables[3]` we create `PathEffect pe` (a `DiscretePathEffect` which
          * chops the path into lines of 10, randomly deviating from the original path by 4) and
