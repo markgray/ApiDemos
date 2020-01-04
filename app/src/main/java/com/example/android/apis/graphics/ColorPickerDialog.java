@@ -26,6 +26,7 @@ import android.view.View;
 
 /**
  * Custom {@code Dialog} to pick colors, used only by {@code FingerPaint}
+ * TODO: Scale the Dialog by resources.displayMetrics.density (in Kotlin version) see FingerPaint
  */
 @SuppressWarnings("WeakerAccess")
 public class ColorPickerDialog extends Dialog {

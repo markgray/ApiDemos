@@ -33,34 +33,34 @@ import kotlin.math.abs
  */
 class FingerPaint : GraphicsActivity(), OnColorChangedListener {
     /**
-     * Current `Paint` to use for drawing loci of finger movements.
+     * Current [Paint] to use for drawing loci of finger movements.
      */
     private var mPaint: Paint? = null
     /**
-     * An `EmbossMaskFilter` which can be added to `mPaint` using the options menu,
+     * An [EmbossMaskFilter] which can be added to [mPaint] using the options menu,
      * applies a shadow like effect to the line being drawn.
      */
     private var mEmboss: MaskFilter? = null
     /**
-     * A `BlurMaskFilter` which can be added to `mPaint` using the options menu,
+     * A [BlurMaskFilter] which can be added to [mPaint] using the options menu,
      * applies a blur effect to the line being drawn.
      */
     private var mBlur: MaskFilter? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to an instance of `MyView`. Next we
-     * allocate a `Paint mPaint`, set its antialias flag, set its dither flag, set its color
+     * `onCreate`, then we set our content view to an instance of [MyView]. Next we allocate a
+     * [Paint] for our filed [mPaint], set its antialias flag, set its dither flag, set its color
      * to RED, set the style to STROKE, set the stroke join to ROUND, set its stroke cap to ROUND,
-     * and set its stroke width to 12. We initialize `MaskFilter mEmboss` with an instance of
-     * `EmbossMaskFilter` configured to use a light source direction of (1,1,1), ambient light
-     * value of 0.4f,coefficient for specular highlights of 6.0, and blur before lighting of 3.5f.
+     * and set its stroke width to 12. We initialize our [MaskFilter] filed [mEmboss] with an
+     * instance of [EmbossMaskFilter] configured to use a light source direction of (1,1,1), ambient
+     * light value of 0.4f, coefficient for specular highlights of 6.0, and blur before lighting of
+     * 3.5f.
      *
-     *
-     * Finally we initialize our field `MaskFilter mBlur` with a `BlurMaskFilter` configured
+     * Finally we initialize our [MaskFilter] field [mBlur] with a [BlurMaskFilter] configured
      * to use a blur radius of 8.0f, and a blur type of NORMAL.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,11 +80,11 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
     }
 
     /**
-     * This method will be called when the user has chosen a new color using `ColorPickerDialog`.
-     * We simply set the color of `Paint mPaint` to the `color` the user chose using the
+     * This method will be called when the user has chosen a new color using [ColorPickerDialog].
+     * We simply set the color of [Paint] field [mPaint] to the `color` the user chose using the
      * dialog.
      *
-     * @param color new color chosen by user using `ColorPickerDialog`
+     * @param color new color chosen by user using [ColorPickerDialog]
      */
     override fun colorChanged(color: Int) {
         mPaint!!.color = color
