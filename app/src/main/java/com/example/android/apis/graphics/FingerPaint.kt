@@ -95,26 +95,26 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
      */
     inner class MyView(c: Context?) : View(c) {
         /**
-         * `Bitmap` which is used to save all lines drawn. It is updated with the latest
-         * `Path mPath` in method `touch_up` every time we receive the event
-         * MotionEvent.ACTION_UP by drawing to `Canvas mCanvas` (which is a `Canvas`
-         * created from `mBitmap`) and used in our `onDraw` override to draw the old
-         * lines before drawing the current `Path mPath`.
+         * [Bitmap] which is used to save all lines drawn. It is updated with the latest
+         * [Path] field [mPath] in method `touch_up` every time we receive the event
+         * MotionEvent.ACTION_UP by drawing to [Canvas] field [mCanvas] (which is a [Canvas]
+         * created from [mBitmap]) and used in our [onDraw] override to draw the old lines
+         * before drawing the current [mPath].
          */
         private var mBitmap: Bitmap? = null
         /**
-         * `Canvas` for the `Bitmap mBitmap` created in `onSizeChanged` that allows
-         * us to draw into `mBitmap`
+         * [Canvas] for the [Bitmap] field [mBitmap] created in [onSizeChanged] that allows
+         * us to draw into [mBitmap]
          */
         private var mCanvas: Canvas? = null
         /**
-         * `Path` traced by user's finger, collected from `MotionEvent`'s received in our
+         * [Path] traced by user's finger, collected from `MotionEvent`'s received in our
          * `MyView.onTouchEvent` method.
          */
         private val mPath: Path = Path()
         /**
-         * `Paint` used to draw `Bitmap mBitmap` (the accumulated finger loci tracing)
-         * used in our `onDraw` override.
+         * [Paint] used to draw [Bitmap] field [mBitmap] (the accumulated finger loci tracing)
+         * used in our [onDraw] override.
          */
         private val mBitmapPaint: Paint = Paint(Paint.DITHER_FLAG)
 
@@ -123,11 +123,10 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
          * you were just added to the view hierarchy, you're called with the old
          * values of 0.
          *
-         *
          * First we call through to our super's implementation of `onSizeChanged`, then we set
-         * out field `Bitmap mBitmap` to a w by h `Bitmap` with a config of ARGB_8888.
-         * Finally we set our field `Canvas mCanvas` to a canvas that can be used to draw into
-         * the bitmap `mBitmap`.
+         * out field [Bitmap] field [mBitmap] to a [w] by [h] [Bitmap] with a config of ARGB_8888.
+         * Finally we set our [Canvas] field [mCanvas] to a canvas that can be used to draw into
+         * the bitmap [mBitmap].
          *
          * @param w    Current width of this view.
          * @param h    Current height of this view.
@@ -141,10 +140,10 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
         }
 
         /**
-         * We implement this to do our drawing. First we fill the entire `Canvas canvas` with
-         * the color 0xFFAAAAAA (a light gray), then we draw `Bitmap mBitmap` (our accumulated
-         * finger tracing lines) using `Paint mBitmapPaint`, and finally we draw the current
-         * finger loci being built in `Path mPath` using `Paint mPaint`.
+         * We implement this to do our drawing. First we fill the entire [Canvas] parameter [canvas]
+         * with the color 0xFFAAAAAA (a light gray), then we draw [Bitmap] field [mBitmap] (our
+         * accumulated finger tracing lines) using [Paint] field [mBitmapPaint], and finally we draw
+         * the current finger loci being built in [Path] field [mPath] using [Paint] field [mPaint].
          *
          * @param canvas the canvas on which the background will be drawn
          */
@@ -159,11 +158,12 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
          */
         private var mX = 0f
         private var mY = 0f
+
         /**
          * Called when our `onTouchEvent` override receives a ACTION_DOWN motion event. First
-         * we clear all lines and curves from our current finger loci `Path mPath` making it
-         * empty. Then we set the beginning of the next contour of `mPath` to (x,y), and save
-         * the position in our fields `mX` and `mY`.
+         * we clear all lines and curves from our current finger loci [Path] field [mPath] making
+         * it empty. Then we set the beginning of the next contour of [mPath] to (x,y), and save
+         * the position in our fields [mX] and [mY].
          *
          * @param x x coordinate of the `MotionEvent`
          * @param y y coordinate of the `MotionEvent`
@@ -178,10 +178,10 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
         /**
          * Called when our `onTouchEvent` override receives a ACTION_MOVE motion event. First
          * we calculate how far the motion event moved `dx` from `mX` in the x direction
-         * and `dy` fro `mY` in the y direction and if either of these is greater than
+         * and `dy` from `mY` in the y direction and if either of these is greater than
          * or equal to TOUCH_TOLERANCE we add a quadratic bezier from the last point `mPath`
          * was moved to, approaching control point (mX,mY), and ending at the point given by
-         * [(x+mX)/2, (y+mY)/2]. We then save (x,y) in our fields mX and mY respectively.
+         * `[(x+mX)/2, (y+mY)/2]`. We then save (x,y) in our fields [mX] and [mY] respectively.
          *
          * @param x x coordinate of the `MotionEvent`
          * @param y y coordinate of the `MotionEvent`
@@ -198,10 +198,10 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
 
         /**
          * Called when our `onTouchEvent` override receives an ACTION_UP motion event. First we
-         * add a line to `Path mPath` from the last point to the point (mX,mY), then we commit
-         * the `Path mPath` to our offscreen `Bitmap mBitmap` by writing to it using
-         * `Canvas mCanvas`, then we clear all lines and curves from our current finger loci
-         * `Path mPath` making it empty.
+         * add a line to [Path] field [mPath] from the last point to the point (mX,mY), then we
+         * commit [mPath] to our offscreen [Bitmap] field [mBitmap] by writing to it using [Canvas]
+         * field [mCanvas], then we clear all lines and curves from our current finger loci in
+         * [Path] field [mPath] making it empty.
          */
         private fun touchUp() {
             mPath.lineTo(mX, mY)
@@ -217,23 +217,18 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
          * the `MotionEvent event` to `float y`. Then we switch based on the action
          * that is being reported in `event`:
          *
-         *  *
-         * ACTION_DOWN - we call our method `touch_start` with the coordinate (x,y) in
-         * order to begin recording a new loci of finger tracings, then call `invalidate`
-         * to request that our view be redrawn.
+         *  * ACTION_DOWN - we call our method `touch_start` with the coordinate (x,y) in
+         *  order to begin recording a new loci of finger tracings, then call `invalidate`
+         *  to request that our view be redrawn.
          *
-         *  *
-         * ACTION_MOVE - we call our method `touch_move` with the coordinate (x,y) in
-         * order to draw a bezier curve from the last location to this new location, then
-         * call `invalidate` to request that our view be redrawn.
+         *  * ACTION_MOVE - we call our method `touch_move` with the coordinate (x,y) in
+         *  order to draw a bezier curve from the last location to this new location, then
+         *  call `invalidate` to request that our view be redrawn.
          *
-         *  *
-         * ACTION_UP - we call our method `touch_up` which finishes `Path mPath`
-         * by drawing a line to our last point at (mX,mY), commits `mPath` to our
-         * offscreen accumulated finger tracings contained in `Bitmap mBitmap` and
-         * empties `mPath`, then call `invalidate` to request that our view be
-         * redrawn.
-         *
+         *  * ACTION_UP - we call our method `touch_up` which finishes `Path mPath`
+         *  by drawing a line to our last point at (mX,mY), commits `mPath` to our
+         *  offscreen accumulated finger tracings contained in `Bitmap mBitmap` and
+         *  empties `mPath`, then call `invalidate` to request that our view be redrawn.
          *
          * Finally we return true to the caller to indicate that we have consumed the `MotionEvent`.
          *
