@@ -88,13 +88,16 @@ class ColorPickerDialog
     /**
      * Custom View that draws a color wheel that the user can choose a color from.
      */
-    private class ColorPickerView(c: Context?,
-                                  /**
-                                   * The `OnColorChangedListener` we were constructed with, its `colorChanged` method
-                                   * will be called once the user the has clicked "select color and dismiss" circle at the center
-                                   * of the color wheel. Do not confuse with `ColorPickerDialog.mListener`.
-                                   */
-                                  private val mListener: OnColorChangedListener, color: Int) : View(c) {
+    private class ColorPickerView(
+            c: Context?,
+            /**
+             * The `OnColorChangedListener` we were constructed with, its `colorChanged` method
+             * will be called once the user the has clicked "select color and dismiss" circle at the center
+             * of the color wheel. Do not confuse with `ColorPickerDialog.mListener`.
+             */
+            private val mListener: OnColorChangedListener,
+            color: Int
+    ) : View(c) {
         /**
          * `Paint` with a `SweepGradient` shader used to draw a color spectrum circular
          * oval. Any user finger movement reported to our `onTouchEvent` callback that is found
