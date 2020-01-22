@@ -213,27 +213,27 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
 
         /**
          * We implement this method to handle touch screen motion events. First we fetch the x
-         * coordinate of the `MotionEvent event` to `float x` and the y coordinate of
-         * the `MotionEvent event` to `float y`. Then we switch based on the action
-         * that is being reported in `event`:
+         * coordinate of the [MotionEvent] parameter [event] to the [Float] variable `val x` and
+         * the y coordinate to `val y`. Then we switch based on the action that is being reported
+         * in `event`:
          *
-         *  * ACTION_DOWN - we call our method `touch_start` with the coordinate (x,y) in
+         *  * ACTION_DOWN - we call our method [touchStart] with the coordinate (x,y) in
          *  order to begin recording a new loci of finger tracings, then call `invalidate`
          *  to request that our view be redrawn.
          *
-         *  * ACTION_MOVE - we call our method `touch_move` with the coordinate (x,y) in
+         *  * ACTION_MOVE - we call our method [touchMove] with the coordinate (x,y) in
          *  order to draw a bezier curve from the last location to this new location, then
          *  call `invalidate` to request that our view be redrawn.
          *
-         *  * ACTION_UP - we call our method `touch_up` which finishes `Path mPath`
-         *  by drawing a line to our last point at (mX,mY), commits `mPath` to our
-         *  offscreen accumulated finger tracings contained in `Bitmap mBitmap` and
-         *  empties `mPath`, then call `invalidate` to request that our view be redrawn.
+         *  * ACTION_UP - we call our method [touchUp] which finishes our [Path] field [mPath]
+         *  by drawing a line to our last point at (mX,mY), commits [mPath] to our  offscreen
+         *  accumulated finger tracings contained in [Bitmap] field [mBitmap] and  empties [mPath],
+         *  then we call `invalidate` to request that our view be redrawn.
          *
-         * Finally we return true to the caller to indicate that we have consumed the `MotionEvent`.
+         * Finally we return *true* to the caller to indicate that we have consumed the [MotionEvent].
          *
          * @param event The motion event.
-         * @return True if the event was handled, false otherwise.
+         * @return *true* if the event was handled, *false* otherwise.
          */
         @SuppressLint("ClickableViewAccessibility")
         override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -261,37 +261,36 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
     /**
      * Initialize the contents of the Activity's standard options menu. First we call through to our
      * super's implementation of `onCreateOptionsMenu`. Then we add our menu options to
-     * `Menu menu`:
+     * our [Menu] parameter [menu]:
      *
-     *  *
-     * COLOR_MENU_ID - "Color" allows the user to select a color
+     *  * COLOR_MENU_ID - "Color" allows the user to select a color
      *
-     *  *
-     * EMBOSS_MENU_ID - "Emboss" allows you to toggle the usage of the `EmbossMaskFilter`
+     *  * EMBOSS_MENU_ID - "Emboss" allows you to toggle the usage of the `EmbossMaskFilter`
      *
-     *  *
-     * BLUR_MENU_ID - "Blur" allows you to toggle the usage of the `BlurMaskFilter`
+     *  * BLUR_MENU_ID - "Blur" allows you to toggle the usage of the `BlurMaskFilter`
      *
-     *  *
-     * ERASE_MENU_ID - "Erase" sets the Porter-Duff transfer mode to CLEAR
+     *  * ERASE_MENU_ID - "Erase" sets the Porter-Duff transfer mode to CLEAR
      *
-     *  *
-     * SRCATOP_MENU_ID - "SrcATop" sets the Porter-Duff transfer mode to SRC_ATOP
+     *  * SRCATOP_MENU_ID - "SrcATop" sets the Porter-Duff transfer mode to SRC_ATOP
      *
-     *
-     * Finally we return true so the menu will be displayed.
+     * Finally we return *true* so the menu will be displayed.
      *
      * @param menu The options menu in which you place your items.
-     * @return You must return true for the menu to be displayed;
-     * if you return false it will not be shown
+     * @return You must return *true* for the menu to be displayed;
+     * if you return *false* it will not be shown
      */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
-        menu.add(0, COLOR_MENU_ID, 0, "Color").setShortcut('3', 'c')
-        menu.add(0, EMBOSS_MENU_ID, 0, "Emboss").setShortcut('4', 's')
-        menu.add(0, BLUR_MENU_ID, 0, "Blur").setShortcut('5', 'z')
-        menu.add(0, ERASE_MENU_ID, 0, "Erase").setShortcut('5', 'z')
-        menu.add(0, SRCATOP_MENU_ID, 0, "SrcATop").setShortcut('5', 'z')
+        menu.add(0, COLOR_MENU_ID, 0, "Color")
+                .setShortcut('3', 'c')
+        menu.add(0, EMBOSS_MENU_ID, 0, "Emboss")
+                .setShortcut('4', 's')
+        menu.add(0, BLUR_MENU_ID, 0, "Blur")
+                .setShortcut('5', 'z')
+        menu.add(0, ERASE_MENU_ID, 0, "Erase")
+                .setShortcut('5', 'z')
+        menu.add(0, SRCATOP_MENU_ID, 0, "SrcATop")
+                .setShortcut('5', 'z')
         /*   Is this the mechanism to extend with filter effects?
         Intent intent = new Intent(null, getIntent().getData());
         intent.addCategory(Intent.CATEGORY_ALTERNATIVE);
@@ -299,7 +298,8 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
                               Menu.ALTERNATIVE, 0,
                               new ComponentName(this, NotesList.class),
                               null, intent, 0, null);
-        */return true
+        */
+        return true
     }
 
     /**
@@ -308,14 +308,13 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
      * use this method to efficiently enable/disable items or otherwise
      * dynamically modify the contents.
      *
-     *
      * We simply call through to our super's implementation of `onPrepareOptionsMenu` and return
-     * true so the menu will be displayed
+     * *true* so the menu will be displayed
      *
      * @param menu The options menu as last shown or first initialized by
      * onCreateOptionsMenu().
-     * @return You must return true for the menu to be displayed;
-     * if you return false it will not be shown.
+     * @return You must return *true* for the menu to be displayed;
+     * if you return *false* it will not be shown.
      */
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
@@ -326,44 +325,37 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
      * This hook is called whenever an item in your options menu is selected.
      * The default implementation simply returns false to have the normal
      * processing happen (calling the item's Runnable or sending a message to
-     * its Handler as appropriate).  You can use this method for any items
+     * its Handler as appropriate). You can use this method for any items
      * for which you would like to do processing without those other
      * facilities.
      *
-     *
      * First we clear the previous Porter-Duff transfer mode of `Paint mPaint`, and set the
-     * alpha to its max. Then we switch on the item ID of `MenuItem item`:
+     * alpha to its max. Then we switch on the item ID of our [MenuItem] parameter [item]:
      *
-     *  *
-     * COLOR_MENU_ID - "Color" allows the user to select a color. We create and `show` an
-     * instance of `ColorPickerDialog` which will allow the user to select a new color using
-     * a "color wheel" and upon selection our method `colorChanged` will be called with that
-     * selection which it will use to set the color of `Paint mPaint`.
+     *  * COLOR_MENU_ID - "Color" allows the user to select a color. We create and `show` an
+     *  instance of [ColorPickerDialog] which will allow the user to select a new color using
+     *  a "color wheel" and upon selection our method [colorChanged] will be called with that
+     *  selection which it will use to set the color of [Paint] field [mPaint].
      *
-     *  *
-     * EMBOSS_MENU_ID - "Emboss" allows you to toggle the usage of the `EmbossMaskFilter`. If
-     * the current `MaskFilter` for `Paint mPaint` is not `MaskFilter mEmboss` we
-     * set the `MaskFilter` to `mEmboss`, and if it is we set it to null.
+     *  * EMBOSS_MENU_ID - "Emboss" allows you to toggle the usage of the [EmbossMaskFilter]. If
+     *  the current [MaskFilter] for [Paint] field [mPaint] is not [MaskFilter] field [mEmboss] we
+     *  set the [MaskFilter] to [mEmboss], and if it is we set it to *null*.
      *
-     *  *
-     * BLUR_MENU_ID - "Blur" allows you to toggle the usage of the `BlurMaskFilter`. If
-     * the current `MaskFilter` for `Paint mPaint` is not `MaskFilter mBlur` we
-     * set the `MaskFilter` to `mBlur`, and if it is we set it to null.
+     *  * BLUR_MENU_ID - "Blur" allows you to toggle the usage of the [BlurMaskFilter]. If
+     *  the current [MaskFilter] for [Paint] field [mPaint] is not [MaskFilter] field [mBlur] we
+     *  set the [MaskFilter] to [mBlur], and if it is we set it to *null*.
      *
-     *  *
-     * ERASE_MENU_ID - "Erase" sets the Porter-Duff transfer mode to CLEAR
+     *  * ERASE_MENU_ID - "Erase" sets the Porter-Duff transfer mode to CLEAR
      *
-     *  *
-     * SRCATOP_MENU_ID - "SrcATop" sets the Porter-Duff transfer mode to SRC_ATOP, and sets the
-     * alpha component to the max value.
-     *
+     *  * SRCATOP_MENU_ID - "SrcATop" sets the Porter-Duff transfer mode to SRC_ATOP, and sets the
+     *  alpha component to the max value.
      *
      * Finally we return the value returned by our super's implementation of `onOptionsItemSelected`
      * to the caller
      *
      * @param item The menu item that was selected.
-     * @return boolean Return false to allow normal menu processing to
-     * proceed, true to consume it here.
+     * @return boolean Return *false* to allow normal menu processing to
+     * proceed, *true* to consume it here.
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         mPaint!!.xfermode = null
