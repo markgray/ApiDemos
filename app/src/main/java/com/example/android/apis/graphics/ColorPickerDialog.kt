@@ -388,19 +388,21 @@ class ColorPickerDialog
             /**
              * x coordinate of the center of the center circle
              */
-            private const val CENTER_X = 100
+            private var CENTER_X = 100
             /**
              * y coordinate of the center of the center circle
              */
-            private const val CENTER_Y = 100
+            private var CENTER_Y = 100
             /**
              * radius of the center circle
              */
-            private const val CENTER_RADIUS = 32
+            private var CENTER_RADIUS = 32
             /**
              * constant pi value used for circle calculations when a color on the wheel is being selected
              */
             private const val PI = 3.1415926f
+
+            var density: Float = 1.0f
         }
 
         /**
@@ -415,13 +417,17 @@ class ColorPickerDialog
          */
         init {
             val s: Shader = SweepGradient(0f, 0f, mColors, null)
+            density = c!!.resources.displayMetrics.density
             mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
             mPaint.shader = s
             mPaint.style = Paint.Style.STROKE
-            mPaint.strokeWidth = 32f
+            mPaint.strokeWidth = 32f * density
             mCenterPaint = Paint(Paint.ANTI_ALIAS_FLAG)
             mCenterPaint.color = color
-            mCenterPaint.strokeWidth = 5f
+            mCenterPaint.strokeWidth = 5f * density
+            CENTER_X = (CENTER_X * density).toInt()
+            CENTER_Y = (CENTER_Y * density).toInt()
+            CENTER_RADIUS = (CENTER_RADIUS * density).toInt()
         }
     }
 
