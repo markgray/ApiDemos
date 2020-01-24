@@ -1419,8 +1419,7 @@ Graphics
     Graphics/FingerPaint                   all
         .graphics.FingerPaint
         .graphics.ColorPickerDialog
-            Shows off some Canvas drawing methods and View.onTouchEvent usage. ColorPickerDialog
-            produces a color wheel which is too small
+            Shows off some Canvas drawing methods and View.onTouchEvent usage.
 
   Layers
     Graphics/Layers                        all
