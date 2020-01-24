@@ -28,14 +28,12 @@ import kotlin.math.roundToInt
 
 /**
  * Custom `Dialog` to pick colors, used only by `FingerPaint`
- * TODO: Scale the Dialog by resources.displayMetrics.density (in Kotlin version) see FingerPaint
  */
 class ColorPickerDialog
 /**
- * Constructor for our `ColorPickerDialog` instance. First we call through to our super's
- * constructor, then we save our parameter `OnColorChangedListener listener` in our field
- * `OnColorChangedListener mListener`, and `int initialColor` in our field
- * `int mInitialColor`.
+ * Constructor for our [ColorPickerDialog] instance. First we call through to our super's
+ * constructor, then we save our `OnColorChangedListener` parameter `listener` in our field
+ * `mListener`, and `initialColor` in our field `mInitialColor`.
  *
  * @param context      `Context` to use for resources, in our case "this" when called from
  * `FingerPaint`'s `onOptionsItemSelected` override
@@ -81,6 +79,7 @@ class ColorPickerDialog
                 dismiss()
             }
         }
+        window!!.setBackgroundDrawableResource(android.R.color.transparent)
         setContentView(ColorPickerView(context, l, mInitialColor))
         setTitle("Pick a Color")
     }

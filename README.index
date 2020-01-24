@@ -1420,7 +1420,7 @@ Graphics
         .graphics.FingerPaint
         .graphics.ColorPickerDialog
             Shows off some Canvas drawing methods and View.onTouchEvent usage. ColorPickerDialog
-            produces a color wheel which is too small TODO: fix size of ColorPickerDialog
+            produces a color wheel which is too small
 
   Layers
     Graphics/Layers                        all
