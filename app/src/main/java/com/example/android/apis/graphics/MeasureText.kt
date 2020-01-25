@@ -22,19 +22,19 @@ import android.os.Bundle
 import android.view.View
 
 /**
- * Shows how to use the text measurement methods: Paint.getTextWidths(),
- * Paint.measureText(), and Paint.getTextBounds() to determine what area
+ * Shows how to use the text measurement methods: [Paint.getTextWidths],
+ * [Paint.measureText], and [Paint.getTextBounds] to determine what area
  * each character in a string as well as the complete string will occupy
- * when they are drawn using Canvas.drawText, then draws a colored rectangle
+ * when they are drawn using [Canvas.drawText], then draws a colored rectangle
  * around each string and a line under each at the baseline. Text was too
  * small so I modified it a bit.
  */
 class MeasureText : GraphicsActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to a new instance of `SampleView`.
+     * `onCreate`, then we set our content view to a new instance of [SampleView].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,46 +47,45 @@ class MeasureText : GraphicsActivity() {
      */
     private class SampleView(context: Context?) : View(context) {
         /**
-         * `Paint` used to draw with in the method `showText` (called from `onDraw`.
+         * [Paint] used to draw with in the method [showText] which is called from [onDraw].
          */
         private val mPaint: Paint
         /**
-         * Starting x coordinate for our `onDraw` to draw to its Canvas
+         * Starting x coordinate for our [onDraw] override to draw to its [Canvas]
          */
         private val mOriginX = 10f
         /**
-         * Starting y coordinate for our `onDraw` to draw to its Canvas
+         * Starting y coordinate for our [onDraw] override to draw to its [Canvas]
          */
         private val mOriginY = 80f
 
         /**
-         * Convenience method to measure the `String text`, draw a light green rectangle of
-         * that size, draw the `text`, and draw a RED horizontal line across the baseline of
-         * the text. First we allocate `Rect bounds` which we will use to hold the rectangle
-         * that encloses all of `String text`, and `float[] widths` which will hold the
-         * widths of each of the corresponding characters in `text`. We set the text size of
-         * `Paint mPaint` to 100, use the method `mPaint.getTextWidths` to load the array
-         * `widths` with the widths of each of the characters in `text` and setting
-         * `int count` to the number of code units in the text. We use `mPaint.measureText`
-         * to set `float w` to the width of `text`, and we use `mPaint.getTextBounds`
-         * to initialize `Rect bounds` to the smallest rectangle that encloses all of the
-         * characters, with an implied origin at (0,0).
+         * Convenience method to measure the [String] parameter [text], draw a light green rectangle
+         * of that size, draw the [text], and draw a RED horizontal line across the baseline of
+         * the text. First we allocate a [Rect] for `val bounds` which we will use to hold the
+         * rectangle that encloses all of [text], and a [Float] array for `val widths` which will
+         * hold the widths of each of the corresponding characters in [text]. We set the text size
+         * of [Paint] field [mPaint] to 100, use the [Paint.getTextWidths] method of [mPaint] to
+         * load the array `widths` with the widths of each of the characters in [text] and setting
+         * `val count` to the number of code units in the text which the method returns. We use
+         * the [Paint.measureText] method of [mPaint] to set [Float] variable `val w` to the width
+         * of [text], and we use the [Paint.getTextBounds] method of [mPaint] to initialize `bounds`
+         * to the smallest rectangle that encloses all of the characters, with an implied origin at
+         * (0,0).
          *
+         * Having retrieved all the measurements of [text] we proceed to set the color of [mPaint]
+         * to a shade of green, use it to draw a rectangle on our [Canvas] parameter [canvas] using
+         * `bounds` as the rectangle shape. We then change the color of [mPaint] to BLACK and use it
+         * to draw the text [text] to [canvas].
          *
-         * Having retrieved all the measurements of `text` we proceed to set the color of
-         * `mPaint` to a shade of green, use it to draw a rectangle on `Canvas canvas`
-         * using `bounds` as the rectangle shape. We then change the color of `mPaint`
-         * to BLACK and use it to draw the text `text` to the `Canvas canvas`.
-         *
-         *
-         * In order to draw the line at the baseline, we allocate `float[] pts` to be twice
-         * as long as `count` plus 2 entries for the starting point of (0,0) and loop through
-         * `widths` accumulating the widths of the characters in `text` for the starting
+         * In order to draw the line at the baseline, we allocate a [Float] array for `val pts` to
+         * be twice as long as `count` plus 2 entries for the starting point of (0,0) and loop
+         * through `widths` accumulating the widths of the characters in [text] for the starting
          * x coordinate of each character with the y coordinate 0. After this `pts` thus contains
-         * the (x,y) location of each character in the string `text`. We then set the color of
-         * `mPaint` to RED, the stroke width to 0 (hairline mode) and draw a line across the
-         * entire width of the text. We then set the stroke width of `mPaint` to 5 and draw
-         * largish points at each of the (x,y) starting locations for the characters in `text`
+         * the (x,y) location of each character in the string [text]. We then set the color of
+         * [mPaint] to RED, the stroke width to 0 (hairline mode) and draw a line across the
+         * entire width of the text. We then set the stroke width of [mPaint] to 5 and draw
+         * largish points at each of the (x,y) starting locations for the characters in [text]
          * which we have stored in `pts`.
          *
          * @param canvas `Canvas` we are to draw to
@@ -123,14 +122,14 @@ class MeasureText : GraphicsActivity() {
         }
 
         /**
-         * We implement this to do our drawing. First we set the entire `Canvas canvas` to
-         * WHITE, then we move it to our starting point (mOriginX, mOriginY) (10,10) in our case.
-         * We call our method `showText` to measure and display the text "Measure", move the
-         * canvas down 180 pixels and call `showText` to measure and display the text "wiggy!"
-         * and finally move the canvas down a further 180 pixels and call `showText` to measure
+         * We implement this to do our drawing. First we set the entire [Canvas] parameter [canvas]
+         * to WHITE, then we move it to our starting point ([mOriginX], [mOriginY]) (10,10) in our
+         * case. We call our method [showText] to measure and display the text "Measure", move the
+         * canvas down 180 pixels and call [showText] to measure and display the text "wiggy!"
+         * and finally move the canvas down a further 180 pixels and call [showText] to measure
          * and display the text "Text".
          *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(Color.WHITE)
@@ -143,14 +142,10 @@ class MeasureText : GraphicsActivity() {
         }
 
         /**
-         * Constructor for our View. First we call our super's constructor, then we enable our view
-         * to receive focus. We allocate a new `Paint` for our field `Paint mPaint`, set
-         * its antialias flag to true, set the stroke width to 5, set the line cap style to ROUND,
-         * text size to 64, and finally set its typeface to a typeface object of the SERIF family,
-         * and ITALIC style
-         *
-         * Parameter: context `Context` used for resources, this `MeasureText` activity when
-         * called from our `onCreate` override.
+         * We enable our view to receive focus. We allocate a new `Paint` for our `Paint` field
+         * `mPaint`, set its antialias flag to true, set the stroke width to 5, set the line cap
+         * style to ROUND, text size to 64, and finally set its typeface to a typeface object of
+         * the SERIF family, and ITALIC style
          */
         init {
             isFocusable = true
