@@ -19,6 +19,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -32,9 +33,9 @@ import androidx.annotation.RequiresApi
 class Layers : GraphicsActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to a new instance of `SampleView`.
+     * `onCreate`, then we set our content view to a new instance of [SampleView].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,33 +43,33 @@ class Layers : GraphicsActivity() {
     }
 
     /**
-     * This custom `View` consists solely of a BLUE circle drawn slightly offset on top of a
+     * This custom [View] consists solely of a BLUE circle drawn slightly offset on top of a
      * RED circle. The drawing is done to an offscreen bitmap allocated and redirected to by the
      * method `saveLayerAlpha`, then displayed onscreen by `restore`.
      */
     private class SampleView(context: Context?) : View(context) {
         /**
-         * `Paint` used to draw in our `onDraw` method
+         * [Paint] used to draw in our [onDraw] method
          */
         private val mPaint: Paint
 
         /**
-         * We implement this to do our drawing. First we set the entire `Canvas canvas` to
-         * WHITE, then we move the canvas to the location (10,10). We call `saveLayerAlpha`
-         * to allocate and redirect drawing instructions sent to `Canvas canvas` to an offscreen
-         * bitmap until the matching restore displays that bitmap and restores the canvas to its
-         * original settings. The bitmap is 200x200 with 0x88 specified as the alpha value to be used
-         * when `restore` draws the bitmap to the `Canvas canvas`.
+         * We implement this to do our drawing. First we set the entire [Canvas] parameter [canvas]
+         * to WHITE, then we move the canvas to the location (10,10). We call the [Canvas.saveLayerAlpha]
+         * method of [canvas] to allocate and redirect drawing instructions sent to [canvas] to an
+         * offscreen [Bitmap] until the matching call to the `restore` method of [canvas] displays
+         * that [Bitmap] and restores the canvas to its original settings. The bitmap is 200x200 with
+         * 0x88 specified as the alpha value to be used when `restore` draws the [Bitmap] to the
+         * [canvas].
          *
-         *
-         * We then set the color of `Paint mPaint` to RED and use it to draw a circle of radius
-         * 75 pixels centered at the point (75,75), set the color of `mPaint` to BLUE and use
+         * We then set the color of [Paint] field [mPaint] to RED and use it to draw a circle of
+         * radius 75 pixels centered at the point (75,75), set the color of [mPaint] to BLUE and use
          * it to draw a circle of radius 75 pixels centered at the point (125,125). Both of these
          * `drawCircle` commands have been done to the offscreen bitmap that `canvas` is
          * redirecting commands to, and this bitmap is now transferred to `Canvas canvas` and
          * the settings saved by `saveLayerAlpha` are restored by a call to `canvas.restore`.
          *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(Color.WHITE)
@@ -84,12 +85,8 @@ class Layers : GraphicsActivity() {
         }
 
         /**
-         * Our constructor. First we call through to our super's constructor, then we enable focus for
-         * our view, allocate a new instance of `Paint` for our field `Paint mPaint` and
-         * set its antialias flag to true.
-         *
-         * Parameter: context "this" `Layers` activity when called from `onCreate`, used for
-         * resources.
+         * We enable focus for our view, allocate a new instance of `Paint` for our `Paint` field
+         * `mPaint` and set its antialias flag to true.
          */
         init {
             isFocusable = true
