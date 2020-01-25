@@ -16,6 +16,16 @@
 
 package com.example.android.apis.graphics;
 
+import android.opengl.ETC1Util;
+import android.opengl.GLES10;
+import android.opengl.GLSurfaceView;
+import android.os.Bundle;
+import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -26,22 +36,13 @@ import java.nio.ByteOrder;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.app.Activity;
-import android.opengl.ETC1Util;
-import android.opengl.GLES10;
-import android.opengl.GLSurfaceView;
-import android.os.Bundle;
-import android.util.Log;
-
-import com.example.android.apis.R;
-
 /**
  * Demonstrate how to use ETC1 format compressed textures.
  * This sample can be recompiled to use either resource-based
  * textures (compressed offline using the etc1tool), or
  * textures created on the fly by compressing images.
  */
-public class CompressedTextureActivity extends Activity {
+public class CompressedTextureActivity extends AppCompatActivity {
     /**
      * TAG used for logging
      */
@@ -138,6 +139,7 @@ public class CompressedTextureActivity extends Activity {
         public void load(GL10 gl) {
             Log.w(TAG, "ETC1 texture support: " + ETC1Util.isETC1Supported());
             InputStream input = getResources().openRawResource(R.raw.androids);
+            //noinspection TryFinallyCanBeTryWithResources
             try {
                 ETC1Util.loadTexture(GLES10.GL_TEXTURE_2D, 0, 0,
                         GLES10.GL_RGB, GLES10.GL_UNSIGNED_SHORT_5_6_5, input);
@@ -210,6 +212,7 @@ public class CompressedTextureActivity extends Activity {
          * @return {@code Buffer} (actually a {@code ByteBuffer}) containing an image to be used as a
          * texture.
          */
+        @SuppressWarnings("SameParameterValue")
         private Buffer createImage(int width, int height) {
             int stride = 3 * width;
             ByteBuffer image = ByteBuffer.allocateDirect(height * stride)
