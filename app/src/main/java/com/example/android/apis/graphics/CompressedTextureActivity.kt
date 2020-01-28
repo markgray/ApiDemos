@@ -26,6 +26,7 @@ import com.example.android.apis.graphics.StaticTriangleRenderer.TextureLoader
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import java.io.InputStream
 import java.nio.Buffer
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -39,24 +40,24 @@ import javax.microedition.khronos.opengles.GL10
  */
 class CompressedTextureActivity : AppCompatActivity() {
     /**
-     * `GLSurfaceView` used to display our demo
+     * [GLSurfaceView] used to display our demo
      */
     private var mGLView: GLSurfaceView? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we initialize our field `GLSurfaceView mGLView` with a new instance
-     * of `GLSurfaceView` using "this" activity as the context for resources. Then we call
-     * `setEGLConfigChooser` to install a config chooser which will choose a config as close
-     * to 16-bit RGB as possible with the value false so that there is no depth buffer. We declare
-     * `StaticTriangleRenderer.TextureLoader loader`, and if value of the compile time switch
-     * TEST_CREATE_TEXTURE is true we set it to an instance of `SyntheticCompressedTextureLoader`,
-     * and if false we set it to an instance of `CompressedTextureLoader`. We set the renderer
-     * of `mGLView` to a new instance of `StaticTriangleRenderer` using "this"
-     * `CompressedTextureActivity` activity for context, and `loader` as the
-     * `TextureLoader` to use, and finally we set our content view to `mGLView`.
+     * `onCreate`, then we initialize our [GLSurfaceView] field [mGLView] with a new instance
+     * of [GLSurfaceView] using "this" activity as the context for resources. Then we call
+     * the [GLSurfaceView.setEGLConfigChooser] method of [mGLView] to install a config chooser which
+     * will choose a config as close to 16-bit RGB as possible with the value *false* so that there
+     * is no depth buffer. We declare [StaticTriangleRenderer.TextureLoader] variable `vak loader`,
+     * and if the value of the compile time switch TEST_CREATE_TEXTURE is *true* we set it to an
+     * instance of [SyntheticCompressedTextureLoader], and if *false* we set it to an instance of
+     * [CompressedTextureLoader]. We set the renderer of [mGLView] to a new instance of
+     * [StaticTriangleRenderer] using *this* [CompressedTextureActivity] activity for context, and
+     * `loader` as the [TextureLoader] to use, and finally we set our content view to [mGLView].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,8 +76,8 @@ class CompressedTextureActivity : AppCompatActivity() {
     /**
      * Called as part of the activity lifecycle when an activity is going into
      * the background, but has not (yet) been killed.  The counterpart to
-     * [.onResume]. First we call through to our super's implementation of
-     * `onPause`, then we inform the `GLSurfaceView mGLView` view that
+     * [onResume]. First we call through to our super's implementation of
+     * `onPause`, then we inform the [GLSurfaceView] field [mGLView] view that
      * the activity is paused.
      */
     override fun onPause() {
@@ -85,10 +86,10 @@ class CompressedTextureActivity : AppCompatActivity() {
     }
 
     /**
-     * Called after [.onRestoreInstanceState], [.onRestart], or
-     * [.onPause], for your activity to start interacting with the user.
+     * Called after [onRestoreInstanceState], [onRestart], or
+     * [onPause], for your activity to start interacting with the user.
      * First we call through to our super's implementation of `onResume`,
-     * then we inform the `GLSurfaceView mGLView` view that the activity
+     * then we inform the [GLSurfaceView] field [mGLView] view that the activity
      * is resumed (calling this method will recreate the OpenGL display and resume
      * the rendering thread.
      */
@@ -103,9 +104,9 @@ class CompressedTextureActivity : AppCompatActivity() {
     private inner class CompressedTextureLoader : TextureLoader {
         /**
          * Called to load the compressed texture, it is called in the `onSurfaceCreated`
-         * override of `StaticTriangleRenderer` if TEST_CREATE_TEXTURE is false. First we
-         * open a data stream `InputStream input` for reading the raw resource R.raw.androids
-         * (raw/androids.pkm), then we use the method `ETC1Util.loadTexture` to load the ETC1
+         * override of [StaticTriangleRenderer] if TEST_CREATE_TEXTURE is false. First we
+         * open a [InputStream] data stream `val input` for reading the raw resource R.raw.androids
+         * (raw/androids.pkm), then we use the method [ETC1Util.loadTexture] to load the ETC1
          * texture contained in that file. (The rest is just boilerplate to catch exceptions that
          * might occur.)
          *
@@ -114,7 +115,7 @@ class CompressedTextureActivity : AppCompatActivity() {
          */
         override fun load(gl: GL10) {
             Log.w(TAG, "ETC1 texture support: " + ETC1Util.isETC1Supported())
-            val input = resources.openRawResource(R.raw.androids)
+            val input: InputStream = resources.openRawResource(R.raw.androids)
             try {
                 ETC1Util.loadTexture(GLES10.GL_TEXTURE_2D, 0, 0,
                         GLES10.GL_RGB, GLES10.GL_UNSIGNED_SHORT_5_6_5, input)
@@ -135,16 +136,16 @@ class CompressedTextureActivity : AppCompatActivity() {
     private inner class SyntheticCompressedTextureLoader : TextureLoader {
         /**
          * Called to create and load the compressed texture, it is called in the `onSurfaceCreated`
-         * override of `StaticTriangleRenderer` if TEST_CREATE_TEXTURE is true. We declare the
-         * constants `width` and `height` to be 128, then we call our method `createImage`
-         * to create a `ByteBuffer` holding a 128x128 colored pattern to use as our texture and
-         * save that in `Buffer image`. We use the method `ETC1Util.compressTexture` to
-         * create `ETC1Util.ETC1Texture etc1Texture` from `Buffer image`. If the compile
-         * time flag USE_STREAM_IO is true we write `etc1Texture` to a `ByteArrayOutputStream`,
-         * convert that `ByteArrayOutputStream` to a `byte[]` array, and open a
-         * `ByteArrayInputStream bis` from that array which we then use in a call to the method
-         * `ETC1Util.loadTexture` to load the texture to the active openGL context. If USE_STREAM_IO
-         * is false we simply call the method `ETC1Util.loadTexture` to directly load the texture
+         * override of [StaticTriangleRenderer] if TEST_CREATE_TEXTURE is *true*. We declare the
+         * constants `val width` and `val height` to be 128, then we call our method [createImage]
+         * to create a [ByteBuffer] holding a 128x128 colored pattern to use as our texture and
+         * save that in [Buffer] variable `val image`. We use the method [ETC1Util.compressTexture]
+         * to create [ETC1Util.ETC1Texture] `val etc1Texture` from `image`. If the compile
+         * time flag USE_STREAM_IO is *true* we write `etc1Texture` to a [ByteArrayOutputStream]
+         * variable `val bos`, convert that [ByteArrayOutputStream] to a [Byte] array, and open a
+         * [ByteArrayInputStream] `val bis` from that array which we then use in a call to the method
+         * [ETC1Util.loadTexture] to load the texture to the active openGL context. If USE_STREAM_IO
+         * is *false* we simply call the method [ETC1Util.loadTexture] to directly load the texture
          * to the active openGL context.
          *
          * @param gl the GL interface. Use `instanceof` to test if the interface supports
@@ -173,16 +174,16 @@ class CompressedTextureActivity : AppCompatActivity() {
         }
 
         /**
-         * Fills a `ByteBuffer` with a width X height colored image to use as a texture. First
-         * we calculate `int stride` to be 3*width (three bytes per pixel RGB), then we allocate
-         * `ByteBuffer image` to be a height*stride `ByteBuffer` using native byte order.
-         * Then we loop through every row in `image`, calculating a "munching squares" pattern
-         * for each pixel and appending them to `image`. When done we reset the position of
+         * Fills a [ByteBuffer] with a width by height colored image to use as a texture. First
+         * we calculate `val stride` to be 3*width (three bytes per pixel RGB), then we allocate
+         * [ByteBuffer] variable `val image` to be a height times stride [ByteBuffer] using native
+         * byte order. Then we loop through every row in `image`, calculating a "munching squares"
+         * pattern for each pixel and appending them to `image`. When done we reset the position of
          * `image` to the beginning and return it to the caller.
          *
          * @param width width of the image to create
          * @param height height of the image to create
-         * @return `Buffer` (actually a `ByteBuffer`) containing an image to be used as a
+         * @return [Buffer] (actually a [ByteBuffer]) containing an image to be used as a
          * texture.
          */
         @Suppress("SameParameterValue")
