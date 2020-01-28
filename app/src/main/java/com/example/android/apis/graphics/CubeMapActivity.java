@@ -16,7 +16,6 @@
 
 package com.example.android.apis.graphics;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLSurfaceView;
@@ -24,6 +23,8 @@ import android.opengl.GLU;
 import android.opengl.GLUtils;
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -40,14 +41,12 @@ import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 import javax.microedition.khronos.opengles.GL11ExtensionPack;
 
-import static com.example.android.apis.graphics.FrameBufferObjectActivity.checkGLError;
-
 /**
  * Demonstrate how to use the OES_texture_cube_map extension, available on some
  * high-end OpenGL ES 1.x GPUs. Shows how to load and use GL_TEXTURE_CUBE_MAP
  * textures to animate a gyrating Torus.
  */
-public class CubeMapActivity extends Activity {
+public class CubeMapActivity extends AppCompatActivity {
     /**
      * TAG used for logging.
      */
@@ -292,7 +291,7 @@ public class CubeMapActivity extends Activity {
                     try {
                         is.close();
                     } catch (IOException e) {
-                        Log.e("CubeMap", "Could not decode texture for face " + Integer.toString(face));
+                        Log.e("CubeMap", "Could not decode texture for face " + face);
                     }
                 }
                 GLUtils.texImage2D(GL11ExtensionPack.GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, bitmap, 0);
@@ -324,6 +323,7 @@ public class CubeMapActivity extends Activity {
          * @param minorRadius Radius of body of torus 0.75f in our case
          * @return {@code Grid} describing our torus
          */
+        @SuppressWarnings("SameParameterValue")
         private Grid generateTorusGrid(GL gl, int uSteps, int vSteps, float majorRadius, float minorRadius) {
             Grid grid = new Grid(uSteps + 1, vSteps + 1);
             for (int j = 0; j <= vSteps; j++) {
@@ -378,6 +378,7 @@ public class CubeMapActivity extends Activity {
          * @param extension extension to test for
          * @return true if the extension is present in the current context.
          */
+        @SuppressWarnings("SameParameterValue")
         private boolean checkIfContextSupportsExtension(GL10 gl, String extension) {
             String extensions = " " + gl.glGetString(GL10.GL_EXTENSIONS) + " ";
             // The extensions string is padded with spaces between extensions, but not
