@@ -393,11 +393,13 @@ class CubeMapActivity : AppCompatActivity() {
      */
     private class Grid(w: Int, h: Int) {
         /**
-         * Buffer object name that we upload our vertex buffer `ByteBuffer mVertexByteBuffer` to
+         * Buffer object name that we use when we upload our vertex buffer ([ByteBuffer] field
+         * [mVertexByteBuffer]).
          */
         private var mVertexBufferObjectId = 0
         /**
-         * Buffer object name that we upload our index buffer `CharBuffer mIndexBuffer` to
+         * Buffer object name that we use when we upload our index buffer ([CharBuffer] field
+         * [mIndexBuffer]).
          */
         private var mElementBufferObjectId = 0
 
@@ -408,37 +410,37 @@ class CubeMapActivity : AppCompatActivity() {
          */
 
         /**
-         * `ByteBuffer` we use to build our vertex and normal vector data in
+         * [ByteBuffer] we use to build our vertex and normal vector data in
          */
         private var mVertexByteBuffer: ByteBuffer?
         /**
-         * a view of `ByteBuffer mVertexByteBuffer` as a float buffer
+         * a view of [ByteBuffer] field [mVertexByteBuffer] as a float buffer
          */
         private var mVertexBuffer: FloatBuffer?
         /**
-         * `CharBuffer` we use to build our index data array
+         * [CharBuffer] we use to build our index data array
          */
         private var mIndexBuffer: CharBuffer?
         /**
-         * Width of our `Grid` (vertices in one row)
+         * Width of our [Grid] (vertices in one row)
          */
         private val mW: Int
         /**
-         * Height of our `Grid` (number of rows of vertices)
+         * Height of our [Grid] (number of rows of vertices)
          */
         private val mH: Int
         /**
-         * Number of entries in our index buffer `CharBuffer mIndexBuffer`
+         * Number of entries in our index buffer ([CharBuffer] field [mIndexBuffer])
          */
         private val mIndexCount: Int
 
         /**
-         * Stores the vertex coordinate values in the proper places in our `FloatBuffer mVertexBuffer`
-         * vertex buffer. After making sure our address arguments `i` and `j` are in range
-         * (throwing IllegalArgumentException if they are not), we calculate the `int index` that
-         * `i` and `j` point to (`mW*j + i`) and position `FloatBuffer mVertexBuffer`
-         * to that position (`index*VERTEX_SIZE/FLOAT_SIZE`), and proceed to deposit the rest of
-         * our arguments (`x, y, z, nx, ny, nz`) into `FloatBuffer mVertexBuffer` one after
+         * Stores the vertex coordinate values in the proper places in our [FloatBuffer] field
+         * [mVertexBuffer] vertex buffer. After making sure our address arguments [i] and [j] are
+         * in range (throwing [IllegalArgumentException] if they are not), we calculate the [Int]
+         * variable `val index` that [i] and [j] point to (`mW*j + i`) and position [FloatBuffer]
+         * field [mVertexBuffer] to that position (`index*VERTEX_SIZE/FLOAT_SIZE`), and proceed to
+         * deposit the rest of our arguments (`x, y, z, nx, ny, nz`) into [mVertexBuffer] one after
          * the other.
          *
          * @param i  column to set
@@ -464,35 +466,34 @@ class CubeMapActivity : AppCompatActivity() {
         }
 
         /**
-         * Transfers our `FloatBuffer mVertexBuffer` to the hardware GL_ARRAY_BUFFER, and our
-         * `CharBuffer mIndexBuffer` to the hardware GL_ELEMENT_ARRAY_BUFFER. First we call our
-         * method `checkGLError` to catch any errors that may have occurred. Next we allocate
-         * 2 ints for `int[] vboIds`, cast our argument `GL gl` to set `GL11 gl11`,
-         * and generate two buffer object names in `vboIds`, the first we save in our field
-         * `int mVertexBufferObjectId`, and the second in `int mElementBufferObjectId`.
+         * Transfers our [FloatBuffer] field [mVertexBuffer] vertex buffer to the hardware buffer
+         * GL_ARRAY_BUFFER, and our [CharBuffer] field [mIndexBuffer] index buffer to the hardware
+         * index buffer GL_ELEMENT_ARRAY_BUFFER.
          *
+         * First we call our method [checkGLError] to catch any errors that may have occurred. Next
+         * we allocate 2 ints for [Int] array `val vboIds`, cast our [GL] argument [gl] to set [GL11]
+         * variable `val gl11`, and generate two buffer object names in `vboIds`, the first we save
+         * in our [Int] field [mVertexBufferObjectId], and the second in [mElementBufferObjectId].
          *
-         * To upload the vertex data we bind `mVertexBufferObjectId` to GL_ARRAY_BUFFER, position
-         * `mVertexByteBuffer` to its beginning, and call `gl11.glBufferData` to create
-         * and initialize the GL_ARRAY_BUFFER buffer object's data store from `mVertexByteBuffer`
+         * To upload the vertex data we bind [mVertexBufferObjectId] to GL_ARRAY_BUFFER, position
+         * [mVertexByteBuffer] to its beginning, and call `gl11.glBufferData` to create and
+         * initialize the GL_ARRAY_BUFFER buffer object's data store from [mVertexByteBuffer] with
+         * the usage hint of GL_STATIC_DRAW (The data store contents will be modified once and used
+         * many times, and the data store contents are modified by the application, and used as the
+         * source for GL drawing and image specification commands).
+         *
+         * To upload the index data we bind [mElementBufferObjectId] to GL_ELEMENT_ARRAY_BUFFER,
+         * position [mIndexBuffer] to its beginning, and call `gl11.glBufferData` to create and
+         * initialize the GL_ELEMENT_ARRAY_BUFFER buffer object's data store from [mIndexBuffer]
          * with the usage hint of GL_STATIC_DRAW (The data store contents will be modified once and
          * used many times, and the data store contents are modified by the application, and used as
          * the source for GL drawing and image specification commands).
          *
-         *
-         * To upload the index data we bind `mElementBufferObjectId` to GL_ELEMENT_ARRAY_BUFFER,
-         * position `mIndexBuffer` to its beginning, and call `gl11.glBufferData` to create
-         * and initialize the GL_ELEMENT_ARRAY_BUFFER buffer object's data store from `mIndexBuffer`
-         * with the usage hint of GL_STATIC_DRAW (The data store contents will be modified once and
-         * used many times, and the data store contents are modified by the application, and used as
-         * the source for GL drawing and image specification commands).
-         *
-         *
-         * Since we no longer need the in-memory data we set `mVertexBuffer` and `mIndexBuffer`
-         * to null so they can be garbage collected, and call our method `checkGLError` to catch
+         * Since we no longer need the in-memory data we set [mVertexBuffer] and [mIndexBuffer]
+         * to *null* so they can be garbage collected, and call our method [checkGLError] to catch
          * any errors that may have occurred.
          *
-         * @param gl the GL interface.
+         * @param gl the [GL] interface.
          */
         fun createBufferObjects(gl: GL) {
             checkGLError(gl)
@@ -505,10 +506,20 @@ class CubeMapActivity : AppCompatActivity() {
             // Upload the vertex data
             gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, mVertexBufferObjectId)
             mVertexByteBuffer!!.position(0)
-            gl11.glBufferData(GL11.GL_ARRAY_BUFFER, mVertexByteBuffer!!.capacity(), mVertexByteBuffer, GL11.GL_STATIC_DRAW)
+            gl11.glBufferData(
+                    GL11.GL_ARRAY_BUFFER,
+                    mVertexByteBuffer!!.capacity(),
+                    mVertexByteBuffer,
+                    GL11.GL_STATIC_DRAW
+            )
             gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, mElementBufferObjectId)
             mIndexBuffer!!.position(0)
-            gl11.glBufferData(GL11.GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer!!.capacity() * CHAR_SIZE, mIndexBuffer, GL11.GL_STATIC_DRAW)
+            gl11.glBufferData(
+                    GL11.GL_ELEMENT_ARRAY_BUFFER,
+                    mIndexBuffer!!.capacity() * CHAR_SIZE,
+                    mIndexBuffer,
+                    GL11.GL_STATIC_DRAW
+            )
             // We don't need the in-memory data any more
             mVertexBuffer = null
             mVertexByteBuffer = null
@@ -517,35 +528,34 @@ class CubeMapActivity : AppCompatActivity() {
         }
 
         /**
-         * Called from `Renderer.onDrawFrame` to draw our torus when it is called to draw the
-         * current frame. First we call our method `checkGLError` to catch any errors that may
-         * have occurred, and the we cast our argument `GL10 gl` to set `GL11 gl11`. We
-         * enable the client-side capability GL_VERTEX_ARRAY (the vertex array is enabled for writing
-         * and used during rendering when glArrayElement, glDrawArrays, glDrawElements, glDrawRangeElements
-         * glMultiDrawArrays, or glMultiDrawElements is called). Then we bind our buffer object
-         * `mVertexBufferObjectId` to the target GL_ARRAY_BUFFER, and then define an array of
-         * vertex data with 3 coordinate per vertex, float data type, a stride of VERTEX_SIZE (since
-         * the normal vector is interleaved with the vertex coordinates), and the pointer set to the
-         * first vertex (0). Next we enable the client-side capability GL_NORMAL_ARRAY (the normal
-         * array is enabled for writing and used during rendering when glArrayElement, glDrawArrays,
-         * glDrawElements, glDrawRangeElements glMultiDrawArrays, or glMultiDrawElements is called).
-         * Then we define an array of normals, or float type, stride VERTEX_SIZE (since the normals
-         * are interleaved with the vertex coordinates), and a starting pointer that advances us past
-         * the first vertex coordinate: VERTEX_NORMAL_BUFFER_INDEX_OFFSET * FLOAT_SIZE (3 floats).
+         * Called from [Renderer.onDrawFrame] to draw our torus when it is called to draw the
+         * current frame. First we call our method [checkGLError] to catch any errors that may
+         * have occurred, and the we cast our [GL10] argument [gl] to set [GL11] variable `val gl11`.
+         * We enable the client-side capability GL_VERTEX_ARRAY (the vertex array is enabled for
+         * writing and used during rendering when `glArrayElement`, `glDrawArrays`, `glDrawElements`,
+         * `glDrawRangeElements`, `glMultiDrawArrays`, or `glMultiDrawElements` is called). Then we
+         * bind our buffer object [mVertexBufferObjectId] to the target GL_ARRAY_BUFFER, and then
+         * define an array of vertex data with 3 coordinate per vertex, [Float] data type, a stride
+         * of VERTEX_SIZE (since the normal vector is interleaved with the vertex coordinates), and
+         * the pointer set to the first vertex (0). Next we enable the client-side capability
+         * GL_NORMAL_ARRAY (the normal array is enabled for writing and used during rendering when
+         * `glArrayElement`, `glDrawArrays`, `glDrawElements`, `glDrawRangeElements`, `glMultiDrawArrays`,
+         * or `glMultiDrawElements` is called). Then we define an array of normals, of [Float] type,
+         * stride VERTEX_SIZE (since the normals are interleaved with the vertex coordinates), and a
+         * starting pointer that advances us past the first vertex coordinate:
+         * VERTEX_NORMAL_BUFFER_INDEX_OFFSET * FLOAT_SIZE (3 floats).
          *
-         *
-         * We bind our buffer object `int mElementBufferObjectId` to GL_ELEMENT_ARRAY_BUFFER,
-         * and call the method `glDrawElements` to draw GL_TRIANGLES (the primitive to render),
-         * with `mIndexCount` number of elements to be rendered, with type of the values or
-         * our indices being GL_UNSIGNED_SHORT, and an initial pointer of 0 to start at the first
+         * We bind our buffer object [Int] field [mElementBufferObjectId] to GL_ELEMENT_ARRAY_BUFFER,
+         * and call the [GL11.glDrawElements] method of `gl11`  to draw GL_TRIANGLES (the primitive
+         * to render), with [mIndexCount] number of elements to be rendered, with type of the values
+         * of our indices being GL_UNSIGNED_SHORT, and an initial pointer of 0 to start at the first
          * index value.
-         *
          *
          * Having drawn our torus we now disable the client-side capability GL_VERTEX_ARRAY and
          * GL_NORMAL_ARRAY, and unbind the targets GL_ARRAY_BUFFER, and GL_ELEMENT_ARRAY_BUFFER.
-         * Finally we call our method `checkGLError` to catch any errors that may have occurred.
+         * Finally we call our method [checkGLError] to catch any errors that may have occurred.
          *
-         * @param gl the GL interface.
+         * @param gl the [GL] interface.
          */
         fun draw(gl: GL10) {
             checkGLError(gl)
@@ -573,11 +583,15 @@ class CubeMapActivity : AppCompatActivity() {
              * Size of index data char elements in bytes:
              */
             const val CHAR_SIZE = 2
-            // Vertex structure:
-// float x, y, z;
-// float nx, ny, nx;
             /**
-             * 6 floats are used for each vertex, 3 for the (x,y.z) coordinate, and 3 for the normal vector
+             * Vertex structure:
+             *
+             * float x, y, z;
+             *
+             * float nx, ny, nx;
+             *
+             * 6 floats are used for each vertex, 3 for the (x,y.z) coordinate, and 3 for the normal
+             * vector
              */
             const val VERTEX_SIZE = 6 * FLOAT_SIZE
             /**
@@ -588,55 +602,43 @@ class CubeMapActivity : AppCompatActivity() {
 
         /**
          * Allocates storage to build our `Grid` in and initializes the contents of the index
-         * data array `CharBuffer mIndexBuffer` (a triangle list mesh). First we check to make
-         * sure our arguments are within the limitations imposed on us by the size of `char`
-         * values, and if not we throw IllegalArgumentException. We initialize our field `int mW`
-         * with our argument `int w`, and our field `int mH` with our argument `int h`.
-         * We calculate the total number of vertices to be `int size = w*h`. We allocate a native
-         * byte order `ByteBuffer` capable of holding `size` vertices to initialize our field
-         * `ByteBuffer mVertexByteBuffer`, and set our field `FloatBuffer mVertexBuffer`
-         * to a view of `mVertexByteBuffer` as a `FloatBuffer`. We calculate the total
-         * number of indices we will need `int mIndexCount`, and then initialize our field
-         * `CharBuffer mIndexBuffer` with a native byte order `ByteBuffer` of the correct
-         * size, viewed as a `CharBuffer`.
-         *
+         * data array `CharBuffer` field `mIndexBuffer` (a triangle list mesh). First we check to
+         * make sure our arguments are within the limitations imposed on us by the size of `char`
+         * values, and if not we throw `IllegalArgumentException`. We initialize our `Int` field
+         * `mW` with our `Int` argument `w`, and our `Int` field `mH` with our `Int` argument `h`.
+         * We calculate the total number of vertices to be `val size = w*h`. We allocate a native
+         * byte order `ByteBuffer` capable of holding `size` vertices to initialize our `ByteBuffer`
+         * field `mVertexByteBuffer`, and set our `FloatBuffer` field `mVertexBuffer` to a view of
+         * `mVertexByteBuffer` as a `FloatBuffer`. We calculate the total number of indices we will
+         * need to initialize our field `mIndexCount`, and then initialize our `CharBuffer` field
+         * `mIndexBuffer` with a native byte order `ByteBuffer` of the correct size, viewed as a
+         * `CharBuffer`.
          *
          * Next we loop through all the index values in `mIndexBuffer`, setting them to index
          * values in groups of two triangles, with three indices for each triangle. The indices for
          * a triangle are assigned in counter clockwise order so that the normal points out of the
-         * screen. The result is a `w` by `h` two dimensional rectangle divided into
-         * equal triangles. The magic occurs when each vertex corresponding to an index value is
-         * assigned a three dimensional coordinate by the code in our method `generateTorusGrid`.
-         *
+         * screen. The result is a `w` by `h` two dimensional rectangle divided into equal triangles.
+         * The magic occurs when each vertex corresponding to an index value is assigned a three
+         * dimensional coordinate by the code in our method `generateTorusGrid`.
          *
          * The six indices for the two triangle group are set from the row `y` and the column
          * `x` as follows:
          *
-         *
          * First triangle
          *
-         *  *
-         * (y*mW + x) top left corner (a)
+         *  * (y*mW + x) top left corner (a)
          *
-         *  *
-         * ((y+1)*mW + x) bottom left corner (c)
+         *  * ((y+1)*mW + x) bottom left corner (c)
          *
-         *  *
-         * (y*mW + x + 1) top right corner (b)
-         *
+         *  * (y*mW + x + 1) top right corner (b)
          *
          * Second triangle
          *
-         *  *
-         * (y*mW + x + 1) top right corner (b)
+         *  * (y*mW + x + 1) top right corner (b)
          *
-         *  *
-         * ((y+1)*mW + x) bottom left corner (c)
+         *  * ((y+1)*mW + x) bottom left corner (c)
          *
-         *  *
-         * ((y+1)*mW + x + 1) bottom right corner (d)
-         *
-         *
+         *  * ((y+1)*mW + x + 1) bottom right corner (d)
          *
          * Parameter: w Width of the `Grid` (vertices in one row)
          * Parameter: h Height of the `Grid` (number of rows of vertices)
@@ -691,41 +693,47 @@ class CubeMapActivity : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`. Then we initialize our field `GLSurfaceView mGLSurfaceView` with a
-     * new instance of `GLSurfaceView`, set its renderer to a new instance of `Renderer`,
-     * and finally set our content view to `mGLSurfaceView`.
+     * `onCreate`. Then we initialize our [GLSurfaceView] field [mGLSurfaceView] with a new instance
+     * of [GLSurfaceView], set its renderer to a new instance of [Renderer], and finally set our
+     * content view to [mGLSurfaceView].
      *
-     * @param savedInstanceState We do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState We do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Create our surface view and set it as the content of our
-// Activity
+        /**
+         * Create our surface view and set it as the content of our Activity
+         */
         mGLSurfaceView = GLSurfaceView(this)
         mGLSurfaceView!!.setRenderer(Renderer())
         setContentView(mGLSurfaceView)
     }
 
     /**
-     * Called after [.onRestoreInstanceState], [.onRestart], or [.onPause], for
-     * your activity to start interacting with the user. First we call through to our super's
-     * implementation of `onResume`, then we call our field's `GLSurfaceView mGLSurfaceView`
-     * implementation of `onResume`.
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for our activity to start
+     * interacting with the user. First we call through to our super's implementation of `onResume`,
+     * then we call the `onResume` method of our [GLSurfaceView] field [mGLSurfaceView].
      */
-    override fun onResume() { // Ideally a game should implement onResume() and onPause()
-// to take appropriate action when the activity looses focus
+    override fun onResume() {
+        /**
+         * Ideally a game should implement onResume() and onPause()
+         * to take appropriate action when the activity looses focus
+         */
         super.onResume()
         mGLSurfaceView!!.onResume()
     }
 
     /**
      * Called as part of the activity lifecycle when an activity is going into the background, but
-     * has not (yet) been killed.  The counterpart to [.onResume]. First we call through to our
-     * super's implementation of `onPause`, then we call our field's `mGLSurfaceView`
-     * implementation of `onPause`.
+     * has not (yet) been killed.  The counterpart to [onResume]. First we call through to our
+     * super's implementation of `onPause`, then we call the `onPause` method of our field
+     * [mGLSurfaceView].
      */
-    override fun onPause() { // Ideally a game should implement onResume() and onPause()
-// to take appropriate action when the activity looses focus
+    override fun onPause() {
+        /**
+         * Ideally a game should implement onResume() and onPause()
+         * to take appropriate action when the activity looses focus
+         */
         super.onPause()
         mGLSurfaceView!!.onPause()
     }
@@ -738,7 +746,7 @@ class CubeMapActivity : AppCompatActivity() {
 
         /**
          * Calls `glGetError` to get the value of the error flag, and if it is not GL_NO_ERROR (0),
-         * throws a RuntimeException.
+         * throws a [RuntimeException].
          *
          * @param gl the GL interface.
          */
