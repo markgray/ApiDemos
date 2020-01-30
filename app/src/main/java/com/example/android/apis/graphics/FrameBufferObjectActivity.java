@@ -16,22 +16,23 @@
 
 package com.example.android.apis.graphics;
 
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL;
-import javax.microedition.khronos.opengles.GL10;
-import javax.microedition.khronos.opengles.GL11ExtensionPack;
-
-import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.os.Bundle;
 import android.os.SystemClock;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL;
+import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11ExtensionPack;
+
 /**
  * Demonstrate the Frame Buffer Object OpenGL ES extension. This sample renders a scene into an
  * offscreen frame buffer, and then uses the resulting image as a texture to render an onscreen scene.
  */
-public class FrameBufferObjectActivity extends Activity {
+public class FrameBufferObjectActivity extends AppCompatActivity {
     /**
      * {@code GLSurfaceView} containing our demo, its {@code GLSurfaceView.Renderer} is our class
      * {@code Renderer} and it is our entire content view.
@@ -481,6 +482,7 @@ public class FrameBufferObjectActivity extends Activity {
          * @param extension extension to check for
          * @return true if the extension is present in the current context.
          */
+        @SuppressWarnings("SameParameterValue")
         private boolean checkIfContextSupportsExtension(GL10 gl, String extension) {
             String extensions = " " + gl.glGetString(GL10.GL_EXTENSIONS) + " ";
             // The extensions string is padded with spaces between extensions, but not
