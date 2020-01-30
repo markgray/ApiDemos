@@ -16,6 +16,7 @@
 package com.example.android.apis.graphics
 
 import android.opengl.GLSurfaceView
+import android.view.SurfaceView
 import android.opengl.GLU
 import android.os.Bundle
 import android.os.SystemClock
@@ -31,88 +32,89 @@ import javax.microedition.khronos.opengles.GL11ExtensionPack
  */
 class FrameBufferObjectActivity : AppCompatActivity() {
     /**
-     * `GLSurfaceView` containing our demo, its `GLSurfaceView.Renderer` is our class
-     * `Renderer` and it is our entire content view.
+     * [GLSurfaceView] containing our demo, its [GLSurfaceView.Renderer] is our class
+     * [Renderer] and it is our entire content view.
      */
     private var mGLSurfaceView: GLSurfaceView? = null
 
     /**
-     * `GLSurfaceView.Renderer` which draws our demo, it consists of two rotating `Cube`
-     * objects used as the texture for a rotating `Triangle`
+     * [GLSurfaceView.Renderer] which draws our demo, it consists of two rotating [Cube]
+     * objects used as the texture for a rotating [Triangle] object.
      */
     private inner class Renderer : GLSurfaceView.Renderer {
         /**
-         * Flag indicating whether the current GL context supports the extension GL_OES_framebuffer_object
+         * Flag indicating whether the current GL context supports the GL_OES_framebuffer_object
+         * extension
          */
         private var mContextSupportsFrameBufferObject = false
         /**
          * Texture ID of the texture we use for our demo, it is bound to GL_TEXTURE_2D in our method
-         * `drawOnscreen` which is called by our override of `onDrawFrame`.
+         * [drawOnscreen] which is called by our override of [onDrawFrame].
          */
         private var mTargetTexture = 0
         /**
          * Framebuffer object name we use to draw our offscreen texture to, it is bound to
-         * GL11ExtensionPack.GL_FRAMEBUFFER_OES in `onDrawFrame`
+         * [GL11ExtensionPack.GL_FRAMEBUFFER_OES] in our [onDrawFrame] override
          */
         private var mFramebuffer = 0
         /**
-         * Width of the Framebuffer object, it is used in our method `createTargetTexture` to
-         * specify the width of the two-dimensional texture image for the GL_TEXTURE_2D target (which
-         * is bound to our `mTargetTexture`, as well as by our method `createFrameBuffer`
+         * Width of the Framebuffer object, it is used in our method [createTargetTexture] to
+         * specify the width of the two-dimensional texture image for the GL_TEXTURE_2D target
+         * (which is bound to our [mTargetTexture], as well as by our method [createFrameBuffer]
          * to specify the width of the renderbuffer object's image that is bound to GL_RENDERBUFFER_OES
-         * (which is our `mFramebuffer`).
+         * (which is our [mFramebuffer]).
          */
         private val mFramebufferWidth = 256
         /**
-         * Height of the Framebuffer object, it is used in our method `createTargetTexture` to
-         * specify the height of the two-dimensional texture image for the GL_TEXTURE_2D target (which
-         * is bound to our `mTargetTexture`, as well as by our method `createFrameBuffer`
+         * Height of the Framebuffer object, it is used in our method [createTargetTexture] to
+         * specify the height of the two-dimensional texture image for the GL_TEXTURE_2D target
+         * (which is bound to our [mTargetTexture], as well as by our method [createFrameBuffer]
          * to specify the height of the renderbuffer object's image that is bound to GL_RENDERBUFFER_OES
-         * (which is our `mFramebuffer`).
+         * (which is our [mFramebuffer]).
          */
         private val mFramebufferHeight = 256
         /**
-         * Width of our `SurfaceView` which is set in our `onSurfaceChanged` callback
+         * Width of our [SurfaceView] which is set in our [onSurfaceChanged] callback
          */
         private var mSurfaceWidth = 0
         /**
-         * Height of our `SurfaceView` which is set in our `onSurfaceChanged` callback
+         * Height of our [SurfaceView] which is set in our [onSurfaceChanged] callback
          */
         private var mSurfaceHeight = 0
         /**
-         * `Triangle` instance which we draw in our method `drawOnscreen` every time our
-         * callback `onDrawFrame` is called, it is rotated by a function of the system time
-         * by rotating the `GLSurfaceView` using `glRotatef`, and the texture is supplied
-         * by `mTargetTexture` (which consists of our off screen frame buffer which has two
-         * rotating `Cube` objects being drawn into it).
+         * [Triangle] instance which we draw in our method [drawOnscreen] every time our
+         * callback [onDrawFrame] is called, it is rotated by a function of the system time
+         * by rotating the [GLSurfaceView] using `glRotatef`, and the texture is supplied
+         * by [mTargetTexture] (which consists of our off screen frame buffer which has two
+         * rotating [Cube] objects being drawn into it).
          */
         private var mTriangle: Triangle? = null
         /**
-         * `Cube` instance that we use twice to produce the texture used by our `Triangle`
-         * instance (the second rotated around the (y,z) axis by twice the angle the first is rotated
-         * by, and translated by (0.5, 0.5, 0.5))
+         * [Cube] instance that we use twice to produce the texture used by our [Triangle] instance
+         * (the second rotated around the (y,z) axis by twice the angle the first is rotated by, and
+         * translated by (0.5, 0.5, 0.5))
          */
         private var mCube: Cube? = null
         /**
-         * Angle used to draw the two `Cube` objects we use as our texture, it is advanced by
+         * Angle used to draw the two [Cube] objects we use as our texture, it is advanced by
          * 1.2 degrees every frame.
          */
         private var mAngle = 0f
 
         /**
-         * Called to draw the current frame. First we call our method `checkGLError` to catch
-         * any errors that may have occurred. Then if `mContextSupportsFrameBufferObject` (the
-         * current context supports frame buffer objects) we cast our parameter `GL10 gl` to
-         * `GL11ExtensionPack gl11ep` and if we are debugging we immediately call our method
-         * `drawOffscreenImage` which will draw the two rotating `Cube` that we use as
-         * our texture directly to the `GLSurfaceView` window system provided framebuffer,
-         * if we are not debugging we bind our frame buffer object name `mFramebuffer` to the
-         * target GL_FRAMEBUFFER_OES, then call our method `drawOffscreenImage`, unbind the
-         * target GL_FRAMEBUFFER_OES, and call our method `drawOnscreen`. If the current
-         * context doesn't support frame buffer objects we set our clear color to red, and clear the
-         * color buffer and depth buffer with it.
+         * Called to draw the current frame. First we call our method [checkGLError] to catch
+         * any errors that may have occurred. Then if [mContextSupportsFrameBufferObject] is
+         * *true* (the current context supports frame buffer objects) we cast our [GL10] parameter
+         * [gl] to a [GL11ExtensionPack] to set variable `val gl11ep` and if we are debugging we
+         * immediately call our method [drawOffscreenImage] which will draw the two rotating [Cube]
+         * objects that we use as our texture directly to the [GLSurfaceView] window system provided
+         * framebuffer, if we are not debugging we bind our frame buffer object name [mFramebuffer]
+         * to the target GL_FRAMEBUFFER_OES, then call our method [drawOffscreenImage], unbind the
+         * target GL_FRAMEBUFFER_OES, and call our method [drawOnscreen]. If the current context
+         * doesn't support frame buffer objects we set our clear color to red, and clear the color
+         * buffer and depth buffer with it.
          *
-         * @param gl the GL interface.
+         * @param gl the [GL] interface.
          */
         override fun onDrawFrame(gl: GL10) {
             checkGLError(gl)
@@ -127,8 +129,11 @@ class FrameBufferObjectActivity : AppCompatActivity() {
                     gl11ep.glBindFramebufferOES(GL11ExtensionPack.GL_FRAMEBUFFER_OES, 0)
                     drawOnscreen(gl, mSurfaceWidth, mSurfaceHeight)
                 }
-            } else { // Current context doesn't support frame buffer objects.
-// Indicate this by drawing a red background.
+            } else {
+                /**
+                 * Current context doesn't support frame buffer objects.
+                 * Indicate this by drawing a red background.
+                 */
                 gl.glClearColor(1f, 0f, 0f, 0f)
                 gl.glClear(GL10.GL_COLOR_BUFFER_BIT or GL10.GL_DEPTH_BUFFER_BIT)
             }
