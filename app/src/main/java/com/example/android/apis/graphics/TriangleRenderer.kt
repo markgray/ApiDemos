@@ -24,6 +24,7 @@ import android.opengl.GLUtils
 import android.os.SystemClock
 import com.example.android.apis.R
 import java.io.IOException
+import java.io.InputStream
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -35,14 +36,15 @@ class TriangleRenderer(
          * `Context` passed to our constructor, we use it to access resources, "this" when called
          * from the `onCreate` method the the activity `GLES20Activity`.
          */
-        private val mContext: Context) : GLSurfaceView.Renderer {
+        private val mContext: Context
+) : GLSurfaceView.Renderer {
     /**
-     * Our `Triangle` instance. We use it only to ask it to `draw` itself.
+     * Our [Triangle] instance. We use it only to ask it to `draw` itself.
      */
     private val mTriangle: Triangle = Triangle()
     /**
      * Texture name for the texture we use. It is bound to `GL_TEXTURE_2D`, configured and
-     * loaded from the raw resource robot.png in our method `onSurfaceCreated`.
+     * loaded from the raw resource robot.png in our override of [onSurfaceCreated].
      */
     private var mTextureID = 0
 
@@ -50,7 +52,6 @@ class TriangleRenderer(
      * Called when the surface is created or recreated. Called when the rendering thread starts and
      * whenever the EGL context is lost. The EGL context will typically be lost when the Android
      * device awakes after going to sleep.
-     *
      *
      * First we disable the server side capability GL_DITHER (color components and indices will not
      * be dithered before they are written to the color buffer), then we specify the implementation
@@ -65,9 +66,8 @@ class TriangleRenderer(
      * depth), and enable the server side capability GL_TEXTURE_2D (If enabled and no fragment shader
      * is active, two-dimensional texturing is performed).
      *
-     *
-     * Next we create our texture. we call `glGenTextures` to generate a texture name which we
-     * store in our field `int mTextureID`. We bind `int mTextureID` to the target
+     * Next we create our texture. we call the [GL10.glGenTextures] method of [gl] to generate a
+     * texture name which we store in our field [mTextureID]. We bind [mTextureID] to the target
      * GL_TEXTURE_2D (While a texture is bound, GL operations on the target to which it is bound
      * affect the bound texture, and queries of the target to which it is bound return state from
      * the bound texture. If texture mapping is active on the target to which a texture is bound,
@@ -75,35 +75,33 @@ class TriangleRenderer(
      * currently bound to them, and the texture name zero refers to the default textures that were
      * bound to them at initialization).
      *
-     *
-     * We now proceed to configure our texture. We use `glTexParameterf` to set the texture
-     * parameter GL_TEXTURE_MIN_FILTER to GL_NEAREST (The texture minifying function is used whenever
-     * the pixel being textured maps to an area greater than one texture element. GL_NEAREST Returns
-     * the value of the texture element that is nearest (in Manhattan distance) to the center of the
-     * pixel being textured). We set the texture parameter GL_TEXTURE_MAG_FILTER to GL_LINEAR (The
-     * texture magnification function is used when the pixel being textured maps to an area less than
-     * or equal to one texture element. GL_LINEAR Returns the weighted average of the four texture
-     * elements that are closest to the center of the pixel being textured). We set the texture
-     * parameters GL_TEXTURE_WRAP_S, and GL_TEXTURE_WRAP_T to GL_CLAMP_TO_EDGE (causes texture
-     * coordinates to be clamped to the range [1/(2N), 1-1/(2N)] where N is the size of the texture
-     * in the direction of clamping ie. the color of the edge colors will be repeated when the
-     * drawing reaches the edge of the texture, rather than repeating the texture).
-     *
+     * We now proceed to configure our texture. We use the [GL10.glTexParameterf] method of [gl] to
+     * set the texture parameter GL_TEXTURE_MIN_FILTER to GL_NEAREST (The texture minifying function
+     * is used whenever the pixel being textured maps to an area greater than one texture element.
+     * GL_NEAREST Returns the value of the texture element that is nearest (in Manhattan distance)
+     * to the center of the pixel being textured). We set the texture parameter GL_TEXTURE_MAG_FILTER
+     * to GL_LINEAR (The texture magnification function is used when the pixel being textured maps to
+     * an area less than or equal to one texture element. GL_LINEAR Returns the weighted average of
+     * the four texture elements that are closest to the center of the pixel being textured). We set
+     * the texture parameters GL_TEXTURE_WRAP_S, and GL_TEXTURE_WRAP_T to GL_CLAMP_TO_EDGE (causes
+     * texture coordinates to be clamped to the range [1/(2N), 1-1/(2N)] where N is the size of the
+     * texture in the direction of clamping ie. the color of the edge colors will be repeated when
+     * the drawing reaches the edge of the texture, rather than repeating the texture).
      *
      * We next set the GL_TEXTURE_ENV_MODE texture environment parameter of the target texture
      * environment GL_TEXTURE_ENV to GL_REPLACE (the texture color will replace the color already
      * present).
      *
-     *
-     * We open `InputStream is` to read our raw resource file robot.png, allocate
-     * `Bitmap bitmap` and wrapped in a try we decode `is` into `bitmap`. We then
-     * use `GLUtils.texImage2D` use `bitmap` as the image for the target GL_TEXTURE_2D.
-     * Then we recycle `bitmap`.
+     * We open an [InputStream] for `val inputStream` to read our raw resource file robot.png,
+     * allocate a [Bitmap] for `val bitmap` and wrapped in a try we decode `inputStream` into
+     * `bitmap`. We then use the [GLUtils.texImage2D] method to use `bitmap` as the image for
+     * the target GL_TEXTURE_2D. Then we recycle `bitmap`.
      *
      * @param gl     the GL interface.
      * @param config the EGLConfig of the created surface.
      */
-    override fun onSurfaceCreated(gl: GL10, config: EGLConfig) { /*
+    override fun onSurfaceCreated(gl: GL10, config: EGLConfig) {
+        /*
          * By default, OpenGL enables features that improve quality
          * but reduce performance. One might want to tweak that
          * especially on software renderer.
@@ -112,7 +110,8 @@ class TriangleRenderer(
         /*
          * Some one-time OpenGL initialization can be made here
          * probably based on features of this particular context
-         */gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST)
+         */
+        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST)
         gl.glClearColor(.5f, .5f, .5f, 1f)
         gl.glShadeModel(GL10.GL_SMOOTH)
         gl.glEnable(GL10.GL_DEPTH_TEST)
@@ -130,13 +129,13 @@ class TriangleRenderer(
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE.toFloat())
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE.toFloat())
         gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE.toFloat())
-        val `is` = mContext.resources.openRawResource(R.raw.robot)
+        val inputStream: InputStream = mContext.resources.openRawResource(R.raw.robot)
         val bitmap: Bitmap
         bitmap = try {
-            BitmapFactory.decodeStream(`is`)
+            BitmapFactory.decodeStream(inputStream)
         } finally {
             try {
-                `is`.close()
+                inputStream.close()
             } catch (e: IOException) { // Ignore.
             }
         }
@@ -152,11 +151,9 @@ class TriangleRenderer(
      * surface of the polygon by multiplying the color components together). We next clear both the
      * color buffer and the depth buffer.
      *
-     *
      * We set the matrix mode to GL_MODELVIEW (subsequent matrix operations will apply to the model
      * view matrix stack), and load it with the identify matrix. We define a viewing transformation
      * with the eye at (0,0,-5), the center at (0,0,0), and an up vector of (0,1,0).
-     *
      *
      * We enable the client side capability GL_VERTEX_ARRAY (the vertex array is enabled for writing
      * and used during rendering), and the client side capability GL_TEXTURE_COORD_ARRAY (the texture
@@ -169,19 +166,16 @@ class TriangleRenderer(
      * used. In effect, the texture targets become aliases for the textures currently bound to them,
      * and the texture name zero refers to the default textures that were bound to them at initialization).
      *
-     *
      * We set both the texture parameters GL_TEXTURE_WRAP_S and GL_TEXTURE_WRAP_T of GL_TEXTURE_2D
      * to GL_REPEAT (causes the integer part of the texture coordinate to be ignored; the GL uses
      * only the fractional part, thereby creating a repeating pattern).
-     *
      *
      * We next compute an `float angle` based on the current system time since boot modulo 4000
      * which creates an angle which goes from 0 to 360 degrees every 4 seconds, and we use it to
      * rotate our model matrix around the z axis. We then instruct our field `Triangle mTriangle`
      * to draw itself.
      *
-     * @param gl the GL interface. Use `instanceof` to
-     * test if the interface supports GL11 or higher interfaces.
+     * @param gl the GL interface.
      */
     override fun onDrawFrame(gl: GL10) { /*
          * By default, OpenGL enables features that improve quality
