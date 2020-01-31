@@ -13,62 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.graphics
 
-package com.example.android.apis.graphics;
-
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.opengl.GLSurfaceView;
-import android.opengl.GLU;
-import android.opengl.GLUtils;
-import android.os.SystemClock;
-
-import com.example.android.apis.R;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.opengl.GLSurfaceView
+import android.opengl.GLU
+import android.opengl.GLUtils
+import android.os.SystemClock
+import com.example.android.apis.R
+import java.io.IOException
+import javax.microedition.khronos.egl.EGLConfig
+import javax.microedition.khronos.opengles.GL10
 
 /**
- * Draws a {@code Triangle} using OpenGL ES 1.x-compatible renderer.
+ * Draws a `Triangle` using OpenGL ES 1.x-compatible renderer.
  */
-@SuppressWarnings("WeakerAccess")
-public class TriangleRenderer implements GLSurfaceView.Renderer {
+class TriangleRenderer(
+        /**
+         * `Context` passed to our constructor, we use it to access resources, "this" when called
+         * from the `onCreate` method the the activity `GLES20Activity`.
+         */
+        private val mContext: Context) : GLSurfaceView.Renderer {
     /**
-     * {@code Context} passed to our constructor, we use it to access resources, "this" when called
-     * from the {@code onCreate} method the the activity {@code GLES20Activity}.
+     * Our `Triangle` instance. We use it only to ask it to `draw` itself.
      */
-    private Context mContext;
+    private val mTriangle: Triangle = Triangle()
     /**
-     * Our {@code Triangle} instance. We use it only to ask it to {@code draw} itself.
+     * Texture name for the texture we use. It is bound to `GL_TEXTURE_2D`, configured and
+     * loaded from the raw resource robot.png in our method `onSurfaceCreated`.
      */
-    private Triangle mTriangle;
-    /**
-     * Texture name for the texture we use. It is bound to {@code GL_TEXTURE_2D}, configured and
-     * loaded from the raw resource robot.png in our method {@code onSurfaceCreated}.
-     */
-    private int mTextureID;
-
-    /**
-     * Our constructor, we save our parameter {@code Context context} in our field {@code Context mContext}
-     * and initialize our field {@code Triangle mTriangle} with a new instance of {@code Triangle}.
-     *
-     * @param context {@code Context} to use to access resources, "this" when called from the
-     *                {@code onCreate} method of the activity {@code GLES20Activity}.
-     */
-    public TriangleRenderer(Context context) {
-        mContext = context;
-        mTriangle = new Triangle();
-    }
+    private var mTextureID = 0
 
     /**
      * Called when the surface is created or recreated. Called when the rendering thread starts and
      * whenever the EGL context is lost. The EGL context will typically be lost when the Android
      * device awakes after going to sleep.
-     * <p>
+     *
+     *
      * First we disable the server side capability GL_DITHER (color components and indices will not
      * be dithered before they are written to the color buffer), then we specify the implementation
      * specific hint GL_PERSPECTIVE_CORRECTION_HINT to GL_FASTEST (the quality of color, texture
@@ -81,17 +64,19 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
      * is discarded. If the test passes, the depth buffer will be updated with the new fragment's output
      * depth), and enable the server side capability GL_TEXTURE_2D (If enabled and no fragment shader
      * is active, two-dimensional texturing is performed).
-     * <p>
-     * Next we create our texture. we call {@code glGenTextures} to generate a texture name which we
-     * store in our field {@code int mTextureID}. We bind {@code int mTextureID} to the target
+     *
+     *
+     * Next we create our texture. we call `glGenTextures` to generate a texture name which we
+     * store in our field `int mTextureID`. We bind `int mTextureID` to the target
      * GL_TEXTURE_2D (While a texture is bound, GL operations on the target to which it is bound
      * affect the bound texture, and queries of the target to which it is bound return state from
      * the bound texture. If texture mapping is active on the target to which a texture is bound,
      * the bound texture is used. In effect, the texture targets become aliases for the textures
      * currently bound to them, and the texture name zero refers to the default textures that were
      * bound to them at initialization).
-     * <p>
-     * We now proceed to configure our texture. We use {@code glTexParameterf} to set the texture
+     *
+     *
+     * We now proceed to configure our texture. We use `glTexParameterf` to set the texture
      * parameter GL_TEXTURE_MIN_FILTER to GL_NEAREST (The texture minifying function is used whenever
      * the pixel being textured maps to an area greater than one texture element. GL_NEAREST Returns
      * the value of the texture element that is nearest (in Manhattan distance) to the center of the
@@ -103,73 +88,60 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
      * coordinates to be clamped to the range [1/(2N), 1-1/(2N)] where N is the size of the texture
      * in the direction of clamping ie. the color of the edge colors will be repeated when the
      * drawing reaches the edge of the texture, rather than repeating the texture).
-     * <p>
+     *
+     *
      * We next set the GL_TEXTURE_ENV_MODE texture environment parameter of the target texture
      * environment GL_TEXTURE_ENV to GL_REPLACE (the texture color will replace the color already
      * present).
-     * <p>
-     * We open {@code InputStream is} to read our raw resource file robot.png, allocate
-     * {@code Bitmap bitmap} and wrapped in a try we decode {@code is} into {@code bitmap}. We then
-     * use {@code GLUtils.texImage2D} use {@code bitmap} as the image for the target GL_TEXTURE_2D.
-     * Then we recycle {@code bitmap}.
+     *
+     *
+     * We open `InputStream is` to read our raw resource file robot.png, allocate
+     * `Bitmap bitmap` and wrapped in a try we decode `is` into `bitmap`. We then
+     * use `GLUtils.texImage2D` use `bitmap` as the image for the target GL_TEXTURE_2D.
+     * Then we recycle `bitmap`.
      *
      * @param gl     the GL interface.
      * @param config the EGLConfig of the created surface.
      */
-    @Override
-    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        /*
+    override fun onSurfaceCreated(gl: GL10, config: EGLConfig) { /*
          * By default, OpenGL enables features that improve quality
          * but reduce performance. One might want to tweak that
          * especially on software renderer.
          */
-        gl.glDisable(GL10.GL_DITHER);
-
+        gl.glDisable(GL10.GL_DITHER)
         /*
          * Some one-time OpenGL initialization can be made here
          * probably based on features of this particular context
-         */
-        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
-
-        gl.glClearColor(.5f, .5f, .5f, 1);
-        gl.glShadeModel(GL10.GL_SMOOTH);
-        gl.glEnable(GL10.GL_DEPTH_TEST);
-        gl.glEnable(GL10.GL_TEXTURE_2D);
-
+         */gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST)
+        gl.glClearColor(.5f, .5f, .5f, 1f)
+        gl.glShadeModel(GL10.GL_SMOOTH)
+        gl.glEnable(GL10.GL_DEPTH_TEST)
+        gl.glEnable(GL10.GL_TEXTURE_2D)
         /*
          * Create our texture. This has to be done each time the
          * surface is created.
          */
-
-        int[] textures = new int[1];
-        gl.glGenTextures(1, textures, 0);
-
-        mTextureID = textures[0];
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID);
-
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
-
-        gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE);
-
-        InputStream is = mContext.getResources().openRawResource(R.raw.robot);
-        Bitmap bitmap;
-        //noinspection TryFinallyCanBeTryWithResources
-        try {
-            bitmap = BitmapFactory.decodeStream(is);
+        val textures = IntArray(1)
+        gl.glGenTextures(1, textures, 0)
+        mTextureID = textures[0]
+        gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID)
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST.toFloat())
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR.toFloat())
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE.toFloat())
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE.toFloat())
+        gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE.toFloat())
+        val `is` = mContext.resources.openRawResource(R.raw.robot)
+        val bitmap: Bitmap
+        bitmap = try {
+            BitmapFactory.decodeStream(`is`)
         } finally {
             try {
-                is.close();
-            } catch (IOException e) {
-                // Ignore.
+                `is`.close()
+            } catch (e: IOException) { // Ignore.
             }
         }
-
-        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
-        bitmap.recycle();
+        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0)
+        bitmap.recycle()
     }
 
     /**
@@ -179,85 +151,74 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
      * to GL_MODULATE (color from the texture image will be merged with the existing color on the
      * surface of the polygon by multiplying the color components together). We next clear both the
      * color buffer and the depth buffer.
-     * <p>
+     *
+     *
      * We set the matrix mode to GL_MODELVIEW (subsequent matrix operations will apply to the model
      * view matrix stack), and load it with the identify matrix. We define a viewing transformation
      * with the eye at (0,0,-5), the center at (0,0,0), and an up vector of (0,1,0).
-     * <p>
+     *
+     *
      * We enable the client side capability GL_VERTEX_ARRAY (the vertex array is enabled for writing
      * and used during rendering), and the client side capability GL_TEXTURE_COORD_ARRAY (the texture
      * coordinate array is enabled for writing and used during rendering). We select GL_TEXTURE0 to
      * be the active texture unit (selects which texture unit subsequent texture state calls will
-     * affect), and bind our texture name {@code mTextureID} to the texture target GL_TEXTURE_2D
+     * affect), and bind our texture name `mTextureID` to the texture target GL_TEXTURE_2D
      * (While a texture is bound, GL operations on the target to which it is bound affect the bound
      * texture, and queries of the target to which it is bound return state from the bound texture.
      * If texture mapping is active on the target to which a texture is bound, the bound texture is
      * used. In effect, the texture targets become aliases for the textures currently bound to them,
      * and the texture name zero refers to the default textures that were bound to them at initialization).
-     * <p>
+     *
+     *
      * We set both the texture parameters GL_TEXTURE_WRAP_S and GL_TEXTURE_WRAP_T of GL_TEXTURE_2D
      * to GL_REPEAT (causes the integer part of the texture coordinate to be ignored; the GL uses
      * only the fractional part, thereby creating a repeating pattern).
-     * <p>
-     * We next compute an {@code float angle} based on the current system time since boot modulo 4000
+     *
+     *
+     * We next compute an `float angle` based on the current system time since boot modulo 4000
      * which creates an angle which goes from 0 to 360 degrees every 4 seconds, and we use it to
-     * rotate our model matrix around the z axis. We then instruct our field {@code Triangle mTriangle}
+     * rotate our model matrix around the z axis. We then instruct our field `Triangle mTriangle`
      * to draw itself.
      *
-     * @param gl the GL interface. Use <code>instanceof</code> to
-     *           test if the interface supports GL11 or higher interfaces.
+     * @param gl the GL interface. Use `instanceof` to
+     * test if the interface supports GL11 or higher interfaces.
      */
-    @Override
-    public void onDrawFrame(GL10 gl) {
-        /*
+    override fun onDrawFrame(gl: GL10) { /*
          * By default, OpenGL enables features that improve quality
          * but reduce performance. One might want to tweak that
          * especially on software renderer.
          */
-        gl.glDisable(GL10.GL_DITHER);
-
-        gl.glTexEnvx(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
-
+        gl.glDisable(GL10.GL_DITHER)
+        gl.glTexEnvx(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE)
         /*
          * Usually, the first thing one might want to do is to clear
          * the screen. The most efficient way of doing this is to use
          * glClear().
-         */
-
-        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-
+         */gl.glClear(GL10.GL_COLOR_BUFFER_BIT or GL10.GL_DEPTH_BUFFER_BIT)
         /*
          * Now we're ready to draw some 3D objects
-         */
-
-        gl.glMatrixMode(GL10.GL_MODELVIEW);
-        gl.glLoadIdentity();
-
-        GLU.gluLookAt(gl, 0, 0, -5, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
-
-        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-
-        gl.glActiveTexture(GL10.GL_TEXTURE0);
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID);
-        gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
-        gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
-
-        long time = SystemClock.uptimeMillis() % 4000L;
-        float angle = 0.090f * ((int) time);
-
-        gl.glRotatef(angle, 0, 0, 1.0f);
-
-        mTriangle.draw(gl);
+         */gl.glMatrixMode(GL10.GL_MODELVIEW)
+        gl.glLoadIdentity()
+        GLU.gluLookAt(gl, 0f, 0f, -5f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
+        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY)
+        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY)
+        gl.glActiveTexture(GL10.GL_TEXTURE0)
+        gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID)
+        gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT)
+        gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT)
+        val time = SystemClock.uptimeMillis() % 4000L
+        val angle = 0.090f * time.toInt()
+        gl.glRotatef(angle, 0f, 0f, 1.0f)
+        mTriangle.draw(gl)
     }
 
     /**
      * Called when the surface changed size. Called after the surface is created and whenever the
      * OpenGL ES surface size changes. We set the view port to have its lower left hand corner at
-     * (0,0) and to have a width of {@code w} and a height of {@code h}. We calculate the aspect
-     * ratio {@code float ratio} to be {@code w/h}, set the matrix mode to GL_PROJECTION (subsequent
+     * (0,0) and to have a width of `w` and a height of `h`. We calculate the aspect
+     * ratio `float ratio` to be `w/h`, set the matrix mode to GL_PROJECTION (subsequent
      * matrix operations will apply to the projection matrix stack), load it with the identity matrix,
-     * then set its left clipping plane to {@code -ratio}, its right clipping plane to {@code ratio}.
+     * then set its left clipping plane to `-ratio`, its right clipping plane to `ratio`.
      * its bottom clipping plane to -1, its top clipping plane to 1, its near clipping plane to 3,
      * and its far clipping plane to 7.
      *
@@ -265,20 +226,17 @@ public class TriangleRenderer implements GLSurfaceView.Renderer {
      * @param w  width of new surface
      * @param h  height of new surface
      */
-    @Override
-    public void onSurfaceChanged(GL10 gl, int w, int h) {
-        gl.glViewport(0, 0, w, h);
-
+    override fun onSurfaceChanged(gl: GL10, w: Int, h: Int) {
+        gl.glViewport(0, 0, w, h)
         /*
         * Set our projection matrix. This doesn't have to be done
         * each time we draw, but usually a new projection needs to
         * be set when the viewport is resized.
         */
-
-        float ratio = (float) w / h;
-        gl.glMatrixMode(GL10.GL_PROJECTION);
-        gl.glLoadIdentity();
-        gl.glFrustumf(-ratio, ratio, -1, 1, 3, 7);
+        val ratio = w.toFloat() / h
+        gl.glMatrixMode(GL10.GL_PROJECTION)
+        gl.glLoadIdentity()
+        gl.glFrustumf(-ratio, ratio, -1f, 1f, 3f, 7f)
     }
-}
 
+}
