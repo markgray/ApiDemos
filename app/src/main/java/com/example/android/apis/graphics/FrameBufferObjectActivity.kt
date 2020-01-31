@@ -141,13 +141,13 @@ class FrameBufferObjectActivity : AppCompatActivity() {
 
         /**
          * Called when the surface changed size. Called after the surface is created and whenever
-         * the OpenGL ES surface size changes. First we call our method `checkGLError` to
-         * catch any error that may have occurred, then we save `width` in our field
-         * `mSurfaceWidth` and height in our field `mSurfaceHeight` then set the viewport
-         * to have the lower left corner at (0,0) and a width of `width` and a height of
-         * `height`.
+         * the OpenGL ES surface size changes. First we call our method [checkGLError] to
+         * catch any error that may have occurred, then we save our [width] parameter in our field
+         * [mSurfaceWidth] and [height] in our field [mSurfaceHeight] and set the viewport
+         * to have the lower left corner at (0,0) and a width of [width] and a height of
+         * [height].
          *
-         * @param gl     the GL interface.
+         * @param gl     the [GL] interface.
          * @param width  width of surface
          * @param height height of surface
          */
@@ -163,15 +163,14 @@ class FrameBufferObjectActivity : AppCompatActivity() {
          * and whenever the EGL context is lost. The EGL context will typically be lost when the
          * Android device awakes after going to sleep. First we check to see if the current context
          * supports the capability GL_OES_framebuffer_object (has frame buffer objects) and set our
-         * field `mContextSupportsFrameBufferObject` to true if it does. Then if it does support
-         * frame buffer objects, we call our method `createTargetTexture` and initialize our
-         * field `mTargetTexture` with the texture name bound to GL_TEXTURE_2D and configured
-         * appropriately which it we returns. We call our method `createFrameBuffer` and
-         * initialize our field `mFramebuffer` with the framebuffer object name which has our
-         * `mTargetTexture` attached to it and which is configured appropriately which it
-         * returns. Finally we initialize our field `Cube mCube` with a new instance of
-         * `Cube`, and our field `Triangle mTriangle` with a new instance of
-         * `Triangle`.
+         * field [mContextSupportsFrameBufferObject] to *true* if it does. Then if it does support
+         * frame buffer objects, we call our method [createTargetTexture] and initialize our
+         * field [mTargetTexture] with the texture name bound to GL_TEXTURE_2D and configured
+         * appropriately which it returns. We call our method [createFrameBuffer] and initialize
+         * our field [mFramebuffer] with the framebuffer object name which has our
+         * [mTargetTexture] attached to it and which is configured appropriately which it
+         * returns. Finally we initialize our [Cube] field [mCube] with a new instance of
+         * [Cube], and our [Triangle] field [mTriangle] with a new instance of [Triangle].
          *
          * @param gl     the GL interface.
          * @param config the EGLConfig of the created surface. Unused.
@@ -187,44 +186,38 @@ class FrameBufferObjectActivity : AppCompatActivity() {
         }
 
         /**
-         * Called from our implementation of `onDrawFrame` to draw our triangle. First we set
-         * the viewport to have the lower left corner at (0,0) and a width of `width` and a
-         * height of `height`. Then we calculate the aspect ratio `float ratio` to be
-         * `width/height`, then we set the GL_PROJECTION matrix to be the current matrix, load
-         * it with the identity matrix and call `glFrustumf` to multiply the matrix by the
-         * perspective matrix with the left clipping plane at `-ratio`, the right clipping
-         * plane at `+ratio`, the bottom clipping plane at -1, the top clipping plane at 1,
-         * the near clipping plane at 3 and the far clipping plane at 7.
-         *
+         * Called from our implementation of [onDrawFrame] to draw our triangle. First we set
+         * the viewport to have the lower left corner at (0,0) and a width of [width] and a
+         * height of [height]. Then we calculate the [Float] aspect ratio `val ratio` to be
+         * [width] divided by [height], we set the GL_PROJECTION matrix to be the current matrix,
+         * load it with the identity matrix and call the [GL10.glFrustumf] method of [gl] to
+         * multiply the matrix by the perspective matrix with the left clipping plane at minus
+         * `ratio`, the right clipping plane at plus `ratio`, the bottom clipping plane at -1,
+         * the top clipping plane at 1, the near clipping plane at 3 and the far clipping plane at 7.
          *
          * We set the clear color to the color blue, and clear the color buffer and the depth buffer.
-         * Then we bind our `mTargetTexture` to the target texture GL_TEXTURE_2D.
-         *
+         * Then we bind our [mTargetTexture] to the target texture GL_TEXTURE_2D.
          *
          * We set the GL_TEXTURE_ENV_MODE texture environment parameter of the texture environment
          * GL_TEXTURE_ENV to the texture function GL_REPLACE (the texture replaces the current color).
          *
-         *
          * Next we set the GL_MODELVIEW matrix to be the current matrix, load it with the identity
-         * matrix and call `GLU.gluLookAt` to specify the viewing transformation to have the
+         * matrix and call [GLU.gluLookAt] to specify the viewing transformation to have the
          * eye point at (0,0,-5), the center reference point at (0,0,0) and the up vector (0,1,0).
-         *
          *
          * We enable the client-side capability GL_VERTEX_ARRAY and GL_TEXTURE_COORD_ARRAY then select
          * GL_TEXTURE0 to be the active texture unit.
          *
-         *
-         * We calculate `float angle` using the current milliseconds since boot and rotate the
-         * GL_MODELVIEW matrix by `angle` around the vector (0,0,1). Then we instruct our
-         * `Triangle mTriangle` to draw itself.
-         *
+         * We calculate the [Float] `val angle` using the current milliseconds since boot and rotate
+         * the GL_MODELVIEW matrix by `angle` around the vector (0,0,1). Then we instruct our
+         * [Triangle] field [mTriangle] to draw itself.
          *
          * To clean up we unbind the texture GL_TEXTURE_2D, and disable the client-side capabilities
          * GL_VERTEX_ARRAY and GL_TEXTURE_COORD_ARRAY.
          *
-         * @param gl     the GL interface.
-         * @param width  width of our surface view `mSurfaceWidth` in our case.
-         * @param height height of our surface view `mSurfaceHeight` in our case.
+         * @param gl     the [GL] interface.
+         * @param width  width of our surface view [mSurfaceWidth] in our case.
+         * @param height height of our surface view [mSurfaceHeight] in our case.
          */
         private fun drawOnscreen(gl: GL10, width: Int, height: Int) {
             gl.glViewport(0, 0, width, height)
@@ -253,40 +246,38 @@ class FrameBufferObjectActivity : AppCompatActivity() {
         }
 
         /**
-         * Called from our `onDrawFrame` implementation, this Draws our `Cube mCube`
+         * Called from our [onDrawFrame] implementation, this Draws our [Cube] field [mCube]
          * twice to the currently selected framebuffer (either the window system provided default
-         * framebuffer it we are debugging our texture, or the offscreen `mFramebuffer` which
+         * framebuffer if we are debugging our texture, or the offscreen [mFramebuffer] which
          * is bound to the target GL_FRAMEBUFFER_OES). First we set the viewport to have the lower
-         * left corner at (0,0) and a width of `width` and a height of `height`. Then we
-         * calculate the aspect ratio `float ratio` to be `width/height`, then we set
+         * left corner at (0,0) and a width of [width] and a height of [height]. Then we
+         * calculate the [Float] aspect ratio `val ratio` to be `width/height`, then we set
          * the GL_PROJECTION matrix to be the current matrix, load it with the identity matrix and
-         * call `glFrustumf` to multiply the matrix by the perspective matrix with the left
-         * clipping plane at `-ratio`, the right clipping plane at `+ratio`, the bottom
-         * clipping plane at -1, the top clipping plane at 1, the near clipping plane at 1 and the
-         * far clipping plane at 10.
-         *
+         * call the [GL10.glFrustumf] method of [gl] to multiply the matrix by the perspective
+         * matrix with the left clipping plane at `-ratio`, the right clipping plane at `+ratio`,
+         * the bottom clipping plane at -1, the top clipping plane at 1, the near clipping plane
+         * at 1 and the far clipping plane at 10.
          *
          * We enable the server-side GL capabilities GL_CULL_FACE (cull polygons based on their
          * winding in window coordinates) and GL_DEPTH_TEST (do depth comparisons and update the
          * depth buffer). We set the clear color to (0, 0.5, 1.0) (a light blue) and clear the color
          * buffer and the depth buffer. Next we set the GL_MODELVIEW matrix to be the current matrix,
-         * load it with the identity matrix, translate it to (0, 0, -3), rotate it by `mAngle`
-         * around the vector (0, 1, 0), and rotate it by `mAngle*0.25` around the vector (1,0,0).
-         *
+         * load it with the identity matrix, translate it to (0, 0, -3), rotate it by [mAngle]
+         * around the vector (0, 1, 0), and rotate it by [mAngle] times 0.25` around the vector
+         * (1,0,0).
          *
          * We enable the client-side capability GL_VERTEX_ARRAY (the vertex array is enabled for
          * writing and used during rendering) and GL_COLOR_ARRAY (the color array is enabled for
-         * writing and used during rendering), and then we instruct our field `Cube mCube` to
-         * draw itself. We then rotate the GL_MODELVIEW matrix by `mAngle*2.0` around the
-         * vector (0, 1, 1), translate it to (0.5f, 0.5f, 0.5f) and instruct our field `Cube mCube`
+         * writing and used during rendering), and then we instruct our [Cube] field [mCube] to
+         * draw itself. We then rotate the GL_MODELVIEW matrix by [mAngle] times 2.0` around the
+         * vector (0, 1, 1), translate it to (0.5f, 0.5f, 0.5f) and instruct our [Cube] field [mCube]
          * to draw itself again.
          *
-         *
-         * We increment `mAngle` by 1.2 degrees for the next time we are executed, disable the
+         * We increment [mAngle] by 1.2 degrees for the next time we are executed, disable the
          * server-side GL capabilities GL_CULL_FACE and GL_DEPTH_TEST, and disable the client-side
          * capabilities GL_VERTEX_ARRAY, and GL_COLOR_ARRAY so the other renderer is not affected..
          *
-         * @param gl     the GL interface.
+         * @param gl     the [GL] interface.
          * @param width  width of our texture
          * @param height height of our texture
          */
@@ -321,38 +312,34 @@ class FrameBufferObjectActivity : AppCompatActivity() {
 
         /**
          * Generates a texture name, binds it to GL_TEXTURE_2D, configures it, then returns the
-         * texture name to the caller. Called from our implementation of `onSurfaceCreated` it
-         * is used to initialize the field `int mTargetTexture`. We allocate `int texture`
-         * and `int[] textures`, call `glGenTextures` to generate 1 texture name in
-         * `textures` which we then use to initialize `texture`. We then bind `texture`
-         * to GL_TEXTURE_2D, call `glTexImage2D` to specify a two-dimensional texture image for
-         * GL_TEXTURE_2D with a level-of-detail number of Level 0 (the base image level), an internal
-         * format of GL_RGBA, `width` for its width, `height` for its height, 0 for its
-         * border (must be 0 according to docs), GL_RGBA as the format of the texel data, GL_UNSIGNED_BYTE
-         * as the data type of the texel data, and 0 to point to the beginning of the data in memory.
-         *
+         * texture name to the caller. Called from our implementation of [onSurfaceCreated] it
+         * is used to initialize the [Int] field [mTargetTexture]. We declare an [Int] `val texture`
+         * and [Int] array `val textures`, call the [GL10.glGenTextures] method of [gl] to generate
+         * 1 texture name in `textures` which we then use to initialize `texture`. We then bind
+         * `texture` to GL_TEXTURE_2D, call the [GL10.glTexImage2D] method of [gl] to specify a
+         * two-dimensional texture image for GL_TEXTURE_2D with a level-of-detail number of Level 0
+         * (the base image level), an internal format of GL_RGBA, [width] for its width, [height]
+         * for its height, 0 for its border (must be 0 according to docs), GL_RGBA as the format of
+         * the texel data, GL_UNSIGNED_BYTE as the data type of the texel data, and 0 to point to
+         * the beginning of the data in memory.
          *
          * New we set texture parameter GL_TEXTURE_MIN_FILTER for the target GL_TEXTURE_2D to GL_NEAREST
          * (the value of the texture element that is nearest (in Manhattan distance) to the center of
          * the pixel being textured is used whenever the pixel being textured maps to an area greater
          * than one texture element).
          *
-         *
          * We set texture parameter GL_TEXTURE_MAG_FILTER for the target GL_TEXTURE_2D to GL_LINEAR
          * (the weighted average of the four texture elements that are closest to the center of the
          * pixel being textured is used when the pixel being textured maps to an area less than or
          * equal to one texture element).
          *
+         * We call the [GL10.glTexParameterx] method of [gl] to set texture parameter GL_TEXTURE_WRAP_S
+         * for the target GL_TEXTURE_2D to GL_REPEAT (causes the integer part of the s coordinate to
+         * be ignored; the GL uses only the fractional part, thereby creating a repeating pattern).
          *
-         * We call `glTexParameterx` to set texture parameter GL_TEXTURE_WRAP_S for the target
-         * GL_TEXTURE_2D to GL_REPEAT (causes the integer part of the s coordinate to be ignored;
-         * the GL uses only the fractional part, thereby creating a repeating pattern).
-         *
-         *
-         * We call `glTexParameterx` to set texture parameter GL_TEXTURE_WRAP_T for the target
-         * GL_TEXTURE_2D to GL_REPEAT (causes the integer part of the t coordinate to be ignored;
-         * the GL uses only the fractional part, thereby creating a repeating pattern).
-         *
+         * We call [GL10.glTexParameterx] method of [gl] to set texture parameter GL_TEXTURE_WRAP_T
+         * for the target GL_TEXTURE_2D to GL_REPEAT (causes the integer part of the t coordinate to
+         * be ignored; the GL uses only the fractional part, thereby creating a repeating pattern).
          *
          * Finally we return `texture` to the caller.
          *
@@ -378,41 +365,36 @@ class FrameBufferObjectActivity : AppCompatActivity() {
 
         /**
          * Generates a framebuffer object name, binds it to GL_FRAMEBUFFER_OES, configures it to our
-         * wishing, attaches the texture image `targetTextureId` to that framebuffer object and
+         * wishing, attaches the texture image [targetTextureId] to that framebuffer object and
          * returns the framebuffer object name to the caller. Used to initialize our field
-         * `mFramebuffer`.
+         * [mFramebuffer].
          *
+         * First we cast our [GL10] argument [gl] to a [GL11ExtensionPack] to initialize `val gl11ep`,
+         * then we allocate an [Int] for `val framebuffer` and an [Int] array `val framebuffers`, fill
+         * `framebuffers` with 1 framebuffer object name which we use to set `framebuffer`. We then
+         * bind `framebuffer` to GL_FRAMEBUFFER_OES.
          *
-         * First we cast our argument `GL10 gl` to `GL11ExtensionPack gl11ep`, then we
-         * allocate `int framebuffer` and `int[] framebuffers`, fill `framebuffers`
-         * with 1 framebuffer object name which we use to set `framebuffer`. We then bind
-         * `framebuffer` to GL_FRAMEBUFFER_OES.
-         *
-         *
-         * Next we allocate `int depthbuffer` and `int[] renderbuffers`, fill
+         * Next we allocate an [Int] `val depthbuffer` and [Int] array `val renderbuffers`, fill
          * `renderbuffers` with 1 renderbuffer object name which we use to set `depthbuffer`.
          * We then bind `depthbuffer` to the target GL_RENDERBUFFER_OES, establish data storage,
          * format and dimensions of the renderbuffer object's image to use GL_DEPTH_COMPONENT16 as its
-         * internal format, a width of `width`, and a height of `height`. We next attach
-         * the renderbuffer object `depthbuffer` to the target GL_FRAMEBUFFER_OES, to the
-         * attachment point GL_DEPTH_ATTACHMENT_OES, specifying the renderbuffer target GL_RENDERBUFFER_OES.
+         * internal format, a width of [width], and a height of [height]. We next attach the
+         * renderbuffer object `depthbuffer` to the target GL_FRAMEBUFFER_OES, to the attachment
+         * point GL_DEPTH_ATTACHMENT_OES, specifying the renderbuffer target GL_RENDERBUFFER_OES.
          *
-         *
-         * We attach the texture image `targetTextureId` to the framebuffer object GL_FRAMEBUFFER_OES
+         * We attach the texture image [targetTextureId] to the framebuffer object GL_FRAMEBUFFER_OES
          * using the attachment point GL_COLOR_ATTACHMENT0_OES, texture target GL_TEXTURE_2D, and 0
          * as the mipmap level of the texture image to be attached, which must be 0.
          *
-         *
          * We now retrieve the framebuffer completeness status of the framebuffer object GL_FRAMEBUFFER_OES
-         * to set `int status`, and if it is not GL_FRAMEBUFFER_COMPLETE_OES we throw a runtime
+         * to set the [Int] `val status`, and if it is not GL_FRAMEBUFFER_COMPLETE_OES we throw a runtime
          * exception. Otherwise we unbind the framebuffer GL_FRAMEBUFFER_OES and return `framebuffer`
          * to the caller.
          *
          * @param gl              the GL interface.
          * @param width           width of our framebuffer
          * @param height          height of our framebuffer
-         * @param targetTextureId a texture name bound to GL_TEXTURE_2D, `int mTargetTexture`
-         * in our case.
+         * @param targetTextureId a texture name bound to GL_TEXTURE_2D, [mTargetTexture] in our case.
          * @return a framebuffer object name bound to GL_RENDERBUFFER_OES and configured as we wish it.
          */
         @Suppress("SameParameterValue")
@@ -446,7 +428,7 @@ class FrameBufferObjectActivity : AppCompatActivity() {
         }
 
         /**
-         * Convenience function that calls our method `checkIfContextSupportsExtension` with the
+         * Convenience function that calls our method [checkIfContextSupportsExtension] with the
          * string GL_OES_framebuffer_object.
          *
          * @param gl the GL interface.
@@ -461,7 +443,7 @@ class FrameBufferObjectActivity : AppCompatActivity() {
          * for a few extensions each time a context is created. We append spaces to the beginning
          * and end of the GL_EXTENSIONS string describing the current GL connection (the space
          * separated list of supported extensions to GL), and we return the results of searching
-         * that string for our argument `String extension` (true if found).
+         * that string for our [String] argument [extension] (*true* if found).
          *
          * @param gl        the GL interface.
          * @param extension extension to check for
@@ -470,12 +452,14 @@ class FrameBufferObjectActivity : AppCompatActivity() {
         @Suppress("SameParameterValue")
         private fun checkIfContextSupportsExtension(gl: GL10, extension: String): Boolean {
             val extensions = " " + gl.glGetString(GL10.GL_EXTENSIONS) + " "
-            // The extensions string is padded with spaces between extensions, but not
-// necessarily at the beginning or end. For simplicity, add spaces at the
-// beginning and end of the extensions string and the extension string.
-// This means we can avoid special-case checks for the first or last
-// extension, as well as avoid special-case checks when an extension name
-// is the same as the first part of another extension name.
+            /**
+             * The extensions string is padded with spaces between extensions, but not
+             * necessarily at the beginning or end. For simplicity, add spaces at the
+             * beginning and end of the extensions string and the extension string.
+             * This means we can avoid special-case checks for the first or last
+             * extension, as well as avoid special-case checks when an extension name
+             * is the same as the first part of another extension name.
+             */
             return extensions.contains(" $extension ")
         }
 
@@ -483,41 +467,47 @@ class FrameBufferObjectActivity : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`. Then we initialize our field `GLSurfaceView mGLSurfaceView` with a new
-     * instance of `GLSurfaceView`, set its renderer to a new instance of `Renderer` and
-     * set our content view to `GLSurfaceView mGLSurfaceView`.
+     * `onCreate`. Then we initialize our [GLSurfaceView] field [mGLSurfaceView] with a new
+     * instance of [GLSurfaceView], set its renderer to a new instance of [Renderer] and
+     * set our content view to [mGLSurfaceView].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Create our surface view and set it as the content of our
-// Activity
+        /**
+         * Create our surface view and set it as the content of our Activity
+         */
         mGLSurfaceView = GLSurfaceView(this)
         mGLSurfaceView!!.setRenderer(Renderer())
         setContentView(mGLSurfaceView)
     }
 
     /**
-     * Called after [.onRestoreInstanceState], [.onRestart], or [.onPause], for
-     * your activity to start interacting with the user. First we call through to our super's
-     * implementation of `onResume`, then we pass the call on to the `onResume` method
-     * of our field `GLSurfaceView mGLSurfaceView`.
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for our activity to start
+     * interacting with the user. First we call through to our super's implementation of `onResume`,
+     * then we pass the call on to the `onResume` method of our [GLSurfaceView] field [mGLSurfaceView].
      */
-    override fun onResume() { // Ideally a game should implement onResume() and onPause()
-// to take appropriate action when the activity looses focus
+    override fun onResume() {
+        /**
+         * Ideally a game should implement onResume() and onPause()
+         * to take appropriate action when the activity looses focus
+         */
         super.onResume()
         mGLSurfaceView!!.onResume()
     }
 
     /**
      * Called as part of the activity lifecycle when an activity is going into the background, but
-     * has not (yet) been killed. The counterpart to [.onResume]. First we call through to our super's
+     * has not (yet) been killed. The counterpart to [onResume]. First we call through to our super's
      * implementation of `onPause`, then we pass the call on to the `onPause` method
-     * of our field `GLSurfaceView mGLSurfaceView`.
+     * of our [GLSurfaceView] field [mGLSurfaceView].
      */
-    override fun onPause() { // Ideally a game should implement onResume() and onPause()
-// to take appropriate action when the activity looses focus
+    override fun onPause() {
+        /**
+         * Ideally a game should implement onResume() and onPause()
+         * to take appropriate action when the activity looses focus
+         */
         super.onPause()
         mGLSurfaceView!!.onPause()
     }
@@ -533,8 +523,8 @@ class FrameBufferObjectActivity : AppCompatActivity() {
         private const val DEBUG_RENDER_OFFSCREEN_ONSCREEN = false
 
         /**
-         * We call `glGetError` to fetch error information to `int error` and if the result
-         * is not GL_NO_ERROR we through a RuntimeException.
+         * We call `glGetError` to fetch error information to `Int` `val error` and if the result
+         * is not GL_NO_ERROR we throw a `RuntimeException`.
          *
          * @param gl the GL interface.
          */
