@@ -159,20 +159,20 @@ class TriangleRenderer(
      * and used during rendering), and the client side capability GL_TEXTURE_COORD_ARRAY (the texture
      * coordinate array is enabled for writing and used during rendering). We select GL_TEXTURE0 to
      * be the active texture unit (selects which texture unit subsequent texture state calls will
-     * affect), and bind our texture name `mTextureID` to the texture target GL_TEXTURE_2D
-     * (While a texture is bound, GL operations on the target to which it is bound affect the bound
-     * texture, and queries of the target to which it is bound return state from the bound texture.
-     * If texture mapping is active on the target to which a texture is bound, the bound texture is
-     * used. In effect, the texture targets become aliases for the textures currently bound to them,
-     * and the texture name zero refers to the default textures that were bound to them at initialization).
+     * affect), and bind our texture name [mTextureID] to the texture target GL_TEXTURE_2D (While a
+     * texture is bound, GL operations on the target to which it is bound affect the bound texture,
+     * and queries of the target to which it is bound return state from the bound texture. If texture
+     * mapping is active on the target to which a texture is bound, the bound texture is used. In
+     * effect, the texture targets become aliases for the textures currently bound to them, and the
+     * texture name zero refers to the default textures that were bound to them at initialization).
      *
      * We set both the texture parameters GL_TEXTURE_WRAP_S and GL_TEXTURE_WRAP_T of GL_TEXTURE_2D
      * to GL_REPEAT (causes the integer part of the texture coordinate to be ignored; the GL uses
      * only the fractional part, thereby creating a repeating pattern).
      *
-     * We next compute an `float angle` based on the current system time since boot modulo 4000
+     * We next compute an [Float] `val angle` based on the current system time since boot modulo 4000
      * which creates an angle which goes from 0 to 360 degrees every 4 seconds, and we use it to
-     * rotate our model matrix around the z axis. We then instruct our field `Triangle mTriangle`
+     * rotate our model matrix around the z axis. We then instruct our [Triangle] field [mTriangle]
      * to draw itself.
      *
      * @param gl the GL interface.
@@ -207,14 +207,14 @@ class TriangleRenderer(
     }
 
     /**
-     * Called when the surface changed size. Called after the surface is created and whenever the
+     * Called when the surface changes size. Called after the surface is created and whenever the
      * OpenGL ES surface size changes. We set the view port to have its lower left hand corner at
-     * (0,0) and to have a width of `w` and a height of `h`. We calculate the aspect
-     * ratio `float ratio` to be `w/h`, set the matrix mode to GL_PROJECTION (subsequent
-     * matrix operations will apply to the projection matrix stack), load it with the identity matrix,
-     * then set its left clipping plane to `-ratio`, its right clipping plane to `ratio`.
-     * its bottom clipping plane to -1, its top clipping plane to 1, its near clipping plane to 3,
-     * and its far clipping plane to 7.
+     * (0,0) and to have a width of [w] and a height of [h]. We calculate the aspect ratio [Float]
+     * `val ratio` to be `w/h`, set the matrix mode to GL_PROJECTION (subsequent matrix operations
+     * will apply to the projection matrix stack), load it with the identity matrix, then set its
+     * left clipping plane to `-ratio`, its right clipping plane to `ratio`, its bottom clipping
+     * plane to -1, its top clipping plane to 1, its near clipping plane to 3, and its far clipping
+     * plane to 7.
      *
      * @param gl the GL interface.
      * @param w  width of new surface
