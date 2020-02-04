@@ -16,18 +16,18 @@
 
 package com.example.android.apis.graphics.kube;
 
-import android.app.Activity;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Window;
 
-import android.opengl.GLSurfaceView;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Random;
 
 /**
  * Animates a Rubic cube, randomly spinning layers one by one.
  */
-public class Kube extends Activity implements KubeRenderer.AnimationCallback {
+public class Kube extends AppCompatActivity implements KubeRenderer.AnimationCallback {
     /**
      * {@code GLSurfaceView} that we use as our content view, if uses {@code KubeRenderer mRenderer}
      * as its renderer.
