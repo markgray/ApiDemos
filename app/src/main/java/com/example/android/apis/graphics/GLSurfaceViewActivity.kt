@@ -21,53 +21,58 @@ import androidx.appcompat.app.AppCompatActivity
 
 /**
  * Wrapper activity demonstrating the use of [GLSurfaceView], a view that uses OpenGL drawing
- * into a dedicated surface. Uses CubeRenderer to render a pair of tumbling cubes created and
+ * into a dedicated surface. Uses [CubeRenderer] to render a pair of tumbling cubes created and
  * drawn by Cube.java
  */
 class GLSurfaceViewActivity : AppCompatActivity() {
     /**
-     * `GLSurfaceView` we do our drawing to.
+     * [GLSurfaceView] we do our drawing to.
      */
     private var mGLSurfaceView: GLSurfaceView? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`. We initialize our field `GLSurfaceView mGLSurfaceView` with a new
-     * instance of `GLSurfaceView`, set its renderer to a new instance of `CubeRenderer`
-     * specifying that it not use a translucent background, and set our content view to
-     * `GLSurfaceView mGLSurfaceView`.
+     * `onCreate`. We initialize our [GLSurfaceView] field [mGLSurfaceView] with a new instance of
+     * [GLSurfaceView], set its renderer to a new instance of [CubeRenderer] specifying that it not
+     * use a translucent background, and set our content view to [mGLSurfaceView].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Create our Preview view and set it as the content of our
-// Activity
+        /**
+         * Create our Preview view and set it as the content of our Activity
+         */
         mGLSurfaceView = GLSurfaceView(this)
         mGLSurfaceView!!.setRenderer(CubeRenderer(false))
         setContentView(mGLSurfaceView)
     }
 
     /**
-     * Called after [.onRestoreInstanceState], [.onRestart], or [.onPause], for
-     * your activity to start interacting with the user. First we call through to our super's
-     * implementation of `onResume`, then we pass the call on to the `onResume` method
-     * of our field `mGLSurfaceView`.
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for our activity to start
+     * interacting with the user. First we call through to our super's implementation of `onResume`,
+     * then we pass the call on to the `onResume` method of our [GLSurfaceView] field [mGLSurfaceView].
      */
-    override fun onResume() { // Ideally a game should implement onResume() and onPause()
-// to take appropriate action when the activity looses focus
+    override fun onResume() {
+        /**
+         * Ideally a game should implement onResume() and onPause()
+         * to take appropriate action when the activity looses focus
+         */
         super.onResume()
         mGLSurfaceView!!.onResume()
     }
 
     /**
      * Called as part of the activity lifecycle when an activity is going into the background, but
-     * has not (yet) been killed. The counterpart to [.onResume]. First we call through to our
+     * has not (yet) been killed. The counterpart to [onResume]. First we call through to our
      * super's implementation of `onPause`, then we pass the call on to the `onPause`
-     * method of our field `mGLSurfaceView`.
+     * method of our [GLSurfaceView] field [mGLSurfaceView].
      */
-    override fun onPause() { // Ideally a game should implement onResume() and onPause()
-// to take appropriate action when the activity looses focus
+    override fun onPause() {
+        /**
+         * Ideally a game should implement onResume() and onPause()
+         * to take appropriate action when the activity looses focus
+         */
         super.onPause()
         mGLSurfaceView!!.onPause()
     }
