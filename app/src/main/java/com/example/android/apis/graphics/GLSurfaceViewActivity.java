@@ -16,16 +16,17 @@
 
 package com.example.android.apis.graphics;
 
-import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Wrapper activity demonstrating the use of {@link GLSurfaceView}, a view that uses OpenGL drawing
  * into a dedicated surface. Uses CubeRenderer to render a pair of tumbling cubes created and
  * drawn by Cube.java
  */
-public class GLSurfaceViewActivity extends Activity {
+public class GLSurfaceViewActivity extends AppCompatActivity {
     /**
      * {@code GLSurfaceView} we do our drawing to.
      */
