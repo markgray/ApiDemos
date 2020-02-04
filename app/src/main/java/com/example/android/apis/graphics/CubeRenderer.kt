@@ -38,7 +38,7 @@ class CubeRenderer(
     private var mAngle = 0f
 
     /**
-     * Called to draw the current frame. First we clear buffers to preset values using glClear and
+     * Called to draw the current frame. First we clear buffers to preset values using `glClear` and
      * the mask GL_COLOR_BUFFER_BIT (the buffers currently enabled for color writing) or'ed with
      * GL_DEPTH_BUFFER_BIT (the depth buffer). Next we replace the current matrix with the identity
      * matrix, translate the current matrix using a translation matrix using the xyz coordinates
@@ -47,13 +47,12 @@ class CubeRenderer(
      * the vector (1, 0, 0) (x axis rotation). Next we enable the client-side capabilities
      * GL_VERTEX_ARRAY (the vertex array is enabled for writing and used during rendering) and
      * GL_COLOR_ARRAY (the color array is enabled for writing and used during rendering). Then we
-     * instruct our instance of Cube mCube to draw itself. Having drawn the first Cube, we now
-     * rotate the current matrix using the value 2.0*mAngle about the vector (0, 1, 1), translate
-     * the matrix using the xyz coordinates (0.5f, 0.5f, 0.5f), and instruct our Cube mCube to
+     * instruct our instance of [Cube] in field [mCube] to draw itself. Having drawn the first Cube,
+     * we now rotate the current matrix using the value 2.0*mAngle about the vector (0, 1, 1),
+     * translate the matrix using the xyz coordinates (0.5f, 0.5f, 0.5f), and instruct [mCube] to
      * draw itself again using this matrix. Finally we increment mAngle by 1.2 degrees.
      *
-     * @param gl the GL interface. Use **instanceof** to test if the interface supports
-     * GL11 or higher interfaces.
+     * @param gl the GL interface.
      */
     override fun onDrawFrame(gl: GL10) { /*
          * Usually, the first thing one might want to do is to clear
@@ -87,8 +86,7 @@ class CubeRenderer(
      * horizontal clipping planes set to -1 and +1 respectively, and the distances to the near and
      * far depth clipping planes set to 1 and 10 respectively.
      *
-     * @param gl     the GL interface. Use **instanceof** to test if the interface supports
-     * GL11 or higher interfaces.
+     * @param gl     the GL interface.
      * @param width  width of the surface in pixels
      * @param height height of the surface in pixels
      */
@@ -107,22 +105,17 @@ class CubeRenderer(
 
     /**
      * Called when the surface is created or recreated. Part of the GLSurfaceView.Renderer interface.
-     *
-     *
      * Called when the rendering thread starts and whenever the EGL context is lost. The EGL context
      * will typically be lost when the Android device awakes after going to sleep.
-     *
      *
      * Since this method is called at the beginning of rendering, as well as every time the EGL
      * context is lost, this method is a convenient place to put code to create resources that
      * need to be created when the rendering starts, and that need to be recreated when the EGL
      * context is lost. Textures are an example of a resource that you might want to create here.
      *
-     *
      * Note that when the EGL context is lost, all OpenGL resources associated with that context
      * will be automatically deleted. You do not need to call the corresponding "glDelete" methods
      * such as glDeleteTextures to manually delete these lost resources.
-     *
      *
      * First to improve performance we disable the GL_DITHER GL capability (dithers color components
      * or indices before they are written to the color buffer). Next we specify implementation
@@ -135,8 +128,7 @@ class CubeRenderer(
      * and finally enable the GL capability GL_DEPTH_TEST (do depth comparisons and update the depth
      * buffer).
      *
-     * @param gl     the GL interface. Use **instanceof** to test if the interface supports
-     * GL11 or higher interfaces.
+     * @param gl     the GL interface.
      * @param config the EGLConfig of the created surface. Can be used to create matching pbuffers.
      */
     override fun onSurfaceCreated(gl: GL10, config: EGLConfig) { /*
