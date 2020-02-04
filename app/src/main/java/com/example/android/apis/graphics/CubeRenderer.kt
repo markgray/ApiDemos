@@ -13,34 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.graphics
 
-package com.example.android.apis.graphics;
-
-import android.opengl.GLSurfaceView;
-
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
+import android.opengl.GLSurfaceView
+import javax.microedition.khronos.egl.EGLConfig
+import javax.microedition.khronos.opengles.GL10
 
 /**
  * Render a pair of tumbling cubes.
  */
-public class CubeRenderer implements GLSurfaceView.Renderer {
-    //  private static String TAG = "CubeRenderer";
-    private boolean mTranslucentBackground; // Flag to use a translucent background (glClearColor(0,0,0,0)
-    private Cube mCube; // an instance of a vertex shaded cube.
-    private float mAngle; // ever increasing angle that is used to rotate the two cubes
-
+class CubeRenderer(
+        /**
+         * Flag to use a translucent background (glClearColor(0,0,0,0)
+         */
+        private val mTranslucentBackground : Boolean
+) : GLSurfaceView.Renderer {
     /**
-     * Constructor which is used to initialize our fields. After saving the value of the parameter
-     * boolean useTranslucentBackground to our field boolean mTranslucentBackground, we create
-     * a new instance of Cube and save it in our field Cube mCube.
-     *
-     * @param useTranslucentBackground use a translucent background (glClearColor(0,0,0,0)
+     * an instance of a vertex shaded cube
      */
-    public CubeRenderer(boolean useTranslucentBackground) {
-        mTranslucentBackground = useTranslucentBackground;
-        mCube = new Cube();
-    }
+    private val mCube : Cube = Cube()
+    /**
+     * ever increasing angle that is used to rotate the two cubes
+     */
+    private var mAngle = 0f
 
     /**
      * Called to draw the current frame. First we clear buffers to preset values using glClear and
@@ -57,40 +52,29 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
      * the matrix using the xyz coordinates (0.5f, 0.5f, 0.5f), and instruct our Cube mCube to
      * draw itself again using this matrix. Finally we increment mAngle by 1.2 degrees.
      *
-     * @param gl the GL interface. Use <b>instanceof</b> to test if the interface supports
-     *           GL11 or higher interfaces.
+     * @param gl the GL interface. Use **instanceof** to test if the interface supports
+     * GL11 or higher interfaces.
      */
-    @Override
-    public void onDrawFrame(GL10 gl) {
-        /*
+    override fun onDrawFrame(gl: GL10) { /*
          * Usually, the first thing one might want to do is to clear
          * the screen. The most efficient way of doing this is to use
          * glClear().
          */
-
-        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-
+        gl.glClear(GL10.GL_COLOR_BUFFER_BIT or GL10.GL_DEPTH_BUFFER_BIT)
         /*
          * Now we're ready to draw some 3D objects
-         */
-
-        gl.glMatrixMode(GL10.GL_MODELVIEW);
-        gl.glLoadIdentity();
-        gl.glTranslatef(0, 0, -3.0f);
-        gl.glRotatef(mAngle, 0, 1, 0);
-        gl.glRotatef(mAngle * 0.25f, 1, 0, 0);
-
-        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-        gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-
-        mCube.draw(gl);
-
-        gl.glRotatef(mAngle * 2.0f, 0, 1, 1);
-        gl.glTranslatef(0.5f, 0.5f, 0.5f);
-
-        mCube.draw(gl);
-
-        mAngle += 1.2f;
+         */gl.glMatrixMode(GL10.GL_MODELVIEW)
+        gl.glLoadIdentity()
+        gl.glTranslatef(0f, 0f, -3.0f)
+        gl.glRotatef(mAngle, 0f, 1f, 0f)
+        gl.glRotatef(mAngle * 0.25f, 1f, 0f, 0f)
+        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY)
+        gl.glEnableClientState(GL10.GL_COLOR_ARRAY)
+        mCube.draw(gl)
+        gl.glRotatef(mAngle * 2.0f, 0f, 1f, 1f)
+        gl.glTranslatef(0.5f, 0.5f, 0.5f)
+        mCube.draw(gl)
+        mAngle += 1.2f
     }
 
     /**
@@ -103,42 +87,43 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
      * horizontal clipping planes set to -1 and +1 respectively, and the distances to the near and
      * far depth clipping planes set to 1 and 10 respectively.
      *
-     * @param gl     the GL interface. Use <b>instanceof</b> to test if the interface supports
-     *               GL11 or higher interfaces.
+     * @param gl     the GL interface. Use **instanceof** to test if the interface supports
+     * GL11 or higher interfaces.
      * @param width  width of the surface in pixels
      * @param height height of the surface in pixels
      */
-    @Override
-    public void onSurfaceChanged(GL10 gl, int width, int height) {
-        gl.glViewport(0, 0, width, height);
-
-         /*
+    override fun onSurfaceChanged(gl: GL10, width: Int, height: Int) {
+        gl.glViewport(0, 0, width, height)
+        /*
           * Set our projection matrix. This doesn't have to be done
           * each time we draw, but usually a new projection needs to
           * be set when the viewport is resized.
           */
-
-        float ratio = (float) width / height;
-        gl.glMatrixMode(GL10.GL_PROJECTION);
-        gl.glLoadIdentity();
-        gl.glFrustumf(-ratio, ratio, -1, 1, 1, 10);
+        val ratio = width.toFloat() / height
+        gl.glMatrixMode(GL10.GL_PROJECTION)
+        gl.glLoadIdentity()
+        gl.glFrustumf(-ratio, ratio, -1f, 1f, 1f, 10f)
     }
 
     /**
      * Called when the surface is created or recreated. Part of the GLSurfaceView.Renderer interface.
-     * <p>
+     *
+     *
      * Called when the rendering thread starts and whenever the EGL context is lost. The EGL context
      * will typically be lost when the Android device awakes after going to sleep.
-     * <p>
+     *
+     *
      * Since this method is called at the beginning of rendering, as well as every time the EGL
      * context is lost, this method is a convenient place to put code to create resources that
      * need to be created when the rendering starts, and that need to be recreated when the EGL
      * context is lost. Textures are an example of a resource that you might want to create here.
-     * <p>
+     *
+     *
      * Note that when the EGL context is lost, all OpenGL resources associated with that context
      * will be automatically deleted. You do not need to call the corresponding "glDelete" methods
      * such as glDeleteTextures to manually delete these lost resources.
-     * <p>
+     *
+     *
      * First to improve performance we disable the GL_DITHER GL capability (dithers color components
      * or indices before they are written to the color buffer). Next we specify implementation
      * specific hint GL_PERSPECTIVE_CORRECTION_HINT (Indicates the quality of color and texture
@@ -150,32 +135,28 @@ public class CubeRenderer implements GLSurfaceView.Renderer {
      * and finally enable the GL capability GL_DEPTH_TEST (do depth comparisons and update the depth
      * buffer).
      *
-     * @param gl     the GL interface. Use <b>instanceof</b> to test if the interface supports
-     *               GL11 or higher interfaces.
+     * @param gl     the GL interface. Use **instanceof** to test if the interface supports
+     * GL11 or higher interfaces.
      * @param config the EGLConfig of the created surface. Can be used to create matching pbuffers.
      */
-    @Override
-    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        /*
+    override fun onSurfaceCreated(gl: GL10, config: EGLConfig) { /*
          * By default, OpenGL enables features that improve quality
          * but reduce performance. One might want to tweak that
          * especially on software renderer.
          */
-        gl.glDisable(GL10.GL_DITHER);
-
+        gl.glDisable(GL10.GL_DITHER)
         /*
          * Some one-time OpenGL initialization can be made here
          * probably based on features of this particular context
-         */
-        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
-
+         */gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST)
         if (mTranslucentBackground) {
-            gl.glClearColor(0, 0, 0, 0);
+            gl.glClearColor(0f, 0f, 0f, 0f)
         } else {
-            gl.glClearColor(1, 1, 1, 1);
+            gl.glClearColor(1f, 1f, 1f, 1f)
         }
-        gl.glEnable(GL10.GL_CULL_FACE);
-        gl.glShadeModel(GL10.GL_SMOOTH);
-        gl.glEnable(GL10.GL_DEPTH_TEST);
+        gl.glEnable(GL10.GL_CULL_FACE)
+        gl.glShadeModel(GL10.GL_SMOOTH)
+        gl.glEnable(GL10.GL_DEPTH_TEST)
     }
+
 }
