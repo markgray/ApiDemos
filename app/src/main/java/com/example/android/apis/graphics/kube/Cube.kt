@@ -59,60 +59,43 @@ class Cube(world: GLWorld?, left: Float, bottom: Float, back: Float, right: Floa
      * belonging to our `GLShape`) as well as to the list of all `GLVertex` objects
      * `ArrayList<GLVertex> GLWorld.mVertexList`:
      *
-     *  *
-     * `leftBottomBack` - with the x,y,z coordinates (left, bottom, back)
+     *  * `leftBottomBack` - with the x,y,z coordinates (left, bottom, back)
      *
-     *  *
-     * `rightBottomBack` - with the x,y,z coordinates (right, bottom, back)
+     *  * `rightBottomBack` - with the x,y,z coordinates (right, bottom, back)
      *
-     *  *
-     * `leftTopBack` - with the x,y,z coordinates (left, top, back)
+     *  * `leftTopBack` - with the x,y,z coordinates (left, top, back)
      *
-     *  *
-     * `rightTopBack` - with the x,y,z coordinates (right, top, back)
+     *  * `rightTopBack` - with the x,y,z coordinates (right, top, back)
      *
-     *  *
-     * `leftBottomFront` - with the x,y,z coordinates (left, bottom, front)
+     *  * `leftBottomFront` - with the x,y,z coordinates (left, bottom, front)
      *
-     *  *
-     * `rightBottomFront` - with the x,y,z coordinates (right, bottom, front)
+     *  * `rightBottomFront` - with the x,y,z coordinates (right, bottom, front)
      *
-     *  *
-     * `leftTopFront` - with the x,y,z coordinates (left, top, front)
+     *  * `leftTopFront` - with the x,y,z coordinates (left, top, front)
      *
-     *  *
-     * `rightTopFront` - with the x,y,z coordinates (right, top, front)
-     *
+     *  * `rightTopFront` - with the x,y,z coordinates (right, top, front)
      *
      * Having created and added these `GLVertex` objects, we now proceed to call our super's
      * method `addFace` to add `GLFace` objects to the list of faces of our `Cube`
      * `ArrayList<GLFace> mFaceList`:
      *
-     *  *
-     * bottom face (`kBottom`) using the `GLVertex` objects leftBottomBack, leftBottomFront,
-     * rightBottomFront, rightBottomBack
+     *  * bottom face (`kBottom`) using the `GLVertex` objects leftBottomBack, leftBottomFront,
+     *  rightBottomFront, rightBottomBack
      *
-     *  *
-     * front face (`kFront`) using the `GLVertex` objects leftBottomFront, leftTopFront,
-     * rightTopFront, rightBottomFront
+     *  * front face (`kFront`) using the `GLVertex` objects leftBottomFront, leftTopFront,
+     *  rightTopFront, rightBottomFront
      *
-     *  *
-     * left face (`kLeft`) using the `GLVertex` objects leftBottomBack, leftTopBack,
-     * leftTopFront, leftBottomFront
+     *  * left face (`kLeft`) using the `GLVertex` objects leftBottomBack, leftTopBack,
+     *  leftTopFront, leftBottomFront
      *
-     *  *
-     * right face (`kRight`) using the `GLVertex` objects rightBottomBack, rightBottomFront,
-     * rightTopFront, rightTopBack
+     *  * right face (`kRight`) using the `GLVertex` objects rightBottomBack, rightBottomFront,
+     *  rightTopFront, rightTopBack
      *
-     *  *
-     * back face (`kBack`) using the `GLVertex` objects leftBottomBack, rightBottomBack,
-     * rightTopBack, leftTopBack
+     *  * back face (`kBack`) using the `GLVertex` objects leftBottomBack, rightBottomBack,
+     *  rightTopBack, leftTopBack
      *
-     *  *
-     * top face (`kTop`) using the `GLVertex` objects leftTopBack, rightTopBack,
-     * rightTopFront, leftTopFront
-     *
-     *
+     *  * top face (`kTop`) using the `GLVertex` objects leftTopBack, rightTopBack,
+     *  rightTopFront, leftTopFront
      *
      * Parameter: world  the `GLWorld` instance of our rubic cube
      * Parameter: left   x coordinate of the left side of the cube
@@ -131,8 +114,10 @@ class Cube(world: GLWorld?, left: Float, bottom: Float, back: Float, right: Floa
         val rightBottomFront = addVertex(right, bottom, front)
         val leftTopFront = addVertex(left, top, front)
         val rightTopFront = addVertex(right, top, front)
-        // vertices are added in a clockwise orientation (when viewed from the outside)
-// bottom
+        /**
+         * vertices are added in a clockwise orientation (when viewed from the outside)
+          */
+        // bottom
         addFace(GLFace(leftBottomBack, leftBottomFront, rightBottomFront, rightBottomBack))
         // front
         addFace(GLFace(leftBottomFront, leftTopFront, rightTopFront, rightBottomFront))
