@@ -27,29 +27,29 @@ import java.util.*
 @Suppress("MemberVisibilityCanBePrivate")
 class Kube : AppCompatActivity(), KubeRenderer.AnimationCallback {
     /**
-     * `GLSurfaceView` that we use as our content view, if uses `KubeRenderer mRenderer`
+     * [GLSurfaceView] that we use as our content view, if uses [KubeRenderer] field [mRenderer]
      * as its renderer.
      */
     var mView: GLSurfaceView? = null
     /**
-     * Renderer which performs the drawing to our `GLSurfaceView mView` using the Rubic cube
-     * we construct and initialize in the instance of `GLWorld` we pass to its constructor for
-     * its data (see our method `makeGLWorld` for how we do this).
+     * Renderer which performs the drawing to our [GLSurfaceView] field [mView] using the Rubic cube
+     * we construct and initialize in the instance of [GLWorld] we pass to its constructor for
+     * its data (see our method [makeGLWorld] for how we do this).
      */
     private var mRenderer: KubeRenderer? = null
     /**
-     * The 27 `Cube` objects which represent our Rubic cube
+     * The 27 [Cube] objects which represent our Rubic cube
      */
     var mCubes = arrayOfNulls<Cube>(27)
     /**
-     * a `Layer` for each possible move, each layer consists of the 9 `Cube` objects in
-     * a plane which can be rotated around its center `Cube`, 3 rotating around x, 3 rotating
+     * a [Layer] for each possible move, each layer consists of the 9 [Cube] objects in
+     * a plane which can be rotated around its center [Cube], 3 rotating around x, 3 rotating
      * around y, and 3 rotating around z.
      */
     var mLayers = arrayOfNulls<Layer>(9)
     /**
-     * permutation that needs to be done after the current rotation is finished (and the initial solved
-     * permutation (0, 1, ... ,26) as well).
+     * Permutation that needs to be done after the current rotation is finished (and the initial
+     * solved permutation (0, 1, ... ,26) as well).
      */
     lateinit var mPermutation: IntArray
     /**
@@ -57,83 +57,74 @@ class Kube : AppCompatActivity(), KubeRenderer.AnimationCallback {
      */
     var mRandom = Random(System.currentTimeMillis())
     /**
-     * currently turning layer, set to null when the layer reaches its mEndAngle. It is set to a
-     * random value in our method `animate` if it is null, and is the same layer as the layer
-     * chosen to be permutated from `mLayerPermutations` of course.
+     * Currently turning layer, set to *null* when the layer reaches its [mEndAngle]. It is set to
+     * a random value in our method [animate] if it is *null* and is the same layer as the layer
+     * chosen to be permutated from [mLayerPermutations] of course.
      */
     var mCurrentLayer: Layer? = null
     /**
-     * current and final angle for current Layer animation
+     * Current and final angle for current Layer animation
      */
     var mCurrentAngle = 0f
     var mEndAngle = 0f
     /**
-     * amount to increment angle
+     * Amount to increment angle
      */
     var mAngleIncrement = 0f
     /**
-     * Temporary storage for the `mLayerPermutations` chosen for the next rotation which is
-     * then used to permutate `mLayerPermutation` to create a new `mLayerPermutation`
-     * when the rotation has completed
+     * Temporary storage for the [mLayerPermutations] chosen for the next rotation which is
+     * then used to permutate [mPermutation] to create a new [mPermutation] when the rotation
+     * has completed
      */
     lateinit var mCurrentLayerPermutation: IntArray
 
     /**
-     * Creates, configures and returns a new instance of `GLWorld` which consists of a 27
-     * `Cube` cube (3 by 3 by 3) representing a Rubic cube. First we create a new instance
-     * for `GLWorld world`. Then we initialize some constants to use to create the seven
-     * `GLColor` objects we use to color our `Cube` objects, and the six coordinate
-     * values we use when we construct the 27 `Cube` objects used in our Rubic cube. We
-     * construct the 27 instances of `Cube` in our Rubic cube to initialize our the contents
-     * of our field `Cube[] mCubes`, then we loop through `mCubes` using there method
+     * Creates, configures and returns a new instance of [GLWorld] which consists of a 27
+     * [Cube] cube (3 by 3 by 3) representing a Rubic cube. First we create a new instance
+     * for [GLWorld] variable `val world`. Then we initialize some constants to use to create
+     * the seven [GLColor] objects we use to color our [Cube] objects, and the six coordinate
+     * values we use when we construct the 27 [Cube] objects used in our Rubic cube. We
+     * construct the 27 instances of [Cube] in our Rubic cube to initialize our the contents
+     * of our [Cube] array field [mCubes], then we loop through [mCubes] using their method
      * `setFaceColor` to set all the faces to the default black. We now go through all of the
-     * `Cube` objects setting the color of the `GLFace` facing out as follows:
+     * `Cube` objects setting the color of the [GLFace] facing out as follows:
      *
-     *  *
-     * top of Rubic cube - orange. This includes all the `Cube.kTop` faces of the 9
-     * `Cube` objects in `mCubes[]` (0,1,2,3,4,5,6,7,8)
+     *  * top of Rubic cube - orange. This includes all the `Cube.kTop` faces of the 9
+     *  [Cube] objects in [mCubes] (0,1,2,3,4,5,6,7,8)
      *
-     *  *
-     * bottom of Rubic cube - red. This includes all the `Cube.kBottom` faces of the 9
-     * `Cube` objects in `mCubes[]` (18,19,20,21,22,23,24,25,26)
+     *  * bottom of Rubic cube - red. This includes all the `Cube.kBottom` faces of the 9
+     *  [Cube] objects in [mCubes] (18,19,20,21,22,23,24,25,26)
      *
-     *  *
-     * left of Rubic cube - yellow. This includes all the `Cube.kLeft` faces of the 9
-     * `Cube` objects in `mCubes[]` (0,3,6,9,12,15,18,21,24)
+     *  * left of Rubic cube - yellow. This includes all the `Cube.kLeft` faces of the 9
+     *  [Cube] objects in [mCubes] (0,3,6,9,12,15,18,21,24)
      *
-     *  *
-     * right of Rubic cube - white. This includes all the `Cube.kRight` faces of the 9
-     * `Cube` objects in `mCubes[]` (2,5,8,11,15,17,20,23,26)
+     *  * right of Rubic cube - white. This includes all the `Cube.kRight` faces of the 9
+     *  [Cube] objects in [mCubes] (2,5,8,11,15,17,20,23,26)
      *
-     *  *
-     * back of Rubic cube - blue. This includes all the `Cube.kBack` faces of the 9
-     * `Cube` objects in `mCubes[]` (0,1,2,9,10,11,18,19,20)
+     *  * back of Rubic cube - blue. This includes all the `Cube.kBack` faces of the 9
+     *  [Cube] objects in [mCubes] (0,1,2,9,10,11,18,19,20)
      *
-     *  *
-     * front of Rubic cube - green. This includes all the `Cube.kFront` faces of the 9
-     * `Cube` objects in `mCubes[]` (6,7,8,15,16,17,24,25,26)
+     *  * front of Rubic cube - green. This includes all the `Cube.kFront` faces of the 9
+     *  [Cube] objects in [mCubes] (6,7,8,15,16,17,24,25,26)
      *
+     * Then for each of the 27 [Cube] objects in [mCubes] we call the method
+     * `world.addShape` to add the [GLShape] to its list of [Cube] objects in
+     * its `ArrayList<GLShape>` field `mShapeList`.
      *
-     * Then for each of the 27 `Cube` objects in `Cube[] mCubes` we call the method
-     * `world.addShape` to add the `GLShape` to its list of `Cube` objects in
-     * `ArrayList<GLShape> mShapeList`.
-     *
-     *
-     * Next we initialize our field `int[] mPermutation` with the numbers (0,1,...,26) representing
-     * an initial "solved" ordering of `Cube` objects. We call our method `createLayers`
-     * to allocate and construct the 9 layers initializing the axis they can rotate about, and call
-     * our method `updateLayers` to assign each of the `Cube` objects to the `Layer`
-     * that it belongs to in the solved initial position that `int[] mPermutation` presently
-     * represents.
-     *
+     * Next we initialize our [Int] array field [mPermutation] with the numbers (0,1,...,26)
+     * representing an initial "solved" ordering of [Cube] objects. We call our method
+     * [createLayers] to allocate and construct the 9 layers initializing the axis they can
+     * rotate about, and call our method [updateLayers] to assign each of the [Cube] objects
+     * to the [Layer] that it belongs to in the solved initial position that [mPermutation]
+     * currently represents.
      *
      * Then we call the method `world.generate` which allocates and fills the direct allocated
      * buffers required by the method `glDrawElements` when it draws our Rubic cube. Finally we
      * return `world` to the caller (in our case the call to the constructor of the
-     * `KubeRenderer` that is used to initialize our field `KubeRenderer mRenderer` in
+     * [KubeRenderer] that is used to initialize our [KubeRenderer] field [mRenderer] in
      * this activities override of `onCreate`.
      *
-     * @return a new instance of `GLWorld` configured with Rubic cube cubes.
+     * @return a new instance of [GLWorld] configured with Rubic cube cubes.
      */
     private fun makeGLWorld(): GLWorld {
         val world = GLWorld()
@@ -267,37 +258,26 @@ class Kube : AppCompatActivity(), KubeRenderer.AnimationCallback {
     }
 
     /**
-     * This initializes our field `Layer[] mLayers` with `Layer` objects constructed to
+     * This initializes our [Layer] array field [mLayers] with [Layer] objects constructed to
      * rotate around their respective axises:
      *
-     *  *
-     * kUp = 0 Up layer (top 9 cubes) rotates around the y axis.
+     *  * kUp = 0 Up layer (top 9 cubes) rotates around the y axis.
      *
-     *  *
-     * kDown = 1 Down layer (bottom 9 cubes) rotates around the y axis.
+     *  * kDown = 1 Down layer (bottom 9 cubes) rotates around the y axis.
      *
-     *  *
-     * kLeft = 2 Left layer (9 cubes on left side) rotates around the x axis.
+     *  * kLeft = 2 Left layer (9 cubes on left side) rotates around the x axis.
      *
-     *  *
-     * kRight = 3 Right layer (9 cubes on right side) rotates around the x axis.
+     *  * kRight = 3 Right layer (9 cubes on right side) rotates around the x axis.
      *
-     *  *
-     * kFront = 4 Front layer (layer in front of you) rotates around the z axis.
+     *  * kFront = 4 Front layer (layer in front of you) rotates around the z axis.
      *
-     *  *
-     * kBack = 5 Back layer (layer at the back of the Rubic cube) rotates around the z axis.
+     *  * kBack = 5 Back layer (layer at the back of the Rubic cube) rotates around the z axis.
      *
-     *  *
-     * kMiddle = 6 Middle layer (layer between left and right) rotates around the x axis.
+     *  * kMiddle = 6 Middle layer (layer between left and right) rotates around the x axis.
      *
-     *  *
-     * kEquator = 7 Equator layer (layer between up and down) rotates around the y axis.
+     *  * kEquator = 7 Equator layer (layer between up and down) rotates around the y axis.
      *
-     *  *
-     * kSide = 8 Side layer (layer between front and back) rotates around the z axis.
-     *
-     *
+     *  * kSide = 8 Side layer (layer between front and back) rotates around the z axis.
      */
     private fun createLayers() {
         mLayers[kUp] = Layer(Layer.kAxisY)
@@ -312,65 +292,50 @@ class Kube : AppCompatActivity(), KubeRenderer.AnimationCallback {
     }
 
     /**
-     * This method updates all the layers in our field `Layer[] mLayers` so that their field
-     * `GLShape[] mShapes` contains the correct `Cube` objects based on the latest
-     * `mPermutation` performed (including the initial "solved" `mPermutation` (0.1,...,26).
-     *
+     * This method updates all the layers in our [Layer] array field [mLayers] so that their field
+     * [GLShape] array field `mShapes` contains the correct [Cube] objects based on the latest
+     * [mPermutation] performed (including the initial "solved" [mPermutation] (0.1,...,26).
      *
      * First we declare the variables we will be using:
      *
-     *  *
-     * `Layer layer` will contain a reference to the `Layer` object from the `Layer[] mLayers`
-     * that we are currently working with.
+     *  * [Layer] `var layer` will contain a reference to the [Layer] object from the [Layer] array
+     *  field [mLayers] that we are currently working with.
      *
-     *  *
-     * `GLShape[] shapes` will contain a reference to the `GLShape[] mShapes` field
-     * of the current `Layer layer`
+     *  * [GLShape] array variable `var shapes` will contain a reference to the [GLShape] array
+     *  field `mShapes` of the current [Layer] `layer`
      *
-     *  *
-     * `i, j, and k` will be used as indices
+     *  * `i, j, and k` will be used as indices
      *
-     *
-     * Next we assign the correct `Cube` objects from our field `Cube[] mCubes`. This
+     * Next we assign the correct [Cube] objects from our [Cube] array field [mCubes]. This
      * assignment is done for the 9 layers as follows:
      *
-     *  *
-     * kUp = 0 Up layer (top 9 cubes), its 9 `mShapes` `Cube` objects are chosen
-     * from our `Cube[] mCubes` based on `mPermutation` entries (0,1,2,3,4,5,6,7,8)
+     *  * kUp = 0 Up layer (top 9 cubes), its 9 `mShapes` [Cube] objects are chosen
+     *  from our [Cube] array field [mCubes] based on [mPermutation] entries (0,1,2,3,4,5,6,7,8)
      *
-     *  *
-     * kDown = 1 Down layer (bottom 9 cubes), its 9 `mShapes` `Cube` objects are chosen
-     * from our `Cube[] mCubes` based on `mPermutation` entries (18,19,20,21,22,23,24,25,26)
+     *  * kDown = 1 Down layer (bottom 9 cubes), its 9 `mShapes` [Cube] objects are chosen from our
+     *  [Cube] array field [mCubes] based on [mPermutation] entries (18,19,20,21,22,23,24,25,26)
      *
-     *  *
-     * kLeft = 2 Left layer (9 cubes on left side), its 9 `mShapes` `Cube` objects are chosen
-     * from our `Cube[] mCubes` based on `mPermutation` entries (0,3,6,9,12,15,18,21,24)
+     *  * kLeft = 2 Left layer (9 cubes on left side), its 9 `mShapes` [Cube] objects are chosen
+     *  from our [Cube] array field [mCubes] based on [mPermutation] entries (0,3,6,9,12,15,18,21,24)
      *
-     *  *
-     * kRight = 3 Right layer (9 cubes on right side), its 9 `mShapes` `Cube` objects are chosen
-     * from our `Cube[] mCubes` based on `mPermutation` entries (2,5,8,11,14,17,20,23,26)
+     *  * kRight = 3 Right layer (9 cubes on right side), its 9 `mShapes` [Cube] objects are chosen
+     *  from our [Cube] array field [mCubes] based on [mPermutation] entries (2,5,8,11,14,17,20,23,26)
      *
-     *  *
-     * kFront = 4 Front layer (layer in front of you), its 9 `mShapes` `Cube` objects are chosen
-     * from our `Cube[] mCubes` based on `mPermutation` entries (6,7,8,15,16,17,24,25,26)
+     *  * kFront = 4 Front layer (layer in front of you), its 9 `mShapes` [Cube] objects are chosen
+     *  from our [Cube] array field [mCubes] based on [mPermutation] entries (6,7,8,15,16,17,24,25,26)
      *
-     *  *
-     * kBack = 5 Back layer (layer at the back of the Rubic cube), its 9 `mShapes` `Cube` objects are chosen
-     * from our `Cube[] mCubes` based on `mPermutation` entries (0,1,2,9,10,11,18,19,20)
+     *  * kBack = 5 Back layer (layer at the back of the Rubic cube), its 9 `mShapes` [Cube] objects
+     *  are chosen from our [Cube] array field [mCubes] based on [mPermutation] entries
+     *  (0,1,2,9,10,11,18,19,20)
      *
-     *  *
-     * kMiddle = 6 Middle layer (layer between left and right), its 9 `mShapes` `Cube` objects are chosen
-     * from our `Cube[] mCubes` based on `mPermutation` entries (1,4,7,9,13,16,18,21,24)
+     *  * kMiddle = 6 Middle layer (layer between left and right), its 9 `mShapes` [Cube] objects are chosen
+     *  from our [Cube] array field [mCubes] based on [mPermutation] entries (1,4,7,9,13,16,18,21,24)
      *
-     *  *
-     * kEquator = 7 Equator layer (layer between up and down), its 9 `mShapes` `Cube` objects are chosen
-     * from our `Cube[] mCubes` based on `mPermutation` entries (9,10,11,12,13,14,15,16,17)
+     *  * kEquator = 7 Equator layer (layer between up and down), its 9 `mShapes` [Cube] objects are chosen
+     *  from our [Cube] array field [mCubes] based on [mPermutation] entries (9,10,11,12,13,14,15,16,17)
      *
-     *  *
-     * kSide = 8 Side layer (layer between front and back), its 9 `mShapes` `Cube` objects are chosen
-     * from our `Cube[] mCubes` based on `mPermutation` entries (3,4,5,12,13,14,21,22,23)
-     *
-     *
+     *  * kSide = 8 Side layer (layer between front and back), its 9 `mShapes` [Cube] objects are chosen
+     *  from our [Cube] array field [mCubes] based on [mPermutation] entries (3,4,5,12,13,14,21,22,23)
      */
     private fun updateLayers() {
         var shapes: Array<GLShape?>
@@ -484,12 +449,12 @@ class Kube : AppCompatActivity(), KubeRenderer.AnimationCallback {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`. Then we request the window feature FEATURE_NO_TITLE. Next we initialize our
-     * field `GLSurfaceView mView` with an instance of `GLSurfaceView`, initialize our
-     * field `KubeRenderer mRenderer` with an instance of `KubeRenderer` constructed using
-     * the `GLWorld` returned by the method `makeGLWorld` and set `mRenderer` as
-     * the renderer for `mView`. Finally we set our content view to `mView`.
+     * [GLSurfaceView] field [mView] with an instance of [GLSurfaceView], initialize our [KubeRenderer]
+     * field [mRenderer] with an instance of [KubeRenderer] constructed using the [GLWorld] returned
+     * by our method [makeGLWorld] and set [mRenderer] as the renderer for [mView]. Finally we set
+     * our content view to [mView].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -502,10 +467,9 @@ class Kube : AppCompatActivity(), KubeRenderer.AnimationCallback {
     }
 
     /**
-     * Called after [.onRestoreInstanceState], [.onRestart], or [.onPause], for
-     * your activity to start interacting with the user. First we call through to our super's
-     * implementation of `onResume` then we call the `onResume` method of our field
-     * `GLSurfaceView mView`.
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for our activity to start
+     * interacting with the user. First we call through to our super's implementation of `onResume`
+     * then we call the `onResume` method of our [GLSurfaceView] field [mView].
      */
     override fun onResume() {
         super.onResume()
@@ -514,9 +478,9 @@ class Kube : AppCompatActivity(), KubeRenderer.AnimationCallback {
 
     /**
      * Called as part of the activity lifecycle when an activity is going into the background, but
-     * has not (yet) been killed.  The counterpart to [.onResume]. First we call through to our
-     * super's implementation of `onPause` then we call the `onPause` method of our field
-     * `GLSurfaceView mView`.
+     * has not (yet) been killed.  The counterpart to [onResume]. First we call through to our
+     * super's implementation of `onPause` then we call the `onPause` method of our [GLSurfaceView]
+     * field [mView].
      */
     override fun onPause() {
         super.onPause()
@@ -524,43 +488,41 @@ class Kube : AppCompatActivity(), KubeRenderer.AnimationCallback {
     }
 
     /**
-     * Called by `KubeRenderer.onDrawFrame` to prepare the Rubic cube for the next frame to be
-     * drawn. First we instruct our `KubeRenderer mRenderer` to add 1.2 degrees to the angle it
-     * uses when rotating the entire Rubic cube. Then if `Layer mCurrentLayer` is null (the
-     * last layer rotation has reached its endpoint, or we are just starting) we set `layerID`
-     * to a random number between 0 and 8, and use it as an index into `mLayers` in order to
-     * set `mCurrentLayer`, and we use it as an index into `mLayerPermutations` in order
-     * to set `mCurrentLayerPermutation`. We call the method `mCurrentLayer.startAnimation`
-     * which calls `Shape.startAnimation` (which does nothing) for each of the shapes in the
-     * layer. We execute some unused code, then set `count` to 1, and `direction` to
-     * false (neither of which is used). We set our field `mCurrentAngle` to 0 then (since
-     * `direction` is always false) we set `mAngleIncrement` to PI/50 and `mEndAngle`
-     * to -PI/2 (since `mCurrentAngle` is 0 at this point, and count is 1).
+     * Called by [KubeRenderer.onDrawFrame] to prepare the Rubic cube for the next frame to be
+     * drawn. First we instruct our [KubeRenderer] field `[mRenderer] to add 1.2 degrees to the
+     * angle it uses when rotating the entire Rubic cube. Then if [Layer] field [mCurrentLayer] is
+     * *null* (the last layer rotation has reached its endpoint, or we are just starting) we set
+     * `val layerID` to a random number between 0 and 8, and use it as an index into our [mLayers]
+     * field in order to set [Layer] field [mCurrentLayer], and we use it as an index into
+     * [mLayerPermutations] in order to set [Int] array field [mCurrentLayerPermutation]. We call
+     * the method `mCurrentLayer.startAnimation` which calls `Shape.startAnimation` (which does
+     * nothing) for each of the shapes in the layer. We execute some unused code, then set `var count`
+     * to 1, and `var direction` to *false* (overriding their initial setting to random values for
+     * some reason). We set our field [mCurrentAngle] to 0 then (since `direction` is always *false*)
+     * we set [mAngleIncrement] to PI/50 and [mEndAngle] to -PI/2 (since [mCurrentAngle] is 0 at
+     * this point, and count is always 1).
      *
-     *
-     * Now that `mCurrentLayer` is known not to be null, we increment `mCurrentAngle` by
-     * `mAngleIncrement`, and if we have reached our `mEndAngle` we set the angle of
-     * `mCurrentLayer` to `mEndAngle`, and call the method `mCurrentLayer.endAnimation`
-     * which calls the method `Shape.endAnimation` for each of the 9 shapes in the layer inorder
+     * Now that [mCurrentLayer] is known not to be *null*, we increment [mCurrentAngle] by
+     * [mAngleIncrement], and if we have reached our [mEndAngle] we set the angle of
+     * [mCurrentLayer] to [mEndAngle], and call the method `mCurrentLayer.endAnimation`
+     * which calls the method `Shape.endAnimation` for each of the 9 shapes in the layer in order
      * to update its cumulative transfer matrix `mTransform` with the transform matrix it used for
-     * the movement to the angle `mEndAngle`: `mAnimateTransform`. We then set our field
-     * `mCurrentLayer` to null (so that a new layer will be chosen then next time `animate`
+     * the movement to the angle [mEndAngle]: `mAnimateTransform`. We then set our field
+     * [mCurrentLayer] to null (so that a new layer will be chosen then next time [animate]
      * is called).
      *
+     * We now have to adjust [mPermutation] so that the next call to [updateLayers] will
+     * assign the [Cube] objects to the correct layer based on the just completed layer rotation.
+     * To do this we first allocate temporary storage for [Int] array `val newPermutation`, then
+     * for each of the current layer assignments for our [Cube] array field [mCubes] which was last
+     * specified by the contents of [mPermutation] we assign a new layer based on the contents of
+     * the respective index entry contained in [mCurrentLayerPermutation] (the permutation of the
+     * just completed rotation). Then we assign our temporary `newPermutation` to [mPermutation]
+     * and call our method [updateLayers] to apply this layer assignment to all the `Layer.mShapes`
+     * objects in the [Layer] objects in [mLayers].
      *
-     * We now have to adjust `mPermutation` so that the next call to `updateLayers` will
-     * assign the `Cube` objects to the correct layer based on the just completed layer rotation.
-     * To do this we first allocate temporary storage for `int[] newPermutation`, then for each
-     * of the current layer assignments for our `Cube[] mCubes` which was last specified by the
-     * contents of `mPermutation` we assign a new layer based on the contents of the respective
-     * index entry contained in `mCurrentLayerPermutation` (the permutation of the just completed
-     * rotation). Then we assign our temporary `newPermutation` to `mPermutation` and call
-     * our method `updateLayers` to apply this layer assignment to all the `Layer[] mLayers`
-     * `Layer.mShapes` fields.
-     *
-     *
-     * If we have not yet reached the `mEndAngle` we just call the `setAngle` method of
-     * `mCurrentLayer` to set the angle to the new `mCurrentAngle`
+     * If on the other hand, we have not yet reached the [mEndAngle] we just call the `setAngle`
+     * method of [mCurrentLayer] to set the angle of the [Layer] to the new [mCurrentAngle]
      */
     override fun animate() { // change our angle of view
         mRenderer!!.angle = mRenderer!!.angle + 1.2f
