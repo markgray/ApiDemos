@@ -41,7 +41,7 @@ class GLColor {
     val alpha: Int
 
     /**
-     * Constructor for an instance of `GLColor` with all four components passed as parameters.
+     * Constructor for an instance of [GLColor] with all four components passed as parameters.
      *
      * @param red   red component of color
      * @param green green component of color
@@ -57,7 +57,7 @@ class GLColor {
     }
 
     /**
-     * Constructor for an instance of `GLColor` with three components specified, and alpha
+     * Constructor for an instance of [GLColor] with three components specified, and alpha
      * defaulting to 0x10000
      *
      * @param red   red component of color
@@ -73,9 +73,9 @@ class GLColor {
 
     /**
      * Compares this instance with the specified object and indicates if they are equal. First we make
-     * sure our argument is an instance of `GLColor`, and if so we cast `other` to
-     * `GLColor color`, and return true if all components are the same as the components of this
-     * instance, false if not. We also return false if `other` is not an instance of `GLColor`.
+     * sure our argument is an instance of [GLColor], and if so return true if all components are the
+     * same as the components of *this* instance, *false* if not. We also return *false* if [other]
+     * is not an instance of [GLColor].
      *
      * @param other `GLColor` object to compare against
      * @return true if all components of both `GLColor` objects are equal, false otherwise.
@@ -87,6 +87,11 @@ class GLColor {
         return false
     }
 
+    /**
+     * Returns a hash code value for our object.
+     *
+     * @return an [Int] that can be used for bucketing in Hash implementations.
+     */
     override fun hashCode(): Int {
         var result = red
         result = 31 * result + green
