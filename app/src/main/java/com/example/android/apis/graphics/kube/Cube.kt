@@ -18,7 +18,15 @@ package com.example.android.apis.graphics.kube
 /**
  * Class representing a single cube of the 3x3x3 cube Rubic cube.
  */
-class Cube(world: GLWorld?, left: Float, bottom: Float, back: Float, right: Float, top: Float, front: Float) : GLShape(world) {
+class Cube(
+        world: GLWorld?,
+        left: Float,
+        bottom: Float,
+        back: Float,
+        right: Float,
+        top: Float,
+        front: Float
+) : GLShape(world!!) {
     companion object {
         /**
          * index number of the bottom `GLFace` of our `GLShape` in our super's list of faces
