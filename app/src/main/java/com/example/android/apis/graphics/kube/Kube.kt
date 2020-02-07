@@ -241,7 +241,7 @@ class Kube : AppCompatActivity(), KubeRenderer.AnimationCallback {
         }
         i = 0
         while (i < 27) {
-            if (mCubes[i] != null) world.addShape(mCubes[i])
+            if (mCubes[i] != null) world.addShape(mCubes[i]!!)
             i++
         }
         // initialize our permutation to solved position
