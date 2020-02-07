@@ -39,7 +39,7 @@ class GLVertex {
     var z: Float
     /**
      * Index number of this vertex in the field `ArrayList<GLVertex> mVertexList` of our instance
-     * of `GLWorld`.
+     * of [GLWorld].
      */
     val index // index in vertex table
             : Short
@@ -49,8 +49,8 @@ class GLVertex {
     var color: GLColor? = null
 
     /**
-     * Basic constructor, only used in our `update` method to create a temporary `GLVertex`
-     * which we use as the destination vertex of the transform of our instance of `GLVertex`
+     * Basic constructor, only used in our [update] method to create a temporary [GLVertex]
+     * which we use as the destination vertex of the transform of our instance of [GLVertex]
      * by the transformation matrix argument `M4 transform`
      */
     internal constructor() {
@@ -61,16 +61,16 @@ class GLVertex {
     }
 
     /**
-     * Constructor for a new instance of `GLVertex`, called from our `GLWorld` method
-     * `addVertex`, which is called from `GLShape.addVertex`, which is called from the
-     * constructor of a `Cube` object for each of the six vertices making up a cube in the
+     * Constructor for a new instance of [GLVertex], called from our [GLWorld] method
+     * `addVertex`, which is called from [GLShape.addVertex], which is called from the
+     * constructor of a [Cube] object for each of the six vertices making up a cube in the
      * Rubic cube.
      *
      * @param x     x coordinate
      * @param y     y coordinate
      * @param z     z coordinate
      * @param index Index number of this vertex in the field `ArrayList<GLVertex> mVertexList`
-     * of our instance of `GLWorld`.
+     * of our instance of [GLWorld].
      */
     internal constructor(x: Float, y: Float, z: Float, index: Int) {
         this.x = x
@@ -81,9 +81,8 @@ class GLVertex {
 
     /**
      * Compares this instance with the specified object and indicates if they are equal. First we
-     * make sure that `Object other` is an instance of `GLVertex` and if so, we cast
-     * `other` to `GLVertex v` and return return true if the `x`. `y`, and
-     * `z` fields of both are equal, false otherwise.
+     * make sure that our [Object] parameter [other] is an instance of [GLVertex] and if so, we
+     * return return *true* if the `x`, `y`, and `z` fields of both are equal, *false* otherwise.
      *
      * @param other the object to compare this instance with.
      * @return true if the specified object is equal to this object; false otherwise.
@@ -96,21 +95,20 @@ class GLVertex {
     }
 
     /**
-     * Adds the coordinates of this instance of `GLVertex` to the `IntBuffer vertexBuffer`,
-     * and the color components to `IntBuffer colorBuffer`. `vertexBuffer` and
-     * `colorBuffer` are the direct allocated byte buffers used by the openGL method
-     * `glDrawElements` to render our Rubic cube. Called from `GLWorld.generate` for
-     * every `GLVertex` in its vertex list `ArrayList<GLVertex> mVertexList`.
+     * Adds the coordinates of this instance of [GLVertex] to the [IntBuffer] parameter [vertexBuffer],
+     * and the color components to the [IntBuffer] parameter [colorBuffer]. [vertexBuffer] and
+     * [colorBuffer] are the direct allocated byte buffers used by the openGL method
+     * `glDrawElements` to render our Rubic cube. Called from [GLWorld.generate] for
+     * every [GLVertex] in its vertex list `ArrayList<GLVertex> mVertexList`.
      *
+     * We assume that the [IntBuffer] parameters [vertexBuffer] and [colorBuffer] are positioned
+     * properly, then we convert our instances coordinates x, y, and z to [Int] and write them
+     * in order to [IntBuffer] parameter[vertexBuffer]. If our [GLColor] field [color] is null we
+     * write four 0's to [IntBuffer] parameter [colorBuffer], otherwise we write the fields
+     * `red`, `green`, `blue`, and `alpha` of [color] to [IntBuffer] parameter [colorBuffer].
      *
-     * We assume that the `IntBuffer vertexBuffer` and `IntBuffer colorBuffer` are positioned
-     * properly, then we convert our instances coordinates x, y, and z to `int` and write them
-     * in order to `IntBuffer vertexBuffer`. If our field `GLColor color` is null we write
-     * four 0's to `IntBuffer colorBuffer`, otherwise we write the `GLColor color` fields
-     * `red`, `green`, `blue`, and `alpha` to `IntBuffer colorBuffer`.
-     *
-     * @param vertexBuffer `IntBuffer` used by `GLWorld` as a vertex buffer.
-     * @param colorBuffer  `IntBuffer` used by `GLWorld` as a color buffer.
+     * @param vertexBuffer [IntBuffer] used by [GLWorld] as a vertex buffer.
+     * @param colorBuffer  [IntBuffer] used by [GLWorld] as a color buffer.
      */
     fun put(vertexBuffer: IntBuffer, colorBuffer: IntBuffer) {
         vertexBuffer.put(toFixed(x))
@@ -130,23 +128,26 @@ class GLVertex {
     }
 
     /**
-     * Applies the transform matrix `M4 transform` to our coordinates x, y, and z and stores
-     * them in their proper place in `IntBuffer vertexBuffer`. Called from our `GLWorld`
-     * object method `transformVertex`, which is called from `GLShape.animateTransform`,
-     * which is called from `Layer.setAngle`, which is called from `Kube.animate`, which
-     * is called from `KubeRenderer.onDrawFrame`.
+     * Applies the [M4] transform matrix in parameter [transform] to our coordinates x, y, and z and
+     * stores them in their proper place in [IntBuffer] parameter [vertexBuffer]. Called from the
+     * [GLWorld.transformVertex] method, which is called from [GLShape.animateTransform], which is
+     * called from [Layer.setAngle], which is called from [Kube.animate], whichis called from
+     * [KubeRenderer.onDrawFrame].
      *
+     * First we position [IntBuffer] parameter [vertexBuffer] to our index in it. Then if our [M4]
+     * transform matrix [transform] is null we simply write our unmodified x, y, and z coordinates
+     * into [IntBuffer] parameter [vertexBuffer]. If [transform] is not null we create a new empty
+     * [GLVertex] for `val temp`, apply the transform to our current coordinates saving the result
+     * in `temp`, then we write the x, y, and z coordinates of `temp` into [IntBuffer] parameter
+     * [vertexBuffer].
      *
-     * First we position `IntBuffer vertexBuffer` to our index in it. Then if `M4 transform`
-     * is null we simply write our unmodified x, y, and z coordinates into `IntBuffer vertexBuffer`.
-     * If `M4 transform` is not null we create a new empty `GLVertex temp`, apply the
-     * transform to our current coordinates saving the result in `GLVertex temp`, then we write
-     * the x, y, and z coordinates of `GLVertex temp` into `IntBuffer vertexBuffer`.
-     *
-     * @param vertexBuffer `IntBuffer mVertexBuffer` field from our `GLWorld`
+     * @param vertexBuffer [IntBuffer] field `mVertexBuffer` field from our [GLWorld]
      * @param transform    transformation matrix to apply to our coordinates
      */
-    fun update(vertexBuffer: IntBuffer, transform: M4?) { // skip to location of vertex in mVertex buffer
+    fun update(vertexBuffer: IntBuffer, transform: M4?) {
+        /**
+         * skip to location of vertex in mVertex buffer
+         */
         vertexBuffer.position(index * 3)
         if (transform == null) {
             vertexBuffer.put(toFixed(x))
@@ -161,6 +162,9 @@ class GLVertex {
         }
     }
 
+    /**
+     * Generates a hash code from our contents that can be used as a key into a hashmap.
+     */
     override fun hashCode(): Int {
         var result = x.hashCode()
         result = 31 * result + y.hashCode()
@@ -172,7 +176,7 @@ class GLVertex {
 
     companion object {
         /**
-         * Convenience function to convert our float fields (x,y,z) to an `int` for storing in
+         * Convenience function to convert our float fields (x,y,z) to an `Int` for storing in
          * an `IntBuffer vertexBuffer`. Used in our methods `put` and `update`.
          *
          * @param floatValue float value to be turned into an `int`
