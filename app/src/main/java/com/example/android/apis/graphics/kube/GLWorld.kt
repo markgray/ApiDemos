@@ -168,23 +168,23 @@ class GLWorld {
     }
 
     /**
-     * Called from `KubeRenderer.onDrawFrame` to draw our Rubic cube. First we reset the position
-     * of the direct allocated buffers used by `glDrawElements`: `IntBuffer mColorBuffer`
-     * (color buffer), `IntBuffer mVertexBuffer` (vertex buffer), and `ShortBuffer mIndexBuffer`
-     * (index buffer). Then we specify the orientation of front-facing polygons to be GL_CW, and select
-     * flat shade model.
+     * Called from [KubeRenderer.onDrawFrame] to draw our Rubic cube. First we reset the position
+     * of the direct allocated buffers used by `glDrawElements`: [IntBuffer] field [mColorBuffer]
+     * (color buffer), [IntBuffer] field [mVertexBuffer] (vertex buffer), and [ShortBuffer] field
+     * [mIndexBuffer] (index buffer). Then we specify the orientation of front-facing polygons to
+     * be GL_CW, and select flat shade model.
      *
      * We define an array of vertex data to have 3 coordinates per vertex, GL_FIXED as its data type,
-     * 0 for its stride, and `IntBuffer mVertexBuffer` as the pointer to the first element in
-     * the array.
+     * 0 for its stride, and [IntBuffer] field [mVertexBuffer] as the pointer to the first element
+     * in the array.
      *
      * We define an array of colors to have 4 color components per color, GL_FIXED as its data type,
-     * 0 for its stride, and `IntBuffer mColorBuffer` as a pointer to the first component of
+     * 0 for its stride, and [IntBuffer] field [mColorBuffer] as a pointer to the first component of
      * the first color element in the array.
      *
      * Finally we call `glDrawElements` to render primitives from the array data we specified
-     * above, using GL_TRIANGLES as the primitives to draw, `mIndexCount` the number of elements
-     * to use from the arrays, and `ShortBuffer mIndexBuffer` as the pointer to the location
+     * above, using GL_TRIANGLES as the primitives to draw, [mIndexCount] the number of elements
+     * to use from the arrays, and [ShortBuffer] field [mIndexBuffer] as the pointer to the location
      * where the indices are stored.
      *
      * We increment `count` for no apparent reason.
