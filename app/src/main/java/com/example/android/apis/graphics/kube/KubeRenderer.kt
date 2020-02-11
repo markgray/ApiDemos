@@ -20,9 +20,9 @@ import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 /**
- * Example of how to use OpenGL|ES in a custom view. This is the `GLSurfaceView.Renderer`
- * implementation which is set as the renderer of our `GLSurfaceView` in the `onCreate`
- * override of `Kube`.
+ * Example of how to use OpenGL|ES in a custom view. This is the [GLSurfaceView.Renderer]
+ * implementation which is set as the renderer of our [GLSurfaceView] in the `onCreate`
+ * override of [Kube].
  */
 internal class KubeRenderer
 /**
