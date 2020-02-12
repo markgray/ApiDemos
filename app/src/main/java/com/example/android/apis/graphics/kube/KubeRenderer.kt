@@ -33,43 +33,36 @@ internal class KubeRenderer
  * its `draw` method
  * Parameter: callback Callback we use to update the openGL buffers before instructing `mWorld`
  * to draw itself.
- */(
+ */
+(
         /**
-         * The `GLWorld` instance for our rubic cube, it is created in the method `Kube.makeGLWorld`
-         * and used as an argument to our constructor when the `Kube.onCreate` initializes its field
-         * `KubeRenderer mRenderer` with the instance of `KubeRenderer` it uses as the renderer
-         * for its field `GLSurfaceView mView`.
+         * The [GLWorld] instance for our rubic cube, it is created in the method [Kube.makeGLWorld]
+         * and used as an argument to our constructor when the [Kube.onCreate] method initializes its
+         * [KubeRenderer] field `mRenderer` with the instance of [KubeRenderer] it uses as the renderer
+         * for its [GLSurfaceView] field `mView`.
          */
         private val mWorld: GLWorld,
         /**
-         * The class that implements our interface `AnimationCallback`, it is set by one of the
-         * arguments to our constructor (in our case it is "this" when `Kube.onCreate` initializes
-         * its field `KubeRenderer mRenderer` with the instance of `KubeRenderer` it uses as
-         * the renderer for its field `GLSurfaceView mView`. We call its method `animate`
-         * from our `onDrawFrame` method when we want the openGL buffers to be updated to the next
-         * step of the animation before we call `mWorld.draw` to draw the next frame.
+         * The class that implements our interface [AnimationCallback], it is set by one of the
+         * arguments to our constructor (in our case it is "this" when [Kube.onCreate] initializes
+         * its [KubeRenderer] field `mRenderer` with the instance of [KubeRenderer] it uses as
+         * the renderer for its [GLSurfaceView] field `mView`. We call its method `animate`
+         * from our [onDrawFrame] method when we want the openGL buffers to be updated to the next
+         * step of the animation before we call the `draw` method of [mWorld] to draw the next frame.
          */
-        private val mCallback: AnimationCallback?) : GLSurfaceView.Renderer {
-    /**
-     * Getter method for our field `float mAngle`.
-     *
-     * @return current value of our field `float mAngle`
-     */
-    /**
-     * Setter method for our field `float mAngle`.
-     *
-     * Parameter: angle angle in degrees to set `mAngle` to
-     */
+        private val mCallback: AnimationCallback?
+) : GLSurfaceView.Renderer {
+
     /**
      * Angle in degrees to rotate the entire rubic cube before drawing it.
      */
     var angle = 0f
 
     /**
-     * Interface for the callback we call to update the openGL buffers before we call `GLWorld.draw`
-     * to draw them. It is implemented by `Kube` which uses "this" when calling our constructor
-     * which sets our field `AnimationCallback mCallback` to it, and our `onDrawFrame`
-     * override calls `mCallback.animate`.
+     * Interface for the callback we call to update the openGL buffers before we call [GLWorld.draw]
+     * to draw them. It is implemented by [Kube] which uses "this" when calling our constructor
+     * which sets our [AnimationCallback] field [mCallback] to it, and our [onDrawFrame] override
+     * calls the `animate` method of [mCallback].
      */
     interface AnimationCallback {
         fun animate()
@@ -89,7 +82,6 @@ internal class KubeRenderer
      * (causes the computed colors of vertices to be interpolated as the primitive is rasterized),
      * and enable the server-side GL capability GL_DEPTH_TEST (do depth comparisons and update the
      * depth buffer).
-     *
      *
      * Finally we call the method `mWorld.draw` to issue the final openGL commands to draw the
      * rubic cube.
