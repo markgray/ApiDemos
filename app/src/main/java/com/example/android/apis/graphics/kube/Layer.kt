@@ -19,9 +19,9 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 /**
- * Class containing the 9 `Cube` (`GLShape`) objects which comprise one of the planes of
+ * Class containing the 9 [Cube] ([GLShape]) objects which comprise one of the planes of
  * the Rubic cube. A plane is that group of objects which can be rotated around an axis, and there
- * are 9 of them - all contained in the field `Kube.mLayers`.
+ * are 9 of them - all contained in the array of [Layer] field `Kube.mLayers`.
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class Layer(
@@ -29,30 +29,31 @@ class Layer(
          * which axis do we rotate around? 0 for X, 1 for Y, 2 for Z
          */
         var mAxis: Int) {
-    /**
-     * The `Cube` (`GLShape`) objects presently in this `Layer`. All 9 of the
-     * `Layer` planes are initialized in the method `Kube.updateLayers` using a
-     * (0,1, ... 26) initial `mPermutation` of the `Cube` objects in the field
-     * `Cube[] mCubes`, and then `mPermutation` is randomly chosen from one of the
-     * permutations in `Kube.mLayerPermutations` to rotate the 9 `Layer` objects (also
-     * using the method `Kube.updateLayers`)
-     */
-    var mShapes = arrayOfNulls<GLShape>(9)
-    /**
-     * Transform matrix which will rotate our layer instance around its x, y, or z axis, depending
-     * on where in the Rubic cube we are located. It is used in our method `setAngle` to move
-     * all the `GLShape[] mShapes` by calling `GLShape.animateTransform` which applies
-     * the transform matrix to all the vertices the `GLShape` is made from. `setAngle`
-     * calculates the contents of `mTransform` using the `float angle` parameter it is
-     * passed, which is the angle in radians to rotate this layer instance around its appropriate
-     * `mAxis` axis.
-     */
-    var mTransform = M4()
-    //	float mAngle;
 
     /**
-     * Called from `Kube.animate`, which is called from `KubeRenderer.onDrawFrame`. For
-     * each of the `GLShape shape` objects in our list `GLShape[] mShapes`, we call its
+     * The [Cube] ([GLShape]) objects presently in this [Layer]. All 9 of the
+     * [Layer] planes are initialized in the method [Kube.updateLayers] using a
+     * (0,1, ... 26) initial `mPermutation` of the [Cube] objects in its [Cube] array field
+     * `mCubes`, and then `mPermutation` is randomly chosen from one of the permutations in
+     * [Kube.mLayerPermutations] to rotate the 9 [Layer] objects (also using the method
+     * [Kube.updateLayers])
+     */
+    var mShapes = arrayOfNulls<GLShape>(9)
+
+    /**
+     * Transform matrix which will rotate our layer instance around its x, y, or z axis, depending
+     * on where in the Rubic cube we are located. It is used in our method [setAngle] to move
+     * all the [GLShape] objects in [mShapes] by calling [GLShape.animateTransform] which applies
+     * the transform matrix to all the vertices the [GLShape] is made from. [setAngle]
+     * calculates the contents of [mTransform] using the [Float] parameter `angle`  it is
+     * passed, which is the angle in radians to rotate this layer instance around its appropriate
+     * [mAxis] axis.
+     */
+    var mTransform = M4()
+
+    /**
+     * Called from [Kube.animate], which is called from [KubeRenderer.onDrawFrame]. For
+     * each of the [GLShape] `val shape` objects in our [GLShape] array [mShapes], we call its
      * method `startAnimation` ... which is a no-op in our case.
      */
     fun startAnimation() {
