@@ -525,7 +525,7 @@ class Kube : AppCompatActivity(), KubeRenderer.AnimationCallback {
      * method of [mCurrentLayer] to set the angle of the [Layer] to the new [mCurrentAngle]
      */
     override fun animate() { // change our angle of view
-        mRenderer!!.angle = mRenderer!!.angle + 1.2f
+        mRenderer!!.mAngle = mRenderer!!.mAngle + 1.2f
         if (mCurrentLayer == null) {
             val layerID = mRandom.nextInt(9)
             mCurrentLayer = mLayers[layerID]
