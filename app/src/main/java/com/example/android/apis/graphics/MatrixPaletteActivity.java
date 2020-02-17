@@ -16,14 +16,15 @@
 
 package com.example.android.apis.graphics;
 
-import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * This sample shows how to implement a Matrix Palette, used to rock a column back and forth.
  */
-public class MatrixPaletteActivity extends Activity {
+public class MatrixPaletteActivity extends AppCompatActivity {
     /**
      * {@code GLSurfaceView} we create for {@code MatrixPaletteRenderer} to render to.
      */
