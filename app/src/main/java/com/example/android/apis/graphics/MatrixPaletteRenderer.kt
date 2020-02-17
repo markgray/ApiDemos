@@ -37,15 +37,15 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 /**
- * This renderer is part of the `MatrixPaletteActivity` sample which shows how to implement a
+ * This renderer is part of the [MatrixPaletteActivity] sample which shows how to implement a
  * Matrix Palette, which is used to rock a column back and forth.
  */
 class MatrixPaletteRenderer
 /**
- * Our constructor, we simply save our parameter in our field `Context mContext`.
+ * Our constructor, we simply save our parameter in our [Context] field [mContext].
  *
- * Parameter: context `Context` to use to retrieve resources, this when called from the
- * `onCreate` method of the `MatrixPaletteActivity` `Activity`.
+ * Parameter: [mContext] the [Context] to use to retrieve resources, this when called from the
+ * `onCreate` method of the [MatrixPaletteActivity] `Activity`.
  */
 (
         /**
@@ -53,16 +53,17 @@ class MatrixPaletteRenderer
          * `onCreate` method of `MatrixPaletteActivity`).
          */
         private val mContext: Context
+
 ) : GLSurfaceView.Renderer {
     /**
-     * `Grid` containing our column vertices. It is created and configured by the method
-     * `generateWeightedGrid` with all the data needed for drawing by the method `draw`
+     * [Grid] containing our column vertices. It is created and configured by our method
+     * [generateWeightedGrid] with all the data needed for drawing by tbe [Grid.draw] method
      * loaded into GPU vertex buffer objects.
      */
     private var mGrid: Grid? = null
     /**
      * Texture name that we use for the texture we use for GL_TEXTURE_2D, it is created and uploaded
-     * to the GPU in the method `onSurfaceCreated` from the raw resource robot.png
+     * to the GPU in the method [onSurfaceCreated] from the raw resource robot.png
      */
     private var mTextureID = 0
 
@@ -71,6 +72,9 @@ class MatrixPaletteRenderer
      * the vertex data required for this example. The vertex and index data are held in VBO objects
      * because on most GPUs VBO objects are the fastest way of rendering static vertex and index
      * data.
+     *
+     * @param w width of our [Grid] in vertices
+     * @param h height of our [Grid] in vertices
      */
     private class Grid(w: Int, h: Int) {
         /**
@@ -78,54 +82,56 @@ class MatrixPaletteRenderer
          */
         private var mVertexBufferObjectId = 0
         /**
-         * Buffer object name for the GPU VBO we use for our the GL_ELEMENT_ARRAY_BUFFER indices into
+         * Buffer object name for the GPU VBO we use for our GL_ELEMENT_ARRAY_BUFFER indices into
          * our vertex buffer. Consists of the indices of the vertex buffer elements that are to be
          * used for the GL_TRIANGLES triangles that will be drawn by `glDrawElements`.
          */
         private var mElementBufferObjectId = 0
-        // These buffers are used to hold the vertex and index data while
-// constructing the grid. Once createBufferObjects() is called
-// the buffers are nulled out to save memory.
+
         /**
-         * `ByteBuffer` pointer for the vertex data, allows the vertex data buffer to be
-         * accessed as `byte` values when "putting" the `byte` values for the palette
-         * matrix indices.
+         * The following buffers are used to hold the vertex and index data while constructing the
+         * grid. Once createBufferObjects() is called the buffers are nulled out to save memory.
+         */
+
+        /**
+         * [ByteBuffer] pointer for the vertex data, allows the vertex data buffer to be accessed
+         * as [Byte] values when "putting" the byte values for the palette matrix indices.
          */
         private var mVertexByteBuffer: ByteBuffer?
         /**
-         * `FloatBuffer` pointer for the vertex data, allows the vertex data to be accessed as
-         * `float` values when "putting" `float` values into the vertex data buffer.
+         * [FloatBuffer] pointer for the vertex data, allows the vertex data to be accessed as
+         * [Float] values when "putting" float values into the vertex data buffer.
          */
         private var mVertexBuffer: FloatBuffer?
         /**
-         * `CharBuffer` we build the indices of the GL_TRIANGLES triangles of our column,
+         * [CharBuffer] in which we build the indices of the GL_TRIANGLES triangles of our column,
          * which we later upload to the GL_ELEMENT_ARRAY_BUFFER GPU VBO for drawing .
          */
         private var mIndexBuffer: CharBuffer?
         /**
-         * Width of our `Grid` in number of vertices, set in our constructor.
+         * Width of our [Grid] in number of vertices, set in our constructor.
          */
         private val mW: Int
         /**
-         * Height of our `Grid` in number of vertices, set in our constructor.
+         * Height of our [Grid] in number of vertices, set in our constructor.
          */
         private val mH: Int
         /**
-         * Number of indices in our `Grid` and `char` values in `mIndexBuffer`,
+         * Number of indices in our [Grid] and [Char] values in [mIndexBuffer],
          * used in the call to `glDrawElements`.
          */
         private val mIndexCount: Int
 
         /**
-         * Sets the values of a specific vertex in `FloatBuffer mVertexBuffer` (aka for byte
-         * values: `ByteBuffer mVertexByteBuffer`). After making sure our input values are
-         * within range and throwing IllegalArgumentException if they are not, we calculate the index
-         * value `index` for the vertex in question, which is `(mW*j + i)` (the number of
-         * vertices in a row times the row number (y index), plus the column number (x index). We use
-         * `index` to calculate the correct offset into `FloatBuffer mVertexBuffer` (which
-         * is `index*VERTEX_SIZE/FLOAT_SIZE`) and position `FloatBuffer mVertexBuffer`
-         * to this offset. We then `put` the seven float parameters `x, y, z, u, v, w0, w1`
-         * into `mVertexBuffer`. We then position `ByteBuffer mVertexByteBuffer` to the
+         * Sets the values of a specific vertex in [FloatBuffer] field [mVertexBuffer] (alias for
+         * the [Byte] values in [ByteBuffer] field [mVertexByteBuffer]). After making sure our input
+         * values are within range and throwing [IllegalArgumentException] if they are not, we
+         * calculate the index value `val index` for the vertex in question, which is `(mW*j + i)`
+         * (the number of vertices in a row times the row number (y index), plus the column number
+         * (x index). We use `index` to calculate the correct offset into [FloatBuffer] field
+         * [mVertexBuffer] (which is `index*VERTEX_SIZE/FLOAT_SIZE`) and position [mVertexBuffer] to
+         * this offset. We then [FloatBuffer.put] our seven [Float] parameters `x, y, z, u, v, w0, w1`
+         * into [mVertexBuffer]. We then position [ByteBuffer] field [mVertexByteBuffer] to the
          * correct position for our two byte parameters `p0, p1` of our vertex (which is
          * `index*VERTEX_SIZE + VERTEX_PALETTE_INDEX_OFFSET`) and put them into the buffer in
          * order.
@@ -384,21 +390,21 @@ class MatrixPaletteRenderer
              *     [a]------[b] ...
              *      |       |
              */
-                var i = 0
-                for (y in 0 until quadH) {
-                    for (x in 0 until quadW) {
-                        val a = (y * mW + x).toChar()
-                        val b = (y * mW + x + 1).toChar()
-                        val c = ((y + 1) * mW + x).toChar()
-                        val d = ((y + 1) * mW + x + 1).toChar()
-                        mIndexBuffer!!.put(i++, a)
-                        mIndexBuffer!!.put(i++, c)
-                        mIndexBuffer!!.put(i++, b)
-                        mIndexBuffer!!.put(i++, b)
-                        mIndexBuffer!!.put(i++, c)
-                        mIndexBuffer!!.put(i++, d)
-                    }
+            var i = 0
+            for (y in 0 until quadH) {
+                for (x in 0 until quadW) {
+                    val a = (y * mW + x).toChar()
+                    val b = (y * mW + x + 1).toChar()
+                    val c = ((y + 1) * mW + x).toChar()
+                    val d = ((y + 1) * mW + x + 1).toChar()
+                    mIndexBuffer!!.put(i++, a)
+                    mIndexBuffer!!.put(i++, c)
+                    mIndexBuffer!!.put(i++, b)
+                    mIndexBuffer!!.put(i++, b)
+                    mIndexBuffer!!.put(i++, c)
+                    mIndexBuffer!!.put(i++, d)
                 }
+            }
         }
     }
 
