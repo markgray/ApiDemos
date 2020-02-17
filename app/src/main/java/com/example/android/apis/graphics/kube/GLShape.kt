@@ -186,7 +186,7 @@ open class GLShape(
     fun animateTransform(transform: M4?) {
         var transformLocal = transform
         mAnimateTransform = transformLocal
-        if (mTransform != null) transformLocal = mTransform!!.multiply(transformLocal)
+        if (mTransform != null) transformLocal = mTransform!!.multiply(transformLocal!!)
         val iter: Iterator<GLVertex> = mVertexList.iterator()
         while (iter.hasNext()) {
             val vertex = iter.next()
@@ -209,9 +209,9 @@ open class GLShape(
      */
     fun endAnimation() {
         mTransform = if (mTransform == null) {
-            M4(mAnimateTransform)
+            M4(mAnimateTransform!!)
         } else {
-            mTransform!!.multiply(mAnimateTransform)
+            mTransform!!.multiply(mAnimateTransform!!)
         }
     }
 
