@@ -16,24 +16,24 @@
 package com.example.android.apis.graphics.kube
 
 /**
- * A 4x4 float matrix which is used to move `GLVertex` x,y,z locations
+ * A 4x4 float matrix which is used to move a [GLVertex] x,y,z locations
  */
 class M4 {
     /**
-     * Our 4x4 float matrix which are methods operate on.
+     * Our 4x4 float matrix which our methods operate on.
      */
     var m = Array(4) { FloatArray(4) }
 
     /**
-     * Our basic constructor, which does nothing, but gives us an all zero field `float[][] m`
-     * to use.
+     * Our basic constructor, which does nothing, but gives us an all zero [Float] array field
+     * [m] to use.
      */
     constructor()
 
     /**
-     * Constructor which clones another instance of `M4` using deep copy.
+     * Constructor which clones another instance of [M4] using deep copy.
      *
-     * @param other `M4` object we are to deep copy.
+     * @param other [M4] object we are to deep copy.
      */
     constructor(other: M4) {
         for (i in 0..3) {
@@ -44,13 +44,13 @@ class M4 {
     }
 
     /**
-     * Multiplies a `GLVertex src` by our field `float[][] m` and places the results in
-     * `GLVertex dest`. Simple multiplication of a vector by a matrix. The `m[3]` array
-     * appears to be superfluous since only `m[3][3]` is non-zero (set to 1.0 by the method
-     * `setIdentity` and it is never used oddly enough.
+     * Multiplies our [GLVertex] parameter [src] by our [Float] array field [src] and places the
+     * results in [GLVertex] parameter [dest]. Simple multiplication of a vector by a matrix. The
+     * `m[3]` array appears to be superfluous since only `m[3][3]` is non-zero (set to 1.0 by the
+     * method [setIdentity] and it is never used oddly enough.
      *
-     * @param src Source `GLVertex` to multiply by our field `float[][] m`.
-     * @param dest Destination `GLVertex` to place results in.
+     * @param src Source [GLVertex] to multiply by our [Float] array field [m].
+     * @param dest Destination [GLVertex] to place results in.
      */
     fun multiply(src: GLVertex, dest: GLVertex) {
         dest.x = src.x * m[0][0] + src.y * m[1][0] + src.z * m[2][0] + m[3][0]
@@ -59,11 +59,11 @@ class M4 {
     }
 
     /**
-     * Simple 4x4 matrix multiplication, the 4x4 float matrix in the field `other.m` is
-     * multiplied by our own field `float[][] m` and the result is returned to the caller.
+     * Simple 4x4 matrix multiplication, the 4x4 float matrix in the field `other.m` is multiplied
+     * by our own [Float] array field [m] and the result is returned to the caller.
      *
-     * @param other `M4` matrix to multiply by our own matrix
-     * @return the result of multiplying `M4 other` by our own matrix.
+     * @param other [M4] matrix to multiply by our own matrix
+     * @return the result of multiplying our [M4] parameter [other] by our own matrix.
      */
     fun multiply(other: M4): M4 {
         val result = M4()
@@ -78,7 +78,7 @@ class M4 {
     }
 
     /**
-     * Sets the contents of our field `float[][] m` to the identity matrix.
+     * Sets the contents of our [Float] array field [m] to the identity matrix.
      */
     fun setIdentity() {
         for (i in 0..3) {
@@ -89,7 +89,7 @@ class M4 {
     }
 
     /**
-     * Turns our field `float[][] m` into a string for debugging purposes.
+     * Turns our [Float] array field [m] into a string for debugging purposes.
      *
      * @return printable string version of our 4x4 float matrix
      */
