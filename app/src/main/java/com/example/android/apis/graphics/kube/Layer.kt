@@ -64,14 +64,14 @@ class Layer(
     }
 
     /**
-     * Called from `Kube.animate` when the `Layer` being rotated has reached its ending
-     * angle. `Kube.animate` is called from `KubeRenderer.onDrawFrame`. For each of the
-     * `GLShape shape` objects in our list `GLShape[] mShapes`, we call its method
-     * `endAnimation` which updates its field `M4 mTransform` to reflect the movement
-     * which has been applied to the `GLShape` via its field `M4 mAnimateTransform`
-     * (which we have been setting in our `setAngle` method as the `Layer` rotates).
+     * Called from [Kube.animate] when the [Layer] being rotated has reached its ending
+     * angle. [Kube.animate] is called from [KubeRenderer.onDrawFrame]. For each of the
+     * `val shape` [GLShape] objects in our [GLShape] array [mShapes], we call its method
+     * `endAnimation` which updates its [M4] field `mTransform` to reflect the movement
+     * which has been applied to the [GLShape] via its [M4] field `mAnimateTransform`
+     * (which we have been setting in our [setAngle] method as the [Layer] rotates).
      * `mTransform` thus represents the cumulative transforms which have been applied to the
-     * `GLShape` instance as the various layers it belongs to are rotated, resulting in its
+     * [GLShape] instance as the various layers it belongs to are rotated, resulting in its
      * current x,y,z location.
      */
     fun endAnimation() {
@@ -82,40 +82,33 @@ class Layer(
     }
 
     /**
-     * This is used by `Kube.animate` to set the angle of our layer. We do this by using our
-     * `float angle` parameter to set our field `M4 mTransform` to be a transform matrix
-     * designed to move a `GLVertex` of the `GLShape` objects comprising our `Layer`
-     * to the position it should be when our layer is rotated to `angle` radians around its
-     * `int mAxis`.
+     * This is used by [Kube.animate] to set the angle of our layer. We do this by using our
+     * [Float] parameter [angle]  to set our [M4] field [mTransform] to be a transform matrix
+     * designed to move a [GLVertex] of the [GLShape] objects comprising our [Layer] to the
+     * position it should be when our layer is rotated to [angle] radians around its [mAxis].
      *
+     * First we make a local copy of our [Float] parameter [angle] in `var angleVar` and then we
+     * normalize `angleVar` to be between 0.0 and 2.0 pi radians, then we set [Float]
+     * `val sin` to be the sine of `angleVar`, and [Float] `val cos` to be the cosine of
+     * `angleVar`. We fetch a reference to the `mTransform.m` field of our field [mTransform] to
+     * the [Float] array variable `val m` to make the following code easier to read. Then we switch
+     * on the value of our [mAxis] field (our rotation axis):
      *
-     * First we normalize `angle` to be between 0.0 and 2.0 pi radians, then we set
-     * `float sin` to be the sine of `angle`, and `float cos` to be the cosine of
-     * `angle`. We fetch a reference to our fields field `mTransform.m` to the variable
-     * `float[][] m` to make the following code easier to read. Then we switch on the value of
-     * our field `int mAxis` (our rotation axis):
+     *  * `kAxisX` - rotation around the x axis
      *
-     *  *
-     * `kAxisX` - rotation around the x axis
+     *  * `kAxisY` - rotation around the y axis
      *
-     *  *
-     * `kAxisY` - rotation around the y axis
-     *
-     *  *
-     * `kAxisZ` - rotation around the z axis
-     *
+     *  * `kAxisZ` - rotation around the z axis
      *
      * and set the values of the entries in `m` to the appropriate values for the axis in
      * question.
      *
+     * Having calculated the new contents of `mTransform.m`, we call the [GLShape.mTransform]
+     * method of each of the `val shape` [GLShape] objects in our [GLShape] array [mShapes] and
+     * it applies the [mTransform] transform matrix to each of the [GLVertex] vertices used to
+     * describe the [GLShape] (causing the [GLShape] to move the next time it is drawn).
      *
-     * Having calculated the new contents of `mTransform.m`, we call the method
-     * `animateTransform(mTransform` for each of the `GLShape shape` objects in our list
-     * `GLShape[] mShapes` and it applies the transform matrix to each of the `GLVertex`
-     * vertices used to describe the `GLShape` (causing the `GLShape` to move the next
-     * time it is drawn).
-     *
-     * @param angle angle in radians to rotate our `Layer`
+     * @param angle angle in radians to rotate our [Layer]
      */
     fun setAngle(angle: Float) { // normalize the angle
         var angleVar = angle
@@ -189,11 +182,8 @@ class Layer(
     }
 
     /**
-     * Constructor for a `Layer` instance, it saves the parameter `axis` (the x, y, or z
-     * axis we are able to rotate about) in its field `mAxis` and initializes its field
-     * `M4 mTransform` with an identity matrix.
-     *
-     * Parameter: axis which axis do we rotate around? 0 for X, 1 for Y, 2 for Z
+     * Constructor for a `Layer` instance, it initializes its `M4` field `mTransform` with an
+     * identity matrix.
      */
     init {
         /**
