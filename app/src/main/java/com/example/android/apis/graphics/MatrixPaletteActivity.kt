@@ -24,15 +24,15 @@ import androidx.appcompat.app.AppCompatActivity
  */
 class MatrixPaletteActivity : AppCompatActivity() {
     /**
-     * `GLSurfaceView` we create for `MatrixPaletteRenderer` to render to.
+     * [GLSurfaceView] we create for [MatrixPaletteRenderer] to render to.
      */
     private var mGLSurfaceView: GLSurfaceView? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we create a new `GLSurfaceView` and use it to initialize our field
-     * `GLSurfaceView mGLSurfaceView`, set its renderer to a new instance of `MatrixPaletteRenderer`
-     * and finally set our content view to `GLSurfaceView mGLSurfaceView`.
+     * `onCreate`, then we create a new [GLSurfaceView] and use it to initialize our [GLSurfaceView]
+     * field [mGLSurfaceView], set its renderer to a new instance of [MatrixPaletteRenderer]
+     * and finally set our content view to [mGLSurfaceView].
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
      */
@@ -44,25 +44,30 @@ class MatrixPaletteActivity : AppCompatActivity() {
     }
 
     /**
-     * Called after [.onRestoreInstanceState], [.onRestart], or [.onPause], for
-     * your activity to start interacting with the user. First we call through to our super's
-     * implementation of `onResume`, then we call the `onResume` method of our field
-     * `GLSurfaceView mGLSurfaceView`.
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for our activity to start
+     * interacting with the user. First we call through to our super's implementation of `onResume`,
+     * then we call the [GLSurfaceView.onResume] method of our [GLSurfaceView] field [mGLSurfaceView]
      */
-    override fun onResume() { // Ideally a game should implement onResume() and onPause()
-// to take appropriate action when the activity looses focus
+    override fun onResume() {
+        /**
+         * Ideally a game should implement onResume() and onPause()
+         * to take appropriate action when the activity looses focus
+         */
         super.onResume()
         mGLSurfaceView!!.onResume()
     }
 
     /**
      * Called as part of the activity lifecycle when an activity is going into the background, but
-     * has not (yet) been killed. The counterpart to [.onResume]. First we call through to our
-     * super's  implementation of `onPause`, then we call the `onPause` method of our
-     * field `GLSurfaceView mGLSurfaceView`.
+     * has not (yet) been killed. The counterpart to [onResume]. First we call through to our
+     * super's  implementation of `onPause`, then we call the [GLSurfaceView.onPause] method of our
+     * [GLSurfaceView] field [mGLSurfaceView].
      */
-    override fun onPause() { // Ideally a game should implement onResume() and onPause()
-// to take appropriate action when the activity looses focus
+    override fun onPause() {
+        /**
+         * Ideally a game should implement onResume() and onPause()
+         * to take appropriate action when the activity looses focus
+         */
         super.onPause()
         mGLSurfaceView!!.onPause()
     }
