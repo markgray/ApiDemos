@@ -36,86 +36,85 @@ import javax.microedition.khronos.opengles.GL10
  * Draws a textured rotating triangle using OpenGL ES 2.0
  */
 internal class GLES20TriangleRenderer(
+
         /**
-         * `Context` we were constructed with, used to retrieve resources.
+         * [Context] we were constructed with, used to retrieve resources.
          */
-        private val mContext: Context) : GLSurfaceView.Renderer {
+        private val mContext: Context
+
+) : GLSurfaceView.Renderer {
+
     /**
      * Vertex data for the three vertices of our triangle.
      */
     private val mTriangleVerticesData = floatArrayOf( // X, Y, Z, U, V
-            -1.0f, -0.5f, 0f, -0.5f, 0.0f,
-            1.0f, -0.5f, 0f, 1.5f, -0.0f,
-            0.0f, 1.11803399f, 0f, 0.5f, 1.61803399f)
+            -1.0f, -0.5f, 0f,         // X
+            -0.5f, 0.0f, 1.0f,        // Y
+            -0.5f, 0f, 1.5f,          // Z
+            -0.0f, 0.0f, 1.11803399f, // U
+            0f, 0.5f, 1.61803399f     // V
+    )
+
     /**
-     * `FloatBuffer` that we load `mTriangleVerticesData` into then use in a call to
+     * [FloatBuffer] that we load [mTriangleVerticesData] into then use in a call to
      * `glVertexAttribPointer` to define an array of generic vertex attribute data both for
-     * `maPositionHandle` (the location of the attribute variable "aPosition" in our compiled
-     * program object `mProgram`) and `maTextureHandle` (the location of the attribute
-     * variable "aTextureCoord" in our compiled program object `mProgram`)
+     * [maPositionHandle] (the location of the attribute variable "aPosition" in our compiled
+     * program object [mProgram]) and [maTextureHandle] (the location of the attribute
+     * variable "aTextureCoord" in our compiled program object [mProgram])
      */
     private val mTriangleVertices: FloatBuffer
+
     /**
-     * Source code for the GL_VERTEX_SHADER part of our shader program `mProgram` (shader that
+     * Source code for the GL_VERTEX_SHADER part of our shader program [mProgram] (shader that
      * is intended to run on the programmable vertex processor). The statements meanings:
      *
-     *  *
-     * uniform mat4 uMVPMatrix; # A `uniform` is a global openGL Shading Language variable
-     * declared with the "uniform" storage qualifier. These act as parameters that the user of a
-     * shader program can pass to that program. They are stored in a program object. Uniforms
-     * are so named because they do not change from one execution of a shader program to the next
-     * within a particular rendering call. This makes them unlike shader stage inputs and outputs,
-     * which are often different for each invocation of a program stage. A `mat4` is a
-     * 4x4 matrix, and `uMVPMatrix` is the name of the uniform variable which is located
-     * using the method `glGetUniformLocation`, its location assigned to the field
-     * `muMVPMatrixHandle` and changed using the method `glUniformMatrix4fv` in our
-     * `onDrawFrame` method. It is used to feed the Model View Projection matrix
-     * `mMVPMatrix` which rotates the triangle a little bit every frame.
+     *  * uniform mat4 uMVPMatrix; # A `uniform` is a global openGL Shading Language variable
+     *  declared with the "uniform" storage qualifier. These act as parameters that the user of a
+     *  shader program can pass to that program. They are stored in a program object. Uniforms
+     *  are so named because they do not change from one execution of a shader program to the next
+     *  within a particular rendering call. This makes them unlike shader stage inputs and outputs,
+     *  which are often different for each invocation of a program stage. A `mat4` is a
+     *  4x4 matrix, and `uMVPMatrix` is the name of the uniform variable which is located
+     *  using the method `glGetUniformLocation`, its location assigned to the field
+     *  `muMVPMatrixHandle` and changed using the method `glUniformMatrix4fv` in our
+     *  `onDrawFrame` method. It is used to feed the Model View Projection matrix
+     *  `mMVPMatrix` which rotates the triangle a little bit every frame.
      *
-     *  *
-     * attribute vec4 aPosition; # An `attribute` is used to feed data from the vertex
-     * array object, with the index into that object for the vertices being fed it set by the
-     * method `glVertexAttribPointer`, a `vec4` is a 4-component float vector,
-     * `aPosition` is the name of the attribute, and its location is located and assigned
-     * to the field `maPositionHandle` using the method `glGetAttribLocation`. It
-     * is used to feed the (x,y,z) coordinates to the shader program.
+     *  * attribute vec4 aPosition; # An `attribute` is used to feed data from the vertex
+     *  array object, with the index into that object for the vertices being fed it set by the
+     *  method `glVertexAttribPointer`, a `vec4` is a 4-component float vector,
+     *  `aPosition` is the name of the attribute, and its location is located and assigned
+     *  to the field `maPositionHandle` using the method `glGetAttribLocation`. It
+     *  is used to feed the (x,y,z) coordinates to the shader program.
      *
-     *  *
-     * attribute vec2 aTextureCoord; # Like `aPosition` but a 2-component float vector,
-     * with the location assigned to the field `maTextureHandle`. It is used to feed
-     * the (u,v) texture coordinates to the shader program.
+     *  * attribute vec2 aTextureCoord; # Like `aPosition` but a 2-component float vector,
+     *  with the location assigned to the field `maTextureHandle`. It is used to feed
+     *  the (u,v) texture coordinates to the shader program.
      *
-     *  *
-     * varying vec2 vTextureCoord; # A `varying` variable provides an interface between
-     * Vertex and Fragment Shader. Vertex Shaders compute values per vertex and fragment shaders
-     * compute values per fragment. If you define a varying variable in a vertex shader, its
-     * value will be interpolated (perspective-correct) over the primitive being rendered and
-     * you can access the interpolated value in the fragment shader. We use it simply to pass
-     * the value of `aTextureCoord` for this vertex to the fragment shader.
+     *  * varying vec2 vTextureCoord; # A `varying` variable provides an interface between
+     *  Vertex and Fragment Shader. Vertex Shaders compute values per vertex and fragment shaders
+     *  compute values per fragment. If you define a varying variable in a vertex shader, its
+     *  value will be interpolated (perspective-correct) over the primitive being rendered and
+     *  you can access the interpolated value in the fragment shader. We use it simply to pass
+     *  the value of `aTextureCoord` for this vertex to the fragment shader.
      *
-     *  *
-     * void main() { # Each shader's entry point is at its `main` function where we
-     * process any input variables and output the results in its output variables.
+     *  * void main() { # Each shader's entry point is at its `main` function where we
+     *  process any input variables and output the results in its output variables.
      *
-     *  *
-     * gl_Position = uMVPMatrix * aPosition; # `gl_Position` is a built-in variable for
-     * the clip-space output position of the current vertex, and is intended for writing the
-     * homogeneous vertex position. It can be written at any time during vertex shader execution.
-     * This value will be used by primitive assembly, clipping, culling, and other fixed
-     * functionality operations, if present, that operate on primitives after vertex processing
-     * has occurred. Its value is undefined after the vertex processing stage if the vertex
-     * shader executable does not write gl_Position. We calculate it by multiplying the (x,y,z)
-     * coordinates of the vertex fed us in `aPosition` by the Model View Projection matrix
-     * `uMVPMatrix` which rotates the vertex to the current position.
+     *  * gl_Position = uMVPMatrix * aPosition; # `gl_Position` is a built-in variable for
+     *  the clip-space output position of the current vertex, and is intended for writing the
+     *  homogeneous vertex position. It can be written at any time during vertex shader execution.
+     *  This value will be used by primitive assembly, clipping, culling, and other fixed
+     *  functionality operations, if present, that operate on primitives after vertex processing
+     *  has occurred. Its value is undefined after the vertex processing stage if the vertex
+     *  shader executable does not write gl_Position. We calculate it by multiplying the (x,y,z)
+     *  coordinates of the vertex fed us in `aPosition` by the Model View Projection matrix
+     *  `uMVPMatrix` which rotates the vertex to the current position.
      *
-     *  *
-     * vTextureCoord = aTextureCoord; # We merely pass on the (u,v) texture coordinates of this
-     * vertex fed us in `aTextureCoord` to the fragment shader using `vTextureCoord`.
+     *  * vTextureCoord = aTextureCoord; # We merely pass on the (u,v) texture coordinates of this
+     *  vertex fed us in `aTextureCoord` to the fragment shader using `vTextureCoord`.
      *
-     *  *
-     * } # That's all folks!
-     *
-     *
+     *  * } # That's all folks!
      */
     private val mVertexShader = "uniform mat4 uMVPMatrix;\n" +
             "attribute vec4 aPosition;\n" +
