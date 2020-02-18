@@ -24,6 +24,7 @@ import android.opengl.GLUtils
 import android.os.SystemClock
 import com.example.android.apis.R
 import java.io.IOException
+import java.io.InputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.CharBuffer
@@ -136,17 +137,17 @@ class MatrixPaletteRenderer
          * `index*VERTEX_SIZE + VERTEX_PALETTE_INDEX_OFFSET`) and put them into the buffer in
          * order.
          *
-         * @param i  x index of the vertex to set
-         * @param j  y index of the vertex to set
-         * @param x  x coordinate of the vertex
-         * @param y  y coordinate of the vertex
-         * @param z  z coordinate of the vertex
-         * @param u  x coordinate of the texture to use
-         * @param v  y coordinate of the texture to use
-         * @param w0 weight of palette matrix 0
-         * @param w1 weight of palette matrix 1
-         * @param p0 index of palette matrix that w0 refers to (always 0)
-         * @param p1 index of palette matrix that w1 refers to (always 1)
+         * @param i  [Int] x index of the vertex to set
+         * @param j  [Int] y index of the vertex to set
+         * @param x  [Float] x coordinate of the vertex
+         * @param y  [Float] y coordinate of the vertex
+         * @param z  [Float] z coordinate of the vertex
+         * @param u  [Float] x coordinate of the texture to use
+         * @param v  [Float] y coordinate of the texture to use
+         * @param w0 [Float] weight of palette matrix 0
+         * @param w1 [Float] weight of palette matrix 1
+         * @param p0 [Int] index of palette matrix that w0 refers to (always 0)
+         * @param p1 [Int] index of palette matrix that w1 refers to (always 1)
          */
         operator fun set(i: Int, j: Int,
                          x: Float, y: Float, z: Float,
@@ -171,91 +172,106 @@ class MatrixPaletteRenderer
         }
 
         /**
-         * Uploads our two data buffers `ByteBuffer mVertexByteBuffer` (our vertex buffer) and
-         * `CharBuffer mIndexBuffer` (our index buffer) to the proper openGL GPU VBOs. First
-         * we allocate 2 ints for `int[] vboIds`, cast our argument `GL gl` to set
-         * `GL11 gl11`, and use `gl11` to generate 2 buffer object names in `vboIds`.
-         * We initialize our fields `int mVertexBufferObjectId` and `int mElementBufferObjectId`
-         * with these to buffer object names.
+         * Uploads our two data buffers: [ByteBuffer] field [mVertexByteBuffer] (our vertex buffer)
+         * and [CharBuffer] field [mIndexBuffer] (our index buffer) to the proper openGL GPU VBOs.
+         * First we allocate 2 ints for [Int] array `val vboIds`, cast our [GL] argument [gl] to
+         * initialize our variable [GL11] `val gl11`, and use `gl11` to generate 2 buffer object
+         * names in `vboIds`. We initialize our fields [mVertexBufferObjectId] and
+         * [mElementBufferObjectId] with these two buffer object names.
          *
-         *
-         * We bind `mVertexBufferObjectId` to the target GL_ARRAY_BUFFER (The GL_ARRAY_BUFFER
+         * We bind [mVertexBufferObjectId] to the target GL_ARRAY_BUFFER (The GL_ARRAY_BUFFER
          * target for buffer objects represents the intent to use that buffer object for vertex
-         * attribute data), then we rewind `mVertexByteBuffer` and then we create and initialize
-         * the GL_ARRAY_BUFFER buffer object's data store using `mVertexByteBuffer`, giving
+         * attribute data), then we rewind [mVertexByteBuffer] and then we create and initialize
+         * the GL_ARRAY_BUFFER buffer object's data store using [mVertexByteBuffer], giving
          * openGL the hint GL_STATIC_DRAW (The user will be writing data to the buffer, but the user
-         * will not read it, and The user will set the data once).
+         * will not read it, and the user will set the data only once).
          *
-         *
-         * We bind `mElementBufferObjectId` to the target GL_ELEMENT_ARRAY_BUFFER (the
-         * GL_ELEMENT_ARRAY_BUFFER contains the indices of each element in the GL_ARRAY_BUFFER buffer),
-         * then we rewind `mIndexBuffer` and create and initialize the GL_ELEMENT_ARRAY_BUFFER
-         * buffer object's data store using `mIndexBuffer`, giving openGL the hint GL_STATIC_DRAW
+         * We bind [mElementBufferObjectId] to the target GL_ELEMENT_ARRAY_BUFFER (the
+         * GL_ELEMENT_ARRAY_BUFFER contains the indices of each element in the GL_ARRAY_BUFFER
+         * buffer), then we rewind [mIndexBuffer] and create and initialize the GL_ELEMENT_ARRAY_BUFFER
+         * buffer object's data store using [mIndexBuffer], giving openGL the hint GL_STATIC_DRAW
          * (as above).
          *
+         * In order to save memory we now null out [mVertexBuffer], [mVertexByteBuffer], and
+         * [mIndexBuffer] so their storage can be garbage collected.
          *
-         * In order to save memory we now null out `mVertexBuffer`, `mVertexByteBuffer`,
-         * and `mIndexBuffer` so their storage can be garbage collected.
-         *
-         * @param gl the GL interface.
+         * @param gl the [GL] interface.
          */
-        fun createBufferObjects(gl: GL) { // Generate a the vertex and element buffer IDs
+        fun createBufferObjects(gl: GL) {
+            /**
+             * Generate a the vertex and element buffer IDs
+             */
             val vboIds = IntArray(2)
             val gl11 = gl as GL11
             gl11.glGenBuffers(2, vboIds, 0)
             mVertexBufferObjectId = vboIds[0]
             mElementBufferObjectId = vboIds[1]
-            // Upload the vertex data
+
+            /**
+             * Upload the vertex data
+             */
             gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, mVertexBufferObjectId)
             mVertexByteBuffer!!.position(0)
-            gl11.glBufferData(GL11.GL_ARRAY_BUFFER, mVertexByteBuffer!!.capacity(), mVertexByteBuffer, GL11.GL_STATIC_DRAW)
+            gl11.glBufferData(
+                    GL11.GL_ARRAY_BUFFER,
+                    mVertexByteBuffer!!.capacity(),
+                    mVertexByteBuffer,
+                    GL11.GL_STATIC_DRAW
+            )
             gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, mElementBufferObjectId)
             mIndexBuffer!!.position(0)
-            gl11.glBufferData(GL11.GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer!!.capacity() * CHAR_SIZE, mIndexBuffer, GL11.GL_STATIC_DRAW)
-            // We don't need the in-memory data any more
+            gl11.glBufferData(
+                    GL11.GL_ELEMENT_ARRAY_BUFFER,
+                    mIndexBuffer!!.capacity() * CHAR_SIZE,
+                    mIndexBuffer,
+                    GL11.GL_STATIC_DRAW
+            )
+
+            /**
+             * We don't need the in-memory data any more
+             */
             mVertexBuffer = null
             mVertexByteBuffer = null
             mIndexBuffer = null
         }
 
         /**
-         * Called from `onDrawFrame` to issue the commands for the openGL GPU to draw our VBOs
-         * to the `GLSurfaceView`. First we cast our parameter `GL gl` to `GL11 gl11`
-         * and `GL11Ext gl11Ext`. We enable the client side capability GL_VERTEX_ARRAY (the vertex
-         * array is enabled for writing and used during rendering), and bind our buffer object
-         * `mVertexBufferObjectId` to the target GL_ARRAY_BUFFER (registers our intent to use
-         * that buffer object for vertex attribute data). We next specify the location and data format
-         * of our array of vertex coordinates to use when rendering to have 3 coordinates per vertex,
-         * to be in GL_FLOAT data type, have a stride of VERTEX_SIZE (32), and initial pointer of 0.
-         * We then specify the location and data format of an array of texture coordinates to use when
-         * rendering to have 2 coordinates per array element, to be in GL_FLOAT data type, have a stride
-         * of VERTEX_SIZE (32), and have an initial pointer of VERTEX_TEXTURE_BUFFER_INDEX_OFFSET*FLOAT_SIZE
-         * (3*4=12).
-         *
+         * Called from [onDrawFrame] to issue the commands for the openGL GPU to draw our VBOs
+         * to the [GLSurfaceView]. First we cast our [GL] parameter [gl] to initialize [GL11]
+         * variable `val gl11` and cast our [GL] parameter [gl] to initialize [GL11Ext] variable
+         * `val gl11Ext`. We enable the client side capability GL_VERTEX_ARRAY (the vertex array
+         * is enabled for writing and used during rendering), and bind our buffer object
+         * [mVertexBufferObjectId] to the target GL_ARRAY_BUFFER (registers our intent to use
+         * that buffer object for vertex attribute data). We next specify the location and data
+         * format of our array of vertex coordinates to use when rendering to have 3 coordinates
+         * per vertex, to be in GL_FLOAT data type, have a stride of VERTEX_SIZE (32), and initial
+         * pointer of 0. We then specify the location and data format of an array of texture
+         * coordinates to use when rendering to have 2 coordinates per array element, to be in
+         * GL_FLOAT data type, have a stride of VERTEX_SIZE (32), and have an initial pointer of
+         * VERTEX_TEXTURE_BUFFER_INDEX_OFFSET*FLOAT_SIZE (ie. 3*4=12 in our case).
          *
          * We enable the client side capability GL_MATRIX_INDEX_ARRAY_OES (the palette matrix index
          * array is enabled for writing and used for rendering), and the client side capability
          * GL_WEIGHT_ARRAY_OES (the palette matrix weight array is enabled for writing and used for
          * rendering). Then we specify the palette matrix weight array pointer to have 2 entries, of
          * type GL_FLOAT, with a stride of VERTEX_SIZE (32), and an initial pointer of the quantity
-         * VERTEX_WEIGHT_BUFFER_INDEX_OFFSET*FLOAT_SIZE (5*4=20). We specify the palette matrix index
-         * pointer to have 2 entries, of type GL_UNSIGNED_BYTE, with a stride of VERTEX_SIZE (32),
-         * and an initial pointer of VERTEX_PALETTE_INDEX_OFFSET (28). These two are used to describe
-         * the weights and matrix indices used to blend corresponding matrices for a given vertex.
+         * VERTEX_WEIGHT_BUFFER_INDEX_OFFSET*FLOAT_SIZE (ie. 5*4=20 in our case). We specify the
+         * palette matrix index pointer to have 2 entries, of type GL_UNSIGNED_BYTE, with a stride
+         * of VERTEX_SIZE (32 in our case), and an initial pointer of VERTEX_PALETTE_INDEX_OFFSET
+         * (28 in our case). These two are used to describe the weights and matrix indices used to
+         * blend corresponding matrices for a given vertex.
          *
-         *
-         * Now we bind our buffer name `mElementBufferObjectId` to the GL_ELEMENT_ARRAY_BUFFER
+         * Now we bind our buffer name [mElementBufferObjectId] to the GL_ELEMENT_ARRAY_BUFFER
          * (the GL_ELEMENT_ARRAY_BUFFER contains the indices of each element in the GL_ARRAY_BUFFER
-         * buffer), and we call the method `glDrawElements` to render `mIndexCount`
-         * GL_TRIANGLES primitives, with values of our indices being of the type GL_UNSIGNED_SHORT,
-         * and an initial pointer of 0.
-         *
+         * buffer), and we call the method `glDrawElements` to render [mIndexCount] GL_TRIANGLES
+         * primitives, with values of our indices being of the type GL_UNSIGNED_SHORT, and an
+         * initial pointer of 0.
          *
          * Having done our drawing, we now disable the client side capability GL_VERTEX_ARRAY,
-         * GL_MATRIX_INDEX_ARRAY_OES, and GL_WEIGHT_ARRAY_OES. Then reset our binding of GL_ARRAY_BUFFER
-         * and GL_ELEMENT_ARRAY_BUFFER to 0.
+         * GL_MATRIX_INDEX_ARRAY_OES, and GL_WEIGHT_ARRAY_OES. Then reset our binding of
+         * GL_ARRAY_BUFFER and GL_ELEMENT_ARRAY_BUFFER to 0.
          *
-         * @param gl the GL interface.
+         * @param gl the [GL] interface.
          */
         fun draw(gl: GL10) {
             val gl11 = gl as GL11
@@ -278,7 +294,7 @@ class MatrixPaletteRenderer
         }
 
         companion object {
-            // Size of vertex data elements in bytes:
+
             /**
              * Number of bytes in a `float` value
              */
@@ -287,11 +303,16 @@ class MatrixPaletteRenderer
              * Number of bytes in a `char` value
              */
             const val CHAR_SIZE = 2
-            // Vertex structure:
-// float x, y, z;
-// float u, v;
-// float weight0, weight1;
-// byte palette0, palette1, pad0, pad1;
+
+            /**
+             * Vertex structure:
+             *
+             *  * [Float] x, y, z;
+             *  * [Float] u, v;
+             *  * [Float] weight0, weight1;
+             *  * [Byte] palette0, palette1, pad0, pad1;
+             */
+
             /**
              * Total number of bytes for a complete vertex entry
              */
@@ -311,30 +332,27 @@ class MatrixPaletteRenderer
         }
 
         /**
-         * Our constructor. First we check that our arguments are within the bounds dictated by the
-         * use of `char` size index entries, and throw an IllegalArgumentException if they are
-         * too large or negative. Then we initialize our field `mW` with our argument `w`
-         * (the width in vertices of our `Grid`) and `mH` with our argument `h`
-         * (the height in vertices of our `Grid`). We calculate the total number of vertices
-         * required `int size` to be `w*h`, and initialize `ByteBuffer mVertexByteBuffer`
+         * The init block of our constructor. First we check that our arguments are within the bounds
+         * dictated by the use of `Char` size index entries, and throw an IllegalArgumentException if
+         * they are too large or negative. Then we initialize our field `mW` with our argument `w`
+         * (the width in vertices of our `Grid`) and `mH` with our argument `h` (the height in
+         * vertices of our `Grid`). We calculate the total number of vertices required to initialize
+         * `Int` variable `val size` to be `w*h`, and initialize `ByteBuffer` field `mVertexByteBuffer`
          * with a `ByteBuffer` on the native heap that is large enough to hold that many vertices
-         * and is in native byte order. We initialize `FloatBuffer mVertexBuffer` to be a
-         * `FloatBuffer` view of `ByteBuffer mVertexByteBuffer`.
-         *
+         * and is in native byte order. We initialize `FloatBuffer` field `mVertexBuffer` to be a
+         * `FloatBuffer` view of `mVertexByteBuffer`.
          *
          * Next we calculate the number of index entries `mIndexCount` required to divide our
          * `Grid` into triangles for `glDrawElements`. This is the quantity 6*(mW-1)(mH-1).
          * This calculation is based on the fact that the number of quadrilaterals in each direction
          * (`quadW` and `quadW`) is one less than the number of vertices in that direction,
          * the total number of quadrilaterals is `quadW*quadH`, there are 2 triangles needed for
-         * each quadrilateral, and 3 vertices for each triangle hence 6 indices required for each of
-         * the quadrilaterals.
-         *
+         * each quadrilateral, and 3 vertices for each triangle hence 6 indices required for each
+         * of the quadrilaterals.
          *
          * We use this count of required indices to allocate enough bytes on the native heap in native
-         * byte order, which we use to initialize our field `CharBuffer mIndexBuffer` by viewing
+         * byte order, which we use to initialize our `CharBuffer` field `mIndexBuffer` by viewing
          * that `ByteBuffer` as a `CharBuffer`.
-         *
          *
          * Our next step is to initialize the triangle list mesh that `mIndexBuffer` needs to
          * divide our `Grid` into triangles. To do this we loop from the "bottom" quadrilateral
@@ -362,7 +380,9 @@ class MatrixPaletteRenderer
             mW = w
             mH = h
             val size = w * h
-            mVertexByteBuffer = ByteBuffer.allocateDirect(VERTEX_SIZE * size).order(ByteOrder.nativeOrder())
+            mVertexByteBuffer = ByteBuffer.allocateDirect(
+                    VERTEX_SIZE * size
+            ).order(ByteOrder.nativeOrder())
             mVertexBuffer = mVertexByteBuffer!!.asFloatBuffer()
             val quadW = mW - 1
             val quadH = mH - 1
@@ -413,7 +433,6 @@ class MatrixPaletteRenderer
      * whenever the EGL context is lost. The EGL context will typically be lost when the Android
      * device awakes after going to sleep.
      *
-     *
      * First we disable the server-side GL capability GL_DITHER (color components or indices will not
      * be dithered before they are written to the color buffer). We specify the implementation-specific
      * hint GL_PERSPECTIVE_CORRECTION_HINT to be GL_FASTEST (Indicates the quality of color, texture
@@ -423,15 +442,14 @@ class MatrixPaletteRenderer
      * typically assigning different colors to each resulting pixel fragment). We enable the server
      * side GL capability GL_DEPTH_TEST (do depth comparisons and update the depth buffer) and the
      * server-side GL capability GL_TEXTURE_2D (if no fragment shader is active, two-dimensional
-     * texturing is performed). Next we allocate `int[] textures` and ask GL to generate 1
-     * texture name in it, and we set our field `mTextureID` to that texture name, then bind
-     * that named texture to the texturing target GL_TEXTURE_2D (while a texture is bound, GL
-     * operations on the target to which it is bound affect the bound texture, and queries of the
+     * texturing is performed). Next we allocate [Int] array `val textures` to hold one int and ask
+     * GL to generate one texture name in it, and we set our field [mTextureID] to that texture name,
+     * then bind that named texture to the texturing target GL_TEXTURE_2D (while a texture is bound,
+     * GL operations on the target to which it is bound affect the bound texture, and queries of the
      * target to which it is bound return state from the bound texture. If texture mapping is active
      * on the target to which a texture is bound, the bound texture is used. In effect, the texture
      * targets become aliases for the textures currently bound to them, and the texture name zero
      * refers to the default textures that were bound to them at initialization).
-     *
      *
      * Next we set texture parameter GL_TEXTURE_MIN_FILTER for GL_TEXTURE_2D to be GL_NEAREST (The
      * texture minifying function is used whenever the pixel being textured maps to an area greater
@@ -442,45 +460,43 @@ class MatrixPaletteRenderer
      * element. GL_LINEAR Returns the weighted average of the four texture elements that are closest
      * to the center of the pixel being textured).
      *
-     *
      * We set texture parameter GL_TEXTURE_WRAP_S for GL_TEXTURE_2D to be GL_CLAMP_TO_EDGE (Sets the
-     * wrap parameter for texture coordinate s to GL_CLAMP_TO_EDGE which causes s coordinates to be
-     * clamped to the range [1/2N, 1-1/2N] where N is the size of the texture in the direction of
+     * wrap parameter for texture coordinate *s* to GL_CLAMP_TO_EDGE which causes *s* coordinates to
+     * be clamped to the range [1/2N, 1-1/2N] where N is the size of the texture in the direction of
      * clamping), and we set texture parameter GL_TEXTURE_WRAP_T for GL_TEXTURE_2D to be GL_CLAMP_TO_EDGE
      * as well. This has textures stop at the last pixel when you fall off the edge in either direction.
-     *
      *
      * We next set texture environment parameter GL_TEXTURE_ENV_MODE of GL_TEXTURE_ENV to GL_REPLACE
      * (causes the texture to replace whatever pixels were present).
      *
-     *
-     * We open our raw resource file robot.png for reading by `InputStream is` and decode the
-     * png into `Bitmap bitmap` (with the code wrapped in an appropriate try block). We then
-     * specify `bitmap` as a two-dimensional texture image for GL_TEXTURE_2D, and recycle
+     * We open our raw resource file robot.png for reading by [InputStream] `val inputStream` and
+     * decode the png into [Bitmap] `val bitmap` (with the code wrapped in an appropriate try block).
+     * We then specify `bitmap` as a two-dimensional texture image for GL_TEXTURE_2D, and recycle
      * `bitmap`.
      *
+     * Finally we initialize our [Grid] field [mGrid] with the [Grid] generated by our method
+     * [generateWeightedGrid].
      *
-     * Finally we initialize our field `Grid mGrid` with the `Grid` generated by our
-     * method `generateWeightedGrid`.
-     *
-     * @param gl     the GL interface.
-     * @param config the EGLConfig of the created surface.
+     * @param gl     the [GL] interface.
+     * @param config the [EGLConfig] of the created surface.
      */
-    override fun onSurfaceCreated(gl: GL10, config: EGLConfig) { /*
+    override fun onSurfaceCreated(gl: GL10, config: EGLConfig) {
+        /**
          * By default, OpenGL enables features that improve quality
          * but reduce performance. One might want to tweak that
          * especially on software renderer.
          */
         gl.glDisable(GL10.GL_DITHER)
-        /*
+        /**
          * Some one-time OpenGL initialization can be made here
          * probably based on features of this particular context
-         */gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST)
+         */
+        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST)
         gl.glClearColor(.5f, .5f, .5f, 1f)
         gl.glShadeModel(GL10.GL_SMOOTH)
         gl.glEnable(GL10.GL_DEPTH_TEST)
         gl.glEnable(GL10.GL_TEXTURE_2D)
-        /*
+        /**
          * Create our texture. This has to be done each time the
          * surface is created.
          */
@@ -493,13 +509,13 @@ class MatrixPaletteRenderer
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE.toFloat())
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE.toFloat())
         gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE.toFloat())
-        val `is` = mContext.resources.openRawResource(R.raw.robot)
+        val inputStream: InputStream = mContext.resources.openRawResource(R.raw.robot)
         val bitmap: Bitmap
         bitmap = try {
-            BitmapFactory.decodeStream(`is`)
+            BitmapFactory.decodeStream(inputStream)
         } finally {
             try {
-                `is`.close()
+                inputStream.close()
             } catch (e: IOException) { // Ignore.
             }
         }
@@ -515,32 +531,29 @@ class MatrixPaletteRenderer
      * the color buffer and depth buffer, enable the server-side GL capability GL_DEPTH_TEST, and
      * the server-side GL capability GL_CULL_FACE.
      *
-     *
      * Now we are ready to draw, so we set the matrix mode to GL_MODELVIEW and load it with the
      * identity matrix, and then we define a viewing transformation with the position of the eye
      * point at (0,0,-5), the position of the reference point at (0,0,0), and the direction of the
      * up vector (0,1,0).
      *
-     *
      * We enable the client-side capability GL_VERTEX_ARRAY (the vertex array is enabled for writing
      * and used during rendering), and the client-side capability GL_TEXTURE_COORD_ARRAY (the texture
      * coordinate array is enabled for writing and used during rendering).
      *
-     *
-     * We select active texture unit GL_TEXTURE0, and bind `mTextureID` to the texturing target
+     * We select active texture unit GL_TEXTURE0, and bind [mTextureID] to the texturing target
      * GL_TEXTURE_2D. We set the texture parameter GL_TEXTURE_WRAP_S of GL_TEXTURE_2D to GL_REPEAT
-     * (Sets the wrap parameter for texture coordinate s to ignore the integer part of the s coordinate
-     * and use only the fractional part, thereby creating a repeating pattern), and GL_TEXTURE_WRAP_T
-     * to GL_REPEAT as well.
+     * (Sets the wrap parameter for texture coordinate *s* to ignore the integer part of the *s*
+     * coordinate and use only the fractional part, thereby creating a repeating pattern), and
+     * GL_TEXTURE_WRAP_T to GL_REPEAT as well.
      *
-     *
-     * We set `long time` to the number of milliseconds since boot modulo 4000, set the variable
-     * `double animationUnit` `time/4000` in order to calculate a value for the variable
-     * `float unitAngle` which we multiply by 135.0 to get the current value for the variable
-     * `float angle` which we will later use to build and apply a rotation matrix to the
-     * GL_MATRIX_PALETTE_OES matrix (vertices will transformed by the matrix before they are rendered,
-     * a "skinning effect")
-     *
+     * We set [Long] variable `val time` to the number of milliseconds since boot modulo 4000, set
+     * the [Double] variable `val animationUnit` to `time/4000` in order to calculate a value for
+     * the [Float] variable `val unitAngle` which we multiply by 135.0 to get the current value for
+     * the [Float] variable `val angle` which we will later use to build and apply a rotation matrix
+     * to the GL_MATRIX_PALETTE_OES matrix (vertices will transformed by the matrix before they are
+     * rendered, a "skinning effect". Skinning allows organic shapes (such as humans) to deform nicely
+     * around joints as they bend. Without skinning, joints have a rigid appearance that is more
+     * similar to a mechanical joint like you would see in a robot.)
      *
      * We enable the server side capability GL_MATRIX_PALETTE_OES (When this extension is utilized,
      * the enabled units transform each vertex by the modelview matrices specified by the vertices'
@@ -551,7 +564,6 @@ class MatrixPaletteRenderer
      * current matrix palette to 0, and load the current palette matrix from the modelview matrix.
      * We then multiply the matrix by a rotation matrix of `angle` around the z axis.
      *
-     *
      * Next we set the current matrix palette to 1, and load the current palette matrix from the
      * modelview matrix. Each vertex contains a weight for the two palette matrices, with the vertices
      * at the bottom of the column giving less weight to palette 0 (the rotated model view) with the
@@ -559,32 +571,37 @@ class MatrixPaletteRenderer
      * and palette 0 (the rotated matrix) has more influence at the top causing the bottom to be
      * glued in place and the top to sway with the `angle` of rotation.
      *
-     *
-     * Now that we have set up our texture and palette configuration we call `mGrid.draw` to
-     * draw the vertices of the `Grid mGrid`. And finally we disable the server-side capability
+     * Now that we have set up our texture and palette configuration we call the [Grid.draw] method
+     * of [mGrid] to draw the vertices of [mGrid]. And finally we disable the server-side capability
      * GL_MATRIX_PALETTE_OES.
      *
-     * @param gl the GL interface.
+     * @param gl the [GL10] interface.
      */
-    override fun onDrawFrame(gl: GL10) { /*
+    override fun onDrawFrame(gl: GL10) {
+        /**
          * By default, OpenGL enables features that improve quality
          * but reduce performance. One might want to tweak that
          * especially on software renderer.
          */
         gl.glDisable(GL10.GL_DITHER)
         gl.glTexEnvx(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE)
-        /*
+        /**
          * Usually, the first thing one might want to do is to clear
          * the screen. The most efficient way of doing this is to use
          * glClear().
          */gl.glClear(GL10.GL_COLOR_BUFFER_BIT or GL10.GL_DEPTH_BUFFER_BIT)
         gl.glEnable(GL10.GL_DEPTH_TEST)
         gl.glEnable(GL10.GL_CULL_FACE)
-        /*
+        /**
          * Now we're ready to draw some 3D objects
-         */gl.glMatrixMode(GL10.GL_MODELVIEW)
+         */
+        gl.glMatrixMode(GL10.GL_MODELVIEW)
         gl.glLoadIdentity()
-        GLU.gluLookAt(gl, 0f, 0f, -5f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
+        GLU.gluLookAt(gl,
+                0f, 0f, -5f,
+                0f, 0f, 0f,
+                0f, 1.0f, 0.0f
+        )
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY)
         gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY)
         gl.glActiveTexture(GL10.GL_TEXTURE0)
@@ -592,17 +609,23 @@ class MatrixPaletteRenderer
         gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT)
         gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT)
         val time = SystemClock.uptimeMillis() % 4000L
-        // Rock back and forth
+        /**
+         * Rock back and forth
+         */
         val animationUnit = time.toDouble() / 4000
         val unitAngle = cos(animationUnit * 2 * Math.PI).toFloat()
         val angle = unitAngle * 135f
         gl.glEnable(GL11Ext.GL_MATRIX_PALETTE_OES)
         gl.glMatrixMode(GL11Ext.GL_MATRIX_PALETTE_OES)
         val gl11Ext = gl as GL11Ext
-        // matrix 0: no transformation
+        /**
+         * matrix 0: no transformation
+         */
         gl11Ext.glCurrentPaletteMatrixOES(0)
         gl11Ext.glLoadPaletteFromModelViewMatrixOES()
-        // matrix 1: rotate by "angle" NOTE: This comment is wrong, matrix 0 is rotated!
+        /**
+         * matrix 1: rotate by "angle" NOTE: This comment is wrong(?), matrix 0 is rotated!
+         */
         gl.glRotatef(angle, 0f, 0f, 1.0f)
         gl11Ext.glCurrentPaletteMatrixOES(1)
         gl11Ext.glLoadPaletteFromModelViewMatrixOES()
@@ -613,24 +636,25 @@ class MatrixPaletteRenderer
     /**
      * Called when the surface changed size. Called after the surface is created and whenever the
      * OpenGL ES surface size changes. First we set the viewport to have the lower left corner at
-     * (0,0), a width of `width` and a height of `height`. Then we calculate the aspect
-     * ratio `ratio` w/h, set the matrix mode to GL_PROJECTION (subsequent matrix operations
-     * will be applied to the projection matrix stack), load it with the identity matrix, and apply
-     * a perspective projection to that with the left and right vertical clipping planes at
-     * `-ratio`, and `+ratio`, the bottom clipping plane at -1, the top clipping plane
-     * at +1, the near clipping plane at 3 and the far clipping plane at 7.
+     * (0,0), a width of [w] and a height of [h]. Then we calculate the aspect ratio `val ratio`
+     * to be `w/h`, set the matrix mode to GL_PROJECTION (subsequent matrix operations will be
+     * applied to the projection matrix stack), load it with the identity matrix, and apply a
+     * perspective projection to that with the left and right vertical clipping planes at `-ratio`,
+     * and `+ratio`, the bottom clipping plane at -1, the top clipping plane at +1, the near
+     * clipping plane at 3 and the far clipping plane at 7.
      *
-     * @param gl the GL interface.
+     * @param gl the [GL10] interface.
      * @param w  new width of the surface
      * @param h  new height of the surface
      */
     override fun onSurfaceChanged(gl: GL10, w: Int, h: Int) {
         gl.glViewport(0, 0, w, h)
-        /*
-        * Set our projection matrix. This doesn't have to be done
-        * each time we draw, but usually a new projection needs to
-        * be set when the viewport is resized.
-        */
+
+        /**
+         * Set our projection matrix. This doesn't have to be done
+         * each time we draw, but usually a new projection needs to
+         * be set when the viewport is resized.
+         */
         val ratio = w.toFloat() / h
         gl.glMatrixMode(GL10.GL_PROJECTION)
         gl.glLoadIdentity()
@@ -638,51 +662,47 @@ class MatrixPaletteRenderer
     }
 
     /**
-     * Creates and configures a `Grid` instance of our swaying column. First we define the
-     * constants used to size our `Grid`: `uSteps` (number of "steps" in the u texture
-     * coordinate space) and `vSteps` (number of "steps" in the v texture coordinate space).
-     * Then we initialize the `radius` of our column to be 0.25 and the `height` to be 2.
+     * Creates and configures a [Grid] instance of our swaying column. First we define the
+     * constants used to size our [Grid]: `val uSteps` (number of "steps" in the *u* texture
+     * coordinate space) and `val vSteps` (number of "steps" in the *v* texture coordinate space).
+     * Then we initialize the `val radius` of our column to be 0.25 and the `val height` to be 2.
      *
-     *
-     * Next we initialize `Grid grid` to be a `Grid` allocated and indexed for the texture
+     * Next we initialize [Grid] `val grid` to be a [Grid] allocated and indexed for the texture
      * space size required for our `uSteps` by `vSteps` column.
      *
-     *
-     * Now we loop with the index `j` covering all of the v coordinates, and the inner loop with
-     * the index `i` covering all of the u coordinates. We calculate the current `angle`
-     * of the column we are to use to locate our vertex by dividing 2*pi by `uSteps` and
-     * multiplying this by the index `i` (the inner loop goes around the column). Then we
-     * calculate the `x` coordinate of the vertex to be the `radius` times the cosine of
+     * Now we loop with the index `j` covering all of the *v* coordinates, and the inner loop with
+     * the index `i` covering all of the *u* coordinates. We calculate the current `val angle`
+     * around the circumference column we are to use to locate our vertex by dividing `2*PI` by
+     * `uSteps` and multiplying this by the index `i` (the inner loop goes around the column). Then
+     * we calculate the `x` coordinate of the vertex to be the `radius` times the cosine of
      * `angle`, the `y` coordinate of the vertex to be the `height` of the column
      * times the index `j` divided by the quantity `vSteps` minus 0.5 (the outer loop
      * goes from the bottom of the tower to the top). We calculate the `z` coordinate of the
-     * vertex to be the `radius` times the sine of `angle`. The texture coordinate `u`
+     * vertex to be the `radius` times the sine of `angle`. The texture coordinate `val u`
      * is -4.0 time the `i` index divided by `uSteps` (the 2 dimensional texture wraps
-     * around the tower), and the texture coordinate `v` is -4.0 time the `j` index
+     * around the tower), and the texture coordinate `val v` is -4.0 time the `j` index
      * divided by `vSteps` (the 2 dimensional texture runs up and down the tower).
      *
-     *
-     * Now comes the fun part where we calculate the weights of our two palette matrices. `w0`
+     * Now comes the fun part where we calculate the weights of our two palette matrices. `val w0`
      * (the weight of palette matrix 0) is assigned the value of the index `j` divided by the
      * number of `vSteps` (it runs from a weight of 0 at the bottom of the tower (no effect),
-     * to 1.0 at the top of the tower (maximum effect), and `w1` is just `1-w0` (it runs
+     * to 1.0 at the top of the tower (maximum effect), and `val w1` is just `1-w0` (it runs
      * from a weight of 1.0 at the bottom of the tower (maximum effect) to a weight of 0 at the top
      * of the tower (no effect). The last statement of our double loop calls the method `grid.set`
      * to store in the space reserved for the index `(i,j)` the location of the vertex (x,y,z),
      * its texture coordinate assignment (u,v), the weights of the two palette matrices `w0`
-     * and `w1` and the indices of these matrices 0 and 1.
+     * and `w1` and the indices of these matrices 0 and 1 (in kotlin this is done using matrix
+     * notation -- cute hey?).
      *
-     *
-     * When our loops have finished building our tower `Grid grid` we call the method
-     * `grid.createBufferObjects` to load the information contained in its `mVertexBuffer`
-     * and `mIndexBuffer` into the openGL buffer object data store.
-     *
+     * When our loops have finished building our tower [Grid] `grid` we call the
+     * [Grid.createBufferObjects] method of `grid.` to load the information contained in its
+     * [Grid.mVertexBuffer] and [Grid.mIndexBuffer] into the openGL buffer object data store.
      *
      * And finally we return `grid` to our caller (the `onSurfaceCreated` method, which
-     * stores it in `Grid mGrid`).
+     * stores it in [Grid] field [mGrid]).
      *
-     * @param gl the GL interface.
-     * @return A `Grid` ready to be drawn, with (x,y,z) vertex coordinates, (u,v) texture
+     * @param gl the [GL] interface.
+     * @return A [Grid] ready to be drawn, with (x,y,z) vertex coordinates, (u,v) texture
      * coordinates, weights and indices of the two palette matrices used all loaded into the openGL
      * vertex buffer.
      */
