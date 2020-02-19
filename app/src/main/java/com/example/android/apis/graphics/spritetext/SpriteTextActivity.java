@@ -16,11 +16,12 @@
 
 package com.example.android.apis.graphics.spritetext;
 
-import javax.microedition.khronos.opengles.GL;
-
-import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import javax.microedition.khronos.opengles.GL;
 
 /**
  * Shows how to add text to a GLSurfaceView using OpenGL labels. OpenGL labels are implemented by
@@ -32,7 +33,7 @@ import android.os.Bundle;
  * to recreate the whole texture if any label text changes. Characters are too small on lollipop,
  * okay on froyo.
  */
-public class SpriteTextActivity extends Activity {
+public class SpriteTextActivity extends AppCompatActivity {
     /**
      * Our {@code GLSurfaceView}, created in our {@code onCreate} method.
      */
