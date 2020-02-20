@@ -30,26 +30,22 @@ import kotlin.math.ceil
 /**
  * An OpenGL text label maker.
  *
- *
- * OpenGL labels are implemented by creating a Bitmap, drawing all the labels
- * into the Bitmap, converting the Bitmap into an Alpha texture, and drawing
- * portions of the texture using glDrawTexiOES.
- *
+ * OpenGL labels are implemented by creating a [Bitmap], drawing all the labels
+ * into the [Bitmap], converting the [Bitmap] into an Alpha texture, and drawing
+ * portions of the texture using `glDrawTexiOES`.
  *
  * The benefits of this approach are that the labels are drawn using the high
  * quality anti-aliased font rasterizer, full character set support, and all the
  * text labels are stored on a single texture, which makes it faster to use.
  *
- *
  * The drawbacks are that you can only have as many labels as will fit onto one
- * texture, and you have to recreate the whole texture if any label text
- * changes.
+ * texture, and you have to recreate the whole texture if any label text changes.
  */
 class LabelMaker(
         /**
-         * true if we want a full color backing store (4444), otherwise we generate a grey L8 backing
-         * store. Set to the `boolean fullColor` parameter of our constructor, always true in our
-         * case.
+         * *true* if we want a full color backing store (4444), otherwise we generate a grey L8
+         * backing store. Set to the [Boolean] `fullColor` parameter of our constructor, always
+         * *true* in our case.
          */
         private val mFullColor: Boolean,
         /**
@@ -64,16 +60,16 @@ class LabelMaker(
         private val mStrikeHeight: Int
 ) {
     /**
-     * `Bitmap` we create our labels in, and when done creating the labels we upload it as
+     * [Bitmap] we create our labels in, and when done creating the labels we upload it as
      * GL_TEXTURE_2D for drawing the labels (and then recycle it).
      */
     private var mBitmap: Bitmap? = null
     /**
-     * `Canvas` we use to draw into `Bitmap mBitmap`.
+     * [Canvas] we use to draw into [Bitmap] field [mBitmap].
      */
     private var mCanvas: Canvas? = null
     /**
-     * We create this as a black paint, with a style of FILL but never actually use it.
+     * We create this as a black [Paint], alpha 0, with a style of FILL but never actually use it.
      */
     private val mClearPaint: Paint = Paint()
     /**
@@ -81,12 +77,16 @@ class LabelMaker(
      */
     private var mTextureID = 0
 
+    /**
+     * Convert texel to U
+     */
     @Suppress("unused")
-    private val mTexelWidth // Convert texel to U
-            : Float = (1.0 / mStrikeWidth).toFloat()
+    private val mTexelWidth: Float = (1.0 / mStrikeWidth).toFloat()
+    /**
+     * Convert texel to V
+     */
     @Suppress("unused")
-    private val mTexelHeight // Convert texel to V
-            : Float = (1.0 / mStrikeHeight).toFloat()
+    private val mTexelHeight: Float = (1.0 / mStrikeHeight).toFloat()
 
     /**
      * `u` (x) coordinate to use when adding next label to our texture.
@@ -101,27 +101,27 @@ class LabelMaker(
      */
     private var mLineHeight = 0
     /**
-     * List of the `Label` objects in our texture. A `Label` instance contains information
+     * List of the [Label] objects in our texture. A [Label] instance contains information
      * about the location and size of the label's text in the texture, as well as the cropping
-     * parameters to use to draw only that `Label`.
+     * parameters to use to draw only that [Label].
      */
     private val mLabels = ArrayList<Label>()
     /**
-     * State that our `LabelMaker` instance is in, one of the above constants. It is used by
-     * our method `checkState` to make sure that a state change is "legal", and also by our
-     * method `shutdown` to make sure that our texture is deleted when our surface has been
-     * destroyed (a texture will only have been allocated if `mState>STATE_NEW`).
+     * State that our [LabelMaker] instance is in, one of [STATE_NEW], [STATE_INITIALIZED],
+     * [STATE_ADDING], or [STATE_DRAWING]. It is used by our method [checkState] to make sure
+     * that a state change is "legal", and also by our method [shutdown] to make sure that our
+     * texture is deleted when our surface has been destroyed (a texture will only have been
+     * allocated if `mState>STATE_NEW`).
      */
     private var mState: Int
 
     /**
-     * Call to initialize the class. Call whenever the surface has been created. First we set our
-     * field `int mState` to STATE_INITIALIZED (in this state we have generated a texture name,
+     * Called to initialize the class. Called whenever the surface has been created. First we set
+     * our field [mState] to [STATE_INITIALIZED] (in this state we have generated a texture name,
      * bound that texture to GL_TEXTURE_2D and configured it to our liking, but no image data has
-     * been uploaded yet). Next we generate a texture name and save it in our field `int mTextureID`.
+     * been uploaded yet). Next we generate a texture name and save it in our field [mTextureID]
      *
-     *
-     * We bind the texture `mTextureID` to the target GL_TEXTURE_2D (GL_TEXTURE_2D becomes an
+     * We bind the texture [mTextureID] to the target GL_TEXTURE_2D (GL_TEXTURE_2D becomes an
      * alias for our texture), and set both the texture parameters GL_TEXTURE_MIN_FILTER and
      * GL_TEXTURE_MAG_FILTER of GL_TEXTURE_2D to GL_NEAREST (uses the value of the texture element
      * that is nearest (in Manhattan distance) to the center of the pixel being textured when the
@@ -131,11 +131,10 @@ class LabelMaker(
      * GL_CLAMP_TO_EDGE (when the fragment being textured is larger than the texture, the texture
      * elements at the edges will be used for the rest of the fragment).
      *
-     *
      * Finally we set the texture environment parameter GL_TEXTURE_ENV_MODE of the texture environment
      * GL_TEXTURE_ENV to GL_REPLACE (the texture will replace whatever was in the fragment).
      *
-     * @param gl the gl interface
+     * @param gl the [GL10] interface
      */
     fun initialize(gl: GL10) {
         mState = STATE_INITIALIZED
@@ -153,13 +152,12 @@ class LabelMaker(
 
     /**
      * Called when the surface we were labeling has been destroyed and a new surface is being created
-     * so that the the label texture used by this instance of `LabelMaker` can be deleted. To
+     * so that the the label texture used by this instance of [LabelMaker] can be deleted. We need to
      * do this if we have already passed to a state where a texture name has been allocated by the
-     * hardware (`mState>STATE_NEW`) we must delete our texture `int mTextureID` and
-     * move our state field `int mState` to the state STATE_NEW (ready to start building a new
-     * label texture).
+     * hardware (`mState>STATE_NEW`) we must delete our [mTextureID] texture  and move our state
+     * field [mState] to the state [STATE_NEW] (ready to start building a new label texture).
      *
-     * @param gl the gl interface
+     * @param gl the [GL10] interface
      */
     fun shutdown(gl: GL10?) {
         if (gl != null) {
@@ -173,18 +171,18 @@ class LabelMaker(
     }
 
     /**
-     * Call before adding labels, and after calling `initialize`. Clears out any existing labels.
-     * First we call `checkState` to make sure we are currently in STATE_INITIALIZED, and if so
-     * changing to state STATE_ADDING. Next we clear our current list of `Label` objects contained
-     * in `ArrayList<LabelMaker.Label> mLabels`. We reset the texture coordinates for our next
-     * label `int mU` and `int mV`, and set the height of the current line `int mLineHeight`
-     * to 0. We set `Bitmap.Config config` to ARGB_4444 if our field `boolean mFullColor`
-     * is true, or to ALPHA_8 if it is false. Then we initialize our field `Bitmap mBitmap` with
-     * a new instance of `Bitmap` using `config` which is `mStrikeWidth` pixels by
-     * `mStrikeHeight` pixels. We initialize `Canvas mCanvas` with a canvas which will use
-     * `mBitmap` to draw to, then set the entire `mBitmap` to black.
+     * Call before [add]'ing labels, and after calling [initialize]. Clears out any existing labels.
+     * First we call [checkState] to make sure we are currently in [STATE_INITIALIZED], and if so
+     * have it change to state [STATE_ADDING]. Next we clear our current list of [Label] objects
+     * contained in our `ArrayList<LabelMaker.Label>` field [mLabels]. We reset the [Int] texture
+     * coordinates for our next label [mU] and [mV], and set the [Int] height of the current line
+     * [mLineHeight] to 0. We set [Bitmap.Config] variable `val config` to ARGB_8888 if our [Boolean]
+     * field [mFullColor] is true, or to ALPHA_8 if it is false. Then we initialize our [Bitmap]
+     * field [mBitmap] with a new instance of [Bitmap] using `config` which is [mStrikeWidth] pixels
+     * by [mStrikeHeight] pixels. We initialize [Canvas] field [mCanvas] with a canvas which will
+     * use [mBitmap] to draw to, then set the entire [mBitmap] to black.
      *
-     * @param gl the gl interface UNUSED
+     * @param gl the [GL10] interface UNUSED
      */
     @Suppress("UNUSED_PARAMETER")
     fun beginAdding(gl: GL10?) {
@@ -200,13 +198,13 @@ class LabelMaker(
     }
 
     /**
-     * Call to add a label, convenience function to call the full argument `add` with a null
-     * `Drawable background` and `winWidth` and `minHeight` both equal to 0. We
-     * simply supply a null for `Drawable background` and pass the call on.
+     * Call to add a label, convenience function to call the full argument `add` with a *null*
+     * `Drawable` parameter `background` and `minWidth` and `minHeight` both equal to 0. We
+     * simply supply a *null* for `Drawable` parameter `background` and pass the call on.
      *
-     * @param gl        the gl interface
+     * @param gl        the [GL10] interface
      * @param text      the text of the label
-     * @param textPaint the paint of the label
+     * @param textPaint the [Paint] of the label
      * @return the id of the label, used to measure and draw the label
      */
     fun add(gl: GL10?, text: String?, textPaint: Paint?): Int {
@@ -216,8 +214,8 @@ class LabelMaker(
     /**
      * Call to add a label UNUSED
      *
-     * @param gl         the gl interface
-     * @param background background `Drawable` to use
+     * @param gl         the [GL10] interface
+     * @param background background [Drawable] to use
      * @param minWidth   minimum width of label
      * @param minHeight  minimum height of label
      * @return the id of the label, used to measure and draw the label
@@ -226,65 +224,57 @@ class LabelMaker(
         return add(gl, background, null, null, minWidth, minHeight)
     }
     /**
-     * Call to add a label. First we call our method `checkState` to make sure we are in the
-     * state STATE_ADDING (our method `beginAdding` has been called). Next we determine if
-     * we have a `background` to draw `background != null`) saving the result to
-     * `boolean drawBackground`, and determine if we have text to draw (`text != null`
-     * and `textPaint != null`) saving the result to `boolean drawText`.
+     * Call to add a label. First we call our method [checkState] to make sure we are in the
+     * state [STATE_ADDING] (our method [beginAdding] has been called). Next we determine if
+     * we have a [background] to draw ([background]!= *null*) saving the result to [Boolean]
+     * variable `val drawBackground`, and determine if we have text to draw ([text]!= null`
+     * and [textPaint] != *null*) saving the result to [Boolean] variable `val drawText`.
      *
+     * We allocate a new instance of [Rect] for `val padding` and if we have a background that needs
+     * to be drawn we fetch the padding insets for [background] to `padding`, set the variable
+     * `minWidthVar` to the max of `minWidthVar` and the minimum width of the drawable [background],
+     * and set the variable `minHeightVar` to the max of `minHeightVar` and the minimum height of the
+     * drawable [background].
      *
-     * We allocate a new instance for `Rect padding` and if we have a background that needs to
-     * be drawn we fetch the padding insets for `background` to `padding`, set the input
-     * parameter `minWidth` to the max of `minWidth` and the minimum width of the drawable
-     * `background`, and set the input parameter `minHeight` to the max of `minHeight`
-     * and the minimum height of the drawable `background`.
+     * Next we set `var ascent`, `var descent` and `var measuredTextWidth` all to 0, and if we have
+     * text that needs drawing we set `ascent` to the ceiling value of the highest ascent above the
+     * baseline for the current typeface and text size of the [Paint] parameter [textPaint], set
+     * `descent` to the ceiling value of the lowest descent below the baseline for the current
+     * typeface and text size of the [Paint] parameter [textPaint], and set `measuredTextWidth` to
+     * the ceiling value of the length of [text].
      *
+     * We now perform a bunch of boring calculations to determine where on the [Canvas] field
+     * [mCanvas] we are to draw our background and/or text, and if we have a background we draw
+     * the background drawable at that position, and if we have text we draw the text at that
+     * position.
      *
-     * Next we set `int ascent`, `int descent` and `int measuredTextWidth` all to
-     * 0, and if we have text that needs drawing we set `int ascent` to the ceiling value of
-     * the highest ascent above the baseline for the current typeface and text size of the parameter
-     * `Paint textPaint`, set `int descent` to the ceiling value of the lowest descent
-     * below the baseline for the current typeface and text size of the parameter `Paint textPaint`,
-     * and set `{ measuredTextWidth}` to the ceiling value of the length of `text`.
+     * Having done so, we update our field [mU] to point to the next u (x) coordinate we can
+     * use, [mV] to point to the next v (y) coordinate we can use, and [mLineHeight] to the
+     * (possibly new) height of our current line.
      *
+     * Finally we add a new instance of [Label] to `ArrayList<Label>` field [mLabels] with the
+     * information that will be needed to locate, crop and draw the label we just created, and
+     * return the index in [mLabels] of this [Label] object to the caller.
      *
-     * We now perform a bunch of boring calculations to determine where on the `Canvas mCanvas`
-     * we are to draw our background and/or text, and if we have a background we draw the background
-     * drawable at that position, and if we have text we draw the text at that position.
-     *
-     *
-     * Having done so, we update our field `mU` to point to the next u (x) coordinate we can
-     * use, `mV` to point to the next v (y) coordinate we can use, and `mLineHeight` to
-     * the (possibly new) height of our current line.
-     *
-     *
-     * Finally we add a new instance of `Label` to `ArrayList<Label> mLabels` with the
-     * information that will be needed to locate, crop and draw the label we just drew, and return
-     * the index of this `Label` object to the caller.
-     *
-     * Parameter: gl         the gl interface UNUSED
-     * Parameter: background background `Drawable` to use
-     * Parameter: text       the text of the label
-     * Parameter: textPaint  the paint of the label
-     * Parameter: minWidth   minimum width of label
-     * Parameter: minHeight  minimum height of label
-     * @return index of the `Label` in `ArrayList<Label> mLabels`, the `Label`
-     * object will be used to locate, measure, crop and draw the label.
-     */
-    /**
-     * Call to add a label, convenience function to call the full argument `add` with
-     * `winWidth` and `minHeight` both equal to 0. We simply supply 0 for both
-     * `int minWidth` and `int minHeight` and pass the call on.
-     *
-     * @param gl         the gl interface
-     * @param background background `Drawable` to use
+     * @param gl         the [GL10] interface
+     * @param background background [Drawable] to use
      * @param text       the text of the label
-     * @param textPaint  the paint of the label
-     * @return the id of the label, used to measure and draw the label
+     * @param textPaint  the [Paint] of the label
+     * @param minWidth   minimum width of label
+     * @param minHeight  minimum height of label
+     * @return index of the [Label] in `ArrayList<Label>` field [mLabels]. The [Label]
+     * object will be used to locate, measure, crop and draw the label.
      */
     @Suppress("UNUSED_PARAMETER")
     @JvmOverloads
-    fun add(gl: GL10?, background: Drawable?, text: String?, textPaint: Paint?, minWidth: Int = 0, minHeight: Int = 0): Int {
+    fun add(
+            gl: GL10?,
+            background: Drawable?,
+            text: String?,
+            textPaint: Paint?,
+            minWidth: Int = 0,
+            minHeight: Int = 0
+    ): Int {
         var minWidthVar = minWidth
         var minHeightVar = minHeight
         checkState(STATE_ADDING, STATE_ADDING)
@@ -314,16 +304,19 @@ class LabelMaker(
         val effectiveTextWidth = width - padWidth
         val centerOffsetHeight = (effectiveTextHeight - textHeight) / 2
         val centerOffsetWidth = (effectiveTextWidth - textWidth) / 2
-        // Make changes to the local variables, only commit them
-// to the member variables after we've decided not to throw
-// any exceptions.
+        /**
+         * Make changes to the local variables, only commit them to the member
+         * variables after we've decided not to throw any exceptions.
+         */
         var u = mU
         var v = mV
         var lineHeight = mLineHeight
         if (width > mStrikeWidth) {
             width = mStrikeWidth
         }
-        // Is there room for this string on the current line?
+        /**
+         * Is there room for this string on the current line?
+         */
         if (u + width > mStrikeWidth) { // No room, go to the next line:
             u = 0
             v += lineHeight
@@ -346,7 +339,9 @@ class LabelMaker(
                     vBase + padding.top + centerOffsetHeight.toFloat(),
                     textPaint!!)
         }
-        // We know there's enough space, so update the member variables
+        /**
+         * We know there's enough space, so update the member variables
+         */
         mU = u + width
         mV = v
         mLineHeight = lineHeight
@@ -355,19 +350,21 @@ class LabelMaker(
     }
 
     /**
-     * Call to end adding labels. Must be called before drawing starts. First we call our method
-     * `checkState` to verify that we are in the STATE_ADDING state, and if so transition back
-     * to the STATE_INITIALIZED state. Next we bind our texture name `mTextureID` to the
-     * GL_TEXTURE_2D target, upload our `Bitmap mBitmap` to the GPU, recycle our `mBitmap`
-     * and null our both `mBitmap` and `mCanvas` so they can be garbage collected.
+     * Call to end adding labels. Must be called before drawing of the lables starts. First we call
+     * our method [checkState] to verify that we are in the [STATE_ADDING] state, and if so have it
+     * transition us back to the [STATE_INITIALIZED] state. Next we bind our texture name [mTextureID]
+     * to the GL_TEXTURE_2D target, upload our [Bitmap] field [mBitmap] to the GPU, recycle [mBitmap]
+     * and null both [mBitmap] and [mCanvas] so they can be garbage collected.
      *
-     * @param gl the gl interface
+     * @param gl the [GL10] interface
      */
     fun endAdding(gl: GL10) {
         checkState(STATE_ADDING, STATE_INITIALIZED)
         gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID)
         GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, mBitmap, 0)
-        // Reclaim storage used by bitmap and canvas.
+        /**
+         * Reclaim storage used by bitmap and canvas.
+         */
         mBitmap!!.recycle()
         mBitmap = null
         mCanvas = null
@@ -375,7 +372,7 @@ class LabelMaker(
 
     /**
      * Get the width in pixels of a given label. Convenience getter for the `width` field of
-     * the `Label` at index value `labelID` in our `ArrayList<Label> mLabels`.
+     * the [Label] at index value [labelID] in our `ArrayList<Label>` field [mLabels].
      *
      * @param labelID index of label
      * @return the width in pixels
@@ -386,7 +383,7 @@ class LabelMaker(
 
     /**
      * Get the height in pixels of a given label. Convenience getter for the `height` field of
-     * the `Label` at index value `labelID` in our `ArrayList<Label> mLabels`.
+     * the [Label] at index value [labelID] in our `ArrayList<Label>` field [mLabels].
      *
      * @param labelID index of label
      * @return the height in pixels
@@ -419,20 +416,18 @@ class LabelMaker(
      * value. The sum of these two colors is then written back into the framebuffer.) We then call
      * the method `glColor4x` to set the primitive’s opacity to 1.0 in GLfixed format.
      *
-     *
      * We set the current matrix to the projection matrix GL_PROJECTION, push the current projection
      * matrix to its stack, load GL_PROJECTION with the identity matrix, and multiply it with the
      * orthographic matrix that has the left clipping plane at 0, the right clipping plane at
      * `viewWidth`, the bottom clipping plane at 0, the top clipping plane at `viewHeight`,
      * the near clipping plane at 0.0, and the far clipping plane at 1.0
      *
-     *
      * We then set the current matrix to the model view matrix GL_MODELVIEW, push the current model
      * view matrix to its stack, load GL_MODELVIEW with the identity matrix, and multiply it by a
      * translation matrix which moves both x and y coordinates by 0.375 in order to promote consistent
      * rasterization.
      *
-     * @param gl         the gl interface
+     * @param gl         the [GL10] interface
      * @param viewWidth  view width
      * @param viewHeight view height
      */
