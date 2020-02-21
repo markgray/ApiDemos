@@ -43,7 +43,7 @@ import kotlin.math.ceil
  */
 class LabelMaker(
         /**
-         * *true* if we want a full color backing store (4444), otherwise we generate a grey L8
+         * *true* if we want a full color backing store (8888), otherwise we generate a grey L8
          * backing store. Set to the [Boolean] `fullColor` parameter of our constructor, always
          * *true* in our case.
          */
@@ -406,8 +406,8 @@ class LabelMaker(
 
     /**
      * Begin drawing labels. Sets the OpenGL state for rapid drawing. First we call our method
-     * `checkState` to verify that we are in STATE_INITIALIZED state and if so to transition
-     * to STATE_DRAWING state. Next we bind our texture name `mTextureID` to the target
+     * [checkState] to verify that we are in [STATE_INITIALIZED] state and if so to transition
+     * to [STATE_DRAWING] state. Next we bind our texture name [mTextureID] to the target
      * GL_TEXTURE_2D, set the shade model to GL_FLAT and enable the server side capability GL_BLEND
      * (blend the computed fragment color values with the values in the color buffers). We call the
      * method `glBlendFunc` to set the source blending function to GL_SRC_ALPHA, and the
@@ -419,8 +419,8 @@ class LabelMaker(
      * We set the current matrix to the projection matrix GL_PROJECTION, push the current projection
      * matrix to its stack, load GL_PROJECTION with the identity matrix, and multiply it with the
      * orthographic matrix that has the left clipping plane at 0, the right clipping plane at
-     * `viewWidth`, the bottom clipping plane at 0, the top clipping plane at `viewHeight`,
-     * the near clipping plane at 0.0, and the far clipping plane at 1.0
+     * [viewWidth], the bottom clipping plane at 0, the top clipping plane at [viewHeight], the
+     * near clipping plane at 0.0, and the far clipping plane at 1.0
      *
      * We then set the current matrix to the model view matrix GL_MODELVIEW, push the current model
      * view matrix to its stack, load GL_MODELVIEW with the identity matrix, and multiply it by a
@@ -451,15 +451,15 @@ class LabelMaker(
 
     /**
      * Draw a given label at a given x,y position, expressed in pixels, with the lower-left-hand
-     * corner of the view being (0,0). First we call our method `checkState` to make sure we
-     * are in the STATE_DRAWING state. We fetch the `Label` object for the label we are to
-     * draw to `Label label`, enable the server side capability GL_TEXTURE_2D, and set the
-     * cropping rectangle of GL_TEXTURE_2D to the contents of the `label.mCrop` field. Then
+     * corner of the view being (0,0). First we call our method [checkState] to make sure we
+     * are in the [STATE_DRAWING] state. We fetch the [Label] object for the label we are to
+     * draw to [Label] variable `val label`, enable the server side capability GL_TEXTURE_2D, and
+     * set the cropping rectangle of GL_TEXTURE_2D to the contents of the `label.mCrop` field. Then
      * we call glDrawTexiOES to draw the cropped area of the texture at `(x,y,z)` using the
      * width and height specified by the `label.width` field, and the `label.height`
      * field.
      *
-     * @param gl      the gl interface
+     * @param gl      the [GL10] interface
      * @param x       x coordinate to draw at
      * @param y       y coordinate to draw at
      * @param labelID index of `Label` in the list `ArrayList<Label> mLabels` to draw
@@ -468,18 +468,26 @@ class LabelMaker(
         checkState(STATE_DRAWING, STATE_DRAWING)
         val label = mLabels[labelID]
         gl.glEnable(GL10.GL_TEXTURE_2D)
-        (gl as GL11).glTexParameteriv(GL10.GL_TEXTURE_2D, GL11Ext.GL_TEXTURE_CROP_RECT_OES, label.mCrop, 0)
-        (gl as GL11Ext).glDrawTexiOES(x.toInt(), y.toInt(), 0, label.width.toInt(), label.height.toInt())
+        (gl as GL11).glTexParameteriv(
+                GL10.GL_TEXTURE_2D,
+                GL11Ext.GL_TEXTURE_CROP_RECT_OES,
+                label.mCrop,
+                0
+        )
+        (gl as GL11Ext).glDrawTexiOES(
+                x.toInt(), y.toInt(), 0,
+                label.width.toInt(), label.height.toInt()
+        )
     }
 
     /**
-     * Ends the drawing and restores the OpenGL state. First we call our method `checkState` to
-     * make sure we are in the STATE_DRAWING state and if so to transition to the STATE_INITIALIZED
+     * Ends the drawing and restores the OpenGL state. First we call our method [checkState] to make
+     * sure we are in the [STATE_DRAWING] state and if so to transition to the [STATE_INITIALIZED]
      * state. We disable the server side capability GL_BLEND, set the current matrix to the projection
      * matrix GL_PROJECTION and pop the old matrix off of its stake, and then set the current matrix
-     * to the model view matrix GL_MODELVIEW and pop the old matrix off of its stake.
+     * to the model view matrix GL_MODELVIEW and pop the old matrix off of its stack.
      *
-     * @param gl the gl interface
+     * @param gl the [GL10] interface
      */
     fun endDrawing(gl: GL10) {
         checkState(STATE_DRAWING, STATE_INITIALIZED)
@@ -491,8 +499,8 @@ class LabelMaker(
     }
 
     /**
-     * Throws an IllegalArgumentException if we are not currently in the state `oldState`, and
-     * if we are in that state transitions to `newState`.
+     * Throws an [IllegalArgumentException] if we are not currently in the state [oldState], and
+     * if we are in that state transitions to [newState].
      *
      * @param oldState state we need to be in to use the method we are called from
      * @param newState state to transition to iff we were in `oldState`
@@ -518,7 +526,8 @@ class LabelMaker(
             /**
              * Unused, but set to the ascent value of the font and font size of the paint used to draw
              */
-            var baseline: Float, cropU: Int, cropV: Int, cropW: Int, cropH: Int) {
+            var baseline: Float, cropU: Int, cropV: Int, cropW: Int, cropH: Int
+    ) {
         /**
          * Defines the location and size of the label in the texture, it is used to crop the texture
          * so that only this label is used for drawing.
@@ -526,16 +535,17 @@ class LabelMaker(
         var mCrop: IntArray
 
         /**
-         * Our constructor. We simply initialize our fields using our input parameters.
+         * The init block of our constructor. We simply initialize our `mCrop` field to an `Int`
+         * array containing the values of the constructor parameters:
          *
-         * Parameter: width    width of our label
-         * Parameter: height   height of our label
-         * Parameter: baseLine baseline of our label
-         * Parameter: cropU    u coordinate of left side of label in texture
-         * Parameter: cropV    v coordinate of top of texture
-         * Parameter: cropW    width of label in texture
-         * Parameter: cropH    height of the crop region, the negative value in our case specifies that the
-         * region lies below the coordinate (u,v) in the texture image.
+         *  * cropU    u coordinate of left side of label in texture
+         *
+         *  * cropV    v coordinate of top of texture
+         *
+         *  * cropW    width of label in texture
+         *
+         *  * cropH    height of the crop region, the negative value in our case specifies that the
+         *  region lies below the coordinate (u,v) in the texture image.
          */
         init {
             val crop = IntArray(4)
@@ -549,51 +559,39 @@ class LabelMaker(
 
     companion object {
         /**
-         * Constant used to set our field `mState` to indicate that we are just starting the
-         * creation of our `Label` texture and there are no resources that need to be freed if
+         * Constant used to set our field [mState] to indicate that we are just starting the
+         * creation of our [Label] texture and there are no resources that need to be freed if
          * our `GLSurface` is destroyed.
          */
         private const val STATE_NEW = 0
         /**
-         * Constant used to set our field `mState` to indicate that our `initialize` method
+         * Constant used to set our field [mState] to indicate that our [initialize] method
          * has been called, and we are ready to begin adding labels. We have acquired a texture name
-         * for our field `mTextureID`, bound it to GL_TEXTURE_2D and configured it so there is
+         * for our field [mTextureID], bound it to GL_TEXTURE_2D and configured it so there is
          * a texture which needs to be freed if our `GLSurface` is destroyed.
          */
         private const val STATE_INITIALIZED = 1
         /**
-         * Constant used to set our field `mState` to indicate that our `beginAdding` method
-         * has been called, and we are ready to add a label (or an additional label). `initialize`
-         * was called before us, and we have allocated a `Bitmap` for our field `Bitmap mBitmap`
-         * so there is some needed if our `GLSurface` is destroyed.
+         * Constant used to set our field [mState] to indicate that our [beginAdding] method
+         * has been called, and we are ready to add a label (or an additional label). [initialize]
+         * was called before us, and we have allocated a [Bitmap] for our [Bitmap] field [mBitmap]
+         * so there is some cleanup needed if our `GLSurface` is destroyed.
          */
         private const val STATE_ADDING = 2
         /**
-         * Constant used to set our field `mState` to indicate that our `beginDrawing` method
-         * has been called and we are in the process of drawing the various `Label` objects located
+         * Constant used to set our field [mState] to indicate that our [beginDrawing] method
+         * has been called and we are in the process of drawing the various [Label] objects located
          * in our texture.
          */
         private const val STATE_DRAWING = 3
     }
 
     /**
-     * Create a label maker. For maximum compatibility with various OpenGL ES implementations, the
-     * strike width and height must be powers of two, We want the strike width to be at least as
-     * wide as the widest window. First we initialize our field `boolean mFullColor` to our
-     * parameter `boolean fullColor`, `int mStrikeWidth` to `int strikeWidth`, and
-     * `int mStrikeHeight` to `int strikeHeight`. We configure 3 fields which are never
-     * used: `mTexelWidth`. `mTexelHeight`, and `mPaint`. Finally we set our field
-     * `int mState` to STATE_NEW (in this state we do not yet have a texture that will need to
-     * be freed if our surface is destroyed, but we are ready to begin building our label texture).
-     *
-     * Parameter: fullColor    true if we want a full color backing store (4444), otherwise we
-     * generate a grey L8 backing store.
-     * Parameter: strikeWidth  width of strike
-     * Parameter: strikeHeight height of strike
+     * The init block for our `LabelMaker` constructor. We just configure our `Paint` field
+     * `mClearPaint` to be a black `Paint` with its alpha 0, with a style of FILL, and set our
+     * state field `mState` to `STATE_NEW`.
      */
     init {
-        // UNUSED
-        // UNUSED
         mClearPaint.setARGB(0, 0, 0, 0)
         mClearPaint.style = Paint.Style.FILL
         mState = STATE_NEW
