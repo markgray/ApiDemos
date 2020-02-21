@@ -46,10 +46,10 @@ internal class MatrixGrabber {
 
     /**
      * Record the current modelView matrix state. Has the side effect of setting the current matrix
-     * state to GL_MODELVIEW. We simply call our method `getMatrix` to read the current model
-     * view matrix into our field `float[] mModelView`
+     * state to GL_MODELVIEW. We simply call our method [getMatrix] to read the current model
+     * view matrix into our [Float] array field [mModelView]
      *
-     * @param gl the gl interface
+     * @param gl the [GL10] interface
      */
     fun getCurrentModelView(gl: GL10) {
         getMatrix(gl, GL10.GL_MODELVIEW, mModelView)
@@ -57,25 +57,25 @@ internal class MatrixGrabber {
 
     /**
      * Record the current projection matrix state. Has the side effect of setting the current matrix
-     * state to GL_PROJECTION. We simply call our method `getMatrix` to read the current
-     * projection matrix into our field `float[] mProjection`.
+     * state to GL_PROJECTION. We simply call our method [getMatrix] to read the current
+     * projection matrix into our [Float] array field [mProjection].
      *
-     * @param gl the gl interface
+     * @param gl the [GL10] interface
      */
     fun getCurrentProjection(gl: GL10) {
         getMatrix(gl, GL10.GL_PROJECTION, mProjection)
     }
 
     /**
-     * Sets the current matrix to its parameter `int mode`, and reads that matrix into its
-     * parameter `float[] mat`. To do this we cast our parameter `GL10 gl` to
-     * `MatrixTrackingGL gl2`, use it to set the current matrix to `int mode`, and
+     * Sets the current matrix to its [Int] parameter [mode], and reads that matrix into its
+     * [Float] array parameter [mat]. To do this we cast our [GL10] parameter [gl] to initialize
+     * [MatrixTrackingGL] variable `val gl2`, use it to set the current matrix to [mode], and
      * then use the `gl2` method `getMatrix` to copy that matrix into our parameter
-     * `mat`.
+     * [mat].
      *
-     * @param gl   the gl interface
+     * @param gl   the [GL10] interface
      * @param mode matrix we are interested in, either GL_MODELVIEW, or GL_PROJECTION
-     * @param mat  `float[]` array to hold the matrix requested
+     * @param mat  [Float] array to hold the matrix requested
      */
     private fun getMatrix(gl: GL10, mode: Int, mat: FloatArray) {
         val gl2 = gl as MatrixTrackingGL
