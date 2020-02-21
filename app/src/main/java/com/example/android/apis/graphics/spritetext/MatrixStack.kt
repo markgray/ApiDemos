@@ -24,22 +24,22 @@ import java.nio.IntBuffer
  */
 class MatrixStack {
     /**
-     * Our stack of matrices, it is in our case a `float[]` array allocated enough storage for
-     * DEFAULT_MAX_DEPTH*MATRIX_SIZE entries.
+     * Our stack of matrices, it is in our case a [FloatArray] which is allocated enough
+     * storage for [DEFAULT_MAX_DEPTH] times [MATRIX_SIZE] entries.
      */
     private lateinit var mMatrix: FloatArray
     /**
-     * Index of the current top of matrix stack, it goes from 0 to (DEFAULT_MAX_DEPTH-1)*MATRIX_SIZE
-     * in steps of MATRIX_SIZE.
+     * Index of the current top of matrix stack, it goes from 0 to [MATRIX_SIZE] time the quantity
+     * [DEFAULT_MAX_DEPTH] minus one in steps of [MATRIX_SIZE].
      */
     private var mTop = 0
     /**
-     * Temporary storage for holding two matrices each having a size of MATRIX_SIZE.
+     * Temporary storage for holding two matrices each having a size of [MATRIX_SIZE].
      */
     private lateinit var mTemp: FloatArray
 
     /**
-     * Our constructor, we simply call our method `commonInit` to allocate the storage we need
+     * Our constructor, we simply call our method [commonInit] to allocate the storage we need
      * for a matrix stack with DEFAULT_MAX_DEPTH matrices in it.
      */
     constructor() {
@@ -57,9 +57,10 @@ class MatrixStack {
     }
 
     /**
-     * Initializes our instance by allocating storage for our fields `float[] mMatrix` and
-     * `float[] mTemp` with its argument `int maxDepth` specifying how many matrices our
-     * matrix stack needs to hold.
+     * Initializes our instance by allocating storage for our [FloatArray] fields [mMatrix] and
+     * [mTemp] with its [Int] argument [maxDepth] specifying how many matrices our matrix stack
+     * needs to hold. It also calls our [glLoadIdentity] method to load the top of our stack with
+     * the identity matrix.
      *
      * @param maxDepth depth of matrix stack.
      */
@@ -70,10 +71,10 @@ class MatrixStack {
     }
 
     /**
-     * Loads the matrix at the top of the matrix stack with a projection matrix defined in terms of
-     * the six clipping planes. We simply call the method `Matrix.frustumM` with `mMatrix`
-     * as the output array using `mTop` as the index offset into that array, and passing our
-     * parameters as the clipping planes.
+     * Loads the matrix at the top of the matrix stack with a projection matrix defined in terms
+     * of the six clipping planes. We simply call the method [Matrix.frustumM] with [mMatrix] as
+     * the output array using our parameter [mTop] as the index offset into that array, passing
+     * our other parameters as the clipping planes it is to use.
      *
      * @param left   left vertical clipping plane
      * @param right  right vertical clipping plane
@@ -88,9 +89,9 @@ class MatrixStack {
 
     /**
      * Loads the matrix at the top of the matrix stack with a projection matrix defined in terms of
-     * the six fixed point clipping planes. We simply convert the fixed values of our parameters to
-     * float values using our method `fixedToFloat`, then pass the call to our method
-     * `glFrustumf`.
+     * six fixed point ([Int]) clipping planes. We simply convert the fixed values of our parameters
+     * to float values using our method [fixedToFloat], then pass the call to our [Float] version of
+     * [glFrustumf].
      *
      * @param left   left vertical clipping plane
      * @param right  right vertical clipping plane
@@ -107,14 +108,15 @@ class MatrixStack {
 
     /**
      * Loads the top of our matrix stack with the identity matrix, we simply call the static method
-     * `android.opengl.Matrix.setIdentityM` to do this for us.
+     * [Matrix.setIdentityM] to do this for us.
      */
     fun glLoadIdentity() {
         Matrix.setIdentityM(mMatrix, mTop)
     }
 
     /**
-     * Replace the matrix at the top of our stack with the matrix `float[] m`.
+     * Replace the matrix at the top of our stack with our [FloatArray] parameter [m]. We just use
+     * the method [System.arraycopy] to do the copy for us.
      *
      * @param m      matrix to load to the top of the matrix stack
      * @param offset offset to first source location
@@ -124,17 +126,22 @@ class MatrixStack {
     }
 
     /**
-     * Replace the matrix at the top of our stack with the matrix contained in `FloatBuffer m`.
+     * Replace the matrix at the top of our stack with the matrix contained in [FloatBuffer]
+     * parameter [m]. We use the relative bulk `get` method: [FloatBuffer.get] which transfers
+     * [MATRIX_SIZE] floats from the buffer [m] into [FloatArray] field [mMatrix] starting at
+     * offset [mTop] in [mMatrix].
      *
-     * @param m `FloatBuffer` containing matrix to load to the top of the matrix stack
+     * @param m [FloatBuffer] containing matrix to load to the top of the matrix stack
      */
     fun glLoadMatrixf(m: FloatBuffer) {
         m[mMatrix, mTop, MATRIX_SIZE]
     }
 
     /**
-     * Replace the matrix at the top of our stack with the matrix `int[] m` converted from fixed
-     * point 16.16 format to `float` format.
+     * Replace the matrix at the top of our stack with the [IntArray] matrix [m] converted from
+     * fixed point 16.16 format to [Float] format. We loop through the [IntArray] parameter [m]
+     * starting from the [offset] element for [MATRIX_SIZE] elements, converting the element from
+     * [m] to [Float] and storing the result in [mMatrix] starting at offset [mTop].
      *
      * @param m      matrix to load to the top of the matrix stack
      * @param offset offset to first source location
@@ -146,10 +153,10 @@ class MatrixStack {
     }
 
     /**
-     * Replace the matrix at the top of our stack with the matrix contained in `IntBuffer m`
-     * converted from fixed point 16.16 format to `float` format.
+     * Replace the matrix at the top of our stack with the matrix contained in [IntBuffer] parameter
+     * [m] converted from fixed point 16.16 format to [Float] format.
      *
-     * @param m `IntBuffer` containing 16.16 format matrix to load to the top of the matrix stack
+     * @param m [IntBuffer] containing 16.16 format matrix to load to the top of the matrix stack
      */
     fun glLoadMatrixx(m: IntBuffer) {
         for (i in 0 until MATRIX_SIZE) {
