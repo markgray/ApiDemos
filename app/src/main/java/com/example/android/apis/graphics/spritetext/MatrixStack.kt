@@ -139,9 +139,10 @@ class MatrixStack {
 
     /**
      * Replace the matrix at the top of our stack with the [IntArray] matrix [m] converted from
-     * fixed point 16.16 format to [Float] format. We loop through the [IntArray] parameter [m]
-     * starting from the [offset] element for [MATRIX_SIZE] elements, converting the element from
-     * [m] to [Float] and storing the result in [mMatrix] starting at offset [mTop].
+     * fixed point 16.16 format to [Float] format. We loop through the elements in the [IntArray]
+     * parameter [m] starting from the [offset] element for [MATRIX_SIZE] elements, converting the
+     * element from fixed point to [Float] using our [fixedToFloat] method and storing the result
+     * in [mMatrix] starting at offset [mTop].
      *
      * @param m      matrix to load to the top of the matrix stack
      * @param offset offset to first source location
@@ -154,7 +155,10 @@ class MatrixStack {
 
     /**
      * Replace the matrix at the top of our stack with the matrix contained in [IntBuffer] parameter
-     * [m] converted from fixed point 16.16 format to [Float] format.
+     * [m] converted from fixed point 16.16 format to [Float] format. We loop over `i` from 0 until
+     * [MATRIX_SIZE] storing the result of having our [fixedToFloat] method convert each [Int] that
+     * the [IntBuffer.get] method of [m] returns to [Float] in our [FloatArray] field [mMatrix] at
+     * the [mTop] plus `i` location.
      *
      * @param m [IntBuffer] containing 16.16 format matrix to load to the top of the matrix stack
      */
@@ -166,18 +170,17 @@ class MatrixStack {
 
     /**
      * Replaces our top of stack matrix by the results of multiplying our top of stack matrix (lhs)
-     * by the parameter matrix `float[] m` (rhs). Note that when this result is then used to
-     * multiply a vector it is as if the rhs `m` matrix is used to multiply first, then the old
+     * by the [FloatArray] matrix parameter [m] (rhs). Note that when this result is then used to
+     * multiply a vector it is as if the rhs [m] matrix is used to multiply first, then the old
      * lhs top of stack matrix (a result of the way matrix multiplication works which might run
      * counter to your intuition).
      *
-     *
-     * First we copy our top of stack matrix to `float[] mTemp`, then we use the static method
-     * `android.opengl.Matrix.multiplyMM` to multiply `mTemp` by `m` placing the
-     * result in our top of stack matrix.
+     * First we copy our top of stack matrix to [FloatArray] field [mTemp], then we use the static
+     * method [Matrix.multiplyMM] to multiply [mTemp] by [m] placing the result in our top of stack
+     * matrix.
      *
      * @param m      matrix to multiply our top of stack matrix by
-     * @param offset offset to first source location in `float[] m`
+     * @param offset offset to first source location in [m]
      */
     fun glMultMatrixf(m: FloatArray?, offset: Int) {
         System.arraycopy(mMatrix, mTop, mTemp, 0, MATRIX_SIZE)
@@ -186,14 +189,16 @@ class MatrixStack {
 
     /**
      * Replaces our top of stack matrix by the results of multiplying our top of stack matrix (lhs)
-     * by the matrix contained in our parameter `FloatBuffer m` (rhs).
+     * by the matrix contained in our [FloatBuffer] parameter [m] (rhs).
      *
+     * To do this we bulk `get` the [m] matrix into the second matrix of [FloatArray] field [mTemp]
+     * temporary matrix storage, then call our [glMultMatrixf] method to have it replace the top of
+     * stack matrix by the results of multiplying the top of stack matrix by the copy of [m] that
+     * we placed in the second matrix of [mTemp] ([MATRIX_SIZE] is used as the offset to specify the
+     * use of the second matrix in both cases, note that [glMultMatrixf] copies the top of stack
+     * matrix to the first matrix in [mTemp]).
      *
-     * To do this we `get` the matrix into the second matrix in our `float[] mTemp` temp
-     * matrix storage, then call our method `glMultMatrixf(float[], int)` using this copy of the
-     * matrix that was contained in `m`.
-     *
-     * @param m `FloatBuffer` containing a matrix to multiply our top of stack matrix by
+     * @param m [FloatBuffer] containing a matrix to multiply our top of stack matrix by
      */
     fun glMultMatrixf(m: FloatBuffer) {
         m[mTemp, MATRIX_SIZE, MATRIX_SIZE]
@@ -202,10 +207,10 @@ class MatrixStack {
 
     /**
      * Replaces our top of stack matrix by the results of multiplying our top of stack matrix (lhs)
-     * by the parameter matrix `int[] m` (rhs). To do this we convert the 16.16 fixed point
-     * values of `m` to `float` values, storing the result in the second matrix in our
-     * `float[] mTemp` temp matrix storage. We then call our method `glMultMatrixf(float[], int)`
-     * using this converted copy of the matrix `m`.
+     * by the [IntArray] parameter matrix [m] (rhs). To do this we convert the 16.16 fixed point
+     * values of [m] to [Float] values, storing the result in the second matrix of our [FloatArray]
+     * field [mTemp] temp matrix storage. We then call our method [glMultMatrixf] using this converted
+     * copy of the matrix [m].
      *
      * @param m      matrix to multiply our top of stack matrix by
      * @param offset offset to first source location
@@ -219,13 +224,12 @@ class MatrixStack {
 
     /**
      * Replaces our top of stack matrix by the results of multiplying our top of stack matrix (lhs)
-     * by the matrix contained in our parameter `IntBuffer m`. To do this we `get` and
-     * convert the 16.16 fixed point values of `m` to `float` values, storing the result
-     * in the second matrix in our `float[] mTemp` temp matrix storage. We then call our method
-     * `glMultMatrixf(float[], int)` using this converted copy of the matrix contained in
-     * `m`.
+     * by the matrix contained in our [IntBuffer] parameter [m]. To do this we `get` and convert the
+     * 16.16 fixed point values of [m] to `float` values, storing the result in the second matrix in
+     * our [FloatArray] field [mTemp] temp matrix storage. We then call our [glMultMatrixf] method
+     * using this converted copy of the matrix contained in [m].
      *
-     * @param m `IntBuffer` containing 16.16 format matrix to multiply our top of stack matrix by.
+     * @param m [IntBuffer] containing 16.16 format matrix to multiply our top of stack matrix by.
      */
     fun glMultMatrixx(m: IntBuffer) {
         for (i in 0 until MATRIX_SIZE) {
@@ -236,8 +240,7 @@ class MatrixStack {
 
     /**
      * Replaces our top of stack matrix with an orthographic projection matrix based on its input
-     * parameters. We simply call the static method `android.opengl.Matrix.orthoM` to do all
-     * our work for us.
+     * parameters. We simply call the static method [Matrix.orthoM] to do all our work for us.
      *
      * @param left   left vertical clipping plane
      * @param right  right vertical clipping plane
@@ -252,7 +255,7 @@ class MatrixStack {
 
     /**
      * Replaces our top of stack matrix with an orthographic projection matrix based on its input
-     * parameters. We pass our input parameters converted from fixed point 16.16 format to `float`
+     * parameters. We pass our input parameters converted from fixed point 16.16 format to [Float]
      * to our method `glOrthof(float, float, float, float, float, float)`.
      *
      * @param left   left vertical clipping plane
@@ -270,10 +273,10 @@ class MatrixStack {
 
     /**
      * Pop's the top matrix off of the stack replacing the current matrix with the one below it on
-     * the stack (the one that was saved by a previous call to `glPushMatrix`). First we call
-     * our method `preflight_adjust` to make sure there at least one matrix below us on the
-     * stack, throwing an IllegalArgumentException if not, then we call our method `adjust`
-     * to subtract the length of one matrix from our pointer `mTop`.
+     * the stack (the one that was saved by a previous call to [glPushMatrix]). First we call our
+     * method [preflightAdjust] to make sure there at least one matrix below us on the stack,
+     * throwing an [IllegalArgumentException] if not, then we call our method [adjust] to subtract
+     * the length of one matrix from our pointer [mTop].
      */
     fun glPopMatrix() {
         preflightAdjust(-1)
@@ -282,11 +285,11 @@ class MatrixStack {
 
     /**
      * Pushes the current matrix stack down by one, duplicating the current matrix. That is, after a
-     * `glPushMatrix` call, the matrix on top of the stack is identical to the one below it.
-     * First we call our method `preflight_adjust` to make sure there is enough room for another
+     * [glPushMatrix] call, the matrix on top of the stack is identical to the one below it.
+     * First we call our method [preflightAdjust] to make sure there is enough room for another
      * matrix on our stack, then we copy the current top of stack matrix to the area above it in the
-     * stack, and call our method `adjust` to add the length of one matrix to the top of stack
-     * pointer `mTop` (to point to the new top of stack matrix).
+     * stack, and call our method [adjust] to add the length of one matrix to the top of stack
+     * pointer [mTop] (to point to the new top of stack matrix).
      */
     fun glPushMatrix() {
         preflightAdjust(1)
@@ -296,11 +299,10 @@ class MatrixStack {
 
     /**
      * Multiply the current matrix by a rotation matrix. First we create a matrix for rotation by
-     * angle `angle` (in degrees) around the axis (x, y, z) in our temp matrix storage
-     * `mTemp`, then we copy the top of stack matrix to the second temp matrix storage
-     * location just above. Finally we call `android.opengl.Matrix.multiplyMM` to multiply
-     * the old top of stack matrix by our rotation matrix placing the result in the top of stack
-     * matrix.
+     * angle [angle] (in degrees) around the axis (x, y, z) in our temp matrix storage [mTemp], then
+     * we copy the top of stack matrix to the second temp matrix storage location just above. Finally
+     * we call [Matrix.multiplyMM] to multiply the old top of stack matrix by our rotation matrix
+     * placing the result in the top of stack matrix.
      *
      * @param angle angle in degrees to rotate
      * @param x     x coordinate of vector to rotate around
@@ -329,7 +331,7 @@ class MatrixStack {
 
     /**
      * Scales the top of stack matrix in place by its input parameters x, y, and z. We simply call
-     * the method `android.opengl.Matrix.scaleM` to do all the work for us.
+     * the method [Matrix.scaleM] to do all the work for us.
      *
      * @param x scale factor along the x axis
      * @param y scale factor along the y axis
@@ -354,7 +356,7 @@ class MatrixStack {
 
     /**
      * Translates our top of stack matrix by its parameters x, y, and z in place. We simply call the
-     * method `android.opengl.Matrix.translateM` to do all the work for us.
+     * method [Matrix.translateM] to do all the work for us.
      *
      * @param x x coordinate of the translation vector
      * @param y y coordinate of the translation vector
@@ -378,7 +380,7 @@ class MatrixStack {
     }
 
     /**
-     * Copies our top of stack matrix to its input parameter `float[] dest`.
+     * Copies our top of stack matrix to the [FloatArray] input parameter [dest].
      *
      * @param dest   destination matrix to copy to
      * @param offset index of first location to copy to
@@ -388,10 +390,10 @@ class MatrixStack {
     }
 
     /**
-     * Convenience function to convert a 16.16 fixed point format value to `float` format.
+     * Convenience function to convert a 16.16 fixed point format value to [Float] format.
      *
      * @param fixedValue 16.16 fixed point format value
-     * @return input parameter converted to `float` format
+     * @return input parameter converted to [Float] format
      */
     private fun fixedToFloat(fixedValue: Int): Float {
         return fixedValue * (1.0f / 65536.0f)
@@ -399,8 +401,8 @@ class MatrixStack {
 
     /**
      * Sanity check to see if a push or pop of our matrix stack is a legal operation or not. Throws
-     * an IllegalArgumentException if the operation would result in a value of `mTop` less
-     * than zero, or greater than the storage allocated for our stack `float[] mMatrix`.
+     * an [IllegalArgumentException] if the operation would result in a value of [mTop] less than
+     * zero, or greater than the storage allocated for our stack in [FloatArray] field [mMatrix].
      *
      * @param dir number of matrices we want to push (positive number), or pop (negative number).
      */
@@ -411,8 +413,8 @@ class MatrixStack {
     }
 
     /**
-     * Adjusts our top of stack point `mTop` based on the number of matrices we wish to push
-     * or to pop, leaving `mTop` pointing to the new top of stack matrix.
+     * Adjusts our top of stack point [mTop] based on the number of matrices we wish to push
+     * or to pop, leaving [mTop] pointing to the new top of stack matrix.
      *
      * @param dir number of matrices we want to push (positive number), or pop (negative number).
      */
