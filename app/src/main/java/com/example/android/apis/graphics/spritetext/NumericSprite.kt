@@ -24,18 +24,18 @@ import kotlin.math.ceil
  */
 class NumericSprite
 /**
- * Our constructor, we simply initialize our field `String mText` to the empty string, and
- * set our field `LabelMaker mLabelMaker` to null.
+ * Our constructor, we simply initialize our [String] field [mText] to the empty string, and
+ * set our [LabelMaker] field [mLabelMaker] to null.
  */
 {
     /**
-     * Our `LabelMaker`
+     * Our [LabelMaker]
      */
     private var mLabelMaker: LabelMaker? = null
     /**
-     * Numeric text we are to draw, initially the empty string it is set to the number of milliseconds
-     * per frame using our method `setValue` by the `drawMsPF` method of `SpriteTextRenderer`
-     * which is called every time its `onDrawFrame` method is called
+     * Numeric text we are to draw. It is set to the number of milliseconds per frame using our
+     * method [setValue] by the `drawMsPF` method of [SpriteTextRenderer] which is called every
+     * time its `onDrawFrame` method is called
      */
     private var mText = ""
     /**
@@ -48,27 +48,26 @@ class NumericSprite
     private val mLabelId = IntArray(10)
 
     /**
-     * Called from the `onSurfaceCreated` method of `SpriteTextRenderer` to initialize
-     * this instance of `NumericSprite`. First we initialize `int height` to be the first
-     * power of 2 number greater than the recommended line spacing of `Paint paint`. We set
-     * `float interDigitGaps` to 9 pixels (the spacing between digits) and then initialize
-     * `int width` to be the first power of 2 number greater than the sum of `interDigitGaps`
-     * and the length of our string `String sStrike` in pixels when `paint` is used to
-     * render it. We set our field `LabelMaker mLabelMaker` to a new instance of `LabelMaker`
-     * specifying the use of full color, a width of `width` and a height of `height`. We
-     * instruct `mLabelMaker` to initialize itself (transition to the STATE_INITIALIZED state),
-     * then to transition to the state STATE_ADDING.
+     * Called from the `onSurfaceCreated` method of [SpriteTextRenderer] to initialize this
+     * instance of [NumericSprite]. First we initialize [Int] variable `val height` to be the
+     * first power of 2 number greater than the recommended line spacing of [Paint] parameter
+     * [paint]. We set [Float] variable `val interDigitGaps` to 9 pixels (the spacing between
+     * digits) and then initialize [Int] variable `val width` to be the first power of 2 number
+     * greater than the sum of `interDigitGaps` and the length of our [String] constant [sStrike]
+     * in pixels when [paint] is used to render it. We set our [LabelMaker] field [mLabelMaker]
+     * to a new instance of [LabelMaker] specifying the use of full color, a width of `width` and
+     * a height of `height`. We instruct [mLabelMaker] to initialize itself (transition to the
+     * STATE_INITIALIZED state), then to transition to the state STATE_ADDING.
      *
-     *
-     * Then for each of the 10 digits in our `String sStrike` we extract a single digit at a
-     * time and instruct `LabelMaker mLabelMaker` to add it to its labels saving the index
-     * number of the label in our field `int[] mLabelId`, and we save the width of the label
-     * created by `mLabelMaker` in our field `int[] mWidth`. When done adding the digits
-     * to `mLabelMaker` we instruct it to transition from STATE_ADDING to STATE_INITIALIZED.
+     * Then for each of the 10 digits in our [String] constant [sStrike] we extract a single digit
+     * at a time and instruct [LabelMaker] field [mLabelMaker] to add it to its labels, saving the
+     * index number of the label in our [IntArray] field [mLabelId], and we save the width of the
+     * label created by [mLabelMaker] in our [IntArray] field [mWidth]. When done adding the digits
+     * to [mLabelMaker] we instruct it to transition from STATE_ADDING to STATE_INITIALIZED.
      *
      * @param gl    the gl interface
-     * @param paint `Paint` to use, it comes from the field `Paint mLabelPaint` which is
-     * created and configured in the constructor of `Paint mLabelPaint`.
+     * @param paint [Paint] to use, it comes from the [Paint] field [SpriteTextRenderer.mLabelPaint]
+     * which is created and configured in the constructor of [SpriteTextRenderer].
      */
     fun initialize(gl: GL10?, paint: Paint) {
         val height = roundUpPower2(paint.fontSpacing.toInt())
