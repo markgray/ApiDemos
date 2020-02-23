@@ -85,10 +85,10 @@ class NumericSprite
     }
 
     /**
-     * Called from the `onSurfaceCreated` method of `SpriteTextRenderer` when an instance
-     * of us already exists for a previous creation of the surface, in order to force us to create a
-     * new instance for the new surface. We simply call the `shutdown` method of `mLabelMaker`
-     * and set it to null.
+     * Called from the `onSurfaceCreated` method of [SpriteTextRenderer] when an instance
+     * of us already exists for a previous creation of the surface, in order to force us to
+     * create a new instance for the new surface. We simply call the `shutdown` method of
+     * [mLabelMaker] and set it to null.
      *
      * @param gl the gl interface
      */
@@ -99,9 +99,9 @@ class NumericSprite
 
     /**
      * Find the smallest power of two >= the input value. (Doesn't work for negative numbers.) The
-     * shifting and or'ing result in a value with all bits to the right of the most significant 1 bit
-     * are also 1's and when 1 is added to that you get a power of 2 value. The initial subtract is
-     * done in case the number was already that value.
+     * shifting and or'ing result in a value with all bits to the right of the most significant 1
+     * bit are also 1's and when 1 is added to that you get a power of 2 value. The initial subtract
+     * is done in case the number was already that value.
      *
      * @param x number to round up
      * @return our input parameter rounded up to the smallest power of two above it
@@ -118,28 +118,26 @@ class NumericSprite
     }
 
     /**
-     * Formats its parameter `int value` as text and saves it in our field `String mText`.
-     * `mText` is then drawn using the individual digit labels when our `draw` method is
-     * called.
+     * Formats its [Int] parameter [value] as text and saves it in our [String] field [mText].
+     * [mText] is then drawn using the individual digit labels when our [draw] method is called.
      *
-     * @param value int value we want to print to our surface
+     * @param value [Int] value we want to print to our surface
      */
     fun setValue(value: Int) {
         mText = format(value)
     }
 
     /**
-     * Called to draw the contents of our field `String mText` to the `SurfaceView` using
-     * the individual digit labels we have created in our `LabelMaker mLabelMaker`. First we
-     * set `int length` to the number of characters in `mText` and instruct our instance
-     * of `LabelMaker mLabelMaker` to begin drawing (transition from the state STATE_INITIALIZED
-     * to the state STATE_DRAWING). Then for each of the characters in `mText` we calculate the
-     * index of the label for that character and instruct `mLabelMaker` to draw that label at
-     * the location (x,y). We then advance `x` by the width of the label just drawn and move to
-     * the next character.
+     * Called to draw the contents of our [String] field [mText] to the `SurfaceView` using the
+     * individual digit labels we have created in our [LabelMaker] field [mLabelMaker]. First we
+     * set [Int] variable `val length` to the number of characters in [mText] and instruct our
+     * instance of [LabelMaker] in [mLabelMaker] to begin drawing (transition from the state
+     * STATE_INITIALIZED to the state STATE_DRAWING). Then for each of the characters in [mText]
+     * we calculate the index of the label for that character and instruct [mLabelMaker] to draw
+     * that label at the location `(x,y)`. We then advance `x` by the width of the label just
+     * drawn and move to the next character.
      *
-     *
-     * When done drawing we instruct `mLabelMaker` to end the drawing (transition from the state
+     * When done drawing we instruct [mLabelMaker] to end the drawing (transition from the state
      * STATE_DRAWING to the state STATE_INITIALIZED).
      *
      * @param gl         the gl interface
@@ -162,12 +160,12 @@ class NumericSprite
     }
 
     /**
-     * Adds up the width of each of the labels needed to print the contents of `String mText`
-     * and returns the result to the caller. Called from the `drawMsPF` method of the class
-     * `SpriteTextRenderer` in order to calculate the correct starting x location before calling
-     * our method `draw`.
+     * Adds up the width of each of the labels needed to print the contents of [String] field
+     * [mText] and returns the result to the caller. Called from the `drawMsPF` method of the
+     * class [SpriteTextRenderer] in order to calculate the correct starting x location before
+     * calling our method `draw`.
      *
-     * @return width in pixels of the labels needed to render the contents of `String mText`
+     * @return width in pixels of the labels needed to render the contents of [String] field [mText]
      */
     fun width(): Float {
         var width = 0.0f
@@ -180,10 +178,10 @@ class NumericSprite
     }
 
     /**
-     * Returns its parameter's `String` representation.
+     * Returns its parameter's [String] representation.
      *
-     * @param value int value to format into text string
-     * @return `String` object representing our parameter `int value`
+     * @param value [Int] value to format into text string
+     * @return [String] object representing our parameter [value]
      */
     private fun format(value: Int): String {
         return value.toString()
@@ -191,7 +189,8 @@ class NumericSprite
 
     companion object {
         /**
-         * String of digits used to initialize our ten numeric labels with the character they should draw.
+         * String of digits used to initialize our ten numeric labels with the
+         * character they should draw.
          */
         private const val sStrike = "0123456789"
     }
