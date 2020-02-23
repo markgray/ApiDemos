@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.graphics
 
-package com.example.android.apis.graphics;
-
-import android.opengl.GLSurfaceView;
-import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
+import android.opengl.GLSurfaceView
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * Shows a rotating triangle using a bitmap made from raw/robot.png as the texture. It uses a
@@ -29,54 +27,49 @@ import androidx.appcompat.app.AppCompatActivity;
  * to reuse code and documentation written for the C OpenGL ES APIs. It uses android:theme="@style/ThemeCurrentDialog"
  * in the AndroidManifest.xml so the SurfaceView is shrunk to appear in a dialog size window.
  */
-public class TriangleActivity extends AppCompatActivity {
-
+class TriangleActivity : AppCompatActivity() {
     /**
-     * Our {@code GLSurfaceView} we use for drawing.
+     * Our `GLSurfaceView` we use for drawing.
      */
-    private GLSurfaceView mGLView;
+    private var mGLView: GLSurfaceView? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * {@code onCreate}. Next we initialize our field {@code GLSurfaceView mGLView} with a new instance
-     * of {@code GLSurfaceView}, and set its renderer to a new instance of {@code StaticTriangleRenderer}.
-     * Finally we set our content view to {@code mGLView}. Note that since our entry in the AndroidManifest
+     * `onCreate`. Next we initialize our field `GLSurfaceView mGLView` with a new instance
+     * of `GLSurfaceView`, and set its renderer to a new instance of `StaticTriangleRenderer`.
+     * Finally we set our content view to `mGLView`. Note that since our entry in the AndroidManifest
      * uses android:theme="@style/ThemeCurrentDialog" we appear in a dialog sized window above the main
      * activity which spawned us.
      *
-     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use
+     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mGLView = new GLSurfaceView(this);
-        mGLView.setRenderer(new StaticTriangleRenderer(this));
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mGLView = GLSurfaceView(this)
+        mGLView!!.setRenderer(StaticTriangleRenderer(this))
         /*ImageView imageView = new ImageView(this);
         imageView.setImageResource(R.raw.robot);
-        setContentView(imageView);*/
-        setContentView(mGLView);
+        setContentView(imageView);*/setContentView(mGLView)
     }
 
     /**
      * Called as part of the activity lifecycle when an activity is going into the background, but
-     * has not (yet) been killed. First we call through to our super's implementation of {@code onPause}
-     * then we pass the call on to the {@code onPause} method of our field {@code GLSurfaceView mGLView}.
+     * has not (yet) been killed. First we call through to our super's implementation of `onPause`
+     * then we pass the call on to the `onPause` method of our field `GLSurfaceView mGLView`.
      */
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mGLView.onPause();
+    override fun onPause() {
+        super.onPause()
+        mGLView!!.onPause()
     }
 
     /**
-     * Called after {@link #onRestoreInstanceState}, {@link #onRestart}, or {@link #onPause}, for
+     * Called after [.onRestoreInstanceState], [.onRestart], or [.onPause], for
      * your activity to start interacting with the user. First we call through to our super's
-     * implementation of {@code onResume} then we pass the call on to the {@code onResume} method of
-     * our field {@code GLSurfaceView mGLView}.
+     * implementation of `onResume` then we pass the call on to the `onResume` method of
+     * our field `GLSurfaceView mGLView`.
      */
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mGLView.onResume();
+    override fun onResume() {
+        super.onResume()
+        mGLView!!.onResume()
     }
 }
