@@ -25,6 +25,7 @@ import android.opengl.GLUtils
 import android.os.SystemClock
 import com.example.android.apis.R
 import java.io.IOException
+import java.io.InputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
@@ -33,27 +34,29 @@ import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 /**
- * Renderer for the `GLSurfaceView` used for the demo.
+ * Renderer for the [GLSurfaceView] used for the demo.
  */
 class SpriteTextRenderer(
+
         /**
-         * `Context` to use for accessing resources, set to the parameter `Context context`
-         * passed to our constructor ("this" when called from the `onCreate` method of the activity
-         * `SpriteTextActivity`).
+         * [Context] to use for accessing resources ("this" when called from the `onCreate` method
+         * of the activity [SpriteTextActivity]).
          */
-        private val mContext: Context) : GLSurfaceView.Renderer {
+        private val mContext: Context
+
+) : GLSurfaceView.Renderer {
     /**
-     * Width of the `GLSurfaceView` we are rendering to, set using the `w` parameter
-     * passed to our method `onSurfaceChanged`.
+     * Width of the [GLSurfaceView] we are rendering to, set using the `w` parameter
+     * passed to our method [onSurfaceChanged].
      */
     private var mWidth = 0
     /**
-     * Height of the `GLSurfaceView` we are rendering to, set using the `h` parameter
-     * passed to our method `onSurfaceChanged`.
+     * Height of the [GLSurfaceView] we are rendering to, set using the `h` parameter
+     * passed to our method [onSurfaceChanged].
      */
     private var mHeight = 0
     /**
-     * Rotating `Triangle` instance that we render.
+     * Rotating [Triangle] instance that we render.
      */
     private val mTriangle: Triangle = Triangle()
     /**
@@ -69,47 +72,47 @@ class SpriteTextRenderer(
      */
     private var mMsPerFrame = 0
     /**
-     * Start time for current counting of frames used to calculate the value of `mMsPerFrame`
+     * Start time for current counting of frames used to calculate the value of [mMsPerFrame]
      */
     private var mStartTime: Long = 0
     /**
-     * `LabelMaker` containing labels for the three vertices of our triangle "A", "B", and "C",
+     * [LabelMaker] containing labels for the three vertices of our triangle "A", "B", and "C",
      * as well as the label "ms/f"
      */
     private var mLabels: LabelMaker? = null
     /**
-     * `Paint` instance we use for our labels as well as the labels that `NumericSprite`
-     * draws to display our frame millisecond per frame data.
+     * [Paint] instance we use for our labels as well as the labels that [NumericSprite]
+     * draws to display our millisecond per frame data.
      */
     private val mLabelPaint: Paint = Paint()
     /**
-     * `Label` index pointing to the `Label` "A" in `LabelMaker mLabels`
+     * `Label` index pointing to the `Label` "A" in [LabelMaker] field [mLabels]
      */
     private var mLabelA = 0
     /**
-     * `Label` index pointing to the `Label` "B" in `LabelMaker mLabels`
+     * `Label` index pointing to the `Label` "B" in [LabelMaker] field [mLabels]
      */
     private var mLabelB = 0
     /**
-     * `Label` index pointing to the `Label` "C" in `LabelMaker mLabels`
+     * `Label` index pointing to the `Label` "C" in [LabelMaker] field [mLabels]
      */
     private var mLabelC = 0
     /**
-     * `Label` index pointing to the `Label` "ms/f" in `LabelMaker mLabels`
+     * `Label` index pointing to the `Label` "ms/f" in [LabelMaker] field [mLabels]
      */
     private var mLabelMsPF = 0
     /**
-     * `Projector` we use to "project" our vertex labels to the correct position on our rotating
+     * [Projector] we use to "project" our vertex labels to the correct position on our rotating
      * triangle.
      */
     private val mProjector: Projector = Projector()
     /**
-     * `NumericSprite` instance we use to draw the digit labels to display our `mMsPerFrame`
+     * [NumericSprite] instance we use to draw the digit labels to display our [mMsPerFrame]
      * (milliseconds per frame) data at the bottom of the `SurfaceView`.
      */
     private var mNumericSprite: NumericSprite? = null
     /**
-     * Scratch array we use in our call to `Projector.project` to calculate the correct location
+     * Scratch array we use in our call to [Projector.project] to calculate the correct location
      * of our triangle vertex labels.
      */
     private val mScratch = FloatArray(8)
@@ -120,11 +123,9 @@ class SpriteTextRenderer(
      * device awakes after going to sleep. First we disable the server side capability GL_DITHER
      * (color components and indices will not be dithered before they are written to the color buffer).
      *
-     *
      * Next we specify the implementation specific hint GL_FASTEST for the GL_PERSPECTIVE_CORRECTION_HINT
      * target (Indicates the quality of color, texture coordinate, and fog coordinate interpolation.
      * GL_FASTEST will result in simple linear interpolation of colors and/or texture coordinates).
-     *
      *
      * We set the clear color to gray, set the shade model to GL_SMOOTH (causes the computed colors
      * of vertices to be interpolated as the primitive is rasterized, typically assigning different
@@ -132,13 +133,11 @@ class SpriteTextRenderer(
      * (do depth comparisons and update the depth buffer), and the server side capability GL_TEXTURE_2D
      * (If enabled and no fragment shader is active, two-dimensional texturing is performed).
      *
-     *
-     * Next we request that a texture name be generated, and we save the name in our field
-     * `mTextureID`. We then bind `mTextureID` to the target GL_TEXTURE_2D (GL_TEXTURE_2D
-     * becomes an alias for `mTextureID` which becomes a two dimensional texture. While a texture
-     * is bound, GL operations on the target to which it is bound affect the bound texture, and queries
-     * of the target to which it is bound return state from the bound texture).
-     *
+     * Next we request that a texture name be generated, and we save the name in our [Int] field
+     * [mTextureID]. We then bind [mTextureID] to the target GL_TEXTURE_2D (GL_TEXTURE_2D becomes
+     * an alias for [mTextureID] which becomes a two dimensional texture. While a texture is bound,
+     * GL operations on the target to which it is bound affect the bound texture, and queries of
+     * the target to which it is bound return state from the bound texture).
      *
      * We set the texture parameter GL_TEXTURE_MIN_FILTER of GL_TEXTURE_2D to GL_NEAREST (The texture
      * minifying function is used whenever the pixel being textured maps to an area greater than one
@@ -149,29 +148,26 @@ class SpriteTextRenderer(
      * GL_LINEAR causes the weighted average of the four texture elements that are closest to the
      * center of the pixel being textured to be used).
      *
-     *
      * We set the texture parameters GL_TEXTURE_WRAP_S and GL_TEXTURE_WRAP_T of GL_TEXTURE_2D both to
      * GL_CLAMP_TO_EDGE (causes the color of the pixel at the edges of the texture to be used when
      * the area being textured extends past the size of the texture). We set texture parameter
      * GL_TEXTURE_ENV_MODE of the texture environment target GL_TEXTURE_ENV to GL_REPLACE (causes
      * the colors of the texture to replace whatever colors were there before).
      *
-     *
-     * We open `InputStream is` to read the contents of our raw resource robot.png, declare
-     * `Bitmap bitmap`, then decode `is` into `bitmap`. We upload `bitmap`
+     * We open [InputStream] `val inputStream` to read the contents of our raw resource robot.png,
+     * declare [Bitmap] `val bitmap`, then decode `inputStream` into `bitmap`. We upload `bitmap`
      * to the texture target GL_TEXTURE_2D and recycle `bitmap`.
      *
+     * If we already have a [LabelMaker] field [mLabels] in use (our surface has been recreated), we
+     * call its `shutdown` method to have it delete its current texture, and if [mLabels] is *null*
+     * we initialize it with a new instance of [LabelMaker]. We then instruct [mLabels] to begin
+     * adding labels and add the four labels "A", "B", "C", and "ms/f" and saving the index number
+     * returned in [mLabelA], [mLabelB], [mLabelC], and [mLabelMsPF] respectively. We then instruct
+     * [mLabels] to end the adding of labels.
      *
-     * If we already have a `LabelMaker mLabels` in use (our surface has been recreated), we
-     * surface has been recreated), We then instruct `mLabels` to begin adding labels and add the
-     * four labels "A", "B", "C", and "ms/f" and saving the index number returned in `mLabelA`,
-     * `mLabelB`, `mLabelC`, and `mLabelMsPF` respectively. We then instruct
-     * `mLabels` to end the adding of labels.
-     *
-     *
-     * Finally, if `NumericSprite mNumericSprite` is not null (our surface has been recreated),
-     * we instruct it to `shutdown`, otherwise we initialize `mNumericSprite` with a new
-     * instance of `NumericSprite`. Then we instruct `mNumericSprite` to initialize.
+     * Finally, if [NumericSprite] field [mNumericSprite] is not null (our surface has been recreated),
+     * we instruct it to `shutdown`, otherwise we initialize [mNumericSprite] with a new instance of
+     * [NumericSprite]. Then we instruct [mNumericSprite] to initialize.
      *
      * @param gl     the GL interface
      * @param config the EGLConfig of the created surface. UNUSED
@@ -203,13 +199,13 @@ class SpriteTextRenderer(
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE.toFloat())
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE.toFloat())
         gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE.toFloat())
-        val `is` = mContext.resources.openRawResource(R.raw.robot)
+        val inputStream: InputStream = mContext.resources.openRawResource(R.raw.robot)
         val bitmap: Bitmap
         bitmap = try {
-            BitmapFactory.decodeStream(`is`)
+            BitmapFactory.decodeStream(inputStream)
         } finally {
             try {
-                `is`.close()
+                inputStream.close()
             } catch (e: IOException) { // Ignore.
             }
         }
@@ -242,40 +238,34 @@ class SpriteTextRenderer(
      * to GL_MODULATE (causes the colors from the texture units to be multiplied). Next we clear both
      * the color buffer and the depth buffer.
      *
-     *
      * To do the drawing we make the model view matrix the current matrix, load it with the identity
      * matrix, then we create a viewing matrix derived from an eye point at (0,0,-2.5), a reference
      * point indicating the center of the scene at (0,0,0), and an UP vector or (0,1,0).
      *
-     *
      * We enable the client side capability GL_VERTEX_ARRAY (the vertex array is enabled for writing
      * and used during rendering), and the client side capability GL_TEXTURE_COORD_ARRAY (the texture
      * coordinate array is enabled for writing and used during rendering). We set the active texture
-     * unit to GL_TEXTURE0, and bind our texture name `mTextureID` to the texture target
-     * GL_TEXTURE_2D. We set the texture parameters GL_TEXTURE_WRAP_S and GL_TEXTURE_WRAP_T of
-     * GL_TEXTURE_2D both to GL_REPEAT (causes the texture to be repeated when the area being textured
-     * is bigger than the texture).
+     * unit to GL_TEXTURE0, and bind our texture name [mTextureID] to the texture target GL_TEXTURE_2D.
+     * We set the texture parameters GL_TEXTURE_WRAP_S and GL_TEXTURE_WRAP_T of GL_TEXTURE_2D both to
+     * GL_REPEAT (causes the texture to be repeated when the area being textured is bigger than the
+     * texture).
      *
-     *
-     * We calculate `angle` based on the system time since boot modulo 4000, multiplied by a
+     * We calculate `val angle` based on the system time since boot modulo 4000, multiplied by a
      * factor of 0.090 (angle goes from 0 degrees to 360 degrees every 4 seconds). We then rotate
      * our model view matrix by `angle` degrees around the z axis, and scale it by 2.0 in all
      * three directions (multiply the current matrix by a general scaling matrix using 2.0 for all
-     * three scale factors). Then we instruct our field `Triangle mTriangle` to draw itself.
+     * three scale factors). Then we instruct our [Triangle] field [mTriangle] to draw itself.
      *
+     * To add our labels to the `SurfaceView` we instruct our [Projector] field [mProjector] to
+     * load the current model view matrix, tell our [LabelMaker] field [mLabels] to begin drawing,
+     * then call our method [drawLabel] to draw the three vertex labels [mLabelA], [mLabelB], and
+     * [mLabelC]. We calculate [Float] `val msPFX` to be the x coordinate of our label [mLabelMsPF]
+     * by subtracting the width of that label from the width [mWidth] of our surface view (with an
+     * additional pixel for spacing), then instruct [mLabels] to draw our label [mLabelMsPF] at the
+     * xy location `(msPFX,0)`. We then instruct [mLabels] to end its drawing state.
      *
-     * To add our labels to the `SurfaceView` we instruct our `Projector mProjector` to
-     * load the current model view matrix, tell our `LabelMaker mLabels` to begin drawing, then
-     * call our method `drawLabel` to draw the three vertex labels `mLabelA`, `mLabelB`,
-     * and `mLabelC`. We calculate `float msPFX` to be the x coordinate of our label
-     * `mLabelMsPF` by subtracting the width of that label from the width `mWidth` of our
-     * surface view (with an additional pixel for spacing), then instruct `mLabels` to draw our
-     * label `mLabelMsPF` at the xy location (msPFX,0). We then instruct `mLabels` to end
-     * its drawing state.
-     *
-     *
-     * Finally we call our method `drawMsPF` to display the milliseconds per frame data before
-     * the `mLabelMsPF` label.
+     * Finally we call our method [drawMsPF] to display the milliseconds per frame data in front of
+     * the [mLabelMsPF] label.
      *
      * @param gl the GL interface.
      */
@@ -321,26 +311,23 @@ class SpriteTextRenderer(
     }
 
     /**
-     * Draws the milliseconds per frame data on the `SurfaceView` using our field
-     * `NumericSprite mNumericSprite` to draw the value using its per digit labels.
+     * Draws the milliseconds per frame data on the `SurfaceView` using our [NumericSprite] field
+     * [mNumericSprite] to draw the value using its per digit labels.
      *
-     *
-     * First we fetch the system time since boot to `long time`, and if `mStartTime` is
-     * 0 (our first time called) we also save it in `mStartTime`. We increment our field
-     * `mFrames` and if we have waited for SAMPLE_PERIOD_FRAMES (12) since our last update,
-     * we set `mFrames` to 0, calculate `long delta` as the number of milliseconds that
-     * have passed between `time` and `mStartTime`, set `mStartTime` to `time`,
-     * and set `mMsPerFrame` to the number of milliseconds per frame we calculate by multiplying
+     * First we fetch the system time since boot to [Long] `val time`, and if [mStartTime] is
+     * 0 (our first time called) we also save it in [mStartTime]. We increment our field
+     * [mFrames] and if we have waited for SAMPLE_PERIOD_FRAMES (12) since our last update,
+     * we set [mFrames] to 0, calculate [Long] `val delta` as the number of milliseconds that
+     * have passed between `time` and [mStartTime], set [mStartTime] to `time`, and set
+     * [mMsPerFrame] to the number of milliseconds per frame we calculate by multiplying
      * `delta` times SAMPLE_FACTOR.
      *
+     * Then if [mMsPerFrame] is greater than 0, we tell [mNumericSprite] to set its value
+     * to [mMsPerFrame], retrieve the width need to display this value to [Float] `val numWidth`
+     * and calculate the value of the x coordinate to begin our number display [Float] `val x` by
+     * subtracting `numWidth` from our input parameter [rightMargin].
      *
-     * Then if `mMsPerFrame` is greater than 0, we tell `mNumericSprite` to set its value
-     * to `mMsPerFrame`, retrieve the width need to display this value to `float numWidth`
-     * and calculate the value of the x coordinate to begin our number display `float x` by
-     * subtracting `numWidth` from our input parameter `float rightMargin`.
-     *
-     *
-     * Finally we instruct `mNumericSprite` to draw its value at (`x`, 0).
+     * Finally we instruct [mNumericSprite] to draw its value at (`x`, 0).
      *
      * @param gl          the GL interface
      * @param rightMargin x coordinate of the end of our milliseconds display (the beginning of the
@@ -367,19 +354,18 @@ class SpriteTextRenderer(
 
     /**
      * Draws the vertex label requested in the proper position on the rotating triangle. First we
-     * get the x and y coordinates of the `triangleVertex` vertex we are to label to the
-     * variables `x` and `y`. We load our scratch vector with `x`, `y`, 0
-     * for the z coordinate, and 1.0 for the w (to indicate it is a point). Then we call our the
-     * `project` method of our field `Projector mProjector` to translate the relative
-     * position of our vertex to the absolute position in the rotating model view and retrieve the
-     * resulting x coordinate to `sx`, and the y coordinate to `sy`. We get the height
-     * of our label for `float height`, and the width of our label for `float width` and
-     * calculate the centered location `(tx,ty)` for placing our label by subtracting half the
-     * width from `sx` and half the height from `sy` respectively.
+     * get the x and y coordinates of the [triangleVertex] vertex we are to label to the variables
+     * `x` and `y`. We load our scratch vector with `x`, `y`, 0, and 1.0 for the w coordinate (to
+     * indicate it is a point). Then we call our the [Projector.project] method of our [Projector]
+     * field [mProjector] to translate the relative position of our vertex to the absolute position
+     * in the rotating model view and retrieve the resulting x coordinate to `val sx`, and the y
+     * coordinate to `val sy`. We get the height of our label for [Float] `val height`, and the
+     * width of our label for [Float] `val width` and calculate the centered location `(tx,ty)` for
+     * placing our label by subtracting half the width from `sx` and half the height from `sy`
+     * respectively.
      *
-     *
-     * Finally we instruct our field `LabelMaker mLabels` to draw the label with index
-     * `labelID` at the location `(tx,ty)`.
+     * Finally we instruct our [LabelMaker] field [mLabels] to draw the label with index [labelId]
+     * at the location `(tx,ty)`.
      *
      * @param gl             the GL interface
      * @param triangleVertex the index number of the vertex, 0, 1, or 2.
@@ -404,19 +390,17 @@ class SpriteTextRenderer(
 
     /**
      * Called when the surface changed size. Called after the surface is created and whenever the
-     * OpenGL ES surface size changes. First we save our parameter `w` (the new width) in our
-     * field `mWidth` and our parameter `h` (the new height) in our field `mHeight`.
-     * Then we set the viewport of our surface to have the lower left hand corner at (0,0), a width
-     * of `w` and a height of `h`. We also inform our field `Projector mProjector`
-     * about the new surface size.
+     * OpenGL ES surface size changes. First we save our parameter [w] (the new width) in our field
+     * [mWidth] and our parameter [h] (the new height) in our field [mHeight]. Then we set the
+     * viewport of our surface to have the lower left hand corner at `(0,0)`, a width of [w] and a
+     * height of [h]. We also inform our [Projector] field [mProjector] about the new surface size.
      *
-     *
-     * Next we calculate the aspect ration `float ratio`, set the current matrix to GL_PROJECTION,
+     * Next we calculate the [Float] aspect ration `val ratio`, set the current matrix to GL_PROJECTION,
      * load it with the identity matrix, and multiply it by a perspective matrix with the left clipping
-     * plane at `-ratio`, the right clipping plane at `ratio`, the bottom clipping plane
-     * at -1, the top clipping plane at 1, the near clipping plane at 1, and the far clipping plane
-     * at 10. Finally we instruct `Projector mProjector` to fetch a copy of this projection
-     * matrix for its use.
+     * plane at `-ratio`, the right clipping plane at `ratio`, the bottom clipping plane at -1, the
+     * top clipping plane at 1, the near clipping plane at 1, and the far clipping plane at 10.
+     * Finally we instruct [Projector] field [mProjector] to fetch a copy of this projection matrix
+     * for its use.
      *
      * @param gl the GL interface.
      * @param w  new width of the surface
@@ -452,14 +436,8 @@ class SpriteTextRenderer(
     }
 
     /**
-     * Our constructor. First we save our parameter `Context context` in our field
-     * `Context mContext`, then we initialize our fields `Triangle mTriangle`,
-     * `Projector mProjector` and `Paint mLabelPaint` with new instances. We set
-     * the text size of `Paint mLabelPaint` to 32, set its antialias flag, and set its
-     * color to black.
-     *
-     * Parameter: context `Context` to use to access resources, "this" when we are called from the
-     * `onCreate` method of the activity `SpriteTextActivity`.
+     * The init block of our constructor. We set the text size of `Paint` field `mLabelPaint` to 32,
+     * set its antialias flag, and set its color to black.
      */
     init {
         mLabelPaint.textSize = 32f
@@ -473,30 +451,29 @@ class SpriteTextRenderer(
  */
 internal class Triangle {
     /**
-     * Native heap `FloatBuffer` we use to hold our vertex coordinates in.
+     * Native heap [FloatBuffer] we use to hold our vertex coordinates in.
      */
     private val mFVertexBuffer: FloatBuffer
     /**
-     * Native heap `FloatBuffer` we use to hold our texture coordinates in.
+     * Native heap [FloatBuffer] we use to hold our texture coordinates in.
      */
     private val mTexBuffer: FloatBuffer
     /**
-     * Native heap `ShortBuffer` we use to hold our indices in.
+     * Native heap [ShortBuffer] we use to hold our indices in.
      */
     private val mIndexBuffer: ShortBuffer
 
     /**
-     * Called from the `onDrawFrame` method of `SpriteTextRenderer` to draw our triangle.
-     * First we select counterclockwise polygons as front-facing. Next we specify `mFVertexBuffer`
-     * to be the location of our vertex data, with 3 coordinates per vertex, GL_FLOAT as the data
-     * type, and 0 as the stride. We enable the server side capability GL_TEXTURE_2D, and specify
-     * `mTexBuffer` to be the location of our texture coordinates, with 2 coordinates per array
-     * element, GL_FLOAT as the data type, and 0 as the stride.
+     * Called from the `onDrawFrame` method of [SpriteTextRenderer] to draw our triangle. First we
+     * select counterclockwise polygons as front-facing. Next we specify [mFVertexBuffer] to be the
+     * location of our vertex data, with 3 coordinates per vertex, GL_FLOAT as the data type, and 0
+     * as the stride. We enable the server side capability GL_TEXTURE_2D, and specify [mTexBuffer]
+     * to be the location of our texture coordinates, with 2 coordinates per array element, GL_FLOAT
+     * as the data type, and 0 as the stride.
      *
-     *
-     * Finally we instruct openGL to render primitives from array data, using GL_TRIANGLE_STRIP as the
-     * primitive type, VERTS (3) as the number of elements to be rendered, `mIndexBuffer` as the
-     * location of the indices, and GL_UNSIGNED_SHORT as the type of values it contains.
+     * Finally we instruct openGL to render primitives from array data, using GL_TRIANGLE_STRIP as
+     * the primitive type, VERTS (3) as the number of elements to be rendered, [mIndexBuffer] as
+     * the location of the indices, and GL_UNSIGNED_SHORT as the type of values it contains.
      *
      * @param gl the GL interface
      */
@@ -536,41 +513,43 @@ internal class Triangle {
         /**
          * (x,y,z) coordinates for a unit-sided equilateral triangle centered on the origin.
          */
-        private val sCoords = floatArrayOf( // X, Y, Z
+        private val sCoords: FloatArray = floatArrayOf( // X, Y, Z
                 -0.5f, -0.25f, 0f,
                 0.5f, -0.25f, 0f,
                 0.0f, 0.559016994f, 0f)
     }
 
     /**
-     * Our constructor. First we allocate `ByteBuffer vbb` on the native heap, with enough space
-     * to hold our `float[] sCoords` array of vertex coordinates, we set its byte order to native
-     * byte order, and initialize our field `FloatBuffer mFVertexBuffer` with a view of this byte
-     * buffer as a float buffer. We allocate `ByteBuffer tbb` on the native heap, with enough space
-     * to hold our two dimensional texture vertex coordinates, we set its byte order to native byte order,
-     * and initialize our field `FloatBuffer mTexBuffer` with a view of this byte buffer as a float
-     * buffer. We allocate `ByteBuffer ibb` on the native heap, with enough space to hold our indices,
-     * we set its byte order to native byte order, and initialize our field `ShortBuffer mIndexBuffer`
-     * with a view of this byte buffer as a short buffer.
-     *
+     * The init block of Our constructor. First we allocate `ByteBuffer` variable `val vbb` on the
+     * native heap, with enough space to hold our `FloatArray` field `sCoords` array of vertex
+     * coordinates, we set its byte order to native byte order, and initialize our `FloatBuffer`
+     * field `mFVertexBuffer` with a view of this byte buffer as a float buffer. We allocate `ByteBuffer`
+     * variable `val tbb` on the native heap, with enough space to hold our two dimensional texture
+     * vertex coordinates, we set its byte order to native byte order, and initialize our `FloatBuffer`
+     * field `mTexBuffer` with a view of this byte buffer as a float buffer. We allocate `ByteBuffer`
+     * variable `val ibb` on the native heap, with enough space to hold our indices, we set its byte
+     * order to native byte order, and initialize our `ShortBuffer` field `mIndexBuffer` with a view
+     * of this byte buffer as a short buffer.
      *
      * Next we loop through the 3 vertices, each with 3 coordinates and add the coordinate values from
-     * `float[] sCoords` to `mFVertexBuffer`. For the texture coordinates we loop through
+     * `FloatArray` field `sCoords` to `mFVertexBuffer`. For the texture coordinates we loop through
      * the 3 vertices, each with 2 coordinates, scaling the (x,y) coordinates of `sCoords` by
      * 2.0 and offsetting them by 0.5 before storing them in `mTexBuffer`. For our index buffer
      * `mIndexBuffer` we simply add the three indices 0, 1, 2.
      *
-     *
-     * Finally we rewind our three buffers `mFVertexBuffer`, `mTexBuffer`, and
-     * `mIndexBuffer` so they will be ready for use.
+     * Finally we rewind our three buffers `mFVertexBuffer`, `mTexBuffer`, and `mIndexBuffer` so they
+     * will be ready for use.
      */
-    init { // Buffers to be passed to gl*Pointer() functions
-// must be direct, i.e., they must be placed on the
-// native heap where the garbage collector cannot
-// move them.
-//
-// Buffers with multi-byte data types (e.g., short, int, float)
-// must have their byte order set to native order
+    init {
+        /**
+         * Buffers to be passed to gl*Pointer() functions
+         * must be direct, i.e., they must be placed on the
+         * native heap where the garbage collector cannot
+         * move them.
+         *
+         * Buffers with multi-byte data types (e.g., short, int, float)
+         * must have their byte order set to native order
+         */
         val vbb = ByteBuffer.allocateDirect(VERTS * 3 * 4)
         vbb.order(ByteOrder.nativeOrder())
         mFVertexBuffer = vbb.asFloatBuffer()
