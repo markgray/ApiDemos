@@ -16,9 +16,10 @@
 
 package com.example.android.apis.graphics;
 
-import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Shows a rotating triangle using a bitmap made from raw/robot.png as the texture. It uses a
@@ -28,7 +29,7 @@ import android.os.Bundle;
  * to reuse code and documentation written for the C OpenGL ES APIs. It uses android:theme="@style/ThemeCurrentDialog"
  * in the AndroidManifest.xml so the SurfaceView is shrunk to appear in a dialog size window.
  */
-public class TriangleActivity extends Activity {
+public class TriangleActivity extends AppCompatActivity {
 
     /**
      * Our {@code GLSurfaceView} we use for drawing.
