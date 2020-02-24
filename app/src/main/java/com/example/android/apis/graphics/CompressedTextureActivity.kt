@@ -113,7 +113,7 @@ class CompressedTextureActivity : AppCompatActivity() {
          * @param gl the GL interface. Use `instanceof` to test if the interface supports
          * GL11 or higher interfaces. UNUSED.
          */
-        override fun load(gl: GL10) {
+        override fun load(gl: GL10?) {
             Log.w(TAG, "ETC1 texture support: " + ETC1Util.isETC1Supported())
             val input: InputStream = resources.openRawResource(R.raw.androids)
             try {
@@ -151,7 +151,7 @@ class CompressedTextureActivity : AppCompatActivity() {
          * @param gl the GL interface. Use `instanceof` to test if the interface supports
          * GL11 or higher interfaces. UNUSED.
          */
-        override fun load(gl: GL10) {
+        override fun load(gl: GL10?) {
             val width = 128
             val height = 128
             val image = createImage(width, height)
