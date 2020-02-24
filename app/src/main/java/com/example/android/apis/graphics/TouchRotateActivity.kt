@@ -38,22 +38,22 @@ import javax.microedition.khronos.opengles.GL10
 @RequiresApi(api = Build.VERSION_CODES.O)
 class TouchRotateActivity : AppCompatActivity() {
     /**
-     * The `GLSurfaceView` (`TouchSurfaceView`) we use for drawing
+     * The [GLSurfaceView] (a [TouchSurfaceView] in our case) that we use for drawing
      */
     private var mGLSurfaceView: GLSurfaceView? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we initialize our field `GLSurfaceView mGLSurfaceView` with a new
-     * instance of `TouchSurfaceView`, give it focus, and allow it to receive focus while in
-     * touch mode.
+     * `onCreate`, then we initialize our [GLSurfaceView] field [mGLSurfaceView] with a new instance
+     * of [TouchSurfaceView], give it focus, and allow it to receive focus while in touch mode.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Create our Preview view and set it as the content of our
-// Activity
+        /**
+         * Create our Preview view and set it as the content of our Activity
+         */
         mGLSurfaceView = TouchSurfaceView(this)
         setContentView(mGLSurfaceView)
         mGLSurfaceView!!.requestFocus()
@@ -61,13 +61,15 @@ class TouchRotateActivity : AppCompatActivity() {
     }
 
     /**
-     * Called after [.onRestoreInstanceState], [.onRestart], or [.onPause], for
-     * your activity to start interacting with the user. First we call through to our super's
-     * implementation of `onResume`, then we pass the call on to the `onResume` method
-     * of our field `mGLSurfaceView`.
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for our activity to start
+     * interacting with the user. First we call through to our super's implementation of `onResume`,
+     * then we pass the call on to the `onResume` method of our [GLSurfaceView] field [mGLSurfaceView].
      */
-    override fun onResume() { // Ideally a game should implement onResume() and onPause()
-// to take appropriate action when the activity looses focus
+    override fun onResume() {
+        /**
+         * Ideally a game should implement onResume() and onPause()
+         * to take appropriate action when the activity looses focus
+         */
         super.onResume()
         mGLSurfaceView!!.onResume()
     }
@@ -75,47 +77,50 @@ class TouchRotateActivity : AppCompatActivity() {
     /**
      * Called as part of the activity lifecycle when an activity is going into the background, but
      * has not (yet) been killed. First we call through to our super's implementation of `onPause`,
-     * then we pass the call on to the `onPause` method of our field `mGLSurfaceView`.
+     * then we pass the call on to the `onPause` method of our field [mGLSurfaceView].
      */
-    override fun onPause() { // Ideally a game should implement onResume() and onPause()
-// to take appropriate action when the activity looses focus
+    override fun onPause() {
+        /**
+         * Ideally a game should implement onResume() and onPause()
+        // to take appropriate action when the activity looses focus
+         */
         super.onPause()
         mGLSurfaceView!!.onPause()
     }
 
     /**
-     * Adds a simple rotation control to a `GLSurfaceView` which contains a `Cube`.
+     * Adds a simple rotation control to a [GLSurfaceView] which contains a [Cube].
      */
     private class TouchSurfaceView internal constructor(context: Context?) : GLSurfaceView(context) {
         /**
-         * Renderer for our `GLSurfaceView`.
+         * Renderer for our [GLSurfaceView].
          */
         private val mRenderer: CubeRenderer
         /**
-         * Last x coordinate of a `MotionEvent` received by our `onTouchEvent` override. It
-         * is set by all types of `MotionEvent` but then only used when the touch event is of the
-         * ACTION_MOVE type when it is used along with the new x coordinate of the `MotionEvent`
-         * to calculate a new angle to rotate for `CubeRenderer mRenderer`
+         * Last x coordinate of a [MotionEvent] received by our [onTouchEvent] override. It
+         * is set by all types of [MotionEvent] but then only used when the touch event is of the
+         * ACTION_MOVE type when it is used along with the new x coordinate of the [MotionEvent]
+         * to calculate a new angle to rotate for [CubeRenderer] field [mRenderer]
          */
         private var mPreviousX = 0f
         /**
-         * Last y coordinate of a `MotionEvent` received by our `onTouchEvent` override. It
-         * is set by all types of `MotionEvent` but then only used when the touch event is of the
-         * ACTION_MOVE type when it is used along with the new y coordinate of the `MotionEvent`
-         * to calculate a new angle to rotate for `CubeRenderer mRenderer`
+         * Last y coordinate of a [MotionEvent] received by our [onTouchEvent] override. It
+         * is set by all types of [MotionEvent] but then only used when the touch event is of the
+         * ACTION_MOVE type when it is used along with the new y coordinate of the [MotionEvent]
+         * to calculate a new angle to rotate for [CubeRenderer] field [mRenderer]
          */
         private var mPreviousY = 0f
 
         /**
-         * We implement this method to handle trackball motion events. We call our method `updateAngles`
-         * with the X and Y coordinate of the first pointer index of our parameter `MotionEvent e`
-         * and the scale factor for a trackball `MotionEvent` TRACKBALL_SCALE_FACTOR. The
-         * `updateAngles` method will modify the `mAngleX` and `mAngleY` fields of our
-         * `CubeRenderer mRenderer` and call the method `requestRender` to request that
-         * our renderer render a new frame. Finally we return true to the caller.
+         * We implement this method to handle trackball motion events. We call our [updateAngles]
+         * method with the X and Y coordinate of the first pointer index of our [MotionEvent] parameter
+         * [e] and the scale factor for a trackball [MotionEvent] TRACKBALL_SCALE_FACTOR. The
+         * [updateAngles] method will modify the `mAngleX` and `mAngleY` fields of our [CubeRenderer]
+         * field [mRenderer] and call the method [requestRender] to request that our renderer render
+         * a new frame. Finally we return *true* to the caller.
          *
          * @param e The motion event.
-         * @return True if the event was handled, false otherwise. We always return true
+         * @return *true* if the event was handled, false otherwise. We always return *true*
          */
         override fun onTrackballEvent(e: MotionEvent): Boolean {
             updateAngles(e.x, e.y, TRACKBALL_SCALE_FACTOR)
@@ -123,38 +128,34 @@ class TouchRotateActivity : AppCompatActivity() {
         }
 
         /**
-         * We implement this method to handle touch screen motion events. We initialize `action`
-         * with the masked of action of our parameter `MotionEvent e`, then branch on the value
+         * We implement this method to handle touch screen motion events. We initialize `val action`
+         * with the masked off action of our [MotionEvent] parameter [e], then branch on the value
          * of `action`:
          *
-         *  *
-         * ACTION_MOVE: A change has happened during a press gesture (between ACTION_DOWN and
-         * ACTION_UP), we call our method `updateAngles` with the difference between
-         * the X and Y coordinates of the first pointer index of our parameter `MotionEvent e`
-         * and the previous values stored in our fields `mPreviousX` and `mPreviousY`
-         * along with the scale factor for a ACTION_MOVE touch movement TOUCH_SCALE_FACTOR. The
-         * `updateAngles` method will modify the `mAngleX` and `mAngleY` fields
-         * of our `CubeRenderer mRenderer` and call the method `requestRender` to
-         * request that our renderer render a new frame.
+         *  * ACTION_MOVE: A change has happened during a press gesture (between ACTION_DOWN and
+         *  ACTION_UP), we call our method [updateAngles] with the difference between  the X and Y
+         *  coordinates of the first pointer index of our [MotionEvent] parameter [e] and the
+         *  previous values stored in our fields [mPreviousX] and [mPreviousY] along with the scale
+         *  factor for a ACTION_MOVE touch movement TOUCH_SCALE_FACTOR. The [updateAngles] method
+         *  will modify the `mAngleX` and `mAngleY` fields of our [CubeRenderer] field [mRenderer]
+         *  and call the method [requestRender] to request that our renderer render a new frame.
          *
-         *  *
-         * ACTION_DOWN: A pressed gesture has started, if the source of `MotionEvent e`
-         * is SOURCE_MOUSE (input source is a mouse pointing device) we call the method
-         * `requestPointerCapture` to request pointer capture mode (When the window has
-         * pointer capture, the mouse pointer icon will disappear and will not change its position.
-         * Further mouse will be dispatched with the source [InputDevice.SOURCE_MOUSE_RELATIVE],
-         * and relative position changes will be available through [MotionEvent.getX] and
-         * [MotionEvent.getY].) If the source is not SOURCE_MOUSE we call the `releasePointerCapture`
-         * method to release pointer capture (if the window does not have pointer capture, this
-         * call will do nothing).
+         *  * ACTION_DOWN: A pressed gesture has started, if the source of [MotionEvent] parameter
+         *  [e] is SOURCE_MOUSE (input source is a mouse pointing device) we call the method
+         *  [requestPointerCapture] to request pointer capture mode (When the window has pointer
+         *  capture, the mouse pointer icon will disappear and will not change its position. Further
+         *  mouse events will be dispatched with the source [InputDevice.SOURCE_MOUSE_RELATIVE], and
+         *  relative position changes will be available through the methods [MotionEvent.getX] and
+         *  [MotionEvent.getY].) If the source is not SOURCE_MOUSE we call the [releasePointerCapture]
+         *  method to release pointer capture (if the window does not have pointer capture, this
+         *  call will do nothing).
          *
-         *
-         * For all `MotionEvent` types we save the value of the X coordinate of `e` in
-         * `mPreviousX` and the value the Y coordinate in `mPreviousY`, and return true
+         * For all [MotionEvent] types we save the value of the X coordinate of [e] in
+         * [mPreviousX] and the value the Y coordinate in [mPreviousY], and return *true*
          * to the caller to consume the event.
          *
          * @param e The motion event.
-         * @return True if the event was handled, false otherwise.
+         * @return *true* if the event was handled, *false* otherwise.
          */
         @SuppressLint("ClickableViewAccessibility")
         override fun onTouchEvent(e: MotionEvent): Boolean {
@@ -174,7 +175,7 @@ class TouchRotateActivity : AppCompatActivity() {
         }
 
         /**
-         * Implement this method to handle captured pointer events If the masked off action of our
+         * Implement this method to handle captured pointer events. If the masked off action of our
          * parameter `MotionEvent e` is ACTION_DOWN we call the `releasePointerCapture`
          * method to release pointer capture, otherwise we call our method `updateAngles` with
          * the X and Y coordinates of `e` along with the scale factor for a ACTION_MOVE touch
