@@ -1542,7 +1542,7 @@ Graphics
         .graphics.TouchRotateActivity
         .graphics.Cube
             Shows how to redraw in response to user input. Draws a cube, and allows the
-            user to rotate it using their finger. TODO: Implement molecule demo.
+            user to rotate it using their finger.
 
    Translucent GLSurfaceView
     Graphics/OpenGL ES/Translucent GLSurfaceView  -- all

@@ -17,15 +17,16 @@
 package com.example.android.apis.graphics;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.RequiresApi;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -34,12 +35,11 @@ import javax.microedition.khronos.opengles.GL10;
  * Wrapper activity demonstrating the use of {@link GLSurfaceView}, a view
  * that uses OpenGL drawing into a dedicated surface.
  *
- * Shows:
- * + How to redraw in response to user input. Draws a cube, and allows the user to rotate it using
- * their finger.
+ * Shows: How to redraw in response to user input. Draws a cube, and allows the user to rotate it
+ * using their finger.
  */
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class TouchRotateActivity extends Activity {
+public class TouchRotateActivity extends AppCompatActivity {
 
     /**
      * The {@code GLSurfaceView} ({@code TouchSurfaceView}) we use for drawing
