@@ -16,10 +16,11 @@
 
 package com.example.android.apis.graphics;
 
-import android.app.Activity;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
 /**
@@ -27,7 +28,7 @@ import android.os.Bundle;
  * Sets the background of the GLSurfaceView of a CubeRenderer to Translucent, allowing the user to
  * see the ApiDemos application behind the rotating cube.
  */
-public class TranslucentGLSurfaceViewActivity extends Activity {
+public class TranslucentGLSurfaceViewActivity extends AppCompatActivity {
 
     /**
      * Our {@code GLSurfaceView}.
