@@ -1555,7 +1555,7 @@ Graphics
     Graphics/PathEffects                   all
         .graphics.PathEffects
             Shows how to use the PathEffect classes to make animated dashed lines, and 
-            smoothed, rounded lines. TODO: scale lines for high dpi screens.
+            smoothed, rounded lines.
 
   PathFillTypes
     Graphics/PathFillTypes                 all
