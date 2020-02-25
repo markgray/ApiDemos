@@ -22,50 +22,56 @@ import androidx.appcompat.app.AppCompatActivity
 
 /**
  * Wrapper activity demonstrating the use of [GLSurfaceView] to display translucent 3D graphics.
- * Sets the background of the GLSurfaceView of a CubeRenderer to Translucent, allowing the user to
- * see the ApiDemos application behind the rotating cube.
+ * Sets the background of the [GLSurfaceView] of a [CubeRenderer] to Translucent, allowing the user
+ * to see the ApiDemos application behind the rotating cube.
  */
 class TranslucentGLSurfaceViewActivity : AppCompatActivity() {
     /**
-     * Our `GLSurfaceView`.
+     * Our [GLSurfaceView].
      */
     private var mGLSurfaceView: GLSurfaceView? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we initialize our field `GLSurfaceView mGLSurfaceView` with a
-     * new instance of `GLSurfaceView`. We install a config chooser for `mGLSurfaceView`
-     * which will choose a config with depthSize of 16 and stencilSize of 0, with redSize, greenSize,
-     * blueSize and alphaSize 8 bit. We set the renderer of `mGLSurfaceView` to a new instance
-     * of `CubeRenderer`, passing it the flag true so that it will use a translucent background.
-     * We fetch an instance of `SurfaceHolder` from `mGLSurfaceView` which provides access
-     * and control over its underlying surface and set its `PixelFormat` to TRANSLUCENT. Finally
-     * we set our content view to `mGLSurfaceView`.
+     * `onCreate`, then we initialize our [GLSurfaceView] field [mGLSurfaceView] with a new instance
+     * of [GLSurfaceView]. We install a config chooser for [mGLSurfaceView] which will choose a
+     * config with depthSize of 16 and stencilSize of 0, with redSize, greenSize, blueSize and
+     * alphaSize 8 bit. We set the renderer of [mGLSurfaceView] to a new instance of [CubeRenderer],
+     * passing it the flag *true* for its `mTranslucentBackground` field so that it will use a
+     * translucent background. We fetch an instance of `SurfaceHolder` from [mGLSurfaceView] which
+     * provides access and control over its underlying surface and set its `PixelFormat` to TRANSLUCENT.
+     * Finally we set our content view to [mGLSurfaceView].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Create our Preview view and set it as the content of our
-// Activity
+        /**
+         * Create our Preview view and set it as the content of our Activity
+         */
         mGLSurfaceView = GLSurfaceView(this)
-        // We want an 8888 pixel format because that's required for
-// a translucent window.
-// And we want a depth buffer.
-        mGLSurfaceView!!.setEGLConfigChooser(8, 8, 8, 8, 16, 0)
-        // Tell the cube renderer that we want to render a translucent version
-// of the cube:
+        /**
+         * We want an 8888 pixel format because that's required for a translucent window.
+         * And we want a depth buffer.
+         */
+        mGLSurfaceView!!.setEGLConfigChooser(
+                8, 8, 8, 8, 16, 0
+        )
+        /**
+         * Tell the cube renderer that we want to render a translucent version of the cube:
+         */
         mGLSurfaceView!!.setRenderer(CubeRenderer(true))
-        // Use a surface format with an Alpha channel:
+        /**
+         * Use a surface format with an Alpha channel:
+         */
         mGLSurfaceView!!.holder.setFormat(PixelFormat.TRANSLUCENT)
         setContentView(mGLSurfaceView)
     }
 
     /**
-     * Called after [.onRestoreInstanceState], [.onRestart], or [.onPause], for
-     * our activity to start interacting with the user. First we call through to our super's
-     * implementation of `onResume`, then we pass the call on to the `onResume` method
-     * of our field `GLSurfaceView mGLSurfaceView`.
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for our activity to start
+     * interacting with the user. First we call through to our super's implementation of `onResume`,
+     * then we pass the call on to the `onResume` method of our [GLSurfaceView] field [mGLSurfaceView]
      */
     override fun onResume() {
         super.onResume()
@@ -75,7 +81,7 @@ class TranslucentGLSurfaceViewActivity : AppCompatActivity() {
     /**
      * Called as part of the activity lifecycle when an activity is going into the background, but
      * has not (yet) been killed. First we call through to our super's implementation of `onPause`,
-     * then we pass the call on to the `onPause` method of our field `GLSurfaceView mGLSurfaceView`.
+     * then we pass the call on to the `onPause` method of our [GLSurfaceView] field [mGLSurfaceView]
      */
     override fun onPause() {
         super.onPause()
