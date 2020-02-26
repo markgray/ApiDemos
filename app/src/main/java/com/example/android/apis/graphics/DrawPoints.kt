@@ -25,15 +25,15 @@ import android.view.View
 import kotlin.math.roundToInt
 
 /**
- * Creates an array of points, draws RED lines between them using Canvas.drawLines() then draws the
- * points by themselves in BLUE using Canvas.drawPoints().
+ * Creates an array of points, draws RED lines between them using [Canvas.drawLines] then draws the
+ * points by themselves in BLUE using [Canvas.drawPoints].
  */
 class DrawPoints : GraphicsActivity() {
     /**
      * Called when the activity is starting. First we call our super's implementation of
-     * `onCreate`, then we set our content view to a new instance of `SampleView`
+     * `onCreate`, then we set our content view to a new instance of [SampleView]
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,35 +41,35 @@ class DrawPoints : GraphicsActivity() {
     }
 
     /**
-     * Demonstrates how to use the `Canvas.drawLines` and `Canvas.drawPoints` methods to
+     * Demonstrates how to use the [Canvas.drawLines] and [Canvas.drawPoints] methods to
      * draw lines and points.
      */
     private class SampleView(context: Context) : View(context) {
         /**
-         * `Paint` that we use to draw with in our `onDraw` method.
+         * [Paint] that we use to draw with in our [onDraw] method.
          */
         private val mPaint = Paint()
         /**
-         * Our array of points, allocated and initialized by our `buildPoints` method.
+         * Our array of points, allocated and initialized by our [buildPoints] method.
          */
         private lateinit var mPts: FloatArray
 
         /**
-         * Allocates and initializes our field `float[] mPts` with an array of points. First we
-         * determine the number of points `ptCount` we will need given the value of `SEGS`
-         * (twice the value of `SEGS+1`, twice because we will be dividing a line of `SIZE`
-         * length into `SEGS` segments for both x and y axes, the +1 is because of the endpoint).
+         * Allocates and initializes our [FloatArray] field [mPts] with an array of points. First
+         * we determine the number of points `val ptCount` we will need given the value of [SEGS]
+         * (twice the value of `SEGS+1`, twice because we will be dividing a line of [SIZE]
+         * length into [SEGS] segments for both x and y axes, the +1 is because of the endpoint).
          * Next we allocate `2*ptCount` floats for `mPts` because each point will have an
          * x and a y coordinate.
          *
-         *
-         * We initialize `value` to 0.0 and calculate `delta` to be `SIZE/SEGS`.
-         * Then we loop for our `SEGS` segments assigning the values of four `mPts` entries
-         * so that the first contains the x coordinate of the point along the x axis (goes from `SIZE`
-         * down to 0 in steps of `delta`), the second contains the y coordinate of the point along
-         * the x axis (always 0), the third contains the x coordinate of the point along the y axis
-         * (always 0), and the fourth contains the y coordinate of the point along the y axis (goes
-         * from 0 to `SIZE` in steps of `delta`). We then add `delta` to `value`.
+         * We initialize `val value` to 0.0 and calculate `val delta` to be [SIZE] divided by
+         * [SEGS]. Then we loop for our [SEGS] segments assigning the values of four [mPts] entries
+         * so that the first contains the x coordinate of the point along the x axis (goes from
+         * [SIZE] down to 0 in steps of `delta`), the second contains the y coordinate of the point
+         * along the x axis (always 0), the third contains the x coordinate of the point along the
+         * y axis (always 0), and the fourth contains the y coordinate of the point along the y axis
+         * (goes from 0 to [SIZE] in steps of `delta`). We then add `delta` to `value` and loop
+         * around for the next segment.
          */
         private fun buildPoints() {
             val ptCount = (SEGS + 1) * 2
@@ -86,18 +86,16 @@ class DrawPoints : GraphicsActivity() {
         }
 
         /**
-         * We implement this to do our drawing. First we make a copy of the pointer in our field
-         * `Paint mPaint` for `Paint paint`. Then we translate our `Canvas canvas`
-         * parameter to the point (10,10), and set it to all WHITE. We set the color of `paint`
-         * to RED, its stroke width to 0, and use it to call the method `drawLines` of
-         * `canvas` which draws a series of lines with each line taken from 4 consecutive values
-         * in the `mPts` array.
-         *
+         * We implement this to do our drawing. First we make a copy of our [Paint] field [mPaint]
+         * `val paint`. Then we translate our [Canvas] parameter [canvas] parameter to the point
+         * (10,10), and set it to all WHITE. We set the color of `paint` to RED, its stroke width
+         * to 0, and use it in a call to the [Canvas.drawLines] method of [canvas] to draw a series
+         * of lines with each line taken from 4 consecutive values in the [mPts] array.
          *
          * Next we set the color of `paint` to BLUE, its stroke width to 3, and use it to call
-         * the `drawPoints` method of `canvas` which draws a series of points, each point
-         * is centered at the coordinate specified by 2 consecutive values in the `mPts` array,
-         * and its diameter is specified by the paint's stroke width.
+         * the [Canvas.drawPoints] method of [canvas] to draw a series of points, each point
+         * centered at the coordinate specified by 2 consecutive values in the [mPts] array,
+         * with its diameter specified by the paint's stroke width.
          *
          * @param canvas the canvas on which the background will be drawn
          */
@@ -133,13 +131,11 @@ class DrawPoints : GraphicsActivity() {
         }
 
         /**
-         * Our constructor. First we call our super's constructor. Then we retrieve the current display
-         * metrics that are in effect to initialize `DisplayMetrics displayMetrics`, and use
-         * it to calculate the value of 300dp in pixels to initialize our field `SIZE`. Finally
-         * we call our method `buildPoints` to allocate and initialize the array of points in
-         * our field `float[] mPts`.
-         *
-         * Parameter: context `Context` to use to access resources.
+         * The init block of iur constructor. We retrieve the current display metrics that are in
+         * effect to initialize `DisplayMetrics` variable `val displayMetrics`, and use it to
+         * calculate the value of 300dpi in pixels to initialize our field `SIZE`. Finally we call
+         * our method `buildPoints` to allocate and initialize the array of points in our field
+         * `FloatArray` field `mPts`.
          */
         init {
             val displayMetrics = context.resources.displayMetrics
