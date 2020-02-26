@@ -23,19 +23,20 @@ import android.view.MotionEvent
 import android.view.View
 
 /**
- * Creates two Bitmap's: a blue rectangle on a red background, and a green circle on a clear background.
- * It uses these Bitmap's to make two BitmapShader's, and it rotates the Circle BitmapShader by 30
- * degrees. In the onDraw method it first draws using the rectangle pattern, translate's the Canvas
- * based on the current MotionEvent movement and draws using the circle pattern. The effect is to
- * allow you to move the circle pattern with your finger while leaving the rectangle pattern stationary
- * and partially visible through the circle pattern on top.
+ * Creates two [Bitmap]'s: a blue rectangle on a red background, and a green circle on a clear
+ * background. It uses these [Bitmap]'s to make two [BitmapShader]'s, and it rotates the Circle
+ * [BitmapShader] by 30 degrees. In the [SampleView.onDraw] method it first draws using the
+ * rectangle pattern, translate's the [Canvas] based on the current [MotionEvent] movement and
+ * draws using the circle pattern. The effect is to allow you to move the circle pattern with
+ * your finger while leaving the rectangle pattern stationary and partially visible through the
+ * circle pattern on top.
  */
 class Patterns : GraphicsActivity() {
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to a new instance of `SampleView`.
+     * then we set our content view to a new instance of [SampleView].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,27 +44,27 @@ class Patterns : GraphicsActivity() {
     }
 
     /**
-     * A custom `View` consisting of two `Shader` objects, one stationary consisting of
+     * A custom [View] consisting of two [Shader] objects, one stationary consisting of
      * a rectangle pattern, and one movable on top of it consisting of a circle pattern.
      */
     private class SampleView(context: Context?) : View(context) {
         /**
-         * `Shader` consisting of a pattern of blue rectangles on a red background.
+         * [Shader] consisting of a pattern of blue rectangles on a red background.
          */
         private val mShader1: Shader
         /**
-         * `Shader` consisting of a pattern of green circles on an uncolored background.
+         * [Shader] consisting of a pattern of green circles on an uncolored background.
          */
         private val mShader2: Shader
         /**
-         * `Paint` used to draw to our `Canvas`
+         * [Paint] used to draw to our [Canvas]
          */
         private val mPaint: Paint
         /**
-         * `PaintFlagsDrawFilter` that clears the Paint.FILTER_BITMAP_FLAG and Paint.DITHER_FLAG
-         * of the `Paint` used to draw to the `Canvas` when it is set as the draw filter
-         * of that `Canvas`. `DrawFilter mDF` is set to it when an ACTION_DOWN touch event
-         * is received (and `mDF` is set to null on an ACTION_UP event). See `mDF`.
+         * [PaintFlagsDrawFilter] that clears the [Paint.FILTER_BITMAP_FLAG] and [Paint.DITHER_FLAG]
+         * of the [Paint] used to draw to the [Canvas] when it is set as the draw filter of that
+         * [Canvas]. [DrawFilter] field [mDF] is set to it when an ACTION_DOWN touch event is
+         * received (and [mDF] is set to *null* on an ACTION_UP event). See [mDF].
          */
         private val mFastDF: DrawFilter
         /**
@@ -83,26 +84,26 @@ class Patterns : GraphicsActivity() {
          */
         private var mTouchCurrY = 0f
         /**
-         * `DrawFilter` that is used as the draw filter of the `Canvas` we are drawing to.
-         * It is set to `DrawFilter mFastDF` on an ACTION_DOWN event and to null on an ACTION_UP
-         * event.
+         * [DrawFilter] that is used as the draw filter of the [Canvas] we are drawing to.
+         * It is set to [DrawFilter] field [mFastDF] on an ACTION_DOWN event and to *null*
+         * on an ACTION_UP event.
          */
         private var mDF: DrawFilter? = null
 
         /**
-         * We implement this to do our drawing. First we set the draw filter of our parameter
-         * `Canvas canvas` to our field `DrawFilter mDF` (this will either be the
-         * contents of our field `DrawFilter mFastDF` after an ACTION_DOWN event or null
-         * after an ACTION_UP event). We set the `Shader` object of `Paint mPaint` to
-         * `mShader1` (blue rectangles on a red background) and fill the `Canvas canvas`
-         * bitmap with that pattern. Then we move the `Canvas` by the movement in x and y implied
-         * by the last ACTION_MOVE event (`mTouchCurrX - mTouchStartX` in the x direction and
-         * `mTouchCurrY - mTouchStartY` in the y direction). We set the `Shader` object
-         * of `Paint mPaint` to `mShader2` (green circles on an uncolored background) and
-         * fill the `Canvas canvas` bitmap with that pattern. The rectangle pattern of
-         * `mShader1` will show through the uncolored background of `mShader1`.
+         * We implement this to do our drawing. First we set the draw filter of our [Canvas]
+         * parameter [canvas] to our [DrawFilter] field [mDF] (this will either be the
+         * contents of our [DrawFilter] field [mFastDF] after an ACTION_DOWN event or *null*
+         * after an ACTION_UP event). We set the [Shader] object of [Paint] field [mPaint] to
+         * [mShader1] (blue rectangles on a red background) and fill the bitmap of the [Canvas]
+         * parameter [canvas]  with that pattern. Then we move [canvas] by the movement in x and
+         * y implied by the last ACTION_MOVE event ([mTouchCurrX] minus [mTouchStartX] in the x
+         * direction and [mTouchCurrY] minus [mTouchStartY] in the y direction). We set the
+         * [Shader] object of [Paint] field [mPaint] to [mShader2] (green circles on an uncolored
+         * background) and fill the bitmap of [Canvas] parameter [canvas] with that pattern. The
+         * rectangle pattern of [mShader1] will show through the uncolored background of [mShader1].
          *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawFilter = mDF
@@ -115,29 +116,25 @@ class Patterns : GraphicsActivity() {
         }
 
         /**
-         * Implement this method to handle touch screen motion events. First we fetch the x coordinate
-         * of the `MotionEvent event` to `float x` and the y coordinate to `float y`.
-         * Then we switch based on the kind of action of the `event`:
+         * Implement this method to handle touch screen motion events. First we fetch the x
+         * coordinate of the [MotionEvent] parameter [event] to [Float] `val x` and the y
+         * coordinate to [Float] `val y`. Then we switch based on the kind of action of [event]:
          *
-         *  *
-         * ACTION_DOWN - We set our fields `mTouchStartX` and `mTouchCurrX` to x
-         * and our fields `mTouchStartY` and `mTouchCurrY`. We set our field
-         * `DrawFilter mDF` to the contents of `DrawFilter mFastDF`, and invalidate
-         * our view so that our `onDraw` method will be called.
+         *  * ACTION_DOWN - We set our fields [mTouchStartX] and [mTouchCurrX] to `x` and our
+         *  fields [mTouchStartY] and [mTouchCurrY] to `y`. We set our [DrawFilter] field [mDF]
+         *  to the contents of [DrawFilter] field [mFastDF], and invalidate  our view so that our
+         *  [onDraw] method will be called.
          *
-         *  *
-         * ACTION_MOVE - We set our field `mTouchCurrX` to x, and `mTouchCurrY`
-         * to y and invalidate our view so that our `onDraw` method will be called.
+         *  * ACTION_MOVE - We set our field [mTouchCurrX] to x, and [mTouchCurrY]
+         *  to y and invalidate our view so that our [onDraw] method will be called.
          *
-         *  *
-         * ACTION_UP - We set our field `DrawFilter mDF` to null and invalidate our
-         * view so that our `onDraw` method will be called.
+         *  * ACTION_UP - We set our [DrawFilter] field [mDF] to *null* and invalidate our
+         *  view so that our [onDraw] method will be called.
          *
-         *
-         * In all cases we return true to the called to indicate that we handled the `MotionEvent`.
+         * In all cases we return *true* to the caller to indicate that we handled the [MotionEvent]
          *
          * @param event The motion event.
-         * @return True if the event was handled, false otherwise. We always return true.
+         * @return *true* if the event was handled, *false* otherwise. We always return *true*.
          */
         @SuppressLint("ClickableViewAccessibility")
         override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -170,29 +167,23 @@ class Patterns : GraphicsActivity() {
         }
 
         /**
-         * Our constructor. First we call our super's constructor, then we enable our view to receive
-         * focus, and to receive focus in touch mode. We initialize our field `DrawFilter mFastDF`
-         * with a new instance of `PaintFlagsDrawFilter` configured to clear the `Paint`
-         * flags Paint.FILTER_BITMAP_FLAG and Paint.DITHER_FLAG if it is set as the draw filter of a
-         * canvas. We initialize our field `Shader mShader1` with a new instance of
+         * The init block of our constructor. We enable our view to receive focus, and to receive
+         * focus in touch mode. We initialize our `DrawFilter` field `mFastDF` with a new instance
+         * of `PaintFlagsDrawFilter` configured to clear the `Paint` flags Paint.FILTER_BITMAP_FLAG
+         * and Paint.DITHER_FLAG. We initialize our `Shader` field `mShader1` with a new instance of
          * `BitmapShader` created using the `Bitmap` returned from our method `makeBitmap1`
          * (a blue rectangle with a red background) and configured to repeat in both the x and y
-         * directions. We initialize our field `Shader mShader2` with a new instance of
+         * directions. We initialize our `Shader` field `mShader2` with a new instance of
          * `BitmapShader` created using the `Bitmap` returned from our method `makeBitmap2`
-         * (a green circle with an uncolored background) and configured to repeat in both the x and y
-         * directions.
+         * (a green circle with an uncolored background) and configured to repeat in both the
+         * x and y directions.
          *
+         * We create a new instance for `Matrix` for `val m`, set the matrix to rotate about (0,0)
+         * by 30 degrees, and use it to set the local matrix of `Shader` field `mShader2` (rotates
+         * the pattern by 30 degrees when it is drawn).
          *
-         * We create a new instance for `Matrix m`, set the matrix to rotate about (0,0) by
-         * 30 degrees, and use it to set the local matrix of `Shader mShader2` (rotates the
-         * pattern by 30 degrees when it is drawn).
-         *
-         *
-         * Finally we allocate a new instance of `Paint` for our field `Paint mPaint`,
-         * setting the Paint.FILTER_BITMAP_FLAG on it (enables bilinear sampling on scaled bitmaps).
-         *
-         * Parameter: context `Context` to use to access resources, "this" when called from the
-         * `onCreate` method of the `Patterns` activity.
+         * Finally we allocate a new instance of `Paint` for our `Paint` field `mPaint`, setting
+         * the Paint.FILTER_BITMAP_FLAG on it (enables bilinear sampling on scaled bitmaps).
          */
         init {
             isFocusable = true
@@ -209,15 +200,15 @@ class Patterns : GraphicsActivity() {
 
     companion object {
         /**
-         * Creates and returns a 40x40 pixel `Bitmap` containing a single blue 30x30 rectangle at
-         * the center of its red background. First we create a new instance of a 40x40 `Bitmap`
-         * for `Bitmap bm`. We create a `Canvas c` that uses `bm` to draw into and set
-         * the entire canvas to RED. We create a new instance of `Paint` for `Paint p` and set
-         * its color to BLUE. We use `p` to draw a rectangle on `c` whose top left corner is
-         * at (5,5), and whose bottom right corner is at (35,35). We then return the `Bitmap bm` that
-         * now contains that rectangle.
+         * Creates and returns a 40x40 pixel [Bitmap] containing a single blue 30x30 rectangle at
+         * the center of its red background. First we create a new instance of a 40x40 [Bitmap]
+         * for [Bitmap] variable `val bm`. We create a [Canvas] for `val c` that uses `bm` to draw
+         * into and set the entire canvas to RED. We create a new instance of [Paint] for [Paint]
+         * variable `val p` and set its color to BLUE. We use `p` to draw a rectangle on `c` whose
+         * top left corner is at (5,5), and whose bottom right corner is at (35,35). We then return
+         * the [Bitmap] `bm` that now contains that rectangle.
          *
-         * @return 40x40 pixel `Bitmap` containing a single blue 30x30 rectangle at the center of
+         * @return 40x40 pixel [Bitmap] containing a single blue 30x30 rectangle at the center of
          * its red background.
          */
         private fun makeBitmap1(): Bitmap {
@@ -231,14 +222,15 @@ class Patterns : GraphicsActivity() {
         }
 
         /**
-         * Creates and returns a 64x64 pixel `Bitmap` containing a single GREEN circle of radius 27
-         * at the center of its uncolored background. First we create a new instance of a 64x64 `Bitmap`
-         * for `Bitmap bm`. We create a `Canvas c` that uses `bm` to draw into. We create a
-         * new instance of `Paint` for `Paint p` and set its color to GREEN, and its alpha to
-         * 0xCC. We use `p` to draw a circle on `c` whose center is at (32,32) and whose radius
-         * is 27. We then return the `Bitmap bm` that now contains that circle.
+         * Creates and returns a 64x64 pixel [Bitmap] containing a single GREEN circle of radius 27
+         * at the center of its uncolored background. First we create a new instance of a 64x64
+         * [Bitmap] for [Bitmap] variable `val bm`. We create a [Canvas] `val c` that uses `bm` to
+         * draw into. We create a new instance of [Paint] for [Paint] variable `val p` and set its
+         * color to GREEN, and its alpha to 0xCC. We use `p` to draw a circle on `c` whose center
+         * is at (32,32) and whose radius is 27. We then return the [Bitmap] `bm` that now contains
+         * that circle.
          *
-         * @return 64x64 pixel `Bitmap` containing a single GREEN circle of radius 27 at the center
+         * @return 64x64 pixel [Bitmap] containing a single GREEN circle of radius 27 at the center
          * of its uncolored background.
          */
         private fun makeBitmap2(): Bitmap {
