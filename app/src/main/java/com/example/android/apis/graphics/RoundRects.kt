@@ -24,16 +24,19 @@ import android.view.View
 import kotlin.math.sqrt
 
 /**
- * Shows how to use a GradientDrawable to draw rectangles with rounded corners, and three different
- * types of color gradient: GradientDrawable.LINEAR_GRADIENT, GradientDrawable.RADIAL_GRADIENT, and
- * GradientDrawable.SWEEP_GRADIENT.
+ * Shows how to use a [GradientDrawable] to draw rectangles with rounded corners while using three
+ * different types of color gradient:
+ *
+ *  * [GradientDrawable.LINEAR_GRADIENT],
+ *  * [GradientDrawable.RADIAL_GRADIENT],
+ *  * [GradientDrawable.SWEEP_GRADIENT].
  */
 class RoundRects : GraphicsActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to a new instance of `SampleView`.
+     * `onCreate`, then we set our content view to a new instance of [SampleView].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,63 +45,54 @@ class RoundRects : GraphicsActivity() {
 
     private class SampleView(context: Context?) : View(context) {
         /**
-         * `Rect` we use to set the bounds of the `GradientDrawable mDrawable` we draw
+         * [Rect] we use to set the bounds of the [GradientDrawable] field [mDrawable] we draw
          */
         private val mRect: Rect
         /**
-         * `GradientDrawable` that we draw using different gradient types.
+         * [GradientDrawable] that we draw using different gradient types.
          */
         private val mDrawable: GradientDrawable
 
         /**
          * We implement this to do our drawing. First we set the bounds (Specify a bounding rectangle)
-         * for our field `GradientDrawable mDrawable` to our field `Rect mRect`. Then we
-         * define a constant `float r=16` to use for the radii of our `mDrawable`. We
-         * then proceed to demonstrate 6 different types of gradients, each wrapped between matching
-         * saves of the `Canvas canvas` current matrix, and restores of that state:
+         * for our [GradientDrawable] field [mDrawable] to be our [Rect] field [mRect]. Then we
+         * define a [Float] constant `val r=16` to use for the radii of our [mDrawable]. We then
+         * proceed to demonstrate 6 different types of gradients, each wrapped between matching
+         * saves of the [Canvas] parameter [canvas] current matrix, and restores of that state:
          *
-         *  *
-         * LINEAR_GRADIENT - we move the `Canvas` to (10,10), set the gradient type of
-         * `mDrawable` to LINEAR_GRADIENT, set the corner radii of the top-left and
-         * top-right to `r`, the other radii to 0 and draw it. This causes a Linear
-         * color change from red at the top-left corner, to blue at the bottom-right.
+         *  * LINEAR_GRADIENT - we move [Canvas] parameter [canvas] to (10,10), set the gradient
+         *  type of [mDrawable] to LINEAR_GRADIENT, set the corner radii of the top-left and
+         *  top-right to `r`, the other radii to 0 and draw it. This causes a Linear  color
+         *  change from red at the top-left corner, to blue at the bottom-right.
          *
-         *  *
-         * RADIAL_GRADIENT - we move the `Canvas` to a point 20 pixels to the right of
-         * our LINEAR_GRADIENT rectangle, set the gradient type of `mDrawable` to
-         * RADIAL_GRADIENT, set the corner radii of the bottom-right and bottom-left to
-         * `r`, the other radii to 0 and draw it. This causes a Linear color change
-         * from red at the center of the rectangle to blue at the corners. We interpolate
-         * a move of the canvas to 10 pixels below the first row of rectangles now to get
-         * ready for the second row.
+         *  * RADIAL_GRADIENT - we move [Canvas] parameter [canvas] to a point 20 pixels to the
+         *  right of our LINEAR_GRADIENT rectangle, set the gradient type of [mDrawable] to
+         *  RADIAL_GRADIENT, set the corner radii of the bottom-right and bottom-left to
+         *  `r`, the other radii to 0 and draw it. This causes a Linear color change
+         *  from red at the center of the rectangle to blue at the corners. We interpolate
+         *  a move of the canvas to 10 pixels below the first row of rectangles now to get
+         *  ready for the second row.
          *
-         *  *
-         * SWEEP_GRADIENT - we move the `Canvas` to (10,10), set the gradient type of
-         * `mDrawable` to SWEEP_GRADIENT, set the corner radii of the top-right and
-         * bottom-right to `r`, the other radii to 0 and draw it. This creates a
-         * circular sweep of blended colour around the rectangle, starting with red at the
-         * 0 degree location, transitioning to green, then to blue as it comes back to the
-         * 0 degree location.
+         *  * SWEEP_GRADIENT - we move [Canvas] parameter [canvas] to (10,10), set the gradient
+         *  type of [mDrawable] to SWEEP_GRADIENT, set the corner radii of the top-right and
+         *  bottom-right to `r`, the other radii to 0 and draw it. This creates a circular sweep
+         *  of blended colour around the rectangle, starting with red at the  0 degree location,
+         *  transitioning to green, then to blue as it comes back to the  0 degree location.
          *
-         *  *
-         * LINEAR_GRADIENT - same as the first LINEAR_GRADIENT except for its location on the
-         * second row to the right of the SWEEP_GRADIENT example and the use of rounded corners
-         * for the top-left and bottom-left corners. We interpolate a move of the canvas to
-         * 10 pixels below the second row of rectangles now to get ready for the third row.
+         *  * LINEAR_GRADIENT - same as the first LINEAR_GRADIENT except for its location on the
+         *  second row to the right of the SWEEP_GRADIENT example and the use of rounded corners
+         *  for the top-left and bottom-left corners. We interpolate a move of the canvas to
+         *  10 pixels below the second row of rectangles now to get ready for the third row.
          *
-         *  *
-         * RADIAL_GRADIENT - same as the first RADIAL_GRADIENT except for its location on the
-         * third row first column, and the use of rounded corners for the top-left and bottom-right
-         * corners.
+         *  * RADIAL_GRADIENT - same as the first RADIAL_GRADIENT except for its location on the
+         *  third row first column, and the use of rounded corners for the top-left and bottom-right
+         *  corners.
          *
-         *  *
-         * SWEEP_GRADIENT - same as the first SWEEP_GRADIENT except for its location on the
-         * third row second column, and the use of rounded corners for the top-right and bottom-left
-         * corners.
+         *  * SWEEP_GRADIENT - same as the first SWEEP_GRADIENT except for its location on the
+         *  third row second column, and the use of rounded corners for the top-right and bottom-left
+         *  corners.
          *
-         *
-         *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
             mDrawable.bounds = mRect
@@ -145,12 +139,12 @@ class RoundRects : GraphicsActivity() {
 
         companion object {
             /**
-             * Convenience function for calling `setCornerRadii (float[] radii)`. We simply stuff
-             * the radius arguments into an anonymous float, repeating the single radius value for both
-             * the x and y radius, then call the `setCornerRadii` method of our parameter
-             * `GradientDrawable drawable`.
+             * Convenience function for calling [setCornerRadii] `(radii: Float)`. We simply stuff
+             * the radius arguments into an anonymous [FloatArray], repeating the single radius
+             * value for both the x and y radius, then call the [setCornerRadii] method of our
+             * [GradientDrawable] parameter [drawable].
              *
-             * @param drawable `GradientDrawable` we are to set the corner radii on
+             * @param drawable [GradientDrawable] we are to set the corner radii on
              * @param r0       top-left radius (for both x and y)
              * @param r1       top-right radius (for both x and y)
              * @param r2       bottom-right radius (for both x and y)
@@ -162,20 +156,20 @@ class RoundRects : GraphicsActivity() {
         }
 
         /**
-         * Our constructor. First we call our super's constructor, then we enable our view to receive
-         * focus. We initialize our field `Rect mRect` with a new 120x120 pixel rectangle. We
-         * initialize our field `GradientDrawable mDrawable` with a new instance whose orientation
-         * is TL_BR (draws the gradient from the top-left to the bottom-right) and whose colors array
-         * is red, green and blue. We set the shape of `mDrawable` to RECTANGLE and set the
-         * gradient radius to 60 times the square root of 2.
-         *
-         * context `Context` to access resources, "this" when called from the `onCreate`
-         * method of the activity `RoundRects`.
+         * The init block of our constructor. First we enable our view to receive focus. We initialize
+         * our `Rect` field `mRect` with a new 120x120 pixel rectangle. We initialize our `GradientDrawable`
+         * field `mDrawable` with a new instance whose orientation is TL_BR (draws the gradient from
+         * the top-left to the bottom-right) and whose colors array is red, green and blue. We set
+         * the shape of `mDrawable` to RECTANGLE and set the gradient radius to 60 times the square
+         * root of 2.
          */
         init {
             isFocusable = true
             mRect = Rect(0, 0, 120, 120)
-            mDrawable = GradientDrawable(GradientDrawable.Orientation.TL_BR, intArrayOf(-0x10000, -0xff0100, -0xffff01))
+            mDrawable = GradientDrawable(
+                    GradientDrawable.Orientation.TL_BR,
+                    intArrayOf(-0x10000, -0xff0100, -0xffff01)
+            )
             mDrawable.shape = GradientDrawable.RECTANGLE
             mDrawable.gradientRadius = (sqrt(2.0) * 60).toFloat()
         }
