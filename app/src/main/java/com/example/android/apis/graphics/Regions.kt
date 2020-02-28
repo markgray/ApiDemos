@@ -21,8 +21,8 @@ import android.os.Bundle
 import android.view.View
 
 /**
- * Shows how to use the Region class to merge two or more Rectangle's in a Region using Union, Xor,
- * Difference, and Intersect operations.
+ * Shows how to use the [Region] class to merge two or more Rectangle's in a [Region] using Union,
+ * Xor, Difference, and Intersect operations.
  */
 class Regions : GraphicsActivity() {
     /**
