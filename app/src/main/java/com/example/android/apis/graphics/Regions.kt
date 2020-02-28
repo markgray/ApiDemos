@@ -34,6 +34,11 @@ class Regions : GraphicsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(SampleView(this))
+        SCREEN_DENSITY = resources.displayMetrics.density
+    }
+
+    companion object {
+        var SCREEN_DENSITY: Float = 1f
     }
 
     /**
@@ -170,6 +175,8 @@ class Regions : GraphicsActivity() {
          * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
+            canvas.save()
+            canvas.scale(SCREEN_DENSITY, SCREEN_DENSITY)
             canvas.drawColor(Color.GRAY)
             canvas.save()
             canvas.translate(80f, 5f)
@@ -191,6 +198,7 @@ class Regions : GraphicsActivity() {
             canvas.save()
             canvas.translate(160f, 280f)
             drawRgn(canvas, Color.WHITE, "Intersect", Region.Op.INTERSECT)
+            canvas.restore()
             canvas.restore()
         }
 
