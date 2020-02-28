@@ -27,7 +27,8 @@ import android.view.View
 class Regions : GraphicsActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to a new instance of `SampleView`.
+     * `onCreate`, then we set our content view to a new instance of [SampleView]. Finally we fetch
+     * the logical density of the display to initialize our [SCREEN_DENSITY] variable.
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
@@ -38,6 +39,9 @@ class Regions : GraphicsActivity() {
     }
 
     companion object {
+        /**
+         * The logical density of the display, used to scale the [Canvas] before drawing.
+         */
         var SCREEN_DENSITY: Float = 1f
     }
 
@@ -142,11 +146,14 @@ class Regions : GraphicsActivity() {
         }
 
         /**
-         * We implement this to do our drawing. First we set the entire [Canvas] parameter [canvas]
-         * to the color GRAY. We save the current matrix and clip of the canvas onto a private stack,
-         * move the canvas to the point (80,5) and call our method [drawOriginalRects] to draw
-         * [Rect] field [mRect1] and [Rect] field [mRect2] using an alpha of 0xFF, then we restore
-         * the state of the canvas to its previous state.
+         * We implement this to do our drawing. First we save the current matrix and clip of the
+         * canvas onto a private stack, then we scale the [Canvas] parameter [canvas] by the value
+         * [SCREEN_DENSITY] (logical density of the display) in both the x and y direction. We set
+         * the entire [Canvas] parameter [canvas] to the color GRAY, save the current matrix and
+         * clip of the canvas onto a private stack, move the canvas to the point (80,5) and call
+         * our method [drawOriginalRects] to draw [Rect] field [mRect1] and [Rect] field [mRect2]
+         * using an alpha of 0xFF, then we restore the state of the canvas to its state before our
+         * last call to save (the canvas is still scaled remember).
          *
          * Next we set the style of [Paint] field [mPaint] to FILL. We save the current matrix and
          * clip of the canvas onto a private stack, move the canvas to the point (0,140) and call
@@ -170,7 +177,8 @@ class Regions : GraphicsActivity() {
          * to the point (160,280) and call our method [drawRgn] to form a [Region] from [mRect1]
          * and [mRect2] using the [Region.Op] operation [Region.Op.INTERSECT], draw the result in
          * WHITE and label it "Intersect". We then restore the state of the canvas to its state
-         * before we called `save`.
+         * before we last called `save` (still scaled at this point). Finally we restore the state
+         * of the canvas to its state before we scaled it.
          *
          * @param canvas the [Canvas] on which the background will be drawn
          */
