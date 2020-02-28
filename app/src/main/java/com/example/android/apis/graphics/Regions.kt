@@ -46,7 +46,7 @@ class Regions : GraphicsActivity() {
     }
 
     /**
-     * Our demo custom view, demonstrates the use of the Region class.
+     * Our demo custom view, demonstrates the use of the [Region] class.
      */
     private class SampleView(context: Context?) : View(context) {
         /**
