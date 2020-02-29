@@ -143,25 +143,24 @@ class ScaleToFit : GraphicsActivity() {
         }
 
         /**
-         * We implement this to do our drawing. First we set the entire `Canvas canvas` to the
-         * color WHITE, then we move it to the location (10,10), and save the current matrix and clip
-         * onto a private stack. Then for each of our `N` ovals, we call our method `setSrcR`
-         * to set the coordinates of `mScrR` for that oval, and using our method {drawSrcR} draw
-         * the oval to the canvas. We then move the canvas to the right by the width of `mSrcR`
-         * with an additional 15 pixels for spacing. When done drawing the ovals we restore the state
-         * of the canvas to that it had before our call to save.
+         * We implement this to do our drawing. First we set the entire [Canvas] parameter [canvas]
+         * to the color WHITE, then we move it to the location (10,10), and save the current matrix
+         * and clip onto a private stack. Then for each of our [N] ovals, we call our [setSrcR]
+         * method to set the coordinates of [RectF] field [mSrcR] for that oval, and using our
+         * [drawSrcR] method draw the oval to the canvas. We then move the canvas to the right by
+         * the width of [mSrcR] with an additional 15 pixels for spacing. When done drawing the
+         * ovals we restore the state of the canvas to that it had before our call to save.
          *
-         *
-         * Now we move the `Canvas canvas` down 100 pixels and for each of the four scale to fit
-         * options contained in `Matrix.ScaleToFit[] sFits` we first save the canvas matrix to
-         * its private stack. Then for each of the four ovals we call our method `drawFit` to
-         * scale and translate the oval then draw it into `RectF mDstR`, and move the canvas to
-         * the right by the width of `mDstR` with an 8 pixel spacing to get ready for the next
+         * Now we move the [canvas] down 100 pixels and for each of the four scale to fit options
+         * contained in the [Matrix.ScaleToFit] array [sFits] we first save the canvas matrix to
+         * its private stack. Then for each of the four ovals we call our method [drawFit] to
+         * scale and translate the oval then draw it into [RectF] field [mDstR], and move the canvas
+         * to the right by the width of [mDstR] with an 8 pixel spacing to get ready for the next
          * oval. When done with the ovals for this row we draw the text describing the scale to fit
          * option that was used for that row, restore the canvas matrix to the state before our call
-         * to save, and move the canvas down by `HEIGHT+20` for the next row.
+         * to save, and move the canvas down by [HEIGHT] plus 20 pixels for the next row.
          *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(Color.WHITE)
@@ -188,23 +187,37 @@ class ScaleToFit : GraphicsActivity() {
 
         companion object {
             /**
-             * The four different `Matrix.ScaleToFit` options passed to `setRectToRect`.
+             * The four different [Matrix.ScaleToFit] options passed to `setRectToRect`.
              */
             private val sFits = arrayOf(
-                    Matrix.ScaleToFit.FILL,  // Scale in X and Y independently, so that src matches dst exactly.
-// This may change the aspect ratio of the src.
-                    Matrix.ScaleToFit.START,  // Compute a scale that will maintain the original src aspect ratio,
-// but will also ensure that src fits entirely inside dst. At least one axis (X or Y) will fit
-// exactly. START aligns the result to the left and top edges of dst.
-                    Matrix.ScaleToFit.CENTER,  // Compute a scale that will maintain the original src aspect ratio,
-// but will also ensure that src fits entirely inside dst. At least one axis (X or Y) will fit
-// exactly. The result is centered inside dst.
-                    Matrix.ScaleToFit.END // Compute a scale that will maintain the original src aspect ratio, but
-// will also ensure that src fits entirely inside dst. At least one axis (X or Y) will fit exactly.
-// END aligns the result to the right and bottom edges of dst.
+                    /**
+                     * Scale in X and Y independently, so that src matches dst exactly.
+                     * This may change the aspect ratio of the src.
+                     */
+                    Matrix.ScaleToFit.FILL,
+                    /**
+                     * Compute a scale that will maintain the original src aspect ratio,
+                     * but will also ensure that src fits entirely inside dst. At least
+                     * one axis (X or Y) will fit exactly. START aligns the result to the
+                     * left and top edges of dst.
+                     */
+                    Matrix.ScaleToFit.START,
+                    /**
+                     * Compute a scale that will maintain the original src aspect ratio,
+                     * but will also ensure that src fits entirely inside dst. At least
+                     * one axis (X or Y) will fit exactly. The result is centered inside dst.
+                     */
+                    Matrix.ScaleToFit.CENTER,
+                    /**
+                     * Compute a scale that will maintain the original src aspect ratio, but
+                     * will also ensure that src fits entirely inside dst. At least one axis
+                     * (X or Y) will fit exactly. END aligns the result to the right and bottom
+                     * edges of dst.
+                     */
+                    Matrix.ScaleToFit.END
             )
             /**
-             * The labels corresponding to the `Matrix.ScaleToFit` option used for a row.
+             * The labels corresponding to the [Matrix.ScaleToFit] option used for a row.
              */
             private val sFitLabels = arrayOf("FILL", "START", "CENTER", "END")
             /**
@@ -221,27 +234,22 @@ class ScaleToFit : GraphicsActivity() {
              */
             private const val N = 4
             /**
-             * Width of the destination rectangle for our drawing, modified by our constructor to scale
-             * for the current display density
+             * Width of the destination rectangle for our drawing, modified by our constructor to
+             * scale for the current display density
              */
             private var WIDTH = 52
             /**
-             * Height of the destination rectangle for our drawing, modified by our constructor to scale
-             * for the current display density
+             * Height of the destination rectangle for our drawing, modified by our constructor to
+             * scale for the current display density
              */
             private var HEIGHT = 52
         }
 
         /**
-         * Our constructor. First we call our super's constructor, then we set our field `mScale`
-         * to the value needed to dp units to pixel by fetching the resources associated with this view
-         * and using that to access the `density` field of the current display metrics. We then
-         * use `mScale` to scale our fields `WIDTH` and `HEIGHT`. We allocate a new
-         * instance of `RectF` with width `WIDTH` and height `HEIGHT` for our field
-         * `mDstR`, set the style of our field `Paint mHairPaint` to STROKE, and the text
-         * size of `Paint mLabelPaint` to `16 * mScale`.
-         *
-         *  context `Context` to access resources.
+         * The init block of ur constructor. First we use `mScale` to scale our fields `WIDTH` and
+         * `HEIGHT` for the display density. We allocate a new instance of `RectF` with width `WIDTH`
+         * and height `HEIGHT` for our field `mDstR`, set the style of our `Paint` field `mHairPaint`
+         * to STROKE, and the text size of `Paint` field `mLabelPaint` to `16 * mScale`.
          */
         init {
             WIDTH *= mScale.toInt()
