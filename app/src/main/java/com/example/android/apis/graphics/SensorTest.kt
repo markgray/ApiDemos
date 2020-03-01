@@ -38,11 +38,11 @@ import kotlin.math.roundToInt
 class SensorTest : GraphicsActivity() {
 
     /**
-     * `SensorManager` for accessing sensors
+     * [SensorManager] for accessing sensors
      */
     private var mSensorManager: SensorManager? = null
     /**
-     * Default sensor for the accelerometer sensor type TYPE_ACCELEROMETER
+     * Default [Sensor] for the accelerometer sensor type TYPE_ACCELEROMETER
      */
     private var mSensor: Sensor? = null
     /**
@@ -50,7 +50,7 @@ class SensorTest : GraphicsActivity() {
      */
     private var mView: SampleView? = null
     /**
-     * The `onDraw` method of `SampleView` rotates the canvas based on the value of
+     * The `onDraw` method of [SampleView] rotates the canvas based on the value of
      * `mValues[0]` - must have been copied from the compass example.
      */
     private val mValues: FloatArray? = FloatArray(1)
@@ -58,11 +58,11 @@ class SensorTest : GraphicsActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`. We fetch the handle to the system level service SENSOR_SERVICE to set our
-     * field `SensorManager mSensorManager`, then use it to initialize our field `Sensor mSensor`
+     * [SensorManager] field [mSensorManager], then use it to initialize our [Sensor] field [mSensor]
      * with the default sensor for the accelerometer sensor type. Finally we create a new instance of
-     * `SampleView` for our field `SampleView mView` and set our content view to it.
+     * [SampleView] for our [SampleView] field [mView] and set our content view to it.
      *
-     * @param icicle We do not call `onSaveInstanceState` so do not use
+     * @param icicle We do not call [onSaveInstanceState] so do not use
      */
     override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
@@ -73,11 +73,10 @@ class SensorTest : GraphicsActivity() {
     }
 
     /**
-     * Called after [.onRestoreInstanceState], [.onRestart], or [.onPause], for
-     * your activity to start interacting with the user. First we call through to our super's
-     * implementation of `onResume`, then we register `SensorEventListener mListener` as
-     * the listener for our sensor `Sensor mSensor` using SENSOR_DELAY_FASTEST (get sensor data
-     * as quickly as possible).
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for our activity to start
+     * interacting with the user. First we call through to our super's implementation of `onResume`,
+     * then we register [SensorEventListener] field [mListener] as the listener for our sensor in
+     * [Sensor] field [mSensor] using SENSOR_DELAY_FASTEST (get sensor data as quickly as possible).
      */
     override fun onResume() {
         super.onResume()
@@ -85,8 +84,9 @@ class SensorTest : GraphicsActivity() {
     }
 
     /**
-     * Called when you are no longer visible to the user. We unregister `SensorEventListener mListener`
-     * as a listener for its sensors, then call through to our super's implementation of `onStop`.
+     * Called when you are no longer visible to the user. We unregister [SensorEventListener] field
+     * [mListener] as a listener for its sensors, then call through to our super's implementation of
+     * `onStop`.
      */
     override fun onStop() {
         mSensorManager!!.unregisterListener(mListener)
@@ -141,7 +141,7 @@ class SensorTest : GraphicsActivity() {
     }
 
     /**
-     * An anonymous `SensorEventListener` that we use to listen to `Sensor mSensor`
+     * An anonymous [SensorEventListener] that we use to listen to [Sensor] field [mSensor]
      */
     private val mListener: SensorEventListener = object : SensorEventListener {
         /**
@@ -150,7 +150,7 @@ class SensorTest : GraphicsActivity() {
          */
         private val mScale = floatArrayOf(2f, 2.5f, 0.5f) // acceleration
         /**
-         * Values of the previous `SensorEvent.values[]` array, used to detect change in the
+         * Values of the previous [SensorEvent.values] array, used to detect change in the
          * sensor readings.
          */
         private val mPrev = FloatArray(3)
@@ -161,29 +161,29 @@ class SensorTest : GraphicsActivity() {
         private var mLastGestureTime: Long = 0
 
         /**
-         * Called when sensor values have changed. First we set our flag `show` to false (we set
-         * it to true if the sensor readings have changed enough to justify logging them (which we then
-         * do)). We allocate 3 floats for `float[] diff`, then loop through the 3 readings in
-         * `event.values[]` and 3 previous readings in our field `mPrev[]`, scaling each
-         * change in readings then rounding them to the nearest `int` before assigning the result
-         * to the corresponding `diff[]`. If the absolute value is greater than 0, we set `show`
-         * to true. We then save the current sensor reading in `mPrev[]` to the next time we are
-         * called and loop back for the next element of `values[]`.
+         * Called when sensor values have changed. First we set our flag `var show` to false (we set
+         * it to true if the sensor readings have changed enough to justify logging them (which we
+         * then do)). We allocate 3 floats for [FloatArray] `val diff`, then loop through the 3
+         * readings in `event.values[]` and 3 previous readings in our [FloatArray] field [mPrev],
+         * scaling each change in readings then rounding them to the nearest [Int] before assigning
+         * the result to the corresponding entry in `diff`. If the absolute value is greater than 0,
+         * we set `show` to true. We then save the current sensor reading in [mPrev] fpr the next
+         * time we are called and loop back for the next element in `values[]`.
          *
          * When done with the sensor readings we check if `show` is now true, and if so log the
-         * sensor changes, increment `mValues[0]` modulo 360, and invalidate `SampleView mView`
-         * so that the compass arrow angle will change (why not?).
+         * sensor changes, increment `mValues[0]` modulo 360, and invalidate [SampleView] field
+         * [mView] so that the compass arrow angle will change (why not?).
          *
-         * We fetch the milliseconds since boot for `long now`, and if 1000 milliseconds have passed
-         * since `mLastGestureTime` was last set we set `mLastGestureTime` to 0 copy `diff[0]`
-         * to `float x` and `diff[1]` to `float y`. We set `boolean gestX` to true
-         * if the absolute value of `x` is greater than 3 and `boolean gestY` to true if the
-         * absolute value of `y` is greater than 3. Then if either `gestX` or `gestY`
-         * is true, but both are not true we have a gesture to log. If `gestX` was the one that was
-         * true, a value for `x` less than 0 is logged as a LEFT gesture, otherwise it is logged
-         * as a RITE gesture. If `gestY` was the one that was true, a value of `y` less than
-         * -2 is logged as UP, otherwise it is logged as DOWN. If we logged a gesture we now set the
-         * value of `mLastGestureTime` to `now`.
+         * We fetch the milliseconds since boot for [Long] `val now`, and if 1000 milliseconds have
+         * passed since [mLastGestureTime] was last set we set [mLastGestureTime] to 0 copy `diff[0]`
+         * to [Float] `val x` and `diff[1]` to [Float] `val y`. We set [Boolean] `val gestX` to true
+         * if the absolute value of `x` is greater than 3 and [Boolean] `val gestY` to true if the
+         * absolute value of `y` is greater than 3. Then if either `gestX` or `gestY` is true, but
+         * both are not true we have a gesture to log. If `gestX` was the one that was true, a value
+         * for `x` less than 0 is logged as a LEFT gesture, otherwise it is logged as a RITE gesture.
+         * If `gestY` was the one that was true, a value of `y` less than -2 is logged as UP, otherwise
+         * it is logged as DOWN. If we logged a gesture we now set the value of [mLastGestureTime]
+         * to `now`.
          *
          * @param event the [SensorEvent][android.hardware.SensorEvent].
          */
@@ -197,8 +197,11 @@ class SensorTest : GraphicsActivity() {
                 }
                 mPrev[i] = event.values[i]
             }
-            if (show) { // only shows if we think the delta is big enough, in an attempt
-// to detect "serious" moves left/right or up/down
+            if (show) {
+                /**
+                 * only shows if we think the delta is big enough, in an attempt
+                 * to detect "serious" moves left/right or up/down
+                 */
                 Log.e(TAG, "sensorChanged " + event.sensor.name +
                         " (" + event.values[0] + ", " + event.values[1] + ", " +
                         event.values[2] + ")" + " diff(" + diff[0] +
@@ -235,34 +238,34 @@ class SensorTest : GraphicsActivity() {
         /**
          * Called when the accuracy of the registered sensor has changed. We do nothing.
          *
-         * @param sensor The `Sensor` whose accuracy has changed
+         * @param sensor The [Sensor] whose accuracy has changed
          * @param accuracy The new accuracy of this sensor, one of `SensorManager.SENSOR_STATUS_*`
          */
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
     }
 
     /**
-     * Custom `View` which just displays a compass arrow, rotated by the value of `-mValues[0]`
+     * Custom [View] which just displays a compass arrow, rotated by the value of `-mValues[0]`
      * for no apparent reason.
      */
     private inner class SampleView(context: Context?) : View(context) {
         /**
-         * `Paint` we use to draw our compass arrow.
+         * [Paint] we use to draw our compass arrow.
          */
         private val mPaint = Paint()
         /**
-         * `Path` that draws a compass arrow.
+         * [Path] that draws a compass arrow.
          */
         private val mPath = Path()
         /**
-         * Flag which we do not actually use, but set to true when our method `onAttachedToWindow`
-         * is called and set to false when our method `onDetachedFromWindow` is called.
+         * Flag which we do not actually use, but set to true when our method [onAttachedToWindow]
+         * is called and set to false when our method [onDetachedFromWindow] is called.
          */
         private var mAnimate = false
 
         /**
-         * We implement this to do our drawing. First we make a local copy `Paint paint` of the
-         * pointer in our field `Paint mPaint`. Then we fill the entire `Canvas canvas`
+         * We implement this to do our drawing. First we make a local copy [Paint] `val paint` of
+         * the pointer in our [Paint] field [mPaint]. Then we fill the entire `Canvas canvas`
          * with the color WHITE. We set the antialias flag of `paint` to true, its color to
          * BLACK, and its style to FILL. We initialize `int w` with the width of the `canvas`
          * and `int h` with the height. We calculate the center of the canvas from these values
