@@ -29,25 +29,24 @@ import com.example.android.apis.R
 import java.util.*
 
 /**
- * Clever use of Animator and AnimatorSet to move card stack using "material design" shadowing.
+ * Clever use of [Animator] and [AnimatorSet] to move card stack using "material design" shadowing.
  * The properties being animated are: translationY (expandAnimators), translationZ (towardAnimators),
  * rotationY and translationX (moveAwayAnimators), rotationY and translationX (moveBackAnimators),
- * translationZ (awayAnimators), and translationY (collapseAnimators). Crashes for less than v21 due
- * to AndroidManifest android:theme="@android:style/Theme.Material.Light"
+ * translationZ (awayAnimators), and translationY (collapseAnimators).
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class ShadowCardStack : AppCompatActivity() {
     /**
-     * Turns a list of `Animator` objects into an `AnimatorSet`, with the `Animator`
-     * objects set to play together, with a start delay of `startDelay` milliseconds, and returns
+     * Turns a list of [Animator] objects into an [AnimatorSet], with the [Animator] objects set to
+     * play together, with a start delay of [Long] parameter [startDelay]  milliseconds, and returns
      * it to the caller.
      *
-     * @param items      list of `Animator` objects
+     * @param items      list of [Animator] objects
      * @param startDelay amount of time, in milliseconds, to delay starting the animation after its
      * `start()` method is called.
-     * @return An `AnimatorSet` containing all of the `Animator` objects in `items`,
-     * configured to play together with a start delay of `startDelay`
+     * @return An [AnimatorSet] containing all of the [Animator] objects in `ArrayList<Animator>`
+     * parameter [items], configured to play together with a start delay of [startDelay]
      */
     fun createSet(items: ArrayList<Animator>?, startDelay: Long): AnimatorSet {
         val set = AnimatorSet()

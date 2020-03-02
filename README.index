@@ -1665,8 +1665,7 @@ Graphics
             design" shadowing. The properties being animated are: translationY (expandAnimators), 
             translationZ (towardAnimators), rotationY and translationX (moveAwayAnimators), 
             rotationY and translationX (moveBackAnimators),  translationZ (awayAnimators), and
-            translationY (collapseAnimators). Crashes for less than v21 due to AndroidManifest
-            android:theme="@android:style/Theme.Material.Light"
+            translationY (collapseAnimators).
 
   Surface Window
     Graphics/Surface Window                v21 or crash
