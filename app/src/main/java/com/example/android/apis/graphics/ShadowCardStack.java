@@ -21,11 +21,12 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -39,7 +40,7 @@ import java.util.ArrayList;
  * to AndroidManifest android:theme="@android:style/Theme.Material.Light"
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class ShadowCardStack extends Activity {
+public class ShadowCardStack extends AppCompatActivity {
 
     /**
      * X coordinate in DP that the cards "slide away" to in the {@code Animator slideAway}, (where it
@@ -145,7 +146,7 @@ public class ShadowCardStack extends Activity {
 
         float density = getResources().getDisplayMetrics().density;
 
-        final ViewGroup cardParent = (ViewGroup) findViewById(R.id.card_parent);
+        final ViewGroup cardParent = findViewById(R.id.card_parent);
 
         final float X = X_SHIFT_DP * density;
         final float Y = Y_SHIFT_DP * density;
