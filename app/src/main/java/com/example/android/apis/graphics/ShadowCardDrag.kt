@@ -18,7 +18,6 @@ package com.example.android.apis.graphics
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.Activity
 import android.graphics.*
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
@@ -34,6 +33,7 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.Button
 import android.widget.CheckBox
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import java.util.*
 
@@ -42,7 +42,7 @@ import java.util.*
  * on touching the screen.
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-class ShadowCardDrag : Activity() {
+class ShadowCardDrag : AppCompatActivity() {
     /**
      * `ShapeDrawable` presently being used for the draggable, it is cycled by the R.id.shape_select
      * `Button` to be one of `RectShape`, `OvalShape`, `RoundRectShape` and
