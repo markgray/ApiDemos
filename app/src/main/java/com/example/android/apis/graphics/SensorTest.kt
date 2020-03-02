@@ -265,15 +265,15 @@ class SensorTest : GraphicsActivity() {
 
         /**
          * We implement this to do our drawing. First we make a local copy [Paint] `val paint` of
-         * the pointer in our [Paint] field [mPaint]. Then we fill the entire `Canvas canvas`
-         * with the color WHITE. We set the antialias flag of `paint` to true, its color to
-         * BLACK, and its style to FILL. We initialize `int w` with the width of the `canvas`
-         * and `int h` with the height. We calculate the center of the canvas from these values
-         * and move the canvas to that point. Then is our field `mValues` is not null we rotate
-         * the canvas by `-mValues[0]`. Finally we draw the compass arrow contained in `Path mPath`
-         * to the canvas using `Paint mPaint` as the paint.
+         * the pointer in our [Paint] field [mPaint]. Then we fill the entire [Canvas] parameter
+         * [canvas] with the color WHITE. We set the antialias flag of `paint` to true, its color to
+         * BLACK, and its style to FILL. We initialize [Int] `val w` with the width of the [canvas]
+         * and `val h` with the height. We calculate the center of the canvas from these values
+         * and move the canvas to that point. Then if our field [mValues] is not null we rotate
+         * the canvas by `-mValues[0]`. Finally we draw the compass arrow contained in [Path] field
+         * [mPath] to the canvas using [mPaint] as the [Paint].
          *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
             val paint = mPaint
@@ -294,7 +294,7 @@ class SensorTest : GraphicsActivity() {
 
         /**
          * This is called when the view is attached to a window. At this point it has a Surface and
-         * will soon start drawing. We set our flag `mAnimate` to true for no apparent reason
+         * will soon start drawing. We set our flag [mAnimate] to true for no apparent reason
          * and call through to our super's implementation of `onAttachedToWindow`.
          */
         override fun onAttachedToWindow() {
@@ -306,8 +306,8 @@ class SensorTest : GraphicsActivity() {
 
         /**
          * This is called when the view is detached from a window. At this point it no longer has a
-         * surface for drawing. We set our flag `mAnimate` to false for no apparent reason
-         * and call through to our super's implementation of `onDetachedFromWindow`.
+         * surface for drawing. We set our flag [mAnimate] to false for no apparent reason and call
+         * through to our super's implementation of `onDetachedFromWindow`.
          */
         override fun onDetachedFromWindow() {
             mAnimate = false
@@ -317,15 +317,13 @@ class SensorTest : GraphicsActivity() {
         }
 
         /**
-         * Our constructor. First we call our super's constructor, then we construct a wedge shaped
-         * path in `Path mPath` which our `onDraw` method will use to draw our compass
-         * arrow.
-         *
-         * context `Context` used to retrieve resources, this when called from the
-         * `onCreate` method of the `SensorTest` activity.
+         * The init block of our constructor. We construct a wedge shaped path in `Path` field
+         * `mPath` which our `onDraw` method will use to draw our compass arrow.
          */
         init {
-            // Construct a wedge-shaped path
+            /**
+             * Construct a wedge-shaped path
+             */
             mPath.moveTo(0f, -50f)
             mPath.lineTo(-20f, 60f)
             mPath.lineTo(0f, 50f)
