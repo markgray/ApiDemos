@@ -1,7 +1,6 @@
 package com.example.android.apis.graphics;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
@@ -9,13 +8,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 /**
  * Demonstrates how to take over the Surface from a window to do direct drawing to it (without going
  * through the view hierarchy). Good example of how to use a background thread to do your drawing.
  * Shows use of life cycle callbacks when a thread is running in the background.
  */
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
+public class WindowSurface extends AppCompatActivity implements SurfaceHolder.Callback2 {
     /**
      * TAG for logging.
      */
@@ -173,7 +174,6 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
     /**
      * Tracking of a single point that is moving on the screen.
      */
-    @SuppressWarnings("WeakerAccess")
     static final class MovingPoint {
         /**
          * Our current x coordinate
@@ -264,7 +264,6 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
      * This is a thread that will be running a loop, drawing into the
      * window's surface.
      */
-    @SuppressWarnings("WeakerAccess")
     class DrawingThread extends Thread {
         // These are protected by the Thread's lock.
         /**
@@ -485,6 +484,7 @@ public class WindowSurface extends Activity implements SurfaceHolder.Callback2 {
                         try {
                             wait();
                         } catch (InterruptedException e) {
+                            //noinspection ConstantConditions
                             Log.i(TAG, e.getLocalizedMessage());
                         }
                     }
