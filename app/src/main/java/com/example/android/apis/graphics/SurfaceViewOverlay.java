@@ -16,23 +16,25 @@
 
 package com.example.android.apis.graphics;
 
-import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
+
 //Need the following import to get access to the app resources, since this
 //class is in a sub-package.
-import com.example.android.apis.R;
 
 /**
  * Demonstration of overlays placed on top of a SurfaceView. Shows how to use a FrameLayout to layer
  * views within it, and how to use View.setVisibility(View.VISIBLE), View.INVISIBLE, and View.GONE to
  * toggle which ones are shown. Good use of a translucent background as well.
  */
-public class SurfaceViewOverlay extends Activity {
+public class SurfaceViewOverlay extends AppCompatActivity {
     /**
      * {@code LinearLayout} which contains our two "Hide Me!" buttons (id R.id.hidecontainer)
      */
@@ -69,7 +71,7 @@ public class SurfaceViewOverlay extends Activity {
 
         setContentView(R.layout.surface_view_overlay);
 
-        GLSurfaceView glSurfaceView = (GLSurfaceView) findViewById(R.id.glsurfaceview);
+        GLSurfaceView glSurfaceView = findViewById(R.id.glsurfaceview);
         glSurfaceView.setRenderer(new CubeRenderer(false));
 
         // Find the views whose visibility will change
@@ -80,9 +82,9 @@ public class SurfaceViewOverlay extends Activity {
         mVictim2.setOnClickListener(new HideMeListener(mVictim2));
 
         // Find our buttons
-        Button visibleButton = (Button) findViewById(R.id.vis);
-        Button invisibleButton = (Button) findViewById(R.id.invis);
-        Button goneButton = (Button) findViewById(R.id.gone);
+        Button visibleButton = findViewById(R.id.vis);
+        Button invisibleButton = findViewById(R.id.invis);
+        Button goneButton = findViewById(R.id.gone);
 
         // Wire each button to a click listener
         visibleButton.setOnClickListener(mVisibleListener);
@@ -117,7 +119,7 @@ public class SurfaceViewOverlay extends Activity {
      * {@code OnClickListener} which sets the visibility of the {@code View} it is constructed for
      * to INVISIBLE.
      */
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings("InnerClassMayBeStatic")
     class HideMeListener implements OnClickListener {
         /**
          * {@code View} we were constructed to make INVISIBLE when it is clicked.
