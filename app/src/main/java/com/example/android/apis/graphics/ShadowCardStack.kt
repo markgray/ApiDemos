@@ -58,11 +58,11 @@ class ShadowCardStack : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout R.layout.shadow_card_stack. Next
-     * we fetch the current logical density of our display to `float density` to use to scale
-     * DP to pixels. We find the `ViewGroup` with id R.id.card_parent and save a pointer to it
-     * in `ViewGroup cardParent`. Next we convert `X_SHIFT_DP` to pixels and assign the
-     * value to `float X`, `Y_SHIFT_DP` to `float Y` and `Z_LIFT_DP` to
-     * `float Z` for later use. We create 6 lists of `Animator` objects:
+     * we fetch the current logical density of our display to [Float] `val density` to use to scale
+     * DP to pixels. We find the [ViewGroup] with id R.id.card_parent and save a pointer to it
+     * in [ViewGroup] `val cardParent`. Next we convert `X_SHIFT_DP` to pixels and assign the
+     * value to [Float] `val xInPixels`, `Y_SHIFT_DP` to `val yInPixels` and `Z_LIFT_DP` to
+     * `val zInPixels` for later use. We create 6 lists of [Animator] objects:
      *
      *  * `towardAnimators` - contains "translationZ" `Animator` objects for moving towards the viewer
      *  * `expandAnimators` - contains "translationY" `Animator` objects for expanding from 1 card to 5 stacked cards
@@ -71,41 +71,42 @@ class ShadowCardStack : AppCompatActivity() {
      *  * `awayAnimators` - contains "translationZ" `Animator` objects for moving Z back to 0
      *  * `collapseAnimators` - contains "translationY" `Animator` objects for moving Y back to 0
      *
-     * We now initialize `max` to the number of child `TextView` objects in our layout (5 in
-     * our case), and loop for each of these. We fetch a reference to the current child to `TextView card`,
-     * set its text to display the "Card number" it represents. We calculate the Y coordinate we want that
-     * card to "expand" to, create an `Animator expand` to animate the cards "translationY" attribute
-     * to that coordinate and add it to the `expandAnimators` list. We calculate how high we want
-     * that card to rise toward the viewer, create an `Animator toward` to animate the cards "translationZ"
-     * to that point and add it to the `towardAnimators` list. We set the x location of the point around
-     * which the view is rotated to X_SHIFT_DP (1000), create an `Animator rotateAway` to rotate every
-     * card except card 0 (the bottom card) by ROTATE_DEGREES (15), set its start delay to 1000ms for card 0,
-     * 800ms for card 1, 600ms for card 2, 400ms for card 3, and 200ms for card 4 (top of stack), set its
-     * duration to 100ms, and add it to the `moveAwayAnimators` list. We create an `Animator slideAway`
-     * to animate the cards "translationX" to 0 for card 0, and to `X` for all other cards, set its start
-     * delay to 1000ms for card 0, 800ms for card 1, 600ms for card 2, 400ms for card 3, and 200ms for card 4
+     * We now initialize `val max` to the number of child [TextView] objects in our layout (5 in our
+     * case), and loop for each of these. In this loop we fetch a reference to the current child to
+     * [TextView] `val card`, and set its text to display the "Card number" it represents. We calculate
+     * the Y coordinate we want that card to "expand" to, create an [Animator] `val expand` to animate
+     * the cards "translationY" attribute to that coordinate and add it to the `expandAnimators` list.
+     * We calculate how high we want that card to rise toward the viewer, create an [Animator]
+     * `val toward` to animate the cards "translationZ" to that point and add it to the `towardAnimators`
+     * list. We set the x location of the point around which the view is rotated to X_SHIFT_DP (1000),
+     * create an [Animator] `val rotateAway` to rotate every card except card 0 (the bottom card) by
+     * ROTATE_DEGREES (15), set its start delay to 1000ms for card 0, 800ms for card 1, 600ms for card 2,
+     * 400ms for card 3, and 200ms for card 4 (top of stack), set its duration to 100ms, and add it
+     * to the `moveAwayAnimators` list. We create an [Animator] `val slideAway` to animate the cards
+     * "translationX" to 0f for card 0, and to `xInPixels` for all other cards, set its start delay
+     * to 1000ms for card 0, 800ms for card 1, 600ms for card 2, 400ms for card 3, and 200ms for card 4
      * (top of stack), set its duration to 100ms and add it to the `moveAwayAnimators` list. We create
-     * an `Animator rotateBack` to animate the cards "rotationY" to 0, set its start delay to 0ms
-     * for card 0, 200ms for card 1, 400ms for card 2, 600ms for card 3, and 800ms for card 4 (top of stack),
-     * and add it to the `moveBackAnimators` list. We create an `Animator slideBack` to animate the
-     * cards "translationX" to 0, set its start delay to 0ms for card 0, 200ms for card 1, 400ms for card 2,
-     * 600ms for card 3, and 800ms for card 4 (top of stack), and add it to the `moveBackAnimators` list.
-     * We create an `Animator away` to animate the cards "translationZ" to 0, set its start delay to 0ms
-     * for card 0, 200ms for card 1, 400ms for card 2, 600ms for card 3, and 800ms for card 4 (top of stack),
-     * and add it to the `awayAnimators` list. And finally we create an `Animator collapse` to
-     * animate the cards "translationY" to 0, and add it to the `collapseAnimators` list.
+     * an [Animator] `val rotateBack` to animate the cards "rotationY" to 0, set its start delay to
+     * 0ms for card 0, 200ms for card 1, 400ms for card 2, 600ms for card 3, and 800ms for card 4
+     * (top of stack), and add it to the `moveBackAnimators` list. We create an [Animator]
+     * `val slideBack` to animate the cards "translationX" to 0, set its start delay to 0ms for card 0,
+     * 200ms for card 1, 400ms for card 2, 600ms for card 3, and 800ms for card 4 (top of stack), and
+     * add it to the `moveBackAnimators` list. We create an [Animator] `val away` to animate the cards
+     * "translationZ" to 0, set its start delay to 0ms for card 0, 200ms for card 1, 400ms for card 2,
+     * 600ms for card 3, and 800ms for card 4 (top of stack), and add it to the `awayAnimators` list.
+     * And finally we create an [Animator] `val collapse` to animate the cards "translationY" to 0,
+     * and add it to the `collapseAnimators` list.
      *
+     * When we are done creating the animators for all five cards, we create [AnimatorSet] `val totalSet`
+     * and set it up to play each of the [AnimatorSet] objects that our method [createSet] creates from
+     * our 6 `Animator` lists. The `expandAnimators` run together after a start delay of 250ms, followed
+     * by the `towardAnimators`, followed after a 250ms delay by the `moveAwayAnimators`, followed by
+     * the `moveBackAnimators`, followed after a 250ms delay by the `awayAnimators`, followed by the
+     * `collapseAnimators`. We then start `totalSet` running and set its `AnimatorListener` to a new
+     * instance of our [RepeatListener] contructed to listen to `totalSet` and which restarts the
+     * `totalSet` animation when it ends.
      *
-     * When we are done creating the animators for all five cards, we create `AnimatorSet totalSet`
-     * and set it up to play each of the `AnimatorSet` objects that our method `createSet`
-     * creates from our 6 `Animator` lists. The `expandAnimators` run together after a start
-     * delay of 250ms, followed by the `towardAnimators`, followed after a 250ms delay by the
-     * `moveAwayAnimators`, followed by the `moveBackAnimators`, followed after a 250ms
-     * delay by the `awayAnimators`, followed by the `collapseAnimators`. We then start
-     * `totalSet` running and set its `AnimatorListener` to a new instance of our
-     * `RepeatListener(totalSet)` which restarts the `totalSet` animation when it ends.
-     *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -168,17 +169,15 @@ class ShadowCardStack : AppCompatActivity() {
     }
 
     /**
-     * `AnimatorListener` which starts its animation over again when it ends.
+     * [Animator.AnimatorListener] which starts its animation over again when it ends.
      */
     class RepeatListener
     /**
-     * Our constructor simply saves its argument in our field `Animator mRepeatAnimator`.
-     *
-     *  repeatAnimator `Animator` object that we are created to listen to.
+     * Our constructor simply saves its argument in our [Animator] field [mRepeatAnimator].
      */
     (
             /**
-             * The `Animator` we were constructed to listen to.
+             * The [Animator] we were constructed to listen to.
              */
             val mRepeatAnimator: Animator) : Animator.AnimatorListener {
 
@@ -190,7 +189,7 @@ class ShadowCardStack : AppCompatActivity() {
         override fun onAnimationStart(animation: Animator) {}
 
         /**
-         * Notifies the end of the animation. If we are being called for the same `Animator` we
+         * Notifies the end of the animation. If we are being called for the same [Animator] we
          * were created to listen to, we start it running again.
          *
          * @param animation The animation which reached its end.
@@ -226,13 +225,13 @@ class ShadowCardStack : AppCompatActivity() {
         /**
          * Used to calculate the `targetY` for each individual card that that card "expands to"
          * in the `Animator expand`, (where it is scaled to pixels using the display's logical
-         * density before being used). It is essentially the size in DP of the top edge of the card that
-         * is visible when the stack is expanded.
+         * density before being used). It is essentially the size in DP of the top edge of the
+         * card that is visible when the stack is expanded.
          */
         private const val Y_SHIFT_DP = 50f
         /**
-         * Each card has an animation of its "translationZ" attribute by a multiple of this depending on
-         * the location of the card in the stack in the `Animator toward`, (where it is scaled to
+         * Each card has an animation of its "translationZ" attribute by a multiple of this depending
+         * on the location of the card in the stack in the `Animator toward`, (where it is scaled to
          * pixels using the display's logical density before being used). It is essentially the height
          * of a card above the card below it when the stack is expanded.
          */
@@ -240,8 +239,8 @@ class ShadowCardStack : AppCompatActivity() {
         /**
          * Angle to which the cards are rotated around the y axis using the "rotationY" attribute as
          * they begin to "slide away" in the `Animator rotateAway`. It is a subtle animation when
-         * the "slide away" happens so fast, but is visible if you change the "slide away" duration to
-         * a much longer time period.
+         * the "slide away" happens so fast, but is visible if you change the "slide away" duration
+         * to a much longer time period.
          */
         private const val ROTATE_DEGREES = 15f
     }
