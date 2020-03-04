@@ -28,38 +28,39 @@ import android.view.View
 class Sweep : GraphicsActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to a new instance of `SampleView`.
+     * `onCreate`, then we set our content view to a new instance of [SampleView].
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(SampleView(this))
+        densityScale = resources.displayMetrics.density
     }
 
     /**
-     * Our custom view, which simply draws a circle with an animated `SweepGradient` as its
-     * `Shader`.
+     * Our custom view, which simply draws a circle with an animated [SweepGradient] as its
+     * [Shader].
      */
     private class SampleView(context: Context?) : View(context) {
         /**
-         * `Paint` used to draw our circle.
+         * [Paint] used to draw our circle.
          */
         private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
         /**
-         * Angle in degrees to rotate our `Shader mShader`, advanced by 3 degrees every time
-         * our `onDraw` method is called.
+         * Angle in degrees to rotate our [Shader] field [mShader], advanced by 3 degrees every time
+         * our [onDraw] method is called.
          */
         private var mRotate = 0f
 
         /**
-         * `Matrix` we use to rotate our `Shader mShader`.
+         * [Matrix] we use to rotate our [Shader] field [mShader].
          */
         private val mMatrix = Matrix()
 
         /**
-         * `SweepGradient` we use as `Shader` for our `Paint mPaint`.
+         * [SweepGradient] we use as [Shader] for our [Paint] field [mPaint].
          */
         private val mShader: Shader
 
@@ -70,25 +71,25 @@ class Sweep : GraphicsActivity() {
         private var mDoTiming = false
 
         /**
-         * We implement this to do our drawing. First we make a local copy of `Paint mPaint`
-         * for `Paint paint`, initialize `x` to 160, and `y` to 100. We set the
-         * color of the entire `Canvas canvas` to WHITE. We set `Matrix mMatrix` to rotate
-         * by `mRotate` degrees around the point (x,y), and set the local matrix of `mShader`
-         * to it, then set the shader of `Paint mPaint` to `mShader`. We increment
-         * `mRotate` by 3 degrees and if the result is greater than or equal to 360 we set it
-         * to 0. We then invalidate the view so we will be called again sometime in the future.
+         * We implement this to do our drawing. First we make a local copy of [Paint] field [mPaint]
+         * for `val paint`, initialize `val x` to 160f, and `val y` to 100f. We set the color of the
+         * entire [Canvas] parameter [canvas] to WHITE. We set [Matrix] field [mMatrix] to rotate
+         * by field [mRotate] degrees around the point `(x,y)`, and set the local matrix of [Shader]
+         * field [mShader] to it, then set the shader of [Paint] field [mPaint] to [mShader]. We
+         * increment [mRotate] by 3 degrees and if the result is greater than or equal to 360 we set
+         * it to 0. We then invalidate the view so we will be called again sometime in the future.
          *
-         * If our `mDoTiming` flag is true, we set `now` to the current time in milliseconds
-         * since boot, loop drawing our circle 20 times, calculate how long this took and log the result.
-         * If `mDoTiming` is false we simply use `Paint paint` to draw a circle with a
+         * If our [mDoTiming] flag is true, we set `var now` to the current time in milliseconds
+         * since boot, loop drawing our circle 20 times, calculate how long this took and log the
+         * result. If [mDoTiming] is false we simply use the [Paint] `paint` to draw a circle with a
          * radius of 80 pixels around the point (x,y).
          *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
             val paint = mPaint
-            val x = 160f
-            val y = 100f
+            val x = 160f * densityScale
+            val y = 100f * densityScale
             canvas.drawColor(Color.WHITE)
             mMatrix.setRotate(mRotate, x, y)
             mShader.setLocalMatrix(mMatrix)
@@ -101,12 +102,12 @@ class Sweep : GraphicsActivity() {
             if (mDoTiming) {
                 var now = System.currentTimeMillis()
                 for (i in 0..19) {
-                    canvas.drawCircle(x, y, 80f, paint)
+                    canvas.drawCircle(x, y, 80f * densityScale, paint)
                 }
                 now = System.currentTimeMillis() - now
                 Log.d("skia", "sweep ms = " + now / 20.0)
             } else {
-                canvas.drawCircle(x, y, 80f, paint)
+                canvas.drawCircle(x, y, 80f * densityScale, paint)
             }
         }
 
@@ -144,22 +145,23 @@ class Sweep : GraphicsActivity() {
         }
 
         /**
-         * Our constructor. First we call through to our super's constructor, then we enable our view
-         * to receive focus, and to receive focus in touch mode. We initialize `x` to 160 and
-         * `y` to 100 and use them to create a `SweepGradient` to initialize our field
-         * `Shader mShader` with the center at (x,y), using the array `COLORS` as the
-         * colors to be evenly distributed around the center. Finally we set `mShader` as the
-         * shader of `Paint mPaint`.
-         *
-         *  context `Context` to use to access resources.
+         * The init block of our constructor. First we enable our view to receive focus, and to
+         * receive focus in touch mode. We initialize `x` to 160 and `y` to 100 and use them to
+         * create a `SweepGradient` to initialize our `Shader` field `mShader` with the center at
+         * (x,y), using the array `COLORS` as the colors to be evenly distributed around the center.
+         * Finally we set `mShader` as the shader of `Paint mPaint`.
          */
         init {
             isFocusable = true
             isFocusableInTouchMode = true
-            val x = 160f
-            val y = 100f
+            val x = 160f * densityScale
+            val y = 100f * densityScale
             mShader = SweepGradient(x, y, COLORS, null)
             mPaint.shader = mShader
         }
+    }
+
+    companion object {
+        var densityScale = 1f
     }
 }
