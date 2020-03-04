@@ -50,19 +50,18 @@ class SurfaceViewOverlay : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.surface_view_overlay.
-     * Then we locate `GLSurfaceView glSurfaceView` in our layout (id R.id.glsurfaceview), and
-     * set its renderer to a new instance of `CubeRenderer` (a pair of tumbling cubes). We locate
-     * `View mVictimContainer` with id R.id.hidecontainer. We locate `View mVictim1` with
-     * id R.id.hideme1 and set its `OnClickListener` to a new instance of `HideMeListener`
-     * constructed for it, and we locate `View mVictim2` with id R.id.hideme2 and set its
-     * `OnClickListener` to a new instance of `HideMeListener` constructed for it.
-     * We locate `Button visibleButton` id R.id.vis and set its `OnClickListener` to
-     * `OnClickListener mVisibleListener`, `Button invisibleButton` id R.id.invis and set
-     * its `OnclickListener` to `OnClickListener mInvisibleListener`, and locate
-     * `Button goneButton` id R.id.gone and set its `OnClickListener` to
-     * `OnClickListener mGoneListener`.
+     * Then we locate [GLSurfaceView] `val glSurfaceView` in our layout (id R.id.glsurfaceview), and
+     * set its renderer to a new instance of [CubeRenderer] (a pair of tumbling cubes). We locate
+     * [View] field [mVictimContainer] with id R.id.hidecontainer. We locate [View] field [mVictim1]
+     * with id R.id.hideme1 and set its [View.OnClickListener] to a new instance of [HideMeListener]
+     * constructed for it, and we locate [View] field [mVictim2] with id R.id.hideme2 and set its
+     * [View.OnClickListener] to a new instance of [HideMeListener] constructed for it. We locate
+     * [Button] `val visibleButton` id R.id.vis and set its [View.OnClickListener] to our field
+     * [mVisibleListener], [Button] `val invisibleButton` with id R.id.invis and set its
+     * [View.OnClickListener] to our field [mInvisibleListener], and locate [Button] `val goneButton`
+     * with id R.id.gone and set its [View.OnClickListener] to our field [mGoneListener].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,13 +85,15 @@ class SurfaceViewOverlay : AppCompatActivity() {
     }
 
     /**
-     * Called after [.onRestoreInstanceState], [.onRestart], or [.onPause], for
-     * your activity to start interacting with the user. We simply call through to our super's
-     * implementation of `onResume`.
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for our activity to start
+     * interacting with the user. We simply call through to our super's implementation of `onResume`.
      */
     @Suppress("RedundantOverride")
-    override fun onResume() { // Ideally a game should implement onResume() and onPause()
-// to take appropriate action when the activity looses focus
+    override fun onResume() {
+        /**
+         * Ideally a game should implement onResume() and onPause()
+         * to take appropriate action when the activity looses focus
+         */
         super.onResume()
     }
 
@@ -101,33 +102,29 @@ class SurfaceViewOverlay : AppCompatActivity() {
      * has not (yet) been killed. We simply call through to our super's implementation of `onPause`.
      */
     @Suppress("RedundantOverride")
-    override fun onPause() { // Ideally a game should implement onResume() and onPause()
-// to take appropriate action when the activity looses focus
+    override fun onPause() {
+        /**
+         * Ideally a game should implement onResume() and onPause()
+         * to take appropriate action when the activity looses focus
+         */
         super.onPause()
     }
 
     /**
-     * `OnClickListener` which sets the visibility of the `View` it is constructed for
+     * [View.OnClickListener] which sets the visibility of the [View] it is constructed for
      * to INVISIBLE.
      */
-    internal inner class HideMeListener
-    /**
-     * Our constructor. We simple save our parameter `View target` in our field
-     * `View mTarget`.
-     *
-     *  target `View` to make invisible if it is clicked
-     */
-    (
+    internal inner class HideMeListener(
             /**
              * `View` we were constructed to make INVISIBLE when it is clicked.
              */
             val mTarget: View?) : View.OnClickListener {
 
         /**
-         * Called when a view whose `OnClickListener` we are has been clicked. We simply set
-         * the visibility of our `View mTarget` to INVISIBLE.
+         * Called when a view whose [View.OnClickListener] we are has been clicked. We simply set
+         * the visibility of our [View] field [mTarget] to INVISIBLE.
          *
-         * @param v `View` that was clicked.
+         * @param v [View] that was clicked.
          */
         override fun onClick(v: View) {
             mTarget!!.visibility = View.INVISIBLE
@@ -136,16 +133,9 @@ class SurfaceViewOverlay : AppCompatActivity() {
     }
 
     /**
-     * `OnClickListener` for the `Button` "Vis", id R.id.vis in our layout. It sets the
-     * visibility of `View mVictim1`, `View mVictim2` and `View mVictimContainer`
-     * to VISIBLE when the `Button` is clicked.
-     */
-    /**
-     * Called when a view whose `OnClickListener` we are has been clicked. When clicked we
-     * set the visibility of `View mVictim1`, `View mVictim2` and `View mVictimContainer`
-     * to VISIBLE.
-     *
-     *  v The view that was clicked.
+     * [View.OnClickListener] for the [Button] "Vis", id R.id.vis in our layout. It sets the
+     * visibility of [View] fields [mVictim1], [mVictim2] and [mVictimContainer] to VISIBLE when
+     * the [Button] is clicked.
      */
     var mVisibleListener: View.OnClickListener = View.OnClickListener{
         mVictim1!!.visibility = View.VISIBLE
@@ -154,33 +144,20 @@ class SurfaceViewOverlay : AppCompatActivity() {
     }
 
     /**
-     * `OnClickListener` for the `Button` "Invis", id R.id.invis in our layout. It sets the
-     * visibility of `View mVictim1`, `View mVictim2` and `View mVictimContainer`
-     * to INVISIBLE when the `Button` is clicked.
-     */
-    /**
-     * Called when a view whose `OnClickListener` we are has been clicked. When clicked we
-     * set the visibility of `View mVictim1`, `View mVictim2` and `View mVictimContainer`
-     * to INVISIBLE.
-     *
-     *  v The view that was clicked.
+     * [View.OnClickListener] for the [Button] "Invis", id R.id.invis in our layout. It sets the
+     * visibility of [View] fields [mVictim1], [mVictim2] and [mVictimContainer] to INVISIBLE when
+     * the [Button] is clicked.
      */
     var mInvisibleListener: View.OnClickListener = View.OnClickListener{
         mVictim1!!.visibility = View.INVISIBLE
         mVictim2!!.visibility = View.INVISIBLE
         mVictimContainer!!.visibility = View.INVISIBLE
     }
+
     /**
-     * `OnClickListener` for the `Button` "Gone", id R.id.gone in our layout. It sets the
-     * visibility of `View mVictim1`, `View mVictim2` and `View mVictimContainer`
-     * to GONE when the `Button` is clicked.
-     */
-    /**
-     * Called when a view whose `OnClickListener` we are has been clicked. When clicked we
-     * set the visibility of `View mVictim1`, `View mVictim2` and `View mVictimContainer`
-     * to GONE.
-     *
-     * v The view that was clicked.
+     * [View.OnClickListener] for the [Button] "Gone", id R.id.gone in our layout. It sets the
+     * visibility of [View] fields [mVictim1], [mVictim2] and [mVictimContainer] to GONE when
+     * the [Button] is clicked.
      */
     var mGoneListener: View.OnClickListener = View.OnClickListener {
         mVictim1!!.visibility = View.GONE
