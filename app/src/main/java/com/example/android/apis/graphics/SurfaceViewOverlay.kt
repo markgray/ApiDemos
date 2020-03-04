@@ -19,11 +19,14 @@ import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+
+/**
+ * Need the following import to get access to the app resources, since this class is in a sub-package.
+ */
 import com.example.android.apis.R
 
-//Need the following import to get access to the app resources, since this
-//class is in a sub-package.
 /**
  * Demonstration of overlays placed on top of a SurfaceView. Shows how to use a FrameLayout to layer
  * views within it, and how to use View.setVisibility(View.VISIBLE), View.INVISIBLE, and View.GONE to
@@ -32,15 +35,15 @@ import com.example.android.apis.R
 @Suppress("MemberVisibilityCanBePrivate")
 class SurfaceViewOverlay : AppCompatActivity() {
     /**
-     * `LinearLayout` which contains our two "Hide Me!" buttons (id R.id.hidecontainer)
+     * [LinearLayout] which contains our two "Hide Me!" buttons (id R.id.hidecontainer)
      */
     var mVictimContainer: View? = null
     /**
-     * First "Hide Me!" `Button` (id R.id.hideme1)
+     * First "Hide Me!" [Button] (id R.id.hideme1)
      */
     var mVictim1: View? = null
     /**
-     * Second "Hide Me!" `Button` (id R.id.hideme2)
+     * Second "Hide Me!" [Button] (id R.id.hideme2)
      */
     var mVictim2: View? = null
 
