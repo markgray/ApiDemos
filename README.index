@@ -1688,7 +1688,7 @@ Graphics
         .graphics.Sweep
             Animates a SweepGradient Shader by rotating its setLocalMatrix(Matrix M),
             used to paint a circle.
-            TODO: Scale for high dpi screens, and add alternative input for keypad.
+            TODO: Add alternative input for keypad.
 
   Text Align
     Graphics/Text Align                    all
