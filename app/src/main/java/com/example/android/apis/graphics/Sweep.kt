@@ -34,13 +34,12 @@ class Sweep : GraphicsActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(SampleView(this))
         densityScale = resources.displayMetrics.density
+        setContentView(SampleView(this))
     }
 
     /**
-     * Our custom view, which simply draws a circle with an animated [SweepGradient] as its
-     * [Shader].
+     * Our custom view, which simply draws a circle with an animated [SweepGradient] as its [Shader].
      */
     private class SampleView(context: Context?) : View(context) {
         /**
