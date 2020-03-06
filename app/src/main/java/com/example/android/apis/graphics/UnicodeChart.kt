@@ -30,10 +30,10 @@ import android.view.Window
 class UnicodeChart : GraphicsActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we request the window feature FEATURE_NO_TITLE (turns off the title at
-     * the top of the screen), and finally we set our content view to a new instance of `SampleView`.
+     * `onCreate`, then we request the window feature FEATURE_NO_TITLE (turns off the title at the
+     * top of the screen), and finally we set our content view to a new instance of [SampleView].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,16 +42,16 @@ class UnicodeChart : GraphicsActivity() {
     }
 
     /**
-     * Simple custom `View` which fills its canvas with a unicode chart.
+     * Simple custom [View] which fills its canvas with a unicode chart.
      */
     private class SampleView(context: Context?) : View(context) {
         /**
-         * `Paint` used to draw the unicode characters in our chart, text size is 15
+         * [Paint] used to draw the unicode characters in our chart, text size is 15
          */
         private val mBigCharPaint: Paint
 
         /**
-         * `Paint` used to draw the hex values of the characters under the unicode characters
+         * [Paint] used to draw the hex values of the characters under the unicode characters
          */
         private val mLabelPaint: Paint
 
@@ -71,7 +71,8 @@ class UnicodeChart : GraphicsActivity() {
         private var mBase = 0
 
         /**
-         * Computes and returns the X coordinate to place the hex version of the character on the screen.
+         * Computes and returns the X coordinate to place the hex version of the character
+         * on the screen.
          *
          * @param index index of the character being considered.
          * @return X coordinate to place the hex version of the character on the screen
@@ -81,7 +82,8 @@ class UnicodeChart : GraphicsActivity() {
         }
 
         /**
-         * Computes and returns the Y coordinate to place the hex version of the character on the screen.
+         * Computes and returns the Y coordinate to place the hex version of the character
+         * on the screen.
          *
          * @param index index of the character being considered.
          * @return Y coordinate to place the hex version of the character on the screen
@@ -91,18 +93,16 @@ class UnicodeChart : GraphicsActivity() {
         }
 
         /**
-         * Draws the unicode chart for the characters in page `base`. First we copy the `mChars`
-         * pointer to `char[] chars`, then for each of the 256 characters `i` in the current page
-         * we form the unicode value `int unichar` by adding `base` to `i` and cast
-         * `unichar` to `char` to set `chars[ i ]`, then draw the hex version of `unichar`
-         * underneath the location where the unicode character will be placed using `mLabelPaint` as
-         * the `Paint`.
-         *
+         * Draws the unicode chart for the characters in page [base]. First we copy the [CharArray]
+         * field [mChars] to `val chars`, then for each of the 256 characters `i` in the current page
+         * we form the unicode [Int] value `val unichar` by adding `base` to `i` and cast `unichar`
+         * to [Char] to set `chars[ i ]`, then draw the hex version of `unichar` underneath the
+         * location where the unicode character will be placed using [mLabelPaint] as the [Paint].
          *
          * Having filled `chars` and labeled the grid, we now draw the unicode characters in `chars`
-         * using `mPos` to position them, and `mBigCharPaint` as the `Paint`.
+         * using the coordinates in [mPos] to position them, and [mBigCharPaint] as the [Paint].
          *
-         * @param canvas `Canvas` we are to draw to
+         * @param canvas [Canvas] we are to draw to
          * @param base   which page we are to draw.
          */
         private fun drawChart(canvas: Canvas, base: Int) {
@@ -117,10 +117,10 @@ class UnicodeChart : GraphicsActivity() {
         }
 
         /**
-         * We implement this to do our drawing. First we fill the entire `Canvas canvas` with the
-         * color WHITE, scale the canvas by the screen density, move it to (0,1), and then call our
-         * method `drawChart` to draw the unicode characters in page `mBase` (where a page
-         * is defined as 256 adjacent code points) on `Canvas canvas`.
+         * We implement this to do our drawing. First we fill the entire [Canvas] parameter [canvas]
+         * with the color [Color.WHITE], scale the canvas by the screen density, move it to (0,1),
+         * and then call our method [drawChart] to draw the unicode characters in page [mBase]
+         * (where a page is defined as 256 adjacent code points) on [canvas].
          *
          * @param canvas the canvas on which the background will be drawn
          */
@@ -132,18 +132,15 @@ class UnicodeChart : GraphicsActivity() {
         }
 
         /**
-         * Called when a key down event has occurred. We switch on the value of `keyCode`:
+         * Called when a key down event has occurred. We switch on the value of [keyCode]:
          *
-         *  *
-         * KEYCODE_DPAD_LEFT - if `mBase` is greater than 0, we decrement it, invalidate
-         * the view so it will drawn again, and return true
+         *  * KEYCODE_DPAD_LEFT - if `mBase` is greater than 0, we decrement it, invalidate
+         *  the view so it will drawn again, and return true
          *
-         *  *
-         * KEYCODE_DPAD_RIGHT - we increment `mBase`, invalidate the view so it will
-         * drawn again, and return true
+         *  * KEYCODE_DPAD_RIGHT - we increment `mBase`, invalidate the view so it will
+         *  drawn again, and return true
          *
-         *
-         * If the `keyCode` is neither KEYCODE_DPAD_LEFT nor KEYCODE_DPAD_RIGHT, we return the
+         * If the [keyCode] is neither KEYCODE_DPAD_LEFT nor KEYCODE_DPAD_RIGHT, we return the
          * value returned by our super's implementation of `onKeyDown`.
          *
          * @param keyCode The value in event.getKeyCode().
@@ -196,29 +193,25 @@ class UnicodeChart : GraphicsActivity() {
         }
 
         /**
-         * Our constructor. First we enable our view to receive focus, and to receive focus in touch
-         * mode. We initialize `SCREEN_DENSITY` to the logical density of the screen. We allocate
-         * a new instance of `Paint` with its ANTI_ALIAS_FLAG flag set for our field
-         * `Paint mBigCharPaint`, set its text size to 15, and set its text alignment to CENTER.
-         * We allocate a new instance of `Paint` with its ANTI_ALIAS_FLAG flag set for our field
-         * `Paint mLabelPaint`, set its text size to 8, and set its text alignment to CENTER.
+         * The init block of our constructor. First we enable our view to receive focus, and to
+         * receive focus in touch mode. We initialize `SCREEN_DENSITY` to the logical density of
+         * the screen. We allocate a new instance of `Paint` with its ANTI_ALIAS_FLAG flag set for
+         * our `Paint` field `mBigCharPaint`, set its text size to 15, and set its text alignment
+         * to CENTER. We allocate a new instance of `Paint` with its ANTI_ALIAS_FLAG flag set for
+         * our `Paint` field `mLabelPaint`, set its text size to 8, and set its text alignment to
+         * CENTER.
          *
+         * We copy the `FloatArray` field `mPos` to `val pos`, and initialize `var index` to 0. Then
+         * we loop through the 16 columns and 16 rows calculating the value of the `x` coordinate
+         * for the characters in the current column, before looping through the rows where we set
+         * the `index` entry in `pos` to `x`, incrementing `index`, setting the following entry to
+         * the Y coordinate for the current row and incrementing `index`. The end result is to fill
+         * the `pos` (and hence the `mPos`) array with (x,y) coordinate pairs for each of the 256
+         * characters displayed in our chart, going down the rows first, and then moving to the next
+         * column and going down the rows again etc.
          *
-         * We copy the `mPos` pointer to `float[] pos`, and initialize `int index`
-         * to 0. Then we loop through the 16 columns and 16 rows calculating the value of the `x`
-         * coordinate for the characters in the current column, before looping through the rows where
-         * we set the `index` entry in `pos` to `x`, incrementing `index`, setting
-         * the following entry to the Y coordinate for the current row and incrementing `index`.
-         * The end result is to fill the `pos` (and hence the `mPos`) array with (x,y)
-         * coordinate pairs for each of the 256 characters displayed in our chart, going down the rows
-         * first, and then moving to the next column and going down the rows again etc.
-         *
-         *
-         * Finally we set our `OnClickListener` to an anonymous class which advances to the next
-         * page in the unicode space.
-         *
-         *  context `Context` for accessing resources, "this" when called from the
-         * `onCreate` method of `UnicodeChart`
+         * Finally we set our `OnClickListener` to a lambda which advances to the next page in the
+         * unicode space.
          */
         init {
             isFocusable = true
