@@ -29,9 +29,9 @@ import android.view.View
 class Typefaces : GraphicsActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to a new instance of `SampleView`.
+     * `onCreate`, then we set our content view to a new instance of [SampleView].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +44,7 @@ class Typefaces : GraphicsActivity() {
      */
     private class SampleView(context: Context) : View(context) {
         /**
-         * `Paint` we use to draw our text
+         * [Paint] we use to draw our text
          */
         private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
@@ -57,15 +57,15 @@ class Typefaces : GraphicsActivity() {
         )
 
         /**
-         * We implement this to do our drawing. First we set the entire `Canvas canvas` to
-         * `Color.WHITE`. We set the type face of `Paint mPaint` to null (so it will
-         * use the default), and use it to draw the text "Draw with Default:" at (10,100) on
-         * `canvas`, then draw the text "  SAMPLE TEXT" at (10,200), "Draw with Custom Font"
-         * at (10,400), and "(Custom Font draws 'A' with solid triangle.)" at (10,500). Next we set
-         * the typeface of `mPaint` to our custom `Typeface mFace`, and use it to draw
-         * the text "  SAMPLE TEXT" at (10,600) on `canvas`.
+         * We implement this to do our drawing. First we set the entire [Canvas] parameter [canvas]
+         * to [Color.WHITE]. We set the type face of [Paint] field [mPaint] to null (so it will use
+         * the default), and use it to draw the text "Draw with Default:" at (10,100) on [canvas],
+         * then draw the text "SAMPLE TEXT" at (10,200), "Draw with Custom Font" at (10,400), and
+         * "(Custom Font draws 'A' with solid triangle.)" at (10,500). Next we set the typeface of
+         * [mPaint] to our custom [Typeface] field [mFace], and use it to draw the text "SAMPLE TEXT"
+         * at (10,600) on [canvas].
          *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(Color.WHITE)
@@ -79,13 +79,7 @@ class Typefaces : GraphicsActivity() {
         }
 
         /**
-         * Our constructor. First we call our super's constructor, then we initialize our field
-         * `Typeface mFace` with a new typeface created from the font data loaded from our
-         * resource file "fonts/samplefont.ttf". Finally we set the text size of `Paint mPaint`
-         * to 64.
-         *
-         *  context `Context` to use to access resources, "this" in the `onCreate`
-         * method of `TypeFaces`.
+         * The init block of our constructor. We set the text size of `Paint` field `mPaint` to 64.
          */
         init {
             mPaint.textSize = 64f
