@@ -1712,9 +1712,8 @@ Graphics
   UnicodeChart
     Graphics/UnicodeChart                  all
         .graphics.UnicodeChart
-            Draws a unicode chart, and if you had a dpad it would draw more than 
-            one chart. Way too small on the newer devices (froyo OK). I fixed this
-            by scaling the canvas by the logical screen density before drawing to it.
+            Draws a unicode chart, and cycles from page to page of the chart as
+             you click it (or use dpad)
 
   Vertices
     Graphics/Vertices                      all
