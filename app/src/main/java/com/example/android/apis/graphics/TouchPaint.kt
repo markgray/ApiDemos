@@ -36,13 +36,11 @@ import kotlin.math.sin
  * Demonstrates the handling of touch screen, stylus, mouse and trackball events to
  * implement a simple painting app.
  *
- *
  * Drawing with a touch screen is accomplished by drawing a point at the
  * location of the touch. When pressure information is available, it is used
  * to change the intensity of the color. When size and orientation information
  * is available, it is used to directly adjust the size and orientation of the
  * brush.
- *
  *
  * Drawing with a stylus is similar to drawing with a touch screen, with a
  * few added refinements. First, there may be multiple tools available including
@@ -51,11 +49,9 @@ import kotlin.math.sin
  * to perform various actions. Here we use one button to cycle colors and the
  * other to airbrush from a distance.
  *
- *
  * Drawing with a mouse is similar to drawing with a touch screen, but as with
  * a stylus we have extra buttons. Here we use the primary button to draw,
  * the secondary button to cycle colors and the tertiary button to airbrush.
- *
  *
  * Drawing with a trackball is a simple matter of using the relative motions
  * of the trackball to move the paint brush around. The trackball may also
@@ -74,8 +70,9 @@ class TouchPaint : GraphicsActivity() {
     private var mFading = false
 
     /**
-     * `Handler` which calls the `fade` method of `PaintView mView` every FADE_DELAY
-     * (100ms) to "fade" the finger painting.
+     * [Handler] which calls the [PaintView.fade] method of [PaintView] field [mView] every
+     * [FADE_DELAY] (100ms) to "fade" the finger painting (it does this only if the message
+     * received is a [MSG_FADE] message).
      */
     @SuppressLint("HandlerLeak")
     private val mHandler: Handler = object : Handler() {
@@ -105,19 +102,18 @@ class TouchPaint : GraphicsActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, initialize our field `PaintView mView` with a new instance of
-     * `PaintView`, set our content view to it, and enable it to receive focus. Then if our
-     * parameter `savedInstanceState` is not null we set our field `boolean mFading` with
-     * the value stored in `savedInstanceState` under the key "fading" (defaulting to true if
-     * no value was found), and we set the field `mColorIndex` of our `PaintView mView`
-     * to the value saved under the key "color" (defaulting to 0 if no value was found). If our
-     * parameter `savedInstanceState` is null (first time running) we set `boolean mFading`
-     * to true, and the field `mColorIndex` of our `PaintView mView` to 0.
+     * `onCreate`, initialize our [PaintView] field [mView] with a new instance of [PaintView], set
+     * our content view to it, and enable it to receive focus. Then if our parameter [savedInstanceState]
+     * is not null we set our [Boolean] field [mFading] with the value stored in [savedInstanceState]
+     * under the key "fading" (defaulting to true if no value was found), and we set the field
+     * `mColorIndex` of our [PaintView] field [mView] to the value saved under the key "color"
+     * (defaulting to 0 if no value was found). If our parameter [savedInstanceState] is null
+     * (first time running) we set [mFading] to true, and the field `mColorIndex` of [mView] to 0.
      *
-     * @param savedInstanceState In our `onSaveInstanceState` we save the value of our field
-     * `mFading` and the value of the field `mColorIndex` of our
-     * `PaintView mView` under the keys "fading" and "color" respectively,
-     * so if `savedInstanceState` is not null, we restore them here.
+     * @param savedInstanceState In our [onSaveInstanceState] we save the value of our field
+     * [mFading] and the value of the field `mColorIndex` of our [PaintView] field [mView] under
+     * the keys "fading" and "color" respectively, so if [savedInstanceState] is not null, we set
+     * them to the values stored in it here.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -141,10 +137,10 @@ class TouchPaint : GraphicsActivity() {
 
     /**
      * We initialize the contents of the Activity's standard options menu here, adding our menu items
-     * to the `Menu menu` parameter. We add a menu item with the id CLEAR_ID and the title
-     * "Clear" to `menu`, and a menu item with the id FADE_ID and the title "Fade" to `menu`
-     * setting its checkable state to true. Finally we return the value returned by our super's
-     * implementation `onCreateOptionsMenu`.
+     * to the [Menu] parameter [menu]. We add a menu item with the id CLEAR_ID and the title "Clear"
+     * to [menu], and a menu item with the id FADE_ID and the title "Fade" to [menu] setting its
+     * checkable state to true. Finally we return the value returned by our super's implementation
+     * of `onCreateOptionsMenu`.
      *
      * @param menu The options menu in which you place your items.
      * @return You must return true for the menu to be displayed; if you return false it will not
@@ -158,8 +154,8 @@ class TouchPaint : GraphicsActivity() {
 
     /**
      * We prepare the Screen's standard options menu to be displayed here. We find our item with the
-     * id FADE_ID in our parameter `Menu menu` and set its checkable state to the value of our
-     * field `boolean mFading`. Then we return the value returned by our super's implementation
+     * id FADE_ID in our [Menu] parameter [menu] and set its checkable state to the value of our
+     * [Boolean] field [mFading]. Then we return the value returned by our super's implementation
      * `onPrepareOptionsMenu` to our caller.
      *
      * @param menu The options menu as last shown or first initialized by onCreateOptionsMenu().
@@ -172,24 +168,18 @@ class TouchPaint : GraphicsActivity() {
 
     /**
      * This hook is called whenever an item in our options menu is selected. We switch on the value
-     * of the identifier of our parameter `MenuItem item`:
+     * of the identifier of our [MenuItem] parameter [item]:
      *
-     *  *
-     * CLEAR_ID - we call the `clear` method of `PaintView mView` then return true
+     *  * CLEAR_ID - we call the `clear` method of `PaintView mView` then return true
      *
-     *  *
-     * FADE_ID - we toggle the value of our field `boolean mFading`, and if the new value is
-     * true we call our method `startFading`, if false we call our method `stopFading`.
-     * In either case we return true to our caller.
+     *  * FADE_ID - we toggle the value of our field `boolean mFading`, and if the new value is
+     *  true we call our method `startFading`, if false we call our method `stopFading`.
+     *  In either case we return true to our caller.
      *
-     *  *
-     * default - we return the value returned by our super's implementation of `onOptionsItemSelected`
-     *
-     *
+     *  * default - we return the value returned by our super's implementation of `onOptionsItemSelected`
      *
      * @param item The menu item that was selected.
-     * @return boolean Return false to allow normal menu processing to
-     * proceed, true to consume it here.
+     * @return [Boolean] return false to allow normal menu processing to proceed, true to consume it here.
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -211,10 +201,9 @@ class TouchPaint : GraphicsActivity() {
     }
 
     /**
-     * Called after [.onRestoreInstanceState], [.onRestart], or [.onPause], for
-     * our activity to start interacting with the user. First we call through to our super's
-     * implementation of `onResume`, then if our field `boolean mFading` is true we call
-     * our method `startFading`.
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for our activity to start
+     * interacting with the user. First we call through to our super's implementation of `onResume`,
+     * then if our[Boolean] field [mFading] is true we call our method [startFading].
      */
     override fun onResume() {
         super.onResume()
@@ -228,13 +217,13 @@ class TouchPaint : GraphicsActivity() {
 
     /**
      * Called to retrieve per-instance state from an activity before being killed so that the state
-     * can be restored in [.onCreate] or [.onRestoreInstanceState] (the [Bundle]
-     * populated by this method will be passed to both). First we call through to our super's
-     * implementation of `onSaveInstanceState`, then we save the value of our field
-     * `boolean mFading` in our parameter `Bundle outState` under the key "fading", and
-     * the value of the field `mColorIndex` of our `PaintView mView` under the key "color".
+     * can be restored in [onCreate] or [onRestoreInstanceState] (the [Bundle] populated by this
+     * method will be passed to both). First we call through to our super's implementation of
+     * `onSaveInstanceState`, then we save the value of our [Boolean] field [mFading] in our [Bundle]
+     * [outState] under the key "fading", and the value of the field `mColorIndex` of our [PaintView]
+     * field [mView] under the key "color".
      *
-     * @param outState Bundle in which to place your saved state.
+     * @param outState [Bundle] in which to place your saved state.
      */
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -248,20 +237,19 @@ class TouchPaint : GraphicsActivity() {
     /**
      * Called as part of the activity lifecycle when an activity is going into the background, but
      * has not (yet) been killed. First we call through to our super's implementation of `onPause`,
-     * then we call our method `stopFading` to stop the pulse that fades the screen.
+     * then we call our method [stopFading] to stop the pulse that fades the screen.
      */
     override fun onPause() {
         super.onPause()
 
-        // Make sure to never run the fading pulse while we are paused or
-        // stopped.
+        // Make sure to never run the fading pulse while we are paused or stopped.
         stopFading()
     }
 
     /**
      * Start up the pulse to fade the screen, first clearing any existing pulse to ensure that we
-     * don't have multiple pulses running at a time. Then we call our method `scheduleFade` to
-     * schedule a new FADE_DELAY message to our `Handler mHandler`.
+     * don't have multiple pulses running at a time. Then we call our method [scheduleFade] to
+     * schedule a new [FADE_DELAY] message to our [Handler] field [mHandler].
      */
     private fun startFading() {
         mHandler.removeMessages(MSG_FADE)
@@ -269,53 +257,51 @@ class TouchPaint : GraphicsActivity() {
     }
 
     /**
-     * Stop the pulse to fade the screen. To do this we simply remove all of the MSG_FADE messages
-     * in the queue of `Handler mHandler`.
+     * Stop the pulse to fade the screen. To do this we simply remove all of the [MSG_FADE] messages
+     * in the queue of [Handler] field [mHandler].
      */
     private fun stopFading() {
         mHandler.removeMessages(MSG_FADE)
     }
 
     /**
-     * Schedule a fade message for later. We simply call the `sendMessageDelayed` method of
-     * `Handler mHandler` to send a MSG_FADE message with a delay of FADE_DELAY (100ms).
+     * Schedule a fade message for later. We simply call the [Handler.sendMessageDelayed] method of
+     * [Handler] field [mHandler] to send a [MSG_FADE] message with a delay of [FADE_DELAY] (100ms).
      */
     fun scheduleFade() {
         mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_FADE), FADE_DELAY.toLong())
     }
 
     /**
-     * This view implements the drawing canvas.
-     *
-     *
-     * It handles all of the input events and drawing functions.
+     * This view implements the drawing canvas. It handles all of the input events and drawing
+     * functions.
      */
     open class PaintView : View {
         /**
-         * Random number generator used by the `drawSplat` method to create random splat vectors.
+         * Random number generator used by the [drawSplat] method to create random splat vectors.
          */
         private val mRandom = Random()
 
         /**
-         * Bitmap used by `Canvas mCanvas` to draw into. Our method `onSizeChanged` also
+         * [Bitmap] used by [Canvas] field [mCanvas] to draw into. Our method [onSizeChanged] also
          * uses it to remember what has been drawn when the size of the window changes.
          */
         private var mBitmap: Bitmap? = null
 
         /**
-         * `Canvas` we draw on, and when our `onDraw` method is called we draw the
-         * {Bitmap mBitmap} that `mCanvas` draws into the `Canvas canvas` passed as
-         * a parameter to `onDraw` (our view's `Canvas`).
+         * [Canvas] we draw on. When our [onDraw] method is called we draw the [Bitmap] field
+         * [mBitmap] that [mCanvas] draws onto on the [Canvas] passed as a parameter to [onDraw]
+         * (our view's [Canvas]).
          */
         private var mCanvas: Canvas? = null
 
         /**
-         * `Paint` we use to draw with.
+         * [Paint] we use to draw with.
          */
         private val mPaint = Paint()
 
         /**
-         * `Paint` our fade thread uses to "fade" the finger painting.
+         * [Paint] our fade thread uses to "fade" the finger painting.
          */
         private val mFadePaint = Paint()
 
@@ -336,9 +322,9 @@ class TouchPaint : GraphicsActivity() {
         private var mOldButtonState = 0
 
         /**
-         * Number of times the fade thread `Handler mHandler` has called our method `fade`
-         * to fade our finger painting. When it reaches MAX_FADE_STEPS our `fade` method stops
-         * "fading". It is set to 0 to start fading again when our methods `paint` and `text`
+         * Number of times the fade thread of [Handler] field [mHandler] has called our method
+         * [fade] to fade our finger painting. When it reaches [MAX_FADE_STEPS] our [fade] method
+         * stops "fading". It is set to 0 to start fading again when our methods [paint] and [text]
          * are called.
          */
         private var mFadeSteps = MAX_FADE_STEPS
@@ -349,11 +335,11 @@ class TouchPaint : GraphicsActivity() {
         var mColorIndex = 0
 
         /**
-         * Our constructor. First we call our super's constructor, then we call our method `init`
+         * Our constructor. First we call our super's constructor, then we call our method [init]
          * to initialize our instance.
          *
-         * @param c `Context` to use to access resources, "this" in the `onCreate` method
-         * of `TouchPaint`
+         * @param c [Context] to use to access resources, "this" in the `onCreate` method
+         * of [TouchPaint]
          */
         constructor(c: Context?) : super(c) {
             init()
@@ -362,10 +348,10 @@ class TouchPaint : GraphicsActivity() {
         /**
          * Constructor that is called when our view is inflated from xml. `GameActivity.Content`
          * extends us, and it is inflated in the layout file of `GameActivity` R.layout.game.
-         * First we call through to our super's constructor, then we call our method `init` to
+         * First we call through to our super's constructor, then we call our method [init] to
          * initialize our instance.
          *
-         * @param c     `Context` our view is running in, through which we can access the current
+         * @param c     [Context] our view is running in, through which we can access the current
          * theme, resources, etc.
          * @param attrs attributes of the XML tag that is inflating this view.
          */
@@ -374,10 +360,10 @@ class TouchPaint : GraphicsActivity() {
         }
 
         /**
-         * Our initialization method, called from our constructors. First we enable our view to receive
-         * focus, then we set the anti alias flag of `Paint mPaint`, set the color of
-         * `Paint mFadePaint` to BACKGROUND_COLOR (`Color.BLACK`, and set its alpha to
-         * FADE_ALPHA (0x06).
+         * Our initialization method, called from our constructors. First we enable our view to
+         * receive focus, then we set the anti alias flag of [Paint] field [mPaint], set the color
+         * of [Paint] field [mFadePaint] to [BACKGROUND_COLOR] ([Color.BLACK], and set its alpha to
+         * [FADE_ALPHA] (0x06).
          */
         private fun init() {
             isFocusable = true
@@ -387,11 +373,10 @@ class TouchPaint : GraphicsActivity() {
         }
 
         /**
-         * Clears the `Canvas mCanvas`. If `mCanvas` is not null, we set the color of
-         * `Paint mPaint` to BACKGROUND_COLOR (`Color.BLACK`), fill the entire `mCanvas`
-         * to the color of `mPaint`, call invalidate to schedule `onDraw` to be called
-         * to copy `mCanvas` to the view's `Canvas`, and finally set `mFadeSteps`
-         * to MAX_FADE_STEPS (89).
+         * Clears the [Canvas] field [mCanvas]. If [mCanvas] is not null, we set the color of [Paint]
+         * field [mPaint] to [BACKGROUND_COLOR] ([Color.BLACK]), fill the entire [mCanvas] with the
+         * color of [mPaint], call [invalidate] to schedule [onDraw] to be called to copy [mCanvas]
+         * to the view's [Canvas], and finally set [mFadeSteps] to [MAX_FADE_STEPS] (89).
          */
         fun clear() {
             if (mCanvas != null) {
@@ -403,10 +388,10 @@ class TouchPaint : GraphicsActivity() {
         }
 
         /**
-         * "Fades" the `Canvas mCanvas`. If `mCanvas` is not null, and if `mFadeSteps`
-         * is less than MAX_FADE_STEPS (89) we fill the entire `mCanvas` with `Paint mFadePaint`,
-         * and call invalidate so `onDraw` will be called to copy `mCanvas` to the view's
-         * `Canvas`. Finally we increment `mFadeSteps`.
+         * "Fades" the [Canvas] field [mCanvas]. If [mCanvas] is not null, and if [mFadeSteps]
+         * is less than [MAX_FADE_STEPS] (89) we fill the entire [mCanvas] with [Paint] field
+         * [mFadePaint], and call [invalidate] so [onDraw] will be called to copy [mCanvas] to
+         * the view's [Canvas]. Finally we increment [mFadeSteps].
          */
         fun fade() {
             if (mCanvas != null && mFadeSteps < MAX_FADE_STEPS) {
@@ -417,25 +402,24 @@ class TouchPaint : GraphicsActivity() {
         }
 
         /**
-         * Draws the `String text` to `Canvas mCanvas` and causes `onDraw` to copy
-         * `mCanvas` to the view's `Canvas`. Before doing anything, we make sure that
-         * `Bitmap mBitmap` is not null, returning having done nothing if it is null. Otherwise
-         * we set `int width` to the width of `mBitmap`, and `int height` to the
-         * height of `mBitmap`. We set the color of `Paint mPaint` to the color currently
-         * selected by `COLORS[mColorIndex]`, and its alpha to 255. We set `int size` to
-         * `height`, and set the text size of `mPaint` to `size`. We create a
-         * `Rect bounds`, and fetch the text bounds of `String text` drawn using `mPaint`
-         * to `bounds`. We set `int twidth` to the width of `bounds`, then increment
-         * it by one quarter of itself. If `twidth` is greater than `width`, we set size
-         * to `(size*width)/twidth`, set the text size of `mPaint` to `size`, and
-         * retrieve the text bounds of `text` drawn using `mPaint` to `bounds`. We
-         * fetch the font metrics of `mPaint` to `Paint.FontMetrics fm`, so that we can
-         * use the `fm.ascent` field. We then call the `mCanvas.drawText` method to draw
-         * the `String text` using `Paint mPaint` with the x coordinate calculated to
-         * center the text in the middle of the `Canvas`, and the y coordinate calculated to
-         * position the text in a weird part of the screen (probably a bug?). We set `mFadeSteps`
-         * to 0 so that fading will start again, and call `invalidate` so that a call to our
-         * `onDraw` method will be scheduled to copy `mCanvas` to the view's `Canvas`.
+         * Draws the [String] parameter [text] to [Canvas] field [mCanvas] and causes [onDraw] to
+         * copy [mCanvas] to the view's [Canvas]. Before doing anything, we make sure that [Bitmap]
+         * field [mBitmap] is not null, returning having done nothing if it is null. Otherwise we
+         * set [Int] `val width` to the width of [mBitmap], and [Int] `val height` to the height of
+         * [mBitmap]. We set the color of [Paint] field [mPaint] to the color currently selected by
+         * [mColorIndex] in the [IntArray] field [COLORS] , and its alpha to 255. We set `var size`
+         * to `height`, and set the text size of [mPaint] to `size`. We create a [Rect] `val bounds`,
+         * and fetch the text bounds of [String] parameter [text] drawn using [mPaint] to `bounds`.
+         * We set `var twidth` to the width of `bounds`, then increment it by one quarter of itself.
+         * If `twidth` is greater than `width`, we set size to `(size*width)/twidth`, set the text
+         * size of [mPaint] to `size`, and retrieve the text bounds of `text` drawn using [mPaint]
+         * to `bounds`. We fetch the font metrics of [mPaint] to [Paint.FontMetrics] `val fm`, so
+         * that we can use the `fm.ascent` field. We then call the [Canvas.drawText] method of
+         * [mCanvas] to draw the [String] parameter [text] using [mPaint] with the x coordinate
+         * calculated to center the text in the middle of the [Canvas], and the y coordinate
+         * calculated to position the text in a weird part of the screen (probably a bug?). We set
+         * [mFadeSteps] to 0 so that fading will start again, and call [invalidate] so that a call
+         * to our [onDraw] method will be scheduled to copy [mCanvas] to the view's [Canvas].
          *
          * @param text String to display
          */
@@ -464,24 +448,22 @@ class TouchPaint : GraphicsActivity() {
         }
 
         /**
-         * This is called during layout when the size of this view has changed. If you were just added
-         * to the view hierarchy, you're called with the old values of 0. If `Bitmap mBitmap` is
-         * not null we set `int curW` to the width of `mBitmap` and `int curH` to
-         * the height of `mBitmap`, if it is null we set them both to 0. If `curW` is
-         * greater than or equal to `w` and `curH` is greater than or equal to `h`
-         * we return having done nothing.
+         * This is called during layout when the size of this view has changed. If you were just
+         * added to the view hierarchy, you're called with the old values of 0. If [Bitmap] field
+         * [mBitmap] is not null we set [Int] `var curW` to the width of [mBitmap] and `var curH`
+         * to the height of [mBitmap], if it is null we set them both to 0. If `curW` is greater
+         * than or equal to [Int] parameter [w] and `curH` is greater than or equal to [Int]
+         * parameter [h] we return having done nothing.
          *
+         * If `curW` is less than [w] we set it to [w], and if `curH` is less than [h] we set it to
+         * [h]. We create [Bitmap] `val newBitmap` to be `curW` by `curH` using the ARGB_8888 format.
+         * We allocate a new [Canvas] `val newCanvas` and set `newBitmap` to be the [Bitmap] for it
+         * to draw into. If [Bitmap] field [mBitmap] is not null we draw it into `newCanvas` (this
+         * function will take care of automatically scaling the bitmap to draw at the same density
+         * as the canvas drawn into). Then we set our [Bitmap] field [mBitmap]` to `newBitmap`, and
+         * [Canvas] field [mCanvas] to `newCanvas`.
          *
-         * If `curW` is less than `w` we set it to `w`, and if `curH` is less
-         * than `h` we set it to `h`. We create `Bitmap newBitmap` to be `curW`
-         * by `curH` using the ARGB_8888 format. We allocate a new `Canvas newCanvas` and
-         * set `newBitmap` to be the bitmap for it to draw into. If `Bitmap mBitmap` is
-         * not null we draw it into `newCanvas` (this function will take care of automatically
-         * scaling the bitmap to draw at the same density as the canvas). Then we set our fields
-         * `Bitmap mBitmap` to `newBitmap`, and `Canvas mCanvas` to `newCanvas`.
-         *
-         *
-         * Finally we set `mFadeSteps` to MAX_FADE_STEPS so that fading will pause until new
+         * Finally we set [mFadeSteps] to [MAX_FADE_STEPS] so that fading will pause until new
          * finger painting starts.
          *
          * @param w    Current width of this view.
@@ -509,10 +491,10 @@ class TouchPaint : GraphicsActivity() {
         }
 
         /**
-         * We implement this to do our drawing. If `Bitmap mBitmap` is not null we draw it to
-         * our argument `Canvas canvas`.
+         * We implement this to do our drawing. If [Bitmap] field [mBitmap] is not null we draw it
+         * to our [Canvas] argument [canvas].
          *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
             if (mBitmap != null) {
@@ -547,8 +529,7 @@ class TouchPaint : GraphicsActivity() {
         }
 
         /**
-         * Adds the change in x and y to `mCurW` and `mCurH` and draws an oval at the new
-         * point.
+         * Adds the change in x and y to [mCurX] and [mCurY] and draws an oval at the new point.
          *
          * @param deltaX X coordinate change
          * @param deltaY Y coordinate change
@@ -556,14 +537,18 @@ class TouchPaint : GraphicsActivity() {
         private fun moveTrackball(deltaX: Float, deltaY: Float) {
             val curW = if (mBitmap != null) mBitmap!!.width else 0
             val curH = if (mBitmap != null) mBitmap!!.height else 0
-            mCurX = (mCurX + deltaX).coerceAtMost(curW - 1.toFloat()).coerceAtLeast(0f)
-            mCurY = (mCurY + deltaY).coerceAtMost(curH - 1.toFloat()).coerceAtLeast(0f)
+            mCurX = (mCurX + deltaX)
+                    .coerceAtMost(curW - 1.toFloat())
+                    .coerceAtLeast(0f)
+            mCurY = (mCurY + deltaY)
+                    .coerceAtMost(curH - 1.toFloat())
+                    .coerceAtLeast(0f)
             paint(PaintMode.Draw, mCurX, mCurY)
         }
 
         /**
          * We implement this method to handle touch screen motion events. We simply return the value
-         * returned by our method `onTouchOrHoverEvent` when its `isTouch` argument is
+         * returned by our method [onTouchOrHoverEvent] when its `isTouch` argument is
          * true.
          *
          * @param event The motion event.
@@ -576,7 +561,7 @@ class TouchPaint : GraphicsActivity() {
 
         /**
          * We implement this method to handle hover events. We simply return the value returned by
-         * our method `onTouchOrHoverEvent` when its `isTouch` argument is false.
+         * our method [onTouchOrHoverEvent] when its `isTouch` argument is false.
          *
          * @param event The motion event that describes the hover.
          * @return True if the view handled the hover event.
@@ -593,12 +578,10 @@ class TouchPaint : GraphicsActivity() {
          * the BUTTON_SECONDARY button, we call our method `advanceColor` to change the color
          * used to draw to the next one in line.
          *
-         *
          * Next we declare `PaintMode mode`, and if the BUTTON_TERTIARY is pressed we set
          * `mode` to `PaintMode.Splat`, if the event is a touch event or BUTTON_PRIMARY
          * is pressed we set `mode` to `PaintMode.Draw`. Otherwise we return having done
          * nothing.
-         *
          *
          * We initialize `action` to the masked action being performed in `event`. If the
          * `action` is ACTION_DOWN, or ACTION_MOVE, or ACTION_HOVER_MOVE we initialize `N`
@@ -611,7 +594,6 @@ class TouchPaint : GraphicsActivity() {
          * pressure, historical touch major axis coordinate, historical touch minor axis coordinate,
          * historical orientation coordinate, historical value of the AXIS_DISTANCE axis, and the
          * historical value of the AXIS_TILT axis for the data point being processed.
-         *
          *
          * Once we have painted all of the historical points, we do the same thing using the values
          * for the current data point, and set our fields `mCurX` and `mCurY` to the x
@@ -706,25 +688,22 @@ class TouchPaint : GraphicsActivity() {
          * `minor` are greater than 0, and if not we set them to the default value 16. Then we
          * switch based on the value of our parameter `PaintMode mode`:
          *
-         *  *
-         * Draw: we set the color of `Paint mPaint` to the color in the array `COLORS`
-         * pointed to by `mColorIndex`, set its alpha to the lesser of `pressure*128`
-         * and 255, then call our method `drawOval` to use `mPaint` to draw an oval
-         * on `mCanvas` at (`x`,`y`) with the size of the containing `RectF`
-         * being `minor` by `major` in size, and rotated by `orientation` radians.
+         *  * Draw: we set the color of `Paint mPaint` to the color in the array `COLORS`
+         *  pointed to by `mColorIndex`, set its alpha to the lesser of `pressure*128`
+         *  and 255, then call our method `drawOval` to use `mPaint` to draw an oval
+         *  on `mCanvas` at (`x`,`y`) with the size of the containing `RectF`
+         *  being `minor` by `major` in size, and rotated by `orientation` radians.
          *
-         *  *
-         * Erase: we set the color of `Paint mPaint` to the color BACKGROUND_COLOR, set its
-         * alpha to the lesser of `pressure*128` and 255, then call our method `drawOval`
-         * to use `mPaint` to draw an oval on `mCanvas` at (`x`,`y`) with
-         * the size of the containing `RectF` being `minor` by `major` in size,
-         * and rotated by `orientation` radians.
+         *  * Erase: we set the color of `Paint mPaint` to the color BACKGROUND_COLOR, set its
+         *  alpha to the lesser of `pressure*128` and 255, then call our method `drawOval`
+         *  to use `mPaint` to draw an oval on `mCanvas` at (`x`,`y`) with
+         *  the size of the containing `RectF` being `minor` by `major` in size,
+         *  and rotated by `orientation` radians.
          *
-         *  *
-         * Erase: we set the color of `Paint mPaint` to the color in the array `COLORS`
-         * pointed to by `mColorIndex`, set its alpha to 64, and use our method `drawSplat`
-         * to use `mPaint` "splatter" paint on `mCanvas` using the other parameters to
-         * control where and how much paint is randomly splattered to the canvas.
+         *  * Erase: we set the color of `Paint mPaint` to the color in the array `COLORS`
+         *  pointed to by `mColorIndex`, set its alpha to 64, and use our method `drawSplat`
+         *  to use `mPaint` "splatter" paint on `mCanvas` using the other parameters to
+         *  control where and how much paint is randomly splattered to the canvas.
          *
          * Whether we did any drawing or not, we set `mFadeSteps` to 0, and invalidate the view
          * so that the current `mBitmap` (if it exists) will be drawn to the views canvas by
@@ -827,12 +806,10 @@ class TouchPaint : GraphicsActivity() {
         /**
          * Splatter paint in an area.
          *
-         *
          * Chooses random vectors describing the flow of paint from a round nozzle
          * across a range of a few degrees. Then adds this vector to the direction
          * indicated by the orientation and tilt of the tool and throws paint at
          * the canvas along that vector.
-         *
          *
          * Repeats the process until a masterpiece is born.
          *
