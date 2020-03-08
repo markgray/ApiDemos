@@ -22,10 +22,10 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 
 /**
- * Wrapper around `Activity` which optionally places the `View` that is passed to
+ * Wrapper around [AppCompatActivity] which optionally places the [View] that is passed to
  * `setContentView` from the `onCreate` override in a class that extends this class
- * inside an instance of `PictureLayout` if TEST_PICTURE is true. `PictureLayout` is
- * a `ViewGroup` which displays its one and only child in the four corners of the display.
+ * inside an instance of [PictureLayout] if TEST_PICTURE is true. [PictureLayout] is
+ * a [ViewGroup] which displays its one and only child in the four corners of the display.
  */
 @SuppressLint("Registered")
 open class GraphicsActivity : AppCompatActivity() {
@@ -33,7 +33,7 @@ open class GraphicsActivity : AppCompatActivity() {
      * Called when the activity is starting. We simply call through to our super's implementation of
      * `onCreate`.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     @Suppress("RedundantOverride")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,14 +41,12 @@ open class GraphicsActivity : AppCompatActivity() {
     }
 
     /**
-     * Set the activity content to an explicit view. If our debug flag TEST_PICTURE is true, we create
-     * an instance of `PictureLayout` `ViewGroup vg` and add our parameter `View view`
-     * to it. `PictureLayout` extends `ViewGroup` to mirror any single `View` added to
-     * it in the four corners of its canvas. We then set `view` to `vg`.
-     *
-     *
-     * Finally we call our super's implementation of `setContentView` with `view` (modified or
-     * not).
+     * Set the activity content to an explicit view. First we make a local copy of our [View]
+     * parameter [view] in `var viewVar`. If our debug flag TEST_PICTURE is true, we create an
+     * instance of [PictureLayout] for [ViewGroup] `val vg` and add our `viewVar` to it.
+     * [PictureLayout] extends [ViewGroup] to mirror any single [View] added to it in the four
+     * corners of its canvas. We then set `viewVar` to `vg`. Finally we call our super's
+     * implementation of `setContentView` with `viewVar` (modified or not).
      *
      * @param view The desired content to display.
      */
@@ -64,7 +62,9 @@ open class GraphicsActivity : AppCompatActivity() {
     }
 
     companion object {
-        // set to true to test Picture
+        /**
+         * set to true to test Picture
+         */
         private const val TEST_PICTURE = false
     }
 }
