@@ -18,13 +18,14 @@ package com.example.android.apis.graphics;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * PurgeableBitmap demonstrates the effects of setting Bitmaps as being
@@ -54,7 +55,7 @@ public class PurgeableBitmap extends GraphicsActivity {
      * its bitmaps.
      */
     @SuppressLint("HandlerLeak")
-    class RefreshHandler extends Handler {
+    public class RefreshHandler extends Handler {
 
         /**
          * We implement this to receive messages. First we call the {@code update} method of
@@ -71,7 +72,7 @@ public class PurgeableBitmap extends GraphicsActivity {
          * @param msg A {@link android.os.Message Message} object
          */
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NotNull Message msg) {
             int index = mView.update(this);
             if (index > 0) {
                 showAlertDialog(getDialogMessage(true, index));
@@ -195,10 +196,7 @@ public class PurgeableBitmap extends GraphicsActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(message)
                 .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
+                .setPositiveButton("Yes", (dialog, id) -> {
                 });
         AlertDialog alert = builder.create();
         alert.show();
