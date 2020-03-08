@@ -25,8 +25,8 @@ import android.view.ViewGroup
 import android.view.ViewParent
 
 /**
- * Extends `ViewGroup` to mirror any single `View` added to it in the four corners of its
- * `Canvas`. Actually a disabled test of the `Picture` class.
+ * Extends [ViewGroup] to mirror any single [View] added to it in the four corners of its
+ * [Canvas]. Actually a disabled test of the [Picture] class.
  */
 class PictureLayout : ViewGroup {
     /**
