@@ -21,14 +21,15 @@ package com.example.android.apis.hardware;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
+import android.hardware.ConsumerIrManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.hardware.ConsumerIrManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -53,7 +54,7 @@ import com.example.android.apis.R;
  * </table>
  */
 @TargetApi(Build.VERSION_CODES.KITKAT)
-public class ConsumerIr extends Activity {
+public class ConsumerIr extends AppCompatActivity {
     private static final String TAG = "ConsumerIrTest";
     TextView mFreqsText;
     ConsumerIrManager mCIR;
@@ -79,7 +80,7 @@ public class ConsumerIr extends Activity {
         // Set the OnClickListener for the button so we see when it's pressed.
         findViewById(R.id.send_button).setOnClickListener(mSendClickListener);
         findViewById(R.id.get_freqs_button).setOnClickListener(mGetFreqsClickListener);
-        mFreqsText = (TextView) findViewById(R.id.freqs_text);
+        mFreqsText = findViewById(R.id.freqs_text);
     }
 
     View.OnClickListener mSendClickListener = new View.OnClickListener() {
