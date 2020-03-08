@@ -120,7 +120,7 @@ class TouchPaint : GraphicsActivity() {
 
         // Create and attach the view that is responsible for painting.
         mView = PaintView(this)
-        setContentView(mView)
+        setContentView(mView!!)
         mView!!.requestFocus()
 
         // Restore the fading option if we are being thawed from a

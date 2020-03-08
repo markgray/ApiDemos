@@ -97,15 +97,15 @@ class Compass : GraphicsActivity() {
      * default sensor for the type TYPE_ORIENTATION. We initialize our [SampleView] field [mView]
      * with an instance of our view subclass [SampleView] and set our content view to it.
      *
-     * @param icicle We do not override [onSaveInstanceState] so do not use
+     * @param savedInstanceState We do not override [onSaveInstanceState] so do not use
      */
-    override fun onCreate(icicle: Bundle?) {
-        super.onCreate(icicle)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         @Suppress("DEPRECATION")
         mSensor = mSensorManager!!.getDefaultSensor(Sensor.TYPE_ORIENTATION)
         mView = SampleView(this)
-        setContentView(mView)
+        setContentView(mView!!)
     }
 
     /**

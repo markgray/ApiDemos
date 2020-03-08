@@ -62,14 +62,14 @@ class SensorTest : GraphicsActivity() {
      * with the default sensor for the accelerometer sensor type. Finally we create a new instance of
      * [SampleView] for our [SampleView] field [mView] and set our content view to it.
      *
-     * @param icicle We do not call [onSaveInstanceState] so do not use
+     * @param savedInstanceState We do not call [onSaveInstanceState] so do not use
      */
-    override fun onCreate(icicle: Bundle?) {
-        super.onCreate(icicle)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         mSensor = mSensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         mView = SampleView(this)
-        setContentView(mView)
+        setContentView(mView!!)
     }
 
     /**
