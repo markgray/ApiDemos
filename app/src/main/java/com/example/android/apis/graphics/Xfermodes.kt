@@ -28,12 +28,13 @@ import androidx.annotation.RequiresApi
  * to the same Canvas. It was way too small on the newer devices (froyo OK), so I modified it to
  * scale for dpi.
  */
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class Xfermodes : GraphicsActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to a new instance of `SampleView`
+     * `onCreate`, then we set our content view to a new instance of [SampleView]
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,12 +48,12 @@ class Xfermodes : GraphicsActivity() {
     private class SampleView(context: Context?) : View(context) {
 
         /**
-         * `Bitmap` used for the "src" image (a rectangle)
+         * [Bitmap] used for the "src" image (a rectangle)
          */
         private val mSrcB: Bitmap
 
         /**
-         * `Bitmap` used for the "dst" image (a circle)
+         * [Bitmap] used for the "dst" image (a circle)
          */
         private val mDstB: Bitmap
 
@@ -62,42 +63,43 @@ class Xfermodes : GraphicsActivity() {
         private val mBG: Shader
 
         /**
-         * We implement this to do our drawing. First we set the entire `Canvas canvas` to the
-         * color WHITE, and scale `canvas` by SCREEN_DENSITY in both x and y directions. We
-         * allocate `Paint labelP` with its antialias flag set, and set its text alignment to
-         * CENTER. We allocate `Paint paint` and clear its FILTER_BITMAP_FLAG.
+         * We implement this to do our drawing. First we set the entire [Canvas] parameter [canvas]
+         * to the color [Color.WHITE], and scale [canvas] by SCREEN_DENSITY in both x and y directions.
+         * We allocate [Paint] `val labelP` with its antialias flag set, and set its text alignment
+         * to CENTER. We allocate [Paint] `val paint` and clear its FILTER_BITMAP_FLAG.
          *
-         * We move the canvas to (15,35) and initialize `int x` and `int y` both to 0.
-         * Now we loop through the 16 `Xfermode[] sModes` using `int i` as the index.
-         * We set the style of `Paint paint` to STROKE, set its shader to null, and use it to
-         * draw a rectangle outline for the current xfermode example. Next we set the style of
-         * `paint` to FILL, set its shader to `Shader mBG` and draw a checkerboard rect
-         * for the background of the example. We call the method `canvas.saveLayer` saving its
-         * save level in `int sc` which allocates and redirects drawing to an offscreen bitmap
-         * with bounds of a rectangle whose top left corner is taken from the point (x,y) of the
-         * `Canvas canvas`, and whose bottom right corner is (x+W,y+H) (the `paint` argument
-         * is null so no `Paint` will be applied when the offscreen bitmap is copied back to the
-         * canvas when the matching `restoreToCount` is called). We move the `Canvas canvas`
-         * to (x,y), and draw the `Bitmap mDstB` to it at (0,0) using `Paint paint`. We set
-         * the xfermode of `paint` to the `Xfermode[] sModes` currently indexed by `i`,
-         * then use `paint` to draw the `Bitmap mSrcB` to the canvas at (0,0). We set the
-         * xfermode of `paint` back to null, and call `canvas.restoreToCount(sc)` to restore
-         * the canvas state to that is held before our `saveLayer` call and to copy the offscreen
-         * bitmap to the onscreen canvas. Next we draw the label from `String[] sLabels` which
-         * describes the `i`'th PorterDuff xfermode in the proper place. Finally we add `W+10`
-         * to `x` and if we have reached the end of a row (as defined by `ROW_MAX`) we set
-         * `x` to 0 and add `H+30` to `y`, then loop back for the next PorterDuff
-         * xfermode in `Xfermode[] sModes`.
+         * We move the canvas to (15,35) and initialize [Int] `val x` and `val y` both to 0.
+         * Now we loop through the 16 [Xfermode] array field [sModes] using `var i` as the index.
+         * We set the style of `paint` to STROKE, set its [Shader] to null, and use it to draw a
+         * rectangle outline for the current xfermode example. Next we set the style of `paint`
+         * to FILL, set its [Shader] to our [Shader] field [mBG] (a [BitmapShader]) and draw a
+         * checkerboard rect for the background of the example. We call the [Canvas.saveLayer]
+         * method of [canvas] saving its save level in `val sc` which allocates and redirects
+         * drawing to an offscreen bitmap with the bounds of a rectangle whose top left corner is
+         * taken from the point (x,y) of [canvas], and whose bottom right corner is (x+W,y+H) (the
+         * `paint` argument is null so no `Paint` will be applied when the offscreen bitmap is
+         * copied back to the canvas when the matching [Canvas.restoreToCount] is called). We move
+         * [canvas] to (x,y), and draw our [Bitmap] field [mDstB] to it at (0,0) using [Paint]
+         * `paint`. We set the xfermode of `paint` to the [Xfermode] in the [Xfermode] array field
+         * [sModes] currently indexed by `i`, then use `paint` to draw the [Bitmap] field [mSrcB]
+         * to [canvas] at (0,0). We set the xfermode of `paint` back to null, and call the method
+         * [Canvas.restoreToCount] of [canvas] to restore  the `sc` canvas state to that it held
+         * before our `saveLayer` call and to copy the offscreen bitmap to the onscreen canvas.
+         * Next we draw the label from [String] array field [sLabels] which describes the `i`'th
+         * PorterDuff xfermode in the proper place. Finally we add `W+10` to `x` and if we have
+         * reached the end of a row (as defined by [ROW_MAX]) we set `x` to 0 and add `H+30` to
+         * `y`, then loop back for the next PorterDuff xfermode in [Xfermode] array field [sModes].
          *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
-        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(Color.WHITE)
             canvas.scale(SCREEN_DENSITY, SCREEN_DENSITY)
-            @SuppressLint("DrawAllocation") val labelP = Paint(Paint.ANTI_ALIAS_FLAG)
+            @SuppressLint("DrawAllocation")
+            val labelP = Paint(Paint.ANTI_ALIAS_FLAG)
             labelP.textAlign = Paint.Align.CENTER
-            @SuppressLint("DrawAllocation") val paint = Paint()
+            @SuppressLint("DrawAllocation")
+            val paint = Paint()
             paint.isFilterBitmap = false
             canvas.translate(15f, 35f)
             var x = 0
@@ -106,18 +108,32 @@ class Xfermodes : GraphicsActivity() {
                 // draw the border
                 paint.style = Paint.Style.STROKE
                 paint.shader = null
-                canvas.drawRect(x - 0.5f, y - 0.5f, x + W + 0.5f, y + H + 0.5f, paint)
+                canvas.drawRect(
+                        x - 0.5f,
+                        y - 0.5f,
+                        x + W + 0.5f,
+                        y + H + 0.5f,
+                        paint
+                )
 
                 // draw the checker-board pattern
                 paint.style = Paint.Style.FILL
                 paint.shader = mBG
-                canvas.drawRect(x.toFloat(), y.toFloat(), x + W.toFloat(), y + H.toFloat(), paint)
+                canvas.drawRect(
+                        x.toFloat(),
+                        y.toFloat(),
+                        x + W.toFloat(),
+                        y + H.toFloat(),
+                        paint
+                )
 
                 // draw the src/dst example into our offscreen bitmap
-                @SuppressLint("WrongConstant")
                 val sc = canvas.saveLayer(
-                        x.toFloat(), y.toFloat(),
-                        x + W.toFloat(), y + H.toFloat(), null
+                        x.toFloat(),
+                        y.toFloat(),
+                        x + W.toFloat(),
+                        y + H.toFloat(),
+                        null
                 )
                 canvas.translate(x.toFloat(), y.toFloat())
                 canvas.drawBitmap(mDstB, 0f, 0f, paint)
@@ -127,7 +143,12 @@ class Xfermodes : GraphicsActivity() {
                 canvas.restoreToCount(sc)
 
                 // draw the label
-                canvas.drawText(sLabels[i], x + W / 2.toFloat(), y - labelP.textSize / 2, labelP)
+                canvas.drawText(
+                        sLabels[i],
+                        x + W / 2.toFloat(),
+                        y - labelP.textSize / 2,
+                        labelP
+                )
                 x += W + 10
 
                 // wrap around when we've drawn enough for one row
@@ -193,18 +214,15 @@ class Xfermodes : GraphicsActivity() {
         }
 
         /**
-         * Our constructor. First we call our super's constructor. Then we initialize `SCREEN_DENSITY`
-         * to the logical density of the current display. We initialize `Bitmap mSrcB` with a
-         * W by H rectangle created by our method `makeSrc`, and `mDstB` with an W by H oval
-         * created by our method `makeDst` (since W=H=64 they are actually a square and a circle
-         * respectively). We create `Bitmap bm` to be a 2 by 2 image using the colors white, gray,
-         * gray, white for the four pixels. Then we initialize our field `Shader mBG` to be a
-         * `BitmapShader` formed from `bm` using a tile mode of REPEAT for both the x and
-         * y axis. We create `Matrix m`, set it to scale by 6 (both x and y), then set the local
-         * matrix of `Shader mBG` to it.
-         *
-         * context `Context` to use to access resources, "this" in the `onCreate`
-         * method of `Xfermodes`
+         * The init block of our constructor. First we initialize `SCREEN_DENSITY` to the logical
+         * density of the current display. We initialize `Bitmap` field `mSrcB` with a W by H
+         * rectangle created by our method `makeSrc`, and `mDstB` with an W by H oval created by
+         * our method `makeDst` (since W=H=64 they are actually a square and a circle respectively).
+         * We create `Bitmap` `val bm` to be a 2 by 2 image using the colors white, gray, gray,
+         * white for the four pixels. Then we initialize our `Shader` field `mBG` to be a
+         * `BitmapShader` formed from `bm` using a tile mode of REPEAT for both the x and y axis.
+         * We create `Matrix` `val m`, set it to scale by 6 (both x and y), then set the local
+         * matrix of `Shader` `mBG` to it.
          */
         init {
             SCREEN_DENSITY = resources.displayMetrics.density
@@ -212,7 +230,13 @@ class Xfermodes : GraphicsActivity() {
             mDstB = makeDst(W, H)
 
             // make a checkerboard pattern
-            val bm = Bitmap.createBitmap(intArrayOf(-0x1, -0x333334, -0x333334, -0x1),
+            val bm = Bitmap.createBitmap(
+                    intArrayOf(
+                            0xFFFFFFFF.toInt(),
+                            0xFFCCCCCC.toInt(),
+                            0xFFCCCCCC.toInt(),
+                            0xFFFFFFFF.toInt()
+                    ),
                     2, 2, Bitmap.Config.RGB_565)
             mBG = BitmapShader(bm, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
             val m = Matrix()
@@ -223,45 +247,59 @@ class Xfermodes : GraphicsActivity() {
 
     companion object {
         /**
-         * Create a bitmap with a circle, used for the "dst" image. First we create `Bitmap bm` to
-         * be `w` by `h` in size and using the ARGB_8888 configuration. Then we create
-         * `Canvas c` to draw into `Bitmap bm`. We create `Paint p` with its antialias
-         * flag set, and set its color to 0xFFFFCC44 (a yellowish orange). Then we use `Paint p` to
-         * draw an oval on `Canvas c` with a `RectF` defining its size to be `w*3/4` by
-         * `h*3/4`. Finally we return `Bitmap bm` which now contains this oval to the caller.
+         * Create a [Bitmap] with a circle, used for the "dst" image. First we create [Bitmap]
+         * `val bm` to be `w` by `h` in size and using the ARGB_8888 configuration. Then we create
+         * [Canvas] `val c` to draw into [Bitmap] `bm`. We create [Paint] `val p` with its antialias
+         * flag set, and set its color to 0xFFFFCC44 (a yellowish orange). Then we use `p` to draw
+         * an oval on [Canvas] `c` with a [RectF] defining its size to be `w*3/4` by `h*3/4`.
+         * Finally we return [Bitmap] `bm` which now contains this oval to the caller.
          *
-         * @param w width of the `Bitmap`
-         * @param h height of the `Bitmap`
-         * @return `Bitmap` containing a circle
+         * @param w width of the [Bitmap]
+         * @param h height of the [Bitmap]
+         * @return [Bitmap] containing a circle
          */
         fun makeDst(w: Int, h: Int): Bitmap {
             val bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
             val c = Canvas(bm)
             val p = Paint(Paint.ANTI_ALIAS_FLAG)
-            p.color = -0x33bc
-            c.drawOval(RectF(0f, 0f, (w * 3 / 4).toFloat(), (h * 3 / 4).toFloat()), p)
+            p.color = 0xFFFFCC44.toInt()
+            c.drawOval(
+                    RectF(
+                            0f,
+                            0f,
+                            (w * 3 / 4).toFloat(),
+                            (h * 3 / 4).toFloat()
+                    ),
+                    p
+            )
             return bm
         }
 
         /**
-         * Create a bitmap with a rect, used for the "src" image. First we create `Bitmap bm` to
-         * be `w` by `h` in size and using the ARGB_8888 configuration. Then we create
-         * `Canvas c` to draw into `Bitmap bm`. We create `Paint p` with its antialias
-         * flag set, and set its color to 0xFF66AAFF (a light blue). Then we use `Paint p` to draw
-         * a rectangle on `Canvas c` with its top left corner at (w/3,h/3), and its bottom right
-         * corner at (w*19/20,h*19/20). Finally we return `Bitmap bm` which now contains this rect
-         * to the caller.
+         * Create a [Bitmap] with a rect, used for the "src" image. First we create [Bitmap]
+         * `val bm` to be `w` by `h` in size and using the ARGB_8888 configuration. Then we
+         * create [Canvas] `val c` to draw into `bm`. We create [Paint] `val p` with its antialias
+         * flag set, and set its color to 0xFF66AAFF (a light blue). Then we use `p` to draw a
+         * rectangle on `c` with its top left corner at (w/3,h/3), and its bottom right corner at
+         * (w*19/20,h*19/20). Finally we return [Bitmap] `bm` which now contains this rect to the
+         * caller.
          *
-         * @param w width of the `Bitmap`
-         * @param h height of the `Bitmap`
-         * @return `Bitmap` containing a rect.
+         * @param w width of the [Bitmap]
+         * @param h height of the [Bitmap]
+         * @return [Bitmap] containing a rect.
          */
         fun makeSrc(w: Int, h: Int): Bitmap {
             val bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
             val c = Canvas(bm)
             val p = Paint(Paint.ANTI_ALIAS_FLAG)
-            p.color = -0x995501
-            c.drawRect(w / 3.toFloat(), h / 3.toFloat(), w * 19 / 20.toFloat(), h * 19 / 20.toFloat(), p)
+            p.color = 0xFF66AAFF.toInt()
+            c.drawRect(
+                    w / 3.toFloat(),
+                    h / 3.toFloat(),
+                    w * 19 / 20.toFloat(),
+                    h * 19 / 20.toFloat(),
+                    p
+            )
             return bm
         }
     }

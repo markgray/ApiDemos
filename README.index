@@ -1724,7 +1724,7 @@ Graphics
             in the original version, so I scaled it by the logical screen density.
 
   Xfermodes
-    Graphics/Xfermodes                     all
+    Graphics/Xfermodes                     v21 Due to use of new Canvas.saveLayer
         .graphics.Xfermodes
             Shows the results of using different Xfermode's when drawing an overlapping 
             square and a circle to the same Canvas. It was way too small on the newer devices
