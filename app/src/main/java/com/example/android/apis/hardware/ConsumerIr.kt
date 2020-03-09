@@ -1,0 +1,124 @@
+/*
+ * Copyright (C) 20013The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.example.android.apis.hardware
+
+import android.annotation.SuppressLint
+import android.annotation.TargetApi
+import android.content.Context
+import android.hardware.ConsumerIrManager
+import android.os.Build
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
+
+// Need the following import to get access to the app resources, since this
+// class is in a sub-package.
+/**
+ * App that transmits an IR code
+ *
+ *
+ *
+ * This demonstrates the [android.hardware.ConsumerIrManager] class.
+ *
+ *
+ * <h4>Demo</h4>
+ * Hardware / Consumer IR
+ *
+ *
+ * <h4>Source files</h4>
+ * <table class="LinkTable">
+ * <tr>
+ * <td>src/com.example.android.apis/hardware/ConsumerIr.java</td>
+ * <td>Consumer IR demo</td>
+</tr> *
+ * <tr>
+ * <td>res/any/layout/consumer_ir.xml</td>
+ * <td>Defines contents of the screen</td>
+</tr> *
+</table> *
+ */
+@Suppress("MemberVisibilityCanBePrivate")
+@TargetApi(Build.VERSION_CODES.KITKAT)
+class ConsumerIr : AppCompatActivity() {
+    var mFreqsText: TextView? = null
+    var mCIR: ConsumerIrManager? = null
+
+    /**
+     * Initialization of the Activity after it is first created.  Must at least
+     * call [setContentView()][android.app.Activity.setContentView] to
+     * describe what is to be displayed in the screen.
+     */
+    override fun onCreate(savedInstanceState: Bundle?) {
+        // Be sure to call the super class.
+        super.onCreate(savedInstanceState)
+
+        // Get a reference to the ConsumerIrManager
+        mCIR = getSystemService(Context.CONSUMER_IR_SERVICE) as ConsumerIrManager
+
+        // See assets/res/any/layout/consumer_ir.xml for this
+        // view layout definition, which is being set here as
+        // the content of our screen.
+        setContentView(R.layout.consumer_ir)
+
+        // Set the OnClickListener for the button so we see when it's pressed.
+        findViewById<View>(R.id.send_button).setOnClickListener(mSendClickListener)
+        findViewById<View>(R.id.get_freqs_button).setOnClickListener(mGetFreqsClickListener)
+        mFreqsText = findViewById(R.id.freqs_text)
+    }
+
+    var mSendClickListener = View.OnClickListener {
+        if (!mCIR!!.hasIrEmitter()) {
+            Log.e(TAG, "No IR Emitter found\n")
+            return@OnClickListener
+        }
+
+        // A pattern of alternating series of carrier on and off periods measured in
+        // microseconds.
+        val pattern = intArrayOf(1901, 4453, 625, 1614, 625, 1588, 625, 1614, 625, 442, 625, 442, 625,
+                468, 625, 442, 625, 494, 572, 1614, 625, 1588, 625, 1614, 625, 494, 572, 442, 651,
+                442, 625, 442, 625, 442, 625, 1614, 625, 1588, 651, 1588, 625, 442, 625, 494, 598,
+                442, 625, 442, 625, 520, 572, 442, 625, 442, 625, 442, 651, 1588, 625, 1614, 625,
+                1588, 625, 1614, 625, 1588, 625, 48958)
+
+        // transmit the pattern at 38.4KHz
+        mCIR!!.transmit(38400, pattern)
+    }
+    @SuppressLint("SetTextI18n")
+    var mGetFreqsClickListener = View.OnClickListener {
+        val b = StringBuilder()
+        if (!mCIR!!.hasIrEmitter()) {
+            mFreqsText!!.text = "No IR Emitter found!"
+            Log.e(TAG, "No IR Emitter found!\n")
+            return@OnClickListener
+        }
+
+        // Get the available carrier frequency ranges
+        val freqs = mCIR!!.carrierFrequencies
+        b.append("IR Carrier Frequencies:\n")
+        for (range in freqs) {
+            b.append(String.format("    %d - %d\n", range.minFrequency,
+                    range.maxFrequency))
+        }
+        mFreqsText!!.text = b.toString()
+    }
+
+    companion object {
+        private const val TAG = "ConsumerIrTest"
+    }
+}
