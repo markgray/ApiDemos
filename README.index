@@ -1944,19 +1944,19 @@ Views
             end of every selected suggestion and MultiAutoCompleteTextView.CommaTokenizer
             uses that to separate the words for the MultiAutoCompleteTextView.
 
-Buttons
+  Buttons
     Views/Buttons                          all
         .view.Buttons1
             Shows three different buttons, all totally defined in layout/buttons_1.xml:
             a default button, a small button using style="?android:attr/buttonStyleSmall",
             and a ToggleButton. The small button is same size as normal button on M.
 
-Chronometer
+  Chronometer
     Views/Chronometer                      all
         .view.ChronometerDemo
             Demonstrates the Chronometer class.
 
-Controls
+  Controls
     Views/Controls/1. Light Theme          all
         .view.Controls1
             A gallery of basic controls: Button, EditText, RadioButton, Checkbox, Spinner
@@ -2017,7 +2017,7 @@ Controls
             Uses .view.Controls1 without specifying a theme which uses the system default
             of the device it is running on.
 
-Custom
+  Custom
     Views/Custom                           all
         .view.CustomView1
         .view.LabelView.java
@@ -2025,7 +2025,7 @@ Custom
             com.example.android.apis.view.LabelView.java -- the attributes it accepts
             are defined in the file values/attrs.xml
 
-Date Widgets
+  Date Widgets
     Views/Date Widgets/1. Dialog           all
         .view.DateWidgets1
             Basic example of using date and time widgets, including android.app.TimePickerDialog
@@ -2038,14 +2038,14 @@ Date Widgets
         .view.DateWidgets2
             Shows the use of an inline TimePicker. Neat on M lame on J
 
-Drag and Drop
+  Drag and Drop
     Views/Drag and Drop                    v11
         .view.DragAndDropDemo
         .view.DraggableDot
             Shows how to implement draggable views.
 
 
-Expandable Lists
+  Expandable Lists
     Views/Expandable Lists/1. Custom Adapter  -- all -- v17+ or crash
         .view.ExpandableList1
             Demonstrates expandable lists using a custom ExpandableListAdapter from
@@ -2066,7 +2066,7 @@ Expandable Lists
             Demonstrates expandable lists backed by a Simple Map-based adapter, which is
             created using SimpleExpandableListAdapter
 
-Focus
+  Focus
     Views/Focus/1. Vertical                all
         .view.Focus1
             Demonstrates the use of non-focusable views: caused by android:focusable="false" 
@@ -2111,7 +2111,7 @@ Focus
             prints "Gained focus", and whose onFocusLost(WindowId) prints "Lost focus".
             Nothing happens on a touch only screen of course.
 
-Game Controller Input
+  Game Controller Input
     Views/Game Controller Input            all
         .view.GameControllerInput
         .view.GameView
@@ -2124,7 +2124,7 @@ Game Controller Input
             for the game itself, it is used by our layout file R.layout.game_controller_input.
             No game controller here.
 
-Grid
+  Grid
     Views/Grid/1. Icon Grid                all
         .view.Grid1
             Shows how to use a GridView to display a grid of ImageView's created from
@@ -2140,25 +2140,25 @@ Grid
         .view.Grid3
             Implements multi-selection mode on GridView - hard to select by touch though
 
-Hover Events
+  Hover Events
     Views/Hover Events                     all -- v14+ or crash View.OnHoverListener()
         .view.Hover
         .view.HoverInterceptorView
             No idea what this is supposed to do -- need mouse.
 
-ImageButton
+  ImageButton
     Views/ImageButton                      all
         .view.ImageButton1
             Simply shows how to draw images on buttons using the SDK stock image.
 
-ImageView
+  ImageView
     Views/ImageView                        all
         .view.ImageView1
             Shows how to control scaling in an ImageView in a layout file using:
             android:layout_width, android:layout_height, android:maxWidth, and 
             android:maxHeight and other attributes of ImageView.
 
-Input Method
+  Input Method
     Views/Input Method/HintLocales         v24
          .view.HintLocales
              Provide some EditText with specifying android.view.inputmethod.EditorInfo.hintLocales
@@ -2170,7 +2170,7 @@ Input Method
              InputMethodManager.showInputMethodAndSubtypeEnabler(String), which is highly 
              likely to be broken.
 
-Layout Animation
+  Layout Animation
     Views/Layout Animation/1. Grid Fade    all
         .view.LayoutAnimation1
             Uses @anim/layout_grid_fade.xml which is a gridLayoutAnimation which uses
@@ -2222,7 +2222,7 @@ Layout Animation
             Way too fast to see effect well even on Excite 10
             TODO: slow down animation to show effect.
 
-Layouts
+  Layouts
   Baseline
     Views/Layouts/Baseline/1. Top          all
         .view.Baseline1
@@ -2373,7 +2373,7 @@ Layouts
             (EditText is hard to read because of background color -- please fix.)
             TODO: Change background or text color so it can be read especially for Excite 10.
 
- RelativeLayout
+   RelativeLayout
     Views/Layouts/RelativeLayout/1. Vertical  --all
         .view.RelativeLayout1
             A simple layout which demonstrates stretching a view to fill the space
@@ -2385,7 +2385,7 @@ Layouts
         .view.RelativeLayout2
             Demonstrates using a relative layout to create a form.
 
-  ScrollView
+    ScrollView
     Views/Layouts/ScrollView/1. Short      all
         .view.ScrollView1
             Demonstrates wrapping a (short) layout in a ScrollView.
@@ -2409,7 +2409,7 @@ Layouts
             keep their internal interesting rectangle visible.  Needs keyboard and a fix to
             background colors in InternalSelectView.java
 
-  TableLayout
+    TableLayout
     Views/Layouts/TableLayout/01. Basic    all
         .view.TableLayout1
             Very simple example of TableLayout done entirely in xml, three rows, three columns of
@@ -2475,7 +2475,7 @@ Layouts
         .view.TableLayout12
             Creates large multi-column cells for several rows using android:layout_span=
 
-Lists
+  Lists
     Views/Lists/01. Array                  all
         .view.List1
         .view.Cheeses
@@ -2611,13 +2611,13 @@ Lists
         .view.LivePointerIconButton
             A gallery of the different pointer icons, crashes TODO: find out why
 
- Popup Menu
+  Popup Menu
     Views/Popup Menu                       all -- v11+ or crash
         .view.PopupMenu1
             This demonstrates the use of the PopupMenu class. Clicking the button will
             inflate and show a popup menu from an XML resource.
 
-Progress Bar
+  Progress Bar
     Views/Progress Bar/1. Incremental      all
         .view.ProgressBar1
             Demonstrates how to use ProgressBar as a widget. The ProgressBar is defined in
@@ -2650,7 +2650,7 @@ Progress Bar
             Demonstrates how to use an indeterminate progress indicator in the window's
             title bar. This does not work for android starting with 5.0
 
-Radio Group
+  Radio Group
     Views/Radio Group                      all
         .view.RadioGroup1
             Demonstrates RadioGroup, including adding a RadioButton to an xml defined
@@ -2658,7 +2658,7 @@ Radio Group
             retrieving the R.id.* of the RadioButton selected, clearing all buttons, and the
             value View.NO_ID (=-1) returned when no RadioButton is selected.
 
-Rating Bar
+  Rating Bar
     Views/Rating Bar                       all
         .view.RatingBar1
             Demonstrates how to use a rating bar. The top two RatingBar's have their
@@ -2666,7 +2666,7 @@ Rating Bar
             updates a TextView and two RatingBar indicators based on the values passed to
             it.
 
-Rotating Button
+  Rotating Button
     Views/Rotating Button                 all -- v11+ or crash
         .view.RotatingButton
             This application demonstrates the ability to transform views in 2D and 3D,
@@ -2677,7 +2677,7 @@ Rotating Button
             and setRotation. Good demo of SeekBar.
             TODO: fix crash that occurs if you rotate too much
 
-ScrollBars
+  ScrollBars
     Views/ScrollBars/1. Basic              all
         .view.ScrollBar1
             Demonstrates scrolling with a ScrollView. Done entirely in xml, the ScrollView is
@@ -2699,7 +2699,7 @@ ScrollBars
             setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET)
             TODO: Scroll bars are too small to see clearly, scale them better
 
-Search View
+  Search View
     Views/Search View/Action Bar           v11+
         .view.SearchViewActionBar
         .app.SearchQueryResults
@@ -2725,7 +2725,7 @@ Search View
             (Very sweet -- need to try this!)
             http://stackoverflow.com/questions/30398247/how-to-filter-a-recyclerview-with-a-searchview
 
-Secure View
+  Secure View
     Views/Secure View                      all -- v9+ or crash
         .view.SecureView
         .view.SecureViewOverlay
@@ -2763,7 +2763,7 @@ Secure View
                View#onFilterTouchEventForSecurity(MotionEvent).
              TODO: Make first TextView secure_view_overlay.xml More visible.
 
-Seek Bar
+  Seek Bar
     Views/Seek Bar                         all
         .view.SeekBar1
             Demonstrates how to use a seek bar. It implements SeekBar.OnSeekBarChangeListener which
@@ -2771,7 +2771,7 @@ Seek Bar
             displaying appropriate text based on the information passed it.
             TODO: why do first two SeekBar's start out enabled in spite of android:enabled="false"
 
-Spinner
+  Spinner
     Views/Spinner                          all
         .view.Spinner1
             Demonstrates the use of the Spinner widget. It creates two ArrayAdapter<CharSequence>
@@ -2781,7 +2781,7 @@ Spinner
             for each which involves implementing onItemSelected and onNothingSelected to receive
             callbacks when an item in the Spinner's is selected.
 
-Splitting Touches across Views
+  Splitting Touches across Views
     Views/Splitting Touches across Views   all - v11+ or crash in layout
         .view.SplitTouchView
         .view.Cheeses
@@ -2790,13 +2790,13 @@ Splitting Touches across Views
             android:splitMotionEvents set to "true". Try scrolling both lists simultaneously
             using multiple fingers.
 
-Switches
+  Switches
     Views/Switches                         all - v14+ or crash in layout
         .view.Switches
             Demonstrates the use of the toggle switch widget. Customized text removed for Lollipop
             unless attribute android:showText="true" is added
 
-System UI Visibility
+  System UI Visibility
     Views/System UI Visibility/Content Browser  -- v16
         .view.ContentBrowserActivity
             This activity demonstrates how to use system UI flags to implement
@@ -2851,7 +2851,7 @@ System UI Visibility
             UI flags to transition in and out of modes where the entire screen can be filled
             with content (at the expense of no user interaction).
 
-Tabs
+  Tabs
     Views/Tabs/1. Content By Id            all
         .view.Tabs1
             An example of an TabActivity that uses labels TabSpec#setIndicator(CharSequence)
@@ -2892,7 +2892,7 @@ Tabs
             Uses a right gravity for the TabWidget. Does not seem to have any effect even
             after changing AndroidManifest to android:theme="@android:style/Theme"
 
-Text
+  Text
     Views/Text/EditText
         .view.EditTextDemo
             Demonstrates the android.widget.EditText widget. android:imeOptions="actionSearch"
@@ -2949,20 +2949,20 @@ Text
             as well as the effect of android:textIsSelectable="true",
             android:visibility="invisible", and android:background="#ff00ff00"
 
-Tooltips
+  Tooltips
     Views/Tooltips                         v26
         .view.Tooltips
             A demo for tooltips, it is implemented almost entirely in the layout file layout/tooltips.xml
             using the android:tooltipText attribute for the views, but the TextView with id R.id.tooltips_code
             has its tooltip set using its setTooltipText method in our onCreate override.
 
-Visibility
+  Visibility
     Views/Visibility                       all
         .view.Visibility1
             Demonstrates making a view VISIBLE, INVISIBLE and GONE. Three buttons control
             the visibility of a TextView which is sandwiched between two other TextView's
 
-WebView
+  WebView
     Views/WebView                          all
         .view.WebView1
             Sample creating 1 webviews. Html data is loaded into the layout's WebView using

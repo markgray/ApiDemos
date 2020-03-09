@@ -18,7 +18,6 @@ package com.example.android.apis.media;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -38,6 +37,8 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.android.apis.R;
 
 /**
@@ -45,7 +46,7 @@ import com.example.android.apis.R;
  * the Visualizer.OnDataCaptureListener interface.
  */
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-public class AudioFxDemo extends Activity {
+public class AudioFxDemo extends AppCompatActivity {
     /**
      * TAG for logging
      */
@@ -141,12 +142,7 @@ public class AudioFxDemo extends Activity {
         // When the stream ends, we don't need to collect any more data. We don't do this in
         // setupVisualizerFxAndUI because we likely want to have more, non-Visualizer related code
         // in this callback.
-        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                mVisualizer.setEnabled(false);
-            }
-        });
+        mMediaPlayer.setOnCompletionListener(mediaPlayer -> mVisualizer.setEnabled(false));
 
         mMediaPlayer.start();
         mStatusTextView.setText("Playing audio...");
@@ -419,12 +415,12 @@ class VisualizerView extends View {
         mRect.set(0, 0, getWidth(), getHeight());
 
         for (int i = 0; i < mBytes.length - 1; i++) {
-            mPoints[i * 4] = mRect.width() * i / (mBytes.length - 1);
-            mPoints[i * 4 + 1] = mRect.height() / 2
-                    + ((byte) (mBytes[i] + 128)) * (mRect.height() / 2) / 128;
-            mPoints[i * 4 + 2] = mRect.width() * (i + 1) / (mBytes.length - 1);
-            mPoints[i * 4 + 3] = mRect.height() / 2
-                    + ((byte) (mBytes[i + 1] + 128)) * (mRect.height() / 2) / 128;
+            mPoints[i * 4] = (mRect.width() * (float)i / (mBytes.length - 1));
+            mPoints[i * 4 + 1] = mRect.height() / 2f
+                    + ((byte) (mBytes[i] + 128)) * (mRect.height() / 2f) / 128f;
+            mPoints[i * 4 + 2] = mRect.width() * (i + 1) / (mBytes.length - 1f);
+            mPoints[i * 4 + 3] = mRect.height() / 2f
+                    + ((byte) (mBytes[i + 1] + 128f)) * (mRect.height() / 2f) / 128;
         }
 
         canvas.drawLines(mPoints, mForePaint);
