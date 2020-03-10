@@ -3531,7 +3531,8 @@
         </activity>
         <activity
             android:name=".media.VideoViewDemo"
-            android:label="Media/VideoView">
+            android:label="Media/VideoView"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

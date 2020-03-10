@@ -17,7 +17,6 @@
 package com.example.android.apis.media;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.ClipData;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -28,6 +27,8 @@ import android.view.View;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.android.apis.R;
 
 /**
@@ -35,7 +36,7 @@ import com.example.android.apis.R;
  * MediaController to provide control buttons for the playback.
  */
 @TargetApi(Build.VERSION_CODES.N)
-public class VideoViewDemo extends Activity {
+public class VideoViewDemo extends AppCompatActivity {
 
     /**
      * {@code VideoView} in our layout that we use to display our video (ID R.id.surface_view)
