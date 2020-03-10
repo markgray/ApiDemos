@@ -29,7 +29,7 @@ import com.example.android.apis.R
  */
 class MediaPlayerDemoAudio : AppCompatActivity() {
     /**
-     * `MediaPlayer` we use to play our audio files, both local files, and raw files read from
+     * [MediaPlayer] we use to play our audio files, both local files, and raw files read from
      * our resources.
      */
     private var mMediaPlayer: MediaPlayer? = null
@@ -40,19 +40,19 @@ class MediaPlayerDemoAudio : AppCompatActivity() {
     private var path: String? = null
 
     /**
-     * `TextView` we use as our content view. Currently displays the string "Playing audio..."
+     * [TextView] we use as our content view. Currently displays the string "Playing audio..."
      * if and only if we are used to play the file from our raw resources.
      */
     private var tx: TextView? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we create a new instance of `TextView` to initialize our field
-     * `TextView tx`, and set our content view to it. Next we fetch a map of the extended data
-     * from our intent to set `Bundle extras` and call our method `playAudio` with the
-     * data stored under the key MEDIA ("media").
+     * `onCreate`, then we create a new instance of [TextView] to initialize our field [tx], and set
+     * our content view to it. Next we fetch a map of the extended data from our intent to set
+     * [Bundle] `val extras` and call our method [playAudio] with the data stored under the key
+     * MEDIA ("media").
      *
-     * @param icicle we do not override `onSaveInstanceState` so do not use
+     * @param icicle we do not override [onSaveInstanceState] so do not use
      */
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
@@ -63,29 +63,25 @@ class MediaPlayerDemoAudio : AppCompatActivity() {
     }
 
     /**
-     * Creates and fires up a `MediaPlayer` to play some audio, either LOCAL_AUDIO or
-     * RESOURCES_AUDIO depending on our parameter `Integer media`. Wrapped in a try block
+     * Creates and fires up a [MediaPlayer] to play some audio, either LOCAL_AUDIO or
+     * RESOURCES_AUDIO depending on our [Int] parameter [media]. Wrapped in a try block
      * intended to catch any Exception we switch based the value of `media`:
      *
-     *  *
-     * LOCAL_AUDIO - The code needs to be edited to modify the assignment to our field
-     * `String path` to point to a local audio file path or it just toasts a message
-     * stating that it needs to be set to a valid file path. Assuming it has been edited, we
-     * initialize our field `MediaPlayer mMediaPlayer` with a new instance, set its data
-     * source file-path to `path`, calls its `prepare` method (which prepares the
-     * player for playback, synchronously, and blocks until MediaPlayer is ready for playback),
-     * and call its method `start` to resume playing (or stop had it been playing).
+     *  * LOCAL_AUDIO - The code needs to be edited to modify the assignment to our field
+     *  `String path` to point to a local audio file path or it just toasts a message
+     *  stating that it needs to be set to a valid file path. Assuming it has been edited, we
+     *  initialize our field `MediaPlayer mMediaPlayer` with a new instance, set its data
+     *  source file-path to `path`, calls its `prepare` method (which prepares the
+     *  player for playback, synchronously, and blocks until MediaPlayer is ready for playback),
+     *  and call its method `start` to resume playing (or stop had it been playing).
      *
-     *  *
-     * RESOURCES_AUDIO - Initializes our field `MediaPlayer mMediaPlayer` with a
-     * `MediaPlayer` created for the resource id R.raw.test_cbr (On success,
-     * `prepare()` will already have been called), and call its method `start`
-     * to resume playing (or stop had it been playing).
+     *  * RESOURCES_AUDIO - Initializes our [MediaPlayer] field [mMediaPlayer] with a [MediaPlayer]
+     *  created for the resource id R.raw.test_cbr (On success, `prepare()` will already have been
+     *  called), and call its method `start` to resume playing (or stop had it been playing).
      *
+     * After doing the above, we set the text of [TextView] field [tx] to "Playing audio..."
      *
-     * After doing the above, we set the text of `TextView tx` to "Playing audio..."
-     *
-     * @param media The type of audio we are to play, either LOCAL_AUDIO or RESOURCES_AUDIO
+     * @param media The type of audio we are to play, either [LOCAL_AUDIO] or [RESOURCES_AUDIO]
      */
     @SuppressLint("SetTextI18n")
     private fun playAudio(media: Int) {
@@ -94,7 +90,8 @@ class MediaPlayerDemoAudio : AppCompatActivity() {
                 LOCAL_AUDIO -> {
                     /*
                      * TODO: Set the path variable to a local audio file path.
-                     */path = ""
+                     */
+                    path = ""
                     if (path === "") {
                         // Tell the user to provide an audio file URL.
                         Toast.makeText(this@MediaPlayerDemoAudio,
@@ -121,9 +118,9 @@ class MediaPlayerDemoAudio : AppCompatActivity() {
 
     /**
      * Perform any final cleanup before an activity is destroyed. First we call through to our super's
-     * implementation of `onDestroy`, then if our field `MediaPlayer mMediaPlayer` is not
-     * null, we call its `release` method (Releases resources associated with this MediaPlayer
-     * object) and set `mMediaPlayer` to null.
+     * implementation of `onDestroy`, then if our [MediaPlayer] field [mMediaPlayer] is not null, we
+     * call its `release` method (Releases resources associated with this [MediaPlayer] object) and
+     * set [mMediaPlayer] to null.
      */
     override fun onDestroy() {
         super.onDestroy()
@@ -141,8 +138,8 @@ class MediaPlayerDemoAudio : AppCompatActivity() {
         private const val TAG = "MediaPlayerDemo"
 
         /**
-         * The name of the extra data included in the intent used to launch us. The extra data is one of
-         * LOCAL_AUDIO, STREAM_AUDIO, RESOURCES_AUDIO, LOCAL_VIDEO, STREAM_VIDEO, or RESOURCES_VIDEO.
+         * The name of the extra data included in the intent used to launch us. The extra data is one
+         * of [LOCAL_AUDIO], [STREAM_AUDIO], [RESOURCES_AUDIO], [LOCAL_VIDEO], or [STREAM_VIDEO].
          */
         private const val MEDIA = "media"
 
@@ -158,7 +155,8 @@ class MediaPlayerDemoAudio : AppCompatActivity() {
         private const val STREAM_AUDIO = 2
 
         /**
-         * "media" extra data which causes us to play an audio file from our raw resources (the mp3 R.raw.test_cbr).
+         * "media" extra data which causes us to play an audio file from our raw resources (the mp3
+         * R.raw.test_cbr).
          */
         private const val RESOURCES_AUDIO = 3
 
