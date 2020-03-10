@@ -16,9 +16,6 @@
 
 package com.example.android.apis.media;
 
-import com.example.android.apis.R;
-
-import android.app.Activity;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
@@ -31,11 +28,15 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
+
 /**
  * Activity launched by {@code MediaPlayerDemo} to play a video file
  */
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
-public class MediaPlayerDemo_Video extends Activity implements
+public class MediaPlayerDemo_Video extends AppCompatActivity implements
         OnBufferingUpdateListener, OnCompletionListener,
         OnPreparedListener, OnVideoSizeChangedListener, SurfaceHolder.Callback {
 
@@ -131,7 +132,7 @@ public class MediaPlayerDemo_Video extends Activity implements
         super.onCreate(icicle);
         setContentView(R.layout.mediaplayer_2);
 
-        mPreview = (SurfaceView) findViewById(R.id.surface);
+        mPreview = findViewById(R.id.surface);
         holder = mPreview.getHolder();
         holder.addCallback(this);
         //noinspection deprecation

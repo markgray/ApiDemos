@@ -3499,12 +3499,15 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- ************************************* -->
+        </activity>
+
+        <!-- ************************************* -->
         <!-- MEDIA SAMPLES -->
         <!-- ************************************* -->
         <activity
             android:name=".media.MediaPlayerDemo"
-            android:label="Media/MediaPlayer">
+            android:label="Media/MediaPlayer"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3512,14 +3515,16 @@
         </activity>
         <activity
             android:name=".media.MediaPlayerDemo_Audio"
-            android:label="Media/MediaPlayer">
+            android:label="Media/MediaPlayer"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
         <activity
             android:name=".media.MediaPlayerDemo_Video"
-            android:label="Media/MediaPlayer">
+            android:label="Media/MediaPlayer"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>

@@ -17,12 +17,13 @@
 package com.example.android.apis.media;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -30,7 +31,7 @@ import com.example.android.apis.R;
  * Activity launched by {@code MediaPlayerDemo} to play a video file
  */
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
-public class MediaPlayerDemo_Audio extends Activity {
+public class MediaPlayerDemo_Audio extends AppCompatActivity {
 
     /**
      * TAG for logging

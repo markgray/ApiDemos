@@ -16,20 +16,22 @@
 
 package com.example.android.apis.media;
 
-import com.example.android.apis.R;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
+
 /**
  * Shows how to use the MediaPlayer class to control playback of audio/video files and streams.
  * TODO: Set the path variables to a local audio and video file path.
  */
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
-public class MediaPlayerDemo extends Activity {
+public class MediaPlayerDemo extends AppCompatActivity {
     /**
      * "Play Video from Local File" Button in our layout file (ID R.id.localvideo)
      */
@@ -108,14 +110,14 @@ public class MediaPlayerDemo extends Activity {
         super.onCreate(icicle);
         setContentView(R.layout.mediaplayer_1);
 
-        mlocalaudio = (Button) findViewById(R.id.localaudio);
+        mlocalaudio = findViewById(R.id.localaudio);
         mlocalaudio.setOnClickListener(mLocalAudioListener);
-        mresourcesaudio = (Button) findViewById(R.id.resourcesaudio);
+        mresourcesaudio = findViewById(R.id.resourcesaudio);
         mresourcesaudio.setOnClickListener(mResourcesAudioListener);
 
-        mlocalvideo = (Button) findViewById(R.id.localvideo);
+        mlocalvideo = findViewById(R.id.localvideo);
         mlocalvideo.setOnClickListener(mLocalVideoListener);
-        mstreamvideo = (Button) findViewById(R.id.streamvideo);
+        mstreamvideo = findViewById(R.id.streamvideo);
         mstreamvideo.setOnClickListener(mStreamVideoListener);
     }
 
