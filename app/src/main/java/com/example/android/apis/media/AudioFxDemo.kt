@@ -140,34 +140,33 @@ class AudioFxDemo : AppCompatActivity() {
      * for our control of it of 0 (the normal priority). We then enable [mEqualizer] to make the
      * [Equalizer] apply its settings to the audio content being played in the audio session.
      *
-     * We create `TextView eqTextView`, set its text to "Equalizer:" and add it to the main UI
-     * `LinearLayout mLinearLayout`.
+     * We create [TextView] `val eqTextView`, set its text to "Equalizer:" and add it to the main UI
+     * in [LinearLayout] field [mLinearLayout].
      *
-     * We set `short bands` to the number of frequency bands supported by the Equalizer engine
-     * `Equalizer mEqualizer`, set `short minEQLevel` to minimum equalization value, and
-     * `short maxEQLevel` to the maximum equalization value of `mEqualizer`.
+     * We set [Short] `val bands` to the number of frequency bands supported by the Equalizer engine
+     * in [Equalizer] field [mEqualizer], set [Short] `val minEQLevel` to minimum equalization value,
+     * and [Short] `val maxEQLevel` to the maximum equalization value of [mEqualizer].
      *
-     * We loop through the `bands` bands of `Equalizer mEqualizer`, set `short band`
-     * to the band index being processed, create a `TextView freqTextView`, set its layout parameters
-     * to MATCH_PARENT and WRAP_CONTENT, set its gravity to CENTER_HORIZONTAL, and set its text to
+     * We loop through the `bands` bands of [mEqualizer], set [Short] `val band` to the band index
+     * being processed, create a [TextView] `val freqTextView`, set its layout parameters to
+     * MATCH_PARENT and WRAP_CONTENT, set its gravity to CENTER_HORIZONTAL, and set its text to
      * the center frequency of the given `band` divided by 1000 and with the string " Hz" appended
-     * to it. We then add the view `freqTextView` to `LinearLayout mLinearLayout`.
+     * to it. We then add the view `freqTextView` to [LinearLayout] field [mLinearLayout].
      *
-     * We create a `LinearLayout row`, and set its orientation to HORIZONTAL. We create a
-     * `TextView minDbTextView`, set its layout parameters to WRAP_CONTENT (both horizontal and
-     * vertical), and set its text to `minEQLevel` divided by 100 with the string " dB" appended
-     * to it. We create a `TextView maxDbTextView`, set its layout parameters to WRAP_CONTENT
+     * We create a [LinearLayout] `val row`, and set its orientation to HORIZONTAL. We create a
+     * [TextView] `val minDbTextView`, set its layout parameters to WRAP_CONTENT (both horizontal
+     * and vertical), and set its text to `minEQLevel` divided by 100 with the string " dB" appended
+     * to it. We create a [TextView] `val maxDbTextView`, set its layout parameters to WRAP_CONTENT
      * (both horizontal and vertical), and set its text to `maxEQLevel` divided by 100 with the
-     * string " dB" appended to it. We create `LinearLayout.LayoutParams layoutParams` with the
-     * layout parameters MATCH_PARENT and WRAP_CONTENT, and set its `weight` to 1. We create a
-     * `SeekBar bar`, set its layout parameters to `layoutParams`, set its maximum setting
-     * to `maxEQLevel-minEQLevel`, and set its current progress to the gain currently set for
-     * the equalizer band `band` of `mEqualizer`. Then we set the `OnSeekBarChangeListener`
-     * of `bar` to an anonymous class whose `onProgressChanged` override sets the equalizer
-     * gain value of band `band` to the `progress` added to `minEQLevel`. Now we
-     * add the views `minDbTextView`, `bar` and `maxDbTextView` to `LinearLayout row`,
-     * and add `row` to `LinearLayout mLinearLayout` (the content view of our UI that we are
-     * filling.
+     * string " dB" appended to it. We create [LinearLayout.LayoutParams] `val layoutParams` with
+     * the layout parameters MATCH_PARENT and WRAP_CONTENT, and set its `weight` to 1. We create a
+     * [SeekBar] `val bar`, set its layout parameters to `layoutParams`, set its maximum setting
+     * to `maxEQLevel` minus `minEQLevel`, and set its current progress to the gain currently set
+     * for the equalizer band `band` of `mEqualizer`. Then we set the `OnSeekBarChangeListener`
+     * of `bar` to an anonymous class whose `onProgressChanged` override sets the equalizer gain
+     * value of band `band` to the `progress` added to `minEQLevel`. Now we add the views
+     * `minDbTextView`, `bar` and `maxDbTextView` to [LinearLayout] `row`, and add `row` to
+     * [LinearLayout]  field [mLinearLayout] (the content view of our UI that we are filling.
      *
      * Then we loop back to process the next `band` of `bands`.
      */
@@ -228,17 +227,17 @@ class AudioFxDemo : AppCompatActivity() {
     }
 
     /**
-     * Creates and set up our `VisualizerView mVisualizerView`. First we initialize our field
-     * `VisualizerView mVisualizerView` with a new instance. Then we set its layout parameters
+     * Creates and set up our [VisualizerView] field [mVisualizerView]. First we initialize our
+     * [VisualizerView] field [mVisualizerView] with a new instance. Then we set its layout parameters
      * to MATCH_PARENT and VISUALIZER_HEIGHT_DIP scaled to pixels by multiplying by the logical screen
-     * density. We then add `mVisualizerView` to `VisualizerView mVisualizerView`. We
-     * initialize our field `Visualizer mVisualizer` with a new instance constructed to use the
-     * system wide unique audio session identifier of `MediaPlayer mMediaPlayer` to attach to it.
-     * We set the capture size, i.e. the number of bytes returned by getWaveForm(byte[]) and getFft(byte[])
-     * methods to the maximum capture size range of `Visualizer`. We set the `OnDataCaptureListener`
-     * of `mVisualizer` to an anonymous class whose `onWaveFormDataCapture` override calls
-     * the `updateVisualizer` method of `VisualizerView mVisualizerView` with the `bytes`
-     * sampled. The rate of the `OnDataCaptureListener` is half of the maximum capture rate for
+     * density. We then add [mVisualizerView] to [mVisualizerView]. We initialize our [Visualizer]
+     * field [mVisualizer] with a new instance constructed to use the system wide unique audio session
+     * identifier of [MediaPlayer] field [mMediaPlayer] as the audio session to attach to. We set the
+     * capture size, i.e. the number of bytes returned by getWaveForm(byte[]) and getFft(byte[])
+     * methods to the maximum capture size range of [Visualizer]. We set the [OnDataCaptureListener]
+     * of [mVisualizer] to an anonymous class whose `onWaveFormDataCapture` override calls the
+     * `updateVisualizer` method of [VisualizerView] field [mVisualizerView] with the `bytes`
+     * sampled. The rate of the [OnDataCaptureListener] is half of the maximum capture rate for
      * the callback capture method, and a waveform capture is requested and not a frequency capture.
      */
     private fun setupVisualizerFxAndUI() {
@@ -254,21 +253,29 @@ class AudioFxDemo : AppCompatActivity() {
         mVisualizer = Visualizer(mMediaPlayer!!.audioSessionId)
         mVisualizer!!.captureSize = Visualizer.getCaptureSizeRange()[1]
         mVisualizer!!.setDataCaptureListener(object : OnDataCaptureListener {
-            override fun onWaveFormDataCapture(visualizer: Visualizer, bytes: ByteArray, samplingRate: Int) {
+            override fun onWaveFormDataCapture(
+                    visualizer: Visualizer,
+                    bytes: ByteArray,
+                    samplingRate: Int
+            ) {
                 mVisualizerView!!.updateVisualizer(bytes)
             }
 
-            override fun onFftDataCapture(visualizer: Visualizer, bytes: ByteArray, samplingRate: Int) {}
+            override fun onFftDataCapture(
+                    visualizer: Visualizer,
+                    bytes: ByteArray,
+                    samplingRate: Int) {}
+
         }, Visualizer.getMaxCaptureRate() / 2, true, false)
     }
 
     /**
      * Called as part of the activity lifecycle when an activity is going into the background, but
      * has not (yet) been killed. First we call our super's implementation of `onPause`, then
-     * if the method `isFinishing` returns true and is `MediaPlayer mMediaPlayer` is not
-     * null, we release the native resources used by `Visualizer mVisualizer`, release the
-     * native AudioEffect resources of `Equalizer mEqualizer`, release resources associated
-     * with `MediaPlayer mMediaPlayer` and set `mMediaPlayer` to null.
+     * if the method [isFinishing] returns true and if [MediaPlayer] field [mMediaPlayer] is not
+     * null, we release the native resources used by [Visualizer] field [mVisualizer], release the
+     * native AudioEffect resources of [Equalizer] field [mEqualizer], release resources associated
+     * with [MediaPlayer] field [mMediaPlayer] and set [mMediaPlayer] to null.
      */
     override fun onPause() {
         super.onPause()
@@ -299,34 +306,33 @@ class AudioFxDemo : AppCompatActivity() {
  */
 internal class VisualizerView(context: Context?) : View(context) {
     /**
-     * Array containing latest sample bytes passed to our method `updateVisualizer` by the
-     * `onWaveFormDataCapture` override of the `OnDataCaptureListener` of
-     * `Visualizer mVisualizer`
+     * Array containing latest sample bytes passed to our method [updateVisualizer] by the
+     * `onWaveFormDataCapture` override of the [OnDataCaptureListener] of [Visualizer] field
+     * `mVisualizer` of [AudioFxDemo].
      */
     private var mBytes: ByteArray? = null
 
     /**
-     * The coordinates of points used to draw lines to display the `mBytes` of the sample. Each
+     * The coordinates of points used to draw lines to display the [mBytes] of the sample. Each
      * line requires four coordinates (two points) so its size is four times the number of sample
      * values.
      */
     private var mPoints: FloatArray? = null
 
     /**
-     * `Rect` having same size as the view we are drawing to (ie. `getWidth()` by
-     * `getHeight()`.
+     * [Rect] having same size as the view we are drawing to (ie. `getWidth()` by `getHeight()`.
      */
     private val mRect = Rect()
 
     /**
-     * `Paint` used to draw the lines of our graph of the media sample.
+     * [Paint] used to draw the lines of our graph of the media sample.
      */
     private val mForePaint = Paint()
 
     /**
-     * Initialize our instance, called from our constructor. First we set our field
-     * `byte[] mBytes` to null, then we set the stroke width of `Paint mForePaint`
-     * to 1, set its antialias flag, and set its color to a shade of blue.
+     * Initialize our instance, called from our constructor. First we set our [ByteArray] field
+     * [mBytes] to null, then we set the stroke width of [Paint] field [mForePaint] to 1, set its
+     * antialias flag, and set its color to a shade of blue.
      */
     private fun init() {
         mBytes = null
@@ -336,9 +342,9 @@ internal class VisualizerView(context: Context?) : View(context) {
     }
 
     /**
-     * Saves the data array passed to the `onWaveFormDataCapture` method of the
-     * `OnDataCaptureListener` of `Visualizer mVisualizer` in our field
-     * `byte[] mBytes`.
+     * Saves the data array passed to the `onWaveFormDataCapture` method of the [OnDataCaptureListener]
+     * of the [Visualizer] field `mVisualizer` of [AudioFxDemo] in our [ByteArray] field [mBytes],
+     * then calls [invalidate] so that our [onDraw] override will be called.
      *
      * @param bytes Array of bytes containing the waveform representation of our audio sample.
      */
@@ -349,20 +355,20 @@ internal class VisualizerView(context: Context?) : View(context) {
 
     /**
      * We implement this to do our drawing. First we call our super's implementation of `onDraw`,
-     * and if our field `byte[] mBytes` is null we return having done nothing. Then if our field
-     * `float[] mPoints` is null, or smaller than four times the length of `mBytes` we
-     * allocate a `float[]` array that is four times the length of `mBytes` and set
-     * `mPoints` to it. We set the size of `Rect mRect` to the same size as our view in
-     * order to use it to scale the audio waveform sample data to fit in our view. We loop through
-     * all the bytes in `byte[] mBytes` calculating the (x,y) coordinates to plot the values in
-     * the space allocated for our view, which we store in `float[] mPoints`. Each line requires
-     * four coordinates and each data point has a line which connects to the one before it and a line
-     * which has connects it to the one after it.
+     * and if our [ByteArray] field [mBytes] is null we return having done nothing. Then if our
+     * [FloatArray] field [mPoints] is null, or smaller than four times the length of [mBytes] we
+     * allocate a [FloatArray] that is four times the length of [mBytes] and set [mPoints] to it.
+     * We set the size of [Rect] field [mRect] to the same size as our view in order to use it to
+     * scale the audio waveform sample data to fit in our view. We loop through all the bytes in
+     * [ByteArray] field [mBytes] calculating the (x,y) coordinates to plot the values in the space
+     * allocated for our view, which we store in [FloatArray] field [mPoints]. Each line requires
+     * four coordinates and each data point has a line which connects to the one before it and a
+     * line which connects it to the one after it.
      *
-     * When done filling `float[] mPoints` we call `canvas.drawLines` to draw the lines
-     * using the `Paint mForePaint` as the `Paint`.
+     * When done filling [mPoints] we call the [Canvas.drawLines] method of our [Canvas] parameter
+     * [canvas] to draw the lines using [Paint] field [mForePaint] as the [Paint].
      *
-     * @param canvas the canvas on which the background will be drawn
+     * @param canvas the [Canvas] on which the background will be drawn
      */
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -385,11 +391,7 @@ internal class VisualizerView(context: Context?) : View(context) {
     }
 
     /**
-     * Our constructor. First we call our super's constructor, then we call our `init` method
-     * to initialize our instance.
-     *
-     *  context `Context` to use to access resources, "this" in the
-     * `setupVisualizerFxAndUI` method of `AudioFxDemo`.
+     * The init block of our constructor. We just call our `init` method to initialize our instance.
      */
     init {
         init()
