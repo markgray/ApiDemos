@@ -112,22 +112,22 @@ class MediaPlayerDemo : AppCompatActivity() {
 
     /**
      * [View.OnClickListener] for [Button] field [mlocalvideo] "Play Video from Local File" (ID
-     * R.id.localvideo) It creates an intent to launch the activity [MediaPlayerDemo_Video], adding
+     * R.id.localvideo) It creates an intent to launch the activity [MediaPlayerDemoVideo], adding
      * the extra LOCAL_VIDEO under the key MEDIA ("media"), and starts that activity.
      */
     private val mLocalVideoListener: View.OnClickListener = View.OnClickListener {
-        val intent = Intent(this@MediaPlayerDemo, MediaPlayerDemo_Video::class.java)
+        val intent = Intent(this@MediaPlayerDemo, MediaPlayerDemoVideo::class.java)
         intent.putExtra(MEDIA, LOCAL_VIDEO)
         startActivity(intent)
     }
 
     /**
      * [View.OnClickListener] for [Button] field [mstreamvideo] "Play Streaming Video" (ID
-     * R.id.streamvideo) It creates an intent to launch the activity [MediaPlayerDemo_Video],
+     * R.id.streamvideo) It creates an intent to launch the activity [MediaPlayerDemoVideo],
      * adding the extra STREAM_VIDEO under the key MEDIA ("media"), and starts that activity.
      */
     private val mStreamVideoListener: View.OnClickListener = View.OnClickListener {
-        val intent = Intent(this@MediaPlayerDemo, MediaPlayerDemo_Video::class.java)
+        val intent = Intent(this@MediaPlayerDemo, MediaPlayerDemoVideo::class.java)
         intent.putExtra(MEDIA, STREAM_VIDEO)
         startActivity(intent)
     }
@@ -158,12 +158,12 @@ class MediaPlayerDemo : AppCompatActivity() {
         private const val RESOURCES_AUDIO = 3
 
         /**
-         * "media" extra data which causes [MediaPlayerDemo_Video] to play a local video file
+         * "media" extra data which causes [MediaPlayerDemoVideo] to play a local video file
          */
         private const val LOCAL_VIDEO = 4
 
         /**
-         * "media" extra data which causes [MediaPlayerDemo_Video] to play a stream-able mp4 or
+         * "media" extra data which causes [MediaPlayerDemoVideo] to play a stream-able mp4 or
          * 3gpp format URL
          */
         private const val STREAM_VIDEO = 5

@@ -3522,7 +3522,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".media.MediaPlayerDemo_Video"
+            android:name=".media.MediaPlayerDemoVideo"
             android:label="Media/MediaPlayer"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
