@@ -28,7 +28,7 @@ import com.example.android.apis.R
  */
 class MediaPlayerDemo : AppCompatActivity() {
     /**
-     * "Play Video from Local File" Button in our layout file (ID R.id.localvideo)
+     * "Play Video from Local File" [Button] in our layout file (ID R.id.localvideo)
      */
     private var mlocalvideo: Button? = null
 
@@ -39,17 +39,17 @@ class MediaPlayerDemo : AppCompatActivity() {
     private val mresourcesvideo: Button? = null
 
     /**
-     * "Play Streaming Video" Button in our layout file (ID R.id.streamvideo)
+     * "Play Streaming Video" [Button] in our layout file (ID R.id.streamvideo)
      */
     private var mstreamvideo: Button? = null
 
     /**
-     * "Play Audio from Local File" Button in our layout file (ID R.id.localaudio)
+     * "Play Audio from Local File" [Button] in our layout file (ID R.id.localaudio)
      */
     private var mlocalaudio: Button? = null
 
     /**
-     * "Play Audio from Resources" Button in our layout file (ID R.id.resourcesaudio)
+     * "Play Audio from Resources" [Button] in our layout file (ID R.id.resourcesaudio)
      */
     private var mresourcesaudio: Button? = null
 
@@ -62,18 +62,18 @@ class MediaPlayerDemo : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.mediaplayer_1. We
-     * initialize our field `Button mlocalaudio` by locating the "Play Audio from Local File"
-     * button in our layout file (ID R.id.localaudio), and set its `OnClickListener` to
-     * `mLocalAudioListener`. We initialize our field `Button mresourcesaudio` by locating
-     * the "Play Audio from Resources" button in our layout file (ID R.id.resourcesaudio), and set its
-     * `OnClickListener` to `mResourcesAudioListener`. We initialize our field
-     * `Button mlocalvideo` by locating the "Play Video from Local File" button in our layout file
-     * (ID R.id.localvideo), and set its `OnClickListener` to `mLocalVideoListener`. Finally,
-     * we initialize our field `Button mstreamvideo` by locating the "Play Streaming Video" button
-     * in our layout file (ID R.id.streamvideo), and set its `OnClickListener` to
-     * `mStreamVideoListener`.
+     * initialize our [Button] field [mlocalaudio] by locating the "Play Audio from Local File"
+     * button in our layout file (ID R.id.localaudio), and set its [View.OnClickListener] to
+     * field [mLocalAudioListener]. We initialize our [Button] field [mresourcesaudio] by locating
+     * the "Play Audio from Resources" [Button] in our layout file (ID R.id.resourcesaudio), and set
+     * its [View.OnClickListener] to field [mResourcesAudioListener]. We initialize our [Button]
+     * field [mlocalvideo] by locating the "Play Video from Local File" [Button] in our layout file
+     * (ID R.id.localvideo), and set its [View.OnClickListener] to field [mLocalVideoListener].
+     * Finally, we initialize our [Button] field [mstreamvideo] by locating the "Play Streaming Video"
+     * [Button] in our layout file (ID R.id.streamvideo), and set its [View.OnClickListener] to field
+     * [mStreamVideoListener].
      *
-     * @param icicle we do not override `onSaveInstanceState` so do not use
+     * @param icicle we do not override [onSaveInstanceState] so do not use
      */
     override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
@@ -89,15 +89,9 @@ class MediaPlayerDemo : AppCompatActivity() {
     }
 
     /**
-     * `OnClickListener` for `Button mlocalaudio` "Play Audio from Local File" (ID R.id.localaudio).
-     * It creates an intent to launch the activity `MediaPlayerDemo_Audio`, adding the extra
-     * LOCAL_AUDIO under the key MEDIA ("media"), and starts that activity.
-     */
-    /**
-     * When clicked we create an intent to launch the activity `MediaPlayerDemo_Audio`,
-     * adding the extra LOCAL_AUDIO under the key MEDIA ("media"), and start that activity.
-     *
-     * Parameter: view that has been clicked
+     * [View.OnClickListener] for [Button] field [mlocalaudio] "Play Audio from Local File" (ID
+     * R.id.localaudio). It creates an intent to launch the activity [MediaPlayerDemo_Audio], adding
+     * the extra LOCAL_AUDIO under the key MEDIA ("media"), and starts that activity.
      */
     private val mLocalAudioListener: View.OnClickListener = View.OnClickListener {
         val intent = Intent(this@MediaPlayerDemo.application, MediaPlayerDemo_Audio::class.java)
@@ -106,15 +100,9 @@ class MediaPlayerDemo : AppCompatActivity() {
     }
 
     /**
-     * `OnClickListener` for `Button mresourcesaudio` "Play Audio from Resources" (ID R.id.resourcesaudio)
-     * It creates an intent to launch the activity `MediaPlayerDemo_Audio`, adding the extra
-     * RESOURCES_AUDIO under the key MEDIA ("media"), and starts that activity.
-     */
-    /**
-     * When clicked we create an intent to launch the activity `MediaPlayerDemo_Audio`,
-     * adding the extra RESOURCES_AUDIO under the key MEDIA ("media"), and start that activity.
-     *
-     * Parameter view that has been clicked
+     * [View.OnClickListener] for [Button] field [mresourcesaudio] "Play Audio from Resources" (ID
+     * R.id.resourcesaudio) It creates an intent to launch the activity [MediaPlayerDemo_Audio],
+     * adding the extra RESOURCES_AUDIO under the key MEDIA ("media"), and starts that activity.
      */
     private val mResourcesAudioListener: View.OnClickListener = View.OnClickListener {
         val intent = Intent(this@MediaPlayerDemo.application, MediaPlayerDemo_Audio::class.java)
@@ -123,15 +111,9 @@ class MediaPlayerDemo : AppCompatActivity() {
     }
 
     /**
-     * `OnClickListener` for `Button mlocalvideo` "Play Video from Local File" (ID R.id.localvideo)
-     * It creates an intent to launch the activity `MediaPlayerDemo_Video`, adding the extra
-     * LOCAL_VIDEO under the key MEDIA ("media"), and starts that activity.
-     */
-    /**
-     * When clicked we create an intent to launch the activity `MediaPlayerDemo_Video`,
-     * adding the extra LOCAL_VIDEO under the key MEDIA ("media"), and start that activity.
-     *
-     * Parameter view that has been clicked
+     * [View.OnClickListener] for [Button] field [mlocalvideo] "Play Video from Local File" (ID
+     * R.id.localvideo) It creates an intent to launch the activity [MediaPlayerDemo_Video], adding
+     * the extra LOCAL_VIDEO under the key MEDIA ("media"), and starts that activity.
      */
     private val mLocalVideoListener: View.OnClickListener = View.OnClickListener {
         val intent = Intent(this@MediaPlayerDemo, MediaPlayerDemo_Video::class.java)
@@ -140,16 +122,9 @@ class MediaPlayerDemo : AppCompatActivity() {
     }
 
     /**
-     * `OnClickListener` for `Button mstreamvideo` "Play Streaming Video" (ID R.id.streamvideo)
-     * It creates an intent to launch the activity `MediaPlayerDemo_Video`, adding the extra
-     * STREAM_VIDEO under the key MEDIA ("media"), and starts that activity.
-     */
-
-    /**
-     * When clicked we create an intent to launch the activity `MediaPlayerDemo_Video`,
-     * adding the extra STREAM_VIDEO under the key MEDIA ("media"), and start that activity.
-     *
-     * Parameter view that has been clicked
+     * [View.OnClickListener] for [Button] field [mstreamvideo] "Play Streaming Video" (ID
+     * R.id.streamvideo) It creates an intent to launch the activity [MediaPlayerDemo_Video],
+     * adding the extra STREAM_VIDEO under the key MEDIA ("media"), and starts that activity.
      */
     private val mStreamVideoListener: View.OnClickListener = View.OnClickListener {
         val intent = Intent(this@MediaPlayerDemo, MediaPlayerDemo_Video::class.java)
@@ -159,14 +134,14 @@ class MediaPlayerDemo : AppCompatActivity() {
 
     companion object {
         /**
-         * The name of the extra data included in the intent used to launch both `MediaPlayerDemo_Audio`
-         * and `MediaPlayerDemo_Video`. The extra data is one of LOCAL_AUDIO, STREAM_AUDIO, RESOURCES_AUDIO,
-         * LOCAL_VIDEO, STREAM_VIDEO, or RESOURCES_VIDEO.
+         * The name of the extra data included in the intent used to launch both [MediaPlayerDemo_Audio]
+         * and `MediaPlayerDemo_Video`. The extra data is one of [LOCAL_AUDIO], [STREAM_AUDIO],
+         * [RESOURCES_AUDIO], [LOCAL_VIDEO], [STREAM_VIDEO], or [RESOURCES_VIDEO].
          */
         private const val MEDIA = "media"
 
         /**
-         * "media" extra data which causes `MediaPlayerDemo_Audio` to play a local audio file
+         * "media" extra data which causes [MediaPlayerDemo_Audio] to play a local audio file
          */
         private const val LOCAL_AUDIO = 1
 
@@ -177,18 +152,18 @@ class MediaPlayerDemo : AppCompatActivity() {
         private const val STREAM_AUDIO = 2
 
         /**
-         * "media" extra data which causes `MediaPlayerDemo_Audio` to play an audio file from our
+         * "media" extra data which causes [MediaPlayerDemo_Audio] to play an audio file from our
          * raw resources (the mp3 R.raw.test_cbr).
          */
         private const val RESOURCES_AUDIO = 3
 
         /**
-         * "media" extra data which causes `MediaPlayerDemo_Video` to play a local video file
+         * "media" extra data which causes [MediaPlayerDemo_Video] to play a local video file
          */
         private const val LOCAL_VIDEO = 4
 
         /**
-         * "media" extra data which causes `MediaPlayerDemo_Video` to play a stream-able mp4 or
+         * "media" extra data which causes [MediaPlayerDemo_Video] to play a stream-able mp4 or
          * 3gpp format URL
          */
         private const val STREAM_VIDEO = 5
