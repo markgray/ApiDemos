@@ -17,7 +17,6 @@
 package com.example.android.apis.media.projection;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -40,7 +39,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.android.apis.R;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +54,7 @@ import java.util.List;
  * SurfaceView.
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class MediaProjectionDemo extends Activity {
+public class MediaProjectionDemo extends AppCompatActivity {
     /**
      * TAG used for logging.
      */
@@ -230,6 +233,7 @@ public class MediaProjectionDemo extends Activity {
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode != PERMISSION_CODE) {
             Log.e(TAG, "Unknown request code: " + requestCode);
             return;
@@ -511,6 +515,7 @@ public class MediaProjectionDemo extends Activity {
          *
          * @return a printable representation of this object.
          */
+        @NotNull
         @Override
         public String toString() {
             return x + "x" + y;

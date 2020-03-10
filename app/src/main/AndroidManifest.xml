@@ -3548,7 +3548,8 @@
         </activity>
         <activity
             android:name=".media.projection.MediaProjectionDemo"
-            android:label="Media/MediaProjection">
+            android:label="Media/MediaProjection"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

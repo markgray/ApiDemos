@@ -1751,6 +1751,8 @@ Media
             files and streams.
             TODO: Set the path variables to a local audio and video file path.
 
+    *** Crashes on Q due to: java.lang.SecurityException: Media projections require a
+     foreground service of type ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION
     Media/MediaProjection                  all -- v21 or crash
         .media.projection.MediaProjectionDemo
             Shows how to use a ProjectionManager.createScreenCaptureIntent to capture 
