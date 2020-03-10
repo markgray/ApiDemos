@@ -90,22 +90,22 @@ class MediaPlayerDemo : AppCompatActivity() {
 
     /**
      * [View.OnClickListener] for [Button] field [mlocalaudio] "Play Audio from Local File" (ID
-     * R.id.localaudio). It creates an intent to launch the activity [MediaPlayerDemo_Audio], adding
+     * R.id.localaudio). It creates an intent to launch the activity [MediaPlayerDemoAudio], adding
      * the extra LOCAL_AUDIO under the key MEDIA ("media"), and starts that activity.
      */
     private val mLocalAudioListener: View.OnClickListener = View.OnClickListener {
-        val intent = Intent(this@MediaPlayerDemo.application, MediaPlayerDemo_Audio::class.java)
+        val intent = Intent(this@MediaPlayerDemo.application, MediaPlayerDemoAudio::class.java)
         intent.putExtra(MEDIA, LOCAL_AUDIO)
         startActivity(intent)
     }
 
     /**
      * [View.OnClickListener] for [Button] field [mresourcesaudio] "Play Audio from Resources" (ID
-     * R.id.resourcesaudio) It creates an intent to launch the activity [MediaPlayerDemo_Audio],
+     * R.id.resourcesaudio) It creates an intent to launch the activity [MediaPlayerDemoAudio],
      * adding the extra RESOURCES_AUDIO under the key MEDIA ("media"), and starts that activity.
      */
     private val mResourcesAudioListener: View.OnClickListener = View.OnClickListener {
-        val intent = Intent(this@MediaPlayerDemo.application, MediaPlayerDemo_Audio::class.java)
+        val intent = Intent(this@MediaPlayerDemo.application, MediaPlayerDemoAudio::class.java)
         intent.putExtra(MEDIA, RESOURCES_AUDIO)
         startActivity(intent)
     }
@@ -134,14 +134,14 @@ class MediaPlayerDemo : AppCompatActivity() {
 
     companion object {
         /**
-         * The name of the extra data included in the intent used to launch both [MediaPlayerDemo_Audio]
+         * The name of the extra data included in the intent used to launch both [MediaPlayerDemoAudio]
          * and `MediaPlayerDemo_Video`. The extra data is one of [LOCAL_AUDIO], [STREAM_AUDIO],
          * [RESOURCES_AUDIO], [LOCAL_VIDEO], [STREAM_VIDEO], or [RESOURCES_VIDEO].
          */
         private const val MEDIA = "media"
 
         /**
-         * "media" extra data which causes [MediaPlayerDemo_Audio] to play a local audio file
+         * "media" extra data which causes [MediaPlayerDemoAudio] to play a local audio file
          */
         private const val LOCAL_AUDIO = 1
 
@@ -152,7 +152,7 @@ class MediaPlayerDemo : AppCompatActivity() {
         private const val STREAM_AUDIO = 2
 
         /**
-         * "media" extra data which causes [MediaPlayerDemo_Audio] to play an audio file from our
+         * "media" extra data which causes [MediaPlayerDemoAudio] to play an audio file from our
          * raw resources (the mp3 R.raw.test_cbr).
          */
         private const val RESOURCES_AUDIO = 3

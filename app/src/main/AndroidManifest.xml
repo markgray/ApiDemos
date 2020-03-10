@@ -3514,7 +3514,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".media.MediaPlayerDemo_Audio"
+            android:name=".media.MediaPlayerDemoAudio"
             android:label="Media/MediaPlayer"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
