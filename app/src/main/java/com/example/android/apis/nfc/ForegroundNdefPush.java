@@ -16,11 +16,8 @@
 
 package com.example.android.apis.nfc;
 
-import com.example.android.apis.R;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -28,13 +25,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
+
 /**
  * An example of how to use the NFC foreground NDEF push APIs to push an url to another android device.
  */
 @SuppressWarnings("FieldCanBeLocal")
 @SuppressLint("SetTextI18n")
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-public class ForegroundNdefPush extends Activity {
+public class ForegroundNdefPush extends AppCompatActivity {
     /**
      * The default NFC Adapter of our device.
      */
@@ -76,7 +77,7 @@ public class ForegroundNdefPush extends Activity {
         mMessage = new NdefMessage(NdefRecord.createUri("http://www.android.com"));
 
         setContentView(R.layout.foreground_dispatch);
-        mText = (TextView) findViewById(R.id.text);
+        mText = findViewById(R.id.text);
 
         if (mAdapter != null) {
             mAdapter.setNdefPushMessage(mMessage, this);
