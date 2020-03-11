@@ -1771,6 +1771,7 @@ NFC
             An example of how to use the NFC foreground dispatch APIs. This will intercept
             any MIME data based NDEF dispatch as well as all dispatched for NfcF tags.
 
+    ******* Android Beam has been removed as of Q *******
     NFC/ForegroundNdefPush                 all -- v16+ or crash
         .nfc.ForegroundNdefPush
             An example of how to use the NFC foreground NDEF push APIs to push an url to

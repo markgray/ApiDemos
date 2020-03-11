@@ -27,7 +27,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
- * An example of how to use the NFC foreground NDEF push APIs to push an url to another android device.
+ * An example of how to use the NFC foreground NDEF push APIs to push an url to another android
+ * device. Note: Android Beam has been removed as of Q
  */
 @SuppressLint("SetTextI18n")
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -38,33 +39,31 @@ class ForegroundNdefPush : AppCompatActivity() {
     private var mAdapter: NfcAdapter? = null
 
     /**
-     * `TextView` in our layout file with ID R.id.text, we use it to display the instruction
+     * [TextView] in our layout file with ID R.id.text, we use it to display the instruction
      * "Tap another Android phone with NFC to push a URL", and if NFC is unavailable the message
      * "This phone is not NFC enabled."
      */
     private var mText: TextView? = null
 
     /**
-     * The `NdefMessage` we create to send to another device, contains an NDEF Record containing
+     * The [NdefMessage] we create to send to another device, contains an NDEF Record containing
      * the uri "http://www.android.com".
      */
     private var mMessage: NdefMessage? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we initialize our field `NfcAdapter mAdapter` with the default
-     * NFC adaptor of our device, initialize `NdefMessage mMessage` with an `NdefMessage`
-     * containing the the uri "http://www.android.com", set our content view to our layout file
-     * R.layout.foreground_dispatch, and initialize `TextView mText` by locating the TextView
-     * in our layout file with ID R.id.text.
+     * `onCreate`, then we initialize our [NfcAdapter] field [mAdapter] with the default NFC adaptor
+     * of our device, initialize [NdefMessage] field [mMessage] with an [NdefMessage] containing the
+     * uri "http://www.android.com", set our content view to our layout file R.layout.foreground_dispatch,
+     * and initialize [TextView] field [mText] by locating the [TextView] in our layout file with ID
+     * R.id.text.
      *
+     * Finally if [mAdapter] is not null, we set [mMessage] as the static [NdefMessage] to send using
+     * Android Beam, and set the text of [mText] to "Tap another Android phone with NFC to push a URL".
+     * If [mAdapter] is null we set the text of [mText] to "This phone is not NFC enabled.".
      *
-     * Finally if `mAdapter` is not null, we set `mMessage` as the static NdefMessage to
-     * send using Android Beam, and set the text of `mText` to "Tap another Android phone with
-     * NFC to push a URL". If `mAdapter` is null we set the text of `mText` to "This phone
-     * is not NFC enabled.".
-     *
-     * @param savedState we do not override `onSaveInstanceState`, so do not use
+     * @param savedState we do not override [onSaveInstanceState], so do not use
      */
     public override fun onCreate(savedState: Bundle?) {
         super.onCreate(savedState)
