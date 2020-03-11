@@ -16,11 +16,8 @@
 
 package com.example.android.apis.nfc;
 
-import com.example.android.apis.R;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -32,13 +29,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
+
 /**
  * An example of how to use the NFC foreground dispatch APIs. This will intercept any MIME data
  * based NDEF dispatch as well as all dispatched for NfcF tags.
  */
 @TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
 @SuppressLint("SetTextI18n")
-public class ForegroundDispatch extends Activity {
+public class ForegroundDispatch extends AppCompatActivity {
     /**
      * Default NFC Adapter
      */
@@ -95,7 +96,7 @@ public class ForegroundDispatch extends Activity {
         super.onCreate(savedState);
 
         setContentView(R.layout.foreground_dispatch);
-        mText = (TextView) findViewById(R.id.text);
+        mText = findViewById(R.id.text);
         mText.setText("Scan a tag");
 
         mAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -157,6 +158,7 @@ public class ForegroundDispatch extends Activity {
      */
     @Override
     public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
         Log.i("Foreground dispatch", "Discovered tag with intent: " + intent);
         mText.setText("Discovered tag " + ++mCount + " with intent: " + intent);
     }
