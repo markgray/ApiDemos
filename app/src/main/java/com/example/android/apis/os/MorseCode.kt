@@ -19,50 +19,41 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Vibrator
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.android.apis.R
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+import com.example.android.apis.R
+
 /**
- * <h3>App that vibrates the vibrator with the Morse Code for a string.</h3>
+ * App that vibrates the vibrator with the Morse Code for a string. This demonstrates the
+ * [android.os.Vibrator] class.
  *
+ * Demo OS / Morse Code Vibrator
  *
+ * Source files:
  *
- * This demonstrates the [android.os.Vibrator] class.
- *
- *
- * <h4>Demo</h4>
- * OS / Morse Code Vibrator
- *
- *
- * <h4>Source files</h4>
- * <table class="LinkTable">
- * <tr>
- * <td>src/com.example.android.apis/os/MorseCode.java</td>
- * <td>The Morse Code Vibrator</td>
-</tr> *
- * <tr>
- * <td>res/any/layout/morse_code.xml</td>
- * <td>Defines contents of the screen</td>
-</tr> *
-</table> *
+ *  * os/MorseCode.kt The Morse Code Vibrator
+ *  * os/MorseCodeConverter.kt Class that implements the text to morse code conversion
+ *  * res/layout/morse_code.xml Defines contents of the screen
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class MorseCode : AppCompatActivity() {
     /**
-     * Our text view with ID R.id.text, used to enter text for us to convert to Morse code.
+     * Our [TextView] with ID R.id.text, used to enter text for us to convert to Morse code.
      */
     private var mTextView: TextView? = null
 
     /**
      * Initialization of the Activity after it is first created. First we call through to our
      * super's implementation of `onCreate`, then we set our content view to our layout file
-     * R.layout.morse_code. We locate the `Button` in our layout with ID R.id.button ("Vibrate")
-     * and set its `OnClickListener` to our field `OnClickListener mClickListener`. Then
-     * we locate the `EditText` in our layout file with ID R.id.text and save a reference to it
-     * in our field `TextView mTextView`.
+     * R.layout.morse_code. We locate the [Button] in our layout with ID R.id.button ("Vibrate")
+     * and set its [View.OnClickListener] to our field [mClickListener]. Then we locate the
+     * [EditText] in our layout file with ID R.id.text and save a reference to it in our [TextView]
+     * field [mTextView].
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
@@ -70,7 +61,7 @@ class MorseCode : AppCompatActivity() {
         // Be sure to call the super class.
         super.onCreate(savedInstanceState)
 
-        // See assets/res/any/layout/morse_code.xml for this
+        // See res/layout/morse_code.xml for this
         // view layout definition, which is being set here as
         // the content of our screen.
         setContentView(R.layout.morse_code)
@@ -83,17 +74,12 @@ class MorseCode : AppCompatActivity() {
     }
 
     /**
-     * Called when the button with ID R.id.button ("Vibrate") is pushed
-     */
-    /**
      * Called when the button with ID R.id.button ("Vibrate") is pushed. First we retrieve the
-     * string that the user has entered in `TextView mTextView` to `String text`.
-     * Then we call the method `MorseCodeConverter.pattern` to convert `text` to
-     * the `long[] pattern` array representing the Morse code version of the text. We fetch
-     * a handle to the system level service VIBRATOR_SERVICE to `Vibrator vibrator` and
-     * call its method `vibrate` to vibrate the Morse code in `pattern`.
-     *
-     *  v the `View` that was clicked.
+     * string that the user has entered in [TextView] field [mTextView] to [String] `val text`.
+     * Then we call the method [MorseCodeConverter.pattern] to convert `text` to the [LongArray]
+     * `val pattern` representing the Morse code version of the text. We fetch a handle to the
+     * system level service VIBRATOR_SERVICE to [Vibrator] `val vibrator` and call its method
+     * `vibrate` to vibrate the Morse code in `pattern`.
      */
     var mClickListener: View.OnClickListener = View.OnClickListener {
         // Get the text out of the view
