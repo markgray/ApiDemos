@@ -26,6 +26,8 @@ import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -45,7 +47,7 @@ import javax.microedition.khronos.opengles.GL10;
  * Uses output from Sensor.TYPE_ROTATION_VECTOR to change the rotation matrix of an openGL Cube.
  */
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-public class RotationVectorDemo extends Activity {
+public class RotationVectorDemo extends AppCompatActivity {
     /**
      * The {@code GLSurfaceView} we use as our content view, contains a {@code MyRenderer.Cube}
      * which {@code MyRenderer} rotates based on the rotation vector sensor.
@@ -304,21 +306,21 @@ public class RotationVectorDemo extends Activity {
              * {@code indices[]} into {@code mIndexBuffer}, and position it to its beginning.
              */
             public Cube() {
-                final float vertices[] = {
+                final float[] vertices = {
                         -1, -1, -1, 1, -1, -1,
                         1, 1, -1, -1, 1, -1,
                         -1, -1, 1, 1, -1, 1,
                         1, 1, 1, -1, 1, 1,
                 };
 
-                final float colors[] = {
+                final float[] colors = {
                         0, 0, 0, 1, 1, 0, 0, 1,
                         1, 1, 0, 1, 0, 1, 0, 1,
                         0, 0, 1, 1, 1, 0, 1, 1,
                         1, 1, 1, 1, 0, 1, 1, 1,
                 };
 
-                final byte indices[] = {
+                final byte[] indices = {
                         0, 4, 5, 0, 5, 1,
                         1, 5, 6, 1, 6, 2,
                         2, 6, 7, 2, 7, 3,
