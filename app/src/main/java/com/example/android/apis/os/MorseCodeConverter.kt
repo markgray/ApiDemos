@@ -52,12 +52,38 @@ internal object MorseCodeConverter {
     /**
      * The characters from 'A' to 'Z'
      */
-    private val LETTERS = arrayOf(longArrayOf(DOT, GAP, DASH), longArrayOf(DASH, GAP, DOT, GAP, DOT, GAP, DOT), longArrayOf(DASH, GAP, DOT, GAP, DASH, GAP, DOT), longArrayOf(DASH, GAP, DOT, GAP, DOT), longArrayOf(DOT), longArrayOf(DOT, GAP, DOT, GAP, DASH, GAP, DOT), longArrayOf(DASH, GAP, DASH, GAP, DOT), longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DOT), longArrayOf(DOT, GAP, DOT), longArrayOf(DOT, GAP, DASH, GAP, DASH, GAP, DASH), longArrayOf(DASH, GAP, DOT, GAP, DASH), longArrayOf(DOT, GAP, DASH, GAP, DOT, GAP, DOT), longArrayOf(DASH, GAP, DASH), longArrayOf(DASH, GAP, DOT), longArrayOf(DASH, GAP, DASH, GAP, DASH), longArrayOf(DOT, GAP, DASH, GAP, DASH, GAP, DOT), longArrayOf(DASH, GAP, DASH, GAP, DOT, GAP, DASH), longArrayOf(DOT, GAP, DASH, GAP, DOT), longArrayOf(DOT, GAP, DOT, GAP, DOT), longArrayOf(DASH), longArrayOf(DOT, GAP, DOT, GAP, DASH), longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DASH), longArrayOf(DOT, GAP, DASH, GAP, DASH), longArrayOf(DASH, GAP, DOT, GAP, DOT, GAP, DASH), longArrayOf(DASH, GAP, DOT, GAP, DASH, GAP, DASH), longArrayOf(DASH, GAP, DASH, GAP, DOT, GAP, DOT))
+    private val LETTERS = arrayOf(
+            longArrayOf(DOT, GAP, DASH), longArrayOf(DASH, GAP, DOT, GAP, DOT, GAP, DOT),
+            longArrayOf(DASH, GAP, DOT, GAP, DASH, GAP, DOT), longArrayOf(DASH, GAP, DOT, GAP, DOT),
+            longArrayOf(DOT), longArrayOf(DOT, GAP, DOT, GAP, DASH, GAP, DOT),
+            longArrayOf(DASH, GAP, DASH, GAP, DOT), longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DOT),
+            longArrayOf(DOT, GAP, DOT), longArrayOf(DOT, GAP, DASH, GAP, DASH, GAP, DASH),
+            longArrayOf(DASH, GAP, DOT, GAP, DASH), longArrayOf(DOT, GAP, DASH, GAP, DOT, GAP, DOT),
+            longArrayOf(DASH, GAP, DASH), longArrayOf(DASH, GAP, DOT),
+            longArrayOf(DASH, GAP, DASH, GAP, DASH), longArrayOf(DOT, GAP, DASH, GAP, DASH, GAP, DOT),
+            longArrayOf(DASH, GAP, DASH, GAP, DOT, GAP, DASH), longArrayOf(DOT, GAP, DASH, GAP, DOT),
+            longArrayOf(DOT, GAP, DOT, GAP, DOT), longArrayOf(DASH),
+            longArrayOf(DOT, GAP, DOT, GAP, DASH), longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DASH),
+            longArrayOf(DOT, GAP, DASH, GAP, DASH), longArrayOf(DASH, GAP, DOT, GAP, DOT, GAP, DASH),
+            longArrayOf(DASH, GAP, DOT, GAP, DASH, GAP, DASH),
+            longArrayOf(DASH, GAP, DASH, GAP, DOT, GAP, DOT)
+    )
 
     /**
      * The characters from '0' to '9'
      */
-    private val NUMBERS = arrayOf(longArrayOf(DASH, GAP, DASH, GAP, DASH, GAP, DASH, GAP, DASH), longArrayOf(DOT, GAP, DASH, GAP, DASH, GAP, DASH, GAP, DASH), longArrayOf(DOT, GAP, DOT, GAP, DASH, GAP, DASH, GAP, DASH), longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DASH, GAP, DASH), longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DOT, GAP, DASH), longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DOT, GAP, DOT), longArrayOf(DASH, GAP, DOT, GAP, DOT, GAP, DOT, GAP, DOT), longArrayOf(DASH, GAP, DASH, GAP, DOT, GAP, DOT, GAP, DOT), longArrayOf(DASH, GAP, DASH, GAP, DASH, GAP, DOT, GAP, DOT), longArrayOf(DASH, GAP, DASH, GAP, DASH, GAP, DASH, GAP, DOT))
+    private val NUMBERS = arrayOf(
+            longArrayOf(DASH, GAP, DASH, GAP, DASH, GAP, DASH, GAP, DASH),
+            longArrayOf(DOT, GAP, DASH, GAP, DASH, GAP, DASH, GAP, DASH),
+            longArrayOf(DOT, GAP, DOT, GAP, DASH, GAP, DASH, GAP, DASH),
+            longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DASH, GAP, DASH),
+            longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DOT, GAP, DASH),
+            longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DOT, GAP, DOT),
+            longArrayOf(DASH, GAP, DOT, GAP, DOT, GAP, DOT, GAP, DOT),
+            longArrayOf(DASH, GAP, DASH, GAP, DOT, GAP, DOT, GAP, DOT),
+            longArrayOf(DASH, GAP, DASH, GAP, DASH, GAP, DOT, GAP, DOT),
+            longArrayOf(DASH, GAP, DASH, GAP, DASH, GAP, DASH, GAP, DOT)
+    )
 
     /**
      * Duration in milliseconds of a pause when the character is not one we support
@@ -65,16 +91,15 @@ internal object MorseCodeConverter {
     private val ERROR_GAP = longArrayOf(GAP)
 
     /**
-     * Return the pattern data for a given character. We first check if the parameter `char c`
-     * is between 'A' and 'Z' and if so we return the array in `LETTERS` that is indexed by the
-     * value `c - 'A'`, then we check if the parameter `char c` is between 'a' and 'z'
-     * and if so we return the array in `LETTERS` that is indexed by the value `c - 'a'`,
-     * then we check if the parameter `char c` is between '0' and '9' and if so we return the
-     * array in `NUMBERS` that is indexed by the value `c - '0'`. If it is not one of the
-     * above we return the array `ERROR_GAP`.
+     * Return the pattern data for a given character. We first check if the [Char] parameter [c]
+     * is between 'A' and 'Z' and if so we return the array in [LETTERS] that is indexed by the
+     * value `c - 'A'`, then we check if the parameter [c] is between 'a' and 'z' and if so we
+     * return the array in [LETTERS] that is indexed by the value `c - 'a'`, then we check if the
+     * parameter [c] is between '0' and '9' and if so we return the array in [NUMBERS] that is
+     * indexed by the value `c - '0'`. If it is not one of the above we return the array [ERROR_GAP].
      *
      * @param c Character that is being converted to Morse code
-     * @return an array of `long` that contains the Morse code for the parameter `c`
+     * @return an array of [Long] that contains the Morse code for the parameter [c]
      */
     fun pattern(c: Char): LongArray {
         if (c in 'A'..'Z') {
@@ -94,41 +119,37 @@ internal object MorseCodeConverter {
     }
 
     /**
-     * Return the pattern data for a given string. We declare our flag `boolean lastWasWhitespace`,
-     * and store the length of our parameter `str` in `strlen`.
+     * Return the pattern data for a given string. We declare our [Boolean] flag
+     * `var lastWasWhitespace`, and store the length of our [String] parameter
+     * [str] in `val strlen`.
      *
+     * Next we proceed to calculate how big our return array of [LongArray] needs to be, by first
+     * initializing `var len` to 1 (the length needed), and setting `lastWasWhitespace` to true.
+     * Then we loop through all the [Char] `val c` in [str], checking whether `c` is a white space
+     * character, and if so we check whether the previous character was also a white space character
+     * skipping it if so, otherwise incrementing `len` and setting `lastWasWhitespace` to true. If
+     * `c` was not a white space character and the previous character was also not a white space
+     * character we increment `len`, then for all non white space characters we then set
+     * `lastWasWhitespace` to false and add the length of the Morse code pattern returned for `c`
+     * by our method [pattern] to `len`.
      *
-     * Next we proceed to calculate how big our return array of `long[]` needs to be, by first
-     * initializing `len` to 1 (the length needed), and setting `lastWasWhitespace` to
-     * true. Then we loop through all the `char c` in `str`, checking whether `c`
-     * is a white space character, and if so we check whether the previous character was also a
-     * white space character skipping it if so, otherwise incrementing `len` and setting
-     * `lastWasWhitespace` to true. If `c` was not a white space character and the
-     * previous character was also not a white space character we increment `len`, then for all
-     * non white space characters we then set `lastWasWhitespace` to false and add the length
-     * of the Morse code pattern returned for `c` by our method `pattern(char)` to `len`.
-     *
-     *
-     * Now that we know how long our array needs to be we allocate `len+1` longs for our variable
-     * `long[] result`, set `result[0]` to 0 (the initial pause of the vibration pattern),
-     * set `int pos` to 1 (next storage location in `result[]`), and set `lastWasWhitespace`
-     * to true. Then once again looping through all the `char c` in `str`, we first check
+     * Now that we know how long our array needs to be we allocate `len+1` longs for our [LongArray]
+     * variable `val result`, set `result[0]` to 0 (the initial pause of the vibration pattern),
+     * set `var pos` to 1 (next storage location in `result[]`), and set `lastWasWhitespace`
+     * to true. Then once again looping through all the [Char] `val c` in [str], we first check
      * if `c` is a white space character, and if so we check whether the previous character was
-     * also a white space character skipping it if so, otherwise setting the `pos` entry in
-     * `result` to
-     * `WORD_GAP` incrementing `pos` and setting `lastWasWhitespace` to true. If
-     * `c` was not a white space character and the previous character was a white space character
-     * we set the `pos` entry in `result` to the array `LETTER_GAP` and increment `pos` before setting
-     * `lastWasWhitespace` to true, and `long[] letter` to the array of Morse code that our
-     * method `pattern(char)` returns for `c`. We then copy the contents of the array
-     * `letter` to our array `result` starting at location `pos` and add the length
-     * of `letter` to `pos`.
+     * also a white space character skipping it if so, otherwise setting the `pos` entry in `result`
+     * to [WORD_GAP] incrementing `pos` and setting `lastWasWhitespace` to true. If `c` was not a
+     * white space character and the previous character was a white space character we set the `pos`
+     * entry in `result` to the array [LETTER_GAP] and increment `pos` before setting
+     * `lastWasWhitespace` to true, and [LongArray] `val letter` to the array of Morse code that our
+     * method [pattern] returns for `c`. We then copy the contents of the array `letter` to our array
+     * `result` starting at location `pos` and add the length of `letter` to `pos`.
      *
+     * When done with all the characters in [str] we return `result` to the caller.
      *
-     * When done with all the characters in `str` we return `result` to the caller.
-     *
-     * @param str a string which needs to be converted to Morse code
-     * @return an array of `long` that contains the Morse code for the parameter `str`
+     * @param str a [String] which needs to be converted to Morse code
+     * @return a [LongArray] that contains the Morse code for the parameter [str]
      */
     fun pattern(str: String): LongArray {
         /*
