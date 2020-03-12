@@ -1515,12 +1515,14 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- ************************************* -->
+        </activity>
+        <!-- ************************************* -->
         <!-- OS PACKAGE SAMPLES -->
         <!-- ************************************* -->
         <activity
             android:name=".os.MorseCode"
-            android:label="OS/Morse Code">
+            android:label="OS/Morse Code"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

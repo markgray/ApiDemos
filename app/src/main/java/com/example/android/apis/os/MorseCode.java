@@ -19,12 +19,13 @@ package com.example.android.apis.os;
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -48,7 +49,7 @@ import com.example.android.apis.R;
  * </tr>
  * </table>
  */
-public class MorseCode extends Activity {
+public class MorseCode extends AppCompatActivity {
     /**
      * Our text view with ID R.id.text, used to enter text for us to convert to Morse code.
      */
@@ -78,7 +79,7 @@ public class MorseCode extends Activity {
         findViewById(R.id.button).setOnClickListener(mClickListener);
 
         // Save the text view so we don't have to look it up each time
-        mTextView = (TextView) findViewById(R.id.text);
+        mTextView = findViewById(R.id.text);
     }
 
     /**
