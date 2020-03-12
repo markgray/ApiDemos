@@ -3596,7 +3596,8 @@
         </activity>
         <activity
             android:name=".nfc.TechFilter"
-            android:label="NFC/TechFilter">
+            android:label="NFC/TechFilter"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

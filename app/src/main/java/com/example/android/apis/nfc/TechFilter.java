@@ -16,21 +16,22 @@
 
 package com.example.android.apis.nfc;
 
-import com.example.android.apis.R;
-
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
 
 /**
  * No idea, but nfc related somehow. Having looked at it more closely, it does not look like it does
  * anything at all
  */
 @SuppressLint("SetTextI18n")
-public class TechFilter extends Activity {
+public class TechFilter extends AppCompatActivity {
     /**
      * {@code TextView} in our layout with ID R.id.text, we use it to display either a count of the
      * number of NFC tags discovered, or the instructions "Scan a tag".
@@ -59,7 +60,7 @@ public class TechFilter extends Activity {
         super.onCreate(savedState);
 
         setContentView(R.layout.foreground_dispatch);
-        mText = (TextView) findViewById(R.id.text);
+        mText = findViewById(R.id.text);
 
         Intent intent = getIntent();
         String action = intent.getAction();
@@ -86,6 +87,7 @@ public class TechFilter extends Activity {
      */
     @Override
     public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
         mText.setText("Discovered tag " + ++mCount + " with intent: " + intent);
     }
 }
