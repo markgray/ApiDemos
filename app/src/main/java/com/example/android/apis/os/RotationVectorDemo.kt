@@ -35,21 +35,17 @@ import javax.microedition.khronos.opengles.GL10
  * Wrapper activity demonstrating the use of the new
  * [rotation vector sensor][SensorEvent.values]
  * ([TYPE_ROTATION_VECTOR][Sensor.TYPE_ROTATION_VECTOR]).
- *
  * @see Sensor
- *
  * @see SensorEvent
- *
  * @see SensorManager
  *
- *
- * Uses output from Sensor.TYPE_ROTATION_VECTOR to change the rotation matrix of an openGL Cube.
+ * Uses output from [Sensor.TYPE_ROTATION_VECTOR] to change the rotation matrix of an openGL Cube.
  */
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 class RotationVectorDemo : AppCompatActivity() {
     /**
-     * The `GLSurfaceView` we use as our content view, contains a `MyRenderer.Cube`
-     * which `MyRenderer` rotates based on the rotation vector sensor.
+     * The [GLSurfaceView] we use as our content view, contains a [MyRenderer.Cube]
+     * which [MyRenderer] rotates based on the rotation vector sensor.
      */
     private var mGLSurfaceView: GLSurfaceView? = null
 
@@ -59,19 +55,18 @@ class RotationVectorDemo : AppCompatActivity() {
     private var mSensorManager: SensorManager? = null
 
     /**
-     * The instance of `MyRenderer` we use as the renderer of `mGLSurfaceView`.
+     * The instance of [MyRenderer] we use as the renderer of [mGLSurfaceView].
      */
     private var mRenderer: MyRenderer? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we initialize or field `SensorManager mSensorManager` with a
-     * handle to the system level service SENSOR_SERVICE ("sensor"). We create a new instance for
-     * `MyRenderer mRenderer`, and a new instance for `GLSurfaceView mGLSurfaceView`,
-     * set the renderer of `GLSurfaceView mGLSurfaceView` to `MyRenderer mRenderer` and
-     * set our content view to `GLSurfaceView mGLSurfaceView`.
+     * `onCreate`, then we initialize our [SensorManager] field [mSensorManager] with a handle to
+     * the system level service [Context.SENSOR_SERVICE] ("sensor"). We create a new instance for
+     * [MyRenderer] field [mRenderer], and a new instance for [GLSurfaceView] field [mGLSurfaceView],
+     * set the renderer of [mGLSurfaceView] to [mRenderer] and set our content view to [mGLSurfaceView].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,10 +83,10 @@ class RotationVectorDemo : AppCompatActivity() {
     }
 
     /**
-     * Called after [.onRestoreInstanceState], [.onRestart], or [.onPause], for
-     * our activity to start interacting with the user. First we call through to our super's implementation
-     * of `onResume`, then we call the `start` method of `MyRenderer mRenderer`,
-     * and the `onResume` method of `GLSurfaceView mGLSurfaceView`.
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for our activity to start
+     * interacting with the user. First we call through to our super's implementation of `onResume`,
+     * then we call the `start` method of [MyRenderer] field [mRenderer], and the `onResume` method
+     * of [GLSurfaceView] field [mGLSurfaceView].
      */
     override fun onResume() {
         // Ideally a game should implement onResume() and onPause()
@@ -104,8 +99,8 @@ class RotationVectorDemo : AppCompatActivity() {
     /**
      * Called as part of the activity lifecycle when an activity is going into the background, but
      * has not (yet) been killed. First we call through to our super's implementation of `onPause`,
-     * then we call the `stop` method of `MyRenderer mRenderer`, and the `onPause`
-     * method of `GLSurfaceView mGLSurfaceView`.
+     * then we call the `stop` method of [MyRenderer] field [mRenderer], and the `onPause` method of
+     * [GLSurfaceView] field [mGLSurfaceView].
      */
     override fun onPause() {
         // Ideally a game should implement onResume() and onPause()
