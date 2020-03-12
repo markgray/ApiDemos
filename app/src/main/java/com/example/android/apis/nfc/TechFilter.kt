@@ -30,7 +30,7 @@ import com.example.android.apis.R
 @SuppressLint("SetTextI18n")
 class TechFilter : AppCompatActivity() {
     /**
-     * `TextView` in our layout with ID R.id.text, we use it to display either a count of the
+     * [TextView] in our layout with ID R.id.text, we use it to display either a count of the
      * number of NFC tags discovered, or the instructions "Scan a tag".
      */
     private var mText: TextView? = null
@@ -43,15 +43,15 @@ class TechFilter : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.foreground_dispatch.
-     * We initialize our field `TextView mText` by locating the `TextView` with ID
-     * R.id.text. Next we fetch the `Intent` which launched us to `Intent intent`, and
-     * the action of `intent` to `String action`. If `action` is ACTION_TECH_DISCOVERED
-     * ("android.nfc.action.TECH_DISCOVERED") we set the text of `mText` to the string "Discovered
-     * tag" with the string value of `mCount` concatenated to it (we then post increment `mCount`
-     * here), with the string "with intent:" concatenated to that, and the string value of `intent`
-     * concatenated to the end. Otherwise we set the text of `mText` to the string "Scan a tag".
+     * We initialize our [TextView] field [mText] by locating the [TextView] with ID R.id.text. Next
+     * we fetch the [Intent] which launched us to [Intent] `val intent`, and the action of `intent`
+     * to [String] `val action`. If `action` is ACTION_TECH_DISCOVERED ("android.nfc.action.TECH_DISCOVERED")
+     * we set the text of `mText` to the string "Discovered tag" with the string value of [mCount]
+     * concatenated to it (we then post increment [mCount] here), with the string "with intent:"
+     * concatenated to that, and the string value of `intent` concatenated to the end. Otherwise we
+     * set the text of [mText] to the string "Scan a tag".
      *
-     * @param savedState we do not override `onSaveInstanceState`, so do not use
+     * @param savedState we do not override [onSaveInstanceState], so do not use
      */
     public override fun onCreate(savedState: Bundle?) {
         super.onCreate(savedState)
@@ -68,18 +68,17 @@ class TechFilter : AppCompatActivity() {
 
     /**
      * This is called for activities that set launchMode to "singleTop" in their package, or if a
-     * client used the [Intent.FLAG_ACTIVITY_SINGLE_TOP] flag when calling [.startActivity].
-     * In either case, when the activity is re-launched while at the top of the activity stack instead
-     * of a new instance of the activity being started, onNewIntent() will be called on the existing
-     * instance with the Intent that was used to re-launch it.
+     * client used the [Intent.FLAG_ACTIVITY_SINGLE_TOP] flag when calling [startActivity]. In
+     * either case, when the activity is re-launched while at the top of the activity stack instead
+     * of a new instance of the activity being started, [onNewIntent] will be called on the existing
+     * instance with the [Intent] that was used to re-launch it.
      *
-     *
-     * We simply set the text of `mText` to the string "Discovered tag" with the string value
-     * of `mCount` concatenated to it (we then post increment `mCount` here), with the
-     * string "with intent:" concatenated to that, and the string value of `intent` concatenated
+     * We simply set the text of [mText] to the string "Discovered tag" with the string value
+     * of [mCount] concatenated to it (we then post increment [mCount] here), with the string
+     * "with intent:" concatenated to that, and the string value of `intent` concatenated
      * to the end.
      *
-     * @param intent The new intent that was started for the activity.
+     * @param intent The new [Intent] that was started for the activity.
      */
     public override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
