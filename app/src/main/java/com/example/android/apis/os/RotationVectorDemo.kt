@@ -111,32 +111,33 @@ class RotationVectorDemo : AppCompatActivity() {
     }
 
     /**
-     * The renderer for `GLSurfaceView mGLSurfaceView`, it draws a `Cube` after modifying
-     * the rotation matrix `mRotationMatrix` based on the TYPE_ROTATION_VECTOR sensor readings.
-     * Our `onDrawFrame` method then multiplies the GL_MODELVIEW (model view) matrix by
-     * `mRotationMatrix` before telling `Cube mCube` to draw itself.
+     * The renderer for [GLSurfaceView] field [mGLSurfaceView], it draws a [Cube] after modifying
+     * the rotation matrix field [mRotationMatrix] based on the TYPE_ROTATION_VECTOR sensor readings.
+     * Our [onDrawFrame] method then multiplies the GL_MODELVIEW (model view) matrix by
+     * [mRotationMatrix] before telling [Cube] field [mCube] to draw itself.
      */
     internal inner class MyRenderer : GLSurfaceView.Renderer, SensorEventListener {
         /**
-         * The `Cube` instance which we rotate.
+         * The [Cube] instance which we rotate.
          */
         private val mCube: Cube
 
         /**
          * The default sensor for TYPE_ROTATION_VECTOR (rotation vector sensor type)
          */
-        private val mRotationVectorSensor: Sensor = mSensorManager!!.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+        private val mRotationVectorSensor: Sensor
+                = mSensorManager!!.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
 
         /**
-         * Rotation vector that we multiply the GL_MODELVIEW matrix by before telling our `Cube mCube`
-         * to draw itself. It is set in our `onSensorChanged` override based on the rotation vector
-         * passed it in its `SensorEvent event` parameter.
+         * Rotation vector that we multiply the GL_MODELVIEW matrix by before telling our [Cube] field
+         * [mCube] to draw itself. It is set in our [onSensorChanged] override based on the rotation
+         * vector passed it in its [SensorEvent] parameter `event`.
          */
         private val mRotationMatrix = FloatArray(16)
 
         /**
-         * Enables `Sensor mRotationVectorSensor` asking for 10 millisecond updates, and registers
-         * "this" as the listener for the sensor.
+         * Enables [Sensor] field [mRotationVectorSensor] asking for 10 millisecond updates, and
+         * registers "this" as the listener for the sensor.
          */
         fun start() {
             // enable our sensor when the activity is resumed, ask for
@@ -153,10 +154,10 @@ class RotationVectorDemo : AppCompatActivity() {
         }
 
         /**
-         * Called when sensor values have changed. If the sensor that generated the `event` is
-         * of type TYPE_ROTATION_VECTOR, we call the `getRotationMatrixFromVector` method of
-         * `SensorManager` to convert the rotation vector in the `values` field of
-         * `event` to a rotation matrix in `mRotationMatrix`.
+         * Called when sensor values have changed. If the sensor that generated the [event] is
+         * of type TYPE_ROTATION_VECTOR, we call the [SensorManager.getRotationMatrixFromVector]
+         * method of to convert the rotation vector in the `values` field of [event] to a rotation
+         * matrix in the rotation matrix field [mRotationMatrix].
          *
          * @param event the [SensorEvent][android.hardware.SensorEvent].
          */
@@ -174,8 +175,8 @@ class RotationVectorDemo : AppCompatActivity() {
         /**
          * Called to draw the current frame. First we clear the screen, then we set the current matrix
          * to the GL_MODELVIEW matrix, load it with the identity matrix, translate it to (0,0,-3), and
-         * multiply it by `mRotationMatrix`. We then enable the client side capability GL_VERTEX_ARRAY.
-         * and GL_COLOR_ARRAY and tell `Cube mCube` to draw itself.
+         * multiply it by the rotation matrix field [mRotationMatrix]. We then enable the client side
+         * capability GL_VERTEX_ARRAY. and GL_COLOR_ARRAY and tell [Cube] field [mCube] to draw itself.
          *
          * @param gl the GL interface.
          */
@@ -197,14 +198,14 @@ class RotationVectorDemo : AppCompatActivity() {
 
         /**
          * Called when the surface changed size. First we set our view port to have the lower left
-         * corner at (0,0), and a width of `int width` and a height of `int height`. Then
-         * we calculate th aspect ratio `float ratio` to be `width/height`. We set the
-         * current matrix mode to GL_PROJECTION (The projection matrix defines the properties of the
-         * camera that views the objects in the world coordinate frame. Here you typically set the
-         * zoom factor, aspect ratio and the near and far clipping planes). We load the matrix with
-         * the identity matrix, and then set the left clipping plane to `-ratio` the right
-         * clipping plane to `ratio`, the bottom clipping plane to -1, the top clipping plane
-         * to 1, the near clipping plane to 1, and the far clipping plane to 10.
+         * corner at (0,0), and a width of [Int] parameter [width] and a height of [Int] parameter
+         * [height]. Then we calculate the aspect [Float] ratio `val ratio` to be `width/height`.
+         * We set the current matrix mode to GL_PROJECTION (The projection matrix defines the
+         * properties of the camera that views the objects in the world coordinate frame. Here you
+         * typically set the zoom factor, aspect ratio and the near and far clipping planes). We
+         * load the matrix with the identity matrix, and then set the left clipping plane to `-ratio`
+         * the right clipping plane to `ratio`, the bottom clipping plane to -1, the top clipping
+         * plane to 1, the near clipping plane to 1, and the far clipping plane to 10.
          *
          * @param gl     the GL interface.
          * @param width  new width of the surface.
@@ -257,27 +258,27 @@ class RotationVectorDemo : AppCompatActivity() {
             /**
              * Index buffer for a cube, loaded in the constructor from an array, passed to the openGL
              * system by the method `glDrawElements` to draw a series of GL_TRIANGLES primitives
-             * using the index buffer to specify the coordinates of each point addressed by the indices,
-             * and color buffer to specify the color.
+             * using the index buffer to specify the coordinates of each point addressed by the
+             * indices, and color buffer to specify the color.
              */
             private val mIndexBuffer: ByteBuffer
 
             /**
-             * Called by `MyRenderer.onDrawFrame` to draw our `Cube`. First we enable the
-             * server side capability GL_CULL_FACE (culls polygons based on their winding in window
+             * Called by [MyRenderer.onDrawFrame] to draw our [Cube]. First we enable the server
+             * side capability GL_CULL_FACE (culls polygons based on their winding in window
              * coordinates). We set the orientation of front-facing polygons to GL_CW (clockwise),
              * and set the shade model to GL_SMOOTH (causes the computed colors of vertices to be
              * interpolated as the primitive is rasterized, typically assigning different colors to
              * each resulting pixel fragment). Next we specify the location and data format of the
-             * array of vertex coordinates to use when rendering to be `FloatBuffer mVertexBuffer`,
-             * with a size of 3, a data type of GL_FLOAT, and a stride of 0. We specify the location
-             * and data format of an array of color components to use when rendering to be our field
-             * `FloatBuffer mColorBuffer`, with a size of 4, a data type of GL_FLOAT, and a
-             * stride of 0.
-             *
+             * array of vertex coordinates to use when rendering to be [FloatBuffer] field
+             * [mVertexBuffer], with a size of 3, a data type of GL_FLOAT, and a stride of 0. We
+             * specify the location and data format of an array of color components to use when
+             * rendering to be our [FloatBuffer] field [mColorBuffer], with a size of 4, a data type
+             * of GL_FLOAT, and a stride of 0.
              *
              * Finally we call `glDrawElements` to draw 36 GL_TRIANGLES using the GL_UNSIGNED_BYTE
-             * data in `ByteBuffer mIndexBuffer` as the indices into the vertex and color buffers.
+             * data in [ByteBuffer] field [mIndexBuffer] as the indices into the vertex and color
+             * buffers.
              *
              * @param gl the GL interface.
              */
@@ -291,27 +292,41 @@ class RotationVectorDemo : AppCompatActivity() {
             }
 
             /**
-             * Our constructor. We allocate a new direct byte buffer for `ByteBuffer vbb` large
-             * enough to hold our constant array `vertices[]`, set its byte order to the native
-             * order for our device, and create a view of it as a float buffer in order to initialize
-             * our field `FloatBuffer mVertexBuffer`. We then transfer the entire content of
-             * `vertices[]` into `mVertexBuffer`, and position it to its beginning.
+             * The init block of our constructor. We allocate a new direct byte buffer for `ByteBuffer`
+             * variable `val vbb` large enough to hold our constant array `vertices[]`, set its byte
+             * order to the native order for our device, and create a view of it as a float buffer in
+             * order to initialize our `FloatBuffer` field `mVertexBuffer`. We then transfer the
+             * entire content of `vertices` into `mVertexBuffer`, and position it to its beginning.
              *
+             * We allocate a new direct byte buffer for `ByteBuffer` variable `val cbb` large enough
+             * to hold our constant array `colors`, set its byte order to the native order for our
+             * device, and create a view of it as a float buffer in order to initialize `FloatBuffer`
+             * field `mColorBuffer`. We then transfer the entire content of `colors` into `mColorBuffer`,
+             * and position it to its beginning.
              *
-             * We allocate a new direct byte buffer for `ByteBuffer cbb` large enough to hold
-             * our constant array `colors[]`, set its byte order to the native order for our
-             * device, and create a view of it as a float buffer in order to initialize our field
-             * `FloatBuffer mColorBuffer`. We then transfer the entire content of
-             * `colors[]` into `mColorBuffer`, and position it to its beginning.
-             *
-             *
-             * Finally We allocate a new direct byte buffer for `ByteBuffer mIndexBuffer` large
-             * enough to hold our constant array `indices[]`, and transfer the entire content of
-             * `indices[]` into `mIndexBuffer`, and position it to its beginning.
+             * Finally We allocate a new direct byte buffer for `ByteBuffer` field `mIndexBuffer`
+             * large enough to hold our constant array `val indices`, and transfer the entire content
+             * of `indices` into `mIndexBuffer`, and position it to its beginning.
              */
             init {
-                val vertices = floatArrayOf(-1f, -1f, -1f, 1f, -1f, -1f, 1f, 1f, -1f, -1f, 1f, -1f, -1f, -1f, 1f, 1f, -1f, 1f, 1f, 1f, 1f, -1f, 1f, 1f)
-                val colors = floatArrayOf(0f, 0f, 0f, 1f, 1f, 0f, 0f, 1f, 1f, 1f, 0f, 1f, 0f, 1f, 0f, 1f, 0f, 0f, 1f, 1f, 1f, 0f, 1f, 1f, 1f, 1f, 1f, 1f, 0f, 1f, 1f, 1f)
+                val vertices = floatArrayOf(
+                        -1f, -1f, -1f, 1f,
+                        -1f, -1f, 1f, 1f,
+                        -1f, -1f, 1f, -1f,
+                        -1f, -1f, 1f, 1f,
+                        -1f, 1f, 1f, 1f,
+                        1f, -1f, 1f, 1f
+                )
+                val colors = floatArrayOf(
+                        0f, 0f, 0f, 1f,
+                        1f, 0f, 0f, 1f,
+                        1f, 1f, 0f, 1f,
+                        0f, 1f, 0f, 1f,
+                        0f, 0f, 1f, 1f,
+                        1f, 0f, 1f, 1f,
+                        1f, 1f, 1f, 1f,
+                        0f, 1f, 1f, 1f
+                )
                 val indices = byteArrayOf(
                         0, 4, 5, 0, 5, 1,
                         1, 5, 6, 1, 6, 2,
@@ -339,15 +354,14 @@ class RotationVectorDemo : AppCompatActivity() {
         /**
          * Called when the accuracy of the registered sensor has changed. We ignore it.
          *
-         * @param sensor   the `Sensor` whose accuracy has changed
+         * @param sensor   the [Sensor] whose accuracy has changed
          * @param accuracy The new accuracy of this sensor
          */
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
 
         /**
-         * Our constructor. First we initialize `Sensor mRotationVectorSensor` with the default
-         * TYPE_ROTATION_VECTOR sensor, then we create a new instance for `Cube mCube`, and
-         * initialize `mRotationMatrix` to the identity matrix.
+         * The init block of our constructor. First we create a new instance for `Cube` field `mCube`,
+         * and then we initialize `mRotationMatrix` to the identity matrix.
          */
         init {
             // find the rotation-vector sensor
