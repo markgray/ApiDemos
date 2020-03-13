@@ -17,7 +17,6 @@
 package com.example.android.apis.os;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -26,6 +25,8 @@ import android.hardware.TriggerEventListener;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -45,7 +46,7 @@ import com.example.android.apis.R;
  * src/main/res/layout/trigger_sensors.xml
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-public class TriggerSensors extends Activity {
+public class TriggerSensors extends AppCompatActivity {
     /**
      * A {@code SensorManager} we use for accessing sensors.
      */
@@ -88,7 +89,7 @@ public class TriggerSensors extends Activity {
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         //noinspection ConstantConditions
         mSigMotion = mSensorManager.getDefaultSensor(Sensor.TYPE_SIGNIFICANT_MOTION);
-        mTextView = (TextView) findViewById(R.id.text);
+        mTextView = findViewById(R.id.text);
         mListener = new TriggerListener(this, mTextView);
         if (mSigMotion == null) {
             mTextView.append(getString(R.string.no_sig_motion) + "\n");
