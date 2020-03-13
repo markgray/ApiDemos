@@ -1237,7 +1237,8 @@
         </activity>
         <activity
             android:name=".preference.PreferencesFromXml"
-            android:label="@string/preferences_from_xml">
+            android:label="@string/preferences_from_xml"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

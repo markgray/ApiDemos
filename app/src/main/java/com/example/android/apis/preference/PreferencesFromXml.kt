@@ -13,34 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
 
-package com.example.android.apis.preference;
+package com.example.android.apis.preference
 
-import com.example.android.apis.R;
-
-import android.annotation.SuppressLint;
-import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import android.annotation.SuppressLint
+import android.os.Bundle
+import android.preference.PreferenceActivity
+import com.example.android.apis.R
 
 /**
  * Uses deprecated method PreferenceActivity.addPreferencesFromResource to load preferences.
  */
 @SuppressLint("ExportedPreferenceActivity")
-@SuppressWarnings("deprecation")
-public class PreferencesFromXml extends PreferenceActivity {
+class PreferencesFromXml : PreferenceActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * {@code onCreate}, then we call the method {@code addPreferencesFromResource} to load the
+     * `onCreate`, then we call the method `addPreferencesFromResource` to load the
      * preferences from the XML resource file R.xml.preferences.
      *
-     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         // Load the preferences from an XML resource
-        addPreferencesFromResource(R.xml.preferences);
+        addPreferencesFromResource(R.xml.preferences)
     }
-
 }
