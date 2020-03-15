@@ -33,27 +33,27 @@ import com.example.android.apis.R
 @SuppressLint("ExportedPreferenceActivity")
 class AdvancedPreferences : PreferenceActivity(), OnSharedPreferenceChangeListener {
     /**
-     * The "Haunted preference" `CheckBoxPreference` in our preferences resource file
-     * R.xml.advanced_preferences (`Runnable mForceCheckBoxRunnable` switches it on and off
+     * The "Haunted preference" [CheckBoxPreference] in our preferences resource file
+     * R.xml.advanced_preferences ([Runnable] field [mForceCheckBoxRunnable] switches it on and off
      * once a second).
      */
     private var mCheckBoxPreference: CheckBoxPreference? = null
 
     /**
-     * `Handler` for our `Runnable mForceCheckBoxRunnable` (used by its `run` override
-     * to schedule itself to run once a second).
+     * [Handler] for our [Runnable] field [mForceCheckBoxRunnable] (used by its `run` override to
+     * schedule itself to run once a second).
      */
     private val mHandler = Handler()
 
     /**
-     * This is a simple example of controlling a preference from code. It toggles the preference
-     * `CheckBoxPreference mCheckBoxPreference` on and off once a second.
+     * This is a simple example of controlling a preference from code. It toggles the preference in
+     * [CheckBoxPreference] field [mCheckBoxPreference] on and off once a second.
      */
     private val mForceCheckBoxRunnable: Runnable = object : Runnable {
         /**
-         * When called we make sure that `CheckBoxPreference mCheckBoxPreference` is not null
-         * before toggling it. Then we use `Handler mHandler` to schedule us to run again after
-         * a 1000 millisecond delay.
+         * When called we make sure that [CheckBoxPreference] field [mCheckBoxPreference] is not
+         * null before toggling it. Then we use [Handler] field [mHandler] to schedule us to run
+         * again after a 1000 millisecond delay.
          */
         override fun run() {
             if (mCheckBoxPreference != null) {
@@ -66,14 +66,14 @@ class AdvancedPreferences : PreferenceActivity(), OnSharedPreferenceChangeListen
     }
 
     /**
-     * Called when the `PreferenceActivity` is starting. First we call through to our super's
+     * Called when the [PreferenceActivity] is starting. First we call through to our super's
      * implementation of `onCreate`. Then we inflate our preference screen from the XML resource
-     * R.xml.advanced_preferences and add its preference hierarchy to the current preference hierarchy.
-     * Finally we locate the `CheckBoxPreference` with key KEY_ADVANCED_CHECKBOX_PREFERENCE in
-     * the root of the preference hierarchy that this activity is showing in order to initialize our
-     * field `CheckBoxPreference mCheckBoxPreference` with it.
+     * R.xml.advanced_preferences and add its preference hierarchy to the current preference
+     * hierarchy. Finally we locate the [CheckBoxPreference] with key [KEY_ADVANCED_CHECKBOX_PREFERENCE]
+     * in the root of the preference hierarchy that this activity is showing in order to initialize
+     * our [CheckBoxPreference] field [mCheckBoxPreference] with it.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,11 +87,11 @@ class AdvancedPreferences : PreferenceActivity(), OnSharedPreferenceChangeListen
     }
 
     /**
-     * Called after `onRestoreInstanceState`, `onRestart`, or `onPause`, for our
-     * activity to start interacting with the user. First we call through to our super's implementation
-     * of `onResume`, then we start our `Runnable mForceCheckBoxRunnable` running. Finally
-     * we register this as a `OnSharedPreferenceChangeListener` for the `SharedPreference`
-     * used by the root of the preference hierarchy that this activity is showing.
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for our activity to start
+     * interacting with the user. First we call through to our super's implementation of `onResume`,
+     * then we start our [Runnable] field [mForceCheckBoxRunnable] running. Finally we register this
+     * as a [OnSharedPreferenceChangeListener] for the [SharedPreferences] used by the root of the
+     * preference hierarchy that this activity is showing.
      */
     override fun onResume() {
         super.onResume()
@@ -106,8 +106,8 @@ class AdvancedPreferences : PreferenceActivity(), OnSharedPreferenceChangeListen
     /**
      * Called as part of the activity lifecycle when an activity is going into the background, but
      * has not (yet) been killed. First we call through to our super's implementation of `onPause`.
-     * Then we unregister "this" as an `OnSharedPreferenceChangeListener`, and remove all callbacks
-     * from `Handler mHandler` for `Runnable mForceCheckBoxRunnable`.
+     * Then we unregister "this" as an [OnSharedPreferenceChangeListener], and remove all callbacks
+     * from [Handler] field [mHandler] for [Runnable] field [mForceCheckBoxRunnable].
      */
     override fun onPause() {
         super.onPause()
@@ -118,11 +118,12 @@ class AdvancedPreferences : PreferenceActivity(), OnSharedPreferenceChangeListen
     }
 
     /**
-     * Called when a shared preference is changed, added, or removed. If the key is KEY_MY_PREFERENCE,
-     * we create and show a toast with the message "Thanks! You increased my count to " concatenated
-     * with the int value stored under `String key` in `SharedPreferences sharedPreferences`.
+     * Called when a shared preference is changed, added, or removed. If the key is [KEY_MY_PREFERENCE],
+     * we create and show a toast with the message "Thanks! You increased my count to" concatenated
+     * with the [Int] value stored under our [String] parameter [key] in [SharedPreferences] parameter
+     * [sharedPreferences].
      *
-     * @param sharedPreferences The `SharedPreferences` that received the change.
+     * @param sharedPreferences The [SharedPreferences] that received the change.
      * @param key The key of the preference that was changed, added, or removed.
      */
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
@@ -141,7 +142,7 @@ class AdvancedPreferences : PreferenceActivity(), OnSharedPreferenceChangeListen
         const val KEY_MY_PREFERENCE = "my_preference"
 
         /**
-         * Key in our shared preferences for the `CheckBoxPreference mCheckBoxPreference`
+         * Key in our shared preferences for the `CheckBoxPreference` field `mCheckBoxPreference`
          */
         const val KEY_ADVANCED_CHECKBOX_PREFERENCE = "advanced_checkbox_preference"
     }
