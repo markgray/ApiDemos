@@ -30,7 +30,7 @@ import com.example.android.apis.R
 @SuppressLint("ExportedPreferenceActivity")
 class PreferenceDependencies : PreferenceActivity() {
     /**
-     * Called when the `PreferenceActivity` is starting. We just call through to our super's
+     * Called when the [PreferenceActivity] is starting. We just call through to our super's
      * implementation of `onCreate`, then we inflate the XML resource R.xml.preference_dependencies
      * and add its preference hierarchy to the current preference hierarchy. The entire example occurs
      * in the xml, see the android:dependency="wifi" attribute ("wifi" is the key of the CheckBoxPreference)
