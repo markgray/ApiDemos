@@ -42,8 +42,8 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
     /**
      * Binds the created View to the data for this Preference. First we call through to our super's
      * implementation of `onBindView`, then we locate the view with ID R.id.mypreference_widget
-     * in our parameter `View view` to set `TextView myTextView` and if that is not null
-     * we set its text to the string value of our field `int mClickCounter`.
+     * in our [View] parameter [view] to set [TextView] `val myTextView` and if that is not null
+     * we set its text to the string value of our [Int] field [mClickCounter].
      *
      * @param view The View that shows this Preference.
      */
@@ -58,13 +58,12 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
     }
 
     /**
-     * Processes a click on this preference. First we set `int newValue` to one more than our
-     * field `int mClickCounter`, then if calling the method `callChangeListener` with
-     * `newValue` returns false (the client rejects changing the preference to `newValue`)
-     * we return having done nothing. Otherwise we set our field `int mClickCounter` to
-     * `newValue`, call `persistInt` to save `mClickCounter` to the shared preference
-     * file, and call `Preference.notifyChanged` to notify the system that the preference value
-     * has changed so that the UI can be refreshed.
+     * Processes a click on this preference. First we set [Int] `val newValue` to one more than our
+     * [Int] field [mClickCounter], then if calling the method [callChangeListener] with `newValue`
+     * returns false (the client rejects changing the preference to `newValue`) we return having
+     * done nothing. Otherwise we set our [Int] field [mClickCounter] to `newValue`, call [persistInt]
+     * to save [mClickCounter] to the shared preference file, and call [Preference.notifyChanged] to
+     * notify the system that the preference value has changed so that the UI can be refreshed.
      */
     override fun onClick() {
         val newValue = mClickCounter + 1
@@ -87,9 +86,9 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
     }
 
     /**
-     * Called when our `Preference` is being inflated and the default value attribute needs to
-     * be read. We retrieve the integer value for the attribute at `index`, defaulting to 0,
-     * and return this value to the caller.
+     * Called when our [Preference] is being inflated and the default value attribute needs to
+     * be read. We retrieve the integer value for the attribute at [index], defaulting to 0, and
+     * return this value to the caller.
      *
      * @param a     The set of attributes.
      * @param index The index of the default value attribute.
@@ -102,17 +101,15 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
     }
 
     /**
-     * Implement this to set the initial value of the Preference. If our parameter `restoreValue`
-     * is true we set our field `int mClickCounter` to the persisted int stored in the shared
-     * preferences, defaulting to the current value of `mClickCounter`. If `restoreValue`
-     * is false we cast `defaultValue` to `Integer` to set `int value`, set
-     * `mClickCounter` to `value`, and call `persistInt` to save `value` to
-     * the shared preference file.
+     * Implement this to set the initial value of the [Preference]. If our parameter [restoreValue]
+     * is true we set our [Int] field [mClickCounter] to the persisted [Int] stored in the shared
+     * preferences, defaulting to the current value of [mClickCounter]. If [restoreValue] is false
+     * we cast [defaultValue] to [Int] to set `val value`, set [mClickCounter] to `value`, and call
+     * [persistInt] to save `value` to the shared preference file.
      *
-     * @param restoreValue True to restore the persisted value, false to use the given
-     * `defaultValue`
-     * @param defaultValue The default value for this Preference. Only use this if
-     * `restoreValue` is false.
+     * @param restoreValue True to restore the persisted value, false to use the given [defaultValue]
+     * @param defaultValue The default value for this Preference. Only use this if [restoreValue] is
+     * false.
      */
     override fun onSetInitialValue(restoreValue: Boolean, defaultValue: Any?) {
         if (restoreValue) {
@@ -128,15 +125,15 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
 
     /**
      * Hook allowing a Preference to generate a representation of its internal state that can later
-     * be used to create a new instance with that same state. First we set `Parcelable superState`
-     * to the value returned by our super's implementation of `onSaveInstanceState`. Then if the
-     * method `isPersistent` returns true (this Preference is persistent) we just return
-     * `superState` to the caller. Otherwise we create `SavedState myState` from the contents
-     * of `superState`, set its `clickCounter` field to `mClickCounter`, and return
-     * it to the caller. (`SavedState` is a subclass of `BaseSavedState` and is defined
-     * in this file later on).
+     * be used to create a new instance with that same state. First we set [Parcelable] variable
+     * `val superState` to the value returned by our super's implementation of `onSaveInstanceState`.
+     * Then if the method [isPersistent] returns true (this [Preference] is persistent) we just return
+     * `superState` to the caller. Otherwise we create [SavedState] `val myState` from the contents
+     * of `superState`, set its `clickCounter` field to [mClickCounter], and return it to the caller.
+     * ([SavedState] is a subclass of [Preference.BaseSavedState] and is defined in this file later
+     * on).
      *
-     * @return A Parcelable object containing the current dynamic state of this Preference, or null
+     * @return A [Parcelable] object containing the current dynamic state of this Preference, or null
      * if there is nothing interesting to save.
      */
     override fun onSaveInstanceState(): Parcelable {
@@ -158,18 +155,17 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
     }
 
     /**
-     * Hook allowing a Preference to re-apply a representation of its internal state that had previously
-     * been generated by `onSaveInstanceState`. First we make sure that our parameter
-     * `Parcelable state` is an instance of `SavedState`, and if not we did not save our
-     * state in it, so we just call our super's implementation of `onRestoreInstanceState` and
-     * return. Otherwise we cast `state` to set `SavedState myState`, call our super's
-     * implementation of `onRestoreInstanceState` with the super state that saved in `myState`.
-     * We then set our field `mClickCounter` to the `clickCounter` field of `myState`,
-     * and call `Preference.notifyChanged` to notify the system that the preference value has
-     * changed so that the UI can be refreshed.
+     * Hook allowing a [Preference] to re-apply a representation of its internal state that had
+     * previously been generated by [onSaveInstanceState]. First we make sure that our [Parcelable]
+     * parameter [state] is an instance of [SavedState], and if not we did not save our state in it,
+     * so we just call our super's implementation of `onRestoreInstanceState` and return. Otherwise
+     * we cast [state] to set [SavedState] `val myState`, call our super's implementation of
+     * `onRestoreInstanceState` with the super state that is saved in `myState`. We then set our
+     * [Int] field [mClickCounter] to the `clickCounter` field of `myState`, and call the method
+     * [Preference.notifyChanged] to notify the system that the preference value has changed so that
+     * the UI can be refreshed.
      *
-     * @param state The saved state that had previously been returned by
-     * `onSaveInstanceState`.
+     * @param state The saved state that had previously been returned by [onSaveInstanceState].
      */
     override fun onRestoreInstanceState(state: Parcelable) {
         if (state.javaClass != SavedState::class.java) {
@@ -186,25 +182,21 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
     }
 
     /**
-     * SavedState, a subclass of `BaseSavedState`, will store the state of `MyPreference`,
-     * a subclass of `Preference`.
-     *
-     *
-     * It is important to always call through to super methods.
+     * SavedState, a subclass of [Preference.BaseSavedState], will store the state of [MyPreference],
+     * which is a subclass of [Preference]. It is important to always call through to super methods.
      */
     private class SavedState : BaseSavedState {
         /**
-         * Field that `MyPreference` stores its `mClickCounter` field in.
+         * Field that [MyPreference] stores its `mClickCounter` field in.
          */
         var clickCounter = 0
 
         /**
-         * Our constructor. First we call our super's constructor, then we read an integer value
-         * from `Parcel source` from the current `dataPosition()` into our field
-         * `int clickCounter`.
+         * Our constructor. First we call our super's constructor, then we read an [Int] value from
+         * [Parcel] parameter [source] from the current `dataPosition()` into our [Int] field
+         * [clickCounter].
          *
-         * @param source `Parcelable` returned by the `Preference` implementation of
-         * `onSaveInstanceState`
+         * @param source [Parcelable] returned by the [Preference] implementation of [onSaveInstanceState]
          */
         constructor(source: Parcel) : super(source) {
 
@@ -214,10 +206,11 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
 
         /**
          * Flatten this object in to a Parcel. First we call our super's implementation of `writeToParcel`,
-         * then we call the method `dest.writeInt` to write the value of our field `int clickCounter`
-         * into the parcel at the current `dest.dataPosition()`, growing its `dataCapacity()` if needed.
+         * then we call the [Parcel.writeInt] method of [Parcel] parameter [dest] to write the value of
+         * our [Int] field [clickCounter] into the parcel at the current `dest.dataPosition()`, growing
+         * its `dataCapacity()` if needed.
          *
-         * @param dest  The Parcel in which the object should be written.
+         * @param dest  The [Parcel] in which the object should be written.
          * @param flags Additional flags about how the object should be written.
          */
         override fun writeToParcel(dest: Parcel, flags: Int) {
@@ -228,7 +221,7 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
         }
 
         /**
-         * Constructor called by derived classes when creating their SavedState objects. We just call
+         * Constructor called by derived classes when creating their [SavedState] objects. We just call
          * our super's constructor.
          *
          * @param superState The state of the superclass of this view
@@ -237,17 +230,18 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
 
         companion object {
             /**
-             * Interface that must be implemented and provided as a public CREATOR field that generates
-             * instances of our Parcelable class from a Parcel.
+             * Interface that must be implemented and provided as a public CREATOR field that
+             * generates instances of our Parcelable class from a Parcel.
              */
             @Suppress("unused")
             val CREATOR: Creator<SavedState> = object : Creator<SavedState> {
                 /**
-                 * Create a new instance of the Parcelable class, instantiating it from the given Parcel
-                 * whose data had previously been written by `Parcelable.writeToParcel()`. We simply
-                 * return a new instance of `SavedState` created from our parameter `Parcel in`
+                 * Create a new instance of the Parcelable class, instantiating it from the given
+                 * [Parcel] whose data had previously been written by [Parcelable.writeToParcel].
+                 * We simply return a new instance of [SavedState] created from our [Parcel]
+                 * parameter `in`
                  *
-                 * @param in The Parcel to read the object's data from.
+                 * @param in The [Parcel] to read the object's data from.
                  * @return Returns a new instance of the Parcelable class.
                  */
                 override fun createFromParcel(`in`: Parcel): SavedState? {
@@ -255,12 +249,12 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
                 }
 
                 /**
-                 * Create a new array of the Parcelable class. We simply return a new array of
-                 * `SavedState[]` of size `int size`.
+                 * Create a new array of the [Parcelable] class. We simply return a new array of
+                 * all null [SavedState] objects of size [size].
                  *
                  * @param size Size of the array.
-                 * @return Returns an array of the Parcelable class, with every entry
-                 * initialized to null.
+                 * @return Returns an array of the [Parcelable] class, with every entry initialized
+                 * to null.
                  */
                 override fun newArray(size: Int): Array<SavedState?> {
                     return arrayOfNulls(size)
@@ -270,14 +264,9 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
     }
 
     /**
-     * This is the constructor called by the inflater. First we call our super's constructor, then
-     * we call the method `setWidgetLayoutResource` to set the layout for the controllable widget
-     * portion of our `Preference` to our layout file R.layout.preference_widget_mypreference
-     * (which contains only a `TextView`).
-     *
-     *  context The Context this is associated with, through which it can access the current
-     * theme, resources, `SharedPreferences`, etc.
-     *  attrs   The attributes of the XML tag that is inflating the preference.
+     * This is the init block of our constructor. We just call the method `setWidgetLayoutResource`
+     * method to set the layout for the controllable widget portion of our `Preference` to our layout
+     * file R.layout.preference_widget_mypreference (which contains only a `TextView`).
      */
     init {
         widgetLayoutResource = R.layout.preference_widget_mypreference
