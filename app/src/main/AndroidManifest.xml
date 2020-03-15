@@ -1254,7 +1254,8 @@
         </activity>
         <activity
             android:name=".preference.AdvancedPreferences"
-            android:label="@string/advanced_preferences">
+            android:label="@string/advanced_preferences"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
