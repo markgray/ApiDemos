@@ -21,40 +21,34 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.Preference
 import android.preference.PreferenceActivity
 import android.preference.PreferenceManager
 import com.example.android.apis.R
 
 /**
- * This activity is an example of a simple settings screen that has default
- * values.
- *
- *
- * In order for the default values to be populated into the
- * [SharedPreferences] (from the preferences XML file), the client must
- * call
- * [PreferenceManager.setDefaultValues].
- *
- *
- * This should be called early, typically when the application is first created.
- * An easy way to do this is to have a common function for retrieving the
- * SharedPreferences that takes care of calling it.
+ * This activity is an example of a simple settings screen that has default values. In order for the
+ * default values to be populated into the [SharedPreferences] (from the preferences XML file), the
+ * client must call [PreferenceManager.setDefaultValues]. This should be called early, typically
+ * when the application is first created. An easy way to do this is to have a common function for
+ * retrieving the [SharedPreferences] that takes care of calling it.
  */
 @SuppressLint("ExportedPreferenceActivity")
 class DefaultValues : PreferenceActivity() {
     /**
-     * Called when the `PreferenceActivity` is starting. First we call through to our super's
-     * implementation of `onCreate`. Then we call our method `getPrefs` to set the default
-     * values for the shared preferences file PREFS_NAME ("defaults"), with file creation mode MODE_PRIVATE,
-     * the preference XML file R.xml.default_values, and specifying that the defaults not be read again.
+     * Called when the [PreferenceActivity] is starting. First we call through to our super's
+     * implementation of `onCreate`. Then we call our method [getPrefs] to set the default values for
+     * the shared preferences file [PREFS_NAME] ("defaults"), with file creation mode MODE_PRIVATE,
+     * the preference XML file R.xml.default_values, and specifying that the defaults not be read
+     * again.
      *
-     * Next we use the `PreferenceManager` used by this activity to set the name of the
-     * SharedPreferences file that preferences we manage will use to PREFS_NAME ("defaults").
-     * Finally we inflate the XML resource R.xml.default_values and add its preference hierarchy to
-     * the current preference hierarchy. The key to the whole example lies in the use of the attribute
-     * android:defaultValue for each of the *Preference elements in the R.xml.default_values file.
+     * Next we use the [PreferenceManager] used by this activity to set the name of the [SharedPreferences]
+     * file that preferences we manage will use to [PREFS_NAME] ("defaults"). Finally we inflate the
+     * XML resource R.xml.default_values and add its preference hierarchy to the current preference
+     * hierarchy. The key to the whole example lies in the use of the attribute android:defaultValue
+     * for each of the [Preference] elements in the R.xml.default_values file.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,12 +66,12 @@ class DefaultValues : PreferenceActivity() {
         const val PREFS_NAME = "defaults"
 
         /**
-         * Called to set the default values for the shared preferences file PREFS_NAME ("defaults"), with
-         * file creation mode MODE_PRIVATE, the preference XML file R.xml.default_values, and specifying
-         * that the defaults not be read again.
+         * Called to set the default values for the shared preferences file [PREFS_NAME] ("defaults"),
+         * with file creation mode MODE_PRIVATE, the preference XML file R.xml.default_values, and
+         * specifying that the defaults not be read again.
          *
-         * @param context `Context` to use to access resources
-         * @return our `SharedPreferences` read from PREFS_NAME ("defaults") Unused by our caller
+         * @param context [Context] to use to access resources
+         * @return our [SharedPreferences] read from [PREFS_NAME] ("defaults") (Unused by our caller)
          */
         fun getPrefs(context: Context): SharedPreferences {
             PreferenceManager.setDefaultValues(context, PREFS_NAME, Context.MODE_PRIVATE, R.xml.default_values, false)
