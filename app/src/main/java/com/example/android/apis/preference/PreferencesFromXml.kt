@@ -29,10 +29,10 @@ import com.example.android.apis.R
 class PreferencesFromXml : PreferenceActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we call the method `addPreferencesFromResource` to load the
-     * preferences from the XML resource file R.xml.preferences.
+     * `onCreate`, then we call the method [PreferenceActivity.addPreferencesFromResource] to load
+     * the preferences from the XML resource file R.xml.preferences.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
