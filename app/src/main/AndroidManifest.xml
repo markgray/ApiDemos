@@ -1272,7 +1272,8 @@
         </activity>
         <activity
             android:name=".preference.PreferenceDependencies"
-            android:label="@string/preference_dependencies">
+            android:label="@string/preference_dependencies"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
