@@ -1857,7 +1857,7 @@ Preference
 
     Preference/7. Fragment                 v11
         .preference.FragmentPreferences
-            Shows how to use a PreferenceFragment instead of the deprecated PreferenceActivity.
+            Shows how to use a PreferenceFragmentCompat instead of the deprecated PreferenceActivity.
 
     Preference/8. Headers                  v11 -- need to override isValidFragment or crash
         .preference.PreferenceWithHeaders

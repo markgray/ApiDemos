@@ -23,19 +23,18 @@ import androidx.preference.PreferenceFragmentCompat
 import com.example.android.apis.R
 
 /**
- * Demonstration of PreferenceFragment, showing a single fragment in an
- * activity.
+ * Demonstration of [PreferenceFragmentCompat], showing a single fragment in an activity.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentPreferences : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`. Then we fetch the FragmentManager for interacting with fragments associated
+     * `onCreate`. Then we fetch the `FragmentManager` for interacting with fragments associated
      * with this activity and use it to begin a fragment transaction which will replace any fragments
-     * occupying the root element of our view with a new instance of `PrefsFragment`, and then
+     * occupying the root element of our view with a new instance of [PrefsFragment], and then
      * we schedule a commit of this transaction.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,25 +46,23 @@ class FragmentPreferences : AppCompatActivity() {
     }
 
     /**
-     * Our `PreferenceFragment`, loads its preferences from an XML resource
+     * Our [PreferenceFragmentCompat], loads its preferences from an XML resource
      */
     class PrefsFragment : PreferenceFragmentCompat() {
         /**
-         * Called to do the initial creation of our fragment. This is called after `onAttach(Activity)`
-         * and before `onCreateView(LayoutInflater, ViewGroup, Bundle)`.
-         *
+         * Called to do the initial creation of our fragment. This is called after [onAttach] and
+         * before [onCreateView].
          *
          * Note that this can be called while the fragment's activity is still in the process of
          * being created.  As such, you can not rely on things like the activity's content view
          * hierarchy being initialized at this point.  If you want to do work once the activity itself
-         * is created, see `onActivityCreated(Bundle)`.
+         * is created, see [onActivityCreated].
          *
-         *
-         * First we call through to our super's implementation of `onCreate`. Then we Inflate
-         * the XML resource R.xml.preferences and add the preference hierarchy to the current preference
+         * First we call through to our super's implementation of `onCreate`. Then we Inflate the
+         * XML resource R.xml.preferences and add the preference hierarchy to the current preference
          * hierarchy.
          *
-         * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
+         * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
          */
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
@@ -75,9 +72,9 @@ class FragmentPreferences : AppCompatActivity() {
         }
 
         /**
-         * Called during [.onCreate] to supply the preferences for this fragment.
-         * Subclasses are expected to call `setPreferenceScreen(PreferenceScreen)` either
-         * directly or via helper methods such as [.addPreferencesFromResource].
+         * Called during [onCreate] to supply the preferences for this fragment. Subclasses are
+         * expected to call `setPreferenceScreen(PreferenceScreen)` either directly or via helper
+         * methods such as [addPreferencesFromResource].
          *
          * @param savedInstanceState If the fragment is being re-created from a previous saved state,
          * this is the state.
