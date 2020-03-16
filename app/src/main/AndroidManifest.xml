@@ -1220,7 +1220,8 @@
         <activity
             android:name=".preference.FragmentPreferences"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="@string/fragment_preferences">
+            android:label="@string/fragment_preferences"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

@@ -16,20 +16,20 @@
 
 package com.example.android.apis.preference;
 
-import com.example.android.apis.R;
-
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceFragmentCompat;
+
+import com.example.android.apis.R;
 
 /**
  * Demonstration of PreferenceFragment, showing a single fragment in an
  * activity.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class FragmentPreferences extends Activity {
+public class FragmentPreferences extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}. Then we fetch the FragmentManager for interacting with fragments associated
@@ -44,7 +44,7 @@ public class FragmentPreferences extends Activity {
         super.onCreate(savedInstanceState);
 
         // Display the fragment as the main content.
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new PrefsFragment())
                 .commit();
     }
@@ -52,7 +52,7 @@ public class FragmentPreferences extends Activity {
     /**
      * Our {@code PreferenceFragment}, loads its preferences from an XML resource
      */
-    public static class PrefsFragment extends PreferenceFragment {
+    public static class PrefsFragment extends PreferenceFragmentCompat {
         /**
          * Called to do the initial creation of our fragment. This is called after {@code onAttach(Activity)}
          * and before {@code onCreateView(LayoutInflater, ViewGroup, Bundle)}.
@@ -74,6 +74,21 @@ public class FragmentPreferences extends Activity {
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
+        }
+
+        /**
+         * Called during {@link #onCreate(Bundle)} to supply the preferences for this fragment.
+         * Subclasses are expected to call {@code setPreferenceScreen(PreferenceScreen)} either
+         * directly or via helper methods such as {@link #addPreferencesFromResource(int)}.
+         *
+         * @param savedInstanceState If the fragment is being re-created from a previous saved state,
+         *                           this is the state.
+         * @param rootKey            If non-null, this preference fragment should be rooted at the
+         *                           {@code PreferenceScreen} with this key.
+         */
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+
         }
     }
 
