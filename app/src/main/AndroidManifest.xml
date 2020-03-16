@@ -1230,7 +1230,8 @@
         <activity
             android:name=".preference.PreferenceWithHeaders"
             android:enabled="@bool/atLeastHoneycomb"
-            android:label="@string/preference_with_headers">
+            android:label="@string/preference_with_headers"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

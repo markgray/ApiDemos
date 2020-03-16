@@ -1817,14 +1817,14 @@ Preference
     Preference/1. Preferences from XML     all
         .preference.PreferencesFromXml
             Uses deprecated method PreferenceActivity.addPreferencesFromResource to load 
-            preferences. TODO: use PreferenceFragment and PreferenceFragment.addPreferencesFromResource
+            preferences. TODO: use PreferenceFragmentCompat and PreferenceFragmentCompat.addPreferencesFromResource
 
     Preference/2. Launching preferences    all
         .preference.LaunchingPreferences
         .preference.AdvancedPreferences
         .preference.MyPreference
             Shows how to launch a separate PreferenceActivity activity to collect user
-            preference choices. TODO: Use PreferenceFragment instead.
+            preference choices. TODO: Use PreferenceFragmentCompat instead.
 
     Preference/3. Preference dependencies  all
         .preference.PreferenceDependencies
@@ -1842,18 +1842,18 @@ Preference
             This should be called early, typically when the application is first created. An easy way
             to do this is to have a common function for retrieving the SharedPreferences that takes
             care of calling it.
-            TODO: use PreferenceFragment instead.
+            TODO: use PreferenceFragmentCompat instead.
 
     Preference/5. Preferences from code    all -- v14+ or crash
         .preference.PreferencesFromCode
             Shows how to fill a PreferenceScreen using java code.
-            TODO: use PreferenceFragment instead.
+            TODO: use PreferenceFragmentCompat instead.
 
     Preference/6. Advanced preferences     all
         .preference.AdvancedPreferences
         .preference.MyPreference ?
             Show how to impliment a OnSharedPreferenceChangeListener.
-            TODO: use PreferenceFragment instead.
+            TODO: use PreferenceFragmentCompat instead.
 
     Preference/7. Fragment                 v11
         .preference.FragmentPreferences
@@ -1864,11 +1864,12 @@ Preference
             After override of isValidFragment {return true;} you have a top-level preference 
             panel with headers which when clicked launch the PreferenceFragment's listed
             in the xml/preference_headers.xml resource loaded using loadHeadersFromResource.
+            TODO: use PreferenceFragmentCompat instead
 
     Preference/9. Switch                   v14
         .preference.SwitchPreference
             Shows how to use android.preference.SwitchPreference.
-            TODO: use PreferenceFragment instead.
+            TODO: use PreferenceFragmentCompat instead.
 
 Security
     Security/KeyStore                      all -- v23+ or crash
