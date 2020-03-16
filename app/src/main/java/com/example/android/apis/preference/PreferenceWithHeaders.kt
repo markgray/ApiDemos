@@ -37,12 +37,12 @@ import com.example.android.apis.R
 @SuppressLint("SetTextI18n")
 class PreferenceWithHeaders : PreferenceActivity() {
     /**
-     * Called when the `PreferenceActivity` is starting. First we call through to our super's
-     * implementation of `onCreate`. If the method `PreferenceActivity.hasHeaders` returns
-     * true (we are currently showing the header list) we create `Button button`, set its text
-     * to "Some action", and set if as a footer that should be shown at the bottom of the header list.
+     * Called when the [PreferenceActivity] is starting. First we call through to our super's
+     * implementation of `onCreate`. If the method [PreferenceActivity.hasHeaders] returns true
+     * (we are currently showing the header list) we create [Button] `val button`, set its text to
+     * "Some action", and set if as a footer that should be shown at the bottom of the header list.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,9 +57,9 @@ class PreferenceWithHeaders : PreferenceActivity() {
 
     /**
      * Subclasses should override this method and verify that the given fragment is a valid type
-     * to be attached to this activity. The default implementation returns `true` for
-     * apps built for android:targetSdkVersion older than android.os.Build.VERSION_CODES.KITKAT.
-     * For later versions, it will throw an exception.
+     * to be attached to this activity. The default implementation returns `true` for apps built
+     * for android:targetSdkVersion older than android.os.Build.VERSION_CODES.KITKAT. For later
+     * versions, it will throw an exception.
      *
      * @param fragmentName the class name of the Fragment about to be attached to this activity.
      * @return true if the fragment class name is valid for this Activity and false otherwise.
@@ -74,9 +74,9 @@ class PreferenceWithHeaders : PreferenceActivity() {
      * Note that this function may not always be called; for example, if the activity has been asked
      * to display a particular fragment without the header list, there is no need to build the headers.
      *
-     *
-     * We simply call the function `loadHeadersFromResource` to Parse the XML file R.xml.preference_headers
-     * as a header description, adding each parsed Header into the `target` list.
+     * We simply call the function [loadHeadersFromResource] to Parse the XML file
+     * R.xml.preference_headers as a header description, adding each parsed Header into the
+     * [target] list of `Header` objects.
      *
      * @param target The list in which to place the headers.
      */
@@ -89,15 +89,13 @@ class PreferenceWithHeaders : PreferenceActivity() {
      */
     class Prefs1Fragment : PreferenceFragment() {
         /**
-         * Called to do initial creation of a fragment. This is called after `onAttach(Activity)`
-         * and before `#nCreateView(LayoutInflater, ViewGroup, Bundle)`.
-         *
+         * Called to do initial creation of a fragment. This is called after [onAttach] and before
+         * [onCreateView].
          *
          * Note that this can be called while the fragment's activity is still in the process of being
          * created. As such, you can not rely on things like the activity's content view hierarchy
          * being initialized at this point. If you want to do work once the activity itself is created,
-         * see `onActivityCreated(Bundle)`.
-         *
+         * see [onActivityCreated].
          *
          * First we call through to our super's implementation of `onCreate`. Then we load the
          * default values of our preferences from R.xml.advanced_preferences if we have not been run
@@ -105,8 +103,7 @@ class PreferenceWithHeaders : PreferenceActivity() {
          * preference hierarchy to the current preference hierarchy.
          *
          * @param savedInstanceState If the fragment is being re-created from a previous saved state,
-         * this is the state. We do not override `onSaveInstanceState`
-         * so do not use.
+         * this is the state. We do not override [onSaveInstanceState] so do not use.
          */
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
@@ -131,7 +128,7 @@ class PreferenceWithHeaders : PreferenceActivity() {
          * of `onCreate`. Then we inflate the XML resource R.xml.fragmented_preferences_inner and add
          * its preference hierarchy to the current preference hierarchy.
          *
-         * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
+         * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
          */
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
@@ -153,7 +150,7 @@ class PreferenceWithHeaders : PreferenceActivity() {
          * of `onCreate`. Then we inflate the XML resource R.xml.preference_dependencies and add
          * its preference hierarchy to the current preference hierarchy.
          *
-         * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
+         * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
          */
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
