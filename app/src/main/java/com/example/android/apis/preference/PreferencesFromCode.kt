@@ -34,11 +34,11 @@ import com.example.android.apis.R
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class PreferencesFromCode : PreferenceActivity() {
     /**
-     * Called when the `PreferenceActivity` is starting. First we call through to our super's
-     * implementation of `onCreate`. Next we use the `PreferenceManager` used by this
-     * activity to create a `PreferenceScreen root` for "this". We set the root of the preference
-     * hierarchy that this activity is showing to `PreferenceScreen root`, and then call our
-     * method `populatePreferenceHierarchy` to programmatically add preferences to it.
+     * Called when the [PreferenceActivity] is starting. First we call through to our super's
+     * implementation of `onCreate`. Next we use the [PreferenceManager] used by this activity
+     * to create a [PreferenceScreen] `val root` for "this". We set the root of the preference
+     * hierarchy that this activity is showing to `root`, and then call our method
+     * [populatePreferenceHierarchy] to programmatically add preferences to it.
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
      */
@@ -50,103 +50,63 @@ class PreferencesFromCode : PreferenceActivity() {
     }
 
     /**
-     * Called to programmatically add a bunch of different types of `Preference` to the parameter
-     * `PreferenceScreen root`.
+     * Called to programmatically add a bunch of different types of [Preference] to the
+     * [PreferenceScreen] parameter [root]. Our UI uses four [PreferenceCategory] objects
+     * to group [Preference] objects of similar types:
      *
+     *  * [PreferenceCategory] `val inlinePrefCat` - title "In-line preferences". We create it,
+     *  set its title and add it to [root]. Then we proceed to add two [Preference] objects
+     *  to `inlinePrefCat`:
+     *      * [CheckBoxPreference] `val checkboxPref` - we create it, set its key to
+     *      "checkbox_preference", set its title to "Switch preference", set its summary
+     *      to "This is a checkbox" and then add it to `inlinePrefCat`.
+     *      * [SwitchPreference] `val switchPref` - we create it, set its key to "switch_preference",
+     *      set its title to "Switch preference", set its summary to "This is a switch" and then
+     *      add it to `inlinePrefCat`.
      *
-     * Our UI uses four `PreferenceCategory` objects to group `Preference` objects of
-     * similar types:
+     *  * [PreferenceCategory] `val dialogBasedPrefCat` - title "Dialog-based preferences". We create
+     *  it, set its title and add it to `root`. Then we proceed to add two [Preference] objects to
+     *  `dialogBasedPrefCat`:
+     *      * [EditTextPreference] `val editTextPref` - we create it, set its dialog title to
+     *      "Enter your favorite animal" (displayed when the dialog is popped up), set its key
+     *      to "edittext_preference", set its title to "Edit text preference", set its summary
+     *      to "An example that uses an edit text dialog" and then add it to `dialogBasedPrefCat`.
+     *      * [ListPreference] `val listPref` - we create it, set its entries to the resource array
+     *      R.array.entries_list_preference, its values to the resource array
+     *      R.array.entryvalues_list_preference, its dialog title to "Choose one", its key to
+     *      "list_preference", its title to "List preference", its summary to "An example that
+     *      uses a list dialog", and then add it to `dialogBasedPrefCat`.
      *
-     *  *
-     * `PreferenceCategory inlinePrefCat` - title "In-line preferences". We create it,
-     * set its title and add it to `root`. Then we proceed to add two `Preference` objects
-     * to `inlinePrefCat`:
+     *  * [PreferenceCategory] `val launchPrefCat` - title "Launch preferences". We create it,
+     *  set its title and add it to `root`. Then we proceed to add two [Preference] objects
+     *  to `launchPrefCat`:
+     *      * [PreferenceScreen] `val screenPref` - we create it, set its key to "screen_preference",
+     *      set its title to "Screen preference", set its summary to "Shows another screen of
+     *      preferences", and then add it to `launchPrefCat`. We create [CheckBoxPreference]
+     *      `val nextScreenCheckBoxPref`, with a key of "screen_preference", a title of "Toggle
+     *      preference", a summary of "Preference that is on the next screen but same hierarchy",
+     *      and add it to `screenPref` (it will be shown on a new page if `screenPref` is clicked).
+     *      * [PreferenceScreen] `val intentPref` - we create it, set its `Intent` to an `Intent`
+     *      with the action ACTION_VIEW, and the data "http://www.android.com", set its title to
+     *      "Intent preference", set its summary to "Launches an Activity from an Intent", and add
+     *      it to `launchPrefCat`
      *
-     *  *
+     *  * [PreferenceCategory] `val prefAttrsCat` - title "Preference attributes". We create it,
+     *  set its title and add it to [root]. Then we proceed to add two [Preference] objects
+     *  to `prefAttrsCat`:
+     *      * [CheckBoxPreference] `val parentCheckBoxPref` - we create it, set its title to
+     *      "Parent checkbox preference", set its summary to "This is visually a parent", add it
+     *      to `prefAttrsCat`, and set its key to PARENT_CHECKBOX_PREFERENCE.
+     *      * [CheckBoxPreference] `val childCheckBoxPref` - we first retrieve styled attribute
+     *      information in this Context's theme for R.styleable.TogglePrefAttrs (consists of
+     *      the styleable attr name="android:preferenceLayoutChild") to [TypedArray] `val a`,
+     *      then we create `childCheckBoxPref`, set its title to "Child checkbox preference",
+     *      set its summary to "This is visually a child", set its layout resource to the value
+     *      of R.styleable.TogglePrefAttrs_android_preferenceLayoutChild (no idea), add it to
+     *      `prefAttrsCat`, set its dependency to PARENT_CHECKBOX_PREFERENCE, and then recycle
+     *      [TypedArray] `a`.
      *
-     *  *
-     * `CheckBoxPreference checkboxPref` - we create it, set its key to "checkbox_preference",
-     * set its title to "Switch preference", set its summary to "This is a checkbox" and then
-     * add it to `inlinePrefCat`.
-     *
-     *  *
-     * `SwitchPreference switchPref` - we create it, set its key to "switch_preference",
-     * set its title to "Switch preference", set its summary to "This is a switch" and then
-     * add it to `inlinePrefCat`.
-     *
-     *
-     *
-     *  *
-     * `PreferenceCategory dialogBasedPrefCat` - title "Dialog-based preferences". We create it,
-     * set its title and add it to `root`. Then we proceed to add two `Preference` objects
-     * to `dialogBasedPrefCat`:
-     *
-     *  *
-     *
-     *  *
-     * `EditTextPreference editTextPref` - we create it, set its dialog title to
-     * "Enter your favorite animal" (displayed when the dialog is popped up), set its key
-     * to "edittext_preference", set its title to "Edit text preference", set its summary
-     * to "An example that uses an edit text dialog" and then add it to `dialogBasedPrefCat`.
-     *
-     *  *
-     * `ListPreference listPref` - we create it, set its entries to the resource array
-     * R.array.entries_list_preference, its values to the resource array R.array.entryvalues_list_preference,
-     * its dialog title to "Choose one", its key to "list_preference", its title to "List preference",
-     * its summary to "An example that uses a list dialog", and then add it to `dialogBasedPrefCat`.
-     *
-     *
-     *
-     *  *
-     * `PreferenceCategory launchPrefCat` - title "Launch preferences". We create it,
-     * set its title and add it to `root`. Then we proceed to add two `Preference` objects
-     * to `launchPrefCat`:
-     *
-     *  *
-     *
-     *  *
-     * `PreferenceScreen screenPref` - we create it, set its key to "screen_preference",
-     * set its title to "Screen preference", set its summary to "Shows another screen of preferences",
-     * and then add it to `launchPrefCat`. We create `CheckBoxPreference nextScreenCheckBoxPref`,
-     * with a key of "screen_preference", a title of "Toggle preference", a summary of "Preference that
-     * is on the next screen but same hierarchy", and add it to `screenPref` (it will be shown
-     * on a new page if `screenPref` is clicked).
-     *
-     *  *
-     * `PreferenceScreen intentPref` - we create it, set its `Intent` to an `Intent`
-     * with the action ACTION_VIEW, and the data "http://www.android.com", set its title to
-     * "Intent preference", set its summary to "Launches an Activity from an Intent", and add it to
-     * `launchPrefCat`
-     *
-     *
-     *
-     *  *
-     * `PreferenceCategory prefAttrsCat` - title "Preference attributes". We create it,
-     * set its title and add it to `root`. Then we proceed to add two `Preference` objects
-     * to `prefAttrsCat`:
-     *
-     *  *
-     *
-     *  *
-     * `CheckBoxPreference parentCheckBoxPref` - we create it, set its title to
-     * "Parent checkbox preference", set its summary to "This is visually a parent", add it
-     * to `prefAttrsCat`, and set its key to PARENT_CHECKBOX_PREFERENCE.
-     *
-     *  *
-     * `CheckBoxPreference childCheckBoxPref` - we first retrieve styled attribute
-     * information in this Context's theme for R.styleable.TogglePrefAttrs (consists of
-     * the styleable attr name="android:preferenceLayoutChild") to `TypedArray a`,
-     * then we create `childCheckBoxPref`, set its title to "Child checkbox preference",
-     * set its summary to "This is visually a child", set its layout resource to the value
-     * of R.styleable.TogglePrefAttrs_android_preferenceLayoutChild (no idea), add it to
-     * `prefAttrsCat`, set its dependency to PARENT_CHECKBOX_PREFERENCE, and then
-     * recycle `TypedArray a`.
-     *
-     *
-     *
-     *
-     *
-     * @param root `PreferenceScreen` we are to programmatically add preferences to.
+     * @param root [PreferenceScreen] we are to programmatically add preferences to.
      */
     private fun populatePreferenceHierarchy(root: PreferenceScreen) {
         // Inline preferences
