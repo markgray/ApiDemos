@@ -1294,7 +1294,8 @@
         <activity
             android:name=".preference.SwitchPreference"
             android:enabled="@bool/atLeastIceCreamSandwich"
-            android:label="@string/switch_preference">
+            android:label="@string/switch_preference"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
