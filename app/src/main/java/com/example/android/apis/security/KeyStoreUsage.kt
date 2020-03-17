@@ -50,110 +50,103 @@ class KeyStoreUsage : AppCompatActivity() {
     var mKeyStore: KeyStore? = null
 
     /**
-     * Used by the `ListView` in our layout to list the keys available in
-     * our `KeyStore` by their alias names.
+     * Used by the [ListView] in our layout to list the keys available in
+     * our [KeyStore] by their alias names.
      */
     var mAdapter: AliasAdapter? = null
 
     /**
-     * Button in the UI that causes a new keypair to be generated in the
-     * `KeyStore`.
+     * [Button] in the UI that causes a new keypair to be generated in the
+     * [KeyStore].
      */
     var mGenerateButton: Button? = null
 
     /**
-     * Button in the UI that causes data to be signed by a key we selected from
-     * the list available in the `KeyStore`.
+     * [Button] in the UI that causes data to be signed by a key we selected from
+     * the list available in the [KeyStore].
      */
     var mSignButton: Button? = null
 
     /**
-     * Button in the UI that causes data to be verified by a key we selected from
-     * the list available in the `KeyStore`.
+     * [Button] in the UI that causes data to be verified by a key we selected from
+     * the list available in the [KeyStore].
      */
     var mVerifyButton: Button? = null
 
     /**
-     * Button in the UI that causes a key entry to be deleted from the
-     * `KeyStore`.
+     * [Button] in the UI that causes a key entry to be deleted from the
+     * [KeyStore].
      */
     var mDeleteButton: Button? = null
 
     /**
-     * Text field in the UI that holds plaintext.
+     * [EditText] field in the UI that holds plaintext.
      */
     var mPlainText: EditText? = null
 
     /**
-     * Text field in the UI that holds the signature.
+     * [EditText] field in the UI that holds the signature.
      */
     var mCipherText: EditText? = null
 
     /**
-     * The alias of the selected entry in the KeyStore.
+     * The alias of the selected entry in the [KeyStore].
      */
     private var mSelectedAlias: String? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.keystore_usage.
-     * We locate the `ListView lv` with ID R.id.entries_list, allocate a new instance to for
-     * `AliasAdapter mAdapter`, set it as the adapter for `lv`, set the choice mode of
-     * `lv` to CHOICE_MODE_SINGLE and set its `OnItemClickListener` to an anonymous class
-     * which sets `String mSelectedAlias` to the item that has been clicked and calls our method
-     * `setKeyActionButtonsEnabled` to enable the views which need a key to use, namely
-     * `EditText mPlainText`, `EditText mCipherText`, `Button mSignButton`,
-     * `Button mVerifyButton`, and `Button mDeleteButton`.
+     * We locate the [ListView] `val lv` with ID R.id.entries_list, allocate a new instance for
+     * [AliasAdapter] field [mAdapter], set it as the adapter for `lv`, set the choice mode of
+     * `lv` to CHOICE_MODE_SINGLE and set its [OnItemClickListener] to an lambda which sets [String]
+     * field [mSelectedAlias] to the item that has been clicked and calls our method
+     * [setKeyActionButtonsEnabled] to enable the views which need a key to use, namely [EditText]
+     * field [mPlainText], [EditText] field [mCipherText], [Button] field [mSignButton], [Button]
+     * field [mVerifyButton], and [Button] field [mDeleteButton].
      *
-     *
-     * We locate the `EditText` with ID R.id.entry_name to set `EditText aliasInput`, and
-     * the `Button` with ID R.id.generate_button to initialize our field `Button mGenerateButton`,
-     * then set the `OnClickListener` of `mGenerateButton` to an anonymous class which reads
-     * the text from `EditText aliasInput` into `String alias`, checks to make sure it was
-     * not empty (complaining about the error if it was) otherwise it clears any `aliasInput` error,
-     * disables the `Button mGenerateButton` and starts the `AsyncTask GenerateTask` running
+     * We locate the [EditText] with ID R.id.entry_name to set [EditText] `val aliasInput`, and
+     * the [Button] with ID R.id.generate_button to initialize our [Button] field [mGenerateButton],
+     * then set the `OnClickListener` of [mGenerateButton] to an lambda which reads the text from
+     * [EditText] `aliasInput` into [String] `val alias`, checks to make sure it was not empty
+     * (complaining about the error if it was) otherwise it clears any `aliasInput` error, disables
+     * the [Button] field [mGenerateButton] and starts the [AsyncTask] class [GenerateTask] running
      * using `alias` as its argument.
      *
+     * Next we locate the [Button] with ID R.id.sign_button to initialize our [Button] field
+     * [mSignButton], set its `OnClickListener` to an lambda which sets [String] `val alias` to the
+     * contents of our [String] field [mSelectedAlias], fetches the text from [EditText] field
+     * [mPlainText] to the [String] variable `val data`, then if `alias` is not null calls
+     * [setKeyActionButtonsEnabled] to temporarily disable the key action views, and then starts
+     * the [AsyncTask] class [SignTask] running using the arguments `alias` and `data`.
      *
-     * Next we locate the button with ID R.id.sign_button to initialize our field `Button mSignButton`,
-     * set its `OnClickListener` to an anonymous class which sets `String alias` to the contents
-     * of our field `String mSelectedAlias`, fetches the text from `EditText mPlainText` to
-     * the variable `String data`, then if `alias` is not null calls `setKeyActionButtonsEnabled`
-     * to temporarily disable the key action views, and then starts the `AsyncTask SignTask` running
-     * using the arguments `alias` and `data`.
+     * We locate the [Button] with ID R.id.verify_button to initialize our [Button] field [mVerifyButton],
+     * and set its `OnClickListener` to an lambda which sets [String] `val alias` to the contents
+     * of our [String] field [mSelectedAlias], fetches the text from [EditText] field [mPlainText]
+     * to the [String] variable `val data`, fetches the text from [EditText] field [mCipherText] to
+     * set [String] `val signature`, then if `alias` is not null calls [setKeyActionButtonsEnabled]
+     * to temporarily disable the key action views, and then starts the [AsyncTask] classs [AsyncTask]
+     * running using the arguments `alias`, `data` and `signature`.
      *
+     * We locate the [Button] with ID R.id.delete_button to initialize our [Button] field [mDeleteButton],
+     * and set its `OnClickListener` to an lambda which sets [String] `val alias` to the contents of
+     * our [String] field [mSelectedAlias], and if it is not null calls [setKeyActionButtonsEnabled]
+     * to temporarily disable the key action views, and then starts the [AsyncTask] class [DeleteTask]
+     * running using the argument `alias`.
      *
-     * We locate the button with ID R.id.verify_button to initialize our field `Button mVerifyButton`, and
-     * set its `OnClickListener` to an anonymous class which sets `String alias` to the contents
-     * of our field `String mSelectedAlias`, fetches the text from `EditText mPlainText` to the variable
-     * `String data`, fetches the text from `EditText mCipherText` to set `String signature`, then
-     * if `alias` is not null calls `setKeyActionButtonsEnabled` to temporarily disable the key action
-     * views, and then starts the `AsyncTask VerifyTask` running using the arguments `alias`, `data`
-     * and `signature`.
+     * We locate the [EditText] with ID R.id.plaintext to initialize our [EditText] field [mPlainText]
+     * and set its `OnFocusChangeListener` to an lambda which sets the color of the text to the
+     * correct color for its state based on the values in android.R.color.primary_text_dark.
      *
-     *
-     * We locate the button with ID R.id.delete_button to initialize our field `Button mDeleteButton`, and
-     * set its `OnClickListener` to an anonymous class which sets `String alias` to the contents
-     * of our field `String mSelectedAlias`, and if it is not null calls `setKeyActionButtonsEnabled`
-     * to temporarily disable the key action views, and then starts the `AsyncTask DeleteTask` running using
-     * the argument `alias`.
-     *
-     *
-     * We locate the `EditText` with ID R.id.plaintext to initialize our field `EditText mPlainText` and
-     * set its `OnFocusChangeListener` to an anonymous class which sets the color of the text to the correct
+     * We locate the [EditText] with ID R.id.ciphertext to initialize our [EditText] field [mCipherText]
+     * and set its `OnFocusChangeListener` to an lambda which sets the color of the text to the correct
      * color for its state based on the values in android.R.color.primary_text_dark.
      *
+     * Finally we call our method [updateKeyList] which calls [setKeyActionButtonsEnabled] to
+     * temporarily disable the key action views, and then starts the [AsyncTask] class
+     * [UpdateKeyListTask] running.
      *
-     * We locate the `EditText` with ID R.id.ciphertext to initialize our field `EditText mCipherText` and
-     * set its `OnFocusChangeListener` to an anonymous class which sets the color of the text to the correct
-     * color for its state based on the values in android.R.color.primary_text_dark.
-     *
-     *
-     * Finally we call our method `updateKeyList` which calls `setKeyActionButtonsEnabled`
-     * to temporarily disable the key action views, and then starts the `AsyncTask UpdateKeyListTask`
-     * running.
-     *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -167,7 +160,11 @@ class KeyStoreUsage : AppCompatActivity() {
         mAdapter = AliasAdapter(applicationContext)
         lv.adapter = mAdapter
         lv.choiceMode = ListView.CHOICE_MODE_SINGLE
-        lv.onItemClickListener = OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
+        lv.onItemClickListener = OnItemClickListener {
+            _: AdapterView<*>?,
+            _: View?,
+            position: Int,
+            _: Long ->
             mSelectedAlias = mAdapter!!.getItem(position)
             setKeyActionButtonsEnabled(true)
         }
@@ -175,7 +172,7 @@ class KeyStoreUsage : AppCompatActivity() {
         // This is alias the user wants for a generated key.
         val aliasInput = findViewById<EditText>(R.id.entry_name)
         mGenerateButton = findViewById(R.id.generate_button)
-        mGenerateButton!!.setOnClickListener{
+        mGenerateButton!!.setOnClickListener {
             /*
              * When the user presses the "Generate" button, we'll
              * check the alias isn't blank here.
@@ -197,7 +194,7 @@ class KeyStoreUsage : AppCompatActivity() {
             }
         }
         mSignButton = findViewById(R.id.sign_button)
-        mSignButton!!.setOnClickListener{
+        mSignButton!!.setOnClickListener {
             val alias = mSelectedAlias
             val data = mPlainText!!.text.toString()
             if (alias != null) {
@@ -206,7 +203,7 @@ class KeyStoreUsage : AppCompatActivity() {
             }
         }
         mVerifyButton = findViewById(R.id.verify_button)
-        mVerifyButton!!.setOnClickListener{
+        mVerifyButton!!.setOnClickListener {
             val alias = mSelectedAlias
             val data = mPlainText!!.text.toString()
             val signature = mCipherText!!.text.toString()
@@ -216,7 +213,7 @@ class KeyStoreUsage : AppCompatActivity() {
             }
         }
         mDeleteButton = findViewById(R.id.delete_button)
-        mDeleteButton!!.setOnClickListener{
+        mDeleteButton!!.setOnClickListener {
             val alias = mSelectedAlias
             if (alias != null) {
                 setKeyActionButtonsEnabled(false)
@@ -224,36 +221,39 @@ class KeyStoreUsage : AppCompatActivity() {
             }
         }
         mPlainText = findViewById(R.id.plaintext)
-        mPlainText!!.setOnFocusChangeListener{ _: View?, _: Boolean ->
+        mPlainText!!.setOnFocusChangeListener { _: View?, _: Boolean ->
             @Suppress("DEPRECATION")
-            mPlainText!!.setTextColor(resources.getColor(android.R.color.primary_text_dark))
+            mPlainText!!.setTextColor(resources.getColor(android.R.color.primary_text_dark, null))
         }
         mCipherText = findViewById(R.id.ciphertext)
-        mCipherText!!.setOnFocusChangeListener{ _: View?, _: Boolean ->
+        mCipherText!!.setOnFocusChangeListener { _: View?, _: Boolean ->
             @Suppress("DEPRECATION")
             mCipherText!!.setTextColor(resources
-                    .getColor(android.R.color.primary_text_dark))
+                    .getColor(android.R.color.primary_text_dark, null))
         }
         updateKeyList()
     }
 
     /**
-     * The `Adapter` we use for our `AliasAdapter mAdapter`, it stores the alias strings
-     * the use has used in its `ArrayAdapter<String>`
+     * The [Adapter] we use for our [AliasAdapter] field [mAdapter], it stores the alias strings
+     * the user has used in its `ArrayAdapter<String>`
      */
     inner class AliasAdapter
     /**
-     * Our constructor. We call our super's constructor specifying android.R.layout.simple_list_item_single_choice
-     * as the resource ID for the layout file containing a TextView to use when instantiating views (it is a
-     * `CheckedTextView`).
+     * Our constructor. We call our super's constructor specifying
+     * android.R.layout.simple_list_item_single_choice as the resource ID for the layout file
+     * containing a [TextView] to use when instantiating views (it is a [CheckedTextView]).
      *
-     * @param context `Context` to use to access resources.
+     * @param context [Context] to use to access resources.
      */
-    (context: Context?) : ArrayAdapter<String?>(context!!, android.R.layout.simple_list_item_single_choice) {
+    (context: Context?) : ArrayAdapter<String?>(
+            context!!,
+            android.R.layout.simple_list_item_single_choice
+    ) {
         /**
          * This clears out all previous aliases and replaces it with the current entries. First we
-         * remove all elements from the list, and then we add our parameter `List<String> items`
-         * at the end of the array. Finally we call `notifyDataSetChanged` to notify the attached
+         * remove all elements from the list, and then we add our `List<String>` parameter [items]
+         * at the end of the array. Finally we call [notifyDataSetChanged] to notify the attached
          * observers that the underlying data has been changed and any View reflecting the data set
          * should refresh itself.
          *
@@ -267,10 +267,11 @@ class KeyStoreUsage : AppCompatActivity() {
     }
 
     /**
-     * Updates the list of keys. First we call our method `setKeyActionButtonsEnabled` to disable
-     * the views used by the key actions: `EditText mPlainText`, `EditText mCipherText`,
-     * `Button mSignButton`, `Button mVerifyButton`, and `Button mDeleteButton`.
-     * Then we start our `AsyncTask UpdateKeyListTask` running to do the actual updating.
+     * Updates the list of keys. First we call our method [setKeyActionButtonsEnabled] to disable
+     * the views used by the key actions: [EditText] field [mPlainText], [EditText] field
+     * [mCipherText], [Button] field [mSignButton], [Button] field [mVerifyButton], and [Button]
+     * field [mDeleteButton]. Then we start our [AsyncTask] class [UpdateKeyListTask] running to
+     * do the actual updating.
      */
     private fun updateKeyList() {
         setKeyActionButtonsEnabled(false)
@@ -279,8 +280,8 @@ class KeyStoreUsage : AppCompatActivity() {
 
     /**
      * Sets all the buttons related to actions that act on an existing key to enabled or disabled:
-     * `EditText mPlainText`, `EditText mCipherText`, `Button mSignButton`,
-     * `Button mVerifyButton`, and `Button mDeleteButton`.
+     * [EditText] field [mPlainText], [EditText] field [mCipherText], [Button] field [mSignButton],
+     * [Button] field[mVerifyButton], and [Button] field [mDeleteButton].
      */
     private fun setKeyActionButtonsEnabled(enabled: Boolean) {
         mPlainText!!.isEnabled = enabled
@@ -291,19 +292,19 @@ class KeyStoreUsage : AppCompatActivity() {
     }
 
     /**
-     * `AsyncTask` which updates the list of aliases used by `AliasAdapter mAdapter`.
+     * [AsyncTask] which updates the list of aliases used by [AliasAdapter] field [mAdapter].
      */
     @SuppressLint("StaticFieldLeak")
     private inner class UpdateKeyListTask : AsyncTask<Void?, Void?, Enumeration<String>?>() {
         /**
          * Returns an `Enumeration<String>` of all the names in the "AndroidKeyStore" keystore
-         * object. First we fetch a `KeyStore` object of type "AndroidKeyStore" to initialize
-         * `KeyStore ks`, we load `ks`, and then return an `Enumeration<String> aliases`
+         * object. First we fetch a [KeyStore] object of type "AndroidKeyStore" to initialize
+         * [KeyStore] `val ks`, we load `ks`, and then return an `Enumeration<String> aliases`
          * listing all of the alias names of this keystore.
          *
          * @param params we do not use params, so these are `Void`
-         * @return An object that implements the Enumeration interface for `String` objects,
-         * it generates a series of elements, one at a time. Successive calls to the nextElement
+         * @return An object that implements the Enumeration interface for [String] objects,
+         * it generates a series of elements, one at a time. Successive calls to the `nextElement`
          * method return successive elements of the series.
          */
         override fun doInBackground(vararg params: Void?): Enumeration<String>? {
@@ -333,14 +334,14 @@ class KeyStoreUsage : AppCompatActivity() {
         }
 
         /**
-         * Runs on the UI thread after `doInBackground`. The parameter `result` is the
-         * value returned by `doInBackground`. First we create an `ArrayList` for
-         * `List<String> aliases`, then we loop through all of the `String` objects in
-         * our parameter `result` adding each of them to `aliases`. Finally we call the
+         * Runs on the UI thread after [doInBackground]. The parameter [result] is the
+         * value returned by [doInBackground]. First we create an [ArrayList] for
+         * `List<String>` `val aliases`, then we loop through all of the [String] objects in
+         * our parameter [result] adding each of them to `aliases`. Finally we call the
          * method `mAdapter.setAliases` to clear out all previous aliases and replace them with
          * the contents of `aliases`.
          *
-         * @param result The list of `KeyStore` aliases computed by `doInBackground`.
+         * @param result The list of [KeyStore] aliases computed by [doInBackground].
          */
         override fun onPostExecute(result: Enumeration<String>?) {
             val aliases: MutableList<String> = ArrayList()
@@ -352,24 +353,24 @@ class KeyStoreUsage : AppCompatActivity() {
     }
 
     /**
-     * `AsyncTask` which is run to generate a new EC key pair entry in the Android Keystore.
+     * [AsyncTask] which is run to generate a new EC key pair entry in the Android Keystore.
      */
     @SuppressLint("StaticFieldLeak")
     private inner class GenerateTask : AsyncTask<String?, Void?, Boolean>() {
         /**
-         * Generate a new EC key pair entry in the Android Keystore by using the KeyPairGenerator API.
-         * First we set `String alias` from our parameter `params[0]` then we set
-         * `KeyPairGenerator kpg` to a KeyPairGenerator object that generates public/private
-         * key pairs for the KEY_ALGORITHM_EC algorithm using the KeyPairGeneratorSpi implementation
+         * Generate a new EC key pair entry in the Android Keystore by using the [KeyPairGenerator]
+         * API. First we set [String] `val alias` from our parameter `params[0]` then we set
+         * [KeyPairGenerator] `val kpg` to a [KeyPairGenerator] object that generates public/private
+         * key pairs for the KEY_ALGORITHM_EC algorithm using the [KeyPairGeneratorSpi] implementation
          * from the "AndroidKeyStore" provider. We initialize `kpg` using a
-         * `KeyGenParameterSpec.Builder` which uses `alias` as the alias of the entry in
-         * which the generated key will appear in Android KeyStore, and whose purpose is both
-         * PURPOSE_SIGN and PURPOSE_VERIFY, whose digests algorithms we set to DIGEST_SHA256 and
-         * DIGEST_SHA512 and then build. Finally we instruct `kpg` to generate a new key pair,
-         * and return true to the caller.
+         * [KeyGenParameterSpec.Builder] which uses `alias` as the alias of the entry in which the
+         * generated key will appear in Android KeyStore, and whose purpose is both PURPOSE_SIGN and
+         * PURPOSE_VERIFY, whose digests algorithms we set to DIGEST_SHA256 and DIGEST_SHA512 and
+         * then build. Finally we instruct `kpg` to generate a new key pair, and return true to the
+         * caller.
          *
          * @param params The alias for the key.
-         * @return true if successful, false if and exception is thrown (it is ignored though)
+         * @return true if successful, false if an exception is thrown (it is ignored though)
          */
         override fun doInBackground(vararg params: String?): Boolean {
             val alias = params[0]
@@ -383,10 +384,12 @@ class KeyStoreUsage : AppCompatActivity() {
                  */
                 val kpg = KeyPairGenerator.getInstance(
                         KeyProperties.KEY_ALGORITHM_EC,
-                        "AndroidKeyStore")
+                        "AndroidKeyStore"
+                )
                 kpg.initialize(KeyGenParameterSpec.Builder(
                                 alias!!,
-                                KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY)
+                                KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY
+                        )
                         .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
                         .build())
                 @Suppress("UNUSED_VARIABLE")
@@ -405,8 +408,8 @@ class KeyStoreUsage : AppCompatActivity() {
         }
 
         /**
-         * Called on the UI thread when the background task returns. We call our method `updateKeyList`
-         * to update the list of keys, and then enable the `Button mGenerateButton`.
+         * Called on the UI thread when the background task returns. We call our method [updateKeyList]
+         * to update the list of keys, and then enable the [Button] field [mGenerateButton].
          *
          * @param result we ignore this.
          */
@@ -416,7 +419,8 @@ class KeyStoreUsage : AppCompatActivity() {
         }
 
         /**
-         * Called if the background task is cancelled, we simply enable the `Button mGenerateButton`.
+         * Called if the background task is cancelled, we simply enable the [Button] field
+         * [mGenerateButton].
          */
         override fun onCancelled() {
             mGenerateButton!!.isEnabled = true
@@ -424,7 +428,7 @@ class KeyStoreUsage : AppCompatActivity() {
     }
 
     /**
-     * `AsyncTask` which is run to create a signature for some data.
+     * [AsyncTask] which is run to create a signature for some data.
      */
     @SuppressLint("StaticFieldLeak")
     private inner class SignTask : AsyncTask<String?, Void?, String?>() {
@@ -608,11 +612,9 @@ class KeyStoreUsage : AppCompatActivity() {
          */
         override fun onPostExecute(result: Boolean) {
             if (result) {
-                @Suppress("DEPRECATION")
-                mCipherText!!.setTextColor(resources.getColor(R.color.solid_green))
+                mCipherText!!.setTextColor(resources.getColor(R.color.solid_green, null))
             } else {
-                @Suppress("DEPRECATION")
-                mCipherText!!.setTextColor(resources.getColor(R.color.solid_red))
+                mCipherText!!.setTextColor(resources.getColor(R.color.solid_red, null))
             }
             setKeyActionButtonsEnabled(true)
         }
@@ -627,7 +629,7 @@ class KeyStoreUsage : AppCompatActivity() {
             mCipherText!!.setText("error!")
             setKeyActionButtonsEnabled(true)
             @Suppress("DEPRECATION")
-            mCipherText!!.setTextColor(resources.getColor(android.R.color.primary_text_dark))
+            mCipherText!!.setTextColor(resources.getColor(android.R.color.primary_text_dark, null))
         }
     }
 

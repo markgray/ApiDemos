@@ -1875,6 +1875,7 @@ Security
     Security/KeyStore                      all -- v23+ or crash
         .security.KeyStoreUsage
             Shows how to use api to generate Key pairs, sign and verify.
+            TODO: Replace use of deprecated android.R.color.primary_text_dark with own <selector>
 
 Views
   Animation
