@@ -30,15 +30,15 @@ import com.example.android.apis.R
 @SuppressLint("ExportedPreferenceActivity")
 class SwitchPreference : PreferenceActivity() {
     /**
-     * Called when the `PreferenceActivity` is starting. First we call through to our super's
+     * Called when the [PreferenceActivity] is starting. First we call through to our super's
      * implementation of `onCreate`. Next we set the default values for our preference file
      * named "switch" by reading the default values from the XML preference file R.xml.default_values
      * using the values defined by each Preference item's android:defaultValue attribute (but only if
-     * this is the first time we have been run). We set the name of the SharedPreferences file that
-     * preferences we manage will use to "switch", and then inflate the XML resource R.xml.preference_switch
-     * and add its preference hierarchy to the current preference hierarchy.
+     * this is the first time we have been run). We set the name of the `SharedPreferences` file that
+     * preferences we manage will use to "switch", and then inflate the XML resource
+     * R.xml.preference_switch and add its preference hierarchy to the current preference hierarchy.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
