@@ -3638,7 +3638,8 @@
         <activity
             android:name=".security.KeyStoreUsage"
             android:label="Security/KeyStore"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

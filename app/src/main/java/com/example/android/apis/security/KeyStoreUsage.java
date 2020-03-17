@@ -18,7 +18,6 @@ package com.example.android.apis.security;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -27,15 +26,12 @@ import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -60,9 +56,10 @@ import java.util.List;
 /**
  * Shows how to use api to generate Key pairs, sign and verify.
  */
+@SuppressWarnings("CodeBlock2Expr")
 @TargetApi(Build.VERSION_CODES.M)
 @SuppressLint("SetTextI18n")
-public class KeyStoreUsage extends Activity {
+public class KeyStoreUsage extends AppCompatActivity {
     /**
      * TAG used for logging.
      */
@@ -184,102 +181,79 @@ public class KeyStoreUsage extends Activity {
          * Set up our {@code ListView} with an adapter that allows
          * us to choose from the available entry aliases.
          */
-        ListView lv = (ListView) findViewById(R.id.entries_list);
+        ListView lv = findViewById(R.id.entries_list);
         mAdapter = new AliasAdapter(getApplicationContext());
         lv.setAdapter(mAdapter);
         lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        lv.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mSelectedAlias = mAdapter.getItem(position);
-                setKeyActionButtonsEnabled(true);
-            }
+        lv.setOnItemClickListener((parent, view, position, id) -> {
+            mSelectedAlias = mAdapter.getItem(position);
+            setKeyActionButtonsEnabled(true);
         });
 
         // This is alias the user wants for a generated key.
-        final EditText aliasInput = (EditText) findViewById(R.id.entry_name);
-        mGenerateButton = (Button) findViewById(R.id.generate_button);
-        mGenerateButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        final EditText aliasInput = findViewById(R.id.entry_name);
+        mGenerateButton = findViewById(R.id.generate_button);
+        mGenerateButton.setOnClickListener(v -> {
+            /*
+             * When the user presses the "Generate" button, we'll
+             * check the alias isn't blank here.
+             */
+            final String alias = aliasInput.getText().toString();
+            //noinspection ConstantConditions
+            if (alias == null || alias.length() == 0) {
+                aliasInput.setError(getResources().getText(R.string.keystore_no_alias_error));
+            } else {
                 /*
-                 * When the user presses the "Generate" button, we'll
-                 * check the alias isn't blank here.
+                 * It's not blank, so disable the generate button while
+                 * the generation of the key is happening. It will be
+                 * enabled by the {@code AsyncTask} later after its
+                 * work is done.
                  */
-                final String alias = aliasInput.getText().toString();
-                //noinspection ConstantConditions
-                if (alias == null || alias.length() == 0) {
-                    aliasInput.setError(getResources().getText(R.string.keystore_no_alias_error));
-                } else {
-                    /*
-                     * It's not blank, so disable the generate button while
-                     * the generation of the key is happening. It will be
-                     * enabled by the {@code AsyncTask} later after its
-                     * work is done.
-                     */
-                    aliasInput.setError(null);
-                    mGenerateButton.setEnabled(false);
-                    new GenerateTask().execute(alias);
-                }
+                aliasInput.setError(null);
+                mGenerateButton.setEnabled(false);
+                new GenerateTask().execute(alias);
             }
         });
 
-        mSignButton = (Button) findViewById(R.id.sign_button);
-        mSignButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String alias = mSelectedAlias;
-                final String data = mPlainText.getText().toString();
-                if (alias != null) {
-                    setKeyActionButtonsEnabled(false);
-                    new SignTask().execute(alias, data);
-                }
+        mSignButton = findViewById(R.id.sign_button);
+        mSignButton.setOnClickListener(v -> {
+            final String alias = mSelectedAlias;
+            final String data = mPlainText.getText().toString();
+            if (alias != null) {
+                setKeyActionButtonsEnabled(false);
+                new SignTask().execute(alias, data);
             }
         });
 
-        mVerifyButton = (Button) findViewById(R.id.verify_button);
-        mVerifyButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String alias = mSelectedAlias;
-                final String data = mPlainText.getText().toString();
-                final String signature = mCipherText.getText().toString();
-                if (alias != null) {
-                    setKeyActionButtonsEnabled(false);
-                    new VerifyTask().execute(alias, data, signature);
-                }
+        mVerifyButton = findViewById(R.id.verify_button);
+        mVerifyButton.setOnClickListener(v -> {
+            final String alias = mSelectedAlias;
+            final String data = mPlainText.getText().toString();
+            final String signature = mCipherText.getText().toString();
+            if (alias != null) {
+                setKeyActionButtonsEnabled(false);
+                new VerifyTask().execute(alias, data, signature);
             }
         });
 
-        mDeleteButton = (Button) findViewById(R.id.delete_button);
-        mDeleteButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String alias = mSelectedAlias;
-                if (alias != null) {
-                    setKeyActionButtonsEnabled(false);
-                    new DeleteTask().execute(alias);
-                }
+        mDeleteButton = findViewById(R.id.delete_button);
+        mDeleteButton.setOnClickListener(v -> {
+            final String alias = mSelectedAlias;
+            if (alias != null) {
+                setKeyActionButtonsEnabled(false);
+                new DeleteTask().execute(alias);
             }
         });
 
-        mPlainText = (EditText) findViewById(R.id.plaintext);
-        mPlainText.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                //noinspection deprecation
-                mPlainText.setTextColor(getResources().getColor(android.R.color.primary_text_dark));
-            }
+        mPlainText = findViewById(R.id.plaintext);
+        mPlainText.setOnFocusChangeListener((v, hasFocus) -> {
+            mPlainText.setTextColor(getResources().getColor(android.R.color.primary_text_dark));
         });
 
-        mCipherText = (EditText) findViewById(R.id.ciphertext);
-        mCipherText.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                //noinspection deprecation
-                mCipherText.setTextColor(getResources()
-                        .getColor(android.R.color.primary_text_dark));
-            }
+        mCipherText = findViewById(R.id.ciphertext);
+        mCipherText.setOnFocusChangeListener((v, hasFocus) -> {
+            mCipherText.setTextColor(getResources()
+                    .getColor(android.R.color.primary_text_dark));
         });
 
         updateKeyList();
@@ -289,7 +263,7 @@ public class KeyStoreUsage extends Activity {
      * The {@code Adapter} we use for our {@code AliasAdapter mAdapter}, it stores the alias strings
      * the use has used in its {@code ArrayAdapter<String>}
      */
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings({"WeakerAccess", "InnerClassMayBeStatic"})
     private class AliasAdapter extends ArrayAdapter<String> {
         /**
          * Our constructor. We call our super's constructor specifying android.R.layout.simple_list_item_single_choice
@@ -678,7 +652,6 @@ public class KeyStoreUsage extends Activity {
          *
          * @param result true if the signature was verified, false if it was not.
          */
-        @SuppressWarnings("deprecation")
         @Override
         protected void onPostExecute(Boolean result) {
             if (result) {
@@ -695,7 +668,6 @@ public class KeyStoreUsage extends Activity {
          * {@code setKeyActionButtonsEnabled} to re-enable the views involved with the key actions,
          * and set the text color of {@code EditText mCipherText} to android.R.color.primary_text_dark
          */
-        @SuppressWarnings("deprecation")
         @Override
         protected void onCancelled() {
             mCipherText.setText("error!");
