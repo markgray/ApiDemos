@@ -435,17 +435,17 @@ class KeyStoreUsage : AppCompatActivity() {
         /**
          * Uses the keystore entry specified by `params[0]` to sign the data specified by
          * `params[1]` and returns the resulting signature. First we copy references to our
-         * two parameters to `String alias` and `String dataString`. Then we load
-         * `byte[] data` with the `byte[]` version of `dataString`. We initialize
-         * `KeyStore ks` with an instance of `KeyStore` providing the "AndroidKeyStore"
+         * two parameters to [String] `val alias` and [String] `val dataString`. Then we load
+         * [ByteArray] `val data` with the `byte[]` version of `dataString`. We initialize
+         * [KeyStore] `val ks` with an instance of [KeyStore] providing the "AndroidKeyStore"
          * type, then instruct it to load. We fetch from `ks` the keystore entry for the alias
-         * `String alias` to initialize `KeyStore.Entry entry`. If `entry` is not
-         * an instance of `PrivateKeyEntry` we log the error and return null. Otherwise we
-         * initialize `Signature s` with an instance that implements the "SHA256withECDSA"
-         * signature algorithm. We initialize `s` for signing using the `PrivateKey` of
-         * `entry`, update the data to be signed or verified by `s`, and then use `s`
-         * to initialize `byte[] signature` with the signature bytes of all the data updated.
-         * We then return `byte[] signature` as a Base64-encoded string using Base64.DEFAULT.
+         * [String] `alias` to initialize [KeyStore.Entry] `val entry`. If `entry` is not
+         * an instance of [KeyStore.PrivateKeyEntry] we log the error and return null. Otherwise
+         * we initialize [Signature] `val s` with an instance that implements the "SHA256withECDSA"
+         * signature algorithm. We initialize `s` for signing using the [PrivateKey] of `entry`,
+         * update the data to be signed or verified by `s`, and then use `s` to initialize [ByteArray]
+         * `val signature` with the signature bytes of all the data updated. We then return
+         * `signature` as a Base64-encoded string using [Base64.DEFAULT].
          *
          * @param params the alias in the keystore to use (`params[0]`), and the data that we
          * are to sign (`params[1]`).
@@ -498,10 +498,10 @@ class KeyStoreUsage : AppCompatActivity() {
         }
 
         /**
-         * When the background task completes, we are called on the UI thread with our parameter
-         * `String result` containing the signature it computed. We set the text of
-         * `EditText mCipherText` to our parameter `result`, and call our method
-         * `setKeyActionButtonsEnabled` to re-enable the views involved with the key actions.
+         * When the background task completes, we are called on the UI thread with our [String]
+         * parameter [result] containing the signature it computed. We set the text of [EditText]
+         * field [mCipherText] to our parameter [result], and call our method
+         * [setKeyActionButtonsEnabled] to re-enable the views involved with the key actions.
          *
          * @param result signature of the data returned by the background task
          */
@@ -512,7 +512,7 @@ class KeyStoreUsage : AppCompatActivity() {
 
         /**
          * Called on the UI thread when the background thread is cancelled. We set the text of
-         * `EditText mCipherText` to "error!", and call our method `setKeyActionButtonsEnabled`
+         * [EditText] field [mCipherText] to "error!", and call our method [setKeyActionButtonsEnabled]
          * to re-enable the views involved with the key actions.
          */
         override fun onCancelled() {
@@ -522,30 +522,29 @@ class KeyStoreUsage : AppCompatActivity() {
     }
 
     /**
-     * `AsyncTask` which is run to verify a signature.
+     * [AsyncTask] which is run to verify a signature.
      */
     @SuppressLint("StaticFieldLeak")
     private inner class VerifyTask : AsyncTask<String?, Void?, Boolean>() {
         /**
-         * Verifies a signature in the background. First we copy references to our three parameters to
-         * `String alias`, `String dataString` and `String signatureString`. We
-         * initialize `byte[] data` with the byte version of `dataString`, declare
-         * `byte[] signature` and try to decode the Base64 contained in `signatureString`
-         * into it (setting `byte[]` to an zero element array if it fails). We initialize
-         * `KeyStore ks` with an instance of `KeyStore` providing the "AndroidKeyStore"
-         * type, then instruct it to load. We fetch from `ks` the keystore entry for the alias
-         * `String alias` to initialize `KeyStore.Entry entry`. If `entry` is not
-         * an instance of `PrivateKeyEntry` we log the error and return false. Otherwise we
-         * initialize `Signature s` with an instance that implements the "SHA256withECDSA"
-         * signature algorithm. We initialize `s` for verification, using the public key from
-         * the end entity Certificate from the certificate chain of `entry`, update the data
-         * verified by `s`, and then use `s` to verify `signature` setting our
-         * variable `boolean valid` to the result of the verification which we return to the
-         * caller.
+         * Verifies a signature in the background. First we copy references to our three parameters
+         * to the [String]'s `val alias`, `val dataString` and `val signatureString`. We initialize
+         * [ByteArray] `val data` with the byte version of `dataString`, declare [ByteArray]
+         * `val signature` and try to decode the Base64 contained in `signatureString` into it
+         * (setting `signature` to an zero element array if it fails). We initialize [KeyStore]
+         * `val ks` with an instance of [KeyStore] providing the "AndroidKeyStore" type, then
+         * instruct it to load. We fetch from `ks` the keystore entry for the alias named [String]
+         * `alias` to initialize [KeyStore.Entry] `val entry`. If `entry` is not an instance of
+         * [KeyStore.PrivateKeyEntry] we log the error and return false. Otherwise we initialize
+         * [Signature] `val s` with an instance that implements the "SHA256withECDSA" signature
+         * algorithm. We initialize `s` for verification, using the public key from the end entity
+         * Certificate from the certificate chain of `entry`, update the data verified by `s`, and
+         * then use `s` to verify `signature` returning the [Boolean] result of the verification
+         * to the caller.
          *
          * @param params `params[0]` contains the alias to use from the keystore, `params[1]`
-         * contains the data that has been signed, and `params[2]` contains the
-         * signature to be verified.
+         * contains the data that has been signed, and `params[2]` contains the signature to
+         * be verified.
          * @return true if the signature is valid, false if it is not
          */
         override fun doInBackground(vararg params: String?): Boolean {
@@ -603,10 +602,10 @@ class KeyStoreUsage : AppCompatActivity() {
 
         /**
          * Called on the UI thread after the background thread has finished verifying the signature.
-         * If our parameter `result` is true we set the text color of `EditText mCipherText`
-         * to green, if false we set the text color of `EditText mCipherText` to red. In either
-         * case we call our method `setKeyActionButtonsEnabled` to re-enable the views involved
-         * with the key actions.
+         * If our parameter [result] is true we set the text color of [EditText] field [mCipherText]
+         * to green, if false we set the text color of [EditText] field [mCipherText] to red. In
+         * either case we call our method [setKeyActionButtonsEnabled] to re-enable the views
+         * involved with the key actions.
          *
          * @param result true if the signature was verified, false if it was not.
          */
@@ -621,9 +620,10 @@ class KeyStoreUsage : AppCompatActivity() {
 
         /**
          * Called on the UI thread when the background thread is cancelled. We set the text of
-         * `EditText mCipherText` to the string "error!", call our method
-         * `setKeyActionButtonsEnabled` to re-enable the views involved with the key actions,
-         * and set the text color of `EditText mCipherText` to android.R.color.primary_text_dark
+         * [EditText] field [mCipherText] to the string "error!", call our method
+         * [setKeyActionButtonsEnabled] to re-enable the views involved with the key actions,
+         * and set the text color of [EditText] field [mCipherText] to the color selected by the
+         * android.R.color.primary_text_dark selector.
          */
         override fun onCancelled() {
             mCipherText!!.setText("error!")
@@ -634,15 +634,15 @@ class KeyStoreUsage : AppCompatActivity() {
     }
 
     /**
-     * `AsyncTask` used to delete an alias from the keystore.
+     * [AsyncTask] used to delete an alias from the keystore.
      */
     @SuppressLint("StaticFieldLeak")
     private inner class DeleteTask : AsyncTask<String?, Void?, Void?>() {
         /**
          * Deletes a previously generated or stored entry in the KeyStore. First we copy a reference
-         * to our parameter to `String alias`. We initialize `KeyStore ks` with an instance
-         * of `KeyStore` providing the "AndroidKeyStore" type, then instruct it to load. We then
-         * call its `deleteEntry` method to delete the entry identified by `alias` from
+         * to our parameter to [String] `val alias`. We initialize [KeyStore] `val ks` with an
+         * instance of [KeyStore] providing the "AndroidKeyStore" type, then instruct it to load.
+         * We then call its `deleteEntry` method to delete the entry identified by `alias` from
          * the keystore. Finally we return null to the caller.
          *
          * @param params `params[0]` contains the alias that is to be deleted
@@ -672,8 +672,8 @@ class KeyStoreUsage : AppCompatActivity() {
         }
 
         /**
-         * Called on the UI thread when the background thread has finished. We simply call our method
-         * `updateKeyList` to update the list of keys used by our UI.
+         * Called on the UI thread when the background thread has finished. We simply call our
+         * method [updateKeyList] to update the list of keys used by our UI.
          *
          * @param result unused, Void
          */
@@ -682,8 +682,8 @@ class KeyStoreUsage : AppCompatActivity() {
         }
 
         /**
-         * Called on the UI thread when the background thread is cancelled. We simply call our method
-         * `updateKeyList` to update the list of keys used by our UI.
+         * Called on the UI thread when the background thread is cancelled. We simply call our
+         * method [updateKeyList] to update the list of keys used by our UI.
          */
         override fun onCancelled() {
             updateKeyList()
