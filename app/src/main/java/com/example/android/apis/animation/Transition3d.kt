@@ -6,11 +6,8 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
-import android.widget.AdapterView
+import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -26,45 +23,42 @@ import com.example.android.apis.R
  */
 class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListener {
     /**
-     * `ListView` with ID android.R.id.list containing names of photos
+     * [ListView] with ID android.R.id.list containing names of photos
      */
     private var mPhotosList: ListView? = null
 
     /**
-     * `FrameLayout` with ID R.id.container containing both `ListView mPhotosList` and
-     * `ImageView mImageView`
+     * [FrameLayout] with ID R.id.container containing both [ListView] field [mPhotosList] and
+     * [ImageView] field [mImageView]
      */
     private var mContainer: ViewGroup? = null
 
     /**
-     * `ImageView` with ID R.id.picture which displays selected photo
+     * [ImageView] with ID R.id.picture which displays selected photo
      */
     private var mImageView: ImageView? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.animations_main_screen.
-     * We initialize `ListView mPhotosList` by locating the view with ID android.R.id.list, we
-     * initialize `ImageView mImageView` by locating the view with ID R.id.picture, and we
-     * initialize `ViewGroup mContainer` by locating the view group with ID R.id.container.
+     * We initialize [ListView] field [mPhotosList] by locating the view with ID android.R.id.list,
+     * we initialize [ImageView] field [mImageView] by locating the view with ID R.id.picture, and
+     * we initialize [ViewGroup] field [mContainer] by locating the view group with ID R.id.container.
      *
+     * We create `ArrayAdapter<String>` `val adapter` using android.R.layout.simple_list_item_1 as
+     * the layout file containing a [TextView] to use when instantiating views, and PHOTOS_NAMES as
+     * the objects to represent in the [ListView], set it as the adapter for our [ListView] field
+     * [mPhotosList], and set "this" as the `OnItemClickListener` for [mPhotosList].
      *
-     * We create `ArrayAdapter<String> adapter` using android.R.layout.simple_list_item_1 as
-     * the layout file containing a TextView to use when instantiating views, and PHOTOS_NAMES as
-     * the objects to represent in the ListView, set it as the adapter for our `ListView`
-     * `ListView mPhotosList`, and set "this" as the `OnItemClickListener` for
-     * `ListView mPhotosList`.
+     * We enable click events for [ImageView] field [mImageView], enable it to receive focus, and
+     * set "this" as its [View.OnClickListener].
      *
+     * Finally we the set the types of drawing caches that should be kept in memory after they have
+     * been created for [ViewGroup] field [mContainer] to PERSISTENT_ANIMATION_CACHE (indicates that
+     * the animation drawing cache should be kept in memory) Note: this last action is deprecated
+     * and rather wasteful in the era of hardware acceleration.
      *
-     * We enable click events for `ImageView mImageView`, enable it to receive focus, and set
-     * "this" as its `OnItemClickListener`.
-     *
-     *
-     * Finally we the set types of drawing caches should be kept in memory after they have been
-     * created for `ViewGroup mContainer` to PERSISTENT_ANIMATION_CACHE (indicates that the
-     * animation drawing cache should be kept in memory).
-     *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
