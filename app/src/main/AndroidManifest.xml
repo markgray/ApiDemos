@@ -1722,7 +1722,8 @@
         <!-- ************************************* -->
         <activity
             android:name=".animation.Transition3d"
-            android:label="Views/Animation/3D Transition">
+            android:label="Views/Animation/3D Transition"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

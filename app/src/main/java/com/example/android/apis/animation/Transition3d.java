@@ -1,18 +1,19 @@
 package com.example.android.apis.animation;
 
-import com.example.android.apis.R;
-
-import android.app.Activity;
 import android.os.Bundle;
-import android.widget.ListView;
-import android.widget.ArrayAdapter;
-import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
 
 /**
  * This sample application shows how to use layout animation and various
@@ -24,7 +25,7 @@ import android.view.animation.DecelerateInterpolator;
  * the picture by 90 degrees on the Y axis. When the first half finishes, the
  * list is made invisible and the picture is set visible.
  */
-public class Transition3d extends Activity implements
+public class Transition3d extends AppCompatActivity implements
         AdapterView.OnItemClickListener, View.OnClickListener {
     /**
      * {@code ListView} with ID android.R.id.list containing names of photos
@@ -92,9 +93,9 @@ public class Transition3d extends Activity implements
 
         setContentView(R.layout.animations_main_screen);
 
-        mPhotosList = (ListView) findViewById(android.R.id.list);
-        mImageView = (ImageView) findViewById(R.id.picture);
-        mContainer = (ViewGroup) findViewById(R.id.container);
+        mPhotosList = findViewById(android.R.id.list);
+        mImageView = findViewById(R.id.picture);
+        mContainer = findViewById(R.id.container);
 
         // Prepare the ListView
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, PHOTOS_NAMES);
