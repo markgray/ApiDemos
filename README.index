@@ -1890,6 +1890,7 @@ Views
             picture by 90 degrees on the Y axis. When the first half finishes, the list
             is made invisible and the picture is set visible. (This would be good to use
             in my ClockSlice app!)
+            TODO: Remove or replace deprecated setPersistentDrawingCache
 
     Views/Animation/Interpolators          all
         .view.Animation3
