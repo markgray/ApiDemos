@@ -19,24 +19,25 @@ package com.example.android.apis.view;
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
-import com.example.android.apis.R;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
 
 /**
  * Shows the effect of selecting each of seven different types of TranslateAnimation interpolator:
  * "Accelerate", "Decelerate", "Accelerate/Decelerate", "Anticipate", "Overshoot",
  * "Anticipate/Overshoot", and "Bounce".
  */
-public class Animation3 extends Activity implements AdapterView.OnItemSelectedListener {
+public class Animation3 extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     /**
      * The list of types of interpolators used to create the {@code Adapter} which is used by the
      * {@code Spinner} with ID R.id.spinner in our layout file.
@@ -66,7 +67,7 @@ public class Animation3 extends Activity implements AdapterView.OnItemSelectedLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animation_3);
 
-        Spinner s = (Spinner) findViewById(R.id.spinner);
+        Spinner s = findViewById(R.id.spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, INTERPOLATORS);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s.setAdapter(adapter);

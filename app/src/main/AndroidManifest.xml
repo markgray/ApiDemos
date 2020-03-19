@@ -2472,7 +2472,8 @@
         </activity>
         <activity
             android:name=".view.Animation3"
-            android:label="Views/Animation/Interpolators">
+            android:label="Views/Animation/Interpolators"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
