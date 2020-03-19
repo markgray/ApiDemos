@@ -20,40 +20,43 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
-import android.widget.AdapterView
+import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
-import com.example.android.apis.R
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
+import com.example.android.apis.R
+
 /**
- * Shows the effect of selecting each of seven different types of TranslateAnimation interpolator:
+ * Shows the effect of selecting each of seven different types of [TranslateAnimation] interpolator:
  * "Accelerate", "Decelerate", "Accelerate/Decelerate", "Anticipate", "Overshoot",
  * "Anticipate/Overshoot", and "Bounce".
  */
 class Animation3 : AppCompatActivity(), OnItemSelectedListener {
+
     /**
      * Called when our activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.animation_3. We
-     * initialize `Spinner s` by locating the spinner with ID R.id.spinner in our layout, then
-     * create `ArrayAdapter<String> adapter` using android.R.layout.simple_spinner_item as the
-     * resource ID for a layout file containing a TextView to use when instantiating views, and our
-     * array `String[] INTERPOLATORS` as the objects to represent in the `Spinner`, we
-     * set the layout resource to create the drop down views of `adapter` to the resource file
-     * android.R.layout.simple_spinner_dropdown_item, and then set `adapter` as the
-     * `SpinnerAdapter` for `s`. Finally we set "this" as the `OnItemSelectedListener`
-     * for `s`.
+     * initialize [Spinner] `val s` by locating the spinner with ID R.id.spinner in our layout,
+     * then create `ArrayAdapter<String>` `val adapter` using android.R.layout.simple_spinner_item
+     * as the resource ID for a layout file containing a [TextView] to use when instantiating views,
+     * and our array [String] array field [INTERPOLATORS] as the objects to represent in the [Spinner].
+     * We set the layout resource to create the drop down views of `adapter` to the resource file
+     * android.R.layout.simple_spinner_dropdown_item, and then set `adapter` as the [SpinnerAdapter]
+     * for `s`. Finally we set "this" as the [OnItemSelectedListener] for `s`.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.animation_3)
         val s = findViewById<Spinner>(R.id.spinner)
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, INTERPOLATORS)
+        val adapter = ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_item,
+                INTERPOLATORS
+        )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         s.adapter = adapter
         s.onItemSelectedListener = this
