@@ -1,11 +1,13 @@
 package com.example.android.apis.animation
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
+import android.view.animation.Interpolator
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
@@ -84,16 +86,17 @@ class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListe
     }
 
     /**
-     * Set up a new 3D rotation on the container view. We locate the center of `ViewGroup mContainer`
-     * `(centerX,centerY)` by dividing the width and height of `mContainer` by 2 respectively.
-     * We create `Rotate3dAnimation rotation` using our parameters `start` the start angle,
-     * `end` as the end angle of the 3D rotation, our variables `centerX` as the X center,
-     * `centerY` as the Y center of the 3D rotation, 310.0 as the translation on the Z axis when
-     * the animation starts, and the flag true to indicate that the translation should be reversed.
-     * We set the duration of `rotation` to 500 milliseconds, set its "fill after" to true so
-     * that the transformation that this animation performed will persist when it is finished, set
-     * its `Interpolator` to a new instance of `AccelerateInterpolator`, and set its
-     * `AnimationListener` to a new instance of `DisplayNextView(position)`
+     * Set up a new 3D rotation on the container view. We locate the center of [ViewGroup] field
+     * [mContainer] `(centerX,centerY)` by dividing the width and height of [mContainer] by 2
+     * respectively. We create [Rotate3dAnimation] `val rotation` using our parameters [start] as
+     * the start angle, [end] as the end angle of the 3D rotation, our variables `centerX` as the
+     * X center, `centerY` as the Y center of the 3D rotation, 310.0 as the translation on the Z
+     * axis when the animation starts, and the flag true to indicate that the translation should
+     * be reversed. We set the duration of `rotation` to 500 milliseconds, set its "fill after" to
+     * true so that the transformation that this animation performed will persist when it is finished,
+     * set its [Interpolator] to a new instance of [AccelerateInterpolator], and set its
+     * [Animation.AnimationListener] to a new instance of [DisplayNextView] constructed for the item
+     * whose position is our [Int] parameter [position].
      *
      * @param position the item that was clicked to show a picture, or -1 to show the list
      * @param start    the start angle at which the rotation must begin
@@ -116,17 +119,17 @@ class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListe
     }
 
     /**
-     * Callback method to be invoked when an item in the AdapterView of `ListView mPhotosList`
-     * has been clicked. First we set the drawable whose resource ID is at `position` in our
-     * array `PHOTOS_RESOURCES` as the content of `ImageView mImageView` (this does
-     * Bitmap reading and decoding on the UI thread, which can cause a latency hiccup). Finally we
-     * call our method `applyRotation` to set up a new 3D rotation on the container view for
-     * transitioning between `ListView mPhotosList` and `ImageView mImageView` and starts
-     * that animation.
+     * Callback method to be invoked when an item in the [AdapterView] of [ListView] field
+     * [mPhotosList] has been clicked. First we set the drawable whose resource ID is at [position]
+     * in our array [PHOTOS_RESOURCES] as the content of [ImageView] field [mImageView] (this does
+     * [Bitmap] reading and decoding on the UI thread, which can cause a latency hiccup). Finally we
+     * call our method [applyRotation] to set up a new 3D rotation on the container view for
+     * transitioning between [ListView] field [mPhotosList] and [ImageView] field [mImageView] and
+     * starts that animation.
      *
-     * @param parent   The AdapterView where the click happened.
-     * @param v        The view within the AdapterView that was clicked (this will be a view provided
-     * by the adapter)
+     * @param parent   The [AdapterView] where the click happened.
+     * @param v        The [View] within the [AdapterView] that was clicked (this will be a [View]
+     *                 provided by the adapter)
      * @param position The position of the view in the adapter.
      * @param id       The row id of the item that was clicked.
      */
@@ -137,34 +140,28 @@ class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListe
     }
 
     /**
-     * Called when `ImageView mImageView` has been clicked. We simply call our method
-     * `applyRotation` to rotate back from `ImageView mImageView` to
-     * `ListView mPhotosList`.
+     * Called when [ImageView] field [mImageView] has been clicked. We simply call our method
+     * [applyRotation] to rotate back from [ImageView] field [mImageView] to [ListView] field
+     * [mPhotosList].
      *
-     * @param v The view that was clicked (`ImageView mImageView` in our case)
+     * @param v The [View] that was clicked ([ImageView] field [mImageView] in our case)
      */
     override fun onClick(v: View) {
         applyRotation(-1, 180f, 90f)
     }
 
     /**
-     * This class listens for the end of the first half of the animation.
-     * It then posts a new action that effectively swaps the views when the container
-     * is rotated 90 degrees and thus invisible.
+     * This class listens for the end of the first half of the animation. It then posts a new action
+     * that effectively swaps the views when the container is rotated 90 degrees and thus invisible.
      */
-    private inner class DisplayNextView
-    /**
-     * Our constructor, we simply save our parameter in our field `int mPosition`.
-     *
-     *  position Position in the `ListView mPhotosList` whose photo is being
-     * transitioned to, or -1 if we are transitioning back to `ListView mPhotosList`.
-     */
-    (
+    private inner class DisplayNextView(
             /**
-             * Position in the `ListView mPhotosList` whose photo is being transitioned to, or -1
-             * if we are transitioning back to `ListView mPhotosList`.
+             * Position in the [ListView] field [mPhotosList] whose photo is being transitioned to,
+             * or -1 if we are transitioning back to [mPhotosList].
              */
-            private val mPosition: Int) : Animation.AnimationListener {
+            private val mPosition: Int
+
+    ) : Animation.AnimationListener {
 
         /**
          * Notifies us that the animation has started. We ignore it.
@@ -174,9 +171,9 @@ class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListe
         override fun onAnimationStart(animation: Animation) {}
 
         /**
-         * Notifies us that the animation has ended. We add a new instance of `SwapViews(mPosition)`
-         * to the message queue of `ViewGroup mContainer`. The runnable will be run on the user
-         * interface thread.
+         * Notifies us that the animation has ended. We add a new instance of [SwapViews] constructed
+         * for position [mPosition] to the message queue of [ViewGroup] field [mContainer]. The
+         * runnable will be run on the user interface thread.
          *
          * @param animation The animation which reached its end.
          */
@@ -196,42 +193,36 @@ class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListe
     /**
      * This class is responsible for swapping the views and starting the second half of the animation.
      */
-    private inner class SwapViews
-    /**
-     * Our constructor, we simply save our parameter in our field `int mPosition`.
-     *
-     *  position Position in the `ListView mPhotosList` whose photo is being transitioned
-     * to, or -1 if we are transitioning back to `ListView mPhotosList`.
-     */
-    (
+    private inner class SwapViews(
             /**
-             * Position in the `ListView mPhotosList` whose photo is being transitioned to, or -1
-             * if we are transitioning back to `ListView mPhotosList`.
+             * Position in the [ListView] field [mPhotosList] whose photo is being transitioned to,
+             * or -1 if we are transitioning back to [mPhotosList].
              */
-            private val mPosition: Int) : Runnable {
+            private val mPosition: Int
+
+    ) : Runnable {
 
         /**
          * Starts executing the active part our code. First we determine the center `(centerX,centerY)`
-         * of `ViewGroup mContainer` by dividing its width and height by 2.0 respectively. We declare
-         * our variable `Rotate3dAnimation rotation`, then if our field `mPosition` is greater
-         * than -1, we set the visibility of `ListView mPhotosList` to GONE, and the visibility of
-         * `ImageView mImageView` to VISIBLE, then request focus for `mImageView`, and set
-         * `rotation` to a new instance of `Rotate3dAnimation` for rotating from 90 degrees to
+         * of [ViewGroup] field [mContainer] by dividing its width and height by 2.0 respectively. We
+         * declare our [Rotate3dAnimation] variable `val rotation`, then if our field [mPosition] is
+         * greater than -1, we set the visibility of [ListView] field [mPhotosList] to GONE, and the
+         * visibility of [ImageView] field [mImageView] to VISIBLE, then request focus for [mImageView],
+         * and set `rotation` to a new instance of [Rotate3dAnimation] for rotating from 90 degrees to
          * 180 degrees, using `(centerX,centerY)` as the center, 310.0 as the Z translation at the
          * start, and false as the `reverse` flag (so the translation is not reversed).
          *
+         * If [mPosition] was less than or equal to -1, we set the visibility of [ImageView] field
+         * [mImageView] to GONE, and the visibility of [ListView] field [mPhotosList] to VISIBLE,
+         * then request focus for [mPhotosList], and set `rotation` to a new instance of
+         * [Rotate3dAnimation] for rotating from 90 degrees to 0 degrees, using `(centerX,centerY)`
+         * as the center, 310.0 as the Z translation at the start, and false as the `reverse` flag
+         * (so the translation is not reversed).
          *
-         * If `mPosition` was less than or equal to -1, we set the visibility of `ImageView mImageView`
-         * to GONE, and the visibility of `ListView mPhotosList` to VISIBLE, then request focus for `mPhotosList`,
-         * and set `rotation` to a new instance of `Rotate3dAnimation` for rotating from 90 degrees to
-         * 0 degrees, using `(centerX,centerY)` as the center, 310.0 as the Z translation at the start, and false
-         * as the `reverse` flag (so the translation is not reversed).
-         *
-         *
-         * In both cases we now set the duration of `rotation` to 500 milliseconds, set its "fill after"
-         * to true so that the transformation that this animation performed will persist when it is finished, set
-         * its `Interpolator` to a new instance of `DecelerateInterpolator`, and start the
-         * animation `rotation` running for `ViewGroup mContainer`.
+         * In both cases we now set the duration of `rotation` to 500 milliseconds, set its "fill
+         * after" to true so that the transformation that this animation performed will persist
+         * when it is finished, set its [Interpolator] to a new instance of [DecelerateInterpolator],
+         * and start the animation `rotation` running for [ViewGroup] field [mContainer].
          */
         override fun run() {
             val centerX = mContainer!!.width / 2.0f
@@ -241,12 +232,20 @@ class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListe
                 mPhotosList!!.visibility = View.GONE
                 mImageView!!.visibility = View.VISIBLE
                 mImageView!!.requestFocus()
-                rotation = Rotate3dAnimation(90f, 180f, centerX, centerY, 310.0f, false)
+                rotation = Rotate3dAnimation(
+                        90f, 180f,
+                        centerX, centerY,
+                        310.0f, false
+                )
             } else {
                 mImageView!!.visibility = View.GONE
                 mPhotosList!!.visibility = View.VISIBLE
                 mPhotosList!!.requestFocus()
-                rotation = Rotate3dAnimation(90f, 0f, centerX, centerY, 310.0f, false)
+                rotation = Rotate3dAnimation(
+                        90f, 0f,
+                        centerX, centerY,
+                        310.0f, false
+                )
             }
             rotation.duration = 500
             rotation.fillAfter = true
