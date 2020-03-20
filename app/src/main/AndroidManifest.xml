@@ -2464,7 +2464,8 @@
         </activity>
         <activity
             android:name=".view.Animation2"
-            android:label="Views/Animation/Push">
+            android:label="Views/Animation/Push"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -2489,7 +2490,8 @@
         </activity>
         <activity
             android:name=".view.LayoutAnimation2"
-            android:label="Views/Layout Animation/2. List Cascade">
+            android:label="Views/Layout Animation/2. List Cascade"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

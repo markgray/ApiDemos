@@ -16,12 +16,6 @@
 
 package com.example.android.apis.view;
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-
-import com.example.android.apis.R;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -30,13 +24,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.ViewFlipper;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+// Need the following import to get access to the app resources, since this
+// class is in a sub-package.
+import com.example.android.apis.R;
+
 /**
  * Shows how to use the four different animations available for a ViewFlipper: "Push up", "Push left",
  * "Cross fade", and "Hyperspace". A ViewFlipper is a Simple ViewAnimator that will animate between
  * two or more views that have been added to it. Only one child is shown at a time. If requested, it
  * can automatically flip between each child at a regular interval.
  */
-public class Animation2 extends Activity implements AdapterView.OnItemSelectedListener {
+public class Animation2 extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     /**
      * The {@code ViewFlipper} in our layout with ID R.id.flipper
      */
@@ -72,10 +72,10 @@ public class Animation2 extends Activity implements AdapterView.OnItemSelectedLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animation_2);
 
-        mFlipper = ((ViewFlipper) this.findViewById(R.id.flipper));
+        mFlipper = this.findViewById(R.id.flipper);
         mFlipper.startFlipping();
 
-        Spinner s = (Spinner) findViewById(R.id.spinner);
+        Spinner s = findViewById(R.id.spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, mStrings);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
