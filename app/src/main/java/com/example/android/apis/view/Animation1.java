@@ -16,23 +16,23 @@
 
 package com.example.android.apis.view;
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-
-import com.example.android.apis.R;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+// Need the following import to get access to the app resources, since this
+// class is in a sub-package.
+import com.example.android.apis.R;
 
 /**
  * Shows use of a translate animation defined in xml to "shake" a TextView. It uses an
  * android:interpolator also defined in xml which consists of a cycleInterpolator whose
  * android:cycles="7".
  */
-public class Animation1 extends Activity implements View.OnClickListener {
+public class Animation1 extends AppCompatActivity implements View.OnClickListener {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
