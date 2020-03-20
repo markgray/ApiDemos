@@ -63,53 +63,44 @@ class Animation3 : AppCompatActivity(), OnItemSelectedListener {
     }
 
     /**
-     * Callback method to be invoked when an item in the `Spinner` with ID R.id.spinner has
-     * been selected. First we locate the `View target` in our layout with ID R.id.target
+     * Callback method to be invoked when an item in the [Spinner] with ID R.id.spinner has
+     * been selected. First we locate the [View] `val target` in our layout with ID R.id.target
      * (the TextView with the text "Interpolators" which we animate), then we find its parent view
-     * `View targetParent` (the main LinearLayout holding the entire UI). We create
-     * `Animation a` which is a `TranslateAnimation` with a `fromXDelta` of 0.0,
-     * a `toXDelta` which is calculated to be the width of `targetParent` minus the width
-     * of `target` minus the left and right padding of `targetParent`, and with 0.0
-     * for both `fromYDelta` and `toYDelta`. We then set the duration of `a` to
-     * 1000 milliseconds, its start offset to 300 milliseconds (when the animation should start
-     * relative to the start time), its repeat mode to RESTART (when it reaches the end it restarts
-     * from the beginning), and its repeat count to INFINITE.
+     * [View] `val targetParent` (the main [LinearLayout] holding the entire UI). We create
+     * [Animation] `val a` which is a [TranslateAnimation] with a `fromXDelta` of 0.0, a `toXDelta`
+     * which is calculated to be the width of `targetParent` minus the width of `target` minus the
+     * left and right padding of `targetParent`, and with 0.0 for both `fromYDelta` and `toYDelta`.
+     * We then set the duration of `a` to 1000 milliseconds, its start offset to 300 milliseconds
+     * (when the animation should start relative to the start time), its repeat mode to RESTART
+     * (when it reaches the end it restarts from the beginning), and its repeat count to INFINITE.
      *
-     * Next we switch based on the parameter `position` to choose the type of interpolator:
+     * Next we switch based on the parameter [position] to choose the type of interpolator:
      *
-     *  *
-     * 0 - "Accelerate" we load the interpolator of `a` from the resource with ID
-     * android.R.anim.accelerate_interpolator.
+     *  * 0 - "Accelerate" we load the interpolator of `a` from the resource with ID
+     *  android.R.anim.accelerate_interpolator.
      *
-     *  *
-     * 1 - "Decelerate" we load the interpolator of `a` from the resource with ID
-     * android.R.anim.decelerate_interpolator
+     *  * 1 - "Decelerate" we load the interpolator of `a` from the resource with ID
+     *  android.R.anim.decelerate_interpolator
      *
-     *  *
-     * 2 - "Accelerate/Decelerate" we load the interpolator of `a` from the resource with ID
-     * android.R.anim.accelerate_decelerate_interpolator
+     *  * 2 - "Accelerate/Decelerate" we load the interpolator of `a` from the resource with ID
+     *  android.R.anim.accelerate_decelerate_interpolator
      *
-     *  *
-     * 3 - "Anticipate" we load the interpolator of `a` from the resource with ID
-     * android.R.anim.anticipate_interpolator
+     *  * 3 - "Anticipate" we load the interpolator of `a` from the resource with ID
+     *  android.R.anim.anticipate_interpolator
      *
-     *  *
-     * 4 - "Overshoot" we load the interpolator of `a` from the resource with ID
-     * android.R.anim.overshoot_interpolator
+     *  * 4 - "Overshoot" we load the interpolator of `a` from the resource with ID
+     *  android.R.anim.overshoot_interpolator
      *
-     *  *
-     * 5 - "Anticipate/Overshoot" we load the interpolator of `a` from the resource with ID
-     * android.R.anim.anticipate_overshoot_interpolator
+     *  * 5 - "Anticipate/Overshoot" we load the interpolator of `a` from the resource with ID
+     *  android.R.anim.anticipate_overshoot_interpolator
      *
-     *  *
-     * 6 - "Bounce" we load the interpolator of `a` from the resource with ID
-     * android.R.anim.bounce_interpolator
+     *  * 6 - "Bounce" we load the interpolator of `a` from the resource with ID
+     *  android.R.anim.bounce_interpolator
      *
+     * Finally we instruct `target` to start [Animation] `a` now.
      *
-     * Finally we instruct `target` to start `Animation a` now.
-     *
-     * @param parent   The AdapterView where the selection happened
-     * @param v        The view within the AdapterView that was clicked
+     * @param parent   The [AdapterView] where the selection happened
+     * @param v        The [View] within the [AdapterView] that was clicked
      * @param position The position of the view in the adapter
      * @param id       The row id of the item that is selected
      */
@@ -145,7 +136,7 @@ class Animation3 : AppCompatActivity(), OnItemSelectedListener {
     /**
      * Callback method to be invoked when the selection disappears from this view. We ignore it.
      *
-     * @param parent The AdapterView that now contains no selected item.
+     * @param parent The [AdapterView] that now contains no selected item.
      */
     override fun onNothingSelected(parent: AdapterView<*>?) {}
 
