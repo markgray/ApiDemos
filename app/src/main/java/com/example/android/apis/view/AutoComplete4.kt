@@ -33,62 +33,76 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
- * Shows how to use the ContentResolver for the contacts database as the source
+ * Shows how to use the [ContentResolver] for the contacts database as the source
  * of data for an auto complete lookup of a contract.
  */
 class AutoComplete4 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.autocomplete_4.
-     * We initialize `ContentResolver content` with a ContentResolver instance for our
-     * application's package, create `Cursor cursor` by querying the URI Contacts.CONTENT_URI
-     * (content://com.android.contacts/contacts), with the projection `CONTACT_PROJECTION`
-     * returning a Cursor over the result set. We create `ContactListAdapter adapter` from
-     * `cursor`, initialize `AutoCompleteTextView textView` by finding the view with ID
+     * We initialize [ContentResolver] `val content` with a [ContentResolver] instance for our
+     * application's package, create [Cursor] `val cursor` by querying the URI Contacts.CONTENT_URI
+     * (content://com.android.contacts/contacts), with the projection [CONTACT_PROJECTION]
+     * returning a [Cursor] over the result set. We create [ContactListAdapter] `val adapter` from
+     * `cursor`, initialize [AutoCompleteTextView] `val textView` by finding the view with ID
      * R.id.edit, and set its adapter to `adapter`.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.autocomplete_4)
         val content = contentResolver
-        @SuppressLint("Recycle") val cursor = content.query(ContactsContract.Contacts.CONTENT_URI, CONTACT_PROJECTION,
-                null, null, null)
+        @SuppressLint("Recycle")
+        val cursor = content.query(
+                ContactsContract.Contacts.CONTENT_URI,
+                CONTACT_PROJECTION,
+                null,
+                null,
+                null
+        )
         val adapter = ContactListAdapter(this, cursor)
         val textView = findViewById<AutoCompleteTextView>(R.id.edit)
         textView.setAdapter(adapter)
     }
 
     /**
-     * `CursorAdapter` subclass we use to populate the suggestions of our
-     * `AutoCompleteTextView` with data from the contacts database.
+     * [CursorAdapter] subclass we use to populate the suggestions of our
+     * [AutoCompleteTextView] with data from the contacts database.
      */
     @Suppress("DEPRECATION")
-    class ContactListAdapter(context: Context, c: Cursor?) : CursorAdapter(context, c), Filterable {
+    class ContactListAdapter(
+            context: Context,
+            c: Cursor?
+    ) : CursorAdapter(context, c), Filterable {
+
         /**
-         * ContentResolver instance for our application's package.
+         * [ContentResolver] instance for our application's package.
          */
         private val mContent: ContentResolver = context.contentResolver
 
         /**
-         * Makes a new view to hold the data pointed to by `Cursor cursor`. First we initialize
-         * `LayoutInflater inflater` with a LayoutInflater for `Context context`, and use
-         * it to inflate the XML layout resource file android.R.layout.simple_dropdown_item_1line,
-         * into `TextView view`, using `ViewGroup parent` to provide a set of LayoutParams
-         * values for root of the returned hierarchy. We then set the text of `view` to the
-         * string of the column COLUMN_DISPLAY_NAME (1) of `Cursor cursor`, and return `view`
-         * to the caller.
+         * Makes a new view to hold the data pointed to by [Cursor] parameter [cursor]. First we
+         * initialize [LayoutInflater] `val inflater` with a [LayoutInflater] for [Context] parameter
+         * [context], and use it to inflate the system XML layout resource file
+         * android.R.layout.simple_dropdown_item_1line, into [TextView] `val view`, using [ViewGroup]
+         * parameter [parent] to provide a set of LayoutParams values for root of the returned
+         * hierarchy. We then set the text of `view` to the string of the column [COLUMN_DISPLAY_NAME]
+         * (1) of [Cursor] `cursor`, and return `view` to the caller.
          *
          * @param context Interface to application's global information
-         * @param cursor  The cursor from which to get the data. The cursor is already moved to the correct position.
+         * @param cursor  The [Cursor] from which to get the data. The [Cursor] is already moved
+         *                to the correct position.
          * @param parent  The parent to which the new view is attached to
          * @return the newly created view.
          */
         override fun newView(context: Context, cursor: Cursor, parent: ViewGroup): View {
             val inflater = LayoutInflater.from(context)
             val view = inflater.inflate(
-                    android.R.layout.simple_dropdown_item_1line, parent, false) as TextView
+                    android.R.layout.simple_dropdown_item_1line,
+                    parent,
+                    false
+            ) as TextView
             view.text = cursor.getString(COLUMN_DISPLAY_NAME)
             return view
         }
