@@ -2683,7 +2683,8 @@
         </activity>
         <activity
             android:name=".view.AutoComplete4"
-            android:label="Views/Auto Complete/4. Contacts">
+            android:label="Views/Auto Complete/4. Contacts"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

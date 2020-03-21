@@ -17,7 +17,6 @@
 package com.example.android.apis.view;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -33,13 +32,15 @@ import android.widget.FilterQueryProvider;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.android.apis.R;
 
 /**
  * Shows how to use the ContentResolver for the contacts database as the source
  * of data for an auto complete lookup of a contract.
  */
-public class AutoComplete4 extends Activity {
+public class AutoComplete4 extends AppCompatActivity {
     /**
      * Projection containing a list of which columns to return from the contacts database.
      */
@@ -76,7 +77,7 @@ public class AutoComplete4 extends Activity {
 
         ContactListAdapter adapter = new ContactListAdapter(this, cursor);
 
-        AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.edit);
+        AutoCompleteTextView textView = findViewById(R.id.edit);
         textView.setAdapter(adapter);
     }
 
