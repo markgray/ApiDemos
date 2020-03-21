@@ -16,19 +16,20 @@
 
 package com.example.android.apis.view;
 
-import com.example.android.apis.R;
-
-import android.app.Activity;
+import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
 
 /**
  * Shows how to use an AutoCompleteTextView to provide suggestions as a user types. The
  * AutoCompleteTextView is located at the top of the screen, so the suggestions appear
  * in a drop down list.
  */
-public class AutoComplete1 extends Activity {
+public class AutoComplete1 extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.autocomplete_1.
@@ -46,7 +47,7 @@ public class AutoComplete1 extends Activity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, COUNTRIES);
-        AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.edit);
+        AutoCompleteTextView textView = findViewById(R.id.edit);
         textView.setAdapter(adapter);
     }
 
