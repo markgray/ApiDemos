@@ -16,19 +16,20 @@
 
 package com.example.android.apis.view;
 
-import com.example.android.apis.R;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
 
 /**
  * Shows how to use an AutoCompleteTextView to provide suggestions as a user types. The entire very
  * long layout is inside a ScrollView that you have to scroll down to see the AutoCompleteTextView's,
  * which control the ScrollView as they need to when presenting the suggestion list.
  */
-public class AutoComplete3 extends Activity {
+public class AutoComplete3 extends AppCompatActivity {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -50,9 +51,9 @@ public class AutoComplete3 extends Activity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line,
                 AutoComplete1.COUNTRIES);
-        AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.edit);
+        AutoCompleteTextView textView = findViewById(R.id.edit);
         textView.setAdapter(adapter);
-        textView = (AutoCompleteTextView) findViewById(R.id.edit2);
+        textView = findViewById(R.id.edit2);
         textView.setAdapter(adapter);
     }
 }

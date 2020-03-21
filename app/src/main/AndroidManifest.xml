@@ -2674,7 +2674,8 @@
         </activity>
         <activity
             android:name=".view.AutoComplete3"
-            android:label="Views/Auto Complete/3. Scroll">
+            android:label="Views/Auto Complete/3. Scroll"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
