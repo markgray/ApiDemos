@@ -18,30 +18,34 @@ package com.example.android.apis.view
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
- * Shows how to use an AutoCompleteTextView to provide suggestions as a user types. The
- * AutoCompleteTextView is located at the top of the screen, so the suggestions appear
+ * Shows how to use an [AutoCompleteTextView] to provide suggestions as a user types. The
+ * [AutoCompleteTextView] is located at the top of the screen, so the suggestions appear
  * in a drop down list.
  */
 class AutoComplete1 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.autocomplete_1.
-     * We create `ArrayAdapter<String> adapter` using our array `COUNTRIES` as the data
+     * We create `ArrayAdapter<String>` `val adapter` using our array `COUNTRIES` as the data
      * and android.R.layout.simple_dropdown_item_1line as the resource ID for the layout file which
-     * contains a TextView to use when instantiating views. We set `AutoCompleteTextView textView`
-     * by finding the view with ID R.id.edit, and set its adapter to `adapter`.
+     * contains a [TextView] to use when instantiating views. We set [AutoCompleteTextView]
+     * `val textView` by finding the view with ID R.id.edit, and set its adapter to `adapter`.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.autocomplete_1)
-        val adapter = ArrayAdapter(this,
-                android.R.layout.simple_dropdown_item_1line, COUNTRIES)
+        val adapter = ArrayAdapter(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                COUNTRIES
+        )
         val textView = findViewById<AutoCompleteTextView>(R.id.edit)
         textView.setAdapter(adapter)
     }
