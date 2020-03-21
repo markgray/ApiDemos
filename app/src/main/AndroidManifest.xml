@@ -2665,7 +2665,8 @@
         </activity>
         <activity
             android:name=".view.AutoComplete2"
-            android:label="Views/Auto Complete/2. Screen Bottom">
+            android:label="Views/Auto Complete/2. Screen Bottom"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
