@@ -2648,7 +2648,8 @@
         </activity>
         <activity
             android:name=".view.Buttons1"
-            android:label="Views/Buttons">
+            android:label="Views/Buttons"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

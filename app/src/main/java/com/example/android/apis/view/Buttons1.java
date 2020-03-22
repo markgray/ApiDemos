@@ -16,12 +16,13 @@
 
 package com.example.android.apis.view;
 
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 import com.example.android.apis.R;
-
-import android.app.Activity;
-import android.os.Bundle;
 
 /**
  * A gallery of the different styles of buttons. Shows three different buttons,
@@ -29,7 +30,7 @@ import android.os.Bundle;
  * using style="?android:attr/buttonStyleSmall", and a ToggleButton. The small
  * button is same size as normal button on M.
  */
-public class Buttons1 extends Activity {
+public class Buttons1 extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.buttons_1.
