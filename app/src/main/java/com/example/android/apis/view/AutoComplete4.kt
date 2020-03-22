@@ -25,10 +25,7 @@ import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AutoCompleteTextView
-import android.widget.CursorAdapter
-import android.widget.Filterable
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -108,22 +105,22 @@ class AutoComplete4 : AppCompatActivity() {
         }
 
         /**
-         * Bind an existing view to the data pointed to by `Cursor cursor`. We simply set the
-         * text of `View view` to the string of the column COLUMN_DISPLAY_NAME (1) of
-         * `Cursor cursor`
+         * Bind an existing view to the data pointed to by [Cursor] parameter [cursor]. We simply
+         * set the text of [View] parameter [view] to the string of the column [COLUMN_DISPLAY_NAME]
+         * (1) of [cursor]
          *
-         * @param view    Existing view, returned earlier by newView
+         * @param view    Existing [View], returned earlier by [newView]
          * @param context Interface to application's global information
-         * @param cursor  The cursor from which to get the data. The cursor is already
-         * moved to the correct position.
+         * @param cursor  The [Cursor] from which to get the data. The [Cursor] is already
+         *                moved to the correct position.
          */
         override fun bindView(view: View, context: Context, cursor: Cursor) {
             (view as TextView).text = cursor.getString(COLUMN_DISPLAY_NAME)
         }
 
         /**
-         * Converts the cursor into a `String`. We simply return the string of the column
-         * COLUMN_DISPLAY_NAME (1) of `Cursor cursor`
+         * Converts the [Cursor] parameter [cursor] into a [String]. We simply return the string of
+         * the column [COLUMN_DISPLAY_NAME] (1) of [cursor]
          *
          * @param cursor the cursor to convert to a String
          * @return a String representing the value
@@ -134,27 +131,34 @@ class AutoComplete4 : AppCompatActivity() {
 
         /**
          * Runs a query with the specified constraint. This query is requested by the filter attached
-         * to this adapter. We initialize `FilterQueryProvider filter` the current filter query
+         * to this adapter. We initialize [FilterQueryProvider] `val filter` the current filter query
          * provider or null if it does not exist, and if it is not null we simply use it to run a
-         * query using `constraint` as the constraint with which the query must be filtered.
-         * Otherwise we create `Uri uri` using Contacts.CONTENT_FILTER_URI as the base Uri with
-         * the string value of `constraint` appended to it as the path. Then we return the
-         * `Cursor` that results when the `ContentResolver mContent` queries `uri`
-         * using `CONTACT_PROJECTION` as the projection.
+         * query using [CharSequence] parameter [constraint] as the constraint with which the query
+         * must be filtered. Otherwise we create [Uri] `val uri` using `Contacts.CONTENT_FILTER_URI`
+         * as the base Uri with the string value of [constraint] appended to it as the path. Then we
+         * return the [Cursor] that results when the [ContentResolver] field [mContent] queries `uri`
+         * using [CONTACT_PROJECTION] as the projection.
          *
          * @param constraint the constraint with which the query must be filtered
-         * @return a Cursor representing the results of the new query
+         * @return a [Cursor] representing the results of the new query
          */
         @SuppressLint("Recycle")
         override fun runQueryOnBackgroundThread(constraint: CharSequence): Cursor {
-            val filter = filterQueryProvider
+            val filter: FilterQueryProvider = filterQueryProvider
+            @Suppress("SENSELESS_COMPARISON")
             if (filter != null) {
                 return filter.runQuery(constraint)
             }
             val uri = Uri.withAppendedPath(
                     ContactsContract.Contacts.CONTENT_FILTER_URI,
                     Uri.encode(constraint.toString()))
-            return mContent.query(uri, CONTACT_PROJECTION, null, null, null)!!
+            return mContent.query(
+                    uri,
+                    CONTACT_PROJECTION,
+                    null,
+                    null,
+                    null
+            )!!
         }
 
     }
