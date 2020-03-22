@@ -16,22 +16,23 @@
 
 package com.example.android.apis.view;
 
-import com.example.android.apis.R;
-
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
 import android.widget.AutoCompleteTextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
+
 /**
  * Shows how to use the ContentResolver for the contacts database as the source
  * of data for an auto complete lookup of a contact. It uses android:completionHint
  * to show the hint "Typing * will show all of your contacts." in the AutoCompleteTextView.
  */
-public class AutoComplete5 extends Activity {
+public class AutoComplete5 extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.autocomplete_5.
@@ -54,7 +55,7 @@ public class AutoComplete5 extends Activity {
         Cursor cursor = content.query(Contacts.CONTENT_URI, AutoComplete4.CONTACT_PROJECTION, null, null, null);
         AutoComplete4.ContactListAdapter adapter = new AutoComplete4.ContactListAdapter(this, cursor);
 
-        AutoCompleteTextView textView = (AutoCompleteTextView)findViewById(R.id.edit);
+        AutoCompleteTextView textView = findViewById(R.id.edit);
         textView.setAdapter(adapter);
     }
 }
