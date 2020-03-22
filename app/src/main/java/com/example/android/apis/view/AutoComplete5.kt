@@ -25,7 +25,10 @@ import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AutoCompleteTextView
+import android.widget.CursorAdapter
+import android.widget.Filterable
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -133,7 +136,7 @@ class AutoComplete5 : AppCompatActivity() {
 
         /**
          * Runs a query with the specified constraint. This query is requested by the filter attached
-         * to this adapter. We initialize [FilterQueryProvider] `val filter` the current filter query
+         * to this adapter. We initialize `FilterQueryProvider` `val filter` the current filter query
          * provider or null if it does not exist, and if it is not null we simply use it to run a
          * query using [CharSequence] parameter [constraint] as the constraint with which the query
          * must be filtered. Otherwise we create [Uri] `val uri` using `Contacts.CONTENT_FILTER_URI`
@@ -146,7 +149,7 @@ class AutoComplete5 : AppCompatActivity() {
          */
         @SuppressLint("Recycle")
         override fun runQueryOnBackgroundThread(constraint: CharSequence): Cursor {
-            val filter: FilterQueryProvider = filterQueryProvider
+            val filter = filterQueryProvider
             @Suppress("SENSELESS_COMPARISON")
             if (filter != null) {
                 return filter.runQuery(constraint)
