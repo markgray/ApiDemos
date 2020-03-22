@@ -69,8 +69,8 @@ class AutoComplete5 : AppCompatActivity() {
     }
 
     /**
-     * [CursorAdapter] subclass we use to populate the suggestions of our
-     * [AutoCompleteTextView] with data from the contacts database.
+     * [CursorAdapter] subclass we use to populate the suggestions of our [AutoCompleteTextView]
+     * with data from the contacts database.
      */
     @Suppress("DEPRECATION")
     class ContactListAdapter(
