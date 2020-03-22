@@ -19,9 +19,6 @@ package com.example.android.apis.view;
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
-import com.example.android.apis.R;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
@@ -29,10 +26,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Chronometer;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
+
 /**
  * Demonstrates the Chronometer class.
  */
-public class ChronometerDemo extends Activity {
+public class ChronometerDemo extends AppCompatActivity {
     /**
      * {@code Chronometer} in our layout file with ID R.id.chronometer
      */
@@ -69,24 +70,24 @@ public class ChronometerDemo extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chronometer);
 
-        mChronometer = (Chronometer) findViewById(R.id.chronometer);
+        mChronometer = findViewById(R.id.chronometer);
 
         Button button;
 
         // Watch for button clicks.
-        button = (Button) findViewById(R.id.start);
+        button = findViewById(R.id.start);
         button.setOnClickListener(mStartListener);
 
-        button = (Button) findViewById(R.id.stop);
+        button = findViewById(R.id.stop);
         button.setOnClickListener(mStopListener);
 
-        button = (Button) findViewById(R.id.reset);
+        button = findViewById(R.id.reset);
         button.setOnClickListener(mResetListener);
 
-        button = (Button) findViewById(R.id.set_format);
+        button = findViewById(R.id.set_format);
         button.setOnClickListener(mSetFormatListener);
 
-        button = (Button) findViewById(R.id.clear_format);
+        button = findViewById(R.id.clear_format);
         button.setOnClickListener(mClearFormatListener);
     }
 
