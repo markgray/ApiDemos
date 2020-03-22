@@ -176,6 +176,6 @@ class AutoComplete4 : AppCompatActivity() {
         /**
          * Index of the column in the cursor containing Contacts.DISPLAY_NAME
          */
-        private const val COLUMN_DISPLAY_NAME = 1
+        const val COLUMN_DISPLAY_NAME = 1
     }
 }
