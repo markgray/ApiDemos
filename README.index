@@ -1943,7 +1943,6 @@ Views
             Shows how to use the ContentResolver for the contacts database as the source
             of data for an auto complete lookup of a contact. It uses android:completionHint
             to show the hint "Typing * will show all of your contacts." in the AutoCompleteTextView.
-            TODO: Conversion to kotlin broke AutoCompleteTextView for some reason - Fix this
 
     Views/Auto Complete/6. Multiple items  all
         .view.AutoComplete6

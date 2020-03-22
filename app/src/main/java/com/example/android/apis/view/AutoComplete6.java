@@ -16,12 +16,13 @@
 
 package com.example.android.apis.view;
 
-import com.example.android.apis.R;
-
-import android.app.Activity;
+import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.MultiAutoCompleteTextView;
-import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
 
 /**
  * Shows how to use a MultiAutoCompleteTextView to show completion suggestions
@@ -29,7 +30,7 @@ import android.os.Bundle;
  * end of every selected suggestion and MultiAutoCompleteTextView.CommaTokenizer
  * uses that to separate the words for the MultiAutoCompleteTextView.
  */
-public class AutoComplete6 extends Activity {
+public class AutoComplete6 extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.autocomplete_6.
@@ -49,7 +50,7 @@ public class AutoComplete6 extends Activity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, COUNTRIES);
-        MultiAutoCompleteTextView textView = (MultiAutoCompleteTextView) findViewById(R.id.edit);
+        MultiAutoCompleteTextView textView = findViewById(R.id.edit);
         textView.setAdapter(adapter);
         textView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
     }

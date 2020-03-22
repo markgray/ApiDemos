@@ -2701,7 +2701,8 @@
         </activity>
         <activity
             android:name=".view.AutoComplete6"
-            android:label="Views/Auto Complete/6. Multiple items">
+            android:label="Views/Auto Complete/6. Multiple items"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
