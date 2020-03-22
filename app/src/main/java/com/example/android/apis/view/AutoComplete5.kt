@@ -30,23 +30,23 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
- * Shows how to use the ContentResolver for the contacts database as the source
+ * Shows how to use the [ContentResolver] for the contacts database as the source
  * of data for an auto complete lookup of a contact. It uses android:completionHint
- * to show the hint "Typing * will show all of your contacts." in the AutoCompleteTextView.
+ * to show the hint "Typing * will show all of your contacts." in the [AutoCompleteTextView].
  */
 @Suppress("RedundantExplicitType")
 class AutoComplete5 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.autocomplete_5.
-     * We initialize `ContentResolver content` with a ContentResolver instance for our
-     * application's package, create `Cursor cursor` by querying the URI Contacts.CONTENT_URI
-     * (content://com.android.contacts/contacts), with the projection `CONTACT_PROJECTION`
-     * returning a Cursor over the result set. We create ContactListAdapter adapter` from
-     * `cursor`, initialize `AutoCompleteTextView textView` by finding the view with ID
+     * We initialize [ContentResolver] `val content` with a [ContentResolver] instance for our
+     * application's package, create [Cursor] `val cursor` by querying the URI Contacts.CONTENT_URI
+     * (content://com.android.contacts/contacts), with the projection [CONTACT_PROJECTION]
+     * returning a [Cursor] over the result set. We create [ContactListAdapter] `val adapter` from
+     * `cursor`, initialize [AutoCompleteTextView] `val textView` by finding the view with ID
      * R.id.edit, and set its adapter to `adapter`.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
