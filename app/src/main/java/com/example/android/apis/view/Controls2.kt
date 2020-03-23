@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.example.android.apis.view;
+package com.example.android.apis.view
 
 /**
  * Same as .view.Controls1 but android:theme="@style/Theme.AppCompat" is set in AndroidManifest.xml
  */
-public class Controls2 extends Controls1 {}
+class Controls2 : Controls1()
