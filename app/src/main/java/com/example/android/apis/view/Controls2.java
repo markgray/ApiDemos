@@ -17,6 +17,6 @@
 package com.example.android.apis.view;
 
 /**
- * Same as .view.Controls1 but android:theme="@android:style/Theme" is set in AndroidManifest.xml
+ * Same as .view.Controls1 but android:theme="@style/Theme.AppCompat" is set in AndroidManifest.xml
  */
 public class Controls2 extends Controls1 {}
