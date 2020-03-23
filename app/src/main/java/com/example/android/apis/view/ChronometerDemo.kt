@@ -27,7 +27,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
- * Demonstrates the Chronometer class.
+ * Demonstrates the [Chronometer] class.
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class ChronometerDemo : AppCompatActivity() {
@@ -39,28 +39,21 @@ class ChronometerDemo : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.chronometer. We
-     * initialize our field `Chronometer mChronometer` by locating the view in our layout with
-     * ID R.id.chronometer. We declare `Button button`, then proceed to use it to set the
-     * `OnClickListener` for the five buttons in our layout:
+     * initialize our [Chronometer] field [mChronometer] by locating the view in our layout with
+     * ID R.id.chronometer. We declare [Button] `val button`, then proceed to use it to set the
+     * [View.OnClickListener] for the five buttons in our layout:
      *
-     *  *
-     * R.id.start "Start" - `OnClickListener mStartListener`
+     *  * R.id.start "Start" - `OnClickListener` field [mStartListener]
      *
-     *  *
-     * R.id.stop "Stop" - `OnClickListener mStopListener`
+     *  * R.id.stop "Stop" - `OnClickListener` field [mStopListener]
      *
-     *  *
-     * R.id.reset "Reset" - `OnClickListener mResetListener`
+     *  * R.id.reset "Reset" - `OnClickListener` field [mResetListener]
      *
-     *  *
-     * R.id.set_format "Set format string" - `OnClickListener mSetFormatListener`
+     *  * R.id.set_format "Set format string" - `OnClickListener` field [mSetFormatListener]
      *
-     *  *
-     * R.id.clear_format "Clear format string" - `OnClickListener mClearFormatListener`
+     *  * R.id.clear_format "Clear format string" - `OnClickListener` field [mClearFormatListener]
      *
-     *
-     *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,60 +74,39 @@ class ChronometerDemo : AppCompatActivity() {
     }
 
     /**
-     * `OnClickListener` for the button R.id.start "Start"
-     */
-    /**
-     * Called when the button R.id.start "Start" is clicked.
-     *
-     *  v view that was clicked
+     * Called when the button R.id.start "Start" is clicked. We simply call the `stop` method
+     * of [Chronometer] field [mChronometer].
      */
     var mStartListener: View.OnClickListener = View.OnClickListener {
         mChronometer!!.start()
     }
 
-    /**
-     * `OnClickListener` for the button R.id.stop "Stop"
-     */
+
     /**
      * Called when the button R.id.stop "Stop" is clicked. We simply call the `stop` method
-     * of `Chronometer mChronometer`.
-     *
-     *  v view that was clicked
+     * of [Chronometer] field [mChronometer].
      */
     var mStopListener: View.OnClickListener = View.OnClickListener { mChronometer!!.stop() }
 
     /**
-     * `OnClickListener` for the button R.id.reset "Reset"
-     */
-    /**
-     * Called when the button R.id.reset "Reset" is clicked. We simply call the `setBase`
-     * method of `Chronometer mChronometer` with the elapsed milliseconds since boot as
-     * its argument.
-     *
-     *  v view that was clicked
+     * Called when the button R.id.reset "Reset" is clicked. We simply call the `setBase` method of
+     * [Chronometer] field [mChronometer] with the elapsed milliseconds since boot as its argument.
      */
     var mResetListener: View.OnClickListener = View.OnClickListener { mChronometer!!.base = SystemClock.elapsedRealtime() }
 
     /**
-     * `OnClickListener` for the button R.id.set_format "Set format string"
-     */
-    /**
      * Called when the button R.id.set_format "Set format string" is clicked. We call the method
-     * `setFormat` of `Chronometer mChronometer` with the string "Formatted time (%s)".
-     *
-     *  v view that was clicked
+     * `setFormat` of [Chronometer] field [mChronometer] with the string "Formatted time (%s)".
      */
-    var mSetFormatListener: View.OnClickListener = View.OnClickListener{ mChronometer!!.format = "Formatted time (%s)"
+    var mSetFormatListener: View.OnClickListener = View.OnClickListener{
+        mChronometer!!.format = "Formatted time (%s)"
     }
 
     /**
-     * `OnClickListener` for the button R.id.clear_format "Clear format string"
-     */
-    /**
      * Called when the button R.id.clear_format "Clear format string" is clicked. We call the
-     * method `setFormat` of `Chronometer mChronometer` with null as the argument.
-     *
-     *  v view that was clicked
+     * method `setFormat` of [Chronometer] field [mChronometer] with null as the argument.
      */
-    var mClearFormatListener: View.OnClickListener = View.OnClickListener { mChronometer!!.format = null }
+    var mClearFormatListener: View.OnClickListener = View.OnClickListener {
+        mChronometer!!.format = null
+    }
 }
