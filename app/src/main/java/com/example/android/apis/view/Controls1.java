@@ -19,21 +19,22 @@ package com.example.android.apis.view;
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
-import com.example.android.apis.R;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
+
 
 /**
  * A gallery of basic controls: Button, EditText, RadioButton, Checkbox, Spinner and switch if v14+.
- * This example uses the light theme which is set using android:theme="@android:style/Theme.Light"
+ * This example uses the light theme which is set using android:theme="@style/Theme.AppCompat.Light"
  * in AndroidManifest.xml
  */
-public class Controls1 extends Activity {
+public class Controls1 extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.controls_1. We set
@@ -52,10 +53,10 @@ public class Controls1 extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.controls_1);
 
-        Button disabledButton = (Button) findViewById(R.id.button_disabled);
+        Button disabledButton = findViewById(R.id.button_disabled);
         disabledButton.setEnabled(false);
 
-        Spinner s1 = (Spinner) findViewById(R.id.spinner1);
+        Spinner s1 = findViewById(R.id.spinner1);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, mStrings);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

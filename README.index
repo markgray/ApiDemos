@@ -1968,7 +1968,7 @@ Views
         .view.Controls1
             A gallery of basic controls: Button, EditText, RadioButton, Checkbox, Spinner
             and switch if v14+. This example uses the light theme which is set using
-            android:theme="@android:style/Theme.Light" in AndroidManifest.xml
+            android:theme="@style/Theme.AppCompat.Light" in AndroidManifest.xml
 
     Views/Controls/2. Dark Theme           all
         .view.Controls2
