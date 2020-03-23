@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.view
 
-package com.example.android.apis.view;
-
-import android.app.Activity;
-import android.os.Bundle;
+import android.app.Activity
+import android.os.Bundle
+import com.example.android.apis.R
 
 /**
- * android:theme="@android:style/Theme.Material.Light" set in AndroidManifest.xml
+ * android:theme="@style/Theme.MyMaterialLight" set in AndroidManifest.xml
+ * TODO: Make look more like android:theme="@android:style/Theme.Material.Light"
  */
-public class ControlsMaterialLight extends Activity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(com.example.android.apis.R.layout.controls_material);
+open class ControlsMaterialLight : Activity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.controls_material)
     }
 }

@@ -1990,14 +1990,16 @@ Views
 
     Views/Controls/5. Material Light Theme v24
         .view.ControlsMaterialLight
-            Uses layout/controls_material.xml with android:theme="@android:style/Theme.Material.Light" 
+            Uses layout/controls_material.xml with aandroid:theme="@style/Theme.MyMaterialLight"
             set in AndroidManifest.xml which contains more advanced controls than used in old
             version.
+            TODO: Make look more like android:theme="@android:style/Theme.Material.Light"
 
     Views/Controls/5. Material Light Theme v20
         .view.Controls5
             Uses .view.Controls1 with android:theme="@android:style/Theme.Material.Light"
             set in AndroidManifest.xml
+            TODO: Make look more like android:theme="@android:style/Theme.Material.Light"
 
     Views/Controls/6. Material Dark Theme v24
          .view.ControlsMaterialLight

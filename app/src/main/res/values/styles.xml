@@ -203,4 +203,8 @@
         parent="Theme.AppCompat">
     </style>
 
+    <style name="Theme.MyMaterialLight"
+        parent="Theme.AppCompat.Light">
+    </style>
+
 </resources>
