@@ -26,23 +26,24 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
- * A gallery of basic controls: Button, EditText, RadioButton, Checkbox, Spinner and switch if v14+.
- * This example uses the light theme which is set using android:theme="@style/Theme.AppCompat.Light"
- * in AndroidManifest.xml
+ * A gallery of basic controls: [Button], `EditText`, `RadioButton`, `Checkbox`, `Spinner` and
+ * `Switch` if v14+. This example uses the light theme which is set using the activity attribute
+ * android:theme="@style/Theme.AppCompat.Light" in AndroidManifest.xml
  */
 open class Controls1 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.controls_1. We set
-     * `Button disabledButton` by finding the view with ID R.id.button_disabled in our layout
-     * and disable it (in order to show what a disabled button looks like). We set `Spinner s1`
-     * by finding the view in our layout with ID R.id.spinner1, create `ArrayAdapter<String> adapter`
-     * from our string array `String[] mStrings` using android.R.layout.simple_spinner_item as
-     * the resource ID for a layout file containing a TextView to use when instantiating views, and
-     * set its layout resource defining the drop down views to be android.R.layout.simple_spinner_dropdown_item.
-     * Finally we set `adapter` as the adapter for `s1`.
+     * [Button] `val disabledButton` by finding the view with ID R.id.button_disabled in our layout
+     * and disable it (in order to show what a disabled button looks like). We set [Spinner] `val s1`
+     * by finding the view in our layout with ID R.id.spinner1, create `ArrayAdapter<String>`
+     * `val adapter` from our string array field [mStrings] using android.R.layout.simple_spinner_item
+     * as the resource ID for a layout file containing a `TextView` to use when instantiating views,
+     * and set its layout resource defining the drop down views to be the system layout file
+     * android.R.layout.simple_spinner_dropdown_item. Finally we set `adapter` as the adapter for
+     * `s1`.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +59,7 @@ open class Controls1 : AppCompatActivity() {
 
     companion object {
         /**
-         * String array used to populate the spinner with ID R.id.spinner1
+         * String array used to populate the `Spinner` with ID R.id.spinner1
          */
         private val mStrings = arrayOf(
                 "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"
