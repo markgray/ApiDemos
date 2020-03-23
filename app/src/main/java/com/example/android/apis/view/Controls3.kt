@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.example.android.apis.view;
+package com.example.android.apis.view
 
 /**
- * Uses .view.Controls1 with android:theme="@android:style/Theme.Holo.Light" set in AndroidManifest.xml
+ * Uses .view.Controls1 with android:theme="@style/Theme.MyHoloLight" set in AndroidManifest.xml
+ * TODO: Make it look more like "@android:style/Theme.Holo.Light"
  */
-public class Controls3 extends Controls1 {
-}
+class Controls3 : Controls1()

@@ -195,4 +195,9 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
+    <style name="Theme.MyHoloLight"
+        parent="Theme.AppCompat.Light">
+
+    </style>
+
 </resources>

@@ -1978,8 +1978,9 @@ Views
 
     Views/Controls/3. Holo Light Theme     v11
         .view.Controls3
-            Uses .view.Controls1 with android:theme="@android:style/Theme.Holo.Light" set
+            Uses .view.Controls1 with android:theme="@style/Theme.MyHoloLight" set
             in AndroidManifest.xml
+            TODO: Make it look more like "@android:style/Theme.Holo.Light"
 
     Views/Controls/4. Holo Dark Theme      v11
         .view.Controls4

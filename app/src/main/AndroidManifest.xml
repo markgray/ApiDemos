@@ -2561,7 +2561,7 @@
             android:name=".view.Controls3"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Views/Controls/3. Holo Light Theme"
-            android:theme="@android:style/Theme.Holo.Light">
+            android:theme="@style/Theme.MyHoloLight">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
