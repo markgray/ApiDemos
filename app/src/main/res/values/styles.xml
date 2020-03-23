@@ -197,7 +197,10 @@
 
     <style name="Theme.MyHoloLight"
         parent="Theme.AppCompat.Light">
+    </style>
 
+    <style name="Theme.MyHolo"
+        parent="Theme.AppCompat">
     </style>
 
 </resources>

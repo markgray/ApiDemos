@@ -2571,7 +2571,7 @@
             android:name=".view.Controls4"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Views/Controls/4. Holo Dark Theme"
-            android:theme="@android:style/Theme.Holo">
+            android:theme="@style/Theme.MyHolo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
