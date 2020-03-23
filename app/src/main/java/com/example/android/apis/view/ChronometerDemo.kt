@@ -86,13 +86,17 @@ class ChronometerDemo : AppCompatActivity() {
      * Called when the button R.id.stop "Stop" is clicked. We simply call the `stop` method
      * of [Chronometer] field [mChronometer].
      */
-    var mStopListener: View.OnClickListener = View.OnClickListener { mChronometer!!.stop() }
+    var mStopListener: View.OnClickListener = View.OnClickListener {
+        mChronometer!!.stop()
+    }
 
     /**
      * Called when the button R.id.reset "Reset" is clicked. We simply call the `setBase` method of
      * [Chronometer] field [mChronometer] with the elapsed milliseconds since boot as its argument.
      */
-    var mResetListener: View.OnClickListener = View.OnClickListener { mChronometer!!.base = SystemClock.elapsedRealtime() }
+    var mResetListener: View.OnClickListener = View.OnClickListener {
+        mChronometer!!.base = SystemClock.elapsedRealtime()
+    }
 
     /**
      * Called when the button R.id.set_format "Set format string" is clicked. We call the method
