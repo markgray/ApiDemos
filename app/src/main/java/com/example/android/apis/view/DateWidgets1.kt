@@ -36,9 +36,10 @@ import java.util.*
  */
 class DateWidgets1 : AppCompatActivity() {
     /**
-     * where we display the selected date and time
+     * [TextView] where we display the selected date and time
      */
     private var mDateDisplay: TextView? = null
+
     // date and time
     /**
      * Year to display
@@ -68,24 +69,24 @@ class DateWidgets1 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.date_widgets_example_1.
-     * We initialize our field `TextView mDateDisplay` by finding the view with ID R.id.dateDisplay,
-     * then call our method `setDialogOnClickListener` to set the `OnClickListener` of the
+     * We initialize our [TextView] field [mDateDisplay] by finding the view with ID R.id.dateDisplay,
+     * then call our method [setDialogOnClickListener] to set the [View.OnClickListener] of the
      * three buttons in our layout as follows:
      *
      *  * ID R.id.pickDate "change the date" button, starts the DATE_DIALOG_ID dialog.
      *  * ID R.id.pickTime12 "change the time (12 hour)" button, starts the TIME_12_DIALOG_ID dialog
      *  * ID R.id.pickTime24 "change the time (24 hour)" button, starts the TIME_24_DIALOG_ID dialog
      *
-     * Next we initialize `Calendar c` with a Calendar with current time in the default time zone
-     * with the default locale. We then use `c` to initialize `mYear` with the current YEAR,
-     * `mMonth` with the current MONTH, `mDay` with the current DAY_OF_MONTH, `mHour`
-     * with the current HOUR_OF_DAY, and `mMinute` with MINUTE.
+     * Next we initialize [Calendar] `val c` with a [Calendar] with current time in the default time
+     * zone with the default locale. We then use `c` to initialize [mYear] with the current YEAR,
+     * [mMonth] with the current MONTH, [mDay] with the current DAY_OF_MONTH, [mHour] with the
+     * current HOUR_OF_DAY, and [mMinute] with MINUTE.
      *
      *
-     * Finally we call our method `updateDisplay` to update `TextView mDateDisplay` with
+     * Finally we call our method [updateDisplay] to update [TextView] field [mDateDisplay] with
      * the date and time values we just initialized.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,15 +105,14 @@ class DateWidgets1 : AppCompatActivity() {
     }
 
     /**
-     * Sets the `OnClickListener` of the button with ID `buttonId` to an anonymous class
-     * which will call `showDialog` using `dialogId` as the ID of the dialog to launch.
+     * Sets the [View.OnClickListener] of the button with ID [buttonId] to a lambda which will call
+     * [showDialog] using [dialogId] as the ID of the dialog to launch.
      *
+     * First we initialize [Button] `val b` by finding the view with ID [buttonId], then we set its
+     * [View.OnClickListener] to a lambda which will call [showDialog] using [dialogId] as the ID of
+     * the dialog to launch.
      *
-     * First we initialize `Button b` by finding the view with ID `buttonId`, then we set
-     * its `OnClickListener` to an anonymous class which will call `showDialog` using
-     * `dialogId` as the ID of the dialog to launch.
-     *
-     * @param buttonId ID of the button in our layout whose `OnClickListener` we are to set
+     * @param buttonId ID of the button in our layout whose [View.OnClickListener] we are to set
      * @param dialogId dialog ID that should be launched when the button is clicked.
      */
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
@@ -126,35 +126,38 @@ class DateWidgets1 : AppCompatActivity() {
 
     /**
      * Callback for creating dialogs that are managed (saved and restored) for you by the activity.
-     * We switch based on the value of our parameter `id`:
+     * We switch based on the value of our parameter [id]:
      *
      *  * TIME_12_DIALOG_ID - we fall through to the TIME_24_DIALOG_ID case
-     *  *
-     * TIME_24_DIALOG_ID - we return a new instance of `TimePickerDialog`, using
-     * `OnTimeSetListener mTimeSetListener` as the listener to call when the time is set,
-     * `mHour` as the initial hour, and `mMinute` as the initial minute, and
-     * true if our parameter `id` is equal to TIME_24_DIALOG_ID (this is a 24 hour view)
-     * or false if we fell through from the TIME_12_DIALOG_ID case (AM/PM view).
      *
-     *  *
-     * DATE_DIALOG_ID - we return a new instance of `DatePickerDialog` using
-     * `OnDateSetListener mDateSetListener` as the listener to call when the date is set,
-     * `mYear` as the initial year, `mMonth` as the initial month, and `mDay`
-     * as the initial day of the month.
+     *  * TIME_24_DIALOG_ID - we return a new instance of [TimePickerDialog], using
+     *  [OnTimeSetListener] field [mTimeSetListener] as the listener to call when the
+     *  time is set, [mHour] as the initial hour, and [mMinute] as the initial minute, and
+     *  true if our parameter [id] is equal to TIME_24_DIALOG_ID (this is a 24 hour view)
+     *  or false if we fell through from the TIME_12_DIALOG_ID case (AM/PM view).
      *
+     *  * DATE_DIALOG_ID - we return a new instance of [DatePickerDialog] using
+     *  [OnDateSetListener] field [mDateSetListener] as the listener to call when
+     *  the date is set, [mYear] as the initial year, [mMonth] as the initial month,
+     *  and [mDay] as the initial day of the month.
      *
      * If the dialog ID is not one of ours, we return null.
      *
      * @param id The id of the dialog.
-     * @return The dialog.  If you return null, the dialog will not be created.
+     * @return The dialog. If you return null, the dialog will not be created.
      */
     override fun onCreateDialog(id: Int): Dialog? {
         when (id) {
-            TIME_12_DIALOG_ID, TIME_24_DIALOG_ID -> return TimePickerDialog(this,
-                    mTimeSetListener, mHour, mMinute, id == TIME_24_DIALOG_ID)
-            DATE_DIALOG_ID -> return DatePickerDialog(this,
+            TIME_12_DIALOG_ID, TIME_24_DIALOG_ID -> return TimePickerDialog(
+                    this,
+                    mTimeSetListener,
+                    mHour, mMinute, id == TIME_24_DIALOG_ID
+            )
+            DATE_DIALOG_ID -> return DatePickerDialog(
+                    this,
                     mDateSetListener,
-                    mYear, mMonth, mDay)
+                    mYear, mMonth, mDay
+            )
         }
         return null
     }
