@@ -17,7 +17,7 @@
 <resources>
 
     <!-- For API level 11 or later, the Holo theme is available and we prefer that. -->
-    <style name="ThemeCurrent" parent="@android:style/Theme.Holo" />
+    <style name="ThemeCurrent" parent="Theme.MyHolo" />
 
     <!-- For API level 11 or later, the Holo theme is available and we prefer that. -->
     <style name="ThemeCurrentDialog" parent="Theme.AppCompat.Light.Dialog.MinWidth" />

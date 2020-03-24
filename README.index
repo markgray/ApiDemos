@@ -2025,6 +2025,7 @@ Views
             Uses .view.Controls1 with style/ThemeCurrent which selects a theme based on the
             version using values/styles.xml and values-vNN/styles.xml to select between the
             versions.
+            TODO: Make all the themes look more like the real ones
 
     Views/Controls/9. Default Theme        all
         .view.Controls9

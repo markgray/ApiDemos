@@ -26,7 +26,7 @@
          selected when the holographic theme is available, or look at
          values-XX/styles.xml for a variation that is selected when the material
          theme is available. -->
-    <style name="ThemeCurrent" parent="android:Theme" />
+    <style name="ThemeCurrent" parent="Theme.AppCompat" />
 
     <!-- This is a theme that reflects the default theme used when no theme is
          specified by an application or activity. In API 14 and above, this

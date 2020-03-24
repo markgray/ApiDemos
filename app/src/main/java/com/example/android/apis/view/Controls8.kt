@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.example.android.apis.view;
+package com.example.android.apis.view
 
 /**
  * Uses .view.Controls1 with style/ThemeCurrent which selects a theme based on the
  * version using values/styles.xml and values-vNN/styles.xml to select between the
  * versions.
+ * TODO: Make all the themes look more like the real ones
  */
-public class Controls8 extends Controls1 {
-}
+class Controls8 : Controls1()

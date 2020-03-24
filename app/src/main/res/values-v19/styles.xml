@@ -15,7 +15,7 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- For API level XX or later, the Material theme is available and we prefer that. -->
-    <style name="ThemeCurrent" parent="android:Theme.Material" tools:ignore="NewApi" />
+    <style name="ThemeCurrent" parent="Theme.MyMaterial" tools:ignore="NewApi" />
 
     <!-- For API level XX or later, the Holo theme is available and we prefer that. -->
     <style name="ThemeCurrentDialog" parent="Theme.AppCompat.Light.Dialog.MinWidth" tools:ignore="NewApi" />
