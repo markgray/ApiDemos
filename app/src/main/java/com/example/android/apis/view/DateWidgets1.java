@@ -16,16 +16,16 @@
 
 package com.example.android.apis.view;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -37,7 +37,7 @@ import java.util.Calendar;
  * Activity.onPrepareDialog and Activity.showDialog to have the activity automatically save
  * and restore the state of the dialogs. Nifty TimePickerDialog on M, lame one on Jellybean
  */
-public class DateWidgets1 extends Activity {
+public class DateWidgets1 extends AppCompatActivity {
     /**
      * where we display the selected date and time
      */
@@ -107,7 +107,7 @@ public class DateWidgets1 extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.date_widgets_example_1);
 
-        mDateDisplay = (TextView) findViewById(R.id.dateDisplay);
+        mDateDisplay = findViewById(R.id.dateDisplay);
 
         setDialogOnClickListener(R.id.pickDate, DATE_DIALOG_ID);
         setDialogOnClickListener(R.id.pickTime12, TIME_12_DIALOG_ID);
@@ -135,13 +135,10 @@ public class DateWidgets1 extends Activity {
      * @param dialogId dialog ID that should be launched when the button is clicked.
      */
     private void setDialogOnClickListener(int buttonId, final int dialogId) {
-        Button b = (Button) findViewById(buttonId);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //noinspection deprecation
-                showDialog(dialogId);
-            }
+        Button b = findViewById(buttonId);
+        b.setOnClickListener(v -> {
+            //noinspection deprecation
+            showDialog(dialogId);
         });
     }
 
@@ -299,6 +296,6 @@ public class DateWidgets1 extends Activity {
         if (c >= 10)
             return String.valueOf(c);
         else
-            return "0" + String.valueOf(c);
+            return "0" + c;
     }
 }

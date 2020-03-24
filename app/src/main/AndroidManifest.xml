@@ -2825,7 +2825,8 @@
         </activity>
         <activity
             android:name=".view.DateWidgets1"
-            android:label="Views/Date Widgets/1. Dialog">
+            android:label="Views/Date Widgets/1. Dialog"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
