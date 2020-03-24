@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.example.android.apis.view;
+package com.example.android.apis.view
 
 /**
- * Extends {@code ControlsMaterialLight} with android:theme="@android:style/Theme.Material" set in
+ * Extends `ControlsMaterialLight` with android:theme="@style/Theme.MyMaterial" set in
  * AndroidManifest.xml
+ * TODO: Make look more like android:theme="@android:style/Theme.Material"
  */
-public class ControlsMaterialDark extends ControlsMaterialLight { }
+class ControlsMaterialDark : ControlsMaterialLight()

@@ -2004,13 +2004,15 @@ Views
     Views/Controls/6. Material Dark Theme v24
          .view.ControlsMaterialLight
          .view.ControlsMaterialDark
-             Extends ControlsMaterialLight with android:theme="@android:style/Theme.Material"
+             Extends ControlsMaterialLight with android:theme="@style/Theme.MyMaterial"
              set in AndroidManifest.xml
+             TODO: Make look more like android:theme="@android:style/Theme.Material"
 
     Views/Controls/6. Material Dark Theme  v20
         .view.Controls6
-            Uses .view.Controls1 with android:theme="@android:style/Theme.Material" set
+            Uses .view.Controls1 with android:theme="@style/Theme.MyMaterial" set
             in AndroidManifest.xml
+            TODO: Make look more like android:theme="@android:style/Theme.Material"
 
     Views/Controls/7. Custom Theme         all
         .view.Controls7

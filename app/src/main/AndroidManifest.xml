@@ -2591,8 +2591,8 @@
         <activity
             android:name=".view.ControlsMaterialDark"
             android:enabled="@bool/atLeastLRelease"
-            android:label="Views/Controls/6. Material Dark Theme"
-            android:theme="@android:style/Theme.Material"
+            android:label="Views/Controls/6. Material Dark Theme v24"
+            android:theme="@style/Theme.MyMaterial"
             tools:targetApi="lollipop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -2613,8 +2613,8 @@
         <activity
             android:name=".view.Controls6"
             android:enabled="@bool/atLeastLRelease"
-            android:label="Views/Controls/6. Material Dark Theme"
-            android:theme="@android:style/Theme.Material"
+            android:label="Views/Controls/6. Material Dark Theme v21"
+            android:theme="@style/Theme.MyMaterial"
             tools:targetApi="lollipop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -207,4 +207,8 @@
         parent="Theme.AppCompat.Light">
     </style>
 
+    <style name="Theme.MyMaterial"
+        parent="Theme.AppCompat">
+    </style>
+
 </resources>

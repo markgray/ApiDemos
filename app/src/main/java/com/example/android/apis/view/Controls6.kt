@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.example.android.apis.view;
+package com.example.android.apis.view
 
 /**
- * Uses .view.Controls1 with android:theme="@android:style/Theme.Material" set in AndroidManifest.xml
+ * Uses .view.Controls1 with android:theme="@style/Theme.MyMaterial" set in AndroidManifest.xml
+ * TODO: Make look more like android:theme="@android:style/Theme.Material"
  */
-public class Controls6 extends Controls1 {
-}
+class Controls6 : Controls1()
