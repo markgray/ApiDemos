@@ -2031,6 +2031,7 @@ Views
         .view.Controls9
             Uses .view.Controls1 without specifying a theme which uses the system default
             of the device it is running on.
+            TODO: this crashed because of need for use of Theme.AppCompat, so I use it for now
 
   Custom
     Views/Custom                           all

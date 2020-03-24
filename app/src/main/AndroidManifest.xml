@@ -2641,7 +2641,8 @@
         </activity>
         <activity
             android:name=".view.Controls9"
-            android:label="Views/Controls/9. Default Theme">
+            android:label="Views/Controls/9. Default Theme"
+            android:theme="@style/Theme.AppCompat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

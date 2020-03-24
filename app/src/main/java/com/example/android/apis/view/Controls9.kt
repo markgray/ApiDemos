@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.example.android.apis.view;
+package com.example.android.apis.view
 
 /**
- * Uses .view.Controls1 without specifying a theme which uses the system default
- * of the device it is running on.
+ * Used to use .view.Controls1 without specifying a theme which uses the system default
+ * of the device it is running on, now uses Theme.AppCompat
+ * TODO: this crashed because of need for use of Theme.AppCompat, so I use it for now
  */
-public class Controls9 extends Controls1 {
-}
+class Controls9 : Controls1()
