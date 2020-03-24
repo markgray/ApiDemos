@@ -2016,7 +2016,7 @@ Views
 
     Views/Controls/7. Custom Theme         all
         .view.Controls7
-            Uses .view.Controls1 with a custom theme derived from parent="android:Theme.Light",
+            Uses .view.Controls1 with a custom theme derived from parent=""Theme.AppCompat.Light"",
             with: <color name="custom_theme_color">#b0b0ff</color> used for both
             android:windowBackground, and android:colorBackground
 

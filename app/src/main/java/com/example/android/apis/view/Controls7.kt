@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.example.android.apis.view;
+package com.example.android.apis.view
 
 /**
- * Uses .view.Controls1 with a custom theme derived from parent="android:Theme.Light",
- * with: {@code <color name="custom_theme_color">#b0b0ff</color>} used for both
+ * Uses .view.Controls1 with a custom theme derived from parent="Theme.AppCompat.Light",
+ * with: `<color name="custom_theme_color">#b0b0ff</color>` used for both
  * android:windowBackground, and android:colorBackground
  */
-public class Controls7 extends Controls1 {
-}
+class Controls7 : Controls1()
