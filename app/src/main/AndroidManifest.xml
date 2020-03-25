@@ -2912,7 +2912,8 @@
             android:name=".view.DragAndDropDemo"
             android:enabled="@bool/atLeastHoneycomb"
             android:hardwareAccelerated="false"
-            android:label="Views/Drag and Drop">
+            android:label="Views/Drag and Drop"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

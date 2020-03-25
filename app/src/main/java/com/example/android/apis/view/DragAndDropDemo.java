@@ -16,23 +16,24 @@
 
 package com.example.android.apis.view;
 
-import com.example.android.apis.R;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.DragEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
+
 /**
  * Shows how to implement draggable views.
  */
 @SuppressLint("SetTextI18n")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class DragAndDropDemo extends Activity {
+public class DragAndDropDemo extends AppCompatActivity {
     /**
      * Target {@code TextView} to display some messages in.
      */
@@ -65,18 +66,18 @@ public class DragAndDropDemo extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drag_layout);
 
-        TextView text = (TextView) findViewById(R.id.drag_text);
-        DraggableDot dot = (DraggableDot) findViewById(R.id.drag_dot_1);
+        TextView text = findViewById(R.id.drag_text);
+        DraggableDot dot = findViewById(R.id.drag_dot_1);
         dot.setReportView(text);
-        dot = (DraggableDot) findViewById(R.id.drag_dot_2);
+        dot = findViewById(R.id.drag_dot_2);
         dot.setReportView(text);
-        dot = (DraggableDot) findViewById(R.id.drag_dot_3);
+        dot = findViewById(R.id.drag_dot_3);
         dot.setReportView(text);
 
-        mHiddenDot = (DraggableDot) findViewById(R.id.drag_dot_hidden);
+        mHiddenDot = findViewById(R.id.drag_dot_hidden);
         mHiddenDot.setReportView(text);
 
-        mResultText = (TextView) findViewById(R.id.drag_result_text);
+        mResultText = findViewById(R.id.drag_result_text);
         View MainView = findViewById(R.id.drag_main);
         MainView.setOnDragListener(new View.OnDragListener() {
             /**
