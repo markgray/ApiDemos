@@ -167,15 +167,12 @@ class DateWidgets1 : AppCompatActivity() {
      * value of our parameter `id`:
      *
      *  * TIME_12_DIALOG_ID - we fall through to the TIME_24_DIALOG_ID case
-     *  *
-     * TIME_24_DIALOG_ID - we call the `updateTime` method of our parameter `dialog`
-     * in order to set the current time to `mHour` and `mMinute` then break.
      *
-     *  *
-     * DATE_DIALOG_ID - we call the `updateDate` method of our parameter `dialog`
-     * in order to set the current date to `mYear`, `mMonth`, and `mDay` then break.
+     *  * TIME_24_DIALOG_ID - we call the `updateTime` method of our [Dialog] parameter [dialog]
+     *  in order to set the current time to [mHour] and [mMinute] then break.
      *
-     *
+     *  * DATE_DIALOG_ID - we call the `updateDate` method of our [Dialog] parameter [dialog]
+     *  in order to set the current date to [mYear], [mMonth], and [mDay] then break.
      *
      * @param id     The id of the managed dialog.
      * @param dialog The dialog.
@@ -188,9 +185,8 @@ class DateWidgets1 : AppCompatActivity() {
     }
 
     /**
-     * Updates the date and time displayed in `TextView mDateDisplay` to a `CharSequence`
-     * built from the current values of `mMonth`, `mDay`, `mYear`, `mHour`,
-     * and `mMinute`.
+     * Updates the date and time displayed in [TextView] field [mDateDisplay] to a [CharSequence]
+     * built from the current values of [mMonth], [mDay], [mYear], [mHour], and [mMinute].
      */
     private fun updateDisplay() {
         mDateDisplay!!.text = StringBuilder() // Month is 0 based so add 1
@@ -202,36 +198,26 @@ class DateWidgets1 : AppCompatActivity() {
     }
 
     /**
-     * `OnDateSetListener` for our `DatePickerDialog` dialog, when called we save our
-     * `year`, `monthOfYear`, and `dayOfMonth` parameters in our fields `mYear`,
-     * `monthOfYear`, and `mDay` respectively then call our method `updateDisplay`
-     * to update our display of these fields.
+     * [OnDateSetListener] for our [DatePickerDialog] dialog, when called we save our `year`,
+     * `monthOfYear`, and `dayOfMonth` parameters in our fields [mYear], [mMonth], and [mDay]
+     * respectively then call our method [updateDisplay] to update our display of these fields.
      */
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-    private val mDateSetListener = OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+    private val mDateSetListener = OnDateSetListener {
+        view,
+        year,
+        monthOfYear,
+        dayOfMonth ->
 
         /**
-         * The callback used to indicate the user is done filling in the date. We simply save
-         * our `year`, `monthOfYear`, and `dayOfMonth` parameters in our
-         * fields `mYear`, `monthOfYear`, and `mDay` respectively then call
-         * our method `updateDisplay` to update our display of these fields.
+         * The callback used to indicate the user is done filling in the date. We simply save our
+         * `year`, `monthOfYear`, and `dayOfMonth` parameters in our fields `mYear`, `mMonth`, and
+         * `mDay` respectively then call our method [updateDisplay] to update our display of these
+         * fields.
          *
          * @param view        The view associated with this listener.
          * @param year        The year that was set.
-         * @param monthOfYear The month that was set (0-11) for compatibility
-         * with [java.util.Calendar].
-         * @param dayOfMonth  The day of the month that was set.
-         */
-        /**
-         * The callback used to indicate the user is done filling in the date. We simply save
-         * our `year`, `monthOfYear`, and `dayOfMonth` parameters in our
-         * fields `mYear`, `monthOfYear`, and `mDay` respectively then call
-         * our method `updateDisplay` to update our display of these fields.
-         *
-         * @param view        The view associated with this listener.
-         * @param year        The year that was set.
-         * @param monthOfYear The month that was set (0-11) for compatibility
-         * with [java.util.Calendar].
+         * @param monthOfYear The month that was set (0-11) for compatibility with [Calendar].
          * @param dayOfMonth  The day of the month that was set.
          */
         mYear = year
@@ -241,28 +227,20 @@ class DateWidgets1 : AppCompatActivity() {
     }
 
     /**
-     * `OnTimeSetListener` for our `TimePickerDialog` dialog, when called we save our
-     * `hourOfDay`, and `minute` parameters in our fields `mHour`, and `mMinute`
-     * respectively then call our method `updateDisplay` to update our display of these fields.
+     * [OnTimeSetListener] for our [TimePickerDialog] dialog, when called we save our `hourOfDay`,
+     * and `minute` parameters in our fields `mHour`, and `mMinute` respectively then call our
+     * method [updateDisplay] to update our display of these fields.
      */
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-    private val mTimeSetListener = OnTimeSetListener { view, hourOfDay, minute ->
+    private val mTimeSetListener = OnTimeSetListener {
+        view,
+        hourOfDay,
+        minute ->
 
         /**
-         * Called when the user is done setting a new time and the dialog has closed. We simply
-         * save our `hourOfDay`, and `minute` parameters in our fields `mHour`,
-         * and `mMinute` respectively then call our method `updateDisplay` to update
-         * our display of these fields.
-         *
-         * @param view      the view associated with this listener
-         * @param hourOfDay the hour that was set
-         * @param minute    the minute that was set
-         */
-        /**
-         * Called when the user is done setting a new time and the dialog has closed. We simply
-         * save our `hourOfDay`, and `minute` parameters in our fields `mHour`,
-         * and `mMinute` respectively then call our method `updateDisplay` to update
-         * our display of these fields.
+         * Called when the user is done setting a new time and the dialog has closed. We simply save
+         * our `hourOfDay`, and `minute` parameters in our fields `mHour`, and `mMinute` respectively
+         * then call our method [updateDisplay] to update our display of these fields.
          *
          * @param view      the view associated with this listener
          * @param hourOfDay the hour that was set
@@ -293,9 +271,9 @@ class DateWidgets1 : AppCompatActivity() {
         const val DATE_DIALOG_ID = 2
 
         /**
-         * Converts int to String, and Zero Pads numbers under 10. If our parameter `c` is greater
-         * than of equal to 10 we just return the String version of `c`, otherwise we append a "0"
-         * to the String version of `c` and return that.
+         * Converts int to String, and Zero Pads numbers under 10. If our parameter [c] is greater
+         * than or equal to 10 we just return the String version of [c], otherwise we append a "0"
+         * to the String version of [c] and return that.
          *
          * @param c number to convert to zero padded String
          * @return zero padded string version of number
