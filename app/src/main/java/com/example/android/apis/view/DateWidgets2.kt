@@ -33,14 +33,14 @@ class DateWidgets2 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.date_widgets_example_2.
-     * Set initialize `TimePicker timePicker` by finding the view with ID R.id.timePicker in our
-     * layout, set its current hour to 12 and current minute to 15. Then we initialize our field
-     * `TextView mTimeDisplay` by finding the view with ID R.id.dateDisplay. We call our method
-     * `updateDisplay` to display the hour of 12, and minute of 15 in `mTimeDisplay`.
-     * Finally we set the `OnTimeChangedListener` to an anonymous class which calls our method
-     * `updateDisplay` to display the hour and minute that the user has chosen.
+     * Set initialize [TimePicker] `val timePicker` by finding the view with ID R.id.timePicker in
+     * our layout, set its current hour to 12 and current minute to 15. Then we initialize our
+     * [TextView] field [mTimeDisplay] by finding the view with ID R.id.dateDisplay. We call our
+     * method [updateDisplay] to display the hour of 12, and minute of 15 in [mTimeDisplay].
+     * Finally we set the `OnTimeChangedListener` of `timePicker` to an anonymous class which calls
+     * our method [updateDisplay] to display the hour and minute that the user has chosen.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     @Suppress("UNUSED_ANONYMOUS_PARAMETER", "DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,8 +58,7 @@ class DateWidgets2 : AppCompatActivity() {
 
             /**
              * The callback interface used to indicate the time has been adjusted. We call our method
-             * `updateDisplay` to display the `hourOfDay` and `minute` that the user
-             * has chosen.
+             * [updateDisplay] to display the `hourOfDay` and `minute` that the user has chosen.
              *
              * @param view The view associated with this listener.
              * @param hourOfDay The current hour.
@@ -70,7 +69,7 @@ class DateWidgets2 : AppCompatActivity() {
     }
 
     /**
-     * Sets the text of `TextView mTimeDisplay` to a string built to display our parameters.
+     * Sets the text of [TextView] field [mTimeDisplay] to a string built to display our parameters.
      *
      * @param hourOfDay hour of the day to display
      * @param minute    minute of the hour to display
@@ -83,9 +82,9 @@ class DateWidgets2 : AppCompatActivity() {
 
     companion object {
         /**
-         * Converts int to String, and Zero Pads numbers under 10. If our parameter `c` is greater
-         * than of equal to 10 we just return the String version of `c`, otherwise we append a "0"
-         * to the String version of `c` and return that.
+         * Converts int to String, and Zero Pads numbers under 10. If our parameter [c] is greater
+         * than of equal to 10 we just return the String version of [c], otherwise we append a "0"
+         * to the String version of [c] and return that.
          *
          * @param c number to convert to zero padded String
          * @return zero padded string version of number
