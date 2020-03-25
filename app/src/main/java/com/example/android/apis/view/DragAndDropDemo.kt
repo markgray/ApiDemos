@@ -34,30 +34,29 @@ import com.example.android.apis.R
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class DragAndDropDemo : AppCompatActivity() {
     /**
-     * Target `TextView` to display some messages in.
+     * Target [TextView] to display some messages in.
      */
     var mResultText: TextView? = null
 
     /**
-     * This `DraggableDot` is invisible until we receive an ACTION_DRAG_STARTED `DragEvent`
+     * This [DraggableDot] is invisible until we receive an ACTION_DRAG_STARTED [DragEvent]
      * whereupon we set it to be visible.
      */
     var mHiddenDot: DraggableDot? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to our layout file R.layout.drag_layout.
-     * We initialize `TextView text` by finding the view with ID R.id.drag_text, then we locate
-     * the views with ID R.id.drag_dot_1, R.id.drag_dot_2, and R.id.drag_dot_3 in turn and call their
-     * method `setReportView(text)`. We initialize our field `DraggableDot mHiddenDot` by
+     * `onCreate`, then we set our content view to our layout file R.layout.drag_layout. We
+     * initialize [TextView] `val text` by finding the view with ID R.id.drag_text, then we locate
+     * the views with ID R.id.drag_dot_1, R.id.drag_dot_2, and R.id.drag_dot_3 in turn and call
+     * their method `setReportView(text)`. We initialize our [DraggableDot] field [mHiddenDot] by
      * finding the view with ID R.id.drag_dot_hidden, and call its method `setReportView(text)`
-     * (`setReportView(text)` saves `text` in the instance's field `TextView mReportView`
-     * so that it can write to it when it wants to). We initialize our field `TextView mResultText`
-     * by finding the view with ID R.id.drag_result_text, and our variable `View MainView` by
-     * finding the view with ID R.id.drag_main. Finally we set the `OnDragListener` of
-     * `View MainView` to an anonymous class which writes info about the `DragEvent`
-     * it receives to `TextView mResultText`, as well as monkeying with the visibility of
-     * `DraggableDot mHiddenDot`.
+     * (`setReportView(text)` saves `text` in the instance's [TextView] field `mReportView` so
+     * that it can write to it when it wants to). We initialize our [TextView] field [mResultText]
+     * by finding the view with ID R.id.drag_result_text, and our variable [View] `val mainView` by
+     * finding the view with ID R.id.drag_main. Finally we set the [OnDragListener] of `mainView`
+     * to a lambda which writes info about the [DragEvent] it receives to [mResultText], as well as
+     * monkeying with the visibility of [DraggableDot] field [mHiddenDot].
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
@@ -80,84 +79,34 @@ class DragAndDropDemo : AppCompatActivity() {
 
             /**
              * Called when a drag event is dispatched to a view. This allows listeners to get a
-             * chance to override base View behavior. We retrieve the action from our parameter
-             * `DragEvent event` to our variable `int action`, then switch on it as
-             * follows:
+             * chance to override base [View] behavior. We retrieve the action from our [DragEvent]
+             * parameter `event` to our variable `int action`, then switch on it as follows:
              *
-             *  *
-             * ACTION_DRAG_STARTED - we set the text of `TextView mResultText` to the string
-             * "ACTION_DRAG_STARTED", set the visibility of `DraggableDot mHiddenDot` to
-             * visible, then return true so that we will get more drag events.
+             *  * ACTION_DRAG_STARTED - we set the text of `TextView mResultText` to the string
+             *  "ACTION_DRAG_STARTED", set the visibility of `DraggableDot mHiddenDot` to
+             *  visible, then return true so that we will get more drag events.
              *
-             *  *
-             * ACTION_DRAG_ENTERED - we set the text of `TextView mResultText` to the string
-             * "ACTION_DRAG_ENTERED" and break
+             *  * ACTION_DRAG_ENTERED - we set the text of `TextView mResultText` to the string
+             *  "ACTION_DRAG_ENTERED" and break
              *
-             *  *
-             * ACTION_DRAG_EXITED - we set the text of `TextView mResultText` to the string
-             * "ACTION_DRAG_EXITED" and break
+             *  * ACTION_DRAG_EXITED - we set the text of `TextView mResultText` to the string
+             *  "ACTION_DRAG_EXITED" and break
              *
-             *  *
-             * ACTION_DROP - we set the text of `TextView mResultText` to the string
-             * "ACTION_DROP" and break
+             *  * ACTION_DROP - we set the text of `TextView mResultText` to the string
+             *  "ACTION_DROP" and break
              *
-             *  *
-             * ACTION_DRAG_ENDED - we set the visibility of `DraggableDot mHiddenDot`
-             * back to invisible, and fetch the result of our parameter `DragEvent event`
-             * to `boolean dropped` and if it is true we set the text of `TextView mResultText`
-             * to the string "Dropped", otherwise we set it to "No drop". Finally we break.
+             *  * ACTION_DRAG_ENDED - we set the visibility of `DraggableDot mHiddenDot`
+             *  back to invisible, and fetch the result of our parameter `DragEvent event`
+             *  to `boolean dropped` and if it is true we set the text of `TextView mResultText`
+             *  to the string "Dropped", otherwise we set it to "No drop". Finally we break.
              *
-             *  *
-             * default - we set the text of `TextView mResultText` to the string value
-             * of `action` and break
-             *
+             *  * default - we set the text of `TextView mResultText` to the string value
+             *  of `action` and break
              *
              * If we have executed a break instead of a return above, we now return false.
              *
-             * @param v     The View that received the drag event.
-             * @param event The [android.view.DragEvent] object for the drag event.
-             * @return `true` if the drag event was handled successfully, or `false`
-             * if the drag event was not handled. We need to return true from ACTION_DRAG_STARTED
-             * if we want to receive any more drag events.
-             */
-            /**
-             * Called when a drag event is dispatched to a view. This allows listeners to get a
-             * chance to override base View behavior. We retrieve the action from our parameter
-             * `DragEvent event` to our variable `int action`, then switch on it as
-             * follows:
-             *
-             *  *
-             * ACTION_DRAG_STARTED - we set the text of `TextView mResultText` to the string
-             * "ACTION_DRAG_STARTED", set the visibility of `DraggableDot mHiddenDot` to
-             * visible, then return true so that we will get more drag events.
-             *
-             *  *
-             * ACTION_DRAG_ENTERED - we set the text of `TextView mResultText` to the string
-             * "ACTION_DRAG_ENTERED" and break
-             *
-             *  *
-             * ACTION_DRAG_EXITED - we set the text of `TextView mResultText` to the string
-             * "ACTION_DRAG_EXITED" and break
-             *
-             *  *
-             * ACTION_DROP - we set the text of `TextView mResultText` to the string
-             * "ACTION_DROP" and break
-             *
-             *  *
-             * ACTION_DRAG_ENDED - we set the visibility of `DraggableDot mHiddenDot`
-             * back to invisible, and fetch the result of our parameter `DragEvent event`
-             * to `boolean dropped` and if it is true we set the text of `TextView mResultText`
-             * to the string "Dropped", otherwise we set it to "No drop". Finally we break.
-             *
-             *  *
-             * default - we set the text of `TextView mResultText` to the string value
-             * of `action` and break
-             *
-             *
-             * If we have executed a break instead of a return above, we now return false.
-             *
-             *  v     The View that received the drag event.
-             *  event The [android.view.DragEvent] object for the drag event.
+             * Parameter: v     The View that received the drag event.
+             * Parameter: event The [android.view.DragEvent] object for the drag event.
              * @return `true` if the drag event was handled successfully, or `false`
              * if the drag event was not handled. We need to return true from ACTION_DRAG_STARTED
              * if we want to receive any more drag events.
