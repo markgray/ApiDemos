@@ -16,17 +16,18 @@
 
 package com.example.android.apis.view;
 
-import com.example.android.apis.R;
-
-import android.app.Activity;
+import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
 
 /**
  * Shows the use of an inline TimePicker. Neat on M lame on J
  */
-public class DateWidgets2 extends Activity {
+public class DateWidgets2 extends AppCompatActivity {
 
     /**
      * where we display the selected date and time
@@ -45,17 +46,16 @@ public class DateWidgets2 extends Activity {
      *
      * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
      */
-    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.date_widgets_example_2);
 
-        TimePicker timePicker = (TimePicker) findViewById(R.id.timePicker);
+        TimePicker timePicker = findViewById(R.id.timePicker);
         timePicker.setCurrentHour(12);
         timePicker.setCurrentMinute(15);
 
-        mTimeDisplay = (TextView) findViewById(R.id.dateDisplay);
+        mTimeDisplay = findViewById(R.id.dateDisplay);
 
         updateDisplay(12, 15);
 
@@ -101,7 +101,7 @@ public class DateWidgets2 extends Activity {
         if (c >= 10)
             return String.valueOf(c);
         else
-            return "0" + String.valueOf(c);
+            return "0" + c;
     }
 
 }
