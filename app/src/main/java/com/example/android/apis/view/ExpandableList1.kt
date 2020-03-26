@@ -28,8 +28,8 @@ import android.widget.ExpandableListView.ExpandableListContextMenuInfo
 import com.example.android.apis.R
 
 /**
- * Demonstrates expandable lists using a custom [ExpandableListAdapter] from
- * [BaseExpandableListAdapter]. The custom BaseExpandableListAdapter groups
+ * Demonstrates expandable lists using a custom [ExpandableListAdapter] derived from
+ * [BaseExpandableListAdapter]. The custom [BaseExpandableListAdapter] groups
  * different child lists under group names: "People Names", "Dog Names", "Cat Names",
  * and "Fish Names". When clicked the groups expand to show the child lists, any child
  * or group which is long-pressed will pop up a context menu with an "action button".
@@ -37,17 +37,17 @@ import com.example.android.apis.R
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 class ExpandableList1 : ExpandableListActivity() {
     /**
-     * The `ExpandableListAdapter` which serves as the `ListAdapter` for our activity.
-     * (It is actually a `MyExpandableListAdapter` as initialized in `onCreate`).
+     * The [ExpandableListAdapter] which serves as the [ListAdapter] for our activity.
+     * (It is actually a [MyExpandableListAdapter] that is initialized in [onCreate]).
      */
     var mAdapter: ExpandableListAdapter? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`. We initialize our field `ExpandableListAdapter mAdapter` with a new
-     * instance, and provide it as the adapter for the expandable list. We fetch our activity's
-     * expandable list view widget and register it for a context menu to be shown (this will set the
-     * View.OnCreateContextMenuListener on the view to "this").
+     * `onCreate`. We initialize our [ExpandableListAdapter] field [mAdapter] with a new instance
+     * of [MyExpandableListAdapter], and provide it as the adapter for the expandable list. We fetch
+     * our activity's expandable list view widget and register it for a context menu to be shown
+     * (this will set the [View.OnCreateContextMenuListener] of the [View] to "this").
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
@@ -61,9 +61,11 @@ class ExpandableList1 : ExpandableListActivity() {
     }
 
     /**
-     * Called when the context menu for this view is being built after the expandable list view widget
-     * is long clicked. First we set the `ContextMenu menu` header's title to the string
-     * "Sample menu". Then we add a menu item with the title R.string.expandable_list_sample_action
+     * Called when the context menu for this view is being built after the expandable list view
+     * widget is long clicked. First we set the [ContextMenu] parameter [menu] header's title to
+     * the string "Sample menu".
+     *
+     * Then we add a menu item with the title R.string.expandable_list_sample_action
      * ("Sample action").
      *
      * @param menu     The context menu that is being built
@@ -78,23 +80,23 @@ class ExpandableList1 : ExpandableListActivity() {
 
     /**
      * This hook is called whenever an item in a context menu is selected. First we initialize our
-     * variable `ExpandableListContextMenuInfo info` to the extra information linked to the View
-     * that added `MenuItem item` to the menu. We initialize `String title` by casting
-     * the view for which the context menu is being displayed to a `TextView`, fetching its
-     * text, and converting it to a string. We initialize `int type` to the type of the position
+     * [ExpandableListContextMenuInfo] variable `val info` to the extra information linked to the
+     * [View] that added [MenuItem] parameter [item] to the menu. We initialize [String] `val title`
+     * by casting the view for which the context menu is being displayed to a [TextView], fetching
+     * its text, and converting it to a string. We initialize `val type` to the type of the position
      * contained within the packed position `info.packedPosition`, either PACKED_POSITION_TYPE_CHILD,
-     * PACKED_POSITION_TYPE_GROUP, or PACKED_POSITION_TYPE_NULL. Then if type is PACKED_POSITION_TYPE_CHILD
-     * we fetch the group position from the packed position `info.packedPosition` to set our
-     * variable `int groupPos`, and the child position from it to set `int childPos`.
-     * We then create and show a toast using a string made from concatenating the `title` (which
-     * will be the child name) with the string ": Child ", the `childPos`, the string " clicked in group ",
-     * followed by `groupPos`. If type is PACKED_POSITION_TYPE_GROUP we fetch the group position
-     * from the packed position `info.packedPosition` to set our variable `int groupPos`.
-     * We then create and show a toast using a string made from concatenating the `title` (which
-     * will be the group name) with the string ": Group ", the `groupPos`, followed by the string
-     * " clicked". In both cases we return true to the caller to consume the menu selection here. If
-     * the `type` is not one of the two above we return false to the caller to allow normal context
-     * menu processing to proceed.
+     * PACKED_POSITION_TYPE_GROUP, or PACKED_POSITION_TYPE_NULL. Then if `type` is
+     * PACKED_POSITION_TYPE_CHILD we fetch the group position from the packed position
+     * `info.packedPosition` to set our variable `val groupPos`, and the child position from it to
+     * set `val childPos`. We then create and show a toast using a string made from concatenating
+     * the `title` (which will be the child name) with the string ": Child ", the `childPos`, the
+     * string " clicked in group ", followed by `groupPos`. If type is PACKED_POSITION_TYPE_GROUP we
+     * fetch the group position from the packed position `info.packedPosition` to set our variable
+     * `val groupPos`. We then create and show a toast using a string made from concatenating the
+     * `title` (which will be the group name) with the string ": Group ", the `groupPos`, followed
+     * by the string " clicked". In both cases we return true to the caller to consume the menu
+     * selection here. If the `type` is not one of the two above we return false to the caller to
+     * allow normal context menu processing to proceed.
      *
      * @param item The context menu item that was selected.
      * @return boolean Return false to allow normal context menu processing to
@@ -124,16 +126,26 @@ class ExpandableList1 : ExpandableListActivity() {
      */
     inner class MyExpandableListAdapter : BaseExpandableListAdapter() {
         /**
-         * Names of the four groups in our expandable list, children[ i ] contains the children (String[])
-         * for groups[ i ].
+         * Names of the four groups in our expandable list, children[ i ] contains the children
+         * (String[]) for groups[ i ].
          */
-        private val groups = arrayOf("People Names", "Dog Names", "Cat Names", "Fish Names")
+        private val groups = arrayOf(
+                "People Names",
+                "Dog Names",
+                "Cat Names",
+                "Fish Names"
+        )
 
         /**
          * `String[]` arrays containing the names of the children belong to each of the groups
          * in `String[] groups`, children[ i ] contains the children (String[]) for groups[ i ].
          */
-        private val children = arrayOf(arrayOf("Arnold", "Barry", "Chuck", "David"), arrayOf("Ace", "Bandit", "Cha-Cha", "Deuce"), arrayOf("Fluffy", "Snuggles"), arrayOf("Goldy", "Bubbles"))
+        private val children = arrayOf(
+                arrayOf("Arnold", "Barry", "Chuck", "David"),
+                arrayOf("Ace", "Bandit", "Cha-Cha", "Deuce"),
+                arrayOf("Fluffy", "Snuggles"),
+                arrayOf("Goldy", "Bubbles")
+        )
 
         /**
          * Gets the data associated with the given child within the given group.
@@ -148,7 +160,7 @@ class ExpandableList1 : ExpandableListActivity() {
 
         /**
          * Gets the ID for the given child within the given group. We simply return our parameter
-         * `childPosition` to the caller.
+         * [childPosition] to the caller.
          *
          * @param groupPosition the position of the group that contains the child
          * @param childPosition the position of the child within the group for which the ID is wanted
@@ -160,7 +172,7 @@ class ExpandableList1 : ExpandableListActivity() {
 
         /**
          * Gets the number of children in a specified group. We simply return the size of the
-         * `String[]` array in `children` for the group `groupPosition`.
+         * `String[]` array in [children] for the group [groupPosition].
          *
          * @param groupPosition the position of the group for which the children count should be returned
          * @return the children count in the specified group
@@ -175,22 +187,24 @@ class ExpandableList1 : ExpandableListActivity() {
         // Set the text alignment
 
         /**
-         * Creates, configures and returns a `TextView` that can be used to display a child in
-         * our expandable list. First we create `AbsListView.LayoutParams lp` with a width of
-         * MATCH_PARENT, and a height of 64. We create a new instance for `TextView textView`,
+         * Creates, configures and returns a [TextView] that can be used to display a child in our
+         * expandable list. First we create [AbsListView.LayoutParams] `val lp` with a width of
+         * MATCH_PARENT, and a height of 64. We create a new instance for [TextView] `val textView`,
          * set its layout parameters to `lp`, set its gravity to CENTER_VERTICAL and LEFT, set
          * its padding to 36 (start), 0 (top), 0 (end), and 0 (bottom), set its text alignment to
          * TEXT_ALIGNMENT_VIEW_START, and set its text size to 18sp. Finally we return `textView`
          * to our caller.
          *
-         * @return a `TextView` configured for use in our expandable list.
+         * @return a [TextView] configured for use in our expandable list.
          */
         @get:SuppressLint("RtlHardcoded")
         val genericView: TextView
             get() {
                 // Layout parameters for the ExpandableListView
                 val lp = AbsListView.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, 64)
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        64
+                )
                 val textView = TextView(this@ExpandableList1)
                 textView.layoutParams = lp
                 // Center the text vertically
@@ -205,10 +219,10 @@ class ExpandableList1 : ExpandableListActivity() {
 
         /**
          * Gets a View that displays the data for the given child within the given group. First we
-         * set `TextView textView` to a text view created and configured by our method
-         * `getGenericView`, then we set its text to the string that our override of
-         * `getChild` returns for group `groupPosition` and child `childPosition`.
-         * Finally we return `textView` to the caller.
+         * set [TextView] `val textView` to a text view created and configured by our method
+         * `getGenericView` (kotlin prefers to consider it the [genericView] property), then we set
+         * its text to the string that our override of [getChild] returns for group [groupPosition]
+         * and child [childPosition]. Finally we return `textView` to the caller.
          *
          * @param groupPosition the position of the group that contains the child
          * @param childPosition the position of the child within the group
@@ -226,7 +240,7 @@ class ExpandableList1 : ExpandableListActivity() {
 
         /**
          * Gets the data associated with the given group. Simply returns the string contained in
-         * `groups[groupPosition]`.
+         * the position [groupPosition] of [groups].
          *
          * @param groupPosition the position of the group
          * @return the string title of the specified group
@@ -236,7 +250,7 @@ class ExpandableList1 : ExpandableListActivity() {
         }
 
         /**
-         * Gets the number of groups. We simply return the length of our array `String[] groups`.
+         * Gets the number of groups. We simply return the size of our `String[]` array [groups].
          *
          * @return the number of groups
          */
@@ -245,7 +259,7 @@ class ExpandableList1 : ExpandableListActivity() {
         }
 
         /**
-         * Gets the ID for the group at the given position. We simply return the `groupPosition`
+         * Gets the ID for the group at the given position. We simply return the [groupPosition]
          * parameter to the caller.
          *
          * @param groupPosition the position of the group for which the ID is wanted
@@ -256,10 +270,10 @@ class ExpandableList1 : ExpandableListActivity() {
         }
 
         /**
-         * Gets a View that displays the given group. First we set `TextView textView` to a
-         * text view created and configured by our method `getGenericView`, then we set its
-         * text to the string returned by our override of `getGroup(groupPosition)` returns.
-         * Finally we return `textView` to the caller.
+         * Gets a [View] that displays the given group. First we set [TextView] `val textView` to a
+         * text view created and configured by our method `getGenericView` (kotlin prefers to
+         * consider it the [genericView] property), then we set its text to the string returned by
+         * our override of [getGroup] returns. Finally we return `textView` to the caller.
          *
          * @param groupPosition the position of the group for which the View is returned
          * @param isExpanded    whether the group is expanded or collapsed
@@ -267,7 +281,12 @@ class ExpandableList1 : ExpandableListActivity() {
          * @param parent        the parent that this view will eventually be attached to
          * @return the View corresponding to the group at the specified position
          */
-        override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
+        override fun getGroupView(
+                groupPosition: Int,
+                isExpanded: Boolean,
+                convertView: View?,
+                parent: ViewGroup
+        ): View {
             val textView = genericView
             textView.text = getGroup(groupPosition).toString()
             return textView
