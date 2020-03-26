@@ -32,7 +32,7 @@ import android.widget.TextView
 import com.example.android.apis.R
 
 /**
- * Used by `DragAndDropDemo` to draw the dots which the user can drag.
+ * Used by [DragAndDropDemo] to draw the dots which the user can drag.
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @SuppressLint("SetTextI18n")
@@ -40,44 +40,44 @@ import com.example.android.apis.R
 class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     /**
      * Flag used to indicate that a drag has started. Set to true when we receive a ACTION_DRAG_STARTED
-     * event, and false when we receive a ACTION_DRAG_ENDED event. It is used in our `onDraw`
+     * event, and false when we receive a ACTION_DRAG_ENDED event. It is used in our [onDraw]
      * method to decide whether to light up as a potential target.
      */
     private var mDragInProgress = false
 
     /**
-     * Flag used to indicate that the dot being dragged is over our `DraggableDot` instance.
+     * Flag used to indicate that the dot being dragged is over our [DraggableDot] instance.
      * Set to true when we receive a ACTION_DRAG_ENTERED event, false when we receive either an
-     * ACTION_DRAG_EXITED, or a ACTION_DRAG_ENDED event. It is used in our `onDraw` method to
-     * decide whether to "light" our `DraggableDot` with a green (false) or white (true) circle.
+     * ACTION_DRAG_EXITED, or a ACTION_DRAG_ENDED event. It is used in our [onDraw] method to
+     * decide whether to "light" our [DraggableDot] with a green (false) or white (true) circle.
      */
     private var mHovering = false
 
     /**
-     * Flag used to indicate that we accept drops of the `DraggableDot` being dragged. If is
-     * set to true when we receive a ACTION_DRAG_STARTED event, and never set to false again so it may
-     * be unnecessary.
+     * Flag used to indicate that we accept drops of the [DraggableDot] being dragged. If is set to
+     * true when we receive a ACTION_DRAG_STARTED event, and never set to false again so it may be
+     * unnecessary.
      */
     private var mAcceptsDrag = false
 
     /**
-     * `TextView` we are to append the drag's textual conversion to if it is dropped on us.
+     * [TextView] we are to append the drag's textual conversion to if it is dropped on us.
      */
     var mReportView: TextView? = null
 
     /**
-     * `Paint` used to draw our Red dot with.
+     * [Paint] used to draw our Red dot with.
      */
     private val mPaint: Paint
 
     /**
-     * `TextPaint` used to draw the "legend" in the center of our dot. The "legend" comes from
-     * the dot:legend attribute as set in the layout file for this instance of `DraggableDot`.
+     * [TextPaint] used to draw the "legend" in the center of our dot. The "legend" comes from
+     * the dot:legend attribute as set in the layout file for this instance of [DraggableDot].
      */
     private val mLegendPaint: TextPaint
 
     /**
-     * `Paint` used to draw the green or white circle around our dot when a drag is in progress
+     * [Paint] used to draw the green or white circle around our dot when a drag is in progress
      * if we are a potential target to be dropped on.
      */
     private val mGlow: Paint
@@ -92,9 +92,8 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
      * dot:anr="thumbnail", and dot:anr="drop" attributes in our layout. The "dot:anr" attribute
      * is defined in values/attrs.xml using a "declare-styleable" element with the value of
      * "thumbnail" 1, and the value of "drop" 2. The "thumbnail" ANR causes a call to our method
-     * `sleepSixSeconds` when a dot with that attribute is long clicked, the "drop" ANR
-     * causes a call to `sleepSixSeconds` when another dot is "dropped" on a dot with that
-     * attribute.
+     * [sleepSixSeconds] when a dot with that attribute is long clicked, the "drop" ANR causes a
+     * call to [sleepSixSeconds] when another dot is "dropped" on a dot with that attribute.
      */
     var mAnrType = 0
 
@@ -104,10 +103,10 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
     var mLegend: CharSequence?
 
     /**
-     * Sleeps for 6 seconds in an attempt to generate an ANR (application not responding). We initialize
-     * our variable `long start` with the milliseconds of non-sleep uptime since boot, then we
-     * call `Thread.sleep` to sleep for 1000 milliseconds as long as the milliseconds of non-sleep
-     * uptime since boot is less than `start` + 6000 (ie. we hang for 6-7 seconds).
+     * Sleeps for 6 seconds in an attempt to generate an ANR (application not responding). We
+     * initialize our [Long] variable `val start` with the milliseconds of non-sleep uptime since
+     * boot, then we call [Thread.sleep] to sleep for 1000 milliseconds as long as the milliseconds
+     * of non-sleep uptime since boot is less than `start` plus 6000 (ie. we hang for 6-7 seconds).
      */
     fun sleepSixSeconds() {
         // hang forever; good for producing ANRs
@@ -127,8 +126,8 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
     internal inner class ANRShadowBuilder
     /**
      * Constructs a shadow image builder based on a View which can optionally force an ANR.
-     * First we call our super's constructor, then we save our parameter `boolean doAnr`
-     * in our field `boolean mDoAnr`.
+     * First we call our super's constructor, then we save our [Boolean] parameter in our
+     * field [mDoAnr].
      *
      * @param view   A View. Any View in scope can be used.
      * @param mDoAnr Flag to indicate whether we should for a ANR when we are long clicked.
@@ -140,11 +139,11 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
         var mDoAnr: Boolean) : DragShadowBuilder(view) {
 
         /**
-         * Draws the shadow image. First if our flag `mDoAnr` is true we call our method
-         * `sleepSixSeconds` to try to force an ANR, then we call our super's implementation
-         * of `onDrawShadow`.
+         * Draws the shadow image. First if our flag [mDoAnr] is true we call our method
+         * [sleepSixSeconds] to try to force an ANR, then we call our super's implementation
+         * of [onDrawShadow].
          *
-         * @param canvas A [android.graphics.Canvas] object in which to draw the shadow image.
+         * @param canvas A [Canvas] object in which to draw the shadow image.
          */
         override fun onDrawShadow(canvas: Canvas) {
             if (mDoAnr) {
@@ -156,7 +155,7 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
     }
 
     /**
-     * A setter method for `TextView mReportView`, just sets our field `mReportView`
+     * A setter method for [TextView] field [mReportView], just sets our field [mReportView]
      * to its argument.
      *
      * @param view TextView that we want to set `TextView mReportView` to
@@ -166,32 +165,29 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
     }
 
     /**
-     * We implement this to draw our View when required to do so. First we initialize our variable
-     * `float wf` with the width of our View, and `float hf` with our height. We calculate
-     * the center X `float cx` and center Y `float cy` to be half of the `wf` and
-     * `hf` respectively. We then subtract the left and right padding from `wf` and the
-     * top and bottom padding from `hf`. We calculate `float rad` (our radius) to be half
-     * of the smaller of `wf` and `hf` then instruct `Canvas canvas` to draw a circle
-     * at (cy,cy) with a radius of `rad` using `Paint mPaint` as the paint.
+     * We implement this to draw our [View] when required to do so. First we initialize our [Float]
+     * variable `var wf` with the width of our [View], and `var hf` with our height. We calculate
+     * the center X `val cx` and center Y `val cy` to be half of the `wf` and `hf` respectively. We
+     * then subtract the left and right padding from `wf` and the top and bottom padding from `hf`.
+     * We calculate `var rad` (our radius) to be half of the smaller of `wf` and `hf` then instruct
+     * [Canvas] parameter [canvas] to draw a circle at `(cy,cy)` with a radius of `rad` using [Paint]
+     * field [mPaint] as the paint.
      *
+     * Then if our field [mLegend] is not null, and has 1 or more characters in it we instruct
+     * [canvas] to draw the text in [mLegend] with the center of the text with `cx` as the X
+     * coordinate and `cy` with half of the line spacing of [mLegendPaint] added to it as the
+     * Y coordinate, and using [TextPaint] field [mLegendPaint] as the paint.
      *
-     * Then if our field `mLegend` is not null, and has 1 or more characters in it we instruct
-     * `canvas` to draw the text in `mLegend` with the center of the text with `cx`
-     * as the X coordinate and `cy` with half of the line spacing of `mLegendPaint` added
-     * to it as the Y coordinate, and using `TextPaint mLegendPaint` as the paint.
-     *
-     *
-     * Next we check whether we are in the middle of a drag (`mDragInProgress` is true) and we
-     * are configured to accept drops (`mAcceptsDrag` is true). If so we want to "light up as
-     * a potential target". To do this we loop for NUM_GLOW_STEPS (10) times setting `int color`
-     * to WHITE_STEP if the drag is over us (`mHovering` is true) or GREEN_STEP if not. We now
+     * Next we check whether we are in the middle of a drag ([mDragInProgress] is true) and we
+     * are configured to accept drops ([mAcceptsDrag] is true). If so we want to "light up as
+     * a potential target". To do this we loop for NUM_GLOW_STEPS (10) times setting `var color`
+     * to WHITE_STEP if the drag is over us ([mHovering] is true) or GREEN_STEP if not. We now
      * multiply `color` or'ed with ALPHA_STEP by the index count of our loop (10 down to 1) and
-     * set the color of `Paint mGlow` to it. We instruct `canvas` to draw a circle centered
-     * at (cx,cy) of `rad` radius using `mGlow` as the paint, subtract 0.5 from `rad`
-     * and have `canvas` draw another circle. We subtract another 0.5 from `rad` and continue
-     * the loop.
+     * set the color of [Paint] field [mGlow] to it. We instruct [canvas] to draw a circle centered
+     * at `(cx,cy)` of `rad` radius using [mGlow] as the paint, subtract 0.5 from `rad` and have
+     * [canvas] draw another circle. We subtract another 0.5 from `rad` and continue the loop.
      *
-     * @param canvas the canvas on which the background will be drawn
+     * @param canvas the [Canvas] on which the background will be drawn
      */
     override fun onDraw(canvas: Canvas) {
         var wf = width.toFloat()
@@ -224,9 +220,9 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
 
     /**
      * Measure the view and its content to determine the measured width and the measured height.
-     * We set `int totalDiameter` to twice the value of our field `mRadius` plus our
-     * left padding and right padding, then use `totalDiameter` as both the X and Y arguments
-     * to `setMeasuredDimension`.
+     * We set `val totalDiameter` to twice the value of our field [mRadius] plus our left padding
+     * and right padding, then use `totalDiameter` as both the X and Y arguments to
+     * [setMeasuredDimension].
      *
      * @param widthSpec  horizontal space requirements as imposed by the parent.
      * The requirements are encoded with
@@ -241,44 +237,36 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
     }
 
     /**
-     * Handles drag events sent by the system following a call to `startDrag()`. We initialize
-     * our variable `boolean result` to false, then switch based on the action of our parameter
-     * `DragEvent event`:
+     * Handles drag events sent by the system following a call to [startDrag]. We initialize
+     * our [Boolean] variable `var result` to false, then switch based on the action of our
+     * [DragEvent] parameter [event]:
      *
-     *  *
-     * ACTION_DRAG_STARTED - We set our field `boolean mDragInProgress` to true, and
-     * set our field `boolean mAcceptsDrag` and `result` to true. Finally we call
-     * `invalidate` to schedule a redraw so we can "light up as a potential target".
-     * Then we break.
+     *  * ACTION_DRAG_STARTED - We set our [Boolean] field [mDragInProgress] to true, and
+     *  set our [Boolean] field [mAcceptsDrag] and `result` to true. Finally we call
+     *  [invalidate] to schedule a redraw so we can "light up as a potential target".
+     *  Then we break.
      *
-     *  *
-     * ACTION_DRAG_ENDED - If `mAcceptsDrag` is true we call `invalidate` to
-     * schedule a redraw so we can "light up as a potential target", then we set our field
-     * `mDragInProgress` to true and `mHovering` to true. Then we break.
+     *  * ACTION_DRAG_ENDED - If [mAcceptsDrag] is true we call [invalidate] to schedule a redraw
+     *  so we can "light up as a potential target", then we set our field [mDragInProgress] to true
+     *  and [mHovering] to true. Then we break.
      *
-     *  *
-     * ACTION_DRAG_LOCATION - We set `result` to `mAcceptsDrag` and break.
+     *  * ACTION_DRAG_LOCATION - We set `result` to [mAcceptsDrag] and break.
      *
-     *  *
-     * ACTION_DROP - If we are configured to ANR when dropped on we call our method
-     * `sleepSixSeconds` to force an ANR (nasty!), then we call our method
-     * `processDrop(event)` to process the drop, set `result` to true and break.
+     *  * ACTION_DROP - If we are configured to ANR when dropped on we call our method
+     *  [sleepSixSeconds] to force an ANR (nasty!), then we call our method [processDrop]
+     *  to process the drop, set `result` to true and break.
      *
-     *  *
-     * ACTION_DRAG_ENTERED - We set our field `mHovering` to true, call `invalidate`
-     * to schedule a redraw so we can "light up as a WHITE hovered over target", and break.
+     *  * ACTION_DRAG_ENTERED - We set our field [mHovering] to true, call [invalidate]
+     *  to schedule a redraw so we can "light up as a WHITE hovered over target", and break.
      *
-     *  *
-     * ACTION_DRAG_EXITED - We set our field `mHovering` to false, call `invalidate`
-     * to schedule a redraw so we can "light up as a GREEN potential target", and break.
+     *  * ACTION_DRAG_EXITED - We set our field [mHovering] to false, call [invalidate]
+     *  to schedule a redraw so we can "light up as a GREEN potential target", and break.
      *
-     *  *
-     * default - We set `result` to `mAcceptsDrag` and break.
-     *
+     *  * default - We set `result` to [mAcceptsDrag] and break.
      *
      * Finally we return `result` to the caller.
      *
-     * @param event The `DragEvent` sent by the system.
+     * @param event The [DragEvent] sent by the system.
      * @return true if the method was successful, otherwise false. The method should return true in
      * response to an action type of ACTION_DRAG_STARTED to receive drag events for the current
      * operation. The method should also return true in response to an action type of ACTION_DROP if
@@ -339,18 +327,18 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
     }
 
     /**
-     * Processes an ACTION_DROP `DragEvent` received by `onDragEvent`. First we retrieve
-     * the ClipData object sent to the system as part of the call to `startDrag()` to initialize
-     * `ClipData data`, and set `int N` to the number of items in the clip data. Next we
-     * loop over the `ClipData.Item item` objects in `data`, logging the string value of
-     * the `item`, and if our field `TextView mReportView` is not null we create
-     * `String text` by coercing `item` to a `CharSequence` then converting that
-     * to a string. We next check whether the local state object sent to the system as part of the
-     * call to `startDrag()` is "this" in which case we append the string " : Dropped on self!"
-     * to `text`. Finally we append `text` to `TextView mReportView` and loop for
-     * the next `ClipData.Item`.
+     * Processes an ACTION_DROP [DragEvent] received by [onDragEvent]. First we retrieve the
+     * [ClipData] object sent to the system as part of the call to [startDrag] to initialize
+     * [ClipData] `val data`, and set `val N` to the number of items in the clip data. Next we
+     * loop over the [ClipData.Item] `val item` objects in `data`, logging the string value of
+     * the `item`, and if our [TextView] field [mReportView] is not null we create [String]
+     * `var text` by coercing `item` to a [CharSequence] then converting that to a [String].
+     * We next check whether the local state object sent to the system as part of the call to
+     * [startDrag] is "this" in which case we append the string " : Dropped on self!" to `text`.
+     * Finally we append `text` to [TextView] field [mReportView] and loop for the next
+     * [ClipData.Item].
      *
-     * @param event `DragEvent` passed to our `onDragEvent` callback
+     * @param event [DragEvent] passed to our [onDragEvent] callback
      */
     private fun processDrop(event: DragEvent) {
         val data = event.clipData
@@ -412,46 +400,39 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
     }
 
     /**
-     * Constructor that is called when inflating a `DraggableDot` from XML. This is called when
-     * a `DraggableDot` is being constructed from an XML file, supplying attributes that were
-     * specified in the XML file. First we call through to our super's constructor, then we enable
-     * our view to receive focus and to be clickable. We initialize our field `mLegend` with
-     * an empty string. We initialize our field `Paint mPaint` with a new instance, set its
-     * antialias flag to true, its stroke width to 6, and its color to a darkish red. We initialize
-     * our field `TextPaint mLegendPaint` with a new instance, set its antialias flag to true,
-     * set its text size to 12 times the logical density of the display, set its text alignment to
-     * CENTER, and set its color to a slightly bluish white. We initialize our field `Paint mGlow`
-     * with a new instance, set its antialias flag to true, its stroke width to 1, and set its style
-     * to STROKE.
+     * Init block for the Constructor that is called when inflating a `DraggableDot` from XML.
+     * This is called when a `DraggableDot` is being constructed from an XML file, supplying
+     * attributes that were specified in the XML file. First we we enable our view to receive
+     * focus and to be clickable. We initialize our field `mLegend` with an empty string. We
+     * initialize our `Paint` field `mPaint` with a new instance, set its antialias flag to true,
+     * its stroke width to 6, and its color to a darkish red. We initialize our `TextPaint` field
+     * `mLegendPaint` with a new instance, set its antialias flag to true, set its text size to 12
+     * times the logical density of the display, set its text alignment to CENTER, and set its
+     * color to a slightly bluish white. We initialize our `Paint` field `mGlow` with a new
+     * instance, set its antialias flag to true, its stroke width to 1, and set its style to STROKE.
      *
+     * Next we initialize our `TypedArray` variable `val a` with styled attribute information in
+     * this Context's theme to the attributes of R.styleable.DraggableDot (defined by a
+     * "declare-styleable" element in the "resources" section of values/attrs.xml: "radius",
+     * "legend", and "anr"). We initialize our variable `val n` with the the number of indices
+     * in the `TypedArray` variable `a` that actually have data, then loop through them setting
+     * our `Int` variable `val attr` to the attribute type of each, which we switch on:
      *
-     * Next we initialize our variable `TypedArray a` with styled attribute information in this
-     * Context's theme to the attributes of R.styleable.DraggableDot (defined by a "declare-styleable"
-     * element in the "resources" section of values/attrs.xml: "radius", "legend", and "anr"). We
-     * initialize our variable `int N` with the the number of indices in the `TypedArray a`
-     * that actually have data, then loop through them setting our variable `int attr` to the
-     * attribute type of each, which we switch on:
+     *  * R.styleable.DraggableDot_radius - we set the value of our `Int` field `mRadius` to
+     *  the value of the dimensional unit attribute at index `attr` in raw pixels.
      *
-     *  *
-     * R.styleable.DraggableDot_radius - we set the value of our field `int mRadius` to
-     * the value of the dimensional unit attribute at index `attr` in raw pixels.
+     *  * R.styleable.DraggableDot_legend - we set our `CharSequence` field `mLegend` to
+     *  the styled string value for the attribute at index `attr` of `a`.
      *
-     *  *
-     * R.styleable.DraggableDot_legend - we set our field `CharSequence mLegend` to
-     * the styled string value for the attribute at index `attr` of `a`.
-     *
-     *  *
-     * R.styleable.DraggableDot_anr - we set our field `int mAnrType` to the integer
-     * value for the attribute at index `attr` of `a` (defaulting to 0).
-     *
+     *  * R.styleable.DraggableDot_anr - we set our `Int` field `mAnrType` to the integer
+     *  value for the attribute at index `attr` of `a` (defaulting to 0).
      *
      * When done processing all the attributes we recycle `a`.
      *
+     * Finally we set our `OnLongClickListener` to a lambda which creates a string describing
+     * our instance in `ClipData` variable `data`, and starts a drag and drop operation.
      *
-     * Finally we set our `OnLongClickListener` to an anonymous class which creates a string
-     * describing our instance in `ClipData data`, and starts a drag and drop operation.
-     *
-     * Parameter: context The Context the view is running in, through which it can
+     * Parameter: context The `Context` the view is running in, through which it can
      * access the current theme, resources, etc.
      * Parameter: attrs   The attributes of the XML tag that is inflating the view.
      */
@@ -495,22 +476,23 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
         setOnLongClickListener { v ->
 
             /**
-             * Called when a view has been clicked and held. First we set the text of our field
-             * `TextView mReportView` to the empty string (note that the "thumbnail" or drag
-             * ANR dot hangs before the view can be displayed). Next we create `ClipData data`
-             * to be a new ClipData holding data of the type MIMETYPE_TEXT_PLAIN which uses "dot" as
-             * the user-visible label for the clip data, and a formatted string which contains the
-             * text "Dot : " concatenated to the string value of `View v` as the actual text
-             * in the clip. Next we call the `startDrag` method of `View v` to start a
-             * drag and drop operation using `data` as the ClipData object pointing to the data
-             * to be transferred by the drag and drop operation, an `ANRShadowBuilder` object
-             * for building the drag shadow which is constructed using `v` as the view (any
-             * View in scope can be used) and if `mAnrType` is equal to ANR_SHADOW the flag
-             * true so that an ANR will be generated when the dot is long-clicked (this dot is nasty)
-             * otherwise false so the dot is a normal dot. We also include `v` cast to Object
-             * in the arguments of `startDrag` to use as the local state Object which contains
-             * local data about the drag and drop operation, and 0 for the flags that control the
-             * drag and drop operation (no flags). Finally we return true to the caller.
+             * Called when a view has been clicked and held. First we set the text of our [TextView]
+             * field [mReportView] to the empty string (note that the "thumbnail" or drag ANR dot
+             * hangs before the view can be displayed). Next we create [ClipData] `val data` to be
+             * a new instance of [ClipData] holding data of the type MIMETYPE_TEXT_PLAIN which uses
+             * "dot" as the user-visible label for the clip data, and a formatted string which
+             * contains the text "Dot : " concatenated to the string value of [View] parameter [v]
+             * as the actual text in the clip. Next we call the [startDrag] method of [View]
+             * parameter [v] to start a drag and drop operation using `data` as the [ClipData]
+             * object pointing to the data to be transferred by the drag and drop operation, an
+             * [ANRShadowBuilder] object for building the drag shadow which is constructed using
+             * [v] as the [View] (any [View] in scope can be used) and if [mAnrType] is equal to
+             * ANR_SHADOW the [Boolean] flag value *true* so that an ANR will be generated when the
+             * dot is long-clicked (this dot is nasty) otherwise false so the dot is a normal dot.
+             * We also include [v] cast to [Any] in the arguments of [startDrag] to use as the local
+             * state Object which contains local data about the drag and drop operation, and 0 for
+             * the flags that control the drag and drop operation (no flags). Finally we return true
+             * to the caller.
              *
              * @param v The view that was clicked and held.
              * @return true if the callback consumed the long click, false otherwise.
