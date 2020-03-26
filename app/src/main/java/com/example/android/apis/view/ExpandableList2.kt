@@ -37,10 +37,12 @@ class ExpandableList2 : ExpandableListActivity() {
     private var mQueryHandler: QueryHandler? = null
 
     /**
-     * In our case it is an `MyExpandableListAdapter` which extends `SimpleCursorTreeAdapter`.
-     * It is an adapter that exposes data from a series of Cursors to an ExpandableListView widget. The
-     * top-level Cursor (that is given in the constructor) exposes the groups, while subsequent
-     * Cursors returned from getChildrenCursor(Cursor) expose children within a particular group.
+     * The [CursorTreeAdapter] for our [ExpandableListActivity] In our case it is an instance of
+     * [MyExpandableListAdapter] which extends [SimpleCursorTreeAdapter]. It is an adapter that
+     * exposes data from a series of Cursors to an `ExpandableListView` widget. The top-level
+     * [Cursor] (that is given in the constructor) exposes the groups, while subsequent Cursors
+     * returned from the [MyExpandableListAdapter.getChildrenCursor] method called with the parent
+     * [Cursor] expose children within a particular group.
      */
     private var mAdapter: CursorTreeAdapter? = null
 
@@ -54,12 +56,10 @@ class ExpandableList2 : ExpandableListActivity() {
      * for a child using android.R.id.text1 in the child layout to display them. We then set our list
      * adapter to `mAdapter`.
      *
-     *
      * Next we initialize our field `QueryHandler mQueryHandler` with a new instance using
      * `mAdapter` as the `CursorTreeAdapter` that `onQueryComplete` will set the
      * group Cursor or child Cursor to (depending on whether it was TOKEN_GROUP or TOKEN_CHILD
      * query that completed).
-     *
      *
      * Finally we call the `startQuery` method of `QueryHandler mQueryHandler` to read
      * the list of people from the contacts database, using TOKEN_GROUP as the token that will be
@@ -68,7 +68,7 @@ class ExpandableList2 : ExpandableListActivity() {
      * the string formed by concatenating Contacts.HAS_PHONE_NUMBER with "=1" ("has_phone_number=1",
      * as the selection, which selects all contacts which have at least one phone number.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
