@@ -30,14 +30,15 @@ class Focus1 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.focus_1. We initialize
-     * our variable `WebView webView` by finding the view with ID R.id.rssWebView, then load an
-     * html string into it. We initialize our variable `ListView listView` by finding the view
-     * with ID R.id.rssListView, and set its adapter to a new instance of `ArrayAdapter` created
-     * using "this" as its `Context`, android.R.layout.simple_list_item_1 as the resource ID for
-     * the layout file containing a TextView to use when instantiating views, and the string array
-     * `String[]{"Ars Technica", "Slashdot", "GameKult"}` as the objects to represent in the ListView.
+     * our [WebView] variable `val webView` by finding the view with ID R.id.rssWebView, then load
+     * an html string into it. We initialize our [ListView] variable `val listView` by finding the
+     * view with ID R.id.rssListView, and set its adapter to a new instance of [ArrayAdapter]
+     * created using "this" as its `Context`, android.R.layout.simple_list_item_1 as the resource
+     * ID for the layout file containing a `TextView` to use when instantiating views, and the
+     * string array `String[]{"Ars Technica", "Slashdot", "GameKult"}` as the objects to represent
+     * in the [ListView].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,9 +46,14 @@ class Focus1 : AppCompatActivity() {
         val webView = findViewById<WebView>(R.id.rssWebView)
         webView.loadData(
                 "<html><body>Can I focus?<br /><a href=\"#\">No I cannot!</a>.</body></html>",
-                "text/html", null)
+                "text/html",
+                null
+        )
         val listView = findViewById<ListView>(R.id.rssListView)
-        listView.adapter = ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, arrayOf("Ars Technica", "Slashdot", "GameKult"))
+        listView.adapter = ArrayAdapter(
+                this,
+                android.R.layout.simple_list_item_1,
+                arrayOf("Ars Technica", "Slashdot", "GameKult")
+        )
     }
 }
