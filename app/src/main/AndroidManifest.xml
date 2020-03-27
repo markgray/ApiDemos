@@ -2804,7 +2804,8 @@
         </activity>
         <activity
             android:name=".view.InternalSelectionFocus"
-            android:label="Views/Focus/4. Internal Selection">
+            android:label="Views/Focus/4. Internal Selection"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
