@@ -16,9 +16,10 @@
 
 package com.example.android.apis.view;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -28,7 +29,7 @@ import com.example.android.apis.R;
  * specify focus behavior that would be difficult with default focus calculation
  * algorithm -- need input device suitable for changing focus.
  */
-public class Focus3 extends Activity {
+public class Focus3 extends AppCompatActivity {
     /**
      * Button in our layout file with ID R.id.top
      */
@@ -52,8 +53,8 @@ public class Focus3 extends Activity {
 
         setContentView(R.layout.focus_3);
 
-        mTopButton = (Button) findViewById(R.id.top);
-        mBottomButton = (Button) findViewById(R.id.bottom);
+        mTopButton = findViewById(R.id.top);
+        mBottomButton = findViewById(R.id.bottom);
     }
 
     /**
