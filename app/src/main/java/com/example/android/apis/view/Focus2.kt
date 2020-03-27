@@ -13,31 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.view
 
-package com.example.android.apis.view;
-
-import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.android.apis.R;
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * Uses android:nextFocusRight="@+id/rightButton" to skip middle button.
  * Need input device suitable for changing focus.
  */
-public class Focus2 extends AppCompatActivity {
-
+class Focus2 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * {@code onCreate}, then we set our content view to our layout file R.layout.focus_2.
+     * `onCreate`, then we set our content view to our layout file R.layout.focus_2.
      *
-     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.focus_2);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.focus_2)
     }
 }
