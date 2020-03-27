@@ -16,16 +16,17 @@
 
 package com.example.android.apis.view;
 
-import com.example.android.apis.R;
-
-import android.app.Activity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
 
 /**
  * Uses android:nextFocusRight="@+id/rightButton" to skip middle button.
  * Need input device suitable for changing focus.
  */
-public class Focus2 extends Activity {
+public class Focus2 extends AppCompatActivity {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
