@@ -21,52 +21,43 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 
 /**
- * [android.view.View.requestFocus] and
- * `android.view.View.onFocusChanged(boolean, int, android.graphics.Rect)`
- * work together to give a newly focused item a hint about the most interesting
- * rectangle of the previously focused view.  The view taking focus can use this
- * to set an internal selection more appropriate using this rect.
- *
+ * [android.view.View.requestFocus] and [android.view.View.onFocusChanged] work together to give a
+ * newly focused item a hint about the most interesting rectangle of the previously focused view.
+ * The view taking focus can use this to set an internal selection more appropriate using this rect.
  *
  * This Activity exercises that behavior using three adjacent [InternalSelectionView]
  * that report interesting rects when giving up focus, and use interesting rects
  * when taking focus to best select the internal row to show as selected.
  *
- *
  * Were [InternalSelectionView] not to override [android.view.View.getFocusedRect], or
- * `android.view.View.onFocusChanged(boolean, int, android.graphics.Rect)`, the focus would
- * jump to some default internal selection (the top) and not allow for the smooth hand-off.
- *
+ * [android.view.View.onFocusChanged], the focus would jump to some default internal selection
+ * (the top) and not allow for the smooth hand-off.
  *
  * Need keys to move focus, so I do not know what this does.
  */
 class InternalSelectionFocus : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`. We create `LinearLayout layout`, set its orientation to HORIZONTAL,
-     * and set its layout parameters for width and height both to MATCH_PARENT. We create an new
-     * instance for `LinearLayout.LayoutParams params` with a width of 0, height of MATCH_PARENT,
-     * and a weight of 1.
+     * `onCreate`. We create [LinearLayout] `val layout`, set its orientation to HORIZONTAL, and set
+     * its layout parameters for width and height both to MATCH_PARENT. We create an new instance
+     * for [LinearLayout.LayoutParams] `val params` with a width of 0, height of MATCH_PARENT, and a
+     * weight of 1.
      *
-     *
-     * We create `InternalSelectionView leftColumn` with 5 rows and the label "left column",
+     * We create [InternalSelectionView] `val leftColumn` with 5 rows and the label "left column",
      * set its layout parameters to `param`, its padding to 10 on all 4 sides and add it to
      * `layout`.
      *
-     *
-     * We create `InternalSelectionView middleColumn` with 5 rows and the label "middle column",
+     * We create [InternalSelectionView] `val middleColumn` with 5 rows and the label "middle column",
      * set its layout parameters to `param`, its padding to 10 on all 4 sides and add it to
      * `layout`.
      *
-     *
-     * We create `InternalSelectionView rightColumn` with 5 rows and the label "right column",
+     * We create [InternalSelectionView] `val rightColumn` with 5 rows and the label "right column",
      * set its layout parameters to `param`, its padding to 10 on all 4 sides and add it to
      * `layout`.
-     *
      *
      * Finally we set our content view to `layout`.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,9 +65,13 @@ class InternalSelectionFocus : AppCompatActivity() {
         layout.orientation = LinearLayout.HORIZONTAL
         layout.layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT)
-        val params = LinearLayout.LayoutParams(0,
-                ViewGroup.LayoutParams.MATCH_PARENT, 1f)
+                ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        val params = LinearLayout.LayoutParams(
+                0,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                1f
+        )
         val leftColumn = InternalSelectionView(this, 5, "left column")
         leftColumn.layoutParams = params
         leftColumn.setPadding(10, 10, 10, 10)
