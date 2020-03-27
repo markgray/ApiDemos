@@ -16,19 +16,20 @@
 
 package com.example.android.apis.view;
 
-import com.example.android.apis.R;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebView;
-import android.widget.ListView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
 
 /**
  * Demonstrates the use of non-focusable views: caused by android:focusable="false"
  * in layout file layout/focus_1.xml
  */
-public class Focus1 extends Activity {
+public class Focus1 extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.focus_1. We initialize
@@ -46,12 +47,12 @@ public class Focus1 extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.focus_1);
 
-        WebView webView = (WebView) findViewById(R.id.rssWebView);
+        WebView webView = findViewById(R.id.rssWebView);
         webView.loadData(
                 "<html><body>Can I focus?<br /><a href=\"#\">No I cannot!</a>.</body></html>",
                 "text/html", null);
 
-        ListView listView = (ListView) findViewById(R.id.rssListView);
+        ListView listView = findViewById(R.id.rssListView);
         listView.setAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
                 new String[]{"Ars Technica", "Slashdot", "GameKult"}));
