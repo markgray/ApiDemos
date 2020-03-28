@@ -2822,7 +2822,8 @@
         </activity>
         <activity
             android:name=".view.WindowFocusObserver"
-            android:label="Views/Focus/6. Window Focus Observer">
+            android:label="Views/Focus/6. Window Focus Observer"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

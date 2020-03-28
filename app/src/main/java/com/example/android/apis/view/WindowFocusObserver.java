@@ -18,7 +18,6 @@ package com.example.android.apis.view;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -28,10 +27,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.WindowId;
 import android.view.WindowId.FocusObserver;
-import android.widget.SearchView;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.ShareActionProvider;
+import androidx.core.view.MenuItemCompat;
 
 import com.example.android.apis.R;
 
@@ -41,7 +43,7 @@ import com.example.android.apis.R;
  */
 @SuppressLint("SetTextI18n")
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-public class WindowFocusObserver extends Activity implements SearchView.OnQueryTextListener {
+public class WindowFocusObserver extends AppCompatActivity implements SearchView.OnQueryTextListener {
     /**
      * {@code TextView} in our layout file that we use to write focus change status to in our
      * {@code FocusObserver mObserver}: either "Gained focus" when our {@code onFocusGained}
@@ -90,7 +92,7 @@ public class WindowFocusObserver extends Activity implements SearchView.OnQueryT
         super.onCreate(savedInstanceState);
         setContentView(R.layout.window_focus_observer);
 
-        mState = (TextView) findViewById(R.id.focus_state);
+        mState = findViewById(R.id.focus_state);
     }
 
     /**
@@ -124,7 +126,8 @@ public class WindowFocusObserver extends Activity implements SearchView.OnQueryT
 
         // Set file with share history to the provider and set the share intent.
         MenuItem actionItem = menu.findItem(R.id.menu_item_share_action_provider_action_bar);
-        ShareActionProvider actionProvider = (ShareActionProvider) actionItem.getActionProvider();
+        ShareActionProvider actionProvider =
+                (ShareActionProvider) MenuItemCompat.getActionProvider(actionItem);
         actionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
         // Note that you can set/change the intent any time,
         // say when the user has selected an image.

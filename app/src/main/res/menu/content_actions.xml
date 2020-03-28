@@ -14,31 +14,32 @@
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="AppCompatResource,HardcodedText"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:ignore="HardcodedText"
     tools:targetApi="ice_cream_sandwich">
     <item
         android:id="@+id/action_search"
-        android:actionViewClass="android.widget.SearchView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
         android:icon="@android:drawable/ic_menu_search"
-        android:showAsAction="always"
-        android:title="@string/action_bar_search" />
+        android:title="@string/action_bar_search"
+        app:showAsAction="always" />
     <item
         android:id="@+id/menu_item_share_action_provider_action_bar"
-        android:actionProviderClass="android.widget.ShareActionProvider"
-        android:showAsAction="always"
-        android:title="@string/action_bar_share_with" />
+        app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider"
+        android:title="@string/action_bar_share_with"
+        app:showAsAction="always" />
     <group
         android:id="@+id/show_tabs_group"
         android:checkableBehavior="single">
         <item
             android:id="@+id/show_tabs"
-            android:showAsAction="never"
-            android:title="Show Tabs" />
+            android:title="Show Tabs"
+            app:showAsAction="never" />
         <item
             android:id="@+id/hide_tabs"
             android:checked="true"
-            android:showAsAction="never"
-            android:title="Hide Tabs" />
+            android:title="Hide Tabs"
+            app:showAsAction="never" />
     </group>
     <group
         android:id="@+id/stable_layout_group"
@@ -46,19 +47,19 @@
         <item
             android:id="@+id/stable_layout"
             android:checked="true"
-            android:showAsAction="never"
-            android:title="Stable Layout" />
+            android:title="Stable Layout"
+            app:showAsAction="never" />
     </group>
     <item
         android:id="@+id/action_share"
         android:icon="@android:drawable/ic_menu_share"
-        android:showAsAction="ifRoom"
-        android:title="@string/action_bar_share" />
+        android:title="@string/action_bar_share"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_sort"
         android:icon="@android:drawable/ic_menu_sort_by_size"
-        android:showAsAction="ifRoom"
-        android:title="@string/action_bar_sort">
+        android:title="@string/action_bar_sort"
+        app:showAsAction="ifRoom">
         <menu>
             <item
                 android:id="@+id/action_sort_size"
