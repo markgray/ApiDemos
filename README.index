@@ -2125,7 +2125,8 @@ Views
         .view.WindowFocusObserver
             Implements a WindowId.FocusObserver() whose onFocusGained(WindowId) merely
             prints "Gained focus", and whose onFocusLost(WindowId) prints "Lost focus".
-            Nothing happens on a touch only screen of course.
+             When menu items are clicked or the app is put in the background the window
+             loses focus even on a touch only device.
 
   Game Controller Input
     Views/Game Controller Input            all
