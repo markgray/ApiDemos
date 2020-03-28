@@ -2927,7 +2927,8 @@
         </activity>
         <activity
             android:name=".view.GameControllerInput"
-            android:label="Views/Game Controller Input">
+            android:label="Views/Game Controller Input"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

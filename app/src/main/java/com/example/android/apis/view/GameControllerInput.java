@@ -16,10 +16,7 @@
 
 package com.example.android.apis.view;
 
-import com.example.android.apis.R;
-
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.hardware.input.InputManager;
@@ -29,17 +26,20 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.view.InputDevice;
+import android.view.InputDevice.MotionRange;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.InputDevice.MotionRange;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +55,7 @@ import java.util.List;
  * for the game itself, it is used by our layout file R.layout.game_controller_input.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-public class GameControllerInput extends Activity implements InputManager.InputDeviceListener {
+public class GameControllerInput extends AppCompatActivity implements InputManager.InputDeviceListener {
     /**
      * TAG used for logging.
      */
@@ -112,16 +112,13 @@ public class GameControllerInput extends Activity implements InputManager.InputD
         mInputDeviceStates = new SparseArray<>();
         mSummaryAdapter = new SummaryAdapter(this, getResources());
 
-        mGame = (GameView) findViewById(R.id.game);
+        mGame = findViewById(R.id.game);
 
-        mSummaryList = (ListView) findViewById(R.id.summary);
+        mSummaryList = findViewById(R.id.summary);
         mSummaryList.setAdapter(mSummaryAdapter);
-        mSummaryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mSummaryAdapter.onItemClick(position);
-            }
-        });
+        mSummaryList.setOnItemClickListener(
+                (parent, view, position, id) -> mSummaryAdapter.onItemClick(position)
+        );
     }
 
     /**
@@ -1065,10 +1062,10 @@ public class GameControllerInput extends Activity implements InputManager.InputD
              */
             @Override
             public void initView(View view) {
-                TextView textView = (TextView) view.findViewById(R.id.label);
+                TextView textView = view.findViewById(R.id.label);
                 textView.setText(mLabel);
 
-                mContentView = (TextView) view.findViewById(R.id.content);
+                mContentView = view.findViewById(R.id.content);
             }
 
             /**
