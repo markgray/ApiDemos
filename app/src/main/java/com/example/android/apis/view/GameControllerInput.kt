@@ -35,60 +35,57 @@ import java.util.*
  * Demonstrates how to process input events received from game controllers.
  * It also shows how to detect when input devices are added, removed or reconfigured.
  *
- *
  * This activity displays button states and joystick positions.
  * Also writes detailed information about relevant input events to the log.
  *
- *
- * The game controller is also uses to control a very simple game.  See `GameView`
+ * The game controller is also used to control a very simple game.  See [GameView]
  * for the game itself, it is used by our layout file R.layout.game_controller_input.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class GameControllerInput : AppCompatActivity(), InputDeviceListener {
     /**
-     * `InputManager` for interacting with input devices.
+     * [InputManager] for interacting with input devices.
      */
     private var mInputManager: InputManager? = null
 
     /**
-     * Array of `InputDeviceState` Objects using the device ID as the index.
+     * Array of [InputDeviceState] Objects using the device ID as the index.
      */
     private var mInputDeviceStates: SparseArray<InputDeviceState>? = null
 
     /**
-     * Reference to the `GameView` in our layout file with ID R.id.game
+     * Reference to the [GameView] in our layout file with ID R.id.game
      */
     private var mGame: GameView? = null
 
     /**
-     * `ListView` in our layout file with ID R.id.summary, fed by the adapter
-     * `SummaryAdapter mSummaryAdapter`, we use it to output information we
-     * receive as an `InputDeviceListener` in a very nifty way.
+     * [ListView] in our layout file with ID R.id.summary, fed by the [SummaryAdapter] adapter field
+     * [mSummaryAdapter], we use it to output information we receive as an [InputDeviceListener] in
+     * a very nifty way.
      */
     private var mSummaryList: ListView? = null
 
     /**
-     * `SummaryAdapter` which feeds `ListView mSummaryList`, displays textual representations
-     * of `InputDeviceState` Objects our `InputDeviceListener` interface receives.
+     * [SummaryAdapter] which feeds [ListView] field [mSummaryList], displays textual representations
+     * of [InputDeviceState] Objects our [InputDeviceListener] interface receives.
      */
     private var mSummaryAdapter: SummaryAdapter? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.game_controller_input.
-     * Then we initialize our field `InputManager mInputManager` with an new instance for
-     * interacting with input devices. Next we initialize our fields
-     * `SparseArray<InputDeviceState> mInputDeviceStates` with a new instance of `SparseArray`,
-     * and `SummaryAdapter mSummaryAdapter` with a new instance of `SummaryAdapter` using
-     * this as the `Context` and a resources instance for our application's package.
+     * Then we initialize our [InputManager] field [mInputManager] with an new instance for
+     * interacting with input devices. Next we initialize our `SparseArray<InputDeviceState>` field
+     *  [mInputDeviceStates] with a new instance of [SparseArray], and our [SummaryAdapter] field
+     *  [mSummaryAdapter] with a new instance of [SummaryAdapter] using this as the [Context] and a
+     *  resources instance for our application's package.
      *
+     * We initialize our [GameView] field [mGame] by finding the view with ID R.id.game, and our
+     * [ListView] field [mSummaryList] by finding the view with ID R.id.summary. We set the adapter
+     * of [mSummaryList] to [mSummaryAdapter], and its `OnItemClickListener` to a lambda which calls
+     * through to the `onItemClick` method of [mSummaryAdapter].
      *
-     * We initialize our field `GameView mGame` by finding the view with ID R.id.game, and our
-     * field `ListView mSummaryList` by finding the view with ID R.id.summary. We set the adapter
-     * of `mSummaryList` to `mSummaryAdapter`, and its `OnItemClickListener` to an
-     * anonymous class which calls through to the `onItemClick` method of `mSummaryAdapter`.
-     *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,18 +105,17 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
     }
 
     /**
-     * Called after `onRestoreInstanceState`, `onRestart`, or `onPause`, for our
-     * activity to start interacting with the user. First we call through to our super's implementation
-     * of `onResume`. We then use `InputManager mInputManager` to register "this" as an
-     * input device listener to watch for when input devices are added, removed or reconfigured. Next
-     * we use `mInputManager` to fetch the ids of all input devices in the system to the array
-     * `int[] ids`. Then we loop for each `int id` in `int[] ids` calling our method
-     * `getInputDeviceState` for it. `getInputDeviceState` maintains the `SparseArray`
-     * `SparseArray<InputDeviceState> mInputDeviceStates` and if the device ID it is called for
-     * is not already in the array, gets information about that input device from `mInputManager`
-     * in a `InputDevice`, creates a `InputDeviceState` from it and stores it in the array
-     * `mInputDeviceStates`. If the device ID already had an entry it just returns that to the
-     * caller.
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for our activity to start
+     * interacting with the user. First we call through to our super's implementation of `onResume`.
+     * We then use [InputManager] field [mInputManager] to register "this" as an input device listener
+     * to watch for when input devices are added, removed or reconfigured. Next we use [mInputManager]
+     * to fetch the ids of all input devices in the system to the [Int] array `val ids`. Then we loop
+     * for each [mInputManager] `id` in `ids` calling our method [getInputDeviceState] for it.
+     * [getInputDeviceState] maintains the  `SparseArray<InputDeviceState>` field [mInputDeviceStates]
+     * and if the device ID it is called for is not already in the array, gets information about that
+     * input device from [mInputManager] in an [InputDevice], creates a [InputDeviceState] from it
+     * and stores it in the array [mInputDeviceStates]. If the device ID already had an entry it just
+     * returns that to the caller.
      */
     override fun onResume() {
         super.onResume()
@@ -139,7 +135,7 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
     /**
      * Called as part of the activity lifecycle when an activity is going into the background, but
      * has not (yet) been killed. We call through to our super's implementation of `onPause`
-     * then use `InputManager mInputManager` to unregister "this" as an `InputDeviceListener`.
+     * then use [InputManager] field [mInputManager] to unregister "this" as an [InputDeviceListener].
      */
     override fun onPause() {
         super.onPause()
@@ -149,10 +145,10 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
     }
 
     /**
-     * Called when the current `Window` of the activity gains or loses focus. This is the best
-     * indicator of whether this activity is visible to the user. First we call through to our super's
-     * implementation of `onWindowFocusChanged`, then we request focus for our field
-     * `GameView mGame`.
+     * Called when the current [Window] of the activity gains or loses focus. This is the best
+     * indicator of whether this activity is visible to the user. First we call through to our
+     * super's implementation of `onWindowFocusChanged`, then we request focus for our [GameView]
+     * field [mGame].
      *
      * @param hasFocus Whether the window of this activity has focus.
      */
@@ -163,21 +159,18 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
 
     /**
      * Called to process key events. You can override this to intercept all key events before they
-     * are dispatched to the window. First we call our method `getInputDeviceState` to initialize
-     * `InputDeviceState state` with the `InputDeviceState` of the device ID that generated
-     * our parameter `KeyEvent event`. If `state` is not null, we switch on the value of
-     * the action of `event`:
+     * are dispatched to the [Window]. First we call our method [getInputDeviceState] to initialize
+     * [InputDeviceState] `val state` with the [InputDeviceState] of the device ID that generated
+     * our [KeyEvent] parameter [event]. If `state` is not null, we switch on the value of the
+     * action of [event]:
      *
-     *  *
-     * ACTION_DOWN - if the `onKeyDown` method of `state` returns true (the key is
-     * a key used by the game), we call the `show` method of `SummaryAdapter mSummaryAdapter`
-     * with `state` as the argument. We then break
+     *  * ACTION_DOWN - if the `onKeyDown` method of `state` returns true (the key is
+     *  a key used by the game), we call the `show` method of [SummaryAdapter] field
+     *  [mSummaryAdapter]  with `state` as the argument. We then break
      *
-     *  *
-     * ACTION_UP - if the `onKeyUp` method of `state` returns true (the key is
-     * a key used by the game), we call the `show` method of `SummaryAdapter mSummaryAdapter`
-     * with `state` as the argument. We then break
-     *
+     *  * ACTION_UP - if the `onKeyUp` method of `state` returns true (the key is a key used by
+     *  the game), we call the `show` method of [SummaryAdapter] field [mSummaryAdapter] with
+     *  `state` as the argument. We then break
      *
      * Finally we return the value returned by our super's implementation of `dispatchKeyEvent` to
      * our caller.
@@ -203,13 +196,13 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
 
     /**
      * Called to process generic motion events. You can override this to intercept all generic motion
-     * events before they are dispatched to the window. Only if the `MotionEvent event` is from
-     * a SOURCE_CLASS_JOYSTICK input source (a joystick) and the action of `event` is ACTION_MOVE
-     * we call our method `getInputDeviceState` to initialize `InputDeviceState state` with
-     * the `InputDeviceState` of the device ID that generated our parameter `KeyEvent event`.
-     * Then if `state` is not null, and its `onJoystickMotion` method returns true given
-     * `MotionEvent event` (it always returns true) we call the `show` method of
-     * `SummaryAdapter mSummaryAdapter` with `state` as the argument. Finally we return
+     * events before they are dispatched to the window. Only if the [MotionEvent] parameter [event]
+     * is from a SOURCE_CLASS_JOYSTICK input source (a joystick) and the action of [event] is
+     * ACTION_MOVE we call our method [getInputDeviceState] to initialize [InputDeviceState]
+     * `val state` with the [InputDeviceState] of the device ID that generated our [KeyEvent]
+     * parameter  [event]. Then if `state` is not null, and its `onJoystickMotion` method returns
+     * true given [MotionEvent] parameter [event] (it always returns true) we call the `show` method
+     * of [SummaryAdapter] field [mSummaryAdapter] with `state` as the argument. Finally we return
      * the value returned by our super's implementation of `dispatchGenericMotionEvent` to our
      * caller.
      *
@@ -231,20 +224,21 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
     }
 
     /**
-     * Returns an `InputDeviceState` object for `deviceId`, from the cache contained in
-     * `SparseArray<InputDeviceState> mInputDeviceStates`, or freshly created (and cached for
-     * future calls. First we try to initialize `InputDeviceState state` by using `deviceId`
-     * to fetch it from our cache `SparseArray<InputDeviceState> mInputDeviceStates`. If it is
-     * null, we use `InputManager mInputManager` to initialize `InputDevice device` with
-     * information about the input device with ID `deviceId`. If `device` is null, we
-     * return null to our caller. Otherwise we set `state` to a new instance of `InputDeviceState`
-     * created from `device`, store `state` in our cache `mInputDeviceStates` under the
-     * index `deviceId`, and log the new device. Finally we return `state` to our caller.
+     * Returns an [InputDeviceState] object for [deviceId], from the cache contained in
+     * `SparseArray<InputDeviceState>` field [mInputDeviceStates], or freshly created (and
+     * cached for future calls. First we try to initialize [InputDeviceState] `val state` by
+     * using [deviceId] to fetch it from our `SparseArray<InputDeviceState>` cache field
+     * [mInputDeviceStates]. If it is null, we use [InputManager] field [mInputManager] to
+     * initialize [InputDevice] `val device` with information about the input device with ID
+     * [deviceId]. If `device` is null, we return null to our caller. Otherwise we set `state`
+     * to a new instance of [InputDeviceState] created from `device`, store `state` in our cache
+     * [mInputDeviceStates] under the index [deviceId], and log the new device. Finally we return
+     * `state` to our caller.
      *
      * @param deviceId Device ID
-     * @return an `InputDeviceState` object for `deviceId`, from the cache contained in
-     * `SparseArray<InputDeviceState> mInputDeviceStates`, or freshly created (and cached for
-     * future calls.
+     * @return an [InputDeviceState] object for [deviceId], from the cache contained in
+     * `SparseArray<InputDeviceState>` field [mInputDeviceStates], or freshly created (and
+     * then cached for future calls) if this is the first time the device has appeared.
      */
     private fun getInputDeviceState(deviceId: Int): InputDeviceState? {
         var state = mInputDeviceStates!![deviceId]
@@ -258,10 +252,10 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
     }
 
     /**
-     * Called whenever an input device has been added to the system, part of the `InputDeviceListener`
-     * interface. We call our method `getInputDeviceState` to initialize `InputDeviceState state`
-     * with the `InputDeviceState` of the device ID of our parameter `deviceId`. We then
-     * log the string value of the `InputDevice` object for that device.
+     * Called whenever an input device has been added to the system, part of the [InputDeviceListener]
+     * interface. We call our method [getInputDeviceState] to initialize [InputDeviceState] `val state`
+     * with the [InputDeviceState] of the device ID of our parameter [deviceId]. We then log the string
+     * value of the [InputDevice] object for that device.
      *
      * @param deviceId The id of the input device that was added.
      */
@@ -272,11 +266,13 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
 
     /**
      * Called whenever the properties of an input device have changed since they were last queried,
-     * part of the `InputDeviceListener` interface. part of the `InputDeviceListener` interface
-     * If `state` is not null, we remove the entry for `deviceId` from our cache
-     * `SparseArray<InputDeviceState> mInputDeviceStates`, and call our method `getInputDeviceState`
-     * to create a new `InputDeviceState` for `deviceId` to set `state` to (and cache it).
-     * We then log the string value of the `InputDevice` object for that device.
+     * part of the [InputDeviceListener] interface. We initialize [InputDeviceState] `var state`
+     * by retrieving the [InputDeviceState] stored under the key [deviceId] in our
+     * `SparseArray<InputDeviceState>` cache field [mInputDeviceStates]. If `state` is not null, we
+     * remove the entry for [deviceId] from [mInputDeviceStates], and call our method
+     * [getInputDeviceState] to create a new [InputDeviceState] for [deviceId] to set `state` to
+     * (and also have it cache it in [mInputDeviceStates]). We then log the string value of the
+     * [InputDevice] object for that device.
      *
      * @param deviceId The id of the input device that changed.
      */
@@ -290,11 +286,11 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
     }
 
     /**
-     * Called whenever an input device has been removed from the system, part of the `InputDeviceListener`
-     * interface. We call our method `getInputDeviceState` to initialize `InputDeviceState state`
-     * with the `InputDeviceState` of the device ID of our parameter `deviceId`. If `state`
-     * is not null we log the string value of the `InputDevice` object for that device, then remove
-     * the entry for `deviceId` from our cache `SparseArray<InputDeviceState> mInputDeviceStates`.
+     * Called whenever an input device has been removed from the system, part of the [InputDeviceListener]
+     * interface. We call our method [getInputDeviceState] to initialize [InputDeviceState] `val state`
+     * with the [InputDeviceState] of the device ID of our parameter [deviceId]. If `state` is not null
+     * we log the string value of the [InputDevice] object for that device, then remove the entry for
+     * [deviceId] from our `SparseArray<InputDeviceState>` cache field [mInputDeviceStates].
      *
      * @param deviceId The id of the input device that was removed.
      */
@@ -312,14 +308,10 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
      */
     private class InputDeviceState(
             /**
-             * The `InputDevice` that we were created for, set in our constructor.
+             * The [InputDevice] that we were created for, set in our constructor.
              */
-            val device: InputDevice) {
-        /**
-         * Getter for our `InputDevice mDevice` field.
-         *
-         * @return the value of our `InputDevice mDevice` field
-         */
+            val device: InputDevice
+    ) {
 
         /**
          * Axis ID's if we are created for a SOURCE_CLASS_JOYSTICK (joystick).
@@ -327,73 +319,70 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
         private val mAxes: IntArray
 
         /**
-         * Axis values reported to `onJoystickMotion` in the last received `MotionEvent`.
+         * Axis values reported to [onJoystickMotion] in the last received [MotionEvent].
          */
         private val mAxisValues: FloatArray
 
         /**
-         * `SparseIntArray` holding the state of the keys of our device (1 for pressed, 0 for
-         * not pressed), indexed by the key code of the key events received (this is the physical key
-         * that was pressed, not the Unicode character).
+         * [SparseIntArray] holding the state of the keys of our device (1 for pressed, 0 for
+         * not pressed), indexed by the key code of the key events received (this is the physical
+         * key that was pressed, not the Unicode character).
          */
         private val mKeys: SparseIntArray
 
         /**
-         * Getter for the length of the `int[] mAxes` array (number of axis supported by the
-         * device).
-         *
-         * @return Number of axis supported by the device
+         * Number of axis supported by the device, which is just the size of our [mAxes] field.
          */
         val axisCount: Int
             get() = mAxes.size
 
         /**
-         * Getter for the Axis ID from the `int[] mAxes` array (the entry at index `axisIndex`)
+         * Getter for the Axis ID from the [mAxes] array field (the entry at index [axisIndex])
          *
          * @param axisIndex index for axis we are looking for
-         * @return Axis ID of axis at index `axisIndex` of our device
+         * @return Axis ID of axis at index [axisIndex] of our device
          */
         fun getAxis(axisIndex: Int): Int {
             return mAxes[axisIndex]
         }
 
         /**
-         * Getter for the current value of the axis at index `axisIndex` of our device.
+         * Getter for the current value of the axis at index [axisIndex] of our device.
          *
          * @param axisIndex index for axis we are looking for
-         * @return Current value of the axis at index `axisIndex` of our device
+         * @return Current value of the axis at index [axisIndex] of our device
          */
         fun getAxisValue(axisIndex: Int): Float {
             return mAxisValues[axisIndex]
         }
 
         /**
-         * Getter for the number of key-value mappings in the `SparseIntArray mKeys` array.
+         * Getter for the number of key-value mappings in the [SparseIntArray] array field [mKeys].
          *
-         * @return number of key-value mappings in the `SparseIntArray mKeys` array.
+         * @return number of key-value mappings in the [SparseIntArray] array field [mKeys].
          */
         val keyCount: Int
             get() = mKeys.size()
 
         /**
-         * Given an index in the range 0...size()-1, returns the keycode from the `int keyIndex`
-         * key-value mapping that `SparseIntArray mKeys` stores. We simply return the key that
-         * the `keyAt` method of `SparseIntArray mKeys` returns (`mKeys` stores the
-         * state of that keycode using the keycode as the key).
+         * Given an index in the range 0...size()-1, returns the keycode from the [keyIndex]
+         * key-value mapping that [SparseIntArray] field [mKeys] stores. We simply return the
+         * key that the `keyAt` method of [mKeys] returns ([mKeys] stores the state of that
+         * keycode using the keycode as the key).
          *
          * @param keyIndex index (0...size()-1) of the key we are interested in
-         * @return keycode that is the key in the `SparseIntArray mKeys` array for index
-         * `keyIndex`
+         * @return keycode that is the key in the [SparseIntArray] field [mKeys] array for index
+         * [keyIndex].
          */
         fun getKeyCode(keyIndex: Int): Int {
             return mKeys.keyAt(keyIndex)
         }
 
         /**
-         * Returns true if the key stored in the `int keyIndex` entry ((0...size()-1) of the
-         * `SparseIntArray mKeys` array) of `mKeys` is pressed, false otherwise. We
+         * Returns true if the key stored in the [keyIndex] entry (for [keyIndex] (0...size()-1) of
+         * the [SparseIntArray] field [mKeys]) of `mKeys` is pressed, false otherwise. We
          * simply return the result of checking whether the value returned by the `valueAt`
-         * method of `SparseIntArray mKeys` for `keyIndex` is not 0.
+         * method of [mKeys] for [keyIndex] is not 0.
          *
          * @param keyIndex index (0...size()-1) of the key we are interested in
          * @return true if the key is pressed, false if it is not.
@@ -403,17 +392,17 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
         }
 
         /**
-         * Called by our `dispatchKeyEvent` override to determine if the keycode which generated
-         * the `KeyEvent` it received is one that our game is interested in, and also to record
-         * the state of that key in our `SparseIntArray mKeys` array if it is one. We first fetch
-         * the keycode from the `KeyEvent` to initialize our variable `int keyCode`. If our
-         * `isGameKey` method determines that it is a key our game is interested in we do some
-         * more processing (if not, we return false to the caller). If the repeat count of our parameter
-         * `KeyEvent event` is 0, we put the value 1 into the `mKeys` array under the key
-         * `keyCode`, set `String symbolicName` to the symbolic name of the keycode, log
+         * Called by our [dispatchKeyEvent] override to determine if the keycode which generated
+         * the [KeyEvent] it received is one that our game is interested in, and also to record
+         * the state of that key in our [SparseIntArray] field [mKeys] if it is one. We first fetch
+         * the keycode from the [KeyEvent] to initialize our variable `val keyCode`. If our
+         * [isGameKey] method determines that it is a key our game is interested in we do some
+         * more processing (if not, we return false to the caller). If the repeat count of our
+         * [KeyEvent] parameter [event] is 0, we put the value 1 into the [mKeys] array under the
+         * key `keyCode`, set [String] `val symbolicName` to the symbolic name of the keycode, log
          * a message about the "Key Down" occurrence, and in both cases return true to the caller.
          *
-         * @param event `KeyEvent` received by our `dispatchKeyEvent` override.
+         * @param event [KeyEvent] received by our [dispatchKeyEvent] override.
          * @return true if the keycode is one our game is interested in, false if not.
          */
         fun onKeyDown(event: KeyEvent): Boolean {
@@ -430,20 +419,20 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
         }
 
         /**
-         * Called by our `dispatchKeyEvent` override to determine if the keycode which generated
-         * the `KeyEvent` it received is one that our game is interested in, and also to record
-         * the state of that key in our `SparseIntArray mKeys` array if it is one. We first fetch
-         * the keycode from the `KeyEvent` to initialize our variable `int keyCode`. If our
-         * `isGameKey` method determines that it is a key our game is interested in we do some
-         * more processing (if not, we return false to the caller). We first make sure the keycode is
-         * already in our `SparseIntArray mKeys` array by calling the `indexOfKey` method
-         * of `mKeys`, and if the result is less that 0 it is not in the array, so we do not
-         * record of log its state. If it is already in the array (a key down event has previously
-         * occurred), we put the value 0 into the `mKeys` array under the key `keyCode`,
-         * set `String symbolicName` to the symbolic name of the keycode, log a message about
-         * the "Key Up" occurrence, and in both cases return true to the caller.
+         * Called by our [dispatchKeyEvent] override to determine if the keycode which generated
+         * the [KeyEvent] it received is one that our game is interested in, and also to record
+         * the state of that key in our [SparseIntArray] field [mKeys] if it is one. We first fetch
+         * the keycode from the [KeyEvent] to initialize our variable `val keyCode`. If our
+         * [isGameKey] method determines that it is a key our game is interested in we do some
+         * more processing (if not, we return false to the caller). We first make sure the keycode
+         * is already in our [mKeys] array by calling the `indexOfKey` method of [mKeys], and if the
+         * result is less that 0 it is not in the array, so we do not record of log its state. If it
+         * is already in the array (a key down event has previously occurred), we put the value 0
+         * into the [mKeys] array under the key `keyCode`, set [String] `val symbolicName` to the
+         * symbolic name of the keycode, log a message about the "Key Up" occurrence, and in both
+         * cases return true to the caller.
          *
-         * @param event `KeyEvent` received by our `dispatchKeyEvent` override.
+         * @param event [KeyEvent] received by our [dispatchKeyEvent] override.
          * @return true if the keycode is one our game is interested in, false if not.
          */
         fun onKeyUp(event: KeyEvent): Boolean {
@@ -461,25 +450,23 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
         }
 
         /**
-         * Called by our `dispatchGenericMotionEvent` override to record and log the contents
-         * of the `MotionEvent` it received. First we create `StringBuilder message` and
-         * append a string consisting of the name of the device we are following with the string
-         * "Joystick Motion" appended to it. We initialize `int historySize` with the the number
-         * of historical points in  `MotionEvent event`. Then we loop over `int i` of all
-         * the axis in our `int[] mAxes` array, setting `int axis` to the axis identifier
-         * contained in `mAxes[ i ]`, and `float value` to the value of that axis contained
-         * in the `MotionEvent event`. We then save this value in our `mAxisValues[ i]`
-         * array, and append a string consisting of the symbolic name of the axis followed by a ":"
-         * to `StringBuilder message`. We now loop through all the historical axis values for
-         * that axis appending all the values for it separated by a "," to `StringBuilder message`.
-         * Finally we append the value `value` and a "\n" to `message` and loop back for the
-         * next axis.
-         *
+         * Called by our [dispatchGenericMotionEvent] override to record and log the contents of the
+         * [MotionEvent] it received. First we create [StringBuilder] `val message` and append to it
+         * a string consisting of the name of the device we are following with the string "Joystick
+         * Motion" appended to it. We initialize `val historySize` with the the number of historical
+         * points in  [MotionEvent] parameter [event]. Then we loop over `i` for all the axis in our
+         * [mAxes] array, setting `val axis` to the axis identifier contained in the i'th entry in
+         * [mAxes], and `val value` to the value of that axis contained in the [MotionEvent] parameter
+         * [event]. We then save this value in the i'th position in our [mAxisValues] array, and
+         * append a string consisting of the symbolic name of the axis followed by a ":" to
+         * [StringBuilder] `message`. We now loop through all the historical axis values for
+         * that axis appending all the values for it separated by a "," to `message`. Finally we
+         * append the value `value` and a "\n" to `message` and loop back for the next axis.
          *
          * When done with all the axis we log the string value `message` under our tag `TAG`,
          * and return true to the caller.
          *
-         * @param event `MotionEvent` received by our `dispatchGenericMotionEvent` override
+         * @param event [MotionEvent] received by our [dispatchGenericMotionEvent] override
          * @return always returns true.
          */
         fun onJoystickMotion(event: MotionEvent): Boolean {
@@ -508,13 +495,14 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
 
         companion object {
             /**
-             * Check whether this is a key we care about. We switch on `int keyCode` returning true
-             * if the key is one of KEYCODE_DPAD_UP, KEYCODE_DPAD_DOWN, KEYCODE_DPAD_LEFT, KEYCODE_DPAD_RIGHT,
-             * KEYCODE_DPAD_CENTER, or KEYCODE_SPACE. Otherwise we return the result of calling the
-             * `KeyEvent.isGamepadButton` method for `keyCode` to the caller.
+             * Check whether this is a key we care about. We switch on [keyCode] returning true
+             * if the key is one of KEYCODE_DPAD_UP, KEYCODE_DPAD_DOWN, KEYCODE_DPAD_LEFT,
+             * KEYCODE_DPAD_RIGHT, KEYCODE_DPAD_CENTER, or KEYCODE_SPACE. Otherwise we return
+             * the result of calling the `KeyEvent.isGamepadButton` method for [keyCode] to the
+             * caller.
              *
              * @param keyCode keycode we are to check for
-             * @return true if `keyCode` is one of the six keycodes we are interested in, false if not.
+             * @return true if [keyCode] is one of the six keycodes we are interested in, false if not.
              */
             private fun isGameKey(keyCode: Int): Boolean {
                 return when (keyCode) {
@@ -525,24 +513,16 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
         }
 
         /**
-         * Our constructor. First we save our parameter `InputDevice device` in our field
-         * `InputDevice mDevice`. We initialize our variable `int numAxes` to 0, and
-         * initialize `List<MotionRange> ranges` to the ranges for all axes supported by the
-         * device `device`. We loop over the `MotionRange range` in `ranges` (if
-         * any), and if `range` is from a SOURCE_CLASS_JOYSTICK input device (a joystick) we
-         * increment `numAxes`.
+         * The init block of our constructor. First we initialize our variable `var numAxes` to 0,
+         * and initialize `List<MotionRange>` `val ranges` to the ranges for all axes supported by
+         * the device `device`. We loop over the `MotionRange range` in `ranges` (if any), and if
+         * `range` is from a SOURCE_CLASS_JOYSTICK input device (a joystick) we increment `numAxes`.
          *
-         *
-         * We next allocate `numAxes` entries for our fields `int[] mAxes` and
-         * `float[] mAxisValues`. We initialize our variable `int i` to 0, then once
-         * again loop over the `MotionRange range` in `ranges` (if any), and if
-         * `range` is from a SOURCE_CLASS_JOYSTICK input device (a joystick) we set
-         * `mAxes[i++]` to the axis ID of `range`.
-         *
-         *
-         * Finally we initialize `SparseIntArray mKeys` with a new instance.
-         *
-         * Parameter: device `InputDevice` we are created for.
+         * We next allocate `numAxes` entries for our `IntArray` field `mAxes` and `FloatArray`
+         * field `mAxisValues`. We initialize our variable `var i` to 0, then once again loop over
+         * the `MotionRange` `var range` in `ranges` (if any), and if `range` is from a
+         * SOURCE_CLASS_JOYSTICK input device (a joystick) we set `mAxes[i++]` to the axis ID of
+         * `range`. Finally we initialize `SparseIntArray` field `mKeys` with a new instance.
          */
         init {
             var numAxes = 0
@@ -569,34 +549,34 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
      */
     private class SummaryAdapter(
             /**
-             * `Context` to use toast a message, this when constructed in the `onCreate`
-             * method of the `GameControllerInput` activity.
+             * [Context]` to use toast a message, this when constructed in the `onCreate`
+             * method of the [GameControllerInput] activity.
              */
             private val mContext: Context,
             /**
-             * `Resources` instance to use to access resources, the value returned by the
+             * [Resources] instance to use to access resources, the value returned by the
              * `getResources` method when constructed in the `onCreate` method of the
-             * `GameControllerInput` activity.
+             * [GameControllerInput] activity.
              */
             private val mResources: Resources) : BaseAdapter() {
 
         /**
-         * `SparseArray` used to hold both axes, and keycode `Item` objects, indexed by
+         * [SparseArray] used to hold both axes, and keycode [Item] objects, indexed by
          * BASE_ID_AXIS_ITEM or'ed with the axis ID for axes, and indexed by BASE_ID_KEY_ITEM or'ed
          * with the keyCode for keys.
          */
         private val mDataItems = SparseArray<Item>()
 
         /**
-         * The list shown in our `ListView`. It is populated with `Item` objects to display
-         * the `InputDeviceState` of the last device that received a `KeyEvent` or
-         * `MotionEvent` we are interested in.
+         * The list shown in our [ListView]. It is populated with [Item] objects to display
+         * the [InputDeviceState] of the last device that received a [KeyEvent] or [MotionEvent]
+         * we are interested in.
          */
         private val mVisibleItems = ArrayList<Item>()
 
         /**
-         * `Heading` for the device heading row (the string "Input Device" will be written to
-         * its `TextView` when the `Heading.initView` method is called.
+         * [Heading] for the device heading row (the string "Input Device" will be written to
+         * its [TextView] when the [Heading.initView] method is called.
          */
         private val mDeviceHeading: Heading
 
