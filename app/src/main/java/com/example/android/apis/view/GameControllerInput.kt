@@ -581,90 +581,82 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
         private val mDeviceHeading: Heading
 
         /**
-         * `TextColumn` for the device name row, consists of two `TextView` views, one
-         * with the string "Name", and the other set to the name of the device whose event we are
-         * displaying.
+         * [TextColumn] for the device name row, consists of two [TextView] views, one with the
+         * string "Name", and the other set to the name of the device whose event we are displaying.
          */
         private val mDeviceNameTextColumn: TextColumn
 
         /**
-         * `Heading` for the axes heading row (the string "Axes" will be written to its
-         * `TextView` when the `Heading.initView` method is called.
+         * [Heading] for the axes heading row (the string "Axes" will be written to its
+         * [TextView] when the [Heading.initView] method is called).
          */
         private val mAxesHeading: Heading
 
         /**
-         * `Heading` for the keys heading row (the string "Keys and Buttons" will be written
-         * to its `TextView` when the `Heading.initView` method is called).
+         * [Heading] for the keys heading row (the string "Keys and Buttons" will be written
+         * to its [TextView] when the [Heading.initView] method is called).
          */
         private val mKeysHeading: Heading
 
         /**
-         * `InputDeviceState` we are currently displaying, it is passed to our `show`
+         * [InputDeviceState] we are currently displaying, it is passed to our [show]
          * method when a new event we are interested in is received by our callbacks.
          */
         private var mState: InputDeviceState? = null
 
         /**
-         * Called from the `OnItemClickListener` of `ListView mSummaryList` (our
-         * `ListView`). If our field `InputDeviceState mState` is not null we toast a
-         * message which displays the string value of the `InputDevice mDevice` field in
-         * `mState`.
+         * Called from the `OnItemClickListener` of [ListView] field [mSummaryList] (our
+         * [ListView]). If our [InputDeviceState] field [mState] is not null we toast a
+         * message which displays the string value of the [InputDevice] field mDevice`
+         * field in [mState].
          *
-         * @param position position in our `ListView` that was clicked UNUSED
+         * @param position position in our [ListView] that was clicked UNUSED
          */
         @Suppress("UNUSED_PARAMETER")
         fun onItemClick(position: Int) {
             if (mState != null) {
-                val toast = Toast.makeText(mContext, mState!!.device.toString(), Toast.LENGTH_LONG)
-                toast.show()
+                Toast.makeText(mContext, mState!!.device.toString(), Toast.LENGTH_LONG).show()
             }
         }
 
         /**
-         * Called from our `dispatchKeyEvent` and `dispatchGenericMotionEvent` to display
-         * the `InputDeviceState` of the device which just received a `KeyEvent` or a
-         * `MotionEvent` that we are interested in. First we save our parameter
-         * `InputDeviceState state` in our field `InputDeviceState mState`, then we clear
-         * our field `ArrayList<Item> mVisibleItems` which contains the list of `Item`
+         * Called from our [dispatchKeyEvent] and [dispatchGenericMotionEvent] to display
+         * the [InputDeviceState] of the device which just received a [KeyEvent] or a
+         * [MotionEvent] that we are interested in. First we save our [InputDeviceState]
+         * parameter [state] in our [InputDeviceState] field [mState], then we clear
+         * our `ArrayList<Item>` field [mVisibleItems] which contains the list of [Item]
          * objects we are displaying.
          *
+         * We begin to rebuild [mVisibleItems] by first adding our [Heading] field [mDeviceHeading]
+         * (a [TextView] with the text "Input Device"), setting the text of the content view
+         * of [TextColumn] field [mDeviceNameTextColumn] to the device name of [InputDeviceState]
+         * parameter [state], and adding [mDeviceNameTextColumn] to [mVisibleItems].
          *
-         * We begin to rebuild `mVisibleItems` by first adding our `Heading mDeviceHeading`
-         * (a `TextView` with the text "Input Device"), setting the text of the content view
-         * of `TextColumn mDeviceNameTextColumn` to the device name of `InputDeviceState state`,
-         * and adding `mDeviceNameTextColumn` to `mVisibleItems`.
+         * Next we populate [mVisibleItems] with the axes information by first adding our [Heading]
+         * field [mAxesHeading] (a [TextView] with the text "Axes"), then looping over all of the
+         * axes contained in [state] we fetch each [Int] `val axis`, form [Int] `val id` from it by
+         * or'ing it with BASE_ID_AXIS_ITEM, and trying to get the [TextColumn] `var column` for
+         * that `id` from our `SparseArray<Item>` field  [mDataItems]. If the result is null we
+         * create a new [TextColumn] for `column` from `id` and the string value of the `axis` and
+         * put that `column` in [mDataItems] under the key `id`. We now set the content [TextView]
+         * of `column` to the string value of the axis value and add `column` to [mVisibleItems].
          *
+         * Next we populate [mVisibleItems] with the keys information by first adding our [Heading]
+         * field [mKeysHeading] (a [TextView] with the text "Keys and Buttons"), then looping over
+         * all of keys in [state] we fetch each [Int] `val keyCode`, form [Int] `val id` from it by
+         * or'ing it with BASE_ID_KEY_ITEM, and trying to get the [TextColumn] `var column` for that
+         * `id` from our `SparseArray<Item>` field [mDataItems]. If the result is null we create a
+         * new [TextColumn] for `column` from `id` and the string value of the `keyCode` and put
+         * that `column` in [mDataItems] under the key `id`. We now set the content [TextView] of
+         * `column` to the string R.string.game_controller_input_key_pressed ("Pressed") if the key
+         * in [state] is pressed, or R.string.game_controller_input_key_released ("Released") if it
+         * is not pressed and add `column` to [mVisibleItems].
          *
-         * Next we populate `mVisibleItems` with the axes information by first adding our
-         * `Heading mAxesHeading` (a TextView with the text "Axes"), then looping over all of
-         * the axes contained in `state` we fetch each `int axis`, form `int id`
-         * from it by or'ing it with BASE_ID_AXIS_ITEM, and trying to get the `TextColumn column`
-         * for that `id` from our field `SparseArray<Item> mDataItems`. If the result is
-         * null we create a new `TextColumn` for `column` from `id` and the string
-         * value of the `axis` and put that `column` in `mDataItems` under the key
-         * `id`. We now set the content `TextView` of `column` to the string value
-         * of the axis value and add `column` to `mVisibleItems`.
-         *
-         *
-         * Next we populate `mVisibleItems` with the keys information by first adding our
-         * `Heading mKeysHeading` (a TextView with the text "Keys and Buttons"), then looping
-         * over all of keys in `state` we fetch each `int keyCode`, form `int id`
-         * from it by or'ing it with BASE_ID_KEY_ITEM, and trying to get the `TextColumn column`
-         * for that `id` from our field `SparseArray<Item> mDataItems`. If the result is
-         * null we create a new `TextColumn` for `column` from `id` and the string
-         * value of the `keyCode` and put that `column` in `mDataItems` under the
-         * key `id`. We now set the content `TextView` of `column` to the string
-         * R.string.game_controller_input_key_pressed ("Pressed") if the key in `state` is
-         * pressed, or R.string.game_controller_input_key_released ("Released") if it is not pressed
-         * and add `column` to `mVisibleItems`.
-         *
-         *
-         * After doing all this we call the method `notifyDataSetChanged` to notify the system
+         * After doing all this we call the method [notifyDataSetChanged] to notify the system
          * that the underlying data has been changed and any View reflecting the data set should
          * refresh itself.
          *
-         * @param state `InputDeviceState` of the device which just received an event we are
+         * @param state [InputDeviceState] of the device which just received an event we are
          * interested in.
          */
         fun show(state: InputDeviceState) {
@@ -722,7 +714,7 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
 
         /**
          * How many items are in the data set represented by this Adapter. We return the size of our
-         * field `ArrayList<Item> mVisibleItems`.
+         * `ArrayList<Item>` field [mVisibleItems].
          *
          * @return Count of items.
          */
@@ -732,7 +724,7 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
 
         /**
          * Get the data item associated with the specified position in the data set. We return the
-         * contents of our field `ArrayList<Item> mVisibleItems` at position `position`.
+         * contents of our `ArrayList<Item>` field [mVisibleItems] at position [position].
          *
          * @param position Position of the item within the adapter's data set that is wanted.
          * @return The data at the specified position.
@@ -743,8 +735,8 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
 
         /**
          * Get the row id associated with the specified position in the list. We call our method
-         * `getItem` to get the `Item` at position `position`, and return the
-         * ID of that `Item` that its `getItemId` method returns.
+         * [getItem] to get the [Item] at position [position], and return the ID of that [Item] that
+         * its `getItemId` method returns (kotlin prefers to call this the [Item.mItemId] property).
          *
          * @param position The position of the item within the adapter's data set whose row id we want.
          * @return The id of the item at the specified position.
@@ -754,14 +746,14 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
         }
 
         /**
-         * Get a View that displays the data at the specified position in the data set. We call our
-         * method `getItem` to get the `Item` at position `position`, and return
-         * the result of calling that objects `getView` method, which either returns the View
-         * that that object has already been using, or one it creates and initializes.
+         * Get a [View] that displays the data at the specified position in the data set. We call
+         * our method [getItem] to get the [Item] at position [position], and return the result of
+         * calling that objects [Item.getView] method, which either returns the [View] that that
+         * object has already been using, or one it creates and initializes.
          *
          * @param position    The position of the item within the adapter's data set of the item
-         * whose view we want.
-         * @param convertView The old view to reuse, if possible.
+         *                    whose view we want.
+         * @param convertView The old [View] to reuse, if possible.
          * @param parent      The parent that this view will eventually be attached to
          * @return A View corresponding to the data at the specified position.
          */
@@ -770,60 +762,51 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
         }
 
         /**
-         * Abstract base class for the `Heading`, and `TextColumn` classes.
+         * Abstract base class for the [Heading], and [TextColumn] classes.
          */
         private abstract class Item
-        /**
-         * Our constructor. We merely save our parameters `itemId` in our field `mItemId`,
-         * and `layoutResourceId` in our field `mLayoutResourceId`.
-         *
-         * Parameter: itemId           Stable Item ID for this `Item` instance
-         * Parameter: layoutResourceId Resource ID pointing to a layout file to display our information.
-         */(
+        (
                 /**
-                 * Stable Item ID that is returned by our method `getItemId`, which is called from
-                 * the `getItemId` method of the `SummaryAdapter` which is using us. It is
-                 * set to one of its parameters by our constructor.
+                 * Stable Item ID that is returned by our method [getItemId], which is called from
+                 * the `getItemId` method of the [SummaryAdapter] which is using us.
                  */
                 val mItemId: Int,
                 /**
-                 * Resource ID for the layout which will display our information. It is set to one of
-                 * its parameters by our constructor.
+                 * Resource ID for the layout which will display our information.
                  */
-                private val mLayoutResourceId: Int) {
+                private val mLayoutResourceId: Int
+        ) {
 
             /**
-             * `View` which is displaying our information. If one does not already exist, our
-             * `getView` method will create one by inflating the layout file pointed to by
-             * our field `mLayoutResourceId`.
+             * [View] which is displaying our information. If one does not already exist, our
+             * [getView] method will create one by inflating the layout file pointed to by
+             * our field [mLayoutResourceId].
              */
             private var mView: View? = null
 
             /**
-             * Returns the stable ID of this `Item` that is stored in our field `mItemId`.
+             * Returns the stable ID of this [Item] that is stored in our [mItemId] field.
              *
-             * @return The stable ID of this `Item`
+             * @return The stable ID of this [Item]
              */
             @Suppress("unused")
             val itemId: Long
                 get() = mItemId.toLong()
 
             /**
-             * Returns a `View` updated to hold our latest information. If our field
-             * `View mView` is null, we initialize `LayoutInflater inflater` with an
-             * instance of the system level service LAYOUT_INFLATER_SERVICE, and use it to inflate
-             * our layout file `mLayoutResourceId` using our parameter `parent` as the
-             * object that provides a set of LayoutParams values for root of the returned hierarchy
-             * to create a new instance for `mView`, and call our method `initView` to
-             * initialize `mView`.
+             * Returns a [View] updated to hold our latest information. If our [View] field [mView]
+             * is null, we initialize [LayoutInflater] `val inflater` with an instance of the system
+             * level service LAYOUT_INFLATER_SERVICE, and use it to inflate our layout file given by
+             * [mLayoutResourceId] using our parameter [parent] as the object that provides a set of
+             * `LayoutParams` values for root of the returned hierarchy to create a new instance for
+             * [mView], and call our method [initView] to initialize [mView].
              *
-             *
-             * In either case we call our method `updateView` to update the information displayed
-             * by `mView` and return `mView` to the caller.
+             * In either case we call our method [updateView] to update the information displayed
+             * by [mView] and return [mView] to the caller.
              *
              * @param convertView UNUSED The old view to reuse, if possible.
              * @param parent      The parent that this view will eventually be attached to
-             * @return `View` holding our information.
+             * @return [View] holding our information.
              */
             @Suppress("UNUSED_PARAMETER")
             fun getView(convertView: View?, parent: ViewGroup): View? {
@@ -839,42 +822,40 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
             /**
              * Derived classes should override this to do any class specific initialization.
              *
-             * @param view `View` which will hold the information for this `Item`
+             * @param view [View] which will hold the information for this [Item]
              */
             protected open fun initView(view: View?) {}
 
             /**
              * Derived classes should override this to do any class specific updating of its view.
              *
-             * @param view `View` which will hold the information for this `Item`
+             * @param view [View] which will hold the information for this [Item]
              */
             protected open fun updateView(view: View?) {}
 
         }
 
         /**
-         * `Item` which displays constant heading text in a `TextView`.
+         * [Item] which displays constant heading text in a [TextView].
          */
         private class Heading
-        /**
-         * Our constructor. First we call our super's constructor with our parameter `itemId`
-         * and our layout resource R.layout.game_controller_input_heading (consists of a single
-         * `TextView` with no ID). Then we save our parameter `String label` in our
-         * field `String mLabel`.
-         *
-         * Parameter: itemId Stable ID for this `Item`
-         * Parameter: label  String to display in our `TextView`
-         */(itemId: Int,
-            /**
-             * String we are supposed to display in our `TextView`
-             */
-            private val mLabel: String) : Item(itemId, R.layout.game_controller_input_heading) {
+        (
+                /**
+                 * itemId Stable ID for this [Item]
+                 */
+                itemId: Int,
+                /**
+                 * String we are supposed to display in our [TextView]
+                 */
+                private val mLabel: String
+
+        ) : Item(itemId, R.layout.game_controller_input_heading) {
 
             /**
-             * Initializes our view by setting the text of its `TextView` to the string in our
-             * field `mLabel`
+             * Initializes our view by setting the text of its [TextView] to the string in our
+             * field [mLabel]
              *
-             * @param view `View` which will hold the information for this `Item`
+             * @param view [View] which will hold the information for this [Item]
              */
             public override fun initView(view: View?) {
                 val textView = view as TextView?
@@ -884,38 +865,35 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
         }
 
         /**
-         * `Item` which displays constant heading text in one `TextView` and varying
-         * information from its field `String mContent` in a second one.
+         * [Item] which displays constant heading text in one [TextView] and varying
+         * information from its [String] field [mContent] in a second one.
          */
         private class TextColumn
-        /**
-         * Our constructor. First we call our super's constructor with our parameter `itemId`
-         * and our layout resource R.layout.game_controller_input_text_column (consists of a
-         * horizontal `LinearLayout` with two `TextView` objects with the ID's
-         * R.id.label (for the constant heading), and R.id.content (for the varying information).
-         * Then we save our parameter `String label` in our field `String mLabel`.
-         *
-         * @param itemId Stable ID for this `Item`
-         * Parameter: label  String to display in our constant first `TextView`
-         */(itemId: Int,
-            /**
-             * Constant string to display in our first `TextView`, set by our constructor.
-             */
-            private val mLabel: String) : Item(itemId, R.layout.game_controller_input_text_column) {
+        (
+                /**
+                 * Stable ID for this `Item`
+                 */
+                itemId: Int,
+                /**
+                 * Constant string to display in our first `TextView`, set by our constructor.
+                 */
+                private val mLabel: String
+
+        ) : Item(itemId, R.layout.game_controller_input_text_column) {
 
             /**
-             * Varying information to display in our second `TextView`, set by calling our
-             * method `setContent`.
+             * Varying information to display in our second [TextView], set by calling our
+             * method [setContent].
              */
             private var mContent: String? = null
 
             /**
-             * Point to the `TextView` in our layout that is used for varying information.
+             * Points to the [TextView] in our layout that is used for varying information.
              */
             private var mContentView: TextView? = null
 
             /**
-             * Saves the value of its parameter `String content` in our field `mContent`.
+             * Saves the value of its [String] parameter [content] in our field [mContent].
              *
              * @param content Varying information that we are to display in our `TextView`
              * with ID R.id.content (`mContentView`)
@@ -925,12 +903,12 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
             }
 
             /**
-             * Initializes this `TextColumn` object. We initialize `TextView textView` by
-             * finding the view in `view` with ID R.id.label and set its text to our field
-             * `mLabel`. We then initialize our field `TextView mContentView` by finding
-             * the view in `view` with ID R.id.content.
+             * Initializes this [TextColumn] object. We initialize [TextView] `val textView` by
+             * finding the view in [View] parameter [view] with ID R.id.label and set its text to
+             * our [String] field [mLabel]. We then initialize our [TextView] field [mContentView]
+             * by finding the view in [view] with ID R.id.content.
              *
-             * @param view `View` which will hold the information for this `Item`
+             * @param view [View] which will hold the information for this [Item].
              */
             public override fun initView(view: View?) {
                 val textView = view!!.findViewById<TextView>(R.id.label)
@@ -939,10 +917,10 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
             }
 
             /**
-             * Updates the text displayed in `TextView mContentView` with the latest contents
-             * of `String mContent`.
+             * Updates the text displayed in [TextView] field [mContentView] with the latest
+             * contents of [String] field [mContent].
              *
-             * @param view `View` which will hold the information for this `Item`
+             * @param view [View] which will hold the information for this [Item]
              */
             public override fun updateView(view: View?) {
                 mContentView!!.text = mContent
@@ -973,21 +951,16 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
         }
 
         /**
-         * Our constructor. First we save our parameters `Context context` in our field
-         * `Context mContext`, and `Resources resources` in our field
-         * `Resources mResources`. We initialize our field `Heading mDeviceHeading` with
-         * a new instance using the row ID BASE_ID_HEADING or'ed with 0 (1024) and the string
-         * R.string.game_controller_input_label_device_name ("Input Device"). We initialize our field
-         * `TextColumn mDeviceNameTextColumn` with a new instance using the row ID BASE_ID_DEVICE_ITEM
-         * or'ed with 0 (2048), and the string R.string.game_controller_input_label_device_name ("Name").
-         * We initialize our field `Heading mAxesHeading` with a new instance using the row ID
-         * BASE_ID_HEADING or'ed with 1 (1025) and the string R.string.game_controller_input_heading_axes
-         * ("Axes"). We initialize our field `Heading mKeysHeading` with a new instance using the row ID
-         * BASE_ID_HEADING or'ed with 2 (1026) and the string R.string.game_controller_input_heading_keys
-         * ("Keys and Buttons")
-         *
-         * Parameter: context   `Context` to use to toast messages
-         * Parameter: resources `Resources` instance to use to access resources.
+         * The init block of our constructor. We initialize our field `Heading` field `mDeviceHeading`
+         * with a new instance using the row ID BASE_ID_HEADING or'ed with 0 (1024) and the string
+         * R.string.game_controller_input_label_device_name ("Input Device"). We initialize our
+         * `TextColumn` field `mDeviceNameTextColumn` with a new instance using the row ID
+         * BASE_ID_DEVICE_ITEM or'ed with 0 (2048), and the string "Name" from the string resource
+         * R.string.game_controller_input_label_device_name. We initialize our `Heading` field
+         * `mAxesHeading` with a new instance using the row ID BASE_ID_HEADING or'ed with 1 (1025)
+         * and the string R.string.game_controller_input_heading_axes ("Axes"). We initialize our
+         * `Heading` field `mKeysHeading` with a new instance using the row ID BASE_ID_HEADING or'ed
+         * with 2 (1026) and the string R.string.game_controller_input_heading_keys ("Keys and Buttons")
          */
         init {
             mDeviceHeading = Heading(BASE_ID_HEADING or 0,
