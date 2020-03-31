@@ -21,6 +21,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.os.Build
+import android.os.Handler
 import android.os.SystemClock
 import android.os.Vibrator
 import android.util.AttributeSet
@@ -34,46 +35,44 @@ import kotlin.math.*
 /**
  * A trivial joystick based physics game to demonstrate joystick handling.
  *
- *
  * If the game controller has a vibrator, then it is used to provide feedback
  * when a bullet is fired or the ship crashes into an obstacle.  Otherwise, the
  * system vibrator is used for that purpose.
  *
- *
- * see GameControllerInput
+ * see [GameControllerInput]
  */
 @Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     /**
-     * `Random` instance we use to generate random numbers whenever needed.
+     * [Random] instance we use to generate random numbers whenever needed.
      */
     private val mRandom: Random = Random()
 
     /**
-     * `Ship` instance that we control with our non-existent game controller.
+     * [Ship] instance that we control with our (non-existent) game controller.
      */
     private var mShip: Ship? = null
 
     /**
-     * List of `Bullet` objects that are currently in flight.
+     * List of [Bullet] objects that are currently in flight.
      */
     private val mBullets: MutableList<Bullet>
 
     /**
-     * List of `Obstacle` objects that are currently in existence.
+     * List of [Obstacle] objects that are currently in existence.
      */
     private val mObstacles: MutableList<Obstacle>
 
     /**
-     * Milliseconds since boot of the previous time that our method `step` was called to advance
+     * Milliseconds since boot of the previous time that our method [step] was called to advance
      * the animation of the game.
      */
     private var mLastStepTime: Long = 0
 
     /**
-     * Set to the device of the last `MotionEvent` received by our `onGenericMotionEvent`
+     * Set to the [InputDevice] of the last [MotionEvent] received by our [onGenericMotionEvent]
      * callback if it is a SOURCE_CLASS_JOYSTICK device, and used to move our spaceship.
      */
     private var mLastInputDevice: InputDevice? = null
@@ -139,7 +138,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     /**
      * This is called during layout when the size of this view has changed. First we call our super's
-     * implementation of `onSizeChanged`, then we call our method `reset` to reset the
+     * implementation of `onSizeChanged`, then we call our method [reset] to reset the
      * game.
      *
      * @param w    Current width of this view.
@@ -155,44 +154,38 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     /**
-     * Callback for a key being pressed. First we call our method `ensureInitialized` to make
-     * sure we have a spaceship to play with. Then we initialize our variable `handled` to
-     * false. Then if the `getRepeatCount` method of our parameter `KeyEvent event` returns
-     * 0 (we only want to handle the keys on initial down but not on auto-repeat), we switch on the
-     * value of `keyCode`:
+     * Callback for a key being pressed. First we call our method [ensureInitialized] to make
+     * sure we have a spaceship to play with. Then we initialize our variable `var handled` to
+     * false. Then if the `getRepeatCount` method of our [KeyEvent] parameter [event] returns 0
+     * (we only want to handle the keys on initial down but not on auto-repeat), we switch on the
+     * value of our [keyCode] parameter:
      *
-     *  *
-     * KEYCODE_DPAD_LEFT - we call the `setHeadingX` method of our field `Ship mShip`
-     * with a value of -1, set the DPAD_STATE_LEFT bit in `mDPadState`, set `handled`
-     * to true, and break.
+     *  * KEYCODE_DPAD_LEFT - we call the `setHeadingX` method of our [Ship] field [mShip]
+     *  with a value of -1, set the DPAD_STATE_LEFT bit in [mDPadState], set `handled`
+     *  to true, and break.
      *
-     *  *
-     * KEYCODE_DPAD_RIGHT - we call the `setHeadingX` method of our field `Ship mShip`
-     * with a value of 1, set the DPAD_STATE_RIGHT bit in `mDPadState`, set `handled`
-     * to true, and break.
+     *  * KEYCODE_DPAD_RIGHT - we call the `setHeadingX` method of our [Ship] field [mShip]
+     *  with a value of 1, set the DPAD_STATE_RIGHT bit in [mDPadState], set `handled`
+     *  to true, and break.
      *
-     *  *
-     * KEYCODE_DPAD_UP - we call the `setHeadingY` method of our field `Ship mShip`
-     * with a value of -1, set the DPAD_STATE_UP bit in `mDPadState`, set `handled`
-     * to true, and break.
+     *  * KEYCODE_DPAD_UP - we call the `setHeadingY` method of our [Ship] field [mShip]
+     *  with a value of -1, set the DPAD_STATE_UP bit in [mDPadState], set `handled`
+     *  to true, and break.
      *
-     *  *
-     * KEYCODE_DPAD_DOWN - we call the `setHeadingY` method of our field `Ship mShip`
-     * with a value of 1, set the DPAD_STATE_DOWN bit in `mDPadState`, set `handled`
-     * to true, and break.
+     *  * KEYCODE_DPAD_DOWN - we call the `setHeadingY` method of our [Ship] field [mShip]
+     *  with a value of 1, set the DPAD_STATE_DOWN bit in [mDPadState], set `handled`
+     *  to true, and break.
      *
-     *  *
-     * default - if our `isFireKey` method returns true for `keyCode`, we call our
-     * method `fire`, set `handled` to true, and break.
+     *  * default - if our [isFireKey] method returns true for [keyCode], we call our
+     *  method [fire], set `handled` to true, and break.
      *
-     *
-     * Having handled the keys we are interested in, we check if `handled` is true, and if so
-     * we call our method `step` with the time that the `KeyEvent event` occurred, and
-     * return true to our caller. Otherwise we return the value returned by our super's implementation
-     * of `onKeyDown`.
+     * Having handled the keys we are interested in, we check if `handled` is true, and if so we
+     * call our method [step] with the time that the [KeyEvent] parameter [event] occurred, and
+     * return true to our caller. Otherwise we return the value returned by our super's
+     * implementation of `onKeyDown`.
      *
      * @param keyCode A key code that represents the button pressed
-     * @param event   The KeyEvent object that defines the button action.
+     * @param event   The [KeyEvent] object that defines the button action.
      * @return true if we handled the event, false otherwise.
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
@@ -236,42 +229,35 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     /**
-     * Called when a key is released. First we call our method `ensureInitialized` to make
-     * sure we have a spaceship to play with. Then we initialize our variable `handled` to
-     * false, and we switch on the value of `keyCode`:
+     * Called when a key is released. First we call our method [ensureInitialized] to make
+     * sure we have a spaceship to play with. Then we initialize our variable `var handled`
+     * to false, and we switch on the value of our ][keyCode] parameter:
      *
-     *  *
-     * KEYCODE_DPAD_LEFT - we call the `setHeadingX` method of our field `Ship mShip`
-     * with a value of 0, clear the DPAD_STATE_LEFT bit in `mDPadState`, set `handled`
-     * to true, and break.
+     *  * KEYCODE_DPAD_LEFT - we call the `setHeadingX` method of our [Ship] field [mShip]
+     *  with a value of 0, clear the DPAD_STATE_LEFT bit in [mDPadState], set `handled`
+     *  to true, and break.
      *
-     *  *
-     * KEYCODE_DPAD_RIGHT - we call the `setHeadingX` method of our field `Ship mShip`
-     * with a value of 0, clear the DPAD_STATE_RIGHT bit in `mDPadState`, set `handled`
-     * to true, and break.
+     *  * KEYCODE_DPAD_RIGHT - we call the `setHeadingX` method of our [Ship] field [mShip]
+     *  with a value of 0, clear the DPAD_STATE_RIGHT bit in [mDPadState], set `handled`
+     *  to true, and break.
      *
-     *  *
-     * KEYCODE_DPAD_UP - we call the `setHeadingY` method of our field `Ship mShip`
-     * with a value of 0, clear the DPAD_STATE_UP bit in `mDPadState`, set `handled`
-     * to true, and break.
+     *  * KEYCODE_DPAD_UP - we call the `setHeadingY` method of our [Ship] field [mShip]
+     *  with a value of 0, clear the DPAD_STATE_UP bit in [mDPadState], set `handled`
+     *  to true, and break.
      *
-     *  *
-     * KEYCODE_DPAD_DOWN - we call the `setHeadingY` method of our field `Ship mShip`
-     * with a value of 0, clear the DPAD_STATE_DOWN bit in `mDPadState`, set `handled`
-     * to true, and break.
+     *  * KEYCODE_DPAD_DOWN - we call the `setHeadingY` method of our [Ship] field [mShip]
+     *  with a value of 0, clear the DPAD_STATE_DOWN bit in [mDPadState], set `handled`
+     *  to true, and break.
      *
-     *  *
-     * default - the our method `isFireKey` returns true for `keyCode` we set `handled`
-     * to true and break.
+     *  * default - the our method [isFireKey] returns true for our [keyCode] parameter we set
+     *  `handled` to true and break.
      *
-     *
-     * If `handled` is now true, we call our method `step` with the time that the
-     * `KeyEvent event` occurred, and return true to our caller. Otherwise we return the value
+     * If `handled` is now true, we call our method [step] with the time that our [KeyEvent]
+     * parameter [event] occurred, and return true to our caller. Otherwise we return the value
      * returned by our super's implementation of `onKeyDown`.
      *
-     * @param keyCode A key code that represents the button pressed, from
-     * [android.view.KeyEvent].
-     * @param event   The KeyEvent object that defines the button action.
+     * @param keyCode A key code that represents the button pressed, from [android.view.KeyEvent].
+     * @param event   The [KeyEvent] object that defines the button action.
      * @return true if we handled the event.
      */
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
@@ -313,29 +299,27 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     /**
      * We implement this method to handle generic motion events. First we call our method
-     * `ensureInitialized` to make sure we have a spaceship to play with. Then if the
-     * `MotionEvent event` is from the source SOURCE_CLASS_JOYSTICK (a joystick), and the
-     * action of `event` is ACTION_MOVE it is an `MotionEvent` we may be interested in
-     * so we do some more processing. If `mLastInputDevice` is null or it does not have the
-     * same input device ID as the `MotionEvent event` we set `mLastInputDevice` to the
-     * `InputDevice` of `event` (if that is still null we return false to the caller
-     * as the `MotionEvent event` is obviously invalid). We make sure that none of our DPAD
-     * keys are pressed by checking the value of `mDPadState`, and if any are set we ignore
-     * the joystick by returning true to the caller.
-     *
+     * [ensureInitialized] to make sure we have a spaceship to play with. Then if the
+     * [MotionEvent] parameter [event] is from the source SOURCE_CLASS_JOYSTICK (a joystick),
+     * and the action of [event] is ACTION_MOVE it is an [MotionEvent] we may be interested in
+     * so we do some more processing. If [mLastInputDevice] is null or it does not have the
+     * same input device ID as the [MotionEvent] parameter [event] we set [mLastInputDevice] to
+     * the [InputDevice] of [event] (if that is still null we return false to the caller as the
+     * [MotionEvent] parameter [event] is obviously invalid). We make sure that none of our DPAD
+     * keys are pressed by checking the value of [mDPadState], and if any are set we ignore the
+     * joystick by returning true to the caller.
      *
      * Now we are ready to process all historical movement samples in the batch. First we initialize
-     * our variable `int historySize` with the number of historical points in `event`,
-     * then we loop over `i` for all these points calling our method `processJoystickInput`
-     * with `event` and `i` (this method will determine an X and Y value for that movement,
-     * change the heading of our spaceship appropriately and call our method `step` to advance
-     * the animation to the time that that sample occurred). When done with the historical samples,
-     * we call `processJoystickInput` again with -1 as the sample number to process the current
-     * movement sample in the batch and return true to the caller.
+     * our [Int] variable `val historySize` with the number of historical points in [event], then we
+     * loop over `i` for all these points calling our method [processJoystickInput] with [event] and
+     * `i` (this method will determine an X and Y value for that movement, change the heading of our
+     * spaceship appropriately and call our method [step] to advance the animation to the time that
+     * that sample occurred). When done with the historical samples, we call [processJoystickInput]
+     * again with -1 as the sample number to process the current movement sample in the batch and
+     * return true to the caller.
      *
-     *
-     * If the `MotionEvent event` is not from a joystick we return the value returned by our
-     * super's implementation of `onGenericMotionEvent`.
+     * If the [MotionEvent] parameter [event] is not from a joystick we return the value returned by
+     * our super's implementation of `onGenericMotionEvent`.
      *
      * @param event The generic motion event being processed.
      * @return True if the event was handled, false otherwise.
@@ -378,31 +362,28 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     /**
-     * Called by our `onGenericMotionEvent` callback to process the `MotionEvent` it
-     * received from a joystick. We first try to set our variable `float x` by calling our
-     * method `getCenteredAxis` to retrieve the AXIS_X axis from the `historyPos` sample
-     * in `event` (we also pass it `mLastInputDevice` so it can determine the range of
-     * the device). If that returns 0, we try to get the AXIS_HAT_X axis, and if that returns 0 also
-     * we try to get the AXIS_Z axis.
+     * Called by our [onGenericMotionEvent] callback to process the [MotionEvent] it received from
+     * a joystick. We first try to set our [Float] variable `var x` by calling our method
+     * [getCenteredAxis] to retrieve the AXIS_X axis from the [historyPos] parameter sample
+     * in [MotionEvent] parameter [event] (we also pass it [mLastInputDevice] so it can determine
+     * the range of the device). If that returns 0, we try to get the AXIS_HAT_X axis, and if that
+     * returns 0 also we try to get the AXIS_Z axis.
      *
-     *
-     * Next we try to set our variable `float y` by calling our method `getCenteredAxis`
-     * to retrieve the AXIS_Y axis from the `historyPos` sample in `event` (we also pass
-     * it `mLastInputDevice` so it can determine the range of the device). If that returns 0,
+     * Next we try to set our [Float] variable `var y` by calling our method [getCenteredAxis] to
+     * retrieve the AXIS_Y axis from the [historyPos] parameter sample in [event] (we also pass
+     * it [mLastInputDevice] so it can determine the range of the device). If that returns 0,
      * we try to get the AXIS_HAT_Y axis, and if that returns 0 also we try to get the AXIS_RZ axis.
-     *
      *
      * We have to try the extra axes because many game pads with two joysticks report the position
      * of the second joystick using the other axis types.
      *
-     *
-     * Once we have extracted the (x,y) coordinates from `event` we call the `setHeading`
-     * method of `Ship mShip` to change its heading, and call our `step` method to advance
-     * the animation, using the time the event occurred if `historyPos` is less than 0, or the
-     * time that the historical movement `historyPos` occurred between this event and the previous
+     * Once we have extracted the `(x,y)` coordinates from [event] we call the `setHeading` method
+     * of [Ship] field [mShip] to change its heading, and call our [step] method to advance the
+     * animation, using the time the event occurred if [historyPos] is less than 0, or the time
+     * that the historical movement [historyPos] occurred between this event and the previous
      * event if greater or equal to zero.
      *
-     * @param event      `MotionEvent` that we received in our `onGenericMotionEvent` callback.
+     * @param event      [MotionEvent] that we received in our [onGenericMotionEvent] callback.
      * @param historyPos number of the historical movement sample in the batch (-1 for the current
      * movement).
      */
@@ -432,24 +413,21 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     /**
-     * Called when the window containing this view gains or loses focus. If our parameter `hasWindowFocus`
-     * is true, we get a handler associated with the thread running this View (This handler can be used to pump
-     * events in the UI events queue) and add our `Runnable mAnimationRunnable` to its message queue
-     * with a delay of ANIMATION_TIME_STEP (16). We then set `mLastStepTime` to the current milliseconds
-     * since boot.
+     * Called when the window containing this view gains or loses focus. If our [hasWindowFocus]
+     * parameter is true, we get a handler associated with the thread running this View (This
+     * handler can be used to pump [Runnable]'s into the UI events queue) and add our [Runnable]
+     * field [mAnimationRunnable] to its message queue with a delay of ANIMATION_TIME_STEP (16).
+     * We then set [mLastStepTime] to the current milliseconds since boot.
      *
-     *
-     * If `hasWindowFocus` is false, we remove all scheduled `Runnable mAnimationRunnable` from
-     * the handler associated with the thread running this View, set `mDPadState` (no keys pressed),
-     * and if `Ship mShip` is not null we call its `setHeading` method to set its heading to
-     * (0,0) and its `setVelocity` method to set its velocity to (0,0).
-     *
+     * If [hasWindowFocus] is false, we remove all scheduled [mAnimationRunnable] field [Runnable]'s
+     * from the handler associated with the thread running this [View], set [mDPadState] to 0 (no
+     * keys pressed), and if [Ship] field [mShip] is not null we call its `setHeading` method to set
+     * its heading to `(0,0)` and its `setVelocity` method to set its velocity to `(0,0)`.
      *
      * Finally we return the value returned by our super's implementation of `onWindowFocusChanged` to
      * our caller.
      *
-     * @param hasWindowFocus True if the window containing this view now has
-     * focus, false otherwise.
+     * @param hasWindowFocus True if the window containing this view now has focus, false otherwise.
      */
     override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
         // Turn on and off animations based on the window focus.
@@ -470,17 +448,16 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     /**
-     * Called to have the spaceship fire its gun. First we make sure that `Ship mShip` is not
-     * null, and that its `isDestroyed` method returns false, returning having done nothing if
-     * we no longer have a spaceship. If we are still alive we initialize `Bullet bullet` with
-     * a new instance, call its `setPosition` method to set its initial position to the initial
-     * position to the position `mShip` dictates for a bullet by its `getBulletInitialX`
-     * and `getBulletInitialY` methods, and call its `setVelocity` method to set its
-     * velocity to the bullet velocity that `mShip` dictates for a bullet using its
-     * `getBulletVelocityX` and `getBulletVelocityY` methods. We then add `bullet`
-     * to our list of bullets in `List<Bullet> mBullets`. Finally we get the vibrator service
-     * associated with the device `InputDevice mLastInputDevice` and ask it to vibrate for 20
-     * milliseconds.
+     * Called to have the spaceship fire its gun. First we make sure that [Ship] field [mShip] is
+     * not null, and that its `isDestroyed` method returns false, returning having done nothing if
+     * we no longer have a spaceship. If we are still alive we initialize [Bullet] `val bullet` with
+     * a new instance, call its `setPosition` method to set its initial position to the position
+     * [mShip] dictates for a bullet by its `getBulletInitialX` and `getBulletInitialY` methods, and
+     * call its `setVelocity` method to set its velocity to the bullet velocity that [mShip] dictates
+     * for a bullet using its `getBulletVelocityX` and `getBulletVelocityY` methods. We then add
+     * `bullet` to our list of bullets in `List<Bullet>` field [mBullets]. Finally we get the
+     * vibrator service associated with the device [InputDevice] field [mLastInputDevice] and ask it
+     * to vibrate for 20 milliseconds.
      */
     private fun fire() {
         if (mShip != null && !mShip!!.isDestroyed) {
@@ -494,7 +471,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     /**
-     * Convenience function to call `reset` if `Ship mShip` is null.
+     * Convenience function to call [reset] if [Ship] field [mShip] is null.
      */
     private fun ensureInitialized() {
         if (mShip == null) {
@@ -503,9 +480,10 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     /**
-     * Called when an obstacle hits our `Ship mShip` in our `step` method. We simply get
-     * the vibrator service associated with the device `InputDevice mLastInputDevice` and ask
-     * it to vibrate for a series of pulses to simulate a "crash" of our spaceship.
+     * Called when an obstacle hits our [Ship] field [mShip] in our [step] method. We simply get
+     * the vibrator service associated with the device of [InputDevice] field [mLastInputDevice]
+     * (or the system VIBRATOR_SERVICE is the device does not vibrate) and ask it to vibrate for
+     * a series of pulses to simulate a "crash" of our spaceship.
      */
     private fun crash() {
         @Suppress("DEPRECATION")
@@ -513,9 +491,9 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     /**
-     * Resets the game to the starting conditions. First we create a new instance for `Ship mShip`,
-     * then we clear our list of bullets in `List<Bullet> mBullets` and our list of obstacles
-     * in `List<Obstacle> mObstacles`.
+     * Resets the game to the starting conditions. First we create a new instance for [Ship] field
+     * [mShip], then we clear our list of bullets in `List<Bullet>` field [mBullets] and our list
+     * of obstacles in `List<Obstacle>` field [mObstacles].
      */
     private fun reset() {
         mShip = Ship()
@@ -524,18 +502,16 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     /**
-     * Gets a `Vibrator` instance to use for some buzzing, either the vibrator associated with
-     * the current input device or the system level vibrator if the device lacks a vibrator. First we
-     * check that `mLastInputDevice` is not null, and if it is not we initialize our variable
-     * `Vibrator vibrator` by calling the `getVibrator` method of `mLastInputDevice`.
-     * If the `hasVibrator` method of `vibrator` returns true we return `vibrator`
-     * to the caller.
+     * Gets a [Vibrator] instance to use for some buzzing, either the vibrator associated with the
+     * current input device or the system level vibrator if the device lacks a vibrator. First we
+     * check that [mLastInputDevice] is not null, and if it is not we initialize our [Vibrator]
+     * variable `val vibrator` by calling the `getVibrator` method of [mLastInputDevice]. If the
+     * `hasVibrator` method of `vibrator` returns true we return `vibrator` to the caller.
      *
+     * Otherwise we return a [Vibrator] from the system level service VIBRATOR_SERVICE.
      *
-     * Otherwise we return a `Vibrator` from the system level service VIBRATOR_SERVICE.
-     *
-     * @return vibrator service associated with the device `InputDevice mLastInputDevice` or
-     * a `Vibrator` from the system level service VIBRATOR_SERVICE if the device lacks one.
+     * @return vibrator service associated with the device of [InputDevice] field [mLastInputDevice]
+     * or a [Vibrator] from the system level service VIBRATOR_SERVICE if the device lacks one.
      */
     private val vibrator: Vibrator
         get() {
@@ -549,19 +525,19 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
     /**
-     * Called from the `run` method of `Runnable mAnimationRunnable` to animate the next
-     * frame of our game. First we initialize our variable `long currentStepTime` with the time
-     * since boot in milliseconds. We then call our method `step` with `currentStepTime`
-     * as the argument to move all the `Sprite` objects in our game to the new time. We initialize
-     * `Handler handler` with a handler associated with the thread running our View and if it is
-     * not null, we add `mAnimationRunnable` to its message queue to be run ANIMATION_TIME_STEP
-     * (16) milliseconds from `currentStepTime`, and invalidate our view so the new `Sprite`
+     * Called from the `run` method of [Runnable] field [mAnimationRunnable] to animate the next
+     * frame of our game. First we initialize our [Long] variable `val currentStepTime` with the
+     * time since boot in milliseconds. We then call our method [step] with `currentStepTime` as
+     * the argument to move all the [Sprite] objects in our game to the new time. We initialize
+     * [Handler] `val handler` with a handler associated with the thread running our [View] and
+     * if it is not null, we add [mAnimationRunnable] to its message queue to be run ANIMATION_TIME_STEP
+     * (16) milliseconds from `currentStepTime`, and invalidate our view so the new [Sprite]
      * locations will eventually be drawn.
      */
     fun animateFrame() {
         val currentStepTime = SystemClock.uptimeMillis()
         step(currentStepTime)
-        val handler = handler
+        val handler: Handler? = handler
         if (handler != null) {
             handler.postAtTime(mAnimationRunnable, currentStepTime + ANIMATION_TIME_STEP)
             invalidate()
@@ -569,26 +545,24 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     /**
-     * Moves all the `Sprite` objects in our game to the new time `long currentStepTime`,
-     * and removes any that are destroyed when that is done. First we calculate `float tau`,
-     * the number of seconds between `mLastStepTime` and `currentStepTime`, then we set
-     * `mLastStepTime` to `currentStepTime`. We call our method `ensureInitialized`
-     * to make sure we have a spaceship to play with, then we call the `accelerate` method of
-     * `Ship mShip` to increase its velocity by the amount `mMaxShipThrust` will increase
-     * it in `tau` seconds (up to the maximum of `mMaxShipSpeed`. We then call the
-     * `step` method of `Ship mShip` with `tau` as the delta time, and if that
-     * returns false (the movement causes the spaceship to be destroyed) we call our method `reset`
-     * to reset the game to the initial conditions.
+     * Moves all the `Sprite` objects in our game to the new time given by [Long] parameter
+     * [currentStepTime], and removes any that are destroyed when that is done. First we calculate
+     * [Float] `val tau`, the number of seconds between our [mLastStepTime] field and our parameter
+     * [currentStepTime], then we set [mLastStepTime] to [currentStepTime]. We call our method
+     * [ensureInitialized] to make sure we have a spaceship to play with, then we call the
+     * `accelerate` method of [Ship] field [mShip] to increase its velocity by the amount that our
+     * field [mMaxShipThrust] will increase it in `tau` seconds (up to the maximum of [mMaxShipSpeed].
+     * We then call the `step` method of [Ship] field [mShip] with `tau` as the delta time, and if
+     * that returns false (the movement causes the spaceship to be destroyed) we call our method
+     * [reset] to reset the game to the initial conditions.
      *
-     *
-     * Next we move all the bullets in our list `List<Bullet> mBullets`. To do this we first
+     * Next we move all the bullets in our `List<Bullet>` field [mBullets]. To do this we first
      * initialize our variable `int numBullets` with the size of `mBullets`. Next we loop
      * over `i` for all the bullets in `mBullets` fetching the i'th bullet to our variable
      * `Bullet bullet` and call its method `step` with `tau` as the delta time. If
      * `step` returns false (the bullet has expired for some reason) we remove it from
      * `mBullets`, decrement `i` and decrement `numBullets` then loop around for the
      * next bullet.
-     *
      *
      * Now we need to move all the obstacles in our list `List<Obstacle> mObstacles`. To do this
      * we first initialize our variable `int numObstacles` with the size of `mObstacles`.
@@ -597,7 +571,6 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
      * `tau` as the delta time. If `step` returns false (the obstacle has expired for
      * some reason) we remove it from `mObstacles`, decrement `i` and decrement
      * `numObstacles` then loop around for the next obstacle.
-     *
      *
      * Now we have to check for collisions between bullets and obstacles. To do this we loop in an
      * outer loop over `i` for the `numBullets` left in `mBullets` fetching each
@@ -609,13 +582,11 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
      * the inner obstacle loop and loop around for the next bullet. If it returns false we loop
      * around for the next combination of bullet and obstacle.
      *
-     *
      * Next we check for collisions between the spaceship and obstacles. To do this we loop over
      * `i` for the `numObstacles` in this list `List<Obstacle> mObstacles` fetching
      * each in turn to `Obstacle obstacle`, we then call the `collidesWith` method of
      * `mShip` with `obstacle` and if it returns true we call the `destroy` method
      * of `mShip` and the `destroy` method of `obstacle` and break out of the loop.
-     *
      *
      * We now want to Spawn more obstacles offscreen when needed to replace any destroyed. In an
      * outer loop with the label "OuterLoop:" we loop while the size of `mObstacles` is less
@@ -624,36 +595,29 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
      * `mMinObstacleSize` and `mMaxObstacleSize`, declare the floats `positionX`
      * and `positionY`, and set `tries` to 0.
      *
-     *
      * Then in an inner loop we loop choosing random values for `positionX` and `positionY`
      * as long as that position is too close to our spaceship (closer than `minDistance`), each
      * time incrementing `tries` and giving up and breaking out of the outer loop ("OuterLoop:")
      * when `tries` is greater than 10. In this inner loop we first choose a random `edge`
      * (0-3) to spawn from. We switch on `edge`:
      *
-     *  *
-     * 0: (left edge) we set `positionX` to `-size` and `positionY` to a
-     * random percentage of the height of our view.
+     *  * 0: (left edge) we set `positionX` to `-size` and `positionY` to a
+     *  random percentage of the height of our view.
      *
-     *  *
-     * 1: (right edge) we set `positionX` to the width of our view plus `size`
-     * and `positionY` to a random percentage of the height of our view.
+     *  * 1: (right edge) we set `positionX` to the width of our view plus `size`
+     *  and `positionY` to a random percentage of the height of our view.
      *
-     *  *
-     * 2: (top edge) we set `positionX` to a random percentage of the width of our view,
-     * and `positionY` to `-size`.
+     *  * 2: (top edge) we set `positionX` to a random percentage of the width of our view,
+     *  and `positionY` to `-size`.
      *
-     *  *
-     * default: (bottom edge) we set `positionX` to a random percentage of the width of our view,
-     * and `positionY` to the height of our view plus `size`.
-     *
+     *  * default: (bottom edge) we set `positionX` to a random percentage of the width of our view,
+     *  and `positionY` to the height of our view plus `size`.
      *
      * At the end of this inner loop we increment `tries` and give up and break out of the outer
      * loop ("OuterLoop:") if `tries` is greater than 10. If it is not, we evaluate our while
      * expression to test whether the obstacle is less than `minDistance` from our ship by
      * calling the `distanceTo` method of `mShip` with `positionX` and `positionY`
      * as the parameters, and loop back in the inner loop to try another position if it is too close.
-     *
      *
      * If it is not, we initialize `float direction` to a random percentage of 2 pi, `float speed`
      * to be a random number between `mMinObstacleSpeed` and `mMaxObstacleSpeed`, initialize
