@@ -460,7 +460,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
      * to vibrate for 20 milliseconds.
      */
     private fun fire() {
-        if (mShip != null && !mShip!!.isDestroyed) {
+        if (mShip != null && !mShip!!.mDestroyed) {
             val bullet = Bullet()
             bullet.setPosition(mShip!!.bulletInitialX, mShip!!.bulletInitialY)
             bullet.setVelocity(mShip!!.getBulletVelocityX(mBulletSpeed), mShip!!.getBulletVelocityY(mBulletSpeed))
@@ -557,75 +557,73 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
      * [reset] to reset the game to the initial conditions.
      *
      * Next we move all the bullets in our `List<Bullet>` field [mBullets]. To do this we first
-     * initialize our variable `int numBullets` with the size of `mBullets`. Next we loop
-     * over `i` for all the bullets in `mBullets` fetching the i'th bullet to our variable
-     * `Bullet bullet` and call its method `step` with `tau` as the delta time. If
-     * `step` returns false (the bullet has expired for some reason) we remove it from
-     * `mBullets`, decrement `i` and decrement `numBullets` then loop around for the
-     * next bullet.
+     * initialize our [Int] variable `var numBullets` with the size of [mBullets]. Next we loop
+     * over `i` for all the bullets in [mBullets] fetching the i'th bullet to our [Bullet] variable
+     * `val bullet` and call its method `step` with `tau` as the delta time. If `step` returns false
+     * (the bullet has expired for some reason) we remove it from [mBullets], decrement `i` and
+     * decrement `numBullets` then loop around for the next bullet.
      *
-     * Now we need to move all the obstacles in our list `List<Obstacle> mObstacles`. To do this
-     * we first initialize our variable `int numObstacles` with the size of `mObstacles`.
-     * Next we loop over `i` for all the obstacles in `mObstacles` fetching the i'th
-     * obstacle to our variable `Obstacle obstacle` and call its method `step` with
-     * `tau` as the delta time. If `step` returns false (the obstacle has expired for
-     * some reason) we remove it from `mObstacles`, decrement `i` and decrement
-     * `numObstacles` then loop around for the next obstacle.
+     * Now we need to move all the obstacles in our `List<Obstacle>` field [mObstacles]. To do this
+     * we first initialize our [Int] variable `var numObstacles` with the size of [mObstacles]. Next
+     * we loop over `i` for all the obstacles in [mObstacles] fetching the i'th obstacle to our
+     * [Obstacle] variable `val obstacle` and call its method `step` with `tau` as the delta time.
+     * If `step` returns false (the obstacle has expired for some reason) we remove it from
+     * [mObstacles], decrement `i` and decrement `numObstacles` then loop around for the next
+     * obstacle.
      *
      * Now we have to check for collisions between bullets and obstacles. To do this we loop in an
-     * outer loop over `i` for the `numBullets` left in `mBullets` fetching each
-     * bullet in turn to our variable `Bullet bullet`. In an inner loop we loop over `j`
-     * for the `numObstacles` obstacles remaining in `mObstacles` fetching each obstacle
-     * in turn to our variable `Obstacle obstacle`. We then call the `collidesWith` method
-     * of `bullet` for `obstacle` and if that returns true we call the `destroy`
-     * method of `bullet` and the `destroy` method of `obstacle` and break out of
-     * the inner obstacle loop and loop around for the next bullet. If it returns false we loop
-     * around for the next combination of bullet and obstacle.
+     * outer loop over `i` for the `numBullets` left in [mBullets] fetching each bullet in turn to
+     * our [Bullet] variable `val bullet`. In an inner loop we loop over `j` for the `numObstacles`
+     * obstacles remaining in [mObstacles] fetching each obstacle in turn to our [Obstacle] variable
+     * `val obstacle`. We then call the `collidesWith` method of `bullet` for `obstacle` and if that
+     * returns true we call the `destroy` method of `bullet` and the `destroy` method of `obstacle`
+     * and break out of the inner obstacle loop and loop around for the next bullet. If it returns
+     * false we loop around for the next combination of bullet and obstacle.
      *
      * Next we check for collisions between the spaceship and obstacles. To do this we loop over
-     * `i` for the `numObstacles` in this list `List<Obstacle> mObstacles` fetching
-     * each in turn to `Obstacle obstacle`, we then call the `collidesWith` method of
-     * `mShip` with `obstacle` and if it returns true we call the `destroy` method
-     * of `mShip` and the `destroy` method of `obstacle` and break out of the loop.
+     * `i` for the `numObstacles` in the `List<Obstacle>` field [mObstacles] fetching each in turn
+     * to [Obstacle] variable `val obstacle`, we then call the `collidesWith` method of [mShip] with
+     * `obstacle` and if it returns true we call the `destroy` method of [mShip] and the `destroy`
+     * method of `obstacle` and break out of the loop.
      *
      * We now want to Spawn more obstacles offscreen when needed to replace any destroyed. In an
-     * outer loop with the label "OuterLoop:" we loop while the size of `mObstacles` is less
-     * than MAX_OBSTACLES (12). We define `float minDistance` to be 4 times the size of our
-     * spaceship `mShipSize`, define `float size` to be a random obstacle size between
-     * `mMinObstacleSize` and `mMaxObstacleSize`, declare the floats `positionX`
-     * and `positionY`, and set `tries` to 0.
+     * outer loop with the label "OuterLoop@" we loop while the size of [mObstacles] is less than
+     * MAX_OBSTACLES (12). We define [Float] `val minDistance` to be 4 times the size of our
+     * spaceship [mShipSize], define [Float] `val size` to be a random obstacle size between
+     * [mMinObstacleSize] and [mMaxObstacleSize], declare the [Float]'s `var positionX` and
+     * `var positionY`, and set `tries` to 0.
      *
      * Then in an inner loop we loop choosing random values for `positionX` and `positionY`
      * as long as that position is too close to our spaceship (closer than `minDistance`), each
-     * time incrementing `tries` and giving up and breaking out of the outer loop ("OuterLoop:")
+     * time incrementing `tries` and giving up and breaking out of the outer loop ("OuterLoop@")
      * when `tries` is greater than 10. In this inner loop we first choose a random `edge`
      * (0-3) to spawn from. We switch on `edge`:
      *
-     *  * 0: (left edge) we set `positionX` to `-size` and `positionY` to a
-     *  random percentage of the height of our view.
+     *  * 0: (left edge) we set `positionX` to `-size` and `positionY` to a random percentage of
+     *  the height of our view.
      *
-     *  * 1: (right edge) we set `positionX` to the width of our view plus `size`
-     *  and `positionY` to a random percentage of the height of our view.
+     *  * 1: (right edge) we set `positionX` to the width of our view plus `size` and `positionY`
+     *  to a random percentage of the height of our view.
      *
-     *  * 2: (top edge) we set `positionX` to a random percentage of the width of our view,
-     *  and `positionY` to `-size`.
+     *  * 2: (top edge) we set `positionX` to a random percentage of the width of our view,  and
+     *  `positionY` to `-size`.
      *
      *  * default: (bottom edge) we set `positionX` to a random percentage of the width of our view,
      *  and `positionY` to the height of our view plus `size`.
      *
      * At the end of this inner loop we increment `tries` and give up and break out of the outer
-     * loop ("OuterLoop:") if `tries` is greater than 10. If it is not, we evaluate our while
-     * expression to test whether the obstacle is less than `minDistance` from our ship by
-     * calling the `distanceTo` method of `mShip` with `positionX` and `positionY`
-     * as the parameters, and loop back in the inner loop to try another position if it is too close.
+     * loop ("OuterLoop@") if `tries` is greater than 10. If it is not, we evaluate our while
+     * expression to test whether the obstacle is less than `minDistance` from our ship by calling
+     * the `distanceTo` method of [mShip] with `positionX` and `positionY` as the parameters, and
+     * loop back in the inner loop to try another position if it is too close.
      *
-     * If it is not, we initialize `float direction` to a random percentage of 2 pi, `float speed`
-     * to be a random number between `mMinObstacleSpeed` and `mMaxObstacleSpeed`, initialize
-     * `float velocityX` to be the X component of `speed` given the `direction`, and
-     * `float velocityY` to be the Y component of `speed` given the `direction`. We
-     * now create a new instance `Obstacle obstacle`, set its position to `positionX`,
-     * `positionY`, its size to `size`, its velocity to `(velocityX, velocityY)`,
-     * and then add it to `mObstacles`.
+     * If it is not, we initialize [Float]  variable `val direction` to a random percentage of 2 pi,
+     * [Float] variable `val speed` to be a random number between [mMinObstacleSpeed] and
+     * [mMaxObstacleSpeed], initialize [Float] variable `val velocityX` to be the X component of
+     * `speed` given the `direction`, and [Float] variable `val velocityY` to be the Y component
+     * of `speed` given the `direction`. We now create a new instance of [Obstacle] for variable
+     * `val obstacle`, set its position to `(positionX`, `positionY)`, its size to `size`, its
+     * velocity to `(velocityX, velocityY)`, and then add it to [mObstacles].
      *
      * @param currentStepTime current time of the frame we are to build
      */
@@ -738,14 +736,14 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     /**
      * We implement this to do our drawing. First we call our super's implementation of `onDraw`,
-     * then if `mShip` is not null we ask it to draw itself on the `Canvas canvas`. We
-     * initialize `int numBullets` to the number of bullets in `mBullets`, and loop over
-     * them fetching each in turn to `Bullet bullet` and instructing that `Bullet` to draw
-     * itself. We initialize `int numObstacles` to the number of obstacles in `mObstacles`,
-     * and loop over them fetching each in turn to `Obstacle obstacle` and instructing that
-     * `Obstacle` to draw itself.
+     * then if [mShip] is not null we ask it to draw itself on the [Canvas] parameter [canvas]. We
+     * initialize `val numBullets` to the number of bullets in [mBullets], and loop over them
+     * fetching each in turn to [Bullet] variable `val bullet` and instructing that [Bullet] to draw
+     * itself. We initialize `val numObstacles` to the number of obstacles in [mObstacles], and loop
+     * over them fetching each in turn to [Obstacle] variable `val obstacle` and instructing that
+     * [Obstacle] to draw itself.
      *
-     * @param canvas the canvas on which the background will be drawn
+     * @param canvas the [Canvas] on which the background will be drawn
      */
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -771,43 +769,38 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     /**
-     * Base class for our `Ship`, `Bullet`, and `Obstacle` objects.
+     * Base class for our [Ship], [Bullet], and [Obstacle] objects.
      */
     private abstract inner class Sprite {
         /**
-         * X coordinate of the position of the `Sprite` in pixels
+         * X coordinate of the position of the [Sprite] in pixels
          */
         protected var mPositionX = 0f
 
         /**
-         * Y coordinate of the position of the `Sprite` in pixels
+         * Y coordinate of the position of the [Sprite] in pixels
          */
         protected var mPositionY = 0f
 
         /**
-         * X component of the velocity of the `Sprite` in pixels per second
+         * X component of the velocity of the [Sprite] in pixels per second
          */
         protected var mVelocityX = 0f
 
         /**
-         * Y component of the velocity of the `Sprite` in pixels per second
+         * Y component of the velocity of the [Sprite] in pixels per second
          */
         protected var mVelocityY = 0f
 
         /**
-         * Size of the `Sprite` in pixels
+         * Size of the [Sprite] in pixels
          */
         protected var mSize = 0f
 
         /**
-         * Getter for our `mDestroyed` field.
-         *
-         * @return the value of our field `mDestroyed`.
+         * Flag to indicate that the [Sprite] has been destroyed
          */
-        /**
-         * Flag to indicate that the `Sprite` has been destroyed
-         */
-        var isDestroyed = false
+        var mDestroyed = false
             protected set
 
         /**
@@ -816,11 +809,11 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         protected var mDestroyAnimProgress = 0f
 
         /**
-         * Setter for the position of the `Sprite`, just saves its parameters `x` and
-         * `y` in our fields `mPositionX` and `mPositionY` respectively.
+         * Setter for the position of the [Sprite], just saves its parameters [x] and
+         * [y] in our fields [mPositionX] and [mPositionY] respectively.
          *
-         * @param x new X coordinate of the `Sprite`
-         * @param y new Y coordinate of the `Sprite`
+         * @param x new X coordinate of the [Sprite]
+         * @param y new Y coordinate of the [Sprite]
          */
         fun setPosition(x: Float, y: Float) {
             mPositionX = x
@@ -828,11 +821,11 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         /**
-         * Setter for the velocity of the `Sprite`, just saves its parameters `x` and
-         * `y` in our fields `mVelocityX` and `mVelocityY` respectively.
+         * Setter for the velocity of the [Sprite], just saves its parameters [x] and
+         * [y] in our fields [mVelocityX] and [mVelocityY] respectively.
          *
-         * @param x new X component of the `Sprite` velocity
-         * @param y new Y component of the `Sprite` velocity
+         * @param x new X component of the [Sprite] velocity
+         * @param y new Y component of the [Sprite] velocity
          */
         fun setVelocity(x: Float, y: Float) {
             mVelocityX = x
@@ -840,10 +833,10 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         /**
-         * Setter for the size of the `Sprite`, just saves its parameter `size` in our
-         * field `mSize`.
+         * Setter for the size of the [Sprite], just saves its parameter [size] in our
+         * field [mSize].
          *
-         * @param size new size of the `Sprite`
+         * @param size new size of the [Sprite]
          */
         fun setSize(size: Float) {
             mSize = size
@@ -851,8 +844,8 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
         /**
          * Calculates the distance from our position to a point that has the coordinates given by our
-         * parameters `x` and `y` by calling our method `pythag` on the results
-         * of subtracting `x` from `mPositionX` and `y` from `mPositionY`.
+         * parameters [x] and [y] by calling our method [pythag] on the results
+         * of subtracting [x] from [mPositionX] and [y] from [mPositionY].
          *
          * @param x X coordinate of the point we are interested in
          * @param y Y coordinate of the point we are interested in
@@ -863,48 +856,46 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         /**
-         * Calculates the distance between us and the position of `Sprite other` by calling
-         * our `distanceTo(float x, float y)` method with the `mPositionX` and
-         * `mPositionY` fields of our parameter `Sprite other`.
+         * Calculates the distance between us and the position of [Sprite] parameter [other] by
+         * calling our `distanceTo(Float x, Float y)` method with the [mPositionX] and
+         * [mPositionY] fields of our [Sprite] parameter [other].
          *
-         * @param other the `Sprite` we wish to measure the distance to
-         * @return the distance in pixels between us and the position of `Sprite other`
+         * @param other the [Sprite] we wish to measure the distance to
+         * @return the distance in pixels between us and the position of [Sprite] parameter [other]
          */
         fun distanceTo(other: Sprite): Float {
             return distanceTo(other.mPositionX, other.mPositionY)
         }
 
         /**
-         * Detects whether we are colliding with our parameter `Sprite other`. The short circuit
-         * and argument of our return statement returns false if we have been destroyed (our field
-         * `mDestroyed` is true), and false if our parameter `Sprite other` has been
-         * destroyed (its `mDestroyed` is true), and false if `Sprite other` is farther
-         * away than the maximum of the size of the two `Sprite` objects plus 0.5 times the
-         * minimum of the size of the two `Sprite` objects. If we have not been destroyed, and
-         * `Sprite other` has not been destroyed, AND we are closer than the maximum of the size
-         * of the two `Sprite` objects plus 0.5 times the minimum of the size of the two
-         * `Sprite` objects we return true, the two `Sprite` objects are colliding.
+         * Detects whether we are colliding with our [Sprite] parameter [other]. The short circuited
+         * *and* argument of our return statement returns false if we have been destroyed (our field
+         * [mDestroyed] is true), and false if our [Sprite] parameter [other] has been destroyed
+         * (its [mDestroyed] is true), and false if [Sprite] parameter [other] is fart minimum of
+         * the size of the two [Sprite] objects. If we have not been destroyed, and [Sprite]
+         * parameter [other] has not been destroyed, AND we are closer than the maximum of the size
+         * of the two [Sprite] objects plus 0.5 times the minimum of the size of the two [Sprite]
+         * objects we return true, the two [Sprite] objects are indeed colliding.
          *
-         * @param other `Sprite` we are checking for collision with us
-         * @return true if we are colliding with the `Sprite other`
+         * @param other [Sprite] we are checking for collision with us
+         * @return true if we are colliding with the [Sprite] parameter [other]
          */
         fun collidesWith(other: Sprite): Boolean {
             // Really bad collision detection.
-            return (!isDestroyed && !other.isDestroyed
+            return (!mDestroyed && !other.mDestroyed
                     && (distanceTo(other) <= mSize.coerceAtLeast(other.mSize)
                     + mSize.coerceAtMost(other.mSize) * 0.5f))
         }
 
         /**
-         * Base method to advance our animation by `float tau` seconds, derived classes override
-         * us to add any special handling required by their objects, calling us to do the basic step
-         * operations. First we add `tau` times `mVelocityX` to `mPositionX` and
-         * add `tau` times `mVelocityY` to `mPositionY`. If we have been destroyed
-         * (`mDestroyed` is true) we add `tau` divided by the value returned by our
-         * overridden method `getDestroyAnimDuration` to `mDestroyAnimProgress` and if
-         * the result is greater than 1.0f we return false to our caller (our destruction animation
-         * has reached its end). We fall through to return true to the caller (same as if we had not
-         * been destroyed).
+         * Base method to advance our animation by [Float] parameter [tau] seconds, derived classes
+         * override us to add any special handling required by their objects, calling us to do the
+         * basic step operations. First we add [tau] times [mVelocityX] to [mPositionX] and add
+         * [tau] times [mVelocityY] to [mPositionY]. If we have been destroyed ([mDestroyed] is true)
+         * we add [tau] divided by the value returned by our overridden method `getDestroyAnimDuration`
+         * to [mDestroyAnimProgress] and if the result is greater than 1.0f we return false to our
+         * caller (our destruction animation has reached its end). We fall through to return true to
+         * the caller (same as if we had not been destroyed).
          *
          * @param tau delta time in seconds to step our animation
          * @return true if our `Sprite` object has successfully been moved, false if it has
@@ -913,7 +904,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         open fun step(tau: Float): Boolean {
             mPositionX += mVelocityX * tau
             mPositionY += mVelocityY * tau
-            if (isDestroyed) {
+            if (mDestroyed) {
                 mDestroyAnimProgress += tau / destroyAnimDuration
                 if (mDestroyAnimProgress >= 1.0f) {
                     return false
@@ -925,27 +916,27 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         /**
          * Derived classes must override this to get drawn.
          *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         abstract fun draw(canvas: Canvas)
 
         /**
          * Derived classes must override this to specify a divisor of the delta time `tau` to
-         * use to calculate a new value for `mDestroyAnimProgress` in our method `step`
-         * if we have been destroyed.
+         * use to calculate a new value for [mDestroyAnimProgress] in our method [step] if we
+         * have been destroyed.
          *
          * @return divisor of the delta time `tau` to use to calculate a new value for
-         * `mDestroyAnimProgress` in our method `step` if we have been destroyed.
+         * [mDestroyAnimProgress] in our method [step] if we have been destroyed.
          */
         abstract val destroyAnimDuration: Float
 
         /**
          * Convenience function to check whether our position is outside of our view. We initialize
-         * `int width` with the width of our `GameView` instance, and `int height`
-         * with the height of our `GameView` instance. We return true if `mPositionX` is
-         * less than 0, or `mPositionX` is greater than or equal to `width`, or
-         * `mPositionY` is less than 0, or `mPositionY` is greater than or equal to
-         * `height`. Otherwise we return false.
+         * [Int] variable `val width` with the width of our [GameView] instance, and [Int] variable
+         * `val height` with the height of our [GameView] instance. We return true if [mPositionX]
+         * is less than 0, or [mPositionX] is greater than or equal to `width`, or [mPositionY] is
+         * less than 0, or [mPositionY] is greater than or equal to `height`. Otherwise we return
+         * false.
          *
          * @return true if our position is outside of our view, false if it is inside the view
          */
@@ -958,26 +949,22 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             }
 
         /**
-         * Wraps the values of `mPositionX` and `mPositionY` around to the other side of
-         * our view when they fall outside of our view. We initialize `int width` with the
-         * width of our `GameView` instance, and `int height` with the height of our
-         * `GameView` instance.
+         * Wraps the values of [mPositionX] and [mPositionY] around to the other side of our view
+         * when they fall outside of our view. We initialize [Int] variable `val width` with the
+         * width of our [GameView] instance, and [Int] variable `val height` with the height of our
+         * [GameView] instance.
          *
+         * While [mPositionX] is less than or equal to minus [mSize] we add `width` plus 2 times
+         * [mSize] to it.
          *
-         * While `mPositionX` is less than or equal to `-mSize` we add `width` plus
-         * 2 times `mSize` to it.
+         * While [mPositionX] is greater than or equal to `width` plus [mSize] we subtract `width`
+         * plus 2 times [mSize] to it.
          *
+         * While [mPositionY] is less than or equal to minus [mSize] we add `height` plus 2 times
+         * [mSize] to it.
          *
-         * While `mPositionX` is greater than or equal to `width` plus `mSize` we
-         * subtract `width` plus 2 times `mSize` to it.
-         *
-         *
-         * While `mPositionY` is less than or equal to `-mSize` we add `height`
-         * plus 2 times `mSize` to it.
-         *
-         *
-         * While `mPositionY` is greater than or equal to `height` plus `mSize` we
-         * subtract `height` plus 2 times `mSize` to it.
+         * While [mPositionY] is greater than or equal to `height` plus [mSize] we subtract `height`
+         * plus 2 times [mSize] to it.
          */
         protected fun wrapAtPlayfieldBoundary() {
             val width = this@GameView.width
@@ -997,18 +984,18 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         /**
-         * Called when our `Sprite` object has been destroyed. We set our flag `mDestroyed`
-         * to true, and call our method `step` with a delta time `tau` of 0 to begin our
+         * Called when our [Sprite] object has been destroyed. We set our flag [mDestroyed]
+         * to true, and call our method [step] with a delta time `tau` of 0f to begin our
          * destruction animation.
          */
         open fun destroy() {
-            isDestroyed = true
+            mDestroyed = true
             step(0f)
         }
     }
 
     /**
-     * `Sprite` subclass adding functionality needed to model our spaceship.
+     * [Sprite] subclass adding functionality needed to model our spaceship.
      */
     private inner class Ship : Sprite() {
         /**
@@ -1032,20 +1019,20 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         private var mHeadingMagnitude = 0f
 
         /**
-         * `Paint` we use to draw our spaceship.
+         * [Paint] we use to draw our spaceship.
          */
         private val mPaint: Paint = Paint()
 
         /**
-         * `Path` defining the shape of our spaceship (an arrowhead), created in our constructor
-         * and used by our `draw` method to draw it by calling `Canvas.drawPath`.
+         * [Path] defining the shape of our spaceship (an arrowhead), created in our constructor
+         * and used by our [draw] method to draw it by calling [Canvas.drawPath].
          */
         private val mPath: Path
 
         /**
-         * Setter for the X coordinate of our heading, we set our field `mHeadingX` to our
-         * parameter `x` and call our method `updateHeading` to calculate and set the
-         * polar equivalent of the new heading.
+         * Setter for the X coordinate of our heading, we set our field [mHeadingX] to our
+         * parameter [x] and call our method [updateHeading] to calculate and set the polar
+         * equivalent of the new heading.
          *
          * @param x value to set the X coordinate of our heading to
          */
@@ -1055,8 +1042,8 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         /**
-         * Setter for the Y coordinate of our heading, we set our field `mHeadingY` to our
-         * parameter `y` and call our method `updateHeading` to calculate and set the
+         * Setter for the Y coordinate of our heading, we set our field [mHeadingY] to our
+         * parameter [y] and call our method [updateHeading] to calculate and set the
          * polar equivalent of the new heading.
          *
          * @param y value to set the Y coordinate of our heading to
@@ -1067,10 +1054,9 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         /**
-         * Setter for both the X and the Y coordinate of our heading. We set our field `mHeadingX`
-         * to our parameter `x` and our field `mHeadingY` to our parameter `y` then
-         * call our method `updateHeading` to calculate and set the polar equivalent of the new
-         * heading.
+         * Setter for both the X and the Y coordinate of our heading. We set our field [mHeadingX]
+         * to our parameter [x] and our field [mHeadingY] to our parameter [mHeadingY] then call
+         * our method [updateHeading] to calculate and set the polar equivalent of the new heading.
          *
          * @param x value to set the X coordinate of our heading to
          * @param y value to set the Y coordinate of our heading to
@@ -1082,11 +1068,10 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         /**
-         * Updates the polar coordinate version of our heading from our fields `mHeadingX` and
-         * `mHeadingY`. We call our method `pythag` with our fields `mHeadingX` and
-         * `mHeadingY` as the parameters to calculate `mHeadingMagnitude`, and if the
-         * result is greater than 0.1, we set `mHeadingAngle` to the `Math.atan2` of
-         * `mHeadingX` and `mHeadingY`.
+         * Updates the polar coordinate version of our heading from our fields [mHeadingX] and
+         * [mHeadingY]. We call our method [pythag] with our fields [mHeadingX] and [mHeadingY]
+         * as the parameters to calculate [mHeadingMagnitude], and if the result is greater than
+         * 0.1, we set [mHeadingAngle] to the [atan2] of [mHeadingX] and [mHeadingY].
          */
         private fun updateHeading() {
             mHeadingMagnitude = pythag(mHeadingX, mHeadingY)
