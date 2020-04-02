@@ -1082,7 +1082,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
         /**
          * Calculates the X coordinate of the end of a vector with the length of its parameter
-         * `radius` pointing in the same direction as our ship. Simple trig equation.
+         * [radius] pointing in the same direction as our ship. Simple trig equation.
          *
          * @param radius length of vector whose X coordinate we are interested in
          * @return X coordinate of the end of the vector
@@ -1093,7 +1093,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
         /**
          * Calculates the Y coordinate of the end of a vector with the length of its parameter
-         * `radius` pointing in the same direction as our ship. Simple trig equation.
+         * [radius] pointing in the same direction as our ship. Simple trig equation.
          *
          * @param radius length of vector whose Y coordinate we are interested in
          * @return Y coordinate of the end of the vector
@@ -1105,7 +1105,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         /**
          * Calculates the initial X coordinate of a bullet being fired from our spaceship, by adding
          * the X coordinate of the spaceships position to the X coordinate of the front of the
-         * spaceship calculated by our method `polarX(mSize)`.
+         * spaceship calculated by our method [polarX] for the value [mSize].
          *
          * @return initial X coordinate of a bullet being fired from our spaceship.
          */
@@ -1115,7 +1115,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         /**
          * Calculates the initial Y coordinate of a bullet being fired from our spaceship, by adding
          * the Y coordinate of the spaceships position to the Y coordinate of the front of the
-         * spaceship calculated by our method `polarY(mSize)`.
+         * spaceship calculated by our method [polarX] for the value [mSize].
          *
          * @return initial Y coordinate of a bullet being fired from our spaceship.
          */
@@ -1125,10 +1125,10 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         /**
          * Calculates the X component of the absolute velocity of a bullet (that is, its velocity
          * relative to the view) given the relative speed of a bullet as given by our parameter
-         * `relativeSpeed`, and the X component of the velocity of the spaceship. We do this
-         * by adding the X component of the velocity of the spaceship (`mVelocityX`) to the
-         * X component of `relativeSpeed` when the bullet leaves the front of the spaceship
-         * as calculated by our method `polarX(mSize)`.
+         * [relativeSpeed], and the X component of the velocity of the spaceship. We do this
+         * by adding the X component of the velocity of the spaceship ([mVelocityX]) to the
+         * X component of [relativeSpeed] when the bullet leaves the front of the spaceship
+         * as calculated by our method [polarX] for the value [relativeSpeed].
          *
          * @param relativeSpeed speed of the bullet relative to the spaceship
          * @return X component of the velocity of a bullet relative to the view.
@@ -1140,10 +1140,10 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         /**
          * Calculates the Y component of the absolute velocity of a bullet (that is, its velocity
          * relative to the view) given the relative speed of a bullet as given by our parameter
-         * `relativeSpeed`, and the Y component of the velocity of the spaceship. We do this
-         * by adding the Y component of the velocity of the spaceship (`mVelocityY`) to the
+         * [relativeSpeed], and the Y component of the velocity of the spaceship. We do this
+         * by adding the Y component of the velocity of the spaceship ([mVelocityY]) to the
          * Y component of `relativeSpeed` when the bullet leaves the front of the spaceship
-         * as calculated by our method `polarY(mSize)`.
+         * as calculated by our method [polarX] for the value [relativeSpeed].
          *
          * @param relativeSpeed speed of the bullet relative to the spaceship
          * @return X component of the velocity of a bullet relative to the view.
@@ -1154,13 +1154,13 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
         /**
          * Applies the maximum thrust to the spaceship in the direction that the spaceship is
-         * heading. We initialize `float thrust` to the current polar heading coordinate
-         * `mHeadingMagnitude` times our parameter `maxThrust`. We add the X component
-         * of `thrust` to `mVelocityX`, and the Y component to `mVelocityY`. We
-         * calculate the new speed `float speed ` (pixels per second) by calling our method
-         * `pythag(mVelocityX, mVelocityY)`. If `speed` is greater than `maxSpeed`
-         * we calculate `float scale` to be `maxSpeed` divided by `speed` and scale
-         * both `mVelocityX` and `mVelocityY` by it.
+         * heading. We initialize [Float] `val thrust` to the current polar heading coordinate
+         * [mHeadingMagnitude] times our parameter [maxThrust]. We add the X component of
+         * `thrust` to [mVelocityX], and the Y component to [mVelocityY]. We calculate the new
+         * speed [Float] `val speed ` (pixels per second) by calling our method
+         * `pythag(mVelocityX, mVelocityY)`. If `speed` is greater than [maxSpeed]
+         * we calculate [Float] `val scale` to be [maxSpeed] divided by `speed` and scale
+         * both [mVelocityX] and [mVelocityY] by it.
          *
          * @param tau       delta time that the thrust is being applied UNUSED
          * @param maxThrust maximum thrust of the spaceship
@@ -1180,14 +1180,14 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         /**
-         * Called to advance our spaceship's animation by `float tau` seconds. If our super's
-         * implementation of `step` returns false (our `Sprite` object has disappeared
+         * Called to advance our spaceship's animation by [Float] parameter [tau] seconds. If our
+         * super's implementation of `step` returns false (our [Sprite] object has disappeared
          * from the game) we return false to the caller. Otherwise we make sure that our spaceship
          * wraps around to the other side of the view if we cross one of the edges by calling our
-         * method `wrapAtPlayfieldBoundary`, and return true to the caller.
+         * method [wrapAtPlayfieldBoundary], and return true to the caller.
          *
          * @param tau delta time in seconds to step our animation
-         * @return true if our `Ship` object has successfully been moved, false if it has
+         * @return true if our [Ship] object has successfully been moved, false if it has
          * disappeared from the game.
          */
         override fun step(tau: Float): Boolean {
@@ -1199,17 +1199,17 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         /**
-         * We implement this to get drawn. First we call the method `setPaintARGBBlend` to set
-         * the color of `mPaint` to a color that is appropriate for the stage of destruction
-         * given by `mDestroyAnimProgress` (a puke green shade to start with an alpha of 255,
+         * We implement this to get drawn. First we call the method [setPaintARGBBlend] to set
+         * the color of [mPaint] to a color that is appropriate for the stage of destruction
+         * given by [mDestroyAnimProgress] (a puke green shade to start with an alpha of 255,
          * which morphs to RED with an alpha of 0 when we are fully destroyed, we stay a puke green
-         * until we hit an obstacle of course). Then we save the state of `Canvas canvas` on
-         * its private stack, move it to `(mPositionX, mPositionY)`, rotate the canvas to
-         * `mHeadingAngle` (converted to degrees by multiplying it by TO_DEGREES), draw the
-         * `Path mPath` defining our shape using `mPaint` as the paint, and restore the
-         * state of `canvas`.
+         * until we hit an obstacle of course). Then we save the state of [Canvas] parameter
+         * [canvas] on its private stack, move it to ([mPositionX], [mPositionY]), rotate the
+         * canvas to [mHeadingAngle] (converted to degrees by multiplying it by TO_DEGREES), draw
+         * the [Path] field [mPath] defining our shape using [mPaint] as the paint, and restore the
+         * state of [canvas].
          *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun draw(canvas: Canvas) {
             setPaintARGBBlend(mPaint, mDestroyAnimProgress,
@@ -1224,11 +1224,11 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
         /**
          * Just returns 1.0 to use as the scaling factor to divide the delta time `tau` by in
-         * order to calculate the value to add to `mDestroyAnimProgress` in `Sprite.step`
+         * order to calculate the value to add to [mDestroyAnimProgress] in [Sprite.step]
          * (if we are currently animating our destruction that is).
          *
          * @return scaling factor to divide the delta time `tau` by in order to calculate the
-         * value to add to `mDestroyAnimProgress` in `Sprite.step` (if we are currently
+         * value to add to [mDestroyAnimProgress] in [Sprite.step] (if we are currently
          * animating our destruction that is).
          */
         override val destroyAnimDuration: Float
@@ -1237,7 +1237,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         /**
          * Called when we have collided with an obstacle and have entered our "destruction phase".
          * First we call our super's implementation of `destroy` to initiate the destruction
-         * animation, then we call our method `crash` to perform some appropriate vibrating.
+         * animation, then we call our method [crash] to perform some appropriate vibrating.
          */
         override fun destroy() {
             super.destroy()
@@ -1245,12 +1245,12 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         /**
-         * Our constructor. We initialize our field `Paint mPaint` with a new instance, and set
-         * its style to FILL. We set our position to the center of our view, set our velocity to 0,
-         * and set our ship size to `mShipSize`. We create a new instance for `Path mPath`,
-         * move to (0,0), draw a line to (-19.687501987396608,-34.09974912658822), draw a line to
-         * (39.375,0), draw a line to (-19.687501987396608,34.09974912658822), and draw a line to
-         * (0,0) (an arrowhead shape, the values are for a Pixel phone, other phones with different
+         * The init block of our constructor. We set the style of our `Paint` field `mPaint` to
+         * FILL. We set our position to the center of our view, set our velocity to 0, and set our
+         * ship size to `mShipSize`. We create a new instance for `Path` field `mPath`, move it to
+         * (0,0), draw a line to (-19.687501987396608, -34.09974912658822), draw a line to
+         * (39.375, 0), draw a line to (-19.687501987396608, 34.09974912658822), and draw a line to
+         * (0, 0) (an arrowhead shape, the values are for a Pixel phone, other phones with different
          * display densities will result in values scaled for that density).
          */
         init {
@@ -1261,7 +1261,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             mPath = Path()
             mPath.moveTo(0f, 0f)
             mPath.lineTo(cos(-CORNER_ANGLE.toDouble()).toFloat() * mSize,
-                    sin(CORNER_ANGLE.toDouble()).toFloat() * mSize)
+                    sin(-CORNER_ANGLE.toDouble()).toFloat() * mSize)
             mPath.lineTo(mSize, 0f)
             mPath.lineTo(cos(CORNER_ANGLE.toDouble()).toFloat() * mSize,
                     sin(CORNER_ANGLE.toDouble()).toFloat() * mSize)
@@ -1549,7 +1549,8 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          * "to" color based on the current value of our parameter `float alpha`.
          *
          * @param paint `Paint` whose color we are to set
-         * @param alpha a value between 0 and 1.0 which determines where between from and to we are currently
+         * @param alpha a value between 0 and 1.0 which determines where between
+         *              from and to we are currently
          * @param a1    from alpha color component
          * @param r1    from red color component
          * @param g1    from green color component
