@@ -1274,23 +1274,23 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     /**
-     * `Sprite` subclass adding functionality needed to model a bullet.
+     * [Sprite] subclass adding functionality needed to model a bullet.
      */
     private inner class Bullet : Sprite() {
         /**
-         * `Paint` we use to draw our bullet.
+         * [Paint] we use to draw our bullet.
          */
         private val mPaint: Paint = Paint()
 
         /**
-         * Called to advance our bullet's animation by `float tau` seconds. If our super's
-         * implementation of `step` returns false (our `Sprite` object has disappeared
+         * Called to advance our bullet's animation by [Float] parameter [tau] seconds. If our
+         * super's implementation of `step` returns false (our [Sprite] object has disappeared
          * from the game) we return false to the caller. Otherwise we return the negation of the
-         * value returned by the method `isOutsidePlayfield` (ie. false if it is outside of the
+         * value returned by the method [isOutsidePlayfield] (ie. false if it is outside of the
          * playing field, our bullet disappears from the game if it leaves the playing field).
          *
          * @param tau delta time in seconds to step our animation
-         * @return true if our `Bullet` object has successfully been moved, false if it has
+         * @return true if our [Bullet] object has successfully been moved, false if it has
          * disappeared from the game.
          */
         override fun step(tau: Float): Boolean {
@@ -1300,37 +1300,39 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         /**
-         * We implement this to get drawn. First we call the method `setPaintARGBBlend` to set
-         * the color of `mPaint` to a color that is appropriate for the stage of destruction
-         * given by `mDestroyAnimProgress` (a bright yellow shade to start with an alpha of 255,
-         * which morphs to white with an alpha of 0 when we are fully destroyed, we stay bright yellow
-         * until we hit an obstacle of course). Then we draw a circle at `(mPositionX,mPositionY)`
-         * using `mPaint`.
+         * We implement this to get drawn. First we call the method [setPaintARGBBlend] to set
+         * the color of [mPaint] to a color that is appropriate for the stage of destruction
+         * given by [mDestroyAnimProgress] (a bright yellow shade to start with an alpha of 255,
+         * which morphs to white with an alpha of 0 when we are fully destroyed, we stay bright
+         * yellow until we hit an obstacle of course). Then we draw a circle at the position
+         * ([mPositionX] , [mPositionY]) using [mPaint].
          *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun draw(canvas: Canvas) {
-            setPaintARGBBlend(mPaint, mDestroyAnimProgress,
+            setPaintARGBBlend(
+                    mPaint, mDestroyAnimProgress,
                     255, 255, 255, 0,
-                    0, 255, 255, 255)
+                    0, 255, 255, 255
+            )
             canvas.drawCircle(mPositionX, mPositionY, mSize, mPaint)
         }
 
         /**
          * Just returns 0.125 to use as the scaling factor to divide the delta time `tau` by in
-         * order to calculate the value to add to `mDestroyAnimProgress` in `Sprite.step`
+         * order to calculate the value to add to [mDestroyAnimProgress] in [Sprite.step]
          * (if we are currently animating our destruction that is).
          *
          * @return scaling factor to divide the delta time `tau` by in order to calculate the
-         * value to add to `mDestroyAnimProgress` in `Sprite.step` (if we are currently
+         * value to add to [mDestroyAnimProgress] in [Sprite.step] (if we are currently
          * animating our destruction that is).
          */
         override val destroyAnimDuration: Float
             get() = 0.125f
 
         /**
-         * Our constructor. First we allocate a new instance for `Paint mPaint`, and set its
-         * style to FILL. Then we set our size to `mBulletSize` by calling `setSize`.
+         * The init block of our constructor. We set the style of our `Paint` field `mPaint` to
+         * FILL. Then we set our size to `mBulletSize` by calling `setSize`.
          */
         init {
             mPaint.style = Paint.Style.FILL
@@ -1339,23 +1341,23 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     /**
-     * `Sprite` subclass adding functionality needed to model an obstacle
+     * [Sprite] subclass adding functionality needed to model an obstacle
      */
     private inner class Obstacle : Sprite() {
         /**
-         * `Paint` we use to draw our obstacle.
+         * [Paint] we use to draw our obstacle.
          */
         private val mPaint: Paint = Paint()
 
         /**
-         * Called to advance our obstacle's animation by `float tau` seconds. If our super's
-         * implementation of `step` returns false (our `Sprite` object has disappeared
+         * Called to advance our obstacle's animation by [Float] parameter [tau] seconds. If our
+         * super's implementation of `step` returns false (our [Sprite] object has disappeared
          * from the game) we return false to the caller. Otherwise we make sure that our obstacle
          * wraps around to the other side of the view if we cross one of the edges by calling our
-         * method `wrapAtPlayfieldBoundary`, and return true to the caller.
+         * method [wrapAtPlayfieldBoundary], and return true to the caller.
          *
          * @param tau delta time in seconds to step our animation
-         * @return true if our `Obstacle` object has successfully been moved, false if it has
+         * @return true if our [Obstacle] object has successfully been moved, false if it has
          * disappeared from the game.
          */
         override fun step(tau: Float): Boolean {
@@ -1367,38 +1369,43 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         /**
-         * We implement this to get drawn. First we call the method `setPaintARGBBlend` to set
-         * the color of `mPaint` to a color that is appropriate for the stage of destruction
-         * given by `mDestroyAnimProgress` (a blue shade to start with an alpha of 255, which
+         * We implement this to get drawn. First we call the method [setPaintARGBBlend] to set
+         * the color of [mPaint] to a color that is appropriate for the stage of destruction
+         * given by [mDestroyAnimProgress] (a blue shade to start with an alpha of 255, which
          * morphs to RED with an alpha of 0 when we are fully destroyed, we stay blue until we hit
-         * another `Sprite` of course). Then we draw a circle at `(mPositionX,mPositionY)`
-         * using `mPaint` of a size which starts at `mSize` and decreases to 0.0 when we
+         * another [Sprite] of course). Then we draw a circle at ([mPositionX], [mPositionY])
+         * using [mPaint] of a size which starts at [mSize] and decreases to 0.0 when we
          * are animating our destruction.
          *
-         * @param canvas the canvas on which the background will be drawn
+         * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun draw(canvas: Canvas) {
-            setPaintARGBBlend(mPaint, mDestroyAnimProgress,
+            setPaintARGBBlend(
+                    mPaint, mDestroyAnimProgress,
                     255, 127, 127, 255,
-                    0, 255, 0, 0)
-            canvas.drawCircle(mPositionX, mPositionY,
-                    mSize * (1.0f - mDestroyAnimProgress), mPaint)
+                    0, 255, 0, 0
+            )
+            canvas.drawCircle(
+                    mPositionX, mPositionY,
+                    mSize * (1.0f - mDestroyAnimProgress),
+                    mPaint
+            )
         }
 
         /**
          * Just returns 0.25 to use as the scaling factor to divide the delta time `tau` by in
-         * order to calculate the value to add to `mDestroyAnimProgress` in `Sprite.step`
+         * order to calculate the value to add to [mDestroyAnimProgress] in [Sprite.step]
          * (if we are currently animating our destruction that is).
          *
          * @return scaling factor to divide the delta time `tau` by in order to calculate the
-         * value to add to `mDestroyAnimProgress` in `Sprite.step` (if we are currently
+         * value to add to [mDestroyAnimProgress] in [Sprite.step] (if we are currently
          * animating our destruction that is).
          */
         override val destroyAnimDuration: Float
             get() = 0.25f
 
         /**
-         * Our constructor. First we allocate a new instance for `Paint mPaint`, set its color
+         * The init block of our constructor. We set the color of our `Paint` field `mPaint`
          * to a shade of blue and set its style to FILL.
          */
         init {
@@ -1408,21 +1415,17 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     /**
-     * Constructor that is called when inflating a view from XML. First we call our super's constructor,
-     * and allocate new instances for our fields `Random mRandom`, `List<Bullet> mBullets`,
-     * and `List<Obstacle> mObstacles`. We enable our view to receive focus, and to receive
-     * focus in touch mode. We initialize `float baseSize` to 5.0 times the logical density of
-     * our display, and `float baseSpeed` to be 3.0 times `baseSize`. We initialize our
-     * field `mShipSize` to be 3.0 times `baseSize`, `mMaxShipThrust` to be 0.25
-     * times `baseSpeed`, and `mMaxShipSpeed` to be 12 times `baseSpeed`. We initialize
-     * `mBulletSize` to be `baseSize`, and `mBulletSpeed` to be 12 times `baseSpeed`.
-     * We initialize `mMinObstacleSize` to be 2 times `baseSize`, `mMaxObstacleSize`
-     * to be 12 times `baseSize`, `mMinObstacleSpeed` to be `baseSpeed`, and
-     * `mMaxObstacleSpeed` to be 3 times `baseSpeed`.
-     *
-     *  context The Context the view is running in, through which it can access the current
-     * theme, resources, etc.
-     *  attrs   The attributes of the XML tag that is inflating the view.
+     * The init block of our Constructor that is called when inflating a view from XML. First we
+     * call our super's constructor, and allocate new instances for our `List<Bullet>` field
+     * `mBullets`, and `List<Obstacle>` field `mObstacles`. We enable our view to receive focus,
+     * and to receive focus in touch mode. We initialize `Float` variable `val baseSize` to 5.0
+     * times the logical density of our display, and `Float` variable `val baseSpeed` to be 3.0
+     * times `baseSize`. We initialize our field `mShipSize` to be 3.0 times `baseSize`,
+     * `mMaxShipThrust` to be 0.25 times `baseSpeed`, and `mMaxShipSpeed` to be 12 times
+     * `baseSpeed`. We initialize `mBulletSize` to be `baseSize`, and `mBulletSpeed` to be 12
+     * times `baseSpeed`. We initialize `mMinObstacleSize` to be 2 times `baseSize`,
+     * `mMaxObstacleSize` to be 12 times `baseSize`, `mMinObstacleSpeed` to be `baseSpeed`,
+     * and `mMaxObstacleSpeed` to be 3 times `baseSpeed`.
      */
     init {
         mBullets = ArrayList()
@@ -1454,35 +1457,35 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         private const val MAX_OBSTACLES = 12
 
         /**
-         * Bit in our field `int mDPadState` we use to indicate that the KEYCODE_DPAD_LEFT key is
+         * Bit in our [Int] field [mDPadState] we use to indicate that the KEYCODE_DPAD_LEFT key is
          * currently pressed.
          */
         private const val DPAD_STATE_LEFT = 1 shl 0
 
         /**
-         * Bit in our field `int mDPadState` we use to indicate that the KEYCODE_DPAD_RIGHT key is
+         *Bit in our [Int] field [mDPadState] we use to indicate that the KEYCODE_DPAD_RIGHT key is
          * currently pressed.
          */
         private const val DPAD_STATE_RIGHT = 1 shl 1
 
         /**
-         * Bit in our field `int mDPadState` we use to indicate that the KEYCODE_DPAD_UP key is
+         * Bit in our [Int] field [mDPadState] we use to indicate that the KEYCODE_DPAD_UP key is
          * currently pressed.
          */
         private const val DPAD_STATE_UP = 1 shl 2
 
         /**
-         * Bit in our field `int mDPadState` we use to indicate that the KEYCODE_DPAD_DOWN key is
+         * Bit in our [Int] field [mDPadState] we use to indicate that the KEYCODE_DPAD_DOWN key is
          * currently pressed.
          */
         private const val DPAD_STATE_DOWN = 1 shl 3
 
         /**
-         * Convenience function to check whether our parameter `keyCode` is either a gamepad button,
-         * KEYCODE_DPAD_CENTER, or KEYCODE_SPACE (in which case we return true).
+         * Convenience function to check whether our [Int] parameter [keyCode] is either a gamepad
+         * button, KEYCODE_DPAD_CENTER, or KEYCODE_SPACE (in which case we return true).
          *
          * @param keyCode keycode we are to check to see if it is a "fire" key
-         * @return true if `keyCode` is a "fire" key, false if not.
+         * @return true if [keyCode] is a "fire" key, false if not.
          */
         private fun isFireKey(keyCode: Int): Boolean {
             return (KeyEvent.isGamepadButton(keyCode)
@@ -1491,25 +1494,32 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         /**
-         * Returns the value of the requested joystick axis from the `MotionEvent` passed it. First
-         * we initialize our variable `InputDevice.MotionRange range` by calling the `getMotionRange`
-         * method of `InputDevice device` for the `axis` we are interested in and the source
-         * of `event`. If that is not null, we initialize our variable `float flat` with the
-         * extent of the center flat position with respect to this axis. If `historyPos` is less than
-         * 0 we initialize our variable `float value` with the value of the requested axis for the
-         * for the current movement, otherwise we initialize it to the value of the requested axis for the
-         * historical movement `historyPos`. If the absolute value of `value` is greater than
-         * than the `flat` range we return `value` to the caller, otherwise we return 0.
+         * Returns the value of the requested joystick axis from the [MotionEvent] passed it. First
+         * we initialize our [InputDevice.MotionRange] variable `val range` by calling the
+         * `getMotionRange` method of [InputDevice] parameter [device] for the [axis] we are
+         * interested in and the source of `event`. If that is not null, we initialize our [Float]
+         * variable `val flat` with the extent of the center flat position with respect to this
+         * axis. If [historyPos] is less than 0 we initialize our [Float] variable `val value` with
+         * the value of the requested axis for the for the current movement, otherwise we initialize
+         * it to the value of the requested axis for the historical movement [historyPos]. If the
+         * absolute value of `value` is greater than than the `flat` range we return `value` to the
+         * caller, otherwise we return 0.
          *
-         * @param event      joystick `MotionEvent` received by our `onGenericMotionEvent` callback.
-         * @param device     `InputDevice` of the device which sent us the event.
+         * @param event      joystick [MotionEvent] received by our [onGenericMotionEvent] callback.
+         * @param device     [InputDevice] of the device which sent us the event.
          * @param axis       joystick axis we are interested in.
-         * @param historyPos number of the historical movement sample in the batch (-1 for the current
-         * movement).
+         * @param historyPos number of the historical movement sample in the batch (-1 for the
+         *                   current movement).
          * @return value of the requested axis for the event or historical event we are interested in
          * (or 0 if the value is within the "flat" range of the device).
          */
-        private fun getCenteredAxis(event: MotionEvent, device: InputDevice?, axis: Int, historyPos: Int): Float {
+        private fun getCenteredAxis(
+                event: MotionEvent,
+                device: InputDevice?,
+                axis: Int,
+                historyPos: Int
+        ): Float {
+
             val range = device!!.getMotionRange(axis, event.source)
             if (range != null) {
                 val flat = range.flat
@@ -1536,8 +1546,8 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         /**
-         * Convenience function to calculate a color value that starts at `from` and is animated
-         * to `to` based on the value of `alpha`.
+         * Convenience function to calculate a color value that starts at [Int] parameter [from]
+         * and is animated to [Int] parameter [to] based on the value of [Float] parameter [alpha].
          *
          * @param alpha value of alpha component
          * @param from  starting value for this color component
@@ -1549,8 +1559,8 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         /**
-         * Convenience function to animate the color of `Paint paint` between a "from" color and a
-         * "to" color based on the current value of our parameter `float alpha`.
+         * Convenience function to animate the color of [Paint] parameter [paint] between a "from"
+         * color and a "to" color based on the current value of our [Float] parameter [alpha].
          *
          * @param paint `Paint` whose color we are to set
          * @param alpha a value between 0 and 1.0 which determines where between
@@ -1564,11 +1574,15 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          * @param g2    to green color component
          * @param b2    ti blue color component
          */
-        fun setPaintARGBBlend(paint: Paint, alpha: Float,
-                              a1: Int, r1: Int, g1: Int, b1: Int,
-                              a2: Int, r2: Int, g2: Int, b2: Int) {
+        fun setPaintARGBBlend(
+                paint: Paint, alpha: Float,
+                a1: Int, r1: Int, g1: Int, b1: Int,
+                a2: Int, r2: Int, g2: Int, b2: Int
+        ) {
+
             paint.setARGB(blend(alpha, a1, a2), blend(alpha, r1, r2),
                     blend(alpha, g1, g2), blend(alpha, b1, b2))
+
         }
 
         /**
