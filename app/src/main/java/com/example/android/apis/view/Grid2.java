@@ -16,9 +16,6 @@
 
 package com.example.android.apis.view;
 
-import com.example.android.apis.R;
-
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -27,11 +24,15 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
+
 /**
  * A grid that displays a set of framed photos created from resource jpg's using
  * ImageView.setImageResource
  */
-public class Grid2 extends Activity {
+public class Grid2 extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.grid_2. Next we
@@ -45,14 +46,14 @@ public class Grid2 extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.grid_2);
 
-        GridView g = (GridView) findViewById(R.id.myGrid);
+        GridView g = findViewById(R.id.myGrid);
         g.setAdapter(new ImageAdapter(this));
     }
 
     /**
      * An adapter which returns {@code ImageView} objects loaded from an array of resource IDs.
      */
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings({"WeakerAccess", "InnerClassMayBeStatic", "FieldCanBeLocal"})
     public class ImageAdapter extends BaseAdapter {
         /**
          * {@code Context} we were constructed with ("this" in the {@code onCreate} method of the
