@@ -1260,11 +1260,15 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             setSize(mShipSize)
             mPath = Path()
             mPath.moveTo(0f, 0f)
-            mPath.lineTo(cos(-CORNER_ANGLE.toDouble()).toFloat() * mSize,
-                    sin(-CORNER_ANGLE.toDouble()).toFloat() * mSize)
+            mPath.lineTo(
+                    cos(-CORNER_ANGLE.toDouble()).toFloat() * mSize,
+                    sin(-CORNER_ANGLE.toDouble()).toFloat() * mSize
+            )
             mPath.lineTo(mSize, 0f)
-            mPath.lineTo(cos(CORNER_ANGLE.toDouble()).toFloat() * mSize,
-                    sin(CORNER_ANGLE.toDouble()).toFloat() * mSize)
+            mPath.lineTo(
+                    cos(CORNER_ANGLE.toDouble()).toFloat() * mSize,
+                    sin(CORNER_ANGLE.toDouble()).toFloat() * mSize
+            )
             mPath.lineTo(0f, 0f)
         }
     }
