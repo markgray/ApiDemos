@@ -16,7 +16,6 @@
 
 package com.example.android.apis.view;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
@@ -26,17 +25,21 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import java.util.List;
+import androidx.appcompat.app.AppCompatActivity;
 
-//Need the following import to get access to the app resources, since this
-//class is in a sub-package.
+/*
+ * Need the following import to get access to the app resources,
+ * since this class is in a sub-package.
+ */
 import com.example.android.apis.R;
+
+import java.util.List;
 
 /**
  * Shows how to use a GridView to display a grid of ImageView's created
  * from the app icons retrieved from the PackageManager
  */
-public class Grid1 extends Activity {
+public class Grid1 extends AppCompatActivity {
     /**
      * The {@code GridView} in our layout with ID R.id.myGrid
      */
@@ -59,7 +62,7 @@ public class Grid1 extends Activity {
 
         loadApps(); // do this in onResume?
 
-        mGrid = (GridView) findViewById(R.id.myGrid);
+        mGrid = findViewById(R.id.myGrid);
         mGrid.setAdapter(new AppsAdapter());
     }
 
