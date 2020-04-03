@@ -15,10 +15,7 @@
  */
 package com.example.android.apis.view;
 
-import com.example.android.apis.R;
-
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
@@ -35,6 +32,10 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
+
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ import java.util.List;
  * Implements multi-selection mode on GridView - hard to select by touch though
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class Grid3 extends Activity {
+public class Grid3 extends AppCompatActivity {
     /**
      * Our layout's {@code GridView}, with ID R.id.myGrid.
      */
@@ -67,7 +68,7 @@ public class Grid3 extends Activity {
 
         loadApps();
 
-        mGrid = (GridView) findViewById(R.id.myGrid);
+        mGrid = findViewById(R.id.myGrid);
         mGrid.setAdapter(new AppsAdapter());
         mGrid.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
         mGrid.setMultiChoiceModeListener(new MultiChoiceModeListener());
@@ -98,7 +99,7 @@ public class Grid3 extends Activity {
      * Our adapter which fetches app icons from the {@code ResolveInfo} for each of the applications
      * in our {@code List<ResolveInfo> mApps}.
      */
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings({"WeakerAccess", "FieldCanBeLocal"})
     public class AppsAdapter extends BaseAdapter {
         /**
          * Logical density of the display
@@ -207,6 +208,7 @@ public class Grid3 extends Activity {
     /**
      * View group which holds our {@code ImageView}, and allows it to be checkable.
      */
+    @SuppressWarnings("InnerClassMayBeStatic")
     public class CheckableLayout extends FrameLayout implements Checkable {
         /**
          * Flag to indicate whether we are checked or not.
@@ -342,6 +344,7 @@ public class Grid3 extends Activity {
         @Override
         public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
             int selectCount = mGrid.getCheckedItemCount();
+            //noinspection SwitchStatementWithTooFewBranches
             switch (selectCount) {
                 case 1:
                     mode.setSubtitle("One item selected");

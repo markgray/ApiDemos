@@ -2363,7 +2363,8 @@
         </activity>
         <activity
             android:name=".view.Grid3"
-            android:label="Views/Grid/3. Selection Mode">
+            android:label="Views/Grid/3. Selection Mode"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
