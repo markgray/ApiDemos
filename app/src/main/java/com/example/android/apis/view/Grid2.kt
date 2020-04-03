@@ -28,16 +28,16 @@ import com.example.android.apis.R
 
 /**
  * A grid that displays a set of framed photos created from resource jpg's using
- * ImageView.setImageResource
+ * [ImageView.setImageResource]
  */
 class Grid2 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.grid_2. Next we
-     * initialize our variable `GridView g` by finding the view with ID R.id.myGrid, and set
-     * its adapter to a new instance of `ImageAdapter`.
+     * initialize our [GridView] variable `val g` by finding the view with ID R.id.myGrid, and set
+     * its adapter to a new instance of [ImageAdapter].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,12 +47,12 @@ class Grid2 : AppCompatActivity() {
     }
 
     /**
-     * An adapter which returns `ImageView` objects loaded from an array of resource IDs.
+     * An adapter which returns [ImageView] objects loaded from an array of resource IDs.
      */
     inner class ImageAdapter(
             /**
-             * `Context` we were constructed with ("this" in the `onCreate` method of the
-             * `Grid2` activity), used to access resources.
+             * [Context] we were constructed with ("this" in the `onCreate` method of the
+             * [Grid2] activity), used to access resources.
              */
             private val mContext: Context) : BaseAdapter() {
 
@@ -73,7 +73,7 @@ class Grid2 : AppCompatActivity() {
 
         /**
          * How many items are in the data set represented by this Adapter, in our case this is the
-         * length of our `mThumbIds` array.
+         * length of our [mThumbIds] array.
          *
          * @return Count of items.
          */
@@ -83,8 +83,7 @@ class Grid2 : AppCompatActivity() {
 
         /**
          * Get the data item associated with the specified position in the data set. We simply return
-         * the contents of `mThumbIds[position]` to the caller (this method does not seem to
-         * ever be called, it used to return the parameter `position` for some reason).
+         * the contents of the [position] entry of our [mThumbIds] field to the caller.
          *
          * @param position Position of the item whose data we want within the adapter's data set.
          * @return The data at the specified position.
@@ -95,7 +94,7 @@ class Grid2 : AppCompatActivity() {
 
         /**
          * Get the row id associated with the specified position in the list. Our row id is the same
-         * as our parameter `position` so we just return that to the caller.
+         * as our parameter [position] so we just return that to the caller.
          *
          * @param position The position of the item within the adapter's data set whose row id we want.
          * @return The id of the item at the specified position.
@@ -105,21 +104,21 @@ class Grid2 : AppCompatActivity() {
         }
 
         /**
-         * Get a View that displays the data at the specified position in the data set. First we
-         * declare `ImageView imageView`, then if our parameter `convertView` is null we
-         * create a new instance of `ImageView` for `imageView`, set its layout parameters
-         * to `w` pixels wide (45 scaled by the screen density) by `h` pixels high (also
-         * 45 scaled by the screen density), set it to not adjust its view bounds, set its scale type
-         * to CENTER_CROP, and set its padding to 8 pixels on each side. If `convertView` is
-         * not null we just set `imageView` to it after casting it to an `ImageView`.
-         * Then we use the `setImageResource` of `imageView` to have it load and decode
-         * the jpg for the resource resource ID given by `mThumbIds[position]`, setting it as
-         * its content. Finally we return `imageView` to the caller.
+         * Get a [View] that displays the data at the specified position in the data set. First we
+         * declare [ImageView] variable `val imageView`, then if our parameter [convertView] is null
+         * we create a new instance of [ImageView] for `imageView`, set its layout parameters
+         * to [w] pixels wide (45 scaled by the screen density) by [h] pixels high (also 45 scaled
+         * by the screen density), set it to not adjust its view bounds, set its scale type to
+         * CENTER_CROP, and set its padding to 8 pixels on each side. If [convertView] is not null
+         * we just set `imageView` to it after casting it to an [ImageView]. Then we use the
+         * `setImageResource` method of `imageView` to have it load and decode the jpg for the
+         * resource resource ID given by the [position] entry in our [mThumbIds] field, setting
+         * it as its content. Finally we return `imageView` to the caller.
          *
          * @param position    The position of the item within the adapter's data set whose view we want.
-         * @param convertView The old view to reuse, if possible.
+         * @param convertView The old [View] to reuse, if possible.
          * @param parent      The parent that this view will eventually be attached to
-         * @return A View corresponding to the data at the specified position.
+         * @return A [View] corresponding to the data at the specified position.
          */
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val imageView: ImageView
@@ -137,7 +136,7 @@ class Grid2 : AppCompatActivity() {
         }
 
         /**
-         * The array of resource IDs our `ImageAdapter` used as its data.
+         * The array of resource IDs our [ImageAdapter] uses as its data.
          */
         private val mThumbIds = arrayOf(
                 R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
@@ -222,11 +221,8 @@ class Grid2 : AppCompatActivity() {
                 R.drawable.sample_thumb_6, R.drawable.sample_thumb_7)
 
         /**
-         * Our constructor. First we save our parameter `Context c` in our field
-         * `Context mContext`, then we initialize our field `dp2px` with the logical
-         * density of our display, initialize `w` to 45dp and `h` to 45dp.
-         *
-         *  c `Context` to use to access resources
+         * The init block of our constructor. Our field `dp2px` contains the logical
+         * density of our display, so we use it to scale `w` to 45dp and `h` to 45dp.
          */
         init {
             w = (45 * dp2px).toInt()
