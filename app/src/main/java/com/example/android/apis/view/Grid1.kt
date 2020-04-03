@@ -33,25 +33,25 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
- * Shows how to use a GridView to display a grid of ImageView's created
- * from the app icons retrieved from the PackageManager
+ * Shows how to use a [GridView] to display a grid of [ImageView]'s created
+ * from the app icons retrieved from the `PackageManager`
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class Grid1 : AppCompatActivity() {
     /**
-     * The `GridView` in our layout with ID R.id.myGrid
+     * The [GridView] in our layout with ID R.id.myGrid
      */
     var mGrid: GridView? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.grid_1. Next we
-     * call our method `loadApps` to load `List<ResolveInfo> mApps` with data from the
+     * call our method [loadApps] to load `List<ResolveInfo>` field [mApps] with data from the
      * `PackageManager` (all activities that can be performed for an intent with the action
-     * MAIN, and category LAUNCHER). We initialize our field `GridView mGrid` by finding the
-     * view with the ID R.id.myGrid, and set its adapter to a new instance of `AppsAdapter`.
+     * MAIN, and category LAUNCHER). We initialize our [GridView] field [mGrid] by finding the
+     * view with the ID R.id.myGrid, and set its adapter to a new instance of [AppsAdapter].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,18 +62,18 @@ class Grid1 : AppCompatActivity() {
     }
 
     /**
-     * List of `ResolveInfo` objects for all activities that can be executed for an intent
+     * List of [ResolveInfo] objects for all activities that can be executed for an intent
      * with the action MAIN, and category LAUNCHER loaded from the `PackageManager` by our
-     * method `loadApps`.
+     * method [loadApps].
      */
     private var mApps: List<ResolveInfo>? = null
 
     /**
-     * Loads `List<ResolveInfo> mApps` with a list of all activities that can be performed for
-     * an intent with the action MAIN, and category LAUNCHER loaded using the `PackageManager`.
-     * First we create `Intent mainIntent` with the action ACTION_MAIN, and add the category
-     * CATEGORY_LAUNCHER. Then we retrieve a `PackageManager` instance and use it to retrieve
-     * all activities that can be performed for intent `mainIntent` to initialize `mApps`.
+     * Loads `List<ResolveInfo>` field [mApps] with a list of all activities that can be performed
+     * for an intent with the action MAIN, and category LAUNCHER loaded using the `PackageManager`.
+     * First we create [Intent] variable `val mainIntent` with the action ACTION_MAIN, and add the
+     * category CATEGORY_LAUNCHER. Then we retrieve a `PackageManager` instance and use it to
+     * retrieve all activities that can be performed for intent `mainIntent` to initialize [mApps].
      */
     private fun loadApps() {
         val mainIntent = Intent(Intent.ACTION_MAIN, null)
@@ -82,7 +82,7 @@ class Grid1 : AppCompatActivity() {
     }
 
     /**
-     * Adapter that displays the icons in `List<ResolveInfo> mApps`.
+     * Adapter that displays the icons in `List<ResolveInfo>` field [mApps].
      */
     inner class AppsAdapter
     /**
@@ -91,23 +91,22 @@ class Grid1 : AppCompatActivity() {
         : BaseAdapter() {
         /**
          * Get a View that displays the data at the specified position in the data set. First we
-         * declare `ImageView i`, then if our parameter `convertView` is null we create
-         * a new instance of `ImageView` for `i`, set its scale type to FIT_CENTER and
-         * set its layout parameters to 50 pixels wide by 50 pixels high. If `convertView` is
-         * not null we set `i` to it after casting it to an `ImageView`. We initialize
-         * `ResolveInfo info` with the data in `mApps` at position `position` and
+         * declare [ImageView] `val i`, then if our [View] parameter [convertView] is null we
+         * create a new instance of [ImageView] for `i`, set its scale type to FIT_CENTER and
+         * set its layout parameters to 50 pixels wide by 50 pixels high. If [convertView] is
+         * not null we set `i` to it after casting it to an [ImageView]. We initialize
+         * [ResolveInfo] `val info` with the data in [mApps] at position [position] and
          * set `i` to a drawable of the icon associated with `info` that we retrieve by
-         * using that `ResolveInfo` to call back a `PackageManager` instance to load the
+         * using that [ResolveInfo] to call back a `PackageManager` instance to load the
          * icon from the application. Finally we return `i` to the caller.
          *
          * @param position    The position of the item within the adapter's data set whose view we want.
-         * @param convertView The old view to reuse, if possible.
+         * @param convertView The old [View] to reuse, if possible.
          * @param parent      The parent that this view will eventually be attached to
-         * @return A View corresponding to the data at the specified position.
+         * @return A [View] corresponding to the data at the specified position.
          */
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val i: ImageView
-            @Suppress("SENSELESS_COMPARISON")
             if (convertView == null) {
                 i = ImageView(this@Grid1)
                 i.scaleType = ImageView.ScaleType.FIT_CENTER
@@ -122,7 +121,7 @@ class Grid1 : AppCompatActivity() {
 
         /**
          * How many items are in the data set represented by this Adapter. We return the size of our
-         * `List<ResolveInfo> mApps` field.
+         * `List<ResolveInfo>` field [mApps].
          *
          * @return Count of items.
          */
@@ -132,7 +131,7 @@ class Grid1 : AppCompatActivity() {
 
         /**
          * Get the data item associated with the specified position in the data set. We return the
-         * `ResolveInfo` at position `position` in `List<ResolveInfo> mApps`.
+         * [ResolveInfo] at position [position] in `List<ResolveInfo>` field [mApps].
          *
          * @param position Position of the item whose data we want within the adapter's data set.
          * @return The data at the specified position.
@@ -143,7 +142,7 @@ class Grid1 : AppCompatActivity() {
 
         /**
          * Gets the row id associated with the specified position in the list, in our case the row
-         * id is the same of our parameter `position` so we return it.
+         * id is the same of our parameter [position] so we return it.
          *
          * @param position The position of the item within the adapter's data set whose row id we want.
          * @return The id of the item at the specified position.
