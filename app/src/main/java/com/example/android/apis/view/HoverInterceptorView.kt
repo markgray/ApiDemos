@@ -25,11 +25,9 @@ import com.example.android.apis.R
 /**
  * Part of the [Hover] demo activity.
  *
- *
  * The Interceptor view is a simple subclass of LinearLayout whose sole purpose
  * is to override [.onInterceptHoverEvent].  When the checkbox in the
  * hover activity is checked, the interceptor view will intercept hover events.
- *
  *
  * When this view intercepts hover events, its children will not receive
  * hover events.  This can be useful in some cases when implementing a custom
@@ -55,7 +53,7 @@ class HoverInterceptorView
 
     /**
      * We implement this method to intercept hover events before they are handled by child views. If
-     * our field `boolean mInterceptHover` is true, we return true to our caller, thereby
+     * our [Boolean] field [mInterceptHover] is true, we return true to our caller, thereby
      * intercepting the hover event. Otherwise we return the value returned by our super's
      * implementation of `onInterceptHoverEvent`.
      *
@@ -70,14 +68,15 @@ class HoverInterceptorView
     }
 
     /**
-     * We implement this method to handle hover events. We initialize our variable `TextView textView`
-     * by finding the view with ID R.id.intercept_message (it is the child view we use to display status
-     * messages). If our field `mInterceptHover` is true and the `MotionEvent event` is not
-     * a ACTION_HOVER_EXIT event, we set the text of `textView` to the string given by the resource
-     * ID R.string.hover_intercept_message_intercepted ("Intercepted hover event instead of sending it to
-     * the button.  Om nom nom!") and return true to the caller. Otherwise we set the text of `textView`
-     * to the string with ID R.string.hover_intercept_message_initial ("Try hovering over the button.")
-     * on return the value returned by our super's implementation of `onHoverEvent` to the caller.
+     * We implement this method to handle hover events. We initialize our [TextView] variable
+     * `val textView` by finding the view with ID R.id.intercept_message (it is the child view
+     * we use to display status messages). If our field [mInterceptHover] is true and the
+     * [MotionEvent] parameter [event] is not a ACTION_HOVER_EXIT event, we set the text of
+     * `textView` to the string given by the resource ID R.string.hover_intercept_message_intercepted
+     * ("Intercepted hover event instead of sending it to the button.  Om nom nom!") and return true
+     * to the caller. Otherwise we set the text of `textView` to the string with ID
+     * R.string.hover_intercept_message_initial ("Try hovering over the button.") and return the
+     * value returned by our super's implementation of `onHoverEvent` to the caller.
      *
      * @param event The motion event that describes the hover.
      * @return True if the view handled the hover event.
@@ -93,9 +92,9 @@ class HoverInterceptorView
     }
 
     /**
-     * Setter for our field `boolean mInterceptHover`.
+     * Setter for our [Boolean] field [mInterceptHover].
      *
-     * @param intercept Value to set `boolean mInterceptHover` to
+     * @param intercept Value to set [Boolean] field [mInterceptHover] to
      */
     fun setInterceptHover(intercept: Boolean) {
         mInterceptHover = intercept
