@@ -16,8 +16,9 @@
 
 package com.example.android.apis.view;
 
-import android.app.Activity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -28,7 +29,7 @@ import com.example.android.apis.R;
  * android:layout_width, android:layout_height, android:maxWidth, and
  * android:maxHeight and other attributes of ImageView.
  */
-public class ImageView1 extends Activity {
+public class ImageView1 extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.image_view_1.
