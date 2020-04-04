@@ -32,27 +32,26 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
- * This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection mode on GridView.
- * Implements multi-selection mode on GridView - hard to select by touch though
+ * This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection mode on [GridView].
+ * Implements multi-selection mode on [GridView]
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class Grid3 : AppCompatActivity() {
     /**
-     * Our layout's `GridView`, with ID R.id.myGrid.
+     * Our layout's [GridView], with ID R.id.myGrid.
      */
     var mGrid: GridView? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to our layout file R.layout.grid_1. Next we
-     * call our method `loadApps` to load our field `List<ResolveInfo> mApps` with
-     * `ResolveInfo` objects for accessing information about all of the apps that the
-     * `PackageManager` knows about. We initialize `GridView mGrid` by finding the view
-     * with ID R.id.myGrid, set its adapter to a new instance of `AppsAdapter`, set its choice
-     * mode to CHOICE_MODE_MULTIPLE_MODAL, and set its `MultiChoiceModeListener` to a new
-     * instance of our class `MultiChoiceModeListener`.
+     * `onCreate`, then we set our content view to our layout file R.layout.grid_1. Next we call our
+     * method [loadApps] to load our `List<ResolveInfo>` field  [mApps] with [ResolveInfo] objects
+     * for accessing information about all of the apps that the `PackageManager` knows about. We
+     * initialize [GridView] field [mGrid] by finding the view with ID R.id.myGrid, set its adapter
+     * to a new instance of [AppsAdapter], set its choice mode to CHOICE_MODE_MULTIPLE_MODAL, and
+     * set its [MultiChoiceModeListener] to a new instance of our class [MultiChoiceModeListener].
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,18 +64,18 @@ class Grid3 : AppCompatActivity() {
     }
 
     /**
-     * List of `ResolveInfo` objects for all activities that can be executed for an intent
+     * List of [ResolveInfo] objects for all activities that can be executed for an intent
      * with the action MAIN, and category LAUNCHER loaded from the `PackageManager` by our
-     * method `loadApps`.
+     * method [loadApps].
      */
     private var mApps: List<ResolveInfo>? = null
 
     /**
-     * Loads `List<ResolveInfo> mApps` with a list of all activities that can be performed for
-     * an intent with the action MAIN, and category LAUNCHER loaded using the `PackageManager`.
-     * First we create `Intent mainIntent` with the action ACTION_MAIN, and add the category
+     * Loads `List<ResolveInfo>` field [mApps] with a list of all activities that can be performed
+     * for an intent with the action MAIN, and category LAUNCHER loaded using the `PackageManager`.
+     * First we create [Intent] `val mainIntent` with the action ACTION_MAIN, and add the category
      * CATEGORY_LAUNCHER. Then we retrieve a `PackageManager` instance and use it to retrieve
-     * all activities that can be performed for intent `mainIntent` to initialize `mApps`.
+     * all activities that can be performed for intent `mainIntent` to initialize [mApps].
      */
     private fun loadApps() {
         val mainIntent = Intent(Intent.ACTION_MAIN, null)
@@ -85,8 +84,8 @@ class Grid3 : AppCompatActivity() {
     }
 
     /**
-     * Our adapter which fetches app icons from the `ResolveInfo` for each of the applications
-     * in our `List<ResolveInfo> mApps`.
+     * Our adapter which fetches app icons from the [ResolveInfo] for each of the applications
+     * in our `List<ResolveInfo>` field [mApps].
      */
     inner class AppsAdapter : BaseAdapter() {
         /**

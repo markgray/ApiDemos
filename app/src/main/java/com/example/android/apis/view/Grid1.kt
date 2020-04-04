@@ -89,6 +89,12 @@ class Grid1 : AppCompatActivity() {
      * Our constructor.
      */
         : BaseAdapter() {
+
+        /**
+         * Logical density of the display
+         */
+        private val dp2px: Float = resources.displayMetrics.density
+
         /**
          * Get a View that displays the data at the specified position in the data set. First we
          * declare [ImageView] `val i`, then if our [View] parameter [convertView] is null we
@@ -110,7 +116,8 @@ class Grid1 : AppCompatActivity() {
             if (convertView == null) {
                 i = ImageView(this@Grid1)
                 i.scaleType = ImageView.ScaleType.FIT_CENTER
-                i.layoutParams = AbsListView.LayoutParams(50, 50)
+                val scaled50 = (50f*dp2px).toInt()
+                i.layoutParams = AbsListView.LayoutParams(scaled50, scaled50)
             } else {
                 i = convertView as ImageView
             }

@@ -2146,7 +2146,6 @@ Views
         .view.Grid1
             Shows how to use a GridView to display a grid of ImageView's created from
             the app icons retrieved from the PackageManager
-            TODO: Scale for high dpi screens
 
     Views/Grid/2. Photo Grid               all
         .view.Grid2
@@ -2155,7 +2154,7 @@ Views
 
     Views/Grid/3. Selection Mode           all -- v11+ or crash
         .view.Grid3
-            Implements multi-selection mode on GridView - hard to select by touch though
+            Implements multi-selection mode on GridView
 
   Hover Events
     Views/Hover Events                     all -- v14+ or crash View.OnHoverListener()
