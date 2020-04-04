@@ -29,22 +29,18 @@ import com.example.android.apis.R
  * Demonstrates how to use [View.onHoverEvent], `ViewGroup.onInterceptHoverEvent`,
  * and [View.setOnHoverListener].
  *
- *
  * This activity displays a few buttons and text fields and entices the user
  * to hover over them using a mouse or touch pad.  It displays feedback reporting
  * the position of the pointing device and the label of the view being hovered.
- *
  *
  * A button changes from dark green to bright yellow when hovered.
  * This effect is achieved by using a state-list drawable to select among different
  * background shapes and colors based on the hover state of the button.
  *
- *
- * A View#OnHoverEventListener is used to listen for hover events within the
+ * A `View.OnHoverEventListener` is used to listen for hover events within the
  * container.  The container will re
  *
- *
- * A checkbox is used to control whether a special view, the Interceptor, will intercept
+ * A [CheckBox] is used to control whether a special view, the Interceptor, will intercept
  * events before they are sent to its child (a button).  When the Interceptor
  * is intercepting events, the button will not change state as the pointer hovers
  * over it because the interceptor itself will grab the events.
@@ -53,43 +49,41 @@ import com.example.android.apis.R
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class Hover : AppCompatActivity() {
     /**
-     * `TextView` in our layout with ID R.id.message, it is used to display strings describing
+     * [TextView] in our layout with ID R.id.message, it is used to display strings describing
      * the actions of the hover events received.
      */
     private var mMessageTextView: TextView? = null
 
     /**
-     * `CheckBox` in our layout with ID R.id.intercept_checkbox, it is used to select whether
-     * our `HoverInterceptorView mInterceptor` intercepts hover events or not.
+     * [CheckBox] in our layout with ID R.id.intercept_checkbox, it is used to select whether
+     * our [HoverInterceptorView] field [mInterceptor] intercepts hover events or not.
      */
     private var mInterceptCheckBox: CheckBox? = null
 
     /**
-     * `HoverInterceptorView` in our layout with ID R.id.interceptor, it is a custom
+     * [HoverInterceptorView] in our layout with ID R.id.interceptor, it is a custom
      * `LinearLayout` whose sole purpose is to intercept hover events that would otherwise be
-     * sent to its children if the `CheckBox mInterceptCheckBox` is checked.
+     * sent to its children if the [CheckBox] field [mInterceptCheckBox] is checked.
      */
     private var mInterceptor: HoverInterceptorView? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.hover. We initialize
-     * our field `TextView mMessageTextView` by finding the view with ID R.id.message,
-     * `CheckBox mInterceptCheckBox` by finding the view with ID R.id.intercept_checkbox, and
-     * `HoverInterceptorView mInterceptor` by finding the view with ID R.id.interceptor.
+     * our [TextView] field [mMessageTextView] by finding the view with ID R.id.message, [CheckBox]
+     * field [mInterceptCheckBox] by finding the view with ID R.id.intercept_checkbox, and
+     * [HoverInterceptorView] field [mInterceptor] by finding the view with ID R.id.interceptor.
      *
+     * We initialize our [View] variable `val container` by finding the view with ID R.id.container
+     * and set its `OnHoverListener` to a lambda whose `onHover` method will set the text of
+     * [TextView] field [mMessageTextView] to different strings depending on the action type of the
+     * [MotionEvent] it receives.
      *
-     * We initialize our variable `View container` by finding the view with ID R.id.container
-     * and set its `OnHoverListener` to an anonymous class whose `onHover` method will
-     * set the text of `TextView mMessageTextView` to different strings depending on the
-     * action type of the `MotionEvent` it receives.
+     * Finally we set the `OnCheckedChangeListener` of [CheckBox] field [mInterceptCheckBox] to
+     * a lambda which calls the `setInterceptHover` method of [mInterceptor] with the new state of
+     * the [CheckBox].
      *
-     *
-     * Finally we set the `OnCheckedChangeListener` of `CheckBox mInterceptCheckBox` to
-     * an anonymous class which calls the `setInterceptHover` method of `mInterceptor`
-     * with the new state of the CheckBox.
-     *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,50 +97,53 @@ class Hover : AppCompatActivity() {
             /**
              * Called when a hover event is dispatched to a view. This allows listeners to get a
              * chance to respond before the target view. We switch on the kind of action being
-             * performed by the `MotionEvent event`:
+             * performed by the [MotionEvent] parameter [event]:
              *
-             *  *
-             * ACTION_HOVER_ENTER - we set the text of `TextView mMessageTextView` to a
-             * formatted string using the format R.string.hover_message_entered_at with the
-             * X and Y coordinates of `Event` filling in the two float arguments, then break.
+             *  * ACTION_HOVER_ENTER - we set the text of [TextView] field [mMessageTextView] to a
+             *  formatted string using the format R.string.hover_message_entered_at with the
+             *  X and Y coordinates of [event] filling in the two float arguments, then break.
              *
-             *  *
-             * ACTION_HOVER_MOVE - we set the text of `TextView mMessageTextView` to a
-             * formatted string using the format R.string.hover_message_moved_at with the
-             * X and Y coordinates of `Event` filling in the two float arguments, then break.
+             *  * ACTION_HOVER_MOVE - we set the text of [TextView] field [mMessageTextView] to a
+             *  formatted string using the format R.string.hover_message_moved_at with the
+             *  X and Y coordinates of [event] filling in the two float arguments, then break.
              *
-             *  *
-             * ACTION_HOVER_EXIT - we set the text of `TextView mMessageTextView` to a
-             * formatted string using the format R.string.hover_message_exited_at with the
-             * X and Y coordinates of `Event` filling in the two float arguments, then break.
-             *
+             *  * ACTION_HOVER_EXIT - we set the text of [TextView] field [mMessageTextView] to a
+             *  formatted string using the format R.string.hover_message_exited_at with the
+             *  X and Y coordinates of [event] filling in the two float arguments, then break.
              *
              * Finally we return true to the caller.
              *
-             * @param v The view the hover event has been dispatched to.
-             * @param event The MotionEvent object containing full information about the event.
+             * @param v The [View] the hover event has been dispatched to.
+             * @param event The [MotionEvent] object containing full information about the event.
              * @return True if the listener has consumed the event, false otherwise.
              */
             when (event.action) {
-                MotionEvent.ACTION_HOVER_ENTER -> mMessageTextView!!.text = this@Hover.resources.getString(
+                MotionEvent.ACTION_HOVER_ENTER ->
+                    mMessageTextView!!.text = this@Hover.resources.getString(
                         R.string.hover_message_entered_at,
-                        event.x, event.y)
-                MotionEvent.ACTION_HOVER_MOVE -> mMessageTextView!!.text = this@Hover.resources.getString(
+                        event.x, event.y
+                    )
+                MotionEvent.ACTION_HOVER_MOVE ->
+                    mMessageTextView!!.text = this@Hover.resources.getString(
                         R.string.hover_message_moved_at,
-                        event.x, event.y)
-                MotionEvent.ACTION_HOVER_EXIT -> mMessageTextView!!.text = this@Hover.resources.getString(
+                        event.x, event.y
+                    )
+                MotionEvent.ACTION_HOVER_EXIT ->
+                    mMessageTextView!!.text = this@Hover.resources.getString(
                         R.string.hover_message_exited_at,
-                        event.x, event.y)
+                        event.x, event.y
+                    )
             }
             false
         }
+
         /**
          * Called when the checked state of a compound button has changed. We simply call the
-         * `setInterceptHover` method of `HoverInterceptorView mInterceptor` with
+         * `setInterceptHover` method of `HoverInterceptorView` field `mInterceptor` with
          * the new checked value `isChecked`.
          *
-         *  buttonView The compound button view whose state has changed.
-         *  isChecked  The new checked state of buttonView.
+         *  buttonView: The compound button view whose state has changed.
+         *  isChecked:  The new checked state of buttonView.
          */
         mInterceptCheckBox!!.setOnCheckedChangeListener{ buttonView, isChecked ->
             mInterceptor!!.setInterceptHover(isChecked)
