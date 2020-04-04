@@ -16,9 +16,9 @@
 
 package com.example.android.apis.view;
 
-import android.app.Activity;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -26,7 +26,7 @@ import com.example.android.apis.R;
  * Simply shows how to draw images on buttons using the SDK stock image. The entire demo is done by
  * the layout file R.layout.image_button_1.
  */
-public class ImageButton1 extends Activity {
+public class ImageButton1 extends AppCompatActivity {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of

@@ -2452,7 +2452,8 @@
         </activity>
         <activity
             android:name=".view.ImageButton1"
-            android:label="Views/ImageButton">
+            android:label="Views/ImageButton"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
