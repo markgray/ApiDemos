@@ -94,34 +94,33 @@ class Grid3 : AppCompatActivity() {
         private val dp2px: Float = resources.displayMetrics.density
 
         /**
-         * Width of an icon in pixels (45*dp2px)
+         * Width of an icon in pixels (50*dp2px)
          */
         private val w: Int
 
         /**
-         * Height of an icon in pixels (45*dp2px)
+         * Height of an icon in pixels (50*dp2px)
          */
         private val h: Int
 
         /**
          * Get a View that displays the data at the specified position in the data set. First we
-         * declare `CheckableLayout l` and `ImageView i`. Then if our parameter
-         * `convertView` is null we create a new instance of `ImageView` for `i`,
-         * set its scale type to FIT_CENTER and set its layout parameters to `w` pixels wide
-         * by `h` pixels high (these are both 50dp scaled by the logical density of our
-         * display). We create a new instance for `CheckableLayout l`, and set its layout
-         * parameters to WRAP_CONTENT for both width and height. We then add the view `i` to
-         * `l`. If `convertView` is not null we set `l` to it after casting it to
-         * an `CheckableLayout`, and set `i` to the child of `l` at position 0.
-         * We initialize `ResolveInfo info` with the data in `mApps` at position
-         * `position` and set `i` to a drawable of the icon associated with `info`
-         * that we retrieve by using that `ResolveInfo` to call back a `PackageManager`
-         * instance to load the icon from the application. Finally we return `l` to the caller.
+         * declare [CheckableLayout] variable `val l` and [ImageView] variable `val i`. Then if our
+         * parameter [convertView] is null we create a new instance of [ImageView] for `i`, set its
+         * scale type to FIT_CENTER and set its layout parameters to `w` pixels wide by `h` pixels
+         * high (these are both 50dp scaled by the logical density of our display). We create a new
+         * instance of [CheckableLayout] for `l`, and set its layout parameters to WRAP_CONTENT for
+         * both width and height. We then add the view `i` to `l`. If [convertView] is not null we
+         * set `l` to it after casting it to a [CheckableLayout], and set `i` to the child of `l` at
+         * position 0. We initialize [ResolveInfo] variable `val info` with the data in [mApps] at
+         * position [position] and set `i` to a drawable of the icon associated with `info` that we
+         * retrieve by using that [ResolveInfo] to call back a `PackageManager` instance to load the
+         * icon from the application. Finally we return `l` to the caller.
          *
          * @param position    The position of the item within the adapter's data set whose view we want.
-         * @param convertView The old view to reuse, if possible.
+         * @param convertView The old [View] to reuse, if possible.
          * @param parent      The parent that this view will eventually be attached to
-         * @return A View corresponding to the data at the specified position.
+         * @return A [View] corresponding to the data at the specified position.
          */
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val l: CheckableLayout
@@ -147,7 +146,7 @@ class Grid3 : AppCompatActivity() {
 
         /**
          * How many items are in the data set represented by this Adapter. We return the size of
-         * `List<ResolveInfo> mApps`,
+         * `List<ResolveInfo>` field [mApps],
          *
          * @return Count of items.
          */
@@ -157,7 +156,7 @@ class Grid3 : AppCompatActivity() {
 
         /**
          * Get the data item associated with the specified position in the data set. We return the
-         * data at position `position` in `List<ResolveInfo> mApps`.
+         * data at position [position] in `List<ResolveInfo>` field [mApps].
          *
          * @param position Position of the item whose data we want within the adapter's data set.
          * @return The data at the specified position.
@@ -168,7 +167,7 @@ class Grid3 : AppCompatActivity() {
 
         /**
          * Get the row id associated with the specified position in the list. Our row id is the same
-         * as our parameter `position`, so we just return that.
+         * as our parameter [position], so we just return that.
          *
          * @param position The position of the item within the adapter's data set whose row id we want.
          * @return The id of the item at the specified position.
@@ -178,9 +177,8 @@ class Grid3 : AppCompatActivity() {
         }
 
         /**
-         * Our constructor. First we initialize our field `dp2px` with the logical density of
-         * our display, then we use it to scale 50dp to pixels to initialize both `w` and
-         * `h`.
+         * The init block of our constructor. We use our field `dp2px` to scale 50dp to pixels to
+         * initialize both our `w` and `h` fields.
          */
         init {
             w = (50 * dp2px).toInt()
@@ -189,13 +187,13 @@ class Grid3 : AppCompatActivity() {
     }
 
     /**
-     * View group which holds our `ImageView`, and allows it to be checkable.
+     * View group which holds our [ImageView], and allows it to be checkable.
      */
     inner class CheckableLayout
     /**
      * Our constructor, we just call our super's constructor.
      *
-     * @param context `Context` to use to access resources
+     * @param context [Context] to use to access resources
      */
     (context: Context?) : FrameLayout(context!!), Checkable {
         /**
@@ -204,8 +202,8 @@ class Grid3 : AppCompatActivity() {
         private var mChecked = false
 
         /**
-         * Change the checked state of the view. We save our parameter `checked` in our field
-         * `mChecked`, and set our background to a slightly translucent blue (0x770000ff) if
+         * Change the checked state of the view. We save our parameter [checked] in our field
+         * [mChecked], and set our background to a slightly translucent blue (0x770000ff) if
          * we are checked, or to null if we are not checked.
          *
          * @param checked The new checked state
@@ -217,8 +215,7 @@ class Grid3 : AppCompatActivity() {
         }
 
         /**
-         * Returns the current checked state of the view, which is the value of our field
-         * `mChecked`.
+         * Returns the current checked state of the view, which is the value of our field [mChecked].
          *
          * @return The current checked state of the view
          */
@@ -228,7 +225,8 @@ class Grid3 : AppCompatActivity() {
 
         /**
          * Change the checked state of the view to the inverse of its current state. We just call
-         * our method `setChecked` with the negated value of our field `mChecked`.
+         * our method [setChecked] with the negated value of our field [mChecked] (kotlin prefers
+         * to call our method a property with the name [isChecked] - go figure).
          */
         override fun toggle() {
             isChecked = !mChecked
@@ -236,17 +234,17 @@ class Grid3 : AppCompatActivity() {
     }
 
     /**
-     * Our custom `GridView.MultiChoiceModeListener`, customized to just display the number
+     * Our custom [AbsListView.MultiChoiceModeListener], customized to just display the number
      * of items selected in the action mode.
      */
     inner class MultiChoiceModeListener : AbsListView.MultiChoiceModeListener {
         /**
-         * Called when action mode is first created. We set the title of our parameter
-         * `ActionMode mode` to the string "Select Items", and the subtitle to the string
-         * "One item selected", then return true to the caller.
+         * Called when action mode is first created. We set the title of our [ActionMode] parameter
+         * [mode] to the string "Select Items", and the subtitle to the string "One item selected",
+         * then return true to the caller.
          *
-         * @param mode ActionMode being created
-         * @param menu Menu used to populate action buttons
+         * @param mode [ActionMode] being created
+         * @param menu [Menu] used to populate action buttons
          * @return true if the action mode should be created, false if entering this mode should
          * be aborted.
          */
@@ -260,8 +258,8 @@ class Grid3 : AppCompatActivity() {
          * Called to refresh an action mode's action menu whenever it is invalidated. We just return
          * true to the caller.
          *
-         * @param mode ActionMode being prepared
-         * @param menu Menu used to populate action buttons
+         * @param mode [ActionMode] being prepared
+         * @param menu [Menu] used to populate action buttons
          * @return true if the menu or action mode was updated, false otherwise.
          */
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
@@ -271,9 +269,9 @@ class Grid3 : AppCompatActivity() {
         /**
          * Called to report a user click on an action button. We just return true to the caller.
          *
-         * @param mode The current ActionMode
-         * @param item The item that was clicked
-         * @return true if this callback handled the event, false if the standard MenuItem
+         * @param mode The current [ActionMode]
+         * @param item The [MenuItem] that was clicked
+         * @return true if this callback handled the event, false if the standard [MenuItem]
          * invocation should continue.
          */
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
@@ -283,25 +281,21 @@ class Grid3 : AppCompatActivity() {
         /**
          * Called when an action mode is about to be exited and destroyed. We ignore it.
          *
-         * @param mode The current ActionMode being destroyed
+         * @param mode The current [ActionMode] being destroyed
          */
         override fun onDestroyActionMode(mode: ActionMode) {}
 
         /**
          * Called when an item is checked or unchecked during selection mode. We initialize our
-         * variable `selectCount` with the number of items currently selected in our field
-         * `GridView mGrid`, then switch on it:
+         * variable `val selectCount` with the number of items currently selected in our field
+         * [GridView] field [mGrid], then switch on it:
          *
-         *  *
-         * 1: we set the subtitle of `ActionMode mode` to the string "One item selected"
-         * then break
+         *  * 1: we set the subtitle of [ActionMode] parameter [mode] to the string "One item
+         *  selected" then break
          *
-         *  *
-         * default: we set the subtitle of `ActionMode mode` to the string formed by
-         * prepending the string " items selected" with the string value of `selectCount`,
-         * then break.
-         *
-         *
+         *  * default: we set the subtitle of [ActionMode] parameter [mode] to the string formed by
+         *  prepending the string " items selected" with the string value of `selectCount`,
+         *  then break.
          *
          * @param mode     The `ActionMode` providing the selection mode
          * @param position Adapter position of the item that was checked or unchecked
