@@ -17,7 +17,6 @@
 package com.example.android.apis.view;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -26,6 +25,8 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.android.apis.R;
 
@@ -51,7 +52,7 @@ import com.example.android.apis.R;
  * over it because the interceptor itself will grab the events.
  */
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-public class Hover extends Activity {
+public class Hover extends AppCompatActivity {
     /**
      * {@code TextView} in our layout with ID R.id.message, it is used to display strings describing
      * the actions of the hover events received.
@@ -93,9 +94,9 @@ public class Hover extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hover);
 
-        mMessageTextView = (TextView) findViewById(R.id.message);
-        mInterceptCheckBox = (CheckBox) findViewById(R.id.intercept_checkbox);
-        mInterceptor = (HoverInterceptorView) findViewById(R.id.interceptor);
+        mMessageTextView = findViewById(R.id.message);
+        mInterceptCheckBox = findViewById(R.id.intercept_checkbox);
+        mInterceptor = findViewById(R.id.interceptor);
 
         View container = findViewById(R.id.container);
         container.setOnHoverListener(new View.OnHoverListener() {
