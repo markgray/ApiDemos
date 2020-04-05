@@ -2509,7 +2509,8 @@
         </activity>
         <activity
             android:name=".view.LayoutAnimation3"
-            android:label="Views/Layout Animation/3. Reverse Order">
+            android:label="Views/Layout Animation/3. Reverse Order"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

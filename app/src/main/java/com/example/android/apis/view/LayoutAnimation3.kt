@@ -13,43 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.view
 
-package com.example.android.apis.view;
-
-import com.example.android.apis.R;
-
-import android.app.ListActivity;
-import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.app.ListActivity
+import android.os.Bundle
+import android.widget.ArrayAdapter
+import com.example.android.apis.R
 
 /**
  * Same as List Cascade above, but an android:layoutAnimation attribute in the layout file
  * R.layout.layout_animation_3 uses anim/layout_bottom_to_top_slide.xml which uses anim/slide_right
  * instead of implementing the animation in code
  */
-public class LayoutAnimation3 extends ListActivity {
+class LayoutAnimation3 : ListActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * {@code onCreate}, then we set our content view to our layout file R.layout.layout_animation_3.
-     * Then we set our list adapter to a new instance of {@code ArrayAdapter} which is constructed
-     * using our array {@code String[] mStrings} as the data, and android.R.layout.simple_list_item_1
+     * `onCreate`, then we set our content view to our layout file R.layout.layout_animation_3.
+     * Then we set our list adapter to a new instance of `ArrayAdapter` which is constructed
+     * using our array `String[] mStrings` as the data, and android.R.layout.simple_list_item_1
      * as the layout file containing a TextView to use when instantiating views.
      *
-     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_animation_3);
-
-        setListAdapter(new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, mStrings));
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.layout_animation_3)
+        listAdapter = ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, mStrings)
     }
 
     /**
-     * The data that our {@code ArrayAdapter} uses to fill our {@code ListView}.
+     * The data that our `ArrayAdapter` uses to fill our `ListView`.
      */
-    private String[] mStrings = {
+    private val mStrings = arrayOf(
             "Bordeaux",
             "Lyon",
             "Marseille",
@@ -57,5 +53,5 @@ public class LayoutAnimation3 extends ListActivity {
             "Paris",
             "Toulouse",
             "Strasbourg"
-    };
+    )
 }
