@@ -17,17 +17,17 @@
 package com.example.android.apis.inputmethod;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.view.View;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ import static android.widget.LinearLayout.VERTICAL;
  * {@link InputMethodManager#showInputMethodAndSubtypeEnabler(String)}, which is highly likely to be
  * broken.
  */
-public class ShowInputMethodAndSubtypeEnabler extends Activity {
+public class ShowInputMethodAndSubtypeEnabler extends AppCompatActivity {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of {@code onCreate}.
@@ -72,12 +72,12 @@ public class ShowInputMethodAndSubtypeEnabler extends Activity {
         {
             final Button button = new Button(this);
             button.setText("Show (All IMEs)");
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showInputMethodAndSubtypeEnabler(ShowInputMethodAndSubtypeEnabler.this, null);
-                }
-            });
+            button.setOnClickListener(v ->
+                    showInputMethodAndSubtypeEnabler(
+                            ShowInputMethodAndSubtypeEnabler.this,
+                            null
+                    )
+            );
             layout.addView(button);
         }
 
@@ -85,12 +85,12 @@ public class ShowInputMethodAndSubtypeEnabler extends Activity {
             final Button button = new Button(this);
             final String id = imi.getId();
             button.setText("Show (" + id + ")");
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showInputMethodAndSubtypeEnabler(ShowInputMethodAndSubtypeEnabler.this, id);
-                }
-            });
+            button.setOnClickListener(v ->
+                    showInputMethodAndSubtypeEnabler(
+                            ShowInputMethodAndSubtypeEnabler.this,
+                            id
+                    )
+            );
             layout.addView(button);
         }
         setContentView(layout);

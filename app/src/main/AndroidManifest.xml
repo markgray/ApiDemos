@@ -2381,7 +2381,8 @@
         </activity>
         <activity
             android:name=".inputmethod.ShowInputMethodAndSubtypeEnabler"
-            android:label="Views/Input Method/ShowInputMethodAndSubtypeEnabler">
+            android:label="Views/Input Method/ShowInputMethodAndSubtypeEnabler"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

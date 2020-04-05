@@ -2181,7 +2181,7 @@ Views
              so that IME developers can test their IMEs.
 
     Views/Input Method/ShowInputMethodAndSubtypeEnabler  v24
-         .view.ShowInputMethodAndSubtypeEnabler
+         .inputmethod.ShowInputMethodAndSubtypeEnabler
              Demonstrates how to show the input method subtype enabler without relying on
              InputMethodManager.showInputMethodAndSubtypeEnabler(String), which is highly 
              likely to be broken.
