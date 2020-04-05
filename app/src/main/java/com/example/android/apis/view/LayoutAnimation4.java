@@ -16,9 +16,6 @@
 
 package com.example.android.apis.view;
 
-import com.example.android.apis.R;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
@@ -28,6 +25,10 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
+
 import java.util.List;
 
 /**
@@ -35,7 +36,7 @@ import java.util.List;
  * using anim/layout_random_fade which has an android:animationOrder="random" attribute and uses the
  * alpha animation specified in anim/fade.xml to fade in app icons in random order.
  */
-public class LayoutAnimation4 extends Activity {
+public class LayoutAnimation4 extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.layout_animation_4.
@@ -53,7 +54,7 @@ public class LayoutAnimation4 extends Activity {
 
         loadApps();
 
-        GridView grid = (GridView) findViewById(R.id.grid);
+        GridView grid = findViewById(R.id.grid);
         grid.setAdapter(new AppsAdapter());
 
     }
