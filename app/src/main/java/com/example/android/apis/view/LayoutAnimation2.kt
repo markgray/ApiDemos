@@ -18,11 +18,15 @@ package com.example.android.apis.view
 
 import android.app.ListActivity
 import android.os.Bundle
-import android.view.animation.*
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
+import android.view.animation.AnimationSet
+import android.view.animation.LayoutAnimationController
+import android.view.animation.TranslateAnimation
 import android.widget.ArrayAdapter
 
 /**
- * Shows how to use a LayoutAnimationController to animate the layout of a list in a ListActivity
+ * Shows how to use a [LayoutAnimationController] to animate the layout of a list in a [ListActivity]
  * Too fast on Nexus 6 to see effect
  */
 class LayoutAnimation2 : ListActivity() {
