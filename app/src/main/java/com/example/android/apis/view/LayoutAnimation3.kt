@@ -29,11 +29,11 @@ class LayoutAnimation3 : ListActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.layout_animation_3.
-     * Then we set our list adapter to a new instance of `ArrayAdapter` which is constructed
+     * Then we set our list adapter to a new instance of [ArrayAdapter] which is constructed
      * using our array `String[] mStrings` as the data, and android.R.layout.simple_list_item_1
-     * as the layout file containing a TextView to use when instantiating views.
+     * as the layout file containing a `TextView` to use when instantiating views.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +43,7 @@ class LayoutAnimation3 : ListActivity() {
     }
 
     /**
-     * The data that our `ArrayAdapter` uses to fill our `ListView`.
+     * The data that our [ArrayAdapter] uses to fill our `ListView`.
      */
     private val mStrings = arrayOf(
             "Bordeaux",
