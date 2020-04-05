@@ -16,16 +16,17 @@
 
 package com.example.android.apis.inputmethod;
 
-import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.LocaleList;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 import static android.widget.LinearLayout.VERTICAL;
 
@@ -35,7 +36,7 @@ import static android.widget.LinearLayout.VERTICAL;
  * IMEs.
  */
 @RequiresApi(api = Build.VERSION_CODES.N)
-public class HintLocales extends Activity {
+public class HintLocales extends AppCompatActivity {
 
     /**
      * Creates a new instance of {@link EditText} that is configured to specify the given

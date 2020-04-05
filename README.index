@@ -2176,7 +2176,7 @@ Views
 
   Input Method
     Views/Input Method/HintLocales         v24
-         .view.HintLocales
+         .inputmethod.HintLocales
              Provide some EditText with specifying android.view.inputmethod.EditorInfo.hintLocales
              so that IME developers can test their IMEs.
 
