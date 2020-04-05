@@ -24,30 +24,27 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 
 /**
- * Provide some [EditText] with specifying
- * [android.view.inputmethod.EditorInfo.hintLocales] so that IME developers can test their
- * IMEs.
+ * Provide some [EditText] which specify different [android.view.inputmethod.EditorInfo.hintLocales]
+ * so that IME developers can test their IMEs.
  */
 @RequiresApi(api = Build.VERSION_CODES.N)
 class HintLocales : AppCompatActivity() {
     /**
      * Creates a new instance of [EditText] that is configured to specify the given
-     * [LocaleList] to [android.view.inputmethod.EditorInfo.hintLocales] so that
-     * developers can locally test how the current input method behaves for the given hint locales.
-     *
+     * [LocaleList] to [android.view.inputmethod.EditorInfo.hintLocales] so that developers can
+     * locally test how the current input method behaves for the given hint locales.
      *
      * **Note:** [android.view.inputmethod.EditorInfo.hintLocales] is just a hint for
      * the input method. IME developers can decide how to use it.
      *
-     *
-     * First we initialize `EditText exitText` with a new instance. If our parameter
-     * `LocaleList hintLocales` is null we set the text to be displayed when the text of the
-     * `exitText` is empty to the string "EditorInfo#hintLocales: (null)", otherwise we set
-     * that text to the string "EditorInfo#hintLocales: " concatenated to the String representation
-     * of the language tags in `LocaleList hintLocales`. We then call the `setImeHintLocales`
-     * method of `exitText` to change the "hint" locales associated with the text view to
-     * `hintLocales`, which will be reported to an IME with `EditorInfo.hintLocales`
-     * when it has focus. Finally we return `exitText` to the caller.
+     * First we initialize [EditText] variable `val exitText` with a new instance. If our [LocaleList]
+     * parameter [hintLocales] is null we set the text to be displayed when the text of the `exitText`
+     * is empty to the string "EditorInfo#hintLocales: (null)", otherwise we set that text to the
+     * string "EditorInfo#hintLocales: " concatenated to the String representation of the language
+     * tags in [LocaleList] parameter [hintLocales]. We then call the `setImeHintLocales` method of
+     * `exitText` to change the "hint" locales associated with the text view to [hintLocales], which
+     * will be reported to an IME with `EditorInfo.hintLocales` when it has focus. Finally we return
+     * `exitText` to the caller.
      *
      * @return A new instance of [EditText], which specifies
      * [android.view.inputmethod.EditorInfo.hintLocales] with the given [LocaleList].
@@ -68,12 +65,12 @@ class HintLocales : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`.
-     * Then we initialize `LinearLayout layout` with a new instance and set its orientation to
-     * VERTICAL. We then proceed to add the views that our method `createEditTextWithImeHintLocales`
-     * creates for various `LocaleList` objects created by the `LocaleList.forLanguageTags`
+     * Then we initialize [LinearLayout] variable `val layout` with a new instance and set its
+     * orientation to VERTICAL. We then proceed to add the views that our [createEditTextWithImeHintLocales]
+     * method  creates for various [LocaleList] objects created by the `LocaleList.forLanguageTags`
      * method to `layout`.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
