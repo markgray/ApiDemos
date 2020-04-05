@@ -13,32 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.view
 
-package com.example.android.apis.view;
-
-import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.android.apis.R;
-
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
- * Demonstrates setting size constraints on {@link android.widget.ImageView}
+ * Demonstrates setting size constraints on [android.widget.ImageView]
  * Shows how to control scaling in an ImageView in a layout file using:
  * android:layout_width, android:layout_height, android:maxWidth, and
  * android:maxHeight and other attributes of ImageView.
  */
-public class ImageView1 extends AppCompatActivity {
+class ImageView1 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * {@code onCreate}, then we set our content view to our layout file R.layout.image_view_1.
+     * `onCreate`, then we set our content view to our layout file R.layout.image_view_1.
      *
-     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.image_view_1);
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.image_view_1)
     }
 }
