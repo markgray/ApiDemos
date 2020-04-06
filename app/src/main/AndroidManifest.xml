@@ -2073,7 +2073,8 @@
         </activity>
         <activity
             android:name=".view.Baseline2"
-            android:label="Views/Layouts/Baseline/2. Bottom">
+            android:label="Views/Layouts/Baseline/2. Bottom"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
