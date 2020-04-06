@@ -16,9 +16,6 @@
 
 package com.example.android.apis.view;
 
-import com.example.android.apis.R;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
@@ -28,17 +25,21 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
+
 import java.util.List;
 
 /**
- * Its layout file R.layout.layout_animation_6 uses and android:layoutAnimation attribute
- * specifying "@anim/layout_wave_scale" as the animation, which in turn use an
+ * Its layout file R.layout.layout_animation_6 uses an android:layoutAnimation attribute
+ * specifying "@anim/layout_wave_scale" as the animation, which in turn uses an
  * android:animation attribute to specify @anim/wave_scale as its animation. This
  * animation animates alpha from 0.0 to 1.0 with a duration of 100, and two fancy scaling
  * animations. The results are: 1. Fade in app icons, 2. Scale them in from .5 size, to
  * 1.5 size, 3. Scale back from 1.5 to 1.0 size.
  */
-public class LayoutAnimation6 extends Activity {
+public class LayoutAnimation6 extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.layout_animation_6.
@@ -56,7 +57,7 @@ public class LayoutAnimation6 extends Activity {
 
         loadApps();
 
-        GridView grid = (GridView) findViewById(R.id.grid);
+        GridView grid = findViewById(R.id.grid);
         grid.setAdapter(new AppsAdapter());
     }
 
