@@ -18,18 +18,19 @@ package com.example.android.apis.view;
 
 import com.example.android.apis.R;
 
-import android.app.Activity;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 /**
- * Its layout file R.layout.layout_animation_7 contains a android:layoutAnimation
+ * Its layout file R.layout.layout_animation_7 contains an android:layoutAnimation
  * attribute specifying @anim/layout_animation_table as its animation. This creates
  * an animation of the layout files TableLayout, with the layout of each TableRow
  * animated using an android:layoutAnimation so that alternating rows use
  * anim/layout_animation_row_right_slide and anim/layout_animation_row_left_slide.
  * Way too fast to see effect well even on Excite 10
  */
-public class LayoutAnimation7 extends Activity {
+public class LayoutAnimation7 extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.layout_animation_7.

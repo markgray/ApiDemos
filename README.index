@@ -2230,7 +2230,7 @@ Views
 
     Views/Layout Animation/7. Nested Animations  -- all
         .view.LayoutAnimation7
-            Its layout file R.layout.layout_animation_7 contains a android:layoutAnimation
+            Its layout file R.layout.layout_animation_7 contains an android:layoutAnimation
             attribute specifying @anim/layout_animation_table as its animation. This creates
             an animation of the layout files TableLayout, with the layout of each TableRow
             animated using an android:layoutAnimation so that alternating rows use
