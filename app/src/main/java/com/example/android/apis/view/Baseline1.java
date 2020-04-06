@@ -16,10 +16,11 @@
 
 package com.example.android.apis.view;
 
-import com.example.android.apis.R;
-
-import android.app.Activity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.android.apis.R;
 
 
 /**
@@ -27,7 +28,7 @@ import android.os.Bundle;
  * to place widgets at top of window -- the baseline of the text in the views of differently
  * sized text is used to align.
  */
-public class Baseline1 extends Activity {
+public class Baseline1 extends AppCompatActivity {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * {@code onCreate}, then we set our content view to our layout file R.layout.baseline_1.
