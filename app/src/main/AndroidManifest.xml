@@ -2527,7 +2527,8 @@
         </activity>
         <activity
             android:name=".view.LayoutAnimation5"
-            android:label="Views/Layout Animation/5. Grid Direction">
+            android:label="Views/Layout Animation/5. Grid Direction"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
