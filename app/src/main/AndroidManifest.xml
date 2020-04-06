@@ -2082,7 +2082,8 @@
         </activity>
         <activity
             android:name=".view.Baseline3"
-            android:label="Views/Layouts/Baseline/3. Center">
+            android:label="Views/Layouts/Baseline/3. Center"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
