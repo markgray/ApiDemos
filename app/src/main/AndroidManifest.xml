@@ -2041,7 +2041,8 @@
         </activity>
         <activity
             android:name=".view.GridLayout1"
-            android:label="Views/Layouts/GridLayout/1. Simple Form">
+            android:label="Views/Layouts/GridLayout/1. Simple Form"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

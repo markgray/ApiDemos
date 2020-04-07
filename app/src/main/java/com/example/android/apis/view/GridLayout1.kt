@@ -13,27 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.view
 
-package com.example.android.apis.view;
-
-import android.app.Activity;
-import android.os.Bundle;
-
-import com.example.android.apis.R;
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * Demonstrates using GridLayout to build the same "Simple Form" as in the
  * LinearLayout and RelativeLayout demos.
  */
-public class GridLayout1 extends Activity {
+class GridLayout1 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * {@code onCreate}, then we set our content view to our layout file R.layout.grid_layout_1.
+     * `onCreate`, then we set our content view to our layout file R.layout.grid_layout_1.
      *
-     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.grid_layout_1);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.grid_layout_1)
     }
 }
