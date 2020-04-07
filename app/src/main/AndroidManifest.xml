@@ -2109,7 +2109,8 @@
         </activity>
         <activity
             android:name=".view.Baseline7"
-            android:label="Views/Layouts/Baseline/6. Relative">
+            android:label="Views/Layouts/Baseline/6. Relative"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

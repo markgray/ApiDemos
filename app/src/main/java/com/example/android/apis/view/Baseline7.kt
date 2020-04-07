@@ -13,30 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.view
 
-package com.example.android.apis.view;
-
-import com.example.android.apis.R;
-
-import android.app.Activity;
-import android.os.Bundle;
-
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * Baseline alignment in RelativeLayout with various font weights. Shows alignment in a
  * RelativeLayout using android:layout_alignParentLeft="true" and
  * android:layout_alignParentRight="true" for two different TextView widgets.
  */
-public class Baseline7 extends Activity {
+class Baseline7 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * {@code onCreate}, then we set our content view to our layout file R.layout.baseline_7.
+     * `onCreate`, then we set our content view to our layout file R.layout.baseline_7.
      *
-     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.baseline_7);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.baseline_7)
     }
 }
