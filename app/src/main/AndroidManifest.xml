@@ -2100,7 +2100,8 @@
         </activity>
         <activity
             android:name=".view.Baseline6"
-            android:label="Views/Layouts/Baseline/5. Multi-line">
+            android:label="Views/Layouts/Baseline/5. Multi-line"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
