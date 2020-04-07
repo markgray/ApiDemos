@@ -2059,7 +2059,8 @@
         </activity>
         <activity
             android:name=".view.GridLayout3"
-            android:label="Views/Layouts/GridLayout/3. Form (Java)">
+            android:label="Views/Layouts/GridLayout/3. Form (Java)"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
