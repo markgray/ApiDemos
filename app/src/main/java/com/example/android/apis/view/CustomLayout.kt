@@ -59,29 +59,25 @@ class CustomLayout : ViewGroup {
     /**
      * Our constructor, simply calls our super's constructor.
      *
-     * @param context `Context` to use to access resources
+     * @param context [Context] to use to access resources
      */
     constructor(context: Context?) : super(context)
-    /**
-     * Perform inflation from XML and apply a class-specific base style from a
-     * theme attribute or style resource.
-     *
-     *  context  The Context the view is running in, through which it can
-     * access the current theme, resources, etc.
-     *  attrs    The attributes of the XML tag that is inflating the view.
-     *  defStyle An attribute in the current theme that contains a
-     * reference to a style resource that supplies default values for
-     * the view. Can be 0 to not look for defaults.
-     */
+
     /**
      * Constructor that is called when inflating from xml.
      *
-     * @param context The Context the view is running in, through which it can
-     * access the current theme, resources, etc.
-     * @param attrs   The attributes of the XML tag that is inflating the view.
+     * @param context  The Context the view is running in, through which it can access the current
+     * theme, resources, etc.
+     * @param attrs    The attributes of the XML tag that is inflating the view.
+     * @param defStyle An attribute in the current theme that contains a reference to a style
+     * resource that supplies default values for the view. Can be 0 to not look for defaults.
      */
     @JvmOverloads
-    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int = 0) : super(context, attrs, defStyle)
+    constructor(
+            context: Context?,
+            attrs: AttributeSet?,
+            defStyle: Int = 0
+    ) : super(context, attrs, defStyle)
 
     /**
      * Any layout manager that doesn't scroll will want to implement this. We return false to the
@@ -96,43 +92,37 @@ class CustomLayout : ViewGroup {
      * the children. This method is invoked by `measure(int, int)` and should be overridden
      * by subclasses to provide accurate and efficient measurement of their contents.
      *
-     *
-     * First we initialize our variable `int count` with the number of children we have. Then
-     * we initialize our fields `mLeftWidth` and `mRightWidth` to 0. Next we initialize
-     * our variables `int maxHeight`, `int maxWidth`, and `int childState` to 0.
-     *
+     * First we initialize our [Int] variable `val count` with the number of children we have. Then
+     * we initialize our fields [mLeftWidth] and [mRightWidth] to 0. Next we initialize our variables
+     * `var maxHeight`, `var maxWidth`, and `var childState` to 0.
      *
      * Now we loop over all `count` of our children using `i` as the index. We initialize
-     * our variable `View child` with the child at position `i`, and if the visibility of
-     * `child` is not GONE we ask `child` to measure itself given the `widthMeasureSpec`
-     * and `heightMeasureSpec` passed us. Next we initialize `LayoutParams lp` with the
+     * our [View] variable `val child` with the child at position `i`, and if the visibility of
+     * `child` is not GONE we ask `child` to measure itself given the [widthMeasureSpec] and
+     * [heightMeasureSpec] passed us. Next we initialize [LayoutParams] variable `val lp` with the
      * layout parameters of `child`. If the `position` field of `lp` is POSITION_LEFT
      * the child needs to go in the left gutter so we add the maximum of `maxWidth` and the
-     * measured width of `child` plus the `leftMargin` plus the `rightMargin` fields
-     * of `lp` to `mLeftWidth`. If the `position` field of `lp` is POSITION_RIGHT
-     * the child needs to go in the right gutter so we add the maximum of `maxWidth` and the
-     * measured width of `child` plus the `leftMargin` plus the `rightMargin` fields
-     * of `lp` to `mRightWidth`. Otherwise we add the maximum of `maxWidth` and the
-     * measured width of `child` plus the `leftMargin` plus the `rightMargin` fields
-     * of `lp` to `maxWidth`. We set `maxHeight` to the maximum of `maxHeight`
-     * and the sum of the measured height of `child` plus the `topMargin` plus the
-     * `bottomMargin` fields of `lp`. We set `childState` to the result of combining
-     * the previous value of `childState` with the state bits of `child` then loop around
-     * for the next of our children.
+     * measured width of `child` plus the `leftMargin` plus the `rightMargin` fields of `lp` to
+     * [mLeftWidth]. If the `position` field of `lp` is POSITION_RIGHT the child needs to go in
+     * the right gutter so we add the maximum of `maxWidth` and the measured width of `child` plus
+     * the `leftMargin` plus the `rightMargin` fields of `lp` to [mRightWidth]. Otherwise we add
+     * the maximum of `maxWidth` and the measured width of `child` plus the `leftMargin` plus the
+     * `rightMargin` fields of `lp` to `maxWidth`. We set `maxHeight` to the maximum of `maxHeight`
+     * and the sum of the measured height of `child` plus the `topMargin` plus the `bottomMargin`
+     * fields of `lp`. We set `childState` to the result of combining the previous value of
+     * `childState` with the state bits of `child` then loop around for the next of our children.
      *
+     * Having processed all of our children we add [mLeftWidth] and [mRightWidth] to `maxWidth`
+     * (total width is the maximum width of all inner children plus the width of the children in
+     * the gutters). We then make sure the `maxHeight` and `maxWidth` are bigger than our suggested
+     * minimum height and width.
      *
-     * Having processed all of our children we add `mLeftWidth` and `mRightWidth` to
-     * `maxWidth` (total width is the maximum width of all inner children plus the width of
-     * the children in the gutters). We then make sure the `maxHeight` and `maxWidth`
-     * are bigger than our suggested minimum height and width.
-     *
-     *
-     * Finally we call the method `setMeasuredDimension` to store the measured width and
-     * measured height, where the width is given by the return value of `resolveSizeAndState`
-     * with `maxWidth` as how big our view wants to be, `widthMeasureSpec` as the restraints
+     * Finally we call the method [setMeasuredDimension] to store the measured width and
+     * measured height, where the width is given by the return value of [View.resolveSizeAndState]
+     * with `maxWidth` as how big our view wants to be, [widthMeasureSpec] as the restraints
      * imposed by our parent, and `childState` as the size information bit mask for our children,
-     * and where the height is given by the return value of `resolveSizeAndState` with
-     * `maxHeight` as how big our view wants to be, `heightMeasureSpec` as the restraints
+     * and where the height is given by the return value of [View.resolveSizeAndState] with
+     * `maxHeight` as how big our view wants to be, [heightMeasureSpec] as the restraints
      * imposed by our parent, and `childState` left shifted by MEASURED_HEIGHT_STATE_SHIFT (16)
      * as the size information bit mask for our children.
      *
@@ -203,64 +193,51 @@ class CustomLayout : ViewGroup {
 
     /**
      * Called from layout when this view should assign a size and position to each of its children.
-     * First we initialize our variable `int count` with the number of children we have. We
-     * initialize `int leftPos` with the left padding of our view, and `int rightPos`
-     * with the result of subtracting our parameter `left` and our right padding from our
-     * parameter `right`. We initialize `int middleLeft` with the result of adding
-     * `leftPos` to `mLeftWidth` (the left side of the middle region between the gutters)
-     * and `int middleRight` with the result of subtracting `mRightWidth` from
-     * `rightPos` (the right side of the middle region between the gutters). We initialize
-     * `int parentTop` with our top padding, and `int parentBottom` with the result of
-     * subtracting `top` and our bottom padding from `bottom`.
-     *
+     * First we initialize our [Int] variable `val count` with the number of children we have. We
+     * initialize `var leftPos` with the left padding of our view, and `var rightPos` with the
+     * result of subtracting our parameter [left] and our right padding from our parameter [right].
+     * We initialize `val middleLeft` with the result of adding `leftPos` to [mLeftWidth] (the left
+     * side of the middle region between the gutters) and `val middleRight` with the result of
+     * subtracting [mRightWidth] from `rightPos` (the right side of the middle region between the
+     * gutters). We initialize `val parentTop` with our top padding, and `val parentBottom` with the
+     * result of subtracting [top] and our bottom padding from [bottom].
      *
      * Now we loop over all `count` of our children using `i` as the index. We initialize
-     * our variable `View child` with the child at position `i`, and if the visibility of
-     * `child` is not GONE we initialize `LayoutParams lp` with the layout parameters
-     * of `child`, initialize `width` with the measured width of `child` and
-     * `height` with its measured height.
+     * our [View] variable `val child` with the child at position `i`, and if the visibility of
+     * `child` is not GONE we initialize [LayoutParams] variable `val lp` with the layout parameters
+     * of `child`, initialize `val width` with the measured width of `child` and `val height` with
+     * its measured height.
      *
+     * We then switch on the value of the `position` field of `lp`:
      *
-     * Left gutter:
-     * If the `position` field of `lp` is POSITION_LEFT we set the `left` field
-     * of `mTmpContainerRect` to the sum of `leftPos` and the `leftMargin` field
-     * of `lp` and the `right` field of `mTmpContainerRect` to `leftPos`
-     * plus `width` plus the `rightMargin` field of `lp`. We then set `leftPos`
-     * to the `right` field of `mTmpContainerRect`.
+     *  Left gutter: If the `position` field of `lp` is POSITION_LEFT we set the `left` field of
+     *  [mTmpContainerRect] to the sum of `leftPos` and the `leftMargin` field of `lp` and the
+     *  `right` field of `mTmpContainerRect` to `leftPos` plus `width` plus the `rightMargin`
+     *  field of `lp`. We then set `leftPos` to the `right` field of [mTmpContainerRect].
      *
+     *  Right gutter: If the `position` field of `lp` is POSITION_RIGHT we set the `right` field
+     *  of [mTmpContainerRect] to `rightPos` minus the `rightMargin` field of `lp` and the `left`
+     *  field of `mTmpContainerRect` to `rightPos` minus `width` minus the `leftMargin` field of
+     *  `lp`. We then set `rightPos` to the `left` field of [mTmpContainerRect].
      *
-     * Right gutter:
-     * If the `position` field of `lp` is POSITION_RIGHT we set the `right` field
-     * of `mTmpContainerRect` to `rightPos` minus the `rightMargin` field of `lp`
-     * and the `left` field of `mTmpContainerRect` to `rightPos` minus `width`
-     * minus the `leftMargin` field of `lp`. We then set `rightPos` to the `left`
-     * field of `mTmpContainerRect`.
+     *  Middle: Otherwise the child is in the middle so we set the `left` field of [mTmpContainerRect]
+     *  to `middleLeft` plus the `leftMargin` field of `lp`, and the `right` field of
+     *  [mTmpContainerRect] to `middleRight` minus the `rightMargin` field of `lp`.
      *
+     * In all cases we set the `top` field of [mTmpContainerRect] to `parentTop` plus the `topMargin`
+     * field of `lp` and the `bottom` field of [mTmpContainerRect] to `parentBottom` minus the
+     * `bottomMargin` field of `lp`.
      *
-     * Middle:
-     * Otherwise the child is in the middle so we set the `left` field of `mTmpContainerRect`
-     * to `middleLeft` plus the `leftMargin` field of `lp`, and the `right`
-     * field of `mTmpContainerRect` to `middleRight` minus the `rightMargin` field
-     * of `lp`.
-     *
-     *
-     * In all cases we set the `top` field of `mTmpContainerRect` to `parentTop`
-     * plus the `topMargin` field of `lp` and the `bottom` field of
-     * `mTmpContainerRect` to `parentBottom` minus the `bottomMargin` field of
-     * `lp`.
-     *
-     *
-     * Having determined where we want `child` positioned we now call `Gravity.apply`
-     * which takes the `gravity` field of `lp` and applies it along with `width`
-     * and `height` of the child and uses `mTmpContainerRect` as the preliminary frame
-     * of the containing space, in which the object will be placed to create the computed frame of
-     * the object in its container `mTmpChildRect`.
-     *
+     * Having determined where we want `child` positioned we now call [Gravity.apply] which takes
+     * the `gravity` field of `lp` and applies it along with `width` and `height` of the child and
+     * uses [mTmpContainerRect] as the preliminary frame of the containing space, in which the
+     * object will be placed to create the computed frame of the object in its container
+     * [mTmpChildRect].
      *
      * Finally we instruct `child` to layout itself with its left X coordinate the `left`
-     * field of `mTmpChildRect`, its top Y coordinate the `top` field of `mTmpChildRect`,
-     * its right X coordinate the `right` field of `mTmpChildRect`, and its bottom Y
-     * coordinate the `bottom` field of `mTmpChildRect`. Then we loop around for the next
+     * field of [mTmpChildRect], its top Y coordinate the `top` field of [mTmpChildRect],
+     * its right X coordinate the `right` field of [mTmpChildRect], and its bottom Y
+     * coordinate the `bottom` field of [mTmpChildRect]. Then we loop around for the next
      * child view.
      *
      * @param changed This is a new size or position for this view if true
@@ -320,24 +297,26 @@ class CustomLayout : ViewGroup {
             }
         }
     }
+
     // ----------------------------------------------------------------------
     // The rest of the implementation is for custom per-child layout parameters.
     // If you do not need these (for example you are writing a layout manager
     // that does fixed positioning of its children), you can drop all of this.
+
     /**
      * Returns a new set of layout parameters based on the supplied attributes set. We return a new
-     * instance of our `MarginLayoutParams` descendant `LayoutParams` created using the
-     * context we are running in, and our parameter `AttributeSet attrs`.
+     * instance of our `MarginLayoutParams` descendant of [LayoutParams] created using the
+     * context we are running in, and our [AttributeSet] parameter [attrs].
      *
      * @param attrs the attributes to build the layout parameters from
-     * @return an instance of `LayoutParams` or one of its descendants
+     * @return an instance of [LayoutParams] or one of its descendants
      */
     override fun generateLayoutParams(attrs: AttributeSet): LayoutParams {
         return LayoutParams(context, attrs)
     }
 
     /**
-     * Returns a set of default layout parameters. We just return a new instance of `LayoutParams`
+     * Returns a set of default layout parameters. We just return a new instance of [LayoutParams]
      * with its width and height both set to MATCH_PARENT.
      *
      * @return a set of default layout parameters or null
@@ -348,23 +327,23 @@ class CustomLayout : ViewGroup {
 
     /**
      * Returns a safe set of layout parameters based on the supplied layout params. We just return
-     * an instance of our `CustomLayout.LayoutParams`, which in turn just calls its super's
-     * constructor with its parameter `p`.
+     * an instance of our [CustomLayout.LayoutParams], which in turn just calls its super's
+     * constructor with its parameter [p].
      *
      * @param p The layout parameters to convert into a suitable set of layout parameters
      * for this ViewGroup.
-     * @return an instance of `ViewGroup.LayoutParams` or one of its descendants
+     * @return an instance of [ViewGroup.LayoutParams] or one of its descendants
      */
     override fun generateLayoutParams(p: ViewGroup.LayoutParams): ViewGroup.LayoutParams {
         return LayoutParams(p)
     }
 
     /**
-     * Returns true if `p` is an instance of our `CustomLayout.LayoutParams`, false
-     * otherwise.
+     * Returns true if [ViewGroup.LayoutParams] is an instance of our [CustomLayout.LayoutParams],
+     * false otherwise.
      *
-     * @param p instance of `ViewGroup.LayoutParams` we are to check
-     * @return true if `p` is an instance of our `CustomLayout.LayoutParams`.
+     * @param p instance of [ViewGroup.LayoutParams] we are to check
+     * @return true if `p` is an instance of our [CustomLayout.LayoutParams].
      */
     override fun checkLayoutParams(p: ViewGroup.LayoutParams): Boolean {
         return p is LayoutParams
@@ -387,15 +366,14 @@ class CustomLayout : ViewGroup {
         /**
          * Creates a new set of layout parameters. The values are extracted from the supplied
          * attributes set and context. This constructor is called when a layout is inflated from an
-         * xml file. First we call our super's constructor, then we initialize `TypedArray a`
-         * with styled attribute information in this Context's theme for the attribute declare-styleable
-         * with resource ID R.styleable.CustomLayoutLP (which defines the attr layout_gravity and
-         * layout_position). We then initialize our field `gravity` with the value stored in
-         * `a` under the key R.styleable.CustomLayoutLP_android_layout_gravity (defaulting to
-         * the current value of `gravity` if none is given), and initialize `position`
+         * xml file. First we call our super's constructor, then we initialize `TypedArray` variable
+         * `val a` with styled attribute information in this [Context]'s theme for the attribute
+         * declare-styleable with resource ID R.styleable.CustomLayoutLP (which defines the attr
+         * layout_gravity and layout_position). We then initialize our field `gravity` with the
+         * value stored in `a` under the key R.styleable.CustomLayoutLP_android_layout_gravity
+         * (defaulting to the current value of `gravity` if none is given), and initialize `position`
          * with the value stored in `a` under the key R.styleable.CustomLayoutLP_layout_position
-         * (defaulting to the current value of `position` if none is given). Finally we recycle
-         * `a`.
+         * (defaulting to the current value of `position` if none is given). Finally we recycle `a`
          *
          * @param c     the application environment
          * @param attrs the set of attributes from which to extract the layout parameters' values
@@ -405,7 +383,8 @@ class CustomLayout : ViewGroup {
             // Pull the layout param values from the layout XML during
             // inflation.  This is not needed if you don't care about
             // changing the layout behavior in XML.
-            @SuppressLint("CustomViewStyleable") val a = c.obtainStyledAttributes(attrs, R.styleable.CustomLayoutLP)
+            @SuppressLint("CustomViewStyleable")
+            val a = c.obtainStyledAttributes(attrs, R.styleable.CustomLayoutLP)
             gravity = a.getInt(R.styleable.CustomLayoutLP_android_layout_gravity, gravity)
             position = a.getInt(R.styleable.CustomLayoutLP_layout_position, position)
             a.recycle()
@@ -421,8 +400,8 @@ class CustomLayout : ViewGroup {
         constructor(width: Int, height: Int) : super(width, height)
 
         /**
-         * Copy constructor. Clones the width and height values of the source. We just call our super's
-         * constructor.
+         * Copy constructor. Clones the width and height values of the source. We just call our
+         * super's constructor.
          *
          * @param source The layout params to copy from.
          */
