@@ -13,31 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.view
 
-package com.example.android.apis.view;
-
-import com.example.android.apis.R;
-
-import android.app.Activity;
-import android.os.Bundle;
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
- * Baseline alignment includes a {@link android.widget.LinearLayout} within another
- * {@link android.widget.LinearLayout}. Using android:baselineAlignedChildIndex
+ * Baseline alignment includes a [android.widget.LinearLayout] within another
+ * [android.widget.LinearLayout]. Using android:baselineAlignedChildIndex
  * again this time to point to a linear layout to baseline align by, which in turn
  * will point to a text view inside of it.
  */
-public class BaselineNested3 extends Activity {
+class BaselineNested3 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * {@code onCreate}, then we set our content view to our layout file R.layout.baseline_nested_3.
+     * `onCreate`, then we set our content view to our layout file R.layout.baseline_nested_3.
      *
-     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.baseline_nested_3);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.baseline_nested_3)
     }
 }
