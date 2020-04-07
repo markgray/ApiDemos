@@ -2050,7 +2050,8 @@
         </activity>
         <activity
             android:name=".view.GridLayout2"
-            android:label="Views/Layouts/GridLayout/2. Form (XML)">
+            android:label="Views/Layouts/GridLayout/2. Form (XML)"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
