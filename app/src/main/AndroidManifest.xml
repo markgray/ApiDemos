@@ -1811,7 +1811,8 @@
         </activity>
         <activity
             android:name=".view.LinearLayout6"
-            android:label="Views/Layouts/LinearLayout/06. Uniform Size">
+            android:label="Views/Layouts/LinearLayout/06. Uniform Size"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
