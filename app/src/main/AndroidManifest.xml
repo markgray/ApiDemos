@@ -1820,7 +1820,8 @@
         </activity>
         <activity
             android:name=".view.LinearLayout7"
-            android:label="Views/Layouts/LinearLayout/07. Fill Parent">
+            android:label="Views/Layouts/LinearLayout/07. Fill Parent"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
