@@ -1802,7 +1802,8 @@
         </activity>
         <activity
             android:name=".view.LinearLayout5"
-            android:label="Views/Layouts/LinearLayout/05. Simple Form">
+            android:label="Views/Layouts/LinearLayout/05. Simple Form"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
