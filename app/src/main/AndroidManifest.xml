@@ -1766,7 +1766,8 @@
         </activity>
         <activity
             android:name=".view.LinearLayout1"
-            android:label="Views/Layouts/LinearLayout/01. Vertical">
+            android:label="Views/Layouts/LinearLayout/01. Vertical"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
