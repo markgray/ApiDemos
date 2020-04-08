@@ -31,17 +31,17 @@ import com.example.android.apis.R
  */
 class LinearLayout8 : AppCompatActivity() {
     /**
-     * `LinearLayout` in our layout with ID R.id.layout
+     * [LinearLayout] in our layout with ID R.id.layout
      */
     private var mLinearLayout: LinearLayout? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.custom_view_1.
-     * Finally we initialize our field `LinearLayout mLinearLayout` by finding the view in our
+     * Finally we initialize our [LinearLayout] field [mLinearLayout] by finding the view in our
      * layout with ID R.id.layout.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,32 +52,23 @@ class LinearLayout8 : AppCompatActivity() {
     /**
      * Initialize the contents of the Activity's standard options menu. First we call through to our
      * super's implementation of `onCreateOptionsMenu`, then we add the following menu items
-     * to our parameter `Menu menu`:
+     * to our [Menu] parameter [menu]:
      *
-     *  *
-     * VERTICAL_ID (1) - "Vertical"
+     *  * VERTICAL_ID (1) - "Vertical"
      *
-     *  *
-     * HORIZONTAL_ID (2) - "Horizontal"
+     *  * HORIZONTAL_ID (2) - "Horizontal"
      *
-     *  *
-     * TOP_ID (3) - "Top"
+     *  * TOP_ID (3) - "Top"
      *
-     *  *
-     * MIDDLE_ID (4) - "Middle"
+     *  * MIDDLE_ID (4) - "Middle"
      *
-     *  *
-     * BOTTOM_ID (5) - "Bottom"
+     *  * BOTTOM_ID (5) - "Bottom"
      *
-     *  *
-     * LEFT_ID (6) - "Left"
+     *  * LEFT_ID (6) - "Left"
      *
-     *  *
-     * CENTER_ID (7) - "Center"
+     *  * CENTER_ID (7) - "Center"
      *
-     *  *
-     * RIGHT_ID (8) - "Right"
-     *
+     *  * RIGHT_ID (8) - "Right"
      *
      * We then return true to the caller so that the menu will be displayed.
      *
@@ -99,43 +90,34 @@ class LinearLayout8 : AppCompatActivity() {
 
     /**
      * This hook is called whenever an item in your options menu is selected. We switch based on the
-     * item ID of our parameter `MenuItem item`:
+     * item ID of our [MenuItem] parameter [item]:
      *
-     *  *
-     * VERTICAL_ID - we set the orientation of `mLinearLayout` to VERTICAL and return
-     * true to the caller.
+     *  * VERTICAL_ID - we set the orientation of [mLinearLayout] to VERTICAL and return
+     *  true to the caller.
      *
-     *  *
-     * HORIZONTAL_ID - we set the orientation of `mLinearLayout` to HORIZONTAL and return
-     * true to the caller.
+     *  * HORIZONTAL_ID - we set the orientation of [mLinearLayout] to HORIZONTAL and return
+     *  true to the caller.
      *
-     *  *
-     * TOP_ID - we set the vertical gravity of `mLinearLayout` to TOP and return
-     * true to the caller.
+     *  * TOP_ID - we set the vertical gravity of [mLinearLayout] to TOP and return
+     *  true to the caller.
      *
-     *  *
-     * MIDDLE_ID - we set the vertical gravity of `mLinearLayout` to CENTER_VERTICAL
-     * and return true to the caller.
+     *  * MIDDLE_ID - we set the vertical gravity of [mLinearLayout] to CENTER_VERTICAL
+     *  and return true to the caller.
      *
-     *  *
-     * BOTTOM_ID - we set the vertical gravity of `mLinearLayout` to BOTTOM and return
-     * true to the caller.
+     *  * BOTTOM_ID - we set the vertical gravity of [mLinearLayout] to BOTTOM and return
+     *  true to the caller.
      *
-     *  *
-     * LEFT_ID - we set the horizontal gravity of `mLinearLayout` to LEFT and return
-     * true to the caller.
+     *  * LEFT_ID - we set the horizontal gravity of [mLinearLayout] to LEFT and return
+     *  true to the caller.
      *
-     *  *
-     * CENTER_ID - we set the horizontal gravity of `mLinearLayout` to CENTER_HORIZONTAL
-     * and return true to the caller.
+     *  * CENTER_ID - we set the horizontal gravity of [mLinearLayout] to CENTER_HORIZONTAL
+     *  and return true to the caller.
      *
-     *  *
-     * RIGHT_ID - we set the horizontal gravity of `mLinearLayout` to RIGHT and return
-     * true to the caller.
+     *  * RIGHT_ID - we set the horizontal gravity of [mLinearLayout] to RIGHT and return
+     *  true to the caller.
      *
-     *
-     * If it is not one of our menu item IDs, we return the value returned by our super's implementation
-     * of `onOptionsItemSelected`.
+     * If it is not one of our menu item IDs, we return the value returned by our super's
+     * implementation of `onOptionsItemSelected`.
      *
      * @param item The menu item that was selected.
      * @return boolean Return false to allow normal menu processing to
