@@ -1979,7 +1979,8 @@
         </activity>
         <activity
             android:name=".view.TableLayout3"
-            android:label="Views/Layouts/TableLayout/03. Long Content">
+            android:label="Views/Layouts/TableLayout/03. Long Content"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
