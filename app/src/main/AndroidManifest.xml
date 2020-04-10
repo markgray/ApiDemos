@@ -2006,7 +2006,8 @@
         </activity>
         <activity
             android:name=".view.TableLayout6"
-            android:label="Views/Layouts/TableLayout/06. More Spanning and Stretchable">
+            android:label="Views/Layouts/TableLayout/06. More Spanning and Stretchable"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
