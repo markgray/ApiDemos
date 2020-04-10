@@ -2051,7 +2051,8 @@
         </activity>
         <activity
             android:name=".view.TableLayout11"
-            android:label="Views/Layouts/TableLayout/11. Gravity">
+            android:label="Views/Layouts/TableLayout/11. Gravity"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
