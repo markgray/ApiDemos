@@ -1970,7 +1970,8 @@
         </activity>
         <activity
             android:name=".view.TableLayout2"
-            android:label="Views/Layouts/TableLayout/02. Empty Cells">
+            android:label="Views/Layouts/TableLayout/02. Empty Cells"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
