@@ -2015,7 +2015,8 @@
         </activity>
         <activity
             android:name=".view.TableLayout7"
-            android:label="Views/Layouts/TableLayout/07. Column Collapse">
+            android:label="Views/Layouts/TableLayout/07. Column Collapse"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
