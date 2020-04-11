@@ -2236,7 +2236,8 @@
         </activity>
         <activity
             android:name=".view.List4"
-            android:label="Views/Lists/04. ListAdapter">
+            android:label="Views/Lists/04. ListAdapter"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
