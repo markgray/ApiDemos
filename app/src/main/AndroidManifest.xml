@@ -2209,7 +2209,8 @@
         </activity>
         <activity
             android:name=".view.List1"
-            android:label="Views/Lists/01. Array">
+            android:label="Views/Lists/01. Array"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
