@@ -2263,7 +2263,8 @@
         </activity>
         <activity
             android:name=".view.List7"
-            android:label="Views/Lists/07. Cursor (Phones)">
+            android:label="Views/Lists/07. Cursor (Phones)"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
