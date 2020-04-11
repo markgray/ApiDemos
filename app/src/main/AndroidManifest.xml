@@ -2245,7 +2245,8 @@
         </activity>
         <activity
             android:name=".view.List5"
-            android:label="Views/Lists/05. Separators">
+            android:label="Views/Lists/05. Separators"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
