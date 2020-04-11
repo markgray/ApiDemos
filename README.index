@@ -2506,7 +2506,7 @@ Views
 
     Views/Lists/03. Cursor (Phones)        all
         .view.List3
-            A list view example where the data comes from a cursor, and a SimpleCursorListAdapter
+            A list view example where the data comes from a cursor, and a SimpleCursorAdapter
             is used to map each item to a two-line display.
             TODO: Switch to the new CursorLoader class with LoaderManager instead
 
