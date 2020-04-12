@@ -2272,7 +2272,8 @@
         </activity>
         <activity
             android:name=".view.List8"
-            android:label="Views/Lists/08. Photos">
+            android:label="Views/Lists/08. Photos"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
