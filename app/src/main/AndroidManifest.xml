@@ -2299,7 +2299,8 @@
         </activity>
         <activity
             android:name=".view.List11"
-            android:label="Views/Lists/11. Multiple choice list">
+            android:label="Views/Lists/11. Multiple choice list"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
