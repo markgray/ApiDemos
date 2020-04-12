@@ -2308,7 +2308,8 @@
         </activity>
         <activity
             android:name=".view.List12"
-            android:label="Views/Lists/12. Transcript">
+            android:label="Views/Lists/12. Transcript"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
