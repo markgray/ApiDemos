@@ -2600,6 +2600,8 @@ Views
         .view.Cheeses
             This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection
             mode on ListView. It switches into selection mode on long press.
+            TODO: Convert all ListActivity's to androidx.fragment.app.ListFragment
+             or androidx.recyclerview.widget.RecyclerView instead. (ListActivity deprecated in R)
 
     Views/Lists/16. Border selection mode  all -- v11+ or crash
         .view.List16
