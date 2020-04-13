@@ -13,24 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.view
 
-package com.example.android.apis.view;
-
-import android.annotation.SuppressLint;
-import android.app.ListActivity;
-import android.content.Context;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.AbsListView.OnScrollListener;
-
-import com.example.android.apis.R;
-
+import android.annotation.SuppressLint
+import android.app.ListActivity
+import android.content.Context
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.AbsListView
+import android.widget.BaseAdapter
+import android.widget.TextView
+import com.example.android.apis.R
 
 /**
  * Demonstrates how a list can avoid expensive operations during scrolls or flings. In this
@@ -39,49 +34,38 @@ import com.example.android.apis.R;
  * has finished, the temporary data is replaced with the actual data.
  */
 @SuppressLint("SetTextI18n")
-public class List13 extends ListActivity implements ListView.OnScrollListener {
+class List13 : ListActivity(), AbsListView.OnScrollListener {
     /**
-     * {@code TextView} in our layout that we use to display the scrolling status in our
-     * {@code onScrollStateChanged} callback: SCROLL_STATE_IDLE "Idle",
+     * [TextView] in our layout that we use to display the scrolling status in our
+     * `onScrollStateChanged` callback: SCROLL_STATE_IDLE "Idle",
      * SCROLL_STATE_TOUCH_SCROLL "Touch scroll", or SCROLL_STATE_FLING "Fling".
      */
-    private TextView mStatus;
+    private var mStatus: TextView? = null
 
     /**
      * Flag used to indicate that scrolling is in progress, set to true or false in our
-     * {@code onScrollStateChanged} callback
+     * `onScrollStateChanged` callback
      */
-    private boolean mBusy = false;
+    private var mBusy = false
 
     /**
      * Will not bind views while the list is scrolling
      */
-    @SuppressWarnings("WeakerAccess")
-    private class SlowAdapter extends BaseAdapter {
+    private inner class SlowAdapter(context: Context) : BaseAdapter() {
         /**
-         * {@code LayoutInflater} instance we use to inflate our item views in our {@code getView} override.
+         * [LayoutInflater] instance we use to inflate our item views in our [getView] override.
          */
-        private LayoutInflater mInflater;
-
-        /**
-         * Our constructor, we just initialize our field {@code LayoutInflater mInflater} with an
-         * instance of the system level service LAYOUT_INFLATER_SERVICE.
-         *
-         * @param context {@code Context} we use to access resources.
-         */
-        public SlowAdapter(Context context) {
-            mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        }
+        private val mInflater: LayoutInflater
+                = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         /**
          * How many items are in the data set represented by this Adapter. The number of items in
-         * the list is determined by the number of cheeses in our array {@code String[] mStrings}.
+         * the list is determined by the number of cheeses in our [String] array field [mStrings].
          *
          * @return Count of items.
          */
-        @Override
-        public int getCount() {
-            return mStrings.length;
+        override fun getCount(): Int {
+            return mStrings.size
         }
 
         /**
@@ -93,9 +77,8 @@ public class List13 extends ListActivity implements ListView.OnScrollListener {
          * @param position Position of the item within the adapter's data set whose data we want.
          * @return The data at the specified position.
          */
-        @Override
-        public Object getItem(int position) {
-            return position;
+        override fun getItem(position: Int): Any {
+            return position
         }
 
         /**
@@ -105,75 +88,70 @@ public class List13 extends ListActivity implements ListView.OnScrollListener {
          * @param position The position of the item within the adapter's data set whose row id we want.
          * @return The id of the item at the specified position.
          */
-        @Override
-        public long getItemId(int position) {
-            return position;
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
         }
 
         /**
-         * Get a View that displays the data at the specified position in the data set. First we
-         * declare {@code TextView text}. If {@code convertView} is null, we use {@code mInflater}
-         * to inflate the layout file android.R.layout.simple_list_item_1, using {@code parent} to
-         * provide layout parameters in order to set {@code text}. If {@code convertView} is not
-         * null we cast it to {@code TextView} in order to set {@code text}.
-         * <p>
-         * If our flag {@code mBusy} is false we set the text of {@code text} to the string in
-         * {@code mStrings[position]}, and set its tag to null. If {@code mBusy} is true we set the
-         * text of {@code text} to the string "Loading..." and set the tag to "this".
-         * <p>
-         * Finally we return {@code text} to the caller.
+         * Get a [View] that displays the data at the specified position in the data set. First we
+         * declare [TextView] variable `val text`. If [convertView] is null, we use [mInflater]
+         * to inflate the layout file android.R.layout.simple_list_item_1, using [parent] to
+         * provide layout parameters to initialize `text`. If [convertView] is not null we cast it
+         * to [TextView] in order to set `text`.
+         *
+         * If our flag [mBusy] is false we set the text of `text` to the string at index [position]
+         * in [mStrings], and set its tag to null. If [mBusy] is true we set the text of `text` to
+         * the string "Loading..." and set the tag to "this".
+         *
+         * Finally we return `text` to the caller.
          *
          * @param position    The position of the item within the adapter's data set whose view we want.
-         * @param convertView The old view to reuse, if possible.
-         * @param parent      The parent that this view will eventually be attached to
-         * @return A View corresponding to the data at the specified position.
+         * @param convertView The old [View] to reuse, if possible.
+         * @param parent      The parent that this [View] will eventually be attached to
+         * @return A [View] corresponding to the data at the specified position.
          */
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            TextView text;
-
-            if (convertView == null) {
-                text = (TextView) mInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val text: TextView = if (convertView == null) {
+                mInflater.inflate(
+                        android.R.layout.simple_list_item_1,
+                        parent,
+                        false
+                ) as TextView
             } else {
-                text = (TextView) convertView;
+                convertView as TextView
             }
-
             if (!mBusy) {
-                text.setText(mStrings[position]);
+                text.text = mStrings[position]
                 // Null tag means the view has the correct data
-                text.setTag(null);
+                text.tag = null
             } else {
-                text.setText("Loading...");
+                text.text = "Loading..."
                 // Non-null tag means the view still needs to load it's data
-                text.setTag(this);
+                text.tag = this
             }
-
-            return text;
+            return text
         }
     }
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * {@code onCreate}, then we set our content view to our layout file R.layout.list_13. We
-     * initialize our field {@code mStatus} by finding the view with ID R.id.status and set its text
-     * to the string "Idle". We set the list adapter of our {@code ListView} to a new instance of
-     * {@code SlowAdapter}, and we set its {@code OnScrollListener} to "this".
+     * `onCreate`, then we set our content view to our layout file R.layout.list_13. We initialize
+     * our field [mStatus] by finding the view with ID R.id.status and set its text to the string
+     * "Idle". We set the list adapter of our `ListView` to a new instance of [SlowAdapter], and we
+     * set its `OnScrollListener` to "this".
      *
-     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_13);
-
-        mStatus = (TextView) findViewById(R.id.status);
-        mStatus.setText("Idle");
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.list_13)
+        mStatus = findViewById(R.id.status)
+        mStatus!!.text = "Idle"
 
         // Use an existing ListAdapter that will map an array
         // of strings to TextViews
-        setListAdapter(new SlowAdapter(this));
-
-        getListView().setOnScrollListener(this);
+        listAdapter = SlowAdapter(this)
+        listView.setOnScrollListener(this)
     }
 
     /**
@@ -184,70 +162,66 @@ public class List13 extends ListActivity implements ListView.OnScrollListener {
      * @param visibleItemCount the number of visible cells
      * @param totalItemCount   the number of items in the list adaptor
      */
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-    }
+    override fun onScroll(
+            view: AbsListView,
+            firstVisibleItem: Int,
+            visibleItemCount: Int,
+            totalItemCount: Int
+    ) {}
 
     /**
      * Callback method to be invoked while the list view or grid view is being scrolled. We switch
-     * the value of {@code scrollState}:
-     * <ul>
-     * <li>
-     * SCROLL_STATE_IDLE - we set our flag {@code mBusy} to false, initialize {@code first}
-     * to the position value of the first visible position, and {@code count} to the number
-     * of children in {@code view}. Then we loop over {@code i} from 0 to {@code count-1}
-     * setting {@code TextView t} to each child in turn, and if the tag of {@code t} is not
-     * null we set the text of {@code t} to the string {@code mStrings[first+i]}, and set
-     * its tag to null. We then set the text of {@code mStatus} to the string "Idle" and break.
-     * </li>
-     * <li>
-     * SCROLL_STATE_TOUCH_SCROLL - we set our flag {@code mBusy} to true, set the text of
-     * {@code mStatus} to the string "Touch scroll", and break
-     * </li>
-     * <li>
-     * SCROLL_STATE_FLING - we set our flag {@code mBusy} to true, set the text of
-     * {@code mStatus} to the string "Fling", and break
-     * </li>
-     * </ul>
+     * the value of [scrollState]:
+     *
+     *  * SCROLL_STATE_IDLE - we set our flag [mBusy] to false, initialize `val first`
+     *  to the position value of the first visible position, and `val count` to the number
+     *  of children in [view]. Then we loop over `i` from 0 to `count-1` setting [TextView]
+     *  `val t` to each child in turn, and if the tag of `t` is not null we set the text of
+     *  `t` to the string at index `first` plus `i` in [mStrings], and set  its tag to null.
+     *  We then set the text of [mStatus] to the string "Idle" and break.
+     *
+     *  * SCROLL_STATE_TOUCH_SCROLL - we set our flag [mBusy] to true, set the text of
+     *  [mStatus] to the string "Touch scroll", and break
+     *
+     *  * SCROLL_STATE_FLING - we set our flag [mBusy] to true, set the text of
+     *  [mStatus] to the string "Fling", and break
      *
      * @param view        The view whose scroll state is being reported
      * @param scrollState The current scroll state. One of SCROLL_STATE_TOUCH_SCROLL,
-     *                    SCROLL_STATE_IDLE, SCROLL_STATE_FLING.
+     * SCROLL_STATE_IDLE, SCROLL_STATE_FLING.
      */
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        switch (scrollState) {
-            case OnScrollListener.SCROLL_STATE_IDLE:
-                mBusy = false;
-
-                int first = view.getFirstVisiblePosition();
-                int count = view.getChildCount();
-                for (int i = 0; i < count; i++) {
-                    TextView t = (TextView) view.getChildAt(i);
-                    if (t.getTag() != null) {
-                        t.setText(mStrings[first + i]);
-                        t.setTag(null);
+    override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
+        when (scrollState) {
+            AbsListView.OnScrollListener.SCROLL_STATE_IDLE -> {
+                mBusy = false
+                val first = view.firstVisiblePosition
+                val count = view.childCount
+                var i = 0
+                while (i < count) {
+                    val t = view.getChildAt(i) as TextView
+                    if (t.tag != null) {
+                        t.text = mStrings[first + i]
+                        t.tag = null
                     }
+                    i++
                 }
-
-                mStatus.setText("Idle");
-                break;
-            case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
-                mBusy = true;
-                mStatus.setText("Touch scroll");
-                break;
-            case OnScrollListener.SCROLL_STATE_FLING:
-                mBusy = true;
-                mStatus.setText("Fling");
-                break;
+                mStatus!!.text = "Idle"
+            }
+            AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL -> {
+                mBusy = true
+                mStatus!!.text = "Touch scroll"
+            }
+            AbsListView.OnScrollListener.SCROLL_STATE_FLING -> {
+                mBusy = true
+                mStatus!!.text = "Fling"
+            }
         }
     }
 
     /**
      * Our list of cheeses that we use as our database.
      */
-    @SuppressWarnings("SpellCheckingInspection")
-    private String[] mStrings = {
+    private val mStrings = arrayOf(
             "Abbaye de Belloc", "Abbaye du Mont des Cats", "Abertam",
             "Abondance", "Ackawi", "Acorn", "Adelost", "Affidelice au Chablis",
             "Afuega'l Pitu", "Airag", "Airedale", "Aisy Cendre",
@@ -420,5 +394,5 @@ public class List13 extends ListActivity implements ListView.OnScrollListener {
             "White Stilton", "Whitestone Farmhouse", "Wigmore",
             "Woodside Cabecou", "Xanadu", "Xynotyro", "Yarg Cornish",
             "Yarra Valley Pyramid", "Yorkshire Blue", "Zamorano",
-            "Zanetti Grana Padano", "Zanetti Parmigiano Reggiano"};
+            "Zanetti Grana Padano", "Zanetti Parmigiano Reggiano")
 }
