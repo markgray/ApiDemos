@@ -13,22 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.view
 
-package com.example.android.apis.view;
-
-import com.example.android.apis.R;
-
-import android.app.Activity;
-import android.os.Bundle;
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * A gallery of the different styles of buttons.
  */
-public class PointerShapes extends Activity {
+class PointerShapes : AppCompatActivity() {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.pointer_types);
+    /**
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * then we set our content view to our layout file R.layout.pointer_types.
+     *
+     * @param savedInstanceState We do not override [onSaveInstanceState] so do not use.
+     */
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.pointer_types)
     }
 }

@@ -3097,7 +3097,8 @@
         </activity>
         <activity
             android:name=".view.PointerShapes"
-            android:label="Views/Pointer shapes">
+            android:label="Views/Pointer shapes"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

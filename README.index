@@ -2635,7 +2635,10 @@ Views
     Views/Pointer shapes v24
         .view.PointerShapes
         .view.LivePointerIconButton
-            A gallery of the different pointer icons, crashes TODO: find out why
+        .view.ResourcePointerIconButton
+        .view.StaticPointerIconButton
+        .view.SystemPointerIconButton
+            A gallery of the different pointer icons, crashes
 
   Popup Menu
     Views/Popup Menu                       all -- v11+ or crash
