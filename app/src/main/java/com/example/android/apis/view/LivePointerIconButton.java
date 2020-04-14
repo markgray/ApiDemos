@@ -16,21 +16,18 @@
 
 package com.example.android.apis.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
-import androidx.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.PointerIcon;
-import android.widget.Button;
+import androidx.annotation.RequiresApi;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
-@SuppressLint("AppCompatCustomView")
-public class LivePointerIconButton extends Button {
+public class LivePointerIconButton extends androidx.appcompat.widget.AppCompatButton {
     public LivePointerIconButton(Context context) {
         this(context, null);
     }
@@ -41,11 +38,6 @@ public class LivePointerIconButton extends Button {
 
     public LivePointerIconButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    public LivePointerIconButton(Context context, AttributeSet attrs,
-                                 int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     @Override
