@@ -2821,7 +2821,8 @@
         </activity>
         <activity
             android:name=".view.NumberPickerActivity"
-            android:label="Views/Number Picker">
+            android:label="Views/Number Picker"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
