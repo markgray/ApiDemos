@@ -2620,6 +2620,7 @@ Views
             for showing a list item with a single line of text whose background
             changes when activated. Uses getListView().setItemChecked in onCreate
             to start with first item activated.
+            TODO: Convert to androidx.fragment.app.ListFragment
 
     Views/Number Picker                   all
          .view.NumberPickerActivity
