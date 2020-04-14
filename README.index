@@ -2609,6 +2609,7 @@ Views
             This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection
             mode on ListView couple with the new simple_list_item_activated_1 which uses
             a highlighted border for selected items.
+            TODO: Convert to androidx.fragment.app.ListFragment
 
     Views/Lists/17. Activate items         all -- v11+ or crash
         .view.List17
