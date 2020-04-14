@@ -2626,6 +2626,12 @@ Views
          .view.NumberPickerActivity
              Demonstrates how to use a NumberPicker
 
+    Views/Overlay Window
+         .view.OverlayWindowActivity
+         .layout.overlay_window
+             Demonstrates the display of overlay windows, i.e. windows that are drawn on top of
+             other apps. TODO: Remove overlay in onDestroy?
+
     Views/Pointer shapes v24
         .view.PointerShapes
         .view.LivePointerIconButton

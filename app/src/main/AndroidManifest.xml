@@ -2830,7 +2830,8 @@
         </activity>
         <activity
             android:name=".view.OverlayWindowActivity"
-            android:label="Views/Overlay Window">
+            android:label="Views/Overlay Window"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
