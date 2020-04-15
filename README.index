@@ -2635,10 +2635,11 @@ Views
     Views/Pointer shapes v24
         .view.PointerShapes
         .view.LivePointerIconButton
+            Constructs a PointerIcon using kotlin code in its onResolvePointerIcon override
         .view.ResourcePointerIconButton
         .view.StaticPointerIconButton
         .view.SystemPointerIconButton
-            A gallery of the different pointer icons, crashes
+            A gallery of the different pointer icons -- Needs mouse
 
   Popup Menu
     Views/Popup Menu                       all -- v11+ or crash
