@@ -2643,6 +2643,8 @@ Views
         .view.StaticPointerIconButton
             Constructs a PointerIcon from a BitmapDrawable in its onResolvePointerIcon override
         .view.SystemPointerIconButton
+            Loads a PointerIcon from one of the system pointer icons in its onResolvePointerIcon
+             override
 
   Popup Menu
     Views/Popup Menu                       all -- v11+ or crash

@@ -16,22 +16,18 @@
 package com.example.android.apis.view
 
 import android.content.Context
-import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.PointerIcon
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
-import com.example.android.apis.R
 
 /**
- * Constructs a [PointerIcon] from a [BitmapDrawable] in its [onResolvePointerIcon] override
+ * Loads a [PointerIcon] from one of the system pointer icons in its [onResolvePointerIcon] override
  */
 @RequiresApi(api = Build.VERSION_CODES.N)
-class StaticPointerIconButton : AppCompatButton {
-    private var mCustomIcon: PointerIcon? = null
-
+class SystemPointerIconButton : AppCompatButton {
     @JvmOverloads
     constructor(
             context: Context?,
@@ -45,17 +41,29 @@ class StaticPointerIconButton : AppCompatButton {
     ) : super(context, attrs, defStyleAttr)
 
     override fun onResolvePointerIcon(event: MotionEvent, pointerIndex: Int): PointerIcon {
-        if (mCustomIcon == null) {
-            val d = context.getDrawable(R.drawable.smile)
-            val bitmapDrawable = d as BitmapDrawable?
-            val hotSpotX = d!!.intrinsicWidth / 2
-            val hotSpotY = d.intrinsicHeight / 2
-            mCustomIcon = PointerIcon.create(
-                    bitmapDrawable!!.bitmap,
-                    hotSpotX.toFloat(),
-                    hotSpotY.toFloat()
-            )
+        val minX = width / 4
+        val maxX = width - minX
+        val minY = height / 4
+        val maxY = height - minY
+        val x = event.getX(pointerIndex)
+        val y = event.getY(pointerIndex)
+        val type: Int
+        type = if (x < minX && y < minY || x > maxX && y > maxY) {
+            // Top/left or bottom/right corner.
+            PointerIcon.TYPE_TOP_LEFT_DIAGONAL_DOUBLE_ARROW
+        } else if (x < minX && y > maxY || x > maxX && y < minY) {
+            // Top/right or bottom/left corner.
+            PointerIcon.TYPE_TOP_RIGHT_DIAGONAL_DOUBLE_ARROW
+        } else if (x < minX || x > maxX) {
+            // Left or right edge.
+            PointerIcon.TYPE_HORIZONTAL_DOUBLE_ARROW
+        } else if (y < minY || y > maxY) {
+            // Top or bottom edge edge.
+            PointerIcon.TYPE_VERTICAL_DOUBLE_ARROW
+        } else {
+            // Everything else (the middle).
+            PointerIcon.TYPE_ALL_SCROLL
         }
-        return mCustomIcon!!
+        return PointerIcon.getSystemIcon(context, type)
     }
 }
