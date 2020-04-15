@@ -2637,6 +2637,8 @@ Views
         .view.LivePointerIconButton
             Constructs a PointerIcon using kotlin code in its onResolvePointerIcon override
         .view.ResourcePointerIconButton
+            Loads a PointerIcon from the "pointer-icon" resource R.drawable.custom_pointer_icon
+            in its onResolvePointerIcon override (needs mouse)
         .view.StaticPointerIconButton
         .view.SystemPointerIconButton
             A gallery of the different pointer icons -- Needs mouse
