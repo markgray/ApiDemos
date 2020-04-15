@@ -2781,7 +2781,8 @@
         </activity>
         <activity
             android:name=".view.ProgressBar1"
-            android:label="Views/Progress Bar/1. Incremental">
+            android:label="Views/Progress Bar/1. Incremental"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
