@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.view
 
-package com.example.android.apis.view;
-
-import com.example.android.apis.R;
-
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.Window;
+import android.os.Bundle
+import android.view.Window
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * Demonstrates the use of indeterminate progress bars as widgets and in the
@@ -28,26 +26,25 @@ import android.view.Window;
  * progress bars that can be used. The window title bar does not work, it has
  * been dropped as of Android 5.0 appCompat library.
  */
-public class ProgressBar2 extends Activity {
+class ProgressBar2 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * {@code onCreate}, then we request the window feature FEATURE_INDETERMINATE_PROGRESS (removed
+     * `onCreate`, then we request the window feature FEATURE_INDETERMINATE_PROGRESS (removed
      * since API 211 ), then we set our content view to our layout file R.layout.progressbar_2.
-     * Finally we call the method {@code setProgressBarVisibility} to make sure the progress bar in the
+     * Finally we call the method [setProgressBarVisibility] to make sure the progress bar in the
      * title bar is visible (No longer supported starting in API 21).
      *
-     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    @Suppress("DEPRECATION")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         // Request for the progress bar to be shown in the title
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
-        setContentView(R.layout.progressbar_2);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS)
+        setContentView(R.layout.progressbar_2)
 
         // Make sure the progress bar is visible
-        setProgressBarVisibility(true);
+        setProgressBarVisibility(true)
     }
 }
