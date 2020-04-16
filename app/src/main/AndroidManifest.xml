@@ -2799,7 +2799,8 @@
         </activity>
         <activity
             android:name=".view.ProgressBar3"
-            android:label="Views/Progress Bar/3. Dialogs">
+            android:label="Views/Progress Bar/3. Dialogs"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
