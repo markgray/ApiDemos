@@ -1867,7 +1867,8 @@
         </activity>
         <activity
             android:name=".view.RadioGroup1"
-            android:label="Views/Radio Group">
+            android:label="Views/Radio Group"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
