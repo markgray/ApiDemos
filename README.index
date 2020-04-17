@@ -2738,6 +2738,8 @@ Views
     Views/Search View/Action Bar           v11+
         .view.SearchViewActionBar
         .app.SearchQueryResults
+        .layout.searchview_actionbar
+        .menu.searchview_in_menu
             This demonstrates the usage of SearchView in an ActionBar as a menu item. It sets
             a SearchableInfo on the SearchView for suggestions and submitting queries to. In
             AndroidManifest.xml a <meta-data> element android:name="android.app.default_searchable"

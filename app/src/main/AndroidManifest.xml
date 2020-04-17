@@ -2938,7 +2938,7 @@
         <activity
             android:name=".view.SearchViewActionBar"
             android:label="Views/Search View/Action Bar"
-            android:theme="@android:style/Theme.Holo">
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

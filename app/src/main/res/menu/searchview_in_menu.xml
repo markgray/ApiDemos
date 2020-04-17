@@ -13,10 +13,11 @@
      limitations under the License.
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <item
         android:id="@+id/action_search"
-        android:actionViewClass="android.widget.SearchView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
         android:icon="@android:drawable/ic_menu_search"
         android:showAsAction="always"
         android:title="@string/action_bar_search"
