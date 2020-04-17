@@ -117,7 +117,7 @@ open class SearchViewActionBar : AppCompatActivity(), SearchView.OnQueryTextList
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private fun setupSearchView(searchItem: MenuItem) {
-        if (isAlwaysExpanded) {
+        if (isAlwaysExpanded()) {
             mSearchView!!.setIconifiedByDefault(false)
         } else {
             searchItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM
@@ -178,6 +178,7 @@ open class SearchViewActionBar : AppCompatActivity(), SearchView.OnQueryTextList
      *
      * @return true to have the search menu item always expanded, false to have iconified.
      */
-    protected open val isAlwaysExpanded: Boolean
-        get() = false
+    open fun isAlwaysExpanded(): Boolean {
+        return false
+    }
 }

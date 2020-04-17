@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.example.android.apis.view;
+package com.example.android.apis.view
 
 /**
  * This demonstrates the usage of SearchView in an ActionBar as a menu item.
@@ -22,16 +21,15 @@ package com.example.android.apis.view;
  * This Activity extends .view.SearchViewActionBar, with the only difference being it
  * Override's isAlwaysExpanded() to return true instead of false.
  */
-public class SearchViewAlwaysVisible extends SearchViewActionBar {
-
+class SearchViewAlwaysVisible : SearchViewActionBar() {
     /**
-     * Overrides {@code isAlwaysExpanded} in {@code SearchViewActionBar} to have the search view menu
+     * Overrides `isAlwaysExpanded` in `SearchViewActionBar` to have the search view menu
      * item always be expanded (by returning true instead of the false returned by the default).
      *
      * @return true to have our search view menu item always be expanded
      */
-    @Override
-    protected boolean isAlwaysExpanded() {
-        return true;
+    override fun isAlwaysExpanded(): Boolean {
+        return true
     }
+
 }
