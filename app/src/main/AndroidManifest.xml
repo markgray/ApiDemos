@@ -2187,7 +2187,8 @@
         </activity>
         <activity
             android:name=".view.ScrollBar2"
-            android:label="Views/ScrollBars/2. Fancy">
+            android:label="Views/ScrollBars/2. Fancy"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

@@ -13,33 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.view
 
-package com.example.android.apis.view;
-
-import com.example.android.apis.R;
-
-import android.app.Activity;
-import android.os.Bundle;
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * Demonstrates scrolling with a ScrollView, android:scrollbarTrackVertical
  * and android:scrollbarTrackVertical are set to colored drawables created in xml
- * using {@code <shape>} and android:scrollbarSize="12dip" makes it wider than normal.
+ * using `<shape>` and android:scrollbarSize="12dip" makes it wider than normal.
  * http://developer.android.com/guide/topics/resources/drawable-resource.html#Shape
- * The drawable/scrollbar_vertical_thumb has {@code <corners android:radius="6dp" />} which
+ * The drawable/scrollbar_vertical_thumb has `<corners android:radius="6dp" />` which
  * gives a rounded look to the top and bottom of the scrollbar.
  */
-public class ScrollBar2 extends Activity {
+class ScrollBar2 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * {@code onCreate}, then we set our content view to our layout file R.layout.scrollbar2.
+     * `onCreate`, then we set our content view to our layout file R.layout.scrollbar2.
      *
-     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.scrollbar2);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.scrollbar2)
     }
 }
