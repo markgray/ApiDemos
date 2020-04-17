@@ -2969,7 +2969,8 @@
         </activity>
         <activity
             android:name=".view.RotatingButton"
-            android:label="Views/Rotating Button">
+            android:label="Views/Rotating Button"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
