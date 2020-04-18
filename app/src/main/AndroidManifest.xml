@@ -2821,7 +2821,8 @@
         </activity>
         <activity
             android:name=".view.SeekBar1"
-            android:label="Views/Seek Bar">
+            android:label="Views/Seek Bar"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
