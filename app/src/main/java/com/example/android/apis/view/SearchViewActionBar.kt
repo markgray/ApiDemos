@@ -119,6 +119,7 @@ open class SearchViewActionBar : AppCompatActivity(), SearchView.OnQueryTextList
     private fun setupSearchView(searchItem: MenuItem) {
         if (isAlwaysExpanded()) {
             mSearchView!!.setIconifiedByDefault(false)
+            searchItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
         } else {
             searchItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM
                     or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
