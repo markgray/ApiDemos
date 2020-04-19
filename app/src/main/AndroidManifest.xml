@@ -3052,7 +3052,7 @@
             android:name=".view.ContentBrowserActivity"
             android:enabled="@bool/atLeastJellyBean"
             android:label="Views/System UI Visibility/Content Browser"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
+            android:theme="@style/Theme.AppCompat.Light"
             android:uiOptions="splitActionBarWhenNarrow">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

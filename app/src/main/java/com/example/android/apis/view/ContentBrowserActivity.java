@@ -17,10 +17,6 @@
 package com.example.android.apis.view;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -31,17 +27,24 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ScrollView;
-import android.widget.SearchView;
-import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SeekBar;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBar.Tab;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.SearchView.OnQueryTextListener;
+import androidx.appcompat.widget.ShareActionProvider;
+import androidx.core.view.MenuItemCompat;
 
 import com.example.android.apis.R;
 
@@ -55,7 +58,7 @@ import com.example.android.apis.R;
  */
 @SuppressWarnings("deprecation")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class ContentBrowserActivity extends Activity
+public class ContentBrowserActivity extends AppCompatActivity
         implements OnQueryTextListener, ActionBar.TabListener {
 
     /**
@@ -336,11 +339,11 @@ public class ContentBrowserActivity extends Activity
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 
         setContentView(R.layout.content_browser);
-        mContent = (Content) findViewById(R.id.content);
-        mContent.init((TextView) findViewById(R.id.title),
-                (SeekBar) findViewById(R.id.seekbar));
+        mContent = findViewById(R.id.content);
+        mContent.init(findViewById(R.id.title),
+                findViewById(R.id.seekbar));
 
-        ActionBar bar = getActionBar();
+        ActionBar bar = getSupportActionBar();
         //noinspection ConstantConditions
         bar.addTab(bar.newTab().setText("Tab 1").setTabListener(this));
         bar.addTab(bar.newTab().setText("Tab 2").setTabListener(this));
@@ -377,7 +380,7 @@ public class ContentBrowserActivity extends Activity
 
         // Set file with share history to the provider and set the share intent.
         MenuItem actionItem = menu.findItem(R.id.menu_item_share_action_provider_action_bar);
-        ShareActionProvider actionProvider = (ShareActionProvider) actionItem.getActionProvider();
+        ShareActionProvider actionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(actionItem);
         actionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
         // Note that you can set/change the intent any time,
         // say when the user has selected an image.
@@ -452,13 +455,13 @@ public class ContentBrowserActivity extends Activity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.show_tabs:
-                //noinspection ConstantConditions,deprecation
-                getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+                // noinspection ConstantConditions
+                getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
                 item.setChecked(true);
                 return true;
             case R.id.hide_tabs:
-                //noinspection ConstantConditions,deprecation
-                getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                // noinspection ConstantConditions
+                getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 item.setChecked(true);
                 return true;
             case R.id.stable_layout:
@@ -511,7 +514,7 @@ public class ContentBrowserActivity extends Activity
      *            being added to the back stack.
      */
     @Override
-    public void onTabSelected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
+    public void onTabSelected(Tab tab, FragmentTransaction ft) {
     }
 
     /**
@@ -524,7 +527,7 @@ public class ContentBrowserActivity extends Activity
      *            support being added to the back stack.
      */
     @Override
-    public void onTabUnselected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
+    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
     }
 
     /**
@@ -536,6 +539,6 @@ public class ContentBrowserActivity extends Activity
      *            being added to the back stack.
      */
     @Override
-    public void onTabReselected(@SuppressWarnings("deprecation") Tab tab, FragmentTransaction ft) {
+    public void onTabReselected(Tab tab, FragmentTransaction ft) {
     }
 }
