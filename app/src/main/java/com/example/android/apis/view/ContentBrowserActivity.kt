@@ -329,7 +329,7 @@ class ContentBrowserActivity : AppCompatActivity(),
      * in [menu] and fetching the currently set action view for this menu item. We then set the
      * `OnQueryTextListener` of `searchView` to "this". We initialize our [MenuItem] variable
      * `val actionItem` by finding the menu item in [menu] with the id
-     * R.id.menu_item_share_action_provider_action_bar, and use it to initialize our variable
+     * R.id.menu_item_share_action_provider_action_bar, and use it to initialize our
      * [ShareActionProvider] variable `val actionProvider` by fetching its action provider. We set
      * the file name of the file for persisting the share history of `actionProvider` to the string
      * DEFAULT_SHARE_HISTORY_FILE_NAME ("share_history.xml"). We initialize our [Intent] variable
