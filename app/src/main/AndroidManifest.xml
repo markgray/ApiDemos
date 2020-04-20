@@ -3063,7 +3063,7 @@
             android:name=".view.ContentBrowserNavActivity"
             android:enabled="@bool/atLeastKitKat"
             android:label="Views/System UI Visibility/Content Browser Nav Bar"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
+            android:theme="@style/Theme.AppCompat.Light"
             android:uiOptions="splitActionBarWhenNarrow">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
