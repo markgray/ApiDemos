@@ -3096,7 +3096,7 @@
             android:name=".view.GameActivity"
             android:enabled="@bool/atLeastKitKat"
             android:label="Views/System UI Visibility/Game"
-            android:theme="@android:style/Theme.Holo.NoActionBar">
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
