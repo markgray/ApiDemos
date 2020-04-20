@@ -52,29 +52,35 @@ import com.example.android.apis.R
  */
 @Suppress("DEPRECATION", "MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListener, ActionBar.TabListener {
+class ContentBrowserActivity : AppCompatActivity(),
+        SearchView.OnQueryTextListener,
+        ActionBar.TabListener
+{
     /**
      * Implementation of a view for displaying immersive content, using system UI
      * flags to transition in and out of modes where the user is focused on that
      * content.
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    class Content(context: Context, attrs: AttributeSet?) : ScrollView(context, attrs), OnSystemUiVisibilityChangeListener, View.OnClickListener {
+    class Content(context: Context, attrs: AttributeSet?) : ScrollView(context, attrs),
+            OnSystemUiVisibilityChangeListener,
+            View.OnClickListener
+    {
         /**
-         * `TextView` we use to display our "content" in (the string with the resource id
+         * [TextView] we use to display our "content" in (the string with the resource id
          * R.string.alert_dialog_two_buttons2ultra_msg)
          */
         var mText: TextView = TextView(context)
 
         /**
-         * `TextView` that our containing activity uses to display a title, it is toggled between
+         * [TextView] that our containing activity uses to display a title, it is toggled between
          * VISIBLE and INVISIBLE to increase usable window space.
          */
         var mTitleView: TextView? = null
 
         /**
-         * `SeekBar` that our containing activity uses to display and control the position of
-         * our `ScrollView`, it is toggled between VISIBLE and INVISIBLE to increase usable
+         * [SeekBar] that our containing activity uses to display and control the position of
+         * our [ScrollView], it is toggled between VISIBLE and INVISIBLE to increase usable
          * window space.
          */
         var mSeekView: SeekBar? = null
@@ -86,16 +92,14 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
         var mNavVisible = false
 
         /**
-         * These are the visibility flags to be given to `setSystemUiVisibility(int)`, they are
-         * modified by user choice in the menu. It starts out:
-         *
+         * These are the visibility flags to be given to [setSystemUiVisibility], they are modified
+         * by user choice in the menu. It starts out:
          *
          * SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN:
          * View would like its window to be laid out as if it has requested SYSTEM_UI_FLAG_FULLSCREEN,
          * even if it currently hasn't. This allows it to avoid artifacts when switching in and out of
          * that mode, at the expense that some of its user interface may be covered by screen decorations
          * when they are shown.
-         *
          *
          * SYSTEM_UI_FLAG_LAYOUT_STABLE:
          * When using other layout flags, we would like a stable view of the content insets given to
@@ -106,24 +110,21 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
          * UI modes you can switch to. That is, if you specify SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN then
          * you will get a stable layout for changes of the SYSTEM_UI_FLAG_FULLSCREEN mode
          */
-        var mBaseSystemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        var mBaseSystemUiVisibility =
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 
         /**
-         * Current global UI visibility flags received by our `onSystemUiVisibilityChange`
-         * callback.
+         * Current global UI visibility flags received by our [onSystemUiVisibilityChange] callback.
          */
         var mLastSystemUiVis = 0
 
         /**
-         * `Runnable` that makes the navigation invisible after a delay of 2000ms. Used by our
-         * `onWindowVisibilityChanged` callback in order to show our navigation elements briefly
-         * before hiding them.
-         */
-        /**
-         * Calls our method `setNavVisibility(false)` to make the navigation views
-         * invisible, this includes `TextView mTitleView`, and `SeekBar mSeekView`
-         * as well as calling `setSystemUiVisibility` to set the system UI visibility to
-         * the appropriate state.
+         * [Runnable] that makes the navigation invisible after a delay of 2000ms. Used by our
+         * [onWindowVisibilityChanged] callback in order to show our navigation elements briefly
+         * before hiding them. Calls our method [setNavVisibility] with the argument `false` to
+         * make the navigation views invisible, this includes [TextView] field [mTitleView], and
+         * [SeekBar] field [mSeekView] as well as calling [setSystemUiVisibility] to set the system
+         * UI visibility to the appropriate state.
          */
         var mNavHider: Runnable = Runnable {
             setNavVisibility(false)
@@ -131,13 +132,13 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
 
         /**
          * Called by the containing activity to supply the surrounding state of the content browser
-         * that it will interact with. We save our parameter `TextView title` in our field
-         * `TextView mTitleView`, and `SeekBar seek` in `SeekBar mSeekView` then
-         * call our method `setNavVisibility(true)` to make our navigation UI appropriately
-         * visible.
+         * that it will interact with. We save our [TextView] parameter [title] in our [TextView]
+         * field [mTitleView], and [SeekBar] parameter [seek] in [SeekBar] field [mSeekView] then
+         * call our method [setNavVisibility] with the argument `true` to make our navigation UI
+         * appropriately visible.
          *
-         * @param title `TextView` to use for our title in `TextView mTitleView`.
-         * @param seek  `SeekBar` to use for our seekbar in `SeekBar mSeekView`.
+         * @param title [TextView] to use for our title in `TextView mTitleView`.
+         * @param seek  [SeekBar] to use for our seekbar in `SeekBar mSeekView`.
          */
         fun init(title: TextView?, seek: SeekBar?) {
             // This called by the containing activity to supply the surrounding
@@ -148,16 +149,16 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
         }
 
         /**
-         * Called when the status bar changes visibility because of a call to `setSystemUiVisibility(int)`.
-         * We initialize our variable `int diff` by xor'ing `mLastSystemUiVis` (the previous
-         * visibility mask) with our parameter `int visibility` (the new visibility mask) isolating
-         * the bits that have changed state. We then set `mLastSystemUiVis` to `visibility`.
-         * If the bit that changed was SYSTEM_UI_FLAG_LOW_PROFILE, and the new value in `visibility`
-         * is 0 (we have left low profile mode), we call our method `setNavVisibility(true)` to
-         * make our navigation UI visible.
+         * Called when the status bar changes visibility because of a call to [setSystemUiVisibility].
+         * We initialize our [Int] variable `val diff` by xor'ing [mLastSystemUiVis] (the previous
+         * visibility mask) with our [Int] parameter [visibility] (the new visibility mask) isolating
+         * the bits that have changed state. We then set [mLastSystemUiVis] to [visibility]. If the
+         * bit that changed was SYSTEM_UI_FLAG_LOW_PROFILE, and the new value in [visibility] is 0
+         * (we have left low profile mode), we call our method [setNavVisibility] with the argument
+         * true to make our navigation UI visible.
          *
-         * @param visibility Bitwise-or of flags SYSTEM_UI_FLAG_LOW_PROFILE, SYSTEM_UI_FLAG_HIDE_NAVIGATION
-         * SYSTEM_UI_FLAG_FULLSCREEN.
+         * @param visibility Bitwise-or of flags SYSTEM_UI_FLAG_LOW_PROFILE,
+         * SYSTEM_UI_FLAG_HIDE_NAVIGATION, and SYSTEM_UI_FLAG_FULLSCREEN.
          */
         override fun onSystemUiVisibilityChange(visibility: Int) {
             // Detect when we go out of low-profile mode, to also go out
@@ -174,9 +175,10 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
         /**
          * Called when the containing window has changed its visibility (between GONE, INVISIBLE,
          * and VISIBLE). First we call our super's implementation of `onWindowVisibilityChanged`,
-         * then we call our method `setNavVisibility(true)` to make our navigation UI visible.
-         * Finally we get a handler associated with the thread running our view and schedule the
-         * `Runnable mNavHider` to run in 2000ms to make the navigation UI invisible.
+         * then we call our method [setNavVisibility] with true as the argument to make our
+         * navigation UI visible. Finally we get a handler associated with the thread running our
+         * view and schedule the [Runnable] field [mNavHider] to run in 2000ms to make the
+         * navigation UI invisible.
          *
          * @param visibility The new visibility of the window.
          */
@@ -191,8 +193,8 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
 
         /**
          * This is called in response to an internal scroll in this view. We first call through to
-         * our super's implementation of `onScrollChanged`, then we call our method
-         * `setNavVisibility(false)` to hide the navigation elements.
+         * our super's implementation of `onScrollChanged`, then we call our method [setNavVisibility]
+         * with false as the argument to hide the navigation elements.
          *
          * @param l    Current horizontal scroll origin.
          * @param t    Current vertical scroll origin.
@@ -209,9 +211,9 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
         /**
          * Called when our view has been clicked. When the user clicks, we toggle the visibility of
          * the navigation elements. We fetch the current system visibility flags to initialize our
-         * variable `int curVis`. Then we call our method `setNavVisibility` with false
-         * if the SYSTEM_UI_FLAG_LOW_PROFILE bit in `curVis` is not set and true if it is
-         * set (thereby toggling the visibility of the navigation elements).
+         * [Int] variable `val curVis`. Then we call our method [setNavVisibility] with false if the
+         * SYSTEM_UI_FLAG_LOW_PROFILE bit in `curVis` is not set and true if it is set (thereby
+         * toggling the visibility of the navigation elements).
          *
          * @param v The view that was clicked.
          */
@@ -222,8 +224,8 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
         }
 
         /**
-         * Convenience setter method for our field `mBaseSystemUiVisibility`, we just set
-         * `mBaseSystemUiVisibility` to our parameter `int visibility`.
+         * Convenience setter method for our field [mBaseSystemUiVisibility], we just set
+         * [mBaseSystemUiVisibility] to our [Int] parameter [visibility].
          *
          * @param visibility new value for `mBaseSystemUiVisibility`
          */
@@ -232,18 +234,18 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
         }
 
         /**
-         * Set our navigation elements visible if our parameter `visible` is true, or invisible
-         * if it is false. First we initialize our variable `int newVis` to our field
-         * `mBaseSystemUiVisibility`. If our parameter `visible` is false we set the flags
+         * Set our navigation elements visible if our parameter [visible] is true, or invisible
+         * if it is false. First we initialize our variable `var newVis` to our field
+         * [mBaseSystemUiVisibility]. If our parameter [visible] is false we set the flags
          * SYSTEM_UI_FLAG_LOW_PROFILE and SYSTEM_UI_FLAG_FULLSCREEN in `newVis`. We initialize
-         * `boolean changed` to true if `newVis` is the same as the last system UI that
-         * was requested using `setSystemUiVisibility(int)` (is this logic inverted?). If
-         * `changed` or `visible` is true, we initialize `Handler h` with a handler
+         * [Boolean] variable `val changed` to true if `newVis` is the same as the last system
+         * UI that was requested using [setSystemUiVisibility] (is this logic inverted?). If
+         * `changed` or `visible` is true, we initialize `Handler` variable `val h` with a handler
          * associated with the thread running our View, and if the result is not null we remove any
-         * scheduled `Runnable mNavHider` from the queue. We then call `setSystemUiVisibility`
-         * to set the system UI visibility to `newVis`, and if `visible` is true we set
-         * the visibility of both `TextView mTitleView` and `SeekBar mSeekView` to VISIBLE,
-         * or to INVISIBLE if `visible` is false.
+         * scheduled [Runnable] field [mNavHider] from the queue. We then call [setSystemUiVisibility]
+         * to set the system UI visibility to `newVis`, and if `visible` is true we set the visibility
+         * of both [TextView] field [mTitleView] and [SeekBar] field [mSeekView] to VISIBLE, or to
+         * INVISIBLE if `visible` is false.
          *
          * @param visible true makes our navigation elements visible, false makes them invisible.
          */
@@ -268,18 +270,13 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
         }
 
         /**
-         * Our constructor which is called when we are inflated from an xml layout file. First we
-         * call our super's constructor. We initialize our field `TextView mText` with a new
-         * instance, set its text size to 16dp, set its text to the string with resource id
-         * R.string.alert_dialog_two_buttons2ultra_msg (a very long bit of nonsense text), disable
-         * its clickable state, set its `OnClickListener` to "this", make its text selectable
-         * by the user, then add it our view using `LayoutParams` which specify a width of
-         * MATCH_PARENT and a height of WRAP_CONTENT. Finally we register "this" as an
-         * `OnSystemUiVisibilityChangeListener`.
-         *
-         * Parameter: context The Context the view is running in, through which it can
-         * access the current theme, resources, etc.
-         * Parameter: attrs   The attributes of the XML tag that is inflating the view.
+         * The init block of our constructor that is called when we are inflated from an xml layout
+         * file. We initialize our `TextView` field `mText` with a new instance, set its text size
+         * to 16dp, set its text to the string with resource id R.string.alert_dialog_two_buttons2ultra_msg
+         * (a very long bit of nonsense text), disable its clickable state, set its `OnClickListener`
+         * to "this", make its text selectable by the user, then add it our view using `LayoutParams`
+         * which specify a width of MATCH_PARENT and a height of WRAP_CONTENT. Finally we register
+         * "this" as an `OnSystemUiVisibilityChangeListener`.
          */
         init {
             mText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16f)
@@ -294,7 +291,7 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
     }
 
     /**
-     * `Content` instance we use.
+     * [Content] instance we use.
      */
     var mContent: Content? = null
 
@@ -302,12 +299,12 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we request the window feature FEATURE_ACTION_BAR_OVERLAY (requests an
      * Action Bar that overlays window content), then we set our content view to our layout file
-     * R.layout.content_browser. We initialize our field `Content mContent` by finding the
-     * view with id R.id.content, and call its `init` method passing it the view with the id
-     * R.id.title for its title `TextView` and the view with the id R.id.seekbar for its
-     * `SeekBar`. We initialize our variable `ActionBar bar` by retrieving a reference
-     * to our activity's ActionBar, then create and add three tabs to it whose text we set to "Tab 1",
-     * "Tab 2", and "Tab 3" and whose `TabListener` we set to "this".
+     * R.layout.content_browser. We initialize our [Content] field [mContent] by finding the view
+     * with id R.id.content, and call its `init` method passing it the view with the id R.id.title
+     * for its title [TextView] and the view with the id R.id.seekbar for its [SeekBar]. We initialize
+     * our [ActionBar] variable `val bar` by retrieving a reference to our activity's support
+     * ActionBar, then create and add three tabs to it whose text we set to "Tab 1", "Tab 2", and
+     * "Tab 3" and whose `TabListener` we set to "this".
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
@@ -325,23 +322,21 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
     }
 
     /**
-     * Initialize the contents of the Activity's standard options menu. We initialize our variable
-     * `MenuInflater inflater` with a `MenuInflater` for this context, then use it to
-     * inflate the menu layout file R.menu.content_actions into our parameter `Menu menu`. We
-     * initialize our variable `SearchView searchView` by finding the menu item with the id
-     * R.id.action_search in `menu` and fetching the currently set action view for this menu
-     * item. We then set the `OnQueryTextListener` of `searchView` to "this". We initialize
-     * our variable `MenuItem actionItem` by finding the menu item in `menu` with the id
+     * Initialize the contents of the Activity's standard options menu. We initialize our `MenuInflater`
+     * variable `val inflater` with a `MenuInflater` for this context, then use it to inflate the menu
+     * layout file R.menu.content_actions into our [Menu] parameter [menu]. We initialize our
+     * [SearchView] variable `val searchView` by finding the menu item with the id R.id.action_search
+     * in [menu] and fetching the currently set action view for this menu item. We then set the
+     * `OnQueryTextListener` of `searchView` to "this". We initialize our [MenuItem] variable
+     * `val actionItem` by finding the menu item in [menu] with the id
      * R.id.menu_item_share_action_provider_action_bar, and use it to initialize our variable
-     * `ShareActionProvider actionProvider` by fetching its action provider. We set the file
-     * name of the file for persisting the share history of `actionProvider` to the string
-     * DEFAULT_SHARE_HISTORY_FILE_NAME ("share_history.xml"). We create `Intent shareIntent`
-     * with the action ACTION_SEND, and set its type to "image/&#42;". We create `Uri uri` to
-     * reference the file "shared.png", and add it as an extra to `shareIntent` with the key
-     * EXTRA_STREAM. We then set the share intent of `actionProvider` to `shareIntent`
-     * and return true to the caller.
+     * [ShareActionProvider] variable `val actionProvider` by fetching its action provider. We set
+     * the file name of the file for persisting the share history of `actionProvider` to the string
+     * DEFAULT_SHARE_HISTORY_FILE_NAME ("share_history.xml"). We initialize our [Intent] variable
+     * `val shareIntent` to the [Intent] returned by our [createShareIntent] method, and then set
+     * the share intent of `actionProvider` to  `shareIntent` and return true to the caller.
      *
-     * @param menu The options menu in which you place your items.
+     * @param menu The options [Menu] in which you place your items.
      * @return You must return true for the menu to be displayed.
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -379,7 +374,7 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
      * the clip data is "image", and whose [Uri] is our `uri`. Finally we return `shareIntent` to
      * the caller.
      *
-     * @return The sharing intent.
+     * @return The sharing [Intent].
      */
     private fun createShareIntent(): Intent {
         val shareIntent = Intent(Intent.ACTION_SEND)
@@ -409,9 +404,8 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
     }
 
     /**
-     * Called after `onRestoreInstanceState`, `onRestart`, or `onPause`, for our
-     * activity to start interacting with the user. We just call our super's implementation of
-     * `onResume`.
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for ou activity to start
+     * interacting with the user. We just call our super's implementation of `onResume`.
      */
     @Suppress("RedundantOverride")
     override fun onResume() {
@@ -422,34 +416,30 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
      * This method is used for the android:onClick method by two of the menu items in the menu. We
      * do nothing.
      *
-     * @param item `MenuItem` that has been selected.
+     * @param item [MenuItem] that has been selected.
      */
     @Suppress("UNUSED_PARAMETER")
     fun onSort(item: MenuItem?) {}
 
     /**
      * This hook is called whenever an item in your options menu is selected. We switch on the item
-     * id of our parameter `MenuItem item`:
+     * id of our [MenuItem] parameter [item]:
      *
-     *  *
-     * R.id.show_tabs - we fetch a reference to our action bar and call its `setNavigationMode`
-     * method with the argument NAVIGATION_MODE_TABS to have it display tabs. We then call the
-     * `setChecked` method of `item` to make sure the `CheckBox` is checked and
-     * return true to the caller to signal that we have consumed the event.
+     *  * R.id.show_tabs - we fetch a reference to our action bar and call its `setNavigationMode`
+     *  method with the argument NAVIGATION_MODE_TABS to have it display tabs. We then call the
+     *  `setChecked` method of [item] to make sure the `CheckBox` is checked and return true to the
+     *  caller to signal that we have consumed the event.
      *
-     *  *
-     * R.id.hide_tabs - we fetch a reference to our action bar and call its `setNavigationMode`
-     * method with the argument NAVIGATION_MODE_STANDARD to have it hide the tabs. We then call the
-     * `setChecked` method of `item` to make sure the `CheckBox` is checked and
-     * return true to the caller to signal that we have consumed the event.
+     *  * R.id.hide_tabs - we fetch a reference to our action bar and call its `setNavigationMode`
+     *  method with the argument NAVIGATION_MODE_STANDARD to have it hide the tabs. We then call the
+     *  `setChecked` method of [item] to make sure the `CheckBox` is checked and  return true to the
+     *  caller to signal that we have consumed the event.
      *
-     *  *
-     * R.id.stable_layout - we toggle the checked state of `item`, then we call the
-     * `setBaseSystemUiVisibility` of our field `Content mContent` with the bitmask
-     * formed by or'ing SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN with SYSTEM_UI_FLAG_LAYOUT_STABLE if
-     * the `item` is now checked, or the bit flag SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN if it
-     * is not. Then we return true to the caller to signal that we have consumed the event.
-     *
+     *  * R.id.stable_layout - we toggle the checked state of [item], then we call the
+     *  `setBaseSystemUiVisibility` of our [Content] field [mContent] with the bitmask
+     *  formed by or'ing SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN with SYSTEM_UI_FLAG_LAYOUT_STABLE if
+     *  the [item] is now checked, or the bit flag SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN if it
+     *  is not. Then we return true to the caller to signal that we have consumed the event.
      *
      * If the item selected is not one of the three above, we return false to the caller to allow
      * normal menu processing to proceed.
@@ -487,7 +477,7 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
      * consumed the event.
      *
      * @param newText the new content of the query text field.
-     * @return false if the SearchView should perform the default action of showing any
+     * @return false if the [SearchView] should perform the default action of showing any
      * suggestions if available, true if the action was handled by the listener.
      */
     override fun onQueryTextChange(newText: String): Boolean {
@@ -496,7 +486,7 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
 
     /**
      * Called when the user submits the query. We construct and show a toast displaying the string
-     * formed by concatenating the string "Searching for: " with our parameter `String query`
+     * formed by concatenating the string "Searching for: " with our [String] parameter [query]
      * followed by the string "...", then we return true to the caller to signal that we have handled
      * the query.
      *
@@ -513,9 +503,9 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
      * Called when a tab enters the selected state. We ignore.
      *
      * @param tab The tab that was selected
-     * @param ft  A `FragmentTransaction` for queuing fragment operations to execute
+     * @param ft  A [FragmentTransaction] for queuing fragment operations to execute
      * during a tab switch. The previous tab's un-select and this tab's select will be
-     * executed in a single transaction. This FragmentTransaction does not support
+     * executed in a single transaction. This [FragmentTransaction] does not support
      * being added to the back stack.
      */
     override fun onTabSelected(tab: ActionBar.Tab, ft: FragmentTransaction) {}
@@ -524,9 +514,9 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
      * Called when a tab exits the selected state. We ignore.
      *
      * @param tab The tab that was unselected
-     * @param ft  A `FragmentTransaction` for queuing fragment operations to execute
+     * @param ft  A [FragmentTransaction] for queuing fragment operations to execute
      * during a tab switch. This tab's un-select and the newly selected tab's select
-     * will be executed in a single transaction. This FragmentTransaction does not
+     * will be executed in a single transaction. This [FragmentTransaction] does not
      * support being added to the back stack.
      */
     override fun onTabUnselected(tab: ActionBar.Tab, ft: FragmentTransaction) {}
@@ -536,7 +526,7 @@ class ContentBrowserActivity : AppCompatActivity(), SearchView.OnQueryTextListen
      *
      * @param tab The tab that was reselected.
      * @param ft  A [FragmentTransaction] for queuing fragment operations to execute
-     * once this method returns. This FragmentTransaction does not support
+     * once this method returns. This [FragmentTransaction] does not support
      * being added to the back stack.
      */
     override fun onTabReselected(tab: ActionBar.Tab, ft: FragmentTransaction) {}
