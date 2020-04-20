@@ -33,39 +33,39 @@ import com.example.android.apis.graphics.TouchPaint.PaintView
  * implement an immersive game.
  */
 @Suppress("MemberVisibilityCanBePrivate", "RedundantOverride")
-class GameActivity
-/**
- * Our constructor.
- */
-    : AppCompatActivity() {
+class GameActivity : AppCompatActivity() {
     /**
      * Implementation of a view for the game, filling the entire screen.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    class Content(context: Context?, attrs: AttributeSet?) : PaintView(context, attrs), OnSystemUiVisibilityChangeListener, View.OnClickListener {
+    class Content(context: Context?, attrs: AttributeSet?) :
+            PaintView(context, attrs),
+            OnSystemUiVisibilityChangeListener,
+            View.OnClickListener
+    {
         /**
-         * Set by our containing Activity to "this" by calling our `init` method, but never
+         * Set by our containing Activity to "this" by calling our [init] method, but never
          * used.
          */
         var mActivity: Activity? = null
 
         /**
-         * Set by our containing Activity to the `Button` in its layout with resource id
-         * R.id.play by calling our `init` method, we set its `OnClickListener` to this
+         * Set by our containing Activity to the [Button] in its layout with resource id
+         * R.id.play by calling our [init] method, we set its `OnClickListener` to this
          * and toggle our paused state when the user clicks on it.
          */
         var mPlayButton: Button? = null
 
         /**
          * Flag indicating whether we are paused of not. When true the navigation UI elements are
-         * displayed and the text of `Button mPlayButton` is set to "Play". When false the
-         * navigation UI elements are invisible and the text of `Button mPlayButton` is set to
-         * "Pause".
+         * displayed and the text of [Button] field [mPlayButton] is set to "Play". When false the
+         * navigation UI elements are invisible and the text of [Button] field [mPlayButton] is set
+         * to "Pause".
          */
         var mPaused = false
 
         /**
-         * The last system UI visibility mask passed to our `onSystemUiVisibilityChange` callback.
+         * The last system UI visibility mask passed to our [onSystemUiVisibilityChange] callback.
          */
         var mLastSystemUiVis = 0
 
@@ -75,12 +75,12 @@ class GameActivity
         var mUpdateSystemUi = false
 
         /**
-         * `Runnable` which is used to fade the current finger painting.
+         * [Runnable] which is used to fade the current finger painting.
          */
         var mFader: Runnable = object : Runnable {
             /**
-             * First we call our method `fade` to fade the current finger painting a bit, then
-             * if our `mUpdateSystemUi` flag is true we call our `updateNavVisibility` to
+             * First we call our method [fade] to fade the current finger painting a bit, then
+             * if our [mUpdateSystemUi] flag is true we call our [updateNavVisibility] method to
              * make the system UI invisible if we are running. Then if we are not paused we reschedule
              * ourselves to run again in 33ms.
              */
@@ -97,14 +97,13 @@ class GameActivity
 
         /**
          * This is called by the containing activity to supply the surrounding state of the game
-         * that it will interact with. We save our parameter `Activity activity` in our field
-         * `Activity mActivity`, and our parameter `Button playButton` in our field
-         * `Button mPlayButton`, set the `OnClickListener` of `mPlayButton` to
-         * "this" and call our method `setGamePaused(true)` to place our game in the "paused"
-         * mode.
+         * that it will interact with. We save our [Activity] parameter [activity] in our field
+         * [mActivity], and our [Button] parameter [playButton] in our field [mPlayButton], set
+         * the `OnClickListener` of [mPlayButton] to "this" and call our method [setGamePaused] with
+         * true as the argument to place our game in the "paused" mode.
          *
-         * @param activity   `Activity` of the containing class
-         * @param playButton `Button` which toggles visibility modes
+         * @param activity   [Activity] of the containing class
+         * @param playButton [Button] which toggles visibility modes
          */
         fun init(activity: Activity?, playButton: Button?) {
             // This called by the containing activity to supply the surrounding
@@ -116,13 +115,13 @@ class GameActivity
         }
 
         /**
-         * Called when the status bar changes visibility. We initialize our variable `int diff`
-         * by xor'ing `mLastSystemUiVis` (the previous visibility mask) with our parameter
-         * `int visibility` (the new visibility mask) isolating the bits that have changed state.
-         * We then set `mLastSystemUiVis` to `visibility`. If our field `mPaused` is
-         * false (we are "running") and the bit that changed was SYSTEM_UI_FLAG_HIDE_NAVIGATION, and the
-         * new value in `visibility` is 0 (system UI navigation has become visible), we set our field
-         * `mUpdateSystemUi` to true so that we will update our system UI state during the next
+         * Called when the status bar changes visibility. We initialize our [Int] variable `val diff`
+         * by xor'ing [mLastSystemUiVis] (the previous visibility mask) with our parameter [visibility]
+         * (the new visibility mask) isolating the bits that have changed state. We then set
+         * [mLastSystemUiVis] to [visibility]. If our field [mPaused] is false (we are "running")
+         * and the bit that changed was SYSTEM_UI_FLAG_HIDE_NAVIGATION, and the new value in
+         * [visibility] is 0 (system UI navigation has become visible), we set our field
+         * [mUpdateSystemUi] to true so that we will update our system UI state during the next
          * game loop.
          *
          * @param visibility Bitwise-or of flags SYSTEM_UI_FLAG_LOW_PROFILE, SYSTEM_UI_FLAG_HIDE_NAVIGATION,
@@ -146,7 +145,7 @@ class GameActivity
         /**
          * Called when the containing window has changed its visibility (between GONE, INVISIBLE,
          * and VISIBLE). First we call our super's implementation of `onWindowVisibilityChanged`,
-         * then we call our method `setGamePaused(true)` to pause our game.
+         * then we call our method [setGamePaused] with true as the argument to pause our game.
          *
          * @param visibility The new visibility of the window.
          */
@@ -159,7 +158,7 @@ class GameActivity
 
         /**
          * Called when the window containing this view gains or loses focus. First we call our super's
-         * implementation of `onWindowFocusChanged`, then we check if our parameter `hasWindowFocus`
+         * implementation of `onWindowFocusChanged`, then we check if our parameter [hasWindowFocus]
          * is false (our window has lost focus) and if so we "could" pause the game if we wanted to.
          *
          * @param hasWindowFocus True if the window containing this view now has focus, false otherwise.
@@ -177,8 +176,9 @@ class GameActivity
         }
 
         /**
-         * Called when our view has been clicked. If the view is our field `mPlayButton` we
-         * call our method `setGamePaused(!mPaused)` toggling the state between play and pause.
+         * Called when our view has been clicked. If the view is our field [mPlayButton] we call our
+         * method [setGamePaused] with the negation of [mPaused] toggling the state between play and
+         * pause.
          *
          * @param v The view that was clicked.
          */
@@ -190,19 +190,18 @@ class GameActivity
         }
 
         /**
-         * Sets the state of the game to paused if its parameter is true, or play if its parameter is
-         * false. We save our parameter `boolean paused` in our field `boolean mPaused`,
-         * then if `paused` is true we set the text of `Button mPlayButton` to the string
-         * with the resource id R.string.play ("Play"), or if false to the string with the resource
-         * id R.string.pause ("Pause"). We call the method `setKeepScreenOn` with the inverse
-         * of `paused` to keep the screen on if were are playing, or not keep it on if we are
-         * in pause mode. We call our method `updateNavVisibility` to hide or show the system
-         * navigation UI depending on the new state of `mPaused` (hide if it is false indicating
+         * Sets the state of the game to paused if its parameter is true, or play if its parameter
+         * is false. We save our [Boolean] parameter [paused] in our field [mPaused], then if [paused]
+         * is true we set the text of [Button] field [mPlayButton] to the string with the resource
+         * id R.string.play ("Play"), or if false to the string with the resource id R.string.pause
+         * ("Pause"). We call the method [setKeepScreenOn] with the inverse of [paused] to keep the
+         * in pause mode. We call our method [updateNavVisibility] to hide or show the system
+         * navigation UI depending on the new state of [mPaused] (hide it if it is false indicating
          * that we are "playing", show it if it is true indicating that we are paused). We initialize
-         * `Handler h` with a handler associated with the thread running our View, and if it
-         * is not null we remove all scheduled `Runnable mFader` in its queue, and if we are
-         * not paused we run `mFader` then call the method `TouchPaint.PaintView.text`
-         * to draw the string "Draw!" to our view.
+         * `Handler` variable `val h` with a handler associated with the thread running our View, and
+         * if it is not null we remove all scheduled [Runnable] field [mFader] in its queue, and if
+         * we are not paused we run [mFader] then call the method [text] (in the [PaintView] class
+         * of `TouchPaint`) to draw the string "Draw!" to our view.
          *
          * @param paused if true we go into paused state, false we go into play state.
          */
@@ -223,65 +222,56 @@ class GameActivity
 
         /**
          * Updates the system UI visibility based on the current state of `mPaused`. We start
-         * by initializing our variable `int newVis` by or'ing the following flags together:
+         * by initializing our variable `var newVis` by or'ing the following flags together:
          *
-         *  *
-         * SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN - our View would like its window to be laid out
-         * as if it has requested SYSTEM_UI_FLAG_FULLSCREEN, even if it currently hasn't.
-         * This allows it to avoid artifacts when switching in and out of that mode, at the
-         * expense that some of its user interface may be covered by screen decorations
-         * when they are shown.
+         *  * SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN - our View would like its window to be laid out
+         *  as if it has requested SYSTEM_UI_FLAG_FULLSCREEN, even if it currently hasn't.
+         *  This allows it to avoid artifacts when switching in and out of that mode, at the
+         *  expense that some of its user interface may be covered by screen decorations
+         *  when they are shown.
          *
-         *  *
-         * SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION - our View would like its window to be laid
-         * out as if it has requested SYSTEM_UI_FLAG_HIDE_NAVIGATION, even if it currently
-         * hasn't. This allows it to avoid artifacts when switching in and out of that mode,
-         * at the expense that some of its user interface may be covered by screen decorations
-         * when they are shown.
+         *  * SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION - our View would like its window to be laid
+         *  out as if it has requested SYSTEM_UI_FLAG_HIDE_NAVIGATION, even if it currently
+         *  hasn't. This allows it to avoid artifacts when switching in and out of that mode,
+         *  at the expense that some of its user interface may be covered by screen decorations
+         *  when they are shown.
          *
-         *  *
-         * SYSTEM_UI_FLAG_LAYOUT_STABLE - When using other layout flags, we would like a stable
-         * view of the content insets given to fitSystemWindows(Rect). This means that the
-         * insets seen there will always represent the worst case that the application can
-         * expect as a continuous state. In the stock Android UI this is the space for the
-         * system bar, nav bar, and status bar, but not more transient elements such as an
-         * input method.
+         *  * SYSTEM_UI_FLAG_LAYOUT_STABLE - When using other layout flags, we would like a stable
+         *  view of the content insets given to fitSystemWindows(Rect). This means that the
+         *  insets seen there will always represent the worst case that the application can
+         *  expect as a continuous state. In the stock Android UI this is the space for the
+         *  system bar, nav bar, and status bar, but not more transient elements such as an
+         *  input method.
          *
+         * Then if our field [mPaused] is false (we are playing) we add the following bit flags:
          *
-         * Then if our field `mPaused` is false (we are playing) we add the following bit flags:
+         *  * SYSTEM_UI_FLAG_LOW_PROFILE -  View requests the system UI to enter an unobtrusive
+         *  "low profile" mode. In low profile mode, the status bar and/or navigation icons may dim.
          *
-         *  *
-         * SYSTEM_UI_FLAG_LOW_PROFILE -  View requests the system UI to enter an unobtrusive
-         * "low profile" mode. In low profile mode, the status bar and/or navigation icons may dim.
+         *  * SYSTEM_UI_FLAG_FULLSCREEN - View requests that we go into the normal fullscreen
+         *  mode so that our content can take over the screen while still allowing the user
+         *  to interact with the application. Non-critical screen decorations (such as the
+         *  status bar) will be hidden while the user is in the View's window.
          *
-         *  *
-         * SYSTEM_UI_FLAG_FULLSCREEN - View requests that we go into the normal fullscreen
-         * mode so that our content can take over the screen while still allowing the user
-         * to interact with the application. Non-critical screen decorations (such as the
-         * status bar) will be hidden while the user is in the View's window.
+         *  * SYSTEM_UI_FLAG_HIDE_NAVIGATION -  View requests that the system navigation be
+         *  temporarily hidden. On devices that draw essential navigation controls (Home, Back,
+         *  and the like) on screen, SYSTEM_UI_FLAG_HIDE_NAVIGATION will cause those to disappear.
          *
-         *  *
-         * SYSTEM_UI_FLAG_HIDE_NAVIGATION -  View requests that the system navigation be
-         * temporarily hidden. On devices that draw essential navigation controls (Home, Back,
-         * and the like) on screen, SYSTEM_UI_FLAG_HIDE_NAVIGATION will cause those to disappear.
+         *  * SYSTEM_UI_FLAG_IMMERSIVE_STICKY - View would like to remain interactive when hiding
+         *  the status bar with SYSTEM_UI_FLAG_FULLSCREEN and/or hiding the navigation bar with
+         *  SYSTEM_UI_FLAG_HIDE_NAVIGATION. If this flag is not set, SYSTEM_UI_FLAG_HIDE_NAVIGATION
+         *  will be force cleared by the system on any user interaction, and SYSTEM_UI_FLAG_FULLSCREEN
+         *  will be force-cleared by the system if the user swipes from the top of the screen.
+         *  When system bars are hidden in immersive mode, they can be revealed temporarily with
+         *  system gestures, such as swiping from the top of the screen. These transient system
+         *  bars will overlay app’s content, may have some degree of transparency, and will
+         *  automatically hide after a short timeout. Since this flag is a modifier for
+         *  SYSTEM_UI_FLAG_FULLSCREEN and SYSTEM_UI_FLAG_HIDE_NAVIGATION, it only has an effect
+         *  when used in combination with one or both of those flags.
          *
-         *  *
-         * SYSTEM_UI_FLAG_IMMERSIVE_STICKY - View would like to remain interactive when hiding
-         * the status bar with SYSTEM_UI_FLAG_FULLSCREEN and/or hiding the navigation bar with
-         * SYSTEM_UI_FLAG_HIDE_NAVIGATION. If this flag is not set, SYSTEM_UI_FLAG_HIDE_NAVIGATION
-         * will be force cleared by the system on any user interaction, and SYSTEM_UI_FLAG_FULLSCREEN
-         * will be force-cleared by the system if the user swipes from the top of the screen.
-         * When system bars are hidden in immersive mode, they can be revealed temporarily with
-         * system gestures, such as swiping from the top of the screen. These transient system
-         * bars will overlay app’s content, may have some degree of transparency, and will
-         * automatically hide after a short timeout. Since this flag is a modifier for
-         * SYSTEM_UI_FLAG_FULLSCREEN and SYSTEM_UI_FLAG_HIDE_NAVIGATION, it only has an effect
-         * when used in combination with one or both of those flags.
-         *
-         *
-         * We then call the method `setSystemUiVisibility` with the argument `newVis` to
-         * request that the visibility of the status bar or other screen/window decorations be changed.
-         * Finally we set our field `mUpdateSystemUi` to false.
+         * We then call the method [setSystemUiVisibility] with the argument `newVis` to request
+         * that the visibility of the status bar or other screen/window decorations be changed.
+         * Finally we set our field [mUpdateSystemUi] to false.
          */
         @TargetApi(Build.VERSION_CODES.KITKAT)
         fun updateNavVisibility() {
@@ -299,13 +289,9 @@ class GameActivity
         }
 
         /**
-         * Our constructor which is called when we are inflated from an xml layout file. First we
-         * call our super's constructor. Then we register "this" as a listener to receive callbacks
-         * when the visibility of the system bar changes.
-         *
-         *  context The Context the view is running in, through which it can
-         * access the current theme, resources, etc.
-         *  attrs   The attributes of the XML tag that is inflating the view.
+         * The init block of our constructor which is called when we are inflated from an xml layout
+         * file. We register "this" as a listener to receive callbacks when the visibility of the
+         * system bar changes.
          */
         init {
             setOnSystemUiVisibilityChangeListener(this)
@@ -313,18 +299,18 @@ class GameActivity
     }
 
     /**
-     * Our instance of `Content`.
+     * Our instance of [Content].
      */
     var mContent: Content? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.game. We initialize
-     * our field `Content mContent` by finding the view with id R.id.content, and use it to
-     * call its `init` method with "this" as the `Activity` argument, and the `Button`
-     * with the id R.id.play as the `Button` argument.
+     * our [Content] field [mContent] by finding the view with id R.id.content, and use it to
+     * call its `init` method with "this" as the [Activity] argument, and the [Button] with the id
+     * R.id.play as the [Button] argument.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -344,8 +330,8 @@ class GameActivity
     /**
      * Called as part of the activity lifecycle when an activity is going into the background, but
      * has not (yet) been killed. We call our super's implementation of `onPause` then call the
-     * `setGamePaused(true)` of our field `mContent` to pause the game while our activity
-     * is paused.
+     * `setGamePaused` method of our field [mContent] with the argument true to pause the game while
+     * our activity is paused.
      */
     override fun onPause() {
         super.onPause()
