@@ -3032,7 +3032,8 @@
             android:name=".view.SystemUIModes"
             android:enabled="@bool/atLeastJellyBeanMR2"
             android:label="Views/System UI Visibility/System UI Modes"
-            android:uiOptions="splitActionBarWhenNarrow">
+            android:uiOptions="splitActionBarWhenNarrow"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
