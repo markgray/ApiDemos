@@ -3043,7 +3043,8 @@
             android:name=".view.SystemUIModesOverlay"
             android:enabled="@bool/atLeastJellyBean"
             android:label="Views/System UI Visibility/System UI Modes Overlay"
-            android:uiOptions="splitActionBarWhenNarrow">
+            android:uiOptions="splitActionBarWhenNarrow"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
