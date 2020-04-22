@@ -3076,7 +3076,7 @@
             android:name=".view.VideoPlayerActivity"
             android:enabled="@bool/atLeastJellyBean"
             android:label="Views/System UI Visibility/Video Player"
-            android:theme="@android:style/Theme.Holo"
+            android:theme="@style/Theme.AppCompat"
             android:uiOptions="splitActionBarWhenNarrow">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

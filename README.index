@@ -2879,7 +2879,7 @@ Views
             of the view to leave space for the system windows. Will only take effect if this
             view is in a non-embedded activity. This has the effect of allowing the text
             displayed to be visible below the system navigation bar and notification bar.
-            android:theme="@android:style/Theme.Holo.NoActionBar.TranslucentDecor" is set in
+            android:theme="@style/Theme.NoActionBar.MyTranslucentDecor" is set in
             AndroidManifest to make the bars translucent.
 
     Views/System UI Visibility/Video Player  -- v16
