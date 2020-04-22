@@ -3087,7 +3087,7 @@
             android:name=".view.TranslucentBarsActivity"
             android:enabled="@bool/atLeastKitKat"
             android:label="Views/System UI Visibility/Translucent Bars"
-            android:theme="@android:style/Theme.Holo.NoActionBar.TranslucentDecor"
+            android:theme="@style/Theme.NoActionBar.MyTranslucentDecor"
             tools:targetApi="kitkat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

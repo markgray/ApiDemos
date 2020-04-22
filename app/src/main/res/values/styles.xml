@@ -221,4 +221,15 @@
         <item name="android:colorBackground">@color/custom_theme_color</item>
     </style>
 
+    <!-- AppCompat Variant of the holographic (dark) theme that has no title bar and translucent
+         system decor.  This theme sets {@link android.R.attr#windowTranslucentStatus} and
+         {@link android.R.attr#windowTranslucentNavigation} to true. -->
+    <style name="Theme.NoActionBar.MyTranslucentDecor"
+        parent="Theme.AppCompat.NoActionBar"
+        tools:targetApi="kitkat">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
 </resources>

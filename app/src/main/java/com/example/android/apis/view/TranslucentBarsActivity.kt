@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.view
 
-package com.example.android.apis.view;
-
-import android.app.Activity;
-import android.os.Bundle;
-
-import com.example.android.apis.R;
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * This activity demonstrates a simple implementation of displaying content with translucent
@@ -28,26 +26,19 @@ import com.example.android.apis.R;
  * of the view to leave space for the system windows. Will only take effect if this view is
  * in a non-embedded activity. This has the effect of allowing the text displayed to be visible
  * below the system navigation bar and notification bar.
- * <p>
- * android:theme="@android:style/Theme.Holo.NoActionBar.TranslucentDecor" is set in AndroidManifest
+ *
+ * android:theme="@style/Theme.NoActionBar.MyTranslucentDecor" is set in AndroidManifest
  * to make the bars translucent.
  */
-public class TranslucentBarsActivity extends Activity {
-    /**
-     * Our constructor. We do nothing.
-     */
-    public TranslucentBarsActivity() {
-    }
-
+class TranslucentBarsActivity : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * {@code onCreate}, then we set our content view to our layout file R.layout.translucent_bars.
+     * `onCreate`, then we set our content view to our layout file R.layout.translucent_bars.
      *
-     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.translucent_bars);
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.translucent_bars)
     }
 }
