@@ -2887,7 +2887,7 @@ Views
             Implementation of a view for displaying full-screen video playback, using system
             UI flags to transition in and out of modes where the entire screen can be filled
             with content (at the expense of no user interaction).
-            TODO: compare with old VideoPlayerActivity
+            Note: AppCompat does not do android:uiOptions="splitActionBarWhenNarrow"
 
   Tabs
     Views/Tabs/1. Content By Id            all

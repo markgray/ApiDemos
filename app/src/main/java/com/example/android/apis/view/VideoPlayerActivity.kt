@@ -72,45 +72,43 @@ class VideoPlayerActivity :
             ActionBar.OnMenuVisibilityListener
     {
         /**
-         * `Activity` of the containing activity that is passed to our `init` method.
-         * ("this" when called from the `onCreate` method of `VideoPlayerActivity`.
+         * [Activity] of the containing activity that is passed to our [init] method.
+         * ("this" when called from the `onCreate` method of [VideoPlayerActivity].
          */
         var mActivity: Activity? = null
 
         /**
-         * `TextView` in the `VideoPlayerActivity` layout file R.layout.video_player
-         * with the id R.layout.video_player (the text reads "A title goes here"), we use it just
-         * to switch its visibility to VISIBLE or INVISIBLE in our `setNavVisibility` method.
+         * [TextView] in the [VideoPlayerActivity] layout file R.layout.video_player with the id
+         * R.layout.video_player (the text reads "A title goes here"), we use it just to switch
+         * its visibility to VISIBLE or INVISIBLE in our [setNavVisibility] method.
          */
         var mTitleView: TextView? = null
 
         /**
-         * `Button` in the `VideoPlayerActivity` layout file R.layout.video_player
-         * with the id R.id.play we use it to switch its text to "Play" of "Pause" in our
-         * `setPlayPaused` method, and to make it VISIBLE or INVISIBLE in our
-         * `setNavVisibility` method.
+         * [Button] in the [VideoPlayerActivity] layout file R.layout.video_player with the id
+         * R.id.play we use it to switch its text to "Play" of "Pause" in our [setPlayPaused]
+         * method, and to make it VISIBLE or INVISIBLE in our [setNavVisibility] method.
          */
         var mPlayButton: Button? = null
 
         /**
-         * `SeekBar` in the `VideoPlayerActivity` layout file R.layout.video_player
-         * with the id R.id.seekbar, we use it just to switch its visibility to VISIBLE or INVISIBLE
-         * in our `setNavVisibility` method.
+         * [SeekBar] in the [VideoPlayerActivity] layout file R.layout.video_player with the id
+         * R.id.seekbar, we use it just to switch its visibility to VISIBLE or INVISIBLE in our
+         * [setNavVisibility] method.
          */
         var mSeekView: SeekBar? = null
 
         /**
-         * Flag to indicate whether we have added "this" as an `OnMenuVisibilityListener` to
-         * the action bar (which we do in our `onAttachedToWindow` override). If it is true
-         * we call `removeOnMenuVisibilityListener` in our `onDetachedFromWindow`
-         * override to remove us.
+         * Flag to indicate whether we have added "this" as an `OnMenuVisibilityListener` to the
+         * action bar (which we do in our [onAttachedToWindow] override). If it is true we call
+         * `removeOnMenuVisibilityListener` in our [onDetachedFromWindow] override to remove us.
          */
         var mAddedMenuListener = false
 
         /**
-         * Flag to indicate that the menus are currently open, it is set in `onMenuVisibilityChanged`
-         * to its parameter, and if it is true our `setNavVisibility` will not schedule
-         * `Runnable mNavHider` to auto hide our navigation UI.
+         * Flag to indicate that the menus are currently open, it is set in [onMenuVisibilityChanged]
+         * to its parameter, and if it is true our [setNavVisibility] will not schedule [Runnable]
+         * field [mNavHider] to auto hide our navigation UI.
          */
         var mMenusOpen = false
 
@@ -126,30 +124,30 @@ class VideoPlayerActivity :
         var mNavVisible = false
 
         /**
-         * Last system UI visibility mask, received by `onSystemUiVisibilityChange` override.
+         * Last system UI visibility mask, received by [onSystemUiVisibilityChange] override.
          */
         var mLastSystemUiVis = 0
 
         /**
-         * `Runnable` which makes system UI visibility go away after 3000ms when play is
-         * resumed, its running is scheduled in `setNavVisibility` method
+         * [Runnable] which makes system UI visibility go away after 3000ms when play is
+         * resumed, its running is scheduled in our [setNavVisibility] method
          */
         var mNavHider = Runnable { setNavVisibility(false) }
 
         /**
-         * Called by our containing `Activity` to initialize our fields with information about
-         * the state of the video player that we will interact with. We save our parameter
-         * `Activity activity` in our field `Activity mActivity`, our parameter
-         * `TextView title` in our field `TextView mTitleView`, our parameter
-         * `Button playButton` in our field `Button mPlayButton`, and our parameter
-         * `SeekBar seek` in our field `SeekBar mSeekView`. We set the `OnClickListener`
-         * of `mPlayButton` to "this", and call our `setPlayPaused(true)` to initialize
-         * our UI to the paused state.
+         * Called by our containing [Activity] to initialize our fields with information about
+         * the state of the video player that we will interact with. We save our [Activity]
+         * parameter [activity] in our [Activity] field [mActivity], our [TextView] parameter
+         * [title] in our [TextView] field [mTitleView], our [Button] parameter [playButton] in
+         * our [Button] field [mPlayButton], and our [SeekBar] parameter [seek] in our [SeekBar]
+         * field [mSeekView]. We set the `OnClickListener` of [mPlayButton] to "this", and call
+         * our [setPlayPaused] method with the argument true to initialize our UI to the paused
+         * state.
          *
-         * @param activity   `Activity` we use to fetch the action bar
-         * @param title      `TextView` containing the title we are playing
-         * @param playButton `Button` that toggles between play and paused states
-         * @param seek       `SeekBar` in the layout file we are contained in
+         * @param activity   [Activity] we use to fetch the action bar
+         * @param title      [TextView] containing the title we are playing
+         * @param playButton [Button] that toggles between play and paused states
+         * @param seek       [SeekBar] in the layout file we are contained in
          */
         fun init(activity: Activity?, title: TextView?, playButton: Button?, seek: SeekBar?) {
             // This called by the containing activity to supply the surrounding
@@ -163,10 +161,12 @@ class VideoPlayerActivity :
         }
 
         /**
-         * This is called when the view is attached to a window. First we call our super's implementation
-         * of `onAttachedToWindow`. Then if our field `Activity mActivity` is not null we
-         * set our flag `mAddedMenuListener` to true, use `mActivity` to get a reference
-         * to the action bar in order to register "this" as an `OnMenuVisibilityListener`.
+         * This is called when the view is attached to a window. First we call our super's
+         * implementation of `onAttachedToWindow`. Then if our [Activity] field [mActivity]
+         * is not null we set our flag [mAddedMenuListener] to true, use [mActivity] to get a
+         * reference to the action bar (we have to cast it first to [AppCompatActivity] to use
+         * the `getSupportActionBar` method) and use this reference to register "this" as an
+         * `OnMenuVisibilityListener`.
          */
         override fun onAttachedToWindow() {
             super.onAttachedToWindow()
@@ -177,10 +177,11 @@ class VideoPlayerActivity :
         }
 
         /**
-         * This is called when the view is detached from a window. First we call our super's implementation
-         * of `onDetachedFromWindow`. Then if our flag `mAddedMenuListener` is true, we
-         * use `mActivity` to get a reference to the action bar in order to remove "this" as an
-         * `OnMenuVisibilityListener`.
+         * This is called when the view is detached from a window. First we call our super's
+         * implementation of `onDetachedFromWindow`. Then if our flag [mAddedMenuListener] is
+         * true, we use [mActivity] to get a reference to the action bar (we have to cast it
+         * first to [AppCompatActivity] to use the `getSupportActionBar` method) and use this
+         * reference to remove "this" as an `OnMenuVisibilityListener`.
          */
         override fun onDetachedFromWindow() {
             super.onDetachedFromWindow()
@@ -190,13 +191,13 @@ class VideoPlayerActivity :
         }
 
         /**
-         * Called when the status bar changes visibility. We initialize `int diff` to the bits
-         * that have changed by bitwise exclusive or'ing our parameter `visibility` with our
-         * field `mLastSystemUiVis`, then set `mLastSystemUiVis` to `visibility`.
-         * If the bit that changed is SYSTEM_UI_FLAG_HIDE_NAVIGATION, and the new value of the bit
-         * in `visibility` is equal to 0, we call our method `setNavVisibility(true)`
-         * in order to make our navigation UI visible, and to schedule `Runnable mNavHider` to
-         * run in 3000ms to make it invisible.
+         * Called when the status bar changes visibility. We initialize [Int] variable `val diff`
+         * to the bits that have changed by bitwise exclusive or'ing our [Int] parameter [visibility]
+         * with our field [mLastSystemUiVis], then set [mLastSystemUiVis] to [visibility]. If the bit
+         * that changed is SYSTEM_UI_FLAG_HIDE_NAVIGATION, and the new value of the bit in [visibility]
+         * is equal to 0, we call our method [setNavVisibility] with the argument true in order to
+         * make our navigation UI visible, and to schedule [Runnable] field [mNavHider] to run in
+         * 3000ms to make it invisible.
          *
          * @param visibility current system UI visibility mask, Bitwise-or of the bit flags
          * SYSTEM_UI_FLAG_LOW_PROFILE, SYSTEM_UI_FLAG_HIDE_NAVIGATION, and
@@ -215,10 +216,10 @@ class VideoPlayerActivity :
         }
 
         /**
-         * Called when the window containing has changed its visibility (between GONE, INVISIBLE, and
-         * VISIBLE). First we call our super's implementation of `onWindowVisibilityChanged` then
-         * we call our method `setPlayPaused(true)` in order to pause play (when we become visible
-         * or invisible, play is paused).
+         * Called when the window containing has changed its visibility (between GONE, INVISIBLE,
+         * and VISIBLE). First we call our super's implementation of `onWindowVisibilityChanged`
+         * then we call our method [setPlayPaused] with true as the argument in order to pause
+         * play (when we become visible or invisible, play is paused).
          *
          * @param visibility The new visibility of the window.
          */
@@ -230,12 +231,13 @@ class VideoPlayerActivity :
         }
 
         /**
-         * Called when a `View` we are registered as an `OnClickListener` for it clicked.
-         * If the `View v` that was clicked is `Button mPlayButton` we call our method
-         * `setPlayPaused(!mPaused)` to toggle our play/pause state, otherwise we call our
-         * method `setNavVisibility(true)` to make the navigation visible.
+         * Called when a [View] we are registered as an `OnClickListener` for is clicked.
+         * If the [View] parameter [v] that was clicked is [Button] field [mPlayButton] we
+         * call our method [setPlayPaused] with the inverse of [Boolean] field [mPaused] to
+         * toggle our play/pause state, otherwise we call our method [setNavVisibility] with
+         * true as the argument to make the navigation visible.
          *
-         * @param v View that was clicked
+         * @param v [View] that was clicked
          */
         override fun onClick(v: View) {
             if (v === mPlayButton) {
@@ -248,9 +250,9 @@ class VideoPlayerActivity :
         }
 
         /**
-         * Called when an action bar menu is shown or hidden. We save our parameter `isVisible`
-         * in our field `mMenusOpen`, then call our method `setNavVisibility(true)` to
-         * make the navigation visible.
+         * Called when an action bar menu is shown or hidden. We save our [Boolean] parameter
+         * [isVisible] in our field [mMenusOpen], then call our method [setNavVisibility] with
+         * the argument true to make the navigation visible.
          *
          * @param isVisible True if an action bar menu is now visible, false if no action bar
          * menus are visible.
@@ -261,14 +263,14 @@ class VideoPlayerActivity :
         }
 
         /**
-         * Called to change state to paused if its parameter `paused` is true, or to play if
-         * it is false. First we save `paused` in our field `mPaused`. If `mPaused`
-         * is true we set the text of our field `Button mPlayButton` to the string with the
-         * resource id R.string.play ("Play"), if false we set it to the string with the resource id
-         * R.string.pause ("Pause"). We call our method `setKeepScreenOn(!paused)` to keep our
-         * screen on if we are now in play state, or to allow it to go off if we are now in paused
-         * state. Finally we call our method `setNavVisibility(true)` to make the navigation
-         * visible.
+         * Called to change state to paused if its [Boolean] parameter [paused] is true, or to play
+         * if it is false. First we save [paused] in our field [mPaused]. If [mPaused] is true we
+         * set the text of our [Button] field [mPlayButton] to the string with the resource id
+         * R.string.play ("Play"), if false we set it to the string with the resource id
+         * R.string.pause ("Pause"). We call our method [setKeepScreenOn] with the inverse of
+         * [paused] to keep our screen on if we are now in play state, or to allow it to go off
+         * if we are now in paused state. Finally we call our method [setNavVisibility] true to
+         * make the navigation visible.
          *
          * @param paused if true move to the paused state, if false move to the play state
          */
@@ -280,58 +282,49 @@ class VideoPlayerActivity :
         }
 
         /**
-         * Called to make our navigation visible if its parameter `visible` is true, or to hide
-         * it if it is false. We initialize our variable `int newVis` by or'ing together the
+         * Called to make our navigation visible if its [Boolean] parameter [visible] is true, or
+         * to hide it if it is false. We initialize our [Int] variable `var newVis` by or'ing
+         * together the following bit flags:
+         *
+         *  * SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN - View would like its window to be laid out as if it
+         *  has requested SYSTEM_UI_FLAG_FULLSCREEN, even if it currently hasn't. This allows it
+         *  to avoid artifacts when switching in and out of that mode, at the expense that some
+         *  of its user interface may be covered by screen decorations when they are shown.
+         *
+         *  * SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION - View would like its window to be laid out
+         *  as if it has requested SYSTEM_UI_FLAG_HIDE_NAVIGATION, even if it currently hasn't.
+         *  This allows it to avoid artifacts when switching in and out of that mode, at the
+         *  expense that some of its user interface may be covered by screen decorations when
+         *  they are shown.
+         *
+         *  * SYSTEM_UI_FLAG_LAYOUT_STABLE - When using other layout flags, we would like a
+         *  stable view of the content insets given to fitSystemWindows(Rect). This means that
+         *  the insets seen there will always represent the worst case that the application
+         *  can expect as a continuous state.
+         *
+         * Then [visible] is false (we want to hide the navigation) we or `newVis` with the
          * following bit flags:
          *
-         *  *
-         * SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN - View would like its window to be laid out as if it
-         * has requested SYSTEM_UI_FLAG_FULLSCREEN, even if it currently hasn't. This allows it
-         * to avoid artifacts when switching in and out of that mode, at the expense that some
-         * of its user interface may be covered by screen decorations when they are shown.
+         *  * SYSTEM_UI_FLAG_LOW_PROFILE - View requests the system UI to enter an unobtrusive
+         *  "low profile" mode. In low profile mode, the status bar and/or navigation icons
+         *  may dim.
          *
-         *  *
-         * SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION - View would like its window to be laid out
-         * as if it has requested SYSTEM_UI_FLAG_HIDE_NAVIGATION, even if it currently hasn't.
-         * This allows it to avoid artifacts when switching in and out of that mode, at the
-         * expense that some of its user interface may be covered by screen decorations when
-         * they are shown.
+         *  * SYSTEM_UI_FLAG_FULLSCREEN - View requests to go into the normal fullscreen mode
+         *  so that its content can take over the screen while still allowing the user to
+         *  interact with the application.
          *
-         *  *
-         * SYSTEM_UI_FLAG_LAYOUT_STABLE - When using other layout flags, we would like a
-         * stable view of the content insets given to fitSystemWindows(Rect). This means that
-         * the insets seen there will always represent the worst case that the application
-         * can expect as a continuous state.
+         *  * SYSTEM_UI_FLAG_HIDE_NAVIGATION - View requests that the system navigation be
+         *  temporarily hidden.
          *
-         *
-         * Then is `visible` is false (we want to hide the navigation) we or `newVis`
-         * with the following bit flags:
-         *
-         *  *
-         * SYSTEM_UI_FLAG_LOW_PROFILE - View requests the system UI to enter an unobtrusive
-         * "low profile" mode. In low profile mode, the status bar and/or navigation icons
-         * may dim.
-         *
-         *  *
-         * SYSTEM_UI_FLAG_FULLSCREEN - View requests to go into the normal fullscreen mode
-         * so that its content can take over the screen while still allowing the user to
-         * interact with the application.
-         *
-         *  *
-         * SYSTEM_UI_FLAG_HIDE_NAVIGATION - View requests that the system navigation be
-         * temporarily hidden.
-         *
-         *
-         * Then if `visible` is true, we initialize `Handler h` with a handler associated
-         * with the thread running the View. If `h` is not null, we remove all scheduled runs of
-         * `Runnable mNavHider` from its queue. If `mMenusOpen` is false (no menus are
-         * open), and `mPaused` is false (we are in play state) we use `h` to schedule
-         * `Runnable mNavHider` to run in 3000ms to hide the navigation again.
-         *
+         * Then if [visible] is true, we initialize `Handler` variable `val h` with a handler
+         * associated with the thread running the [View]. If `h` is not null, we remove all
+         * scheduled runs of [Runnable] field [mNavHider] from its queue. If [mMenusOpen] is
+         * false (no menus are open), and [mPaused] is false (we are in play state) we use `h`
+         * to schedule [Runnable] field [mNavHider] to run in 3000ms to hide the navigation again.
          *
          * We now set the system UI visibility to `newVis`, and set the visibility of the views
-         * `mTitleView`, `mPlayButton`, and `mSeekView` to VISIBLE if our parameter
-         * `visible` is true, or the INVISIBLE if it is false.
+         * [mTitleView], [mPlayButton], and [mSeekView] to VISIBLE if our parameter [visible] is
+         * true, or to INVISIBLE if it is false.
          *
          * @param visible if true we make our navigation visible, if false we hide the navigation.
          */
@@ -366,12 +359,8 @@ class VideoPlayerActivity :
         }
 
         /**
-         * Perform inflation from XML. First we call our super's constructor, then we register this
+         * Init block of our constructor called when we are inflated from XML. We register this
          * as a `OnSystemUiVisibilityChangeListener`, and a `OnClickListener`.
-         *
-         * context The Context the view is running in, through which it can
-         * access the current theme, resources, etc.
-         * attrs   The attributes of the XML tag that is inflating the view.
          */
         init {
             setOnSystemUiVisibilityChangeListener(this)
@@ -380,7 +369,7 @@ class VideoPlayerActivity :
     }
 
     /**
-     * Our `Content` instance.
+     * Our [Content] instance.
      */
     var mContent: Content? = null
 
@@ -388,14 +377,14 @@ class VideoPlayerActivity :
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we request the window feature FEATURE_ACTION_BAR_OVERLAY (requests an
      * Action Bar that overlays window content), and then we set our content view to our layout file
-     * R.layout.video_player. We initialize our field `Content mContent` by finding the view
+     * R.layout.video_player. We initialize our [Content] field [mContent] by finding the view
      * with the id R.id.content, then call its `init` method with "this" as the activity, the
-     * `TextView` with id R.id.title, the `Button` with id R.id.play, and the `SeekBar`
-     * with id R.id.seekbar. We initialize `ActionBar bar` by retrieving a reference to this
-     * activity's ActionBar, then add 3 tabs to it with the text "Tab 1", "Tab 2", and "Tab 3" and
-     * setting their `TabListener` each to this.
+     * [TextView] with id R.id.title, the [Button] with id R.id.play, and the [SeekBar] with id
+     * R.id.seekbar. We initialize [ActionBar] variable `val bar` by retrieving a reference to this
+     * activity's support [ActionBar], then add 3 tabs to it with the text "Tab 1", "Tab 2", and
+     * "Tab 3" and setting their `TabListener` each to this.
      *
-     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -492,9 +481,8 @@ class VideoPlayerActivity :
     }
 
     /**
-     * Called after `onRestoreInstanceState`, `onRestart`, or `onPause`, for our
-     * activity to start interacting with the user. We just call our super's implementation of
-     * `onResume`.
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for our activity to start
+     * interacting with the user. We just call our super's implementation of `onResume`.
      */
     override fun onResume() {
         super.onResume()
@@ -509,21 +497,18 @@ class VideoPlayerActivity :
      * This hook is called whenever an item in your options menu is selected. We switch on the item
      * id of our parameter `MenuItem item`:
      *
-     *  *
-     * R.id.show_tabs "Show Tabs" - We retrieve the action bar for our activity and set its
-     * navigation mode to NAVIGATION_MODE_TABS (Tab navigation mode. Instead of static title
-     * text this mode presents a series of tabs for navigation within the activity). We then
-     * set the item to checked, and return true to the caller to indicate we have consumed
-     * the event.
+     *  * R.id.show_tabs "Show Tabs" - We retrieve the action bar for our activity and set its
+     *  navigation mode to NAVIGATION_MODE_TABS (Tab navigation mode. Instead of static title
+     *  text this mode presents a series of tabs for navigation within the activity). We then
+     *  set the item to checked, and return true to the caller to indicate we have consumed
+     *  the event.
      *
-     *  *
-     * R.id.hide_tabs "Hide Tabs" - We retrieve the action bar for our activity and set its
-     * navigation mode to NAVIGATION_MODE_STANDARD (Standard navigation mode. Consists of
-     * either a logo or icon and title text with an optional subtitle. Clicking any of these
-     * elements will dispatch onOptionsItemSelected to the host Activity with a MenuItem
-     * with item ID android.R.id.home). We then set the item to checked, and return true to
-     * the caller to indicate we have consumed the event.
-     *
+     *  * R.id.hide_tabs "Hide Tabs" - We retrieve the action bar for our activity and set its
+     *  navigation mode to NAVIGATION_MODE_STANDARD (Standard navigation mode. Consists of
+     *  either a logo or icon and title text with an optional subtitle. Clicking any of these
+     *  elements will dispatch onOptionsItemSelected to the host Activity with a MenuItem
+     *  with item ID android.R.id.home). We then set the item to checked, and return true to
+     *  the caller to indicate we have consumed the event.
      *
      * If the item id is not one of two above, we return false to the caller to allow normal menu
      * processing to proceed.
@@ -564,7 +549,7 @@ class VideoPlayerActivity :
 
     /**
      * Called when the user submits the query. We toast a string formed by concatenating the string
-     * "Searching for: " with our parameter `String query` followed by the string "...", then
+     * "Searching for: " with our [String] parameter [query] followed by the string "...", then
      * return true to the caller to indicate that we have handled the event.
      *
      * @param query the query text that is to be submitted
@@ -580,9 +565,9 @@ class VideoPlayerActivity :
      * Called when a tab enters the selected state. We ignore.
      *
      * @param tab The tab that was selected
-     * @param ft  A `FragmentTransaction` for queuing fragment operations to execute
+     * @param ft  A [FragmentTransaction] for queuing fragment operations to execute
      * during a tab switch. The previous tab's unselect and this tab's select will be
-     * executed in a single transaction. This FragmentTransaction does not support
+     * executed in a single transaction. This [FragmentTransaction] does not support
      * being added to the back stack.
      */
     override fun onTabSelected(tab: ActionBar.Tab, ft: FragmentTransaction) {}
@@ -591,9 +576,9 @@ class VideoPlayerActivity :
      * Called when a tab exits the selected state. We ignore.
      *
      * @param tab The tab that was unselected
-     * @param ft  A `FragmentTransaction` for queuing fragment operations to execute
+     * @param ft  A [FragmentTransaction] for queuing fragment operations to execute
      * during a tab switch. This tab's unselect and the newly selected tab's select
-     * will be executed in a single transaction. This FragmentTransaction does not
+     * will be executed in a single transaction. This [FragmentTransaction] does not
      * support being added to the back stack.
      */
     override fun onTabUnselected(tab: ActionBar.Tab, ft: FragmentTransaction) {}
@@ -603,7 +588,7 @@ class VideoPlayerActivity :
      *
      * @param tab The tab that was reselected.
      * @param ft  A [FragmentTransaction] for queuing fragment operations to execute
-     * once this method returns. This FragmentTransaction does not support
+     * once this method returns. This [FragmentTransaction] does not support
      * being added to the back stack.
      */
     override fun onTabReselected(tab: ActionBar.Tab, ft: FragmentTransaction) {}
