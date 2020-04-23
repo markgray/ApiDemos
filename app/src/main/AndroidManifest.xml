@@ -1912,7 +1912,8 @@
         </activity>
         <activity
             android:name=".view.Tabs2"
-            android:label="Views/Tabs/2. Content By Factory">
+            android:label="Views/Tabs/2. Content By Factory"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
