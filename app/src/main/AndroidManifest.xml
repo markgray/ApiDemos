@@ -2472,7 +2472,8 @@
         </activity>
         <activity
             android:name=".text.Link"
-            android:label="Views/Text/Linkify">
+            android:label="Views/Text/Linkify"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
