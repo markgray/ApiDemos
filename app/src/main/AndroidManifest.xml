@@ -1921,7 +1921,8 @@
         </activity>
         <activity
             android:name=".view.Tabs3"
-            android:label="Views/Tabs/3. Content By Intent">
+            android:label="Views/Tabs/3. Content By Intent"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
