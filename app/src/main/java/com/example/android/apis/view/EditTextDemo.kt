@@ -13,32 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.view
 
-package com.example.android.apis.view;
-
-import android.app.Activity;
-import android.os.Bundle;
-
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-import com.example.android.apis.R;
-
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * Demonstrates the android.widget.EditText widget. android:imeOptions="actionSearch"
  * only produces an action key in landscape orientation for some reason. (No :id?)
  */
-public class EditTextDemo extends Activity {
-
+class EditTextDemo : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * {@code onCreate}, then we set our content view to our layout file R.layout.edit_text_demo.
+     * `onCreate`, then we set our content view to our layout file R.layout.edit_text_demo.
      *
-     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_text_demo);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.edit_text_demo)
     }
 }
