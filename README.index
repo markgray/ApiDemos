@@ -1881,6 +1881,7 @@ Views
   Animation
     Views/Animation/3D Transition          all
         .animation.Transition3d
+        .animation.Rotate3dAnimation
             This sample application shows how to use layout animation and various 
             transformations on views. The result is a 3D transition between a ListView
             and an ImageView. When the user clicks on an item in the list, it flips to
