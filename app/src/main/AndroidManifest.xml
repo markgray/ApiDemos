@@ -2499,7 +2499,8 @@
         </activity>
         <activity
             android:name=".view.TextClockDemo"
-            android:label="Views/Text/TextClock">
+            android:label="Views/Text/TextClock"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
