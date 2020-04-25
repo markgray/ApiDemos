@@ -2508,7 +2508,8 @@
         </activity>
         <activity
             android:name=".view.TextSwitcher1"
-            android:label="Views/Text/TextSwitcher">
+            android:label="Views/Text/TextSwitcher"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
