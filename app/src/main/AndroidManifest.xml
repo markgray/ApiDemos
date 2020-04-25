@@ -2517,7 +2517,8 @@
         </activity>
         <activity
             android:name=".view.TextViewDemo"
-            android:label="Views/Text/TextView">
+            android:label="Views/Text/TextView"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
