@@ -2490,7 +2490,8 @@
         </activity>
         <activity
             android:name=".text.Marquee"
-            android:label="Views/Text/Marquee">
+            android:label="Views/Text/Marquee"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

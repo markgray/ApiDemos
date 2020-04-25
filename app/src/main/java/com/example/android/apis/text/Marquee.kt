@@ -13,32 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.text
 
-package com.example.android.apis.text;
-
-import com.example.android.apis.R;
-
-import android.app.Activity;
-import android.os.Bundle;
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * Uses android:ellipsize="marquee" in the layout file to auto scroll Button
  * text that is longer than the view is wide.
- * <p>
+ *
  * Need to add android:focusable="true" and android:focusableInTouchMode="true"
  * to each of the buttons in order for the Marquee animations to run.
  */
-public class Marquee extends Activity {
+class Marquee : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * {@code onCreate}, then we set our content view to our layout file R.layout.marquee.
+     * `onCreate`, then we set our content view to our layout file R.layout.marquee.
      *
-     * @param savedInstanceState we do not override {@code onSaveInstanceState} so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.marquee);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.marquee)
     }
 }
