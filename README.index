@@ -2990,9 +2990,10 @@ Views
   Tooltips
     Views/Tooltips                         v26
         .view.Tooltips
-            A demo for tooltips, it is implemented almost entirely in the layout file layout/tooltips.xml
-            using the android:tooltipText attribute for the views, but the TextView with id R.id.tooltips_code
-            has its tooltip set using its setTooltipText method in our onCreate override.
+            A demo for tooltips, it is implemented almost entirely in the layout file
+            layout/tooltips.xml using the android:tooltipText attribute for the views,
+            but the TextView with id R.id.tooltips_code has its tooltip set using its
+             setTooltipText method in our onCreate override.
 
   Visibility
     Views/Visibility                       all
