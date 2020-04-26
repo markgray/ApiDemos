@@ -1199,7 +1199,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- Application Updating Samples -->
+        </activity>
+
+        <!-- Application Updating Samples -->
         <receiver android:name=".app.AppUpdateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
@@ -1214,7 +1216,9 @@
                     android:ssp="com.example.android.apis"
                     tools:targetApi="kitkat" />
             </intent-filter>
-        </receiver> <!-- ************************************* -->
+        </receiver>
+
+        <!-- ************************************* -->
         <!-- PREFERENCE PACKAGE SAMPLES -->
         <!-- ************************************* -->
         <activity
