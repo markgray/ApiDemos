@@ -750,12 +750,16 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- Stub for memory testing. -->
+        </activity>
+
+        <!-- Stub for memory testing. -->
         <receiver
             android:name=".app.DoNothing"
             android:exported="true"
             android:process=":empty"
-            tools:ignore="ExportedReceiver" /> <!-- ============================ -->
+            tools:ignore="ExportedReceiver" />
+
+        <!-- ============================ -->
         <!-- Accessibility examples -->
         <!-- ============================ -->
         <activity
