@@ -49,6 +49,10 @@ class Rotate3dAnimation
 ) : Animation()
 
 {
+    /**
+     * [Camera] instance that our [applyTransformation] override uses to compute 3D transformations
+     * of the matrix of the [Transformation] it is passed
+     */
     private var mCamera: Camera? = null
 
     /**
@@ -75,9 +79,31 @@ class Rotate3dAnimation
 
     /**
      * Helper for getTransformation. Subclasses should implement this to apply
-     * their transforms given an interpolation value.  Implementations of this
+     * their transforms given an interpolation value. Implementations of this
      * method should always replace the specified Transformation or document
      * they are doing otherwise.
+     *
+     * We initialize our [Float] variable `val fromDegrees` to our field [mFromDegrees], then
+     * calculate our [Float] variable `val degrees` to be the number of degrees we are to
+     * animate to given the value of our [Float] parameter [interpolatedTime]. We initialize
+     * our variable `val centerX` to our field [mCenterX], our variable `val centerY` to our
+     * field [mCenterY], and our [Camera] variable `val camera` to our field [mCamera]. We
+     * initialize our `Matrix` variable `val matrix` to the current `Matix` of our
+     * [Transformation] parameter [t]. We save the camera state of `camera`, then branch on
+     * the value of our [Boolean] field [mReverse]:
+     *
+     *  *true* - We translate `camera` in the Z direction by our [mDepthZ] field multiplied by
+     *  our parameter [interpolatedTime]
+     *
+     *  *false* - We translate `camera` in the Z direction by our [mDepthZ] field multiplied by
+     *  1.0f minus our parameter [interpolatedTime].
+     *
+     * We then rotate `camera` by `degrees` degrees around the Y axis, fetch the `Matrix` of
+     * `camera` into `matrix` (which is the `Matrix` of our [Transformation] parameter [t]
+     * recall), and restore the state of `camera` to that is held before we used it for our
+     * calculations. Finally we pre-concatenate a translation of `matrix` to the location
+     * minus `centerX`, minus `centerY`, and post-concatenate a translation of `matrix` to
+     * the location `centerX`, `centerY`.
      *
      * @param interpolatedTime The value of the normalized time (0.0 to 1.0)
      *        after it has been run through the interpolation function.
