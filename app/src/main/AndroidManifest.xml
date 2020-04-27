@@ -837,7 +837,8 @@
         </activity>
         <activity
             android:name=".app.ContactsFilter"
-            android:label="@string/activity_contacts_filter">
+            android:label="@string/activity_contacts_filter"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <!-- category android:name="android.intent.category.SAMPLE_CODE" / -->

@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.apis.app
 
-package com.example.android.apis.app;
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-
-public class DoNothing extends BroadcastReceiver {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-    }
+class DoNothing : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {}
 }
