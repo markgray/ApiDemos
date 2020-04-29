@@ -29,6 +29,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import com.example.android.apis.R
+import com.example.android.apis.app.FragmentStack.CountingFragment.Companion.newInstance
 
 /**
  * Shows how to push and pop fragments using the system backstack.
@@ -99,7 +100,7 @@ class FragmentStack : FragmentActivity() {
 
         if (savedInstanceState == null) {
             // Do first time initialization -- add initial fragment.
-            val newFragment = CountingFragment.newInstance(mStackLevel)
+            val newFragment = newInstance(mStackLevel)
             val ft = supportFragmentManager.beginTransaction()
             ft.add(R.id.simple_fragment, newFragment).commit()
         } else {
@@ -140,7 +141,7 @@ class FragmentStack : FragmentActivity() {
         mStackLevel++
 
         // Instantiate a new fragment.
-        val newFragment = CountingFragment.newInstance(mStackLevel)
+        val newFragment = newInstance(mStackLevel)
 
         // Add the fragment to the activity, pushing this transaction
         // on to the back stack.
@@ -169,6 +170,7 @@ class FragmentStack : FragmentActivity() {
          *
          * @param savedInstanceState since we do not override onSaveInstanceState we do not use
          */
+        @SuppressLint("UseRequireInsteadOfGet")
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             mNum = if (arguments != null) arguments!!.getInt("num") else 1
