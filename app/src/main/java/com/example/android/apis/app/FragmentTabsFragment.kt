@@ -386,6 +386,13 @@ class FragmentTabsFragment : Fragment() {
             }
         }
 
+        /**
+         * Called from the `onDestroyView` override of our parent's fragment to do what we need to
+         * do when its view has been detached from the fragment. We set the our [mCurrentTabTag]
+         * field to the `currentTabTag` property of our [TabHost] field [mTabHost], set [mTabHost]
+         * to null, clear all entries from our list of [TabInfo] objects field [mTabs] and set our
+         * [mInitialized] field to false.
+         */
         fun handleDestroyView() {
             mCurrentTabTag = mTabHost!!.currentTabTag
             mTabHost = null
@@ -393,10 +400,29 @@ class FragmentTabsFragment : Fragment() {
             mInitialized = false
         }
 
+        /**
+         * Called from the `onSaveInstanceState` override of our parent's fragment to do what we
+         * need to do to save our current dynamic state, so it can later be reconstructed in a new
+         * instance if our process is restarted. We store the currently selected tab in [Bundle]
+         * parameter [outState] under the key "tab", retrieving the [String] to store from the
+         * `currentTabTag` property of our [TabHost] field [mTabHost] if [mTabHost] is not null or
+         * using the [String] in our [String] field [mCurrentTabTag] if [mTabHost] is null.
+         *
+         * @param outState [Bundle] in which to place your saved state.
+         */
         fun handleSaveInstanceState(outState: Bundle) {
             outState.putString("tab", if (mTabHost != null) mTabHost!!.currentTabTag else mCurrentTabTag)
         }
 
+        /**
+         * Part of the `OnTabChangeListener` interface which we implement, it is called when the
+         * user has selected a new tab. If our [mInitialized] field is false we just return having
+         * done nothing. Otherwise we initialize our [FragmentTransaction] variable `val ft` with
+         * the [FragmentTransaction] that our [doTabChanged] method returns which is intended to
+         * switch to the [Fragment] whose tab ID is [tabId]. Then we schedule `ft` to be commited.
+         *
+         * @param tabId the tab id of the tab that has been selected.
+         */
         override fun onTabChanged(tabId: String) {
             if (!mInitialized) {
                 return
@@ -405,6 +431,40 @@ class FragmentTabsFragment : Fragment() {
             ft?.commit()
         }
 
+        /**
+         * Called to construct a [FragmentTransaction] which will switch to the tab with the tab ID
+         * [tabId] and its associated [Fragment]. We initialize our [FragmentTransaction] variable
+         * `var ftVar` to our parameter [ft], and initialize our [TabInfo] variable `var newTab`
+         * to null. Then we loop over `i` for all of the [TabInfo] in our list field [mTabs] setting
+         * our `val tab` variable to the `i`'th entry in [mTabs] and if the `tag` property of `tab`
+         * is equal to [tabId] we set `newTab` to `tab`. When done searching [mTabs] for [tabId] we
+         * check to make sure `newTab` is not null throwing an [IllegalStateException] complaining
+         * "No tab known for tag [tabId]".
+         *
+         * Then we check if `newTab` is equal to our [mLastTab] field and do nothing more if it is.
+         * Otherwise we check whether `ftVar` is null and initialize it by using our [FragmentManager]
+         * field [mManager] to being a new [FragmentTransaction]. Then is our [mLastTab] field is
+         * not null, and the `fragment` property of [mLastTab] is not null we instruct `ftVar` to
+         * detach that fragment from the UI.
+         *
+         * We now branch on whether the `fragment` property of `newTab` is null:
+         *
+         *  - `fragment` property is null: we set it to the [Fragment] returned by the `instantiate`
+         *  method when asked to instantiate a fragment with the class given by the `name` property
+         *  of the `clss` property of `newTab` using the `args` property of `newTab` as the fragment
+         *  argument [Bundle], and then use `ftVar` to add that fragment into the view with the
+         *  ID of our [mContainerId] field using the `tag` property of `newTab` as the tag name.
+         *
+         *  - `fragment` property is not null: we use `ftVar` to re-attach the [Fragment] given by
+         *  the `fragment` property of `newTab`.
+         *
+         * Finally we return `ftVar` to the caller.
+         *
+         * @param tabId tab ID of the tab and associated [Fragment] we want to switch to.
+         * @param ft    if non-null this is a [FragmentTransaction] we should append commands to.
+         *
+         * @return a [FragmentTransaction] which includes the commands necessary to switch tabs.
+         */
         @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
         private fun doTabChanged(tabId: String?, ft: FragmentTransaction?): FragmentTransaction? {
             var ftVar = ft
@@ -427,8 +487,11 @@ class FragmentTabsFragment : Fragment() {
                 }
                 if (newTab.fragment == null) {
                     @Suppress("DEPRECATION")
-                    newTab.fragment = instantiate(mContext,
-                            newTab.clss.name, newTab.args)
+                    newTab.fragment = instantiate(
+                            mContext,
+                            newTab.clss.name,
+                            newTab.args
+                    )
                     ftVar.add(mContainerId, newTab.fragment!!, newTab.tag)
                 } else {
                     ftVar.attach(newTab.fragment!!)
