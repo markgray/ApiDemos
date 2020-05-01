@@ -28,10 +28,13 @@ import com.example.android.apis.R
 import java.util.*
 
 /**
- * The configuration screen for the ExampleAppWidgetProvider widget sample.
+ * The configuration screen for the [ExampleAppWidgetProvider] widget sample.
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class ExampleAppWidgetConfigure : AppCompatActivity() {
+    /**
+     *
+     */
     var mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
     var mAppWidgetPrefix: EditText? = null
     public override fun onCreate(icicle: Bundle?) {

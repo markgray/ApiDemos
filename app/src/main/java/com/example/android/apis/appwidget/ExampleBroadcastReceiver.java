@@ -33,16 +33,17 @@ public class ExampleBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("ExmampleBroadcastReceiver", "intent=" + intent);
+        Log.d("ExampleBroadcastReceive", "intent=" + intent);
 
         // For our example, we'll also update all of the widgets when the timezone
         // changes, or the user or network sets the time.
         String action = intent.getAction();
+        //noinspection ConstantConditions
         if (action.equals(Intent.ACTION_TIMEZONE_CHANGED)
                 || action.equals(Intent.ACTION_TIME_CHANGED)) {
             AppWidgetManager gm = AppWidgetManager.getInstance(context);
-            ArrayList<Integer> appWidgetIds = new ArrayList<Integer>();
-            ArrayList<String> texts = new ArrayList<String>();
+            ArrayList<Integer> appWidgetIds = new ArrayList<>();
+            ArrayList<String> texts = new ArrayList<>();
 
             ExampleAppWidgetConfigure.loadAllTitlePrefs(context, appWidgetIds, texts);
 
