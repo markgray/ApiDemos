@@ -481,7 +481,8 @@
         <activity
             android:name=".app.FragmentNestingTabs"
             android:enabled="@bool/atLeastJellyBeanMR1"
-            android:label="@string/fragment_nesting_tabs">
+            android:label="@string/fragment_nesting_tabs"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
