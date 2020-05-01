@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2016, The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.example.android.apis.content;
+package com.example.android.apis.content
 
 /**
  * Global constant job IDs used by the app.
  */
-public final class JobIds {
-    static final int MEDIA_CONTENT_JOB = 1;
-    static final int PHOTOS_CONTENT_JOB = 2;
+object JobIds {
+    const val MEDIA_CONTENT_JOB = 1
+    const val PHOTOS_CONTENT_JOB = 2
 }
