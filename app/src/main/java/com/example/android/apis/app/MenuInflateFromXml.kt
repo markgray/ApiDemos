@@ -22,7 +22,12 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
 
 import androidx.appcompat.app.AppCompatActivity
 
@@ -64,9 +69,9 @@ class MenuInflateFromXml : AppCompatActivity() {
      * In order to create the [Spinner] for our [mSpinner] field we create an `ArrayAdapter<String>`
      * to initialize our variable `val adapter` using the system layout file
      * android.R.layout.simple_spinner_item as the layout file for each item, and the [String] array
-     * static field [sMenuExampleNames] for the `Object`'s to represent in the [ListView] of the
+     * static field [sMenuExampleNames] for the `Object`'s to represent in the `ListView` of the
      * [Spinner]. We set the layout resource to create the drop down views of the `adapter` to the
-     * [CheckedTextView] contained in the system layout file android.R.layout.simple_spinner_dropdown_item.
+     * `CheckedTextView` contained in the system layout file android.R.layout.simple_spinner_dropdown_item.
      * Next we initialize our [Spinner] field [mSpinner] with a new instance of [Spinner], set its
      * ID to R.id.spinner (so the system will automatically save its instance state), set the Adapter
      * for [mSpinner] to `adapter`, and set its [AdapterView.OnItemSelectedListener] to an anonymous
