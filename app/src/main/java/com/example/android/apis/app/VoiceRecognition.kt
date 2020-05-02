@@ -25,8 +25,16 @@ import android.os.Handler
 import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.ListView
+import android.widget.Spinner
+import android.widget.SpinnerAdapter
+import android.widget.TextView
+import android.widget.Toast
+
 import androidx.appcompat.app.AppCompatActivity
+
 import com.example.android.apis.R
 
 /**
