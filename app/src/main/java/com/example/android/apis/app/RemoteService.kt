@@ -17,13 +17,24 @@ package com.example.android.apis.app
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.*
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.Service
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.graphics.Color
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.RemoteException
+import android.os.Handler
+import android.os.IBinder
+import android.os.Message
+import android.os.Process
+import android.os.RemoteCallbackList
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -33,8 +44,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.app.RemoteService.Binding
 import com.example.android.apis.app.RemoteService.Controller
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
 import com.example.android.apis.R
 
 /**
