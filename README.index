@@ -1750,14 +1750,14 @@ Media
             files and streams.
             TODO: Set the path variables to a local audio and video file path.
 
+    Media/MediaProjection                  all -- v21 or crash
+        .media.projection.MediaProjectionDemo
+            Shows how to use a ProjectionManager.createScreenCaptureIntent to capture
+            screen content to a VirtualDisplay which is created using
+            MediaProjection.createVirtualDisplay to display to a SurfaceView.
     *** Crashes on Q due to: java.lang.SecurityException: Media projections require a
      foreground service of type ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION
      TODO: Fix to run on Q eventually.
-    Media/MediaProjection                  all -- v21 or crash
-        .media.projection.MediaProjectionDemo
-            Shows how to use a ProjectionManager.createScreenCaptureIntent to capture 
-            screen content to a VirtualDisplay which is created using 
-            MediaProjection.createVirtualDisplay to display to a SurfaceView.
 
     Media/VideoView                        all
         .media.VideoViewDemo
