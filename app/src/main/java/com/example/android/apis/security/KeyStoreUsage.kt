@@ -26,14 +26,29 @@ import android.security.keystore.KeyProperties
 import android.util.Base64
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.android.apis.R
+
 import java.io.IOException
-import java.security.*
+import java.security.InvalidAlgorithmParameterException
+import java.security.InvalidKeyException
+import java.security.KeyPairGenerator
+import java.security.KeyStore
+import java.security.KeyStoreException
+import java.security.NoSuchAlgorithmException
+import java.security.NoSuchProviderException
+import java.security.Signature
+import java.security.SignatureException
+import java.security.UnrecoverableEntryException
 import java.security.cert.CertificateException
 import java.util.*
+
+import com.example.android.apis.R
 
 /**
  * Shows how to use api to generate Key pairs, sign and verify.
@@ -235,14 +250,14 @@ class KeyStoreUsage : AppCompatActivity() {
     }
 
     /**
-     * The [Adapter] we use for our [AliasAdapter] field [mAdapter], it stores the alias strings
+     * The `Adapter` we use for our [AliasAdapter] field [mAdapter], it stores the alias strings
      * the user has used in its `ArrayAdapter<String>`
      */
     inner class AliasAdapter
     /**
      * Our constructor. We call our super's constructor specifying
      * android.R.layout.simple_list_item_single_choice as the resource ID for the layout file
-     * containing a [TextView] to use when instantiating views (it is a [CheckedTextView]).
+     * containing a `TextView` to use when instantiating views (it is a `CheckedTextView`).
      *
      * @param context [Context] to use to access resources.
      */
@@ -348,7 +363,8 @@ class KeyStoreUsage : AppCompatActivity() {
             while (result!!.hasMoreElements()) {
                 aliases.add(result.nextElement())
             }
-            mAdapter!!.setAliases(aliases)
+            @Suppress("UNCHECKED_CAST")
+            mAdapter!!.setAliases((aliases as List<String>))
         }
     }
 
@@ -361,7 +377,7 @@ class KeyStoreUsage : AppCompatActivity() {
          * Generate a new EC key pair entry in the Android Keystore by using the [KeyPairGenerator]
          * API. First we set [String] `val alias` from our parameter `params[0]` then we set
          * [KeyPairGenerator] `val kpg` to a [KeyPairGenerator] object that generates public/private
-         * key pairs for the KEY_ALGORITHM_EC algorithm using the [KeyPairGeneratorSpi] implementation
+         * key pairs for the KEY_ALGORITHM_EC algorithm using the `KeyPairGeneratorSpi` implementation
          * from the "AndroidKeyStore" provider. We initialize `kpg` using a
          * [KeyGenParameterSpec.Builder] which uses `alias` as the alias of the entry in which the
          * generated key will appear in Android KeyStore, and whose purpose is both PURPOSE_SIGN and
@@ -442,7 +458,7 @@ class KeyStoreUsage : AppCompatActivity() {
          * [String] `alias` to initialize [KeyStore.Entry] `val entry`. If `entry` is not
          * an instance of [KeyStore.PrivateKeyEntry] we log the error and return null. Otherwise
          * we initialize [Signature] `val s` with an instance that implements the "SHA256withECDSA"
-         * signature algorithm. We initialize `s` for signing using the [PrivateKey] of `entry`,
+         * signature algorithm. We initialize `s` for signing using the `PrivateKey` of `entry`,
          * update the data to be signed or verified by `s`, and then use `s` to initialize [ByteArray]
          * `val signature` with the signature bytes of all the data updated. We then return
          * `signature` as a Base64-encoded string using [Base64.DEFAULT].
