@@ -16,9 +16,6 @@
 
 package com.example.android.apis.app
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.AlertDialog
@@ -38,9 +35,17 @@ import android.view.Display
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.CompoundButton
 import android.widget.CompoundButton.OnCheckedChangeListener
+import android.widget.ImageView
+import android.widget.ListView
+import android.widget.Spinner
+import android.widget.TextView
 
 import androidx.appcompat.app.AppCompatActivity
 
