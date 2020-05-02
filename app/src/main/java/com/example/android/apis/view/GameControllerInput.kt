@@ -25,8 +25,17 @@ import android.os.Bundle
 import android.util.Log
 import android.util.SparseArray
 import android.util.SparseIntArray
-import android.view.*
-import android.widget.*
+import android.view.InputDevice
+import android.view.KeyEvent
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.BaseAdapter
+import android.widget.ListView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import java.util.*
@@ -145,7 +154,7 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
     }
 
     /**
-     * Called when the current [Window] of the activity gains or loses focus. This is the best
+     * Called when the current `Window` of the activity gains or loses focus. This is the best
      * indicator of whether this activity is visible to the user. First we call through to our
      * super's implementation of `onWindowFocusChanged`, then we request focus for our [GameView]
      * field [mGame].
@@ -159,7 +168,7 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
 
     /**
      * Called to process key events. You can override this to intercept all key events before they
-     * are dispatched to the [Window]. First we call our method [getInputDeviceState] to initialize
+     * are dispatched to the `Window`. First we call our method [getInputDeviceState] to initialize
      * [InputDeviceState] `val state` with the [InputDeviceState] of the device ID that generated
      * our [KeyEvent] parameter [event]. If `state` is not null, we switch on the value of the
      * action of [event]:
