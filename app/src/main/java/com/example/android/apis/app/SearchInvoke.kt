@@ -23,8 +23,12 @@ import android.provider.SearchRecentSuggestions
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -72,7 +76,7 @@ class SearchInvoke : AppCompatActivity() {
      * create from the "string-array" R.array.search_menuModes an `ArrayAdapter<CharSequence>` for
      * `val adapter` using the system layout android.R.layout.simple_spinner_dropdown_item, set the
      * layout resource to create the drop down views to android.R.layout.simple_spinner_dropdown_item
-     * and set the [SpinnerAdapter] of our [Spinner] field [mMenuMode] to `adapter`. We set the
+     * and set the `SpinnerAdapter` of our [Spinner] field [mMenuMode] to `adapter`. We set the
      * `OnItemSelectedListener` of [mMenuMode] to an anonymous class which selects the default key
      * handling for this activity based on the Spinner item selected to DEFAULT_KEYS_SEARCH_LOCAL
      * if MENUMODE_TYPE_TO_SEARCH is selected, and DEFAULT_KEYS_DISABLE otherwise (keyboard required
