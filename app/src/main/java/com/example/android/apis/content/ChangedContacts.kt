@@ -28,7 +28,13 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.CursorAdapter
+import android.widget.LinearLayout
+import android.widget.ListView
+import android.widget.TextView
+import android.widget.Toast
+
 import androidx.appcompat.app.AppCompatActivity
 
 /**
