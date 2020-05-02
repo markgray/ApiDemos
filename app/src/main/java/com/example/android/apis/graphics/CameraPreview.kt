@@ -25,12 +25,18 @@ import android.hardware.Camera.CameraInfo
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.SurfaceHolder
+import android.view.SurfaceView
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 
 import androidx.appcompat.app.AppCompatActivity
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
 import com.example.android.apis.R
 
 import java.io.IOException
@@ -287,7 +293,7 @@ class CameraPreview : AppCompatActivity() {
          * Called when the user selects the "Switch Camera" menu item. First we call our [setCamera]
          * method to set our [mCamera] field to our [Camera] parameter [camera]. Then wrapped in a
          * *try* block intended to catch and log [IOException] we call the `setPreviewDisplay` method
-         * of [camera] to have it set the [Surface] to be used for display to our [SurfaceHolder]
+         * of [camera] to have it set the `Surface` to be used for display to our [SurfaceHolder]
          * field [mHolder]. After exiting the *try* block we initialize `val parameters` to the
          * [Camera.Parameters] of [camera], then call the `setPreviewSize` method of `parameters`
          * to set the dimensions for preview pictures to the width and height of our [Camera.Size]
@@ -389,7 +395,7 @@ class CameraPreview : AppCompatActivity() {
         /**
          * This is called immediately after the surface is first created. Wrapped in a try block
          * intended* to catch and log [IOException], we test to make sure our [Camera] field [mCamera]
-         * is not *null* first and then instruct it to set the [Surface] it will use for live preview
+         * is not *null* first and then instruct it to set the `Surface` it will use for live preview
          * to our [SurfaceHolder] parameter [holder].
          *
          * @param holder The [SurfaceHolder] whose surface is being created.
