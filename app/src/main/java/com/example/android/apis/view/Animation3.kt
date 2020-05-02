@@ -20,8 +20,10 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
-import android.widget.*
+import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 
 // Need the following import to get access to the app resources, since this
@@ -40,10 +42,10 @@ class Animation3 : AppCompatActivity(), OnItemSelectedListener {
      * `onCreate`, then we set our content view to our layout file R.layout.animation_3. We
      * initialize [Spinner] `val s` by locating the spinner with ID R.id.spinner in our layout,
      * then create `ArrayAdapter<String>` `val adapter` using android.R.layout.simple_spinner_item
-     * as the resource ID for a layout file containing a [TextView] to use when instantiating views,
+     * as the resource ID for a layout file containing a `TextView` to use when instantiating views,
      * and our array [String] array field [INTERPOLATORS] as the objects to represent in the [Spinner].
      * We set the layout resource to create the drop down views of `adapter` to the resource file
-     * android.R.layout.simple_spinner_dropdown_item, and then set `adapter` as the [SpinnerAdapter]
+     * android.R.layout.simple_spinner_dropdown_item, and then set `adapter` as the `SpinnerAdapter`
      * for `s`. Finally we set "this" as the [OnItemSelectedListener] for `s`.
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
@@ -66,7 +68,7 @@ class Animation3 : AppCompatActivity(), OnItemSelectedListener {
      * Callback method to be invoked when an item in the [Spinner] with ID R.id.spinner has
      * been selected. First we locate the [View] `val target` in our layout with ID R.id.target
      * (the TextView with the text "Interpolators" which we animate), then we find its parent view
-     * [View] `val targetParent` (the main [LinearLayout] holding the entire UI). We create
+     * [View] `val targetParent` (the main `LinearLayout holding the entire UI). We create
      * [Animation] `val a` which is a [TranslateAnimation] with a `fromXDelta` of 0.0, a `toXDelta`
      * which is calculated to be the width of `targetParent` minus the width of `target` minus the
      * left and right padding of `targetParent`, and with 0.0 for both `fromYDelta` and `toYDelta`.
