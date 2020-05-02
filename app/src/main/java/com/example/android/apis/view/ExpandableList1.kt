@@ -21,10 +21,19 @@ import android.app.ExpandableListActivity
 import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.*
+import android.view.ContextMenu
 import android.view.ContextMenu.ContextMenuInfo
-import android.widget.*
+import android.view.Gravity
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.AbsListView
+import android.widget.BaseExpandableListAdapter
+import android.widget.ExpandableListAdapter
+import android.widget.ExpandableListView
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo
+import android.widget.TextView
+import android.widget.Toast
 import com.example.android.apis.R
 
 /**
@@ -37,7 +46,7 @@ import com.example.android.apis.R
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 class ExpandableList1 : ExpandableListActivity() {
     /**
-     * The [ExpandableListAdapter] which serves as the [ListAdapter] for our activity.
+     * The [ExpandableListAdapter] which serves as the `ListAdapter` for our activity.
      * (It is actually a [MyExpandableListAdapter] that is initialized in [onCreate]).
      */
     var mAdapter: ExpandableListAdapter? = null
