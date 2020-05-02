@@ -21,16 +21,30 @@ import android.app.ListActivity
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.pdf.PdfDocument
-import android.os.*
-import android.print.*
+import android.os.AsyncTask
+import android.os.Build
+import android.os.Bundle
+import android.os.CancellationSignal
+import android.os.ParcelFileDescriptor
+import android.print.PageRange
+import android.print.PrintAttributes
+import android.print.PrintDocumentAdapter
+import android.print.PrintDocumentInfo
+import android.print.PrintManager
 import android.print.pdf.PrintedPdfDocument
 import android.util.SparseIntArray
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.view.View.MeasureSpec
+import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
+
 import com.example.android.apis.R
+
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
