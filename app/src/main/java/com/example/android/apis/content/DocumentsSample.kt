@@ -24,9 +24,15 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.DocumentsContract
 import android.util.Log
-import android.widget.*
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.LinearLayout
+import android.widget.ScrollView
+import android.widget.TextView
+
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
