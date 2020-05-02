@@ -8,8 +8,11 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
-import android.widget.*
+import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -30,7 +33,7 @@ class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListe
     private var mPhotosList: ListView? = null
 
     /**
-     * [FrameLayout] with ID R.id.container containing both [ListView] field [mPhotosList] and
+     * `FrameLayout` with ID R.id.container containing both [ListView] field [mPhotosList] and
      * [ImageView] field [mImageView]
      */
     private var mContainer: ViewGroup? = null
@@ -48,7 +51,7 @@ class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListe
      * we initialize [ViewGroup] field [mContainer] by locating the view group with ID R.id.container.
      *
      * We create `ArrayAdapter<String>` `val adapter` using android.R.layout.simple_list_item_1 as
-     * the layout file containing a [TextView] to use when instantiating views, and PHOTOS_NAMES as
+     * the layout file containing a `TextView` to use when instantiating views, and PHOTOS_NAMES as
      * the objects to represent in the [ListView], set it as the adapter for our [ListView] field
      * [mPhotosList], and set "this" as the `OnItemClickListener` for [mPhotosList].
      *
