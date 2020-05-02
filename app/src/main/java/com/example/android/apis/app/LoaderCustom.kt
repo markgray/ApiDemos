@@ -34,20 +34,25 @@ import android.os.Bundle
 import android.os.OperationCanceledException
 import android.text.TextUtils
 import android.util.Log
-import android.view.*
-import android.widget.*
-
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.ListView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.SearchView.OnCloseListener
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.fragment.app.ListFragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.AsyncTaskLoader
 import androidx.loader.content.Loader
-import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.SearchView.OnCloseListener
-import androidx.appcompat.widget.SearchView.OnQueryTextListener
-
 import com.example.android.apis.R
-
 import java.io.File
 import java.text.Collator
 import java.util.*
@@ -605,7 +610,7 @@ class LoaderCustom : AppCompatActivity() {
     }
 
     /**
-     * [ListAdapter] used as cursor to populate the [ListFragment]'s list of our Fragment
+     * `ListAdapter` used as cursor to populate the [ListFragment]'s list of our Fragment
      * [AppListFragment]
      */
     class AppListAdapter
@@ -800,7 +805,7 @@ class LoaderCustom : AppCompatActivity() {
         /**
          * Called when the query text is changed by the user. If the [newText] entered by the
          * user is not empty, we set our [String] field [mCurFilter] to it, otherwise we set
-         * [mCurFilter] to *null*. We get a [Filter] for our [AppListAdapter] field [mAdapter]
+         * [mCurFilter] to *null*. We get a `Filter` for our [AppListAdapter] field [mAdapter]
          * and then use it to start an asynchronous filtering operation using [mCurFilter]
          * (canceling all previous non-executed filtering requests and posting a new filtering
          * request that will be executed later.) Finally we return *true* to indicate that the
