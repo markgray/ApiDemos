@@ -31,7 +31,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Example stub job to monitor when there is a change to photos in the media provider.

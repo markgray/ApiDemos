@@ -38,7 +38,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Uses AnimatorSet.playTogether(Animator... items) to play four different

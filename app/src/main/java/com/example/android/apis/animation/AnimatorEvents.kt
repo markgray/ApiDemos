@@ -16,9 +16,6 @@
 
 package com.example.android.apis.animation
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -40,7 +37,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Supposed to show when the various Sequencer Events and Animator Events:

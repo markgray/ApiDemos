@@ -50,7 +50,7 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import com.example.android.apis.app.LoaderThrottle.SimpleProvider
-import java.util.*
+import java.util.HashMap
 
 /**
  * Demonstration of bottom to top implementation of a content provider holding

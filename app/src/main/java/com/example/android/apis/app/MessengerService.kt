@@ -35,7 +35,7 @@ import android.widget.Toast
 
 import com.example.android.apis.R
 
-import java.util.*
+import java.util.ArrayList
 
 /**
  * This is an example of implementing an application service that uses the

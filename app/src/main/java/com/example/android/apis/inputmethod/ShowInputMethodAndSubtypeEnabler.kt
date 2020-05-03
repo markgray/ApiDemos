@@ -27,7 +27,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Demonstrates how to show the input method subtype enabler without relying on

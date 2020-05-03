@@ -38,7 +38,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Creates an ObjectAnimator to animate the y position of an object from 0 to the

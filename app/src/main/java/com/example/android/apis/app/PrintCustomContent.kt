@@ -47,7 +47,7 @@ import com.example.android.apis.R
 
 import java.io.FileOutputStream
 import java.io.IOException
-import java.util.*
+import java.util.ArrayList
 
 /**
  * This class demonstrates how to implement custom printing support.
