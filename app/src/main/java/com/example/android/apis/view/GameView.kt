@@ -29,7 +29,8 @@ import android.view.InputDevice
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
-import java.util.*
+import java.util.ArrayList
+import java.util.Random
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos

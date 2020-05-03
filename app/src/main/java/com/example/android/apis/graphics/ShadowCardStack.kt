@@ -26,7 +26,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Clever use of [Animator] and [AnimatorSet] to move card stack using "material design" shadowing.
