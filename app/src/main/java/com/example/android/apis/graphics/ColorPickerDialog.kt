@@ -18,7 +18,13 @@ package com.example.android.apis.graphics
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.ColorMatrix
+import android.graphics.Paint
+import android.graphics.RectF
+import android.graphics.Shader
+import android.graphics.SweepGradient
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
