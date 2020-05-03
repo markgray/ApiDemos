@@ -15,10 +15,6 @@
  */
 package com.example.android.apis.content
 
-//Need the following import to get access to the app resources, since this
-//class is in a sub-package.
-import com.example.android.apis.R
-
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -31,13 +27,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.LinearLayout
-
 import androidx.appcompat.app.AppCompatActivity
-import java.io.*
-
+import com.example.android.apis.R
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 
 /**
  * Shows how to use the external storage directory api for both public and app private directories.
