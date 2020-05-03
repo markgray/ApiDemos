@@ -20,7 +20,13 @@ package com.example.android.apis.content
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.LoaderManager
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.CursorLoader
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.Loader
+import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.CursorWrapper
 import android.os.Build
