@@ -16,9 +16,26 @@
 package com.example.android.apis.graphics
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapShader
+import android.graphics.Canvas
+import android.graphics.ComposePathEffect
+import android.graphics.CornerPathEffect
+import android.graphics.DiscretePathEffect
+import android.graphics.LinearGradient
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.PathEffect
+import android.graphics.RectF
+import android.graphics.Shader
+import android.graphics.SweepGradient
 import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.*
+import android.graphics.drawable.shapes.ArcShape
+import android.graphics.drawable.shapes.OvalShape
+import android.graphics.drawable.shapes.PathShape
+import android.graphics.drawable.shapes.RectShape
+import android.graphics.drawable.shapes.RoundRectShape
+import android.graphics.drawable.shapes.Shape
 import android.os.Bundle
 import android.view.View
 
