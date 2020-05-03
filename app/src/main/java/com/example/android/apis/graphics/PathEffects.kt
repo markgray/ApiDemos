@@ -17,7 +17,16 @@ package com.example.android.apis.graphics
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.ComposePathEffect
+import android.graphics.CornerPathEffect
+import android.graphics.DashPathEffect
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.PathDashPathEffect
+import android.graphics.PathEffect
+import android.graphics.RectF
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
