@@ -19,7 +19,12 @@ package com.example.android.apis.app
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.content.*
+import android.content.ContentProvider
+import android.content.ContentResolver
+import android.content.ContentUris
+import android.content.ContentValues
+import android.content.Context
+import android.content.UriMatcher
 import android.database.Cursor
 import android.database.DatabaseUtils
 import android.database.SQLException
@@ -44,6 +49,7 @@ import androidx.fragment.app.ListFragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
+import com.example.android.apis.app.LoaderThrottle.SimpleProvider
 import java.util.*
 
 /**
@@ -682,6 +688,7 @@ class LoaderThrottle : AppCompatActivity() {
          *
          * @param savedInstanceState we do not override `onSaveInstanceState` so do not use this
          */
+        @SuppressLint("UseRequireInsteadOfGet")
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
 
@@ -753,7 +760,7 @@ class LoaderThrottle : AppCompatActivity() {
          * @return boolean Return *false* to allow normal menu processing to
          * proceed, *true* to consume it here.
          */
-        @SuppressLint("StaticFieldLeak")
+        @SuppressLint("StaticFieldLeak", "UseRequireInsteadOfGet")
         override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
             val cr = activity!!.contentResolver
@@ -870,6 +877,7 @@ class LoaderThrottle : AppCompatActivity() {
          * @param args Any arguments supplied by the caller. (We do not use arguments)
          * @return Return a new [Loader] instance that is ready to start loading.
          */
+        @SuppressLint("UseRequireInsteadOfGet")
         override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
 
             val cl = CursorLoader(
