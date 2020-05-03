@@ -30,7 +30,11 @@ import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import java.util.*
-import kotlin.math.*
+import kotlin.math.abs
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.hypot
+import kotlin.math.sin
 
 /**
  * A trivial joystick based physics game to demonstrate joystick handling.

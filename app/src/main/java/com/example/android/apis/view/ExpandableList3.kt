@@ -19,7 +19,8 @@ import android.app.ExpandableListActivity
 import android.os.Bundle
 import android.widget.ExpandableListAdapter
 import android.widget.SimpleExpandableListAdapter
-import java.util.*
+import java.util.ArrayList
+import java.util.HashMap
 
 /**
  * Demonstrates expandable lists backed by a Simple Map-based adapter, which is created using

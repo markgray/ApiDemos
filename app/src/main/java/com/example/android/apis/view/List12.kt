@@ -22,7 +22,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import com.example.android.apis.R
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Demonstrates the using a list view in transcript mode. The bottom of the layout is an
