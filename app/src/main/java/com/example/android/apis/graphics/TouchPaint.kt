@@ -18,7 +18,12 @@ package com.example.android.apis.graphics
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.RectF
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -28,7 +33,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
-import java.util.*
+import java.util.Random
 import kotlin.math.cos
 import kotlin.math.sin
 
