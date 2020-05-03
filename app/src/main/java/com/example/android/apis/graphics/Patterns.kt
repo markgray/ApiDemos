@@ -17,10 +17,19 @@ package com.example.android.apis.graphics
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapShader
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.DrawFilter
+import android.graphics.Matrix
+import android.graphics.Paint
+import android.graphics.PaintFlagsDrawFilter
+import android.graphics.Shader
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
+import com.example.android.apis.graphics.Patterns.SampleView
 
 /**
  * Creates two [Bitmap]'s: a blue rectangle on a red background, and a green circle on a clear
