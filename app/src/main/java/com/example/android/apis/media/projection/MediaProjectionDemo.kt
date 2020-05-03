@@ -40,7 +40,7 @@ import android.widget.Toast
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Shows how to use a ProjectionManager.createScreenCaptureIntent to capture screen content to a
