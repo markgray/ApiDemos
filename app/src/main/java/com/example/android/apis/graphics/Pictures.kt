@@ -17,11 +17,16 @@ package com.example.android.apis.graphics
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Picture
+import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
 import android.os.Bundle
 import android.view.View
+import com.example.android.apis.graphics.Pictures.SampleView
 
 /**
  * Shows how to use the [Picture] class to record drawing instructions performed on the [Canvas]
@@ -35,7 +40,7 @@ import android.view.View
  * Before API 29 it would then write the Picture to a `ByteArrayOutputStream` and draw it by reading
  * that `ByteArrayOutputStream` back in and drawing it using the [Canvas.drawPicture] method that
  * used `Picture.createFromStream` but API 29 removed the long deprecated `Picture.writeToStream` and
- * `Picture.createFromStream`. The preferred method now is to draw the [Picture] into a [Bitmap].
+ * `Picture.createFromStream`. The preferred method now is to draw the [Picture] into a `Bitmap`.
  */
 class Pictures : GraphicsActivity() {
     /**
