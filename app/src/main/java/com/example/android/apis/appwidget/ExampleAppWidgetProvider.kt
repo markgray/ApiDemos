@@ -27,8 +27,6 @@ import com.example.android.apis.R
 import com.example.android.apis.appwidget.ExampleAppWidgetConfigure.Companion.deleteTitlePref
 import com.example.android.apis.appwidget.ExampleAppWidgetConfigure.Companion.loadTitlePref
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
 /**
  * A widget provider.  We have a string that we pull from a preference in order to show
  * the configuration settings and the current time when the widget was updated.  We also

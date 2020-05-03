@@ -23,7 +23,10 @@ import android.view.View
 import android.widget.ListView
 import android.widget.SimpleAdapter
 import java.text.Collator
-import java.util.*
+import java.util.ArrayList
+import java.util.Collections
+import java.util.Comparator
+import java.util.HashMap
 
 /**
  * This is the controlling activity for the entire application and is responsible for parsing the

@@ -25,7 +25,7 @@ import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.*
+import java.util.ArrayList
 
 /**
  * The configuration screen for the [ExampleAppWidgetProvider] widget sample.

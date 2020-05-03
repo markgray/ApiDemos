@@ -22,7 +22,7 @@ import android.content.Intent
 import android.util.Log
 import com.example.android.apis.appwidget.ExampleAppWidgetConfigure.Companion.loadAllTitlePrefs
 import com.example.android.apis.appwidget.ExampleAppWidgetProvider.Companion.updateAppWidget
-import java.util.*
+import java.util.ArrayList
 
 /**
  * A BroadcastReceiver that listens for updates for the ExampleAppWidgetProvider.  This
