@@ -16,8 +16,12 @@
 package com.example.android.apis.graphics
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import java.io.ByteArrayOutputStream
