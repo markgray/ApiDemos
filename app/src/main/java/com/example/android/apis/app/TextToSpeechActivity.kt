@@ -24,7 +24,8 @@ import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.*
+import java.util.Locale
+import java.util.Random
 
 /**
  * Demonstrates text-to-speech (TTS). Please note the following steps:

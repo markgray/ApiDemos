@@ -55,7 +55,9 @@ import androidx.loader.content.Loader
 import com.example.android.apis.R
 import java.io.File
 import java.text.Collator
-import java.util.*
+import java.util.ArrayList
+import java.util.Collections
+import java.util.Comparator
 
 /**
  * Demonstration of the implementation of a custom Loader. Shows how to implement a custom

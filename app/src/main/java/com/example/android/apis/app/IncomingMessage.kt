@@ -32,7 +32,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 
 import com.example.android.apis.R
-import java.util.*
+import java.util.Random
 
 /**
  * UI for posting an example notification. Allows you to choose between a regular app notification,

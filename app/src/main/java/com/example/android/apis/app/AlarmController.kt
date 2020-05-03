@@ -30,10 +30,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import java.util.*
-
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
+import java.util.Calendar
 import com.example.android.apis.R
 
 /**

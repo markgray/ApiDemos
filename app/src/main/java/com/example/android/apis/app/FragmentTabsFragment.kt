@@ -38,7 +38,7 @@ import com.example.android.apis.app.FragmentReceiveResult.ReceiveResultFragment
 import com.example.android.apis.app.LoaderCustom.AppListFragment
 import com.example.android.apis.app.LoaderThrottle.ThrottledLoaderListFragment
 
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Sample fragment that contains tabs of other fragments.
