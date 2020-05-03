@@ -16,7 +16,12 @@
 package com.example.android.apis.graphics
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Matrix
+import android.graphics.Paint
+import android.graphics.Shader
+import android.graphics.SweepGradient
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
