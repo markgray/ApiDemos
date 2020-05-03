@@ -19,7 +19,12 @@ package com.example.android.apis.animation
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
-import android.animation.*
+import android.animation.Animator
+import android.animation.ObjectAnimator
+import android.animation.AnimatorListenerAdapter
+import android.animation.Keyframe
+import android.animation.LayoutTransition
+import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.os.Build
