@@ -23,8 +23,14 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.preference.*
+import android.preference.CheckBoxPreference
+import android.preference.EditTextPreference
+import android.preference.ListPreference
+import android.preference.PreferenceActivity
+import android.preference.PreferenceCategory
+import android.preference.PreferenceScreen
 import android.preference.SwitchPreference
+
 import com.example.android.apis.R
 
 /**
@@ -35,7 +41,7 @@ import com.example.android.apis.R
 class PreferencesFromCode : PreferenceActivity() {
     /**
      * Called when the [PreferenceActivity] is starting. First we call through to our super's
-     * implementation of `onCreate`. Next we use the [PreferenceManager] used by this activity
+     * implementation of `onCreate`. Next we use the `PreferenceManager` used by this activity
      * to create a [PreferenceScreen] `val root` for "this". We set the root of the preference
      * hierarchy that this activity is showing to `root`, and then call our method
      * [populatePreferenceHierarchy] to programmatically add preferences to it.
@@ -50,12 +56,12 @@ class PreferencesFromCode : PreferenceActivity() {
     }
 
     /**
-     * Called to programmatically add a bunch of different types of [Preference] to the
+     * Called to programmatically add a bunch of different types of `Preference` to the
      * [PreferenceScreen] parameter [root]. Our UI uses four [PreferenceCategory] objects
-     * to group [Preference] objects of similar types:
+     * to group `Preference` objects of similar types:
      *
      *  * [PreferenceCategory] `val inlinePrefCat` - title "In-line preferences". We create it,
-     *  set its title and add it to [root]. Then we proceed to add two [Preference] objects
+     *  set its title and add it to [root]. Then we proceed to add two `Preference` objects
      *  to `inlinePrefCat`:
      *      * [CheckBoxPreference] `val checkboxPref` - we create it, set its key to
      *      "checkbox_preference", set its title to "Switch preference", set its summary
@@ -65,7 +71,7 @@ class PreferencesFromCode : PreferenceActivity() {
      *      add it to `inlinePrefCat`.
      *
      *  * [PreferenceCategory] `val dialogBasedPrefCat` - title "Dialog-based preferences". We create
-     *  it, set its title and add it to `root`. Then we proceed to add two [Preference] objects to
+     *  it, set its title and add it to `root`. Then we proceed to add two `Preference` objects to
      *  `dialogBasedPrefCat`:
      *      * [EditTextPreference] `val editTextPref` - we create it, set its dialog title to
      *      "Enter your favorite animal" (displayed when the dialog is popped up), set its key
@@ -78,7 +84,7 @@ class PreferencesFromCode : PreferenceActivity() {
      *      uses a list dialog", and then add it to `dialogBasedPrefCat`.
      *
      *  * [PreferenceCategory] `val launchPrefCat` - title "Launch preferences". We create it,
-     *  set its title and add it to `root`. Then we proceed to add two [Preference] objects
+     *  set its title and add it to `root`. Then we proceed to add two `Preference` objects
      *  to `launchPrefCat`:
      *      * [PreferenceScreen] `val screenPref` - we create it, set its key to "screen_preference",
      *      set its title to "Screen preference", set its summary to "Shows another screen of
@@ -92,7 +98,7 @@ class PreferencesFromCode : PreferenceActivity() {
      *      it to `launchPrefCat`
      *
      *  * [PreferenceCategory] `val prefAttrsCat` - title "Preference attributes". We create it,
-     *  set its title and add it to [root]. Then we proceed to add two [Preference] objects
+     *  set its title and add it to [root]. Then we proceed to add two `Preference` objects
      *  to `prefAttrsCat`:
      *      * [CheckBoxPreference] `val parentCheckBoxPref` - we create it, set its title to
      *      "Parent checkbox preference", set its summary to "This is visually a parent", add it
