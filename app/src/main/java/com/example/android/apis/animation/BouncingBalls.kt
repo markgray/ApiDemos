@@ -16,10 +16,12 @@
 
 package com.example.android.apis.animation
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-
-import android.animation.*
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ArgbEvaluator
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
@@ -37,7 +39,7 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Uses several different kinds of ObjectAnimator to animate bouncing color changing balls.
