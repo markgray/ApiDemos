@@ -17,8 +17,12 @@ package com.example.android.apis.graphics
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.view.View
 import com.example.android.apis.graphics.PurgeableBitmap.RefreshHandler
 import java.io.ByteArrayOutputStream
