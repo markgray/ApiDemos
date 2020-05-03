@@ -17,7 +17,7 @@ package com.example.android.apis.graphics.kube
 
 import android.util.Log
 import java.nio.ShortBuffer
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Class representing a flat surface of a [GLShape], a quadrilateral (square) in the case of
@@ -119,7 +119,7 @@ class GLFace {
 
     /**
      * Calculates and returns the number of indices required to draw the vertices in our list of
-     * vertices `ArrayList<GLVertex>` field [mVertexList]. Called from [GLShape.getIndexCount],
+     * vertices `ArrayList<GLVertex>` field [mVertexList]. Called from [GLShape.indexCount],
      * which is called from [GLWorld.addShape], which is called from [Kube.makeGLWorld], which
      * is called from the `onCreate` override of [Kube] when it calls the constructor for
      * [KubeRenderer] to initialize its [KubeRenderer] field `mRenderer`. Since in our case

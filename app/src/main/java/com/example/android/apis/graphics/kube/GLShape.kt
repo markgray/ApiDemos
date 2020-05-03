@@ -16,7 +16,7 @@
 package com.example.android.apis.graphics.kube
 
 import java.nio.ShortBuffer
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Base class for [Cube], which uses its methods [addVertex] and [addFace] to add

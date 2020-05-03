@@ -19,7 +19,7 @@ import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
-import java.util.*
+import java.util.Random
 
 /**
  * Animates a Rubic cube, randomly spinning layers one by one.

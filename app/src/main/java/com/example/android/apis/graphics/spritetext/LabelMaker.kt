@@ -21,7 +21,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.opengl.GLUtils
-import java.util.*
+import java.util.ArrayList
 import javax.microedition.khronos.opengles.GL10
 import javax.microedition.khronos.opengles.GL11
 import javax.microedition.khronos.opengles.GL11Ext
