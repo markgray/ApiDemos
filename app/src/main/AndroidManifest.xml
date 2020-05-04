@@ -53,9 +53,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- ************************************* -->
+        </activity>
+
+        <!-- ************************************* -->
         <!-- APPLICATION PACKAGE SAMPLES -->
         <!-- ************************************* -->
+
         <!-- Activity Samples -->
         <activity
             android:name=".app.HelloWorld"
@@ -379,7 +382,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- Fragment Samples -->
+        </activity>
+
+        <!-- Fragment Samples -->
         <activity
             android:name=".app.FragmentAlertDialog"
             android:enabled="@bool/atLeastHoneycomb"
@@ -524,7 +529,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- Loader Samples -->
+        </activity>
+
+        <!-- Loader Samples -->
         <activity
             android:name=".app.LoaderCursor"
             android:enabled="@bool/atLeastHoneycomb"
@@ -571,7 +578,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- Intent Samples -->
+        </activity>
+
+        <!-- Intent Samples -->
         <activity
             android:name=".app.Intents"
             android:label="@string/activity_intents"
@@ -589,7 +598,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- Service Samples -->
+        </activity>
+
+        <!-- Service Samples -->
         <service
             android:name=".app.LocalService"
             android:stopWithTask="true" />
@@ -827,7 +838,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- Instrumentation Samples -->
+        </activity>
+
+        <!-- Instrumentation Samples -->
         <activity
             android:name=".app.LocalSample"
             android:label="@string/activity_local_sample">
@@ -844,7 +857,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <!-- category android:name="android.intent.category.SAMPLE_CODE" / -->
             </intent-filter>
-        </activity> <!-- Notifications samples -->
+        </activity>
+
+        <!-- Notifications samples -->
         <activity
             android:name=".app.NotifyWithText"
             android:label="App/Notification/NotifyWithText"
@@ -919,7 +934,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- Dialog samples -->
+        </activity>
+
+        <!-- Dialog samples -->
         <activity
             android:name=".app.AlertDialogSamples"
             android:label="@string/activity_alert_dialog"
@@ -928,7 +945,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- Search Samples -->
+        </activity>
+
+        <!-- Search Samples -->
         <!-- This activity represents a "typical" activity in your application from which the -->
         <!-- user would be allowed to invoke a search function.  As noted below, the definition -->
         <!-- of android.app.default_searchable is more typically handled at the application -->
@@ -952,11 +971,12 @@
             <!-- and we show it here only because we wish to confine the search demo to this -->
             <!-- section of the ApiDemos application. -->
 
-
             <!-- For typical applications, it's simpler to define android.app.default_searchable -->
             <!-- just once, at the application level, where it serves as a default for all of -->
             <!-- the Activities in your package. -->
-        </activity> <!-- This activity represents the "search" activity in your application, in which -->
+        </activity>
+
+        <!-- This activity represents the "search" activity in your application, in which -->
         <!-- search results are gathered and displayed. -->
         <activity
             android:name=".app.SearchQueryResults"
@@ -971,7 +991,6 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
@@ -981,12 +1000,15 @@
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
-        </activity> <!-- This provider declaration informs the Search Manager that you have a provider of -->
+        </activity>
+        <!-- This provider declaration informs the Search Manager that you have a provider of -->
         <!-- Search suggestions, and provides information about how to access it. -->
         <provider
             android:name=".app.SearchSuggestionSampleProvider"
             android:authorities="com.example.android.apis.SuggestionProvider"
-            tools:ignore="ExportedContentProvider" /> <!-- Shortcuts Samples -->
+            tools:ignore="ExportedContentProvider" />
+
+        <!-- Shortcuts Samples -->
         <!-- This section of sample code shows how your application can add shortcuts to -->
         <!-- the launcher (home screen).  Shortcuts have a three step life cycle. -->
         <!-- 1.  Your application offers to provide shortcuts to the launcher.  When -->
@@ -1010,7 +1032,8 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- It is recommended that you use an activity-alias to provide the "CREATE_SHORTCUT" -->
+        </activity>
+        <!-- It is recommended that you use an activity-alias to provide the "CREATE_SHORTCUT" -->
         <!-- intent-filter.  This gives you a way to set the text (and optionally the -->
         <!-- icon) that will be seen in the launcher's create-shortcut user interface. -->
         <activity-alias
@@ -1021,10 +1044,11 @@
             <!-- This intent-filter allows your shortcuts to be created in the launcher. -->
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity-alias> <!-- Menu Samples -->
+        </activity-alias>
+
+        <!-- Menu Samples -->
         <activity
             android:name=".app.MenuInflateFromXml"
             android:label="@string/menu_from_xml_title"
@@ -1033,7 +1057,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- Device Admin Samples -->
+        </activity>
+
+        <!-- Device Admin Samples -->
         <activity
             android:name=".app.DeviceAdminSample"
             android:label="@string/activity_sample_device_admin">
@@ -1068,7 +1094,9 @@
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
-        </receiver> <!-- Voice Recognition Samples -->
+        </receiver>
+
+        <!-- Voice Recognition Samples -->
         <activity
             android:name=".app.VoiceRecognition"
             android:label="@string/voice_recognition"
@@ -1077,7 +1105,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- Text-To-Speech Samples -->
+        </activity>
+
+        <!-- Text-To-Speech Samples -->
         <activity
             android:name=".app.TextToSpeechActivity"
             android:label="@string/text_to_speech"
@@ -1086,7 +1116,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- Action Bar Samples -->
+        </activity>
+
+        <!-- Action Bar Samples -->
         <activity
             android:name=".app.ActionBarMechanics"
             android:enabled="@bool/atLeastHoneycomb"
@@ -1535,6 +1567,7 @@
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+
         <!-- ************************************* -->
         <!-- OS PACKAGE SAMPLES -->
         <!-- ************************************* -->
@@ -1566,6 +1599,7 @@
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+
         <!-- ************************************* -->
         <!-- ANDROID.ANIMATION PACKAGE SAMPLES -->
         <!-- ************************************* -->
@@ -1727,7 +1761,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- ************************************* -->
+        </activity>
+
+        <!-- ************************************* -->
         <!-- ANIMATION PACKAGE SAMPLES -->
         <!-- ************************************* -->
         <activity
@@ -1738,7 +1774,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- ************************************* -->
+        </activity>
+
+        <!-- ************************************* -->
         <!-- VIEW/WIDGET PACKAGE SAMPLES -->
         <!-- ************************************* -->
         <activity
@@ -3153,7 +3191,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
-        </activity> <!-- ************************************* -->
+        </activity>
+
+        <!-- ************************************* -->
         <!-- GRAPHICS SAMPLES -->
         <!-- ************************************* -->
         <activity
