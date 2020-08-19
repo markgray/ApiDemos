@@ -81,7 +81,7 @@ open class SystemUIModes :
          * @param context The [Context] the view is running in, through which it can access the
          * current theme, resources, etc.
          */
-        constructor(context: Context?) : super(context)
+        constructor(context: Context?) : super(context!!)
 
         /**
          * Constructor which is called when our view is being inflated from an xml file. We just call
@@ -91,7 +91,7 @@ open class SystemUIModes :
          *                current theme, resources, etc.
          * @param attrs   The attributes of the XML tag that is inflating the view.
          */
-        constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+        constructor(context: Context?, attrs: AttributeSet?) : super(context!!, attrs)
 
         /**
          * Setter for our [SystemUIModes] field [mActivity]. We register "this" as a

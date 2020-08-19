@@ -32,13 +32,13 @@ class SystemPointerIconButton : AppCompatButton {
     constructor(
             context: Context?,
             attrs: AttributeSet? = null
-    ) : super(context, attrs)
+    ) : super(context!!, attrs)
 
     constructor(
             context: Context?,
             attrs: AttributeSet?,
             defStyleAttr: Int
-    ) : super(context, attrs, defStyleAttr)
+    ) : super(context!!, attrs, defStyleAttr)
 
     override fun onResolvePointerIcon(event: MotionEvent, pointerIndex: Int): PointerIcon {
         val minX = width / 4

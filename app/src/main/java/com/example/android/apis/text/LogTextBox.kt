@@ -49,7 +49,7 @@ constructor(
         context: Context?,
         attrs: AttributeSet? = null,
         defStyle: Int = android.R.attr.textViewStyle
-) : AppCompatTextView(context, attrs, defStyle) {
+) : AppCompatTextView(context!!, attrs, defStyle) {
     /**
      * Subclasses override this to specify a default movement method. We return an instance of
      * [ScrollingMovementMethod] (A movement method that interprets movement keys by scrolling

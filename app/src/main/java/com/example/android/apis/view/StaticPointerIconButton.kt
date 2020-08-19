@@ -15,6 +15,7 @@
  */
 package com.example.android.apis.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
@@ -36,14 +37,15 @@ class StaticPointerIconButton : AppCompatButton {
     constructor(
             context: Context?,
             attrs: AttributeSet? = null
-    ) : super(context, attrs)
+    ) : super(context!!, attrs)
 
     constructor(
             context: Context?,
             attrs: AttributeSet?,
             defStyleAttr: Int
-    ) : super(context, attrs, defStyleAttr)
+    ) : super(context!!, attrs, defStyleAttr)
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onResolvePointerIcon(event: MotionEvent, pointerIndex: Int): PointerIcon {
         if (mCustomIcon == null) {
             val d = context.getDrawable(R.drawable.smile)

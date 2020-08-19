@@ -66,7 +66,7 @@ class VideoPlayerActivity :
      * screen can be filled with content (at the expense of no user interaction).
      */
     class Content(context: Context?, attrs: AttributeSet?) :
-            AppCompatImageView(context, attrs),
+            AppCompatImageView(context!!, attrs),
             OnSystemUiVisibilityChangeListener,
             View.OnClickListener,
             ActionBar.OnMenuVisibilityListener
