@@ -120,7 +120,7 @@ class MediaContentObserver : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.media_content_observer)
         mContentObserver = object : ContentObserver(Handler()) {
-            override fun onChange(selfChange: Boolean, uri: Uri) {
+            override fun onChange(selfChange: Boolean, uri: Uri?) {
                 mDataText!!.append(uri.toString())
                 mDataText!!.append("\n")
             }
