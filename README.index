@@ -20,6 +20,7 @@ O                       v26
 O_MR1                   v27
 P                       v28
 Q                       v29
+R                       v30
 
 Accessibility
   Accessibility/Accessibility Node Querying  v14
@@ -162,6 +163,7 @@ Animation (disabled for froyo)
 
   Animation/Loading v11 -> v23 or higher required due to android:fraction="0"
         .animation.AnimationLoading
+        .animation.ShapeHolder
         .layout.animation_loading.xml
             Loads animations from Xml files: R.animator.object_animator (animates ball[0] "y"
             from 0 to 200, and reverses), R.animator.animator (animates ball[1] alpha from 1 to
@@ -180,6 +182,7 @@ Animation (disabled for froyo)
 
   Animation/Multiple Properties v11
         .animation.MultiPropertyAnimation
+        .animation.ShapeHolder
         .layout.animation_multi_property.xml
             Uses AnimatorSet.playTogether(Animator... items) to play four different 
             animations at once: yBouncer (animates y using a BounceInterpolator), yAlphaBouncer

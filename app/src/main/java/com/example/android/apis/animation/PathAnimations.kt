@@ -417,7 +417,7 @@ class PathAnimations : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, 
     private class PointFToPointConverter : TypeConverter<PointF, Point>(
             PointF::class.java, Point::class.java
     ) {
-        internal var mPoint = Point()
+        var mPoint = Point()
 
         /**
          * Converts a value from PointF to Point by rounding the float (x,y) coordinates of the

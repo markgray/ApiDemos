@@ -15,6 +15,7 @@
  */
 package com.example.android.apis.animation
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.ActivityOptions
 import android.content.Intent
@@ -64,6 +65,7 @@ class ActivityTransitionDetails : AppCompatActivity() {
      */
     @Suppress("DEPRECATION")
     private val heroDrawable: Drawable
+        @SuppressLint("UseCompatLoadingForDrawables")
         get() {
             val name = intent.getStringExtra(KEY_ID)
             if (name != null) {
