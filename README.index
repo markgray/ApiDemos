@@ -303,6 +303,7 @@ App
         .content.FileProvider
             Shows how to add a Share Action Provider to the Action Bar. Shares robot.png
             packaged with the app in res/raw by using content.FileProvider
+            TODO: Broken for R -- need to look into this
 
     App/Action Bar/Display Options v16
         .app.ActionBarDisplayOptions
