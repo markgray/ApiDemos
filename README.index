@@ -431,7 +431,8 @@ App
     App/Activity/Overscan                  v18
         .app.OverscanActivity
         .layout.overscan_activity.xml
-            Uses @android:style/Theme.Holo.NoActionBar.Overscan set in AndroidManifest,
+            Uses "@style/Theme.MyOverscanStyle" set in AndroidManifest, (which is my
+            custom AppCompat version of @android:style/Theme.Holo.NoActionBar.Overscan)
             and android:fitsSystemWindows="true" in its layout/overscan_activity.xml to
             place a surrounding "white box" in the overscan region of the display, and
             displays a picture in a FrameLayout offset to avoid the overscan region.
