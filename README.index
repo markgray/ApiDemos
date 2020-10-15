@@ -677,14 +677,20 @@ App
   Device Admin
     App/Device Admin                       Works only on newer versions(?) v24+ or crash
         .app.DeviceAdminSample
+        .xml.device_admin_headers.xml
+        .xml.device_admin_general.xml
+        .xml.device_admin_quality.xml
+        .xml.device_admin_expiration.xml
+        .xml.device_admin_lock_wipe.xml
+        .xml.device_admin_encryption.xml
             Shows how to implement a comprehensive UI for exploring and operating the 
-            DevicePolicyManager api. I left this in the original java for now because
-            of all the deprecated junk in it -- a challenge for the future as I see it.
+            DevicePolicyManager api.
             TODO: work up enough courage to play around with this (lem?)
 
   Fragment                                 v11+ for all samples
     App/Fragment/Alert Dialog              v11
         .app.FragmentAlertDialog
+        .layout.fragment_dialog.xml
             Demonstrates how to show an AlertDialog that is managed by a Fragment. Uses
             DialogFragment as base class and overrides onCreateDialog in which it builds
             the AlertDialog using an AlertDialog.Builder

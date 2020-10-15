@@ -148,12 +148,12 @@ class FragmentLayout : FragmentActivity() {
 
             // Populate list with our static array of titles.
 
-            listAdapter = ArrayAdapter(activity!!,
+            listAdapter = ArrayAdapter(requireActivity(),
                     android.R.layout.simple_list_item_activated_1, Shakespeare.TITLES)
 
             // Check to see if we have a frame in which to embed the details
             // fragment directly in the containing UI.
-            val detailsFrame = activity!!.findViewById<View>(R.id.details)
+            val detailsFrame = requireActivity().findViewById<View>(R.id.details)
             mDualPane = detailsFrame != null && detailsFrame.visibility == View.VISIBLE
 
             if (savedInstanceState != null) {
@@ -244,7 +244,7 @@ class FragmentLayout : FragmentActivity() {
 
                 // Check what fragment is currently shown, replace if needed.
 
-                var details = activity!!.supportFragmentManager.findFragmentById(R.id.details) as DetailsFragment?
+                var details = requireActivity().supportFragmentManager.findFragmentById(R.id.details) as DetailsFragment?
                 if (details == null || details.shownIndex != index) {
                     // Make new fragment to show this selection.
                     details = DetailsFragment.newInstance(index)
@@ -252,7 +252,7 @@ class FragmentLayout : FragmentActivity() {
                     // Execute a transaction, replacing any existing fragment
                     // with this one inside the frame.
 
-                    val ft = fragmentManager!!.beginTransaction()
+                    val ft = parentFragmentManager.beginTransaction()
                     if (index == 0) {
                         ft.replace(R.id.details, details)
                     } else {
@@ -267,7 +267,7 @@ class FragmentLayout : FragmentActivity() {
                 // the dialog fragment with selected text.
                 val intent = Intent()
 
-                intent.setClass(activity!!, DetailsActivity::class.java)
+                intent.setClass(requireActivity(), DetailsActivity::class.java)
                 intent.putExtra("index", index)
                 startActivity(intent)
             }
@@ -286,7 +286,7 @@ class FragmentLayout : FragmentActivity() {
          * @return integer argument which was stored under the key "index" or 0
          */
         val shownIndex: Int
-            get() = arguments!!.getInt("index", 0)
+            get() = requireArguments().getInt("index", 0)
 
         /**
          * Called to have the fragment instantiate its user interface view. First we check to see if
@@ -324,7 +324,7 @@ class FragmentLayout : FragmentActivity() {
             val text = TextView(activity)
 
             val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                    4f, activity!!.resources.displayMetrics).toInt()
+                    4f, requireActivity().resources.displayMetrics).toInt()
             text.setPadding(padding, padding, padding, padding)
             scroller.addView(text)
             text.text = Shakespeare.DIALOGUE[shownIndex]

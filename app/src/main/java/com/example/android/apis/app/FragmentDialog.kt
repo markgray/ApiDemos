@@ -161,7 +161,7 @@ class FragmentDialog : AppCompatActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
 
-            mNum = arguments!!.getInt("num")
+            mNum = requireArguments().getInt("num")
 
             // Pick a style based on the num.
             var style = STYLE_NORMAL

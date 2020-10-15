@@ -134,9 +134,9 @@ class FragmentAlertDialog : FragmentActivity() {
          */
         @Suppress("UNUSED_ANONYMOUS_PARAMETER")
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            val title = arguments!!.getInt("title")
+            val title = requireArguments().getInt("title")
 
-            return AlertDialog.Builder(this.context!!)
+            return AlertDialog.Builder(this.requireContext())
                     .setIcon(R.drawable.alert_dialog_icon)
                     .setTitle(title)
                     .setPositiveButton(R.string.alert_dialog_ok

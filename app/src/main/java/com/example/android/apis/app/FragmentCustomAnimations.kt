@@ -162,7 +162,7 @@ class FragmentCustomAnimations : FragmentActivity() {
          */
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
-            mNum = if (arguments != null) arguments!!.getInt("num") else 1
+            mNum = if (arguments != null) requireArguments().getInt("num") else 1
         }
 
         /**
@@ -181,6 +181,7 @@ class FragmentCustomAnimations : FragmentActivity() {
          *
          * @return Return the View for the fragment's UI
          */
+        @SuppressLint("UseCompatLoadingForDrawables")
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
             val v = inflater.inflate(R.layout.hello_world, container, false)
             val tv = v.findViewById<View>(R.id.text)

@@ -81,7 +81,7 @@ class FragmentListArray : FragmentActivity() {
             super.onActivityCreated(savedInstanceState)
 
             listAdapter = ArrayAdapter(
-                    activity!!,
+                    requireActivity(),
                     android.R.layout.simple_list_item_1,
                     Shakespeare.TITLES
             )
