@@ -168,6 +168,7 @@ class LoaderCustom : AppCompatActivity() {
          * icon android.R.drawable.sym_def_app_icon
          */
         val icon: Drawable?
+            @SuppressLint("UseCompatLoadingForDrawables")
             get() {
                 if (mIcon == null) {
                     if (mApkFile.exists()) {
@@ -418,6 +419,7 @@ class LoaderCustom : AppCompatActivity() {
          *
          * @return The result of the load operation.
          */
+        @SuppressLint("QueryPermissionsNeeded")
         override fun loadInBackground(): List<AppEntry>? {
             // Retrieve all known applications.
 

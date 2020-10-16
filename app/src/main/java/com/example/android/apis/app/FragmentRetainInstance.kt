@@ -137,7 +137,7 @@ class FragmentRetainInstance : FragmentActivity() {
             super.onActivityCreated(savedInstanceState)
 
 
-            val fm = activity!!.supportFragmentManager
+            val fm = requireActivity().supportFragmentManager
 
             // Check to see if we have retained the worker fragment.
             mWorkFragment = fm.findFragmentByTag("work") as RetainedFragment?
@@ -286,7 +286,7 @@ class FragmentRetainInstance : FragmentActivity() {
             // Retrieve the progress bar from the target's view hierarchy.
 
             mProgressBar = targetFragment!!
-                    .view!!
+                    .requireView()
                     .findViewById(R.id.progress_horizontal)
 
             // We are ready for our thread to go.

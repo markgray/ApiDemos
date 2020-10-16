@@ -343,7 +343,7 @@ class LoaderCursor : AppCompatActivity() {
                     + Contacts.HAS_PHONE_NUMBER + "=1) AND ("
                     + Contacts.DISPLAY_NAME + " != '' ))")
 
-            return CursorLoader(activity!!, baseUri,
+            return CursorLoader(requireActivity(), baseUri,
                     CONTACTS_SUMMARY_PROJECTION, select, null,
                     Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC")
         }

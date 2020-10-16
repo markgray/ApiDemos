@@ -901,7 +901,9 @@ App
     App/Notification/Background Service    v26
         .app.NotificationBackgroundService
         .layout.notification_background_service.xml
-            Example service that gets launched from a notification and runs in the background.
+            Example service that gets launched from a notification and runs in the background. The
+            nested class `Controller` of `NotificationBackgroundService` is the `AppCompatActivity`
+            which is run when the user starts the demo.
 
     App/Notification/IncomingMessage       all -> v26
         .app.IncomingMessage               interstitial crashes froyo startActivities()

@@ -193,7 +193,7 @@ class FragmentStack : FragmentActivity() {
          * from a previous saved state as given here.
          * @return Return the [View] for the fragment's UI, or null.
          */
-        @SuppressLint("DefaultLocale")
+        @SuppressLint("DefaultLocale", "UseCompatLoadingForDrawables")
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
             val v = inflater.inflate(R.layout.hello_world, container, false)
             val tv = v.findViewById<View>(R.id.text)
