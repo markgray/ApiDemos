@@ -70,13 +70,13 @@ class NotifyingService : Service() {
         for (i in 0..3) {
             showNotification(R.drawable.stat_happy,
                     R.string.status_bar_notifications_happy_message)
-            if (mCondition!!.block((5 * 1000).toLong())) break
+            if (mCondition!!.block(5_000L)) break
             showNotification(R.drawable.stat_neutral,
                     R.string.status_bar_notifications_ok_message)
-            if (mCondition!!.block((5 * 1000).toLong())) break
+            if (mCondition!!.block(5_000L)) break
             showNotification(R.drawable.stat_sad,
                     R.string.status_bar_notifications_sad_message)
-            if (mCondition!!.block((5 * 1000).toLong())) break
+            if (mCondition!!.block(5_000L)) break
         }
         // Done with our work...  stop the service!
         this@NotifyingService.stopSelf()
