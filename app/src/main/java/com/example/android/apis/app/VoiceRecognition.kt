@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.View
@@ -81,7 +82,7 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mHandler = Handler()
+        mHandler = Handler(Looper.myLooper()!!)
         /**
          * Inflate our UI from its XML layout description.
          */
