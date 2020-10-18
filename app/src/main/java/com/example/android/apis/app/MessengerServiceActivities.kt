@@ -8,6 +8,7 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.Message
 import android.os.Messenger
 import android.os.RemoteException
@@ -60,7 +61,7 @@ class MessengerServiceActivities {
          * override, which is invoked when a client binds to its service.
          */
         @SuppressLint("HandlerLeak")
-        internal inner class IncomingHandler : Handler() {
+        internal inner class IncomingHandler : Handler(Looper.myLooper()!!) {
             /**
              * Subclasses must implement this to receive messages. We switch on the User-defined
              * message code contained in the `what` field used when the `Message msg`

@@ -28,6 +28,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.Message
 import android.os.Messenger
 import android.os.RemoteException
@@ -68,7 +69,7 @@ class MessengerService : Service() {
      * Handler of incoming messages from clients.
      */
     @SuppressLint("HandlerLeak")
-    internal inner class IncomingHandler : Handler() {
+    internal inner class IncomingHandler : Handler(Looper.myLooper()!!) {
         /**
          * Subclasses must implement this to receive messages. We switch based on the `what`
          * field of the `Message msg` we have received:
