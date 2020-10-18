@@ -19,6 +19,8 @@
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" /> <!-- Required for drawing overlay windows (TYPE_SYSTEM_ALERT, TYPE_APPLICATION_OVERLAY) -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- For android.media.audiofx.Visualizer -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
     <!--
          We will request access to the camera, saying we require a camera
          of some sort but not one with autofocus capability.
