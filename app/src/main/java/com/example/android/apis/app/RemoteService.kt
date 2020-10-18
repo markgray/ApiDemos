@@ -32,6 +32,7 @@ import android.os.Bundle
 import android.os.RemoteException
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.Message
 import android.os.Process
 import android.os.RemoteCallbackList
@@ -279,7 +280,7 @@ class RemoteService : Service() {
      * increments of our value.
      */
     @SuppressLint("HandlerLeak")
-    private val mHandler: Handler = object : Handler() {
+    private val mHandler: Handler = object : Handler(Looper.myLooper()!!) {
         /**
          * Subclasses of [Handler] must implement this to receive messages. We switch based on
          * the `what` field of our [Message] parameter [msg] and if it is not REPORT_MSG,
@@ -778,7 +779,7 @@ class RemoteService : Service() {
          * the [TextView] field [mCallbackText].
          */
         @SuppressLint("HandlerLeak")
-        private val mHandler: Handler = object : Handler() {
+        private val mHandler: Handler = object : Handler(Looper.myLooper()!!) {
             /**
              * Subclasses must implement this to receive messages. We switch on the `what` field
              * of the `Message msg` parameter, defaulting to passing `msg` on to our super's
