@@ -55,6 +55,7 @@ class ColorFilters : GraphicsActivity() {
      * View that displays 7 rows of the same 4 buttons, with each row using different Porter-Duff
      * color filters
      */
+    @SuppressLint("UseCompatLoadingForDrawables")
     private class SampleView(
             /**
              * `Activity` used to construct us, we use it to set the title bar of its window
