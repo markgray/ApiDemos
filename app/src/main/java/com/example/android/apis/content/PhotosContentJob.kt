@@ -27,6 +27,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
@@ -158,7 +159,7 @@ class PhotosContentJob : JobService() {
     /**
      * [Handler] we use to delay our work by 10 seconds so we can see batching happen.
      */
-    val mHandler = Handler()
+    val mHandler = Handler(Looper.myLooper()!!)
 
     /**
      * [Runnable] which does all our "work" after a ten second delay. When an object implementing

@@ -22,6 +22,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -119,7 +120,7 @@ class MediaContentObserver : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.media_content_observer)
-        mContentObserver = object : ContentObserver(Handler()) {
+        mContentObserver = object : ContentObserver(Handler(Looper.myLooper()!!)) {
             override fun onChange(selfChange: Boolean, uri: Uri?) {
                 mDataText!!.append(uri.toString())
                 mDataText!!.append("\n")
