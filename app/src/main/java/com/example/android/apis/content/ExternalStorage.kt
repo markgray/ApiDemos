@@ -123,6 +123,7 @@ class ExternalStorage : AppCompatActivity() {
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
+    @Suppress("RedundantSamConstructor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.external_storage)
