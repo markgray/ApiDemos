@@ -15,6 +15,7 @@
  */
 package com.example.android.apis.graphics
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -238,6 +239,7 @@ class DensityActivity : AppCompatActivity() {
      * [resource] to.
      * @param resource resource ID of an resource image to load.
      */
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun addResourceDrawable(layout: LinearLayout, resource: Int) {
         val view = View(this)
         @Suppress("DEPRECATION")
@@ -275,6 +277,7 @@ class DensityActivity : AppCompatActivity() {
      * @param resource resource ID for a nine-patch png image to load into a `Drawable` and then
      * use as the background for a view which we add to [LinearLayout] parameter [layout]
      */
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun addNinePatchResourceDrawable(layout: LinearLayout, resource: Int) {
         val view = View(this)
         @Suppress("DEPRECATION")
