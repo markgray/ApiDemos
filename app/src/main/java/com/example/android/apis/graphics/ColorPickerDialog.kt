@@ -47,7 +47,8 @@ class ColorPickerDialog
  * call when user has selected a color, in our case "this" when called from
  * `FingerPaint`'s `onOptionsItemSelected` override
  * @param mInitialColor initial color currently being used by `FingerPaint`
- */(context: Context?,
+ */
+(context: Context?,
     /**
      * Set in constructor of `ColorPickerDialog`, and called in `ColorPickerView` when
      * the user has selected a color. Do not confuse with `ColorPickerView.mListener` which
@@ -436,9 +437,9 @@ class ColorPickerDialog
             mCenterPaint = Paint(Paint.ANTI_ALIAS_FLAG)
             mCenterPaint.color = color
             mCenterPaint.strokeWidth = 5f * density
-            CENTER_X = (CENTER_X * density).toInt()
-            CENTER_Y = (CENTER_Y * density).toInt()
-            CENTER_RADIUS = (CENTER_RADIUS * density).toInt()
+            CENTER_X = (100 * density).toInt()
+            CENTER_Y = (100 * density).toInt()
+            CENTER_RADIUS = (32 * density).toInt()
         }
     }
 
