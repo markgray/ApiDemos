@@ -493,7 +493,12 @@ class ShadowCardDrag : AppCompatActivity() {
          * @param outline The Outline to be populated with the result. Should not be null.
          */
         override fun getOutline(outline: Outline) {
-            outline.setConvexPath(mPath)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                outline.setPath(mPath)
+            } else {
+                @Suppress("DEPRECATION")
+                outline.setConvexPath(mPath)
+            }
         }
     }
 
