@@ -27,6 +27,7 @@ import android.graphics.RectF
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.util.AttributeSet
 import android.view.Menu
@@ -79,8 +80,7 @@ class TouchPaint : GraphicsActivity() {
      * [FADE_DELAY] (100ms) to "fade" the finger painting (it does this only if the message
      * received is a [MSG_FADE] message).
      */
-    @SuppressLint("HandlerLeak")
-    private val mHandler: Handler = object : Handler() {
+    private val mHandler: Handler = object : Handler(Looper.myLooper()!!) {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 MSG_FADE -> {
