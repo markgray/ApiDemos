@@ -91,7 +91,7 @@ class TouchRotateActivity : AppCompatActivity() {
     /**
      * Adds a simple rotation control to a [GLSurfaceView] which contains a [Cube].
      */
-    private class TouchSurfaceView internal constructor(context: Context?) : GLSurfaceView(context) {
+    private class TouchSurfaceView(context: Context?) : GLSurfaceView(context) {
         /**
          * Renderer for our [GLSurfaceView].
          */
@@ -236,7 +236,7 @@ class TouchRotateActivity : AppCompatActivity() {
          * Render a [Cube], rotating the model view matrix according to the values of our fields
          * [mAngleX] and [mAngleY] before asking our [Cube] field [mCube] to draw itself.
          */
-        private class CubeRenderer internal constructor() : Renderer {
+        private class CubeRenderer : Renderer {
             /**
              * [Cube] instance we have draw itself in our [GLSurfaceView].
              */
