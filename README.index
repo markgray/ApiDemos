@@ -1686,6 +1686,7 @@ Graphics
             to it (without going through the view hierarchy). Good example of how to use 
             a background thread to do your drawing. Shows use of life cycle callbacks when
             a thread is running in the background.
+            TODO: Prevents back button use - Fix this
 
   SurfaceView Overlay
     Graphics/SurfaceView Overlay           all
