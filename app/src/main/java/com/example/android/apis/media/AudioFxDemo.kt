@@ -385,7 +385,7 @@ internal class VisualizerView(context: Context?) : View(context) {
                     + (mBytes!![i] + 128).toByte() * (mRect.height() / 2f) / 128f)
             mPoints!![i * 4 + 2] = mRect.width() * (i + 1) / (mBytes!!.size - 1f)
             mPoints!![i * 4 + 3] = (mRect.height() / 2f
-                    + (mBytes!![i + 1] + 128f).toByte() * (mRect.height() / 2f) / 128)
+                    + (mBytes!![i + 1] + 128f).toInt().toByte() * (mRect.height() / 2f) / 128)
         }
         canvas.drawLines(mPoints!!, mForePaint)
     }
