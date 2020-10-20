@@ -21,6 +21,7 @@ import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 
 /**
@@ -52,7 +53,7 @@ class PurgeableBitmap : GraphicsActivity() {
      * its bitmaps.
      */
     @SuppressLint("HandlerLeak")
-    inner class RefreshHandler : Handler() {
+    inner class RefreshHandler : Handler(Looper.myLooper()!!) {
         /**
          * We implement this to receive messages. First we call the `update` method of
          * `PurgeableBitmapView mView` saving the return value in `int index`. If
