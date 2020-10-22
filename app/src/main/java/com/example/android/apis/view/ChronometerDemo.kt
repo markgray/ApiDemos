@@ -74,7 +74,7 @@ class ChronometerDemo : AppCompatActivity() {
     }
 
     /**
-     * Called when the button R.id.start "Start" is clicked. We simply call the `stop` method
+     * Called when the button R.id.start "Start" is clicked. We simply call the `start` method
      * of [Chronometer] field [mChronometer].
      */
     var mStartListener: View.OnClickListener = View.OnClickListener {
