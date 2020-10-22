@@ -1989,7 +1989,7 @@ Views
 
     Views/Controls/2. Dark Theme           all
         .view.Controls2
-            Same as .view.Controls1 but android:theme="@android:style/Theme" is set in
+            Same as .view.Controls1 but android:theme="@style/Theme.AppCompat" is set in
             AndroidManifest.xml
 
     Views/Controls/3. Holo Light Theme     v11
