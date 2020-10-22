@@ -2011,7 +2011,7 @@ Views
             version.
             TODO: Make look more like android:theme="@android:style/Theme.Material.Light"
 
-    Views/Controls/5. Material Light Theme v20
+    Views/Controls/5. Material Light Theme v21
         .view.Controls5
             Uses .view.Controls1 with android:theme="@android:style/Theme.Material.Light"
             set in AndroidManifest.xml
@@ -2024,7 +2024,7 @@ Views
              set in AndroidManifest.xml
              TODO: Make look more like android:theme="@android:style/Theme.Material"
 
-    Views/Controls/6. Material Dark Theme  v20
+    Views/Controls/6. Material Dark Theme  v21
         .view.Controls6
             Uses .view.Controls1 with android:theme="@style/Theme.MyMaterial" set
             in AndroidManifest.xml
@@ -2032,7 +2032,8 @@ Views
 
     Views/Controls/7. Custom Theme         all
         .view.Controls7
-            Uses .view.Controls1 with a custom theme derived from parent=""Theme.AppCompat.Light"",
+            Uses .view.Controls1 with a custom theme android:theme="@style/MyCustomTheme" derived
+            from parent=""Theme.AppCompat.Light"",
             with: <color name="custom_theme_color">#b0b0ff</color> used for both
             android:windowBackground, and android:colorBackground
 
@@ -2052,7 +2053,7 @@ Views
   Custom
     Views/Custom                           all
         .view.CustomView1
-        .view.LabelView.java
+        .view.LabelView
             Demonstrates creating a Screen that uses custom views. This example uses
             com.example.android.apis.view.LabelView.kt -- the attributes it accepts
             are defined in the file values/attrs.xml

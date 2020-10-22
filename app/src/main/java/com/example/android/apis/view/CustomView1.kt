@@ -24,7 +24,7 @@ import com.example.android.apis.R
 
 /**
  * Demonstrates creating a Screen that uses custom views. This example uses
- * com.example.android.apis.view.LabelView.java -- the attributes it accepts
+ * com.example.android.apis.view.LabelView.kt -- the attributes it accepts
  * are defined in the file values/attrs.xml
  */
 class CustomView1 : AppCompatActivity() {
