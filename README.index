@@ -2214,12 +2214,14 @@ Views
             Shows how to use a LayoutAnimationController to animate the layout of a list
             in a ListActivity Too fast on Nexus 6 to see effect
             TODO: slow down animation for fast devices.
+            TODO: Use androidx ListFragment or androidx RecyclerView instead of ListActivity
 
     Views/Layout Animation/3. Reverse Order  -- all
         .view.LayoutAnimation3
             Same as List Cascade above, but an android:layoutAnimation attribute in the layout
             file R.layout.layout_animation_3 uses anim/layout_bottom_to_top_slide.xml which uses
              anim/slide_right instead of implementing the animation in code
+             TODO: Use androidx ListFragment or androidx RecyclerView instead of ListActivity
 
     Views/Layout Animation/4. Randomize    all
         .view.LayoutAnimation4
