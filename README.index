@@ -2341,33 +2341,39 @@ Views
   HorizontalScrollView
     Views/Layouts/HorizontalScrollView    all
         .view.HorizontalScrollView1
+        .layout.horizontal_scroll_view1
             Demonstrates horizontal scrolling with a HorizontalScrollView. Needed to set
             android:textSize to see properly.
 
   LinearLayout
     Views/Layouts/LinearLayout/01. Vertical  --all
         .view.LinearLayout1
+        .layout.linear_layout_1
             Demonstrates a simple linear layout. The height of the layout is the sum of 
             its children due to android:layout_height="wrap_content"
 
     Views/Layouts/LinearLayout/02. Vertical (Fill Screen)  --all
         .view.LinearLayout2
+        .layout.linear_layout_2
             Demonstrates a simple linear layout. The layout fills the screen, with the
             children stacked from the top due to android:layout_height="match_parent"
 
     Views/Layouts/LinearLayout/03. Vertical (Padded)  --all
         .view.LinearLayout3
+        .layout.linear_layout_3
             Demonstrates a simple linear layout. The layout fills the screen, with the 
             children stacked from the top. The middle child gets allocated any extra 
             space due to android:layout_weight="1"
 
     Views/Layouts/LinearLayout/04. Horizontal  --all
         .view.LinearLayout4
+        .layout.linear_layout_4
             Demonstrates a horizontal linear layout with equally sized columns due to
             all children View's using android:layout_weight="1"
 
     Views/Layouts/LinearLayout/05. Simple Form  --all
         .view.LinearLayout5
+        .layout.linear_layout_5
             Demonstrates building a simple form with nested LinearLayouts. It uses
             a horizontal layout to hold the two buttons at the bottom and uses
             layout_gravity="right". This means the whole horizontal LinearLayout is
@@ -2377,11 +2383,13 @@ Views
 
     Views/Layouts/LinearLayout/06. Uniform Size  --all
         .view.LinearLayout6
+        .layout.linear_layout_6
             LinearLayout which uses a combination of wrap_content on itself and 
             match_parent on all of its children to get every item to be the same width.
 
     Views/Layouts/LinearLayout/07. Fill Parent  --all
         .view.LinearLayout7
+        .layout.linear_layout_7
             Demonstrates a horizontal linear layout with equally sized columns. Some 
             columns force their height to match the parent. Does not work as is for some
             reason. Changed the height of the longest text to android:layout_height="wrap_content"
@@ -2389,12 +2397,14 @@ Views
 
     Views/Layouts/LinearLayout/08. Gravity  --all
         .view.LinearLayout8
+        .layout.linear_layout_8
             Demonstrates changing gravity of a LinearLayout programmatically using
             setOrientation(LinearLayout.*) as dictated by options menu choice.
 
     Views/Layouts/LinearLayout/09. Layout Weight  --all
         .view.LinearLayout9
         .view.AutoComplete1
+        .layout.linear_layout_9
             Demonstrates a simple linear layout. The layout fills the screen, with the
             children stacked from the top. The ListView receives all the extra space due
             to android:layout_weight="1.0", but because it is still larger than the screen
@@ -2402,6 +2412,7 @@ Views
 
     Views/Layouts/LinearLayout/10. Background Image  --all
         .view.LinearLayout10
+        .layout.linear_layout_10
             Demonstrates the use of LinearLayout backgrounds to group labels,
             EditTexts, and buttons, -- OR -- Demonstrates using a LinearLayout
             background to group related TextViews, EditTexts, and Buttons.
@@ -2411,6 +2422,7 @@ Views
    RelativeLayout
     Views/Layouts/RelativeLayout/1. Vertical  --all
         .view.RelativeLayout1
+        .layout.relative_layout_1
             A simple layout which demonstrates stretching a view to fill the space
             between two other views. This occurs oddly enough because even though all
             three share the same default weight, the android:layout_height="0dip"
@@ -2418,15 +2430,18 @@ Views
 
     Views/Layouts/RelativeLayout/2. Simple Form  --all
         .view.RelativeLayout2
+        .layout.relative_layout_2
             Demonstrates using a relative layout to create a form.
 
     ScrollView
     Views/Layouts/ScrollView/1. Short      all
         .view.ScrollView1
+        .layout.scroll_view_1
             Demonstrates wrapping a (short) layout in a ScrollView.
 
     Views/Layouts/ScrollView/2. Long       all
         .view.ScrollView2
+        .layout.scroll_view_2
             Demonstrates wrapping a LONG LinearLayout in a ScrollView (All but the first
             TextView and Button in the LinearLayout are Created and .addView'd programmatically)
 
@@ -2447,15 +2462,18 @@ Views
     TableLayout
     Views/Layouts/TableLayout/01. Basic    all
         .view.TableLayout1
+        .layout.table_layout_1
             Very simple example of TableLayout done entirely in xml, three rows, three columns of
             TextViews
 
     Views/Layouts/TableLayout/02. Empty Cells  --all
         .view.TableLayout2
+        .layout.table_layout_2
             TableLayout of Button and TextView's showing how to leave a cell empty
 
     Views/Layouts/TableLayout/03. Long Content  --all
         .view.TableLayout3
+        .layout.table_layout_3
             Rows have different number of columns and content doesn't fit on screen:
             column 4 of row 2 shrinks all of the other columns android:shrinkColumns="2, 3"
             Oddly enough my test devices are too wide to need shrinking so it does not
@@ -2464,6 +2482,7 @@ Views
 
     Views/Layouts/TableLayout/04. Stretchable  --all
         .view.TableLayout4
+        .layout.table_layout_4
             Stretch some columns: second column uses android:gravity="right",
             android:stretchColumns="1" (column numbers are zero based)
 
