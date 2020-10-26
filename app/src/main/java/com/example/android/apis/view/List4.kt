@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.example.android.apis.view
 
 import android.app.ListActivity
@@ -29,6 +31,7 @@ import com.example.android.apis.Shakespeare.TITLES
 /**
  * A list view example where the data comes from a custom `ListAdapter` which displays from
  * an array of strings using a custom view (reusing recycled views when one is given to it.)
+ * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
 class List4 : ListActivity() {
     /**

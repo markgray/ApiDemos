@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.example.android.apis.view
 
 import android.app.ListActivity
@@ -27,6 +29,7 @@ import android.widget.TextView
 /**
  * A list view example with separators. Separators are implemented by overriding the methods
  * areAllItemsEnabled, and isEnabled
+ * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
 class List5 : ListActivity() {
     /**

@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.example.android.apis.view
 
 import android.app.ListActivity
@@ -20,12 +22,17 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.widget.ListAdapter
 import android.widget.SimpleCursorAdapter
+import androidx.loader.content.CursorLoader
+import androidx.loader.app.LoaderManager
 
 /**
  * A list view example where the data comes from a cursor. Builds a cursor using
  * getContentResolver().query(...) of the Contacts provider for a projection of
  * Contacts._ID, and Contacts.DISPLAY_NAME and sets it as the [ListAdapter] for the
  * [ListActivity]'s list
+ * TODO: Switch to the new androidx.loader.content.CursorLoader class with androidx.loader.app.LoaderManager
+ * instead of SimpleCursorAdapter
+ * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
 class List2 : ListActivity() {
     /**

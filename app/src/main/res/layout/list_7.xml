@@ -31,6 +31,7 @@
         android:id="@+id/phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/blue" />
+        android:background="@drawable/blue"
+        android:textSize="24sp" />
 
 </LinearLayout>

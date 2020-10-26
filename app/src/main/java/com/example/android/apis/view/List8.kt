@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.example.android.apis.view
 
 import android.app.ListActivity
@@ -31,6 +33,7 @@ import kotlin.math.roundToInt
 /**
  * A list view that demonstrates the use of `setEmptyView`. This example also uses
  * a custom layout file that adds some extra buttons to the screen.
+ * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
 class List8 : ListActivity() {
     /**

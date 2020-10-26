@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.example.android.apis.view
 
 import android.app.ListActivity
@@ -20,6 +22,7 @@ import android.content.Context
 import android.graphics.PixelFormat
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
@@ -33,6 +36,7 @@ import com.example.android.apis.R
  * display the first letter of the visible range of cheeses. Uses a [Handler] thread to remove the
  * dialog displaying the letter after 3000ms using `postDelayed(mRemoveWindow, 3000)` where
  * [mRemoveWindow] is a pointer to a [RemoveWindow] class which implements [Runnable].
+ * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class List9 : ListActivity(), AbsListView.OnScrollListener {
@@ -56,7 +60,7 @@ class List9 : ListActivity(), AbsListView.OnScrollListener {
      * [onCreate]) and to make it invisible again after a 3000ms delay (see the code in
      * [onScroll], [RemoveWindow] and [removeWindow]).
      */
-    var mHandler = Handler()
+    var mHandler = Handler(Looper.myLooper()!!)
 
     /**
      * Handle to the system level service WINDOW_SERVICE, we use it to call its `addView`

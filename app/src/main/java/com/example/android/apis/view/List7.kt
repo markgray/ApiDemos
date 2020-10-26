@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.example.android.apis.view
 
 import android.app.ListActivity
@@ -71,9 +73,7 @@ class List7 : ListActivity(), OnItemSelectedListener {
                 null,
                 null
         )
-        @Suppress("DEPRECATION")
         startManagingCursor(c)
-        @Suppress("DEPRECATION")
         val adapter: ListAdapter = SimpleCursorAdapter(
                 this,
                 android.R.layout.simple_list_item_1, // Use a template that displays a text view

@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.example.android.apis.view
 
 import android.app.ListActivity
@@ -29,6 +31,7 @@ import android.widget.TextView
  * A list view example where the data comes from a custom ListAdapter, `onListItemClick` is
  * overridden to "toggle" the view between two states: collapsed to a title, and expanded
  * to a title and text for that title
+ * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
 class List6 : ListActivity() {
     /**
