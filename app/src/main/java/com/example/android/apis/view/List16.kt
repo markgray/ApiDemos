@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.example.android.apis.view
 
 import android.annotation.TargetApi
@@ -32,6 +34,7 @@ import com.example.android.apis.R
  * This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection mode on ListView
  * coupled with the new simple_list_item_activated_1 which uses a highlighted border for selected
  * items.
+ * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
 class List16 : ListActivity() {
     /**

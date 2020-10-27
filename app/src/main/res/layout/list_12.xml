@@ -29,6 +29,11 @@
         android:stackFromBottom="true"
         android:transcriptMode="normal" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@android:color/black" />
+
     <EditText
         android:id="@+id/userText"
         android:layout_width="match_parent"

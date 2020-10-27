@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.example.android.apis.view
 
 import android.annotation.TargetApi
@@ -28,6 +30,7 @@ import android.widget.ListView
  * background to highlight. Uses the built-in layout android.R.layout.simple_list_item_activated_1
  * for showing a list item with a single line of text whose background changes when activated. Uses
  * getListView().setItemChecked in onCreate to start with first item activated.
+ * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
 class List17 : ListActivity() {
     /**

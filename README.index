@@ -2614,26 +2614,32 @@ Views
         .view.List10
             This example shows how to use choice mode on a list. This list is in
             CHOICE_MODE_SINGLE mode, which means the items behave like radio-buttons.
+            TODO: Use ListFragment or RecyclerView instead of ListActivity
 
     Views/Lists/11. Multiple choice list   all
         .view.List11
             This example shows how to use choice mode on a list. This list is in
             CHOICE_MODE_MULTIPLE mode, which means the items behave like checkboxes.
+            TODO: Use ListFragment or RecyclerView instead of ListActivity
 
     Views/Lists/12. Transcript             all
         .view.List12
+        .layout.list_12
             Demonstrates the using a list view in transcript mode. The bottom of the layout
             is an EditText, clicking on the EditText view .add()'s  the text to the
             ArrayAdapter filling the ListView above it.
+            TODO: Use ListFragment or RecyclerView instead of ListActivity
 
     Views/Lists/13. Slow Adapter           all
         .view.List13
+        .layout.list_13
             Demonstrates how a list can avoid expensive operations during scrolls or flings.
             In this case, we pretend that binding a view to its data is slow (even though it
             really isn't). When a scroll/fling is happening, the adapter binds the view to
             temporary data. After the scroll/fling has finished, the temporary data is
             replaced with the actual data. Usable approach but needs major modification to
             use in real world application.
+            TODO: Use ListFragment or RecyclerView instead of ListActivity
 
     Views/Lists/14. Efficient Adapter      all
         .view.List14
@@ -2651,14 +2657,14 @@ Views
             Note: uses mInflater.inflate(R.layout.list_item_icon_text, parent, false) instead of
             mInflater.inflate(R.layout.list_item_icon_text, null)
             TODO: Fix all other inflate() with null rootview.
+            TODO: Use ListFragment or RecyclerView instead of ListActivity
 
     Views/Lists/15. Selection Mode         all -- v11+ or crash
         .view.List15
         .view.Cheeses
             This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection
             mode on ListView. It switches into selection mode on long press.
-            TODO: Convert all ListActivity's to androidx.fragment.app.ListFragment
-             or androidx.recyclerview.widget.RecyclerView instead. (ListActivity deprecated in R)
+            TODO: Use ListFragment or RecyclerView instead of ListActivity
 
     Views/Lists/16. Border selection mode  all -- v11+ or crash
         .view.List16
@@ -2666,7 +2672,7 @@ Views
             This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection
             mode on ListView couple with the new simple_list_item_activated_1 which uses
             a highlighted border for selected items.
-            TODO: Convert to androidx.fragment.app.ListFragment
+            TODO: Use ListFragment or RecyclerView instead of ListActivity
 
     Views/Lists/17. Activate items         all -- v11+ or crash
         .view.List17
@@ -2677,17 +2683,19 @@ Views
             for showing a list item with a single line of text whose background
             changes when activated. Uses getListView().setItemChecked in onCreate
             to start with first item activated.
-            TODO: Convert to androidx.fragment.app.ListFragment
+            TODO: Use ListFragment or RecyclerView instead of ListActivity
 
     Views/Number Picker                   all
          .view.NumberPickerActivity
+         .layout.number_picker
              Demonstrates how to use a NumberPicker
 
     Views/Overlay Window
          .view.OverlayWindowActivity
          .layout.overlay_window
              Demonstrates the display of overlay windows, i.e. windows that are drawn on top of
-             other apps. TODO: Remove overlay in onDestroy?
+             other apps.
+             TODO: Remove overlay in onDestroy?
 
     Views/Pointer shapes v24
         .view.PointerShapes

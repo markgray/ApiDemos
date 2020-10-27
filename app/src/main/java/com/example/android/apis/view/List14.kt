@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.example.android.apis.view
 
 import android.app.ListActivity
@@ -41,6 +43,7 @@ import com.example.android.apis.R
  * The ViewHolder pattern consists in storing a data structure in the tag of the view returned by
  * `getView()`. This data structures contains references to the views we want to bind data to, thus
  * avoiding calls to [findViewById] every time `getView()` is invoked.
+ * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
 class List14 : ListActivity() {
     /**
@@ -172,7 +175,7 @@ class List14 : ListActivity() {
          * stored in the tag of the view group so that recycled views can be reused without having
          * to find these views again.
          */
-        internal class ViewHolder {
+        class ViewHolder {
             var text: TextView? = null
             var icon: ImageView? = null
         }

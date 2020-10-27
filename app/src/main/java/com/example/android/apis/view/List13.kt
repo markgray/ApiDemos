@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.example.android.apis.view
 
 import android.annotation.SuppressLint
@@ -32,6 +34,7 @@ import com.example.android.apis.R
  * case, we pretend that binding a view to its data is slow (even though it really isn't). When
  * a scroll/fling is happening, the adapter binds the view to temporary data. After the scroll/fling
  * has finished, the temporary data is replaced with the actual data.
+ * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
 @SuppressLint("SetTextI18n")
 class List13 : ListActivity(), AbsListView.OnScrollListener {

@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.example.android.apis.view
 
 import android.app.ListActivity
@@ -24,6 +26,7 @@ import android.widget.ListView
  * This example shows how to use choice mode on a list. This list is
  * in CHOICE_MODE_MULTIPLE mode, which means the items behave like
  * checkboxes.
+ * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
 class List11 : ListActivity() {
     /**

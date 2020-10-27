@@ -23,6 +23,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
@@ -163,6 +164,7 @@ class OverlayWindowActivity : AppCompatActivity() {
         textView.setBackgroundColor(Color.WHITE)
         textView.setTextColor(Color.BLACK)
         textView.setPadding(10, 10, 10, 10)
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40.0F)
         val wm = windowManager
         val params = WindowManager.LayoutParams()
         params.type = if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {

@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.example.android.apis.view
 
 import android.app.ListActivity
@@ -28,6 +30,7 @@ import java.util.ArrayList
  * Demonstrates the using a list view in transcript mode. The bottom of the layout is an
  * [EditText], clicking on the [EditText] view .add()'s the text to the [ArrayAdapter]
  * filling the `ListView` above it.
+ * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
 class List12 : ListActivity(), View.OnClickListener, View.OnKeyListener {
     /**
