@@ -2714,12 +2714,15 @@ Views
   Popup Menu
     Views/Popup Menu                       all -- v11+ or crash
         .view.PopupMenu1
+        .layout.popup_menu_1
+        .menu.popup
             This demonstrates the use of the PopupMenu class. Clicking the button will
             inflate and show a popup menu from an XML resource.
 
   Progress Bar
     Views/Progress Bar/1. Incremental      all
         .view.ProgressBar1
+        .layout.progressbar_1
             Demonstrates how to use ProgressBar as a widget. The ProgressBar is defined in
             the layout xml file to use style="?android:attr/progressBarStyleHorizontal",
             android:layout_width="200dip", android:layout_height="wrap_content",
@@ -2731,6 +2734,7 @@ Views
 
     Views/Progress Bar/2. Smooth           all
         .view.ProgressBar2
+        .layout.progressbar_2
             Demonstrates the use of indeterminate progress bars as widgets and in the
             window's title bar. The widgets show the 3 different sizes of circular
             progress bars that can be used. The window title bar does not work, it has
@@ -2738,6 +2742,7 @@ Views
 
     Views/Progress Bar/3. Dialogs          all
         .view.ProgressBar3
+        .layout.progressbar_3
             Demonstrates the use of progress dialogs.  Uses Activity#onCreateDialog
             Activity#showDialog to ensure the dialogs will be properly saved and
             restored. Buttons on the main Layout allow you to choose between one
@@ -2747,12 +2752,14 @@ Views
 
     Views/Progress Bar/4. In Title Bar     all -- does not work lollipop
         .view.ProgressBar4
+        .layout.progressbar_4
             Demonstrates how to use an indeterminate progress indicator in the window's
             title bar. This does not work for android starting with 5.0
 
   Radio Group
     Views/Radio Group                      all
         .view.RadioGroup1
+        .layout.radio_group_1
             Demonstrates RadioGroup, including adding a RadioButton to an xml defined
             RadioGroup programmatically (the R.id.snack is created in the file values/ids.xml),
             retrieving the R.id.* of the RadioButton selected, clearing all buttons, and the
@@ -2761,6 +2768,7 @@ Views
   Rating Bar
     Views/Rating Bar                       all
         .view.RatingBar1
+        .layout.ratingbar_1
             Demonstrates how to use a rating bar. The top two RatingBar's have their
             RatingBar.OnRatingBarChangeListener set to this and a onRatingChanged method
             updates a TextView and two RatingBar indicators based on the values passed to
@@ -2769,6 +2777,7 @@ Views
   Rotating Button
     Views/Rotating Button                 all -- v11+ or crash
         .view.RotatingButton
+        .layout.rotating_view
             This application demonstrates the ability to transform views in 2D and 3D,
             scaling them, translating them, and rotating them (in 2D and 3D). Use the
             seek bars to set the various transform properties of the button. It sets the
@@ -2780,11 +2789,13 @@ Views
   ScrollBars
     Views/ScrollBars/1. Basic              all
         .view.ScrollBar1
+        .layout.scrollbar1
             Demonstrates scrolling with a ScrollView. Done entirely in xml, the ScrollView is
             the root view with a single LinearLayout child (ScrollView's can have only one.)
 
     Views/ScrollBars/2. Fancy              all
         .view.ScrollBar2
+        .layout.scrollbar2
             Demonstrates scrolling with a ScrollView, android:scrollbarTrackVertical
             and android:scrollbarTrackVertical are set to colored drawables created in xml
             using <shape> and android:scrollbarSize="12dip" makes it wider than normal.
@@ -2794,6 +2805,7 @@ Views
 
     Views/ScrollBars/3. Style              all
         .view.ScrollBar3
+        .layout.scrollbar3
             Demonstrates scrolling with ScrollView's with android:scrollbarStyle set to
             outsideOverlay and outsideInset in the xml, and one set programmatically using
             setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET)
