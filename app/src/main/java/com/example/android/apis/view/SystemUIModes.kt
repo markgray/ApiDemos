@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
 
 package com.example.android.apis.view
 
@@ -53,7 +52,7 @@ import com.example.android.apis.R
  * View.setSystemUiVisibility for the IV extends ImageView which serves as the background in the
  * FrameLayout holding it and the CheckBox'es which overlay it.
  */
-@Suppress("UNUSED_PARAMETER", "DEPRECATION", "MemberVisibilityCanBePrivate", "UNUSED_ANONYMOUS_PARAMETER", "RedundantOverride")
+@Suppress("UNUSED_PARAMETER", "MemberVisibilityCanBePrivate", "UNUSED_ANONYMOUS_PARAMETER", "RedundantOverride")
 @TargetApi(Build.VERSION_CODES.KITKAT)
 open class SystemUIModes :
         AppCompatActivity(),

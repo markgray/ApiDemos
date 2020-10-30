@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.example.android.apis.view
 
 import android.annotation.TargetApi
@@ -49,6 +51,7 @@ import com.example.android.apis.R
  * UI flags to transition in and out of modes where the user is focused on
  * that content. When the user clicks, it toggles the visibility of navigation
  * elements.
+ * TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
  */
 @Suppress("DEPRECATION", "MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)

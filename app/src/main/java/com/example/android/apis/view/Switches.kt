@@ -15,6 +15,7 @@
  */
 package com.example.android.apis.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.CompoundButton
 import android.widget.Switch
@@ -35,6 +36,7 @@ class Switches : AppCompatActivity(), CompoundButton.OnCheckedChangeListener {
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.switches)

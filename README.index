@@ -2825,12 +2825,14 @@ Views
     Views/Search View/Always Expanded      v11+
         .view.SearchViewAlwaysVisible
         .view.SearchViewActionBar
+        .layout.searchview_actionbar
         .app.SearchQueryResults
             This Activity extends .view.SearchViewActionBar, with the only difference being it
             Override's isAlwaysExpanded() to return true instead of false.
 
     Views/Search View/Filter               v11+
         .view.SearchViewFilterMode
+        .layout.searchview_filter
         .view.Cheeses
             Shows a list that can be filtered in-place with a SearchView in non-iconified mode.
             Calls setTextFilterEnabled(true) on the layout's ListView to filter the children
@@ -2842,6 +2844,7 @@ Views
   Secure View
     Views/Secure View                      all -- v9+ or crash
         .view.SecureView
+        .layout.secure_view
         .view.SecureViewOverlay
             This activity demonstrates two different ways in which views can be made more secure to
             touch spoofing attacks by leveraging framework features.
@@ -2880,6 +2883,7 @@ Views
   Seek Bar
     Views/Seek Bar                         all
         .view.SeekBar1
+        .layout.seekbar_1
             Demonstrates how to use a seek bar. It implements SeekBar.OnSeekBarChangeListener which
             has the three call backs: onProgressChanged, onStartTrackingTouch, and onStopTrackingTouch
             displaying appropriate text based on the information passed it.
@@ -2888,6 +2892,9 @@ Views
   Spinner
     Views/Spinner                          all
         .view.Spinner1
+        .layout.spinner_1
+        .array.colors (in values/arrays.xml)
+        .array.planets (in values/arrays.xml)
             Demonstrates the use of the Spinner widget. It creates two ArrayAdapter<CharSequence>
             from string-array resources and uses setDropDownViewResource to set the view used by the
             adapter to create drop down views, then uses setAdapter to set the adapter used by
@@ -2898,6 +2905,7 @@ Views
   Splitting Touches across Views
     Views/Splitting Touches across Views   all - v11+ or crash in layout
         .view.SplitTouchView
+        .layout.split_touch_view
         .view.Cheeses
             This activity demonstrates splitting touch events across multiple views within a
             view group.  Here we have two ListViews within a LinearLayout that has the attribute
@@ -2907,34 +2915,45 @@ Views
   Switches
     Views/Switches                         all - v14+ or crash in layout
         .view.Switches
+        .layout.switches
             Demonstrates the use of the toggle switch widget. Customized text removed for Lollipop
             unless attribute android:showText="true" is added
 
   System UI Visibility
     Views/System UI Visibility/Content Browser  -- v16
         .view.ContentBrowserActivity
+        .layout.content_browser
             This activity demonstrates how to use system UI flags to implement
             a content browser style of UI (such as a book reader). Includes "Content",
             and implementation of a view for displaying immersive content, using system
             UI flags to transition in and out of modes where the user is focused on
             that content. When the user clicks, it toggles the visibility of navigation
             elements.
+            TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
 
     Views/System UI Visibility/Content Browser Nav Bar  -- v19
         .view.ContentBrowserNavActivity
+        .layout.content_browser_nav
             This activity demonstrates how to use system UI flags to implement a content
             browser style of UI (such as a book reader) that hides the nav bar as well as
             the status bar. The difference is the addition of the flags
             SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION, and SYSTEM_UI_FLAG_IMMERSIVE.
+            TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
+            TODO: replace deprecated Action bar navigation using tabs
+            TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
 
     Views/System UI Visibility/Game        v19
         .view.GameActivity
+        .layout.game
         .graphics.TouchPaint
             This activity demonstrates how to use the system UI flags to implement
             an immersive game.
+            TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
+            TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
 
     Views/System UI Visibility/System UI Modes  -- v18
         .view.SystemUIModes
+        .layout.system_ui_modes
             This activity demonstrates some of the available ways to reduce the size or
             visual contrast of the system decor, in order to better focus the user's
             attention or use available screen real estate on the task at hand. Uses
@@ -2945,6 +2964,7 @@ Views
     Views/System UI Visibility/System UI Modes Overlay  -- v16
         .view.SystemUIModesOverlay
         .view.SystemUIModes
+        .layout.system_ui_modes
             Extend .view.SystemUIModes with the addition of requesting the window feature
             Window.FEATURE_ACTION_BAR_OVERLAY which overlays the action bar rather than
             positioning the action bar in the space above the window content.

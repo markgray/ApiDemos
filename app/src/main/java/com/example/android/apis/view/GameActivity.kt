@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.example.android.apis.view
 
 import android.annotation.TargetApi
@@ -31,6 +33,8 @@ import com.example.android.apis.graphics.TouchPaint.PaintView
 /**
  * This activity demonstrates how to use the system UI flags to
  * implement an immersive game.
+ * TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
+ * TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
  */
 @Suppress("MemberVisibilityCanBePrivate", "RedundantOverride")
 class GameActivity : AppCompatActivity() {
