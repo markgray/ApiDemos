@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 @file:Suppress("DEPRECATION")
 
 package com.example.android.apis.view
@@ -28,6 +29,7 @@ import android.os.Bundle
  * respectively, using Intent's. The last sets the Intent flag so that it is
  * recreated each time the tab is clicked using:
  * Intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+ * TODO: replace deprecated TabActivity with modern navigation idiom
  */
 class Tabs3 : TabActivity() {
     /**

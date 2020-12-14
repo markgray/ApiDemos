@@ -2960,6 +2960,9 @@ Views
             CheckBox'es to set or unset the various flags passed to View.setSystemUiVisibility
             for the IV extends ImageView which serves as the background in the FrameLayout
             holding it and the CheckBox'es which overlay it.
+            TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
+            TODO: replace deprecated Action bar navigation using tabs
+            TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
 
     Views/System UI Visibility/System UI Modes Overlay  -- v16
         .view.SystemUIModesOverlay
@@ -2968,9 +2971,13 @@ Views
             Extend .view.SystemUIModes with the addition of requesting the window feature
             Window.FEATURE_ACTION_BAR_OVERLAY which overlays the action bar rather than
             positioning the action bar in the space above the window content.
+            TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
+            TODO: replace deprecated Action bar navigation using tabs
+            TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
 
     Views/System UI Visibility/Translucent Bars  -- v19
         .view.TranslucentBarsActivity
+        .layout.translucent_bars
             Layout sets the attribute android:fitsSystemWindows="true" to adjust view layout
             based on system windows such as the status bar. When true, it  adjusts the padding
             of the view to leave space for the system windows. Will only take effect if this
@@ -2981,17 +2988,23 @@ Views
 
     Views/System UI Visibility/Video Player  -- v16
         .view.VideoPlayerActivity
+        .layout.video_player
             Implementation of a view for displaying full-screen video playback, using system
             UI flags to transition in and out of modes where the entire screen can be filled
             with content (at the expense of no user interaction).
             Note: AppCompat does not do android:uiOptions="splitActionBarWhenNarrow"
+            TODO: replace deprecated Action bar navigation using tabs
+            TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
+            TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
 
   Tabs
     Views/Tabs/1. Content By Id            all
         .view.Tabs1
+        .layout.tabs1
             An example of an TabActivity that uses labels TabSpec#setIndicator(CharSequence)
             for its indicators and views by id from a layout file TabSpec#setContent(int).
             TextView's sharing a FrameLayout are selected by the tabs.
+            TODO: replace deprecated TabActivity with modern navigation idiom
 
     Views/Tabs/2. Content By Factory       all
         .view.Tabs2
@@ -3000,41 +3013,53 @@ Views
             It also demonstrates using an icon on one of the tabs via
             TabHost.TabSpec#setIndicator(CharSequence, android.graphics.drawable.Drawable)
             but this does not work using the default Theme as of Ice Cream Sandwich.
+            TODO: replace deprecated TabActivity with modern navigation idiom
 
     Views/Tabs/3. Content By Intent        all
         .view.Tabs3
+        .view.List1
+        .view.List8
+        .view.Controls1
             An example of tab content that launches an activity via
             android.widget.TabHost.TabSpec#setContent(android.content.Intent), the
             three tabs launch .view.List1, .view.List8, and .view.Controls1
             respectively, using Intent's. The last sets the Intent flag so that it is
             recreated each time the tab is clicked using:
             Intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            TODO: replace deprecated TabActivity with modern navigation idiom
 
     Views/Tabs/4. Non Holo theme           all
         .view.Tabs4
+        .view.Tabs2
             Identical to Tabs2. The change is in the theme used in the manifest file:
             android:theme="@android:style/Theme" The Icon shows up now unlike Tabs2.
 
     Views/Tabs/5. Scrollable               all
         .view.Tabs5
+        .layout.tabs_scroll
             Demonstrates the Tab scrolling when too many tabs are displayed to fit
             in the screen. In the layout a HorizontalScrollView contains the TabWidget
             and 30 tabs are added to it using TabHost.addTab(TabHost.TabSpec tabSpec)
             the callback createTabContent creates the content as each tab is selected.
+            TODO: replace deprecated TabActivity with modern navigation idiom
 
     Views/Tabs/6. Right aligned            all
         .view.Tabs6
+        .layout.tabs_right_gravity
             Uses a right gravity for the TabWidget. Does not seem to have any effect even
             after changing AndroidManifest to android:theme="@android:style/Theme"
+            TODO: replace deprecated TabActivity with modern navigation idiom
 
   Text
     Views/Text/EditText
         .view.EditTextDemo
+        .layout.edit_text_demo
             Demonstrates the android.widget.EditText widget. android:imeOptions="actionSearch"
             only produces an action key in landscape orientation for some reason. (No :id?)
 
     Views/Text/Linkify                           all
         .text.Link
+        .layout.link
             Four different ways to generate html like links and styled text: text1 shows
             the android:autoLink property, which automatically creates links for things
             like URLs and phone numbers found in the text. No java code is needed to make
@@ -3051,6 +3076,7 @@ Views
 
     Views/Text/LogTextBox                        all
         .text.LogTextBox1
+        .layout.log_text_box_1
         .text.LogTextBox
             Using a LogTextBox to display a scrollable text area to which text is
             appended. LogTextBox.java is a custom TextView that is Editable and by
@@ -3058,6 +3084,7 @@ Views
 
     Views/Text/Marquee                           all
         .text.Marquee
+        .layout.marquee
             Uses android:ellipsize="marquee" in the layout file to auto scroll Button
             text that is longer than the view is wide.
             Need to add android:focusable="true" and android:focusableInTouchMode="true"
@@ -3065,12 +3092,14 @@ Views
 
     Views/Text/TextClock                        all - v17+ or crash
         .view.TextClockDemo
+        .layout.textclock
             Variants of TextClock: Default formats; Shows the date only; Uses styles
             (different android:format12Hour, and android:format24Hour strings with
             font and face defined in string xml); Shows seconds; Uses a fixed time zone.
 
     Views/Text/TextSwitcher                     all
         .view.TextSwitcher1
+        .layout.text_switcher_1
             Uses a TextSwitcher to animate changes in the View controlled by the TextSwitcher.
             Two TextView's are requested from the app's overriding of ViewSwitcher.ViewFactory
             method makeView, and when the View needs to be updated TextSwitcher.setText is
@@ -3078,6 +3107,7 @@ Views
 
     Views/Text/TextView
         .view.TextViewDemo
+        .layout.text_view_demo
             Demonstrates the android.widget.TextView widget. Shows different values for
             android:textAppearance: ?android:attr/textAppearanceSmall,
             ?android:attr/textAppearanceMedium, and ?android:attr/textAppearanceLarge,
@@ -3087,20 +3117,23 @@ Views
   Tooltips
     Views/Tooltips                         v26
         .view.Tooltips
+        .layout.tooltips
             A demo for tooltips, it is implemented almost entirely in the layout file
             layout/tooltips.xml using the android:tooltipText attribute for the views,
             but the TextView with id R.id.tooltips_code has its tooltip set using its
-             setTooltipText method in our onCreate override.
+            setTooltipText method in our onCreate override.
 
   Visibility
     Views/Visibility                       all
         .view.Visibility1
+        .layout.visibility_1
             Demonstrates making a view VISIBLE, INVISIBLE and GONE. Three buttons control
             the visibility of a TextView which is sandwiched between two other TextView's
 
   WebView
     Views/WebView                          all
         .view.WebView1
+        .layout.webview_1
             Sample creating 1 webviews. Html data is loaded into the layout's WebView using
             WebView.loadData
 

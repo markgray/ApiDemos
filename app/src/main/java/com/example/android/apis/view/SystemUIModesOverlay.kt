@@ -25,6 +25,9 @@ import android.view.Window
  * .view.SystemUIModes with the addition of requesting the window feature
  * Window.FEATURE_ACTION_BAR_OVERLAY which overlays the action bar rather than
  * positioning the action bar in the space above the window content.
+ * TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
+ * TODO: replace deprecated Action bar navigation using tabs
+ * TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
  */
 class SystemUIModesOverlay : SystemUIModes() {
     /**

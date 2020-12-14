@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION", "UNUSED_PARAMETER", "MemberVisibilityCanBePrivate", "RedundantOverride")
+@file:Suppress("UNUSED_PARAMETER", "MemberVisibilityCanBePrivate", "RedundantOverride", "DEPRECATION")
 
 package com.example.android.apis.view
 
@@ -53,6 +53,9 @@ import com.example.android.apis.R
  * video playback). Uses system UI flags to transition in and out of modes
  * where the entire screen can be filled with content (at the expense of
  * no user interaction).
+ * TODO: replace deprecated Action bar navigation using tabs
+ * TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
+ * TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class VideoPlayerActivity :

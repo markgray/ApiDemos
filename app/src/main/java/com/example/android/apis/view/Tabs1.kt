@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 @file:Suppress("DEPRECATION")
 
 package com.example.android.apis.view
@@ -25,6 +26,7 @@ import com.example.android.apis.R
 /**
  * An example of tabs that uses labels (`TabSpec.setIndicator`)
  * for its indicators and views by id from a layout file (`TabSpec.setContent`).
+ * TODO: replace deprecated TabActivity with modern navigation idiom
  */
 class Tabs1 : TabActivity() {
     /**

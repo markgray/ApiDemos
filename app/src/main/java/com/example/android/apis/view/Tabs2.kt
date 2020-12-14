@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 @file:Suppress("DEPRECATION")
 
 package com.example.android.apis.view
@@ -31,6 +32,7 @@ import com.example.android.apis.R
  * It also demonstrates using an icon on one of the tabs via
  * TabHost.TabSpec#setIndicator(CharSequence, android.graphics.drawable.Drawable)
  * but this does not work using the default Theme as of Ice Cream Sandwich.
+ * TODO: replace deprecated TabActivity with modern navigation idiom
  */
 open class Tabs2 : TabActivity(), TabContentFactory {
     /**
@@ -45,6 +47,7 @@ open class Tabs2 : TabActivity(), TabContentFactory {
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
+    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val tabHost = tabHost

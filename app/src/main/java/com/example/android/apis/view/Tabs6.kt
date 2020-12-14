@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 @file:Suppress("DEPRECATION")
 
 package com.example.android.apis.view
@@ -45,6 +46,7 @@ class Tabs6 : TabActivity(), TabContentFactory {
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
+    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tabs_right_gravity)

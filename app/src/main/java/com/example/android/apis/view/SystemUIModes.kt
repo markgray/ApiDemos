@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.example.android.apis.view
 
 import android.annotation.SuppressLint
@@ -51,6 +53,9 @@ import com.example.android.apis.R
  * estate on the task at hand. Uses CheckBox'es to set or unset the various flags passed to
  * View.setSystemUiVisibility for the IV extends ImageView which serves as the background in the
  * FrameLayout holding it and the CheckBox'es which overlay it.
+ * TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
+ * TODO: replace deprecated Action bar navigation using tabs
+ * TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
  */
 @Suppress("UNUSED_PARAMETER", "MemberVisibilityCanBePrivate", "UNUSED_ANONYMOUS_PARAMETER", "RedundantOverride")
 @TargetApi(Build.VERSION_CODES.KITKAT)
