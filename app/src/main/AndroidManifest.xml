@@ -9,7 +9,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.TRANSMIT_IR" />
@@ -20,7 +21,8 @@
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" /> <!-- Required for drawing overlay windows (TYPE_SYSTEM_ALERT, TYPE_APPLICATION_OVERLAY) -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- For android.media.audiofx.Visualizer -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
     <!--
          We will request access to the camera, saying we require a camera
@@ -49,7 +51,9 @@
             android:name="com.example.will.never.exist"
             android:required="false" />
 
-        <activity android:name=".ApiDemos">
+        <activity
+            android:name=".ApiDemos"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -65,6 +69,7 @@
         <!-- Activity Samples -->
         <activity
             android:name=".app.HelloWorld"
+            android:exported="true"
             android:label="@string/activity_hello_world"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -74,6 +79,7 @@
         </activity>
         <activity
             android:name=".app.DialogActivity"
+            android:exported="true"
             android:label="@string/activity_dialog"
             android:theme="@style/ThemeCurrentDialog">
             <intent-filter>
@@ -83,6 +89,7 @@
         </activity>
         <activity
             android:name=".app.CustomDialogActivity"
+            android:exported="true"
             android:label="@string/activity_custom_dialog"
             android:theme="@style/Theme.CustomDialog">
             <intent-filter>
@@ -93,6 +100,7 @@
         <activity
             android:name=".app.OverscanActivity"
             android:enabled="@bool/atLeastJellyBeanMR2"
+            android:exported="true"
             android:label="@string/activity_overscan"
             android:theme="@style/Theme.MyOverscanStyle"
             tools:targetApi="jelly_bean_mr2">
@@ -103,6 +111,7 @@
         </activity>
         <activity
             android:name=".app.QuickContactsDemo"
+            android:exported="true"
             android:label="@string/quick_contacts_demo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -111,6 +120,7 @@
         </activity>
         <activity
             android:name=".app.WallpaperActivity"
+            android:exported="true"
             android:label="@string/activity_wallpaper"
             android:theme="@style/Theme.MyThemeWallpaper">
             <intent-filter>
@@ -120,6 +130,7 @@
         </activity>
         <activity
             android:name=".app.TranslucentActivity"
+            android:exported="true"
             android:label="@string/activity_translucent"
             android:theme="@style/Theme.MyThemeTranslucent">
             <intent-filter>
@@ -129,6 +140,7 @@
         </activity>
         <activity
             android:name=".app.TranslucentBlurActivity"
+            android:exported="true"
             android:label="@string/activity_translucent_blur"
             android:theme="@style/Theme.MyThemeTranslucent">
             <intent-filter>
@@ -138,6 +150,7 @@
         </activity>
         <activity
             android:name=".app.Animation"
+            android:exported="true"
             android:label="@string/activity_animation"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -147,6 +160,7 @@
         </activity>
         <activity
             android:name=".app.SaveRestoreState"
+            android:exported="true"
             android:label="@string/activity_save_restore"
             android:theme="@style/Theme.AppCompat.Light"
             android:windowSoftInputMode="stateVisible|adjustResize">
@@ -157,6 +171,7 @@
         </activity>
         <activity
             android:name=".app.PersistentState"
+            android:exported="true"
             android:label="@string/activity_persistent"
             android:theme="@style/Theme.AppCompat.Light"
             android:windowSoftInputMode="stateVisible|adjustResize">
@@ -168,6 +183,7 @@
         <activity
             android:name=".app.ActivityRecreate"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/activity_recreate"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -178,6 +194,7 @@
         <activity
             android:name=".app.FinishAffinity"
             android:enabled="@bool/atLeastJellyBean"
+            android:exported="true"
             android:label="@string/activity_finish_affinity"
             android:taskAffinity=":finishing"
             android:theme="@style/Theme.AppCompat.Light">
@@ -188,6 +205,7 @@
         </activity>
         <activity
             android:name=".app.SoftInputModes"
+            android:exported="true"
             android:label="@string/soft_input_modes"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -197,6 +215,7 @@
         </activity>
         <activity
             android:name=".app.ReceiveResult"
+            android:exported="true"
             android:label="@string/activity_receive_result"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -206,9 +225,11 @@
         </activity>
         <activity
             android:name=".app.SendResult"
+            android:exported="true"
             android:theme="@style/Theme.MyThemeDialogWhenLarge" />
         <activity
             android:name=".app.Forwarding"
+            android:exported="true"
             android:label="@string/activity_forwarding"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -218,9 +239,11 @@
         </activity>
         <activity
             android:name=".app.ForwardTarget"
+            android:exported="true"
             android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".app.RedirectEnter"
+            android:exported="true"
             android:label="@string/activity_redirect"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -230,9 +253,11 @@
         </activity>
         <activity
             android:name=".app.RedirectMain"
+            android:exported="true"
             android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".app.RedirectGetter"
+            android:exported="true"
             android:theme="@style/Theme.AppCompat.Light" />
         <!--
              This sample doesn't work with the new action bar, so use
@@ -240,6 +265,7 @@
         -->
         <activity
             android:name=".app.CustomTitle"
+            android:exported="true"
             android:label="@string/activity_custom_title"
             android:theme="@style/Theme.AppCompat.Light"
             android:windowSoftInputMode="stateVisible|adjustPan">
@@ -250,6 +276,7 @@
         </activity>
         <activity
             android:name=".app.ReorderOnLaunch"
+            android:exported="true"
             android:label="@string/activity_reorder"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -259,15 +286,19 @@
         </activity>
         <activity
             android:name=".app.ReorderTwo"
+            android:exported="true"
             android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".app.ReorderThree"
+            android:exported="true"
             android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".app.ReorderFour"
+            android:exported="true"
             android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".app.RotationAnimation"
+            android:exported="true"
             android:label="@string/activity_rotation_animation"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -277,6 +308,7 @@
         </activity>
         <activity
             android:name=".app.SetWallpaperActivity"
+            android:exported="true"
             android:label="@string/activity_setwallpaper"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -286,6 +318,7 @@
         </activity>
         <activity
             android:name=".app.ScreenOrientation"
+            android:exported="true"
             android:label="@string/activity_screen_orientation"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -296,6 +329,7 @@
         <activity
             android:name=".app.PictureInPicture"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:exported="true"
             android:label="@string/activity_picture_in_picture"
             android:resizeableActivity="true"
             android:supportsPictureInPicture="true"
@@ -308,6 +342,7 @@
         </activity>
         <activity
             android:name=".app.MaxAspectRatio$Square"
+            android:exported="true"
             android:label="@string/activity_max_aspect_ratio_square"
             android:maxAspectRatio="1"
             android:resizeableActivity="false"
@@ -320,6 +355,7 @@
         </activity>
         <activity
             android:name=".app.MaxAspectRatio$SixteenToNine"
+            android:exported="true"
             android:label="@string/activity_max_aspect_ratio_16to9"
             android:maxAspectRatio="1.77777778"
             android:resizeableActivity="false"
@@ -332,6 +368,7 @@
         </activity>
         <activity
             android:name=".app.MaxAspectRatio$Any"
+            android:exported="true"
             android:label="@string/activity_max_aspect_ratio_any"
             android:resizeableActivity="true"
             android:theme="@style/Theme.AppCompat.Light"
@@ -343,6 +380,7 @@
         </activity>
         <activity
             android:name=".app.PresentationActivity"
+            android:exported="true"
             android:label="@string/activity_presentation"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -352,6 +390,7 @@
         </activity>
         <activity
             android:name=".app.PresentationWithMediaRouterActivity"
+            android:exported="true"
             android:label="@string/activity_presentation_with_media_router"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -361,6 +400,7 @@
         </activity>
         <activity
             android:name=".app.SecureWindowActivity"
+            android:exported="true"
             android:label="@string/activity_secure_window"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -370,6 +410,7 @@
         </activity>
         <activity
             android:name=".app.SecureDialogActivity"
+            android:exported="true"
             android:label="@string/activity_secure_dialog"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -379,6 +420,7 @@
         </activity>
         <activity
             android:name=".app.SecureSurfaceViewActivity"
+            android:exported="true"
             android:label="@string/activity_secure_surface_view"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -391,6 +433,7 @@
         <activity
             android:name=".app.FragmentAlertDialog"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/fragment_alert_dialog"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -401,6 +444,7 @@
         <activity
             android:name=".app.FragmentArguments"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/fragment_arguments">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -410,6 +454,7 @@
         <activity
             android:name=".app.FragmentCustomAnimations"
             android:enabled="@bool/atLeastHoneycombMR2"
+            android:exported="true"
             android:label="@string/fragment_custom_animations">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -419,6 +464,7 @@
         <activity
             android:name=".app.FragmentHideShow"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/fragment_hide_show"
             android:theme="@style/Theme.AppCompat.Light"
             android:windowSoftInputMode="stateUnchanged">
@@ -430,6 +476,7 @@
         <activity
             android:name=".app.FragmentContextMenu"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/fragment_context_menu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -439,6 +486,7 @@
         <activity
             android:name=".app.FragmentDialog"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/fragment_dialog"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -449,6 +497,7 @@
         <activity
             android:name=".app.FragmentDialogOrActivity"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/fragment_dialog_or_activity"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -459,6 +508,7 @@
         <activity
             android:name=".app.FragmentLayout"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/fragment_layout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -467,10 +517,12 @@
         </activity>
         <activity
             android:name=".app.FragmentLayout$DetailsActivity"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb" />
         <activity
             android:name=".app.FragmentListArray"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/fragment_list_array">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -480,6 +532,7 @@
         <activity
             android:name=".app.FragmentMenu"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/fragment_menu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -489,6 +542,7 @@
         <activity
             android:name=".app.FragmentNestingTabs"
             android:enabled="@bool/atLeastJellyBeanMR1"
+            android:exported="true"
             android:label="@string/fragment_nesting_tabs"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -499,6 +553,7 @@
         <activity
             android:name=".app.FragmentRetainInstance"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/fragment_retain_instance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -508,6 +563,7 @@
         <activity
             android:name=".app.FragmentReceiveResult"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/fragment_receive_result">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -517,6 +573,7 @@
         <activity
             android:name=".app.FragmentStack"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/fragment_stack">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -526,6 +583,7 @@
         <activity
             android:name=".app.FragmentTabs"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/fragment_tabs"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -538,6 +596,7 @@
         <activity
             android:name=".app.LoaderCursor"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/loader_cursor"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -548,6 +607,7 @@
         <activity
             android:name=".app.LoaderCustom"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/loader_custom"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -558,6 +618,7 @@
         <activity
             android:name=".app.LoaderThrottle"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/loader_throttle"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -575,6 +636,7 @@
         <activity
             android:name=".app.LoaderRetained"
             android:enabled="@bool/atLeastHoneycomb"
+            android:exported="true"
             android:label="@string/loader_retained"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -586,6 +648,7 @@
         <!-- Intent Samples -->
         <activity
             android:name=".app.Intents"
+            android:exported="true"
             android:label="@string/activity_intents"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -595,6 +658,7 @@
         </activity>
         <activity
             android:name=".app.IntentActivityFlags"
+            android:exported="true"
             android:label="@string/activity_intent_activity_flags"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -610,6 +674,7 @@
 
         <activity
             android:name=".app.LocalServiceActivities$Controller"
+            android:exported="true"
             android:label="@string/activity_local_service_controller"
             android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light">
@@ -620,6 +685,7 @@
         </activity>
         <activity
             android:name=".app.LocalServiceActivities$Binding"
+            android:exported="true"
             android:label="@string/activity_local_service_binding"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -634,6 +700,7 @@
 
         <activity
             android:name=".app.MessengerServiceActivities$Binding"
+            android:exported="true"
             android:label="@string/activity_messenger_service_binding"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -648,6 +715,7 @@
 
         <activity
             android:name=".app.RemoteService$Controller"
+            android:exported="true"
             android:label="@string/activity_remote_service_controller"
             android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light">
@@ -658,6 +726,7 @@
         </activity>
         <activity
             android:name=".app.RemoteService$Binding"
+            android:exported="true"
             android:label="@string/activity_remote_service_binding"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -667,6 +736,7 @@
         </activity>
         <activity
             android:name=".app.RemoteService$BindingOptions"
+            android:exported="true"
             android:label="@string/activity_remote_service_binding_options"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -679,6 +749,7 @@
 
         <activity
             android:name=".app.ServiceStartArguments$Controller"
+            android:exported="true"
             android:label="@string/activity_service_start_arguments_controller"
             android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light">
@@ -694,6 +765,7 @@
 
         <activity
             android:name=".app.JobWorkServiceActivity"
+            android:exported="true"
             android:label="@string/activity_job_work_service"
             android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light">
@@ -708,6 +780,7 @@
 
         <activity
             android:name=".app.ForegroundServiceController"
+            android:exported="true"
             android:label="@string/activity_foreground_service_controller"
             android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light">
@@ -719,6 +792,7 @@
         <activity
             android:name=".app.IsolatedServiceController"
             android:enabled="@bool/atLeastJellyBean"
+            android:exported="true"
             android:label="@string/activity_isolated_service_controller"
             android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light">
@@ -738,13 +812,16 @@
             android:isolatedProcess="true" /> <!-- Alarm Samples -->
         <receiver
             android:name=".app.OneShotAlarm"
+            android:exported="true"
             android:process=":remote" />
         <receiver
             android:name=".app.RepeatingAlarm"
+            android:exported="true"
             android:process=":remote" />
 
         <activity
             android:name=".app.AlarmController"
+            android:exported="true"
             android:label="@string/activity_alarm_controller"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -759,6 +836,7 @@
 
         <activity
             android:name=".app.AlarmService"
+            android:exported="true"
             android:label="@string/activity_alarm_service"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -779,6 +857,7 @@
         <!-- ============================ -->
         <activity
             android:name=".accessibility.ClockBackActivity"
+            android:exported="true"
             android:label="@string/accessibility_service"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -789,6 +868,7 @@
 
         <service
             android:name=".accessibility.ClockBackService"
+            android:exported="false"
             android:label="@string/accessibility_service_label"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
@@ -797,6 +877,7 @@
         </service>
         <service
             android:name=".accessibility.MagnificationService"
+            android:exported="false"
             android:label="@string/magnification_service_label"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
@@ -811,6 +892,7 @@
         <activity
             android:name=".accessibility.TaskListActivity"
             android:enabled="@bool/atLeastIceCreamSandwich"
+            android:exported="true"
             android:label="@string/accessibility_query_window">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -821,6 +903,7 @@
         <service
             android:name=".accessibility.TaskBackService"
             android:enabled="@bool/atLeastIceCreamSandwich"
+            android:exported="false"
             android:label="@string/accessibility_query_window_label"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
@@ -835,6 +918,7 @@
         <activity
             android:name=".accessibility.CustomViewAccessibilityActivity"
             android:enabled="@bool/atLeastIceCreamSandwich"
+            android:exported="true"
             android:label="@string/accessibility_custom_view"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -846,6 +930,7 @@
         <!-- Instrumentation Samples -->
         <activity
             android:name=".app.LocalSample"
+            android:exported="true"
             android:label="@string/activity_local_sample">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -854,6 +939,7 @@
         </activity>
         <activity
             android:name=".app.ContactsFilter"
+            android:exported="true"
             android:label="@string/activity_contacts_filter"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -865,6 +951,7 @@
         <!-- Notifications samples -->
         <activity
             android:name=".app.NotifyWithText"
+            android:exported="true"
             android:label="App/Notification/NotifyWithText"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -874,6 +961,7 @@
         </activity>
         <activity
             android:name=".app.IncomingMessage"
+            android:exported="true"
             android:label="App/Notification/IncomingMessage"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -883,10 +971,12 @@
         </activity>
         <activity
             android:name=".app.IncomingMessageView"
+            android:exported="true"
             android:label="App/Notification/IncomingMessageView"
             android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".app.IncomingMessageInterstitial"
+            android:exported="true"
             android:excludeFromRecents="true"
             android:label="You have messages"
             android:launchMode="singleTask"
@@ -900,12 +990,14 @@
         -->
         <activity
             android:name=".app.NotificationDisplay"
+            android:exported="true"
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:taskAffinity=""
             android:theme="@style/Theme.MyTransparent" />
         <activity
             android:name=".app.StatusBarNotifications"
+            android:exported="true"
             android:label="App/Notification/Status Bar"
             android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light">
@@ -919,6 +1011,7 @@
 
         <activity
             android:name=".app.NotifyingController"
+            android:exported="true"
             android:label="App/Notification/Notifying Service Controller"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -931,6 +1024,7 @@
 
         <activity
             android:name=".app.NotificationBackgroundService$Controller"
+            android:exported="true"
             android:label="App/Notification/Background Service"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -942,6 +1036,7 @@
         <!-- Dialog samples -->
         <activity
             android:name=".app.AlertDialogSamples"
+            android:exported="true"
             android:label="@string/activity_alert_dialog"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -957,6 +1052,7 @@
         <!-- level, where it can serve as a default for all of your activities. -->
         <activity
             android:name=".app.SearchInvoke"
+            android:exported="true"
             android:label="@string/search_invoke"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -983,6 +1079,7 @@
         <!-- search results are gathered and displayed. -->
         <activity
             android:name=".app.SearchQueryResults"
+            android:exported="true"
             android:label="@string/search_query_results"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1029,6 +1126,7 @@
         <!-- intents from the shortcut itself. -->
         <activity
             android:name=".app.LauncherShortcuts"
+            android:exported="true"
             android:label="@string/shortcuts"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1041,6 +1139,7 @@
         <!-- icon) that will be seen in the launcher's create-shortcut user interface. -->
         <activity-alias
             android:name=".app.CreateShortcuts"
+            android:exported="false"
             android:label="@string/sample_shortcuts"
             android:targetActivity=".app.LauncherShortcuts">
 
@@ -1054,6 +1153,7 @@
         <!-- Menu Samples -->
         <activity
             android:name=".app.MenuInflateFromXml"
+            android:exported="true"
             android:label="@string/menu_from_xml_title"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1065,6 +1165,7 @@
         <!-- Device Admin Samples -->
         <activity
             android:name=".app.DeviceAdminSample"
+            android:exported="true"
             android:label="@string/activity_sample_device_admin">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -1074,6 +1175,7 @@
 
         <receiver
             android:name=".app.DeviceAdminSample$DeviceAdminSampleReceiver"
+            android:exported="true"
             android:description="@string/sample_device_admin_description"
             android:label="@string/sample_device_admin"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
@@ -1087,6 +1189,7 @@
         </receiver>
         <receiver
             android:name=".app.DeviceAdminSample$DeviceAdminSampleReceiver2"
+            android:exported="true"
             android:description="@string/sample_device_admin_description2"
             android:label="@string/sample_device_admin2"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
@@ -1102,6 +1205,7 @@
         <!-- Voice Recognition Samples -->
         <activity
             android:name=".app.VoiceRecognition"
+            android:exported="true"
             android:label="@string/voice_recognition"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1113,6 +1217,7 @@
         <!-- Text-To-Speech Samples -->
         <activity
             android:name=".app.TextToSpeechActivity"
+            android:exported="true"
             android:label="@string/text_to_speech"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1124,6 +1229,7 @@
         <!-- Action Bar Samples -->
         <activity
             android:name=".app.ActionBarMechanics"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="@string/action_bar_mechanics"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1134,6 +1240,7 @@
         </activity>
         <activity
             android:name=".app.ActionBarUsage"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="@string/action_bar_usage"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
@@ -1144,6 +1251,7 @@
         </activity>
         <activity
             android:name=".app.ActionBarDisplayOptions"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="@string/action_bar_display_options"
             android:logo="@drawable/apidemo_androidlogo"
@@ -1155,6 +1263,7 @@
         </activity>
         <activity
             android:name=".app.ActionBarTabs"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="@string/action_bar_tabs"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1165,6 +1274,7 @@
         </activity>
         <activity
             android:name=".app.ActionBarSettingsActionProviderActivity"
+            android:exported="true"
             android:enabled="@bool/atLeastIceCreamSandwich"
             android:label="@string/action_bar_settings_action_provider"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1175,6 +1285,7 @@
         </activity>
         <activity
             android:name=".app.ActionBarShareActionProviderActivity"
+            android:exported="true"
             android:enabled="@bool/atLeastIceCreamSandwich"
             android:label="@string/action_bar_share_action_provider"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1185,6 +1296,7 @@
         </activity>
         <activity
             android:name=".app.ActionBarNavigation"
+            android:exported="true"
             android:enabled="@bool/atLeastJellyBean"
             android:label="@string/action_bar_navigation"
             android:launchMode="singleTask"
@@ -1197,6 +1309,7 @@
         </activity>
         <activity
             android:name=".app.ActionBarNavigationTarget"
+            android:exported="true"
             android:enabled="@bool/atLeastJellyBean"
             android:label="@string/action_bar_navigation_target"
             android:parentActivityName=".app.ActionBarNavigation"
@@ -1204,6 +1317,7 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
             android:name=".app.PrintBitmap"
+            android:exported="true"
             android:enabled="@bool/atLeastKitKat"
             android:label="@string/print_bitmap"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1214,6 +1328,7 @@
         </activity>
         <activity
             android:name=".app.PrintHtmlFromScreen"
+            android:exported="true"
             android:enabled="@bool/atLeastKitKat"
             android:label="@string/print_html_from_screen"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1224,6 +1339,7 @@
         </activity>
         <activity
             android:name=".app.PrintHtmlOffScreen"
+            android:exported="true"
             android:enabled="@bool/atLeastKitKat"
             android:label="@string/print_html_off_screen"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1234,6 +1350,7 @@
         </activity>
         <activity
             android:name=".app.PrintCustomContent"
+            android:exported="true"
             android:enabled="@bool/atLeastKitKat"
             android:label="@string/print_custom_content">
             <intent-filter>
@@ -1243,12 +1360,16 @@
         </activity>
 
         <!-- Application Updating Samples -->
-        <receiver android:name=".app.AppUpdateReceiver">
+        <receiver
+            android:name=".app.AppUpdateReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".app.AppUpdateSspReceiver">
+        <receiver
+            android:name=".app.AppUpdateSspReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
 
@@ -1264,6 +1385,7 @@
         <!-- ************************************* -->
         <activity
             android:name=".preference.FragmentPreferences"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="@string/fragment_preferences"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1274,6 +1396,7 @@
         </activity>
         <activity
             android:name=".preference.PreferenceWithHeaders"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="@string/preference_with_headers"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1284,6 +1407,7 @@
         </activity>
         <activity
             android:name=".preference.PreferencesFromXml"
+            android:exported="true"
             android:label="@string/preferences_from_xml"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1293,6 +1417,7 @@
         </activity>
         <activity
             android:name=".preference.PreferencesFromCode"
+            android:exported="true"
             android:label="@string/preferences_from_code"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1302,6 +1427,7 @@
         </activity>
         <activity
             android:name=".preference.AdvancedPreferences"
+            android:exported="true"
             android:label="@string/advanced_preferences"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1311,6 +1437,7 @@
         </activity>
         <activity
             android:name=".preference.LaunchingPreferences"
+            android:exported="true"
             android:label="@string/launching_preferences"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1320,6 +1447,7 @@
         </activity>
         <activity
             android:name=".preference.PreferenceDependencies"
+            android:exported="true"
             android:label="@string/preference_dependencies"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1329,6 +1457,7 @@
         </activity>
         <activity
             android:name=".preference.DefaultValues"
+            android:exported="true"
             android:label="@string/default_values"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1338,6 +1467,7 @@
         </activity>
         <activity
             android:name=".preference.SwitchPreference"
+            android:exported="true"
             android:enabled="@bool/atLeastIceCreamSandwich"
             android:label="@string/switch_preference"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1352,6 +1482,7 @@
         <!-- ************************************* -->
         <activity
             android:name=".content.ClipboardSample"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="@string/activity_clipboard"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1362,78 +1493,93 @@
         </activity>
         <activity
             android:name=".content.ExternalStorage"
+            android:exported="true"
             android:label="@string/activity_external_storage"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.SAMPLE_CODE" />
                 <category android:name="android.intent.category.EMBED" />
             </intent-filter>
         </activity>
         <activity
             android:name=".content.StyledText"
+            android:exported="true"
             android:label="@string/activity_styled_text"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.SAMPLE_CODE" />
                 <category android:name="android.intent.category.EMBED" />
             </intent-filter>
         </activity>
         <activity
             android:name=".content.TextUndoActivity"
+            android:exported="true"
             android:label="@string/activity_text_undo"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.SAMPLE_CODE" />
                 <category android:name="android.intent.category.EMBED" />
             </intent-filter>
         </activity>
         <activity
             android:name=".content.ResourcesLayoutReference"
+            android:exported="true"
             android:label="@string/activity_resources_layout_reference"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.SAMPLE_CODE" />
                 <category android:name="android.intent.category.EMBED" />
             </intent-filter>
         </activity>
         <activity
             android:name=".content.ResourcesWidthAndHeight"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycombMR2"
             android:label="@string/activity_resources_width_and_height"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.SAMPLE_CODE" />
                 <category android:name="android.intent.category.EMBED" />
             </intent-filter>
         </activity>
         <activity
             android:name=".content.ResourcesSmallestWidth"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycombMR2"
             android:label="@string/activity_resources_smallest_width"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.SAMPLE_CODE" />
                 <category android:name="android.intent.category.EMBED" />
             </intent-filter>
         </activity>
         <activity
             android:name=".content.ReadAsset"
+            android:exported="true"
             android:label="@string/activity_read_asset"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.SAMPLE_CODE" />
                 <category android:name="android.intent.category.EMBED" />
             </intent-filter>
         </activity>
         <activity
             android:name=".content.ResourcesSample"
+            android:exported="true"
             android:label="@string/activity_resources"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1443,6 +1589,7 @@
         </activity>
         <activity
             android:name=".content.PickContact"
+            android:exported="true"
             android:label="@string/activity_pick_contact"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1452,6 +1599,7 @@
         </activity>
         <activity
             android:name=".content.ShareContent"
+            android:exported="true"
             android:label="@string/activity_share_content"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1461,6 +1609,7 @@
         </activity>
         <activity
             android:name=".content.ChangedContacts"
+            android:exported="true"
             android:label="@string/activity_changed_contact"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1470,6 +1619,7 @@
         </activity>
         <activity
             android:name=".content.MediaContentObserver"
+            android:exported="true"
             android:label="@string/activity_media_content_observer"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1487,6 +1637,7 @@
 
         <activity
             android:name=".content.InstallApk"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycombMR2"
             android:label="@string/activity_install_apk"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1509,6 +1660,7 @@
 
         <activity
             android:name=".content.InstallApkSessionApi"
+            android:exported="true"
             android:label="@string/activity_install_apk_session_api"
             android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1524,6 +1676,7 @@
         </activity>
         <activity
             android:name=".content.DocumentsSample"
+            android:exported="true"
             android:enabled="@bool/atLeastKitKat"
             android:label="@string/activity_documents"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1542,6 +1695,7 @@
 
         <activity
             android:name=".content.ProcessTextLauncher"
+            android:exported="true"
             android:label="@string/process_text_title"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1549,7 +1703,9 @@
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-        <activity android:name=".content.ProcessText"
+        <activity
+            android:name=".content.ProcessText"
+            android:exported="true"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
@@ -1563,6 +1719,7 @@
         <!-- ************************************* -->
         <activity
             android:name=".hardware.ConsumerIr"
+            android:exported="true"
             android:label="Hardware/Consumer IR"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1576,6 +1733,7 @@
         <!-- ************************************* -->
         <activity
             android:name=".os.MorseCode"
+            android:exported="true"
             android:label="OS/Morse Code"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1585,6 +1743,7 @@
         </activity>
         <activity
             android:name=".os.TriggerSensors"
+            android:exported="true"
             android:label="OS/TriggerSensors"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1594,6 +1753,7 @@
         </activity>
         <activity
             android:name=".os.RotationVectorDemo"
+            android:exported="true"
             android:label="OS/Rotation Vector"
             android:screenOrientation="nosensor"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1608,6 +1768,7 @@
         <!-- ************************************* -->
         <activity
             android:name=".animation.ActivityTransition"
+            android:exported="true"
             android:enabled="@bool/atLeastLRelease"
             android:label="Animation/Activity Transition"
             android:theme="@style/ActivityTransitionTheme">
@@ -1618,6 +1779,7 @@
         </activity>
         <activity
             android:name=".animation.ActivityTransitionDetails"
+            android:exported="true"
             android:enabled="@bool/atLeastLRelease"
             android:label="Animation/Details of a specific thingy"
             android:theme="@style/ActivityTransitionTheme">
@@ -1627,6 +1789,7 @@
         </activity>
         <activity
             android:name=".animation.AnimationLoading"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Animation/Loading"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1637,6 +1800,7 @@
         </activity>
         <activity
             android:name=".animation.AnimationCloning"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Animation/Cloning"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1647,6 +1811,7 @@
         </activity>
         <activity
             android:name=".animation.AnimationSeeking"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Animation/Seeking"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1657,6 +1822,7 @@
         </activity>
         <activity
             android:name=".animation.AnimatorEvents"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Animation/Events"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1667,6 +1833,7 @@
         </activity>
         <activity
             android:name=".animation.BouncingBalls"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Animation/Bouncing Balls"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1677,6 +1844,7 @@
         </activity>
         <activity
             android:name=".animation.CustomEvaluator"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Animation/Custom Evaluator"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1687,6 +1855,7 @@
         </activity>
         <activity
             android:name=".animation.ListFlipper"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Animation/View Flip"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1697,6 +1866,7 @@
         </activity>
         <activity
             android:name=".animation.ReversingAnimation"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Animation/Reversing"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1707,6 +1877,7 @@
         </activity>
         <activity
             android:name=".animation.MultiPropertyAnimation"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Animation/Multiple Properties"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1717,6 +1888,7 @@
         </activity>
         <activity
             android:name=".animation.LayoutAnimations"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Animation/Layout Animations"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1727,6 +1899,7 @@
         </activity>
         <activity
             android:name=".animation.LayoutAnimationsHideShow"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Animation/Hide-Show Animations"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1737,6 +1910,7 @@
         </activity>
         <activity
             android:name=".animation.LayoutAnimationsByDefault"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Animation/Default Layout Animations"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1747,6 +1921,7 @@
         </activity>
         <activity
             android:name=".animation.Transitions"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Animation/Simple Transitions"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1757,6 +1932,7 @@
         </activity>
         <activity
             android:name=".animation.PathAnimations"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Animation/Path Animations"
             android:theme="@style/Theme.AppCompat.Light">
@@ -1771,6 +1947,7 @@
         <!-- ************************************* -->
         <activity
             android:name=".animation.Transition3d"
+            android:exported="true"
             android:label="Views/Animation/3D Transition"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1784,6 +1961,7 @@
         <!-- ************************************* -->
         <activity
             android:name=".view.ChronometerDemo"
+            android:exported="true"
             android:label="Views/Chronometer"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1793,6 +1971,7 @@
         </activity>
         <activity
             android:name=".view.WebView1"
+            android:exported="true"
             android:label="Views/WebView"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1802,6 +1981,7 @@
         </activity>
         <activity
             android:name=".view.RelativeLayout1"
+            android:exported="true"
             android:label="Views/Layouts/RelativeLayout/1. Vertical"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1811,6 +1991,7 @@
         </activity>
         <activity
             android:name=".view.RelativeLayout2"
+            android:exported="true"
             android:label="Views/Layouts/RelativeLayout/2. Simple Form"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1820,6 +2001,7 @@
         </activity>
         <activity
             android:name=".view.LinearLayout1"
+            android:exported="true"
             android:label="Views/Layouts/LinearLayout/01. Vertical"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1829,6 +2011,7 @@
         </activity>
         <activity
             android:name=".view.LinearLayout2"
+            android:exported="true"
             android:label="Views/Layouts/LinearLayout/02. Vertical (Fill Screen)"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1838,6 +2021,7 @@
         </activity>
         <activity
             android:name=".view.LinearLayout3"
+            android:exported="true"
             android:label="Views/Layouts/LinearLayout/03. Vertical (Padded)"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1847,6 +2031,7 @@
         </activity>
         <activity
             android:name=".view.LinearLayout4"
+            android:exported="true"
             android:label="Views/Layouts/LinearLayout/04. Horizontal"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1856,6 +2041,7 @@
         </activity>
         <activity
             android:name=".view.LinearLayout5"
+            android:exported="true"
             android:label="Views/Layouts/LinearLayout/05. Simple Form"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1865,6 +2051,7 @@
         </activity>
         <activity
             android:name=".view.LinearLayout6"
+            android:exported="true"
             android:label="Views/Layouts/LinearLayout/06. Uniform Size"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1874,6 +2061,7 @@
         </activity>
         <activity
             android:name=".view.LinearLayout7"
+            android:exported="true"
             android:label="Views/Layouts/LinearLayout/07. Fill Parent"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1884,6 +2072,7 @@
         <activity
             android:name=".view.LinearLayout8"
             android:label="Views/Layouts/LinearLayout/08. Gravity"
+            android:exported="true"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -1892,6 +2081,7 @@
         </activity>
         <activity
             android:name=".view.LinearLayout9"
+            android:exported="true"
             android:label="Views/Layouts/LinearLayout/09. Layout Weight"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1901,6 +2091,7 @@
         </activity>
         <activity
             android:name=".view.LinearLayout10"
+            android:exported="true"
             android:label="Views/Layouts/LinearLayout/10. Background Image"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1910,6 +2101,7 @@
         </activity>
         <activity
             android:name=".view.CustomLayoutActivity"
+            android:exported="true"
             android:label="Views/Layouts/CustomLayout"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1919,6 +2111,7 @@
         </activity>
         <activity
             android:name=".view.RadioGroup1"
+            android:exported="true"
             android:label="Views/Radio Group"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1928,6 +2121,7 @@
         </activity>
         <activity
             android:name=".view.ScrollView1"
+            android:exported="true"
             android:label="Views/Layouts/ScrollView/1. Short"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1937,6 +2131,7 @@
         </activity>
         <activity
             android:name=".view.ScrollView2"
+            android:exported="true"
             android:label="Views/Layouts/ScrollView/2. Long"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1946,6 +2141,7 @@
         </activity>
         <activity
             android:name=".view.HorizontalScrollView1"
+            android:exported="true"
             android:label="Views/Layouts/HorizontalScrollView"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1955,6 +2151,7 @@
         </activity>
         <activity
             android:name=".view.Tabs1"
+            android:exported="true"
             android:label="Views/Tabs/1. Content By Id"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1964,6 +2161,7 @@
         </activity>
         <activity
             android:name=".view.Tabs2"
+            android:exported="true"
             android:label="Views/Tabs/2. Content By Factory"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1973,6 +2171,7 @@
         </activity>
         <activity
             android:name=".view.Tabs3"
+            android:exported="true"
             android:label="Views/Tabs/3. Content By Intent"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -1982,6 +2181,7 @@
         </activity>
         <activity
             android:name=".view.Tabs4"
+            android:exported="true"
             android:label="Views/Tabs/4. Non Holo theme"
             android:theme="@android:style/Theme">
             <intent-filter>
@@ -1991,6 +2191,7 @@
         </activity>
         <activity
             android:name=".view.Tabs5"
+            android:exported="true"
             android:label="Views/Tabs/5. Scrollable"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2000,6 +2201,7 @@
         </activity>
         <activity
             android:name=".view.Tabs6"
+            android:exported="true"
             android:label="Views/Tabs/6. Right aligned"
             android:theme="@android:style/Theme">
             <intent-filter>
@@ -2009,6 +2211,7 @@
         </activity>
         <activity
             android:name=".view.InternalSelectionScroll"
+            android:exported="true"
             android:label="Views/Layouts/ScrollView/3. Internal Selection"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2018,6 +2221,7 @@
         </activity>
         <activity
             android:name=".view.TableLayout1"
+            android:exported="true"
             android:label="Views/Layouts/TableLayout/01. Basic"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2027,6 +2231,7 @@
         </activity>
         <activity
             android:name=".view.TableLayout2"
+            android:exported="true"
             android:label="Views/Layouts/TableLayout/02. Empty Cells"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2036,6 +2241,7 @@
         </activity>
         <activity
             android:name=".view.TableLayout3"
+            android:exported="true"
             android:label="Views/Layouts/TableLayout/03. Long Content"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2045,6 +2251,7 @@
         </activity>
         <activity
             android:name=".view.TableLayout4"
+            android:exported="true"
             android:label="Views/Layouts/TableLayout/04. Stretchable"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2054,6 +2261,7 @@
         </activity>
         <activity
             android:name=".view.TableLayout5"
+            android:exported="true"
             android:label="Views/Layouts/TableLayout/05. Spanning and Stretchable"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2063,6 +2271,7 @@
         </activity>
         <activity
             android:name=".view.TableLayout6"
+            android:exported="true"
             android:label="Views/Layouts/TableLayout/06. More Spanning and Stretchable"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2072,6 +2281,7 @@
         </activity>
         <activity
             android:name=".view.TableLayout7"
+            android:exported="true"
             android:label="Views/Layouts/TableLayout/07. Column Collapse"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2081,6 +2291,7 @@
         </activity>
         <activity
             android:name=".view.TableLayout8"
+            android:exported="true"
             android:label="Views/Layouts/TableLayout/08. Toggle Stretch"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2090,6 +2301,7 @@
         </activity>
         <activity
             android:name=".view.TableLayout9"
+            android:exported="true"
             android:label="Views/Layouts/TableLayout/09. Toggle Shrink"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2099,6 +2311,7 @@
         </activity>
         <activity
             android:name=".view.TableLayout10"
+            android:exported="true"
             android:label="Views/Layouts/TableLayout/10. Simple Form"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2108,6 +2321,7 @@
         </activity>
         <activity
             android:name=".view.TableLayout11"
+            android:exported="true"
             android:label="Views/Layouts/TableLayout/11. Gravity"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2117,6 +2331,7 @@
         </activity>
         <activity
             android:name=".view.TableLayout12"
+            android:exported="true"
             android:label="Views/Layouts/TableLayout/12. Cell Spanning"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2126,6 +2341,7 @@
         </activity>
         <activity
             android:name=".view.GridLayout1"
+            android:exported="true"
             android:label="Views/Layouts/GridLayout/1. Simple Form"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2135,6 +2351,7 @@
         </activity>
         <activity
             android:name=".view.GridLayout2"
+            android:exported="true"
             android:label="Views/Layouts/GridLayout/2. Form (XML)"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2144,6 +2361,7 @@
         </activity>
         <activity
             android:name=".view.GridLayout3"
+            android:exported="true"
             android:label="Views/Layouts/GridLayout/3. Form (Java)"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2153,6 +2371,7 @@
         </activity>
         <activity
             android:name=".view.Baseline1"
+            android:exported="true"
             android:label="Views/Layouts/Baseline/1. Top"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2162,6 +2381,7 @@
         </activity>
         <activity
             android:name=".view.Baseline2"
+            android:exported="true"
             android:label="Views/Layouts/Baseline/2. Bottom"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2171,6 +2391,7 @@
         </activity>
         <activity
             android:name=".view.Baseline3"
+            android:exported="true"
             android:label="Views/Layouts/Baseline/3. Center"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2180,6 +2401,7 @@
         </activity>
         <activity
             android:name=".view.Baseline4"
+            android:exported="true"
             android:label="Views/Layouts/Baseline/4. Everywhere"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2189,6 +2411,7 @@
         </activity>
         <activity
             android:name=".view.Baseline6"
+            android:exported="true"
             android:label="Views/Layouts/Baseline/5. Multi-line"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2198,6 +2421,7 @@
         </activity>
         <activity
             android:name=".view.Baseline7"
+            android:exported="true"
             android:label="Views/Layouts/Baseline/6. Relative"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2207,6 +2431,7 @@
         </activity>
         <activity
             android:name=".view.BaselineNested1"
+            android:exported="true"
             android:label="Views/Layouts/Baseline/Nested Example 1"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2216,6 +2441,7 @@
         </activity>
         <activity
             android:name=".view.BaselineNested2"
+            android:exported="true"
             android:label="Views/Layouts/Baseline/Nested Example 2"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2225,6 +2451,7 @@
         </activity>
         <activity
             android:name=".view.BaselineNested3"
+            android:exported="true"
             android:label="Views/Layouts/Baseline/Nested Example 3"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2234,6 +2461,7 @@
         </activity>
         <activity
             android:name=".view.ScrollBar1"
+            android:exported="true"
             android:label="Views/ScrollBars/1. Basic"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2243,6 +2471,7 @@
         </activity>
         <activity
             android:name=".view.ScrollBar2"
+            android:exported="true"
             android:label="Views/ScrollBars/2. Fancy"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2252,6 +2481,7 @@
         </activity>
         <activity
             android:name=".view.ScrollBar3"
+            android:exported="true"
             android:label="Views/ScrollBars/3. Style"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2261,6 +2491,7 @@
         </activity>
         <activity
             android:name=".view.Visibility1"
+            android:exported="true"
             android:label="Views/Visibility"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2270,6 +2501,7 @@
         </activity>
         <activity
             android:name=".view.List1"
+            android:exported="true"
             android:label="Views/Lists/01. Array"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2279,6 +2511,7 @@
         </activity>
         <activity
             android:name=".view.List2"
+            android:exported="true"
             android:label="Views/Lists/02. Cursor (People)"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2288,6 +2521,7 @@
         </activity>
         <activity
             android:name=".view.List3"
+            android:exported="true"
             android:label="Views/Lists/03. Cursor (Phones)"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2297,6 +2531,7 @@
         </activity>
         <activity
             android:name=".view.List4"
+            android:exported="true"
             android:label="Views/Lists/04. ListAdapter"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2306,6 +2541,7 @@
         </activity>
         <activity
             android:name=".view.List5"
+            android:exported="true"
             android:label="Views/Lists/05. Separators"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2315,6 +2551,7 @@
         </activity>
         <activity
             android:name=".view.List6"
+            android:exported="true"
             android:label="Views/Lists/06. ListAdapter Collapsed"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2324,6 +2561,7 @@
         </activity>
         <activity
             android:name=".view.List7"
+            android:exported="true"
             android:label="Views/Lists/07. Cursor (Phones)"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2333,6 +2571,7 @@
         </activity>
         <activity
             android:name=".view.List8"
+            android:exported="true"
             android:label="Views/Lists/08. Photos"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2342,6 +2581,7 @@
         </activity>
         <activity
             android:name=".view.List9"
+            android:exported="true"
             android:label="Views/Lists/09. Array (Overlay)"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2351,6 +2591,7 @@
         </activity>
         <activity
             android:name=".view.List10"
+            android:exported="true"
             android:label="Views/Lists/10. Single choice list"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2360,6 +2601,7 @@
         </activity>
         <activity
             android:name=".view.List11"
+            android:exported="true"
             android:label="Views/Lists/11. Multiple choice list"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2369,6 +2611,7 @@
         </activity>
         <activity
             android:name=".view.List12"
+            android:exported="true"
             android:label="Views/Lists/12. Transcript"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2378,6 +2621,7 @@
         </activity>
         <activity
             android:name=".view.List13"
+            android:exported="true"
             android:label="Views/Lists/13. Slow Adapter"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2387,6 +2631,7 @@
         </activity>
         <activity
             android:name=".view.List14"
+            android:exported="true"
             android:label="Views/Lists/14. Efficient Adapter"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2396,6 +2641,7 @@
         </activity>
         <activity
             android:name=".view.List15"
+            android:exported="true"
             android:label="Views/Lists/15. Selection Mode">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -2404,6 +2650,7 @@
         </activity>
         <activity
             android:name=".view.List16"
+            android:exported="true"
             android:label="Views/Lists/16. Border selection mode">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -2412,6 +2659,7 @@
         </activity>
         <activity
             android:name=".view.List17"
+            android:exported="true"
             android:label="Views/Lists/17. Activate items">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -2420,6 +2668,7 @@
         </activity>
         <activity
             android:name=".view.ExpandableList1"
+            android:exported="true"
             android:label="Views/Expandable Lists/1. Custom Adapter">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -2428,6 +2677,7 @@
         </activity>
         <activity
             android:name=".view.ExpandableList2"
+            android:exported="true"
             android:label="Views/Expandable Lists/2. Cursor (People)">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -2436,6 +2686,7 @@
         </activity>
         <activity
             android:name=".view.ExpandableList3"
+            android:exported="true"
             android:label="Views/Expandable Lists/3. Simple Adapter">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -2444,6 +2695,7 @@
         </activity>
         <activity
             android:name=".view.CustomView1"
+            android:exported="true"
             android:label="Views/Custom"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2453,6 +2705,7 @@
         </activity>
         <activity
             android:name=".view.Spinner1"
+            android:exported="true"
             android:label="Views/Spinner"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2462,6 +2715,7 @@
         </activity>
         <activity
             android:name=".view.Grid1"
+            android:exported="true"
             android:label="Views/Grid/1. Icon Grid"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2471,6 +2725,7 @@
         </activity>
         <activity
             android:name=".view.Grid2"
+            android:exported="true"
             android:label="Views/Grid/2. Photo Grid"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2480,6 +2735,7 @@
         </activity>
         <activity
             android:name=".view.Grid3"
+            android:exported="true"
             android:label="Views/Grid/3. Selection Mode"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2489,6 +2745,7 @@
         </activity>
         <activity
             android:name=".view.ImageView1"
+            android:exported="true"
             android:label="Views/ImageView"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2498,6 +2755,7 @@
         </activity>
         <activity
             android:name=".inputmethod.ShowInputMethodAndSubtypeEnabler"
+            android:exported="true"
             android:label="Views/Input Method/ShowInputMethodAndSubtypeEnabler"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2507,6 +2765,7 @@
         </activity>
         <activity
             android:name=".inputmethod.HintLocales"
+            android:exported="true"
             android:label="Views/Input Method/HintLocales"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2516,6 +2775,7 @@
         </activity>
         <activity
             android:name=".view.EditTextDemo"
+            android:exported="true"
             android:label="Views/Text/EditText"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2525,6 +2785,7 @@
         </activity>
         <activity
             android:name=".text.Link"
+            android:exported="true"
             android:label="Views/Text/Linkify"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2534,6 +2795,7 @@
         </activity>
         <activity
             android:name=".text.LogTextBox1"
+            android:exported="true"
             android:label="Views/Text/LogTextBox"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2543,6 +2805,7 @@
         </activity>
         <activity
             android:name=".text.Marquee"
+            android:exported="true"
             android:label="Views/Text/Marquee"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2552,6 +2815,7 @@
         </activity>
         <activity
             android:name=".view.TextClockDemo"
+            android:exported="true"
             android:label="Views/Text/TextClock"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2561,6 +2825,7 @@
         </activity>
         <activity
             android:name=".view.TextSwitcher1"
+            android:exported="true"
             android:label="Views/Text/TextSwitcher"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2570,6 +2835,7 @@
         </activity>
         <activity
             android:name=".view.TextViewDemo"
+            android:exported="true"
             android:label="Views/Text/TextView"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2579,6 +2845,7 @@
         </activity>
         <activity
             android:name=".view.ImageButton1"
+            android:exported="true"
             android:label="Views/ImageButton"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2588,6 +2855,7 @@
         </activity>
         <activity
             android:name=".view.Animation1"
+            android:exported="true"
             android:label="Views/Animation/Shake"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2597,6 +2865,7 @@
         </activity>
         <activity
             android:name=".view.Animation2"
+            android:exported="true"
             android:label="Views/Animation/Push"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2606,6 +2875,7 @@
         </activity>
         <activity
             android:name=".view.Animation3"
+            android:exported="true"
             android:label="Views/Animation/Interpolators"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2615,6 +2885,7 @@
         </activity>
         <activity
             android:name=".view.LayoutAnimation1"
+            android:exported="true"
             android:label="Views/Layout Animation/1. Grid Fade"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2624,6 +2895,7 @@
         </activity>
         <activity
             android:name=".view.LayoutAnimation2"
+            android:exported="true"
             android:label="Views/Layout Animation/2. List Cascade"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2633,6 +2905,7 @@
         </activity>
         <activity
             android:name=".view.LayoutAnimation3"
+            android:exported="true"
             android:label="Views/Layout Animation/3. Reverse Order"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2642,6 +2915,7 @@
         </activity>
         <activity
             android:name=".view.LayoutAnimation4"
+            android:exported="true"
             android:label="Views/Layout Animation/4. Randomize"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2651,6 +2925,7 @@
         </activity>
         <activity
             android:name=".view.LayoutAnimation5"
+            android:exported="true"
             android:label="Views/Layout Animation/5. Grid Direction"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2660,6 +2935,7 @@
         </activity>
         <activity
             android:name=".view.LayoutAnimation6"
+            android:exported="true"
             android:label="Views/Layout Animation/6. Wave Scale"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2669,6 +2945,7 @@
         </activity>
         <activity
             android:name=".view.LayoutAnimation7"
+            android:exported="true"
             android:label="Views/Layout Animation/7. Nested Animations"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2678,6 +2955,7 @@
         </activity>
         <activity
             android:name=".view.Controls1"
+            android:exported="true"
             android:label="Views/Controls/1. Light Theme"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2687,6 +2965,7 @@
         </activity>
         <activity
             android:name=".view.Controls2"
+            android:exported="true"
             android:label="Views/Controls/2. Dark Theme"
             android:theme="@style/Theme.AppCompat">
             <intent-filter>
@@ -2696,6 +2975,7 @@
         </activity>
         <activity
             android:name=".view.Controls3"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Views/Controls/3. Holo Light Theme"
             android:theme="@style/Theme.MyHoloLight">
@@ -2706,6 +2986,7 @@
         </activity>
         <activity
             android:name=".view.Controls4"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:label="Views/Controls/4. Holo Dark Theme"
             android:theme="@style/Theme.MyHolo">
@@ -2716,6 +2997,7 @@
         </activity>
         <activity
             android:name=".view.ControlsMaterialLight"
+            android:exported="true"
             android:enabled="@bool/atLeastLRelease"
             android:label="Views/Controls/5. Material Light Theme v24"
             android:theme="@style/Theme.MyMaterialLight"
@@ -2727,6 +3009,7 @@
         </activity>
         <activity
             android:name=".view.ControlsMaterialDark"
+            android:exported="true"
             android:enabled="@bool/atLeastLRelease"
             android:label="Views/Controls/6. Material Dark Theme v24"
             android:theme="@style/Theme.MyMaterial"
@@ -2738,6 +3021,7 @@
         </activity>
         <activity
             android:name=".view.Controls5"
+            android:exported="true"
             android:enabled="@bool/atLeastLRelease"
             android:label="Views/Controls/5. Material Light Theme v21"
             android:theme="@style/Theme.MyMaterialLight"
@@ -2749,6 +3033,7 @@
         </activity>
         <activity
             android:name=".view.Controls6"
+            android:exported="true"
             android:enabled="@bool/atLeastLRelease"
             android:label="Views/Controls/6. Material Dark Theme v21"
             android:theme="@style/Theme.MyMaterial"
@@ -2760,6 +3045,7 @@
         </activity>
         <activity
             android:name=".view.Controls7"
+            android:exported="true"
             android:label="Views/Controls/7. Custom Theme"
             android:theme="@style/MyCustomTheme">
             <intent-filter>
@@ -2769,6 +3055,7 @@
         </activity>
         <activity
             android:name=".view.Controls8"
+            android:exported="true"
             android:label="Views/Controls/8. Current or Old Theme"
             android:theme="@style/ThemeCurrent">
             <intent-filter>
@@ -2778,6 +3065,7 @@
         </activity>
         <activity
             android:name=".view.Controls9"
+            android:exported="true"
             android:label="Views/Controls/9. Default Theme"
             android:theme="@style/Theme.AppCompat">
             <intent-filter>
@@ -2787,6 +3075,7 @@
         </activity>
         <activity
             android:name=".view.Buttons1"
+            android:exported="true"
             android:label="Views/Buttons"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2796,6 +3085,7 @@
         </activity>
         <activity
             android:name=".view.AutoComplete1"
+            android:exported="true"
             android:label="Views/Auto Complete/1. Screen Top"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2805,6 +3095,7 @@
         </activity>
         <activity
             android:name=".view.AutoComplete2"
+            android:exported="true"
             android:label="Views/Auto Complete/2. Screen Bottom"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2814,6 +3105,7 @@
         </activity>
         <activity
             android:name=".view.AutoComplete3"
+            android:exported="true"
             android:label="Views/Auto Complete/3. Scroll"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2823,6 +3115,7 @@
         </activity>
         <activity
             android:name=".view.AutoComplete4"
+            android:exported="true"
             android:label="Views/Auto Complete/4. Contacts"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2832,6 +3125,7 @@
         </activity>
         <activity
             android:name=".view.AutoComplete5"
+            android:exported="true"
             android:label="Views/Auto Complete/5. Contacts with Hint"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2841,6 +3135,7 @@
         </activity>
         <activity
             android:name=".view.AutoComplete6"
+            android:exported="true"
             android:label="Views/Auto Complete/6. Multiple items"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2850,6 +3145,7 @@
         </activity>
         <activity
             android:name=".view.ProgressBar1"
+            android:exported="true"
             android:label="Views/Progress Bar/1. Incremental"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2859,6 +3155,7 @@
         </activity>
         <activity
             android:name=".view.ProgressBar2"
+            android:exported="true"
             android:label="Views/Progress Bar/2. Smooth"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2868,6 +3165,7 @@
         </activity>
         <activity
             android:name=".view.ProgressBar3"
+            android:exported="true"
             android:label="Views/Progress Bar/3. Dialogs"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2877,6 +3175,7 @@
         </activity>
         <activity
             android:name=".view.ProgressBar4"
+            android:exported="true"
             android:label="Views/Progress Bar/4. In Title Bar"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2886,6 +3185,7 @@
         </activity>
         <activity
             android:name=".view.SeekBar1"
+            android:exported="true"
             android:label="Views/Seek Bar"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2895,6 +3195,7 @@
         </activity>
         <activity
             android:name=".view.NumberPickerActivity"
+            android:exported="true"
             android:label="Views/Number Picker"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2904,6 +3205,7 @@
         </activity>
         <activity
             android:name=".view.OverlayWindowActivity"
+            android:exported="true"
             android:label="Views/Overlay Window"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2913,6 +3215,7 @@
         </activity>
         <activity
             android:name=".view.RatingBar1"
+            android:exported="true"
             android:label="Views/Rating Bar"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2922,6 +3225,7 @@
         </activity>
         <activity
             android:name=".view.Focus1"
+            android:exported="true"
             android:label="Views/Focus/1. Vertical"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2931,6 +3235,7 @@
         </activity>
         <activity
             android:name=".view.Focus2"
+            android:exported="true"
             android:label="Views/Focus/2. Horizontal"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2940,6 +3245,7 @@
         </activity>
         <activity
             android:name=".view.Focus3"
+            android:exported="true"
             android:label="Views/Focus/3. Circular"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2949,6 +3255,7 @@
         </activity>
         <activity
             android:name=".view.InternalSelectionFocus"
+            android:exported="true"
             android:label="Views/Focus/4. Internal Selection"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2958,6 +3265,7 @@
         </activity>
         <activity
             android:name=".view.Focus5"
+            android:exported="true"
             android:label="Views/Focus/5. Sequential (Tab Order)"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2967,6 +3275,7 @@
         </activity>
         <activity
             android:name=".view.WindowFocusObserver"
+            android:exported="true"
             android:label="Views/Focus/6. Window Focus Observer"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2976,6 +3285,7 @@
         </activity>
         <activity
             android:name=".view.DateWidgets1"
+            android:exported="true"
             android:label="Views/Date Widgets/1. Dialog"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2985,6 +3295,7 @@
         </activity>
         <activity
             android:name=".view.DateWidgets2"
+            android:exported="true"
             android:label="Views/Date Widgets/2. Inline"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -2994,6 +3305,7 @@
         </activity>
         <activity
             android:name=".view.PopupMenu1"
+            android:exported="true"
             android:label="Views/Popup Menu"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3003,6 +3315,7 @@
         </activity>
         <activity
             android:name=".view.SearchViewActionBar"
+            android:exported="true"
             android:label="Views/Search View/Action Bar"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3016,6 +3329,7 @@
         </activity>
         <activity
             android:name=".view.SearchViewAlwaysVisible"
+            android:exported="true"
             android:label="Views/Search View/Always Expanded"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3029,6 +3343,7 @@
         </activity>
         <activity
             android:name=".view.SearchViewFilterMode"
+            android:exported="true"
             android:label="Views/Search View/Filter"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3038,6 +3353,7 @@
         </activity>
         <activity
             android:name=".view.RotatingButton"
+            android:exported="true"
             android:label="Views/Rotating Button"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3047,6 +3363,7 @@
         </activity>
         <activity
             android:name=".view.SecureView"
+            android:exported="true"
             android:label="Views/Secure View"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3056,6 +3373,7 @@
         </activity>
         <activity
             android:name=".view.SplitTouchView"
+            android:exported="true"
             android:label="Views/Splitting Touches across Views"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3065,6 +3383,7 @@
         </activity>
         <activity
             android:name=".view.DragAndDropDemo"
+            android:exported="true"
             android:enabled="@bool/atLeastHoneycomb"
             android:hardwareAccelerated="false"
             android:label="Views/Drag and Drop"
@@ -3076,6 +3395,7 @@
         </activity>
         <activity
             android:name=".view.GameControllerInput"
+            android:exported="true"
             android:label="Views/Game Controller Input"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3085,6 +3405,7 @@
         </activity>
         <activity
             android:name=".view.Hover"
+            android:exported="true"
             android:label="Views/Hover Events"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3094,10 +3415,11 @@
         </activity>
         <activity
             android:name=".view.SystemUIModes"
+            android:exported="true"
             android:enabled="@bool/atLeastJellyBeanMR2"
             android:label="Views/System UI Visibility/System UI Modes"
-            android:uiOptions="splitActionBarWhenNarrow"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            android:uiOptions="splitActionBarWhenNarrow">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3105,10 +3427,11 @@
         </activity>
         <activity
             android:name=".view.SystemUIModesOverlay"
+            android:exported="true"
             android:enabled="@bool/atLeastJellyBean"
             android:label="Views/System UI Visibility/System UI Modes Overlay"
-            android:uiOptions="splitActionBarWhenNarrow"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            android:uiOptions="splitActionBarWhenNarrow">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3116,6 +3439,7 @@
         </activity>
         <activity
             android:name=".view.ContentBrowserActivity"
+            android:exported="true"
             android:enabled="@bool/atLeastJellyBean"
             android:label="Views/System UI Visibility/Content Browser"
             android:theme="@style/Theme.AppCompat.Light"
@@ -3127,6 +3451,7 @@
         </activity>
         <activity
             android:name=".view.ContentBrowserNavActivity"
+            android:exported="true"
             android:enabled="@bool/atLeastKitKat"
             android:label="Views/System UI Visibility/Content Browser Nav Bar"
             android:theme="@style/Theme.AppCompat.Light"
@@ -3138,6 +3463,7 @@
         </activity>
         <activity
             android:name=".view.VideoPlayerActivity"
+            android:exported="true"
             android:enabled="@bool/atLeastJellyBean"
             android:label="Views/System UI Visibility/Video Player"
             android:theme="@style/Theme.AppCompat"
@@ -3149,6 +3475,7 @@
         </activity>
         <activity
             android:name=".view.TranslucentBarsActivity"
+            android:exported="true"
             android:enabled="@bool/atLeastKitKat"
             android:label="Views/System UI Visibility/Translucent Bars"
             android:theme="@style/Theme.NoActionBar.MyTranslucentDecor"
@@ -3160,6 +3487,7 @@
         </activity>
         <activity
             android:name=".view.GameActivity"
+            android:exported="true"
             android:enabled="@bool/atLeastKitKat"
             android:label="Views/System UI Visibility/Game"
             android:theme="@style/Theme.AppCompat.NoActionBar">
@@ -3170,6 +3498,7 @@
         </activity>
         <activity
             android:name=".view.Switches"
+            android:exported="true"
             android:label="Views/Switches"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3179,6 +3508,7 @@
         </activity>
         <activity
             android:name=".view.PointerShapes"
+            android:exported="true"
             android:label="Views/Pointer shapes"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3188,6 +3518,7 @@
         </activity>
         <activity
             android:name=".view.Tooltips"
+            android:exported="true"
             android:label="Views/Tooltips"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3201,6 +3532,7 @@
         <!-- ************************************* -->
         <activity
             android:name=".graphics.kube.Kube"
+            android:exported="true"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/Kube"
             android:theme="@style/Theme.AppCompat.Light">
@@ -3211,6 +3543,7 @@
         </activity>
         <activity
             android:name=".graphics.Compass"
+            android:exported="true"
             android:label="Graphics/Compass"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3220,6 +3553,7 @@
         </activity>
         <activity
             android:name=".graphics.CameraPreview"
+            android:exported="true"
             android:label="Graphics/CameraPreview"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light"
@@ -3231,6 +3565,7 @@
         </activity>
         <activity
             android:name=".graphics.CompressedTextureActivity"
+            android:exported="true"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/Compressed Texture"
             android:theme="@style/Theme.MyThemeNotitleBar">
@@ -3241,6 +3576,7 @@
         </activity>
         <activity
             android:name=".graphics.CubeMapActivity"
+            android:exported="true"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/Cube Map"
             android:theme="@style/Theme.MyThemeNotitleBar">
@@ -3251,6 +3587,7 @@
         </activity>
         <activity
             android:name=".graphics.FrameBufferObjectActivity"
+            android:exported="true"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/Frame Buffer Object"
             android:theme="@style/Theme.MyThemeNotitleBar">
@@ -3261,6 +3598,7 @@
         </activity>
         <activity
             android:name=".graphics.GLSurfaceViewActivity"
+            android:exported="true"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/GLSurfaceView"
             android:theme="@style/Theme.MyThemeNotitleBar">
@@ -3271,6 +3609,7 @@
         </activity>
         <activity
             android:name=".graphics.GLES20Activity"
+            android:exported="true"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/OpenGL ES 2.0"
             android:theme="@style/Theme.MyThemeNotitleBar">
@@ -3281,6 +3620,7 @@
         </activity>
         <activity
             android:name=".graphics.MatrixPaletteActivity"
+            android:exported="true"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/Matrix Palette Skinning"
             android:theme="@style/Theme.AppCompat.Light">
@@ -3291,6 +3631,7 @@
         </activity>
         <activity
             android:name=".graphics.TranslucentGLSurfaceViewActivity"
+            android:exported="true"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/Translucent GLSurfaceView"
             android:theme="@style/Theme.MyThemeTranslucent">
@@ -3301,6 +3642,7 @@
         </activity>
         <activity
             android:name=".graphics.TriangleActivity"
+            android:exported="true"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/Textured Triangle **HANGS**"
             android:theme="@style/ThemeCurrentDialog">
@@ -3311,6 +3653,7 @@
         </activity>
         <activity
             android:name=".graphics.spritetext.SpriteTextActivity"
+            android:exported="true"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/Sprite Text"
             android:theme="@style/Theme.MyThemeNotitleBar">
@@ -3321,6 +3664,7 @@
         </activity>
         <activity
             android:name=".graphics.TouchRotateActivity"
+            android:exported="true"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/OpenGL ES/Touch Rotate"
             android:theme="@style/Theme.MyThemeNotitleBar">
@@ -3331,6 +3675,7 @@
         </activity>
         <activity
             android:name=".graphics.PolyToPoly"
+            android:exported="true"
             android:label="Graphics/PolyToPoly"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3340,6 +3685,7 @@
         </activity>
         <activity
             android:name=".graphics.ScaleToFit"
+            android:exported="true"
             android:label="Graphics/ScaleToFit"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3349,6 +3695,7 @@
         </activity>
         <activity
             android:name=".graphics.RoundRects"
+            android:exported="true"
             android:label="Graphics/RoundRects"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3358,6 +3705,7 @@
         </activity>
         <activity
             android:name=".graphics.ShapeDrawable1"
+            android:exported="true"
             android:label="Graphics/Drawable/ShapeDrawable"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3367,6 +3715,7 @@
         </activity>
         <activity
             android:name=".graphics.SurfaceViewOverlay"
+            android:exported="true"
             android:label="Graphics/SurfaceView Overlay"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3376,6 +3725,7 @@
         </activity>
         <activity
             android:name=".graphics.ShadowCardStack"
+            android:exported="true"
             android:label="Graphics/Shadow Card Stack"
             android:theme="@style/Theme.AppCompat.Light"
             tools:targetApi="lollipop">
@@ -3386,6 +3736,7 @@
         </activity>
         <activity
             android:name=".graphics.ShadowCardDrag"
+            android:exported="true"
             android:label="Graphics/Shadow Card Drag"
             android:theme="@style/Theme.AppCompat.Light"
             tools:targetApi="lollipop">
@@ -3396,6 +3747,7 @@
         </activity>
         <activity
             android:name=".graphics.WindowSurface"
+            android:exported="true"
             android:label="Graphics/Surface Window"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3405,6 +3757,7 @@
         </activity>
         <activity
             android:name=".graphics.TextAlign"
+            android:exported="true"
             android:hardwareAccelerated="false"
             android:label="Graphics/Text Align"
             android:theme="@style/Theme.AppCompat.Light">
@@ -3415,6 +3768,7 @@
         </activity>
         <activity
             android:name=".graphics.Arcs"
+            android:exported="true"
             android:label="Graphics/Arcs"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3424,6 +3778,7 @@
         </activity>
         <activity
             android:name=".graphics.Patterns"
+            android:exported="true"
             android:label="Graphics/Patterns"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3433,6 +3788,7 @@
         </activity>
         <activity
             android:name=".graphics.Clipping"
+            android:exported="true"
             android:hardwareAccelerated="false"
             android:label="Graphics/Clipping"
             android:theme="@style/Theme.AppCompat.Light">
@@ -3443,6 +3799,7 @@
         </activity>
         <activity
             android:name=".graphics.Layers"
+            android:exported="true"
             android:label="Graphics/Layers"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3452,6 +3809,7 @@
         </activity>
         <activity
             android:name=".graphics.UnicodeChart"
+            android:exported="true"
             android:hardwareAccelerated="false"
             android:label="Graphics/UnicodeChart"
             android:theme="@style/Theme.AppCompat.Light">
@@ -3462,6 +3820,7 @@
         </activity>
         <activity
             android:name=".graphics.PathFillTypes"
+            android:exported="true"
             android:label="Graphics/PathFillTypes"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3471,6 +3830,7 @@
         </activity>
         <activity
             android:name=".graphics.Pictures"
+            android:exported="true"
             android:hardwareAccelerated="false"
             android:label="Graphics/Pictures"
             android:theme="@style/Theme.AppCompat.Light">
@@ -3481,6 +3841,7 @@
         </activity>
         <activity
             android:name=".graphics.Vertices"
+            android:exported="true"
             android:hardwareAccelerated="false"
             android:label="Graphics/Vertices"
             android:theme="@style/Theme.AppCompat.Light">
@@ -3491,6 +3852,7 @@
         </activity>
         <activity
             android:name=".graphics.AnimateDrawables"
+            android:exported="true"
             android:label="Graphics/AnimateDrawables"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3500,6 +3862,7 @@
         </activity>
         <activity
             android:name=".graphics.SensorTest"
+            android:exported="true"
             android:label="Graphics/SensorTest"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3509,6 +3872,7 @@
         </activity>
         <activity
             android:name=".graphics.AlphaBitmap"
+            android:exported="true"
             android:label="Graphics/AlphaBitmap"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3518,6 +3882,7 @@
         </activity>
         <activity
             android:name=".graphics.Regions"
+            android:exported="true"
             android:label="Graphics/Regions"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3527,6 +3892,7 @@
         </activity>
         <activity
             android:name=".graphics.Sweep"
+            android:exported="true"
             android:label="Graphics/Sweep"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3536,6 +3902,7 @@
         </activity>
         <activity
             android:name=".graphics.BitmapMesh"
+            android:exported="true"
             android:label="Graphics/BitmapMesh"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3545,6 +3912,7 @@
         </activity>
         <activity
             android:name=".graphics.MeasureText"
+            android:exported="true"
             android:label="Graphics/MeasureText"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3554,6 +3922,7 @@
         </activity>
         <activity
             android:name=".graphics.Typefaces"
+            android:exported="true"
             android:label="Graphics/Typefaces"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3563,6 +3932,7 @@
         </activity>
         <activity
             android:name=".graphics.FingerPaint"
+            android:exported="true"
             android:label="Graphics/FingerPaint"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3572,6 +3942,7 @@
         </activity>
         <activity
             android:name=".graphics.ColorMatrixSample"
+            android:exported="true"
             android:label="Graphics/ColorMatrix"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3581,6 +3952,7 @@
         </activity>
         <activity
             android:name=".graphics.BitmapDecode"
+            android:exported="true"
             android:hardwareAccelerated="false"
             android:label="Graphics/BitmapDecode"
             android:theme="@style/Theme.AppCompat.Light">
@@ -3591,6 +3963,7 @@
         </activity>
         <activity
             android:name=".graphics.ColorFilters"
+            android:exported="true"
             android:label="Graphics/ColorFilters"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light"
@@ -3602,6 +3975,7 @@
         </activity>
         <activity
             android:name=".graphics.CreateBitmap"
+            android:exported="true"
             android:label="Graphics/CreateBitmap"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3611,6 +3985,7 @@
         </activity>
         <activity
             android:name=".graphics.DrawPoints"
+            android:exported="true"
             android:hardwareAccelerated="false"
             android:label="Graphics/Points"
             android:theme="@style/Theme.AppCompat.Light">
@@ -3621,6 +3996,7 @@
         </activity>
         <activity
             android:name=".graphics.TouchPaint"
+            android:exported="true"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="Graphics/Touch Paint"
             android:theme="@style/Theme.AppCompat.Light">
@@ -3631,6 +4007,7 @@
         </activity>
         <activity
             android:name=".graphics.BitmapPixels"
+            android:exported="true"
             android:label="Graphics/BitmapPixels"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3640,6 +4017,7 @@
         </activity>
         <activity
             android:name=".graphics.Xfermodes"
+            android:exported="true"
             android:label="Graphics/Xfermodes"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3649,6 +4027,7 @@
         </activity>
         <activity
             android:name=".graphics.PathEffects"
+            android:exported="true"
             android:label="Graphics/PathEffects"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3658,6 +4037,7 @@
         </activity>
         <activity
             android:name=".graphics.GradientDrawable1"
+            android:exported="true"
             android:label="Graphics/Drawable/GradientDrawable"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3667,6 +4047,7 @@
         </activity>
         <activity
             android:name=".graphics.PurgeableBitmap"
+            android:exported="true"
             android:label="Graphics/PurgeableBitmap/NonPurgeable"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3677,6 +4058,7 @@
 
         <activity-alias
             android:name=".Purgeable"
+            android:exported="true"
             android:label="Graphics/PurgeableBitmap/Purgeable"
             android:targetActivity=".graphics.PurgeableBitmap"
             android:theme="@style/Theme.AppCompat.Light">
@@ -3688,6 +4070,7 @@
 
         <activity
             android:name=".graphics.DensityActivity"
+            android:exported="true"
             android:label="Graphics/Density"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3701,6 +4084,7 @@
         <!-- ************************************* -->
         <activity
             android:name=".media.MediaPlayerDemo"
+            android:exported="true"
             android:label="Media/MediaPlayer"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3710,6 +4094,7 @@
         </activity>
         <activity
             android:name=".media.MediaPlayerDemoAudio"
+            android:exported="true"
             android:label="Media/MediaPlayer"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3718,6 +4103,7 @@
         </activity>
         <activity
             android:name=".media.MediaPlayerDemoVideo"
+            android:exported="true"
             android:label="Media/MediaPlayer"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3726,6 +4112,7 @@
         </activity>
         <activity
             android:name=".media.VideoViewDemo"
+            android:exported="true"
             android:label="Media/VideoView"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3735,6 +4122,7 @@
         </activity>
         <activity
             android:name=".media.AudioFxDemo"
+            android:exported="true"
             android:label="Media/AudioFx"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3744,6 +4132,7 @@
         </activity>
         <activity
             android:name=".media.projection.MediaProjectionDemo"
+            android:exported="true"
             android:label="Media/MediaProjection"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3755,7 +4144,9 @@
         <!-- ************************************* -->
         <!-- APPWIDGET PACKAGE SAMPLES -->
         <!-- ************************************* -->
-        <receiver android:name=".appwidget.ExampleAppWidgetProvider">
+        <receiver
+            android:name=".appwidget.ExampleAppWidgetProvider"
+            android:exported="true">
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/appwidget_provider" />
@@ -3767,6 +4158,7 @@
 
         <activity
             android:name=".appwidget.ExampleAppWidgetConfigure"
+            android:exported="true"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -3775,6 +4167,7 @@
 
         <receiver
             android:name=".appwidget.ExampleBroadcastReceiver"
+            android:exported="true"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.ACTION_TIMEZONE_CHANGED" />
@@ -3787,6 +4180,7 @@
         <!-- ************************************* -->
         <activity
             android:name=".nfc.ForegroundDispatch"
+            android:exported="true"
             android:label="NFC/ForegroundDispatch"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3796,6 +4190,7 @@
         </activity>
         <activity
             android:name=".nfc.TechFilter"
+            android:exported="true"
             android:label="NFC/TechFilter"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3814,6 +4209,7 @@
         </activity>
         <activity
             android:name=".nfc.ForegroundNdefPush"
+            android:exported="true"
             android:label="NFC/ForegroundNdefPush"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
@@ -3823,9 +4219,10 @@
         </activity>
         <activity
             android:name=".security.KeyStoreUsage"
+            android:exported="true"
             android:label="Security/KeyStore"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3833,6 +4230,7 @@
         </activity>
         <activity
             android:name=".AskForPermissions"
+            android:exported="true"
             android:label="AskForPermission"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
