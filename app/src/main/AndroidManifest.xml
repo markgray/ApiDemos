@@ -18,8 +18,10 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" /> <!-- Required for drawing overlay windows (TYPE_SYSTEM_ALERT, TYPE_APPLICATION_OVERLAY) -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- For android.media.audiofx.Visualizer -->
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <!-- Required for drawing overlay windows (TYPE_SYSTEM_ALERT, TYPE_APPLICATION_OVERLAY) -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!-- For android.media.audiofx.Visualizer -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
@@ -813,11 +815,13 @@
         <receiver
             android:name=".app.OneShotAlarm"
             android:exported="true"
-            android:process=":remote" />
+            android:process=":remote"
+            tools:ignore="ExportedReceiver" />
         <receiver
             android:name=".app.RepeatingAlarm"
             android:exported="true"
-            android:process=":remote" />
+            android:process=":remote"
+            tools:ignore="ExportedReceiver" />
 
         <activity
             android:name=".app.AlarmController"
