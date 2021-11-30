@@ -32,12 +32,12 @@ import kotlin.math.min
  * following key features of the Android accessibility APIs:
  *
  *  1. Basic implementation of an AccessibilityService
- *  1. Observing and respond to user-generated key events
+ *  1. Observing and responding to user-generated key events
  *  1. Querying and modifying the state of display magnification
  *
- * It includes the file xml/magnification_service.xml describing the service, which is referenced by
- * a meta-data android:name="android.accessibilityservice" android:resource="@xml/magnification_service"
- * element in AndroidManifest.xml.
+ * It includes the file xml/magnification_service.xml describing the service, which
+ * is referenced by a meta-data android:name="android.accessibilityservice"
+ * android:resource="@xml/magnification_service" element in AndroidManifest.xml.
  */
 @RequiresApi(api = Build.VERSION_CODES.N)
 class MagnificationService : AccessibilityService() {
@@ -145,7 +145,11 @@ class MagnificationService : AccessibilityService() {
         // Set the pivot, then scale around it.
         val metrics = resources.displayMetrics
         controller.setScale(nextScale, true /* animate */)
-        controller.setCenter(metrics.widthPixels / 2f, metrics.heightPixels / 2f, true)
+        controller.setCenter(
+            metrics.widthPixels / 2f,
+            metrics.heightPixels / 2f,
+            true
+        )
         return true
     }
 
@@ -164,7 +168,6 @@ class MagnificationService : AccessibilityService() {
      * to receive notification of changes in the state of magnification. Its `onMagnificationChanged`
      * override just logs the new magnification scale.
      */
-    @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     public override fun onServiceConnected() {
         val info = serviceInfo
                 ?: // If we fail to obtain the service info, the service is not really
@@ -178,6 +181,7 @@ class MagnificationService : AccessibilityService() {
         serviceInfo = info
 
         // Set up a listener for changes in the state of magnification.
+        @Suppress("UNUSED_ANONYMOUS_PARAMETER")
         magnificationController.addListener { controller, region, scale, centerX, centerY ->
             /**
              * Called when the magnified region, scale, or center changes. We just log a message

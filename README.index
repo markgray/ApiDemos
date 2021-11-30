@@ -64,9 +64,9 @@ Accessibility
                Basic implementation of an AccessibilityService
                Observing and respond to user-generated key events
                Querying and modifying the state of display magnification
-            It includes the file xml/magnification_service.xml describing the service, which is referenced by
-            a meta-data android:name="android.accessibilityservice" android:resource="@xml/magnification_service"
-            element in AndroidManifest.xml.
+            It includes the file xml/magnification_service.xml describing the service, which is
+            referenced by a meta-data android:name="android.accessibilityservice"
+            android:resource="@xml/magnification_service" element in AndroidManifest.xml.
 
 Animation (disabled for froyo)
   Animation/Activity Transition v21+
