@@ -309,7 +309,11 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
      * reference to a style resource that supplies default values for
      * the view. Can be 0 to not look for defaults.
      */
-    @JvmOverloads constructor(context: Context, attrs: AttributeSet, defStyle: Int = android.R.attr.buttonStyle) : View(context, attrs, defStyle) {
+    @JvmOverloads constructor(
+        context: Context,
+        attrs: AttributeSet,
+        defStyle: Int = android.R.attr.buttonStyle
+    ) : View(context, attrs, defStyle) {
         /**
          * Flag to indicate whether our toggle button is checked (true) or not checked (false).
          * Returns whether our toggle button is checked (true) or not (false). We just return the
@@ -356,7 +360,11 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
         init {
 
             val typedValue = TypedValue()
-            val valid = context.theme.resolveAttribute(android.R.attr.textSize, typedValue, true)
+            val valid = context.theme.resolveAttribute(
+                android.R.attr.textSize,
+                typedValue,
+                true
+            )
 
             val textSize: Int
             val displayMetrics = context.resources.displayMetrics
@@ -367,9 +375,17 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
             }
             mTextPaint.textSize = textSize.toFloat()
 
-            context.theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true)
+            context.theme.resolveAttribute(
+                android.R.attr.textColorPrimary,
+                typedValue,
+                true
+            )
             @Suppress("DEPRECATION")
-            val textColor = context.resources.getColor(typedValue.resourceId)
+            val textColor: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                context.resources.getColor(typedValue.resourceId, null)
+             else
+                context.resources.getColor(typedValue.resourceId)
+
             mTextPaint.color = textColor
 
             mTextOn = context.getString(R.string.accessibility_custom_on)
@@ -438,10 +454,16 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
          * @return a `StaticLayout` which displays our parameter `CharSequence text`
          */
         private fun makeLayout(text: CharSequence): Layout {
-            @Suppress("DEPRECATION")
-            return StaticLayout(text, mTextPaint,
-                    ceil(Layout.getDesiredWidth(text, mTextPaint).toDouble()).toInt(),
-                    Layout.Alignment.ALIGN_NORMAL, 1f, 0f, true)
+            @Suppress("DEPRECATION") // Using a StaticLayout.Builder has to be a joke!
+            return StaticLayout(
+                text,
+                mTextPaint,
+                ceil(Layout.getDesiredWidth(text, mTextPaint).toDouble()).toInt(),
+                Layout.Alignment.ALIGN_NORMAL,
+                1f,
+                0f,
+                true
+            )
         }
 
         /**
