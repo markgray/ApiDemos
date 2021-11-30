@@ -25,7 +25,7 @@ import com.example.android.apis.R
 
 /**
  * This is the entry activity for a sample that demonstrates how to implement an
- * `AccessibilityService`, namely the ClockBackService.
+ * `AccessibilityService`, namely the [ClockBackService].
  */
 class ClockBackActivity : AppCompatActivity() {
 

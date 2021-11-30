@@ -16,11 +16,8 @@
 
 package com.example.android.apis.accessibility
 
-import com.example.android.apis.R
-
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
-import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Service
 import android.content.BroadcastReceiver
@@ -30,12 +27,16 @@ import android.content.IntentFilter
 import android.media.AudioManager
 import android.os.Build
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
+import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.VibratorManager
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.util.SparseArray
 import android.view.accessibility.AccessibilityEvent
+import com.example.android.apis.R
 
 /**
  * This class is an `AccessibilityService` that provides custom feedback
@@ -102,9 +103,7 @@ class ClockBackService : AccessibilityService() {
     /**
      * `Handler` for executing messages on the service main thread.
      */
-    @Suppress("DEPRECATION")
-    @SuppressLint("HandlerLeak")
-    internal var mHandler: Handler = object : Handler() {
+    internal var mHandler: Handler = object : Handler(Looper.myLooper()!!) {
         /**
          * We implement this to receive messages. We switch on the `what` field of our parameter
          * `Message message`:
@@ -135,7 +134,12 @@ class ClockBackService : AccessibilityService() {
             when (message.what) {
                 MESSAGE_SPEAK -> {
                     val utterance = message.obj as String
-                    mTts!!.speak(utterance, QUEUING_MODE_INTERRUPT, null)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        mTts!!.speak(utterance, QUEUING_MODE_INTERRUPT, null, null)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        mTts!!.speak(utterance, QUEUING_MODE_INTERRUPT, null)
+                    }
                     return
                 }
                 MESSAGE_STOP_SPEAK -> {
@@ -148,11 +152,11 @@ class ClockBackService : AccessibilityService() {
                      *
                      * parameter `it` is [TextToSpeech.SUCCESS] or [TextToSpeech.ERROR].
                      */
-                    mTts = TextToSpeech(mContext, TextToSpeech.OnInitListener {
+                    mTts = TextToSpeech(mContext) {
                         // Register here since to add earcons the TTS must be initialized and
                         // the receiver is called immediately with the current ringer mode.
                         registerBroadCastReceiver()
-                    })
+                    }
                     return
                 }
                 MESSAGE_SHUTDOWN_TTS -> {
@@ -172,7 +176,15 @@ class ClockBackService : AccessibilityService() {
                     val key = message.arg1
                     val pattern = sVibrationPatterns.get(key)
                     if (pattern != null) {
-                        mVibrator!!.vibrate(pattern, -1)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            mVibrator!!.vibrate(
+                                VibrationEffect.createWaveform(pattern, -1),
+                                null
+                            )
+                        } else {
+                            @Suppress("DEPRECATION")
+                            mVibrator!!.vibrate(pattern, -1)
+                        }
                     }
                     return
                 }
@@ -285,7 +297,14 @@ class ClockBackService : AccessibilityService() {
         mHandler.sendEmptyMessage(MESSAGE_START_TTS)
 
         // Get the vibrator service.
-        mVibrator = getSystemService(Service.VIBRATOR_SERVICE) as Vibrator
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager = this.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            mVibrator = vibratorManager.defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            mVibrator = getSystemService(Service.VIBRATOR_SERVICE) as Vibrator
+        }
+
 
         // Get the AudioManager and configure according the current ring mode.
         mAudioManager = getSystemService(Service.AUDIO_SERVICE) as AudioManager
@@ -601,8 +620,12 @@ class ClockBackService : AccessibilityService() {
             }
         }
 
-        @Suppress("DEPRECATION")
-        mTts!!.playEarcon(earconName, QUEUING_MODE_INTERRUPT, null)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mTts!!.playEarcon(earconName, QUEUING_MODE_INTERRUPT, null, null)
+        } else {
+            @Suppress("DEPRECATION")
+            mTts!!.playEarcon(earconName, QUEUING_MODE_INTERRUPT, null)
+        }
     }
 
     companion object {
@@ -741,8 +764,7 @@ class ClockBackService : AccessibilityService() {
         /**
          * Mapping from integers to raw sound resource ids.
          */
-        @SuppressLint("UseSparseArrays")
-        private val sSoundsResourceIds = SparseArray<Int>()
+        private val sSoundsResourceIds: SparseArray<Int> = SparseArray(11)
 
         /**
          * Initializes our `sSoundsResourceIds` `SparseArray`.
