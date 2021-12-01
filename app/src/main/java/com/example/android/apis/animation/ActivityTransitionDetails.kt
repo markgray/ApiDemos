@@ -15,7 +15,6 @@
  */
 package com.example.android.apis.animation
 
-import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.ActivityOptions
 import android.content.Intent
@@ -26,6 +25,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.example.android.apis.R
 
 /**
@@ -63,21 +63,14 @@ class ActivityTransitionDetails : AppCompatActivity() {
      *
      * @return Drawable to be displayed full size
      */
-    @Suppress("DEPRECATION")
     private val heroDrawable: Drawable
-        @SuppressLint("UseCompatLoadingForDrawables")
         get() {
             val name = intent.getStringExtra(KEY_ID)
             if (name != null) {
                 mName = name
                 mImageResourceId = ActivityTransition.getDrawableIdForKey(name)
             }
-
-            return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
-                resources.getDrawable(mImageResourceId)
-            } else {
-                resources.getDrawable(mImageResourceId, null)
-            }
+            return ResourcesCompat.getDrawable(resources, mImageResourceId, null)!!
         }
 
     /**
