@@ -17,6 +17,7 @@
 package com.example.android.apis.accessibility
 
 import android.accessibilityservice.AccessibilityService
+import android.os.Build
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.OnInitListener
 import android.text.TextUtils
@@ -24,7 +25,7 @@ import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import com.example.android.apis.R
-import java.util.Locale
+import java.util.*
 
 /**
  * This class demonstrates how an accessibility service can query
@@ -92,8 +93,7 @@ class TaskBackService : AccessibilityService(), OnInitListener {
         val taskLabel = labelNode.text
         val isComplete = completeNode.isChecked
 
-        val completeStr: String
-        completeStr = if (isComplete) {
+        val completeStr: String = if (isComplete) {
             getString(R.string.task_complete)
         } else {
             getString(R.string.task_not_complete)
@@ -115,8 +115,12 @@ class TaskBackService : AccessibilityService(), OnInitListener {
         }
 
         // Announce the utterance.
-        @Suppress("DEPRECATION")
-        mTts!!.speak(utterance.toString(), TextToSpeech.QUEUE_FLUSH, null)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mTts!!.speak(utterance.toString(), TextToSpeech.QUEUE_FLUSH, null, null)
+        } else {
+            @Suppress("DEPRECATION")
+            mTts!!.speak(utterance.toString(), TextToSpeech.QUEUE_FLUSH, null)
+        }
         Log.d(LOG_TAG, utterance.toString())
     }
 
