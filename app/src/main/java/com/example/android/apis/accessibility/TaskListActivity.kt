@@ -16,17 +16,18 @@
 
 package com.example.android.apis.accessibility
 
-import android.app.ListActivity
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.ImageButton
+import android.widget.ListView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
  * Starts up the task list that will interact with the AccessibilityService sample.
  */
-class TaskListActivity : ListActivity() {
+class TaskListActivity : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -52,7 +53,8 @@ class TaskListActivity : ListActivity() {
                 "Do Taxes", "Abolish IRS", "Tea with Aunt Sharon")
 
         val myAdapter = TaskAdapter(this, labels, checkboxes)
-        this.listAdapter = myAdapter
+        val taskListView: ListView = findViewById(R.id.list)
+        taskListView.adapter = myAdapter
 
         // Add a shortcut to the accessibility settings.
         val button = findViewById<ImageButton>(R.id.button)

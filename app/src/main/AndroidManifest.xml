@@ -897,7 +897,8 @@
             android:name=".accessibility.TaskListActivity"
             android:enabled="@bool/atLeastIceCreamSandwich"
             android:exported="true"
-            android:label="@string/accessibility_query_window">
+            android:label="@string/accessibility_query_window"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
