@@ -16,18 +16,18 @@
 
 package com.example.android.apis
 
-import android.app.Application
+import androidx.multidex.MultiDexApplication
 
 /**
- * This is an example of a [android.app.Application] class. This can
- * be used as a central repository for per-process information about your app;
+ * This is an example of a [android.app.Application] class which extends [MultiDexApplication] in
+ * order for mulitdex to work on androids before SDK 21,
+ *
+ * This can also be used as a central repository for per-process information about your app;
  * however it is recommended to use singletons for that instead rather than merge
  * all of these globals from across your application into one place here.
- *
- * In this case, we have not defined any specific work for this Application.
  */
 @Suppress("unused")
-class ApiDemosApplication : Application() {
+class ApiDemosApplication : MultiDexApplication() {
     @Suppress("RedundantOverride")
     override fun onCreate() {
         super.onCreate()
