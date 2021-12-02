@@ -20,6 +20,7 @@ import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
@@ -37,7 +38,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.ArrayList
 
 /**
  * Supposed to show when the various Sequencer Events and Animator Events:
@@ -249,10 +249,14 @@ class AnimatorEvents : AppCompatActivity() {
                 xAnim.repeatMode = ValueAnimator.REVERSE
                 xAnim.interpolator = AccelerateInterpolator(2f)
 
-                val alphaAnim = ObjectAnimator.ofFloat(ball, "alpha", 1f, .5f).setDuration(1000)
+                val alphaAnim = ObjectAnimator
+                    .ofFloat(ball, "alpha", 1f, .5f)
+                    .setDuration(1000)
+                @SuppressLint("Recycle") // Lint is right: start() is never called, how odd.
                 val alphaSeq = AnimatorSet()
                 alphaSeq.play(alphaAnim)
 
+                @SuppressLint("Recycle") // It is started in startAnimation()
                 animation = AnimatorSet()
                 (animation as AnimatorSet).playTogether(yAnim, xAnim)
                 animation!!.addListener(this)

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN", "MemberVisibilityCanBePrivate")
+@file:Suppress("MemberVisibilityCanBePrivate")
 
 package com.example.android.apis.animation
 
@@ -24,6 +24,7 @@ package com.example.android.apis.animation
 import android.animation.ObjectAnimator
 import android.animation.TypeEvaluator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
@@ -198,6 +199,7 @@ class CustomEvaluator : AppCompatActivity() {
             if (bounceAnim == null) {
                 val startXY = XYHolder(0f, 0f)
                 val endXY = XYHolder(300f, 500f)
+                @SuppressLint("Recycle") // It is started in startAnimation()
                 bounceAnim = ObjectAnimator.ofObject(ballHolder, "xY",
                         XYEvaluator(), startXY, endXY)
                 bounceAnim!!.duration = 1500

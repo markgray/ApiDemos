@@ -19,6 +19,7 @@ package com.example.android.apis.animation
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
@@ -36,7 +37,6 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.ArrayList
 
 /**
  * This application demonstrates the seeking capability of ValueAnimator. The SeekBar in the
@@ -165,6 +165,7 @@ class AnimationSeeking : AppCompatActivity() {
          */
         private fun createAnimation() {
             if (bounceAnim == null) {
+                @SuppressLint("Recycle") // It is started in startAnimation()
                 bounceAnim = ObjectAnimator.ofFloat(
                         ball,
                         "y",
