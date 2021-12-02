@@ -16,11 +16,12 @@
 
 package com.example.android.apis.animation
 
+import android.animation.Animator
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.animation.Animator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
@@ -36,7 +37,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Loads animations from Xml files: R.animator.object_animator (animates ball[0] "y"
@@ -167,6 +168,7 @@ class AnimationLoading : AppCompatActivity() {
          * It then creates the `AnimatorSet animation` configures it to playTogether the
          * 8 Animator's created for the 8 balls.
          */
+        @SuppressLint("NewApi")
         private fun createAnimation() {
             val appContext = this@AnimationLoading
 
@@ -204,6 +206,7 @@ class AnimationLoading : AppCompatActivity() {
                 val animPvhKfInterpolated = AnimatorInflater.loadAnimator(appContext, R.animator.object_animator_pvh_kf_interpolated) as ObjectAnimator
                 animPvhKfInterpolated.target = balls[7]
 
+                @SuppressLint("Recycle") // It is started in startAnimation()
                 animation = AnimatorSet()
                 (animation as AnimatorSet).playTogether(anim, fader, seq, colorizer, animPvh,
                         animPvhKf, faderKf, animPvhKfInterpolated)
