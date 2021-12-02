@@ -25,7 +25,7 @@ import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import com.example.android.apis.R
-import java.util.*
+import java.util.Locale
 
 /**
  * This class demonstrates how an accessibility service can query
