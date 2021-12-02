@@ -22,6 +22,7 @@ package com.example.android.apis.animation
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
@@ -38,7 +39,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Creates an ObjectAnimator to animate the y position of an object from 0 to the
@@ -160,6 +161,7 @@ class AnimationCloning : AppCompatActivity() {
                 val s2 = s1.clone()
                 s2.setTarget(balls[3])
 
+                @SuppressLint("Recycle") // It gets started later in startAnimation()
                 animation = AnimatorSet()
                 animation!!.playTogether(anim1, anim2, s1)
                 animation!!.playSequentially(s1, s2)
