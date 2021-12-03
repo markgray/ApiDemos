@@ -39,16 +39,14 @@ class Rotate3dAnimation
  * @param mCenterY the Y center of the 3D rotation
  * @param mReverse true if the translation should be reversed, false otherwise
  */
-(
-        private val mFromDegrees: Float,
-        private val mToDegrees: Float,
-        private val mCenterX: Float,
-        private val mCenterY: Float,
-        private val mDepthZ: Float,
-        private val mReverse: Boolean
-) : Animation()
-
-{
+    (
+    private val mFromDegrees: Float,
+    private val mToDegrees: Float,
+    private val mCenterX: Float,
+    private val mCenterY: Float,
+    private val mDepthZ: Float,
+    private val mReverse: Boolean
+) : Animation() {
     /**
      * [Camera] instance that our [applyTransformation] override uses to compute 3D transformations
      * of the matrix of the [Transformation] it is passed
