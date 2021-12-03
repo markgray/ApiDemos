@@ -21,6 +21,7 @@ package com.example.android.apis.animation
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
@@ -115,6 +116,7 @@ class ReversingAnimation : AppCompatActivity() {
          */
         private fun createAnimation() {
             if (bounceAnim == null) {
+                @SuppressLint("Recycle")
                 bounceAnim = ObjectAnimator.ofFloat(ball, "y", ball.y, height - 50f)
                         .setDuration(1500)
                 bounceAnim!!.interpolator = AccelerateInterpolator(2f)
