@@ -20,10 +20,10 @@ package com.example.android.apis.animation
 // class is in a sub-package.
 
 import android.animation.Animator
-import android.animation.ObjectAnimator
 import android.animation.AnimatorListenerAdapter
 import android.animation.Keyframe
 import android.animation.LayoutTransition
+import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
@@ -346,6 +346,7 @@ class LayoutAnimations : AppCompatActivity() {
         val pvhBottom = PropertyValuesHolder.ofInt("bottom", 0, 1)
         val pvhScaleX = PropertyValuesHolder.ofFloat("scaleX", 1f, 0f, 1f)
         val pvhScaleY = PropertyValuesHolder.ofFloat("scaleY", 1f, 0f, 1f)
+        @SuppressLint("Recycle")
         customChangingAppearingAnim = ObjectAnimator.ofPropertyValuesHolder(
                 this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhScaleX, pvhScaleY)
                 .setDuration(transition.getDuration(LayoutTransition.CHANGE_APPEARING) * 100)
@@ -362,6 +363,7 @@ class LayoutAnimations : AppCompatActivity() {
         val kf1 = Keyframe.ofFloat(.9999f, 360f)
         val kf2 = Keyframe.ofFloat(1f, 0f)
         val pvhRotation = PropertyValuesHolder.ofKeyframe("rotation", kf0, kf1, kf2)
+        @SuppressLint("Recycle")
         customChangingDisappearingAnim = ObjectAnimator.ofPropertyValuesHolder(
                 this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhRotation)
                 .setDuration(transition.getDuration(LayoutTransition.CHANGE_DISAPPEARING) * 100)
@@ -373,6 +375,7 @@ class LayoutAnimations : AppCompatActivity() {
         })
 
         // Adding
+        @SuppressLint("Recycle")
         customAppearingAnim = ObjectAnimator.ofFloat(
                 null, "rotationY", 90f, 0f)
                 .setDuration(transition.getDuration(LayoutTransition.APPEARING) * 100)
@@ -384,6 +387,7 @@ class LayoutAnimations : AppCompatActivity() {
         })
 
         // Removing
+        @SuppressLint("Recycle")
         customDisappearingAnim = ObjectAnimator.ofFloat(
                 null, "rotationX", 0f, 90f)
                 .setDuration(transition.getDuration(LayoutTransition.DISAPPEARING) * 100)
