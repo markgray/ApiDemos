@@ -22,6 +22,7 @@ import android.animation.Keyframe
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
@@ -218,7 +219,7 @@ class MultiPropertyAnimation : AppCompatActivity() {
                 yxBouncer.repeatCount = 1
                 yxBouncer.repeatMode = ValueAnimator.REVERSE
 
-
+                @SuppressLint("Recycle")
                 bounceAnim = AnimatorSet()
                 (bounceAnim as AnimatorSet).playTogether(
                         yBouncer,
