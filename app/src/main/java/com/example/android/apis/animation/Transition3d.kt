@@ -82,10 +82,11 @@ class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListe
         mImageView!!.isFocusable = true
         mImageView!!.setOnClickListener(this)
 
-        // Since we are caching large views, we want to keep their cache
-        // between each animation
-        @Suppress("UsePropertyAccessSyntax", "DEPRECATION")
-        mContainer!!.setPersistentDrawingCache(ViewGroup.PERSISTENT_ANIMATION_CACHE)
+    // Since we are caching large views, we want to keep their cache
+    // between each animation. This is probably not necessary since
+    // API 11 added hardware-accelerated rendering so I have removed it.
+    // @Suppress("UsePropertyAccessSyntax", "DEPRECATION")
+    // mContainer!!.setPersistentDrawingCache(ViewGroup.PERSISTENT_ANIMATION_CACHE)
     }
 
     /**
@@ -158,11 +159,11 @@ class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListe
      * that effectively swaps the views when the container is rotated 90 degrees and thus invisible.
      */
     private inner class DisplayNextView(
-            /**
-             * Position in the [ListView] field [mPhotosList] whose photo is being transitioned to,
-             * or -1 if we are transitioning back to [mPhotosList].
-             */
-            private val mPosition: Int
+        /**
+         * Position in the [ListView] field [mPhotosList] whose photo is being transitioned to,
+         * or -1 if we are transitioning back to [mPhotosList].
+         */
+        private val mPosition: Int
 
     ) : Animation.AnimationListener {
 
@@ -197,11 +198,11 @@ class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListe
      * This class is responsible for swapping the views and starting the second half of the animation.
      */
     private inner class SwapViews(
-            /**
-             * Position in the [ListView] field [mPhotosList] whose photo is being transitioned to,
-             * or -1 if we are transitioning back to [mPhotosList].
-             */
-            private val mPosition: Int
+        /**
+         * Position in the [ListView] field [mPhotosList] whose photo is being transitioned to,
+         * or -1 if we are transitioning back to [mPhotosList].
+         */
+        private val mPosition: Int
 
     ) : Runnable {
 
@@ -236,18 +237,18 @@ class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListe
                 mImageView!!.visibility = View.VISIBLE
                 mImageView!!.requestFocus()
                 rotation = Rotate3dAnimation(
-                        90f, 180f,
-                        centerX, centerY,
-                        310.0f, false
+                    90f, 180f,
+                    centerX, centerY,
+                    310.0f, false
                 )
             } else {
                 mImageView!!.visibility = View.GONE
                 mPhotosList!!.visibility = View.VISIBLE
                 mPhotosList!!.requestFocus()
                 rotation = Rotate3dAnimation(
-                        90f, 0f,
-                        centerX, centerY,
-                        310.0f, false
+                    90f, 0f,
+                    centerX, centerY,
+                    310.0f, false
                 )
             }
             rotation.duration = 500
@@ -263,24 +264,24 @@ class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListe
          * Names of the photos we show in the list
          */
         private val PHOTOS_NAMES = arrayOf(
-                "Lyon",
-                "Livermore",
-                "Tahoe Pier",
-                "Lake Tahoe",
-                "Grand Canyon",
-                "Bodie"
+            "Lyon",
+            "Livermore",
+            "Tahoe Pier",
+            "Lake Tahoe",
+            "Grand Canyon",
+            "Bodie"
         )
 
         /**
          * Resource identifiers for the photos we want to display
          */
         private val PHOTOS_RESOURCES = intArrayOf(
-                R.drawable.photo1,
-                R.drawable.photo2,
-                R.drawable.photo3,
-                R.drawable.photo4,
-                R.drawable.photo5,
-                R.drawable.photo6
+            R.drawable.photo1,
+            R.drawable.photo2,
+            R.drawable.photo3,
+            R.drawable.photo4,
+            R.drawable.photo5,
+            R.drawable.photo6
         )
     }
 }
