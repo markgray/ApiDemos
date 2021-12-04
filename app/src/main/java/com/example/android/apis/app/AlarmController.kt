@@ -30,8 +30,8 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import java.util.Calendar
 import com.example.android.apis.R
+import java.util.Calendar
 
 /**
  * Example of scheduling one-shot and repeating alarms. See [OneShotAlarm] for the code run when the
@@ -95,7 +95,7 @@ class AlarmController : AppCompatActivity() {
         // IntentSender to have the intent executed as a broadcast.
         val intent = Intent(this@AlarmController, OneShotAlarm::class.java)
         val sender = PendingIntent.getBroadcast(this@AlarmController,
-                0, intent, 0)
+                0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         // We want the alarm to go off 30 seconds from now.
         val calendar = Calendar.getInstance()
@@ -150,7 +150,7 @@ class AlarmController : AppCompatActivity() {
         // allow itself to be sent multiple times.
         val intent = Intent(this@AlarmController, RepeatingAlarm::class.java)
         val sender = PendingIntent.getBroadcast(this@AlarmController,
-                0, intent, 0)
+                0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         // We want the alarm to go off 30 seconds from now.
         var firstTime = SystemClock.elapsedRealtime()
@@ -189,7 +189,7 @@ class AlarmController : AppCompatActivity() {
         // the one that was scheduled.
         val intent = Intent(this@AlarmController, RepeatingAlarm::class.java)
         val sender = PendingIntent.getBroadcast(this@AlarmController,
-                0, intent, 0)
+                0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         // And cancel the alarm.
         val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
