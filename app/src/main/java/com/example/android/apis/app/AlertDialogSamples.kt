@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-@file:Suppress("DEPRECATION")
-
+@file:Suppress("DEPRECATION") // TODO: Replace lots of deprectated stuff in this guy.
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
@@ -27,6 +25,7 @@ import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.provider.ContactsContract
 import android.util.Log
@@ -288,7 +287,7 @@ class AlertDialogSamples : AppCompatActivity() {
         /**
          * Handler for background Thread which advances the Progress Bar in the Progress bar dialog.
          */
-        mProgressHandler = object : Handler() {
+        mProgressHandler = object : Handler(Looper.myLooper()!!) {
             /**
              * Subclasses must implement this to receive messages. We advance the counter whenever
              * we are called, whether by sendEmptyMessage(0) when the ProgressBar is started, or
