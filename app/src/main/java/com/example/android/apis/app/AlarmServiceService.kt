@@ -18,7 +18,6 @@ package com.example.android.apis.app
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
-import com.example.android.apis.R
 
 import android.annotation.TargetApi
 import android.app.Notification
@@ -36,6 +35,7 @@ import android.os.Parcel
 import android.os.RemoteException
 import android.util.Log
 import android.widget.Toast
+import com.example.android.apis.R
 
 /**
  * This is an example of implementing an application service that will run in
@@ -133,7 +133,7 @@ class AlarmServiceService : Service() {
         Log.i(TAG, "onCreate has been called")
         mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val chan1 = NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
-                NotificationManager.IMPORTANCE_DEFAULT)
+            NotificationManager.IMPORTANCE_DEFAULT)
         chan1.lightColor = Color.GREEN
         chan1.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
         mNM.createNotificationChannel(chan1)
@@ -177,6 +177,7 @@ class AlarmServiceService : Service() {
      *
      * @return Return an [IBinder] through which clients can call on to the service.
      */
+    @Suppress("RedundantNullableReturnType")
     override fun onBind(intent: Intent): IBinder? {
         Log.i(TAG, "onBind has been called")
         return mBinder
@@ -203,18 +204,26 @@ class AlarmServiceService : Service() {
         val text = getText(R.string.alarm_service_started)
 
         // The PendingIntent to launch our activity if the user selects this notification
-        val contentIntent = PendingIntent.getActivity(this, 0,
-                Intent(this, AlarmService::class.java), 0)
+        val contentIntent = PendingIntent.getActivity(
+            this,
+            0,
+            Intent(this, AlarmService::class.java),
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.FLAG_IMMUTABLE
+            } else {
+                0
+            }
+        )
 
         // Set the info for the views that show in the notification panel.
         val notification = Notification.Builder(this, PRIMARY_CHANNEL)
-                .setSmallIcon(R.drawable.stat_sample)  // the status icon
-                .setTicker(text)  // the status text
-                .setWhen(System.currentTimeMillis())  // the time stamp
-                .setContentTitle(getText(R.string.alarm_service_label))  // the label of the entry
-                .setContentText(text)  // the contents of the entry
-                .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
-                .build()
+            .setSmallIcon(R.drawable.stat_sample)  // the status icon
+            .setTicker(text)  // the status text
+            .setWhen(System.currentTimeMillis())  // the time stamp
+            .setContentTitle(getText(R.string.alarm_service_label))  // the label of the entry
+            .setContentText(text)  // the contents of the entry
+            .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
+            .build()
 
         // Send the notification.
         // We use a layout id because it is a unique number.  We use it later to cancel.
@@ -229,6 +238,7 @@ class AlarmServiceService : Service() {
          * The id of the primary notification channel
          */
         const val PRIMARY_CHANNEL = "default"
+
         /**
          * TAG used for logging.
          */

@@ -21,6 +21,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.View.OnClickListener
@@ -74,11 +75,11 @@ class AlarmService : AppCompatActivity() {
         val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                firstTime, (30 * 1000).toLong(), mAlarmSender)
+            firstTime, (30 * 1000).toLong(), mAlarmSender)
 
         // Tell the user about what we did.
         Toast.makeText(this@AlarmService, R.string.repeating_scheduled,
-                Toast.LENGTH_LONG).show()
+            Toast.LENGTH_LONG).show()
     }
 
     /**
@@ -97,7 +98,7 @@ class AlarmService : AppCompatActivity() {
 
         // Tell the user about what we did.
         Toast.makeText(this@AlarmService, R.string.repeating_unscheduled,
-                Toast.LENGTH_LONG).show()
+            Toast.LENGTH_LONG).show()
     }
 
     /**
@@ -123,8 +124,16 @@ class AlarmService : AppCompatActivity() {
 
         // Create an IntentSender that will launch our service, to be scheduled
         // with the alarm manager.
-        mAlarmSender = PendingIntent.getService(this@AlarmService,
-                0, Intent(this@AlarmService, AlarmServiceService::class.java), 0)
+        mAlarmSender = PendingIntent.getService(
+            this@AlarmService,
+            0,
+            Intent(this@AlarmService, AlarmServiceService::class.java),
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.FLAG_IMMUTABLE
+            } else {
+                0
+            }
+        )
 
 
         // Watch for button clicks.
