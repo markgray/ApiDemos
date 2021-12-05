@@ -39,12 +39,12 @@ class ContactsFilter : AppCompatActivity() {
 
     private val mGoListener = View.OnClickListener {
         startInstrumentation(
-                ComponentName(
-                        this@ContactsFilter,
-                        ContactsFilterInstrumentation::class.java
-                ),
-                null,
-                null
+            ComponentName(
+                this@ContactsFilter,
+                ContactsFilterInstrumentation::class.java
+            ),
+            null,
+            null
         )
     }
 }

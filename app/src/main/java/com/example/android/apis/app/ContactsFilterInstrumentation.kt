@@ -44,8 +44,10 @@ class ContactsFilterInstrumentation : Instrumentation() {
         // list.
         val intent = Intent(Intent.ACTION_MAIN)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        intent.setClassName(targetContext,
-                "com.android.phone.Dialer")
+        intent.setClassName(
+            targetContext,
+            "com.android.phone.Dialer"
+        )
         val activity = startActivitySync(intent)
 
         // This is the Activity object that was started, to do with as we want.

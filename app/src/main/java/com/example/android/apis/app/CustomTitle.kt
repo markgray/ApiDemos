@@ -55,6 +55,7 @@ class CustomTitle : AppCompatActivity() {
      * A handle to our Activity's [ActionBar].
      */
     lateinit var mActionBar: ActionBar
+
     /**
      * The custom title [View] that we insert as a CustomView in our [ActionBar] field [mActionBar]
      */
@@ -97,8 +98,10 @@ class CustomTitle : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.custom_title)
 
-        mCustomView = layoutInflater.inflate(R.layout.custom_title_1,
-                findViewById<View>(android.R.id.content) as ViewGroup, false)
+        mCustomView = layoutInflater.inflate(
+            R.layout.custom_title_1,
+            findViewById<View>(android.R.id.content) as ViewGroup, false
+        )
         mActionBar = supportActionBar!!
         mActionBar.setDisplayShowHomeEnabled(false)
         mActionBar.setDisplayUseLogoEnabled(false)
@@ -106,11 +109,11 @@ class CustomTitle : AppCompatActivity() {
         mActionBar.setDisplayShowCustomEnabled(true)
 
         mActionBar.setCustomView(
-                mCustomView,
-                ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                )
+            mCustomView,
+            ActionBar.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
         )
 
         Log.i(TAG, "Before first call to findViewById")

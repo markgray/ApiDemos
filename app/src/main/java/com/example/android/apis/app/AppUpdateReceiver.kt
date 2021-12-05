@@ -23,7 +23,7 @@ import android.widget.Toast
 import com.example.android.apis.R
 
 /**
- * Executed when a new version of the application is is installed. It has an `action` intent filter
+ * Executed when a new version of the application is installed. It has an `action` intent filter
  * for the action android:name="android.intent.action.MY_PACKAGE_REPLACED"
  */
 class AppUpdateReceiver : BroadcastReceiver() {

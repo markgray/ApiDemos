@@ -47,27 +47,44 @@ class ContactsSelectInstrumentation : Instrumentation() {
         // list.
         val intent = Intent(Intent.ACTION_MAIN)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        intent.setClassName(targetContext,
-                "com.android.phone.Dialer")
+        intent.setClassName(
+            targetContext,
+            "com.android.phone.Dialer"
+        )
         val activity = startActivitySync(intent)
 
         // This is the Activity object that was started, to do with as we want.
         Log.i("ContactsSelectInstr...", "Started: $activity")
 
         // Monitor for the expected start activity call.
-        val am = addMonitor(IntentFilter.create(
-                Intent.ACTION_VIEW, ContactsContract.Contacts.CONTENT_ITEM_TYPE), null, true)
+        val am = addMonitor(
+            IntentFilter.create(
+                Intent.ACTION_VIEW, ContactsContract.Contacts.CONTENT_ITEM_TYPE
+            ), null, true
+        )
 
         // We are going to enqueue a couple key events to simulate the user
         // selecting an item in the list.
-        sendKeySync(KeyEvent(
-                KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_DOWN))
-        sendKeySync(KeyEvent(
-                KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_DOWN))
-        sendKeySync(KeyEvent(
-                KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_CENTER))
-        sendKeySync(KeyEvent(
-                KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_CENTER))
+        sendKeySync(
+            KeyEvent(
+                KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_DOWN
+            )
+        )
+        sendKeySync(
+            KeyEvent(
+                KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_DOWN
+            )
+        )
+        sendKeySync(
+            KeyEvent(
+                KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_CENTER
+            )
+        )
+        sendKeySync(
+            KeyEvent(
+                KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_CENTER
+            )
+        )
 
         // Was the expected activity started?
         if (checkMonitorHit(am, 1)) {
