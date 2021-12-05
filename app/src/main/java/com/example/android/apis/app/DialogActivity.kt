@@ -19,7 +19,6 @@ package com.example.android.apis.app
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View.OnClickListener
 import android.view.Window
@@ -27,6 +26,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.example.android.apis.R
 
 /**
@@ -46,13 +46,13 @@ class DialogActivity : AppCompatActivity() {
      *
      * Parameter: `View` of [Button] which was clicked: (R.id.add "ADD CONTENT")
      */
-    @SuppressLint("UseCompatLoadingForDrawables")
     private val mAddContentListener = OnClickListener {
         val layout = findViewById<LinearLayout>(R.id.inner_content)
         val iv = ImageView(this@DialogActivity)
 
-        @Suppress("DEPRECATION")
-        iv.setImageDrawable(resources.getDrawable(R.drawable.icon48x48_1))
+        iv.setImageDrawable(
+            ResourcesCompat.getDrawable(resources, R.drawable.icon48x48_1, null)
+        )
         iv.setPadding(4, 4, 4, 4)
         layout.addView(iv)
     }
