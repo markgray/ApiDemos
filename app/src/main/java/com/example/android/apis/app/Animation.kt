@@ -19,6 +19,7 @@ package com.example.android.apis.app
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.ActivityOptions
 import android.content.Intent
@@ -33,7 +34,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
- *
+ * TODO: Remove deprecated use of drawing cache (unneeded since SDK 14)
  * Example of using a custom animation when transitioning between activities.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -49,7 +50,7 @@ class Animation : AppCompatActivity() {
      *
      * Parameter: The [View] of the Button which was clicked
      */
-    private val mFadeListener = OnClickListener{
+    private val mFadeListener = OnClickListener {
         Log.i(TAG, "Starting fade-in animation...")
         // Request the next activity transition (here starting a new one).
         startActivity(Intent(this@Animation, AlertDialogSamples::class.java))
@@ -83,7 +84,7 @@ class Animation : AppCompatActivity() {
         overridePendingTransition(R.anim.zoom_enter, R.anim.zoom_exit)
     }
 
-   /**
+    /**
      * Called when the R.id.modern_fade_animation ("Modern fade in") Button is clicked. We
      * create ActivityOptions opts using R.anim.fade as the fade in animation (an alpha
      * animation from 0.0 to 1.0) and R.anim.hold as the fade out animation (a do-nothing
@@ -101,7 +102,7 @@ class Animation : AppCompatActivity() {
         // to be Z-ordered on top (even though it really isn't) to achieve
         // the effect we want.
         val opts = ActivityOptions.makeCustomAnimation(this@Animation,
-                R.anim.fade, R.anim.hold)
+            R.anim.fade, R.anim.hold)
         // Request the activity be started, using the custom animation options.
         startActivity(Intent(this@Animation, AlertDialogSamples::class.java), opts.toBundle())
     }
@@ -125,7 +126,7 @@ class Animation : AppCompatActivity() {
         // to be Z-ordered on top (even though it really isn't) to achieve
         // the effect we want.
         val opts = ActivityOptions.makeCustomAnimation(this@Animation,
-                R.anim.zoom_enter, R.anim.zoom_enter)
+            R.anim.zoom_enter, R.anim.zoom_enter)
         // Request the activity be started, using the custom animation options.
         startActivity(Intent(this@Animation, AlertDialogSamples::class.java), opts.toBundle())
     }
@@ -145,7 +146,7 @@ class Animation : AppCompatActivity() {
         // Create a scale-up animation that originates at the button
         // being pressed.
         val opts = ActivityOptions.makeScaleUpAnimation(
-                v, 0, 0, v.width, v.height)
+            v, 0, 0, v.width, v.height)
         // Request the activity be started, using the custom animation options.
         startActivity(Intent(this@Animation, AlertDialogSamples::class.java), opts.toBundle())
     }
@@ -183,7 +184,7 @@ class Animation : AppCompatActivity() {
         val c = Canvas(bm)
         //c.drawARGB(255, 255, 0, 0);
         val opts = ActivityOptions.makeThumbnailScaleUpAnimation(
-                v, bm, 0, 0)
+            v, bm, 0, 0)
         // Request the activity be started, using the custom animation options.
         startActivity(Intent(this@Animation, AlertDialogSamples::class.java), opts.toBundle())
         @Suppress("DEPRECATION")
@@ -253,6 +254,7 @@ class Animation : AppCompatActivity() {
         button.setOnClickListener(mFadeListener)
         button = findViewById(R.id.zoom_animation)
         button.setOnClickListener(mZoomListener)
+        @SuppressLint("ObsoleteSdkInt")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             button = findViewById(R.id.modern_fade_animation)
             button.setOnClickListener(mModernFadeListener)
