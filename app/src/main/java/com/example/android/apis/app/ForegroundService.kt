@@ -11,6 +11,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.PowerManager
 import android.os.PowerManager.WakeLock
 import android.util.Log
@@ -21,7 +22,7 @@ import com.example.android.apis.R
 
 @Suppress("MemberVisibilityCanBePrivate")
 @RequiresApi(Build.VERSION_CODES.O)
-open class ForegroundService: Service() {
+open class ForegroundService : Service() {
     /**
      * Handle to the system level service NOTIFICATION_SERVICE
      */
@@ -36,7 +37,7 @@ open class ForegroundService: Service() {
     /**
      * `Handler` we use to run our `Runnable mPulser` every 5 seconds.
      */
-    val mHandler = Handler()
+    val mHandler = Handler(Looper.myLooper()!!)
 
     /**
      * LOGS the message "PULSE!" every 5 seconds while we are running whether foreground or background
@@ -50,7 +51,7 @@ open class ForegroundService: Service() {
      * Schedules the [Runnable] field [mPulser] to run again 5 seconds from now.
      */
     fun repulse() {
-        mHandler.postDelayed(mPulser,5*1000)
+        mHandler.postDelayed(mPulser, 5 * 1000)
     }
 
     /**
@@ -66,8 +67,10 @@ open class ForegroundService: Service() {
      */
     override fun onCreate() {
         mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val chan1 = NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
-                NotificationManager.IMPORTANCE_DEFAULT)
+        val chan1 = NotificationChannel(
+            PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
         chan1.lightColor = Color.GREEN
         chan1.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
         mNM!!.createNotificationChannel(chan1)
@@ -143,17 +146,21 @@ open class ForegroundService: Service() {
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         if (ACTION_FOREGROUND == intent.action || ACTION_FOREGROUND_WAKELOCK == intent.action) { // In this sample, we'll use the same text for the ticker and the expanded notification
             val text = getText(R.string.foreground_service_started)
-            val contentIntent = PendingIntent.getActivity(this, 0,
-                    Intent(this, ForegroundServiceController::class.java), 0)
+            val contentIntent = PendingIntent.getActivity(
+                this,
+                0,
+                Intent(this, ForegroundServiceController::class.java),
+                PendingIntent.FLAG_IMMUTABLE
+            )
             // Set the info for the views that show in the notification panel.
             val notification = Notification.Builder(this, PRIMARY_CHANNEL)
-                    .setSmallIcon(R.drawable.stat_sample) // the status icon
-                    .setTicker(text) // the status text
-                    .setWhen(System.currentTimeMillis()) // the time stamp
-                    .setContentTitle(getText(R.string.alarm_service_label)) // the label
-                    .setContentText(text) // the contents of the entry
-                    .setContentIntent(contentIntent) // The intent to send when clicked
-                    .build()
+                .setSmallIcon(R.drawable.stat_sample) // the status icon
+                .setTicker(text) // the status text
+                .setWhen(System.currentTimeMillis()) // the time stamp
+                .setContentTitle(getText(R.string.alarm_service_label)) // the label
+                .setContentText(text) // the contents of the entry
+                .setContentIntent(contentIntent) // The intent to send when clicked
+                .build()
             startForeground(R.string.foreground_service_started, notification)
         } else if (ACTION_BACKGROUND == intent.action || ACTION_BACKGROUND_WAKELOCK == intent.action) {
             stopForeground(STOP_FOREGROUND_DETACH)
@@ -161,7 +168,8 @@ open class ForegroundService: Service() {
         if (ACTION_FOREGROUND_WAKELOCK == intent.action || ACTION_BACKGROUND_WAKELOCK == intent.action) {
             if (mWakeLock == null) {
                 mWakeLock = getSystemService(PowerManager::class.java)!!.newWakeLock(
-                        PowerManager.PARTIAL_WAKE_LOCK, "myapp:wake-service")
+                    PowerManager.PARTIAL_WAKE_LOCK, "myapp:wake-service"
+                )
                 mWakeLock!!.acquire(30000)
             } else {
                 releaseWakeLock()
@@ -196,7 +204,6 @@ open class ForegroundService: Service() {
     }
 
 
-
     /**
      * Return the communication channel to the service.  May return *null* if
      * clients can not bind to the service.
@@ -218,18 +225,22 @@ open class ForegroundService: Service() {
          * Action of the [Intent] that will launch us in the foreground.
          */
         const val ACTION_FOREGROUND = "com.example.android.apis.FOREGROUND"
+
         /**
          * Action of the [Intent] that will launch us in the foreground with a WAKELOCK.
          */
         const val ACTION_FOREGROUND_WAKELOCK = "com.example.android.apis.FOREGROUND_WAKELOCK"
+
         /**
          * Action of the [Intent] that will launch us in the background.
          */
         const val ACTION_BACKGROUND = "com.example.android.apis.BACKGROUND"
+
         /**
          * Action of the [Intent] that will launch us in the background with a WAKELOCK.
          */
         const val ACTION_BACKGROUND_WAKELOCK = "com.example.android.apis.BACKGROUND_WAKELOCK"
+
         /**
          * The id of the primary notification channel
          */
