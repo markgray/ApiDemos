@@ -16,7 +16,6 @@
 
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.os.Build
@@ -26,6 +25,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.example.android.apis.R
@@ -138,12 +138,21 @@ class FragmentArguments : FragmentActivity() {
          *
          * @return Return the View for the fragment's UI, or null.
          */
-        @SuppressLint("UseCompatLoadingForDrawables")
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
             val v = inflater.inflate(R.layout.hello_world, container, false)
             val tv = v.findViewById<View>(R.id.text)
             (tv as TextView).text = if (mLabel != null) mLabel else "(no label)"
-            tv.setBackground(resources.getDrawable(android.R.drawable.gallery_thumb, null))
+            tv.setBackground(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    android.R.drawable.gallery_thumb,
+                    null
+                )
+            )
             return v
         }
 
