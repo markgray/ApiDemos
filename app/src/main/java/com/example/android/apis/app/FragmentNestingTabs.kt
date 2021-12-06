@@ -31,7 +31,7 @@ import androidx.fragment.app.FragmentTransaction
  * This demonstrates the use of action bar tabs and how they interact
  * with other action bar features.
  */
-@Suppress("DEPRECATION")
+@Suppress("DEPRECATION") // TODO: replace tabs with modern navigation UI
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 class FragmentNestingTabs : AppCompatActivity() {
     /**
@@ -67,7 +67,6 @@ class FragmentNestingTabs : AppCompatActivity() {
      * under the key "tab".
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        @Suppress("DEPRECATION")
         FragmentManager.enableDebugLogging(true)
         super.onCreate(savedInstanceState)
         val bar = supportActionBar
@@ -75,22 +74,42 @@ class FragmentNestingTabs : AppCompatActivity() {
             bar.navigationMode = ActionBar.NAVIGATION_MODE_TABS
         }
         bar?.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE)
-        bar?.addTab(bar.newTab()
+        bar?.addTab(
+            bar.newTab()
                 .setText("Menus")
-                .setTabListener(TabListener(
-                        this, "menus", FragmentMenuFragment::class.java)))
-        bar?.addTab(bar.newTab()
+                .setTabListener(
+                    TabListener(
+                        this, "menus", FragmentMenuFragment::class.java
+                    )
+                )
+        )
+        bar?.addTab(
+            bar.newTab()
                 .setText("Args")
-                .setTabListener(TabListener(
-                        this, "args", FragmentArgumentsFragment::class.java)))
-        bar?.addTab(bar.newTab()
+                .setTabListener(
+                    TabListener(
+                        this, "args", FragmentArgumentsFragment::class.java
+                    )
+                )
+        )
+        bar?.addTab(
+            bar.newTab()
                 .setText("Stack")
-                .setTabListener(TabListener(
-                        this, "stack", FragmentStackFragment::class.java)))
-        bar?.addTab(bar.newTab()
+                .setTabListener(
+                    TabListener(
+                        this, "stack", FragmentStackFragment::class.java
+                    )
+                )
+        )
+        bar?.addTab(
+            bar.newTab()
                 .setText("Tabs")
-                .setTabListener(TabListener(
-                        this, "tabs", FragmentTabsFragment::class.java)))
+                .setTabListener(
+                    TabListener(
+                        this, "tabs", FragmentTabsFragment::class.java
+                    )
+                )
+        )
         if (savedInstanceState != null) {
             bar?.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0))
         }
@@ -120,22 +139,22 @@ class FragmentNestingTabs : AppCompatActivity() {
      * to is selected.
      */
     class TabListener<T : Fragment?> @JvmOverloads internal constructor(
-            /**
-             * FragmentNestingTabs Activity passed as this to constructors
-             */
-            private val mActivity: Activity,
-            /**
-             * tag to use as name of fragment for later use by findFragmentByTag
-             */
-            private val mTag: String,
-            /**
-             * `Class<T>` clz from constructor (java [Fragment] subclass we create)
-             */
-            private val mClass: Class<T>,
-            /**
-             * [Bundle] of arguments to be passed to [Fragment] we create
-             */
-            private val mArgs: Bundle? = null
+        /**
+         * FragmentNestingTabs Activity passed as this to constructors
+         */
+        private val mActivity: Activity,
+        /**
+         * tag to use as name of fragment for later use by findFragmentByTag
+         */
+        private val mTag: String,
+        /**
+         * `Class<T>` clz from constructor (java [Fragment] subclass we create)
+         */
+        private val mClass: Class<T>,
+        /**
+         * [Bundle] of arguments to be passed to [Fragment] we create
+         */
+        private val mArgs: Bundle? = null
     ) : ActionBar.TabListener {
 
         /**
@@ -202,6 +221,7 @@ class FragmentNestingTabs : AppCompatActivity() {
         override fun onTabReselected(tab: ActionBar.Tab, ft: FragmentTransaction) {
             Toast.makeText(mActivity, "Reselected!", Toast.LENGTH_SHORT).show()
         }
+
         /**
          * Init block for our constructor. First we search for a pre-existing `Fragment` for the
          * tab by using the `FragmentManager` associated with `Activity` field `mActivity` to look
@@ -213,7 +233,8 @@ class FragmentNestingTabs : AppCompatActivity() {
             // Check to see if we already have a fragment for this tab, probably
             // from a previously saved state.  If so, deactivate it, because our
             // initial state is that a tab isn't shown.
-            mFragment = (mActivity as AppCompatActivity).supportFragmentManager.findFragmentByTag(mTag)
+            mFragment =
+                (mActivity as AppCompatActivity).supportFragmentManager.findFragmentByTag(mTag)
             if (mFragment != null && !mFragment!!.isDetached) {
                 val ft = mActivity.supportFragmentManager.beginTransaction()
                 ft.detach(mFragment!!)

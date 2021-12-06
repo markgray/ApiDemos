@@ -92,9 +92,9 @@ class FragmentMenuFragment : Fragment() {
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         val v = inflater.inflate(R.layout.fragment_menu, container, false)
 
