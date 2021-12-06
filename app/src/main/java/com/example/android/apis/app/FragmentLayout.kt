@@ -16,9 +16,6 @@
 
 package com.example.android.apis.app
 
-import com.example.android.apis.R
-import com.example.android.apis.Shakespeare
-
 import android.annotation.TargetApi
 import android.content.Intent
 import android.content.res.Configuration
@@ -32,12 +29,12 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.ScrollView
 import android.widget.TextView
-
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.ListFragment
-
-import androidx.fragment.app.FragmentActivity
+import com.example.android.apis.R
+import com.example.android.apis.Shakespeare
 
 /**
  * Demonstration of using fragments to implement different activity layouts.
@@ -126,30 +123,31 @@ class FragmentLayout : FragmentActivity() {
         internal var mCurCheckPosition = 0
 
         /**
-         * Called when the fragment's activity has been created and this fragment's view hierarchy
-         * instantiated. First we call through to our super's implementation of `onActivityCreated`.
-         * Next we set the cursor for the list view of this [ListFragment] to an [ArrayAdapter]
-         * consisting of the `String[]` array [Shakespeare.TITLES]. Then we determine whether we are
-         * in ORIENTATION_LANDSCAPE (dual pane mode) by searching our Activity's content view for
-         * a view with the id R.id.details, saving a reference to it in our [View] variable
-         * `val detailsFrame`. If `detailsFrame` is not *null* and the View is VISIBLE we set our
-         * [Boolean] field [mDualPane] to *true*. If [savedInstanceState] is not *null* we use it to
-         * retrieve the value of our field [mCurCheckPosition] which our callback [onSaveInstanceState]
-         * saved under the key "curChoice". If we have determined that we are in dual pane mode
-         * (ORIENTATION_LANDSCAPE) we set the choice mode for our [ListView] to CHOICE_MODE_SINGLE
-         * so that the currently selected item is highlighted, and then call our method [showDetails]
-         * with [mCurCheckPosition] to display the details of this selected item in the other pane.
+         * Called when all saved state has been restored into the view hierarchy of the fragment.
+         * This is called after [onViewCreated] and before [onStart]. First we call through to our
+         * super's implementation of `onViewStateRestored`. Next we set the cursor for the list view
+         * of this [ListFragment] to an [ArrayAdapter] consisting of the `String[]` array
+         * [Shakespeare.TITLES]. Then we determine whether we are in ORIENTATION_LANDSCAPE (dual
+         * pane mode) by searching our Activity's content view for a view with the id R.id.details,
+         * saving a reference to it in our [View] variable `val detailsFrame`. If `detailsFrame` is
+         * not *null* and the View is VISIBLE we set our [Boolean] field [mDualPane] to *true*. If
+         * [savedInstanceState] is not *null* we use it to retrieve the value of our field
+         * [mCurCheckPosition] which our callback [onSaveInstanceState] saved under the key
+         * "curChoice". If we have determined that we are in dual pane mode (ORIENTATION_LANDSCAPE)
+         * we set the choice mode for our [ListView] to CHOICE_MODE_SINGLE so that the currently
+         * selected item is highlighted, and then call our method [showDetails] with [mCurCheckPosition]
+         * to display the details of this selected item in the other pane.
          *
          * @param savedInstanceState If not *null* it contains [mCurCheckPosition] saved by our
          * callback [onSaveInstanceState] under the key "curChoice"
          */
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
+        override fun onViewStateRestored(savedInstanceState: Bundle?) {
+            super.onViewStateRestored(savedInstanceState)
 
             // Populate list with our static array of titles.
 
             listAdapter = ArrayAdapter(requireActivity(),
-                    android.R.layout.simple_list_item_activated_1, Shakespeare.TITLES)
+                android.R.layout.simple_list_item_activated_1, Shakespeare.TITLES)
 
             // Check to see if we have a frame in which to embed the details
             // fragment directly in the containing UI.
