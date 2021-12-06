@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+// TODO: think of appropriate replacement for use of "Theme_Holo" themes
 package com.example.android.apis.app
 
 import android.annotation.TargetApi
@@ -205,10 +205,15 @@ class FragmentDialog : AppCompatActivity() {
          * from a previous saved state as given here.
          * @return Return the [View] for the fragment's UI.
          */
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
             val v = inflater.inflate(R.layout.fragment_dialog, container, false)
             val tv = v.findViewById<View>(R.id.text)
-            val dialogLabel = getString(R.string.dialog_number) + mNum + ": using style " + getNameForNum(mNum)
+            val dialogLabel =
+                getString(R.string.dialog_number) + mNum + ": using style " + getNameForNum(mNum)
             (tv as TextView).text = dialogLabel
 
             // Watch for button clicks.
