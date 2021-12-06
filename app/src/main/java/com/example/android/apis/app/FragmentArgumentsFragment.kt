@@ -30,7 +30,6 @@ import com.example.android.apis.R
  * and layout attributes. Currently only used in FragmentNestingTabs.java which
  * is commented out until I finish migrating all the Fragments it uses.
  */
-@Suppress("unused") // It really is used!
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 class FragmentArgumentsFragment : Fragment() {
     /**
