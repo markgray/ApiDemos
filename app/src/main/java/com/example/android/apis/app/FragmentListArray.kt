@@ -66,24 +66,22 @@ class FragmentListArray : FragmentActivity() {
      * List, and Log's the ID of any item that is clicked.
      */
     class ArrayListFragment : ListFragment() {
-
         /**
-         * Called when the fragment's activity has been created and this fragment's view hierarchy
-         * instantiated. First we call through to our super's implementation of `onActivityCreated`.
-         * Then we set the cursor for our list view to an instance of `ArrayAdapter<String>`
-         * which uses the system layout file android.R.layout.simple_list_item_1 (a `TextView`
-         * with the id "@android:id/text1" as the per item layout) and [Shakespeare.TITLES] as the
-         * Object's with which to populate the List.
+         * Called when all saved state has been restored into the view hierarchy of the fragment.
+         * This is called after [onViewCreated] and before [onStart]. First we call through to our
+         * super's implementation of `onViewStateRestored`. Then we set the cursor for our list view
+         * to an instance of `ArrayAdapter<String>` which uses the system layout file
+         * android.R.layout.simple_list_item_1 (a `TextView` with the id "@android:id/text1" as the
+         * per item layout) and [Shakespeare.TITLES] as the Object's with which to populate the List.
          *
          * @param savedInstanceState we do not override onSaveInstanceState so do not use
          */
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
-
+        override fun onViewStateRestored(savedInstanceState: Bundle?) {
+            super.onViewStateRestored(savedInstanceState)
             listAdapter = ArrayAdapter(
-                    requireActivity(),
-                    android.R.layout.simple_list_item_1,
-                    Shakespeare.TITLES
+                requireActivity(),
+                android.R.layout.simple_list_item_1,
+                Shakespeare.TITLES
             )
         }
 
