@@ -25,6 +25,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.example.android.apis.R
@@ -181,12 +182,21 @@ class FragmentCustomAnimations : FragmentActivity() {
          *
          * @return Return the View for the fragment's UI
          */
-        @SuppressLint("UseCompatLoadingForDrawables")
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
             val v = inflater.inflate(R.layout.hello_world, container, false)
             val tv = v.findViewById<View>(R.id.text)
             (tv as TextView).text = String.format("%s%d", getString(R.string.fragment_number), mNum)
-            tv.setBackground(resources.getDrawable(android.R.drawable.gallery_thumb, null))
+            tv.setBackground(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    android.R.drawable.gallery_thumb,
+                    null
+                )
+            )
             return v
         }
 
