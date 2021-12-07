@@ -30,9 +30,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.example.android.apis.R
+import com.example.android.apis.app.FragmentReceiveResult.ReceiveResultFragment
 
 /**
  * [FragmentReceiveResult] builds a [FrameLayout] in java -- no xml layout. To this it adds
@@ -68,8 +72,9 @@ class FragmentReceiveResult : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val lp = FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT)
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
         val frame = FrameLayout(this)
         frame.id = R.id.simple_fragment
         setContentView(frame, lp)
@@ -93,6 +98,7 @@ class FragmentReceiveResult : FragmentActivity() {
          * [TextView] we use to write results to (R.id.results)
          */
         private var mResults: TextView? = null
+
         /**
          * [String] saved and restored
          */
@@ -101,8 +107,9 @@ class FragmentReceiveResult : FragmentActivity() {
         /**
          * [OnClickListener] used for the Button R.id.get, launches the [SendResult] Activity for a
          * result. We create an [Intent] to initialize our variable `val intent` designed to start
-         * the Activity [SendResult], then call `startActivityForResult(Intent, int)` from the
-         * fragment's containing Activity using the request code GET_CODE.
+         * the Activity [SendResult], then call the [ActivityResultLauncher.launch] method of our
+         * field [resultLauncher] to have it launch the activity and process the result in the
+         * lambda argument of its call to the [registerForActivityResult] method.
          *
          * Parameter: View of the Button that was clicked.
          */
@@ -110,8 +117,53 @@ class FragmentReceiveResult : FragmentActivity() {
             // Start the activity whose result we want to retrieve.  The
             // result will come back with request code GET_CODE.
             val intent = Intent(activity, SendResult::class.java)
-            startActivityForResult(intent, GET_CODE)
+            resultLauncher.launch(intent)
         }
+
+        /**
+         * This is the [ActivityResultLauncher] that replaces the use of `startActivityForResult`.
+         * It is launched by calling its `launch` method with an [Intent] that is constructed to
+         * launch the activity whose result we want, and the lambda argument to the
+         * [registerForActivityResult] method replaces the override of [onActivityResult] that
+         * would receive the result had the `startActivityForResult` method been used.
+         *
+         * First we retrieve an [Editable] reference to the current text in our results [TextView]
+         * field [mResults] to initialise our variable `val text`. If the `resultCode` property of
+         * the [ActivityResult] returned to us in our `result` parameter is RESULT_CANCELED (the back
+         * button was pressed instead of an "answer" [Button]), we append the [String] "(cancelled)"
+         * to the `text` being displayed, otherwise we append the String "(okay " followed by the
+         * value of `result.resultCode`, followed by ") ". We then initialize our [Intent] variable
+         * `val data` to the [Intent] stored in the `data` field of `result`, and if this is not
+         * `null` we append the value that the [SendResult] Activity returned as the action of the
+         * [Intent] returned with the [String] being either "Corky!" or "Violet!" depending on the
+         * Button pressed by the user. Finally we append a newline to the end of `text` for both
+         * cases of `resultCode` we consider.
+         */
+        private val resultLauncher: ActivityResultLauncher<Intent> =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                // We will be adding to our text.
+                val text = mResults!!.text as Editable
+
+                // This is a standard resultCode that is sent back if the
+                // activity doesn't supply an explicit result.  It will also
+                // be returned if the activity failed to launch.
+                if (result.resultCode == Activity.RESULT_CANCELED) {
+                    text.append("(cancelled)")
+
+                    // Our protocol with the sending activity is that it will send
+                    // text in 'data' as its result.
+                } else {
+                    text.append("(okay ")
+                    text.append(result.resultCode.toString())
+                    text.append(") ")
+                    val data: Intent? = result.data
+                    if (data != null) {
+                        text.append(data.action)
+                    }
+                }
+
+                text.append("\n")
+            }
 
         /**
          * Called to do initial creation of a fragment. First we call through to our super's
@@ -167,7 +219,11 @@ class FragmentReceiveResult : FragmentActivity() {
          * @param savedInstanceState We do not use in this method.
          * @return the [View] for the fragment's UI.
          */
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
             val v = inflater.inflate(R.layout.receive_result, container, false)
 
             // Retrieve the TextView widget that will display results.
@@ -181,72 +237,6 @@ class FragmentReceiveResult : FragmentActivity() {
             getButton.setOnClickListener(mGetListener)
 
             return v
-        }
-
-        /**
-         * This method is called when the sending activity has finished, with the result it
-         * supplied. First we check to see if the result is for the request we sent (our
-         * [requestCode] parameter is GET_CODE), and if not we do nothing. (This is merely
-         * a formality which is only necessary when an Activity makes multiple kinds of
-         * requests.) If it is the result from a GET_CODE request, we retrieve an [Editable]
-         * reference to the current text in our results [TextView] field [mResults] to initialise
-         * our variable `val text`. If the [resultCode] parameter is RESULT_CANCELED (the back
-         * button was pressed instead of an "answer" [Button]), we append the [String] "(cancelled)"
-         * to the `text` being displayed, otherwise we append the String "(okay " followed by the
-         * value of [resultCode], followed by ") ", followed by the value that the [SendResult]
-         * Activity returned as the action of the result using `Intent.setAction(String)` (with the
-         * [String] being either "Corky!" or "Violet!" depending on the Button pressed by the user.
-         * (We are careful to check whether the [Intent] parameter [data] returned to us is not
-         * *null* before calling `getAction` on it, but only an unforeseen bug would cause it to
-         * be *null* in our case.) Finally we append a newline to the end of `text` for both cases
-         * of [resultCode] we consider.
-         *
-         * @param requestCode The integer request code originally supplied to
-         * startActivityForResult(), allowing you to identify who this
-         * result came from. (Should be GET_CODE in our case.)
-         * @param resultCode  The integer result code returned by the child activity
-         * through its setResult().
-         * @param data        An Intent, which can return result data to the caller
-         * (various data can be attached to Intent "extras").
-         */
-        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            // You can use the requestCode to select between multiple child
-            // activities you may have started.  Here there is only one thing
-            // we launch.
-            if (requestCode == GET_CODE) {
-
-                // We will be adding to our text.
-                val text = mResults!!.text as Editable
-
-                // This is a standard resultCode that is sent back if the
-                // activity doesn't supply an explicit result.  It will also
-                // be returned if the activity failed to launch.
-                if (resultCode == Activity.RESULT_CANCELED) {
-                    text.append("(cancelled)")
-
-                    // Our protocol with the sending activity is that it will send
-                    // text in 'data' as its result.
-                } else {
-                    text.append("(okay ")
-                    text.append(resultCode.toString())
-                    text.append(") ")
-                    if (data != null) {
-                        text.append(data.action)
-                    }
-                }
-
-                text.append("\n")
-            }
-        }
-
-        /**
-         * Our static constant
-         */
-        companion object {
-            /**
-             * Definition of the one requestCode we use for receiving results.
-             */
-            private const val GET_CODE = 0
         }
     }
 
