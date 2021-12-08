@@ -15,6 +15,7 @@
  */
 
 package com.example.android.apis.app
+// TODO: Replace suppresssed deprecation warnings with modern solution.
 
 import android.annotation.TargetApi
 import android.os.Build
@@ -109,33 +110,25 @@ class FragmentRetainInstance : FragmentActivity() {
         }
 
         /**
-         * Called when the fragment's activity has been created and this
-         * fragment's view hierarchy instantiated.  It can be used to do final
-         * initialization once these pieces are in place, such as retrieving
-         * views or restoring state.  It is also useful for fragments that use
-         * [setRetainInstance] to retain their instance, as this callback tells
-         * the fragment when it is fully associated with the new activity instance.
-         * This is called after [onCreateView] and before [onViewStateRestored].
+         * Called when all saved state has been restored into the view hierarchy of the fragment.
+         * First we call through to our super's implementation of `onViewStateRestored`, then we
+         * fetch a handle to the support `FragmentManager` for interacting with fragments associated
+         * with this fragment's activity to initialize our `FragmentManager` variable `val fm`. We
+         * use `fm` to search for a fragment with the tag "work" (the tag we use for our retained
+         * work fragment) and save the reference in our [RetainedFragment] field [mWorkFragment].
+         * If the `FragmentManager` failed to find this fragment (`findFragmentByTag` returned
+         * *null*) we create a new instance of [RetainedFragment] to initialize [mWorkFragment],
+         * and set its target fragment to this with a request code of 0 (this establishes a
+         * caller/called relationship which the called [Fragment] can use to send results back
+         * using a direct call to `getTargetFragment().onActivityResult`). Then we use `fm` to
+         * create a `FragmentTransaction` which we use to add [mWorkFragment] with the tag "work",
+         * and we then commit this `FragmentTransaction`.
          *
-         * First we call through to our super's implementation of `onActivityCreated`, then we fetch
-         * a handle to the support `FragmentManager` for interacting with fragments associated with
-         * this fragment's activity to initialize our `FragmentManager` variable `val fm`. We use
-         * `fm` to search for a fragment with the tag "work" (the tag we use for our retained work
-         * fragment) and save the reference in our [RetainedFragment] field [mWorkFragment]. If the
-         * `FragmentManager` failed to find this fragment (`findFragmentByTag` returned *null*) we
-         * create a new instance of [RetainedFragment] to initialize [mWorkFragment], and set its
-         * target fragment to this with a request code of 0 (this establishes a caller/called
-         * relationship which the called [Fragment] can use to send results back using a direct call
-         * to `getTargetFragment().onActivityResult`). Then we use `fm` to create a
-         * `FragmentTransaction` which we use to add [mWorkFragment] with the tag "work", and we
-         * then commit this `FragmentTransaction`.
-         *
-         * @param savedInstanceState If the fragment is being re-created from
-         * a previous saved state, this is the state.
+         * @param savedInstanceState If the fragment is being re-created from a previous saved
+         * state, this is the state.
          */
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
-
+        override fun onViewStateRestored(savedInstanceState: Bundle?) {
+            super.onViewStateRestored(savedInstanceState)
 
             val fm = requireActivity().supportFragmentManager
 
@@ -146,11 +139,11 @@ class FragmentRetainInstance : FragmentActivity() {
             if (mWorkFragment == null) {
                 mWorkFragment = RetainedFragment()
                 // Tell it who it is working with.
+                @Suppress("DEPRECATION")
                 mWorkFragment!!.setTargetFragment(this, 0)
                 fm.beginTransaction().add(mWorkFragment!!, "work").commit()
             }
         }
-
     }
 
     /**
@@ -257,6 +250,7 @@ class FragmentRetainInstance : FragmentActivity() {
 
             // Tell the framework to try to keep this fragment around
             // during a configuration change.
+            @Suppress("DEPRECATION")
             retainInstance = true
 
             // Start up the worker thread.
@@ -264,11 +258,10 @@ class FragmentRetainInstance : FragmentActivity() {
         }
 
         /**
-         * This is called when the Fragment's Activity is ready to go, after its content view has
-         * been installed; it is called both after the initial fragment creation and after the
-         * fragment is re-attached to a new activity.
+         * Called when all saved state has been restored into the view hierarchy of the fragment.
+         * This is called after [onViewCreated] and before [onStart].
          *
-         * First we call through to our super's implementation of `onActivityCreated`, then we use
+         * First we call through to our super's implementation of `onViewStateRestored`, then we use
          * the `getTargetFragment` method to retrieve the `UIFragment` instance which was set as our
          * target fragment using `mWorkFragment.setTargetFragment(this, 0)`, and use that
          * reference to retrieve the root view for that fragment's layout (the one returned by
@@ -280,14 +273,14 @@ class FragmentRetainInstance : FragmentActivity() {
          *
          * @param savedInstanceState we do not override onSaveInstanceState to we do not use
          */
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
+        override fun onViewStateRestored(savedInstanceState: Bundle?) {
+            super.onViewStateRestored(savedInstanceState)
 
             // Retrieve the progress bar from the target's view hierarchy.
-
+            @Suppress("DEPRECATION")
             mProgressBar = targetFragment!!
-                    .requireView()
-                    .findViewById(R.id.progress_horizontal)
+                .requireView()
+                .findViewById(R.id.progress_horizontal)
 
             // We are ready for our thread to go.
             synchronized(mThread) {
