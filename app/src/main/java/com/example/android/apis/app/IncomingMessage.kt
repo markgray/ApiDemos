@@ -138,7 +138,7 @@ class IncomingMessage : AppCompatActivity() {
         // it with the new array of Intents.
         val contentIntent = PendingIntent.getActivities(this, 0,
                 makeMessageIntentStack(this, from, message),
-                PendingIntent.FLAG_CANCEL_CURRENT)
+                PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         // The ticker text, this uses a formatted string so our message could be localized
         val tickerText = getString(R.string.imcoming_message_ticker_text, message)
@@ -225,7 +225,7 @@ class IncomingMessage : AppCompatActivity() {
         intent.putExtra(IncomingMessageView.KEY_MESSAGE, message)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         val contentIntent = PendingIntent.getActivity(this, 0,
-                intent, PendingIntent.FLAG_CANCEL_CURRENT)
+                intent, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         // The ticker text, this uses a formatted string so our message could be localized
         val tickerText = getString(R.string.imcoming_message_ticker_text, message)
