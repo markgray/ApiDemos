@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 @file:Suppress("DEPRECATION")
-
+// TODO: Replace Tab use with modern navigation UI
 package com.example.android.apis.app
 
 import android.annotation.TargetApi
