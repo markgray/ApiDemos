@@ -51,8 +51,16 @@ class IntentActivityFlags : AppCompatActivity() {
     private val mFlagActivityClearTaskPIListener = OnClickListener {
         val context = this@IntentActivityFlags
 
-        val pi = PendingIntent.getActivities(context, 0,
-                buildIntentsToViewsLists(), PendingIntent.FLAG_UPDATE_CURRENT)
+        val pi = PendingIntent.getActivities(
+            context,
+            0,
+            buildIntentsToViewsLists(),
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            } else {
+                PendingIntent.FLAG_UPDATE_CURRENT
+            }
+        )
 
         try {
             pi.send()
