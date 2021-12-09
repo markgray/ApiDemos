@@ -26,23 +26,26 @@ class IsolatedServiceController : AppCompatActivity() {
      * IsolatedService2
      */
     class ServiceInfo(
-            /**
-             * "this" Activity in our call from onCreate of Controller Activity
-             */
-            val mActivity: Activity,
-            /**
-             * Class of the service to be controlled
-             */
-            val mClz: Class<*>, start: Int, stop: Int, bind: Int, status: Int) {
+        /**
+         * "this" Activity in our call from onCreate of Controller Activity
+         */
+        val mActivity: Activity,
+        /**
+         * Class of the service to be controlled
+         */
+        val mClz: Class<*>, start: Int, stop: Int, bind: Int, status: Int
+    ) {
 
         /**
          * [TextView] to display status in
          */
         lateinit var mStatus: TextView
+
         /**
          * [Boolean] flag for whether we are bound to or not = false
          */
         var mServiceBound: Boolean = false
+
         /**
          * Defined in IRemoteService.aidl
          */
@@ -65,6 +68,7 @@ class IsolatedServiceController : AppCompatActivity() {
         private val mStartListener = View.OnClickListener {
             mActivity.startService(Intent(mActivity, mClz))
         }
+
         /**
          * `OnClickListener` for the Button with resource ID `stop`, we create an [Intent] to stop
          * the service with the [Class] in our field [mClz] and stop it when the Button is clicked.
@@ -72,6 +76,7 @@ class IsolatedServiceController : AppCompatActivity() {
         private val mStopListener = View.OnClickListener {
             mActivity.stopService(Intent(mActivity, mClz))
         }
+
         /**
          * `OnClickListener` for the `CheckBox` with resource ID `bind`. When we are clicked, we
          * check to see if our `CheckBox` is checked and if so we check to make sure we are not
@@ -85,7 +90,12 @@ class IsolatedServiceController : AppCompatActivity() {
         private val mBindListener = View.OnClickListener { v ->
             if ((v as CheckBox).isChecked) {
                 if (!mServiceBound) {
-                    if (mActivity.bindService(Intent(mActivity, mClz), mConnection, Context.BIND_AUTO_CREATE)) {
+                    if (mActivity.bindService(
+                            Intent(mActivity, mClz),
+                            mConnection,
+                            Context.BIND_AUTO_CREATE
+                        )
+                    ) {
                         mServiceBound = true
                         mStatus.text = "BOUND"
                     }
@@ -98,6 +108,7 @@ class IsolatedServiceController : AppCompatActivity() {
                 }
             }
         }
+
         /**
          * [ServiceConnection] created and bound to when the "bind" [CheckBox] gets checked,
          * and disconnected from when it gets unchecked.
@@ -184,6 +195,7 @@ class IsolatedServiceController : AppCompatActivity() {
      * Holds the service information for our service `IsolatedService`
      */
     var mService1: ServiceInfo? = null
+
     /**
      * Holds the service information for our service `IsolatedService2`
      */
@@ -202,8 +214,22 @@ class IsolatedServiceController : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.isolated_service_controller)
-        mService1 = ServiceInfo(this, IsolatedService::class.java, R.id.start1, R.id.stop1, R.id.bind1, R.id.status1)
-        mService2 = ServiceInfo(this, IsolatedService2::class.java, R.id.start2, R.id.stop2, R.id.bind2, R.id.status2)
+        mService1 = ServiceInfo(
+            this,
+            IsolatedService::class.java,
+            R.id.start1,
+            R.id.stop1,
+            R.id.bind1,
+            R.id.status1
+        )
+        mService2 = ServiceInfo(
+            this,
+            IsolatedService2::class.java,
+            R.id.start2,
+            R.id.stop2,
+            R.id.bind2,
+            R.id.status2
+        )
     }
 
     /**

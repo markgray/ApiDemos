@@ -37,11 +37,13 @@ open class IsolatedService : Service() {
      * that it can be accessed more efficiently from inner classes.
      */
     val mCallbacks = RemoteCallbackList<IRemoteServiceCallback>()
+
     /**
      * No idea what this was intended for, suspect it to be a relic of code pasting.
      */
     @Suppress("unused")
     var mValue = 0
+
     /**
      * Called by the system when the service is first created. We simply log the fact that we have
      * been created.

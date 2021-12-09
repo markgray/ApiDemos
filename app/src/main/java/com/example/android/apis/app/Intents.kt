@@ -24,8 +24,10 @@ import com.example.android.apis.R
 
 /**
  * Uses Intent.createChooser(Intent, "title") to create a "chooser intent"  from three different
- * mime types ("audio/(any), "image/(any), and "(any)/(any)") of Intent.ACTION_GET_CONTENT Intents based on which
- * button the user clicks, and it then hands the created "chooser Intent" to startActivity(Intent)
+ * mime types ("audio/(any), "image/(any), and "(any)/(any)") of Intent.ACTION_GET_CONTENT Intents
+ * based on which button the user clicks, and it then hands the created "chooser Intent" to
+ * startActivity(Intent)
+ *
  * Note: occurrences of slash star in comments are replace by /(any) to avoid kotlin compiler bug.
  */
 @Suppress("UNUSED_PARAMETER")

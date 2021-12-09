@@ -29,10 +29,9 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Build
-import androidx.annotation.RequiresApi
 import android.util.Log
 import android.widget.Toast
-
+import androidx.annotation.RequiresApi
 import com.example.android.apis.R
 
 /**
@@ -62,11 +61,12 @@ class JobWorkService : JobService() {
      *
      * Parameter: the `JobParameters` passed to the `onStartJob` override
      */
-    (
-            /**
-             * The `JobParameters` we were constructed to process.
-             */
-            private val mParams: JobParameters) : AsyncTask<Void, Void, Void>() {
+        (
+        /**
+         * The `JobParameters` we were constructed to process.
+         */
+        private val mParams: JobParameters
+    ) : AsyncTask<Void, Void, Void>() {
 
         /**
          * Override this method to perform a computation on a background thread. Our while loop is
@@ -158,8 +158,10 @@ class JobWorkService : JobService() {
      */
     override fun onCreate() {
         mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val chan1 = NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
-                NotificationManager.IMPORTANCE_DEFAULT)
+        val chan1 = NotificationChannel(
+            PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
         chan1.lightColor = Color.GREEN
         chan1.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
         mNM!!.createNotificationChannel(chan1)
@@ -234,17 +236,25 @@ class JobWorkService : JobService() {
      */
     private fun showNotification(text: String?) {
         // The PendingIntent to launch our activity if the user selects this notification
-        val contentIntent = PendingIntent.getActivity(this, 0,
-                Intent(this, JobWorkServiceActivity::class.java), 0)
+        val contentIntent = PendingIntent.getActivity(
+            this,
+            0,
+            Intent(this, JobWorkServiceActivity::class.java),
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                PendingIntent.FLAG_IMMUTABLE
+            } else {
+                0
+            }
+        )
 
         // Set the info for the views that show in the notification panel.
         val noteBuilder = Notification.Builder(this, PRIMARY_CHANNEL)
-                .setSmallIcon(R.drawable.stat_sample)  // the status icon
-                .setTicker(text)  // the status text
-                .setWhen(System.currentTimeMillis())  // the time stamp
-                .setContentTitle(getText(R.string.service_start_arguments_label))  // the label
-                .setContentText(text)  // the contents of the entry
-                .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
+            .setSmallIcon(R.drawable.stat_sample)  // the status icon
+            .setTicker(text)  // the status text
+            .setWhen(System.currentTimeMillis())  // the time stamp
+            .setContentTitle(getText(R.string.service_start_arguments_label))  // the label
+            .setContentText(text)  // the contents of the entry
+            .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
 
         // We show this for as long as our service is processing a command.
         noteBuilder.setOngoing(true)
