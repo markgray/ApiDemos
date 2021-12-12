@@ -31,17 +31,17 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ListView
-
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.SearchView.OnCloseListener
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.ListFragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
-import androidx.cursoradapter.widget.SimpleCursorAdapter
-import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.SearchView.OnCloseListener
-import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import com.example.android.apis.app.LoaderCursor.CursorLoaderListFragment
 
 /**
  * Demonstration of the use of a CursorLoader to load and display contacts data in a fragment.
@@ -107,23 +107,23 @@ class LoaderCursor : AppCompatActivity() {
         internal var mCurFilter: String? = null
 
         /**
-         * Called when the fragment's activity has been created and this fragment's view hierarchy
-         * instantiated. First we call through to our super's implementaton of `onActivityCreated`,
-         * Then we set the text for the `TextView` of the default content for our `ListFragment`
-         * to the String "No phone numbers". Then we report that this fragment would like to participate
-         * in populating the options menu by receiving a call to [onCreateOptionsMenu] and related
-         * methods. Next we create an instance of [SimpleCursorAdapter] with a *null* cursor (we
-         * will set the cursor for the adapter later) and save a reference to it in our
-         * [SimpleCursorAdapter] field [mAdapter], which we then use to set our ListView's adapter.
-         * We call the [ListFragment] method `setListShown(false)` so that a indeterminate progress
-         * bar will be displayed while we wait for our Adapter to have data available for the List.
-         * Finally we start a loader (or reconnect) specifying *this* as the interface provider for
-         * [LoaderManager.LoaderCallbacks].
+         * Called when all saved state has been restored into the view hierarchy of the fragment.
+         * This is called after [onViewCreated] and before [onStart]. First we call through to our
+         * super's implementaton of `onViewStateRestored`, then we set the text for the `TextView`
+         * of the default content for our `ListFragment` to the String "No phone numbers". Then we
+         * report that this fragment would like to participate in populating the options menu by
+         * receiving a call to [onCreateOptionsMenu] and related methods. Next we create an instance
+         * of [SimpleCursorAdapter] with a *null* cursor (we will set the cursor for the adapter
+         * later) and save a reference to it in our [SimpleCursorAdapter] field [mAdapter], which we
+         * then use to set our ListView's adapter. We call the [ListFragment] method `setListShown`
+         * with `false` so that a indeterminate progress bar will be displayed while we wait for our
+         * Adapter to have data available for the List. Finally we start a loader (or reconnect)
+         * specifying *this* as the interface provider for [LoaderManager.LoaderCallbacks].
          *
          * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
          */
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
+        override fun onViewStateRestored(savedInstanceState: Bundle?) {
+            super.onViewStateRestored(savedInstanceState)
 
             // Give some text to display if there is no data.  In a real
             // application this would come from a resource.
@@ -134,9 +134,9 @@ class LoaderCursor : AppCompatActivity() {
 
             // Create an empty adapter we will use to display the loaded data.
             mAdapter = SimpleCursorAdapter(activity,
-                    android.R.layout.simple_list_item_2, null,
-                    arrayOf(Contacts.DISPLAY_NAME, Contacts.CONTACT_STATUS),
-                    intArrayOf(android.R.id.text1, android.R.id.text2), 0)
+                android.R.layout.simple_list_item_2, null,
+                arrayOf(Contacts.DISPLAY_NAME, Contacts.CONTACT_STATUS),
+                intArrayOf(android.R.id.text1, android.R.id.text2), 0)
             listAdapter = mAdapter
 
             // Start out with a progress indicator.
