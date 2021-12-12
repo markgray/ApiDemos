@@ -26,14 +26,14 @@ import com.example.android.apis.R
 /**
  * This Activity actually handles two stages of a launcher shortcut's life cycle.
  *
- * 1. Your application offers to provide shortcuts to the launcher.  When
- * the user installs a shortcut, an activity within your application
- * generates the actual shortcut and returns it to the launcher, where it
- * is shown to the user as an icon.
+ *  1. Your application offers to provide shortcuts to the launcher.  When
+ *  the user installs a shortcut, an activity within your application
+ *  generates the actual shortcut and returns it to the launcher, where it
+ *  is shown to the user as an icon.
  *
- * 2. Any time the user clicks on an installed shortcut, an intent is sent.
- * Typically this would then be handled as necessary by an activity within
- * your application.
+ *  2. Any time the user clicks on an installed shortcut, an intent is sent.
+ *  Typically this would then be handled as necessary by an activity within
+ *  your application.
  *
  * We handle stage 1 (creating a shortcut) by simply sending back the information (in the form
  * of an [android.content.Intent] that the launcher will use to create the shortcut.
@@ -48,7 +48,7 @@ import com.example.android.apis.R
  * In a real application, you would probably use the shortcut intent to display specific content
  * or start a particular operation.
  */
-@Suppress("DEPRECATION")
+@Suppress("DEPRECATION") // TODO: use ShortcutManager for SDK >= 25
 class LauncherShortcuts : AppCompatActivity() {
 
     /**
