@@ -16,6 +16,9 @@
 
 package com.example.android.apis.app
 
+import android.R.drawable
+import android.R.id
+import android.R.layout
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
@@ -48,6 +51,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnCloseListener
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.ListFragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.AsyncTaskLoader
@@ -88,9 +92,9 @@ class LoaderCustom : AppCompatActivity() {
         val fm = supportFragmentManager
 
         // Create the list fragment and add it as our sole content.
-        if (fm.findFragmentById(android.R.id.content) == null) {
+        if (fm.findFragmentById(id.content) == null) {
             val list = AppListFragment()
-            fm.beginTransaction().add(android.R.id.content, list).commit()
+            fm.beginTransaction().add(id.content, list).commit()
         } else {
             Log.i(TAG, "There is already an android.R.id.content Fragment")
         }
@@ -112,20 +116,21 @@ class LoaderCustom : AppCompatActivity() {
      * Parameter: info   one of the `ApplicationInfo` instances of the list that is returned
      * from the call to `PackageManager.getInstalledApplications`
      */
-    (
-            /**
-             * [AppListLoader] which created us using its *this*
-             */
-            private val mLoader: AppListLoader,
-            /**
-             * ApplicationInfo for package we are assigned to
-             */
-            val applicationInfo: ApplicationInfo
+        (
+        /**
+         * [AppListLoader] which created us using its *this*
+         */
+        private val mLoader: AppListLoader,
+        /**
+         * ApplicationInfo for package we are assigned to
+         */
+        val applicationInfo: ApplicationInfo
     ) {
         /**
          * Full path to the base APK for the package
          */
         private val mApkFile: File = File(applicationInfo.sourceDir)
+
         /**
          * Application label as discovered by the method loadLabel
          */
@@ -168,7 +173,6 @@ class LoaderCustom : AppCompatActivity() {
          * icon android.R.drawable.sym_def_app_icon
          */
         val icon: Drawable?
-            @SuppressLint("UseCompatLoadingForDrawables")
             get() {
                 if (mIcon == null) {
                     if (mApkFile.exists()) {
@@ -189,10 +193,11 @@ class LoaderCustom : AppCompatActivity() {
                     return mIcon
                 }
 
-                @Suppress("DEPRECATION")
-                return mLoader.context
-                        .resources
-                        .getDrawable(android.R.drawable.sym_def_app_icon)
+                return ResourcesCompat.getDrawable(
+                    mLoader.context.resources,
+                    drawable.sym_def_app_icon,
+                    null
+                )
             }
 
         /**
@@ -233,9 +238,9 @@ class LoaderCustom : AppCompatActivity() {
                     label = applicationInfo.packageName
                 } else {
                     mMounted = true
-                    val label: CharSequence? = applicationInfo.loadLabel(context.packageManager)
+                    val label: CharSequence = applicationInfo.loadLabel(context.packageManager)
 
-                    this.label = label?.toString() ?: applicationInfo.packageName
+                    this.label = label.toString()
                 }
             }
         }
@@ -288,7 +293,8 @@ class LoaderCustom : AppCompatActivity() {
             val configChanges = mLastConfiguration.updateFrom(res.configuration)
             val densityChanged = mLastDensity != res.displayMetrics.densityDpi
             if (densityChanged || configChanges and (ActivityInfo.CONFIG_LOCALE
-                            or ActivityInfo.CONFIG_UI_MODE or ActivityInfo.CONFIG_SCREEN_LAYOUT) != 0) {
+                    or ActivityInfo.CONFIG_UI_MODE or ActivityInfo.CONFIG_SCREEN_LAYOUT) != 0
+            ) {
                 mLastDensity = res.displayMetrics.densityDpi
                 return true
             }
@@ -330,11 +336,11 @@ class LoaderCustom : AppCompatActivity() {
      * `onContentChanged` (which it  inherits unchanged from its superclass `AsyncTaskLoader`)
      * when the [AppListLoader] needs to reload its data.
      */
-    (
-            /**
-             * [Loader] that is interested in changes made to installed apps.
-             */
-            internal val mLoader: AppListLoader
+        (
+        /**
+         * [Loader] that is interested in changes made to installed apps.
+         */
+        internal val mLoader: AppListLoader
     ) : BroadcastReceiver() {
 
         init {
@@ -375,7 +381,7 @@ class LoaderCustom : AppCompatActivity() {
      *
      * @param context used only to pass on to our super's constructor
      */
-    (context: Context) : AsyncTaskLoader<List<AppEntry>>(context) {
+        (context: Context) : AsyncTaskLoader<List<AppEntry>>(context) {
 
         /**
          * Helper for determining if the configuration has changed in a way that may require us
@@ -425,7 +431,9 @@ class LoaderCustom : AppCompatActivity() {
 
             @SuppressLint("InlinedApi")
             var apps: List<ApplicationInfo>? = mPm.getInstalledApplications(
-                    PackageManager.MATCH_UNINSTALLED_PACKAGES or PackageManager.MATCH_DISABLED_COMPONENTS)
+                PackageManager.MATCH_UNINSTALLED_PACKAGES
+                    or PackageManager.MATCH_DISABLED_COMPONENTS
+            )
 
             if (apps == null) {
                 apps = ArrayList()
@@ -628,7 +636,7 @@ class LoaderCustom : AppCompatActivity() {
      * @param context This is the [Context] to use, in our case it is the [Activity]
      * returned by `getActivity()`
      */
-    (context: Context) : ArrayAdapter<AppEntry>(context, android.R.layout.simple_list_item_2) {
+        (context: Context) : ArrayAdapter<AppEntry>(context, layout.simple_list_item_2) {
 
         /**
          * `LayoutInflater` created in constructor using the `Context` passed it to get
@@ -637,7 +645,8 @@ class LoaderCustom : AppCompatActivity() {
          * is then used in our `getView` override when it needs to inflate the layout file
          * for a `List` item `View`.
          */
-        private val mInflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        private val mInflater: LayoutInflater =
+            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         /**
          * Sets the contents of our [ArrayAdapter]. First we remove all elements from our list,
@@ -672,9 +681,9 @@ class LoaderCustom : AppCompatActivity() {
          */
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view: View = convertView ?: mInflater.inflate(
-                    R.layout.list_item_icon_text,
-                    parent,
-                    false
+                R.layout.list_item_icon_text,
+                parent,
+                false
             )
 
             val item = getItem(position)
@@ -690,10 +699,9 @@ class LoaderCustom : AppCompatActivity() {
      * The [ListFragment] which displays the data from our custom [AppListAdapter] in its list.
      */
     class AppListFragment : ListFragment(),
-            OnQueryTextListener,
-            OnCloseListener,
-            LoaderManager.LoaderCallbacks<List<AppEntry>>
-    {
+        OnQueryTextListener,
+        OnCloseListener,
+        LoaderManager.LoaderCallbacks<List<AppEntry>> {
 
         /**
          * This is the Adapter being used to display the list's data.
@@ -711,24 +719,23 @@ class LoaderCustom : AppCompatActivity() {
         internal var mCurFilter: String? = null
 
         /**
-         * Called when the fragment's activity has been created and this fragment's view hierarchy
-         * instantiated. First we call through to our super's implementation of `onActivityCreated`,
-         * then we set the empty text to be shown in our [ListView] if we are unable to load any
-         * data to the string "No applications". Then we report that this fragment would like to
-         * participate in populating the options menu by receiving a call to [onCreateOptionsMenu]
-         * and related methods. We initialize our [AppListAdapter] field [mAdapter] with an instance
-         * of our custom adapter [AppListAdapter] using the [Activity] our Fragment is associated
-         * with as the [Context]. and set our list adapter to [mAdapter]. We set our [ListView] to
-         * display an indeterminate progress indicator while we wait for our loader to finish
-         * loading its data. Then we initialize the loader using *this* for the
-         * [LoaderManager.LoaderCallbacks] parameter (so our methods [onCreateLoader],
-         * [onLoadFinished], and [onLoaderReset] will be called.)
+         * Called when all saved state has been restored into the view hierarchy of the fragment.
+         * This is called after [onViewCreated] and before [onStart]. First we call through to our
+         * super's implementation of `onViewStateRestored`, then we set the empty text to be shown
+         * in our [ListView] if we are unable to load any data to the string "No applications". Then
+         * we report that this fragment would like to participate in populating the options menu by
+         * receiving a call to [onCreateOptionsMenu] and related methods. We initialize our
+         * [AppListAdapter] field [mAdapter] with an instance of our custom adapter [AppListAdapter]
+         * using the [Activity] our Fragment is associated with as the [Context]. and set our list
+         * adapter to [mAdapter]. We set our [ListView] to display an indeterminate progress
+         * indicator while we wait for our loader to finish loading its data. Then we initialize
+         * the loader using *this* for the [LoaderManager.LoaderCallbacks] parameter (so our methods
+         * [onCreateLoader], [onLoadFinished], and [onLoaderReset] will be called.)
          *
          * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
          */
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
-
+        override fun onViewStateRestored(savedInstanceState: Bundle?) {
+            super.onViewStateRestored(savedInstanceState)
             // Give some text to display if there is no data.  In a real
             // application this would come from a resource.
             setEmptyText("No applications")
@@ -745,8 +752,7 @@ class LoaderCustom : AppCompatActivity() {
 
             // Prepare the loader.  Either re-connect with an existing one,
             // or start a new one.
-            @Suppress("DEPRECATION")
-            loaderManager.initLoader(0, null, this)
+            LoaderManager.getInstance(this).initLoader(0, null, this)
         }
 
         /**
@@ -758,7 +764,7 @@ class LoaderCustom : AppCompatActivity() {
          *
          * @param context Activity returned from `getActivity` in our case.
          */
-        (context: Context) : SearchView(context) {
+            (context: Context) : SearchView(context) {
 
             /**
              * Called when this view is collapsed as an action view.
@@ -795,9 +801,9 @@ class LoaderCustom : AppCompatActivity() {
         override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
             // Place an action bar item for searching.
             val item = menu.add("Search")
-            item.setIcon(android.R.drawable.ic_menu_search)
+            item.setIcon(drawable.ic_menu_search)
             item.setShowAsAction(
-                    MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW
+                MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW
             )
             mSearchView = MySearchView(activity as Context)
             mSearchView.setOnQueryTextListener(this)
