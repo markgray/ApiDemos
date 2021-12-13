@@ -195,7 +195,7 @@ class MessengerService : Service() {
                 this,
                 0,
                 Intent(this, MessengerServiceActivities.Binding::class.java),
-                0
+                PendingIntent.FLAG_IMMUTABLE
         )
         /**
          * Set the info for the views that show in the notification panel.
