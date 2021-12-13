@@ -64,7 +64,7 @@ class NotificationBackgroundService : Service() {
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
 
         (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
-                .cancel(R.layout.notification_background_service)
+            .cancel(R.layout.notification_background_service)
         stopSelf(startId)
         return START_NOT_STICKY
     }
@@ -124,7 +124,7 @@ class NotificationBackgroundService : Service() {
 
             mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val chan1 = NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
-                    NotificationManager.IMPORTANCE_DEFAULT)
+                NotificationManager.IMPORTANCE_DEFAULT)
             chan1.lightColor = Color.GREEN
             chan1.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
             mNM!!.createNotificationChannel(chan1)
@@ -150,18 +150,22 @@ class NotificationBackgroundService : Service() {
         @Suppress("SameParameterValue")
         private fun showNotification(text: CharSequence) {
             // The PendingIntent to launch our activity if the user selects this notification
-            val contentIntent = PendingIntent.getService(this, 0,
-                    Intent(this, NotificationBackgroundService::class.java), 0)
+            val contentIntent = PendingIntent.getService(
+                this,
+                0,
+                Intent(this, NotificationBackgroundService::class.java),
+                PendingIntent.FLAG_IMMUTABLE
+            )
 
             // Set the info for the views that show in the notification panel.
             val notification = Notification.Builder(this, PRIMARY_CHANNEL)
-                    .setSmallIcon(R.drawable.stat_sample)  // the status icon
-                    .setTicker(text)  // the status text
-                    .setWhen(System.currentTimeMillis())  // the time stamp
-                    .setContentTitle(getText(R.string.notification_background_label))  // the label of the entry
-                    .setContentText(text)  // the contents of the entry
-                    .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
-                    .build()
+                .setSmallIcon(R.drawable.stat_sample)  // the status icon
+                .setTicker(text)  // the status text
+                .setWhen(System.currentTimeMillis())  // the time stamp
+                .setContentTitle(getText(R.string.notification_background_label))  // the label of the entry
+                .setContentText(text)  // the contents of the entry
+                .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
+                .build()
 
             // Send the notification.
             // We use a layout id because it is a unique number.  We use it later to cancel.
