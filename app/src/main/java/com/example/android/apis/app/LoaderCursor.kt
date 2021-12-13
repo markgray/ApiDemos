@@ -144,8 +144,7 @@ class LoaderCursor : AppCompatActivity() {
 
             // Prepare the loader.  Either re-connect with an existing one,
             // or start a new one.
-            @Suppress("DEPRECATION")
-            loaderManager.initLoader(0, null, this)
+            LoaderManager.getInstance(this).initLoader(0, null, this)
         }
 
         /**
@@ -246,8 +245,7 @@ class LoaderCursor : AppCompatActivity() {
                 return true
             }
             mCurFilter = newFilter
-            @Suppress("DEPRECATION")
-            loaderManager.restartLoader(0, null, this)
+            LoaderManager.getInstance(this).restartLoader(0, null, this)
             return true
         }
 
