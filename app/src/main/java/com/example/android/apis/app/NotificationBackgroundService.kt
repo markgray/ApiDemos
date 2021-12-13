@@ -27,6 +27,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import android.view.View.OnClickListener
 import android.widget.Button
 
@@ -63,6 +64,7 @@ class NotificationBackgroundService : Service() {
      */
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
 
+        Log.i("NotificationBService", " I have been started")
         (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
             .cancel(R.layout.notification_background_service)
         stopSelf(startId)
