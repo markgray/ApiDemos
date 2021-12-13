@@ -99,24 +99,25 @@ class LoaderRetained : AppCompatActivity() {
         internal var mCurFilter: String? = null
 
         /**
-         * Called when the fragment's activity has been created and this fragment's view hierarchy
-         * instantiated. First we call through to our super's implementation of `onActivityCreated`,
-         * and then we set the retain instance state flag of our Fragment to true. We set the empty
-         * text of our List that will be shown if there is no data to "No phone numbers". We report
-         * that this fragment would like to participate in populating the options menu (system will
-         * now call [onCreateOptionsMenu] and related methods). We initialize our [SimpleCursorAdapter]
-         * field [mAdapter] with an empty [SimpleCursorAdapter], and set our list's adapter to
-         * [mAdapter]. We set the list to not be displayed while the data is being loaded so the
-         * indefinite progress bar will be displayed to start with. Then we make sure a loader is
-         * initialized and connected to us.
+         * Called when all saved state has been restored into the view hierarchy of the fragment.
+         * This is called after [onViewCreated] and before [onStart]. First we call through to our
+         * super's implementation of `onViewStateRestored`, and then we set the retain instance
+         * state flag of our Fragment to `true`. We set the empty text of our List that will be
+         * shown if there is no data to "No phone numbers". We report that this fragment would like
+         * to participate in populating the options menu (system will now call [onCreateOptionsMenu]
+         * and related methods). We initialize our [SimpleCursorAdapter] field [mAdapter] with an
+         * empty [SimpleCursorAdapter], and set our list's adapter to [mAdapter]. We set the list to
+         * not be displayed while the data is being loaded so the indefinite progress bar will be
+         * displayed to start with. Then we make sure a loader is initialized and connected to us.
          *
          * @param savedInstanceState We do not override [onSaveInstanceState] so do not use.
          */
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
+        override fun onViewStateRestored(savedInstanceState: Bundle?) {
+            super.onViewStateRestored(savedInstanceState)
 
             // In this sample we are going to use a retained fragment.
-            retainInstance = true
+            @Suppress("DEPRECATION")
+            retainInstance = true // TODO: replace this with ViewModel to retain data
 
             // Give some text to display if there is no data.  In a real
             // application this would come from a resource.
@@ -127,9 +128,9 @@ class LoaderRetained : AppCompatActivity() {
 
             // Create an empty adapter we will use to display the loaded data.
             mAdapter = SimpleCursorAdapter(activity,
-                    android.R.layout.simple_list_item_2, null,
-                    arrayOf(Contacts.DISPLAY_NAME, Contacts.CONTACT_STATUS),
-                    intArrayOf(android.R.id.text1, android.R.id.text2), 0)
+                android.R.layout.simple_list_item_2, null,
+                arrayOf(Contacts.DISPLAY_NAME, Contacts.CONTACT_STATUS),
+                intArrayOf(android.R.id.text1, android.R.id.text2), 0)
             listAdapter = mAdapter
 
             // Start out with a progress indicator.
@@ -137,8 +138,7 @@ class LoaderRetained : AppCompatActivity() {
 
             // Prepare the loader.  Either re-connect with an existing one,
             // or start a new one.
-            @Suppress("DEPRECATION")
-            loaderManager.initLoader(0, null, this)
+            LoaderManager.getInstance(this).initLoader(0, null, this)
         }
 
         /**
@@ -221,8 +221,7 @@ class LoaderRetained : AppCompatActivity() {
                 return true
             }
             mCurFilter = newFilter
-            @Suppress("DEPRECATION")
-            loaderManager.restartLoader(0, null, this)
+            LoaderManager.getInstance(this).restartLoader(0, null, this)
             return true
         }
 
