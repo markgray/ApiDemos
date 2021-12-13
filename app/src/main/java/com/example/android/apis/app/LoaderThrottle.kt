@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+@file:Suppress("DEPRECATION")
+// TODO: replace AsyncTask with coroutine approach.
 package com.example.android.apis.app
-
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
@@ -366,15 +366,14 @@ class LoaderThrottle : AppCompatActivity() {
             val qb = SQLiteQueryBuilder()
             qb.tables = MainTable.TABLE_NAME
 
-            @Suppress("UsePropertyAccessSyntax")
             when (mUriMatcher.match(uri)) {
                 MAIN ->
                     // If the incoming URI is for main table.
-                    qb.setProjectionMap(mNotesProjectionMap)
+                    qb.projectionMap = mNotesProjectionMap
 
                 MAIN_ID -> {
                     // The incoming URI is for a single row.
-                    qb.setProjectionMap(mNotesProjectionMap)
+                    qb.projectionMap = mNotesProjectionMap
                     qb.appendWhere(BaseColumns._ID + "=?")
                     selectionArgsLocal = DatabaseUtils.appendSelectionArgs(selectionArgsLocal,
                             arrayOf(uri.lastPathSegment!!))
@@ -412,7 +411,7 @@ class LoaderThrottle : AppCompatActivity() {
          * @param uri the URI to query.
          * @return a MIME type string, or *null* if there is no type.
          */
-        override fun getType(uri: Uri): String? {
+        override fun getType(uri: Uri): String {
             return when (mUriMatcher.match(uri)) {
                 MAIN -> MainTable.CONTENT_TYPE
                 MAIN_ID -> MainTable.CONTENT_ITEM_TYPE
@@ -458,7 +457,7 @@ class LoaderThrottle : AppCompatActivity() {
          * This must not be `null`.
          * @return The URI for the newly inserted item.
          */
-        override fun insert(uri: Uri, initialValues: ContentValues?): Uri? {
+        override fun insert(uri: Uri, initialValues: ContentValues?): Uri {
             require(mUriMatcher.match(uri) == MAIN) { // Can only insert into to main URI.
                 "Unknown URI $uri"
             }
@@ -688,7 +687,6 @@ class LoaderThrottle : AppCompatActivity() {
          *
          * @param savedInstanceState we do not override `onSaveInstanceState` so do not use this
          */
-        @SuppressLint("UseRequireInsteadOfGet")
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
 
@@ -708,8 +706,7 @@ class LoaderThrottle : AppCompatActivity() {
 
             // Prepare the loader.  Either re-connect with an existing one,
             // or start a new one.
-            @Suppress("DEPRECATION")
-            loaderManager.initLoader(0, null, this)
+            LoaderManager.getInstance(this).initLoader(0, null, this)
         }
 
         /**
@@ -760,7 +757,7 @@ class LoaderThrottle : AppCompatActivity() {
          * @return boolean Return *false* to allow normal menu processing to
          * proceed, *true* to consume it here.
          */
-        @SuppressLint("StaticFieldLeak", "UseRequireInsteadOfGet")
+        @SuppressLint("StaticFieldLeak")
         override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
             val cr = activity!!.contentResolver
@@ -877,7 +874,6 @@ class LoaderThrottle : AppCompatActivity() {
          * @param args Any arguments supplied by the caller. (We do not use arguments)
          * @return Return a new [Loader] instance that is ready to start loading.
          */
-        @SuppressLint("UseRequireInsteadOfGet")
         override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
 
             val cl = CursorLoader(
