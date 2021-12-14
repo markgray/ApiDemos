@@ -38,7 +38,7 @@ import java.util.Calendar
  * one-shot alarm goes off, and [RepeatingAlarm] for the code run when the repeating alarm goes off.
  *
  * Demo
- * App/Service/Alarm Controller
+ * App/Alarm/Alarm Controller
  *
  * Source files:
  *  - src/com.example.android.apis/app/AlarmController.kt
@@ -94,8 +94,12 @@ class AlarmController : AppCompatActivity() {
         // AndroidManifest.xml) instantiated and called, and then create an
         // IntentSender to have the intent executed as a broadcast.
         val intent = Intent(this@AlarmController, OneShotAlarm::class.java)
-        val sender = PendingIntent.getBroadcast(this@AlarmController,
-                0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val sender = PendingIntent.getBroadcast(
+            this@AlarmController,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
 
         // We want the alarm to go off 30 seconds from now.
         val calendar = Calendar.getInstance()
@@ -111,14 +115,16 @@ class AlarmController : AppCompatActivity() {
                 am.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, sender)
             else ->
                 am.setExactAndAllowWhileIdle(
-                        AlarmManager.RTC_WAKEUP, calendar.timeInMillis, sender)
+                    AlarmManager.RTC_WAKEUP, calendar.timeInMillis, sender
+                )
         }
 
         // Tell the user about what we did.
         if (mToast != null) {
             mToast!!.cancel()
         }
-        mToast = Toast.makeText(this@AlarmController, R.string.one_shot_scheduled, Toast.LENGTH_LONG)
+        mToast =
+            Toast.makeText(this@AlarmController, R.string.one_shot_scheduled, Toast.LENGTH_LONG)
         mToast!!.show()
     }
 
@@ -149,8 +155,12 @@ class AlarmController : AppCompatActivity() {
         // Note that unlike above, this IntentSender is configured to
         // allow itself to be sent multiple times.
         val intent = Intent(this@AlarmController, RepeatingAlarm::class.java)
-        val sender = PendingIntent.getBroadcast(this@AlarmController,
-                0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val sender = PendingIntent.getBroadcast(
+            this@AlarmController,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
 
         // We want the alarm to go off 30 seconds from now.
         var firstTime = SystemClock.elapsedRealtime()
@@ -159,14 +169,17 @@ class AlarmController : AppCompatActivity() {
         // Schedule the alarm!
         val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                firstTime, (15 * 1000).toLong(), sender)
+        am.setRepeating(
+            AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            firstTime, (15 * 1000).toLong(), sender
+        )
 
         // Tell the user about what we did.
         if (mToast != null) {
             mToast!!.cancel()
         }
-        mToast = Toast.makeText(this@AlarmController, R.string.repeating_scheduled, Toast.LENGTH_LONG)
+        mToast =
+            Toast.makeText(this@AlarmController, R.string.repeating_scheduled, Toast.LENGTH_LONG)
         mToast!!.show()
     }
 
@@ -188,8 +201,12 @@ class AlarmController : AppCompatActivity() {
         // Create the same intent, and thus a matching IntentSender, for
         // the one that was scheduled.
         val intent = Intent(this@AlarmController, RepeatingAlarm::class.java)
-        val sender = PendingIntent.getBroadcast(this@AlarmController,
-                0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val sender = PendingIntent.getBroadcast(
+            this@AlarmController,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
 
         // And cancel the alarm.
         val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -200,7 +217,8 @@ class AlarmController : AppCompatActivity() {
         if (mToast != null) {
             mToast!!.cancel()
         }
-        mToast = Toast.makeText(this@AlarmController, R.string.repeating_unscheduled, Toast.LENGTH_LONG)
+        mToast =
+            Toast.makeText(this@AlarmController, R.string.repeating_unscheduled, Toast.LENGTH_LONG)
         mToast!!.show()
     }
 

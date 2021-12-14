@@ -48,6 +48,7 @@ import android.widget.Spinner
 import android.widget.TextView
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 
 import com.example.android.apis.R
 import kotlin.math.max
@@ -84,18 +85,22 @@ class PresentationActivity
      * Used to manage the properties of attached displays
      */
     private var mDisplayManager: DisplayManager? = null
+
     /**
      * An `ArrayAdapter<Display>` to list displays
      */
     private var mDisplayListAdapter: DisplayListAdapter? = null
+
     /**
      * `Checkbox` in layout for displaying all displays
      */
     private var mShowAllDisplaysCheckbox: CheckBox? = null
+
     /**
      * `ListView` in layout in which we display our list of displays.
      */
     private var mListView: ListView? = null
+
     /**
      * Used to cycle through the 8 photos displayed
      */
@@ -191,7 +196,7 @@ class PresentationActivity
      */
     private val mOnDismissListener = DialogInterface.OnDismissListener { dialog ->
 
-        if(dialog == null) return@OnDismissListener
+        if (dialog == null) return@OnDismissListener
         val presentation = dialog as DemoPresentation
         val displayId = presentation.display.displayId
         Log.d(TAG, "Presentation on display #$displayId was dismissed.")
@@ -361,8 +366,10 @@ class PresentationActivity
             return
         }
 
-        Log.d(TAG, "Showing presentation photo #" + contents.photo
-                + " on display #" + displayId + ".")
+        Log.d(
+            TAG, "Showing presentation photo #" + contents.photo
+                + " on display #" + displayId + "."
+        )
 
         val presentation = DemoPresentation(this, display, contents)
         presentation.show()
@@ -466,22 +473,26 @@ class PresentationActivity
         val display = v.tag as Display
         val r = context.resources
         val alert = builder
-                .setTitle(r.getString(
-                        R.string.presentation_alert_info_text, display.displayId))
-                .setMessage(display.toString())
-                .setNeutralButton(R.string.presentation_alert_dismiss_text
-                ) { dialog, which ->
-                    /**
-                     * Called when the "OK" Button is clicked, we simply dismiss the dialog.
-                     *
-                     * @param dialog The dialog that received the click.
-                     * @param which The button that was clicked (e.g.
-                     * [DialogInterface.BUTTON1]) or
-                     * the position of the item clicked.
-                     */
-                    dialog.dismiss()
-                }
-                .create()
+            .setTitle(
+                r.getString(
+                    R.string.presentation_alert_info_text, display.displayId
+                )
+            )
+            .setMessage(display.toString())
+            .setNeutralButton(
+                R.string.presentation_alert_dismiss_text
+            ) { dialog, which ->
+                /**
+                 * Called when the "OK" Button is clicked, we simply dismiss the dialog.
+                 *
+                 * @param dialog The dialog that received the click.
+                 * @param which The button that was clicked (e.g.
+                 * [DialogInterface.BUTTON1]) or
+                 * the position of the item clicked.
+                 */
+                dialog.dismiss()
+            }
+            .create()
         alert.show()
     }
 
@@ -500,10 +511,12 @@ class PresentationActivity
     override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val display = parent.tag as Display
         val modes = display.supportedModes
-        setPresentationDisplayMode(display, if (position >= 1 && position <= modes.size)
-            modes[position - 1].modeId
-        else
-            0)
+        setPresentationDisplayMode(
+            display, if (position >= 1 && position <= modes.size)
+                modes[position - 1].modeId
+            else
+                0
+        )
     }
 
     /**
@@ -530,11 +543,12 @@ class PresentationActivity
      *
      * Parameter: context PresentationActivity Context ("this" in onCreate())
      */
-    (
-            /**
-             * `Context` passed to our constructor.
-             */
-            internal val mContext: Context) : ArrayAdapter<Display>(mContext, R.layout.presentation_list_item) {
+        (
+        /**
+         * `Context` passed to our constructor.
+         */
+        val mContext: Context
+    ) : ArrayAdapter<Display>(mContext, R.layout.presentation_list_item) {
 
         /**
          * This method just checks whether the `CheckBox mShowAllDisplaysCheckbox` ("Show all
@@ -610,8 +624,8 @@ class PresentationActivity
         @SuppressLint("InflateParams", "DefaultLocale")
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val v: View = convertView ?: (mContext as AppCompatActivity)
-                    .layoutInflater
-                    .inflate(R.layout.presentation_list_item, null)
+                .layoutInflater
+                .inflate(R.layout.presentation_list_item, null)
 
             val display = getItem(position)
 
@@ -630,7 +644,8 @@ class PresentationActivity
 
             val tv = v.findViewById<TextView>(R.id.display_id)
             tv.text = v.context.resources.getString(
-                    R.string.presentation_display_id_text, displayId, display.name)
+                R.string.presentation_display_id_text, displayId, display.name
+            )
 
             val b = v.findViewById<Button>(R.id.info)
             b.tag = display
@@ -642,8 +657,10 @@ class PresentationActivity
                 s.visibility = View.GONE
                 s.adapter = null
             } else {
-                val modeAdapter = ArrayAdapter<String>(mContext,
-                        android.R.layout.simple_list_item_1)
+                val modeAdapter = ArrayAdapter<String>(
+                    mContext,
+                    android.R.layout.simple_list_item_1
+                )
                 s.visibility = View.VISIBLE
                 s.adapter = modeAdapter
                 s.tag = display
@@ -652,10 +669,14 @@ class PresentationActivity
                 modeAdapter.add("<default mode>")
 
                 for (mode in modes) {
-                    modeAdapter.add(String.format("Mode %d: %dx%d/%.1ffps",
+                    modeAdapter.add(
+                        String.format(
+                            "Mode %d: %dx%d/%.1ffps",
                             mode.modeId,
                             mode.physicalWidth, mode.physicalHeight,
-                            mode.refreshRate))
+                            mode.refreshRate
+                        )
+                    )
                     if (contents.displayModeId == mode.modeId) {
                         s.setSelection(modeAdapter.count - 1)
                     }
@@ -711,11 +732,13 @@ class PresentationActivity
      * @param display The display to which the presentation should be attached.
      * Parameter: contents Information about the content we want to show in the presentation.
      */
-    (context: Context, display: Display,
-     /**
-      * Information about the content we are showing in the presentation.
-      */
-     internal val mContents: DemoPresentationContents) : Presentation(context, display) {
+        (
+        context: Context, display: Display,
+        /**
+         * Information about the content we are showing in the presentation.
+         */
+        val mContents: DemoPresentationContents
+    ) : Presentation(context, display) {
 
         /**
          * Sets the preferred display mode id for the presentation. First we store the parameter `modeId`
@@ -778,13 +801,14 @@ class PresentationActivity
 
             // Show a caption to describe what's going on.
             val text = findViewById<TextView>(R.id.text)
-            text.text = r.getString(R.string.presentation_photo_text,
-                    photo, displayId, display.name)
+            text.text = r.getString(
+                R.string.presentation_photo_text,
+                photo, displayId, display.name
+            )
 
             // Show a n image for visual interest.
             val image = findViewById<ImageView>(R.id.image)
-            @Suppress("DEPRECATION")
-            image.setImageDrawable(r.getDrawable(PHOTOS[photo]))
+            image.setImageDrawable(ResourcesCompat.getDrawable(r, PHOTOS[photo], null))
 
             val drawable = GradientDrawable()
             drawable.shape = GradientDrawable.RECTANGLE
@@ -792,6 +816,7 @@ class PresentationActivity
 
             // Set the background to a random gradient.
             val p = Point()
+            @Suppress("DEPRECATION")
             getDisplay().getSize(p)
             drawable.gradientRadius = (max(p.x, p.y) / 2).toFloat()
             drawable.colors = mContents.colors
@@ -806,15 +831,17 @@ class PresentationActivity
         /**
          * Index into int[] PHOTOS array of Drawable resource id's for our photo
          */
-        internal val photo: Int
+        val photo: Int
+
         /**
          * Array of random colors used for the background
          */
-        internal val colors: IntArray
+        val colors: IntArray
+
         /**
          * Display mode Id we are to use.
          */
-        internal var displayModeId: Int = 0
+        var displayModeId: Int = 0
 
         /**
          * Constructs a DemoPresentationContents instance using the parameter `photo` as its
@@ -825,7 +852,10 @@ class PresentationActivity
          */
         constructor(photo: Int) {
             this.photo = photo
-            colors = intArrayOf((Math.random() * Integer.MAX_VALUE).toInt() or -0x1000000, (Math.random() * Integer.MAX_VALUE).toInt() or -0x1000000)
+            colors = intArrayOf(
+                (Math.random() * Integer.MAX_VALUE).toInt() or -0x1000000,
+                (Math.random() * Integer.MAX_VALUE).toInt() or -0x1000000
+            )
         }
 
         /**
@@ -877,34 +907,35 @@ class PresentationActivity
              */
             @Suppress("unused")
             @JvmField
-            val CREATOR: Parcelable.Creator<DemoPresentationContents> = object : Parcelable.Creator<DemoPresentationContents> {
-                /**
-                 * Create a new instance of the Parcelable class, instantiating it
-                 * from the given Parcel whose data had previously been written by
-                 * [Parcelable.writeToParcel()][Parcelable.writeToParcel].
-                 *
-                 *
-                 * We simply use the `Parcel in` to call our constructor that uses a
-                 * `Parcel` argument.
-                 *
-                 * @param in The Parcel to read the object's data from.
-                 * @return Returns a new instance of the Parcelable class DemoPresentationContents
-                 */
-                override fun createFromParcel(`in`: Parcel): DemoPresentationContents {
-                    return DemoPresentationContents(`in`)
-                }
+            val CREATOR: Parcelable.Creator<DemoPresentationContents> =
+                object : Parcelable.Creator<DemoPresentationContents> {
+                    /**
+                     * Create a new instance of the Parcelable class, instantiating it
+                     * from the given Parcel whose data had previously been written by
+                     * [Parcelable.writeToParcel()][Parcelable.writeToParcel].
+                     *
+                     *
+                     * We simply use the `Parcel in` to call our constructor that uses a
+                     * `Parcel` argument.
+                     *
+                     * @param in The Parcel to read the object's data from.
+                     * @return Returns a new instance of the Parcelable class DemoPresentationContents
+                     */
+                    override fun createFromParcel(`in`: Parcel): DemoPresentationContents {
+                        return DemoPresentationContents(`in`)
+                    }
 
-                /**
-                 * Create a new array of the Parcelable class DemoPresentationContents
-                 *
-                 * @param size Size of the array.
-                 * @return Returns an array of the Parcelable class, with every entry
-                 * initialized to null.
-                 */
-                override fun newArray(size: Int): Array<DemoPresentationContents?> {
-                    return arrayOfNulls(size)
+                    /**
+                     * Create a new array of the Parcelable class DemoPresentationContents
+                     *
+                     * @param size Size of the array.
+                     * @return Returns an array of the Parcelable class, with every entry
+                     * initialized to null.
+                     */
+                    override fun newArray(size: Int): Array<DemoPresentationContents?> {
+                        return arrayOfNulls(size)
+                    }
                 }
-            }
         }
     }
 
@@ -918,7 +949,16 @@ class PresentationActivity
         /**
          * The content that we want to show on the presentation.
          */
-        private val PHOTOS = intArrayOf(R.drawable.frantic, R.drawable.photo1, R.drawable.photo2, R.drawable.photo3, R.drawable.photo4, R.drawable.photo5, R.drawable.photo6, R.drawable.sample_4)
+        private val PHOTOS = intArrayOf(
+            R.drawable.frantic,
+            R.drawable.photo1,
+            R.drawable.photo2,
+            R.drawable.photo3,
+            R.drawable.photo4,
+            R.drawable.photo5,
+            R.drawable.photo6,
+            R.drawable.sample_4
+        )
 
         /**
          * TAG used for logging

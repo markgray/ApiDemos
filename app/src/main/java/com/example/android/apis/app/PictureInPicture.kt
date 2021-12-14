@@ -36,7 +36,6 @@ class PictureInPicture : AppCompatActivity() {
      *
      * Parameter: v `View` that was clicked.
      */
-
     private var mEnterPip: Button? = null
 
     /**
@@ -56,7 +55,7 @@ class PictureInPicture : AppCompatActivity() {
         mEnterPip = findViewById(R.id.enter_pip)
         mEnterPip!!.setOnClickListener {
             val pictureInPictureParams: PictureInPictureParams =
-                    PictureInPictureParams.Builder().build()
+                PictureInPictureParams.Builder().build()
             enterPictureInPictureMode(pictureInPictureParams)
         }
     }
@@ -69,7 +68,7 @@ class PictureInPicture : AppCompatActivity() {
      */
     override fun onUserLeaveHint() {
         val pictureInPictureParams: PictureInPictureParams =
-                PictureInPictureParams.Builder().build()
+            PictureInPictureParams.Builder().build()
         enterPictureInPictureMode(pictureInPictureParams)
     }
 }
