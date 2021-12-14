@@ -15,12 +15,11 @@
  */
 
 @file:Suppress("DEPRECATION")
+// TODO: Replace deprecated API usage
 
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import com.example.android.apis.R
-
 import android.app.ListActivity
 import android.content.Context
 import android.database.CharArrayBuffer
@@ -32,6 +31,7 @@ import android.view.ViewGroup
 import android.widget.QuickContactBadge
 import android.widget.ResourceCursorAdapter
 import android.widget.TextView
+import com.example.android.apis.R
 
 /**
  * Shows how to query the contacts database using a cursor, and display the results in a
