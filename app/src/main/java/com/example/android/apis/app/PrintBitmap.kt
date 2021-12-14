@@ -39,6 +39,7 @@ import com.example.android.apis.R
  */
 class PrintBitmap : AppCompatActivity() {
     private var mImageView: ImageView? = null
+
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.print_bitmap.

@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+// TODO: Fix the many deprecated method usages
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
@@ -187,16 +189,17 @@ class PrintCustomContent : ListActivity() {
      * Parameter: items    `List` of `MotoGpStatItem` data items for MotoGp winners
      * Parameter: inflater `LayoutInflater` to use in `getView` override
      */
-    (
-            /**
-             * `List` of data Objects for MotoGp winners initialized in constructor
-             */
-            private val mItems: List<MotoGpStatItem>,
-            /**
-             * `LayoutInflater` to use in `getView` override to inflate our xml layout file
-             * R.layout.motogp_stat_item
-             */
-            private val mInflater: LayoutInflater) : BaseAdapter() {
+        (
+        /**
+         * `List` of data Objects for MotoGp winners initialized in constructor
+         */
+        private val mItems: List<MotoGpStatItem>,
+        /**
+         * `LayoutInflater` to use in `getView` override to inflate our xml layout file
+         * R.layout.motogp_stat_item
+         */
+        private val mInflater: LayoutInflater
+    ) : BaseAdapter() {
 
         /**
          * Returns a clone of the MotoGp winner data items in our field `List<MotoGpStatItem> mItems`.
@@ -294,20 +297,24 @@ class PrintCustomContent : ListActivity() {
          * Width of page to be printed, it is the maximum width the printer will print
          */
         private var mRenderPageWidth = 0
+
         /**
          * Height of page to be printed, it is the maximum height the printer will print
          */
         private var mRenderPageHeight = 0
+
         /**
          * Copy of `PrintAttributes newAttributes` parameter to `onLayout` which we stash
          * for later use in background thread which does the actual printing.
          */
         private var mPrintAttributes: PrintAttributes? = null
+
         /**
          * `PrintDocumentInfo info` returned from AsyncTask launched by `onLayout`, used
          * in call to `LayoutResultCallback callback.onLayoutFinished`
          */
         private var mDocumentInfo: PrintDocumentInfo? = null
+
         /**
          * `Context` for resources at printer density created in `onLayout` using a
          * `Configuration` whose field `densityDpi` is set to a density calculated
@@ -396,11 +403,13 @@ class PrintCustomContent : ListActivity() {
          *
          * @see .EXTRA_PRINT_PREVIEW
          */
-        override fun onLayout(oldAttributes: PrintAttributes,
-                              newAttributes: PrintAttributes,
-                              cancellationSignal: CancellationSignal,
-                              callback: LayoutResultCallback,
-                              metadata: Bundle) { // If we are already cancelled, don't do any work.
+        override fun onLayout(
+            oldAttributes: PrintAttributes,
+            newAttributes: PrintAttributes,
+            cancellationSignal: CancellationSignal,
+            callback: LayoutResultCallback,
+            metadata: Bundle
+        ) { // If we are already cancelled, don't do any work.
             if (cancellationSignal.isCanceled) {
                 callback.onLayoutCancelled()
                 return
@@ -411,7 +420,7 @@ class PrintCustomContent : ListActivity() {
              */
             var layoutNeeded = false
             val density = newAttributes.resolution!!.horizontalDpi
-                    .coerceAtLeast(newAttributes.resolution!!.verticalDpi)
+                .coerceAtLeast(newAttributes.resolution!!.verticalDpi)
 
             /**
              * Note that we are using the PrintedPdfDocument class which creates
@@ -426,11 +435,11 @@ class PrintCustomContent : ListActivity() {
              * of pixels the printer can put horizontally.
              */
             val marginLeft = (density * newAttributes.minMargins!!
-                    .leftMils.toFloat() / MILS_IN_INCH).toInt()
+                .leftMils.toFloat() / MILS_IN_INCH).toInt()
             val marginRight = (density * newAttributes.minMargins!!
-                    .rightMils.toFloat() / MILS_IN_INCH).toInt()
+                .rightMils.toFloat() / MILS_IN_INCH).toInt()
             val contentWidth = (density * newAttributes.mediaSize!!
-                    .widthMils.toFloat() / MILS_IN_INCH).toInt() - marginLeft - marginRight
+                .widthMils.toFloat() / MILS_IN_INCH).toInt() - marginLeft - marginRight
             if (mRenderPageWidth != contentWidth) {
                 mRenderPageWidth = contentWidth
                 layoutNeeded = true
@@ -441,11 +450,11 @@ class PrintCustomContent : ListActivity() {
              * of pixels the printer can put vertically.
              */
             val marginTop = (density * newAttributes.minMargins!!
-                    .topMils.toFloat() / MILS_IN_INCH).toInt()
+                .topMils.toFloat() / MILS_IN_INCH).toInt()
             val marginBottom = (density * newAttributes.minMargins!!
-                    .bottomMils.toFloat() / MILS_IN_INCH).toInt()
+                .bottomMils.toFloat() / MILS_IN_INCH).toInt()
             val contentHeight = (density * newAttributes.mediaSize!!
-                    .heightMils.toFloat() / MILS_IN_INCH).toInt() - marginTop - marginBottom
+                .heightMils.toFloat() / MILS_IN_INCH).toInt() - marginTop - marginBottom
             if (mRenderPageHeight != contentHeight) {
                 mRenderPageHeight = contentHeight
                 layoutNeeded = true
@@ -456,11 +465,13 @@ class PrintCustomContent : ListActivity() {
              * resources for a density the printer supports.
              */
             if (mPrintContext == null || mPrintContext!!.resources
-                            .configuration.densityDpi != density) {
+                    .configuration.densityDpi != density
+            ) {
                 val configuration = Configuration()
                 configuration.densityDpi = density
                 mPrintContext = createConfigurationContext(
-                        configuration)
+                    configuration
+                )
                 @Suppress("DEPRECATION")
                 (mPrintContext as Context).setTheme(android.R.style.Theme_Holo_Light)
             }
@@ -482,7 +493,7 @@ class PrintCustomContent : ListActivity() {
              */
             val items = (listAdapter as MotoGpStatAdapter).cloneItems()
             MotoGpOnLayoutAsyncTask(cancellationSignal, newAttributes, items, callback)
-                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, null)
+                .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, null)
         }
 
         /**
@@ -539,10 +550,12 @@ class PrintCustomContent : ListActivity() {
          *
          * @see CancellationSignal
          */
-        override fun onWrite(pages: Array<PageRange>,
-                             destination: ParcelFileDescriptor,
-                             cancellationSignal: CancellationSignal,
-                             callback: WriteResultCallback) { // If we are already cancelled, don't do any work.
+        override fun onWrite(
+            pages: Array<PageRange>,
+            destination: ParcelFileDescriptor,
+            cancellationSignal: CancellationSignal,
+            callback: WriteResultCallback
+        ) { // If we are already cancelled, don't do any work.
             if (cancellationSignal.isCanceled) {
                 callback.onWriteCancelled()
                 return
@@ -550,7 +563,7 @@ class PrintCustomContent : ListActivity() {
             // Store the data as we will layout off the main thread.
             val items = (listAdapter as MotoGpStatAdapter).cloneItems()
             MotoGpOnWriteAsyncTask(cancellationSignal, items, pages, destination, callback)
-                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, null)
+                .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, null)
         }
 
         /**
@@ -572,13 +585,15 @@ class PrintCustomContent : ListActivity() {
          */
         private fun measureView(view: View?) {
             val widthMeasureSpec = ViewGroup.getChildMeasureSpec(
-                    MeasureSpec.makeMeasureSpec(mRenderPageWidth, MeasureSpec.EXACTLY),
-                    0,
-                    view!!.layoutParams.width)
+                MeasureSpec.makeMeasureSpec(mRenderPageWidth, MeasureSpec.EXACTLY),
+                0,
+                view!!.layoutParams.width
+            )
             val heightMeasureSpec = ViewGroup.getChildMeasureSpec(
-                    MeasureSpec.makeMeasureSpec(mRenderPageHeight, MeasureSpec.EXACTLY),
-                    0,
-                    view.layoutParams.height)
+                MeasureSpec.makeMeasureSpec(mRenderPageHeight, MeasureSpec.EXACTLY),
+                0,
+                view.layoutParams.height
+            )
             view.measure(widthMeasureSpec, heightMeasureSpec)
         }
 
@@ -618,14 +633,17 @@ class PrintCustomContent : ListActivity() {
              * List of [PageRange] structures we parse the [writtenPages] parameter into.
              */
             val pageRanges: MutableList<PageRange> = ArrayList()
+
             /**
              * Current start of the range of pages
              */
             var start: Int
+
             /**
              * Current end of the range of pages
              */
             var end: Int
+
             /**
              * Size of the [writtenPages] array, number of pages stored in it.
              */
@@ -666,7 +684,8 @@ class PrintCustomContent : ListActivity() {
         private fun containsPage(pageRanges: Array<PageRange>, page: Int): Boolean {
             for (pageRange: PageRange in pageRanges) {
                 if ((pageRange.start <= page
-                                && pageRange.end >= page)) {
+                        && pageRange.end >= page)
+                ) {
                     return true
                 }
             }
@@ -687,33 +706,33 @@ class PrintCustomContent : ListActivity() {
          * @param items A clone of the List of `MotoGpStatItem`'s displayed by our UI
          * @param callback Callback to inform the system for the layout result passed to `onLayout`
          */
-        internal constructor(
-                /**
-                 * This is a copy of the [CancellationSignal] passed to `onLayout` which allows
-                 * us to be canceled by setting a `OnCancelListener` on it.
-                 */
-                private val cancellationSignal: CancellationSignal,
-                /**
-                 * This is a copy of the [PrintAttributes] passed to `onLayout` which
-                 * represents the attributes of the print job. These attributes describe
-                 * how the printed content should be laid out.
-                 */
-                private val newAttributes: PrintAttributes,
-                /**
-                 * List of [MotoGpStatItem]'s which we display in our ListView and want to print.
-                 */
-                private val items: List<MotoGpStatItem>,
-                /**
-                 * Provides access to the three callbacks we need to return our result when
-                 * we are done:
-                 *  * `onLayoutFinished` - layout was successful, returns a `PrintDocumentInfo`
-                 *  which contains the information our layout determined.
-                 *  * `onLayoutCancelled` - Notifies that layout was cancelled as a result of a
-                 *  cancellation request.
-                 *  * `onLayoutFailed` - Notifies that an error occurred while laying out the
-                 *  document, the argument is a `CharSequence` describing the error.
-                 */
-                private val callback: LayoutResultCallback
+        constructor(
+            /**
+             * This is a copy of the [CancellationSignal] passed to `onLayout` which allows
+             * us to be canceled by setting a `OnCancelListener` on it.
+             */
+            private val cancellationSignal: CancellationSignal,
+            /**
+             * This is a copy of the [PrintAttributes] passed to `onLayout` which
+             * represents the attributes of the print job. These attributes describe
+             * how the printed content should be laid out.
+             */
+            private val newAttributes: PrintAttributes,
+            /**
+             * List of [MotoGpStatItem]'s which we display in our ListView and want to print.
+             */
+            private val items: List<MotoGpStatItem>,
+            /**
+             * Provides access to the three callbacks we need to return our result when
+             * we are done:
+             *  * `onLayoutFinished` - layout was successful, returns a `PrintDocumentInfo`
+             *  which contains the information our layout determined.
+             *  * `onLayoutCancelled` - Notifies that layout was cancelled as a result of a
+             *  cancellation request.
+             *  * `onLayoutFailed` - Notifies that an error occurred while laying out the
+             *  document, the argument is a `CharSequence` describing the error.
+             */
+            private val callback: LayoutResultCallback
 
         ) : AsyncTask<Void?, Void?, PrintDocumentInfo?>() {
 
@@ -759,20 +778,24 @@ class PrintCustomContent : ListActivity() {
                      * to load resources for the printer density.
                      */
                     val inflater = mPrintContext!!
-                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                     val adapter = MotoGpStatAdapter(items, inflater)
+
                     /**
                      * Page count, which is advanced every time pageContentHeight > [mRenderPageHeight]
                      */
                     var currentPage = 0
+
                     /**
                      * Height of the current page being laid out
                      */
                     var pageContentHeight = 0
+
                     /**
                      * view type of the last View processed
                      */
                     var viewType = -1
+
                     /**
                      * View containing current item that is being processed
                      * This is used to provide layout parameters when calling
@@ -820,9 +843,9 @@ class PrintCustomContent : ListActivity() {
                      * Create a document info describing the result.
                      */
                     val info = PrintDocumentInfo.Builder("MotoGP_stats.pdf")
-                            .setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
-                            .setPageCount(currentPage + 1)
-                            .build()
+                        .setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
+                        .setPageCount(currentPage + 1)
+                        .build()
                     /**
                      * We completed the layout as a result of print attributes
                      * change. Hence, if we are here the content changed for
@@ -879,39 +902,41 @@ class PrintCustomContent : ListActivity() {
          * the given [ParcelFileDescriptor] file descriptor [destination].
          */
         @SuppressLint("StaticFieldLeak")
-        private inner class MotoGpOnWriteAsyncTask internal constructor(
-                /**
-                 * Signal for observing cancel writing requests. It is used to propagate requests
-                 * from the system to your application for canceling the current write operation.
-                 */
-                private val cancellationSignal: CancellationSignal,
-                /**
-                 * List of MotoGp winners data Objects for our [MotoGpStatAdapter] to hold for this
-                 * [MotoGpOnWriteAsyncTask] to format and write.
-                 */
-                private val items: List<MotoGpStatItem>,
-                /**
-                 * The pages that we should print.
-                 */
-                private val pages: Array<PageRange>,
-                /**
-                 * The destination file descriptor to write to.
-                 */
-                private val destination: ParcelFileDescriptor,
-                /**
-                 * Callback to inform the system of the write result.
-                 */
-                private val callback: WriteResultCallback
+        private inner class MotoGpOnWriteAsyncTask constructor(
+            /**
+             * Signal for observing cancel writing requests. It is used to propagate requests
+             * from the system to your application for canceling the current write operation.
+             */
+            private val cancellationSignal: CancellationSignal,
+            /**
+             * List of MotoGp winners data Objects for our [MotoGpStatAdapter] to hold for this
+             * [MotoGpOnWriteAsyncTask] to format and write.
+             */
+            private val items: List<MotoGpStatItem>,
+            /**
+             * The pages that we should print.
+             */
+            private val pages: Array<PageRange>,
+            /**
+             * The destination file descriptor to write to.
+             */
+            private val destination: ParcelFileDescriptor,
+            /**
+             * Callback to inform the system of the write result.
+             */
+            private val callback: WriteResultCallback
         ) : AsyncTask<Void?, Void?, Void?>() {
             /**
              * [SparseIntArray] holding the page numbers of the pages we have printed.
              */
             private val mWrittenPages: SparseIntArray = SparseIntArray()
+
             /**
              * [PrintedPdfDocument] we use to hold the canvases we draw our views on.
              */
-            private val mPdfDocument: PrintedPdfDocument
-                    = PrintedPdfDocument(this@PrintCustomContent, (mPrintAttributes)!!)
+            private val mPdfDocument: PrintedPdfDocument =
+                PrintedPdfDocument(this@PrintCustomContent, (mPrintAttributes)!!)
+
             /**
              * Runs on the UI thread before [doInBackground]. We simply set the
              * `OnCancelListener` of our [CancellationSignal] field [cancellationSignal]
@@ -995,29 +1020,37 @@ class PrintCustomContent : ListActivity() {
                  * Create an adapter with the stats and an inflater
                  * to load resources for the printer density.
                  */
-                val adapter = MotoGpStatAdapter(items,
-                        mPrintContext!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+                val adapter = MotoGpStatAdapter(
+                    items,
+                    mPrintContext!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                )
+
                 /**
                  * Current page number that we are working on
                  */
                 var currentPage = -1
+
                 /**
                  * Height of the current page so far
                  */
                 var pageContentHeight = 0
+
                 /**
                  * Set to -1 so we only request a new [View] the first time
                  * (`getItemViewType` returns > 0)
                  */
                 var viewType = -1
+
                 /**
                  * View for item that we are laying out, then drawing to the pdf `Canvas`
                  */
                 var view: View? = null
+
                 /**
                  * [PdfDocument.Page] page of the pdf that we are drawing to.
                  */
                 var page: PdfDocument.Page? = null
+
                 /**
                  * This dummy [LinearLayout] is used to provide `LayoutParams` for rendering the
                  * data item [View].
@@ -1031,10 +1064,12 @@ class PrintCustomContent : ListActivity() {
                  * so we will scale down the content.
                  */
                 val scale = (
-                        mPdfDocument.pageContentRect.width().toFloat()
-                                / mRenderPageWidth).coerceAtMost((
+                    mPdfDocument.pageContentRect.width().toFloat()
+                        / mRenderPageWidth).coerceAtMost(
+                    (
                         mPdfDocument.pageContentRect.height().toFloat()
-                                / mRenderPageHeight))
+                            / mRenderPageHeight)
+                )
                 val itemCount = adapter.count
                 for (i in 0 until itemCount) {
                     /**
