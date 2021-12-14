@@ -58,14 +58,14 @@ class QuickContactsDemo : ListActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val select = ("((" + Contacts.DISPLAY_NAME + " NOTNULL) AND ("
-                + Contacts.HAS_PHONE_NUMBER + "=1) AND ("
-                + Contacts.DISPLAY_NAME + " != '' ))")
+            + Contacts.HAS_PHONE_NUMBER + "=1) AND ("
+            + Contacts.DISPLAY_NAME + " != '' ))")
         val c = contentResolver.query(
-                Contacts.CONTENT_URI,
-                CONTACTS_SUMMARY_PROJECTION,
-                select,
-                null,
-                Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC"
+            Contacts.CONTENT_URI,
+            CONTACTS_SUMMARY_PROJECTION,
+            select,
+            null,
+            Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC"
         )
 
         @Suppress("DEPRECATION")
@@ -88,7 +88,7 @@ class QuickContactsDemo : ListActivity() {
      * and the drop down views
      * @param c Cursor
      */
-    (context: Context, layout: Int, c: Cursor) : ResourceCursorAdapter(context, layout, c) {
+        (context: Context, layout: Int, c: Cursor) : ResourceCursorAdapter(context, layout, c) {
 
         /**
          * Bind an existing view to the data pointed to by cursor. First we retrieve the Tag from
@@ -154,29 +154,36 @@ class QuickContactsDemo : ListActivity() {
         /**
          * A list of which columns to return.
          */
-        internal val CONTACTS_SUMMARY_PROJECTION = arrayOf(Contacts._ID, // 0
-                Contacts.DISPLAY_NAME, // 1
-                Contacts.STARRED, // 2
-                Contacts.TIMES_CONTACTED, // 3
-                Contacts.CONTACT_PRESENCE, // 4
-                Contacts.PHOTO_ID, // 5
-                Contacts.LOOKUP_KEY, // 6
-                Contacts.HAS_PHONE_NUMBER)// 7
+        internal val CONTACTS_SUMMARY_PROJECTION = arrayOf(
+            Contacts._ID, // 0
+            Contacts.DISPLAY_NAME, // 1
+            Contacts.STARRED, // 2
+            Contacts.TIMES_CONTACTED, // 3
+            Contacts.CONTACT_PRESENCE, // 4
+            Contacts.PHOTO_ID, // 5
+            Contacts.LOOKUP_KEY, // 6
+            Contacts.HAS_PHONE_NUMBER
+        )// 7
 
         /**
          * Indexes to column in cursor returned. See CONTACTS_SUMMARY_PROJECTION above
          */
         internal const val SUMMARY_ID_COLUMN_INDEX = 0
         internal const val SUMMARY_NAME_COLUMN_INDEX = 1
+
         @Suppress("unused")
         internal const val SUMMARY_STARRED_COLUMN_INDEX = 2
+
         @Suppress("unused")
         internal const val SUMMARY_TIMES_CONTACTED_COLUMN_INDEX = 3
+
         @Suppress("unused")
         internal const val SUMMARY_PRESENCE_STATUS_COLUMN_INDEX = 4
+
         @Suppress("unused")
         internal const val SUMMARY_PHOTO_ID_COLUMN_INDEX = 5
         internal const val SUMMARY_LOOKUP_KEY = 6
+
         @Suppress("unused")
         internal const val SUMMARY_HAS_PHONE_COLUMN_INDEX = 7
     }

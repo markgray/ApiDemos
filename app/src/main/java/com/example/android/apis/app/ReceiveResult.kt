@@ -16,12 +16,16 @@
 
 package com.example.android.apis.app
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 
 import androidx.appcompat.app.AppCompatActivity
 
@@ -74,7 +78,7 @@ class ReceiveResult : AppCompatActivity() {
         // Start the activity whose result we want to retrieve.  The
         // result will come back with request code GET_CODE.
         val intent = Intent(this@ReceiveResult, SendResult::class.java)
-        startActivityForResult(intent, GET_CODE)
+        resultLauncher.launch(intent)
     }
 
     /**
@@ -113,48 +117,39 @@ class ReceiveResult : AppCompatActivity() {
     }
 
     /**
-     * This method is called when the sending activity has finished, with the
-     * result it supplied.
+     * This is the [ActivityResultLauncher] replacement for the use of `startActivityForResult` and
+     * `onActivityResult`. The lambda parameter is called when the sending activity has finished,
+     * with the [ActivityResult] argument to the lambda as the result the activity supplied.
      *
-     * First we check if the requestCode matches the one used to launch the sending activity (GET_CODE)
-     * and if not we do nothing. If it does match we create Editable text by casting the CharSequence
-     * returned from mResults.getText() to Editable (we can do this since we set the text with the
-     * option TextView.BufferType.EDITABLE). Then if the resultCode from the sending activity is
-     * RESULT_CANCELED we append the string (cancelled) to Editable text, otherwise we append to
-     * text the value of resultCode and the value of the action of the intent returned sandwiched
-     * between other text. This results in the update of the text displayed in the TextView mResults.
+     * We create [Editable] text by casting the [CharSequence] returned from mResults.getText() to
+     * [Editable] (we can do this since we set the text with the option TextView.BufferType.EDITABLE).
+     * Then if the `resultCode` from the sending activity is `RESULT_CANCELED` we append the string
+     * (cancelled) to Editable text, otherwise we append to text the value of `resultCode` and the
+     * value of the action of the intent returned sandwiched between other text. This results in the
+     * update of the text displayed in the TextView mResults.
      *
      * The result is something like this:
      *  - (okay -1) Corky!
      *  - (okay -1) Violet!
-     *
-     * @param requestCode The original request code as given to
-     * startActivity().
-     * @param resultCode From sending activity as per setResult().
-     * @param data From sending activity as per setResult().
      */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        // You can use the requestCode to select between multiple child
-        // activities you may have started.  Here there is only one thing
-        // we launch.
-        if (requestCode == GET_CODE) {
-
+    private val resultLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             // We will be adding to our text.
             val text = mResults!!.text as Editable
 
             // This is a standard resultCode that is sent back if the
             // activity doesn't supply an explicit result.  It will also
             // be returned if the activity failed to launch.
-            if (resultCode == RESULT_CANCELED) {
+            if (result.resultCode == Activity.RESULT_CANCELED) {
                 text.append("(cancelled)")
 
                 // Our protocol with the sending activity is that it will send
                 // text in 'data' as its result.
             } else {
                 text.append("(okay ")
-                text.append(resultCode.toString())
+                text.append(result.resultCode.toString())
                 text.append(") ")
+                val data: Intent? = result.data
                 if (data != null) {
                     text.append(data.action)
                 }
@@ -162,14 +157,6 @@ class ReceiveResult : AppCompatActivity() {
 
             text.append("\n")
         }
-    }
 
-    companion object {
-
-        /**
-         * Definition of the one requestCode we use for receiving results.
-         */
-        private const val GET_CODE = 0
-    }
 }
 
