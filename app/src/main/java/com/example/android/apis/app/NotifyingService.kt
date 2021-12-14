@@ -68,14 +68,20 @@ class NotifyingService : Service() {
      */
     private val mTask = Runnable {
         for (i in 0..3) {
-            showNotification(R.drawable.stat_happy,
-                    R.string.status_bar_notifications_happy_message)
+            showNotification(
+                R.drawable.stat_happy,
+                R.string.status_bar_notifications_happy_message
+            )
             if (mCondition!!.block(5_000L)) break
-            showNotification(R.drawable.stat_neutral,
-                    R.string.status_bar_notifications_ok_message)
+            showNotification(
+                R.drawable.stat_neutral,
+                R.string.status_bar_notifications_ok_message
+            )
             if (mCondition!!.block(5_000L)) break
-            showNotification(R.drawable.stat_sad,
-                    R.string.status_bar_notifications_sad_message)
+            showNotification(
+                R.drawable.stat_sad,
+                R.string.status_bar_notifications_sad_message
+            )
             if (mCondition!!.block(5_000L)) break
         }
         // Done with our work...  stop the service!
@@ -111,8 +117,10 @@ class NotifyingService : Service() {
      */
     override fun onCreate() {
         mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val chan1 = NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
-                NotificationManager.IMPORTANCE_DEFAULT)
+        val chan1 = NotificationChannel(
+            PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
         chan1.lightColor = Color.GREEN
         chan1.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
         mNM!!.createNotificationChannel(chan1)
@@ -146,7 +154,7 @@ class NotifyingService : Service() {
      * @param intent The [Intent] that was used to bind to this service.
      * @return an [IBinder] through which clients can call on to the service.
      */
-    override fun onBind(intent: Intent): IBinder? {
+    override fun onBind(intent: Intent): IBinder {
         return mBinder
     }
 
@@ -171,8 +179,12 @@ class NotifyingService : Service() {
         val text = getText(textId)
 
         // The PendingIntent to launch our activity if the user selects this notification
-        val contentIntent = PendingIntent.getActivity(this, 0,
-                Intent(this, NotifyingController::class.java), 0)
+        val contentIntent = PendingIntent.getActivity(
+            this,
+            0,
+            Intent(this, NotifyingController::class.java),
+            PendingIntent.FLAG_IMMUTABLE
+        )
 
         // Set the icon and timestamp.
         // Note that in this example, we do not set the tickerText.  We update the icon enough that
@@ -181,12 +193,12 @@ class NotifyingService : Service() {
         // changed" messages that always pop up)
         // Set the info for the views that show in the notification panel.
         val notification = Notification.Builder(this, PRIMARY_CHANNEL)
-                .setSmallIcon(moodId)
-                .setWhen(System.currentTimeMillis())
-                .setContentTitle(getText(R.string.status_bar_notifications_mood_title))
-                .setContentText(text)  // the contents of the entry
-                .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
-                .build()
+            .setSmallIcon(moodId)
+            .setWhen(System.currentTimeMillis())
+            .setContentTitle(getText(R.string.status_bar_notifications_mood_title))
+            .setContentText(text)  // the contents of the entry
+            .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
+            .build()
 
         // Send the notification.
         // We use a layout id because it is a unique number.  We use it later to cancel.
@@ -202,6 +214,7 @@ class NotifyingService : Service() {
          * Use a layout id for a unique identifier
          */
         private const val MOOD_NOTIFICATIONS = R.layout.status_bar_notifications
+
         /**
          * The id of the primary notification channel
          */
