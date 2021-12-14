@@ -45,8 +45,7 @@ import com.example.android.apis.R
  * to pick something and sends the selection back to its caller.  Implementing
  * this functionality involves the
  * [setResult()][android.app.Activity.setResult] method for sending a result and
- * [onActivityResult()][androidx.fragment.app.FragmentActivity.onActivityResult] to
- * receive it.
+ * [ActivityResultLauncher] to receive it.
  *
  * Demo App/Activity/Receive Result
  *
@@ -65,12 +64,14 @@ class ReceiveResult : AppCompatActivity() {
     private var mResults: TextView? = null
 
     /**
-     * Set as the [OnClickListener] for the [Button] "GET RESULT" (R.id.get) is launches the Activity
-     * [SendResult] using [startActivityForResult] and the result intent will be handled in the callback
-     * [onActivityResult]. First we create an [Intent] to start the Activity [SendResult], then we use
-     * that [Intent] to launch the Activity using [startActivityForResult] with the requestCode GET_CODE.
+     * Set as the [OnClickListener] for the [Button] "GET RESULT" (R.id.get) it launches the Activity
+     * [SendResult] using the [ActivityResultLauncher.launch] method of our field `resultLauncher`
+     * and the [ActivityResult] result intent will be handled in the [ActivityResultLauncher] lambda
+     * parameter. First we create an [Intent] to start the Activity [SendResult], then we use
+     * that [Intent] to launch the Activity using the `launch` method of `resultLauncher`.
      * [SendResult] will call [setResult] with an [Intent] containing the result of that Activity which
-     * we will receive in the callback [onActivityResult].
+     * we will receive as an [ActivityResult] in the lambda parameter of the [ActivityResultLauncher]
+     * constructor.
      *
      * Parameter: The View of the [Button] "GET RESULT" (R.id.get)
      */
