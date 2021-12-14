@@ -44,6 +44,7 @@ class PrintHtmlFromScreen : AppCompatActivity() {
      * WebView in our layout file
      */
     private var mWebView: WebView? = null
+
     /**
      * Flag used to enable print option in options menu
      * (set after WebView finishes loading)
@@ -77,7 +78,10 @@ class PrintHtmlFromScreen : AppCompatActivity() {
              * @param view The [WebView] that is initiating the callback.
              * @param url The url of the page.
              */
-            override fun onPageFinished(view: WebView, url: String) { // Data loaded, so now we want to show the print option.
+            override fun onPageFinished(
+                view: WebView,
+                url: String
+            ) { // Data loaded, so now we want to show the print option.
                 mDataLoaded = true
                 invalidateOptionsMenu()
             }
@@ -130,9 +134,9 @@ class PrintHtmlFromScreen : AppCompatActivity() {
         val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
         // Pass in the ViewView's document adapter.
         printManager.print(
-                "MotoGP stats",
-                mWebView!!.createPrintDocumentAdapter("MotoGP stats"),
-                null
+            "MotoGP stats",
+            mWebView!!.createPrintDocumentAdapter("MotoGP stats"),
+            null
         )
     }
 }

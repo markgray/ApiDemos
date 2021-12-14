@@ -144,11 +144,13 @@ class PrintHtmlOffScreen : AppCompatActivity() {
          * Get the print manager.
          */
         val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
+
         /**
          * Create a wrapper [PrintDocumentAdapter] to clean up when done.
          */
         val adapter: PrintDocumentAdapter = object : PrintDocumentAdapter() {
             private val mWrappedInstance = mWebView!!.createPrintDocumentAdapter("MotoGP stats")
+
             /**
              * Called when printing starts. This method is invoked on the main thread. We simply pass
              * the call on through to `mWrappedInstance`.
@@ -170,13 +172,19 @@ class PrintHtmlOffScreen : AppCompatActivity() {
              * @param extras Additional information about how to layout the content.
              */
             override fun onLayout(
-                    oldAttributes: PrintAttributes,
-                    newAttributes: PrintAttributes,
-                    cancellationSignal: CancellationSignal,
-                    callback: LayoutResultCallback,
-                    extras: Bundle
+                oldAttributes: PrintAttributes,
+                newAttributes: PrintAttributes,
+                cancellationSignal: CancellationSignal,
+                callback: LayoutResultCallback,
+                extras: Bundle
             ) {
-                mWrappedInstance.onLayout(oldAttributes, newAttributes, cancellationSignal, callback, extras)
+                mWrappedInstance.onLayout(
+                    oldAttributes,
+                    newAttributes,
+                    cancellationSignal,
+                    callback,
+                    extras
+                )
             }
 
             /**
@@ -190,10 +198,10 @@ class PrintHtmlOffScreen : AppCompatActivity() {
              * @param callback Callback to inform the system for the write result.
              */
             override fun onWrite(
-                    pages: Array<PageRange>,
-                    destination: ParcelFileDescriptor,
-                    cancellationSignal: CancellationSignal,
-                    callback: WriteResultCallback
+                pages: Array<PageRange>,
+                destination: ParcelFileDescriptor,
+                cancellationSignal: CancellationSignal,
+                callback: WriteResultCallback
             ) {
                 mWrappedInstance.onWrite(pages, destination, cancellationSignal, callback)
             }
