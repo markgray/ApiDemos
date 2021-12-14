@@ -99,7 +99,7 @@ class StatusBarNotifications : AppCompatActivity() {
         // Get the notification manager service.
         mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val chan1 = NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
-                NotificationManager.IMPORTANCE_DEFAULT)
+            NotificationManager.IMPORTANCE_DEFAULT)
         chan1.lightColor = Color.GREEN
         chan1.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
         mNotificationManager!!.createNotificationChannel(chan1)
@@ -183,9 +183,12 @@ class StatusBarNotifications : AppCompatActivity() {
         // is already an active matching pending intent, we will update its
         // extras (and other Intents in the array) to be the ones passed in here.
 
-        return PendingIntent.getActivity(this, 0,
-                Intent(this, NotificationDisplay::class.java).putExtra("moodimg", moodId),
-                PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getActivity(
+            this,
+            0,
+            Intent(this, NotificationDisplay::class.java).putExtra("moodimg", moodId),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
     }
 
     /**
@@ -216,7 +219,7 @@ class StatusBarNotifications : AppCompatActivity() {
         // This is a convenient way to make the proper Intent to launch and
         // reset an application's task.
         intents[0] = Intent.makeRestartActivityTask(ComponentName(this,
-                com.example.android.apis.ApiDemos::class.java))
+            com.example.android.apis.ApiDemos::class.java))
 
         // "App"
         intents[1] = Intent(this, com.example.android.apis.ApiDemos::class.java)
@@ -233,8 +236,12 @@ class StatusBarNotifications : AppCompatActivity() {
         // is already an active matching pending intent, we will update its
         // extras (and other Intents in the array) to be the ones passed in here.
 
-        return PendingIntent.getActivities(this, 0,
-                intents, PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getActivities(
+            this,
+            0,
+            intents,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
     }
 
     /**
@@ -268,11 +275,11 @@ class StatusBarNotifications : AppCompatActivity() {
 
         // Set the info for the views that show in the notification panel.
         val notifBuilder = Notification.Builder(this, PRIMARY_CHANNEL) // the context to use
-                .setSmallIcon(moodId)  // the status icon
-                .setWhen(System.currentTimeMillis())  // the timestamp for the notification
-                .setContentTitle(title)  // the title for the notification
-                .setContentText(text)  // the details to display in the notification
-                .setContentIntent(makeMoodIntent(moodId))  // The intent to send clicked
+            .setSmallIcon(moodId)  // the status icon
+            .setWhen(System.currentTimeMillis())  // the timestamp for the notification
+            .setContentTitle(title)  // the title for the notification
+            .setContentText(text)  // the details to display in the notification
+            .setContentIntent(makeMoodIntent(moodId))  // The intent to send clicked
 
         if (showTicker) {
             // include the ticker text
@@ -365,19 +372,19 @@ class StatusBarNotifications : AppCompatActivity() {
         // Set the info for the views that show in the notification panel.
         @Suppress("DEPRECATION")
         val notification = Notification.Builder(this, PRIMARY_CHANNEL) // the context to use
-                .setSmallIcon(R.drawable.stat_happy)  // the status icon
-                .setTicker(text)  // the text to display in the ticker
-                .setWhen(System.currentTimeMillis())  // the timestamp for the notification
-                .setContentTitle(title)  // the title for the notification
-                .setContentText(text)  // the details to display in the notification
-                .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
-                .setDefaults(defaults)
-                .build()
+            .setSmallIcon(R.drawable.stat_happy)  // the status icon
+            .setTicker(text)  // the text to display in the ticker
+            .setWhen(System.currentTimeMillis())  // the timestamp for the notification
+            .setContentTitle(title)  // the title for the notification
+            .setContentText(text)  // the details to display in the notification
+            .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
+            .setDefaults(defaults)
+            .build()
 
         mNotificationManager!!.notify(
-                MOOD_NOTIFICATIONS, // we use a string id because it is a unique
-                // number.  we use it later to cancel the notification
-                notification)
+            MOOD_NOTIFICATIONS, // we use a string id because it is a unique
+            // number.  we use it later to cancel the notification
+            notification)
     }
 
     /**
