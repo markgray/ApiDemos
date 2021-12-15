@@ -29,23 +29,22 @@ import android.content.ServiceConnection
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.RemoteException
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.os.Message
 import android.os.Process
 import android.os.RemoteCallbackList
+import android.os.RemoteException
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 import com.example.android.apis.app.RemoteService.Binding
 import com.example.android.apis.app.RemoteService.Controller
-
-import com.example.android.apis.R
 
 /**
  * This is an example of implementing an application service that runs in a
@@ -59,7 +58,6 @@ import com.example.android.apis.R
  * running in its own process, the [LocalService] sample shows a much
  * simpler way to interact with it.
  */
-@Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.O)
 @SuppressLint("SetTextI18n")
 class RemoteService : Service() {
@@ -69,14 +67,16 @@ class RemoteService : Service() {
      * that it can be accessed more efficiently from inner classes.
      */
     val mCallbacks = RemoteCallbackList<IRemoteServiceCallback>()
+
     /**
      * Value that we increment and send to our clients
      */
     var mValue = 0
+
     /**
      * Handle to the system level NOTIFICATION_SERVICE service
      */
-    var mNM: NotificationManager? = null
+    private var mNM: NotificationManager? = null
 
     /**
      * Called by the system when the service is first created. First we initialize our
@@ -94,7 +94,7 @@ class RemoteService : Service() {
     override fun onCreate() {
         mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val chan1 = NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
-                NotificationManager.IMPORTANCE_DEFAULT)
+            NotificationManager.IMPORTANCE_DEFAULT)
         chan1.lightColor = Color.GREEN
         chan1.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
         mNM!!.createNotificationChannel(chan1)
@@ -231,6 +231,7 @@ class RemoteService : Service() {
             if (cb != null) mCallbacks.unregister(cb)
         }
     }
+
     /**
      * A secondary interface to the service is defined through the IDL file `ISecondary.aidl`,
      * and consists of two methods which are accessible in much the same way as the methods in
@@ -302,6 +303,7 @@ class RemoteService : Service() {
         override fun handleMessage(msg: Message) { // It is time to bump the value!
             if (msg.what == REPORT_MSG) { // Up it goes.
                 val value = ++mValue
+
                 /**
                  * Broadcast to all clients the new value.
                  */
@@ -342,21 +344,28 @@ class RemoteService : Service() {
          * In this sample, we'll use the same text for the ticker and the expanded notification
          */
         val text = getText(R.string.remote_service_started)
+
         /**
          * The [PendingIntent] to launch our activity if the user selects this notification
          */
-        val contentIntent = PendingIntent.getActivity(this, 0, Intent(this, Controller::class.java), 0)
+        val contentIntent = PendingIntent.getActivity(
+            this,
+            0,
+            Intent(this, Controller::class.java),
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
         /**
          * Set the info for the views that show in the notification panel.
          */
         val notification = Notification.Builder(this, PRIMARY_CHANNEL)
-                .setSmallIcon(R.drawable.stat_sample) // the status icon
-                .setTicker(text) // the status text
-                .setWhen(System.currentTimeMillis()) // the time stamp
-                .setContentTitle(getText(R.string.remote_service_label)) // the label of the entry
-                .setContentText(text) // the contents of the entry
-                .setContentIntent(contentIntent) // The intent to send when the entry is clicked
-                .build()
+            .setSmallIcon(R.drawable.stat_sample) // the status icon
+            .setTicker(text) // the status text
+            .setWhen(System.currentTimeMillis()) // the time stamp
+            .setContentTitle(getText(R.string.remote_service_label)) // the label of the entry
+            .setContentText(text) // the contents of the entry
+            .setContentIntent(contentIntent) // The intent to send when the entry is clicked
+            .build()
         /**
          * Send the notification. We use a string id because it is a unique number.
          * We use it later to cancel.
@@ -444,19 +453,23 @@ class RemoteService : Service() {
          * the file app/src/main/aidl/com/example/android/apis/app/ISecondary.aidl
          */
         var mService: IRemoteService? = null
+
         /**
          * Another interface we use on the service. This class is generated from
          * the file app/src/main/aidl/com/example/android/apis/app/IRemoteService.aidl
          */
         var mSecondaryService: ISecondary? = null
+
         /**
          * [Button] in our UI which kills the service process when clicked
          */
         var mKillButton: Button? = null
+
         /**
          * [TextView] we use to display status information
          */
         var mCallbackText: TextView? = null
+
         /**
          * Flag to keep track of whether we are bound to the service or not
          */
@@ -583,6 +596,7 @@ class RemoteService : Service() {
                 Toast.makeText(this@Binding, R.string.remote_service_disconnected, Toast.LENGTH_SHORT).show()
             }
         }
+
         /**
          * Class for interacting with the secondary interface of the service.
          */
@@ -774,6 +788,7 @@ class RemoteService : Service() {
                 mHandler.sendMessage(mHandler.obtainMessage(BUMP_MSG, value, 0))
             }
         }
+
         /**
          * [Handler] running on the UI thread which other threads can use to post text into
          * the [TextView] field [mCallbackText].
@@ -820,14 +835,16 @@ class RemoteService : Service() {
          * after calling [bindService]
          */
         var mCurConnection: ServiceConnection? = null
+
         /**
          * [TextView] used to display status information about our connection
          */
         var mCallbackText: TextView? = null
+
         /**
          * [Intent] used to Bind to the [RemoteService] service
          */
-        var mBindIntent: Intent? = null
+        private var mBindIntent: Intent? = null
 
         /**
          * Contains our implementation of the [ServiceConnection] interface, consisting of the
@@ -838,7 +855,7 @@ class RemoteService : Service() {
              * Flag used to unbind in `onServiceDisconnected` when true (set to true for option
              * BIND_WAIVE_PRIORITY
              */
-            val mUnbindOnDisconnect: Boolean
+            private val mUnbindOnDisconnect: Boolean
 
             /**
              * Default constructor, sets [mUnbindOnDisconnect] flag field to *false*
@@ -965,7 +982,7 @@ class RemoteService : Service() {
          * field [mCurConnection] to `conn`.
          *
          * Parameter: View of Button that was clicked
-        */
+         */
         private val mBindNormalListener: View.OnClickListener = View.OnClickListener {
             if (mCurConnection != null) {
                 unbindService(mCurConnection!!)
@@ -976,6 +993,7 @@ class RemoteService : Service() {
                 mCurConnection = conn
             }
         }
+
         /**
          * `OnClickListener` for the R.id.bind_not_foreground "Not Foreground" [Button].
          * When clicked we check to see if our [ServiceConnection] field [mCurConnection] is
@@ -999,6 +1017,7 @@ class RemoteService : Service() {
                 mCurConnection = conn
             }
         }
+
         /**
          * `OnClickListener` for the R.id.bind_above_client "Above Client" [Button].
          * When clicked we check to see if our [ServiceConnection] field [mCurConnection] is
@@ -1022,6 +1041,7 @@ class RemoteService : Service() {
                 mCurConnection = conn
             }
         }
+
         /**
          * `OnClickListener` for the R.id.bind_allow_oom "Allow OOM Management" [Button].
          * When clicked we check to see if our [ServiceConnection] field [mCurConnection] is
@@ -1045,6 +1065,7 @@ class RemoteService : Service() {
                 mCurConnection = conn
             }
         }
+
         /**
          * `OnClickListener` for the R.id.bind_waive_priority "Waive Priority" [Button].
          * When clicked we check to see if our [ServiceConnection] field [mCurConnection] is
@@ -1069,6 +1090,7 @@ class RemoteService : Service() {
                 mCurConnection = conn
             }
         }
+
         /**
          * `OnClickListener` for the R.id.bind_important "Important" [Button].
          * When clicked we check to see if our [ServiceConnection] field [mCurConnection] is
@@ -1092,6 +1114,7 @@ class RemoteService : Service() {
                 mCurConnection = conn
             }
         }
+
         /**
          * `OnClickListener` for the R.id.bind_with_activity "Adjust With Activity" [Button].
          * When clicked we check to see if our [ServiceConnection] field [mCurConnection] is
@@ -1111,12 +1134,13 @@ class RemoteService : Service() {
             }
             val conn: ServiceConnection = MyServiceConnection()
             val flags = (Context.BIND_AUTO_CREATE
-                    or Context.BIND_ADJUST_WITH_ACTIVITY
-                    or Context.BIND_WAIVE_PRIORITY)
+                or Context.BIND_ADJUST_WITH_ACTIVITY
+                or Context.BIND_WAIVE_PRIORITY)
             if (bindService(mBindIntent, conn, flags)) {
                 mCurConnection = conn
             }
         }
+
         /**
          * `OnClickListener` for the R.id.unbind "Unbind Service" [Button].
          * If [ServiceConnection] field [mCurConnection] is connected to the service, we unbind
@@ -1140,6 +1164,7 @@ class RemoteService : Service() {
          * The id of the primary notification channel
          */
         const val PRIMARY_CHANNEL = "default"
+
         /**
          * Used as `what` field of message sent to `mHandler` which causes `mValue`
          * to be incremented and broadcast
