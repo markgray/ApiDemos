@@ -21,6 +21,9 @@ import android.os.Bundle
 import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 
 import androidx.appcompat.app.AppCompatActivity
 
@@ -57,16 +60,35 @@ class RedirectMain : AppCompatActivity() {
 
     /**
      * OnClickListener for the Button "New text" (R.id.newView). We create an Intent to start the
-     * Activity RedirectGetter, then startActivityForResult that Activity using the requestCode
-     * NEW_TEXT_REQUEST (1)
+     * Activity [RedirectGetter], then call the [ActivityResultLauncher.launch] method of our field
+     * [newTextGetterLauncher] to launch that activity.
      *
      * Parameter: View of the Button that was clicked
      */
     private val mNewListener = OnClickListener {
         // Retrieve new text preferences.
         val intent = Intent(this@RedirectMain, RedirectGetter::class.java)
-        startActivityForResult(intent, NEW_TEXT_REQUEST)
+        newTextGetterLauncher.launch(intent)
     }
+
+    /**
+     * This is the [ActivityResultLauncher] that is used to launch [RedirectGetter] when the user
+     * clicks the "New text" [Button]. In the lambda of the [ActivityResultLauncher] constructor the
+     * [ActivityResult.getResultCode] (kotlin `resultCode` property) value of the [ActivityResult]
+     * that [RedirectGetter] returns is just checked to see if the user canceled the change in which
+     * case we just ignore it, otherwise we call our [loadPrefs] method to reload the text that was
+     * saved by [RedirectGetter] in our shared preferences file.
+     */
+    private val newTextGetterLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+
+            // In this case we are just changing the text, so if it was
+            // cancelled then we can leave things as-is.
+            if (result.resultCode != RESULT_CANCELED) {
+                loadPrefs()
+            }
+
+        }
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -76,8 +98,8 @@ class RedirectMain : AppCompatActivity() {
      * to OnClickListener mNewListener. We call our method loadPrefs() to read the "text" entry from
      * our shared preference file, and if was there it returns true and we are done. If it returns
      * false there was nothing stored under "text" in the shared preference file so we create an
-     * Intent intent to launch RedirectGetter and we startActivityForResult using that Intent with
-     * the requestCode of INIT_TEXT_REQUEST (0).
+     * Intent intent to launch [RedirectGetter] and call the [ActivityResultLauncher.launch] method
+     * of our field [initTextRequestLauncher] using that Intent with to launch the activity.
      *
      * @param savedInstanceState always null since onSaveInstanceState is not called
      */
@@ -99,62 +121,33 @@ class RedirectMain : AppCompatActivity() {
         // result is returned.
         if (!loadPrefs()) {
             val intent = Intent(this, RedirectGetter::class.java)
-            startActivityForResult(intent, INIT_TEXT_REQUEST)
+            initTextRequestLauncher.launch(intent)
         }
     }
 
     /**
-     * Called when an activity you launched exits, giving you the requestCode
-     * you started it with, the resultCode it returned, and any additional
-     * data from it.  The <var>resultCode</var> will be
-     * [.RESULT_CANCELED] if the activity explicitly returned that,
-     * didn't return any result, or crashed during its operation.
-     *
-     *
-     * You will receive this call immediately before onResume() when your
-     * activity is re-starting.
-     *
-     * First we check to see if this result is from an INIT_TEXT_REQUEST requestCode. If is we
-     * check whether the resultCode was RESULT_CANCELED and if so we exit back to RedirectEnter,
-     * otherwise we call our method loadPrefs() which will load the "text" entry from our shared
-     * preference file and display it in our UI. If the result is from an NEW_TEXT_REQUEST we
-     * check to see if the resultCode was RESULT_CANCELED and if so do nothing leaving the text
-     * in our UI unchanged, otherwise we call our method loadPrefs() which will load the "text"
-     * entry from our shared preference file and update the text in our UI.
-     *
-     * @param requestCode The integer request code originally supplied to
-     * startActivityForResult(), allowing you to identify who this
-     * result came from and what you requested of it.
-     * @param resultCode The integer result code returned by the child activity
-     * through its setResult().
-     * @param data An Intent, which can return result data to the caller
-     * (various data can be attached to Intent "extras"). (Unused)
+     * This is the [ActivityResultLauncher] that is used to launch [RedirectGetter] in our [onCreate]
+     * override when our [loadPrefs] method returns `false` indicating that ous shared preferences
+     * file has no text stored. In the lambda of the [ActivityResultLauncher] constructor the
+     * [ActivityResult.getResultCode] (kotlin `resultCode` property) value of the [ActivityResult]
+     * that [RedirectGetter] returns is checked to see if the user canceled the activity in which
+     * case we are cancelled as well so we call [finish] to exit, otherwise we call our [loadPrefs]
+     * method to reload the text that was saved by [RedirectGetter] in our shared preferences file.
      */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == INIT_TEXT_REQUEST) {
+    private val initTextRequestLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
 
             // If the request was cancelled, then we are cancelled as well.
-            if (resultCode == RESULT_CANCELED) {
+            if (result.resultCode == RESULT_CANCELED) {
                 finish()
 
-                // Otherwise, there now should be text...  reload the prefs,
-                // and show our UI.  (Optionally we could verify that the text
-                // is now set and exit if it isn't.)
+            // Otherwise, there now should be text...  reload the prefs,
+            // and show our UI.  (Optionally we could verify that the text
+            // is now set and exit if it isn't.)
             } else {
                 loadPrefs()
             }
-
-        } else if (requestCode == NEW_TEXT_REQUEST) {
-
-            // In this case we are just changing the text, so if it was
-            // cancelled then we can leave things as-is.
-            if (resultCode != RESULT_CANCELED) {
-                loadPrefs()
-            }
-
         }
-    }
 
     /**
      * Reads the shared preference file "RedirectData" looking for a String stored under the key
@@ -181,8 +174,4 @@ class RedirectMain : AppCompatActivity() {
         return false
     }
 
-    companion object {
-        internal const val INIT_TEXT_REQUEST = 0 // Request code for initial run of Activity RedirectGetter
-        internal const val NEW_TEXT_REQUEST = 1  // Request code when new text Button is clicked
-    }
 }
