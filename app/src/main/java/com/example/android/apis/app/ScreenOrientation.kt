@@ -38,32 +38,31 @@ import com.example.android.apis.R
  * available for v9+, and some only for v18+ but froyo ignores them rather than crashes.
  * Very nice example of spinner layout and use.
  */
-@Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class ScreenOrientation : AppCompatActivity() {
     /**
      * [Spinner] in layout used for choosing orientation
      */
-    lateinit var mOrientation: Spinner
+    private lateinit var mOrientation: Spinner
 
     /**
      * The current orientation.
      */
-    var mCurrentOrientation: Int = -2
+    private var mCurrentOrientation: Int = -2
 
     /**
      * Orientation chosen by the [mOrientation] orientation [Spinner]
      */
-    var mNewOrientation: Int = -2
+    private var mNewOrientation: Int = -2
 
     /**
      * [TextView] displaying information about the current orientation.
      */
-    lateinit var mCurrentTextView: TextView
+    private lateinit var mCurrentTextView: TextView
     /**
      * [TextView] displaying information about the requested orientation.
      */
-    lateinit var mRequestedTextView: TextView
+    private lateinit var mRequestedTextView: TextView
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -163,6 +162,7 @@ class ScreenOrientation : AppCompatActivity() {
     @Suppress("UNUSED_PARAMETER")
     fun applyNewOrientation(view: View) {
         mCurrentTextView.text = orientationDescription(mNewOrientation)
+        //noinspection ResourceType
         requestedOrientation = mNewOrientation
     }
 
@@ -175,7 +175,7 @@ class ScreenOrientation : AppCompatActivity() {
      * @param orient the orientation constant
      * @return the [String] in our [mOrientationDescriptions] field describing [orient].
      */
-    fun orientationDescription(orient: Int): String {
+    private fun orientationDescription(orient: Int): String {
         for (i in mOrientationValues.indices) {
             if (mOrientationValues[i] == orient) return mOrientationDescriptions[i]
         }

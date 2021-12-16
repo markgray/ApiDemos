@@ -63,11 +63,13 @@ class ServiceStartArguments : Service() {
      * Handle to the system level [NotificationManager] service
      */
     private var mNM: NotificationManager? = null
+
     /**
      * [Looper] for the `HandlerThread` background thread we create to run our service in
      */
     @Volatile
     private var mServiceLooper: Looper? = null
+
     /**
      * Our instance of the custom [ServiceHandler] subclass of [Handler] for messages
      * sent to our service thread
@@ -148,7 +150,7 @@ class ServiceStartArguments : Service() {
     override fun onCreate() {
         mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val chan1 = NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
-                NotificationManager.IMPORTANCE_DEFAULT)
+            NotificationManager.IMPORTANCE_DEFAULT)
         chan1.lightColor = Color.GREEN
         chan1.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
         mNM!!.createNotificationChannel(chan1)
@@ -278,21 +280,22 @@ class ServiceStartArguments : Service() {
          * The PendingIntent to launch our activity if the user selects this notification
          */
         val contentIntent = PendingIntent.getActivity(
-                this,
-                0,
-                Intent(this, Controller::class.java),
-                0
+            this,
+            0,
+            Intent(this, Controller::class.java),
+            PendingIntent.FLAG_IMMUTABLE
         )
+
         /**
          * Set the info for the views that show in the notification panel.
          */
         val noteBuilder = Notification.Builder(this, PRIMARY_CHANNEL)
-                .setSmallIcon(R.drawable.stat_sample) // the status icon
-                .setTicker(text) // the status text
-                .setWhen(System.currentTimeMillis()) // the time stamp
-                .setContentTitle(getText(R.string.service_start_arguments_label)) // the label
-                .setContentText(text) // the contents of the entry
-                .setContentIntent(contentIntent) // The intent to send when the entry is clicked
+            .setSmallIcon(R.drawable.stat_sample) // the status icon
+            .setTicker(text) // the status text
+            .setWhen(System.currentTimeMillis()) // the time stamp
+            .setContentTitle(getText(R.string.service_start_arguments_label)) // the label
+            .setContentText(text) // the contents of the entry
+            .setContentIntent(contentIntent) // The intent to send when the entry is clicked
         /**
          * We show this for as long as our service is processing a command.
          */
@@ -358,8 +361,9 @@ class ServiceStartArguments : Service() {
          */
         private val mStart1Listener = View.OnClickListener {
             startService(Intent(this@Controller, ServiceStartArguments::class.java)
-                    .putExtra("name", "One"))
+                .putExtra("name", "One"))
         }
+
         /**
          * `OnClickListener` for the R.id.start2 "Start Two no redeliver" Button, calls the
          * [startService] method with an explicit [Intent] for the [ServiceStartArguments]
@@ -368,8 +372,9 @@ class ServiceStartArguments : Service() {
          */
         private val mStart2Listener = View.OnClickListener {
             startService(Intent(this@Controller, ServiceStartArguments::class.java)
-                    .putExtra("name", "Two"))
+                .putExtra("name", "Two"))
         }
+
         /**
          * `OnClickListener` for the R.id.start3 "Start Three w/redeliver" Button, calls the
          * [startService] method with an explicit [Intent] for the [ServiceStartArguments]
@@ -378,9 +383,10 @@ class ServiceStartArguments : Service() {
          */
         private val mStart3Listener = View.OnClickListener {
             startService(Intent(this@Controller, ServiceStartArguments::class.java)
-                    .putExtra("name", "Three")
-                    .putExtra("redeliver", true))
+                .putExtra("name", "Three")
+                .putExtra("redeliver", true))
         }
+
         /**
          * `OnClickListener` for the R.id.startfail "Start failed delivery" Button, calls the
          * [startService] method with an explicit [Intent] for the [ServiceStartArguments]
@@ -389,9 +395,10 @@ class ServiceStartArguments : Service() {
          */
         private val mStartFailListener = View.OnClickListener {
             startService(Intent(this@Controller, ServiceStartArguments::class.java)
-                    .putExtra("name", "Failure")
-                    .putExtra("fail", true))
+                .putExtra("name", "Failure")
+                .putExtra("fail", true))
         }
+
         /**
          * `OnClickListener` for the R.id.kill "Kill Process" Button, calls the [Process.killProcess]
          * method with the PID of our process which the [Process.myPid] returns
@@ -412,6 +419,7 @@ class ServiceStartArguments : Service() {
          * TAG for logging
          */
         const val TAG = "ServiceStartArguments"
+
         /**
          * The id of the primary notification channel
          */

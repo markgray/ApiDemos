@@ -44,27 +44,29 @@ import com.example.android.apis.R
  * The definition of android.app.default_searchable is more typically handled at the application
  * level, where it can serve as a default for all of your activities.
  */
-@Suppress("MemberVisibilityCanBePrivate")
 class SearchInvoke : AppCompatActivity() {
     // UI elements
     /**
      * Button used to start search - Without a keyboard, you need to press
      * this to get a soft keyboard to use.
      */
-    var mStartSearch: Button? = null
+    private var mStartSearch: Button? = null
+
     /**
      * Spinner used to select between "Search Key", "Menu Item", "Type-To-Search" or "Disabled"
      */
-    var mMenuMode: Spinner? = null
+    private var mMenuMode: Spinner? = null
+
     /**
      * Used to enter text to prefill the search
      */
-    var mQueryPrefill: EditText? = null
+    private var mQueryPrefill: EditText? = null
+
     /**
      * context specific data to include in a Bundle under the key "demo_key"
      * it will be returned in search Intents
      */
-    var mQueryAppData: EditText? = null
+    private var mQueryAppData: EditText? = null
 
     /**
      * Called when the activity is created. First we call through to our super's implementation of
@@ -103,7 +105,7 @@ class SearchInvoke : AppCompatActivity() {
          * Populate items
          */
         val adapter = ArrayAdapter.createFromResource(
-                this, R.array.search_menuModes, android.R.layout.simple_spinner_item)
+            this, R.array.search_menuModes, android.R.layout.simple_spinner_item)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mMenuMode!!.adapter = adapter
         /**
@@ -194,19 +196,19 @@ class SearchInvoke : AppCompatActivity() {
         when (item.itemId) {
             0 -> when (mMenuMode!!.selectedItemPosition) {
                 MENUMODE_SEARCH_KEY -> AlertDialog.Builder(this)
-                        .setMessage("To invoke search, dismiss this dialog and press the search key" +
-                                " (F5 on the simulator).")
-                        .setPositiveButton("OK", null)
-                        .show()
+                    .setMessage("To invoke search, dismiss this dialog and press the search key" +
+                        " (F5 on the simulator).")
+                    .setPositiveButton("OK", null)
+                    .show()
                 MENUMODE_MENU_ITEM -> onSearchRequested()
                 MENUMODE_TYPE_TO_SEARCH -> AlertDialog.Builder(this)
-                        .setMessage("To invoke search, dismiss this dialog and start typing.")
-                        .setPositiveButton("OK", null)
-                        .show()
+                    .setMessage("To invoke search, dismiss this dialog and start typing.")
+                    .setPositiveButton("OK", null)
+                    .show()
                 MENUMODE_DISABLED -> AlertDialog.Builder(this)
-                        .setMessage("You have disabled search.")
-                        .setPositiveButton("OK", null)
-                        .show()
+                    .setMessage("You have disabled search.")
+                    .setPositiveButton("OK", null)
+                    .show()
             }
             1 -> clearSearchHistory()
         }
@@ -246,6 +248,7 @@ class SearchInvoke : AppCompatActivity() {
          * open the UI with an empty query string.
          */
         val queryPrefill = mQueryPrefill!!.text.toString()
+
         /**
          * Next, set up a bundle to send context-specific search data (if any)
          * The bundle can contain any number of elements, using any number of keys;
@@ -292,7 +295,7 @@ class SearchInvoke : AppCompatActivity() {
      */
     private fun clearSearchHistory() {
         val suggestions = SearchRecentSuggestions(this,
-                SearchSuggestionSampleProvider.AUTHORITY, SearchSuggestionSampleProvider.MODE)
+            SearchSuggestionSampleProvider.AUTHORITY, SearchSuggestionSampleProvider.MODE)
         suggestions.clearHistory()
     }
 
@@ -308,15 +311,18 @@ class SearchInvoke : AppCompatActivity() {
          * "Search Key" Uses the search key to launch searches (Needs keyboard)
          */
         const val MENUMODE_SEARCH_KEY = 0
+
         /**
          * "Menu Item" Uses the menu item itself to launch searches
          */
         const val MENUMODE_MENU_ITEM = 1
+
         /**
          * "Type-To-Search" unhandled keystrokes will start an application-defined search
          * (needs keyboard)
          */
         const val MENUMODE_TYPE_TO_SEARCH = 2
+
         /**
          * "Disabled" Search is disabled
          */

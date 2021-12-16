@@ -34,21 +34,20 @@ import com.example.android.apis.R
  * Note: that although this is intended to only be called by `SearchInvoke` it also can be
  * launched using the "App/Search/Query Search Results" path of the `ApiDemos` app.
  */
-@Suppress("MemberVisibilityCanBePrivate")
 class SearchQueryResults : AppCompatActivity() {
     // UI elements
     /**
      * [TextView] we will display our query text in
      */
-    var mQueryText: TextView? = null
+    private var mQueryText: TextView? = null
     /**
      * [TextView] we will display our application-specific context (if any)
      */
-    var mAppDataText: TextView? = null
+    private var mAppDataText: TextView? = null
     /**
      * [TextView] we will use to inform user whether we were started by a search or by launching.
      */
-    var mDeliveredByText: TextView? = null
+    private var mDeliveredByText: TextView? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of

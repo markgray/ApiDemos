@@ -27,27 +27,29 @@ import com.example.android.apis.R
  *
  * They are set with: `getWindow().setSoftInputMode(mResizeModeValues[ position ])`
  */
-@Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class SoftInputModes : AppCompatActivity() {
     /**
      * spinner used to select the soft input mode
      */
     internal lateinit var mResizeMode: Spinner
+
     /**
      * labels used for Spinner
      */
-    internal val mResizeModeLabels = arrayOf<CharSequence>(
-            "Unspecified", "Resize", "Pan", "Nothing"
+    private val mResizeModeLabels = arrayOf<CharSequence>(
+        "Unspecified", "Resize", "Pan", "Nothing"
     )
+
     /**
      * LayoutParams constants corresponding to labels
      */
     internal val mResizeModeValues = intArrayOf(
-            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED,
-            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE,
-            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN,
-            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING
+        WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED,
+        @Suppress("DEPRECATION")
+        WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE,
+        WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN,
+        WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING
     )
 
     /**
@@ -77,7 +79,7 @@ class SoftInputModes : AppCompatActivity() {
 
         mResizeMode = findViewById<View>(R.id.resize_mode) as Spinner
         val adapter = ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, mResizeModeLabels)
+            android.R.layout.simple_spinner_item, mResizeModeLabels)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mResizeMode.adapter = adapter
         mResizeMode.setSelection(0)

@@ -28,7 +28,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
- *
  * Demonstrates required behavior of saving and restoring dynamic activity
  * state, so that an activity will restart with the correct state if it is
  * stopped by the system.

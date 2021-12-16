@@ -19,6 +19,7 @@ package com.example.android.apis.app
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
+import android.annotation.SuppressLint
 import android.app.WallpaperManager
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -67,6 +68,7 @@ class SetWallpaperActivity : AppCompatActivity() {
         setContentView(R.layout.wallpaper_2)
 
         val wallpaperManager = WallpaperManager.getInstance(this)
+        @SuppressLint("MissingPermission")
         val wallpaperDrawable = wallpaperManager.drawable
         val imageView = findViewById<View>(R.id.imageview) as ImageView
         @Suppress("DEPRECATION")
@@ -120,7 +122,7 @@ class SetWallpaperActivity : AppCompatActivity() {
          * Array of colors to be used as the random filter applied to our wallpaper.
          */
         private val mColors = intArrayOf(Color.BLUE, Color.GREEN, Color.RED,
-                Color.LTGRAY, Color.MAGENTA, Color.CYAN, Color.YELLOW, Color.WHITE)
+            Color.LTGRAY, Color.MAGENTA, Color.CYAN, Color.YELLOW, Color.WHITE)
     }
 }
 
