@@ -313,7 +313,9 @@ class StatusBarNotifications : AppCompatActivity() {
         // in all of the data ourselves.  The normal one uses the default layout for notifications.
         // You probably want that in most cases, but if you want to do something custom, you
         // can set the contentView field to your own RemoteViews object.
-        val notif = Notification.Builder(this, PRIMARY_CHANNEL).build()
+        val notif = Notification.Builder(this, PRIMARY_CHANNEL)
+            .setSmallIcon(moodId) // the icon for the status bar
+            .build()
 
         // This is who should be launched if the user selects our notification.
         notif.contentIntent = makeMoodIntent(moodId)
@@ -321,10 +323,6 @@ class StatusBarNotifications : AppCompatActivity() {
         // In this sample, we'll use the same text for the ticker and the expanded notification
         val text = getText(textId)
         notif.tickerText = text
-
-        // the icon for the status bar
-        @Suppress("DEPRECATION")
-        notif.icon = moodId
 
         // our custom view
         val contentView = RemoteViews(packageName, R.layout.status_bar_balloon)
