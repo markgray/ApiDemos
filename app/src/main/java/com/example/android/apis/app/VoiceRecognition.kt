@@ -33,10 +33,14 @@ import android.widget.Spinner
 import android.widget.SpinnerAdapter
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 
 import androidx.appcompat.app.AppCompatActivity
 
 import com.example.android.apis.R
+import java.util.ArrayList
 
 /**
  * Sample code that invokes the speech recognition intent API.
@@ -47,10 +51,12 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
      * [ListView] used to display the different strings the recognizer thought it could have heard.
      */
     private var mList: ListView? = null
+
     /**
      * [Handler] running on the UI thread, which other threads can post a [Runnable] to.
      */
     private var mHandler: Handler? = null
+
     /**
      * [Spinner] in the UI which allows one to choose the language used by the recognizer.
      */
@@ -135,8 +141,10 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
      * field [mSupportedLanguageView] is not "Default" we add an extra for EXTRA_LANGUAGE using
      * the language we retrieve from [mSupportedLanguageView].
      *
-     * Finally we call [startActivityForResult] to launch our [Intent] `intent` using
-     * VOICE_RECOGNITION_REQUEST_CODE as the request code to be returned to [onActivityResult].
+     * Finally we call the launch method of our [ActivityResultLauncher] field
+     * [voiceToTextRequestLauncher] to launch our [Intent] `intent`. The [ActivityResult] that the
+     * activity returns is handled by the lambda parameter of the [registerForActivityResult] method
+     * that we use to construct the launcher.
      */
     private fun startVoiceRecognitionActivity() {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
@@ -167,31 +175,38 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
         if (mSupportedLanguageView!!.selectedItem.toString() != "Default") {
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, mSupportedLanguageView!!.selectedItem.toString())
         }
-        startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE)
+        voiceToTextRequestLauncher.launch(intent)
     }
 
     /**
-     * Handle the results from the recognition activity. First we make sure that the result is for
-     * our request code VOICE_RECOGNITION_REQUEST_CODE, and the result code is RESULT_OK (if not we
-     * do nothing). If this is our result we then fetch the `ArrayList<String>` from our [Intent]
-     * results parameter [data] using the key EXTRA_RESULTS to initialize variable `val matches`,
-     * and set the adapter of [ListView] field [mList] to an [ArrayAdapter] created from `matches`.
+     * This is the [ActivityResultLauncher] that we use to launch the speech recognition activity.
+     * The lambda parameter of the call to the method [registerForActivityResult] will handle the
+     * [ActivityResult] results that the recognition activity returns. If the result code is of the
+     * the [ActivityResult] is [Activity.RESULT_OK] we initialize our [Intent] variable `val data`
+     * to the contents of the [ActivityResult.getData] (aka kotlin `data` property) of the `result`
+     * and if `data` not `null` we initialize our [ArrayList] of [String] variable `val matches` to
+     * the value stored in the `data` [Intent] under the key [RecognizerIntent.EXTRA_RESULTS], and
+     * set the adapter of [ListView] field [mList] to an [ArrayAdapter] created from `matches`.
      *
-     * Finally we call through to our super's implementation of `onActivityResult`.
-     *
-     * @param requestCode The integer request code originally supplied to [startActivityForResult],
-     * allowing you to identify who this result came from.
-     * @param resultCode The integer result code returned by the child activity in a call to [setResult].
-     * @param data An [Intent], which can return result data to the caller (various data can be
-     * attached as [Intent] "extras").
+     * If the result code was not [Activity.RESULT_OK] we log the message "Voice to text was cancelled"
+     * and if the `data` property of the [ActivityResult] was `null` we log the message "There was
+     * no data Intent returned from Voice to text".
      */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == Activity.RESULT_OK) { // Fill the list view with the strings the recognizer thought it could have heard
-            val matches = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            mList!!.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, matches!!)
+    private val voiceToTextRequestLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+
+            if (result.resultCode == RESULT_OK) {
+                val data: Intent? = result.data
+                if (data != null) {
+                    val matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    mList!!.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, matches!!)
+                } else {
+                    Log.i(TAG, "There was no data Intent returned from Voice to text")
+                }
+            } else {
+                Log.i(TAG, "Voice to text was cancelled")
+            }
         }
-        super.onActivityResult(requestCode, resultCode, data)
-    }
 
     /**
      * Sends a broadcast [Intent] asking to receive details from the package that implements
@@ -201,13 +216,13 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
     private fun refreshVoiceSettings() {
         Log.i(TAG, "Sending broadcast")
         sendOrderedBroadcast(
-                RecognizerIntent.getVoiceDetailsIntent(this),
-                null,
-                SupportedLanguageBroadcastReceiver(),
-                null,
-                Activity.RESULT_OK,
-                null,
-                null
+            RecognizerIntent.getVoiceDetailsIntent(this),
+            null,
+            SupportedLanguageBroadcastReceiver(),
+            null,
+            Activity.RESULT_OK,
+            null,
+            null
         )
     }
 
@@ -231,8 +246,8 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
     private fun updateSupportedLanguages(languages: MutableList<String>?) { // We add "Default" at the beginning of the list to simulate default language.
         languages!!.add(0, "Default")
         val adapter: SpinnerAdapter = ArrayAdapter<CharSequence>(this,
-                android.R.layout.simple_spinner_item,
-                languages.toTypedArray())
+            android.R.layout.simple_spinner_item,
+            languages.toTypedArray())
         mSupportedLanguageView!!.adapter = adapter
     }
 
@@ -294,14 +309,14 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
             if (extra.containsKey(RecognizerIntent.EXTRA_SUPPORTED_LANGUAGES)) {
                 mHandler!!.post {
                     updateSupportedLanguages(
-                            extra.getStringArrayList(RecognizerIntent.EXTRA_SUPPORTED_LANGUAGES)
+                        extra.getStringArrayList(RecognizerIntent.EXTRA_SUPPORTED_LANGUAGES)
                     )
                 }
             }
             if (extra.containsKey(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE)) {
                 mHandler!!.post {
                     updateLanguagePreference(
-                            extra.getString(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE)
+                        extra.getString(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE)
                     )
                 }
             }
@@ -325,11 +340,5 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
          * TAG for logging
          */
         private const val TAG = "VoiceRecognition"
-        /**
-         * Request code used when the Intent for the `RecognizerIntent.ACTION_RECOGNIZE_SPEECH`
-         * Activity is started using `startActivityForResult`, it is returned in the call to
-         * the callback `onActivityResult` when the voice recognition completes.
-         */
-        private const val VOICE_RECOGNITION_REQUEST_CODE = 1234
     }
 }
