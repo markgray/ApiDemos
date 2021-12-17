@@ -58,13 +58,14 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     private val mReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val toast = Toast.makeText(
-                    context,
-                    "Contacts database created.",
-                    Toast.LENGTH_SHORT
+                context,
+                "Contacts database created.",
+                Toast.LENGTH_SHORT
             )
             toast.show()
         }
     }
+
     /**
      * [CursorAdapter] subclass used to fill [ListView] field [mList] with data from the
      * ID_DELETE_LOADER [CursorLoader] which is configured to query the contacts data base
@@ -74,6 +75,7 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      * since" Button click. The deleted contact table holds a log of deleted contacts.
      */
     private var mDeleteAdapter: DeleteAdapter? = null
+
     /**
      * [CursorAdapter] subclass used to fill [ListView] field [mList] with data from the
      * ID_CHANGE_LOADER [CursorLoader] which is configured to query the contacts data base
@@ -82,6 +84,7 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      * updated to the newest contact change received after every "Changed Since" Button click.
      */
     private var mChangeAdapter: ChangeAdapter? = null
+
     /**
      * Last time stamp, which is read from the preferences data base using key PREF_KEY_CHANGE or
      * PREF_KEY_DELETE depending on whether the "Changed Since" or "Deleted Since" `CursorLoader`
@@ -89,24 +92,29 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      * [saveLastTimestamp], and [getLastTimestamp].
      */
     private var mSearchTime: Long = 0
+
     /**
      * [TextView] used to display number of contact changes or number of contact deletes since
      * [mSearchTime]
      */
     private var mDisplayView: TextView? = null
+
     /**
      * [ListView] used to display changed or deleted contacts retrieved by the [ChangeAdapter] field
      * [mChangeAdapter] or [DeleteAdapter] field [mDeleteAdapter]
      */
     private var mList: ListView? = null
+
     /**
      * [Button] used to search the contacts database for deleted contacts
      */
     private var mDeleteButton: Button? = null
+
     /**
      * [Button] used to search the contacts database for changed contacts
      */
     private var mChangeButton: Button? = null
+
     /**
      * [Button] used to reset PREF_KEY_CHANGE, and PREF_KEY_DELETE timestamps in the preferences
      * data base to 0
@@ -307,17 +315,17 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     private val changeLoader: CursorLoader
         get() {
             val projection = arrayOf(
-                    ContactsContract.Data._ID,
-                    ContactsContract.Data.CONTACT_ID,
-                    ContactsContract.Data.DISPLAY_NAME,
-                    ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP
+                ContactsContract.Data._ID,
+                ContactsContract.Data.CONTACT_ID,
+                ContactsContract.Data.DISPLAY_NAME,
+                ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP
             )
             mSearchTime = getLastTimestamp(0, PREF_KEY_CHANGE)
             val selection = ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP + " > ?"
             val bindArgs = arrayOf(mSearchTime.toString() + "")
             return CursorLoader(this, ContactsContract.Data.CONTENT_URI, projection,
-                    selection, bindArgs, ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP
-                    + " desc, " + ContactsContract.Data.CONTACT_ID + " desc")
+                selection, bindArgs, ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP
+                + " desc, " + ContactsContract.Data.CONTACT_ID + " desc")
         }
 
     /**
@@ -337,15 +345,15 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     private val deleteLoader: CursorLoader
         get() {
             val projection = arrayOf(
-                    ContactsContract.DeletedContacts.CONTACT_ID,
-                    ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP
+                ContactsContract.DeletedContacts.CONTACT_ID,
+                ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP
             )
             mSearchTime = getLastTimestamp(0, PREF_KEY_DELETE)
             val selection = ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP + " > ?"
             val bindArgs = arrayOf(mSearchTime.toString() + "")
             return CursorLoader(this, ContactsContract.DeletedContacts.CONTENT_URI, projection,
-                    selection, bindArgs, ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP +
-                    " desc")
+                selection, bindArgs, ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP +
+                " desc")
         }
 
     /**
@@ -390,7 +398,8 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                  * Save the largest timestamp returned. Only need the first one due to the sort order.
                  */
                 if (data.moveToNext()) {
-                    timestamp = data.getLong(data.getColumnIndex(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP))
+                    val columnIndexLastUpdatedTime = data.getColumnIndex(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP)
+                    timestamp = data.getLong(columnIndexLastUpdatedTime)
                     data.moveToPrevious()
                 }
                 if (timestamp > 0) {
@@ -403,7 +412,8 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                 mList!!.adapter = mDeleteAdapter
                 mDeleteAdapter!!.swapCursor(DeleteCursorWrapper(data))
                 if (data.moveToNext()) {
-                    timestamp = data.getLong(data.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP))
+                    val columnIndexDeletedTime = data.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP)
+                    timestamp = data.getLong(columnIndexDeletedTime)
                     data.moveToPrevious()
                 }
                 if (timestamp > 0) {
@@ -517,8 +527,10 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
          */
         override fun bindView(view: View, context: Context, cursor: Cursor) {
             val item = view as LinearLayout
-            val id = cursor.getString(cursor.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_ID))
-            val timestamp = cursor.getString(cursor.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP))
+            val columnIndexDeletedContactId = cursor.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_ID)
+            val id = cursor.getString(columnIndexDeletedContactId)
+            val columnIndexDeletedTime = cursor.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP)
+            val timestamp = cursor.getString(columnIndexDeletedTime)
             setText(item.getChildAt(0), id)
             setText(item.getChildAt(1), timestamp)
         }
@@ -576,9 +588,12 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
          */
         override fun bindView(view: View, context: Context, cursor: Cursor) {
             val item = view as LinearLayout
-            val id = cursor.getString(cursor.getColumnIndex(ContactsContract.Data.CONTACT_ID))
-            val name = cursor.getString(cursor.getColumnIndex(ContactsContract.Data.DISPLAY_NAME))
-            val timestamp = cursor.getString(cursor.getColumnIndex(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP))
+            val columnIndexContactId = cursor.getColumnIndex(ContactsContract.Data.CONTACT_ID)
+            val id = cursor.getString(columnIndexContactId)
+            val columnIndexDisplayName = cursor.getColumnIndex(ContactsContract.Data.DISPLAY_NAME)
+            val name = cursor.getString(columnIndexDisplayName)
+            val columnIndexUpdatedTime = cursor.getColumnIndex(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP)
+            val timestamp = cursor.getString(columnIndexUpdatedTime)
             setText(item.getChildAt(0), id)
             setText(item.getChildAt(1), name)
             setText(item.getChildAt(2), timestamp)
@@ -595,25 +610,30 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
          * Copy of the WRAP_CONTENT field of [ViewGroup.LayoutParams]
          */
         const val WRAP = ViewGroup.LayoutParams.WRAP_CONTENT
+
         /**
          * Used for the preferences file 'name' when accessing shared preferences
          */
         private val CLASS = ChangedContacts::class.java.simpleName
+
         /**
          * Preference file key for the timestamp of the latest change to the contact database
          * (Starts at 0 and is updated when the database is read for the first time)
          */
         private const val PREF_KEY_CHANGE = "timestamp_change"
+
         /**
          * Preference file key for the timestamp of the latest delete from the contact database
          * (Starts at 0 and is updated when the database is read for the first time)
          */
         private const val PREF_KEY_DELETE = "timestamp_delete"
+
         /**
          * ID for the [CursorLoader] used to feed data about changed contacts to fill [ListView]
          * field [mList]
          */
         private const val ID_CHANGE_LOADER = 1
+
         /**
          * ID for the [CursorLoader] used to feed data about deleted contacts to fill [ListView]
          * field [mList]
