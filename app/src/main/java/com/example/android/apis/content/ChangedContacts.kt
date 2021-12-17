@@ -13,19 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-@file:Suppress("DEPRECATION")
 
 package com.example.android.apis.content
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.LoaderManager
 import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.CursorLoader
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.Loader
 import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.CursorWrapper
@@ -40,8 +36,10 @@ import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
-
 import androidx.appcompat.app.AppCompatActivity
+import androidx.loader.app.LoaderManager
+import androidx.loader.content.CursorLoader
+import androidx.loader.content.Loader
 
 /**
  * Shows how to access the contacts database and list those that have changed or been deleted since
@@ -224,7 +222,7 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      */
     private fun changeClick() {
         mChangeAdapter!!.swapCursor(null)
-        val manager = loaderManager
+        val manager = LoaderManager.getInstance(this)
         manager.destroyLoader(ID_DELETE_LOADER)
         manager.restartLoader(ID_CHANGE_LOADER, Bundle(), this)
     }
@@ -235,7 +233,7 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      */
     private fun deleteClick() {
         mDeleteAdapter!!.swapCursor(null)
-        val manager = loaderManager
+        val manager = LoaderManager.getInstance(this)
         manager.destroyLoader(ID_CHANGE_LOADER)
         manager.restartLoader(ID_DELETE_LOADER, Bundle(), this)
     }
@@ -251,12 +249,11 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      * @param time timestamp to save in shared preferences file
      * @param key  key to save the timestamp under
      */
-    @SuppressLint("ApplySharedPref")
     private fun saveLastTimestamp(time: Long, key: String) {
         val pref = getSharedPreferences(CLASS, Context.MODE_PRIVATE)
         val editor = pref.edit()
         editor.putLong(key, time)
-        editor.commit()
+        editor.apply()
     }
 
     /**
@@ -290,12 +287,12 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      * @param args Any arguments supplied by the caller.
      * @return Return a new Loader instance that is ready to start loading.
      */
-    override fun onCreateLoader(id: Int, args: Bundle): Loader<Cursor>? {
-        when (id) {
-            ID_CHANGE_LOADER -> return changeLoader
-            ID_DELETE_LOADER -> return deleteLoader
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
+        return when (id) {
+            ID_CHANGE_LOADER -> changeLoader
+            ID_DELETE_LOADER -> deleteLoader
+            else -> CursorLoader(this)
         }
-        return null
     }
 
     /**
