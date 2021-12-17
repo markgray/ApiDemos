@@ -45,6 +45,7 @@ class TextToSpeechActivity : AppCompatActivity(), OnInitListener {
      * [TextToSpeech] instance we use to read our text aloud.
      */
     private var mTts: TextToSpeech? = null
+
     /**
      * R.id.again_button The "Again" [Button] in our layout, says a random phrase when clicked
      */
@@ -72,8 +73,8 @@ class TextToSpeechActivity : AppCompatActivity(), OnInitListener {
          * initialization completes.
          */
         mTts = TextToSpeech(
-                this, // For our Context
-                this // TextToSpeech.OnInitListener
+            this, // For our Context
+            this // TextToSpeech.OnInitListener
         )
         Log.i(TAG, "getMaxSpeechInputLength: " + TextToSpeech.getMaxSpeechInputLength())
         /**
@@ -127,7 +128,7 @@ class TextToSpeechActivity : AppCompatActivity(), OnInitListener {
              * `result = mTts.setLanguage(Locale.FRANCE);`
              */
             if (result == TextToSpeech.LANG_MISSING_DATA ||
-                    result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 /**
                  * Language data is missing or the language is not supported.
                  */
@@ -168,9 +169,9 @@ class TextToSpeechActivity : AppCompatActivity(), OnInitListener {
         val hello = HELLOS[RANDOM.nextInt(helloLength)]
         val dummy: Bundle? = null
         mTts!!.speak(hello,
-                TextToSpeech.QUEUE_FLUSH, // Drop all pending entries in the playback queue.
-                dummy,
-                hello)
+            TextToSpeech.QUEUE_FLUSH, // Drop all pending entries in the playback queue.
+            dummy,
+            hello)
     }
 
     /**
@@ -181,21 +182,23 @@ class TextToSpeechActivity : AppCompatActivity(), OnInitListener {
          * TAG for logging
          */
         private const val TAG = "TextToSpeechDemo"
+
         /**
          * random number generator used to select random phrase to utter
          */
         private val RANDOM = Random()
+
         /**
          * Text strings used by [sayHello] to `speak`
          */
         private val HELLOS = arrayOf(
-                "Hello",
-                "Salutations",
-                "Greetings",
-                "Howdy",
-                "What's crack-a-lackin?",
-                "That explains the stench!",
-                "And God said, Behold, I have given you every herb bearing " +
+            "Hello",
+            "Salutations",
+            "Greetings",
+            "Howdy",
+            "What's crack-a-lackin?",
+            "That explains the stench!",
+            "And God said, Behold, I have given you every herb bearing " +
                 "seed, which is upon the face of all the earth, and every tree, " +
                 "in the which is the fruit of a tree yielding seed; to you it " +
                 "shall be for meat."
