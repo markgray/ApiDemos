@@ -38,7 +38,6 @@ import com.example.android.apis.R
 /**
  * Shows how to copy to, and paste from the clipboard using the different conversion methods available
  */
-@Suppress("MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 @SuppressLint("SetTextI18n")
 class ClipboardSample : AppCompatActivity() {
@@ -46,7 +45,7 @@ class ClipboardSample : AppCompatActivity() {
      * Handle to the CLIPBOARD_SERVICE system-level service (Interface to the clipboard service,
      * for placing and retrieving text in the global clipboard)
      */
-    var mClipboard: ClipboardManager? = null
+    private var mClipboard: ClipboardManager? = null
     /**
      * [Spinner] in our UI with ID R.id.clip_type, it is filled from the string array resource
      * R.array.clip_data_types and allows the user to choose options as to how to deal with the
@@ -56,30 +55,30 @@ class ClipboardSample : AppCompatActivity() {
     /**
      * Displays the Mime types describing the current primary clip on the clipboard
      */
-    var mMimeTypes: TextView? = null
+    private var mMimeTypes: TextView? = null
     /**
      * Output [TextView] for displaying the contents of the clipboard as coerced by the selection
      * in the [Spinner] field [mSpinner].
      */
-    var mDataText: TextView? = null
+    private var mDataText: TextView? = null
     /**
      * [CharSequence] used to hold the styled text resource String R.string.styled_text
      * ("`Plain, <b>bold</b>, <i>italic</i>, <b><i>bold-italic</i></b>`")
      */
-    var mStyledText: CharSequence? = null
+    private var mStyledText: CharSequence? = null
     /**
      * [String] containing the result of converting [CharSequence] field [mStyledText] to a
      * plain text string using `toString` method.
      */
-    var mPlainText: String? = null
+    private var mPlainText: String? = null
     /**
      * The constant HTML [String] `"<b>Link:</b> <a href=\"http://www.android.com\">Android</a>"`
      */
-    var mHtmlText: String? = null
+    private var mHtmlText: String? = null
     /**
      * The constant [String] "Link: http://www.android.com"
      */
-    var mHtmlPlainText: String? = null
+    private var mHtmlPlainText: String? = null
 
     /**
      * Callback that is invoked by [android.content.ClipboardManager] when the primary clip
@@ -88,7 +87,7 @@ class ClipboardSample : AppCompatActivity() {
      * types of the [ClipData] in order to display them, positions the [Spinner] field [mSpinner]
      * appropriately, and updates the contents of the various [TextView]'s in the UI.
      */
-    var mPrimaryChangeListener: OnPrimaryClipChangedListener = OnPrimaryClipChangedListener {
+    private var mPrimaryChangeListener: OnPrimaryClipChangedListener = OnPrimaryClipChangedListener {
         updateClipData(true)
     }
 
