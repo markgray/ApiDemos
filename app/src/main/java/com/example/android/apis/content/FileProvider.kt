@@ -35,6 +35,8 @@ import java.io.InputStream
 
 /**
  * A very simple content provider that can serve arbitrary asset files from our .apk.
+ * Used by `ActionBarShareActionProviderActivity`, `ShareContent`, `ContentBrowserActivity`,
+ * `ContentBrowserNavActivity`, `SystemUIModes`, `VideoPlayerActivity`.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class FileProvider : ContentProvider(), PipeDataWriter<InputStream> {
@@ -76,12 +78,13 @@ class FileProvider : ContentProvider(), PipeDataWriter<InputStream> {
      * free to define the sort order.
      * @return a [Cursor] or *null*.
      */
+    @Suppress("RedundantNullableReturnType")
     override fun query(
-            uri: Uri,
-            projection: Array<String>?,
-            selection: String?,
-            selectionArgs: Array<String>?,
-            sortOrder: String?
+        uri: Uri,
+        projection: Array<String>?,
+        selection: String?,
+        selectionArgs: Array<String>?,
+        sortOrder: String?
     ): Cursor? {
         /**
          * content providers that support open and openAssetFile should support queries for all
@@ -95,8 +98,8 @@ class FileProvider : ContentProvider(), PipeDataWriter<InputStream> {
          */
         if (projectionLocal == null) {
             projectionLocal = arrayOf(
-                    OpenableColumns.DISPLAY_NAME,
-                    OpenableColumns.SIZE)
+                OpenableColumns.DISPLAY_NAME,
+                OpenableColumns.SIZE)
         }
         for (i in projectionLocal.indices) {
             if (OpenableColumns.DISPLAY_NAME == projectionLocal[i]) {
@@ -171,6 +174,7 @@ class FileProvider : ContentProvider(), PipeDataWriter<InputStream> {
      * @param uri the URI to query.
      * @return a MIME type string, or *null* if there is no type (we always return "image/jpeg")
      */
+    @Suppress("RedundantNullableReturnType")
     override fun getType(uri: Uri): String? {
         /**
          * For this sample, assume all files are JPEGs.
@@ -222,11 +226,11 @@ class FileProvider : ContentProvider(), PipeDataWriter<InputStream> {
             val assetPath = path.substring(off + 1)
             val asset: AssetFileDescriptor = context!!.assets.openNonAssetFd(cookie, assetPath)
             ParcelFileDescriptor(
-                    openPipeHelper(uri, "image/jpeg",
-                            null,
-                            asset.createInputStream(),
-                            this
-                    )
+                openPipeHelper(uri, "image/jpeg",
+                    null,
+                    asset.createInputStream(),
+                    this
+                )
             )
         } catch (e: IOException) {
             throw FileNotFoundException("Unable to open $uri")
