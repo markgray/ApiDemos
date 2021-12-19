@@ -67,31 +67,36 @@ class DocumentsSample : AppCompatActivity() {
      *
      *  * "OPEN_DOC &#42;/&#42;" Creates an [Intent] for the action ACTION_OPEN_DOCUMENT with
      *  the mime type of &#42;/&#42;, and starts the activity for a result using the request
-     *  code CODE_READ
+     *  code CODE_READ by calling the `launch` method of [launcherCodeRead]
      *  * "OPEN_DOC image/&#42;" Creates an [Intent] for the action ACTION_OPEN_DOCUMENT with the
      *  mime type of image/&#42;, and starts the activity for a result using the request
-     *  code CODE_READ
+     *  code CODE_READ by calling the `launch` method of [launcherCodeRead]
      *  * "OPEN_DOC audio/ogg" Creates an [Intent] for the action ACTION_OPEN_DOCUMENT with the mime
-     *  type of audio/ogg, and starts the activity for a result using the request code CODE_READ
+     *  type of audio/ogg, and starts the activity for a result using the request code CODE_READ by
+     *  calling the `launch` method of [launcherCodeRead]
      *  * "OPEN_DOC text/plain, application/msword" Creates an [Intent] for the action
      *  ACTION_OPEN_DOCUMENT with the mime type of &#42;/&#42;, adds the extra EXTRA_MIME_TYPES
      *  consisting of a `String[]` array containing the strings "text/plain", and "application/msword"
-     *  and then starts the activity for a result using the request code CODE_READ
+     *  and then starts the activity for a result using the request code CODE_READ by calling the
+     *  `launch` method of [launcherCodeRead]
      *  * "CREATE_DOC text/plain" Creates an [Intent] for the action ACTION_CREATE_DOCUMENT with the
      *  mime type of "text/plain" and an extra EXTRA_TITLE of "foobar.txt" and starts the activity
-     *  for a result using the request code CODE_WRITE
+     *  for a result using the request code CODE_WRITE by calling the `launch` method of
+     *  [launcherCodeWrite]
      *  * "CREATE_DOC image/png" Creates an [Intent] for the action ACTION_CREATE_DOCUMENT with the
      *  mime type of "image/png" and an extra EXTRA_TITLE of "mypicture.png" and starts the activity
-     *  for a result using the request code CODE_WRITE
+     *  for a result using the request code CODE_WRITE by calling the `launch` method of
+     *  [launcherCodeWrite]
      *  * "GET_CONTENT &#42;/&#42;" Creates an [Intent] for the action ACTION_GET_CONTENT with the
      *  mime type of "&#42;/&#42;" and uses the [Intent] to create an action chooser with the title
-     *  "Kittens!" which it starts for a result using the request code CODE_READ
+     *  "Kittens!" which it starts for a result using the request code CODE_READ by calling the
+     *  `launch` method of [launcherCodeRead]
      *  * "OPEN_DOC_TREE" Creates an [Intent] for the action ACTION_OPEN_DOCUMENT_TREE and uses the
      *  [Intent] to create an action chooser with the title "Kittens!" which it starts for a result
-     *  using the request code CODE_TREE
+     *  using the request code CODE_TREE by calling the `launch` method of [launcherCodeTree]
      *  * "OPEN_DOC &#42;/&#42; for rename" Creates an [Intent] for the action ACTION_OPEN_DOCUMENT
      *  with the mime type of &#42;/&#42; and starts the activity for a result using the request code
-     *  CODE_RENAME
+     *  CODE_RENAME by calling the `launch` method of [launcherCodeRename]
      *
      * Note that in each case if it is appropriate to specify a local only version of the request,
      * `onClick` checks to see if [CheckBox] `localOnly` is checked and if so adds the extra
@@ -259,6 +264,9 @@ class DocumentsSample : AppCompatActivity() {
         setContentView(scroll)
     }
 
+    /**
+     * [ActivityResultLauncher] used to launch a [CODE_READ] request code [Intent].
+     */
     private val launcherCodeRead: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             handleRequestCodes(
@@ -268,6 +276,9 @@ class DocumentsSample : AppCompatActivity() {
             )
         }
 
+    /**
+     * [ActivityResultLauncher] used to launch a [CODE_WRITE] request code [Intent].
+     */
     private val launcherCodeWrite: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             handleRequestCodes(
@@ -277,6 +288,9 @@ class DocumentsSample : AppCompatActivity() {
             )
         }
 
+    /**
+     * [ActivityResultLauncher] used to launch a [CODE_TREE] request code [Intent].
+     */
     private val launcherCodeTree: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             handleRequestCodes(
@@ -286,6 +300,9 @@ class DocumentsSample : AppCompatActivity() {
             )
         }
 
+    /**
+     * [ActivityResultLauncher] used to launch a [CODE_RENAME] request code [Intent].
+     */
     private val launcherCodeRename: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             handleRequestCodes(
