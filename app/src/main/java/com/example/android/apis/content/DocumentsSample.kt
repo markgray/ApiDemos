@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION") // TODO: Remove all calls to startActivityForResult
+
 package com.example.android.apis.content
 
 import android.annotation.SuppressLint
@@ -30,6 +30,9 @@ import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -104,6 +107,7 @@ class DocumentsSample : AppCompatActivity() {
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
         val context: Context = this
+
         /**
          * LinearLayout we will place our UI in programmatically
          */
@@ -140,7 +144,7 @@ class DocumentsSample : AppCompatActivity() {
             if (localOnly.isChecked) {
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
             }
-            startActivityForResult(intent, CODE_READ)
+            launcherCodeRead.launch(intent) // Launch a CODE_READ request code
         }
         view.addView(button)
         button = Button(context)
@@ -155,7 +159,7 @@ class DocumentsSample : AppCompatActivity() {
             if (localOnly.isChecked) {
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
             }
-            startActivityForResult(intent, CODE_READ)
+            launcherCodeRead.launch(intent) // Launch a CODE_READ request code
         }
         view.addView(button)
         button = Button(context)
@@ -170,7 +174,7 @@ class DocumentsSample : AppCompatActivity() {
             if (localOnly.isChecked) {
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
             }
-            startActivityForResult(intent, CODE_READ)
+            launcherCodeRead.launch(intent) // Launch a CODE_READ request code
         }
         view.addView(button)
         button = Button(context)
@@ -180,14 +184,14 @@ class DocumentsSample : AppCompatActivity() {
             intent.addCategory(Intent.CATEGORY_OPENABLE)
             intent.type = "*/*"
             intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf(
-                    "text/plain", "application/msword"))
+                "text/plain", "application/msword"))
             if (multiple.isChecked) {
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             }
             if (localOnly.isChecked) {
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
             }
-            startActivityForResult(intent, CODE_READ)
+            launcherCodeRead.launch(intent) // Launch a CODE_READ request code
         }
         view.addView(button)
         button = Button(context)
@@ -200,7 +204,7 @@ class DocumentsSample : AppCompatActivity() {
             if (localOnly.isChecked) {
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
             }
-            startActivityForResult(intent, CODE_WRITE)
+            launcherCodeWrite.launch(intent) // Launch a CODE_WRITE request code
         }
         view.addView(button)
         button = Button(context)
@@ -213,7 +217,7 @@ class DocumentsSample : AppCompatActivity() {
             if (localOnly.isChecked) {
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
             }
-            startActivityForResult(intent, CODE_WRITE)
+            launcherCodeWrite.launch(intent) // Launch a CODE_WRITE request code
         }
         view.addView(button)
         button = Button(context)
@@ -228,7 +232,7 @@ class DocumentsSample : AppCompatActivity() {
             if (localOnly.isChecked) {
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
             }
-            startActivityForResult(Intent.createChooser(intent, "Kittens!"), CODE_READ)
+            launcherCodeRead.launch(Intent.createChooser(intent, "Kittens!")) // CODE_READ
         }
         view.addView(button)
         button = Button(context)
@@ -238,7 +242,7 @@ class DocumentsSample : AppCompatActivity() {
             if (localOnly.isChecked) {
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
             }
-            startActivityForResult(Intent.createChooser(intent, "Kittens!"), CODE_TREE)
+            launcherCodeTree.launch(Intent.createChooser(intent, "Kittens!")) // CODE_TREE
         }
         view.addView(button)
         button = Button(context)
@@ -247,7 +251,7 @@ class DocumentsSample : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
             intent.addCategory(Intent.CATEGORY_OPENABLE)
             intent.type = "*/*"
-            startActivityForResult(intent, CODE_RENAME)
+            launcherCodeRename.launch(intent) // CODE_RENAME request code
         }
         view.addView(button)
         val scroll = ScrollView(context)
@@ -255,74 +259,113 @@ class DocumentsSample : AppCompatActivity() {
         setContentView(scroll)
     }
 
-/**
- * Called when an activity you launched exits, giving you the requestCode you started it with, the
- * resultCode it returned, and any additional data from it. First we call our super's implementation
- * of `onActivityResult`. Then we set [ContentResolver] `val cr` to a [ContentResolver] instance for
- * our application's package. We call our method [clearLog] to clear the text from our result
- * reporting [TextView] field [mResult]. Next we use our method [log] to display the result code and
- * the [String] representation of the [Intent] parameter [data] (Which will be an URI which looks
- * like: "Intent {dat=content://com.android.providers.media.documents/&#42;}". If [data] is not
- * *null* we set [Uri] `val uri` to the URI data this intent is carrying (which would look like:
- * content://com.android.providers.media.documents/document/image%3A603). If `uri` is not *null*
- * we log the [Boolean] result of a test of `uri` to see if the given URI represents a
- * [DocumentsContract.Document] backed by a `DocumentsProvider`.
- *
- * Next we branch on the value of the request code parameter [requestCode] used to launch the
- * activity whose results we have received:
- *
- *  * CODE_READ - wrapped in try block intended to catch [SecurityException], we use [ContentResolver]
- *  `cr` to take the persistable URI permission grant FLAG_GRANT_READ_URI_PERMISSION that has been
- *  offered for `uri` (Once taken, the permission grant will be remembered across device reboots.
- *  Only URI permissions granted with FLAG_GRANT_PERSISTABLE_URI_PERMISSION can be persisted.) We
- *  then declare [InputStream] `var inputStream` as *null*, and wrapped in *try* block intended to
- *  catch any [Exception], we use `cr` to open the input stream `inputStream` using the content
- *  associated with content URI `uri`, and then call our method [readFullyNoClose] to read the
- *  entire contents of `inputStream` into a [Byte] array which we use only to display the length.
- *  In our *finally* block we call our method [closeQuietly] to close `inputStream`.
- *  * CODE_WRITE - wrapped in try block intended to catch [SecurityException], we use [ContentResolver]
- *  `cr` to take the persistable URI permission grant FLAG_GRANT_WRITE_URI_PERMISSION that has been
- *  offered for `uri` (Once taken, the permission grant will be remembered across device reboots.
- *  Only URI permissions granted with FLAG_GRANT_PERSISTABLE_URI_PERMISSION can be persisted.) We
- *  then declare [OutputStream] `var os` as *null*, and wrapped in *try* block intended to catch any
- *  [Exception], we use `cr` to open the output stream `os` using the content associated with content
- *  URI `uri`. We write the [String] "THE COMPLETE WORKS OF SHAKESPEARE" to `os`. In our *finally*
- *  block we call our method [closeQuietly] to close `os`
- *  * CODE_TREE - We build [Uri] `val doc` to be an URI representing COLUMN_DOCUMENT_ID from the
- *  [Uri] `uri` (This can then be used to access documents under a user-selected directory tree,
- *  since it doesn't require the user to separately confirm each new document access.) We build
- *  [Uri] `val child` to be an URI representing the children of the target directory [Uri] `uri`.
- *  We use [ContentResolver] `cr` to query the content provider for `child` using a projection
- *  consisting of the two columns DocumentsContract.Document.COLUMN_DISPLAY_NAME and
- *  DocumentsContract.Document.COLUMN_MIME_TYPE, with the selection *null* (all rows), selection
- *  arguments of *null*, and sort order of *null* and store the `Cursor` returned in `val c`
- *  (the `Cursor` will reference the contents or the target directory). We then move the cursor
- *  from row to row, using our method [log] to display the value of column 0 and column 1 of the
- *  row pointed to by `c` (COLUMN_DISPLAY_NAME and COLUMN_MIME_TYPE based on the projection
- *  requested). We then call our method [closeQuietly] to close `c`. Next we call our method
- *  [createDocument] to create a "image/png" file ("pic.png") inside of [Uri] `doc` saving the [Uri]
- *  returned that points to the file in `val pic`, a directory  "my dir" inside of `doc` saving the
- *  [Uri] returned that points to the directory in `val dir`, then using the [Uri] `dir` for "my dir"
- *  we create a "image/png" file ("pic2.png") inside of that new subdirectory saving the [Uri] returned
- *  that points to that file in `val dirPic`. We display messages informing the user of our actions
- *  and the [Uri] for each of these new documents. Then we open [OutputStream] `var os` using the
- *  [Uri] `dirPic` and write the string "THE COMPLETE  WORKS OF SHAKESPEARE" to the file "pic2.png",
- *  log a message to this effect, and finally call our method [deleteDocument] to delete the empty
- *  file "pic.png" using its [Uri] `pic` then log a message to this effect.
- *  * CODE_RENAME - We call our method [renameDocument] to use the [ContentResolver] `cr` to resolve
- *  and rename the [Uri] `uri` selected by the user to "MEOW.TEST", then use the [Uri] `val newUri`
- *  returned from this operation to open an [InputStream] `var inputStream` for this renamed file
- *  which we attempt to read using our method [readFullyNoClose], logging only the number of bytes
- *  read if this is successful.
- *
- * @param requestCode The integer request code originally supplied to [startActivityForResult],
- * allowing you to identify who this result came from.
- * @param resultCode The integer result code returned by the child activity through its [setResult].
- * @param data An [Intent], which can return result data to the caller (various data can be attached
- * to the [Intent] as "extras").
-*/
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    private val launcherCodeRead: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            handleRequestCodes(
+                requestCode = CODE_READ,
+                resultCode = result.resultCode,
+                data = result.data
+            )
+        }
+
+    private val launcherCodeWrite: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            handleRequestCodes(
+                requestCode = CODE_WRITE,
+                resultCode = result.resultCode,
+                data = result.data
+            )
+        }
+
+    private val launcherCodeTree: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            handleRequestCodes(
+                requestCode = CODE_TREE,
+                resultCode = result.resultCode,
+                data = result.data
+            )
+        }
+
+    private val launcherCodeRename: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            handleRequestCodes(
+                requestCode = CODE_RENAME,
+                resultCode = result.resultCode,
+                data = result.data
+            )
+        }
+
+    /**
+     * Called when an activity you launched exits, giving you the requestCode you started it with,
+     * the resultCode it returned, and any additional data from it. First we call our super's
+     * implementation of `onActivityResult`. Then we set [ContentResolver] `val cr` to a
+     * [ContentResolver] instance for our application's package. We call our method [clearLog] to
+     * clear the text from our result reporting [TextView] field [mResult]. Next we use our method
+     * [log] to display the result code and the [String] representation of the [Intent] parameter
+     * [data] (Which will be an URI which looks like:
+     * "Intent {dat=content://com.android.providers.media.documents/&#42;}". If [data] is not *null*
+     * we set [Uri] `val uri` to the URI data this intent is carrying (which would look like:
+     * content://com.android.providers.media.documents/document/image%3A603). If `uri` is not *null*
+     * we log the [Boolean] result of a test of `uri` to see if the given URI represents a
+     * [DocumentsContract.Document] backed by a `DocumentsProvider`.
+     *
+     * Next we branch on the value of the request code parameter [requestCode] used to launch the
+     * activity whose results we have received:
+     *
+     *  * CODE_READ - wrapped in try block intended to catch [SecurityException], we use
+     *  [ContentResolver] `cr` to take the persistable URI permission grant
+     *  FLAG_GRANT_READ_URI_PERMISSION that has been offered for `uri` (Once taken, the permission
+     *  grant will be remembered across device reboots. Only URI permissions granted with
+     *  FLAG_GRANT_PERSISTABLE_URI_PERMISSION can be persisted.) We then declare [InputStream]
+     *  `var inputStream` as *null*, and wrapped in *try* block intended to catch any [Exception],
+     *  we use `cr` to open the input stream `inputStream` using the content associated with content
+     *  URI `uri`, and then call our method [readFullyNoClose] to read the entire contents of
+     *  `inputStream` into a [Byte] array which we use only to display the length. In our *finally*
+     *  block we call our method [closeQuietly] to close `inputStream`.
+     *  * CODE_WRITE - wrapped in try block intended to catch [SecurityException], we use
+     *  [ContentResolver] `cr` to take the persistable URI permission grant
+     *  FLAG_GRANT_WRITE_URI_PERMISSION that has been offered for `uri` (Once taken, the permission
+     *  grant will be remembered across device reboots. Only URI permissions granted with
+     *  FLAG_GRANT_PERSISTABLE_URI_PERMISSION can be persisted.) We then declare [OutputStream]
+     *  `var os` as *null*, and wrapped in *try* block intended to catch any [Exception], we use
+     *  `cr` to open the output stream `os` using the content associated with content URI `uri`.
+     *  We write the [String] "THE COMPLETE WORKS OF SHAKESPEARE" to `os`. In our *finally* block
+     *  we call our method [closeQuietly] to close `os`
+     *  * CODE_TREE - We build [Uri] `val doc` to be an URI representing COLUMN_DOCUMENT_ID from the
+     *  [Uri] `uri` (This can then be used to access documents under a user-selected directory tree,
+     *  since it doesn't require the user to separately confirm each new document access.) We build
+     *  [Uri] `val child` to be an URI representing the children of the target directory [Uri] `uri`.
+     *  We use [ContentResolver] `cr` to query the content provider for `child` using a projection
+     *  consisting of the two columns DocumentsContract.Document.COLUMN_DISPLAY_NAME and
+     *  DocumentsContract.Document.COLUMN_MIME_TYPE, with the selection *null* (all rows), selection
+     *  arguments of *null*, and sort order of *null* and store the `Cursor` returned in `val c`
+     *  (the `Cursor` will reference the contents or the target directory). We then move the cursor
+     *  from row to row, using our method [log] to display the value of column 0 and column 1 of the
+     *  row pointed to by `c` (COLUMN_DISPLAY_NAME and COLUMN_MIME_TYPE based on the projection
+     *  requested). We then call our method [closeQuietly] to close `c`. Next we call our method
+     *  [createDocument] to create a "image/png" file ("pic.png") inside of [Uri] `doc` saving the
+     *  [Uri] returned that points to the file in `val pic`, a directory  "my dir" inside of `doc`
+     *  saving the [Uri] returned that points to the directory in `val dir`, then using the [Uri]
+     *  `dir` for "my dir" we create a "image/png" file ("pic2.png") inside of that new subdirectory
+     *  saving the [Uri] returned that points to that file in `val dirPic`. We display messages
+     *  informing the user of our actions and the [Uri] for each of these new documents. Then we
+     *  open [OutputStream] `var os` using the [Uri] `dirPic` and write the string "THE COMPLETE
+     *  WORKS OF SHAKESPEARE" to the file "pic2.png", log a message to this effect, and finally call
+     *  our method [deleteDocument] to delete the empty file "pic.png" using its [Uri] `pic` then
+     *  log a message to this effect.
+     *  * CODE_RENAME - We call our method [renameDocument] to use the [ContentResolver] `cr` to
+     *  resolve and rename the [Uri] `uri` selected by the user to "MEOW.TEST", then use the [Uri]
+     *  `val newUri` returned from this operation to open an [InputStream] `var inputStream` for
+     *  this renamed file which we attempt to read using our method [readFullyNoClose], logging
+     *  only the number of bytes read if this is successful.
+     *
+     * @param requestCode The integer request code originally supplied to [startActivityForResult],
+     * allowing you to identify who this result came from.
+     * @param resultCode The integer result code returned by the child activity through its [setResult].
+     * @param data An [Intent], which can return result data to the caller (various data can be
+     * attached to the [Intent] as "extras").
+     */
+    private fun handleRequestCodes(requestCode: Int, resultCode: Int, data: Intent?) {
         val cr = contentResolver
         clearLog()
         log("resultCode=$resultCode")
@@ -367,22 +410,22 @@ class DocumentsSample : AppCompatActivity() {
             }
         } else if (requestCode == CODE_TREE) { // Find existing docs
             val doc = DocumentsContract.buildDocumentUriUsingTree(
-                    uri,
-                    DocumentsContract.getTreeDocumentId(uri)
+                uri,
+                DocumentsContract.getTreeDocumentId(uri)
             )
             val child = DocumentsContract.buildChildDocumentsUriUsingTree(
-                    uri,
-                    DocumentsContract.getTreeDocumentId(uri)
+                uri,
+                DocumentsContract.getTreeDocumentId(uri)
             )
             val c = cr.query(
-                    child,
-                    arrayOf(
-                            DocumentsContract.Document.COLUMN_DISPLAY_NAME,
-                            DocumentsContract.Document.COLUMN_MIME_TYPE
-                    ),
-                    null,
-                    null,
-                    null
+                child,
+                arrayOf(
+                    DocumentsContract.Document.COLUMN_DISPLAY_NAME,
+                    DocumentsContract.Document.COLUMN_MIME_TYPE
+                ),
+                null,
+                null,
+                null
             )
             try {
                 while (c!!.moveToNext()) {
@@ -395,7 +438,12 @@ class DocumentsSample : AppCompatActivity() {
              * Create some documents
              */
             val pic = createDocument(cr, doc, "image/png", "pic.png")
-            val dir = createDocument(cr, doc, DocumentsContract.Document.MIME_TYPE_DIR, "my dir")
+            val dir = createDocument(
+                cr,
+                doc,
+                DocumentsContract.Document.MIME_TYPE_DIR,
+                "my dir"
+            )
             val dirPic = createDocument(cr, dir, "image/png", "pic2.png")
             log("created $pic")
             log("created $dir")
@@ -449,10 +497,10 @@ class DocumentsSample : AppCompatActivity() {
      * @return [Uri] pointing to the newly created document, or *null* if we failed
      */
     private fun createDocument(
-            resolver: ContentResolver,
-            documentUri: Uri?,
-            mimeType: String,
-            displayName: String
+        resolver: ContentResolver,
+        documentUri: Uri?,
+        mimeType: String,
+        displayName: String
     ): Uri? {
         return try {
             DocumentsContract.createDocument(resolver, documentUri!!, mimeType, displayName)
