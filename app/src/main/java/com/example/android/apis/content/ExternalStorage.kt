@@ -41,14 +41,13 @@ import java.io.OutputStream
 /**
  * Shows how to use the external storage directory api for both public and app private directories.
  */
-@Suppress("MemberVisibilityCanBePrivate")
 class ExternalStorage : AppCompatActivity() {
     /**
      * The [LinearLayout] R.id.layout inside of our layout file R.layout.external_storage into which
      * we add the three "storage controls" (inflated and configured instances of the layout file
      * R.layout.external_storage_item) which we use to exercise the external storage directory api.
      */
-    var mLayout: ViewGroup? = null
+    private var mLayout: ViewGroup? = null
 
     /**
      * Class which is used to hold references to the three important Views (the root view itself, and
@@ -130,40 +129,40 @@ class ExternalStorage : AppCompatActivity() {
         mLayout = findViewById(R.id.layout)
         @Suppress("DEPRECATION")
         mExternalStoragePublicPicture = createStorageControls(
-                "Picture: getExternalStoragePublicDirectory",
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                View.OnClickListener {
-                    createExternalStoragePublicPicture()
-                    updateExternalStorageState()
-                },
-                View.OnClickListener {
-                    deleteExternalStoragePublicPicture()
-                    updateExternalStorageState()
-                })
+            "Picture: getExternalStoragePublicDirectory",
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            View.OnClickListener {
+                createExternalStoragePublicPicture()
+                updateExternalStorageState()
+            },
+            View.OnClickListener {
+                deleteExternalStoragePublicPicture()
+                updateExternalStorageState()
+            })
         mLayout!!.addView(mExternalStoragePublicPicture!!.mRoot)
         mExternalStoragePrivatePicture = createStorageControls(
-                "Picture getExternalFilesDir",
-                getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                View.OnClickListener {
-                    createExternalStoragePrivatePicture()
-                    updateExternalStorageState()
-                },
-                View.OnClickListener {
-                    deleteExternalStoragePrivatePicture()
-                    updateExternalStorageState()
-                })
+            "Picture getExternalFilesDir",
+            getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+            View.OnClickListener {
+                createExternalStoragePrivatePicture()
+                updateExternalStorageState()
+            },
+            View.OnClickListener {
+                deleteExternalStoragePrivatePicture()
+                updateExternalStorageState()
+            })
         mLayout!!.addView(mExternalStoragePrivatePicture!!.mRoot)
         mExternalStoragePrivateFile = createStorageControls(
-                "File getExternalFilesDir",
-                getExternalFilesDir(null),
-                View.OnClickListener {
-                    createExternalStoragePrivateFile()
-                    updateExternalStorageState()
-                },
-                View.OnClickListener {
-                    deleteExternalStoragePrivateFile()
-                    updateExternalStorageState()
-                })
+            "File getExternalFilesDir",
+            getExternalFilesDir(null),
+            View.OnClickListener {
+                createExternalStoragePrivateFile()
+                updateExternalStorageState()
+            },
+            View.OnClickListener {
+                deleteExternalStoragePrivateFile()
+                updateExternalStorageState()
+            })
         mLayout!!.addView(mExternalStoragePrivateFile!!.mRoot)
         startWatchingExternalStorage()
     }
@@ -213,7 +212,7 @@ class ExternalStorage : AppCompatActivity() {
      * [BroadcastReceiver] for the actions ACTION_MEDIA_MOUNTED, and ACTION_MEDIA_REMOVED, it
      * just calls our method [updateExternalStorageState] once created.
      */
-    var mExternalStorageReceiver: BroadcastReceiver? = null
+    private var mExternalStorageReceiver: BroadcastReceiver? = null
 
     /**
      * External storage is present (but not necessarily writeable). Set to *true* in our method
@@ -222,7 +221,7 @@ class ExternalStorage : AppCompatActivity() {
      * (Otherwise *false*). Used only as the argument to a call to our method
      * [handleExternalStorageState]
      */
-    var mExternalStorageAvailable = false
+    private var mExternalStorageAvailable = false
 
     /**
      * External storage is present and writeable. Set to *true* in our method
@@ -230,7 +229,7 @@ class ExternalStorage : AppCompatActivity() {
      * storage media returned by `getExternalStorageState` is MEDIA_MOUNTED. (Otherwise
      * *false*). Used only as the argument to a call to our method [handleExternalStorageState]
      */
-    var mExternalStorageWriteable = false
+    private var mExternalStorageWriteable = false
 
     /**
      * Queries the current state of the primary shared/external storage media, setting our [Boolean]
@@ -267,7 +266,7 @@ class ExternalStorage : AppCompatActivity() {
      * update the enabled/disabled state of our "storage controls" Buttons based on the state of the
      * external storage.
      */
-    fun startWatchingExternalStorage() {
+    private fun startWatchingExternalStorage() {
         mExternalStorageReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 Log.i("test", "Storage: " + intent.data)
@@ -286,7 +285,7 @@ class ExternalStorage : AppCompatActivity() {
      * we just unregister our previously registered [BroadcastReceiver] field [mExternalStorageReceiver].
      * All filters that have been registered for this [BroadcastReceiver] will be removed.
      */
-    fun stopWatchingExternalStorage() {
+    private fun stopWatchingExternalStorage() {
         unregisterReceiver(mExternalStorageReceiver)
     }
 
@@ -312,7 +311,7 @@ class ExternalStorage : AppCompatActivity() {
      * file so that it is immediately available to the user. **Note:** Running on Android Q and
      * above will just throw an [IOException]: "EACCES (Permission denied)"
      */
-    fun createExternalStoragePublicPicture() {
+    private fun createExternalStoragePublicPicture() {
         /**
          * Create a path where we will place our picture in the user's public pictures directory.
          * Note that you should be careful about what you place here, since the user often manages
@@ -345,9 +344,9 @@ class ExternalStorage : AppCompatActivity() {
              * that it is immediately available to the user.
              */
             MediaScannerConnection.scanFile(
-                    this,
-                    arrayOf(file.toString()),
-                    null
+                this,
+                arrayOf(file.toString()),
+                null
             ) { pathScanned, uri ->
                 /**
                  * Called to notify the client when the media scanner has finished
@@ -370,9 +369,9 @@ class ExternalStorage : AppCompatActivity() {
              */
             Log.w("ExternalStorage", "Error writing $file", e)
             Toast.makeText(
-                    this,
-                    this.getString(R.string.public_storage_failure),
-                    Toast.LENGTH_LONG
+                this,
+                this.getString(R.string.public_storage_failure),
+                Toast.LENGTH_LONG
             ).show()
         }
     }
@@ -386,7 +385,7 @@ class ExternalStorage : AppCompatActivity() {
      * `val file` using `path` as the directory path, and "DemoPicture.jpg" as the name of the file.
      * Finally we delete the file denoted by the pathname `file`.
      */
-    fun deleteExternalStoragePublicPicture() {
+    private fun deleteExternalStoragePublicPicture() {
         /**
          * Create a path where we will place our picture in the user's public pictures directory
          * and delete the file. If external storage is not currently mounted this will fail.
@@ -411,7 +410,7 @@ class ExternalStorage : AppCompatActivity() {
      * @return *true* if the file "DemoPicture.jpg" exists already in the user's public
      * pictures directory
      */
-    fun hasExternalStoragePublicPicture(): Boolean {
+    private fun hasExternalStoragePublicPicture(): Boolean {
         /**
          * Create a path where we will place our picture in the user's public pictures directory
          * and check if the file exists. If external storage is not currently mounted this will
@@ -447,7 +446,7 @@ class ExternalStorage : AppCompatActivity() {
      * Finally we call [MediaScannerConnection.scanFile] to tell the media scanner about the new
      * file so that it is immediately available to the user.
      */
-    fun createExternalStoragePrivatePicture() {
+    private fun createExternalStoragePrivatePicture() {
         /**
          * Create a path where we will place our picture in our own private
          * pictures directory.  Note that we don't really need to place a
@@ -510,7 +509,7 @@ class ExternalStorage : AppCompatActivity() {
      * "DemoPicture.jpg" as the name of the file. Finally we delete the file denoted by the pathname
      * [File] `file`.
      */
-    fun deleteExternalStoragePrivatePicture() {
+    private fun deleteExternalStoragePrivatePicture() {
         /**
          * Create a path where we will place our picture in the user's
          * public pictures directory and delete the file If external
@@ -536,7 +535,7 @@ class ExternalStorage : AppCompatActivity() {
      * @return *true* if the file "DemoPicture.jpg" exists already in the applications persistent
      * directory for files of type DIRECTORY_PICTURES
      */
-    fun hasExternalStoragePrivatePicture(): Boolean {
+    private fun hasExternalStoragePrivatePicture(): Boolean {
         /**
          * Create a path where we will place our picture in the user's
          * public pictures directory and check if the file exists. If
@@ -567,7 +566,7 @@ class ExternalStorage : AppCompatActivity() {
      * the number of bytes that can be read from `inputStream`, read all of `inputStream` into `data`,
      * write all of `data` to `os` and then close both `inputStream` and `os`.
      */
-    fun createExternalStoragePrivateFile() {
+    private fun createExternalStoragePrivateFile() {
         /**
          * Create a path where we will place our private file on external storage.
          */
@@ -604,7 +603,7 @@ class ExternalStorage : AppCompatActivity() {
      * on my Nexus 6) and "DemoPicture.jpg" as the name of the file. Finally we delete the file denoted
      * by the pathname `File file`.
      */
-    fun deleteExternalStoragePrivateFile() {
+    private fun deleteExternalStoragePrivateFile() {
         /**
          * Get path for the file on external storage. If external
          * storage is not currently mounted this will fail.
@@ -627,7 +626,7 @@ class ExternalStorage : AppCompatActivity() {
      * @return *true* if the file "DemoPicture.jpg" exists already in the applications persistent directory
      * for files, otherwise *false*.
      */
-    fun hasExternalStoragePrivateFile(): Boolean {
+    private fun hasExternalStoragePrivateFile(): Boolean {
         /**
          * Get path for the file on external storage. If external
          * storage is not currently mounted this will fail.
@@ -662,10 +661,11 @@ class ExternalStorage : AppCompatActivity() {
      * `mRoot` (field `mCreate`), and the "DELETE" [Button] R.id.delete in the [View] `mRoot` (field
      * `mDelete`).
      */
-    fun createStorageControls(label: CharSequence?,
-                              path: File?,
-                              createClick: View.OnClickListener?,
-                              deleteClick: View.OnClickListener?
+    private fun createStorageControls(
+        label: CharSequence?,
+        path: File?,
+        createClick: View.OnClickListener?,
+        deleteClick: View.OnClickListener?
     ): Item {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val item = Item()
