@@ -26,6 +26,9 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
@@ -72,10 +75,11 @@ class InstallApk : AppCompatActivity() {
     }
 
     /**
-     * Called when an activity you launched exits, giving you the `requestCode` you started it
-     * with, the `resultCode` it returned, and any additional data from it.  The `resultCode`
-     * will be RESULT_CANCELED if the activity explicitly returned that, didn't return any result,
-     * or crashed during its operation.
+     * Called when an activity you launched using either of the two [ActivityResultLauncher]'s in
+     * this demo: [requestInstallLauncher] or [requestUninstallLauncher] exits, giving you the
+     * `requestCode` it was starte with, the `resultCode` it returned, and any additional data from
+     * it.  The `resultCode` will be RESULT_CANCELED if the activity explicitly returned that,
+     * didn't return any result, or crashed during its operation.
      *
      * You will receive this call immediately before [onResume] when your activity is re-starting.
      *
@@ -93,14 +97,14 @@ class InstallApk : AppCompatActivity() {
      *  * RESULT_CANCELED -- we toast "Uninstall canceled!"
      *  * otherwise we toast "Uninstall Failed!"
      *
-     * @param requestCode The integer request code originally supplied to [startActivityForResult],
-     * allowing you to identify who this result came from.
+     * @param requestCode The integer request code originally supplied by the [ActivityResultLauncher]
+     * used to launch the activity, allowing you to identify who this result came from.
      * @param resultCode The integer result code returned by the child activity through [setResult]
-     * @param intent An [Intent], which can return result data to the caller (various data can be
+     * @param data An [Intent], which can return result data to the caller (various data can be
      * attached as Intent "extras").
      */
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
+    @Suppress("UNUSED_PARAMETER")
+    private fun handleRequestCodes(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_INSTALL) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
@@ -144,6 +148,7 @@ class InstallApk : AppCompatActivity() {
         intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         startActivity(intent)
     }
+
     /**
      * `OnClickListener` for the [Button] with ID R.id.my_source "MY SOURCE". When clicked it
      * creates an [Intent] variable `val intent` with the action ACTION_INSTALL_PACKAGE, sets
@@ -157,7 +162,8 @@ class InstallApk : AppCompatActivity() {
      * EXTRA_RETURN_RESULT (the installer UI should return to the application the result code of
      * the install/uninstall), adds our package name as an extra under the key
      * EXTRA_INSTALLER_PACKAGE_NAME (specifies the installer package name), and finally it uses
-     * `intent` to launch the activity requested asking for it to return a result.
+     * the launch method of [requestInstallLauncher] to launch the activity requested by `intent`,
+     * asking for it to return a result.
      */
     private val mMySourceListener = View.OnClickListener {
         @Suppress("DEPRECATION")
@@ -166,10 +172,25 @@ class InstallApk : AppCompatActivity() {
         intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true)
         intent.putExtra(Intent.EXTRA_RETURN_RESULT, true)
-        intent.putExtra(Intent.EXTRA_INSTALLER_PACKAGE_NAME,
-                applicationInfo.packageName)
-        startActivityForResult(intent, REQUEST_INSTALL)
+        intent.putExtra(Intent.EXTRA_INSTALLER_PACKAGE_NAME, applicationInfo.packageName)
+        requestInstallLauncher.launch(intent) // REQUEST_INSTALL ActivityResultLauncher
     }
+
+    /**
+     * The [ActivityResultLauncher] we use to launch an activity for its result using the request
+     * code [REQUEST_INSTALL]. The [ActivityResult] it returns is passed to our [handleRequestCodes]
+     * method when this activity is resumed.
+     */
+    private val requestInstallLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            // handleRequestCodes is just the renamed original `onActivityResult`
+            handleRequestCodes(
+                requestCode = REQUEST_INSTALL, // This needs to be set for each request code used in app
+                resultCode = result.resultCode,
+                data =  result.data
+            )
+
+        }
     /**
      * `OnClickListener` for the [Button] with ID R.id.uninstall "UNINSTALL". When clicked it
      * creates an [Intent] variable `val intent` with the action ACTION_UNINSTALL_PACKAGE, sets
@@ -183,6 +204,7 @@ class InstallApk : AppCompatActivity() {
         intent.data = Uri.parse("package:com.example.android.helloactivity")
         startActivity(intent)
     }
+
     /**
      * `OnClickListener` for the [Button] with ID R.id.uninstall_result "UNINSTALL W/RESULT". When
      * clicked it creates an [Intent] variable `val intent` with the action ACTION_UNINSTALL_PACKAGE,
@@ -198,8 +220,24 @@ class InstallApk : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE)
         intent.data = Uri.parse("package:com.example.android.helloactivity")
         intent.putExtra(Intent.EXTRA_RETURN_RESULT, true)
-        startActivityForResult(intent, REQUEST_UNINSTALL)
+        requestUninstallLauncher.launch(intent) // REQUEST_UNINSTALL ActivityResultLauncher
     }
+
+    /**
+     * The [ActivityResultLauncher] we use to launch an activity for its result using the request
+     * code [REQUEST_UNINSTALL]. The [ActivityResult] it returns is passed to our [handleRequestCodes]
+     * method when this activity is resumed.
+     */
+    private val requestUninstallLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            // handleRequestCodes is just the renamed original `onActivityResult`
+            handleRequestCodes(
+                requestCode = REQUEST_UNINSTALL,
+                resultCode = result.resultCode,
+                data =  result.data
+            )
+
+        }
 
     /**
      * Returns a [Uri] pointing to the APK to install, either a MODE_WORLD_READABLE file for devices
@@ -236,12 +274,14 @@ class InstallApk : AppCompatActivity() {
          * recommended.
          */
         val useFileProvider = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+
         /**
          * Copy the given asset out into a file so that it can be installed.
          * Returns the path to the file.
          */
         val tempFilename = "tmp.apk"
         val buffer = ByteArray(16384)
+
         @Suppress("DEPRECATION")
         @SuppressLint("WorldReadableFiles")
         val fileMode = if (useFileProvider) Context.MODE_PRIVATE else Context.MODE_WORLD_READABLE
@@ -260,7 +300,7 @@ class InstallApk : AppCompatActivity() {
         return if (useFileProvider) {
             val toInstall = File(this.filesDir, tempFilename)
             FileProvider.getUriForFile(
-                    this, "com.example.android.apis.installapkprovider", toInstall)
+                this, "com.example.android.apis.installapkprovider", toInstall)
         } else {
             Uri.fromFile(getFileStreamPath(tempFilename))
         }
@@ -276,12 +316,14 @@ class InstallApk : AppCompatActivity() {
          * activity is completed.
          */
         const val REQUEST_INSTALL = 1
+
         /**
          * Request code used for `startActivityForResult` when starting the `Intent` with
          * the action ACTION_UNINSTALL_PACKAGE, and checked for in `onActivityResult` when the
          * activity is completed.
          */
         const val REQUEST_UNINSTALL = 2
+
         /**
          * TAG used for logging
          */
