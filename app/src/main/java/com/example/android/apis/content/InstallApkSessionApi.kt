@@ -18,6 +18,7 @@ package com.example.android.apis.content
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -25,6 +26,7 @@ import android.content.pm.PackageInstaller
 import android.content.pm.PackageInstaller.SessionParams
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -99,12 +101,22 @@ class InstallApkSessionApi : AppCompatActivity() {
                 val context: Context = this@InstallApkSessionApi
                 val intent = Intent(context, InstallApkSessionApi::class.java)
                 intent.action = PACKAGE_INSTALLED_ACTION
-                val pendingIntent = PendingIntent.getActivity(
+                @SuppressLint("UnspecifiedImmutableFlag")
+                val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    PendingIntent.getActivity(
+                        context,
+                        0,
+                        intent,
+                        PendingIntent.FLAG_MUTABLE
+                    )
+                } else {
+                    PendingIntent.getActivity(
                         context,
                         0,
                         intent,
                         0
-                )
+                    )
+                }
                 val statusReceiver = pendingIntent.intentSender
                 /**
                  * Commit the session (this will start the installation workflow).
@@ -146,15 +158,15 @@ class InstallApkSessionApi : AppCompatActivity() {
          * if the disk is almost full.
          */
         session.openWrite("package", 0, -1)
-                .use { packageInSession ->
-                    assets.open(assetName).use { inputStream ->
-                        val buffer = ByteArray(16384)
-                        var n: Int
-                        while ((inputStream.read(buffer).also { n = it }) >= 0) {
-                            packageInSession.write(buffer, 0, n)
-                        }
+            .use { packageInSession ->
+                assets.open(assetName).use { inputStream ->
+                    val buffer = ByteArray(16384)
+                    var n: Int
+                    while ((inputStream.read(buffer).also { n = it }) >= 0) {
+                        packageInSession.write(buffer, 0, n)
                     }
                 }
+            }
     }
 
     /**
@@ -216,7 +228,8 @@ class InstallApkSessionApi : AppCompatActivity() {
      */
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        val extras = intent.extras
+        val extras: Bundle? = intent.extras
+        Log.i(TAG, "extras is $extras")
         if ((PACKAGE_INSTALLED_ACTION == intent.action)) {
             val status = extras!!.getInt(PackageInstaller.EXTRA_STATUS)
             val message = extras.getString(PackageInstaller.EXTRA_STATUS_MESSAGE)
@@ -231,9 +244,9 @@ class InstallApkSessionApi : AppCompatActivity() {
 
                 PackageInstaller.STATUS_SUCCESS ->
                     Toast.makeText(
-                            this,
-                            "Install succeeded!",
-                            Toast.LENGTH_SHORT
+                        this,
+                        "Install succeeded!",
+                        Toast.LENGTH_SHORT
                     ).show()
 
                 PackageInstaller.STATUS_FAILURE, PackageInstaller.STATUS_FAILURE_ABORTED,
@@ -241,27 +254,32 @@ class InstallApkSessionApi : AppCompatActivity() {
                 PackageInstaller.STATUS_FAILURE_INCOMPATIBLE, PackageInstaller.STATUS_FAILURE_INVALID,
                 PackageInstaller.STATUS_FAILURE_STORAGE ->
                     Toast.makeText(
-                            this,
-                            "Install failed! $status, $message",
-                            Toast.LENGTH_SHORT
+                        this,
+                        "Install failed! $status, $message",
+                        Toast.LENGTH_SHORT
                     ).show()
 
                 else -> Toast.makeText(
-                        this,
-                        "Unrecognized status received from installer: $status",
-                        Toast.LENGTH_SHORT
+                    this,
+                    "Unrecognized status received from installer: $status",
+                    Toast.LENGTH_SHORT
                 ).show()
             }
         }
     }
 
     /**
-     * Our static constant.
+     * Our static constants.
      */
     companion object {
         /**
          * Action of the [Intent] used for the install status receiver.
          */
         private const val PACKAGE_INSTALLED_ACTION = "com.example.android.apis.content.SESSION_API_PACKAGE_INSTALLED"
+
+        /**
+         * TAG used for logging.
+          */
+        private const val TAG = "InstallApkSessionApi"
     }
 }
