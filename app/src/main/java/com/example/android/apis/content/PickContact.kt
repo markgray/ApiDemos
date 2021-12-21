@@ -15,6 +15,9 @@
  */
 package com.example.android.apis.content
 
+// Need the following import to get access to the app resources, since this
+// class is in a sub-package.
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
@@ -22,10 +25,10 @@ import android.provider.BaseColumns
 import android.provider.ContactsContract
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
 import com.example.android.apis.R
 
 /**
@@ -39,6 +42,7 @@ class PickContact : AppCompatActivity() {
      * Toast we will toast the contact data base query result in
      */
     var mToast: Toast? = null
+
     /**
      * [ResultDisplayer] instance that launched contact data base query, it is set to *this* in the
      * `onClick` override of [ResultDisplayer] when the Button using *this* [ResultDisplayer] as its
@@ -54,15 +58,15 @@ class PickContact : AppCompatActivity() {
      * contact data base query.
      */
     inner class ResultDisplayer(
-            /**
-             * String to use as part of the toast displayed when the result of the contact database
-             * query is returned to [onActivityResult].
-             */
-            var mMsg: String,
-            /**
-             * MIME data type to use for the [Intent] launching the contact database query.
-             */
-            var mMimeType: String
+        /**
+         * String to use as part of the toast displayed when the result of the contact database
+         * query is returned to [onActivityResult].
+         */
+        var mMsg: String,
+        /**
+         * MIME data type to use for the [Intent] launching the contact database query.
+         */
+        var mMimeType: String
     ) : View.OnClickListener {
 
         /**
@@ -72,9 +76,11 @@ class PickContact : AppCompatActivity() {
          * We set an explicit MIME data type for `intent` to be the contents of our field
          * [String] field [mMimeType] (which is set for this instance in our constructor), set our
          * Activity's [ResultDisplayer] field [mPendingResult] to this so that we can be found by
-         * [onActivityResult] when a result for a query is returned, and finally we use `intent` to
-         * launch an activity for which we would like a result when it finishes. (Said result will
-         * be returned to [onActivityResult] in the sweet by-and-by).
+         * [handleRequestCodes] when a result for a query is returned, and finally we use `intent`
+         * in a call to the `launch` method of our [ActivityResultLauncher] field [contactsLauncher]
+         * to launch an activity for which we would like a result when it finishes. (Said result will
+         * be returned to [handleRequestCodes] by the lambda of the call to [registerForActivityResult]
+         * in the sweet by-and-by).
          *
          * @param v View of Button that was clicked
          */
@@ -82,10 +88,26 @@ class PickContact : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = mMimeType
             mPendingResult = this
-            startActivityForResult(intent, 1)
+            contactsLauncher.launch(intent) // launches our intent with 1 as its request code.
         }
-
     }
+
+    /**
+     * This is the [ActivityResultLauncher] that we use to launch the [Intent] to have the contacts
+     * provider ask the user to select a contact from the database. The lambda of the call to
+     * [registerForActivityResult] calls our [handleRequestCodes] method with the results of the
+     * activity launched.
+     */
+    private val contactsLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            // handleRequestCodes is just the renamed original `onActivityResult`
+            handleRequestCodes(
+                requestCode = 1,
+                resultCode = result.resultCode,
+                data =  result.data
+            )
+
+        }
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -106,16 +128,16 @@ class PickContact : AppCompatActivity() {
         setContentView(R.layout.pick_contact)
         // Watch for button clicks.
         findViewById<View>(R.id.pick_contact).setOnClickListener(
-                ResultDisplayer("Selected contact", CONTACT)
+            ResultDisplayer("Selected contact", CONTACT)
         )
         findViewById<View>(R.id.pick_person).setOnClickListener(
-                ResultDisplayer("Selected person", PERSON)
+            ResultDisplayer("Selected person", PERSON)
         )
         findViewById<View>(R.id.pick_phone).setOnClickListener(
-                ResultDisplayer("Selected phone", PHONE)
+            ResultDisplayer("Selected phone", PHONE)
         )
         findViewById<View>(R.id.pick_address).setOnClickListener(
-                ResultDisplayer("Selected address", POSTAL)
+            ResultDisplayer("Selected address", POSTAL)
         )
     }
 
@@ -147,20 +169,27 @@ class PickContact : AppCompatActivity() {
      * @param data An [Intent], which can return result data to the caller (various data can be
      * attached as [Intent] "extras").
      */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    @Suppress("UNUSED_PARAMETER")
+    fun handleRequestCodes(requestCode: Int, resultCode: Int, data: Intent?) {
         if (data != null) {
             val uri = data.data
             if (uri != null) {
                 var c: Cursor? = null
                 try {
-                    c = contentResolver.query(uri, arrayOf(BaseColumns._ID), null, null, null)
+                    c = contentResolver.query(
+                        uri,
+                        arrayOf(BaseColumns._ID),
+                        null,
+                        null,
+                        null
+                    )
                     if (c != null && c.moveToFirst()) {
                         val id = c.getInt(0)
                         if (mToast != null) {
                             mToast!!.cancel()
                         }
                         val txt = mPendingResult!!.mMsg + ":\n" + uri + "\nid: " + id
+                        @SuppressLint("ShowToast")
                         mToast = Toast.makeText(this, txt, Toast.LENGTH_LONG)
                         mToast!!.show()
                     }
@@ -180,16 +209,19 @@ class PickContact : AppCompatActivity() {
          * Constant Value: "vnd.android.cursor.item/contact"
          */
         const val CONTACT = ContactsContract.Contacts.CONTENT_ITEM_TYPE
+
         /**
          * The MIME type of a CONTENT_URI subdirectory of a single person.
          * Constant Value: "vnd.android.cursor.item/person"
          */
         const val PERSON = "vnd.android.cursor.item/person"
+
         /**
          * A data kind representing a telephone number. MIME type used when storing this in data table.
          * Constant Value: "vnd.android.cursor.item/phone_v2"
          */
         const val PHONE = ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
+
         /**
          * A data kind representing a postal addresses and MIME type used when storing this in data table.
          * Constant Value: "vnd.android.cursor.item/postal-address_v2"

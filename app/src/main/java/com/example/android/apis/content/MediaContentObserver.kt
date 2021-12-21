@@ -179,6 +179,7 @@ class MediaContentObserver : AppCompatActivity() {
             permissions: Array<String>,
             grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQ_PHOTOS_PERM) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 PhotosContentJob.scheduleJob(this@MediaContentObserver)

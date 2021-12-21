@@ -205,8 +205,8 @@ class MediaContentJob : JobService() {
          */
         fun isScheduled(context: Context): Boolean {
             val js = context.getSystemService(JobScheduler::class.java)
-            val jobs: MutableList<JobInfo>? = js!!.allPendingJobs
-            for (i in jobs!!.indices) {
+            val jobs: MutableList<JobInfo> = js!!.allPendingJobs
+            for (i in jobs.indices) {
                 if (jobs[i].id == JobIds.MEDIA_CONTENT_JOB) {
                     return true
                 }
