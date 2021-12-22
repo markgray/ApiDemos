@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
+import androidx.core.content.res.ResourcesCompat
 import com.example.android.apis.R
 
 /**
@@ -86,10 +87,12 @@ class AnimateDrawables : GraphicsActivity() {
         init {
             isFocusable = true
             isFocusableInTouchMode = true
-            @Suppress("DEPRECATION")
-            val dr = context.resources.getDrawable(R.drawable.beach)
-            dr.setBounds(0, 0, dr.intrinsicWidth, dr.intrinsicHeight)
-            val an: Animation = TranslateAnimation(0f, 100f, 0f, 200f)
+            val dr = ResourcesCompat.getDrawable(resources, R.drawable.beach, null)
+            dr!!.setBounds(0, 0, dr.intrinsicWidth, dr.intrinsicHeight)
+            val an: Animation = TranslateAnimation(
+                0f, 100f,
+                0f, 200f
+            )
             an.duration = 2000
             an.repeatCount = Animation.INFINITE
             an.initialize(10, 10, 10, 10)

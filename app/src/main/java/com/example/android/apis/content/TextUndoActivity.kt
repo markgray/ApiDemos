@@ -31,21 +31,20 @@ import com.example.android.apis.R
 /**
  * Simple example of using an UndoManager for editing text in a TextView.
  */
-@Suppress("MemberVisibilityCanBePrivate")
 @SuppressLint("SetTextI18n")
 class TextUndoActivity : AppCompatActivity() {
     /**
      * ID R.id.default_text in layout file, it is the "TextView with the default Control-Z undo behavior."
      */
-    lateinit var mDefaultText: EditText
+    private lateinit var mDefaultText: EditText
     /**
      * ID R.id.length_limit_text in layout file, it is the "TextView with a length limit InputFilter."
      */
-    lateinit var mLengthLimitText: EditText
+    private lateinit var mLengthLimitText: EditText
     /**
      * ID R.id.credit_card_text in the layout file, it is the "Credit card input field with a TextWatcher."
      */
-    lateinit var mCreditCardText: EditText
+    private lateinit var mCreditCardText: EditText
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of

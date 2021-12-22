@@ -200,6 +200,7 @@ class SpriteTextRenderer(
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE.toFloat())
         gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE.toFloat())
         val inputStream: InputStream = mContext.resources.openRawResource(R.raw.robot)
+        @Suppress("JoinDeclarationAndAssignment")
         val bitmap: Bitmap
         bitmap = try {
             BitmapFactory.decodeStream(inputStream)
