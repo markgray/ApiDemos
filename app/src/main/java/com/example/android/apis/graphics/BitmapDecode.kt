@@ -15,7 +15,7 @@
  */
 
 @file:Suppress("DEPRECATION")
-
+// TODO: replace Movie with android.graphics.drawable.AnimatedImageDrawable
 package com.example.android.apis.graphics
 
 import android.content.Context
@@ -29,6 +29,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import com.example.android.apis.R
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -252,7 +253,7 @@ class BitmapDecode : GraphicsActivity() {
             @Suppress("DEPRECATION")
             mBitmap4 = Bitmap.createBitmap(pixels, 0, w, w, h, Bitmap.Config.ARGB_4444)
             @Suppress("DEPRECATION")
-            mDrawable = context.resources.getDrawable(R.drawable.button)
+            mDrawable = ResourcesCompat.getDrawable(resources, R.drawable.button, null)!!
             mDrawable.setBounds(150, 20, 300, 100)
             inputStream = context.resources.openRawResource(R.raw.animated_gif)
             @Suppress("ConstantConditionIf")
