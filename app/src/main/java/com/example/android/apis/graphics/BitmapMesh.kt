@@ -52,19 +52,23 @@ class BitmapMesh : GraphicsActivity() {
          * [Bitmap] that contains our jpg to be displayed and warped.
          */
         private val mBitmap: Bitmap
+
         /**
          * Warped [Bitmap] mesh array of (x,y) vertices
          */
         private val mVerts = FloatArray(COUNT * 2)
+
         /**
          * Original un-warped [Bitmap] mesh array of (x,y) vertices
          */
         private val mOrig = FloatArray(COUNT * 2)
+
         /**
          * [Matrix] used to translate the [Canvas] parameter passed to our [onDraw] override to
          * (10,10) before drawing the [Bitmap]
          */
         private val mMatrix = Matrix()
+
         /**
          * The inverse of [Matrix] field [mMatrix] used to translate points received in touch events
          * to a (0,0) origin (ie. it converts points in the [Canvas] `canvas` coordinate space to
@@ -84,11 +88,11 @@ class BitmapMesh : GraphicsActivity() {
             canvas.drawColor(-0x333334)
             canvas.concat(mMatrix)
             canvas.drawBitmapMesh(
-                    mBitmap,
-                    WIDTH, HEIGHT,
-                    mVerts, 0,
-                    null, 0,
-                    null
+                mBitmap,
+                WIDTH, HEIGHT,
+                mVerts, 0,
+                null, 0,
+                null
             )
         }
 
@@ -147,6 +151,7 @@ class BitmapMesh : GraphicsActivity() {
          * x coordinate of last touch event that we warped the bitmap mesh for
          */
         private var mLastWarpX = -9999 // don't match a valid touch coordinate to start with
+
         /**
          * y coordinate of last touch event that we warped the bitmap mesh for
          */
@@ -191,14 +196,17 @@ class BitmapMesh : GraphicsActivity() {
              * Gravitational constant used in [warp] method.
              */
             const val K = 10000f
+
             /**
              * Number of vertices in X dimension of Bitmap mesh.
              */
             private const val WIDTH = 20
+
             /**
              * Number of vertices in Y dimension of Bitmap mesh.
              */
             private const val HEIGHT = 20
+
             /**
              * Total number of vertices in Bitmap mesh
              */

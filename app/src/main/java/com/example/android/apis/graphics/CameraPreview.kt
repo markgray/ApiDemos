@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 @file:Suppress("DEPRECATION")
-
+// TODO: replace use of Camera with android.hardware.camera2
 package com.example.android.apis.graphics
 
 import android.annotation.TargetApi
@@ -53,18 +53,22 @@ class CameraPreview : AppCompatActivity() {
      * Our instance of our class [Preview]
      */
     private var mPreview: Preview? = null
+
     /**
      * Our instance of the [Camera] class
      */
     var mCamera: Camera? = null
+
     /**
      * The number of physical cameras available on this device
      */
     var numberOfCameras = 0
+
     /**
      * Physical camera number that we currently have open
      */
     var cameraCurrentlyLocked = 0
+
     /**
      * The first rear facing camera
      */
@@ -205,7 +209,7 @@ class CameraPreview : AppCompatActivity() {
                 if (numberOfCameras == 1) {
                     val builder = AlertDialog.Builder(this)
                     builder.setMessage(this.getString(R.string.camera_alert))
-                            .setNeutralButton("Close", null)
+                        .setNeutralButton("Close", null)
                     val alert = builder.create()
                     alert.show()
                     return true
@@ -247,11 +251,13 @@ class CameraPreview : AppCompatActivity() {
          * [SurfaceView] we create in our constructor, and the only view in our [ViewGroup].
          */
         var mSurfaceView: SurfaceView = SurfaceView(context)
+
         /**
          * [SurfaceHolder] of our [SurfaceView] field [mSurfaceView], we use it to set the preview
          * display of our [Camera] field [mCamera].
          */
         var mHolder: SurfaceHolder
+
         /**
          * Optimal preview size chosen from amongst the supported preview sizes of the camera
          * `List<Size> mSupportedPreviewSizes` field by our method [getOptimalPreviewSize] based
@@ -259,6 +265,7 @@ class CameraPreview : AppCompatActivity() {
          */
         @Suppress("DEPRECATION")
         var mPreviewSize: Camera.Size? = null
+
         /**
          * List of supported preview sizes for our current [Camera] field [mCamera] as returned by
          * the call to the method `getSupportedPreviewSizes` on the [Camera.Parameters] for the
@@ -266,6 +273,7 @@ class CameraPreview : AppCompatActivity() {
          */
         @Suppress("DEPRECATION")
         var mSupportedPreviewSizes: List<Camera.Size>? = null
+
         /**
          * Current [Camera] instance whose preview we are displaying
          */
@@ -523,6 +531,7 @@ class CameraPreview : AppCompatActivity() {
 
         companion object {
             const val ASPECT_TOLERANCE = 0.1
+
             /**
              * TAG for logging
              */

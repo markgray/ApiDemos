@@ -54,15 +54,18 @@ class BitmapPixels : GraphicsActivity() {
          * Color ramp [Bitmap] using [Bitmap.Config.ARGB_8888] as its resolution
          */
         private val mBitmap1: Bitmap
+
         /**
          * Color ramp [Bitmap] using [Bitmap.Config.RGB_565] as its resolution
          */
         private val mBitmap2: Bitmap
+
         /**
          * Color ramp [Bitmap] using [Bitmap.Config.ARGB_4444] as its resolution (since KITKAT this
          * resolution does not work, so we use [Bitmap.Config.RGB_565] again instead).
          */
         private var mBitmap3: Bitmap? = null
+
         /**
          * We implement this to do our drawing. First we set our entire [Canvas] parameter [canvas]
          * to 0xFFCCCCCC (a darkish gray). We initialize the `y` coordinate we use to draw our bitmaps
@@ -316,14 +319,17 @@ class BitmapPixels : GraphicsActivity() {
             val data8888 = IntArray(n)
             val data565 = ShortArray(n)
             val data4444 = ShortArray(n)
-            makeRamp(premultiplyColor(Color.RED), premultiplyColor(Color.GREEN),
-                    n, data8888, data565, data4444)
+            makeRamp(
+                premultiplyColor(Color.RED),
+                premultiplyColor(Color.GREEN),
+                n, data8888, data565, data4444
+            )
             mBitmap1 = Bitmap.createBitmap(n, n, Bitmap.Config.ARGB_8888)
             mBitmap2 = Bitmap.createBitmap(n, n, Bitmap.Config.RGB_565)
             mBitmap3 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 Bitmap.createBitmap(n, n, Bitmap.Config.RGB_565)
             } else {
-                @Suppress("DEPRECATION")
+                @Suppress("DEPRECATION") // this works for SDK less than KITKAT
                 Bitmap.createBitmap(n, n, Bitmap.Config.ARGB_4444)
             }
             mBitmap1.copyPixelsFromBuffer(makeBuffer(data8888, n))
