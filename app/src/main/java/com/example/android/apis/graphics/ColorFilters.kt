@@ -29,6 +29,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.example.android.apis.R
 
 
@@ -55,7 +56,6 @@ class ColorFilters : GraphicsActivity() {
      * View that displays 7 rows of the same 4 buttons, with each row using different Porter-Duff
      * color filters
      */
-    @SuppressLint("UseCompatLoadingForDrawables")
     private class SampleView(
             /**
              * `Activity` used to construct us, we use it to set the title bar of its window
@@ -317,9 +317,11 @@ class ColorFilters : GraphicsActivity() {
         init {
             val context: Context = mActivity
             isFocusable = true
-            @Suppress("DEPRECATION")
-            mDrawable = context.resources.getDrawable(
-                    R.drawable.btn_default_normal)
+            mDrawable = ResourcesCompat.getDrawable(
+                context.resources,
+                R.drawable.btn_default_normal,
+                null
+            )!!
             mHeightOffset = 55
             val heightOfDrawable = mDrawable.intrinsicHeight
             Log.i(TAG, "Height of drawable: $heightOfDrawable")
@@ -327,8 +329,7 @@ class ColorFilters : GraphicsActivity() {
                 mHeightOffset = heightOfDrawable + 5
             }
             mDrawable.setBounds(0, 0, 150, 48)
-            @Suppress("DEPRECATION")
-            mDrawable.setDither(true)
+            // mDrawable.setDither(true) this is ignored starting when?
             val resIDs = intArrayOf(
                     R.drawable.btn_circle_normal,
                     R.drawable.btn_check_off,
@@ -337,10 +338,8 @@ class ColorFilters : GraphicsActivity() {
             mDrawables = arrayOfNulls(resIDs.size)
             var prev: Drawable? = mDrawable
             for (i in resIDs.indices) {
-                @Suppress("DEPRECATION")
-                mDrawables[i] = context.resources.getDrawable(resIDs[i])
-                @Suppress("DEPRECATION")
-                mDrawables[i]!!.setDither(true)
+                mDrawables[i] = ResourcesCompat.getDrawable(resources, resIDs[i], null)!!
+                // mDrawables[i]!!.setDither(true) this is ignored starting when?
                 addToTheRight(mDrawables[i], prev)
                 prev = mDrawables[i]
             }
