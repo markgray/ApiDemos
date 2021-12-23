@@ -118,7 +118,7 @@ class CompressedTextureActivity : AppCompatActivity() {
             val input: InputStream = resources.openRawResource(R.raw.androids)
             try {
                 ETC1Util.loadTexture(GLES10.GL_TEXTURE_2D, 0, 0,
-                        GLES10.GL_RGB, GLES10.GL_UNSIGNED_SHORT_5_6_5, input)
+                    GLES10.GL_RGB, GLES10.GL_UNSIGNED_SHORT_5_6_5, input)
             } catch (e: IOException) {
                 Log.w(TAG, "Could not load texture: $e")
             } finally {
@@ -163,13 +163,13 @@ class CompressedTextureActivity : AppCompatActivity() {
                     ETC1Util.writeTexture(etc1Texture, bos)
                     val bis = ByteArrayInputStream(bos.toByteArray())
                     ETC1Util.loadTexture(GLES10.GL_TEXTURE_2D, 0, 0,
-                            GLES10.GL_RGB, GLES10.GL_UNSIGNED_SHORT_5_6_5, bis)
+                        GLES10.GL_RGB, GLES10.GL_UNSIGNED_SHORT_5_6_5, bis)
                 } catch (e: IOException) {
                     Log.w(TAG, "Could not load texture: $e")
                 }
             } else {
                 ETC1Util.loadTexture(GLES10.GL_TEXTURE_2D, 0, 0,
-                        GLES10.GL_RGB, GLES10.GL_UNSIGNED_SHORT_5_6_5, etc1Texture)
+                    GLES10.GL_RGB, GLES10.GL_UNSIGNED_SHORT_5_6_5, etc1Texture)
             }
         }
 
@@ -190,7 +190,7 @@ class CompressedTextureActivity : AppCompatActivity() {
         private fun createImage(width: Int, height: Int): Buffer {
             val stride = 3 * width
             val image = ByteBuffer.allocateDirect(height * stride)
-                    .order(ByteOrder.nativeOrder())
+                .order(ByteOrder.nativeOrder())
             // Fill with a pretty "munching squares" pattern:
             for (t in 0 until height) {
                 val red = (255 - 2 * t).toByte()
@@ -214,11 +214,13 @@ class CompressedTextureActivity : AppCompatActivity() {
          * TAG used for logging
          */
         private const val TAG = "C...dTextureAct..."
+
         /**
          * Choose between creating a compressed texture on the fly or
          * loading a compressed texture from a resource.
          */
         private const val TEST_CREATE_TEXTURE = false
+
         /**
          * When creating a compressed texture on the fly, choose
          * whether or not to use the i/o stream APIs.

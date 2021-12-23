@@ -54,22 +54,26 @@ class CreateBitmap : GraphicsActivity() {
          * [Bitmap.setPixels].
          */
         private val mBitmaps: Array<Bitmap?>
+
         /**
          * [Bitmap]'s created from [mBitmaps] six [Bitmap]'s using our method [codec] to first
          * encode and compress our original [Bitmap] using [Bitmap.CompressFormat.JPEG],
          * then decoding it into [Bitmap] format again.
          */
         private val mJPEG: Array<Bitmap?>
+
         /**
          * [Bitmap]'s created from [mBitmaps] six [Bitmap]'s using our method [codec] to first
          * encode and compress our original [Bitmap] using [Bitmap.CompressFormat.PNG], then
          * decoding it into [Bitmap] format again.
          */
         private val mPNG: Array<Bitmap?>
+
         /**
          * The array of colors that we use to create our [Bitmap]'s from
          */
         private val mColors: IntArray
+
         /**
          * [Paint] instance we use to draw our [Bitmap]'s in our [onDraw] override
          */
@@ -101,10 +105,22 @@ class CreateBitmap : GraphicsActivity() {
             }
             // draw the color array directly, w/o creating a bitmap object
             @Suppress("DEPRECATION")
-            canvas.drawBitmap(mColors, 0, STRIDE, 0, 0, WIDTH, HEIGHT, true, null)
+            canvas.drawBitmap(
+                mColors,
+                0, STRIDE,
+                0, 0,
+                WIDTH, HEIGHT,
+                true, null
+            )
             canvas.translate(0f, HEIGHT.toFloat())
             @Suppress("DEPRECATION")
-            canvas.drawBitmap(mColors, 0, STRIDE, 0, 0, WIDTH, HEIGHT, false, mPaint)
+            canvas.drawBitmap(
+                mColors,
+                0, STRIDE,
+                0, 0,
+                WIDTH, HEIGHT,
+                false, mPaint
+            )
         }
 
         /**
@@ -169,10 +185,24 @@ class CreateBitmap : GraphicsActivity() {
             val colors = mColors
             mBitmaps = arrayOfNulls(6)
             // these three are initialized with colors[]
-            mBitmaps[0] = Bitmap.createBitmap(colors, 0, STRIDE, WIDTH, HEIGHT, Bitmap.Config.ARGB_8888)
-            mBitmaps[1] = Bitmap.createBitmap(colors, 0, STRIDE, WIDTH, HEIGHT, Bitmap.Config.RGB_565)
+            mBitmaps[0] = Bitmap.createBitmap(
+                colors, 0,
+                STRIDE, WIDTH, HEIGHT,
+                Bitmap.Config.ARGB_8888
+            )
+            mBitmaps[1] = Bitmap.createBitmap(
+                colors,
+                0, STRIDE,
+                WIDTH, HEIGHT,
+                Bitmap.Config.RGB_565
+            )
             @Suppress("DEPRECATION")
-            mBitmaps[2] = Bitmap.createBitmap(colors, 0, STRIDE, WIDTH, HEIGHT, Bitmap.Config.ARGB_4444)
+            mBitmaps[2] = Bitmap.createBitmap(
+                colors,
+                0, STRIDE,
+                WIDTH, HEIGHT,
+                Bitmap.Config.ARGB_4444
+            )
             // these three will have their colors set later
             mBitmaps[3] = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888)
             mBitmaps[4] = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.RGB_565)
@@ -202,14 +232,17 @@ class CreateBitmap : GraphicsActivity() {
          * the demo on high density screens.
          */
         var SCREEN_DENSITY = 0f
+
         /**
          * Width of the [Bitmap]'s being created and displayed
          */
         private const val WIDTH = 50
+
         /**
          * Height of the [Bitmap]'s being created and displayed
          */
         private const val HEIGHT = 50
+
         /**
          * Number of colors in the array between rows (must be >= width or <= -width). Colors are
          * pulled from the array in order until WIDTH pixels have been assigned, then we skip the
