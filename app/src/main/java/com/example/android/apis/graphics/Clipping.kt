@@ -21,6 +21,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Region
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 
@@ -49,15 +50,11 @@ class Clipping : GraphicsActivity() {
          * [Paint] we use to draw to the [Canvas]
          */
         private val mPaint: Paint
+
         /**
          * [Path] we create for a clip, and set on our [Canvas] using [Canvas.clipPath]
          */
         private val mPath: Path
-        /**
-         * logical density of the screen
-         */
-        @Suppress("PropertyName")
-        var SCREEN_DENSITY: Float
 
         /**
          * Draws a "scene" consisting of a red line, a green circle, and the blue text "Clipping".
@@ -130,8 +127,13 @@ class Clipping : GraphicsActivity() {
             canvas.save()
             canvas.translate(160f, 10f)
             canvas.clipRect(10, 10, 90, 90)
-            @Suppress("DEPRECATION")
-            canvas.clipRect(30f, 30f, 70f, 70f, Region.Op.DIFFERENCE)
+            // This used to be
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                canvas.clipOutRect(30f, 30f, 70f, 70f)
+            } else {
+                @Suppress("DEPRECATION")
+                canvas.clipRect(30f, 30f, 70f, 70f, Region.Op.DIFFERENCE)
+            }
             drawScene(canvas)
             canvas.restore()
             canvas.save()
@@ -163,6 +165,13 @@ class Clipping : GraphicsActivity() {
             mPaint.textSize = 16f
             mPaint.textAlign = Paint.Align.RIGHT
             mPath = Path()
+        }
+
+        companion object {
+            /**
+             * logical density of the screen
+             */
+            var SCREEN_DENSITY: Float = 0f
         }
     }
 }
