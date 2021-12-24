@@ -49,6 +49,7 @@ class DrawPoints : GraphicsActivity() {
          * [Paint] that we use to draw with in our [onDraw] method.
          */
         private val mPaint = Paint()
+
         /**
          * Our array of points, allocated and initialized by our [buildPoints] method.
          */
@@ -116,14 +117,17 @@ class DrawPoints : GraphicsActivity() {
              * Size of our mesh, set in our constructor to the pixel equivalent of 300 dp.
              */
             private var SIZE: Float = 300f
+
             /**
              * Number of line segments to divide our SIZE line into.
              */
             private const val SEGS = 32
+
             /**
              * Offset for the x coordinate of our point
              */
             private const val X = 0
+
             /**
              * Offset for the y coordinate of our point
              */

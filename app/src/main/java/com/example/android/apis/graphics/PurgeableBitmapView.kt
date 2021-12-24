@@ -151,7 +151,9 @@ class PurgeableBitmapView(context: Context?, isPurgeable: Boolean) : View(contex
      */
     override fun onDraw(canvas: Canvas) {
         canvas.drawColor(Color.WHITE)
-        canvas.drawBitmap(mBitmap!!, 0f, 0f, null)
+        if (mBitmap != null) {
+            canvas.drawBitmap(mBitmap!!, 0f, 0f, null)
+        }
         canvas.drawText(mDecodingCount.toString(), WIDTH / 2f - 20f, HEIGHT / 2f, mPaint)
     }
 

@@ -34,14 +34,14 @@ import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 /**
- * Draws a textured rotating triangle using OpenGL ES 2.0
+ * Draws a textured rotating triangle using OpenGL ES 2.0 -- used in GLES20Activity.kt
  */
 internal class GLES20TriangleRenderer(
 
-        /**
-         * [Context] we were constructed with, used to retrieve resources.
-         */
-        private val mContext: Context
+    /**
+     * [Context] we were constructed with, used to retrieve resources.
+     */
+    private val mContext: Context
 
 ) : GLSurfaceView.Renderer {
 
@@ -49,11 +49,11 @@ internal class GLES20TriangleRenderer(
      * Vertex data for the three vertices of our triangle.
      */
     private val mTriangleVerticesData = floatArrayOf( // X, Y, Z, U, V
-            -1.0f, -0.5f, 0f,         // X
-            -0.5f, 0.0f, 1.0f,        // Y
-            -0.5f, 0f, 1.5f,          // Z
-            -0.0f, 0.0f, 1.11803399f, // U
-            0f, 0.5f, 1.61803399f     // V
+        -1.0f, -0.5f, 0f,         // X
+        -0.5f, 0.0f, 1.0f,        // Y
+        -0.5f, 0f, 1.5f,          // Z
+        -0.0f, 0.0f, 1.11803399f, // U
+        0f, 0.5f, 1.61803399f     // V
     )
 
     /**
@@ -63,6 +63,7 @@ internal class GLES20TriangleRenderer(
      * program object [mProgram]) and [maTextureHandle] (the location of the attribute
      * variable "aTextureCoord" in our compiled program object [mProgram])
      */
+    @Suppress("JoinDeclarationAndAssignment")
     private val mTriangleVertices: FloatBuffer
 
     /**
@@ -118,13 +119,14 @@ internal class GLES20TriangleRenderer(
      *  * } # That's all folks!
      */
     private val mVertexShader = "uniform mat4 uMVPMatrix;\n" +
-            "attribute vec4 aPosition;\n" +
-            "attribute vec2 aTextureCoord;\n" +
-            "varying vec2 vTextureCoord;\n" +
-            "void main() {\n" +
-            "  gl_Position = uMVPMatrix * aPosition;\n" +
-            "  vTextureCoord = aTextureCoord;\n" +
-            "}\n"
+        "attribute vec4 aPosition;\n" +
+        "attribute vec2 aTextureCoord;\n" +
+        "varying vec2 vTextureCoord;\n" +
+        "void main() {\n" +
+        "  gl_Position = uMVPMatrix * aPosition;\n" +
+        "  vTextureCoord = aTextureCoord;\n" +
+        "}\n"
+
     /**
      * Source code for the GL_FRAGMENT_SHADER part of our shader program [mProgram] (shader that
      * is intended to run on the programmable fragment processor). The statements meanings:
@@ -156,11 +158,12 @@ internal class GLES20TriangleRenderer(
      *  * } # That's all folks!
      */
     private val mFragmentShader = "precision mediump float;\n" +
-            "varying vec2 vTextureCoord;\n" +
-            "uniform sampler2D sTexture;\n" +
-            "void main() {\n" +
-            "  gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
-            "}\n"
+        "varying vec2 vTextureCoord;\n" +
+        "uniform sampler2D sTexture;\n" +
+        "void main() {\n" +
+        "  gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
+        "}\n"
+
     /**
      * Model View Projection Matrix is the multiplication of the Projection Matrix times the View
      * matrix times the Model Matrix, and transforms a vertex from model coordinates to Homogeneous
@@ -169,6 +172,7 @@ internal class GLES20TriangleRenderer(
      * variable `muMVPMatrixHandle`) and set using the method `glUniformMatrix4fv`.
      */
     private val mMVPMatrix = FloatArray(16)
+
     /**
      * Model matrix, translates model coordinates to world coordinates. We set it to a rotation matrix
      * for the current angle of rotation using the method `setRotateM`. It is used to calculate
@@ -177,12 +181,14 @@ internal class GLES20TriangleRenderer(
      * angle calculated from the system time since boot.
      */
     private val mMMatrix = FloatArray(16)
+
     /**
      * View matrix, translates world coordinates to camera coordinates. We set it using the method
      * `setLookAtM` to have an (x,y,z) eye point coordinate of (0,0,-5), an (x,y,z) center at
      * (0,0,0), and an "up vector" of (0,1,0). It is set once in our method [onSurfaceCreated].
      */
     private val mVMatrix = FloatArray(16)
+
     /**
      * Projection matrix, translates camera coordinates to Homogeneous Space (perspective is included).
      * We set it using the method `frustumM` to have  (mProjMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
@@ -191,6 +197,7 @@ internal class GLES20TriangleRenderer(
      * and a far clipping plane of 7. It is set once in our method [onSurfaceChanged].
      */
     private val mProjMatrix = FloatArray(16)
+
     /**
      * Compiled and linked Program object which contains an executable that will run its GL_VERTEX_SHADER
      * shader object on the vertex processor and run its GL_FRAGMENT_SHADER object on the fragment
@@ -198,12 +205,14 @@ internal class GLES20TriangleRenderer(
      * and it is compiled and linked by our method [createProgram] using GLES20 utility methods.
      */
     private var mProgram = 0
+
     /**
      * Texture name we use for our texture, generated using `glGenTextures`, and bound to
      * GL_TEXTURE_2D in [onSurfaceCreated] in order to upload our png resource, then again in
      * [onDrawFrame] in order to draw using it.
      */
     private var mTextureID = 0
+
     /**
      * The location of the GL vector shader program's uniform variable "uMVPMatrix" located using
      * `glGetUniformLocation` in our method [onSurfaceCreated] and used to upload our
@@ -211,6 +220,7 @@ internal class GLES20TriangleRenderer(
      * using the method `glUniformMatrix4fv`
      */
     private var muMVPMatrixHandle = 0
+
     /**
      * The location of the GL vector shader program's `attribute vec4 aPosition` located using
      * `glGetAttribLocation` in [onSurfaceCreated] and used to initialize `aPosition` to access
@@ -218,6 +228,7 @@ internal class GLES20TriangleRenderer(
      * `glVertexAttribPointer` in [onDrawFrame]
      */
     private var maPositionHandle = 0
+
     /**
      * The location of the GL vector shader program's `attribute vec2 aTextureCoord` located
      * using `glGetAttribLocation` in [onSurfaceCreated] and used to initialize
@@ -298,13 +309,13 @@ internal class GLES20TriangleRenderer(
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureID)
         mTriangleVertices.position(TRIANGLE_VERTICES_DATA_POS_OFFSET)
         GLES20.glVertexAttribPointer(maPositionHandle, 3, GLES20.GL_FLOAT, false,
-                TRIANGLE_VERTICES_DATA_STRIDE_BYTES, mTriangleVertices)
+            TRIANGLE_VERTICES_DATA_STRIDE_BYTES, mTriangleVertices)
         checkGlError("glVertexAttribPointer maPosition")
         mTriangleVertices.position(TRIANGLE_VERTICES_DATA_UV_OFFSET)
         GLES20.glEnableVertexAttribArray(maPositionHandle)
         checkGlError("glEnableVertexAttribArray maPositionHandle")
         GLES20.glVertexAttribPointer(maTextureHandle, 2, GLES20.GL_FLOAT, false,
-                TRIANGLE_VERTICES_DATA_STRIDE_BYTES, mTriangleVertices)
+            TRIANGLE_VERTICES_DATA_STRIDE_BYTES, mTriangleVertices)
         checkGlError("glVertexAttribPointer maTextureHandle")
         GLES20.glEnableVertexAttribArray(maTextureHandle)
         checkGlError("glEnableVertexAttribArray maTextureHandle")
@@ -432,6 +443,7 @@ internal class GLES20TriangleRenderer(
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT)
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT)
         val inputStream: InputStream = mContext.resources.openRawResource(R.raw.robot)
+        @Suppress("JoinDeclarationAndAssignment")
         val bitmap: Bitmap
         bitmap = try {
             BitmapFactory.decodeStream(inputStream)
@@ -444,9 +456,9 @@ internal class GLES20TriangleRenderer(
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0)
         bitmap.recycle()
         Matrix.setLookAtM(mVMatrix, 0,
-                0f, 0f, -5f,
-                0f, 0f, 0f,
-                0f, 1.0f, 0.0f
+            0f, 0f, -5f,
+            0f, 0f, 0f,
+            0f, 1.0f, 0.0f
         )
     }
 
@@ -561,19 +573,23 @@ internal class GLES20TriangleRenderer(
          * Size in bytes of a float value.
          */
         private const val FLOAT_SIZE_BYTES = 4
+
         /**
          * Stride in bytes for triangle vertex data. (3 float (x,y,z) coordinates
          * and 2 texture coordinates).
          */
         private const val TRIANGLE_VERTICES_DATA_STRIDE_BYTES = 5 * FLOAT_SIZE_BYTES
+
         /**
          * Offset for the vertex (x,y,z) coordinates.
          */
         private const val TRIANGLE_VERTICES_DATA_POS_OFFSET = 0
+
         /**
          * Offset for the texture coordinates.
          */
         private const val TRIANGLE_VERTICES_DATA_UV_OFFSET = 3
+
         /**
          * TAG used for logging
          */
@@ -589,7 +605,7 @@ internal class GLES20TriangleRenderer(
      */
     init {
         mTriangleVertices = ByteBuffer.allocateDirect(
-                mTriangleVerticesData.size * FLOAT_SIZE_BYTES
+            mTriangleVerticesData.size * FLOAT_SIZE_BYTES
         ).order(ByteOrder.nativeOrder()).asFloatBuffer()
         mTriangleVertices.put(mTriangleVerticesData).position(0)
     }

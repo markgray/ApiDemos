@@ -52,11 +52,13 @@ class PolyToPoly : GraphicsActivity() {
          * [Paint] we use to draw with
          */
         private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
         /**
          * [Matrix] we use to hold transformation that warps our drawings when concatenated to
          * the current matrix of the canvas.
          */
         private val mMatrix = Matrix()
+
         /**
          * [Paint.FontMetrics] of the [Paint] field [mPaint] used to center text we draw.
          */
@@ -105,11 +107,12 @@ class PolyToPoly : GraphicsActivity() {
              * centering in X is easy... use alignment (and X at midpoint)
              */
             val x = 64f / 2
+
             /**
              * centering in Y, we need to measure ascent/descent first
              */
             val y = 64f / 2 - (mFontMetrics.ascent + mFontMetrics.descent) / 2
-            canvas.drawText("${src.size/2}", x, y, mPaint)
+            canvas.drawText("${src.size / 2}", x, y, mPaint)
             canvas.restore()
         }
 
@@ -157,18 +160,18 @@ class PolyToPoly : GraphicsActivity() {
             canvas.translate(10f, 110f)
             // rotate/skew (3 points)
             doDraw(
-                    canvas,
-                    floatArrayOf(0f, 0f, 64f, 0f, 0f, 64f),
-                    floatArrayOf(0f, 0f, 96f, 0f, 24f, 64f)
+                canvas,
+                floatArrayOf(0f, 0f, 64f, 0f, 0f, 64f),
+                floatArrayOf(0f, 0f, 96f, 0f, 24f, 64f)
             )
             canvas.restore()
             canvas.save()
             canvas.translate(160f, 110f)
             // perspective (4 points)
             doDraw(
-                    canvas,
-                    floatArrayOf(0f, 0f, 64f, 0f, 64f, 64f, 0f, 64f),
-                    floatArrayOf(0f, 0f, 96f, 0f, 64f, 96f, 0f, 64f)
+                canvas,
+                floatArrayOf(0f, 0f, 64f, 0f, 64f, 64f, 0f, 64f),
+                floatArrayOf(0f, 0f, 96f, 0f, 64f, 96f, 0f, 64f)
             )
             canvas.restore()
         }

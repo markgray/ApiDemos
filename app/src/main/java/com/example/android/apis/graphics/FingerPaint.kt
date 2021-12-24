@@ -36,8 +36,6 @@ import kotlin.math.abs
 
 /**
  * Shows off some Canvas drawing methods and `View.onTouchEvent` usage.
- * `ColorPickerDialog` produces a color wheel which is too small
- * TODO: fix size of ColorPickerDialog
  */
 class FingerPaint : GraphicsActivity(), OnColorChangedListener {
     /**
@@ -81,7 +79,7 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
         mPaint!!.strokeJoin = Paint.Join.ROUND
         mPaint!!.strokeCap = Paint.Cap.ROUND
         mPaint!!.strokeWidth = 12f
-        @Suppress("DEPRECATION")
+        @Suppress("DEPRECATION") // "This subclass is not supported and should not be instantiated"
         mEmboss = EmbossMaskFilter(floatArrayOf(1f, 1f, 1f),
                 0.4f, 6F, 3.5f)
         mBlur = BlurMaskFilter(8F, BlurMaskFilter.Blur.NORMAL)

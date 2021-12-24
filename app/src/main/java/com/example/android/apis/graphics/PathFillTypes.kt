@@ -52,10 +52,12 @@ class PathFillTypes : GraphicsActivity() {
          * [Paint] used to draw all 4 examples.
          */
         private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
         /**
          * [Path] used to draw our two circles for all 4 examples.
          */
         private val mPath: Path
+
         /**
          * Multiplier to convert dp units to pixels.
          */

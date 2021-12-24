@@ -30,10 +30,10 @@ open class ProxyDrawable
  * Saves the [Drawable] parameter [mProxy], so it can be used in the `draw` override of our subclass
  */
 (
-        /**
-         * "Real" [Drawable] that we are proxy for
-         */
-        var mProxy: Drawable?
+    /**
+     * "Real" [Drawable] that we are proxy for
+     */
+    var mProxy: Drawable?
 ) : Drawable() {
 
     /**

@@ -49,11 +49,11 @@ class MatrixPaletteRenderer
  * `onCreate` method of the [MatrixPaletteActivity] `Activity`.
  */
 (
-        /**
-         * Context used to retrieve resources, set in our constructor ("this" when called from the
-         * `onCreate` method of `MatrixPaletteActivity`).
-         */
-        private val mContext: Context
+    /**
+     * Context used to retrieve resources, set in our constructor ("this" when called from the
+     * `onCreate` method of `MatrixPaletteActivity`).
+     */
+    private val mContext: Context
 
 ) : GLSurfaceView.Renderer {
     /**
@@ -62,6 +62,7 @@ class MatrixPaletteRenderer
      * loaded into GPU vertex buffer objects.
      */
     private var mGrid: Grid? = null
+
     /**
      * Texture name that we use for the texture we use for GL_TEXTURE_2D, it is created and uploaded
      * to the GPU in the method [onSurfaceCreated] from the raw resource robot.png
@@ -82,6 +83,7 @@ class MatrixPaletteRenderer
          * Buffer object name for the GPU VBO we use for our vertex buffer
          */
         private var mVertexBufferObjectId = 0
+
         /**
          * Buffer object name for the GPU VBO we use for our GL_ELEMENT_ARRAY_BUFFER indices into
          * our vertex buffer. Consists of the indices of the vertex buffer elements that are to be
@@ -99,24 +101,29 @@ class MatrixPaletteRenderer
          * as [Byte] values when "putting" the byte values for the palette matrix indices.
          */
         private var mVertexByteBuffer: ByteBuffer?
+
         /**
          * [FloatBuffer] pointer for the vertex data, allows the vertex data to be accessed as
          * [Float] values when "putting" float values into the vertex data buffer.
          */
         private var mVertexBuffer: FloatBuffer?
+
         /**
          * [CharBuffer] in which we build the indices of the GL_TRIANGLES triangles of our column,
          * which we later upload to the GL_ELEMENT_ARRAY_BUFFER GPU VBO for drawing .
          */
         private var mIndexBuffer: CharBuffer?
+
         /**
          * Width of our [Grid] in number of vertices, set in our constructor.
          */
         private val mW: Int
+
         /**
          * Height of our [Grid] in number of vertices, set in our constructor.
          */
         private val mH: Int
+
         /**
          * Number of indices in our [Grid] and [Char] values in [mIndexBuffer],
          * used in the call to `glDrawElements`.
@@ -213,18 +220,18 @@ class MatrixPaletteRenderer
             gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, mVertexBufferObjectId)
             mVertexByteBuffer!!.position(0)
             gl11.glBufferData(
-                    GL11.GL_ARRAY_BUFFER,
-                    mVertexByteBuffer!!.capacity(),
-                    mVertexByteBuffer,
-                    GL11.GL_STATIC_DRAW
+                GL11.GL_ARRAY_BUFFER,
+                mVertexByteBuffer!!.capacity(),
+                mVertexByteBuffer,
+                GL11.GL_STATIC_DRAW
             )
             gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, mElementBufferObjectId)
             mIndexBuffer!!.position(0)
             gl11.glBufferData(
-                    GL11.GL_ELEMENT_ARRAY_BUFFER,
-                    mIndexBuffer!!.capacity() * CHAR_SIZE,
-                    mIndexBuffer,
-                    GL11.GL_STATIC_DRAW
+                GL11.GL_ELEMENT_ARRAY_BUFFER,
+                mIndexBuffer!!.capacity() * CHAR_SIZE,
+                mIndexBuffer,
+                GL11.GL_STATIC_DRAW
             )
 
             /**
@@ -299,6 +306,7 @@ class MatrixPaletteRenderer
              * Number of bytes in a `float` value
              */
             const val FLOAT_SIZE = 4
+
             /**
              * Number of bytes in a `char` value
              */
@@ -317,14 +325,17 @@ class MatrixPaletteRenderer
              * Total number of bytes for a complete vertex entry
              */
             const val VERTEX_SIZE = 8 * FLOAT_SIZE
+
             /**
              * Offset to the texture coordinates of a vertex entry
              */
             const val VERTEX_TEXTURE_BUFFER_INDEX_OFFSET = 3
+
             /**
              * Offset to the palette matrix weight part of the vertex entry
              */
             const val VERTEX_WEIGHT_BUFFER_INDEX_OFFSET = 5
+
             /**
              * Offset to the palette matrix indices in a vertex entry
              */
@@ -381,7 +392,7 @@ class MatrixPaletteRenderer
             mH = h
             val size = w * h
             mVertexByteBuffer = ByteBuffer.allocateDirect(
-                    VERTEX_SIZE * size
+                VERTEX_SIZE * size
             ).order(ByteOrder.nativeOrder())
             mVertexBuffer = mVertexByteBuffer!!.asFloatBuffer()
             val quadW = mW - 1
@@ -510,6 +521,8 @@ class MatrixPaletteRenderer
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE.toFloat())
         gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE.toFloat())
         val inputStream: InputStream = mContext.resources.openRawResource(R.raw.robot)
+
+        @Suppress("JoinDeclarationAndAssignment")
         val bitmap: Bitmap
         bitmap = try {
             BitmapFactory.decodeStream(inputStream)
@@ -589,7 +602,8 @@ class MatrixPaletteRenderer
          * Usually, the first thing one might want to do is to clear
          * the screen. The most efficient way of doing this is to use
          * glClear().
-         */gl.glClear(GL10.GL_COLOR_BUFFER_BIT or GL10.GL_DEPTH_BUFFER_BIT)
+         */
+        gl.glClear(GL10.GL_COLOR_BUFFER_BIT or GL10.GL_DEPTH_BUFFER_BIT)
         gl.glEnable(GL10.GL_DEPTH_TEST)
         gl.glEnable(GL10.GL_CULL_FACE)
         /**
@@ -598,9 +612,9 @@ class MatrixPaletteRenderer
         gl.glMatrixMode(GL10.GL_MODELVIEW)
         gl.glLoadIdentity()
         GLU.gluLookAt(gl,
-                0f, 0f, -5f,
-                0f, 0f, 0f,
-                0f, 1.0f, 0.0f
+            0f, 0f, -5f,
+            0f, 0f, 0f,
+            0f, 1.0f, 0.0f
         )
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY)
         gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY)
@@ -609,6 +623,7 @@ class MatrixPaletteRenderer
         gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT)
         gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT)
         val time = SystemClock.uptimeMillis() % 4000L
+
         /**
          * Rock back and forth
          */
