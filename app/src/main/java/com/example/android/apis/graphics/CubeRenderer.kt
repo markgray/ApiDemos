@@ -20,7 +20,9 @@ import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 /**
- * Render a pair of tumbling cubes.
+ * Render a pair of tumbling cubes. Used in GLSurfaceViewActivity.kt, PresentationWithMediaRouterActivity.kt,
+ * SecureSurfaceViewActivity.kt, SurfaceViewOverlay.kt, TranslucentGLSurfaceViewActivity.kt
+ *
  */
 class CubeRenderer(
         /**

@@ -21,7 +21,9 @@ import java.nio.IntBuffer
 import javax.microedition.khronos.opengles.GL10
 
 /**
- * A vertex shaded cube.
+ * A vertex shaded cube. Used in CubeRenderer.kt, FrameBufferObjectActivity.kt, and
+ * TouchRotateActivity.kt
+ *
  */
 internal class Cube {
     /**

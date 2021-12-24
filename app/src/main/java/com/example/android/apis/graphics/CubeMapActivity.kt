@@ -272,6 +272,7 @@ class CubeMapActivity : AppCompatActivity() {
             gl.glTexParameterf(GL11ExtensionPack.GL_TEXTURE_CUBE_MAP, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR.toFloat())
             for (face in 0..5) {
                 val inputStream: InputStream = resources.openRawResource(resourceIds[face])
+                @Suppress("JoinDeclarationAndAssignment")
                 var bitmap: Bitmap
                 bitmap = try {
                     BitmapFactory.decodeStream(inputStream)

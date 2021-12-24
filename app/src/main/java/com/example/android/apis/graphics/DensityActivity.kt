@@ -15,7 +15,6 @@
  */
 package com.example.android.apis.graphics
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -29,11 +28,8 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
-
 import androidx.appcompat.app.AppCompatActivity
-
-//Need the following import to get access to the app resources, since this
-//class is in a sub-package.
+import androidx.core.content.res.ResourcesCompat
 import com.example.android.apis.R
 
 /**
@@ -168,7 +164,7 @@ class DensityActivity : AppCompatActivity() {
     private fun scrollWrap(view: View): View {
         val scroller = ScrollView(this)
         scroller.addView(view, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.MATCH_PARENT))
+            FrameLayout.LayoutParams.MATCH_PARENT))
         return scroller
     }
 
@@ -186,7 +182,7 @@ class DensityActivity : AppCompatActivity() {
         val label = TextView(this)
         label.text = text
         root.addView(label, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT))
+            LinearLayout.LayoutParams.WRAP_CONTENT))
     }
 
     /**
@@ -199,7 +195,7 @@ class DensityActivity : AppCompatActivity() {
      */
     private fun addChildToRoot(root: LinearLayout, layout: LinearLayout) {
         root.addView(layout, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT))
+            LinearLayout.LayoutParams.WRAP_CONTENT))
     }
 
     /**
@@ -239,11 +235,9 @@ class DensityActivity : AppCompatActivity() {
      * [resource] to.
      * @param resource resource ID of an resource image to load.
      */
-    @SuppressLint("UseCompatLoadingForDrawables")
     private fun addResourceDrawable(layout: LinearLayout, resource: Int) {
         val view = View(this)
-        @Suppress("DEPRECATION")
-        val d = resources.getDrawable(resource)
+        val d = ResourcesCompat.getDrawable(resources, resource, null)!!
         view.background = d
         view.layoutParams = LinearLayout.LayoutParams(d.intrinsicWidth, d.intrinsicHeight)
         layout.addView(view)
@@ -264,7 +258,7 @@ class DensityActivity : AppCompatActivity() {
         val bitmap: Bitmap = loadAndPrintDpi(resource, scale)
         val view = ScaledBitmapView(this, bitmap)
         view.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT)
+            LinearLayout.LayoutParams.WRAP_CONTENT)
         layout.addView(view)
     }
 
@@ -277,14 +271,12 @@ class DensityActivity : AppCompatActivity() {
      * @param resource resource ID for a nine-patch png image to load into a `Drawable` and then
      * use as the background for a view which we add to [LinearLayout] parameter [layout]
      */
-    @SuppressLint("UseCompatLoadingForDrawables")
     private fun addNinePatchResourceDrawable(layout: LinearLayout, resource: Int) {
         val view = View(this)
-        @Suppress("DEPRECATION")
-        val d = resources.getDrawable(resource)
+        val d = ResourcesCompat.getDrawable(resources, resource, null)!!
         view.background = d
         Log.i("foo", "9-patch #" + Integer.toHexString(resource)
-                + " w=" + d.intrinsicWidth + " h=" + d.intrinsicHeight)
+            + " w=" + d.intrinsicWidth + " h=" + d.intrinsicHeight)
         view.layoutParams = LinearLayout.LayoutParams(d.intrinsicWidth * 2, d.intrinsicHeight * 2)
         layout.addView(view)
     }
@@ -360,8 +352,8 @@ class DensityActivity : AppCompatActivity() {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec)
             val metrics = resources.displayMetrics
             setMeasuredDimension(
-                    mBitmap.getScaledWidth(metrics),
-                    mBitmap.getScaledHeight(metrics))
+                mBitmap.getScaledWidth(metrics),
+                mBitmap.getScaledHeight(metrics))
         }
 
         /**
