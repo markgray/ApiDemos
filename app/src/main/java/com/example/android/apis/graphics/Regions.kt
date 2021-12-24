@@ -58,10 +58,12 @@ class Regions : GraphicsActivity() {
          * [Paint] instance used to do all our drawing.
          */
         private val mPaint = Paint()
+
         /**
          * [Rect] rectangle with the top left corner at (10,10) and bottom right corner at (100,80)
          */
         private val mRect1 = Rect()
+
         /**
          * [Rect] rectangle with the top left corner at (50,50) and bottom right corner at (130,110)
          */
