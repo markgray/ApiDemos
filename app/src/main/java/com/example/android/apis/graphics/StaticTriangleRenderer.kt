@@ -38,7 +38,8 @@ import javax.microedition.khronos.opengles.GL10
  * static OpenGL ES APIs. The static APIs expose more of the OpenGL ES features than
  * the javax.microedition.khronos.opengles APIs, and also provide a programming model
  * that is closer to the C OpenGL ES APIs, which may make it easier to reuse code and
- * documentation written for the C OpenGL ES APIs.
+ * documentation written for the C OpenGL ES APIs. Used in CompressedTextureActivity.kt,
+ * and TriangleActivity.kt
  */
 class StaticTriangleRenderer : GLSurfaceView.Renderer {
     /**
@@ -49,16 +50,19 @@ class StaticTriangleRenderer : GLSurfaceView.Renderer {
      * the `onCreate` override of the [CompressedTextureActivity] demo.
      */
     private var mContext: Context? = null
+
     /**
      * Set to a new instance of [Triangle] in our [init] method, whose [Triangle.draw] method
      * is called to draw the triangular shape we are animating.
      */
     private var mTriangle: Triangle? = null
+
     /**
      * The texture ID of the texture we are using, it is bound to the texturing target GL_TEXTURE_2D,
      * and all code uses GL_TEXTURE_2D to reference it.
      */
     private var mTextureID = 0
+
     /**
      * [TextureLoader] whose [TextureLoader.load] method is called to load the texture image we are
      * to use, it is set to one of the parameters to our method [init]. It is our own default
@@ -258,9 +262,9 @@ class StaticTriangleRenderer : GLSurfaceView.Renderer {
         GLES10.glMatrixMode(GLES10.GL_MODELVIEW)
         GLES10.glLoadIdentity()
         GLU.gluLookAt(gl,
-                0f, 0f, -5f,
-                0f, 0f, 0f,
-                0f, 1.0f, 0.0f
+            0f, 0f, -5f,
+            0f, 0f, 0f,
+            0f, 1.0f, 0.0f
         )
         GLES10.glEnableClientState(GLES10.GL_VERTEX_ARRAY)
         GLES10.glEnableClientState(GLES10.GL_TEXTURE_COORD_ARRAY)
@@ -297,11 +301,11 @@ class StaticTriangleRenderer : GLSurfaceView.Renderer {
      */
     override fun onSurfaceChanged(gl: GL10, w: Int, h: Int) {
         GLES10.glViewport(0, 0, w, h)
-       /**
-        * Set our projection matrix. This doesn't have to be done
-        * each time we draw, but usually a new projection needs to
-        * be set when the viewport is resized.
-        */
+        /**
+         * Set our projection matrix. This doesn't have to be done
+         * each time we draw, but usually a new projection needs to
+         * be set when the viewport is resized.
+         */
         val ratio = w.toFloat() / h
         GLES10.glMatrixMode(GLES10.GL_PROJECTION)
         GLES10.glLoadIdentity()
@@ -325,6 +329,8 @@ class StaticTriangleRenderer : GLSurfaceView.Renderer {
          */
         override fun load(gl: GL10?) {
             val inputStream: InputStream = mContext!!.resources.openRawResource(R.raw.robot)
+
+            @Suppress("JoinDeclarationAndAssignment")
             val bitmap: Bitmap
             bitmap = try {
                 BitmapFactory.decodeStream(inputStream)
@@ -350,6 +356,7 @@ class StaticTriangleRenderer : GLSurfaceView.Renderer {
          * of vertex coordinates to use when rendering.
          */
         private val mFVertexBuffer: FloatBuffer
+
         /**
          * [FloatBuffer] loaded with the x,y coordinates of a unit-sided equilateral triangle
          * centered on the origin. It is used in our [draw] method in a call to the method
@@ -357,6 +364,7 @@ class StaticTriangleRenderer : GLSurfaceView.Renderer {
          * of texture coordinates to use when rendering.
          */
         private val mTexBuffer: FloatBuffer
+
         /**
          * [ShortBuffer] loaded with the three indices 0, 1, and 2. It is used in our [draw] method
          * in the call to `glDrawElements` to specify the indices which it uses to construct a
@@ -395,10 +403,10 @@ class StaticTriangleRenderer : GLSurfaceView.Renderer {
             GLES10.glEnable(GLES10.GL_TEXTURE_2D)
             GLES10.glTexCoordPointer(2, GLES10.GL_FLOAT, 0, mTexBuffer)
             GLES10.glDrawElements(
-                    GLES10.GL_TRIANGLE_STRIP,
-                    VERTS,
-                    GLES10.GL_UNSIGNED_SHORT,
-                    mIndexBuffer
+                GLES10.GL_TRIANGLE_STRIP,
+                VERTS,
+                GLES10.GL_UNSIGNED_SHORT,
+                mIndexBuffer
             )
         }
 
@@ -462,9 +470,9 @@ class StaticTriangleRenderer : GLSurfaceView.Renderer {
              * A unit-sided equilateral triangle centered on the origin.
              */
             val coords = floatArrayOf( // X, Y, Z
-                    -0.5f, -0.25f, 0f,
-                    0.5f, -0.25f, 0f,
-                    0.0f, 0.559016994f, 0f)
+                -0.5f, -0.25f, 0f,
+                0.5f, -0.25f, 0f,
+                0.0f, 0.559016994f, 0f)
             for (i in 0 until VERTS) {
                 for (j in 0..2) {
                     mFVertexBuffer.put(coords[i * 3 + j] * 2.0f)

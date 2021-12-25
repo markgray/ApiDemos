@@ -25,7 +25,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
- * Activity launched by `MediaPlayerDemo` to play a video file
+ * Activity launched by `MediaPlayerDemo` to play an audio file
  */
 class MediaPlayerDemoAudio : AppCompatActivity() {
     /**

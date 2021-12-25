@@ -29,7 +29,7 @@ import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 /**
- * Draws a `Triangle` using OpenGL ES 1.x-compatible renderer.
+ * Draws a `Triangle` using OpenGL ES 1.x-compatible renderer. Used in GLES20Activity.kt
  */
 class TriangleRenderer(
         /**
