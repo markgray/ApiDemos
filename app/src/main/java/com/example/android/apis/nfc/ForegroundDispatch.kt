@@ -103,21 +103,24 @@ class ForegroundDispatch : AppCompatActivity() {
         // Create a generic PendingIntent that will be deliver to this activity. The NFC stack
         // will fill in the intent with the details of the discovered tag before delivering to
         // this activity.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mPendingIntent = PendingIntent.getActivity(
-                this,
-                0,
-                Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
-                PendingIntent.FLAG_IMMUTABLE
-            )
-        } else {
-            @SuppressLint("UnspecifiedImmutableFlag")
-            mPendingIntent = PendingIntent.getActivity(
-                this,
-                0,
-                Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
-                0
-            )
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+                mPendingIntent = PendingIntent.getActivity(
+                    this,
+                    0,
+                    Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                    PendingIntent.FLAG_MUTABLE
+                )
+            }
+            else -> {
+                @SuppressLint("UnspecifiedImmutableFlag")
+                mPendingIntent = PendingIntent.getActivity(
+                    this,
+                    0,
+                    Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                    0
+                )
+            }
         }
 
         // Setup an intent filter for all MIME based dispatches
