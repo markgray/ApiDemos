@@ -17,6 +17,7 @@ package com.example.android.apis.text
 
 import android.content.Context
 import android.text.Editable
+import android.text.SpannableStringBuilder
 import android.text.method.MovementMethod
 import android.text.method.ScrollingMovementMethod
 import android.util.AttributeSet
@@ -73,7 +74,8 @@ constructor(
      * @return The contents of our `TextView`.
      */
     override fun getText(): Editable {
-        return super.getText() as Editable
+        val textViewString: CharSequence = super.getText()
+        return SpannableStringBuilder(textViewString)
     }
 
     /**
