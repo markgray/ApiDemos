@@ -33,6 +33,7 @@ import com.example.android.apis.R
  * number of clicks it has received and stores/retrieves it from the storage.
  * It is inflated from the xml file xml/advanced_preferences.xml
  */
+@Suppress("unused")
 class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context, attrs) {
     /**
      * The current value of our counter preference.
@@ -233,6 +234,7 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
              * Interface that must be implemented and provided as a public CREATOR field that
              * generates instances of our Parcelable class from a Parcel.
              */
+            @JvmField
             @Suppress("unused")
             val CREATOR: Creator<SavedState> = object : Creator<SavedState> {
                 /**
@@ -244,6 +246,7 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
                  * @param in The [Parcel] to read the object's data from.
                  * @return Returns a new instance of the Parcelable class.
                  */
+                @Suppress("RedundantNullableReturnType")
                 override fun createFromParcel(`in`: Parcel): SavedState? {
                     return SavedState(`in`)
                 }
