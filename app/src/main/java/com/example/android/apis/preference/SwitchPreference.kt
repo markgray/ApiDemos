@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 @file:Suppress("DEPRECATION")
-
+// TODO: replace with PreferenceFragmentCompat from androidx.preference:preference:1.1.0 or higher.
 package com.example.android.apis.preference
 
 import android.annotation.SuppressLint
