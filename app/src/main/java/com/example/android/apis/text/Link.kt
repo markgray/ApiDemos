@@ -16,6 +16,7 @@
 package com.example.android.apis.text
 
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.text.SpannableString
@@ -83,12 +84,21 @@ class Link : AppCompatActivity() {
         // illustrate how you might display text that came from a
         // dynamic source (eg, the network).
         val t3 = findViewById<TextView>(R.id.text3)
-        @Suppress("DEPRECATION")
-        t3.text = Html.fromHtml(
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            t3.text = Html.fromHtml(
                 "<b>text3: Constructed from HTML programmatically.</b>  Text with a " +
-                        "<a href=\"http://www.google.com\">link</a> " +
-                        "created in the Java source code using HTML."
-        )
+                    "<a href=\"http://www.google.com\">link</a> " +
+                    "created in the Java source code using HTML.",
+                Html.FROM_HTML_MODE_LEGACY
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            t3.text = Html.fromHtml(
+                "<b>text3: Constructed from HTML programmatically.</b>  Text with a " +
+                    "<a href=\"http://www.google.com\">link</a> " +
+                    "created in the Java source code using HTML."
+            )
+        }
         t3.movementMethod = LinkMovementMethod.getInstance()
 
         // text4 illustrates constructing a styled string containing a
@@ -96,17 +106,17 @@ class Link : AppCompatActivity() {
         // you should probably be using a string resource, not a
         // hardcoded value.
         val ss = SpannableString(
-                "text4: Manually created spans. Click here to dial the phone."
+            "text4: Manually created spans. Click here to dial the phone."
         )
         ss.setSpan(
-                StyleSpan(Typeface.BOLD),
-                0, 30,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            StyleSpan(Typeface.BOLD),
+            0, 30,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         ss.setSpan(
-                URLSpan("tel:4155551212"),
-                31 + 6, 31 + 10,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            URLSpan("tel:4155551212"),
+            31 + 6, 31 + 10,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         val t4 = findViewById<TextView>(R.id.text4)
         t4.text = ss
