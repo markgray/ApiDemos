@@ -16,17 +16,20 @@
 package com.example.android.apis.os
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.VibratorManager
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
 import com.example.android.apis.R
+
+
+
 
 /**
  * App that vibrates the vibrator with the Morse Code for a string. This demonstrates the
@@ -40,7 +43,6 @@ import com.example.android.apis.R
  *  * os/MorseCodeConverter.kt Class that implements the text to morse code conversion
  *  * res/layout/morse_code.xml Defines contents of the screen
  */
-@Suppress("MemberVisibilityCanBePrivate")
 class MorseCode : AppCompatActivity() {
     /**
      * Our [TextView] with ID R.id.text, used to enter text for us to convert to Morse code.
@@ -90,8 +92,20 @@ class MorseCode : AppCompatActivity() {
         val pattern = MorseCodeConverter.pattern(text)
 
         // Start the vibration
-        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        @Suppress("DEPRECATION")
-        vibrator.vibrate(pattern, -1)
+        val vibrator  = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager =  this.getSystemService(Context.VIBRATOR_MANAGER_SERVICE)
+                as VibratorManager
+            vibratorManager.defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            getSystemService(VIBRATOR_SERVICE) as Vibrator
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val vibe = VibrationEffect.createWaveform(pattern, -1)
+            vibrator.vibrate(vibe)
+        } else {
+            @Suppress("DEPRECATION")
+            vibrator.vibrate(pattern, -1)
+        }
     }
 }
