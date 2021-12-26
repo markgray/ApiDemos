@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
+@file:Suppress("DEPRECATION")
+// TODO: replace AsyncTask with coroutine usage.
+
 package com.example.android.apis.security
 
 import android.annotation.SuppressLint
@@ -33,7 +36,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-
+import com.example.android.apis.R
 import java.io.IOException
 import java.security.InvalidAlgorithmParameterException
 import java.security.InvalidKeyException
@@ -48,8 +51,6 @@ import java.security.UnrecoverableEntryException
 import java.security.cert.CertificateException
 import java.util.ArrayList
 import java.util.Enumeration
-
-import com.example.android.apis.R
 
 /**
  * Shows how to use api to generate Key pairs, sign and verify.
