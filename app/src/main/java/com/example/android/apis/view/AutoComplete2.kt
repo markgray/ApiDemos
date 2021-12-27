@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package com.example.android.apis.view
+// TODO: pop-up list always pops down on SDK 31? Fix this.
 
 import android.os.Bundle
 import android.widget.ArrayAdapter
@@ -42,9 +43,9 @@ class AutoComplete2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.autocomplete_2)
         val adapter = ArrayAdapter(
-                this,
-                android.R.layout.simple_dropdown_item_1line,
-                AutoComplete1.COUNTRIES
+            this,
+            android.R.layout.simple_dropdown_item_1line,
+            AutoComplete1.COUNTRIES
         )
         val textView = findViewById<AutoCompleteTextView>(R.id.edit)
         textView.setAdapter(adapter)
