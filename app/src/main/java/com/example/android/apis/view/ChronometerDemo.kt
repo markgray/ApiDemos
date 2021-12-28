@@ -29,12 +29,11 @@ import com.example.android.apis.R
 /**
  * Demonstrates the [Chronometer] class.
  */
-@Suppress("MemberVisibilityCanBePrivate")
 class ChronometerDemo : AppCompatActivity() {
     /**
      * `Chronometer` in our layout file with ID R.id.chronometer
      */
-    var mChronometer: Chronometer? = null
+    private var mChronometer: Chronometer? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -77,7 +76,7 @@ class ChronometerDemo : AppCompatActivity() {
      * Called when the button R.id.start "Start" is clicked. We simply call the `start` method
      * of [Chronometer] field [mChronometer].
      */
-    var mStartListener: View.OnClickListener = View.OnClickListener {
+    private var mStartListener: View.OnClickListener = View.OnClickListener {
         mChronometer!!.start()
     }
 
@@ -86,7 +85,7 @@ class ChronometerDemo : AppCompatActivity() {
      * Called when the button R.id.stop "Stop" is clicked. We simply call the `stop` method
      * of [Chronometer] field [mChronometer].
      */
-    var mStopListener: View.OnClickListener = View.OnClickListener {
+    private var mStopListener: View.OnClickListener = View.OnClickListener {
         mChronometer!!.stop()
     }
 
@@ -94,7 +93,7 @@ class ChronometerDemo : AppCompatActivity() {
      * Called when the button R.id.reset "Reset" is clicked. We simply call the `setBase` method of
      * [Chronometer] field [mChronometer] with the elapsed milliseconds since boot as its argument.
      */
-    var mResetListener: View.OnClickListener = View.OnClickListener {
+    private var mResetListener: View.OnClickListener = View.OnClickListener {
         mChronometer!!.base = SystemClock.elapsedRealtime()
     }
 
@@ -102,7 +101,7 @@ class ChronometerDemo : AppCompatActivity() {
      * Called when the button R.id.set_format "Set format string" is clicked. We call the method
      * `setFormat` of [Chronometer] field [mChronometer] with the string "Formatted time (%s)".
      */
-    var mSetFormatListener: View.OnClickListener = View.OnClickListener{
+    private var mSetFormatListener: View.OnClickListener = View.OnClickListener {
         mChronometer!!.format = "Formatted time (%s)"
     }
 
@@ -110,7 +109,7 @@ class ChronometerDemo : AppCompatActivity() {
      * Called when the button R.id.clear_format "Clear format string" is clicked. We call the
      * method `setFormat` of [Chronometer] field [mChronometer] with null as the argument.
      */
-    var mClearFormatListener: View.OnClickListener = View.OnClickListener {
+    private var mClearFormatListener: View.OnClickListener = View.OnClickListener {
         mChronometer!!.format = null
     }
 }
