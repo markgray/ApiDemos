@@ -21,6 +21,9 @@ import android.util.AttributeSet
 import android.widget.Checkable
 import android.widget.FrameLayout
 
+/**
+ * While it is used in layout/simple_list_item_checkable_1.xml that file is not used by any demo.
+ */
 class CheckableFrameLayout : FrameLayout, Checkable {
     private var mChecked = false
 
@@ -29,8 +32,7 @@ class CheckableFrameLayout : FrameLayout, Checkable {
 
     override fun setChecked(checked: Boolean) {
         mChecked = checked
-        @Suppress("DEPRECATION")
-        setBackgroundDrawable(if (checked) ColorDrawable(-0xffff60) else null)
+        background = if (checked) ColorDrawable(-0xffff60) else null
     }
 
     override fun isChecked(): Boolean {
