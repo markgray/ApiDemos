@@ -37,7 +37,6 @@ import com.example.android.apis.R
  * of data for an auto complete lookup of a contact. It uses android:completionHint
  * to show the hint "Typing * will show all of your contacts." in the [AutoCompleteTextView].
  */
-@Suppress("RedundantExplicitType")
 class AutoComplete5 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -55,15 +54,15 @@ class AutoComplete5 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.autocomplete_5)
         val content: ContentResolver = contentResolver
-        @SuppressLint("Recycle")
+
         val cursor: Cursor? = content.query(
-                ContactsContract.Contacts.CONTENT_URI,
-                CONTACT_PROJECTION,
-                null,
-                null,
-                null
+            ContactsContract.Contacts.CONTENT_URI,
+            CONTACT_PROJECTION,
+            null,
+            null,
+            null
         )
-        val adapter: ContactListAdapter = ContactListAdapter(this, cursor)
+        val adapter = ContactListAdapter(this, cursor)
         val textView: AutoCompleteTextView = findViewById(R.id.edit)
         textView.setAdapter(adapter)
     }
@@ -72,11 +71,10 @@ class AutoComplete5 : AppCompatActivity() {
      * [CursorAdapter] subclass we use to populate the suggestions of our [AutoCompleteTextView]
      * with data from the contacts database.
      */
-    @Suppress("DEPRECATION")
     class ContactListAdapter(
-            context: Context,
-            c: Cursor?
-    ) : CursorAdapter(context, c), Filterable {
+        context: Context,
+        c: Cursor?
+    ) : CursorAdapter(context, c, FLAG_REGISTER_CONTENT_OBSERVER), Filterable {
 
         /**
          * [ContentResolver] instance for our application's package.
@@ -101,9 +99,9 @@ class AutoComplete5 : AppCompatActivity() {
         override fun newView(context: Context, cursor: Cursor, parent: ViewGroup): View {
             val inflater = LayoutInflater.from(context)
             val view = inflater.inflate(
-                    android.R.layout.simple_dropdown_item_1line,
-                    parent,
-                    false
+                android.R.layout.simple_dropdown_item_1line,
+                parent,
+                false
             ) as TextView
             view.text = cursor.getString(COLUMN_DISPLAY_NAME)
             return view
@@ -155,26 +153,27 @@ class AutoComplete5 : AppCompatActivity() {
                 return filter.runQuery(constraint)
             }
             val uri = Uri.withAppendedPath(
-                    ContactsContract.Contacts.CONTENT_FILTER_URI,
-                    Uri.encode(constraint.toString()))
+                ContactsContract.Contacts.CONTENT_FILTER_URI,
+                Uri.encode(constraint.toString()))
             return mContent.query(
-                    uri,
-                    CONTACT_PROJECTION,
-                    null,
-                    null,
-                    null
+                uri,
+                CONTACT_PROJECTION,
+                null,
+                null,
+                null
             )!!
         }
 
     }
+
     companion object {
         /**
          * Projection containing a list of which columns to return from the contacts database.
          */
         @JvmField
         val CONTACT_PROJECTION = arrayOf(
-                ContactsContract.Contacts._ID,
-                ContactsContract.Contacts.DISPLAY_NAME
+            ContactsContract.Contacts._ID,
+            ContactsContract.Contacts.DISPLAY_NAME
         )
 
         /**
