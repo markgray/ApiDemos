@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 @file:Suppress("DEPRECATION")
+// TODO: replace all deprecated apis
 
 package com.example.android.apis.view
 
@@ -56,9 +57,8 @@ import com.example.android.apis.R
 @Suppress("DEPRECATION", "MemberVisibilityCanBePrivate")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class ContentBrowserActivity : AppCompatActivity(),
-        SearchView.OnQueryTextListener,
-        ActionBar.TabListener
-{
+    SearchView.OnQueryTextListener,
+    ActionBar.TabListener {
     /**
      * Implementation of a view for displaying immersive content, using system UI
      * flags to transition in and out of modes where the user is focused on that
@@ -66,9 +66,8 @@ class ContentBrowserActivity : AppCompatActivity(),
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     class Content(context: Context, attrs: AttributeSet?) : ScrollView(context, attrs),
-            OnSystemUiVisibilityChangeListener,
-            View.OnClickListener
-    {
+        OnSystemUiVisibilityChangeListener,
+        View.OnClickListener {
         /**
          * [TextView] we use to display our "content" in (the string with the resource id
          * R.string.alert_dialog_two_buttons2ultra_msg)
@@ -114,7 +113,7 @@ class ContentBrowserActivity : AppCompatActivity(),
          * you will get a stable layout for changes of the SYSTEM_UI_FLAG_FULLSCREEN mode
          */
         var mBaseSystemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 
         /**
          * Current global UI visibility flags received by our [onSystemUiVisibilityChange] callback.
@@ -170,7 +169,7 @@ class ContentBrowserActivity : AppCompatActivity(),
             val diff = mLastSystemUiVis xor visibility
             mLastSystemUiVis = visibility
             if (((diff and View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0
-                            && (visibility and View.SYSTEM_UI_FLAG_LOW_PROFILE) == 0)) {
+                    && (visibility and View.SYSTEM_UI_FLAG_LOW_PROFILE) == 0)) {
                 setNavVisibility(true)
             }
         }
@@ -288,7 +287,7 @@ class ContentBrowserActivity : AppCompatActivity(),
             mText.setOnClickListener(this)
             mText.setTextIsSelectable(true)
             addView(mText, ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
             setOnSystemUiVisibilityChangeListener(this)
         }
     }
@@ -317,7 +316,7 @@ class ContentBrowserActivity : AppCompatActivity(),
         setContentView(R.layout.content_browser)
         mContent = findViewById(R.id.content)
         mContent!!.init(findViewById(R.id.title),
-                findViewById(R.id.seekbar))
+            findViewById(R.id.seekbar))
         val bar = supportActionBar
         bar!!.addTab(bar.newTab().setText("Tab 1").setTabListener(this))
         bar.addTab(bar.newTab().setText("Tab 2").setTabListener(this))
@@ -422,7 +421,8 @@ class ContentBrowserActivity : AppCompatActivity(),
      * @param item [MenuItem] that has been selected.
      */
     @Suppress("UNUSED_PARAMETER")
-    fun onSort(item: MenuItem?) {}
+    fun onSort(item: MenuItem?) {
+    }
 
     /**
      * This hook is called whenever an item in your options menu is selected. We switch on the item
@@ -468,7 +468,7 @@ class ContentBrowserActivity : AppCompatActivity(),
             R.id.stable_layout -> {
                 item.isChecked = !item.isChecked
                 mContent!!.setBaseSystemUiVisibility(if (item.isChecked) (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE) else View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE) else View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
                 return true
             }
         }
