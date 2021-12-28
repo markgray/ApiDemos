@@ -15,7 +15,6 @@
  */
 package com.example.android.apis.view
 
-import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
@@ -53,13 +52,12 @@ class AutoComplete4 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.autocomplete_4)
         val content = contentResolver
-        @SuppressLint("Recycle")
         val cursor = content.query(
-                ContactsContract.Contacts.CONTENT_URI,
-                CONTACT_PROJECTION,
-                null,
-                null,
-                null
+            ContactsContract.Contacts.CONTENT_URI,
+            CONTACT_PROJECTION,
+            null,
+            null,
+            null
         )
         val adapter = ContactListAdapter(this, cursor)
         val textView = findViewById<AutoCompleteTextView>(R.id.edit)
@@ -70,11 +68,10 @@ class AutoComplete4 : AppCompatActivity() {
      * [CursorAdapter] subclass we use to populate the suggestions of our
      * [AutoCompleteTextView] with data from the contacts database.
      */
-    @Suppress("DEPRECATION")
     class ContactListAdapter(
-            context: Context,
-            c: Cursor?
-    ) : CursorAdapter(context, c), Filterable {
+        context: Context,
+        c: Cursor?
+    ) : CursorAdapter(context, c, FLAG_REGISTER_CONTENT_OBSERVER), Filterable {
 
         /**
          * [ContentResolver] instance for our application's package.
@@ -99,9 +96,9 @@ class AutoComplete4 : AppCompatActivity() {
         override fun newView(context: Context, cursor: Cursor, parent: ViewGroup): View {
             val inflater = LayoutInflater.from(context)
             val view = inflater.inflate(
-                    android.R.layout.simple_dropdown_item_1line,
-                    parent,
-                    false
+                android.R.layout.simple_dropdown_item_1line,
+                parent,
+                false
             ) as TextView
             view.text = cursor.getString(COLUMN_DISPLAY_NAME)
             return view
@@ -145,7 +142,6 @@ class AutoComplete4 : AppCompatActivity() {
          * @param constraint the constraint with which the query must be filtered
          * @return a [Cursor] representing the results of the new query
          */
-        @SuppressLint("Recycle")
         override fun runQueryOnBackgroundThread(constraint: CharSequence): Cursor {
             val filter = filterQueryProvider
             @Suppress("SENSELESS_COMPARISON")
@@ -153,14 +149,14 @@ class AutoComplete4 : AppCompatActivity() {
                 return filter.runQuery(constraint)
             }
             val uri = Uri.withAppendedPath(
-                    ContactsContract.Contacts.CONTENT_FILTER_URI,
-                    Uri.encode(constraint.toString()))
+                ContactsContract.Contacts.CONTENT_FILTER_URI,
+                Uri.encode(constraint.toString()))
             return mContent.query(
-                    uri,
-                    CONTACT_PROJECTION,
-                    null,
-                    null,
-                    null
+                uri,
+                CONTACT_PROJECTION,
+                null,
+                null,
+                null
             )!!
         }
 
@@ -172,8 +168,8 @@ class AutoComplete4 : AppCompatActivity() {
          */
         @JvmField
         val CONTACT_PROJECTION = arrayOf(
-                ContactsContract.Contacts._ID,
-                ContactsContract.Contacts.DISPLAY_NAME
+            ContactsContract.Contacts._ID,
+            ContactsContract.Contacts.DISPLAY_NAME
         )
 
         /**
