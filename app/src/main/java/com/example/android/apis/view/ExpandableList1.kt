@@ -17,7 +17,6 @@ package com.example.android.apis.view
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.ExpandableListActivity
 import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
@@ -34,6 +33,7 @@ import android.widget.ExpandableListView
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
@@ -44,12 +44,14 @@ import com.example.android.apis.R
  * or group which is long-pressed will pop up a context menu with an "action button".
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-class ExpandableList1 : ExpandableListActivity() {
+class ExpandableList1 : AppCompatActivity() {
     /**
      * The [ExpandableListAdapter] which serves as the `ListAdapter` for our activity.
      * (It is actually a [MyExpandableListAdapter] that is initialized in [onCreate]).
      */
     var mAdapter: ExpandableListAdapter? = null
+
+    private lateinit var expandableList: ExpandableListView
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -62,11 +64,13 @@ class ExpandableList1 : ExpandableListActivity() {
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.expandable_list1)
+        expandableList = findViewById(R.id.list)
 
         // Set up our adapter
         mAdapter = MyExpandableListAdapter()
-        setListAdapter(mAdapter)
-        registerForContextMenu(expandableListView)
+        expandableList.setAdapter(mAdapter)
+        registerForContextMenu(expandableList)
     }
 
     /**

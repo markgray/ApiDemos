@@ -2678,7 +2678,8 @@
         <activity
             android:name=".view.ExpandableList1"
             android:exported="true"
-            android:label="Views/Expandable Lists/1. Custom Adapter">
+            android:label="Views/Expandable Lists/1. Custom Adapter"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -2687,7 +2688,8 @@
         <activity
             android:name=".view.ExpandableList2"
             android:exported="true"
-            android:label="Views/Expandable Lists/2. Cursor (People)">
+            android:label="Views/Expandable Lists/2. Cursor (People)"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -2696,7 +2698,8 @@
         <activity
             android:name=".view.ExpandableList3"
             android:exported="true"
-            android:label="Views/Expandable Lists/3. Simple Adapter">
+            android:label="Views/Expandable Lists/3. Simple Adapter"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
