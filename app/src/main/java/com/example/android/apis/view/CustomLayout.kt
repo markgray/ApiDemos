@@ -30,7 +30,8 @@ import com.example.android.apis.R
 /**
  * Example of writing a custom layout manager. This is a fairly full-featured
  * layout manager that is relatively general, handling all layout cases. You
- * can simplify it for more specific cases.
+ * can simplify it for more specific cases. Used by CustomLayoutActivity.kt in
+ * its layout file layout/custom_layout.xml
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @RemoteView

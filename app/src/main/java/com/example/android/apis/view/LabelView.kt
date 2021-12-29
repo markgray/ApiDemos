@@ -21,14 +21,14 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
+
 import com.example.android.apis.R
 
 /**
  * Example of how to write a custom subclass of View. LabelView
  * is used to draw simple text views. Note that it does not handle
- * styled text or right-to-left writing systems.
+ * styled text or right-to-left writing systems. Used by the
+ * CustomView1.kt demo in its layout file layout/custom_view_1.xml
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class LabelView : View {

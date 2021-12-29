@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package com.example.android.apis.view
-
+// TODO: replace deprecated showDialog with the new DialogFragment class
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.app.Dialog

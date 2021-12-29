@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 @file:Suppress("DEPRECATION")
-
+// TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
+// TODO: replace deprecated Action bar navigation using tabs
+// TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
 package com.example.android.apis.view
 
 import android.annotation.TargetApi
@@ -49,9 +51,6 @@ import com.example.android.apis.R
  * browser style of UI (such as a book reader) that hides the nav bar as well as
  * the status bar. The difference is the addition of the flags
  * SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION, and SYSTEM_UI_FLAG_IMMERSIVE.
- * TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
- * TODO: replace deprecated Action bar navigation using tabs
- * TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
  */
 @Suppress("UNUSED_PARAMETER", "MemberVisibilityCanBePrivate", "RedundantOverride")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)

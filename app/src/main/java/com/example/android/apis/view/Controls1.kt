@@ -21,8 +21,6 @@ import android.widget.Button
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
 import com.example.android.apis.R
 
 /**
@@ -52,7 +50,7 @@ open class Controls1 : AppCompatActivity() {
         disabledButton.isEnabled = false
         val s1 = findViewById<Spinner>(R.id.spinner1)
         val adapter = ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, mStrings)
+            android.R.layout.simple_spinner_item, mStrings)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         s1.adapter = adapter
     }
@@ -62,7 +60,7 @@ open class Controls1 : AppCompatActivity() {
          * String array used to populate the `Spinner` with ID R.id.spinner1
          */
         private val mStrings = arrayOf(
-                "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"
+            "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"
         )
     }
 }

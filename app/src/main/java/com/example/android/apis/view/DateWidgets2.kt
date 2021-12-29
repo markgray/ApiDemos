@@ -15,6 +15,7 @@
  */
 package com.example.android.apis.view
 
+import android.os.Build
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.TimePicker
@@ -42,13 +43,21 @@ class DateWidgets2 : AppCompatActivity() {
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @Suppress("UNUSED_ANONYMOUS_PARAMETER", "DEPRECATION")
+    @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.date_widgets_example_2)
         val timePicker = findViewById<TimePicker>(R.id.timePicker)
-        timePicker.currentHour = 12
-        timePicker.currentMinute = 15
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            timePicker.hour = 12
+            timePicker.minute = 15
+        } else {
+            @Suppress("DEPRECATION")
+            timePicker.currentHour = 12
+            @Suppress("DEPRECATION")
+            timePicker.currentMinute = 15
+        }
+
         mTimeDisplay = findViewById(R.id.dateDisplay)
         updateDisplay(12, 15)
         timePicker.setOnTimeChangedListener {
