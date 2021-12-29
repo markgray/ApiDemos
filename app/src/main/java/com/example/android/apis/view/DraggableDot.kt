@@ -34,7 +34,6 @@ import com.example.android.apis.R
 /**
  * Used by [DragAndDropDemo] to draw the dots which the user can drag.
  */
-@Suppress("MemberVisibilityCanBePrivate")
 @SuppressLint("SetTextI18n")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs) {
@@ -63,7 +62,7 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
     /**
      * [TextView] we are to append the drag's textual conversion to if it is dropped on us.
      */
-    var mReportView: TextView? = null
+    private var mReportView: TextView? = null
 
     /**
      * [Paint] used to draw our Red dot with.
@@ -85,7 +84,7 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
     /**
      * Radius of our dot, set by the dot:radius="64dp" attribute in our layout.
      */
-    var mRadius = 0
+    private var mRadius = 0
 
     /**
      * The type of ANR (application not responding) that our dot should produce, set by the
@@ -95,12 +94,12 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
      * [sleepSixSeconds] when a dot with that attribute is long clicked, the "drop" ANR causes a
      * call to [sleepSixSeconds] when another dot is "dropped" on a dot with that attribute.
      */
-    var mAnrType = 0
+    private var mAnrType = 0
 
     /**
      * The text to display in the center of our dot, set by the dot:legend attribute in our layout.
      */
-    var mLegend: CharSequence?
+    private var mLegend: CharSequence?
 
     /**
      * Sleeps for 6 seconds in an attempt to generate an ANR (application not responding). We
@@ -133,10 +132,11 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
      * @param mDoAnr Flag to indicate whether we should for a ANR when we are long clicked.
      */
     (view: View?,
-        /**
-         * Flag to indicate whether we should force an ANR when we are long clicked.
-         */
-        var mDoAnr: Boolean) : DragShadowBuilder(view) {
+     /**
+      * Flag to indicate whether we should force an ANR when we are long clicked.
+      */
+     private var mDoAnr: Boolean
+    ) : DragShadowBuilder(view) {
 
         /**
          * Draws the shadow image. First if our flag [mDoAnr] is true we call our method
@@ -200,8 +200,8 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
         canvas.drawCircle(cx, cy, rad, mPaint)
         if (mLegend != null && mLegend!!.isNotEmpty()) {
             canvas.drawText(mLegend!!, 0, mLegend!!.length,
-                    cx, cy + mLegendPaint.fontSpacing / 2,
-                    mLegendPaint)
+                cx, cy + mLegendPaint.fontSpacing / 2,
+                mLegendPaint)
         }
 
         // if we're in the middle of a drag, light up as a potential target
@@ -385,6 +385,7 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
          * is in progress
          */
         private const val ALPHA_STEP = -0x1000000 / NUM_GLOW_STEPS
+
         @Suppress("unused")
         const val ANR_NONE = 0
 
@@ -472,7 +473,7 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
         }
         a.recycle()
         Log.i(TAG, "DraggableDot @ " + this + " : radius=" + mRadius + " legend='" + mLegend
-                + "' anr=" + mAnrType)
+            + "' anr=" + mAnrType)
         setOnLongClickListener { v ->
 
             /**
@@ -499,8 +500,12 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
              */
             mReportView!!.text = ""
             val data = ClipData.newPlainText("dot", "Dot : $v")
-            @Suppress("DEPRECATION")
-            v.startDrag(data, ANRShadowBuilder(v, mAnrType == ANR_SHADOW), v as Any, 0)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                v.startDragAndDrop(data, ANRShadowBuilder(v, mAnrType == ANR_SHADOW), v as Any, 0)
+            } else {
+                @Suppress("DEPRECATION")
+                v.startDrag(data, ANRShadowBuilder(v, mAnrType == ANR_SHADOW), v as Any, 0)
+            }
             true
         }
     }
