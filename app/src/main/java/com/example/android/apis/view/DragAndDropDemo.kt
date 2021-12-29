@@ -29,20 +29,19 @@ import com.example.android.apis.R
 /**
  * Shows how to implement draggable views.
  */
-@Suppress("MemberVisibilityCanBePrivate")
 @SuppressLint("SetTextI18n")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class DragAndDropDemo : AppCompatActivity() {
     /**
      * Target [TextView] to display some messages in.
      */
-    var mResultText: TextView? = null
+    private var mResultText: TextView? = null
 
     /**
      * This [DraggableDot] is invisible until we receive an ACTION_DRAG_STARTED [DragEvent]
      * whereupon we set it to be visible.
      */
-    var mHiddenDot: DraggableDot? = null
+    private var mHiddenDot: DraggableDot? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
