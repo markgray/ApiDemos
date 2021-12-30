@@ -15,10 +15,12 @@
  */
 package com.example.android.apis.view
 
-import android.app.ExpandableListActivity
 import android.os.Bundle
 import android.widget.ExpandableListAdapter
+import android.widget.ExpandableListView
 import android.widget.SimpleExpandableListAdapter
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 import java.util.ArrayList
 import java.util.HashMap
 
@@ -26,10 +28,16 @@ import java.util.HashMap
  * Demonstrates expandable lists backed by a Simple Map-based adapter, which is created using
  * [SimpleExpandableListAdapter]
  */
-class ExpandableList3 : ExpandableListActivity() {
+class ExpandableList3 : AppCompatActivity() {
+
+    /**
+     * The [ExpandableListView] in our layout file with ID [R.id.list]
+     */
+    private lateinit var expandableList: ExpandableListView
+
     /**
      * [SimpleExpandableListAdapter] created from a list of maps, and a list of list of maps,
-     * it is used as the [ExpandableListAdapter] of our [ExpandableListActivity]
+     * it is used as the [ExpandableListAdapter] of our [ExpandableListView]
      */
     private var mAdapter: ExpandableListAdapter? = null
 
@@ -94,6 +102,9 @@ class ExpandableList3 : ExpandableListActivity() {
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.expandable_list1)
+        expandableList = findViewById(R.id.list)
+
         val groupData: MutableList<Map<String, String?>> = ArrayList()
         val childData: MutableList<List<Map<String, String?>>> = ArrayList()
         for (i in 0..19) {
@@ -123,7 +134,7 @@ class ExpandableList3 : ExpandableListActivity() {
                 arrayOf(NAME, IS_EVEN),
                 intArrayOf(android.R.id.text1, android.R.id.text2)
         )
-        setListAdapter(mAdapter)
+        expandableList.setAdapter(mAdapter)
     }
 
     companion object {
