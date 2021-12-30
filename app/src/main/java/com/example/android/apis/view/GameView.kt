@@ -335,7 +335,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         // Check that the event came from a joystick since a generic motion event
         // could be almost anything.
         if ((event.isFromSource(InputDevice.SOURCE_CLASS_JOYSTICK)
-                        && event.action == MotionEvent.ACTION_MOVE)) {
+                && event.action == MotionEvent.ACTION_MOVE)) {
             // Cache the most recently obtained device information.
             // The device information may change over time but it can be
             // somewhat expensive to query.
@@ -521,11 +521,13 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private val vibrator: Vibrator
         get() {
             if (mLastInputDevice != null) {
+                @Suppress("DEPRECATION")
                 val vibrator = mLastInputDevice!!.vibrator
                 if (vibrator.hasVibrator()) {
                     return vibrator
                 }
             }
+            @Suppress("DEPRECATION")
             return context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         }
 
@@ -888,8 +890,8 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         fun collidesWith(other: Sprite): Boolean {
             // Really bad collision detection.
             return (!mDestroyed && !other.mDestroyed
-                    && (distanceTo(other) <= mSize.coerceAtLeast(other.mSize)
-                    + mSize.coerceAtMost(other.mSize) * 0.5f))
+                && (distanceTo(other) <= mSize.coerceAtLeast(other.mSize)
+                + mSize.coerceAtMost(other.mSize) * 0.5f))
         }
 
         /**
@@ -950,7 +952,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                 val width = this@GameView.width
                 val height = this@GameView.height
                 return (mPositionX < 0) || (mPositionX >= width
-                        ) || (mPositionY < 0) || (mPositionY >= height)
+                    ) || (mPositionY < 0) || (mPositionY >= height)
             }
 
         /**
@@ -1218,8 +1220,8 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          */
         override fun draw(canvas: Canvas) {
             setPaintARGBBlend(mPaint, mDestroyAnimProgress,
-                    255, 63, 255, 63,
-                    0, 255, 0, 0)
+                255, 63, 255, 63,
+                0, 255, 0, 0)
             canvas.save()
             canvas.translate(mPositionX, mPositionY)
             canvas.rotate(mHeadingAngle * TO_DEGREES)
@@ -1266,13 +1268,13 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             mPath = Path()
             mPath.moveTo(0f, 0f)
             mPath.lineTo(
-                    cos(-CORNER_ANGLE.toDouble()).toFloat() * mSize,
-                    sin(-CORNER_ANGLE.toDouble()).toFloat() * mSize
+                cos(-CORNER_ANGLE.toDouble()).toFloat() * mSize,
+                sin(-CORNER_ANGLE.toDouble()).toFloat() * mSize
             )
             mPath.lineTo(mSize, 0f)
             mPath.lineTo(
-                    cos(CORNER_ANGLE.toDouble()).toFloat() * mSize,
-                    sin(CORNER_ANGLE.toDouble()).toFloat() * mSize
+                cos(CORNER_ANGLE.toDouble()).toFloat() * mSize,
+                sin(CORNER_ANGLE.toDouble()).toFloat() * mSize
             )
             mPath.lineTo(0f, 0f)
         }
@@ -1316,9 +1318,9 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          */
         override fun draw(canvas: Canvas) {
             setPaintARGBBlend(
-                    mPaint, mDestroyAnimProgress,
-                    255, 255, 255, 0,
-                    0, 255, 255, 255
+                mPaint, mDestroyAnimProgress,
+                255, 255, 255, 0,
+                0, 255, 255, 255
             )
             canvas.drawCircle(mPositionX, mPositionY, mSize, mPaint)
         }
@@ -1386,14 +1388,14 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          */
         override fun draw(canvas: Canvas) {
             setPaintARGBBlend(
-                    mPaint, mDestroyAnimProgress,
-                    255, 127, 127, 255,
-                    0, 255, 0, 0
+                mPaint, mDestroyAnimProgress,
+                255, 127, 127, 255,
+                0, 255, 0, 0
             )
             canvas.drawCircle(
-                    mPositionX, mPositionY,
-                    mSize * (1.0f - mDestroyAnimProgress),
-                    mPaint
+                mPositionX, mPositionY,
+                mSize * (1.0f - mDestroyAnimProgress),
+                mPaint
             )
         }
 
@@ -1494,8 +1496,8 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          */
         private fun isFireKey(keyCode: Int): Boolean {
             return (KeyEvent.isGamepadButton(keyCode)
-                    || (keyCode == KeyEvent.KEYCODE_DPAD_CENTER
-                    ) || (keyCode == KeyEvent.KEYCODE_SPACE))
+                || (keyCode == KeyEvent.KEYCODE_DPAD_CENTER
+                ) || (keyCode == KeyEvent.KEYCODE_SPACE))
         }
 
         /**
@@ -1519,10 +1521,10 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          * (or 0 if the value is within the "flat" range of the device).
          */
         private fun getCenteredAxis(
-                event: MotionEvent,
-                device: InputDevice?,
-                axis: Int,
-                historyPos: Int
+            event: MotionEvent,
+            device: InputDevice?,
+            axis: Int,
+            historyPos: Int
         ): Float {
 
             val range = device!!.getMotionRange(axis, event.source)
@@ -1580,13 +1582,13 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          * @param b2    ti blue color component
          */
         fun setPaintARGBBlend(
-                paint: Paint, alpha: Float,
-                a1: Int, r1: Int, g1: Int, b1: Int,
-                a2: Int, r2: Int, g2: Int, b2: Int
+            paint: Paint, alpha: Float,
+            a1: Int, r1: Int, g1: Int, b1: Int,
+            a2: Int, r2: Int, g2: Int, b2: Int
         ) {
 
             paint.setARGB(blend(alpha, a1, a2), blend(alpha, r1, r2),
-                    blend(alpha, g1, g2), blend(alpha, b1, b2))
+                blend(alpha, g1, g2), blend(alpha, b1, b2))
 
         }
 
