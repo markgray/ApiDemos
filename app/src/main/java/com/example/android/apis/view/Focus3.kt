@@ -26,19 +26,16 @@ import com.example.android.apis.R
  * specify focus behavior that would be difficult with default focus calculation
  * algorithm -- need input device suitable for changing focus.
  */
-@Suppress("MemberVisibilityCanBePrivate")
 class Focus3 : AppCompatActivity() {
     /**
      * [Button] in our layout file with ID R.id.top
      */
-    var mTopButton: Button? = null
-        private set
+    private var mTopButton: Button? = null
 
     /**
      * [Button] in our layout file with ID R.id.bottom
      */
-    var mBottomButton: Button? = null
-        private set
+    private var mBottomButton: Button? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
