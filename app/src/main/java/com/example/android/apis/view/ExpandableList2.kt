@@ -15,7 +15,6 @@
  */
 package com.example.android.apis.view
 
-import android.app.ExpandableListActivity
 import android.content.AsyncQueryHandler
 import android.content.ContentUris
 import android.content.Context
@@ -25,20 +24,28 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.widget.CursorTreeAdapter
+import android.widget.ExpandableListView
 import android.widget.SimpleCursorTreeAdapter
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * Demonstrates expandable lists backed by Cursors-- uses Contacts data base to retrieve names and
  * when a name is clicked expands to show the phone numbers for that name.
  */
-class ExpandableList2 : ExpandableListActivity() {
+class ExpandableList2 : AppCompatActivity() {
     /**
      * Our handler for making asynchronous ContentResolver queries of the contacts database.
      */
     private var mQueryHandler: QueryHandler? = null
 
     /**
-     * The [CursorTreeAdapter] for our [ExpandableListActivity] In our case it is an instance of
+     * The [ExpandableListView] in our layout file with ID [R.id.list]
+     */
+    private lateinit var expandableList: ExpandableListView
+
+    /**
+     * The [CursorTreeAdapter] for our [ExpandableListView] In our case it is an instance of
      * [MyExpandableListAdapter] which extends [SimpleCursorTreeAdapter]. It is an adapter that
      * exposes data from a series of Cursors to an `ExpandableListView` widget. The top-level
      * [Cursor] (that is given in the constructor) exposes the groups, while subsequent Cursors
@@ -74,6 +81,8 @@ class ExpandableList2 : ExpandableListActivity() {
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.expandable_list1)
+        expandableList = findViewById(R.id.list)
 
         // Set up our adapter
         mAdapter = MyExpandableListAdapter(
@@ -85,7 +94,7 @@ class ExpandableList2 : ExpandableListActivity() {
                 arrayOf(Phone.NUMBER),
                 intArrayOf(android.R.id.text1)
         )
-        setListAdapter(mAdapter)
+        expandableList.setAdapter(mAdapter)
         mQueryHandler = QueryHandler(this, mAdapter)
 
         // Query for people

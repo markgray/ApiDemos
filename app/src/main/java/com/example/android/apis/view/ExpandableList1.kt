@@ -51,6 +51,9 @@ class ExpandableList1 : AppCompatActivity() {
      */
     var mAdapter: ExpandableListAdapter? = null
 
+    /**
+     * The [ExpandableListView] in our layout file with ID [R.id.list]
+     */
     private lateinit var expandableList: ExpandableListView
 
     /**
