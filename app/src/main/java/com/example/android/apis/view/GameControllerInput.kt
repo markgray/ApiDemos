@@ -587,6 +587,7 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
          * [Heading] for the device heading row (the string "Input Device" will be written to
          * its [TextView] when the [Heading.initView] method is called.
          */
+        @Suppress("JoinDeclarationAndAssignment")
         private val mDeviceHeading: Heading
 
         /**
