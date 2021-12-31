@@ -28,11 +28,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.BaseAdapter
+import android.widget.Checkable
+import android.widget.FrameLayout
 import android.widget.GridView
 import android.widget.ImageView
-import android.widget.FrameLayout
-import android.widget.Checkable
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.example.android.apis.R
 
 /**
@@ -100,6 +101,7 @@ class Grid3 : AppCompatActivity() {
         /**
          * Width of an icon in pixels (50*dp2px)
          */
+        @Suppress("JoinDeclarationAndAssignment")
         private val w: Int
 
         /**
@@ -135,8 +137,8 @@ class Grid3 : AppCompatActivity() {
                 i.layoutParams = ViewGroup.LayoutParams(w, h)
                 l = CheckableLayout(this@Grid3)
                 l.layoutParams = AbsListView.LayoutParams(
-                        AbsListView.LayoutParams.WRAP_CONTENT,
-                        AbsListView.LayoutParams.WRAP_CONTENT
+                    AbsListView.LayoutParams.WRAP_CONTENT,
+                    AbsListView.LayoutParams.WRAP_CONTENT
                 )
                 l.addView(i)
             } else {
@@ -214,8 +216,11 @@ class Grid3 : AppCompatActivity() {
          */
         override fun setChecked(checked: Boolean) {
             mChecked = checked
-            @Suppress("DEPRECATION")
-            setBackgroundDrawable(if (checked) resources.getDrawable(R.drawable.blue) else null)
+            background = if (checked) {
+                ResourcesCompat.getDrawable(resources, R.drawable.blue, null)
+            } else {
+                null
+            }
         }
 
         /**

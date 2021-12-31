@@ -36,12 +36,11 @@ import com.example.android.apis.R
  * Shows how to use a [GridView] to display a grid of [ImageView]'s created
  * from the app icons retrieved from the `PackageManager`
  */
-@Suppress("MemberVisibilityCanBePrivate")
 class Grid1 : AppCompatActivity() {
     /**
      * The [GridView] in our layout with ID R.id.myGrid
      */
-    var mGrid: GridView? = null
+    private var mGrid: GridView? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of

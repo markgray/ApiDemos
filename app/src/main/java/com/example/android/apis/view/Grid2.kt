@@ -64,6 +64,7 @@ class Grid2 : AppCompatActivity() {
         /**
          * Width of a photo in pixels (45*dp2px)
          */
+        @Suppress("JoinDeclarationAndAssignment")
         private val w: Int
 
         /**
