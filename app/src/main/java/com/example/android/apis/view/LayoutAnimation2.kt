@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package com.example.android.apis.view
+// TODO: comments need corections.
 
 import android.os.Bundle
 import android.view.animation.AlphaAnimation
