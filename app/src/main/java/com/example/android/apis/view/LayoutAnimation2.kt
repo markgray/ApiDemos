@@ -15,8 +15,6 @@
  */
 package com.example.android.apis.view
 
-
-import android.app.ListActivity
 import android.os.Bundle
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
@@ -24,12 +22,15 @@ import android.view.animation.AnimationSet
 import android.view.animation.LayoutAnimationController
 import android.view.animation.TranslateAnimation
 import android.widget.ArrayAdapter
+import android.widget.ListView
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
- * Shows how to use a [LayoutAnimationController] to animate the layout of a list in a [ListActivity]
+ * Shows how to use a [LayoutAnimationController] to animate the layout of a list in a [ListView]
  * Too fast on Nexus 6 to see effect
  */
-class LayoutAnimation2 : ListActivity() {
+class LayoutAnimation2 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`. The we set our list adapter to a new instance of [ArrayAdapter] which
@@ -54,32 +55,33 @@ class LayoutAnimation2 : ListActivity() {
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        listAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mStrings)
+        setContentView(R.layout.layout_animation_2)
+        val list = findViewById<ListView>(R.id.list)
+        list.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mStrings)
         val set = AnimationSet(true)
         var animation: Animation = AlphaAnimation(0.0f, 1.0f)
         animation.duration = 50
         set.addAnimation(animation)
         animation = TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, -1.0f, Animation.RELATIVE_TO_SELF, 0.0f
+            Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+            Animation.RELATIVE_TO_SELF, -1.0f, Animation.RELATIVE_TO_SELF, 0.0f
         )
         animation.setDuration(100)
         set.addAnimation(animation)
         val controller = LayoutAnimationController(set, 0.5f)
-        val listView = listView
-        listView.layoutAnimation = controller
+        list.layoutAnimation = controller
     }
 
     /**
      * The data that our [ArrayAdapter] uses to fill our `ListView`.
      */
     private val mStrings = arrayOf(
-            "Bordeaux",
-            "Lyon",
-            "Marseille",
-            "Nancy",
-            "Paris",
-            "Toulouse",
-            "Strasbourg"
+        "Bordeaux",
+        "Lyon",
+        "Marseille",
+        "Nancy",
+        "Paris",
+        "Toulouse",
+        "Strasbourg"
     )
 }
