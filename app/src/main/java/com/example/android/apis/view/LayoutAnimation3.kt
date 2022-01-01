@@ -15,21 +15,24 @@
  */
 package com.example.android.apis.view
 
-import android.app.ListActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.ListView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
- * Same as List Cascade above, but an android:layoutAnimation attribute in the layout file
- * R.layout.layout_animation_3 uses anim/layout_bottom_to_top_slide.xml which uses anim/slide_right
- * instead of implementing the animation in code
+ * Same as the List Cascade above implemented in `LayoutAnimation2`, but an android:layoutAnimation
+ * attribute in the layout file R.layout.layout_animation_3 uses anim/layout_bottom_to_top_slide.xml
+ * which uses anim/slide_right instead of implementing the animation in code
  */
-class LayoutAnimation3 : ListActivity() {
+class LayoutAnimation3 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to our layout file R.layout.layout_animation_3.
-     * Then we set our list adapter to a new instance of [ArrayAdapter] which is constructed
+     * `onCreate`, then we set our content view to our layout file R.layout.layout_animation_3, and
+     * initialize our [ListView] variable `val list` by finding the view with ID [R.id.list].
+     *
+     * Then we set adapter of `list`  to a new instance of [ArrayAdapter] which is constructed
      * using our array `String[] mStrings` as the data, and android.R.layout.simple_list_item_1
      * as the layout file containing a `TextView` to use when instantiating views.
      *
@@ -38,20 +41,20 @@ class LayoutAnimation3 : ListActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_animation_3)
-        listAdapter = ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, mStrings)
+        val list = findViewById<ListView>(R.id.list)
+        list.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mStrings)
     }
 
     /**
      * The data that our [ArrayAdapter] uses to fill our `ListView`.
      */
     private val mStrings = arrayOf(
-            "Bordeaux",
-            "Lyon",
-            "Marseille",
-            "Nancy",
-            "Paris",
-            "Toulouse",
-            "Strasbourg"
+        "Bordeaux",
+        "Lyon",
+        "Marseille",
+        "Nancy",
+        "Paris",
+        "Toulouse",
+        "Strasbourg"
     )
 }
