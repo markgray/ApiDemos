@@ -2539,8 +2539,11 @@ Views
     Views/Lists/01. Array                  all
         .view.List1
         .view.Cheeses
-            Uses an ArrayAdapter<String> to fill a ListActivity's list
-            TODO: Use ListFragment or RecyclerView instead of ListActivity
+            A list view example where the data for the list comes from an array of strings. It uses
+            an `ArrayAdapter<String>` to fill a [ListView]'s list. It sets the isTextFilterEnabled`
+            property of the [ListView] to `true` so that the list is filtered when the user types,
+            but as there is no way for the keyboard to appear on a phone this nifty feature does not
+            happen.
 
     Views/Lists/02. Cursor (People)        all
         .view.List2
