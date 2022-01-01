@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package com.example.android.apis.view
-// TODO: comments need corections.
 
 import android.os.Bundle
 import android.view.animation.AlphaAnimation
@@ -34,8 +33,11 @@ import com.example.android.apis.R
 class LayoutAnimation2 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`. The we set our list adapter to a new instance of [ArrayAdapter] which
-     * is constructed using our `String[]` array [mStrings] as the data, and the system layout
+     * `onCreate`, then we set our content view to our layout file [R.layout.layout_animation_2] and
+     * initialize our [ListView] variable `val list` by finding the view with ID [R.id.list].
+     *
+     * Next we set the list adapter of `list` to a new instance of [ArrayAdapter] which is
+     * constructed using our `String[]` array [mStrings] as the data, and the system layout
      * android.R.layout.simple_list_item_1 as the layout file containing a `TextView` to use when
      * instantiating views.
      *
@@ -49,8 +51,8 @@ class LayoutAnimation2 : AppCompatActivity() {
      * milliseconds and add it to `set`.
      *
      * We create [LayoutAnimationController] variable `val controller` to use `set` with a delay
-     * of 0.5. Finally we fetch our `ListView` to `val listView` and set its layout animation
-     * controller to `controller`.
+     * of 0.5. Finally we set the layout animation controller of our [ListView] variable `list`
+     * to `controller`.
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
