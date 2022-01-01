@@ -21,7 +21,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:ignore="TextFields,RtlSymmetry,InefficientWeight,ContentDescription">
+    tools:ignore="TextFields,RtlSymmetry,InefficientWeight,ContentDescription,RtlHardcoded,Autofill,LabelFor">
 
     <!-- Top label/button text field. -->
 

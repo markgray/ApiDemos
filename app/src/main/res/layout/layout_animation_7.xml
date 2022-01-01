@@ -22,7 +22,7 @@
     android:layoutAnimation="@anim/layout_animation_table"
     android:padding="12dp"
     android:stretchColumns="1"
-    tools:ignore="TextFields">
+    tools:ignore="TextFields,RtlHardcoded,LabelFor,Autofill" >
 
     <TableRow android:layoutAnimation="@anim/layout_animation_row_right_slide">
 
