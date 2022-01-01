@@ -13,28 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
-
 package com.example.android.apis.view
 
-import android.app.ListActivity
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.widget.ListAdapter
+import android.widget.ListView
 import android.widget.SimpleCursorAdapter
-import androidx.loader.content.CursorLoader
-import androidx.loader.app.LoaderManager
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * A list view example where the data comes from a cursor. Builds a cursor using
  * getContentResolver().query(...) of the Contacts provider for a projection of
  * Contacts._ID, and Contacts.DISPLAY_NAME and sets it as the [ListAdapter] for the
- * [ListActivity]'s list
+ * [ListView]'s list
  * TODO: Switch to the new androidx.loader.content.CursorLoader class with androidx.loader.app.LoaderManager
  * instead of SimpleCursorAdapter
- * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
-class List2 : ListActivity() {
+class List2 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`. Next we retrieve `Cursor` variable `val c` by querying the uri Contacts.CONTENT_URI
@@ -49,28 +46,28 @@ class List2 : ListActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.list_2)
+        val list = findViewById<ListView>(R.id.list)
 
         // Get a cursor with all people
         val c = contentResolver.query(
-                ContactsContract.Contacts.CONTENT_URI,
-                CONTACT_PROJECTION,
-                null,
-                null
-                , null
+            ContactsContract.Contacts.CONTENT_URI,
+            CONTACT_PROJECTION,
+            null,
+            null, null
         )
-        @Suppress("DEPRECATION")
         startManagingCursor(c)
         /**
          * Use a template that displays a text view, and give the cursor to the list adapter
          */
         @Suppress("DEPRECATION")
         val adapter: ListAdapter = SimpleCursorAdapter(
-                this,
-                android.R.layout.simple_list_item_1,
-                c, arrayOf(ContactsContract.Contacts.DISPLAY_NAME),
-                intArrayOf(android.R.id.text1)
+            this,
+            android.R.layout.simple_list_item_1,
+            c, arrayOf(ContactsContract.Contacts.DISPLAY_NAME),
+            intArrayOf(android.R.id.text1)
         )
-        listAdapter = adapter
+        list.adapter = adapter
     }
 
     companion object {
@@ -78,8 +75,8 @@ class List2 : ListActivity() {
          * Projection for the data we want from the contacts data base.
          */
         private val CONTACT_PROJECTION = arrayOf(
-                ContactsContract.Contacts._ID,
-                ContactsContract.Contacts.DISPLAY_NAME
+            ContactsContract.Contacts._ID,
+            ContactsContract.Contacts.DISPLAY_NAME
         )
     }
 }
