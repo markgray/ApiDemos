@@ -13,27 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
 
 package com.example.android.apis.view
 
-import android.app.ListActivity
 import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.LinearLayout
+import android.widget.ListView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 import com.example.android.apis.Shakespeare.DIALOGUE
 import com.example.android.apis.Shakespeare.TITLES
 
 /**
  * A list view example where the data comes from a custom `ListAdapter` which displays from
  * an array of strings using a custom view (reusing recycled views when one is given to it.)
- * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
-class List4 : ListActivity() {
+class List4 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`. Then we set our list adapter to a new instance of [SpeechListAdapter].
@@ -42,9 +42,11 @@ class List4 : ListActivity() {
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.list_4)
+        val list = findViewById<ListView>(R.id.list)
 
         // Use our own list adapter
-        listAdapter = SpeechListAdapter(this)
+        list.adapter = SpeechListAdapter(this)
     }
 
     /**
