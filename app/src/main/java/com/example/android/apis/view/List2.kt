@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+//TODO: Switch to the new androidx.loader.content.CursorLoader class with androidx.loader.app.LoaderManager
 package com.example.android.apis.view
 
 import android.os.Bundle
@@ -27,9 +29,7 @@ import com.example.android.apis.R
  * A list view example where the data comes from a cursor. Builds a cursor using
  * getContentResolver().query(...) of the Contacts provider for a projection of
  * Contacts._ID, and Contacts.DISPLAY_NAME and sets it as the [ListAdapter] for the
- * [ListView]'s list
- * TODO: Switch to the new androidx.loader.content.CursorLoader class with androidx.loader.app.LoaderManager
- * instead of SimpleCursorAdapter
+ * [ListView]'s list instead of SimpleCursorAdapter
  */
 class List2 : AppCompatActivity() {
     /**
