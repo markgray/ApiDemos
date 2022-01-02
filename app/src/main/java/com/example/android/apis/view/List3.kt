@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 @file:Suppress("DEPRECATION")
-
+// TODO: Switch to the new CursorLoader class with LoaderManager instead
 package com.example.android.apis.view
 
-import android.app.ListActivity
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Phone
+import android.widget.ListView
 import android.widget.SimpleCursorAdapter
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * A list view example where the data comes from a cursor, and a
  * [SimpleCursorAdapter] is used to map each item to a two-line display.
- * TODO: Switch to the new CursorLoader class with LoaderManager instead
- * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
-class List3 : ListActivity() {
+class List3 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`. Next we retrieve `Cursor` variable `val c` by querying the uri Phone.CONTENT_URI
@@ -49,25 +49,23 @@ class List3 : ListActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.list_3)
+        val list = findViewById<ListView>(R.id.list)
 
         // Get a cursor with all phones
         val c = contentResolver.query(Phone.CONTENT_URI, PHONE_PROJECTION,
-                null, null, null)
+            null, null, null)
         @Suppress("DEPRECATION")
         startManagingCursor(c)
 
         // Map Cursor columns to views defined in simple_list_item_2.xml
-        @Suppress("DEPRECATION")
         val adapter = SimpleCursorAdapter(this,
-                android.R.layout.simple_list_item_2, c, arrayOf(
-                Phone.TYPE,
-                Phone.NUMBER
+            android.R.layout.simple_list_item_2, c, arrayOf(
+            Phone.TYPE,
+            Phone.NUMBER
         ), intArrayOf(android.R.id.text1, android.R.id.text2))
         //Used to display a readable string for the phone type
-        adapter.viewBinder = SimpleCursorAdapter.ViewBinder {
-            view,
-            cursor,
-            columnIndex ->
+        adapter.viewBinder = SimpleCursorAdapter.ViewBinder { view, cursor, columnIndex ->
             /**
              * Binds the Cursor column defined by the specified index to the specified view. If the
              * [columnIndex] is not our COLUMN_TYPE we return false so that the adapter will
@@ -99,7 +97,7 @@ class List3 : ListActivity() {
             (view as TextView).text = text
             true
         }
-        listAdapter = adapter
+        list.adapter = adapter
     }
 
     companion object {
@@ -107,10 +105,10 @@ class List3 : ListActivity() {
          * Projection of the data fields we want from the phone database.
          */
         private val PHONE_PROJECTION = arrayOf(
-                Phone._ID,
-                Phone.TYPE,
-                Phone.LABEL,
-                Phone.NUMBER
+            Phone._ID,
+            Phone.TYPE,
+            Phone.LABEL,
+            Phone.NUMBER
         )
 
         /**
