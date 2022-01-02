@@ -13,25 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
 
 package com.example.android.apis.view
 
-import android.app.ListActivity
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ListView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * A list view example with separators. Separators are implemented by overriding the methods
  * areAllItemsEnabled, and isEnabled
- * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
-class List5 : ListActivity() {
+class List5 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`. Then we set our list adapter to a new instance of [MyListAdapter].
@@ -40,7 +40,9 @@ class List5 : ListActivity() {
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        listAdapter = MyListAdapter(this)
+        setContentView(R.layout.list_5)
+        val list = findViewById<ListView>(R.id.list)
+        list.adapter = MyListAdapter(this)
     }
 
     private inner class MyListAdapter
