@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
 
 package com.example.android.apis.view
+// TODO: comments need correcting.
 
-import android.app.ListActivity
 import android.content.Context
 import android.os.Bundle
 import android.view.View
@@ -26,14 +25,15 @@ import android.widget.BaseAdapter
 import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * A list view example where the data comes from a custom ListAdapter, `onListItemClick` is
  * overridden to "toggle" the view between two states: collapsed to a title, and expanded
  * to a title and text for that title
- * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
-class List6 : ListActivity() {
+class List6 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`. Then we set our list adapter to a new instance of [SpeechListAdapter].
@@ -42,9 +42,14 @@ class List6 : ListActivity() {
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.list_6)
+        val list = findViewById<ListView>(R.id.list)
 
         // Use our own list adapter
-        listAdapter = SpeechListAdapter(this)
+        list.adapter = SpeechListAdapter(this)
+        list.setOnItemClickListener { parent, view, position, id ->
+            onListItemClick(parent as ListView, view, position, id)
+        }
     }
 
     /**
@@ -57,8 +62,9 @@ class List6 : ListActivity() {
      * @param position The position of the view in the list
      * @param id       The row id of the item that was clicked
      */
-    override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
-        (listAdapter as SpeechListAdapter).toggle(position)
+    @Suppress("UNUSED_PARAMETER")
+    fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
+        (l.adapter as SpeechListAdapter).toggle(position)
     }
 
     /**

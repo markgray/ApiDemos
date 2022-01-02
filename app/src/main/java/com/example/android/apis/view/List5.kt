@@ -52,10 +52,10 @@ class List5 : AppCompatActivity() {
      * @param mContext [Context] to use to access resources.
      */
     (
-            /**
-             * `Context` to use to access resources.
-             */
-            private val mContext: Context
+        /**
+         * `Context` to use to access resources.
+         */
+        private val mContext: Context
 
     ) : BaseAdapter() {
 
@@ -133,9 +133,9 @@ class List5 : AppCompatActivity() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val tv: TextView = if (convertView == null) {
                 LayoutInflater.from(mContext).inflate(
-                        android.R.layout.simple_expandable_list_item_1,
-                        parent,
-                        false
+                    android.R.layout.simple_expandable_list_item_1,
+                    parent,
+                    false
                 ) as TextView
             } else {
                 convertView as TextView
@@ -150,35 +150,35 @@ class List5 : AppCompatActivity() {
      * Array of cheeses that we use for our `ListView`.
      */
     private val mStrings = arrayOf(
-            "----------",
-            "----------",
-            "Abbaye de Belloc",
-            "Abbaye du Mont des Cats",
-            "Abertam",
-            "----------",
-            "Abondance",
-            "----------",
-            "Ackawi",
-            "Acorn",
-            "Adelost",
-            "Affidelice au Chablis",
-            "Afuega'l Pitu",
-            "Airag",
-            "----------",
-            "Airedale",
-            "Aisy Cendre",
-            "----------",
-            "Allgauer Emmentaler",
-            "Alverca",
-            "Ambert",
-            "American Cheese",
-            "Ami du Chambertin",
-            "----------",
-            "----------",
-            "Anejo Enchilado",
-            "Anneau du Vic-Bilh",
-            "Anthoriro",
-            "----------",
-            "----------"
+        "----------",
+        "----------",
+        "Abbaye de Belloc",
+        "Abbaye du Mont des Cats",
+        "Abertam",
+        "----------",
+        "Abondance",
+        "----------",
+        "Ackawi",
+        "Acorn",
+        "Adelost",
+        "Affidelice au Chablis",
+        "Afuega'l Pitu",
+        "Airag",
+        "----------",
+        "Airedale",
+        "Aisy Cendre",
+        "----------",
+        "Allgauer Emmentaler",
+        "Alverca",
+        "Ambert",
+        "American Cheese",
+        "Ami du Chambertin",
+        "----------",
+        "----------",
+        "Anejo Enchilado",
+        "Anneau du Vic-Bilh",
+        "Anthoriro",
+        "----------",
+        "----------"
     )
 }
