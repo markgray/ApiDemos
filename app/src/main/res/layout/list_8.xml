@@ -14,6 +14,7 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -27,13 +28,15 @@
             android:id="@+id/add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/list_8_new_photo" />
+            android:text="@string/list_8_new_photo"
+            tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/list_8_clear_photos" />
+            android:text="@string/list_8_clear_photos"
+            tools:ignore="ButtonStyle" />
 
     </LinearLayout>
 
@@ -47,7 +50,7 @@
              have to call it "@android:id/list" so ListActivity will
              find it -->
         <ListView
-            android:id="@android:id/list"
+            android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:drawSelectorOnTop="false" />

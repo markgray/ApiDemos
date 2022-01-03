@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
 
 package com.example.android.apis.view
+// TODO: Correct comments
 
-import android.app.ListActivity
 import android.content.Context
 import android.os.Bundle
 import android.view.View
@@ -26,6 +25,8 @@ import android.widget.AbsListView
 import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ListView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import java.util.ArrayList
 import kotlin.math.roundToInt
@@ -33,13 +34,14 @@ import kotlin.math.roundToInt
 /**
  * A list view that demonstrates the use of `setEmptyView`. This example also uses
  * a custom layout file that adds some extra buttons to the screen.
- * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
-class List8 : ListActivity() {
+class List8 : AppCompatActivity() {
     /**
      * The custom [BaseAdapter] for our `ListView`
      */
     var mAdapter: PhotoAdapter? = null
+
+    private lateinit var listView: ListView
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -59,13 +61,14 @@ class List8 : ListActivity() {
 
         // Use a custom layout file
         setContentView(R.layout.list_8)
+        listView = findViewById(R.id.list)
 
         // Tell the list view which view to display when the list is empty
         listView.emptyView = findViewById(R.id.empty)
 
         // Set up our adapter
         mAdapter = PhotoAdapter(this)
-        listAdapter = mAdapter
+        listView.adapter = mAdapter
 
         // Wire up the clear button to remove all photos
         val clear = findViewById<Button>(R.id.clear)
@@ -89,10 +92,10 @@ class List8 : ListActivity() {
      * of [List8]
      */
     (
-            /**
-             * [Context] to use to construct views (set to its parameter by our constructor).
-             */
-            private val mContext: Context
+        /**
+         * [Context] to use to construct views (set to its parameter by our constructor).
+         */
+        private val mContext: Context
 
     ) : BaseAdapter() {
 
@@ -100,9 +103,9 @@ class List8 : ListActivity() {
          * Resource IDs of the jpg photos we can add to our `ListView`
          */
         private val mPhotoPool = arrayOf(
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1, R.drawable.sample_thumb_2,
-                R.drawable.sample_thumb_3, R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7)
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1, R.drawable.sample_thumb_2,
+            R.drawable.sample_thumb_3, R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7)
 
         /**
          * List of photos we are currently displaying in our `ListView`
@@ -163,7 +166,7 @@ class List8 : ListActivity() {
             i.setImageResource(mPhotos[position])
             i.adjustViewBounds = true
             i.layoutParams = AbsListView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT)
+                ViewGroup.LayoutParams.WRAP_CONTENT)
             // Give it a nice background
             i.setBackgroundResource(R.drawable.picture_frame)
             return i
