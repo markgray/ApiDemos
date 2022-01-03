@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
 
+@file:Suppress("DEPRECATION")
+// TODO: correct comments, replace deprecated startManagingCursor and SimpleCursorAdapter
 package com.example.android.apis.view
 
-import android.app.ListActivity
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Phone
@@ -28,6 +28,7 @@ import android.widget.ListAdapter
 import android.widget.ListView
 import android.widget.SimpleCursorAdapter
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
@@ -36,11 +37,13 @@ import com.example.android.apis.R
  * OnItemSelectedListener, I modified to do the same when onListItemClick is called since
  * a touch interface cannot select.
  */
-class List7 : ListActivity(), OnItemSelectedListener {
+class List7 : AppCompatActivity(), OnItemSelectedListener {
     /**
      * [TextView] we use to display the phone number of the selected contact.
      */
     private var mPhone: TextView? = null
+
+    private lateinit var listView: ListView
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -62,26 +65,30 @@ class List7 : ListActivity(), OnItemSelectedListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.list_7)
         mPhone = findViewById(R.id.phone)
+        listView = findViewById(R.id.list)
         listView.onItemSelectedListener = this
 
         // Get a cursor with all numbers.
         // This query will only return contacts with phone numbers
         val c = contentResolver.query(
-                Phone.CONTENT_URI,
-                PHONE_PROJECTION,
-                Phone.NUMBER + " NOT NULL",
-                null,
-                null
+            Phone.CONTENT_URI,
+            PHONE_PROJECTION,
+            Phone.NUMBER + " NOT NULL",
+            null,
+            null
         )
         startManagingCursor(c)
         val adapter: ListAdapter = SimpleCursorAdapter(
-                this,
-                android.R.layout.simple_list_item_1, // Use a template that displays a text view
-                c, // Give the cursor to the list adapter
-                arrayOf(Phone.DISPLAY_NAME),
-                intArrayOf(android.R.id.text1)
+            this,
+            android.R.layout.simple_list_item_1, // Use a template that displays a text view
+            c, // Give the cursor to the list adapter
+            arrayOf(Phone.DISPLAY_NAME),
+            intArrayOf(android.R.id.text1)
         )
-        listAdapter = adapter
+        listView.adapter = adapter
+        listView.setOnItemClickListener { parent, view, position, id ->
+            onListItemClick(parent as ListView, view, position, id)
+        }
     }
 
     /**
@@ -101,8 +108,9 @@ class List7 : ListActivity(), OnItemSelectedListener {
      * @param position The position of the [View] in the list
      * @param id       The row id of the item that was clicked
      */
-    override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
-        setSelection(position)
+    @Suppress("UNUSED_PARAMETER")
+    fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
+        l.setSelection(position)
         val c = listView.getItemAtPosition(position) as Cursor
         val type = c.getInt(COLUMN_PHONE_TYPE)
         val phone = c.getString(COLUMN_PHONE_NUMBER)
@@ -164,11 +172,11 @@ class List7 : ListActivity(), OnItemSelectedListener {
          * Projection we use to query the contact database.
          */
         private val PHONE_PROJECTION = arrayOf(
-                Phone._ID,
-                Phone.TYPE,
-                Phone.LABEL,
-                Phone.NUMBER,
-                Phone.DISPLAY_NAME
+            Phone._ID,
+            Phone.TYPE,
+            Phone.LABEL,
+            Phone.NUMBER,
+            Phone.DISPLAY_NAME
         )
 
         /**
