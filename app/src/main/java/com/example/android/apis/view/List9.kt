@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 @file:Suppress("DEPRECATION")
-
+// TODO: Use ListFragment or RecyclerView instead of ListActivity
 package com.example.android.apis.view
 
 import android.app.ListActivity
@@ -30,13 +30,13 @@ import android.widget.AbsListView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.example.android.apis.R
+import com.example.android.apis.view.List9.RemoveWindow
 
 /**
  * Another variation of the list of cheeses. In this case, we use [AbsListView.OnScrollListener] to
  * display the first letter of the visible range of cheeses. Uses a [Handler] thread to remove the
  * dialog displaying the letter after 3000ms using `postDelayed(mRemoveWindow, 3000)` where
  * [mRemoveWindow] is a pointer to a [RemoveWindow] class which implements [Runnable].
- * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class List9 : ListActivity(), AbsListView.OnScrollListener {
@@ -114,8 +114,7 @@ class List9 : ListActivity(), AbsListView.OnScrollListener {
 
         // Use an existing ListAdapter that will map an array
         // of strings to TextViews
-        listAdapter = ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, mStrings)
+        listAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mStrings)
         listView.setOnScrollListener(this)
         val inflate = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         mDialogText = inflate.inflate(R.layout.list_position, listView, false) as TextView
@@ -123,10 +122,13 @@ class List9 : ListActivity(), AbsListView.OnScrollListener {
         mHandler.post {
             mReady = true
             val lp = WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.TYPE_APPLICATION, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_APPLICATION,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                     or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                    PixelFormat.TRANSLUCENT)
+                PixelFormat.TRANSLUCENT
+            )
             mWindowManager!!.addView(mDialogText, lp)
         }
     }
@@ -180,8 +182,12 @@ class List9 : ListActivity(), AbsListView.OnScrollListener {
      * @param visibleItemCount the number of visible cells
      * @param totalItemCount   the number of items in the list adaptor
      */
-    override fun onScroll(view: AbsListView, firstVisibleItem: Int,
-                          visibleItemCount: Int, totalItemCount: Int) {
+    override fun onScroll(
+        view: AbsListView,
+        firstVisibleItem: Int,
+        visibleItemCount: Int,
+        totalItemCount: Int
+    ) {
         if (mReady) {
             val firstLetter = mStrings[firstVisibleItem][0]
             if (!mShowing && firstLetter != mPrevLetter) {
