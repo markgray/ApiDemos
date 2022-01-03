@@ -15,12 +15,12 @@
  */
 
 package com.example.android.apis.view
-// TODO: comments need correcting.
 
 import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.BaseAdapter
 import android.widget.LinearLayout
 import android.widget.ListView
@@ -29,14 +29,19 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
- * A list view example where the data comes from a custom ListAdapter, `onListItemClick` is
- * overridden to "toggle" the view between two states: collapsed to a title, and expanded
- * to a title and text for that title
+ * A [ListView] example where the data comes from a custom ListAdapter, the [OnItemClickListener]
+ * of the [ListView] is set to a lambda which calls the [onListItemClick] override which was used
+ * when this was a `ListActivity`. This method "toggles" the view between two states: collapsed to
+ * a title, and expanded to a title and text for that title.
  */
 class List6 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`. Then we set our list adapter to a new instance of [SpeechListAdapter].
+     * `onCreate`. Then we set our content view to our layout file [R.layout.list_6], and initialize
+     * our [ListView] variable `val list` by finding the view with ID [R.id.list]. Next we set the
+     * list adapter of `list` to a new instance of [SpeechListAdapter], and set its [OnItemClickListener]
+     * to a lambda which calls our method [onListItemClick] (thereby replicating the behavior when
+     * this was a `ListActivity`).
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
