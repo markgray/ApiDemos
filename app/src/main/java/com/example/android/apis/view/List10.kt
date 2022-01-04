@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
 
 package com.example.android.apis.view
 
-import android.app.ListActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * This example shows how to use choice mode on a list. This list is
  * in CHOICE_MODE_SINGLE mode, which means the items behave like
  * radio-buttons.
- * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
-class List10 : ListActivity() {
+class List10 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`. Next We set the adapter of our [ListView] to a new instance of [ArrayAdapter]
@@ -41,11 +40,11 @@ class List10 : ListActivity() {
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        listAdapter = ArrayAdapter(this,
-                android.R.layout.simple_list_item_single_choice, GENRES)
-        val listView = listView
-        listView.itemsCanFocus = false
-        listView.choiceMode = ListView.CHOICE_MODE_SINGLE
+        setContentView(R.layout.list_10)
+        val list: ListView = findViewById(R.id.list)
+        list.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, GENRES)
+        list.itemsCanFocus = false
+        list.choiceMode = ListView.CHOICE_MODE_SINGLE
     }
 
     companion object {
@@ -53,8 +52,8 @@ class List10 : ListActivity() {
          * Our data array.
          */
         private val GENRES = arrayOf(
-                "Action", "Adventure", "Animation", "Children", "Comedy", "Documentary", "Drama",
-                "Foreign", "History", "Independent", "Romance", "Sci-Fi", "Television", "Thriller"
+            "Action", "Adventure", "Animation", "Children", "Comedy", "Documentary", "Drama",
+            "Foreign", "History", "Independent", "Romance", "Sci-Fi", "Television", "Thriller"
         )
     }
 }
