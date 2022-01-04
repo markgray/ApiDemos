@@ -13,45 +13,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
 
 package com.example.android.apis.view
 
-import android.app.ListActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * This example shows how to use choice mode on a list. This list is
  * in CHOICE_MODE_MULTIPLE mode, which means the items behave like
  * checkboxes.
- * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
-class List11 : ListActivity() {
+class List11 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`. Next We set the adapter of our [ListView] to a new instance of [ArrayAdapter]
-     * constructed to display our [String] array field [GENRES] using the system layout file
-     * android.R.layout.simple_list_item_single_choice as the layout file for each item in the list.
-     * We fetch our [ListView] to initialize our variable `val listView`, disable focus for its
-     * items, and set its choice mode to CHOICE_MODE_MULTIPLE.
+     * `onCreate`, then we set our content view to our layout file [R.layout.list_11] and initialize
+     * our [ListView] variable `val list` by finding the view with ID [R.id.list]. Next We set the
+     * adapter of `list` to a new instance of [ArrayAdapter] constructed to display our [String] array
+     * field [GENRES] using the system layout file android.R.layout.simple_list_item_single_choice as
+     * the layout file for each item in the list. We disable focus for the items of `list`, and set
+     * its choice mode to CHOICE_MODE_MULTIPLE.
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        listAdapter = ArrayAdapter(this,
-                android.R.layout.simple_list_item_multiple_choice, GENRES)
-        val listView = listView
-        listView.itemsCanFocus = false
-        listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE
+        setContentView(R.layout.list_11)
+        val list: ListView = findViewById(R.id.list)
+        list.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_list_item_multiple_choice,
+            GENRES
+        )
+        list.itemsCanFocus = false
+        list.choiceMode = ListView.CHOICE_MODE_MULTIPLE
     }
 
     companion object {
         private val GENRES = arrayOf(
-                "Action", "Adventure", "Animation", "Children", "Comedy", "Documentary", "Drama",
-                "Foreign", "History", "Independent", "Romance", "Sci-Fi", "Television", "Thriller"
+            "Action", "Adventure", "Animation", "Children", "Comedy", "Documentary", "Drama",
+            "Foreign", "History", "Independent", "Romance", "Sci-Fi", "Television", "Thriller"
         )
     }
 }
