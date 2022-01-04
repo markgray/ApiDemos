@@ -67,12 +67,12 @@ class List9 : AppCompatActivity(), AbsListView.OnScrollListener {
      * method to add [TextView] field [mDialogText] and its [removeWindow] method to remove it
      * in our [onDestroy] callback.
      */
-    private var mWindowManager: WindowManager? = null
+    private lateinit var mWindowManager: WindowManager
 
     /**
      * Translucent overlay containing the first letter of the cheese at the top of our `ListView`
      */
-    private var mDialogText: TextView? = null
+    private lateinit var mDialogText: TextView
 
     /**
      * Flag indicating whether our [TextView] field [mDialogText] is currently visible or not.
@@ -95,16 +95,17 @@ class List9 : AppCompatActivity(), AbsListView.OnScrollListener {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`. Next we initialize [WindowManager] field [mWindowManager] with a handle to
-     * the system level service WINDOW_SERVICE. We set the adapter of our `ListView` to a new
-     * instance of [ArrayAdapter] constructed to display our [String] array field [mStrings]
-     * using android.R.layout.simple_list_item_1 as the layout file. We fetch our `ListView`
-     * and set its `OnScrollListener` to "this". We initialize [LayoutInflater] variable
-     * `val inflate` with a [LayoutInflater], then use it to inflate the layout file with the
-     * resource ID R.layout.list_position in order to initialize [TextView] field [mDialogText].
-     * We then set the visibility of [mDialogText] to INVISIBLE. Finally we add a [Runnable] lambda
-     * to the message queue of [Handler] field [mHandler] which will use [mWindowManager] to add
-     * the view [mDialogText] to our UI.
+     * `onCreate`, then we set our contend view to our layout file [R.layout.list_9] and initialize
+     * our [ListView] variable `val list` by finding the view with ID [R.id.list] in it. Next we
+     * initialize [WindowManager] field [mWindowManager] with a handle to the system level service
+     * WINDOW_SERVICE. We set the adapter of our `ListView` to a new instance of [ArrayAdapter]
+     * constructed to display our [String] array field [mStrings] using the system layout file
+     * android.R.layout.simple_list_item_1 as the layout file. We set the `OnScrollListener` of
+     * `list` to "this". We initialize [LayoutInflater] variable `val inflate` with a [LayoutInflater],
+     * then use it to inflate the layout file with the resource ID R.layout.list_position in order
+     * to initialize [TextView] field [mDialogText]. We then set the visibility of [mDialogText] to
+     * INVISIBLE. Finally we add a [Runnable] lambda to the message queue of [Handler] field [mHandler]
+     * which will use [mWindowManager] to add the view [mDialogText] to our UI.
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
@@ -121,7 +122,7 @@ class List9 : AppCompatActivity(), AbsListView.OnScrollListener {
         list.setOnScrollListener(this)
         val inflate = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         mDialogText = inflate.inflate(R.layout.list_position, list, false) as TextView
-        mDialogText!!.visibility = View.INVISIBLE
+        mDialogText.visibility = View.INVISIBLE
         mHandler.post {
             mReady = true
             val lp = WindowManager.LayoutParams(
@@ -132,7 +133,7 @@ class List9 : AppCompatActivity(), AbsListView.OnScrollListener {
                     or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT
             )
-            mWindowManager!!.addView(mDialogText, lp)
+            mWindowManager.addView(mDialogText, lp)
         }
     }
 
@@ -165,7 +166,7 @@ class List9 : AppCompatActivity(), AbsListView.OnScrollListener {
      */
     override fun onDestroy() {
         super.onDestroy()
-        mWindowManager!!.removeView(mDialogText)
+        mWindowManager.removeView(mDialogText)
         mReady = false
     }
 
@@ -195,9 +196,9 @@ class List9 : AppCompatActivity(), AbsListView.OnScrollListener {
             val firstLetter = mStrings[firstVisibleItem][0]
             if (!mShowing && firstLetter != mPrevLetter) {
                 mShowing = true
-                mDialogText!!.visibility = View.VISIBLE
+                mDialogText.visibility = View.VISIBLE
             }
-            mDialogText!!.text = firstLetter.toString()
+            mDialogText.text = firstLetter.toString()
             mHandler.removeCallbacks(mRemoveWindow)
             mHandler.postDelayed(mRemoveWindow, 3000)
             mPrevLetter = firstLetter
@@ -220,7 +221,7 @@ class List9 : AppCompatActivity(), AbsListView.OnScrollListener {
     private fun removeWindow() {
         if (mShowing) {
             mShowing = false
-            mDialogText!!.visibility = View.INVISIBLE
+            mDialogText.visibility = View.INVISIBLE
         }
     }
 
