@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
-// TODO: Use ListFragment or RecyclerView instead of ListActivity
+
 package com.example.android.apis.view
 
-import android.app.ListActivity
 import android.content.Context
 import android.graphics.PixelFormat
 import android.os.Bundle
@@ -28,7 +26,9 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.AbsListView
 import android.widget.ArrayAdapter
+import android.widget.ListView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import com.example.android.apis.view.List9.RemoveWindow
 
@@ -39,7 +39,7 @@ import com.example.android.apis.view.List9.RemoveWindow
  * [mRemoveWindow] is a pointer to a [RemoveWindow] class which implements [Runnable].
  */
 @Suppress("MemberVisibilityCanBePrivate")
-class List9 : ListActivity(), AbsListView.OnScrollListener {
+class List9 : AppCompatActivity(), AbsListView.OnScrollListener {
     /**
      * Class we use to call our method [removeWindow] to make our [TextView] field [mDialogText]
      * invisible. It is scheduled to run 3000ms after a change to it makes it visible.
@@ -110,14 +110,17 @@ class List9 : ListActivity(), AbsListView.OnScrollListener {
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.list_9)
+        val list: ListView = findViewById(R.id.list)
+
         mWindowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
         // Use an existing ListAdapter that will map an array
         // of strings to TextViews
-        listAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mStrings)
-        listView.setOnScrollListener(this)
+        list.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mStrings)
+        list.setOnScrollListener(this)
         val inflate = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        mDialogText = inflate.inflate(R.layout.list_position, listView, false) as TextView
+        mDialogText = inflate.inflate(R.layout.list_position, list, false) as TextView
         mDialogText!!.visibility = View.INVISIBLE
         mHandler.post {
             mReady = true
