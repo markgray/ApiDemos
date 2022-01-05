@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
 
 package com.example.android.apis.view
 
-import android.app.ListActivity
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.ListView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import java.util.ArrayList
 
@@ -30,9 +30,8 @@ import java.util.ArrayList
  * Demonstrates the using a list view in transcript mode. The bottom of the layout is an
  * [EditText], clicking on the [EditText] view .add()'s the text to the [ArrayAdapter]
  * filling the `ListView` above it.
- * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
-class List12 : ListActivity(), View.OnClickListener, View.OnKeyListener {
+class List12 : AppCompatActivity(), View.OnClickListener, View.OnKeyListener {
     /**
      * [EditText] in our layout that the user can type in, and add to our `ListView`
      */
@@ -50,11 +49,12 @@ class List12 : ListActivity(), View.OnClickListener, View.OnKeyListener {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to our layout file R.layout.list_12. Next we
+     * `onCreate`, then we set our content view to our layout file R.layout.list_12, and initialize
+     * our [ListView] variable `val list` by finding the view with ID [R.id.list]. Next we
      * initialize our `ArrayAdapter<String>` field [mAdapter] with an an [ArrayAdapter] constructed
      * to display our list [mStrings] using the layout file android.R.layout.simple_list_item_1
-     * to display each item, and we set our list adapter to it. We initialize our field [mUserText]
-     * by finding the view with ID R.id.userText, and then set both its [View.OnClickListener] and
+     * to display each item, and we set the adapter of `list` to it. We initialize our field [mUserText]
+     * by finding the view with ID [R.id.userText], and then set both its [View.OnClickListener] and
      * [View.OnKeyListener] to "this".
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
@@ -62,8 +62,9 @@ class List12 : ListActivity(), View.OnClickListener, View.OnKeyListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.list_12)
+        val list: ListView = findViewById(R.id.list)
         mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mStrings)
-        listAdapter = mAdapter
+        list.adapter = mAdapter
         mUserText = findViewById(R.id.userText)
         mUserText!!.setOnClickListener(this)
         mUserText!!.setOnKeyListener(this)
