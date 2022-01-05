@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
 
 package com.example.android.apis.view
 
-import android.app.ListActivity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -27,8 +25,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
+import android.widget.ListView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
+import com.example.android.apis.view.List14.EfficientAdapter
 
 /**
  * Demonstrates how to write an efficient list adapter. The adapter used in this example binds
@@ -43,18 +44,21 @@ import com.example.android.apis.R
  * The ViewHolder pattern consists in storing a data structure in the tag of the view returned by
  * `getView()`. This data structures contains references to the views we want to bind data to, thus
  * avoiding calls to [findViewById] every time `getView()` is invoked.
- * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
-class List14 : ListActivity() {
+class List14 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`. Then we set our list adapter to a new instance of [EfficientAdapter].
+     * `onCreate`, then we set our content view to our layout file [R.layout.list_14] and initialize
+     * our [ListView] variable `val list` by finding the view with ID [R.id.list]. Finally we set the
+     * list adapter of `list` to a new instance of [EfficientAdapter].
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        listAdapter = EfficientAdapter(this)
+        setContentView(R.layout.list_14)
+        val list: ListView = findViewById(R.id.list)
+        list.adapter = EfficientAdapter(this)
     }
 
     /**
@@ -70,8 +74,8 @@ class List14 : ListActivity() {
          * [Bitmap] decoded from the resource png R.drawable.icon48x48_1
          */
         private val mIcon1: Bitmap = BitmapFactory.decodeResource(
-                context.resources,
-                R.drawable.icon48x48_1
+            context.resources,
+            R.drawable.icon48x48_1
         )
 
         /**
@@ -79,8 +83,8 @@ class List14 : ListActivity() {
          * and one in drawable-hdpi)
          */
         private val mIcon2: Bitmap = BitmapFactory.decodeResource(
-                context.resources,
-                R.drawable.icon48x48_2
+            context.resources,
+            R.drawable.icon48x48_2
         )
 
         /**
@@ -148,9 +152,9 @@ class List14 : ListActivity() {
             // by ListView is null.
             if (convertViewVar == null) {
                 convertViewVar = mInflater.inflate(
-                        R.layout.list_item_icon_text,
-                        parent,
-                        false
+                    R.layout.list_item_icon_text,
+                    parent,
+                    false
                 )
                 // Creates a ViewHolder and store references to the two children views
                 // we want to bind data to.
