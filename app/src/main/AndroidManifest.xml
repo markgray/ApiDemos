@@ -2651,7 +2651,8 @@
         <activity
             android:name=".view.List15"
             android:exported="true"
-            android:label="Views/Lists/15. Selection Mode">
+            android:label="Views/Lists/15. Selection Mode"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -2660,7 +2661,8 @@
         <activity
             android:name=".view.List16"
             android:exported="true"
-            android:label="Views/Lists/16. Border selection mode">
+            android:label="Views/Lists/16. Border selection mode"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -2669,7 +2671,8 @@
         <activity
             android:name=".view.List17"
             android:exported="true"
-            android:label="Views/Lists/17. Activate items">
+            android:label="Views/Lists/17. Activate items"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
 
 package com.example.android.apis.view
 
 import android.annotation.TargetApi
-import android.app.ListActivity
 import android.os.Build
 import android.os.Bundle
 import android.view.ActionMode
@@ -28,25 +26,30 @@ import android.widget.AbsListView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
  * This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection mode on [ListView].
  * It switches into selection mode on long press.
- * TODO: Use ListFragment or RecyclerView instead of ListActivity
  */
-class List15 : ListActivity() {
+class List15 : AppCompatActivity() {
     /**
      * Reference to the array that we use as our database.
      */
     private val mStrings = Cheeses.sCheeseStrings
 
     /**
+     * The [ListView] in our layout file with ID [R.id.list].
+     */
+    private lateinit var list: ListView
+
+    /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`. We initialize our [ListView] variable `val lv` by fetching a reference to our
-     * [ListView], set its choice mode to `CHOICE_MODE_MULTIPLE_MODAL`, and set its
-     * `MultiChoiceModeListener` to a new instance of [ModeCallback]. Finally we set our
-     * list adapter to a new instance of [ArrayAdapter] constructed to display our array
+     * `onCreate`, then we initialize our [ListView] field [list] by finding the view with ID
+     * [R.id.list]. We set the choice mode of [list] to `CHOICE_MODE_MULTIPLE_MODAL`, and set its
+     * `MultiChoiceModeListener` to a new instance of [ModeCallback]. Finally we set the list
+     * adapter of [list] to a new instance of [ArrayAdapter] constructed to display our array
      * [mStrings] using the layout android.R.layout.simple_list_item_checked.
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
@@ -54,11 +57,11 @@ class List15 : ListActivity() {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val lv = listView
-        lv.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
-        lv.setMultiChoiceModeListener(ModeCallback())
-        listAdapter = ArrayAdapter(this,
-                android.R.layout.simple_list_item_checked, mStrings)
+        setContentView(R.layout.list_15)
+        list = findViewById(R.id.list)
+        list.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
+        list.setMultiChoiceModeListener(ModeCallback())
+        list.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_checked, mStrings)
     }
 
     /**
@@ -72,7 +75,7 @@ class List15 : ListActivity() {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        actionBar!!.subtitle = "Long press to start selection"
+        supportActionBar!!.subtitle = "Long press to start selection"
     }
 
     /**
@@ -137,12 +140,12 @@ class List15 : ListActivity() {
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
             when (item.itemId) {
                 R.id.share -> {
-                    Toast.makeText(this@List15, "Shared " + listView.checkedItemCount +
-                            " items", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@List15, "Shared " + list.checkedItemCount +
+                        " items", Toast.LENGTH_SHORT).show()
                     mode.finish()
                 }
                 else -> Toast.makeText(this@List15, "Clicked " + item.title,
-                        Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT).show()
             }
             return true
         }
@@ -165,10 +168,10 @@ class List15 : ListActivity() {
          * @param checked  true if the item is now checked, false if the item is now unchecked.
          */
         override fun onItemCheckedStateChanged(
-                mode: ActionMode,
-                position: Int,
-                id: Long,
-                checked: Boolean
+            mode: ActionMode,
+            position: Int,
+            id: Long,
+            checked: Boolean
         ) {
             setSubtitle(mode)
         }
@@ -190,7 +193,7 @@ class List15 : ListActivity() {
          * @param mode The [ActionMode] providing the selection mode
          */
         private fun setSubtitle(mode: ActionMode) {
-            when (val checkedCount = listView.checkedItemCount) {
+            when (val checkedCount = list.checkedItemCount) {
                 0 -> mode.subtitle = null
                 1 -> mode.subtitle = "One item selected"
                 else -> mode.subtitle = "$checkedCount items selected"
