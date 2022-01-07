@@ -33,6 +33,9 @@ import com.example.android.apis.R
  * getListView().setItemChecked in onCreate to start with first item activated.
  */
 class List17 : AppCompatActivity() {
+    /**
+     * The [ListView] in our layout file
+     */
     private lateinit var list: ListView
 
     /**

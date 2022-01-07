@@ -29,6 +29,9 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
@@ -74,19 +77,34 @@ class OverlayWindowActivity : AppCompatActivity() {
      * with a new instance with the settings action ACTION_MANAGE_OVERLAY_PERMISSION (Show screen
      * for controlling which apps can draw on top of other app) with an Uri parsed from the string
      * "package:" and our app's package name (it resolves as: "package:com.example.android.apis").
-     * We then start the activity of `intent` for a result using MANAGE_OVERLAY_PERMISSION_REQUEST_CODE
-     * as the request code.
+     * We then launch the activity of `intent` using our [ActivityResultLauncher] field
+     * [requestOverlayPermissionLauncher].
      */
     private val mShowOverlayListener: View.OnClickListener = View.OnClickListener {
         if (Settings.canDrawOverlays(this@OverlayWindowActivity)) {
             drawOverlay()
         } else {
             // Need to ask the user's permission first. We'll redirect them to Settings.
-            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:$packageName"))
-            startActivityForResult(intent, MANAGE_OVERLAY_PERMISSION_REQUEST_CODE)
+            val intent = Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:$packageName")
+            )
+            requestOverlayPermissionLauncher.launch(intent)
         }
     }
+
+    /**
+     * This is the [ActivityResultLauncher] that we use to have the settings activity ask the user
+     * to grant our activity permission to draw on top of other apps.
+     */
+    private val requestOverlayPermissionLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == RESULT_OK) {
+                if (Settings.canDrawOverlays(this)) {
+                    drawOverlay()
+                }
+            }
+        }
 
     /**
      * `OnClickListener` for the button with id R.id.hide_overlay ("Hide Overlay"), in its
@@ -99,29 +117,6 @@ class OverlayWindowActivity : AppCompatActivity() {
             val wm = windowManager
             wm.removeView(mOverlayView)
             mOverlayView = null
-        }
-    }
-
-    /**
-     * This is called after the user chooses whether they grant permission to the app to display
-     * overlays or not. If [requestCode] is MANAGE_OVERLAY_PERMISSION_REQUEST_CODE we check
-     * whether the user granted permission to draw overlays by calling the `canDrawOverlays`
-     * method of [Settings] and if so we call our method [drawOverlay] to draw our overlay window.
-     *
-     * @param requestCode The integer request code originally supplied to startActivityForResult(),
-     *                    allowing you to identify who this result came from.
-     * @param resultCode  The integer result code returned by the child activity through its
-     *                    setResult() method. UNUSED
-     * @param data        An [Intent], which can return result data to the caller (various data can
-     *                    be attached to it as "extras"). UNUSED
-     */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
-            // Check if the user granted permission to draw overlays.
-            if (Settings.canDrawOverlays(this)) {
-                drawOverlay()
-            }
         }
     }
 
@@ -174,8 +169,8 @@ class OverlayWindowActivity : AppCompatActivity() {
             WindowManager.LayoutParams.TYPE_PHONE
         }
         params.flags = (WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH)
+            or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+            or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH)
         params.format = PixelFormat.TRANSPARENT
         params.width = WindowManager.LayoutParams.WRAP_CONTENT
         params.height = WindowManager.LayoutParams.WRAP_CONTENT
@@ -186,12 +181,5 @@ class OverlayWindowActivity : AppCompatActivity() {
         params.y = 10
         wm.addView(textView, params)
         mOverlayView = textView
-    }
-
-    companion object {
-        /**
-         * Request code we use when we have settings app ask the user's permission to use overlays.
-         */
-        private const val MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 1
     }
 }

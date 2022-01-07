@@ -33,14 +33,14 @@ import androidx.appcompat.widget.AppCompatButton
 class LivePointerIconButton : AppCompatButton {
     @JvmOverloads
     constructor(
-            context: Context?,
-            attrs: AttributeSet? = null
+        context: Context?,
+        attrs: AttributeSet? = null
     ) : super(context!!, attrs)
 
     constructor(
-            context: Context?,
-            attrs: AttributeSet?,
-            defStyleAttr: Int
+        context: Context?,
+        attrs: AttributeSet?,
+        defStyleAttr: Int
     ) : super(context!!, attrs, defStyleAttr)
 
     override fun onResolvePointerIcon(event: MotionEvent, pointerIndex: Int): PointerIcon {
@@ -58,10 +58,10 @@ class LivePointerIconButton : AppCompatButton {
         val outerCenterY = cursorSize / 2
         val outerRadius = cursorSize / 2 - strokeWidth
         canvas.drawCircle(
-                outerCenterX.toFloat(),
-                outerCenterY.toFloat(),
-                outerRadius.toFloat(),
-                paint
+            outerCenterX.toFloat(),
+            outerCenterY.toFloat(),
+            outerRadius.toFloat(),
+            paint
         )
 
         // Compute relative offset of the mouse pointer from the view center.
@@ -78,10 +78,10 @@ class LivePointerIconButton : AppCompatButton {
             paint.style = Paint.Style.FILL
         }
         canvas.drawCircle(
-                innerCenterX.toFloat(),
-                innerCenterY.toFloat(),
-                innerRadius.toFloat(),
-                paint
+            innerCenterX.toFloat(),
+            innerCenterY.toFloat(),
+            innerRadius.toFloat(),
+            paint
         )
         val hotSpotX = bitmap.width / 2
         val hotSpotY = bitmap.height / 2
