@@ -35,6 +35,9 @@ import com.example.android.apis.R
  * items.
  */
 class List16 : AppCompatActivity() {
+    /**
+     * The [ListView] in our layout file
+     */
     private lateinit var list: ListView
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
