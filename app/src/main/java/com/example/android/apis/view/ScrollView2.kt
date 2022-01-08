@@ -50,8 +50,8 @@ class ScrollView2 : AppCompatActivity() {
             val textView = TextView(this)
             textView.text = "Text View $i"
             val p = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
             )
             layout.addView(textView, p)
             val buttonView = Button(this)

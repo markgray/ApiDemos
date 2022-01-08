@@ -29,26 +29,25 @@ import com.example.android.apis.R
  * [RatingBar.OnRatingBarChangeListener] set to this and a [onRatingChanged] method
  * updates a [TextView] and two [RatingBar] indicators based on the values passed to it.
  */
-@Suppress("MemberVisibilityCanBePrivate")
 @SuppressLint("SetTextI18n")
 class RatingBar1 : AppCompatActivity(), OnRatingBarChangeListener {
     /**
      * [RatingBar] with the ID R.id.small_ratingbar, it is used to display the value that is
      * given to either of the top two [RatingBar] using ?android:attr/ratingBarStyleSmall
      */
-    var mSmallRatingBar: RatingBar? = null
+    private var mSmallRatingBar: RatingBar? = null
 
     /**
      * [RatingBar] with the ID R.id.indicator_ratingbar, it is used to display the value that
      * is given to either of the top two [RatingBar] using ?android:attr/ratingBarStyleIndicator
      */
-    var mIndicatorRatingBar: RatingBar? = null
+    private var mIndicatorRatingBar: RatingBar? = null
 
     /**
      * [TextView] we use to display the textual version of the value that is given to either
      * of the top two [RatingBar]
      */
-    var mRatingText: TextView? = null
+    private var mRatingText: TextView? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of

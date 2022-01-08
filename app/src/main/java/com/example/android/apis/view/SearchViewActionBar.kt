@@ -121,9 +121,11 @@ open class SearchViewActionBar : AppCompatActivity(), SearchView.OnQueryTextList
             mSearchView!!.setIconifiedByDefault(false)
             searchItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
         } else {
-            searchItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM
-                    or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
+            searchItem.setShowAsActionFlags(
+                MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW
+            )
         }
+        @Suppress("RedundantNullableReturnType")
         val searchManager: SearchManager? = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         if (searchManager != null) {
             val searchables = searchManager.searchablesInGlobalSearch
@@ -134,7 +136,7 @@ open class SearchViewActionBar : AppCompatActivity(), SearchView.OnQueryTextList
             for (inf in searchables) {
                 val suggestAuthority = inf.suggestAuthority
                 if (inf.suggestAuthority != null
-                        && suggestAuthority.startsWith("applications")) {
+                    && suggestAuthority.startsWith("applications")) {
                     info = inf
                 }
             }

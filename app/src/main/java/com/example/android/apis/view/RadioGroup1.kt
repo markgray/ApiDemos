@@ -77,8 +77,8 @@ class RadioGroup1 : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, Vie
         newRadioButton.setText(R.string.radio_group_snack)
         newRadioButton.id = R.id.snack
         val layoutParams: LinearLayout.LayoutParams = RadioGroup.LayoutParams(
-                RadioGroup.LayoutParams.WRAP_CONTENT,
-                RadioGroup.LayoutParams.WRAP_CONTENT
+            RadioGroup.LayoutParams.WRAP_CONTENT,
+            RadioGroup.LayoutParams.WRAP_CONTENT
         )
         mRadioGroup!!.addView(newRadioButton, 0, layoutParams)
 
@@ -109,7 +109,7 @@ class RadioGroup1 : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, Vie
         val selection = getString(R.string.radio_group_selection)
         val none = getString(R.string.radio_group_none)
         mChoice!!.text = selection +
-                if (checkedId == View.NO_ID) none else checkedId
+            if (checkedId == View.NO_ID) none else checkedId
     }
 
     /**
