@@ -30,14 +30,14 @@ import androidx.appcompat.widget.AppCompatButton
 class SystemPointerIconButton : AppCompatButton {
     @JvmOverloads
     constructor(
-            context: Context?,
-            attrs: AttributeSet? = null
+        context: Context?,
+        attrs: AttributeSet? = null
     ) : super(context!!, attrs)
 
     constructor(
-            context: Context?,
-            attrs: AttributeSet?,
-            defStyleAttr: Int
+        context: Context?,
+        attrs: AttributeSet?,
+        defStyleAttr: Int
     ) : super(context!!, attrs, defStyleAttr)
 
     override fun onResolvePointerIcon(event: MotionEvent, pointerIndex: Int): PointerIcon {
@@ -47,6 +47,8 @@ class SystemPointerIconButton : AppCompatButton {
         val maxY = height - minY
         val x = event.getX(pointerIndex)
         val y = event.getY(pointerIndex)
+
+        @Suppress("JoinDeclarationAndAssignment")
         val type: Int
         type = if (x < minX && y < minY || x > maxX && y > maxY) {
             // Top/left or bottom/right corner.
