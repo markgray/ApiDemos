@@ -97,13 +97,13 @@ class SecureViewOverlay
      */
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         spoofLayout(findViewById(R.id.secure_view_overlay_description),
-                mActivity!!.findViewById(R.id.secure_view_description))
+            mActivity!!.findViewById(R.id.secure_view_description))
         spoofLayout(findViewById(R.id.secure_view_overlay_button1),
-                mActivity!!.findViewById(R.id.secure_view_unsecure_button))
+            mActivity!!.findViewById(R.id.secure_view_unsecure_button))
         spoofLayout(findViewById(R.id.secure_view_overlay_button2),
-                mActivity!!.findViewById(R.id.secure_view_builtin_secure_button))
+            mActivity!!.findViewById(R.id.secure_view_builtin_secure_button))
         spoofLayout(findViewById(R.id.secure_view_overlay_button3),
-                mActivity!!.findViewById(R.id.secure_view_custom_secure_button))
+            mActivity!!.findViewById(R.id.secure_view_custom_secure_button))
     }
 
     /**

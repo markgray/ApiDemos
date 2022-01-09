@@ -75,9 +75,9 @@ class Spinner1 : AppCompatActivity() {
         setContentView(R.layout.spinner_1)
         val s1 = findViewById<Spinner>(R.id.spinner1)
         var adapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.colors,
-                android.R.layout.simple_spinner_item
+            this,
+            R.array.colors,
+            android.R.layout.simple_spinner_item
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         s1.adapter = adapter
@@ -95,10 +95,10 @@ class Spinner1 : AppCompatActivity() {
              * @param id The row id of the item that is selected
              */
             override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
             ) {
                 showToast("Spinner1: position=$position id=$id")
             }
@@ -115,9 +115,9 @@ class Spinner1 : AppCompatActivity() {
         }
         val s2 = findViewById<Spinner>(R.id.spinner2)
         adapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.planets,
-                android.R.layout.simple_spinner_item
+            this,
+            R.array.planets,
+            android.R.layout.simple_spinner_item
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         s2.adapter = adapter
@@ -135,10 +135,10 @@ class Spinner1 : AppCompatActivity() {
              * @param id The row id of the item that is selected
              */
             override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
             ) {
                 showToast("Spinner2: position=$position id=$id")
             }

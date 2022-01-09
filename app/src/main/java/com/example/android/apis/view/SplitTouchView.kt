@@ -51,9 +51,9 @@ class SplitTouchView : AppCompatActivity() {
         val list1 = findViewById<ListView>(R.id.list1)
         val list2 = findViewById<ListView>(R.id.list2)
         val adapter: ListAdapter = ArrayAdapter(
-                this,
-                android.R.layout.simple_list_item_1,
-                Cheeses.sCheeseStrings
+            this,
+            android.R.layout.simple_list_item_1,
+            Cheeses.sCheeseStrings
         )
         list1.adapter = adapter
         list2.adapter = adapter
@@ -73,11 +73,10 @@ class SplitTouchView : AppCompatActivity() {
      * string-array with the resource id R.array.cheese_responses.
      */
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-    private val itemClickListener = OnItemClickListener {
-        parent, // The AdapterView where the click happened.
-        view,           // The view within the AdapterView that was clicked
-        position,         // The position of the view in the adapter.
-        id              // The row id of the item that was clicked.
+    private val itemClickListener = OnItemClickListener { parent, // The AdapterView where the click happened.
+                                                          view,           // The view within the AdapterView that was clicked
+                                                          position,         // The position of the view in the adapter.
+                                                          id              // The row id of the item that was clicked.
         ->
 
         /**
@@ -94,7 +93,7 @@ class SplitTouchView : AppCompatActivity() {
         val responses = resources.getStringArray(R.array.cheese_responses)
         val response = responses[responseIndex++ % responses.size]
         val message = resources.getString(R.string.split_touch_view_cheese_toast,
-                Cheeses.sCheeseStrings[position], response)
+            Cheeses.sCheeseStrings[position], response)
         val toast = Toast.makeText(applicationContext, message, Toast.LENGTH_LONG)
         toast.show()
     }

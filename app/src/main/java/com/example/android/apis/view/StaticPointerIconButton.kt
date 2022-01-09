@@ -15,7 +15,6 @@
  */
 package com.example.android.apis.view
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
@@ -23,6 +22,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.PointerIcon
 import androidx.annotation.RequiresApi
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatButton
 import com.example.android.apis.R
 
@@ -35,27 +35,26 @@ class StaticPointerIconButton : AppCompatButton {
 
     @JvmOverloads
     constructor(
-            context: Context?,
-            attrs: AttributeSet? = null
+        context: Context?,
+        attrs: AttributeSet? = null
     ) : super(context!!, attrs)
 
     constructor(
-            context: Context?,
-            attrs: AttributeSet?,
-            defStyleAttr: Int
+        context: Context?,
+        attrs: AttributeSet?,
+        defStyleAttr: Int
     ) : super(context!!, attrs, defStyleAttr)
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onResolvePointerIcon(event: MotionEvent, pointerIndex: Int): PointerIcon {
         if (mCustomIcon == null) {
-            val d = context.getDrawable(R.drawable.smile)
+            val d = AppCompatResources.getDrawable(context, R.drawable.smile)
             val bitmapDrawable = d as BitmapDrawable?
             val hotSpotX = d!!.intrinsicWidth / 2
             val hotSpotY = d.intrinsicHeight / 2
             mCustomIcon = PointerIcon.create(
-                    bitmapDrawable!!.bitmap,
-                    hotSpotX.toFloat(),
-                    hotSpotY.toFloat()
+                bitmapDrawable!!.bitmap,
+                hotSpotX.toFloat(),
+                hotSpotY.toFloat()
             )
         }
         return mCustomIcon!!

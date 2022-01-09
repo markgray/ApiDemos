@@ -78,9 +78,9 @@ class SearchViewFilterMode : AppCompatActivity(), SearchView.OnQueryTextListener
         mSearchView = findViewById(R.id.search_view)
         mListView = findViewById(R.id.list_view)
         mListView!!.adapter = ArrayAdapter(
-                this,
-                android.R.layout.simple_list_item_1,
-                mStrings
+            this,
+            android.R.layout.simple_list_item_1,
+            mStrings
         ).also { mAdapter = it }
 
         mListView!!.isTextFilterEnabled = true

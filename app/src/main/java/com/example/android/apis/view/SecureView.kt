@@ -120,10 +120,11 @@ class SecureView : AppCompatActivity() {
         // on top of this view's interesting widgets.  Sneaky huh?
         @SuppressLint("InflateParams")
         val overlay = layoutInflater
-                .inflate(R.layout.secure_view_overlay, null) as SecureViewOverlay
+            .inflate(R.layout.secure_view_overlay, null) as SecureViewOverlay
         overlay.setActivityToSpoof(this)
         val toast = Toast(applicationContext)
         toast.setGravity(Gravity.FILL, 0, 0)
+        @Suppress("DEPRECATION") // This is still OK if we are foreground.
         toast.view = overlay
         toast.show()
     }
@@ -139,11 +140,11 @@ class SecureView : AppCompatActivity() {
             val messages = resources.getStringArray(R.array.secure_view_clicked)
             val message = messages[mClickCount++ % messages.size]
             AlertDialog.Builder(this@SecureView)
-                    .setTitle(R.string.secure_view_action_dialog_title)
-                    .setMessage(message)
-                    .setNeutralButton(resources.getString(
-                            R.string.secure_view_action_dialog_dismiss), null)
-                    .show()
+                .setTitle(R.string.secure_view_action_dialog_title)
+                .setMessage(message)
+                .setNeutralButton(resources.getString(
+                    R.string.secure_view_action_dialog_dismiss), null)
+                .show()
         }
     }
 
@@ -183,11 +184,11 @@ class SecureView : AppCompatActivity() {
                 if ((event.flags and MotionEvent.FLAG_WINDOW_IS_OBSCURED) != 0) {
                     if (event.action == MotionEvent.ACTION_UP) {
                         AlertDialog.Builder(this@SecureView)
-                                .setTitle(R.string.secure_view_caught_dialog_title)
-                                .setMessage(R.string.secure_view_caught_dialog_message)
-                                .setNeutralButton(resources.getString(
-                                        R.string.secure_view_caught_dialog_dismiss), null)
-                                .show()
+                            .setTitle(R.string.secure_view_caught_dialog_title)
+                            .setMessage(R.string.secure_view_caught_dialog_message)
+                            .setNeutralButton(resources.getString(
+                                R.string.secure_view_caught_dialog_dismiss), null)
+                            .show()
                     }
                     // Return true to prevent the button from processing the touch.
                     return true

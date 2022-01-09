@@ -30,24 +30,23 @@ import com.example.android.apis.R
  * the three call backs: `onProgressChanged`, `onStartTrackingTouch`, and `onStopTrackingTouch`
  * displaying appropriate text based on the information passed it.
  */
-@Suppress("MemberVisibilityCanBePrivate")
 class SeekBar1 : AppCompatActivity(), OnSeekBarChangeListener {
     /**
      * The [SeekBar] in our layout with id R.id.seek that we are `OnSeekBarChangeListener`
      * for in this demo
      */
-    var mSeekBar: SeekBar? = null
+    private var mSeekBar: SeekBar? = null
 
     /**
      * [TextView] we use to display the position of [SeekBar] field [mSeekBar]
      */
-    var mProgressText: TextView? = null
+    private var mProgressText: TextView? = null
 
     /**
      * [TextView] we display whether we are tracking ("Tracking on" user has started a touch
      * gesture) or not ("Tracking off" user has finished a touch gesture).
      */
-    var mTrackingText: TextView? = null
+    private var mTrackingText: TextView? = null
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
