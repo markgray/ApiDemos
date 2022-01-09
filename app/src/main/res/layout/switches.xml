@@ -15,7 +15,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:ignore="RtlHardcoded">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,27 +25,27 @@
         tools:ignore="HardcodedText"
         tools:targetApi="ice_cream_sandwich">
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dip"
             android:text="Standard switch" />
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dip"
             android:checked="true"
             android:text="Default is on" />
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/monitored_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dip"
             android:text="Monitored switch" />
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dip"
@@ -54,7 +55,7 @@
             android:textOn="YES"
             tools:targetApi="lollipop" />
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:layout_width="300dip"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dip"
@@ -62,7 +63,7 @@
             android:singleLine="false"
             android:text="This is an example of a switch with a lot of text in it. It may end up wrapping to another line. The switch will be pinned at the top." />
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:layout_width="300dip"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dip"
@@ -70,7 +71,7 @@
             android:singleLine="false"
             android:text="This is an example of a switch with a lot of text in it. It may end up wrapping to another line. The switch will be vertically centered." />
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:layout_width="300dip"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dip"
@@ -78,7 +79,7 @@
             android:singleLine="false"
             android:text="This is an example of a switch with a lot of text in it. It may end up wrapping to another line. The switch will be pinned at the bottom." />
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dip"
@@ -89,7 +90,7 @@
             android:layout_height="wrap_content"
             android:text="Standalone switch below:" />
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

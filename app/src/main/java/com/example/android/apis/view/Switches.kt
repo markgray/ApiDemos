@@ -15,12 +15,11 @@
  */
 package com.example.android.apis.view
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.CompoundButton
-import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import com.example.android.apis.R
 
 /**
@@ -30,17 +29,16 @@ import com.example.android.apis.R
 class Switches : AppCompatActivity(), CompoundButton.OnCheckedChangeListener {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to our layout file R.layout.switches. We
-     * initialize our [Switch] variable `val s` by finding the view with id R.id.monitored_switch.
-     * If `s` is not null, we set its `OnCheckedChangeListener` to "this".
+     * `onCreate`, then we set our content view to our layout file R.layout.switches. We initialize
+     * our [SwitchCompat] variable `val s` by finding the view with id R.id.monitored_switch. If `s`
+     * is not null, we set its `OnCheckedChangeListener` to "this".
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.switches)
-        val s = findViewById<Switch>(R.id.monitored_switch)
+        val s = findViewById<SwitchCompat>(R.id.monitored_switch)
         s?.setOnCheckedChangeListener(this)
     }
 
@@ -54,9 +52,9 @@ class Switches : AppCompatActivity(), CompoundButton.OnCheckedChangeListener {
      */
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
         Toast.makeText(
-                this,
-                "Monitored switch is ${if (isChecked) "on" else "off"}",
-                Toast.LENGTH_SHORT
+            this,
+            "Monitored switch is ${if (isChecked) "on" else "off"}",
+            Toast.LENGTH_SHORT
         ).show()
     }
 }
