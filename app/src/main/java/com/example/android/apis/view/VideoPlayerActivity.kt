@@ -36,14 +36,13 @@ import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
-
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.ShareActionProvider
 import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.FragmentTransaction
-import androidx.appcompat.widget.AppCompatImageView
 import com.example.android.apis.R
 
 /**
@@ -59,21 +58,19 @@ import com.example.android.apis.R
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class VideoPlayerActivity :
-        AppCompatActivity(),
-        SearchView.OnQueryTextListener,
-        ActionBar.TabListener
-{
+    AppCompatActivity(),
+    SearchView.OnQueryTextListener,
+    ActionBar.TabListener {
     /**
      * Implementation of a view for displaying full-screen video playback,
      * using system UI flags to transition in and out of modes where the entire
      * screen can be filled with content (at the expense of no user interaction).
      */
     class Content(context: Context?, attrs: AttributeSet?) :
-            AppCompatImageView(context!!, attrs),
-            OnSystemUiVisibilityChangeListener,
-            View.OnClickListener,
-            ActionBar.OnMenuVisibilityListener
-    {
+        AppCompatImageView(context!!, attrs),
+        OnSystemUiVisibilityChangeListener,
+        View.OnClickListener,
+        ActionBar.OnMenuVisibilityListener {
         /**
          * [Activity] of the containing activity that is passed to our [init] method.
          * ("this" when called from the `onCreate` method of [VideoPlayerActivity].
@@ -213,7 +210,7 @@ class VideoPlayerActivity :
             val diff = mLastSystemUiVis xor visibility
             mLastSystemUiVis = visibility
             if (diff and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION != 0
-                    && visibility and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION == 0) {
+                && visibility and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION == 0) {
                 setNavVisibility(true)
             }
         }
@@ -334,12 +331,12 @@ class VideoPlayerActivity :
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         fun setNavVisibility(visible: Boolean) {
             var newVis = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
             if (!visible) {
                 newVis = newVis or (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                        or View.SYSTEM_UI_FLAG_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
             }
 
             // If we are now visible, schedule a timer for us to go invisible.
@@ -395,8 +392,8 @@ class VideoPlayerActivity :
         setContentView(R.layout.video_player)
         mContent = findViewById(R.id.content)
         mContent!!.init(this, findViewById(R.id.title),
-                findViewById(R.id.play),
-                findViewById(R.id.seekbar))
+            findViewById(R.id.play),
+            findViewById(R.id.seekbar))
         val bar = supportActionBar
         bar!!.addTab(bar.newTab().setText("Tab 1").setTabListener(this))
         bar.addTab(bar.newTab().setText("Tab 2").setTabListener(this))

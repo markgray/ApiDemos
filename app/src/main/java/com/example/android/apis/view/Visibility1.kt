@@ -25,7 +25,6 @@ import com.example.android.apis.R
  * Demonstrates making a view VISIBLE, INVISIBLE and GONE. Three buttons control
  * the visibility of a TextView which is sandwiched between two other TextView's
  */
-@Suppress("MemberVisibilityCanBePrivate")
 class Visibility1 : AppCompatActivity() {
     /**
      * [View] whose visibility is changed by the buttons between VISIBLE INVISIBLE or GONE
@@ -70,7 +69,7 @@ class Visibility1 : AppCompatActivity() {
      * Called when the [Button] with id R.id.vis ("Vis") is clicked, we just set the
      * visibility of [View] field [mVictim] to VISIBLE.
      */
-    var mVisibleListener: View.OnClickListener = View.OnClickListener {
+    private var mVisibleListener: View.OnClickListener = View.OnClickListener {
         mVictim!!.visibility = View.VISIBLE
     }
 
@@ -78,7 +77,7 @@ class Visibility1 : AppCompatActivity() {
      * Called when the [Button] with id R.id.invis ("Invis") is clicked, we just set the
      * visibility of [View] field [mVictim] to INVISIBLE.
      */
-    var mInvisibleListener: View.OnClickListener = View.OnClickListener {
+    private var mInvisibleListener: View.OnClickListener = View.OnClickListener {
         mVictim!!.visibility = View.INVISIBLE
     }
 
@@ -86,7 +85,7 @@ class Visibility1 : AppCompatActivity() {
      * Called when the [Button] with id R.id.gone ("Gone") is clicked, we just set the
      * visibility of [View] field [mVictim] to GONE.
      */
-    var mGoneListener: View.OnClickListener = View.OnClickListener {
+    private var mGoneListener: View.OnClickListener = View.OnClickListener {
         mVictim!!.visibility = View.GONE
     }
 }
