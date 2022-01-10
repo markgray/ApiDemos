@@ -38,13 +38,13 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.ShareActionProvider
 import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.FragmentTransaction
-import androidx.appcompat.widget.AppCompatImageView
 import com.example.android.apis.R
 
 /**
@@ -60,9 +60,9 @@ import com.example.android.apis.R
 @Suppress("UNUSED_PARAMETER", "MemberVisibilityCanBePrivate", "UNUSED_ANONYMOUS_PARAMETER", "RedundantOverride")
 @TargetApi(Build.VERSION_CODES.KITKAT)
 open class SystemUIModes :
-        AppCompatActivity(),
-        SearchView.OnQueryTextListener,
-        ActionBar.TabListener
+    AppCompatActivity(),
+    SearchView.OnQueryTextListener,
+    ActionBar.TabListener
 {
     /**
      * `ImageView` which is used as the background of our window.
@@ -359,8 +359,8 @@ open class SystemUIModes :
     @get:SuppressLint("DefaultLocale")
     private val viewSize: String
         get() = String.format("View = (%d,%d - %d,%d)",
-                mImage!!.left, mImage!!.top,
-                mImage!!.right, mImage!!.bottom)
+            mImage!!.left, mImage!!.top,
+            mImage!!.right, mImage!!.bottom)
 
     /**
      * Called from the `onSizeChanged` and `onSystemUiVisibilityChange` callbacks of our
@@ -393,10 +393,10 @@ open class SystemUIModes :
      * System UI Flags controlled by the 8 checkboxes in [CheckBox] array field [mCheckControls]
      */
     var mCheckFlags = intArrayOf(View.SYSTEM_UI_FLAG_LOW_PROFILE,
-            View.SYSTEM_UI_FLAG_FULLSCREEN, View.SYSTEM_UI_FLAG_HIDE_NAVIGATION,
-            View.SYSTEM_UI_FLAG_IMMERSIVE, View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY,
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE, View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN,
-            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        View.SYSTEM_UI_FLAG_FULLSCREEN, View.SYSTEM_UI_FLAG_HIDE_NAVIGATION,
+        View.SYSTEM_UI_FLAG_IMMERSIVE, View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY,
+        View.SYSTEM_UI_FLAG_LAYOUT_STABLE, View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN,
+        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
     )
 
     /**
@@ -497,8 +497,8 @@ open class SystemUIModes :
         setContentView(R.layout.system_ui_modes)
         mImage = findViewById(R.id.image)
         mImage!!.setActivity(this)
-        val checkChangeListener = CompoundButton.OnCheckedChangeListener {
-            buttonView, isChecked -> updateSystemUi()
+        val checkChangeListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+            updateSystemUi()
         }
         mCheckControls[0] = findViewById(R.id.modeLowProfile)
         mCheckControls[1] = findViewById(R.id.modeFullscreen)

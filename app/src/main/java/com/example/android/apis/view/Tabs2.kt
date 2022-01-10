@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TabHost.TabContentFactory
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import com.example.android.apis.R
 
 /**
@@ -47,19 +48,21 @@ open class Tabs2 : TabActivity(), TabContentFactory {
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val tabHost = tabHost
         tabHost.addTab(tabHost.newTabSpec("tab1")
-                .setIndicator("tab1", resources.getDrawable(R.drawable.star_big_on))
-                .setContent(this))
+            .setIndicator(
+                "tab1",
+                ResourcesCompat.getDrawable(resources, R.drawable.star_big_on, null)
+            )
+            .setContent(this))
         tabHost.addTab(tabHost.newTabSpec("tab2")
-                .setIndicator("tab2")
-                .setContent(this))
+            .setIndicator("tab2")
+            .setContent(this))
         tabHost.addTab(tabHost.newTabSpec("tab3")
-                .setIndicator("tab3")
-                .setContent(this))
+            .setIndicator("tab3")
+            .setContent(this))
     }
 
     /**
