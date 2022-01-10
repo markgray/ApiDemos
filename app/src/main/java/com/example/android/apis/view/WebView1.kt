@@ -47,9 +47,9 @@ class WebView1 : AppCompatActivity() {
         val mimeType = "text/html"
         val wv: WebView = findViewById(R.id.wv1)
         wv.loadData(
-                "<a href='http://www.google.com/'>Hello World! - 1</a>",
-                mimeType,
-                null
+            "<a href='http://www.google.com/'>Hello World! - 1</a>",
+            mimeType,
+            null
         )
     }
 }

@@ -39,7 +39,6 @@ import com.example.android.apis.R
  * and whose onFocusLost(WindowId) prints "Lost focus". When menu items are clicked or the app is
  * put in the background the window loses focus even on a touch only device.
  */
-@Suppress("MemberVisibilityCanBePrivate")
 @SuppressLint("SetTextI18n")
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class WindowFocusObserver : AppCompatActivity(), SearchView.OnQueryTextListener {
@@ -55,7 +54,7 @@ class WindowFocusObserver : AppCompatActivity(), SearchView.OnQueryTextListener 
      * focus changes on our window by calling the `registerFocusObserver` method of the
      * [WindowId] of our main content view.
      */
-    val mObserver: FocusObserver = object : FocusObserver() {
+    private val mObserver: FocusObserver = object : FocusObserver() {
         /**
          * Called when one of the monitored windows gains input focus. We simply set the text of
          * [TextView] field [mState] to "Gained focus".
@@ -140,7 +139,8 @@ class WindowFocusObserver : AppCompatActivity(), SearchView.OnQueryTextListener 
      * @param item `MenuItem` which has been selected
      */
     @Suppress("UNUSED_PARAMETER")
-    fun onSort(item: MenuItem?) {}
+    fun onSort(item: MenuItem?) {
+    }
 
     /**
      * Called when the query text is changed by the user. We return true having done nothing.
