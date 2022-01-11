@@ -59,7 +59,8 @@
 
         <activity
             android:name=".ApiDemos"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -16,12 +16,12 @@
 
 package com.example.android.apis
 
-import android.app.ListActivity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ListView
 import android.widget.SimpleAdapter
+import androidx.appcompat.app.AppCompatActivity
 import java.text.Collator
 import java.util.ArrayList
 import java.util.Collections
@@ -34,27 +34,34 @@ import java.util.HashMap
  * it creates with entries allowing one to navigate to the various demo activities included in the
  * app.
  */
-@Suppress("MemberVisibilityCanBePrivate")
-open class ApiDemos : ListActivity() {
+open class ApiDemos : AppCompatActivity() {
+    /**
+     * The [ListView] in our layout file with ID [R.id.list]
+     */
+    lateinit var listView: ListView
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`. Then we initialize our variable `Intent intent` by fetching the
-     * `Intent` that launched our activity, and initialize our variable `String path` by
-     * retrieving any string that was stored as an extra in `intent` under the key
-     * "com.example.android.apis.Path". If `path` is null, we set it to the empty string "".
-     * We set our adapter to a new instance of `SimpleAdapter` intended to display the list of
-     * map of `String` to `Object` returned by our method `getData` for the current
+     * `onCreate`, then we set our content view to our layout file [R.layout.api_demos] and initialize
+     * our [ListView] field [listView] by finding the view with ID [R.id.list]. Next we initialize
+     * our variable `Intent intent` by fetching the `Intent` that launched our activity, and
+     * initialize our variable `String path` by retrieving any string that was stored as an extra in
+     * `intent` under the key "com.example.android.apis.Path". If `path` is null, we set it to the
+     * empty string "". We set our adapter to a new instance of `SimpleAdapter` intended to display
+     * the list of map of `String` to `Object` returned by our method `getData` for the current
      * value of `path` using the layout android.R.layout.simple_list_item_1 to display the
      * column "title" in the TextView with id android.R.id.text1 (each `Map<String, Object>`
      * in the list has 2 entries, the name under the key "title" and an `Intent` to launch if
      * the list entry is selected under the key "intent"). Finally we enable type filtering
-     * for our `ListView`.
+     * for our `ListView`, and set the `OnItemClickListener` of [listView] to a lambda which calls
+     * the old `ListActivity` [onListItemClick] override with its parameters.
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.api_demos)
+        listView = findViewById(R.id.list)
 
         val intent = intent
         var path = intent.getStringExtra("com.example.android.apis.Path")
@@ -63,10 +70,13 @@ open class ApiDemos : ListActivity() {
             path = ""
         }
 
-        listAdapter = SimpleAdapter(this, getData(path),
-                android.R.layout.simple_list_item_1, arrayOf("title"),
-                intArrayOf(android.R.id.text1))
+        listView.adapter = SimpleAdapter(this, getData(path),
+            android.R.layout.simple_list_item_1, arrayOf("title"),
+            intArrayOf(android.R.id.text1))
         listView.isTextFilterEnabled = true
+        listView.setOnItemClickListener { parent, view, position, id ->
+            onListItemClick(parent as ListView, view, position, id)
+        }
     }
 
     /**
@@ -150,13 +160,15 @@ open class ApiDemos : ListActivity() {
      * `String prefix`. The next "path segment" is stored under the key "title" and an appropriate
      * `Intent` to deal with it is stored under the key "intent".
      */
-    fun getData(prefix: String): List<Map<String, Any>> {
+    private fun getData(prefix: String): List<Map<String, Any>> {
         val myData = ArrayList<Map<String, Any>>()
 
         val mainIntent = Intent(Intent.ACTION_MAIN, null)
         mainIntent.addCategory(Intent.CATEGORY_SAMPLE_CODE)
 
         val pm = packageManager
+
+        @Suppress("USELESS_ELVIS")
         val list = pm.queryIntentActivities(mainIntent, 0) ?: return myData
 
         val prefixPath: Array<String>?
@@ -186,8 +198,8 @@ open class ApiDemos : ListActivity() {
 
                 if (prefixPath?.size ?: 0 == labelPath.size - 1) {
                     addItem(myData, nextLabel, activityIntent(
-                            info.activityInfo.applicationInfo.packageName,
-                            info.activityInfo.name))
+                        info.activityInfo.applicationInfo.packageName,
+                        info.activityInfo.name))
                 } else {
                     if (entries[nextLabel] == null) {
                         addItem(myData, nextLabel, browseIntent(if (prefix == "") nextLabel else "$prefix/$nextLabel"))
@@ -215,7 +227,7 @@ open class ApiDemos : ListActivity() {
      * used as the component for this Intent.
      * @return an `Intent` to launch the activity specified by our two parameters
      */
-    protected fun activityIntent(pkg: String, componentName: String): Intent {
+    private fun activityIntent(pkg: String, componentName: String): Intent {
         val result = Intent()
         result.setClassName(pkg, componentName)
         return result
@@ -232,7 +244,7 @@ open class ApiDemos : ListActivity() {
      * @param path path to add as an extra under the key "com.example.android.apis.Path"
      * @return an intent to relaunch this `ApiDemos` activity with a different path extra.
      */
-    protected fun browseIntent(path: String): Intent {
+    private fun browseIntent(path: String): Intent {
         val result = Intent()
         result.setClass(this, ApiDemos::class.java)
         result.putExtra("com.example.android.apis.Path", path)
@@ -251,7 +263,7 @@ open class ApiDemos : ListActivity() {
      * @param name   String we are to store in the map item under the key "title"
      * @param intent Intent we are to store in the map item under the key "intent"
      */
-    protected fun addItem(data: MutableList<Map<String, Any>>, name: String, intent: Intent) {
+    private fun addItem(data: MutableList<Map<String, Any>>, name: String, intent: Intent) {
         val temp = HashMap<String, Any>()
         temp["title"] = name
         temp["intent"] = intent
@@ -271,8 +283,9 @@ open class ApiDemos : ListActivity() {
      * @param position The position of the view in the list
      * @param id       The row id of the item that was clicked
      */
-    @Suppress("UNCHECKED_CAST")
-    override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
+    @Suppress("UNUSED_PARAMETER")
+    fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
+        @Suppress("UNCHECKED_CAST")
         val map = l.getItemAtPosition(position) as Map<String, Any>
 
         val intent = Intent(map["intent"] as Intent?)
@@ -287,27 +300,27 @@ open class ApiDemos : ListActivity() {
          * the strings stored under the key "title" as the alphabetical sort key.
          */
         private val sDisplayNameComparator =
-                object : Comparator<Map<String, Any>> {
-            /**
-             * `Collator` instance for the current default locale
-             * that we use to compare two strings
-             */
-            private val collator = Collator.getInstance()
+            object : Comparator<Map<String, Any>> {
+                /**
+                 * `Collator` instance for the current default locale
+                 * that we use to compare two strings
+                 */
+                private val collator = Collator.getInstance()
 
-            /**
-             * Compares two `Map<String, Object>` objects to determine their relative ordering.
-             * We sort based on the `String` stored under the key "title" in each object, so
-             * we just return the value returned by the `compare` method of `collator`
-             * for the values stored under the key "title" in our two parameters.
-             *
-             * @param map1 an `Map<String, Object>` object
-             * @param map2 a second `Map<String, Object>` object to compare with `map1`
-             * @return an integer < 0 if `map1` is less than `map2`, 0 if they are
-             * equal, and > 0 if `map1` is greater than `map2`.
-             */
-            override fun compare(map1: Map<String, Any>, map2: Map<String, Any>): Int {
-                return collator.compare(map1["title"], map2["title"])
+                /**
+                 * Compares two `Map<String, Object>` objects to determine their relative ordering.
+                 * We sort based on the `String` stored under the key "title" in each object, so
+                 * we just return the value returned by the `compare` method of `collator`
+                 * for the values stored under the key "title" in our two parameters.
+                 *
+                 * @param map1 an `Map<String, Object>` object
+                 * @param map2 a second `Map<String, Object>` object to compare with `map1`
+                 * @return an integer < 0 if `map1` is less than `map2`, 0 if they are
+                 * equal, and > 0 if `map1` is greater than `map2`.
+                 */
+                override fun compare(map1: Map<String, Any>, map2: Map<String, Any>): Int {
+                    return collator.compare(map1["title"], map2["title"])
+                }
             }
-        }
     }
 }
