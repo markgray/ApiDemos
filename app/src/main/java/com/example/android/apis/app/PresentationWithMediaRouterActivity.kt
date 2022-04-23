@@ -16,6 +16,7 @@
 
 package com.example.android.apis.app
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Presentation
 import android.content.Context
@@ -29,6 +30,7 @@ import android.view.Menu
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuItemCompat
@@ -110,7 +112,7 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
          * @param router the MediaRouter reporting the event
          * @param info Route that has been selected for the given route types
          */
-        override fun onRouteSelected(router: MediaRouter?, info: RouteInfo?) {
+        override fun onRouteSelected(router: MediaRouter, info: RouteInfo) {
             Log.d(TAG, "onRouteSelected: type=do not know, info=$info")
             updatePresentation()
         }
@@ -224,7 +226,7 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
         super.onResume()
 
         // Listen for changes to media routes.
-        mMediaRouter!!.addCallback(mSelector, mMediaRouterCallback)
+        mMediaRouter!!.addCallback(mSelector!!, mMediaRouterCallback)
 
         // Update the presentation based on the currently selected route.
         mPaused = false
@@ -322,6 +324,8 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
      * call our method [updateContents] which will display our rotating cubes either in the main
      * activity or on the external display and will display some text explaining what is happening.
      */
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @SuppressLint("NewApi")
     private fun updatePresentation() {
         // Get the current route and its presentation display.
         val route = mMediaRouter!!.selectedRoute
