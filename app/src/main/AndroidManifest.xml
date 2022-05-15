@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.android.apis">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -354,7 +353,8 @@
             android:maxAspectRatio="1"
             android:resizeableActivity="false"
             android:theme="@style/Theme.AppCompat.Light"
-            tools:targetApi="26">
+            tools:targetApi="26"
+            tools:ignore="NonResizeableActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -367,7 +367,8 @@
             android:maxAspectRatio="1.77777778"
             android:resizeableActivity="false"
             android:theme="@style/Theme.AppCompat.Light"
-            tools:targetApi="26">
+            tools:targetApi="26"
+            tools:ignore="NonResizeableActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
