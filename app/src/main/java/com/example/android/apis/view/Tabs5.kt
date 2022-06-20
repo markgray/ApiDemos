@@ -44,6 +44,7 @@ class Tabs5 : TabActivity(), TabContentFactory {
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
+    @Deprecated("Deprecated in Java")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tabs_scroll)
@@ -64,6 +65,7 @@ class Tabs5 : TabActivity(), TabContentFactory {
      * @param tag Which tab was selected.
      * @return The view to display the contents of the selected tab.
      */
+    @Deprecated("Deprecated in Java")
     @SuppressLint("SetTextI18n")
     override fun createTabContent(tag: String): View {
         val tv = TextView(this)

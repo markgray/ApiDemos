@@ -261,6 +261,7 @@ class FragmentTabsFragment : Fragment() {
              * @param tag Which tab was selected.
              * @return The [View] to display the contents of the selected tab.
              */
+            @Deprecated("Deprecated in Java")
             override fun createTabContent(tag: String): View {
                 val v = View(mContext)
                 v.minimumWidth = 0
@@ -425,6 +426,7 @@ class FragmentTabsFragment : Fragment() {
          *
          * @param tabId the tab id of the tab that has been selected.
          */
+        @Deprecated("Deprecated in Java")
         override fun onTabChanged(tabId: String) {
             if (!mInitialized) {
                 return

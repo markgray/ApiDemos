@@ -132,6 +132,7 @@ open class SystemUIModes :
          * @param visibility Bitwise-or of flags SYSTEM_UI_FLAG_LOW_PROFILE,
          * SYSTEM_UI_FLAG_HIDE_NAVIGATION and SYSTEM_UI_FLAG_FULLSCREEN.
          */
+        @Deprecated("Deprecated in Java")
         override fun onSystemUiVisibilityChange(visibility: Int) {
             mActivity!!.updateCheckControls()
             mActivity!!.refreshSizes()

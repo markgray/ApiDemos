@@ -40,7 +40,6 @@ import android.widget.Toast
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.ArrayList
 
 /**
  * Shows how to use a ProjectionManager.createScreenCaptureIntent to capture screen content to a
@@ -146,6 +145,7 @@ class MediaProjectionDemo : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.media_projection)
         val metrics = DisplayMetrics()
+        @Suppress("DEPRECATION")
         windowManager.defaultDisplay.getMetrics(metrics)
         mScreenDensity = metrics.densityDpi
         mSurfaceView = findViewById(R.id.surface)
@@ -204,7 +204,9 @@ class MediaProjectionDemo : AppCompatActivity() {
      * @param data An [Intent], which can return result data to the caller (various data can be
      * attached as [Intent] "extras").
      */
+    @Deprecated("Deprecated in Java")
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode != PERMISSION_CODE) {
             Log.e(TAG, "Unknown request code: $requestCode")
@@ -251,6 +253,7 @@ class MediaProjectionDemo : AppCompatActivity() {
             return
         }
         if (mMediaProjection == null) {
+            @Suppress("DEPRECATION")
             startActivityForResult(mProjectionManager!!.createScreenCaptureIntent(), PERMISSION_CODE)
             return
         }

@@ -83,6 +83,7 @@ class ProgressBar3 : AppCompatActivity() {
      * @param id The id of the dialog.
      * @return The dialog. If you return null, the dialog will not be created.
      */
+    @Deprecated("Deprecated in Java")
     override fun onCreateDialog(id: Int): Dialog? {
         when (id) {
             DIALOG1_KEY -> {

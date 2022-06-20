@@ -109,6 +109,7 @@ class PictureLayout : ViewGroup {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun invalidateChildInParent(location: IntArray, dirty: Rect): ViewParent {
         location[0] = left
         location[1] = top

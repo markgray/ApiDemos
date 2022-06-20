@@ -324,6 +324,7 @@ class KeyStoreUsage : AppCompatActivity() {
          * it generates a series of elements, one at a time. Successive calls to the `nextElement`
          * method return successive elements of the series.
          */
+        @Deprecated("Deprecated in Java")
         override fun doInBackground(vararg params: Void?): Enumeration<String>? {
             return try {
 
@@ -360,6 +361,7 @@ class KeyStoreUsage : AppCompatActivity() {
          *
          * @param result The list of [KeyStore] aliases computed by [doInBackground].
          */
+        @Deprecated("Deprecated in Java")
         override fun onPostExecute(result: Enumeration<String>?) {
             val aliases: MutableList<String> = ArrayList()
             while (result!!.hasMoreElements()) {
@@ -390,6 +392,7 @@ class KeyStoreUsage : AppCompatActivity() {
          * @param params The alias for the key.
          * @return true if successful, false if an exception is thrown (it is ignored though)
          */
+        @Deprecated("Deprecated in Java")
         override fun doInBackground(vararg params: String?): Boolean {
             val alias = params[0]
             return try {
@@ -431,6 +434,7 @@ class KeyStoreUsage : AppCompatActivity() {
          *
          * @param result we ignore this.
          */
+        @Deprecated("Deprecated in Java")
         override fun onPostExecute(result: Boolean) {
             updateKeyList()
             mGenerateButton!!.isEnabled = true
@@ -440,6 +444,7 @@ class KeyStoreUsage : AppCompatActivity() {
          * Called if the background task is cancelled, we simply enable the [Button] field
          * [mGenerateButton].
          */
+        @Deprecated("Deprecated in Java")
         override fun onCancelled() {
             mGenerateButton!!.isEnabled = true
         }
@@ -469,6 +474,7 @@ class KeyStoreUsage : AppCompatActivity() {
          * are to sign (`params[1]`).
          * @return The signature of the data using the keystore alias entry passed us
          */
+        @Deprecated("Deprecated in Java")
         override fun doInBackground(vararg params: String?): String? {
             val alias = params[0]
             val dataString = params[1]
@@ -523,6 +529,7 @@ class KeyStoreUsage : AppCompatActivity() {
          *
          * @param result signature of the data returned by the background task
          */
+        @Deprecated("Deprecated in Java")
         override fun onPostExecute(result: String?) {
             mCipherText!!.setText(result)
             setKeyActionButtonsEnabled(true)
@@ -533,6 +540,7 @@ class KeyStoreUsage : AppCompatActivity() {
          * [EditText] field [mCipherText] to "error!", and call our method [setKeyActionButtonsEnabled]
          * to re-enable the views involved with the key actions.
          */
+        @Deprecated("Deprecated in Java")
         override fun onCancelled() {
             mCipherText!!.setText("error!")
             setKeyActionButtonsEnabled(true)
@@ -565,6 +573,7 @@ class KeyStoreUsage : AppCompatActivity() {
          * be verified.
          * @return true if the signature is valid, false if it is not
          */
+        @Deprecated("Deprecated in Java")
         override fun doInBackground(vararg params: String?): Boolean {
             val alias = params[0]
             val dataString = params[1]
@@ -627,6 +636,7 @@ class KeyStoreUsage : AppCompatActivity() {
          *
          * @param result true if the signature was verified, false if it was not.
          */
+        @Deprecated("Deprecated in Java")
         override fun onPostExecute(result: Boolean) {
             if (result) {
                 mCipherText!!.setTextColor(resources.getColor(R.color.solid_green, null))
@@ -643,6 +653,7 @@ class KeyStoreUsage : AppCompatActivity() {
          * and set the text color of [EditText] field [mCipherText] to the color selected by the
          * android.R.color.primary_text_dark selector.
          */
+        @Deprecated("Deprecated in Java")
         override fun onCancelled() {
             mCipherText!!.setText("error!")
             setKeyActionButtonsEnabled(true)
@@ -666,6 +677,7 @@ class KeyStoreUsage : AppCompatActivity() {
          * @param params `params[0]` contains the alias that is to be deleted
          * @return Void.
          */
+        @Deprecated("Deprecated in Java")
         override fun doInBackground(vararg params: String?): Void? {
             val alias = params[0]
             try {
@@ -695,6 +707,7 @@ class KeyStoreUsage : AppCompatActivity() {
          *
          * @param result unused, Void
          */
+        @Deprecated("Deprecated in Java")
         override fun onPostExecute(result: Void?) {
             updateKeyList()
         }
@@ -703,6 +716,7 @@ class KeyStoreUsage : AppCompatActivity() {
          * Called on the UI thread when the background thread is cancelled. We simply call our
          * method [updateKeyList] to update the list of keys used by our UI.
          */
+        @Deprecated("Deprecated in Java")
         override fun onCancelled() {
             updateKeyList()
         }

@@ -106,6 +106,7 @@ open class ProxyDrawable
      *
      * @return int The opacity class of the Drawable.
      */
+    @Deprecated("Deprecated in Java")
     override fun getOpacity(): Int {
         @Suppress("DEPRECATION")
         return if (mProxy != null) mProxy!!.opacity else PixelFormat.TRANSPARENT
@@ -139,6 +140,7 @@ open class ProxyDrawable
      * @param dither *true* to set the dithering bit in flags, *false* to clear it
      * @see android.graphics.Paint.setDither
      */
+    @Deprecated("Deprecated in Java")
     override fun setDither(dither: Boolean) {
         if (mProxy != null) {
             @Suppress("DEPRECATION")

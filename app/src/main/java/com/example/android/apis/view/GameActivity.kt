@@ -132,6 +132,7 @@ class GameActivity : AppCompatActivity() {
          * and SYSTEM_UI_FLAG_FULLSCREEN. This tells you the global state of these UI
          * visibility flags, not what your app is currently applying.
          */
+        @Deprecated("Deprecated in Java")
         override fun onSystemUiVisibilityChange(visibility: Int) {
             // Detect when we go out of nav-hidden mode, to reset back to having
             // it hidden; our game wants those elements to stay hidden as long

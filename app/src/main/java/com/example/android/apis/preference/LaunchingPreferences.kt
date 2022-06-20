@@ -129,6 +129,7 @@ class LaunchingPreferences : AppCompatActivity(), View.OnClickListener {
      * @param resultCode  The integer result code returned by the child activity through its setResult().
      * @param data        An [Intent], which can return result data to the caller UNUSED
      */
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

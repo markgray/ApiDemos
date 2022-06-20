@@ -47,6 +47,7 @@ class Tabs3 : TabActivity() {
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
+    @Deprecated("Deprecated in Java")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val tabHost = tabHost

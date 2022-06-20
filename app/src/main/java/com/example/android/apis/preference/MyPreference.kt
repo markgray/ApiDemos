@@ -48,6 +48,7 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
      *
      * @param view The View that shows this Preference.
      */
+    @Deprecated("Deprecated in Java")
     override fun onBindView(view: View) {
         super.onBindView(view)
 
@@ -66,6 +67,7 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
      * to save [mClickCounter] to the shared preference file, and call [Preference.notifyChanged] to
      * notify the system that the preference value has changed so that the UI can be refreshed.
      */
+    @Deprecated("Deprecated in Java")
     override fun onClick() {
         val newValue = mClickCounter + 1
         // Give the client a chance to ignore this change if they deem it
@@ -95,6 +97,7 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
      * @param index The index of the default value attribute.
      * @return The default value of this preference type.
      */
+    @Deprecated("Deprecated in Java")
     override fun onGetDefaultValue(a: TypedArray, index: Int): Any {
         // This preference type's value type is Integer, so we read the default
         // value from the attributes as an Integer.
@@ -112,6 +115,7 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
      * @param defaultValue The default value for this Preference. Only use this if [restoreValue] is
      * false.
      */
+    @Deprecated("Deprecated in Java")
     override fun onSetInitialValue(restoreValue: Boolean, defaultValue: Any?) {
         if (restoreValue) {
             // Restore state
@@ -137,6 +141,7 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
      * @return A [Parcelable] object containing the current dynamic state of this Preference, or null
      * if there is nothing interesting to save.
      */
+    @Deprecated("Deprecated in Java")
     override fun onSaveInstanceState(): Parcelable {
         /*
          * Suppose a client uses this preference type without persisting. We
@@ -168,6 +173,7 @@ class MyPreference(context: Context?, attrs: AttributeSet?) : Preference(context
      *
      * @param state The saved state that had previously been returned by [onSaveInstanceState].
      */
+    @Deprecated("Deprecated in Java")
     override fun onRestoreInstanceState(state: Parcelable) {
         if (state.javaClass != SavedState::class.java) {
             // Didn't save state for us in onSaveInstanceState

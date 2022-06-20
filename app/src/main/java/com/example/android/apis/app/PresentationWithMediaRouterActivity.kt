@@ -31,15 +31,13 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuItemCompat
-import androidx.mediarouter.media.MediaRouter
-import androidx.mediarouter.media.MediaRouter.RouteInfo
 import androidx.mediarouter.app.MediaRouteActionProvider
 import androidx.mediarouter.media.MediaControlIntent
 import androidx.mediarouter.media.MediaRouteSelector
-
+import androidx.mediarouter.media.MediaRouter
+import androidx.mediarouter.media.MediaRouter.RouteInfo
 import com.example.android.apis.R
 import com.example.android.apis.graphics.CubeRenderer
 
@@ -112,6 +110,7 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
          * @param router the MediaRouter reporting the event
          * @param info Route that has been selected for the given route types
          */
+        @Deprecated("Deprecated in Java")
         override fun onRouteSelected(router: MediaRouter, info: RouteInfo) {
             Log.d(TAG, "onRouteSelected: type=do not know, info=$info")
             updatePresentation()
@@ -124,6 +123,7 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
          * @param router the MediaRouter reporting the event
          * @param info Route that has been unselected for the given route types
          */
+        @Deprecated("Deprecated in Java")
         override fun onRouteUnselected(router: MediaRouter, info: RouteInfo) {
             Log.d(TAG, "onRouteUnselected: type=do not know, info=$info")
             updatePresentation()
@@ -387,6 +387,7 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
                 mPresentation!!.surfaceView!!.onResume()
             }
         } else {
+            @Suppress("DEPRECATION")
             mInfoTextView!!.text = resources.getString(
                     R.string.presentation_with_media_router_now_playing_locally,
                     windowManager.defaultDisplay.name)

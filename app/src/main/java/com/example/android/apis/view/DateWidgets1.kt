@@ -146,6 +146,7 @@ class DateWidgets1 : AppCompatActivity() {
      * @param id The id of the dialog.
      * @return The dialog. If you return null, the dialog will not be created.
      */
+    @Deprecated("Deprecated in Java")
     override fun onCreateDialog(id: Int): Dialog? {
         when (id) {
             TIME_12_DIALOG_ID, TIME_24_DIALOG_ID -> return TimePickerDialog(
@@ -177,6 +178,7 @@ class DateWidgets1 : AppCompatActivity() {
      * @param id     The id of the managed dialog.
      * @param dialog The dialog.
      */
+    @Deprecated("Deprecated in Java")
     override fun onPrepareDialog(id: Int, dialog: Dialog) {
         when (id) {
             TIME_12_DIALOG_ID, TIME_24_DIALOG_ID -> (dialog as TimePickerDialog).updateTime(mHour, mMinute)

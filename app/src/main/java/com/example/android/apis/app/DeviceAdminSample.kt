@@ -76,6 +76,7 @@ class DeviceAdminSample : PreferenceActivity() {
      *
      * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
+    @Deprecated("Deprecated in Java")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -98,6 +99,7 @@ class DeviceAdminSample : PreferenceActivity() {
      * @param target The list in which to place the headers.
      * We override this method to provide PreferenceActivity with the top-level preference headers.
      */
+    @Deprecated("Deprecated in Java")
     override fun onBuildHeaders(target: List<Header>) {
         loadHeadersFromResource(R.xml.device_admin_headers, target)
     }
@@ -123,6 +125,7 @@ class DeviceAdminSample : PreferenceActivity() {
      * @param fragmentName the class name of the Fragment about to be attached to this activity.
      * @return true if the fragment class name is valid for this Activity and false otherwise.
      */
+    @Deprecated("Deprecated in Java")
     override fun isValidFragment(fragmentName: String): Boolean {
         return ((GeneralFragment::class.java.name == fragmentName) || (QualityFragment::class.java.name == fragmentName) || (ExpirationFragment::class.java.name == fragmentName) || (LockWipeFragment::class.java.name == fragmentName) || (EncryptionFragment::class.java.name == fragmentName))
     }
@@ -198,6 +201,7 @@ class DeviceAdminSample : PreferenceActivity() {
          *
          * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
          */
+        @Deprecated("Deprecated in Java")
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
 
@@ -228,6 +232,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * `setEnabled` method with `mAdminActive`, disabling the preference if we are
          * not an active admin.
          */
+        @Deprecated("Deprecated in Java")
         override fun onResume() {
             super.onResume()
             mAdminActive = mActivity!!.isActiveAdmin
@@ -289,6 +294,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * @param preference The Preference that was clicked.
          * @return True if the click was handled.
          */
+        @Deprecated("Deprecated in Java")
         override fun onPreferenceClick(preference: Preference): Boolean {
             if (mSetPassword != null && preference === mSetPassword) {
                 val intent = Intent(DevicePolicyManager.ACTION_SET_NEW_PASSWORD)
@@ -311,6 +317,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * @param newValue The new value of the Preference.
          * @return True to update the state of the Preference with the new value.
          */
+        @Deprecated("Deprecated in Java")
         override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
             if (mResetPassword != null && preference === mResetPassword) {
                 doResetPassword(newValue as String)
@@ -448,6 +455,7 @@ class DeviceAdminSample : PreferenceActivity() {
          *
          * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
          */
+        @Deprecated("Deprecated in Java")
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             addPreferencesFromResource(R.xml.device_admin_general)
@@ -498,6 +506,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * on the checked/unchecked state of the widget). Finally we call our `reloadSummaries`
          * method to set the summary text of our widgets appropriately for their current state.
          */
+        @Deprecated("Deprecated in Java")
         override fun onResume() {
             super.onResume()
             mEnableCheckbox!!.isChecked = mAdminActive
@@ -671,6 +680,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * @param newValue The new value of the Preference.
          * @return True to update the state of the Preference with the new value.
          */
+        @Deprecated("Deprecated in Java")
         override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
             if (super.onPreferenceChange(preference, newValue)) {
                 return true
@@ -968,6 +978,7 @@ class DeviceAdminSample : PreferenceActivity() {
          *
          * @param savedInstanceState we do not override `onSaveInstanceState` so do not use
          */
+        @Deprecated("Deprecated in Java")
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             addPreferencesFromResource(R.xml.device_admin_quality)
@@ -999,6 +1010,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * `PreferenceCategory mQualityCategory` depending on the value of `mAdminActive`,
          * enabling it if we are in an active admin capacity and disabling it if we are not.
          */
+        @Deprecated("Deprecated in Java")
         override fun onResume() {
             super.onResume()
             mQualityCategory!!.isEnabled = mAdminActive
@@ -1096,6 +1108,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * @param newValue The new value of the Preference.
          * @return True to update the state of the Preference with the new value.
          */
+        @Deprecated("Deprecated in Java")
         override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
             if (super.onPreferenceChange(preference, newValue)) {
                 return true
@@ -1242,6 +1255,7 @@ class DeviceAdminSample : PreferenceActivity() {
          *
          * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
          */
+        @Deprecated("Deprecated in Java")
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             addPreferencesFromResource(R.xml.device_admin_expiration)
@@ -1260,6 +1274,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * `PreferenceCategory mExpirationCategory` to enable the preference if `mAdminActive`
          * is true or disable it if it is false.
          */
+        @Deprecated("Deprecated in Java")
         override fun onResume() {
             super.onResume()
             mExpirationCategory!!.isEnabled = mAdminActive
@@ -1326,6 +1341,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * @param newValue The new value of the Preference.
          * @return True to update the state of the Preference with the new value.
          */
+        @Deprecated("Deprecated in Java")
         override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
             if (super.onPreferenceChange(preference, newValue)) {
                 return true
@@ -1363,6 +1379,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * @param preference The Preference that was clicked.
          * @return True if the click was handled.
          */
+        @Deprecated("Deprecated in Java")
         override fun onPreferenceClick(preference: Preference): Boolean {
             if (super.onPreferenceClick(preference)) {
                 return true
@@ -1499,6 +1516,7 @@ class DeviceAdminSample : PreferenceActivity() {
          *
          * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
          */
+        @Deprecated("Deprecated in Java")
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             addPreferencesFromResource(R.xml.device_admin_lock_wipe)
@@ -1521,6 +1539,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * `PreferenceCategory mLockWipeCategory` depending on the value of `mAdminActive`,
          * enabling it if we are in an active admin capacity and disabling it if we are not.
          */
+        @Deprecated("Deprecated in Java")
         override fun onResume() {
             super.onResume()
             mLockWipeCategory!!.isEnabled = mAdminActive
@@ -1588,6 +1607,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * @param newValue The new value of the Preference.
          * @return True to update the state of the Preference with the new value.
          */
+        @Deprecated("Deprecated in Java")
         override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
             if (super.onPreferenceChange(preference, newValue)) {
                 return true
@@ -1636,6 +1656,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * @param preference The Preference that was clicked.
          * @return True if the click was handled.         *
          */
+        @Deprecated("Deprecated in Java")
         override fun onPreferenceClick(preference: Preference): Boolean {
             if (super.onPreferenceClick(preference)) {
                 return true
@@ -1790,6 +1811,7 @@ class DeviceAdminSample : PreferenceActivity() {
          *
          * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
          */
+        @Deprecated("Deprecated in Java")
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             addPreferencesFromResource(R.xml.device_admin_encryption)
@@ -1807,6 +1829,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * `CheckBoxPreference mRequireEncryption` to the value returned by the `getStorageEncryption`
          * method of `DevicePolicyManager mDPM` (true if the admin(s) are requesting encryption, false if not).
          */
+        @Deprecated("Deprecated in Java")
         override fun onResume() {
             super.onResume()
             mEncryptionCategory!!.isEnabled = mAdminActive
@@ -1862,6 +1885,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * @param newValue The new value of the Preference.
          * @return True to update the state of the Preference with the new value.
          */
+        @Deprecated("Deprecated in Java")
         override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
             if (super.onPreferenceChange(preference, newValue)) {
                 return true
@@ -1896,6 +1920,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * @param preference The Preference that was clicked.
          * @return True if the click was handled.
          */
+        @Deprecated("Deprecated in Java")
         override fun onPreferenceClick(preference: Preference): Boolean {
             if (super.onPreferenceClick(preference)) {
                 return true

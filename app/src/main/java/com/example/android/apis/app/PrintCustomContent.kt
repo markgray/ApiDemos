@@ -744,6 +744,7 @@ class PrintCustomContent : ListActivity() {
              * `newAttributes` in our [PrintAttributes] field [mPrintAttributes].
              * TODO: figure out if this stashing is necessary after our refactoring
              */
+            @Deprecated("Deprecated in Java")
             override fun onPreExecute() { // First register for cancellation requests.
                 cancellationSignal.setOnCancelListener { cancel(true) }
                 // Stash the attributes as we will need them for rendering.
@@ -770,6 +771,7 @@ class PrintCustomContent : ListActivity() {
              * name "MotoGP_stats.pdf", the content type CONTENT_TYPE_DOCUMENT, and the total number
              * of pages in our document.
              */
+            @Deprecated("Deprecated in Java")
             @SuppressLint("WrongThread")
             override fun doInBackground(vararg params: Void?): PrintDocumentInfo? {
                 try {
@@ -872,6 +874,7 @@ class PrintCustomContent : ListActivity() {
              *
              * @param result the [PrintDocumentInfo] calculated by our override of [doInBackground]
              */
+            @Deprecated("Deprecated in Java")
             override fun onPostExecute(result: PrintDocumentInfo?) {
                 /**
                  * Update the cached info to send it over if the next
@@ -887,6 +890,7 @@ class PrintCustomContent : ListActivity() {
              *
              * @param result ignored
              */
+            @Deprecated("Deprecated in Java")
             override fun onCancelled(result: PrintDocumentInfo?) {
                 /**
                  * Task was cancelled, report that.
@@ -942,6 +946,7 @@ class PrintCustomContent : ListActivity() {
              * `OnCancelListener` of our [CancellationSignal] field [cancellationSignal]
              * to a lambda which cancels our [AsyncTask], interrupting our thread if needed.
              */
+            @Deprecated("Deprecated in Java")
             override fun onPreExecute() {
                 /**
                  * First register for cancellation requests.
@@ -1013,6 +1018,7 @@ class PrintCustomContent : ListActivity() {
              * @param params we have no parameters
              * @return we return *null*
              */
+            @Deprecated("Deprecated in Java")
             @SuppressLint("WrongThread")
             override fun doInBackground(vararg params: Void?): Void? {
                 /**
@@ -1167,6 +1173,7 @@ class PrintCustomContent : ListActivity() {
              *
              * @param result no result used
              */
+            @Deprecated("Deprecated in Java")
             override fun onCancelled(result: Void?) { // Task was cancelled, report that.
                 callback.onWriteCancelled()
                 mPdfDocument.close()

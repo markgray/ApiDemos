@@ -44,6 +44,7 @@ class PreferenceWithHeaders : PreferenceActivity() {
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
      */
+    @Deprecated("Deprecated in Java")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -64,6 +65,7 @@ class PreferenceWithHeaders : PreferenceActivity() {
      * @param fragmentName the class name of the Fragment about to be attached to this activity.
      * @return true if the fragment class name is valid for this Activity and false otherwise.
      */
+    @Deprecated("Deprecated in Java")
     override fun isValidFragment(fragmentName: String): Boolean {
         return true
     }
@@ -80,6 +82,7 @@ class PreferenceWithHeaders : PreferenceActivity() {
      *
      * @param target The list in which to place the headers.
      */
+    @Deprecated("Deprecated in Java")
     override fun onBuildHeaders(target: List<Header>) {
         loadHeadersFromResource(R.xml.preference_headers, target)
     }
@@ -105,6 +108,7 @@ class PreferenceWithHeaders : PreferenceActivity() {
          * @param savedInstanceState If the fragment is being re-created from a previous saved state,
          * this is the state. We do not override [onSaveInstanceState] so do not use.
          */
+        @Deprecated("Deprecated in Java")
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
 
@@ -130,6 +134,7 @@ class PreferenceWithHeaders : PreferenceActivity() {
          *
          * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
          */
+        @Deprecated("Deprecated in Java")
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
 
@@ -152,6 +157,7 @@ class PreferenceWithHeaders : PreferenceActivity() {
          *
          * @param savedInstanceState we do not override [onSaveInstanceState] so do not use
          */
+        @Deprecated("Deprecated in Java")
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
 

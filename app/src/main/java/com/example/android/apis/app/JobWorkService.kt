@@ -93,6 +93,7 @@ class JobWorkService : JobService() {
          * @param params we do not have any
          * @return we do not have a return value.
          */
+        @Deprecated("Deprecated in Java")
         override fun doInBackground(vararg params: Void): Void? {
             /*
              * true if task was cancelled before it completed, we set every loop of our while loop

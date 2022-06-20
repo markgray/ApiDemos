@@ -687,6 +687,7 @@ class LoaderThrottle : AppCompatActivity() {
          *
          * @param savedInstanceState we do not override `onSaveInstanceState` so do not use this
          */
+        @Deprecated("Deprecated in Java")
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
 
@@ -790,6 +791,7 @@ class LoaderThrottle : AppCompatActivity() {
                          *
                          * @return A result, defined by the subclass of this task (We return no result so Void)
                          */
+                        @Deprecated("Deprecated in Java")
                         override fun doInBackground(vararg params: Void): Void? {
                             var c = 'Z'
                             while (c >= 'A') {
@@ -837,6 +839,7 @@ class LoaderThrottle : AppCompatActivity() {
                          * is used
                          * @return we have nothing to return, so return null here
                          */
+                        @Deprecated("Deprecated in Java")
                         override fun doInBackground(vararg params: Void): Void? {
                             cr.delete(MainTable.CONTENT_URI, null, null)
                             return null

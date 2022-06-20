@@ -167,6 +167,7 @@ class ContentBrowserNavActivity :
          * @param visibility Bitwise-or of flags SYSTEM_UI_FLAG_LOW_PROFILE, SYSTEM_UI_FLAG_HIDE_NAVIGATION
          * SYSTEM_UI_FLAG_FULLSCREEN.
          */
+        @Deprecated("Deprecated in Java")
         override fun onSystemUiVisibilityChange(visibility: Int) {
             // Detect when we go out of low-profile mode, to also go out
             // of full screen.  We only do this when the low profile mode
