@@ -33,8 +33,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'androidx.fragment:fragment-ktx:1.5.4'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'androidx.fragment:fragment-ktx:1.5.5'
     implementation "androidx.preference:preference-ktx:1.2.0"
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.mediarouter:mediarouter:1.3.1'
