@@ -220,6 +220,6 @@ class LocalService : Service() {
          * Unique Identification Number for the Notification.
          * We use it on Notification start, and to cancel it.
          */
-        private const val NOTIFICATION = R.string.local_service_started
+        private const val NOTIFICATION = 42
     }
 }

@@ -397,6 +397,6 @@ class StatusBarNotifications : AppCompatActivity() {
         /**
          * Use our layout id for a unique identifier for our notifications
          */
-        private const val MOOD_NOTIFICATIONS = R.layout.status_bar_notifications
+        private const val MOOD_NOTIFICATIONS = 42
     }
 }

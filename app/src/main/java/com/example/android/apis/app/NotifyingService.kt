@@ -213,7 +213,7 @@ class NotifyingService : Service() {
         /**
          * Use a layout id for a unique identifier
          */
-        private const val MOOD_NOTIFICATIONS = R.layout.status_bar_notifications
+        private const val MOOD_NOTIFICATIONS = 42
 
         /**
          * The id of the primary notification channel
