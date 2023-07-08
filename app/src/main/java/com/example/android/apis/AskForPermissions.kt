@@ -30,6 +30,7 @@ class AskForPermissions : AppCompatActivity() {
         Manifest.permission.TRANSMIT_IR,
         Manifest.permission.READ_PHONE_STATE,
         Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.MODIFY_AUDIO_SETTINGS,
         Manifest.permission.CAMERA
     )
 
