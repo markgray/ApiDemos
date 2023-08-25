@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.os
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.hardware.Sensor
@@ -41,6 +44,7 @@ import javax.microedition.khronos.opengles.GL10
  *
  * Uses output from [Sensor.TYPE_ROTATION_VECTOR] to change the rotation matrix of an openGL Cube.
  */
+@SuppressLint("ObsoleteSdkInt")
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 class RotationVectorDemo : AppCompatActivity() {
     /**
@@ -125,8 +129,7 @@ class RotationVectorDemo : AppCompatActivity() {
         /**
          * The default sensor for TYPE_ROTATION_VECTOR (rotation vector sensor type)
          */
-        private val mRotationVectorSensor: Sensor
-                = mSensorManager!!.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+        private val mRotationVectorSensor: Sensor = mSensorManager!!.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)!!
 
         /**
          * Rotation vector that we multiply the GL_MODELVIEW matrix by before telling our [Cube] field

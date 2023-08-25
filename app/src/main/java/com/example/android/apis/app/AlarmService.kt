@@ -75,7 +75,7 @@ class AlarmService : AppCompatActivity() {
         val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            firstTime, (30 * 1000).toLong(), mAlarmSender)
+            firstTime, (30 * 1000).toLong(), mAlarmSender!!)
 
         // Tell the user about what we did.
         Toast.makeText(this@AlarmService, R.string.repeating_scheduled,
@@ -94,7 +94,7 @@ class AlarmService : AppCompatActivity() {
         // And cancel the alarm.
         val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        am.cancel(mAlarmSender)
+        am.cancel(mAlarmSender!!)
 
         // Tell the user about what we did.
         Toast.makeText(this@AlarmService, R.string.repeating_unscheduled,

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.app
 
 // Need the following import to get access to the app resources, since this
@@ -89,7 +91,7 @@ class SetWallpaperActivity : AppCompatActivity() {
         randomize.setOnClickListener {
             val mColor = floor(Math.random() * mColors.size).toInt()
             @Suppress("DEPRECATION")
-            wallpaperDrawable.setColorFilter(mColors[mColor], PorterDuff.Mode.MULTIPLY)
+            wallpaperDrawable!!.setColorFilter(mColors[mColor], PorterDuff.Mode.MULTIPLY)
             imageView.setImageDrawable(wallpaperDrawable)
             imageView.invalidate()
         }

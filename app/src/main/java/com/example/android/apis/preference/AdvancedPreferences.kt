@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "ReplaceNotNullAssertionWithElvisReturn")
 // TODO: replace with PreferenceFragmentCompat from androidx.preference:preference:1.1.0 or higher.
 
 package com.example.android.apis.preference
@@ -85,7 +85,7 @@ class AdvancedPreferences : PreferenceActivity(), OnSharedPreferenceChangeListen
 
         // Get a reference to the checkbox preference
         mCheckBoxPreference = preferenceScreen
-                .findPreference(KEY_ADVANCED_CHECKBOX_PREFERENCE) as CheckBoxPreference
+            .findPreference(KEY_ADVANCED_CHECKBOX_PREFERENCE) as CheckBoxPreference
     }
 
     /**
@@ -128,11 +128,11 @@ class AdvancedPreferences : PreferenceActivity(), OnSharedPreferenceChangeListen
      * @param sharedPreferences The [SharedPreferences] that received the change.
      * @param key The key of the preference that was changed, added, or removed.
      */
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         // Let's do something when my counter preference value changes
         if (key == KEY_MY_PREFERENCE) {
             Toast.makeText(this, "Thanks! You increased my count to "
-                    + sharedPreferences.getInt(key, 0), Toast.LENGTH_SHORT).show()
+                + sharedPreferences!!.getInt(key, 0), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -141,11 +141,11 @@ class AdvancedPreferences : PreferenceActivity(), OnSharedPreferenceChangeListen
          * Key used for the `MyPreference` preference, our override of `onSharedPreferenceChanged`
          * will toast a message reporting the new value when it changes.
          */
-        const val KEY_MY_PREFERENCE = "my_preference"
+        const val KEY_MY_PREFERENCE: String = "my_preference"
 
         /**
          * Key in our shared preferences for the `CheckBoxPreference` field `mCheckBoxPreference`
          */
-        const val KEY_ADVANCED_CHECKBOX_PREFERENCE = "advanced_checkbox_preference"
+        const val KEY_ADVANCED_CHECKBOX_PREFERENCE: String = "advanced_checkbox_preference"
     }
 }

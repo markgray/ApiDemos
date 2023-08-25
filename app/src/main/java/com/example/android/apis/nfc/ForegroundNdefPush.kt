@@ -75,7 +75,7 @@ class ForegroundNdefPush : AppCompatActivity() {
         mText = findViewById(R.id.text)
         if (mAdapter != null) {
             @Suppress("DEPRECATION")
-            mAdapter!!.setNdefPushMessage(mMessage, this)
+            // mAdapter!!.setNdefPushMessage(mMessage, this) TODO: setNdefPushMessage has been removed
             mText!!.text = "Tap another Android phone with NFC to push a URL"
         } else {
             mText!!.text = "This phone is not NFC enabled."

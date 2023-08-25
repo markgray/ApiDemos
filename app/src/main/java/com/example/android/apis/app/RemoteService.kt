@@ -989,7 +989,7 @@ class RemoteService : Service() {
                 mCurConnection = null
             }
             val conn: ServiceConnection = MyServiceConnection()
-            if (bindService(mBindIntent, conn, Context.BIND_AUTO_CREATE)) {
+            if (bindService(mBindIntent!!, conn, Context.BIND_AUTO_CREATE)) {
                 mCurConnection = conn
             }
         }
@@ -1013,7 +1013,7 @@ class RemoteService : Service() {
             }
             val conn: ServiceConnection = MyServiceConnection()
             val flags = Context.BIND_AUTO_CREATE or Context.BIND_NOT_FOREGROUND
-            if (bindService(mBindIntent, conn, flags)) {
+            if (bindService(mBindIntent!!, conn, flags)) {
                 mCurConnection = conn
             }
         }
@@ -1037,7 +1037,7 @@ class RemoteService : Service() {
             }
             val conn: ServiceConnection = MyServiceConnection()
             val flags = Context.BIND_AUTO_CREATE or Context.BIND_ABOVE_CLIENT
-            if (bindService(mBindIntent, conn, flags)) {
+            if (bindService(mBindIntent!!, conn, flags)) {
                 mCurConnection = conn
             }
         }
@@ -1061,7 +1061,7 @@ class RemoteService : Service() {
             }
             val conn: ServiceConnection = MyServiceConnection()
             val flags = Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_OOM_MANAGEMENT
-            if (bindService(mBindIntent, conn, flags)) {
+            if (bindService(mBindIntent!!, conn, flags)) {
                 mCurConnection = conn
             }
         }
@@ -1086,7 +1086,7 @@ class RemoteService : Service() {
             }
             val conn: ServiceConnection = MyServiceConnection(true)
             val flags = Context.BIND_AUTO_CREATE or Context.BIND_WAIVE_PRIORITY
-            if (bindService(mBindIntent, conn, flags)) {
+            if (bindService(mBindIntent!!, conn, flags)) {
                 mCurConnection = conn
             }
         }
@@ -1110,7 +1110,7 @@ class RemoteService : Service() {
             }
             val conn: ServiceConnection = MyServiceConnection()
             val flags = Context.BIND_AUTO_CREATE or Context.BIND_IMPORTANT
-            if (bindService(mBindIntent, conn, flags)) {
+            if (bindService(mBindIntent!!, conn, flags)) {
                 mCurConnection = conn
             }
         }
@@ -1136,7 +1136,7 @@ class RemoteService : Service() {
             val flags = (Context.BIND_AUTO_CREATE
                 or Context.BIND_ADJUST_WITH_ACTIVITY
                 or Context.BIND_WAIVE_PRIORITY)
-            if (bindService(mBindIntent, conn, flags)) {
+            if (bindService(mBindIntent!!, conn, flags)) {
                 mCurConnection = conn
             }
         }
