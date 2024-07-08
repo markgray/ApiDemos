@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -33,7 +33,6 @@ import com.example.android.apis.R
  * allowing you to hide them to remove them.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentMenu : FragmentActivity() {
     /**
      * [MenuFragment] instance for our app
@@ -195,6 +194,7 @@ class FragmentMenu : FragmentActivity() {
          */
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
+            @Suppress("DEPRECATION")
             setHasOptionsMenu(true)
         }
 
@@ -210,6 +210,7 @@ class FragmentMenu : FragmentActivity() {
          * @param menu The options menu in which you place your items.
          * @param inflater could be used to instantiate menu XML files into Menu objects.
          */
+        @Deprecated("Deprecated in Java")
         override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
             menu.add("Menu 1a").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             menu.add("Menu 1b").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
@@ -239,6 +240,7 @@ class FragmentMenu : FragmentActivity() {
          */
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
+            @Suppress("DEPRECATION")
             setHasOptionsMenu(true)
         }
 
@@ -253,6 +255,11 @@ class FragmentMenu : FragmentActivity() {
          * @param menu The options menu in which you place your items.
          * @param inflater could be used to instantiate menu XML files into Menu objects.
          */
+        @Deprecated("Deprecated in Java", ReplaceWith(
+            "menu.add(\"Menu 2\").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)",
+            "android.view.MenuItem"
+        )
+        )
         override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
             menu.add("Menu 2").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         }

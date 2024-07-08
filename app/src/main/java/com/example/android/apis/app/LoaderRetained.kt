@@ -16,11 +16,9 @@
 
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract.Contacts
 import android.text.TextUtils
@@ -30,7 +28,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ListView
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnCloseListener
@@ -47,7 +44,6 @@ import androidx.loader.content.Loader
  * `setRetainInstance(true)` in the `onActivityCreated` callback.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class LoaderRetained : AppCompatActivity() {
 
     /**
@@ -124,6 +120,7 @@ class LoaderRetained : AppCompatActivity() {
             setEmptyText("No phone numbers")
 
             // We have a menu item to show in action bar.
+            @Suppress("DEPRECATION")
             setHasOptionsMenu(true)
 
             // Create an empty adapter we will use to display the loaded data.
@@ -181,6 +178,7 @@ class LoaderRetained : AppCompatActivity() {
          * @param menu     The options menu in which you place your items.
          * @param inflater inflater you can use to inflate compiled xml files into `menu`
          */
+        @Deprecated("Deprecated in Java")
         override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
             // Place an action bar item for searching.
             val item = menu.add("Search")
@@ -302,7 +300,7 @@ class LoaderRetained : AppCompatActivity() {
                     + Contacts.HAS_PHONE_NUMBER + "=1) AND ("
                     + Contacts.DISPLAY_NAME + " != '' ))")
 
-            return CursorLoader(activity!!, baseUri,
+            return CursorLoader(requireActivity(), baseUri,
                     CONTACTS_SUMMARY_PROJECTION, select, null,
                     Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC")
         }

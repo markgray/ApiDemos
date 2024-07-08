@@ -18,7 +18,6 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.ContentProvider
 import android.content.ContentResolver
 import android.content.ContentUris
@@ -33,7 +32,6 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteQueryBuilder
 import android.net.Uri
 import android.os.AsyncTask
-import android.os.Build
 import android.os.Bundle
 import android.provider.BaseColumns
 import android.text.TextUtils
@@ -50,7 +48,6 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import com.example.android.apis.app.LoaderThrottle.SimpleProvider
-import java.util.HashMap
 
 /**
  * Demonstration of bottom to top implementation of a content provider holding
@@ -60,7 +57,6 @@ import java.util.HashMap
  * [SimpleProvider]
  */
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class LoaderThrottle : AppCompatActivity() {
 
     /**
@@ -100,7 +96,7 @@ class LoaderThrottle : AppCompatActivity() {
             /**
              * The table name offered by this provider
              */
-            const val TABLE_NAME = "main"
+            const val TABLE_NAME: String = "main"
 
             /**
              * The content:// style URL for this table:
@@ -696,7 +692,7 @@ class LoaderThrottle : AppCompatActivity() {
 
             // Create an empty adapter we will use to display the loaded data.
 
-            mAdapter = SimpleCursorAdapter(activity!!,
+            mAdapter = SimpleCursorAdapter(requireActivity(),
                     android.R.layout.simple_list_item_1, null,
                     arrayOf(MainTable.COLUMN_NAME_DATA),
                     intArrayOf(android.R.id.text1), 0)
@@ -724,6 +720,7 @@ class LoaderThrottle : AppCompatActivity() {
          * @param inflater an inflater you can use to instantiate menu XML files into Menu objects.
          * (we do not use it, since we build the menu using code).
          */
+        @Deprecated("Deprecated in Java")
         override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
             menu.add(Menu.NONE, POPULATE_ID, 0, "Populate")
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
@@ -758,10 +755,11 @@ class LoaderThrottle : AppCompatActivity() {
          * @return boolean Return *false* to allow normal menu processing to
          * proceed, *true* to consume it here.
          */
+        @Deprecated("Deprecated in Java")
         @SuppressLint("StaticFieldLeak")
         override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-            val cr = activity!!.contentResolver
+            val cr = requireActivity().contentResolver
 
             when (item.itemId) {
                 POPULATE_ID -> {
@@ -880,7 +878,7 @@ class LoaderThrottle : AppCompatActivity() {
         override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
 
             val cl = CursorLoader(
-                    activity!!,
+                    requireActivity(),
                     MainTable.CONTENT_URI,
                     PROJECTION,
                     null,
@@ -955,7 +953,7 @@ class LoaderThrottle : AppCompatActivity() {
         /**
          * The authority we use to get to our sample provider.
          */
-        const val AUTHORITY = "com.example.android.apis.app.LoaderThrottle"
+        const val AUTHORITY: String = "com.example.android.apis.app.LoaderThrottle"
     }
 }
 

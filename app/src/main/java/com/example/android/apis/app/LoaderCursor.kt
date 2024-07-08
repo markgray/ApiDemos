@@ -16,12 +16,10 @@
 
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract.Contacts
 import android.text.TextUtils
@@ -50,7 +48,6 @@ import com.example.android.apis.app.LoaderCursor.CursorLoaderListFragment
  * [ListFragment]. Includes the use of a [SearchView] which might come in handy for MarkovChain
  */
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class LoaderCursor : AppCompatActivity() {
 
     /**
@@ -130,6 +127,7 @@ class LoaderCursor : AppCompatActivity() {
             setEmptyText("No phone numbers")
 
             // We have a menu item to show in action bar.
+            @Suppress("DEPRECATION")
             setHasOptionsMenu(true)
 
             // Create an empty adapter we will use to display the loaded data.
@@ -202,6 +200,7 @@ class LoaderCursor : AppCompatActivity() {
          *
          * @see .onOptionsItemSelected
          */
+        @Deprecated("Deprecated in Java")
         override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
             // Place an action bar item for searching.
             val item = menu.add("Search")

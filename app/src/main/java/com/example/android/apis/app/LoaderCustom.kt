@@ -70,7 +70,6 @@ import java.util.Comparator
  * all the installed apps.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class LoaderCustom : AppCompatActivity() {
 
     /**
@@ -435,6 +434,7 @@ class LoaderCustom : AppCompatActivity() {
                     or PackageManager.MATCH_DISABLED_COMPONENTS
             )
 
+            @Suppress("KotlinConstantConditions")
             if (apps == null) {
                 apps = ArrayList()
             }
@@ -741,6 +741,7 @@ class LoaderCustom : AppCompatActivity() {
             setEmptyText("No applications")
 
             // We have a menu item to show in action bar.
+            @Suppress("DEPRECATION")
             setHasOptionsMenu(true)
 
             // Create an empty adapter we will use to display the loaded data.
@@ -798,6 +799,7 @@ class LoaderCustom : AppCompatActivity() {
          * @param menu     The options menu in which you place your items.
          * @param inflater [MenuInflater] to use to inflate xml layout file (unused)
          */
+        @Deprecated("Deprecated in Java")
         override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
             // Place an action bar item for searching.
             val item = menu.add("Search")
