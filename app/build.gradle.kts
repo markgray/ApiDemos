@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "com.example.android.apis"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35
         multiDexEnabled = true
     }
     buildTypes {
