@@ -40,14 +40,14 @@ class List15 : AppCompatActivity() {
     private val mStrings = Cheeses.sCheeseStrings
 
     /**
-     * The [ListView] in our layout file with ID [R.id.list].
+     * The [ListView] in our layout file with ID `R.id.list`.
      */
     private lateinit var list: ListView
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we initialize our [ListView] field [list] by finding the view with ID
-     * [R.id.list]. We set the choice mode of [list] to `CHOICE_MODE_MULTIPLE_MODAL`, and set its
+     * `R.id.list`. We set the choice mode of [list] to `CHOICE_MODE_MULTIPLE_MODAL`, and set its
      * `MultiChoiceModeListener` to a new instance of [ModeCallback]. Finally we set the list
      * adapter of [list] to a new instance of [ArrayAdapter] constructed to display our array
      * [mStrings] using the layout android.R.layout.simple_list_item_checked.

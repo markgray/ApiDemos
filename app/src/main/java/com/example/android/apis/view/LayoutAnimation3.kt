@@ -30,7 +30,7 @@ class LayoutAnimation3 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.layout_animation_3, and
-     * initialize our [ListView] variable `val list` by finding the view with ID [R.id.list].
+     * initialize our [ListView] variable `val list` by finding the view with ID `R.id.list`.
      *
      * Then we set adapter of `list`  to a new instance of [ArrayAdapter] which is constructed
      * using our array `String[] mStrings` as the data, and android.R.layout.simple_list_item_1

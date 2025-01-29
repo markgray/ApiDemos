@@ -50,11 +50,11 @@ class List12 : AppCompatActivity(), View.OnClickListener, View.OnKeyListener {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.list_12, and initialize
-     * our [ListView] variable `val list` by finding the view with ID [R.id.list]. Next we
+     * our [ListView] variable `val list` by finding the view with ID `R.id.list`. Next we
      * initialize our `ArrayAdapter<String>` field [mAdapter] with an an [ArrayAdapter] constructed
      * to display our list [mStrings] using the layout file android.R.layout.simple_list_item_1
      * to display each item, and we set the adapter of `list` to it. We initialize our field [mUserText]
-     * by finding the view with ID [R.id.userText], and then set both its [View.OnClickListener] and
+     * by finding the view with ID `R.id.userText`, and then set both its [View.OnClickListener] and
      * [View.OnKeyListener] to "this".
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.

@@ -45,8 +45,8 @@ class List17 : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to our layout file [R.layout.list_17] and initialize
-     * our [ListView] field [list] by finding the view with ID [R.id.list]. Then we set the adapter
+     * `onCreate`, then we set our content view to our layout file `R.layout.list_17` and initialize
+     * our [ListView] field [list] by finding the view with ID `R.id.list`. Then we set the adapter
      * of [list] to a new instance of [ArrayAdapter] constructed to display our array [mStrings]
      * using the layout android.R.layout.simple_list_item_activated_1. We enable the text filter for
      * our [ListView] (needs keyboard to use), set its choice mode to CHOICE_MODE_SINGLE, and set

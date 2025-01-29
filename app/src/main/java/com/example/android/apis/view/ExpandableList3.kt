@@ -31,7 +31,7 @@ import java.util.HashMap
 class ExpandableList3 : AppCompatActivity() {
 
     /**
-     * The [ExpandableListView] in our layout file with ID [R.id.list]
+     * The [ExpandableListView] in our layout file with ID `R.id.list`
      */
     private lateinit var expandableList: ExpandableListView
 

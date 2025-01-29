@@ -137,7 +137,7 @@ class List13 : AppCompatActivity(), AbsListView.OnScrollListener {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file R.layout.list_13, and initialize
-     * our [ListView] variable `val list` by finding the view with ID [R.id.list]. We initialize
+     * our [ListView] variable `val list` by finding the view with ID `R.id.list`. We initialize
      * our field [mStatus] by finding the view with ID R.id.status and set its text to the string
      * "Idle". We set the list adapter of `list` to a new instance of [SlowAdapter], and we set its
      * `OnScrollListener` to "this".

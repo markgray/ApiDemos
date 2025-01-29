@@ -37,8 +37,8 @@ import com.example.android.apis.R
 class List6 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`. Then we set our content view to our layout file [R.layout.list_6], and initialize
-     * our [ListView] variable `val list` by finding the view with ID [R.id.list]. Next we set the
+     * `onCreate`. Then we set our content view to our layout file `R.layout.list_6`, and initialize
+     * our [ListView] variable `val list` by finding the view with ID `R.id.list`. Next we set the
      * list adapter of `list` to a new instance of [SpeechListAdapter], and set its [OnItemClickListener]
      * to a lambda which calls our method [onListItemClick] (thereby replicating the behavior when
      * this was a `ListActivity`).

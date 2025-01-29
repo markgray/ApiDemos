@@ -36,14 +36,14 @@ import java.util.HashMap
  */
 open class ApiDemos : AppCompatActivity() {
     /**
-     * The [ListView] in our layout file with ID [R.id.list]
+     * The [ListView] in our layout file with ID `R.id.list`
      */
     lateinit var listView: ListView
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to our layout file [R.layout.api_demos] and initialize
-     * our [ListView] field [listView] by finding the view with ID [R.id.list]. Next we initialize
+     * `onCreate`, then we set our content view to our layout file `R.layout.api_demos` and initialize
+     * our [ListView] field [listView] by finding the view with ID `R.id.list`. Next we initialize
      * our variable `Intent intent` by fetching the `Intent` that launched our activity, and
      * initialize our variable `String path` by retrieving any string that was stored as an extra in
      * `intent` under the key "com.example.android.apis.Path". If `path` is null, we set it to the

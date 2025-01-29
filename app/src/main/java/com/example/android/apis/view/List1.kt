@@ -36,7 +36,7 @@ class List1 : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to our layout file [R.layout.list_1], and set the
+     * `onCreate`, then we set our content view to our layout file `R.layout.list_1`, and set the
      * adapter of `list` to an instance of [ArrayAdapter] created to display our `String[]` field
      * [mStrings] using the layout android.R.layout.simple_list_item_1. Finally we enable the text
      * filter of our ListView (typing when the view has focus will filter the children to match the

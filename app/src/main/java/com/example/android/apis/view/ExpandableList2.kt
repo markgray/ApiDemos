@@ -40,7 +40,7 @@ class ExpandableList2 : AppCompatActivity() {
     private var mQueryHandler: QueryHandler? = null
 
     /**
-     * The [ExpandableListView] in our layout file with ID [R.id.list]
+     * The [ExpandableListView] in our layout file with ID `R.id.list`
      */
     private lateinit var expandableList: ExpandableListView
 

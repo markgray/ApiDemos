@@ -33,8 +33,8 @@ import com.example.android.apis.R
 class LayoutAnimation2 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to our layout file [R.layout.layout_animation_2] and
-     * initialize our [ListView] variable `val list` by finding the view with ID [R.id.list].
+     * `onCreate`, then we set our content view to our layout file `R.layout.layout_animation_2` and
+     * initialize our [ListView] variable `val list` by finding the view with ID `R.id.list`.
      *
      * Next we set the list adapter of `list` to a new instance of [ArrayAdapter] which is
      * constructed using our `String[]` array [mStrings] as the data, and the system layout

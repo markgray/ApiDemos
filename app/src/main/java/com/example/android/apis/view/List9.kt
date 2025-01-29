@@ -95,8 +95,8 @@ class List9 : AppCompatActivity(), AbsListView.OnScrollListener {
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our contend view to our layout file [R.layout.list_9] and initialize
-     * our [ListView] variable `val list` by finding the view with ID [R.id.list] in it. Next we
+     * `onCreate`, then we set our contend view to our layout file `R.layout.list_9` and initialize
+     * our [ListView] variable `val list` by finding the view with ID `R.id.list` in it. Next we
      * initialize [WindowManager] field [mWindowManager] with a handle to the system level service
      * WINDOW_SERVICE. We set the adapter of our `ListView` to a new instance of [ArrayAdapter]
      * constructed to display our [String] array field [mStrings] using the system layout file

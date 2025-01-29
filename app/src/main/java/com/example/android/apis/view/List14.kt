@@ -48,8 +48,8 @@ import com.example.android.apis.view.List14.EfficientAdapter
 class List14 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to our layout file [R.layout.list_14] and initialize
-     * our [ListView] variable `val list` by finding the view with ID [R.id.list]. Finally we set the
+     * `onCreate`, then we set our content view to our layout file `R.layout.list_14` and initialize
+     * our [ListView] variable `val list` by finding the view with ID `R.id.list`. Finally we set the
      * list adapter of `list` to a new instance of [EfficientAdapter].
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.

@@ -30,8 +30,8 @@ import com.example.android.apis.R
 class List10 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to our layout file [R.layout.list_10], and initialize
-     * our [ListView] variable `val list` by finding the view with ID [R.id.list]. Next We set the
+     * `onCreate`, then we set our content view to our layout file `R.layout.list_10`, and initialize
+     * our [ListView] variable `val list` by finding the view with ID `R.id.list`. Next We set the
      * adapter of `list` to a new instance of [ArrayAdapter] constructed to display our [String] array
      * [GENRES] using the system layout file android.R.layout.simple_list_item_single_choice for each
      * item in the list. Finally we disable focus for the items of `list`, and set its choice mode to

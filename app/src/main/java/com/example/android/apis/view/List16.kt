@@ -41,8 +41,8 @@ class List16 : AppCompatActivity() {
     private lateinit var list: ListView
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
-     * `onCreate`, then we set our content view to our layout file [R.layout.list_16] and initialize
-     * our [ListView] field [list] by finding the view with ID [R.id.list]. We set the choice mode
+     * `onCreate`, then we set our content view to our layout file `R.layout.list_16` and initialize
+     * our [ListView] field [list] by finding the view with ID `R.id.list`. We set the choice mode
      * of [list] to `CHOICE_MODE_MULTIPLE_MODAL`, and set its `MultiChoiceModeListener` to a new
      * instance of [ModeCallback]. Finally we set the list adapter of [list] to a new instance of
      * [ArrayAdapter] constructed to display the array [Cheeses.sCheeseStrings] using the layout
