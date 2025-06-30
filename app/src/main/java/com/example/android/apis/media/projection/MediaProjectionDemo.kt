@@ -314,7 +314,7 @@ class MediaProjectionDemo : AppCompatActivity() {
                 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
                 mSurface,
                 null /*Callbacks*/,
-                null /*Handler*/)
+                null /*Handler*/)!!
     }
 
     /**
