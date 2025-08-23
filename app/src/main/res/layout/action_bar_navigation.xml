@@ -15,10 +15,15 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:padding="4dip"
     android:gravity="center_horizontal"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="120dp">
+    </Space>
     <TextView
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:layout_weight="0"
@@ -35,14 +40,16 @@
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:onClick="onNewActivity"
-        android:text="@string/btn_newactivity">
+        android:text="@string/btn_newactivity"
+        tools:ignore="UsingOnClickInXml">
         <requestFocus />
     </Button>
 
     <Button android:id="@+id/newdoc"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:onClick="onNewDocument"
-        android:text="@string/btn_newdoc">
+        android:text="@string/btn_newdoc"
+        tools:ignore="UsingOnClickInXml">
         <requestFocus />
     </Button>
 

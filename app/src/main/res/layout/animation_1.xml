@@ -20,6 +20,11 @@
     android:orientation="vertical"
     android:padding="10dip">
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="120dp">
+    </Space>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,7 +39,7 @@
         android:focusable="true"
         android:password="true"
         android:singleLine="true"
-        tools:ignore="Deprecated,TextFields" />
+        tools:ignore="Autofill,Deprecated,LabelFor,TextFields" />
 
     <Button
         android:id="@+id/login"

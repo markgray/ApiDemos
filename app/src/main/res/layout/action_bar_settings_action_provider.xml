@@ -23,7 +23,7 @@
     android:addStatesFromChildren="true"
     android:background="?android:attr/actionBarItemBackground"
     style="?android:attr/actionButtonStyle"
-    tools:targetApi="ice_cream_sandwich">
+    >
 
     <ImageButton android:id="@+id/button"
         android:background="@drawable/ic_launcher_settings"

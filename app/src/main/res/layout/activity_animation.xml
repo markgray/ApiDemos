@@ -23,7 +23,10 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="4dip">
-
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="120dp">
+    </Space>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

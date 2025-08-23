@@ -18,8 +18,7 @@ package com.example.android.apis.accessibility
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
-import android.annotation.TargetApi
-import android.app.Service
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -29,6 +28,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.os.VibrationAttributes
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
@@ -51,7 +51,6 @@ import com.example.android.apis.R
  *  1. Providing dynamic, context-dependent feedback  feedback type changes depending
  *  on the ringer state.
  */
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class ClockBackService : AccessibilityService() {
 
     // Sound pool related member fields.
@@ -130,16 +129,12 @@ class ClockBackService : AccessibilityService() {
          *
          * @param message A `Message` object
          */
+        @SuppressLint("NewApi")
         override fun handleMessage(message: Message) {
             when (message.what) {
                 MESSAGE_SPEAK -> {
                     val utterance = message.obj as String
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        mTts!!.speak(utterance, QUEUING_MODE_INTERRUPT, null, null)
-                    } else {
-                        @Suppress("DEPRECATION")
-                        mTts!!.speak(utterance, QUEUING_MODE_INTERRUPT, null)
-                    }
+                    mTts!!.speak(utterance, QUEUING_MODE_INTERRUPT, null, null)
                     return
                 }
                 MESSAGE_STOP_SPEAK -> {
@@ -177,10 +172,12 @@ class ClockBackService : AccessibilityService() {
                     val pattern = sVibrationPatterns.get(key)
                     if (pattern != null) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            mVibrator!!.vibrate(
-                                VibrationEffect.createWaveform(pattern, -1),
-                                null
-                            )
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                mVibrator!!.vibrate(
+                                    VibrationEffect.createWaveform(pattern, -1),
+                                    VibrationAttributes.Builder().build()
+                                )
+                            }
                         } else {
                             @Suppress("DEPRECATION")
                             mVibrator!!.vibrate(pattern, -1)
@@ -298,16 +295,16 @@ class ClockBackService : AccessibilityService() {
 
         // Get the vibrator service.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val vibratorManager = this.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            val vibratorManager = this.getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager
             mVibrator = vibratorManager.defaultVibrator
         } else {
             @Suppress("DEPRECATION")
-            mVibrator = getSystemService(Service.VIBRATOR_SERVICE) as Vibrator
+            mVibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
         }
 
 
         // Get the AudioManager and configure according the current ring mode.
-        mAudioManager = getSystemService(Service.AUDIO_SERVICE) as AudioManager
+        mAudioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         // In Froyo the broadcast receiver for the ringer mode is called back with the
         // current state upon registering but in Eclair this is not done so we poll here.
         val ringerMode = mAudioManager!!.ringerMode
@@ -620,12 +617,7 @@ class ClockBackService : AccessibilityService() {
             }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mTts!!.playEarcon(earconName, QUEUING_MODE_INTERRUPT, null, null)
-        } else {
-            @Suppress("DEPRECATION")
-            mTts!!.playEarcon(earconName, QUEUING_MODE_INTERRUPT, null)
-        }
+        mTts!!.playEarcon(earconName, QUEUING_MODE_INTERRUPT, null, null)
     }
 
     companion object {

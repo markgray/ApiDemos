@@ -13,6 +13,7 @@
      limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -37,28 +38,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onAddTab"
-                android:text="@string/btn_add_tab" />
+                android:text="@string/btn_add_tab"
+                tools:ignore="UsingOnClickInXml" />
 
             <Button
                 android:id="@+id/btn_remove_tab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onRemoveTab"
-                android:text="@string/btn_remove_tab" />
+                android:text="@string/btn_remove_tab"
+                tools:ignore="UsingOnClickInXml" />
 
             <Button
                 android:id="@+id/btn_toggle_tabs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onToggleTabs"
-                android:text="@string/btn_toggle_tabs" />
+                android:text="@string/btn_toggle_tabs"
+                tools:ignore="UsingOnClickInXml" />
 
             <Button
                 android:id="@+id/btn_remove_all_tabs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onRemoveAllTabs"
-                android:text="@string/btn_remove_all_tabs" />
+                android:text="@string/btn_remove_all_tabs"
+                tools:ignore="UsingOnClickInXml" />
         </LinearLayout>
     </ScrollView>
 

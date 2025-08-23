@@ -14,6 +14,7 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -24,7 +25,7 @@
         android:id="@+id/username_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="left"
+        android:gravity="start"
         android:text="@string/alert_dialog_username"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -35,13 +36,14 @@
         android:inputType="text"
         android:gravity="fill_horizontal"
         android:scrollHorizontally="true"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        tools:ignore="Autofill,LabelFor" />
 
     <TextView
         android:id="@+id/password_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="left"
+        android:gravity="start"
         android:text="@string/alert_dialog_password"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -52,6 +54,7 @@
         android:gravity="fill_horizontal"
         android:inputType="textPassword"
         android:scrollHorizontally="true"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        tools:ignore="Autofill,LabelFor" />
 
 </LinearLayout>

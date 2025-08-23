@@ -18,6 +18,11 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="120dp">
+    </Space>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,6 +35,7 @@
         android:layout_height="32dip"
         android:layout_marginTop="50dip"
         android:layout_gravity="center"
+        android:importantForAccessibility="no"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true" />
 
