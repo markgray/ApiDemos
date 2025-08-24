@@ -16,17 +16,14 @@
 package com.example.android.apis.hardware
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.hardware.ConsumerIrManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 import com.example.android.apis.R
@@ -34,7 +31,7 @@ import com.example.android.apis.R
 /**
  * App that transmits an IR code
  *
- * This demonstrates the [android.hardware.ConsumerIrManager] class.
+ * This demonstrates the [ConsumerIrManager] class.
  *
  * Demo Hardware / Consumer IR
  *
@@ -43,7 +40,6 @@ import com.example.android.apis.R
  *  * res/layout/consumer_ir.xml Defines contents of the screen
  */
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.KITKAT)
 class ConsumerIr : AppCompatActivity() {
     /**
      * Used to display the results of interacting with the [ConsumerIrManager]
@@ -75,7 +71,7 @@ class ConsumerIr : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // Get a reference to the ConsumerIrManager
-        mCIR = getSystemService(Context.CONSUMER_IR_SERVICE) as ConsumerIrManager
+        mCIR = getSystemService(CONSUMER_IR_SERVICE) as ConsumerIrManager?
 
         // See /res/layout/consumer_ir.xml for this
         // view layout definition, which is being set here as
@@ -92,8 +88,8 @@ class ConsumerIr : AppCompatActivity() {
      * [View.OnClickListener] for the [Button] with id R.id.send_button, it transmits an infrared
      * pattern if our device has an infrared emitter.
      */
-    var mSendClickListener = View.OnClickListener {
-        if (!mCIR!!.hasIrEmitter()) {
+    var mSendClickListener: View.OnClickListener = View.OnClickListener {
+        if (mCIR == null ||!mCIR!!.hasIrEmitter()) {
             Log.e(TAG, "No IR Emitter found\n")
             return@OnClickListener
         }
@@ -115,10 +111,10 @@ class ConsumerIr : AppCompatActivity() {
      * [ConsumerIrManager] for the infrared transmitter's supported carrier frequencies and
      * displays them in [TextView] field [mFreqsText] if the query is successful.
      */
-    @SuppressLint("SetTextI18n")
-    var mGetFreqsClickListener = View.OnClickListener {
+    @SuppressLint("SetTextI18n", "DefaultLocale")
+    var mGetFreqsClickListener: View.OnClickListener = View.OnClickListener {
         val b = StringBuilder()
-        if (!mCIR!!.hasIrEmitter()) {
+        if (mCIR == null || !mCIR!!.hasIrEmitter()) {
             mFreqsText!!.text = "No IR Emitter found!"
             Log.e(TAG, "No IR Emitter found!\n")
             return@OnClickListener

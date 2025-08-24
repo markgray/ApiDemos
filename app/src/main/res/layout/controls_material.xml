@@ -107,7 +107,8 @@
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/controls_switch" />
+                android:text="@string/controls_switch"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
             <CheckBox
                 android:id="@+id/check1"

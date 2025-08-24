@@ -24,6 +24,10 @@
     android:orientation="vertical"
     tools:ignore="TextFields">
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="120dp">
+    </Space>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

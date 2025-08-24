@@ -28,7 +28,6 @@
         android:id="@+id/left_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:text="@string/custom_title_left"
         android:layout_alignParentStart="true" />
 
@@ -36,7 +35,6 @@
         android:id="@+id/right_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:text="@string/custom_title_right"
         android:layout_alignParentEnd="true" />
 
