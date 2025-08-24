@@ -19,6 +19,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="120dp">
+    </Space>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,14 +38,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="3dip"
+            android:layout_marginEnd="3dip"
             android:layout_gravity="center_vertical"
             android:text="@string/baseline_3_label" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="3dip"
+            android:layout_marginEnd="3dip"
             android:layout_gravity="center_vertical"
             android:text="@string/baseline_3_button" />
 
