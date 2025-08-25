@@ -67,6 +67,8 @@ class InternalSelectionFocus : AppCompatActivity() {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
         )
+        // TODO: Use dp here
+        layout.setPadding(0, 240, 0, 120)
         val params = LinearLayout.LayoutParams(
                 0,
                 ViewGroup.LayoutParams.MATCH_PARENT,

@@ -17,13 +17,11 @@
      See corresponding Java code com.android.sdk.app.DialogActivity.java. -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="4dp"
-    tools:targetApi="honeycomb">
+    android:padding="4dp">
 
     <!-- Message to show to use. -->
     <TextView
@@ -41,8 +39,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="4dp"
-        android:paddingTop="4dp"/>
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp" />
 
     <!-- Alert dialog style buttons along the bottom. -->
     <LinearLayout

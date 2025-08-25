@@ -1288,7 +1288,7 @@ Content
         .layout.external_storage_item.xml
             Shows how to use the external storage directory api for both public and 
             app private directories. Note: as of Android Q the public storage is no
-            longer usable without android:requestLegacyExternalStorage="true", go it
+            longer usable without android:requestLegacyExternalStorage="true", so it
             is best to switch public storage use to the Content/Storage/Documents aka
             DocumentsContract api above.
 
@@ -1414,6 +1414,7 @@ Graphics
   Density
     Graphics/Density                       all
         .graphics.DensityActivity
+        .layout.density_image_views.xml
             This activity demonstrates various ways density can cause the scaling of bitmaps
             and drawables. Includes sample code for different ways to get drawables onto the
             different dpi screens.
@@ -1779,17 +1780,20 @@ Media
 NFC
     NFC/ForegroundDispatch                 all -- v10+ or crash
         .nfc.ForegroundDispatch
+        .layout.foreground_dispatch.xml
             An example of how to use the NFC foreground dispatch APIs. This will intercept
             any MIME data based NDEF dispatch as well as all dispatched for NfcF tags.
 
     ******* Android Beam has been removed as of Q *******
     NFC/ForegroundNdefPush                 all -- v16+ or crash
         .nfc.ForegroundNdefPush
+        .layout.foreground_dispatch.xml
             An example of how to use the NFC foreground NDEF push APIs to push an url to
             another android device.
 
     NFC/TechFilter                         all
         .nfc.TechFilter
+        .layout.foreground_dispatch.xml
             No idea, but nfc related somehow. Having looked at it more closely, it does not
             look like it does anything at all
 
@@ -2068,18 +2072,21 @@ Views
 
     Views/Date Widgets/2. Inline           all
         .view.DateWidgets2
+        .layout.date_widgets_example_2.xml
             Shows the use of an inline TimePicker. Neat on M lame on J
 
   Drag and Drop
     Views/Drag and Drop                    v11
         .view.DragAndDropDemo
         .view.DraggableDot
+        .layout.drag_layout.xml
             Shows how to implement draggable views.
 
 
   Expandable Lists
     Views/Expandable Lists/1. Custom Adapter  -- all -- v17+ or crash
         .view.ExpandableList1
+        .layout.expandable_list1.xml
             Demonstrates expandable lists using a custom ExpandableListAdapter from
             BaseExpandableListAdapter. The custom BaseExpandableListAdapter groups
             different child lists under group names: "People Names", "Dog Names", 
@@ -3055,7 +3062,7 @@ Views
   Text
     Views/Text/EditText
         .view.EditTextDemo
-        .layout.edit_text_demo
+        .layout.edit_text_demo.xml
             Demonstrates the android.widget.EditText widget. android:imeOptions="actionSearch"
             only produces an action key in landscape orientation for some reason. (No :id?)
 

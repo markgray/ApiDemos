@@ -25,6 +25,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="120dp">
+        </Space>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,7 +41,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="flagNoFullscreen"
-            tools:ignore="TextFields" />
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor,TextFields" />
 
         <TextView
             android:layout_width="match_parent"
@@ -49,7 +55,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionSearch"
-            tools:ignore="TextFields" />
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor,TextFields" />
 
     </LinearLayout>
 

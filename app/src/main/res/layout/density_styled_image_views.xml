@@ -19,8 +19,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <ImageView style="@style/ImageView120dpi" />
-    <ImageView style="@style/ImageView160dpi" />
-    <ImageView style="@style/ImageView240dpi" />
+    <ImageView style="@style/ImageView120dpi"
+        android:importantForAccessibility="no" />
+    <ImageView style="@style/ImageView160dpi"
+        android:importantForAccessibility="no" />
+    <ImageView style="@style/ImageView240dpi"
+        android:importantForAccessibility="no" />
 
 </LinearLayout>

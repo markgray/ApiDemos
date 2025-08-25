@@ -1,23 +1,19 @@
 package com.example.android.apis
 
 import android.Manifest
-import android.annotation.TargetApi
-import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.google.android.material.snackbar.Snackbar
 
 /**
  * This `Activity` just asks the user for permissions when the app is first run.
  */
-@TargetApi(Build.VERSION_CODES.KITKAT)
 class AskForPermissions : AppCompatActivity() {
     /**
      * List of permissions requested in AndroidManifest.xml
      */
-    var permissions = arrayOf(
+    var permissions: Array<String> = arrayOf(
         Manifest.permission.READ_CONTACTS,
         Manifest.permission.WRITE_CONTACTS,
         Manifest.permission.VIBRATE,
@@ -51,13 +47,11 @@ class AskForPermissions : AppCompatActivity() {
 
         val askUser = findViewById<Button>(R.id.ask_for_permission)
         askUser?.setOnClickListener { v ->
-            Snackbar.make(v, R.string.permission_rationale,
-                Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.ok) {
-                    ActivityCompat.requestPermissions(
-                        this@AskForPermissions,
-                        permissions, 1)
-                }.show()
+            ActivityCompat.requestPermissions(
+                this@AskForPermissions,
+                permissions,
+                1
+            )
         }
 
     }

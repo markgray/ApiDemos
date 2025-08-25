@@ -18,19 +18,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <TimePicker
-        android:id="@+id/timePicker"
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="120dp">
+    </Space>
 
-    <TextView
-        android:id="@+id/dateDisplay"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="4dip"
-        android:text="@string/date_widgets_example_dateDisplay_text"
-        tools:ignore="RtlSymmetry" />
+        android:orientation="horizontal">
 
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/dateDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="4dip"
+            android:text="@string/date_widgets_example_dateDisplay_text"
+            tools:ignore="RtlSymmetry" />
+
+    </LinearLayout>
 </LinearLayout>

@@ -146,10 +146,10 @@ class ExpandableList1 : AppCompatActivity() {
          * (String[]) for groups[ i ].
          */
         private val groups = arrayOf(
-                "People Names",
-                "Dog Names",
-                "Cat Names",
-                "Fish Names"
+                "    People Names",
+                "    Dog Names",
+                "    Cat Names",
+                "    Fish Names"
         )
 
         /**

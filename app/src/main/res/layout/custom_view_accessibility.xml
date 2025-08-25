@@ -29,6 +29,7 @@
         android:text="@string/accessibility_custom_view_instructions" />
 
     <view
+        android:focusable="true"
         class="com.example.android.apis.accessibility.CustomViewAccessibilityActivity$AccessibleCompoundButtonInheritance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,6 +37,7 @@
         android:padding="20dip" />
 
     <view
+        android:focusable="true"
         class="com.example.android.apis.accessibility.CustomViewAccessibilityActivity$AccessibleCompoundButtonComposition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
