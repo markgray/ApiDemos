@@ -23,6 +23,11 @@
     android:orientation="vertical"
     android:padding="4dip">
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="120dp">
+    </Space>
+
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
@@ -48,7 +53,8 @@
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:label="@string/fragment_arguments_embedded" />
+            android:label="@string/fragment_arguments_embedded"
+            tools:ignore="FragmentTagUsage" />
 
         <FrameLayout
             android:id="@+id/created"
@@ -63,6 +69,7 @@
         class="com.example.android.apis.app.FragmentArguments$MyFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:label="@string/fragment_arguments_embedded_land" />
+        android:label="@string/fragment_arguments_embedded_land"
+        tools:ignore="FragmentTagUsage" />
 
 </LinearLayout>

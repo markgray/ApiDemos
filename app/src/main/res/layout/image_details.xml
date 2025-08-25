@@ -5,8 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:ignore="HardcodedText,ContentDescription"
-    tools:targetApi="lollipop">
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
+    tools:ignore="HardcodedText,ContentDescription">
 
     <ImageView
         android:id="@+id/titleImage"
@@ -15,7 +17,8 @@
         android:layout_weight="1"
         android:onClick="clicked"
         android:scaleType="centerCrop"
-        android:transitionName="hero" />
+        android:transitionName="hero"
+        tools:ignore="UsingOnClickInXml" />
 
     <LinearLayout
         android:layout_width="match_parent"

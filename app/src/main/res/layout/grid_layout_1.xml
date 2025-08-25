@@ -24,22 +24,25 @@
     android:layout_height="wrap_content"
     android:background="@drawable/blue"
     android:columnCount="4"
-    android:padding="10dip"
-    tools:ignore="TextFields"
-    tools:targetApi="ice_cream_sandwich">
+    android:paddingHorizontal="10dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
+    tools:ignore="TextFields">
 
     <TextView android:text="@string/grid_layout_1_instructions" />
 
     <EditText
         android:layout_column="0"
         android:layout_columnSpan="4"
-        android:layout_gravity="fill_horizontal" />
+        android:layout_gravity="fill_horizontal"
+        android:importantForAutofill="no"
+        tools:ignore="LabelFor" />
 
     <Button
         android:layout_column="2"
         android:text="@string/grid_layout_1_cancel" />
 
     <Button
-        android:layout_marginLeft="10dip"
+        android:layout_marginStart="10dip"
         android:text="@string/grid_layout_1_ok" />
 </GridLayout>

@@ -7,8 +7,10 @@
     android:clipChildren="true"
     android:columnCount="2"
     android:rowCount="4"
-    tools:ignore="ContentDescription"
-    tools:targetApi="lollipop">
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
+    tools:ignore="ContentDescription">
 
     <ImageView
         android:id="@+id/ducky"
@@ -19,7 +21,8 @@
         android:onClick="clicked"
         android:scaleType="centerCrop"
         android:src="@drawable/ducky"
-        android:transitionName="ducky" />
+        android:transitionName="ducky"
+        tools:ignore="UsingOnClickInXml" />
 
     <ImageView
         android:id="@+id/woot"
@@ -30,7 +33,8 @@
         android:onClick="clicked"
         android:scaleType="centerCrop"
         android:src="@drawable/woot"
-        android:transitionName="woot" />
+        android:transitionName="woot"
+        tools:ignore="UsingOnClickInXml" />
 
     <ImageView
         android:id="@+id/ball"
@@ -41,7 +45,8 @@
         android:onClick="clicked"
         android:scaleType="centerCrop"
         android:src="@drawable/ball"
-        android:transitionName="ball" />
+        android:transitionName="ball"
+        tools:ignore="UsingOnClickInXml" />
 
     <ImageView
         android:id="@+id/block"
@@ -52,7 +57,8 @@
         android:onClick="clicked"
         android:scaleType="centerCrop"
         android:src="@drawable/block"
-        android:transitionName="block" />
+        android:transitionName="block"
+        tools:ignore="UsingOnClickInXml" />
 
     <ImageView
         android:id="@+id/jellies"
@@ -63,7 +69,8 @@
         android:onClick="clicked"
         android:scaleType="centerCrop"
         android:src="@drawable/jellies"
-        android:transitionName="jellies" />
+        android:transitionName="jellies"
+        tools:ignore="UsingOnClickInXml" />
 
     <ImageView
         android:id="@+id/mug"
@@ -74,7 +81,8 @@
         android:onClick="clicked"
         android:scaleType="centerCrop"
         android:src="@drawable/mug"
-        android:transitionName="mug" />
+        android:transitionName="mug"
+        tools:ignore="UsingOnClickInXml" />
 
     <ImageView
         android:id="@+id/pencil"
@@ -85,7 +93,8 @@
         android:onClick="clicked"
         android:scaleType="centerCrop"
         android:src="@drawable/pencil"
-        android:transitionName="pencil" />
+        android:transitionName="pencil"
+        tools:ignore="UsingOnClickInXml" />
 
     <ImageView
         android:id="@+id/scissors"
@@ -96,5 +105,6 @@
         android:onClick="clicked"
         android:scaleType="centerCrop"
         android:src="@drawable/scissors"
-        android:transitionName="scissors" />
+        android:transitionName="scissors"
+        tools:ignore="UsingOnClickInXml" />
 </GridLayout>

@@ -787,6 +787,7 @@ App
 
     App/Fragment/Nesting Tabs              v17
         .app.FragmentNestingTabs
+        .layout.fragment_tabs_fragment.xml
             Uses tabs in the ActionBar to select between other activities in App/Fragment:
             FragmentMenuFragment.java, FragmentArgumentsFragment.java, FragmentStackFragment.java,
             FragmentTabsFragment.java. Uses FragmentManager.enableDebugLogging(true) to produce
@@ -2155,6 +2156,7 @@ Views
     Views/Game Controller Input            all
         .view.GameControllerInput
         .view.GameView
+        .layout.game_controller_input.xml
             Demonstrates how to process input events received from game controllers.
             It also shows how to detect when input devices are added, removed or 
             reconfigured.
@@ -2167,32 +2169,38 @@ Views
   Grid
     Views/Grid/1. Icon Grid                all
         .view.Grid1
+        .layout.grid_1.xml
             Shows how to use a GridView to display a grid of ImageView's created from
             the app icons retrieved from the PackageManager
 
     Views/Grid/2. Photo Grid               all
         .view.Grid2
+        .layout.grid_2.xml
             Shows how to use a GridView created from resource jpg's using 
             ImageView.setImageResource
 
     Views/Grid/3. Selection Mode           all -- v11+ or crash
         .view.Grid3
+        .layout.grid_1.xml
             Implements multi-selection mode on GridView
 
   Hover Events
     Views/Hover Events                     all -- v14+ or crash View.OnHoverListener()
         .view.Hover
         .view.HoverInterceptorView
+        .layout.hover.xml
             No idea what this is supposed to do -- need mouse.
 
   ImageButton
     Views/ImageButton                      all
         .view.ImageButton1
+        .layout.image_button_1.xml
             Simply shows how to draw images on buttons using the SDK stock image.
 
   ImageView
     Views/ImageView                        all
         .view.ImageView1
+        .layout.image_view_1.xml
             Shows how to control scaling in an ImageView in a layout file using:
             android:layout_width, android:layout_height, android:maxWidth, and 
             android:maxHeight and other attributes of ImageView.
@@ -2325,6 +2333,7 @@ Views
   GridLayout
     Views/Layouts/GridLayout/1. Simple Form  --all -- v14+ or crashes GridLayout
         .view.GridLayout1
+        .layout.grid_layout_1
             Demonstrates using GridLayout to build the same "Simple Form" as in the
             LinearLayout and RelativeLayout demos.
 
@@ -2955,6 +2964,7 @@ Views
         .view.GameActivity
         .layout.game
         .graphics.TouchPaint
+        .layout.game.xml
             This activity demonstrates how to use the system UI flags to implement
             an immersive game.
             TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener

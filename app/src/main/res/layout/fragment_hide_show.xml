@@ -21,6 +21,9 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:paddingHorizontal="4dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     tools:ignore="HardcodedText">
 
     <TextView

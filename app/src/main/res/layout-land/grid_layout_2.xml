@@ -21,8 +21,7 @@
     android:columnCount="4"
     android:rowOrderPreserved="false"
     android:useDefaultMargins="true"
-    tools:ignore="HardcodedText,SpUsage,TextFields"
-    tools:targetApi="ice_cream_sandwich">
+    tools:ignore="HardcodedText,SpUsage,TextFields">
 
     <TextView
         android:layout_columnSpan="4"
@@ -34,20 +33,27 @@
         android:layout_columnSpan="4"
         android:layout_gravity="left"
         android:text="You can configure email in a few simple steps:"
-        android:textSize="16dip" />
+        android:textSize="16dip"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:layout_gravity="right"
-        android:text="Email address:" />
+        android:text="Email address:"
+        tools:ignore="RtlHardcoded" />
 
-    <EditText android:ems="10" />
+    <EditText android:ems="10"
+        android:importantForAutofill="no"
+        tools:ignore="LabelFor" />
 
     <TextView
         android:layout_column="0"
         android:layout_gravity="right"
-        android:text="Password:" />
+        android:text="Password:"
+        tools:ignore="RtlHardcoded" />
 
-    <EditText android:ems="8" />
+    <EditText android:ems="8"
+        android:importantForAutofill="no"
+        tools:ignore="LabelFor" />
 
     <Button
         android:layout_column="3"

@@ -22,7 +22,9 @@
 
     android:horizontalSpacing="10dp"
     android:numColumns="auto_fit"
-    android:padding="10dp"
+    android:paddingHorizontal="10dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     android:stretchMode="columnWidth"
 
     android:verticalSpacing="10dp" />

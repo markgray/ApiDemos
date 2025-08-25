@@ -21,7 +21,9 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="4dip">
+    android:paddingHorizontal="4dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
     <FrameLayout
         android:id="@+id/simple_fragment"
@@ -36,14 +38,14 @@
         android:gravity="center_horizontal"
         android:measureWithLargestChild="true"
         android:orientation="horizontal"
-        android:padding="4dip"
-        tools:targetApi="honeycomb">
+        android:padding="4dip">
 
         <Button
             android:id="@+id/new_fragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/new_fragment">
+            android:text="@string/new_fragment"
+            tools:ignore="ButtonStyle">
 
             <requestFocus />
         </Button>
@@ -54,6 +56,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:text="@string/delete_fragment"
-            tools:ignore="InefficientWeight,NestedWeights" />
+            tools:ignore="ButtonStyle,InefficientWeight,NestedWeights" />
     </LinearLayout>
 </LinearLayout>

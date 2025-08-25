@@ -14,13 +14,25 @@
 -->
 
 <!-- Demonstrates horizontal scrolling with a ScrollView. -->
-<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="100dip"
-    android:layout_height="120dip">
 
-    <TextView
-        android:layout_width="300dip"
-        android:layout_height="wrap_content"
-        android:text="@string/scrollbar_3_text"
-        android:textSize="24sp" />
-</HorizontalScrollView>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="120dp">
+    </Space>
+
+    <HorizontalScrollView
+        android:layout_width="100dip"
+        android:layout_height="120dip">
+
+        <TextView
+            android:layout_width="300dip"
+            android:layout_height="wrap_content"
+            android:text="@string/scrollbar_3_text"
+            android:textSize="24sp" />
+    </HorizontalScrollView>
+</LinearLayout>
