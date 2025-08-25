@@ -2059,6 +2059,7 @@ Views
   Date Widgets
     Views/Date Widgets/1. Dialog           all
         .view.DateWidgets1
+        .layout.date_widgets_example_1.xml
             Basic example of using date and time widgets, including android.app.TimePickerDialog
             and android.widget.DatePicker. Also provides a good example of using Activity#onCreateDialog,
             Activity#onPrepareDialog and Activity#showDialog to have the activity automatically
