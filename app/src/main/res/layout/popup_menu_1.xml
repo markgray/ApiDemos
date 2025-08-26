@@ -13,8 +13,12 @@
      limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     android:orientation="vertical">
 
     <Button
@@ -22,5 +26,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:onClick="onPopupButtonClick"
-        android:text="@string/popup_menu_button" />
+        android:text="@string/popup_menu_button"
+        tools:ignore="UsingOnClickInXml" />
 </LinearLayout>

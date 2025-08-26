@@ -17,19 +17,29 @@
 <!-- Demonstrates starting and stopping a local service.
      See corresponding Java code com.android.sdk.app.LocalSerice.java. -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:padding="4dip"
-              android:gravity="center_horizontal"
-              android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
-        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="0"
         android:paddingBottom="4dip"
-        android:text="@string/notification_background_service"/>
+        android:text="@string/notification_background_service"
+        tools:ignore="InefficientWeight" />
 
-    <Button android:id="@+id/notify"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="@string/notify_bg">
+    <Button
+        android:id="@+id/notify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/notify_bg">
         <requestFocus />
     </Button>
 

@@ -20,6 +20,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
-    android:layout_marginRight="6sp"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
+    android:layout_marginEnd="6sp"
     android:focusable="false"
     android:clickable="false" />

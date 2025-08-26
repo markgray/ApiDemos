@@ -18,9 +18,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="4dip">
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"

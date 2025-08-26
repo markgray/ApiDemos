@@ -17,16 +17,21 @@
 <!-- This activity exercises search invocation options -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     android:orientation="vertical">
     
     <EditText
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:importantForAutofill="no"
         android:paddingBottom="4dip"
-        />
+        tools:ignore="LabelFor,TextFields" />
     
     <Button
         android:id="@+id/button"

@@ -17,11 +17,14 @@
 <!-- Demonstrates displaying overlay windows. -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="4dip">
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
     <TextView
         android:layout_width="match_parent"
@@ -29,18 +32,23 @@
         android:layout_weight="0"
         android:paddingBottom="4dip"
         android:text="Demonstrates displaying overlay windows (on top of other apps)."
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        tools:ignore="HardcodedText,InefficientWeight" />
 
     <Button
         android:id="@+id/show_overlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Show Overlay"></Button>
+        android:text="Show Overlay"
+        tools:ignore="HardcodedText">
+    </Button>
 
     <Button
         android:id="@+id/hide_overlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hide Overlay"></Button>
+        android:text="Hide Overlay"
+        tools:ignore="HardcodedText">
+    </Button>
 
 </LinearLayout>

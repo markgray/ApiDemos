@@ -954,6 +954,7 @@ App
     App/Print/Print Custom Layout          v19
         .app.PrintCustomContent
         .menu.print_custom_content.xml
+        .layout.motogp_stat_item.xml
             Nifty example of a ListActivity with a custom ListAdapter, but it also shows
             how to allow the user to specify options for the printout, and then re-layout
             the pdf canvas View to reflect those changes when it comes time to print.
@@ -1758,14 +1759,17 @@ Media
 
     Media/MediaPlayer                      all
         .media.MediaPlayerDemo
-        .media.MediaPlayerDemo_Audio
-        .media.MediaPlayerDemo_Video
+        .media.MediaPlayerDemoAudio
+        .media.MediaPlayerDemoVideo
+        .layout.mediaplayer_1.xml
+        .layout.mediaplayer_2.xml
             Shows how to use the MediaPlayer class to control playback of audio/video 
             files and streams.
             TODO: Set the path variables to a local audio and video file path.
 
     Media/MediaProjection                  all -- v21 or crash
         .media.projection.MediaProjectionDemo
+        .layout.media_projection.xml
             Shows how to use a ProjectionManager.createScreenCaptureIntent to capture
             screen content to a VirtualDisplay which is created using
             MediaProjection.createVirtualDisplay to display to a SurfaceView.
@@ -1809,6 +1813,7 @@ OS
     OS/Morse Code                          all
         .os.MorseCode
         .os.MorseCodeConverter
+        .layout.morse_code.xml
             App that vibrates the vibrator with the Morse Code for a string. This 
             demonstrates the android.os.Vibrator class.
 
@@ -1839,6 +1844,7 @@ Preference
         .preference.LaunchingPreferences
         .preference.AdvancedPreferences
         .preference.MyPreference
+        .layout.preference_widget_mypreference.xml
             Shows how to launch a separate PreferenceActivity activity to collect user
             preference choices. TODO: Use PreferenceFragmentCompat instead.
 
@@ -2631,6 +2637,8 @@ Views
     Views/Lists/09. Array (Overlay)        all
         .view.List9
         .view.Cheeses
+        .layout.list_9.xml
+        .layout.list_position.xml
             Another variation of the list of cheeses. In this case, we use
             AbsListView#setOnScrollListener(AbsListView.OnScrollListener)
             AbsListView#setOnItemScrollListener(AbsListView.OnItemScrollListener)
@@ -2643,12 +2651,14 @@ Views
 
     Views/Lists/10. Single choice list     all
         .view.List10
+        .layout.list_10.xml
             This example shows how to use choice mode on a list. This list is in
             CHOICE_MODE_SINGLE mode, which means the items behave like radio-buttons.
             TODO: Use ListFragment or RecyclerView instead of ListActivity
 
     Views/Lists/11. Multiple choice list   all
         .view.List11
+        .layout.list_11.xml
             This example shows how to use choice mode on a list. This list is in
             CHOICE_MODE_MULTIPLE mode, which means the items behave like checkboxes.
             TODO: Use ListFragment or RecyclerView instead of ListActivity
@@ -2675,6 +2685,8 @@ Views
     Views/Lists/14. Efficient Adapter      all
         .view.List14
         .view.Cheeses
+        .layout.list_14.xml
+        .layout.list_item_icon_text.xml
             Demonstrates how to write an efficient list adapter. The adapter used in this example
             binds to an ImageView and to a TextView for each row in the list.
             To work efficiently the adapter implemented here uses two techniques:
@@ -2693,6 +2705,7 @@ Views
     Views/Lists/15. Selection Mode         all -- v11+ or crash
         .view.List15
         .view.Cheeses
+        .layout.list_15.xml
             This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection
             mode on ListView. It switches into selection mode on long press.
             TODO: Use ListFragment or RecyclerView instead of ListActivity
@@ -2700,6 +2713,7 @@ Views
     Views/Lists/16. Border selection mode  all -- v11+ or crash
         .view.List16
         .view.Cheeses
+        .layout.list_16.xml
             This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection
             mode on ListView couple with the new simple_list_item_activated_1 which uses
             a highlighted border for selected items.
@@ -2708,6 +2722,7 @@ Views
     Views/Lists/17. Activate items         all -- v11+ or crash
         .view.List17
         .view.Cheeses
+        .layout.list_17.xml
             A ListView.CHOICE_MODE_SINGLE list view where the last item the user
             clicked is placed in the "activated" state, causing its background to
             highlight. Uses the built-in layout android.R.layout.simple_list_item_activated_1
@@ -2730,6 +2745,7 @@ Views
 
     Views/Pointer shapes v24
         .view.PointerShapes
+        .layout.pointer_types.xml
             A gallery of the different pointer icons -- Needs mouse
         .view.LivePointerIconButton
             Constructs a PointerIcon using kotlin code in its onResolvePointerIcon override

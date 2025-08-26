@@ -57,6 +57,7 @@ class MediaPlayerDemoAudio : AppCompatActivity() {
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
         tx = TextView(this)
+        tx!!.setPadding(8, 240, 8, 60) // TODO: Use dp here.
         setContentView(tx)
         val extras = intent.extras
         playAudio(extras!!.getInt(MEDIA))

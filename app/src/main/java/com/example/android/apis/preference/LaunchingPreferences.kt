@@ -73,6 +73,7 @@ class LaunchingPreferences : AppCompatActivity(), View.OnClickListener {
         // Simple layout
         val layout = LinearLayout(this)
         layout.orientation = LinearLayout.VERTICAL
+        layout.setPadding(120, 240, 120, 120) // TODO: USE DP INSTEAD OF PX
         setContentView(layout)
 
         // Create a simple button that will launch the preferences

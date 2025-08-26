@@ -15,30 +15,50 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-    <LinearLayout android:layout_width="match_parent"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
+    android:orientation="vertical"
+    tools:ignore="ButtonStyle,HardcodedText">
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <Button android:id="@+id/schedule_media_job"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
+
+        <Button
+            android:id="@+id/schedule_media_job"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Schedule media job">
         </Button>
+
         <Button android:id="@+id/cancel_media_job"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Cancel media job">
         </Button>
     </LinearLayout>
-    <LinearLayout android:layout_width="match_parent"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <Button android:id="@+id/schedule_photos_job"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
+
+        <Button
+            android:id="@+id/schedule_photos_job"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Schedule photos job">
         </Button>
-        <Button android:id="@+id/cancel_photos_job"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
+
+        <Button
+            android:id="@+id/cancel_photos_job"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Cancel photos job">
         </Button>
     </LinearLayout>
@@ -50,7 +70,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Directly observed content changes:" />
 
-    <ScrollView android:layout_width="match_parent"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
         <TextView

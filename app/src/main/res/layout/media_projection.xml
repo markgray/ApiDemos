@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2014 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,28 +13,35 @@
      limitations under the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
     <SurfaceView
         android:id="@+id/surface"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
         <ToggleButton
             android:id="@+id/screen_sharing_toggle"
-            android:text="@string/screen_sharing_toggle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="onToggleScreenShare"/>
+            android:onClick="onToggleScreenShare"
+            android:text="@string/screen_sharing_toggle"
+            tools:ignore="UsingOnClickInXml" />
+
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="0dp"
