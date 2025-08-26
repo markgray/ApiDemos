@@ -18,9 +18,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="4dip"
-    android:paddingRight="4dip"
-    android:paddingTop="4dip"
+    android:paddingHorizontal="4dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     >
 
     <TextView

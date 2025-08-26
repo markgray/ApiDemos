@@ -20,6 +20,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     android:orientation="vertical"
     tools:ignore="TextFields,RtlSymmetry,InefficientWeight,ContentDescription,RtlHardcoded,Autofill,LabelFor">
 

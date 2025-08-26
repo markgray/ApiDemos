@@ -23,7 +23,9 @@
     android:layout_height="wrap_content"
     android:background="@drawable/blue"
     android:orientation="vertical"
-    android:padding="20dip">
+    android:paddingHorizontal="20dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
     <TextView
         android:layout_width="match_parent"

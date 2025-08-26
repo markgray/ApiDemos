@@ -21,9 +21,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingHorizontal="10dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     android:background="@drawable/blue"
-    android:orientation="vertical"
-    android:padding="10dip">
+    android:orientation="vertical">
 
     <!--
         TextView goes on top...
@@ -39,7 +41,8 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:ignore="TextFields" />
+        android:importantForAutofill="no"
+        tools:ignore="LabelFor,TextFields" />
 
     <!--
         Use a horizontal layout to hold the two buttons.
@@ -53,18 +56,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        tools:ignore="RtlHardcoded">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/linear_layout_5_cancel" />
+            android:text="@string/linear_layout_5_cancel"
+            tools:ignore="ButtonStyle" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dip"
-            android:text="@string/linear_layout_5_ok" />
+            android:text="@string/linear_layout_5_ok"
+            tools:ignore="ButtonStyle" />
 
     </LinearLayout>
 

@@ -26,12 +26,12 @@
         android:layout_gravity="center"
         android:paddingBottom="4dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="This would be where you would see a summary of the information related to the notification.  Instead, we'll just give you a button." />
+        android:text="@string/summary_of_information" />
 
     <Button
         android:id="@+id/notify_app"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Switch To App" />
+        android:text="@string/switch_to_app" />
 
 </LinearLayout>

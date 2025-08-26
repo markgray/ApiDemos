@@ -1890,6 +1890,7 @@ Preference
 Security
     Security/KeyStore                      all -- v23+ or crash
         .security.KeyStoreUsage
+        .layout.keystore_usage.xml
             Shows how to use api to generate Key pairs, sign and verify.
             TODO: Replace use of deprecated android.R.color.primary_text_dark with own <selector>
             TODO: Replace use of android.os.AsyncTask with coroutines.
@@ -2220,11 +2221,13 @@ Views
   Layout Animation
     Views/Layout Animation/1. Grid Fade    all
         .view.LayoutAnimation1
+        .layout.layout_animation_1.xml
             Uses @anim/layout_grid_fade.xml which is a gridLayoutAnimation which uses
             @anim/fade.xml to fade in app icons in a GridView
 
     Views/Layout Animation/2. List Cascade all
         .view.LayoutAnimation2
+        .layout.layout_animation_2.xml
             Shows how to use a LayoutAnimationController to animate the layout of a list
             in a ListActivity Too fast on Nexus 6 to see effect
             TODO: slow down animation for fast devices.
@@ -2232,6 +2235,7 @@ Views
 
     Views/Layout Animation/3. Reverse Order  -- all
         .view.LayoutAnimation3
+        .layout.layout_animation_3.xml
             Same as List Cascade above, but an android:layoutAnimation attribute in the layout
             file R.layout.layout_animation_3 uses anim/layout_bottom_to_top_slide.xml which uses
              anim/slide_right instead of implementing the animation in code
@@ -2239,6 +2243,7 @@ Views
 
     Views/Layout Animation/4. Randomize    all
         .view.LayoutAnimation4
+        .layout.layout_animation_4.xml
             Its layout file R.layout.layout_animation_4 uses a android:layoutAnimation attribute
             to animate using anim/layout_random_fade which has an android:animationOrder="random"
             attribute and uses the alpha animation specified in anim/fade.xml to fade in app
@@ -2246,6 +2251,7 @@ Views
 
     Views/Layout Animation/5. Grid Direction  -- all
         .view.LayoutAnimation5
+        .layout.layout_animation_5.xml
             Its layout file R.layout.layout_animation_5 uses an android:layoutAnimation attribute
             which uses "@anim/layout_grid_inverse_fade" which in turn uses the attributes
             android:directionPriority="row", and android:direction="right_to_left|bottom_to_top"
@@ -2254,6 +2260,7 @@ Views
 
     Views/Layout Animation/6. Wave Scale   all
         .view.LayoutAnimation6
+        .layout.layout_animation_6.xml
             Its layout file R.layout.layout_animation_6 uses an android:layoutAnimation attribute
             specifying "@anim/layout_wave_scale" as the animation, which in turn uses an
             android:animation attribute to specify @anim/wave_scale as its animation. This
@@ -2363,32 +2370,32 @@ Views
   LinearLayout
     Views/Layouts/LinearLayout/01. Vertical  --all
         .view.LinearLayout1
-        .layout.linear_layout_1
+        .layout.linear_layout_1.xml
             Demonstrates a simple linear layout. The height of the layout is the sum of 
             its children due to android:layout_height="wrap_content"
 
     Views/Layouts/LinearLayout/02. Vertical (Fill Screen)  --all
         .view.LinearLayout2
-        .layout.linear_layout_2
+        .layout.linear_layout_2.xml
             Demonstrates a simple linear layout. The layout fills the screen, with the
             children stacked from the top due to android:layout_height="match_parent"
 
     Views/Layouts/LinearLayout/03. Vertical (Padded)  --all
         .view.LinearLayout3
-        .layout.linear_layout_3
+        .layout.linear_layout_3.xml
             Demonstrates a simple linear layout. The layout fills the screen, with the 
             children stacked from the top. The middle child gets allocated any extra 
             space due to android:layout_weight="1"
 
     Views/Layouts/LinearLayout/04. Horizontal  --all
         .view.LinearLayout4
-        .layout.linear_layout_4
+        .layout.linear_layout_4.xml
             Demonstrates a horizontal linear layout with equally sized columns due to
             all children View's using android:layout_weight="1"
 
     Views/Layouts/LinearLayout/05. Simple Form  --all
         .view.LinearLayout5
-        .layout.linear_layout_5
+        .layout.linear_layout_5.xml
             Demonstrates building a simple form with nested LinearLayouts. It uses
             a horizontal layout to hold the two buttons at the bottom and uses
             layout_gravity="right". This means the whole horizontal LinearLayout is
@@ -2398,13 +2405,13 @@ Views
 
     Views/Layouts/LinearLayout/06. Uniform Size  --all
         .view.LinearLayout6
-        .layout.linear_layout_6
+        .layout.linear_layout_6.xml
             LinearLayout which uses a combination of wrap_content on itself and 
             match_parent on all of its children to get every item to be the same width.
 
     Views/Layouts/LinearLayout/07. Fill Parent  --all
         .view.LinearLayout7
-        .layout.linear_layout_7
+        .layout.linear_layout_7.xml
             Demonstrates a horizontal linear layout with equally sized columns. Some 
             columns force their height to match the parent. Does not work as is for some
             reason. Changed the height of the longest text to android:layout_height="wrap_content"
@@ -2412,14 +2419,14 @@ Views
 
     Views/Layouts/LinearLayout/08. Gravity  --all
         .view.LinearLayout8
-        .layout.linear_layout_8
+        .layout.linear_layout_8.xml
             Demonstrates changing gravity of a LinearLayout programmatically using
             setOrientation(LinearLayout.*) as dictated by options menu choice.
 
     Views/Layouts/LinearLayout/09. Layout Weight  --all
         .view.LinearLayout9
         .view.AutoComplete1
-        .layout.linear_layout_9
+        .layout.linear_layout_9.xml
             Demonstrates a simple linear layout. The layout fills the screen, with the
             children stacked from the top. The ListView receives all the extra space due
             to android:layout_weight="1.0", but because it is still larger than the screen
@@ -2427,7 +2434,7 @@ Views
 
     Views/Layouts/LinearLayout/10. Background Image  --all
         .view.LinearLayout10
-        .layout.linear_layout_10
+        .layout.linear_layout_10.xml
             Demonstrates the use of LinearLayout backgrounds to group labels,
             EditTexts, and buttons, -- OR -- Demonstrates using a LinearLayout
             background to group related TextViews, EditTexts, and Buttons.
@@ -2437,7 +2444,7 @@ Views
    RelativeLayout
     Views/Layouts/RelativeLayout/1. Vertical  --all
         .view.RelativeLayout1
-        .layout.relative_layout_1
+        .layout.relative_layout_1.xml
             A simple layout which demonstrates stretching a view to fill the space
             between two other views. This occurs oddly enough because even though all
             three share the same default weight, the android:layout_height="0dip"
@@ -2445,18 +2452,18 @@ Views
 
     Views/Layouts/RelativeLayout/2. Simple Form  --all
         .view.RelativeLayout2
-        .layout.relative_layout_2
+        .layout.relative_layout_2.xml
             Demonstrates using a relative layout to create a form.
 
     ScrollView
     Views/Layouts/ScrollView/1. Short      all
         .view.ScrollView1
-        .layout.scroll_view_1
+        .layout.scroll_view_1.xml
             Demonstrates wrapping a (short) layout in a ScrollView.
 
     Views/Layouts/ScrollView/2. Long       all
         .view.ScrollView2
-        .layout.scroll_view_2
+        .layout.scroll_view_2.xml
             Demonstrates wrapping a LONG LinearLayout in a ScrollView (All but the first
             TextView and Button in the LinearLayout are Created and .addView'd programmatically)
 
@@ -2477,18 +2484,18 @@ Views
     TableLayout
     Views/Layouts/TableLayout/01. Basic    all
         .view.TableLayout1
-        .layout.table_layout_1
+        .layout.table_layout_1.xml
             Very simple example of TableLayout done entirely in xml, three rows, three columns of
             TextViews
 
     Views/Layouts/TableLayout/02. Empty Cells  --all
         .view.TableLayout2
-        .layout.table_layout_2
+        .layout.table_layout_2.xml
             TableLayout of Button and TextView's showing how to leave a cell empty
 
     Views/Layouts/TableLayout/03. Long Content  --all
         .view.TableLayout3
-        .layout.table_layout_3
+        .layout.table_layout_3.xml
             Rows have different number of columns and content doesn't fit on screen:
             column 4 of row 2 shrinks all of the other columns android:shrinkColumns="2, 3"
             Oddly enough my test devices are too wide to need shrinking so it does not
@@ -2497,51 +2504,51 @@ Views
 
     Views/Layouts/TableLayout/04. Stretchable  --all
         .view.TableLayout4
-        .layout.table_layout_4
+        .layout.table_layout_4.xml
             Stretch some columns: second column uses android:gravity="right",
             android:stretchColumns="1" (column numbers are zero based)
 
     Views/Layouts/TableLayout/05. Spanning and Stretchable  --all
         .view.TableLayout5
-        .layout.table_layout_5
+        .layout.table_layout_5.xml
             Uses android:stretchColumns="1" and has View divider line children along with the
             TableRow's
 
     Views/Layouts/TableLayout/06. More Spanning and Stretchable  --all
         .view.TableLayout6
-        .layout.table_layout_6
+        .layout.table_layout_6.xml
             Uses android:stretchColumns="1" to stretch second column, and android:layout_column="1"
             to skip column 0 for some TableRow's
 
     Views/Layouts/TableLayout/07. Column Collapse  --all
         .view.TableLayout7
-        .layout.table_layout_7
+        .layout.table_layout_7.xml
             Button's toggle collapsed state of column 0 or column 2, also show how to build a
             TableRow and add it to a TableLayout programmatically. Note that the attribute
             android:collapseColumns="2" starts column 2 in a collapsed state.
 
     Views/Layouts/TableLayout/08. Toggle Stretch  --all
         .view.TableLayout8
-        .layout.table_layout_8
+        .layout.table_layout_8.xml
             Uses Button to toggle stretch attribute of one column. Includes programmatically built
             TableRow along with xml TableRows
 
     Views/Layouts/TableLayout/09. Toggle Shrink  --all
         .view.TableLayout9
-        .layout.table_layout_9
+        .layout.table_layout_9.xml
             Button uses setColumnShrinkable to toggle the shrinkColumns attribute of a table which
             has a column so long it forces the last columns off the screen.
 
     Views/Layouts/TableLayout/10. Simple Form  --all
         .view.TableLayout10
-        .layout.table_layout_10
+        .layout.table_layout_10.xml
             Uses xml only to construct a form, too long of an entry in the EditText boxes does a
             weird thing -- it scrolls the buttons at the bottom off the screen!
             TODO: Scroll the EditText boxes instead.
 
     Views/Layouts/TableLayout/11. Gravity  --all
         .view.TableLayout11
-        .layout.table_layout_11
+        .layout.table_layout_11.xml
             Shows difference in layout for android:gravity="right",
             android:layout_gravity="center_horizontal" and
             android:layout_gravity="right|bottom" (large cell height is set by
@@ -2549,13 +2556,14 @@ Views
 
     Views/Layouts/TableLayout/12. Cell Spanning  --all
         .view.TableLayout12
-        .layout.table_layout_12
+        .layout.table_layout_12.xml
             Creates large multi-column cells for several rows using android:layout_span=
 
   Lists
     Views/Lists/01. Array                  all
         .view.List1
         .view.Cheeses
+        .layout.list_1.xml
             A list view example where the data for the list comes from an array of strings. It uses
             an `ArrayAdapter<String>` to fill a [ListView]'s list. It sets the isTextFilterEnabled`
             property of the [ListView] to `true` so that the list is filtered when the user types,
@@ -2564,6 +2572,7 @@ Views
 
     Views/Lists/02. Cursor (People)        all
         .view.List2
+        .layout.list_2.xml
             Builds a cursor using getContentResolver().query(...) of the Contacts provider for a
             projection of Contacts._ID, and Contacts.DISPLAY_NAME and sets it as the ListAdapter
             for the ListActivity's list
@@ -2572,6 +2581,7 @@ Views
 
     Views/Lists/03. Cursor (Phones)        all
         .view.List3
+        .layout.list_3.xml
             A list view example where the data comes from a cursor, and a SimpleCursorAdapter
             is used to map each item to a two-line display.
             TODO: Switch to the new CursorLoader class with LoaderManager instead
@@ -2579,6 +2589,7 @@ Views
 
     Views/Lists/04. ListAdapter            all
         .view.List4
+        .layout.list_4.xml
         .Shakespeare
             A list view example where the data comes from a custom ListAdapter which displays from
             an array of strings using a custom view (reusing recycled views when one is given to it.)
@@ -2586,12 +2597,14 @@ Views
 
     Views/Lists/05. Separators             all
         .view.List5
+        .layout.list_5.xml
             A list view example with separators. Separators are implemented by overriding the methods
             areAllItemsEnabled, and isEnabled
             TODO: Use ListFragment or RecyclerView instead of ListActivity
 
     Views/Lists/06. ListAdapter Collapsed  --all
         .view.List6
+        .layout.list_6.xml
             A list view example where the data comes from a custom ListAdapter, onListItemClick is
             overridden to "toggle" the view between two states: collapsed to a title, and expanded
             to a title and text for that title
@@ -2599,7 +2612,7 @@ Views
 
     Views/Lists/07. Cursor (Phones)        all
         .view.List7
-        .layout.list_7
+        .layout.list_7.xml
             A list view example where the data comes from a cursor. Original used the "selected"
             item in list to display the details of an item at the bottom of the string by implementing
             OnItemSelectedListener, I modified to do the same when onListItemClick is called since
@@ -2609,7 +2622,7 @@ Views
 
     Views/Lists/08. Photos                 all
         .view.List8
-        .layout.list_8
+        .layout.list_8.xml
             A list view that demonstrates the use of setEmptyView. This example also uses a custom
             layout file that adds some extra buttons to the screen instead of using the ListActivity
             default layout.
@@ -2642,7 +2655,7 @@ Views
 
     Views/Lists/12. Transcript             all
         .view.List12
-        .layout.list_12
+        .layout.list_12.xml
             Demonstrates the using a list view in transcript mode. The bottom of the layout
             is an EditText, clicking on the EditText view .add()'s  the text to the
             ArrayAdapter filling the ListView above it.
@@ -2650,7 +2663,7 @@ Views
 
     Views/Lists/13. Slow Adapter           all
         .view.List13
-        .layout.list_13
+        .layout.list_13.xml
             Demonstrates how a list can avoid expensive operations during scrolls or flings.
             In this case, we pretend that binding a view to its data is slow (even though it
             really isn't). When a scroll/fling is happening, the adapter binds the view to
@@ -2705,12 +2718,12 @@ Views
 
     Views/Number Picker                   all
          .view.NumberPickerActivity
-         .layout.number_picker
+         .layout.number_picker.xml
              Demonstrates how to use a NumberPicker
 
     Views/Overlay Window
          .view.OverlayWindowActivity
-         .layout.overlay_window
+         .layout.overlay_window.xml
              Demonstrates the display of overlay windows, i.e. windows that are drawn on top of
              other apps.
              TODO: Remove overlay in onDestroy?
@@ -2732,7 +2745,7 @@ Views
   Popup Menu
     Views/Popup Menu                       all -- v11+ or crash
         .view.PopupMenu1
-        .layout.popup_menu_1
+        .layout.popup_menu_1.xml
         .menu.popup
             This demonstrates the use of the PopupMenu class. Clicking the button will
             inflate and show a popup menu from an XML resource.
@@ -2740,7 +2753,7 @@ Views
   Progress Bar
     Views/Progress Bar/1. Incremental      all
         .view.ProgressBar1
-        .layout.progressbar_1
+        .layout.progressbar_1.xml
             Demonstrates how to use ProgressBar as a widget. The ProgressBar is defined in
             the layout xml file to use style="?android:attr/progressBarStyleHorizontal",
             android:layout_width="200dip", android:layout_height="wrap_content",
@@ -2752,7 +2765,7 @@ Views
 
     Views/Progress Bar/2. Smooth           all
         .view.ProgressBar2
-        .layout.progressbar_2
+        .layout.progressbar_2.xml
             Demonstrates the use of indeterminate progress bars as widgets and in the
             window's title bar. The widgets show the 3 different sizes of circular
             progress bars that can be used. The window title bar does not work, it has
@@ -2760,7 +2773,7 @@ Views
 
     Views/Progress Bar/3. Dialogs          all
         .view.ProgressBar3
-        .layout.progressbar_3
+        .layout.progressbar_3.xml
             Demonstrates the use of progress dialogs.  Uses Activity#onCreateDialog
             Activity#showDialog to ensure the dialogs will be properly saved and
             restored. Buttons on the main Layout allow you to choose between one
@@ -2770,14 +2783,14 @@ Views
 
     Views/Progress Bar/4. In Title Bar     all -- does not work lollipop
         .view.ProgressBar4
-        .layout.progressbar_4
+        .layout.progressbar_4.xml
             Demonstrates how to use an indeterminate progress indicator in the window's
             title bar. This does not work for android starting with 5.0
 
   Radio Group
     Views/Radio Group                      all
         .view.RadioGroup1
-        .layout.radio_group_1
+        .layout.radio_group_1.xml
             Demonstrates RadioGroup, including adding a RadioButton to an xml defined
             RadioGroup programmatically (the R.id.snack is created in the file values/ids.xml),
             retrieving the R.id.* of the RadioButton selected, clearing all buttons, and the
@@ -2786,7 +2799,7 @@ Views
   Rating Bar
     Views/Rating Bar                       all
         .view.RatingBar1
-        .layout.ratingbar_1
+        .layout.ratingbar_1.xml
             Demonstrates how to use a rating bar. The top two RatingBar's have their
             RatingBar.OnRatingBarChangeListener set to this and a onRatingChanged method
             updates a TextView and two RatingBar indicators based on the values passed to
@@ -2795,7 +2808,7 @@ Views
   Rotating Button
     Views/Rotating Button                 all -- v11+ or crash
         .view.RotatingButton
-        .layout.rotating_view
+        .layout.rotating_view.xml
             This application demonstrates the ability to transform views in 2D and 3D,
             scaling them, translating them, and rotating them (in 2D and 3D). Use the
             seek bars to set the various transform properties of the button. It sets the
@@ -2807,13 +2820,13 @@ Views
   ScrollBars
     Views/ScrollBars/1. Basic              all
         .view.ScrollBar1
-        .layout.scrollbar1
+        .layout.scrollbar1.xml
             Demonstrates scrolling with a ScrollView. Done entirely in xml, the ScrollView is
             the root view with a single LinearLayout child (ScrollView's can have only one.)
 
     Views/ScrollBars/2. Fancy              all
         .view.ScrollBar2
-        .layout.scrollbar2
+        .layout.scrollbar2.xml
             Demonstrates scrolling with a ScrollView, android:scrollbarTrackVertical
             and android:scrollbarTrackVertical are set to colored drawables created in xml
             using <shape> and android:scrollbarSize="12dip" makes it wider than normal.
@@ -2823,7 +2836,7 @@ Views
 
     Views/ScrollBars/3. Style              all
         .view.ScrollBar3
-        .layout.scrollbar3
+        .layout.scrollbar3.xml
             Demonstrates scrolling with ScrollView's with android:scrollbarStyle set to
             outsideOverlay and outsideInset in the xml, and one set programmatically using
             setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET)
@@ -2833,7 +2846,7 @@ Views
     Views/Search View/Action Bar           v11+
         .view.SearchViewActionBar
         .app.SearchQueryResults
-        .layout.searchview_actionbar
+        .layout.searchview_actionbar.xml
         .menu.searchview_in_menu
             This demonstrates the usage of SearchView in an ActionBar as a menu item. It sets
             a SearchableInfo on the SearchView for suggestions and submitting queries to. In
@@ -2843,14 +2856,14 @@ Views
     Views/Search View/Always Expanded      v11+
         .view.SearchViewAlwaysVisible
         .view.SearchViewActionBar
-        .layout.searchview_actionbar
+        .layout.searchview_actionbar.xml
         .app.SearchQueryResults
             This Activity extends .view.SearchViewActionBar, with the only difference being it
             Override's isAlwaysExpanded() to return true instead of false.
 
     Views/Search View/Filter               v11+
         .view.SearchViewFilterMode
-        .layout.searchview_filter
+        .layout.searchview_filter.xml
         .view.Cheeses
             Shows a list that can be filtered in-place with a SearchView in non-iconified mode.
             Calls setTextFilterEnabled(true) on the layout's ListView to filter the children
@@ -2862,7 +2875,7 @@ Views
   Secure View
     Views/Secure View                      all -- v9+ or crash
         .view.SecureView
-        .layout.secure_view
+        .layout.secure_view.xml
         .view.SecureViewOverlay
             This activity demonstrates two different ways in which views can be made more secure to
             touch spoofing attacks by leveraging framework features.
@@ -2901,7 +2914,7 @@ Views
   Seek Bar
     Views/Seek Bar                         all
         .view.SeekBar1
-        .layout.seekbar_1
+        .layout.seekbar_1.xml
             Demonstrates how to use a seek bar. It implements SeekBar.OnSeekBarChangeListener which
             has the three call backs: onProgressChanged, onStartTrackingTouch, and onStopTrackingTouch
             displaying appropriate text based on the information passed it.
@@ -2910,7 +2923,7 @@ Views
   Spinner
     Views/Spinner                          all
         .view.Spinner1
-        .layout.spinner_1
+        .layout.spinner_1.xml
         .array.colors (in values/arrays.xml)
         .array.planets (in values/arrays.xml)
             Demonstrates the use of the Spinner widget. It creates two ArrayAdapter<CharSequence>
@@ -2923,7 +2936,7 @@ Views
   Splitting Touches across Views
     Views/Splitting Touches across Views   all - v11+ or crash in layout
         .view.SplitTouchView
-        .layout.split_touch_view
+        .layout.split_touch_view.xml
         .view.Cheeses
             This activity demonstrates splitting touch events across multiple views within a
             view group.  Here we have two ListViews within a LinearLayout that has the attribute
@@ -2933,14 +2946,14 @@ Views
   Switches
     Views/Switches                         all - v14+ or crash in layout
         .view.Switches
-        .layout.switches
+        .layout.switches.xml
             Demonstrates the use of the toggle switch widget. Customized text removed for Lollipop
             unless attribute android:showText="true" is added
 
   System UI Visibility
     Views/System UI Visibility/Content Browser  -- v16
         .view.ContentBrowserActivity
-        .layout.content_browser
+        .layout.content_browser.xml
             This activity demonstrates how to use system UI flags to implement
             a content browser style of UI (such as a book reader). Includes "Content",
             and implementation of a view for displaying immersive content, using system
@@ -2951,7 +2964,7 @@ Views
 
     Views/System UI Visibility/Content Browser Nav Bar  -- v19
         .view.ContentBrowserNavActivity
-        .layout.content_browser_nav
+        .layout.content_browser_nav.xml
             This activity demonstrates how to use system UI flags to implement a content
             browser style of UI (such as a book reader) that hides the nav bar as well as
             the status bar. The difference is the addition of the flags
@@ -2962,7 +2975,6 @@ Views
 
     Views/System UI Visibility/Game        v19
         .view.GameActivity
-        .layout.game
         .graphics.TouchPaint
         .layout.game.xml
             This activity demonstrates how to use the system UI flags to implement
@@ -2972,7 +2984,7 @@ Views
 
     Views/System UI Visibility/System UI Modes  -- v18
         .view.SystemUIModes
-        .layout.system_ui_modes
+        .layout.system_ui_modes.xml
             This activity demonstrates some of the available ways to reduce the size or
             visual contrast of the system decor, in order to better focus the user's
             attention or use available screen real estate on the task at hand. Uses
@@ -2986,7 +2998,7 @@ Views
     Views/System UI Visibility/System UI Modes Overlay  -- v16
         .view.SystemUIModesOverlay
         .view.SystemUIModes
-        .layout.system_ui_modes
+        .layout.system_ui_modes.xml
             Extend .view.SystemUIModes with the addition of requesting the window feature
             Window.FEATURE_ACTION_BAR_OVERLAY which overlays the action bar rather than
             positioning the action bar in the space above the window content.
@@ -2996,7 +3008,7 @@ Views
 
     Views/System UI Visibility/Translucent Bars  -- v19
         .view.TranslucentBarsActivity
-        .layout.translucent_bars
+        .layout.translucent_bars.xml
             Layout sets the attribute android:fitsSystemWindows="true" to adjust view layout
             based on system windows such as the status bar. When true, it  adjusts the padding
             of the view to leave space for the system windows. Will only take effect if this
@@ -3007,7 +3019,7 @@ Views
 
     Views/System UI Visibility/Video Player  -- v16
         .view.VideoPlayerActivity
-        .layout.video_player
+        .layout.video_player.xml
             Implementation of a view for displaying full-screen video playback, using system
             UI flags to transition in and out of modes where the entire screen can be filled
             with content (at the expense of no user interaction).
@@ -3019,7 +3031,7 @@ Views
   Tabs
     Views/Tabs/1. Content By Id            all
         .view.Tabs1
-        .layout.tabs1
+        .layout.tabs1.xml
             An example of an TabActivity that uses labels TabSpec#setIndicator(CharSequence)
             for its indicators and views by id from a layout file TabSpec#setContent(int).
             TextView's sharing a FrameLayout are selected by the tabs.
@@ -3055,7 +3067,7 @@ Views
 
     Views/Tabs/5. Scrollable               all
         .view.Tabs5
-        .layout.tabs_scroll
+        .layout.tabs_scroll.xml
             Demonstrates the Tab scrolling when too many tabs are displayed to fit
             in the screen. In the layout a HorizontalScrollView contains the TabWidget
             and 30 tabs are added to it using TabHost.addTab(TabHost.TabSpec tabSpec)
@@ -3064,7 +3076,7 @@ Views
 
     Views/Tabs/6. Right aligned            all
         .view.Tabs6
-        .layout.tabs_right_gravity
+        .layout.tabs_right_gravity.xml
             Uses a right gravity for the TabWidget. Does not seem to have any effect even
             after changing AndroidManifest to android:theme="@android:style/Theme"
             TODO: replace deprecated TabActivity with modern navigation idiom
@@ -3072,13 +3084,13 @@ Views
   Text
     Views/Text/EditText
         .view.EditTextDemo
-        .layout.edit_text_demo.xml
+        .layout.edit_text_demo.xml.xml
             Demonstrates the android.widget.EditText widget. android:imeOptions="actionSearch"
             only produces an action key in landscape orientation for some reason. (No :id?)
 
     Views/Text/Linkify                           all
         .text.Link
-        .layout.link
+        .layout.link.xml
             Four different ways to generate html like links and styled text: text1 shows
             the android:autoLink property, which automatically creates links for things
             like URLs and phone numbers found in the text. No java code is needed to make
@@ -3095,7 +3107,7 @@ Views
 
     Views/Text/LogTextBox                        all
         .text.LogTextBox1
-        .layout.log_text_box_1
+        .layout.log_text_box_1.xml
         .text.LogTextBox
             Using a LogTextBox to display a scrollable text area to which text is
             appended. LogTextBox.java is a custom TextView that is Editable and by
@@ -3103,7 +3115,7 @@ Views
 
     Views/Text/Marquee                           all
         .text.Marquee
-        .layout.marquee
+        .layout.marquee.xml
             Uses android:ellipsize="marquee" in the layout file to auto scroll Button
             text that is longer than the view is wide.
             Need to add android:focusable="true" and android:focusableInTouchMode="true"
@@ -3111,14 +3123,14 @@ Views
 
     Views/Text/TextClock                        all - v17+ or crash
         .view.TextClockDemo
-        .layout.textclock
+        .layout.textclock.xml
             Variants of TextClock: Default formats; Shows the date only; Uses styles
             (different android:format12Hour, and android:format24Hour strings with
             font and face defined in string xml); Shows seconds; Uses a fixed time zone.
 
     Views/Text/TextSwitcher                     all
         .view.TextSwitcher1
-        .layout.text_switcher_1
+        .layout.text_switcher_1.xml
             Uses a TextSwitcher to animate changes in the View controlled by the TextSwitcher.
             Two TextView's are requested from the app's overriding of ViewSwitcher.ViewFactory
             method makeView, and when the View needs to be updated TextSwitcher.setText is
@@ -3126,7 +3138,7 @@ Views
 
     Views/Text/TextView
         .view.TextViewDemo
-        .layout.text_view_demo
+        .layout.text_view_demo.xml
             Demonstrates the android.widget.TextView widget. Shows different values for
             android:textAppearance: ?android:attr/textAppearanceSmall,
             ?android:attr/textAppearanceMedium, and ?android:attr/textAppearanceLarge,
@@ -3136,7 +3148,7 @@ Views
   Tooltips
     Views/Tooltips                         v26
         .view.Tooltips
-        .layout.tooltips
+        .layout.tooltips.xml
             A demo for tooltips, it is implemented almost entirely in the layout file
             layout/tooltips.xml using the android:tooltipText attribute for the views,
             but the TextView with id R.id.tooltips_code has its tooltip set using its
@@ -3145,14 +3157,14 @@ Views
   Visibility
     Views/Visibility                       all
         .view.Visibility1
-        .layout.visibility_1
+        .layout.visibility_1.xml
             Demonstrates making a view VISIBLE, INVISIBLE and GONE. Three buttons control
             the visibility of a TextView which is sandwiched between two other TextView's
 
   WebView
     Views/WebView                          all
         .view.WebView1
-        .layout.webview_1
+        .layout.webview_1.xml
             Sample creating 1 webviews. Html data is loaded into the layout's WebView using
             WebView.loadData
 

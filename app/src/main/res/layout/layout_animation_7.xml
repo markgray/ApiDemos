@@ -20,7 +20,9 @@
     android:animationCache="false"
     android:clipToPadding="false"
     android:layoutAnimation="@anim/layout_animation_table"
-    android:padding="12dp"
+    android:paddingHorizontal="12dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     android:stretchColumns="1"
     tools:ignore="TextFields,RtlHardcoded,LabelFor,Autofill" >
 

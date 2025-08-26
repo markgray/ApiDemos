@@ -1,6 +1,7 @@
 package com.example.android.apis
 
 import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -45,6 +46,9 @@ class AskForPermissions : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ask_for_permissions)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissions += Manifest.permission.POST_NOTIFICATIONS
+        }
         val askUser = findViewById<Button>(R.id.ask_for_permission)
         askUser?.setOnClickListener { v ->
             ActivityCompat.requestPermissions(

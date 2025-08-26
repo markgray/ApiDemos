@@ -20,10 +20,10 @@
     android:columnWidth="60dp"
     android:gravity="center"
     android:horizontalSpacing="10dp"
-
     android:layoutAnimation="@anim/layout_grid_fade"
-
     android:numColumns="auto_fit"
-    android:padding="10dp"
+    android:paddingHorizontal="10dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     android:stretchMode="columnWidth"
     android:verticalSpacing="10dp" />

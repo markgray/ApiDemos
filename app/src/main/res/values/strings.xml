@@ -1682,4 +1682,6 @@
     <string name="current_orientation">Current Orientation</string>
     <string name="requested_orientation">Requested orientation</string>
     <string name="public_storage_failure">Error writing to public storage, either you forgot to ask for permission or you are running on Q or above.</string>
+    <string name="summary_of_information">This would be where you would see a summary of the information related to the notification. Instead, we\'ll just give you a button.</string>
+    <string name="switch_to_app">Switch To App</string>
 </resources>

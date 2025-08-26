@@ -16,6 +16,7 @@
 <!-- Content for a fragment with a text editor. -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -35,7 +36,9 @@
         android:layout_weight="1"
         android:background="@drawable/green"
         android:freezesText="true"
-        android:text="@string/initial_text">
+        android:importantForAutofill="no"
+        android:text="@string/initial_text"
+        tools:ignore="LabelFor,TextFields">
 
         <requestFocus />
     </EditText>

@@ -22,7 +22,9 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="4dip"
+    android:paddingHorizontal="4dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     tools:ignore="InefficientWeight">
 
     <TextView
@@ -38,7 +40,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onGetMusic"
-        android:text="@string/get_music">
+        android:text="@string/get_music"
+        tools:ignore="UsingOnClickInXml">
 
         <requestFocus />
     </Button>
@@ -49,7 +52,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onGetImage"
-        android:text="@string/get_image"></Button>
+        android:text="@string/get_image"
+        tools:ignore="UsingOnClickInXml"></Button>
 
     <!--suppress CheckTagEmptyBody -->
     <Button
@@ -57,7 +61,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onGetStream"
-        android:text="@string/get_stream"></Button>
+        android:text="@string/get_stream"
+        tools:ignore="UsingOnClickInXml"></Button>
 
 </LinearLayout>
 
