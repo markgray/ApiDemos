@@ -73,50 +73,50 @@ class RotationAnimation : AppCompatActivity() {
 
         setRotationAnimation(mRotationAnimation)
 
-        (findViewById<View>(R.id.windowFullscreen) as CheckBox).setOnCheckedChangeListener {
-            buttonView, isChecked ->
-            /**
-             * Called when the checked state of our R.id.windowFullscreen compound button
-             * changed. We simply call our method setFullscreen with the isChecked parameter
-             * passed us.
-             *
-             * @param buttonView The compound button view whose state has changed.
-             * @param isChecked The new checked state of buttonView.
-             */
-            setFullscreen(isChecked)
-        }
-
-        (findViewById<View>(R.id.rotation_radio_group) as RadioGroup).setOnCheckedChangeListener {
-            group, checkedId ->
-            /**
-             * Called when the checked radio button has changed. When the selection is
-             * cleared, checkedId is -1. We switch on checkedId and set mRotationAnimation
-             * to the appropriate value:
-             *  - R.id.rotate LayoutParams.ROTATION_ANIMATION_ROTATE, specifies that this
-             * window will visually rotate in or out following a rotation.
-             *  - R.id.crossfade LayoutParams.ROTATION_ANIMATION_CROSSFADE, specifies that
-             * this window will fade in or out following a rotation
-             *  - R.id.jumpcut LayoutParams.ROTATION_ANIMATION_JUMPCUT, specifies that this
-             * window will immediately disappear or appear following a rotation.
-             *  - R.id.seamless LayoutParams.ROTATION_ANIMATION_SEAMLESS, specifies seamless
-             * rotation mode, works like JUMPCUT but will fall back to CROSSFADE if
-             * rotation can't be applied without pausing the screen.
-             *
-             * and then we call our method setRotationAnimation to change the window
-             * attributes using this value for WindowManager.LayoutParams.rotationAnimation
-             *
-             * @param group the group in which the checked radio button has changed
-             * @param checkedId the unique identifier of the newly checked radio button
-             */
-            mRotationAnimation = when (checkedId) {
-                R.id.rotate -> LayoutParams.ROTATION_ANIMATION_ROTATE
-                R.id.crossfade -> LayoutParams.ROTATION_ANIMATION_CROSSFADE
-                R.id.jumpcut -> LayoutParams.ROTATION_ANIMATION_JUMPCUT
-                R.id.seamless -> LayoutParams.ROTATION_ANIMATION_SEAMLESS
-                else -> LayoutParams.ROTATION_ANIMATION_ROTATE
+        (findViewById<View>(R.id.windowFullscreen) as CheckBox)
+            .setOnCheckedChangeListener { buttonView, isChecked ->
+                /**
+                 * Called when the checked state of our R.id.windowFullscreen compound button
+                 * changed. We simply call our method setFullscreen with the isChecked parameter
+                 * passed us.
+                 *
+                 * @param buttonView The compound button view whose state has changed.
+                 * @param isChecked The new checked state of buttonView.
+                 */
+                setFullscreen(isChecked)
             }
-            setRotationAnimation(mRotationAnimation)
-        }
+
+        (findViewById<View>(R.id.rotation_radio_group) as RadioGroup)
+            .setOnCheckedChangeListener { group, checkedId ->
+                /**
+                 * Called when the checked radio button has changed. When the selection is
+                 * cleared, checkedId is -1. We switch on checkedId and set mRotationAnimation
+                 * to the appropriate value:
+                 *  - R.id.rotate LayoutParams.ROTATION_ANIMATION_ROTATE, specifies that this
+                 * window will visually rotate in or out following a rotation.
+                 *  - R.id.crossfade LayoutParams.ROTATION_ANIMATION_CROSSFADE, specifies that
+                 * this window will fade in or out following a rotation
+                 *  - R.id.jumpcut LayoutParams.ROTATION_ANIMATION_JUMPCUT, specifies that this
+                 * window will immediately disappear or appear following a rotation.
+                 *  - R.id.seamless LayoutParams.ROTATION_ANIMATION_SEAMLESS, specifies seamless
+                 * rotation mode, works like JUMPCUT but will fall back to CROSSFADE if
+                 * rotation can't be applied without pausing the screen.
+                 *
+                 * and then we call our method setRotationAnimation to change the window
+                 * attributes using this value for WindowManager.LayoutParams.rotationAnimation
+                 *
+                 * @param group the group in which the checked radio button has changed
+                 * @param checkedId the unique identifier of the newly checked radio button
+                 */
+                mRotationAnimation = when (checkedId) {
+                    R.id.rotate -> LayoutParams.ROTATION_ANIMATION_ROTATE
+                    R.id.crossfade -> LayoutParams.ROTATION_ANIMATION_CROSSFADE
+                    R.id.jumpcut -> LayoutParams.ROTATION_ANIMATION_JUMPCUT
+                    R.id.seamless -> LayoutParams.ROTATION_ANIMATION_SEAMLESS
+                    else -> LayoutParams.ROTATION_ANIMATION_ROTATE
+                }
+                setRotationAnimation(mRotationAnimation)
+            }
     }
 
     /**

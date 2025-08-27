@@ -17,18 +17,18 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:paddingLeft="0dip"
-    android:paddingRight="9dip"
+    android:paddingStart="0dip"
+    android:paddingEnd="9dip"
     android:layout_height= "wrap_content"
     android:minHeight="48dip">
 
     <QuickContactBadge
         android:id="@+id/badge"
-        android:layout_marginLeft="2dip"
-        android:layout_marginRight="14dip"
+        android:layout_marginStart="2dip"
+        android:layout_marginEnd="14dip"
         android:layout_marginTop="4dip"
         android:layout_marginBottom="3dip"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_height= "wrap_content"
         android:layout_width= "wrap_content"
@@ -38,9 +38,9 @@
     <TextView
         android:id="@+id/name"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:paddingLeft="2dip"
+        android:paddingHorizontal="2dip"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/badge"
+        android:layout_toEndOf="@id/badge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

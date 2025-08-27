@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2011 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2011 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -16,38 +15,78 @@
 
 <!-- Part of resources_width_and_height that varies based on width. -->
 
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
-            android:orientation="horizontal">
-        <TextView android:layout_width="0px" android:layout_height="match_parent"
-                android:layout_weight="1" android:gravity="center_horizontal"
-                android:layout_marginLeft="4dp" android:layout_marginRight="4dp"
-                android:background="#800000ff" android:text="sw600dp #1">
-        </TextView>
-        <TextView android:layout_width="0px" android:layout_height="match_parent"
-                android:layout_weight="1" android:gravity="center_horizontal"
-                android:layout_marginLeft="4dp" android:layout_marginRight="4dp"
-                android:background="#800000ff" android:text="sw600dp #2">
-        </TextView>
-        <TextView android:layout_width="0px" android:layout_height="match_parent"
-                android:layout_weight="1" android:gravity="center_horizontal"
-                android:layout_marginLeft="4dp" android:layout_marginRight="4dp"
-                android:background="#800000ff" android:text="sw600dp #3">
-        </TextView>
-        <TextView android:layout_width="0px" android:layout_height="match_parent"
-                android:layout_weight="1" android:gravity="center_horizontal"
-                android:layout_marginLeft="4dp" android:layout_marginRight="4dp"
-                android:background="#800000ff" android:text="sw600dp #4">
-        </TextView>
-        <TextView android:layout_width="0px" android:layout_height="match_parent"
-                android:layout_weight="1" android:gravity="center_horizontal"
-                android:layout_marginLeft="4dp" android:layout_marginRight="4dp"
-                android:background="#800000ff" android:text="sw600dp #5">
-        </TextView>
-        <TextView android:layout_width="0px" android:layout_height="match_parent"
-                android:layout_weight="1" android:gravity="center_horizontal"
-                android:layout_marginLeft="4dp" android:layout_marginRight="4dp"
-                android:background="#800000ff" android:text="sw600dp #6">
-        </TextView>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:background="#800000ff"
+            android:gravity="center_horizontal"
+            android:text="sw600dp #1"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:background="#800000ff"
+            android:gravity="center_horizontal"
+            android:text="sw600dp #2"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:background="#800000ff"
+            android:gravity="center_horizontal"
+            android:text="sw600dp #3"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:background="#800000ff"
+            android:gravity="center_horizontal"
+            android:text="sw600dp #4"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:background="#800000ff"
+            android:gravity="center_horizontal"
+            android:text="sw600dp #5"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:background="#800000ff"
+            android:gravity="center_horizontal"
+            android:text="sw600dp #6"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
 </merge>

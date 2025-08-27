@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dip">
+    android:paddingHorizontal="10dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
     <TextView
         android:layout_width="match_parent"
@@ -18,7 +20,8 @@
         android:id="@+id/process_text_received_text_editable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:ignore="TextFields" />
+        android:importantForAutofill="no"
+        tools:ignore="LabelFor,TextFields" />
 
     <Button
         android:id="@+id/process_text_finish_button"

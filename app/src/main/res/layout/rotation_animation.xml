@@ -16,7 +16,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -66,7 +69,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:layout_marginLeft="6dp"
                 android:text="@string/rotation_animation_crossfade" />
 
             <RadioButton
@@ -74,7 +76,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:layout_marginLeft="6dp"
                 android:text="@string/rotation_animation_jumpcut" />
 
             <RadioButton
@@ -82,7 +83,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:layout_marginLeft="6dp"
                 android:text="@string/rotation_animation_seamless" />
         </RadioGroup>
     </LinearLayout>

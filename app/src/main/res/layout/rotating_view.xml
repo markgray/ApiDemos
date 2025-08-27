@@ -13,13 +13,14 @@
      limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     android:orientation="vertical"
-    android:splitMotionEvents="true"
-    tools:targetApi="honeycomb">
+    android:splitMotionEvents="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,8 +47,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="15dip"
-            android:paddingRight="5dip"
+            android:paddingStart="15dip"
+            android:paddingEnd="5dip"
             android:text="@string/ty"
             android:textStyle="bold" />
 
@@ -84,8 +85,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="15dip"
-            android:paddingRight="5dip"
+            android:paddingStart="15dip"
+            android:paddingEnd="5dip"
             android:text="@string/sy"
             android:textStyle="bold" />
 
@@ -122,8 +123,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="15dip"
-            android:paddingRight="5dip"
+            android:paddingStart="15dip"
+            android:paddingEnd="5dip"
             android:text="@string/y"
             android:textStyle="bold" />
 
@@ -137,8 +138,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="15dip"
-            android:paddingRight="5dip"
+            android:paddingStart="15dip"
+            android:paddingEnd="5dip"
             android:text="@string/z"
             android:textStyle="bold" />
 
@@ -154,7 +155,7 @@
         android:id="@+id/rotatingButton"
         android:layout_width="200dip"
         android:layout_height="150dip"
-        android:layout_marginLeft="50dip"
+        android:layout_marginStart="50dip"
         android:layout_marginTop="50dip"
         android:text="@string/rotating_button" />
 </LinearLayout>

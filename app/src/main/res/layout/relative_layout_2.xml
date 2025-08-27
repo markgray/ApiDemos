@@ -20,7 +20,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/blue"
-    android:padding="10dip">
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
     <!--
         TextView goes at the top left by default .
@@ -39,7 +41,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/label"
-        tools:ignore="TextFields" />
+        android:importantForAutofill="no"
+        tools:ignore="LabelFor,TextFields" />
 
     <!--
         The OK button goes below the EditText field.
@@ -52,9 +55,9 @@
         android:id="@+id/ok"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_below="@id/entry"
-        android:layout_marginLeft="10dip"
+        android:layout_marginStart="10dip"
         android:text="@string/relative_layout_2_ok" />
 
     <!--
@@ -67,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/ok"
-        android:layout_toLeftOf="@id/ok"
+        android:layout_toStartOf="@id/ok"
         android:text="@string/relative_layout_2_cancel" />
 
 </RelativeLayout>

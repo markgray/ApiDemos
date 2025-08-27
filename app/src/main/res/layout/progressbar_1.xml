@@ -14,8 +14,12 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     android:orientation="vertical">
 
     <ProgressBar
@@ -41,13 +45,15 @@
             android:id="@+id/decrease"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/progressbar_1_minus" />
+            android:text="@string/progressbar_1_minus"
+            tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/increase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/progressbar_1_plus" />
+            android:text="@string/progressbar_1_plus"
+            tools:ignore="ButtonStyle" />
 
     </LinearLayout>
 
@@ -65,13 +71,15 @@
             android:id="@+id/decrease_secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/progressbar_1_minus" />
+            android:text="@string/progressbar_1_minus"
+            tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/increase_secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/progressbar_1_plus" />
+            android:text="@string/progressbar_1_plus"
+            tools:ignore="ButtonStyle" />
 
     </LinearLayout>
 

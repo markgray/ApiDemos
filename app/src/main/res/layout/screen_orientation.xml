@@ -15,12 +15,14 @@
 
 <!-- Demonstrates choosing screen orientation programmatically -->
 
-<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
-    <LinearLayout
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
@@ -52,8 +54,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="@string/current_orientation" />
+            android:text="@string/current_orientation"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/current_orientation"
@@ -63,8 +65,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="@string/requested_orientation" />
+            android:text="@string/requested_orientation"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/requested_orientation"
