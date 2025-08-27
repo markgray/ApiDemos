@@ -20,7 +20,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
     <TextView
         android:layout_width="match_parent"
@@ -66,8 +69,9 @@
         android:layout_weight="0"
         android:background="@drawable/green"
         android:freezesText="true"
+        android:importantForAutofill="no"
         android:text="@string/soft_input_modes_initial_text"
-        tools:ignore="TextFields">
+        tools:ignore="LabelFor,TextFields">
 
         <requestFocus />
     </EditText>

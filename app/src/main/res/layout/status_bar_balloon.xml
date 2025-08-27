@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,17 +14,23 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:baselineAligned="false"
     android:gravity="center_vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:orientation="horizontal"
+    tools:ignore="UseCompoundDrawables">
 
-   <ImageView android:id="@+id/icon"
+    <ImageView
+        android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dip" />
-    <TextView android:id="@+id/text"
+        android:layout_marginEnd="10dip"
+        android:importantForAccessibility="no" />
+
+    <TextView
+        android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#3f3f3f3f" />

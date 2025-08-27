@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -17,59 +16,62 @@
 <!-- Demonstrates scrolling with a ScrollView. -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	tools:ignore="ContentDescription">
-	
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
+    tools:ignore="ContentDescription">
+
     <LinearLayout
-    	android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        
-		<ImageView
-			android:layout_width="match_parent"
-			android:layout_height="50dip"
-			android:src="@drawable/shape_1" />
-			
-		<ImageView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:src="@drawable/line" />
-			
-		<ImageView
-			android:layout_width="match_parent"
-			android:layout_height="50dip"
-			android:src="@drawable/shape_2" />
-			
-		<ImageView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:src="@drawable/line" />
-			
-		<ImageView
-			android:layout_width="match_parent"
-			android:layout_height="50dip"
-			android:src="@drawable/shape_3" />
-			
-		<ImageView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:src="@drawable/line" />
-					
-		<ImageView
-			android:layout_width="match_parent"
-			android:layout_height="50dip"
-			android:src="@drawable/shape_4" />
-			
-		<ImageView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:src="@drawable/line" />
-							
-		<ImageView
-			android:layout_width="match_parent"
-			android:layout_height="50dip"
-			android:src="@drawable/shape_5" />
-	</LinearLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:src="@drawable/shape_1" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/line" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:src="@drawable/shape_2" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/line" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:src="@drawable/shape_3" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/line" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:src="@drawable/shape_4" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/line" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:src="@drawable/shape_5" />
+    </LinearLayout>
 </ScrollView>

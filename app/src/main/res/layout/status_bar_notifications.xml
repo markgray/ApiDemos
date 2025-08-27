@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,106 +14,111 @@
 -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    
+    android:layout_height="match_parent"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
+    tools:ignore="ButtonStyle">
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/status_bar_notifications_icons_only" />
-            
+
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <Button
                 android:id="@+id/happy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/status_bar_notifications_happy" />
-        
+
             <Button
                 android:id="@+id/neutral"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/status_bar_notifications_ok" />
-                
-              <Button
+
+            <Button
                 android:id="@+id/sad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/status_bar_notifications_sad" />
-                
+
         </LinearLayout>
-        
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
             android:text="@string/status_bar_notifications_icons_and_marquee" />
-            
+
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <Button
                 android:id="@+id/happyMarquee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/status_bar_notifications_happy" />
-        
+
             <Button
                 android:id="@+id/neutralMarquee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/status_bar_notifications_ok" />
-                
-              <Button
+
+            <Button
                 android:id="@+id/sadMarquee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/status_bar_notifications_sad" />
-                
+
         </LinearLayout>
-        
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
             android:text="@string/status_bar_notifications_remote_views" />
-            
+
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <Button
                 android:id="@+id/happyViews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/status_bar_notifications_happy" />
-        
+
             <Button
                 android:id="@+id/neutralViews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/status_bar_notifications_ok" />
-                
-              <Button
+
+            <Button
                 android:id="@+id/sadViews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/status_bar_notifications_sad" />
-                
+
         </LinearLayout>
-    
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -122,36 +126,37 @@
             android:text="@string/status_bar_notifications_defaults" />
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <Button
                 android:id="@+id/defaultSound"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/status_bar_notifications_default_sound" />
-        
+
             <Button
                 android:id="@+id/defaultVibrate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/status_bar_notifications_default_vibrate" />
-                
-              <Button
+
+            <Button
                 android:id="@+id/defaultAll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/status_bar_notifications_default_all" />
-                
+
         </LinearLayout>
-    
-        <Button android:id="@+id/clear"
+
+        <Button
+            android:id="@+id/clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
             android:text="@string/status_bar_notifications_clear" />
-            
+
     </LinearLayout>
 
 </ScrollView>

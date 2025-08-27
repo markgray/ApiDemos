@@ -16,14 +16,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     tools:ignore="RtlHardcoded">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:ignore="HardcodedText"
-        tools:targetApi="ice_cream_sandwich">
+        tools:ignore="HardcodedText">
 
         <androidx.appcompat.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -52,8 +54,7 @@
             android:showText="true"
             android:text="Customized text"
             android:textOff="NO"
-            android:textOn="YES"
-            tools:targetApi="lollipop" />
+            android:textOn="YES" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:layout_width="300dip"

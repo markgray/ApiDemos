@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -17,41 +16,57 @@
 <!-- Demonstrates starting and stopping a local service.
      See corresponding Java code com.android.sdk.app.ServiceStartArguments.java. -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:padding="4dip"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
     <TextView
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:layout_weight="0" android:paddingBottom="4dip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:paddingBottom="4dip"
+        android:text="@string/service_start_arguments_controller"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/service_start_arguments_controller"/>
+        tools:ignore="InefficientWeight" />
 
-    <Button android:id="@+id/start1"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" 
+    <Button
+        android:id="@+id/start1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/start1_service">
+
         <requestFocus />
     </Button>
 
-    <Button android:id="@+id/start2"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" 
-        android:text="@string/start2_service">
-    </Button>
+    <Button
+        android:id="@+id/start2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start2_service" />
 
-    <Button android:id="@+id/start3"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" 
-        android:text="@string/start3_service">
-    </Button>
+    <Button
+        android:id="@+id/start3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start3_service" />
 
-    <Button android:id="@+id/startfail"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" 
-        android:text="@string/startfail_service">
-    </Button>
+    <Button
+        android:id="@+id/startfail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/startfail_service" />
 
-    <Button android:id="@+id/kill"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" 
-        android:text="@string/kill_process">
-    </Button>
+    <Button
+        android:id="@+id/kill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/kill_process" />
 
 </LinearLayout>
 

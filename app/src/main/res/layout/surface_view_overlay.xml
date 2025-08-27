@@ -16,9 +16,13 @@
 <!-- Demonstrates changing view visibility. See corresponding Java code. -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
     <!-- Here is where we put the SurfaceView, in a frame so that we can
          stack other views on top of it. -->
@@ -65,7 +69,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        tools:ignore="ButtonStyle">
 
         <Button
             android:id="@+id/vis"

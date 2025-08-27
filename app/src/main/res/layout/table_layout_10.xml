@@ -17,8 +17,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     android:stretchColumns="1"
-    tools:ignore="TextFields">
+    tools:ignore="TextFields,LabelFor,RtlHardcoded,ButtonStyle">
 
     <TableRow>
 
@@ -26,10 +29,12 @@
             android:gravity="right"
             android:padding="3dip"
             android:text="@string/table_layout_10_user"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:ignore="RtlHardcoded" />
 
         <EditText
             android:id="@+id/username"
+            android:importantForAutofill="no"
             android:padding="3dip"
             android:text="@string/table_layout_10_username_text" />
 
@@ -45,6 +50,7 @@
 
         <EditText
             android:id="@+id/password"
+            android:importantForAutofill="no"
             android:inputType="textPassword"
             android:padding="3dip"
             android:text="@string/table_layout_10_password_text" />

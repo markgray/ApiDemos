@@ -938,6 +938,7 @@ App
         .app.StatusBarNotifications
         .app.NotificationDisplay
         .layout.status_bar_notifications.xml
+        .layout.status_bar_balloon.xml
             froyo crash -- sound/vibrate/all calls: Intent.makeRestartActivityTask() 
             and PendingIntent.getActivities() -> v11+ only. Displays icon, and text when
             buttons pressed. Marquee does not work lollipop.
@@ -1424,6 +1425,7 @@ Graphics
   Drawable
     Graphics/Drawable/GradientDrawable     all
         .graphics.GradientDrawable1
+        .layout.shape_drawable_1.xml
             Uses xml to draw <shape> ImageView(s). shape_5.xml has a <gradient>
 
     Graphics/Drawable/ShapeDrawable        all
@@ -1668,12 +1670,14 @@ Graphics
   Shadow Card Drag
     Graphics/Shadow Card Drag              v21 (or crashes due to Outline.setConvexPath)
         .graphics.ShadowCardDrag
+        .layout.shadow_card_drag.xml
             Shows "material design" effects of simple draggable shapes that generate a
             shadow casting outline on touching the screen
 
   Shadow Card Stack
     Graphics/Shadow Card Stack             v11 (or crash due to android.animation.Animator)
         .graphics.ShadowCardStack
+        .layout.shadow_card_stack.xml
             Clever use of Animator and AnimatorSet to move card stack using "material 
             design" shadowing. The properties being animated are: translationY (expandAnimators), 
             translationZ (towardAnimators), rotationY and translationX (moveAwayAnimators), 
@@ -1691,7 +1695,8 @@ Graphics
 
   SurfaceView Overlay
     Graphics/SurfaceView Overlay           all
-        .graphics.SurfaceViewOverlay
+        .graphics.
+        .layout.surface_view_overlay.xml
         .graphics.CubeRenderer
             Shows how to use a FrameLayout to layer views within it, and how to use 
             View.setVisibility(View.VISIBLE), View.INVISIBLE, and View.GONE to toggle
@@ -2861,9 +2866,10 @@ Views
   Search View
     Views/Search View/Action Bar           v11+
         .view.SearchViewActionBar
-        .app.SearchQueryResults
         .layout.searchview_actionbar.xml
         .menu.searchview_in_menu
+        .app.SearchQueryResults
+        .layout.search_query_results.xml
             This demonstrates the usage of SearchView in an ActionBar as a menu item. It sets
             a SearchableInfo on the SearchView for suggestions and submitting queries to. In
             AndroidManifest.xml a <meta-data> element android:name="android.app.default_searchable"
@@ -2874,6 +2880,7 @@ Views
         .view.SearchViewActionBar
         .layout.searchview_actionbar.xml
         .app.SearchQueryResults
+        .layout.search_query_results.xml
             This Activity extends .view.SearchViewActionBar, with the only difference being it
             Override's isAlwaysExpanded() to return true instead of false.
 
@@ -2893,6 +2900,7 @@ Views
         .view.SecureView
         .layout.secure_view.xml
         .view.SecureViewOverlay
+        .layout.secure_view_overlay.xml
             This activity demonstrates two different ways in which views can be made more secure to
             touch spoofing attacks by leveraging framework features.
 

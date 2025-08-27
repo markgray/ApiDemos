@@ -15,9 +15,11 @@
 
 <!-- Demonstrates secure views. -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -89,8 +91,7 @@
             android:layout_gravity="center_horizontal"
             android:filterTouchesWhenObscured="true"
             android:text="@string/secure_view_button"
-            android:textColor="#833"
-            tools:targetApi="gingerbread" />
+            android:textColor="#833" />
 
         <TextView
             android:layout_width="match_parent"

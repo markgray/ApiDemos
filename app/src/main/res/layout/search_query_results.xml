@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2008 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2008 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -19,15 +18,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     android:orientation="vertical">
-    
+
     <!--  Section: Information -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="4dip"
         android:text="@string/msg_search_results" />
-    
+
     <!--  Section: Search Query String -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,7 +40,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_search_query" />
-        <TextView android:id="@+id/txt_query"
+
+        <TextView
+            android:id="@+id/txt_query"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -53,7 +57,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_search_appdata" />
-        <TextView android:id="@+id/txt_appdata"
+
+        <TextView
+            android:id="@+id/txt_appdata"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -68,9 +74,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_search_deliveredby" />
-        <TextView android:id="@+id/txt_deliveredby"
+
+        <TextView
+            android:id="@+id/txt_deliveredby"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
- </LinearLayout>
+</LinearLayout>
