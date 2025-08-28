@@ -14,8 +14,12 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     android:orientation="vertical">
 
     <TableLayout
@@ -33,7 +37,7 @@
                 android:text="@string/table_layout_7_open" />
 
             <TextView
-                android:gravity="right"
+                android:gravity="end"
                 android:padding="3dip"
                 android:text="@string/table_layout_7_open_shortcut" />
         </TableRow>
@@ -46,7 +50,7 @@
                 android:text="@string/table_layout_7_save" />
 
             <TextView
-                android:gravity="right"
+                android:gravity="end"
                 android:padding="3dip"
                 android:text="@string/table_layout_7_save_shortcut" />
         </TableRow>
@@ -59,7 +63,7 @@
                 android:text="@string/table_layout_7_save_as" />
 
             <TextView
-                android:gravity="right"
+                android:gravity="end"
                 android:padding="3dip"
                 android:text="@string/table_layout_7_save_as_shortcut" />
         </TableRow>
@@ -90,7 +94,7 @@
                 android:text="@string/table_layout_7_export" />
 
             <TextView
-                android:gravity="right"
+                android:gravity="end"
                 android:padding="3dip"
                 android:text="@string/table_layout_7_export_shortcut" />
         </TableRow>
@@ -108,12 +112,14 @@
             android:id="@+id/toggle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/table_layout_7_toggle_checkmarks" />
+            android:text="@string/table_layout_7_toggle_checkmarks"
+            tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/toggle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/table_layout_7_toggle_shortcuts" />
+            android:text="@string/table_layout_7_toggle_shortcuts"
+            tools:ignore="ButtonStyle" />
     </LinearLayout>
 </LinearLayout>

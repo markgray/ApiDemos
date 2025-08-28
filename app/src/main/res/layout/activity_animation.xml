@@ -22,11 +22,10 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="4dip">
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="120dp">
-    </Space>
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,7 +48,7 @@
         android:id="@+id/zoom_animation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/activity_animation_zoom"/>
+        android:text="@string/activity_animation_zoom" />
 
     <Button
         android:id="@+id/modern_fade_animation"
@@ -64,24 +63,24 @@
         android:id="@+id/modern_zoom_animation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/activity_modern_animation_zoom"/>
+        android:text="@string/activity_modern_animation_zoom" />
 
     <Button
         android:id="@+id/scale_up_animation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/activity_scale_up_animation"/>
+        android:text="@string/activity_scale_up_animation" />
 
     <Button
         android:id="@+id/zoom_thumbnail_animation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/activity_zoom_thumbnail_animation"/>
+        android:text="@string/activity_zoom_thumbnail_animation" />
 
     <Button
         android:id="@+id/no_animation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/activity_no_animation"/>
+        android:text="@string/activity_no_animation" />
 </LinearLayout>
 

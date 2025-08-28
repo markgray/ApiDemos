@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2010 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,20 +13,27 @@
      limitations under the License.
 -->
 
+<!--suppress DeprecatedClassUsageInspection -->
 <TabHost xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/tabhost"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="60dp">
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:padding="5dp">
+
         <TabWidget
             android:id="@android:id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right|center_vertical" />
+            android:gravity="end|center_vertical" />
+
         <FrameLayout
             android:id="@android:id/tabcontent"
             android:layout_width="match_parent"

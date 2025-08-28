@@ -19,8 +19,12 @@
 package com.example.android.apis.view
 
 import android.app.TabActivity
+import android.content.Context
+import android.content.res.Resources
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
+import android.widget.TabHost
 import com.example.android.apis.R
 
 /**
@@ -45,20 +49,50 @@ class Tabs1 : TabActivity() {
     @Deprecated("Deprecated in Java")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val tabHost = tabHost
-        LayoutInflater.from(this).inflate(
-                R.layout.tabs1,
-                tabHost.tabContentView,
-                true
+        val tabHost: TabHost = tabHost
+        tabHost.setPadding(
+            dpToPixel(8, this),
+            dpToPixel(60, this),
+            dpToPixel(8, this),
+            dpToPixel(240, this)
         )
-        tabHost.addTab(tabHost.newTabSpec("tab1")
+        LayoutInflater.from(this).inflate(
+            R.layout.tabs1,
+            tabHost.tabContentView,
+            true
+        )
+        tabHost.addTab(
+            tabHost.newTabSpec("tab1")
                 .setIndicator("tab1")
-                .setContent(R.id.view1))
-        tabHost.addTab(tabHost.newTabSpec("tab2")
+                .setContent(R.id.view1)
+        )
+        tabHost.addTab(
+            tabHost.newTabSpec("tab2")
                 .setIndicator("tab2")
-                .setContent(R.id.view2))
-        tabHost.addTab(tabHost.newTabSpec("tab3")
+                .setContent(R.id.view2)
+        )
+        tabHost.addTab(
+            tabHost.newTabSpec("tab3")
                 .setIndicator("tab3")
-                .setContent(R.id.view3))
+                .setContent(R.id.view3)
+        )
+    }
+
+    /**
+     * This method converts dp unit to equivalent pixels, depending on device density. First we
+     * fetch a [Resources] instance for `val resources`, then we fetch the current display
+     * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+     * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+     * dots-per-inch, divided by the reference density used throughout the system.
+     *
+     * @param dp      A value in dp (density independent pixels) unit which we need to convert
+     *                into pixels
+     * @param context [Context] to get resources and device specific display metrics
+     * @return An [Int] value to represent px equivalent to dp depending on device density
+     */
+    fun dpToPixel(dp: Int, context: Context): Int {
+        val resources: Resources = context.resources
+        val metrics = resources.displayMetrics
+        return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
     }
 }

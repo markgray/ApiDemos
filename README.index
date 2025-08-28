@@ -294,6 +294,8 @@ App
 
     App/Action Bar/Action Provider/Settings Action Provider v14
         .app.ActionBarSettingsActionProviderActivity
+        .layout.action_bar_settings_action_provider.xml
+        .menu.action_bar_settings_action_provider
             demo creates an ActionProvider for launching the system settings and adds
             a menu item with that provider, in this case it will launch the system
             settings app. Demonstrates how to implement an android.view.ActionProvider
@@ -322,7 +324,7 @@ App
   Activity
     App/Activity/Animation                 all
         .app.Animation
-        .layout.activity_animation
+        .layout.activity_animation.xml
         JELLY_BEAN (v16+) required for "modern animations" by java code if/else statement
         animates in to:
         .app.AlertDialogSamples
@@ -589,7 +591,7 @@ App
             wallpaper, modifies it and sets the modified bitmap as system wallpaper. The
             image it uses is too small for larger screens because the current wallpaper
             is compressed to fit in the ImageView used by the layout, which is then used
-            to set the new wallpaper.
+            to set the new wallpaper. TODO: Fix external file access.
 
     App/Activity/Soft Input Modes          all
         .app.SoftInputModes
@@ -1784,6 +1786,7 @@ Media
 
     Media/VideoView                        all
         .media.VideoViewDemo
+        .layout.videoview.xml
             Shows how to use the VideoView class in an application to play a video, as
             well as a MediaController to provide control buttons for the playback.
 
@@ -1836,6 +1839,7 @@ OS
 
     OS/TriggerSensors                      all -- v18+ or crash
         .os.TriggerSensors
+        .layout.trigger_sensors.xml
             Shows how to use the Sensor.TYPE_SIGNIFICANT_MOTION sensor as a TriggerSensor
             and respond to TriggerEvent it receives as a TriggerEventListener.
 
@@ -1910,7 +1914,7 @@ Views
   Animation
     Views/Animation/3D Transition          all
         .animation.Transition3d
-          R.layout.animations_main_screen
+        .layout.animations_main_screen.xml
         .animation.Rotate3dAnimation
             This sample application shows how to use layout animation and various 
             transformations on views. The result is a 3D transition between a ListView
@@ -1925,12 +1929,14 @@ Views
 
     Views/Animation/Interpolators          all
         .view.Animation3
+        .layout.animation_3.xml
             Shows the effect of selecting each of seven different types of TranslateAnimation
             interpolator: "Accelerate", "Decelerate", "Accelerate/Decelerate", "Anticipate",
             "Overshoot", "Anticipate/Overshoot", and "Bounce".
 
     Views/Animation/Push                   all
         .view.Animation2
+        .layout.animation_2.xml
             Shows how to use the four different animations available for a ViewFlipper:
             "Push up", "Push left", "Cross fade", and "Hyperspace". A ViewFlipper is a
             Simple ViewAnimator that will animate between two or more views that have 
@@ -1939,6 +1945,7 @@ Views
  
     Views/Animation/Shake                  all
         .view.Animation1
+        .layout.animation_1.xml
             Shows use of a translate animation defined in xml to "shake" a TextView.
             It uses an android:interpolator also defined in xml which consists of a 
             cycleInterpolator whose android:cycles="7".
@@ -2159,6 +2166,7 @@ Views
 
     Views/Focus/6. Window Focus Observer   all  -- v18+ or crash
         .view.WindowFocusObserver
+        .layout.window_focus_observer.xml
             Implements a WindowId.FocusObserver() whose onFocusGained(WindowId) merely
             prints "Gained focus", and whose onFocusLost(WindowId) prints "Lost focus".
              When menu items are clicked or the app is put in the background the window

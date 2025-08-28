@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2010 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,31 +14,33 @@
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="HardcodedText"
-    android:orientation="vertical"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/container">
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="120dp">
-    </Space>
+    android:orientation="vertical"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
+    tools:ignore="HardcodedText">
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         tools:ignore="UselessParent">
+
         <Button
+            android:id="@+id/startButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Play"
-            android:id="@+id/startButton"
             tools:ignore="ButtonStyle" />
+
         <Button
+            android:id="@+id/reverseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Reverse"
-            android:id="@+id/reverseButton"
             tools:ignore="ButtonStyle" />
     </LinearLayout>
 </LinearLayout>

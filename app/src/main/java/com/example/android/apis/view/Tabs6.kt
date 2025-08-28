@@ -53,18 +53,24 @@ class Tabs6 : TabActivity(), TabContentFactory {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tabs_right_gravity)
         val tabHost = tabHost
-        tabHost.addTab(tabHost.newTabSpec("tab1")
-            .setIndicator(
-                "tab1",
-                ResourcesCompat.getDrawable(resources, R.drawable.star_big_on, null)
-            )
-            .setContent(this))
-        tabHost.addTab(tabHost.newTabSpec("tab2")
-            .setIndicator("tab2")
-            .setContent(this))
-        tabHost.addTab(tabHost.newTabSpec("tab3")
-            .setIndicator("tab3")
-            .setContent(this))
+        tabHost.addTab(
+            tabHost.newTabSpec("tab1")
+                .setIndicator(
+                    "tab1",
+                    ResourcesCompat.getDrawable(resources, R.drawable.star_big_on, null)
+                )
+                .setContent(this)
+        )
+        tabHost.addTab(
+            tabHost.newTabSpec("tab2")
+                .setIndicator("tab2")
+                .setContent(this)
+        )
+        tabHost.addTab(
+            tabHost.newTabSpec("tab3")
+                .setIndicator("tab3")
+                .setContent(this)
+        )
     }
 
     /**

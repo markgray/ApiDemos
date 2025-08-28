@@ -29,8 +29,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="120dp">
-        </Space>
+            android:layout_height="120dp" />
 
         <Button
             android:id="@+id/two_buttons"

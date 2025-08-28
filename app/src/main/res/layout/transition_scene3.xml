@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2013 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2013 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,89 +13,96 @@
      limitations under the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/container">
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <View
-            android:layout_width="100dip"
-            android:layout_height="50dip"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:background="#f00"
-            android:id="@+id/view1"/>
+        android:id="@+id/view1"
+        android:layout_width="100dip"
+        android:layout_height="50dip"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="#f00" />
 
     <View
-            android:layout_width="100dip"
-            android:layout_height="50dip"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:background="#0f0"
-            android:id="@+id/view2"/>
+        android:id="@+id/view2"
+        android:layout_width="100dip"
+        android:layout_height="50dip"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:background="#0f0" />
 
     <View
-            android:layout_width="100dip"
-            android:layout_height="50dip"
-            android:background="#00f"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:id="@+id/view3"/>
+        android:id="@+id/view3"
+        android:layout_width="100dip"
+        android:layout_height="50dip"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:background="#00f" />
 
     <View
-            android:layout_width="100dip"
-            android:layout_height="50dip"
-            android:background="#0ff"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:id="@+id/view4"/>
+        android:id="@+id/view4"
+        android:layout_width="100dip"
+        android:layout_height="50dip"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="#0ff" />
 
     <LinearLayout
+        android:id="@+id/grayscaleContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:orientation="vertical"
-        android:id="@+id/grayscaleContainer">
+        android:orientation="vertical">
 
         <View
-                android:layout_width="match_parent"
-                android:layout_height="10dip"
-                android:background="#000"
-                android:id="@+id/gray1"/>
+            android:id="@+id/gray1"
+            android:layout_width="match_parent"
+            android:layout_height="10dip"
+            android:background="#000" />
+
         <View
-                android:layout_width="match_parent"
-                android:layout_height="10dip"
-                android:background="#222"
-                android:id="@+id/gray2"/>
+            android:id="@+id/gray2"
+            android:layout_width="match_parent"
+            android:layout_height="10dip"
+            android:background="#222" />
+
         <View
-                android:layout_width="match_parent"
-                android:layout_height="10dip"
-                android:background="#444"
-                android:id="@+id/gray3"/>
+            android:id="@+id/gray3"
+            android:layout_width="match_parent"
+            android:layout_height="10dip"
+            android:background="#444" />
+
         <View
-                android:layout_width="match_parent"
-                android:layout_height="10dip"
-                android:background="#666"
-                android:id="@+id/gray4"/>
+            android:id="@+id/gray4"
+            android:layout_width="match_parent"
+            android:layout_height="10dip"
+            android:background="#666" />
+
         <View
-                android:layout_width="match_parent"
-                android:layout_height="10dip"
-                android:background="#888"
-                android:id="@+id/gray5"/>
+            android:id="@+id/gray5"
+            android:layout_width="match_parent"
+            android:layout_height="10dip"
+            android:background="#888" />
+
         <View
-                android:layout_width="match_parent"
-                android:layout_height="10dip"
-                android:background="#aaa"
-                android:id="@+id/gray6"/>
+            android:id="@+id/gray6"
+            android:layout_width="match_parent"
+            android:layout_height="10dip"
+            android:background="#aaa" />
+
         <View
-                android:layout_width="match_parent"
-                android:layout_height="10dip"
-                android:background="#ccc"
-                android:id="@+id/gray7"/>
+            android:id="@+id/gray7"
+            android:layout_width="match_parent"
+            android:layout_height="10dip"
+            android:background="#ccc" />
+
         <View
-                android:layout_width="match_parent"
-                android:layout_height="10dip"
-                android:background="#fff"
-                android:id="@+id/gray8"/>
+            android:id="@+id/gray8"
+            android:layout_width="match_parent"
+            android:layout_height="10dip"
+            android:background="#fff" />
 
     </LinearLayout>
 

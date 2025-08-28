@@ -36,11 +36,8 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-
 import androidx.appcompat.app.AppCompatActivity
-
 import com.example.android.apis.R
-import java.util.ArrayList
 
 /**
  * Sample code that invokes the speech recognition intent API.
@@ -103,8 +100,9 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
          * Check to see if a recognition activity is present
          */
         val pm = packageManager
-        val activities = pm.queryIntentActivities(Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0)
-        if (activities.size != 0) {
+        val activities =
+            pm.queryIntentActivities(Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0)
+        if (activities.isNotEmpty()) {
             speakButton.setOnClickListener(this)
         } else {
             speakButton.isEnabled = false
@@ -161,7 +159,10 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
          * LANGUAGE_MODEL_FREE_FORM: free-form speech recognition (the alternative is the model
          * LANGUAGE_MODEL_WEB_SEARCH: language model based on web search terms
          */
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        intent.putExtra(
+            RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+        )
         /**
          * Specify how many results you want to receive. The results will be sorted
          * where the first result is the one with higher confidence.
@@ -173,7 +174,10 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
          * system locale). Most of the applications do not have to set this parameter.
          */
         if (mSupportedLanguageView!!.selectedItem.toString() != "Default") {
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, mSupportedLanguageView!!.selectedItem.toString())
+            intent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE,
+                mSupportedLanguageView!!.selectedItem.toString()
+            )
         }
         voiceToTextRequestLauncher.launch(intent)
     }
@@ -199,7 +203,8 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
                 val data: Intent? = result.data
                 if (data != null) {
                     val matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                    mList!!.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, matches!!)
+                    mList!!.adapter =
+                        ArrayAdapter(this, android.R.layout.simple_list_item_1, matches!!)
                 } else {
                     Log.i(TAG, "There was no data Intent returned from Voice to text")
                 }
@@ -220,7 +225,7 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
             null,
             SupportedLanguageBroadcastReceiver(),
             null,
-            Activity.RESULT_OK,
+            RESULT_OK,
             null,
             null
         )
@@ -245,9 +250,11 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
      */
     private fun updateSupportedLanguages(languages: MutableList<String>?) { // We add "Default" at the beginning of the list to simulate default language.
         languages!!.add(0, "Default")
-        val adapter: SpinnerAdapter = ArrayAdapter<CharSequence>(this,
+        val adapter: SpinnerAdapter = ArrayAdapter<CharSequence>(
+            this,
             android.R.layout.simple_spinner_item,
-            languages.toTypedArray())
+            languages.toTypedArray()
+        )
         mSupportedLanguageView!!.adapter = adapter
     }
 
@@ -299,9 +306,8 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
         override fun onReceive(context: Context, intent: Intent) {
             Log.i(TAG, "Receiving broadcast $intent")
             val extra = getResultExtras(false)
-            if (resultCode != Activity.RESULT_OK) {
+            if (resultCode != RESULT_OK)
                 mHandler!!.post { showToast("Error code:$resultCode") }
-            }
             if (extra == null) {
                 mHandler!!.post { showToast("No extra") }
                 return

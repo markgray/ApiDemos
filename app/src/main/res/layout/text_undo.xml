@@ -18,7 +18,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
+    tools:ignore="ButtonStyle,TextFields,LabelFor" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,8 +45,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:freezesText="true"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            tools:ignore="TextFields" />
+            android:importantForAutofill="no"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -55,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:text="@string/text_undo_set_text" />
+                android:text="@string/text_undo_set_text"/>
 
             <Button
                 android:id="@+id/append_text"
@@ -88,9 +92,9 @@
             android:layout_weight="1"
             android:allowUndo="false"
             android:freezesText="true"
+            android:importantForAutofill="no"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            tools:ignore="TextFields"
-            tools:targetApi="m" />
+            tools:targetApi="23" />
 
         <TextView
             android:id="@+id/length_limit_msg"
@@ -107,8 +111,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:freezesText="true"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            tools:ignore="TextFields" />
+            android:importantForAutofill="no"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/credit_card_msg"
@@ -125,6 +129,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:freezesText="true"
+            android:importantForAutofill="no"
             android:textAppearance="?android:attr/textAppearanceMedium"
             tools:ignore="TextFields" />
 

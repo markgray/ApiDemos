@@ -20,13 +20,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:text="@string/randomize" />
+            android:text="@string/randomize"
+            tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/setwallpaper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:text="@string/set_wallpaper" />
+            android:text="@string/set_wallpaper"
+            tools:ignore="ButtonStyle" />
     </LinearLayout>
 </FrameLayout>

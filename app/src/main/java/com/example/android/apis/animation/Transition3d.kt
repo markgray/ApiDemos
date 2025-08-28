@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
+import com.example.android.apis.animation.Transition3d.Companion.PHOTOS_RESOURCES
 
 /**
  * This sample application shows how to use layout animation and various
@@ -82,11 +83,11 @@ class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListe
         mImageView!!.isFocusable = true
         mImageView!!.setOnClickListener(this)
 
-    // Since we are caching large views, we want to keep their cache
-    // between each animation. This is probably not necessary since
-    // API 11 added hardware-accelerated rendering so I have removed it.
-    // @Suppress("UsePropertyAccessSyntax", "DEPRECATION")
-    // mContainer!!.setPersistentDrawingCache(ViewGroup.PERSISTENT_ANIMATION_CACHE)
+        // Since we are caching large views, we want to keep their cache
+        // between each animation. This is probably not necessary since
+        // API 11 added hardware-accelerated rendering so I have removed it.
+        // @Suppress("UsePropertyAccessSyntax", "DEPRECATION")
+        // mContainer!!.setPersistentDrawingCache(ViewGroup.PERSISTENT_ANIMATION_CACHE)
     }
 
     /**

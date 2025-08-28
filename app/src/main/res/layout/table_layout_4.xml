@@ -17,6 +17,9 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     android:stretchColumns="1">
 
     <TableRow>
@@ -26,7 +29,7 @@
             android:text="@string/table_layout_4_open" />
 
         <TextView
-            android:gravity="right"
+            android:gravity="end"
             android:padding="3dip"
             android:text="@string/table_layout_4_open_shortcut" />
     </TableRow>
@@ -38,7 +41,7 @@
             android:text="@string/table_layout_4_save" />
 
         <TextView
-            android:gravity="right"
+            android:gravity="end"
             android:padding="3dip"
             android:text="@string/table_layout_4_save_shortcut" />
     </TableRow>

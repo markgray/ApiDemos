@@ -13,133 +13,141 @@
      limitations under the License.
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    tools:ignore="DisableBaselineAlignment"
-    tools:targetApi="o">
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.5"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:tooltipText="@string/tooltips_container_tooltip">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@string/tooltips_description"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/tooltips_code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="#ccc"
-            android:padding="10dp"
-            android:text="@string/tooltips_code_label"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="#ccc"
-            android:padding="10dp"
-            android:text="@string/tooltips_resource_label"
-            android:textSize="16sp"
-            android:tooltipText="@string/tooltips_resource_tooltip" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="#ccc"
-            android:padding="10dp"
-            android:text="@string/tooltips_long_label"
-            android:textSize="16sp"
-            android:tooltipText="@string/tooltips_long_tooltip" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_margin="4dp"
-            android:background="#ccc"
-            android:padding="10dp"
-            android:text="@string/tooltips_edge_label"
-            android:textSize="16sp"
-            android:tooltipText="@string/tooltips_edge_tooltip" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            tools:ignore="InefficientWeight,NestedWeights" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="#ccc"
-            android:padding="10dp"
-            android:text="@string/tooltips_above_label"
-            android:textSize="16sp"
-            android:tooltipText="@string/tooltips_above_tooltip" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.5"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="#ccc"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/tooltips_wide_label"
-            android:textSize="16sp"
-            android:tooltipText="@string/tooltips_wide_tooltip" />
+        android:orientation="horizontal"
+        tools:ignore="DisableBaselineAlignment,UselessParent"
+        tools:targetApi="o">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            tools:ignore="InefficientWeight,NestedWeights">
+            android:layout_weight="0.5"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:tooltipText="@string/tooltips_container_tooltip">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/tooltips_description"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tooltips_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:background="#ccc"
-                android:gravity="center"
                 android:padding="10dp"
-                android:text="@string/tooltips_tall_label"
+                android:text="@string/tooltips_code_label"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="#ccc"
+                android:padding="10dp"
+                android:text="@string/tooltips_resource_label"
                 android:textSize="16sp"
-                android:tooltipText="@string/tooltips_tall_tooltip" />
+                android:tooltipText="@string/tooltips_resource_tooltip" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="#ccc"
+                android:padding="10dp"
+                android:text="@string/tooltips_long_label"
+                android:textSize="16sp"
+                android:tooltipText="@string/tooltips_long_tooltip" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_margin="4dp"
+                android:background="#ccc"
+                android:padding="10dp"
+                android:text="@string/tooltips_edge_label"
+                android:textSize="16sp"
+                android:tooltipText="@string/tooltips_edge_tooltip" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                tools:ignore="InefficientWeight,NestedWeights" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="#ccc"
+                android:padding="10dp"
+                android:text="@string/tooltips_above_label"
+                android:textSize="16sp"
+                android:tooltipText="@string/tooltips_above_tooltip" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:layout_weight="1"
                 android:background="#ccc"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="@string/tooltips_large_label"
+                android:text="@string/tooltips_wide_label"
                 android:textSize="16sp"
-                android:tooltipText="@string/tooltips_large_tooltip" />
+                android:tooltipText="@string/tooltips_wide_tooltip" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                tools:ignore="InefficientWeight,NestedWeights">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:background="#ccc"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/tooltips_tall_label"
+                    android:textSize="16sp"
+                    android:tooltipText="@string/tooltips_tall_tooltip" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:background="#ccc"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/tooltips_large_label"
+                    android:textSize="16sp"
+                    android:tooltipText="@string/tooltips_large_tooltip" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</FrameLayout>
