@@ -22,12 +22,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp"
     tools:ignore="TextFields">
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="120dp">
-    </Space>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

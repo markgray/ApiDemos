@@ -1754,6 +1754,7 @@ Graphics
 Hardware
     Hardware/Consumer IR                  all  -- but v19+ or crash
         .hardware.ConsumerIr
+        .layout.consumer_ir.xml
             App that transmits an IR code, demonstrates the android.hardware.ConsumerIrManager
             android.hardware.ConsumerIrManager class. Unfortunately I have no devices with an
             IR Emitter.
@@ -1953,18 +1954,21 @@ Views
   Auto Complete
     Views/Auto Complete/1. Screen Top      all
         .view.AutoComplete1
+        .layout.autocomplete_1.xml
             Shows how to use an AutoCompleteTextView to provide suggestions as a user 
             types. The AutoCompleteTextView is located at the top of the screen, so
             the suggestions appear in a drop down list.
 
     Views/Auto Complete/2. Screen Bottom   all
         .view.AutoComplete2
+        .layout.autocomplete_2.xml
             Shows how to use an AutoCompleteTextView to provide suggestions as a user 
             types. The AutoCompleteTextView is located at the bottom of the screen, so
             the suggestions appear in a pop-up list
 
     Views/Auto Complete/3. Scroll          all
         .view.AutoComplete3
+        .layout.autocomplete_3.xml
             Shows how to use an AutoCompleteTextView to provide suggestions as a user 
             types. The entire very long layout is inside a ScrollView that you have to
             scroll down to see the AutoCompleteTextView's, which control the ScrollView
@@ -1972,18 +1976,21 @@ Views
 
     Views/Auto Complete/4. Contacts        all
         .view.AutoComplete4
+        .layout.autocomplete_4.xml
             Shows how to use the ContentResolver for the contacts database as the source
             of data for an auto complete lookup of a contract.
             TODO: replace CursorAdapter constructor with LoaderManager with a CursorLoader
 
     Views/Auto Complete/5. Contacts with Hint -- all
         .view.AutoComplete5
+        .layout.autocomplete_5.xml
             Shows how to use the ContentResolver for the contacts database as the source
             of data for an auto complete lookup of a contact. It uses android:completionHint
             to show the hint "Typing * will show all of your contacts." in the AutoCompleteTextView.
 
     Views/Auto Complete/6. Multiple items  all
         .view.AutoComplete6
+        .layout.autocomplete_6.xml
             Shows how to use a MultiAutoCompleteTextView to show completion suggestions 
             for the substring of the text where the user is typing. Adds a comma at the
             end of every selected suggestion and MultiAutoCompleteTextView.CommaTokenizer
@@ -1992,6 +1999,7 @@ Views
   Buttons
     Views/Buttons                          all
         .view.Buttons1
+        .layout.buttons_1.xml
             Shows three different buttons, all totally defined in layout/buttons_1.xml:
             a default button, a small button using style="?android:attr/buttonStyleSmall",
             and a ToggleButton. The small button is same size as normal button on M.
@@ -1999,11 +2007,13 @@ Views
   Chronometer
     Views/Chronometer                      all
         .view.ChronometerDemo
+        .layout.chronometer.xml
             Demonstrates the Chronometer class.
 
   Controls
     Views/Controls/1. Light Theme          all
         .view.Controls1
+        .layout.controls_1.xml
             A gallery of basic controls: Button, EditText, RadioButton, Checkbox, Spinner
             and switch if v14+. This example uses the light theme which is set using
             the activity attribute android:theme="@style/Theme.AppCompat.Light" in
@@ -2011,33 +2021,45 @@ Views
 
     Views/Controls/2. Dark Theme           all
         .view.Controls2
+        .layout.controls_1.xml
             Same as .view.Controls1 but android:theme="@style/Theme.AppCompat" is set in
             AndroidManifest.xml
 
     Views/Controls/3. Holo Light Theme     v11
         .view.Controls3
+        .layout.controls_1.xml
             Uses .view.Controls1 with android:theme="@style/Theme.MyHoloLight" set
             in AndroidManifest.xml
             TODO: Make it look more like "@android:style/Theme.Holo.Light"
 
     Views/Controls/4. Holo Dark Theme      v11
         .view.Controls4
+        .layout.controls_1.xml
             Uses .view.Controls1 with android:theme="@style/Theme.MyHolo" set in
             AndroidManifest.xml
             TODO: Make look more like android:theme="@android:style/Theme.Holo"
 
+    Views/Controls/5. Material Light Theme v21
+        .view.Controls5
+        .layout.controls_1.xml
+            Uses .view.Controls1 with android:theme="@android:style/Theme.Material.Light"
+            set in AndroidManifest.xml
+            TODO: Make look more like android:theme="@android:style/Theme.Material.Light"
+
     Views/Controls/5. Material Light Theme v24
         .view.ControlsMaterialLight
+        .layout.controls_material.xml
             Uses layout/controls_material.xml with aandroid:theme="@style/Theme.MyMaterialLight"
             set in AndroidManifest.xml which contains more advanced controls than used in old
             version.
             TODO: Make look more like android:theme="@android:style/Theme.Material.Light"
 
-    Views/Controls/5. Material Light Theme v21
-        .view.Controls5
-            Uses .view.Controls1 with android:theme="@android:style/Theme.Material.Light"
-            set in AndroidManifest.xml
-            TODO: Make look more like android:theme="@android:style/Theme.Material.Light"
+    Views/Controls/6. Material Dark Theme  v21
+        .view.Controls6
+        .layout.controls_1.xml
+            Uses .view.Controls1 with android:theme="@style/Theme.MyMaterial" set
+            in AndroidManifest.xml
+            TODO: Make look more like android:theme="@android:style/Theme.Material"
 
     Views/Controls/6. Material Dark Theme v24
          .view.ControlsMaterialLight
@@ -2045,12 +2067,6 @@ Views
              Extends ControlsMaterialLight with android:theme="@style/Theme.MyMaterial"
              set in AndroidManifest.xml
              TODO: Make look more like android:theme="@android:style/Theme.Material"
-
-    Views/Controls/6. Material Dark Theme  v21
-        .view.Controls6
-            Uses .view.Controls1 with android:theme="@style/Theme.MyMaterial" set
-            in AndroidManifest.xml
-            TODO: Make look more like android:theme="@android:style/Theme.Material"
 
     Views/Controls/7. Custom Theme         all
         .view.Controls7
@@ -2076,6 +2092,7 @@ Views
     Views/Custom                           all
         .view.CustomView1
         .view.LabelView
+        .layout.custom_view_1.xml
             Demonstrates creating a Screen that uses custom views. This example uses
             com.example.android.apis.view.LabelView.kt -- the attributes it accepts
             are defined in the file values/attrs.xml
@@ -2301,49 +2318,58 @@ Views
   Baseline
     Views/Layouts/Baseline/1. Top          all
         .view.Baseline1
+        .layout.baseline_1.xml
             Use default android:layout_gravity of LinearLayout to place widgets at top 
             of window -- the baseline of the text in the views of differently sized text
             is used to align.
 
     Views/Layouts/Baseline/2. Bottom       all
         .view.Baseline2
+        .layout.baseline_2.xml
             Uses android:layout_gravity="bottom" of LinearLayout to place widgets at 
             bottom of window -- the baseline of the text in the views of differently sized
             text is used to align.
 
     Views/Layouts/Baseline/3. Center       all
         .view.Baseline3
+        .layout.baseline_3.xml
             This example shows that baseline alignment has no effect when the layout
             gravity is set to center_vertical.
 
     Views/Layouts/Baseline/4. Everywhere   all
         .view.Baseline4
+        .layout.baseline_4.xml
             This example scatters widgets around the window using different values of
             android:layout_gravity
 
     Views/Layouts/Baseline/5. Multi-line   all
         .view.Baseline6
+        .layout.baseline_6.xml
             Demonstrates the baseline alignment in a RelativeLayout when one of the 
             widgets is a multi-line EditText
 
     Views/Layouts/Baseline/6. Relative     all
         .view.Baseline7
+        .layout.baseline_7.xml
             Shows alignment in a RelativeLayout using android:layout_alignParentLeft="true"
             and android:layout_alignParentRight="true" for two different TextView widgets.
 
     Views/Layouts/Baseline/Nested Example 1  --all
         .view.BaselineNested1
+        .layout.baseline_nested_1.xml
             Shows how to use android:baselineAlignedChildIndex to align the baseline of
             widgets contained inside a android:orientation="horizontal" LinearLayout
             TODO: describe layout file R.layout.baseline_nested_1
 
     Views/Layouts/Baseline/Nested Example 2  --all
         .view.BaselineNested2
+        .layout.baseline_nested_2.xml
             More use of android:baselineAlignedChildIndex to align specific widget inside
             compound nested Views
 
     Views/Layouts/Baseline/Nested Example 3  --all
         .view.BaselineNested3
+        .layout.baseline_nested_3.xml
             Using android:baselineAlignedChildIndex again this time to point to a linear 
             layout to baseline align by, which in turn will point to a text view inside 
             of it.
@@ -2352,6 +2378,7 @@ Views
     Views/Layouts/CustomLayout             all -- v11+ or crashes combineMeasuredStates
         .view.CustomLayoutActivity
         .view.CustomLayout
+        .layout.custom_layout.xml
             Example of writing a custom layout manager.  This is a fairly full-featured 
             layout manager that is relatively general, handling all layout cases.  The
             custom parameters that it supports are extensions of ViewGroup.MarginLayoutParams

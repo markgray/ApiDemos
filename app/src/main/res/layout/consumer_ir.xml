@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2008 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2008 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -19,29 +18,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="120dp">
-    </Space>
+    android:orientation="vertical"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
     <Button
         android:id="@+id/send_button"
-        android:text="@string/ir_send"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="@string/ir_send" />
+
     <Button
         android:id="@+id/get_freqs_button"
-        android:text="@string/ir_get_freqs"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="@string/ir_get_freqs" />
 
     <ScrollView
         android:id="@+id/freqs_text_scroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/freqs_text"

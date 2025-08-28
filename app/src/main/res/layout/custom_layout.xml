@@ -20,12 +20,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="80dp">
-    </Space>
+    android:orientation="vertical"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="90dp"
+    android:paddingBottom="60dp">
 
     <com.example.android.apis.view.CustomLayout
         android:layout_width="match_parent"

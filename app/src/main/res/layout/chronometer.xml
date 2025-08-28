@@ -19,12 +19,9 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="4dip">
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="120dp">
-    </Space>
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
     <Chronometer
         android:id="@+id/chronometer"
@@ -32,8 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:format="@string/chronometer_initial_format"
-        android:paddingBottom="30dip"
         android:paddingTop="30dip"
+        android:paddingBottom="30dip"
         tools:ignore="InefficientWeight" />
 
     <Button

@@ -13,48 +13,41 @@
      limitations under the License.
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<!-- Lots of buttons = need scrolling -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="120dp">
-    </Space>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <!-- Lots of buttons = need scrolling -->
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
+        <!-- Regular sized buttons -->
+        <Button
+            android:id="@+id/button_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="@string/buttons_1_normal" />
 
-            <!-- Regular sized buttons -->
-            <Button
-                android:id="@+id/button_normal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/buttons_1_normal" />
+        <!-- Small buttons -->
+        <Button
+            android:id="@+id/button_small"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/buttons_1_small" />
 
-            <!-- Small buttons -->
-            <Button
-                android:id="@+id/button_small"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/buttons_1_small" />
+        <ToggleButton
+            android:id="@+id/button_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/buttons_1_toggle" />
 
-            <ToggleButton
-                android:id="@+id/button_toggle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/buttons_1_toggle" />
+    </LinearLayout>
 
-        </LinearLayout>
-
-    </ScrollView>
-</LinearLayout>
+</ScrollView>

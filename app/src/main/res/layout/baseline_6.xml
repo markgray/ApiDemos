@@ -13,35 +13,29 @@
      limitations under the License.
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
-    <Space
+    <EditText
+        android:id="@+id/anchor"
         android:layout_width="match_parent"
-        android:layout_height="120dp">
-    </Space>
+        android:layout_height="match_parent"
+        android:text="@string/baseline_6_multi_line"
+        android:textSize="20sp"
+        tools:ignore="Autofill,LabelFor,TextFields" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/anchor"
+        android:layout_alignEnd="@id/anchor"
+        android:text="@string/baseline_6_baseline" />
 
-        <EditText
-            android:id="@+id/anchor"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/baseline_6_multi_line"
-            android:textSize="20sp"
-            tools:ignore="Autofill,LabelFor,TextFields" />
+</RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/anchor"
-            android:layout_alignEnd="@id/anchor"
-            android:text="@string/baseline_6_baseline" />
-
-    </RelativeLayout>
-</LinearLayout>
