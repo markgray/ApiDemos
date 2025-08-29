@@ -137,10 +137,12 @@ class ClockBackService : AccessibilityService() {
                     mTts!!.speak(utterance, QUEUING_MODE_INTERRUPT, null, null)
                     return
                 }
+
                 MESSAGE_STOP_SPEAK -> {
                     mTts!!.stop()
                     return
                 }
+
                 MESSAGE_START_TTS -> {
                     /**
                      * Called to signal the completion of the TextToSpeech engine initialization.
@@ -154,19 +156,23 @@ class ClockBackService : AccessibilityService() {
                     }
                     return
                 }
+
                 MESSAGE_SHUTDOWN_TTS -> {
                     mTts!!.shutdown()
                     return
                 }
+
                 MESSAGE_PLAY_EARCON -> {
                     val resourceId = message.arg1
                     playEarcon(resourceId)
                     return
                 }
+
                 MESSAGE_STOP_PLAY_EARCON -> {
                     mTts!!.stop()
                     return
                 }
+
                 MESSAGE_VIBRATE -> {
                     val key = message.arg1
                     val pattern = sVibrationPatterns.get(key)
@@ -185,6 +191,7 @@ class ClockBackService : AccessibilityService() {
                     }
                     return
                 }
+
                 MESSAGE_STOP_VIBRATE -> {
                     mVibrator!!.cancel()
                     return
@@ -219,10 +226,13 @@ class ClockBackService : AccessibilityService() {
 
             when (val action = intent.action) {
                 AudioManager.RINGER_MODE_CHANGED_ACTION -> {
-                    val ringerMode = intent.getIntExtra(AudioManager.EXTRA_RINGER_MODE,
-                            AudioManager.RINGER_MODE_NORMAL)
+                    val ringerMode = intent.getIntExtra(
+                        AudioManager.EXTRA_RINGER_MODE,
+                        AudioManager.RINGER_MODE_NORMAL
+                    )
                     configureForRingerMode(ringerMode)
                 }
+
                 Intent.ACTION_SCREEN_ON -> provideScreenStateChangeFeedback(INDEX_SCREEN_ON)
                 Intent.ACTION_SCREEN_OFF -> provideScreenStateChangeFeedback(INDEX_SCREEN_OFF)
                 else -> Log.w(LOG_TAG, "Registered for but not handling action " + action!!)
@@ -257,14 +267,17 @@ class ClockBackService : AccessibilityService() {
                     mHandler.obtainMessage(MESSAGE_SPEAK, utterance).sendToTarget()
                     return
                 }
+
                 AccessibilityServiceInfo.FEEDBACK_AUDIBLE -> {
                     mHandler.obtainMessage(MESSAGE_PLAY_EARCON, feedbackIndex, 0).sendToTarget()
                     return
                 }
+
                 AccessibilityServiceInfo.FEEDBACK_HAPTIC -> {
                     mHandler.obtainMessage(MESSAGE_VIBRATE, feedbackIndex, 0).sendToTarget()
                     return
                 }
+
                 else -> throw IllegalStateException("Unexpected feedback type $mProvidedFeedbackType")
             }
         }
@@ -425,13 +438,16 @@ class ClockBackService : AccessibilityService() {
                 mProvidedFeedbackType = AccessibilityServiceInfo.FEEDBACK_HAPTIC
 
                 // Take over the spoken and sound feedback so no such feedback is provided.
-                setServiceInfo(AccessibilityServiceInfo.FEEDBACK_HAPTIC
+                setServiceInfo(
+                    AccessibilityServiceInfo.FEEDBACK_HAPTIC
                         or AccessibilityServiceInfo.FEEDBACK_SPOKEN
-                        or AccessibilityServiceInfo.FEEDBACK_AUDIBLE)
+                        or AccessibilityServiceInfo.FEEDBACK_AUDIBLE
+                )
 
                 // Use only an earcon to announce ringer state change.
                 mHandler.obtainMessage(MESSAGE_PLAY_EARCON, INDEX_RINGER_SILENT, 0).sendToTarget()
             }
+
             AudioManager.RINGER_MODE_VIBRATE -> {
                 // When the ringer is vibrating we want to provide only audible feedback.
                 mProvidedFeedbackType = AccessibilityServiceInfo.FEEDBACK_AUDIBLE
@@ -442,6 +458,7 @@ class ClockBackService : AccessibilityService() {
                 // Use only an earcon to announce ringer state change.
                 mHandler.obtainMessage(MESSAGE_PLAY_EARCON, INDEX_RINGER_VIBRATE, 0).sendToTarget()
             }
+
             AudioManager.RINGER_MODE_NORMAL -> {
                 // When the ringer is ringing we want to provide spoken feedback
                 // overriding the default spoken feedback.
@@ -507,10 +524,13 @@ class ClockBackService : AccessibilityService() {
         when (mProvidedFeedbackType) {
             AccessibilityServiceInfo.FEEDBACK_SPOKEN ->
                 mHandler.obtainMessage(MESSAGE_SPEAK, formatUtterance(event)).sendToTarget()
+
             AccessibilityServiceInfo.FEEDBACK_AUDIBLE ->
                 mHandler.obtainMessage(MESSAGE_PLAY_EARCON, event.eventType, 0).sendToTarget()
+
             AccessibilityServiceInfo.FEEDBACK_HAPTIC ->
                 mHandler.obtainMessage(MESSAGE_VIBRATE, event.eventType, 0).sendToTarget()
+
             else -> throw IllegalStateException("Unexpected feedback type $mProvidedFeedbackType")
         }
     }
@@ -530,10 +550,13 @@ class ClockBackService : AccessibilityService() {
         when (mProvidedFeedbackType) {
             AccessibilityServiceInfo.FEEDBACK_SPOKEN ->
                 mHandler.obtainMessage(MESSAGE_STOP_SPEAK).sendToTarget()
+
             AccessibilityServiceInfo.FEEDBACK_AUDIBLE ->
                 mHandler.obtainMessage(MESSAGE_STOP_PLAY_EARCON).sendToTarget()
+
             AccessibilityServiceInfo.FEEDBACK_HAPTIC ->
                 mHandler.obtainMessage(MESSAGE_STOP_VIBRATE).sendToTarget()
+
             else -> throw IllegalStateException("Unexpected feedback type $mProvidedFeedbackType")
         }
     }
@@ -645,9 +668,9 @@ class ClockBackService : AccessibilityService() {
          * This works with AlarmClock and Clock whose package name changes in different releases
          */
         private val PACKAGE_NAMES = arrayOf(
-                "com.android.alarmclock",
-                "com.google.android.deskclock",
-                "com.android.deskclock"
+            "com.android.alarmclock",
+            "com.google.android.deskclock",
+            "com.android.deskclock"
         )
 
         // Message types we are passing around.
@@ -745,10 +768,22 @@ class ClockBackService : AccessibilityService() {
         init {
             sVibrationPatterns.put(AccessibilityEvent.TYPE_VIEW_CLICKED, longArrayOf(0L, 100L))
             sVibrationPatterns.put(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED, longArrayOf(0L, 100L))
-            sVibrationPatterns.put(AccessibilityEvent.TYPE_VIEW_SELECTED, longArrayOf(0L, 15L, 10L, 15L))
-            sVibrationPatterns.put(AccessibilityEvent.TYPE_VIEW_FOCUSED, longArrayOf(0L, 15L, 10L, 15L))
-            sVibrationPatterns.put(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED, longArrayOf(0L, 25L, 50L, 25L, 50L, 25L))
-            sVibrationPatterns.put(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER, longArrayOf(0L, 15L, 10L, 15L, 15L, 10L))
+            sVibrationPatterns.put(
+                AccessibilityEvent.TYPE_VIEW_SELECTED,
+                longArrayOf(0L, 15L, 10L, 15L)
+            )
+            sVibrationPatterns.put(
+                AccessibilityEvent.TYPE_VIEW_FOCUSED,
+                longArrayOf(0L, 15L, 10L, 15L)
+            )
+            sVibrationPatterns.put(
+                AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
+                longArrayOf(0L, 25L, 50L, 25L, 50L, 25L)
+            )
+            sVibrationPatterns.put(
+                AccessibilityEvent.TYPE_VIEW_HOVER_ENTER,
+                longArrayOf(0L, 15L, 10L, 15L, 15L, 10L)
+            )
             sVibrationPatterns.put(INDEX_SCREEN_ON, longArrayOf(0L, 10L, 10L, 20L, 20L, 30L))
             sVibrationPatterns.put(INDEX_SCREEN_OFF, longArrayOf(0L, 30L, 20L, 20L, 10L, 10L))
         }
@@ -763,11 +798,26 @@ class ClockBackService : AccessibilityService() {
          */
         init {
             sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_CLICKED, R.raw.sound_view_clicked)
-            sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED, R.raw.sound_view_clicked)
-            sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_SELECTED, R.raw.sound_view_focused_or_selected)
-            sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_FOCUSED, R.raw.sound_view_focused_or_selected)
-            sSoundsResourceIds.put(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED, R.raw.sound_window_state_changed)
-            sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER, R.raw.sound_view_hover_enter)
+            sSoundsResourceIds.put(
+                AccessibilityEvent.TYPE_VIEW_LONG_CLICKED,
+                R.raw.sound_view_clicked
+            )
+            sSoundsResourceIds.put(
+                AccessibilityEvent.TYPE_VIEW_SELECTED,
+                R.raw.sound_view_focused_or_selected
+            )
+            sSoundsResourceIds.put(
+                AccessibilityEvent.TYPE_VIEW_FOCUSED,
+                R.raw.sound_view_focused_or_selected
+            )
+            sSoundsResourceIds.put(
+                AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
+                R.raw.sound_window_state_changed
+            )
+            sSoundsResourceIds.put(
+                AccessibilityEvent.TYPE_VIEW_HOVER_ENTER,
+                R.raw.sound_view_hover_enter
+            )
             sSoundsResourceIds.put(INDEX_SCREEN_ON, R.raw.sound_screen_on)
             sSoundsResourceIds.put(INDEX_SCREEN_OFF, R.raw.sound_screen_off)
             sSoundsResourceIds.put(INDEX_RINGER_SILENT, R.raw.sound_ringer_silent)

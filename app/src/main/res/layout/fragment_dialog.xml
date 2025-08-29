@@ -16,14 +16,14 @@
 <!-- Top-level content view for the simple fragment sample. -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:theme="@style/Theme.AppCompat.Light"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:paddingHorizontal="4dp"
     android:paddingTop="120dp"
-    android:paddingBottom="60dp">
+    android:paddingBottom="60dp"
+    android:theme="@style/Theme.AppCompat.Light">
 
     <TextView
         android:id="@+id/text"

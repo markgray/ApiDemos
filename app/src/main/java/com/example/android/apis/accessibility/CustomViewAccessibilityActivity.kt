@@ -17,7 +17,6 @@
 package com.example.android.apis.accessibility
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -32,7 +31,10 @@ import android.util.TypedValue
 import android.view.View
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
+import android.view.accessibility.AccessibilityNodeInfo.CHECKED_STATE_FALSE
+import android.view.accessibility.AccessibilityNodeInfo.CHECKED_STATE_TRUE
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.withTranslation
 import com.example.android.apis.R
 import kotlin.math.ceil
 import kotlin.math.max
@@ -76,7 +78,6 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
      * will prevent you application from running on a platform older than
      * `ICE_CREAM_SANDWICH API 14`.
      */
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     class AccessibleCompoundButtonInheritance
     /**
      * Perform inflation from XML. We just call our super's constructor.
@@ -85,7 +86,7 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
      * access the current theme, resources, etc.
      * @param attrs   The attributes of the XML tag that is inflating the view.
      */
-    (context: Context, attrs: AttributeSet) : BaseToggleButton(context, attrs) {
+        (context: Context, attrs: AttributeSet) : BaseToggleButton(context, attrs) {
 
         /**
          * Initializes an `AccessibilityEvent` with information about this View (which is the
@@ -120,7 +121,16 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
             // appropriate info properties. Then we add our properties
             // (checkable and checked) which are not supported by a super class.
             info.isCheckable = true
-            info.isChecked = isChecked
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+                if (isChecked) {
+                    info.setChecked(CHECKED_STATE_TRUE)
+                } else {
+                    info.setChecked(CHECKED_STATE_FALSE)
+                }
+            } else {
+                @Suppress("DEPRECATION") // Need for SDK < BAKLAVA
+                info.isChecked = isChecked
+            }
             // Very often you will need to add only the text on the custom view.
             val text = text
             if (!TextUtils.isEmpty(text)) {
@@ -158,7 +168,6 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
      * backwards compatible. The android-support-v4 library has API that allow
      * using the accessibility APIs in a backwards compatible manner.
      */
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     class AccessibleCompoundButtonComposition
     /**
      * Perform inflation from XML. First we call our super's constructor, then we call our
@@ -169,7 +178,7 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
      * access the current theme, resources, etc.
      * @param attrs   The attributes of the XML tag that is inflating the view.
      */
-    (context: Context, attrs: AttributeSet) : BaseToggleButton(context, attrs) {
+        (context: Context, attrs: AttributeSet) : BaseToggleButton(context, attrs) {
 
         init {
             tryInstallAccessibilityDelegate()
@@ -199,7 +208,7 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
             // AccessibilityDelegate allows clients to override its methods that
             // correspond to the accessibility methods in View and register the
             // delegate in the View essentially injecting the accessibility support.
-            accessibilityDelegate = object : View.AccessibilityDelegate() {
+            accessibilityDelegate = object : AccessibilityDelegate() {
                 /**
                  * Initializes an `AccessibilityEvent` with information about this View (which is the
                  * event source). First we call our super's implementation of `onInitializeAccessibilityEvent`,
@@ -229,13 +238,25 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
                  * @param host The View hosting the delegate.
                  * @param info The instance to initialize.
                  */
-                override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfo) {
+                override fun onInitializeAccessibilityNodeInfo(
+                    host: View,
+                    info: AccessibilityNodeInfo
+                ) {
                     super.onInitializeAccessibilityNodeInfo(host, info)
                     // We called the super implementation to let super classes set
                     // appropriate info properties. Then we add our properties
                     // (checkable and checked) which are not supported by a super class.
                     info.isCheckable = true
-                    info.isChecked = isChecked
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+                        if (isChecked) {
+                            info.setChecked(CHECKED_STATE_TRUE)
+                        } else {
+                            info.setChecked(CHECKED_STATE_FALSE)
+                        }
+                    } else {
+                        @Suppress("DEPRECATION") // Need for SDK < BAKLAVA
+                        info.isChecked = isChecked
+                    }
                     // Very often you will need to add only the text on the custom view.
                     val text = text
                     if (!TextUtils.isEmpty(text)) {
@@ -276,7 +297,6 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
      * button, rather a simple class needed to demonstrate how to refine the
      * accessibility support of a custom View.
      */
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     open class BaseToggleButton
     /**
      * Perform inflation from XML and apply a class-specific base style from a theme attribute.
@@ -328,6 +348,7 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
          * Text to read when the button is on, comes from R.string.accessibility_custom_on ("On")
          */
         private val mTextOn: CharSequence
+
         /**
          * Text to read when the button is off, comes from R.string.accessibility_custom_off ("Off")
          */
@@ -337,6 +358,7 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
          * `StaticLayout` which should show the text `mTextOn` (Invisible because of color choice)
          */
         private var mOnLayout: Layout? = null
+
         /**
          * `StaticLayout` which should show the text `mTextOff` (Invisible because of color choice)
          */
@@ -383,7 +405,7 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
             @Suppress("DEPRECATION")
             val textColor: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 context.resources.getColor(typedValue.resourceId, null)
-             else
+            else
                 context.resources.getColor(typedValue.resourceId)
 
             mTextPaint.color = textColor
@@ -434,11 +456,13 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
                 mOffLayout = makeLayout(mTextOff)
             }
             val minWidth = (max(mOnLayout!!.width, mOffLayout!!.width)
-                    + paddingLeft + paddingRight)
+                + paddingLeft + paddingRight)
             val minHeight = (max(mOnLayout!!.height, mOffLayout!!.height)
-                    + paddingTop + paddingBottom)
-            setMeasuredDimension(resolveSizeAndState(minWidth, widthMeasureSpec, 0),
-                    resolveSizeAndState(minHeight, heightMeasureSpec, 0))
+                + paddingTop + paddingBottom)
+            setMeasuredDimension(
+                resolveSizeAndState(minWidth, widthMeasureSpec, 0),
+                resolveSizeAndState(minHeight, heightMeasureSpec, 0)
+            )
         }
 
         /**
@@ -478,11 +502,10 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
          */
         override fun onDraw(canvas: Canvas) {
             super.onDraw(canvas)
-            canvas.save()
-            canvas.translate(paddingLeft.toFloat(), paddingTop.toFloat())
-            val switchText = if (isChecked) mOnLayout else mOffLayout
-            switchText!!.draw(canvas)
-            canvas.restore()
+            canvas.withTranslation(x = paddingLeft.toFloat(), y = paddingTop.toFloat()) {
+                val switchText = if (isChecked) mOnLayout else mOffLayout
+                switchText!!.draw(this)
+            }
         }
     }
 }

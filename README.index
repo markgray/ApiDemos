@@ -2145,16 +2145,19 @@ Views
   Focus
     Views/Focus/1. Vertical                all
         .view.Focus1
+        .layout.focus_1.xml
             Demonstrates the use of non-focusable views: caused by android:focusable="false" 
             in layout file layout/focus_1.xml
 
     Views/Focus/2. Horizontal              all
         .view.Focus2
+        .layout.focus_2.xml
             Uses android:nextFocusRight="@+id/rightButton" to skip middle button -- need
             input device suitable for changing focus.
 
     Views/Focus/3. Circular                all
         .view.Focus3
+        .layout.focus_3.xml
             Uses android:nextFocusDown="@+id/bottom", android:nextFocusLeft="@+id/left",
             android:nextFocusUp="@+id/top", and android:nextFocusRight="@+id/right" to
             specify focus behavior that would be difficult with default focus calculation 
@@ -2178,6 +2181,7 @@ Views
 
     Views/Focus/5. Sequential (Tab Order)  all
         .view.Focus5
+        .layout.focus_5.xml
             Demonstrates using nextFocusForward in the layout/focus_5.xml to explicitly 
             set sequential focus order. Not for touch only.
 

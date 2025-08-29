@@ -21,17 +21,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
     android:paddingBottom="60dp">
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="120dp">
-    </Space>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dip">
+        android:padding="10dip"
+        tools:ignore="UselessParent">
 
         <Button
             android:id="@+id/top"
