@@ -16,20 +16,20 @@
 <!-- Layout description of the DragAndDrop sample's main activity -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dot="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="120dp">
-    </Space>
+    android:orientation="vertical"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="120dp"
+    android:paddingBottom="60dp">
 
     <RelativeLayout
         android:id="@+id/drag_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <TextView
             android:id="@+id/drag_explanation"
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/drag_explanation"
-            android:layout_toRightOf="@id/drag_dot_1"
+            android:layout_toEndOf="@id/drag_dot_1"
             android:padding="15dp"
             dot:anr="thumbnail"
             dot:legend="Drag ANR"
@@ -61,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/drag_dot_1"
-            android:layout_alignLeft="@id/drag_dot_1"
+            android:layout_alignStart="@id/drag_dot_1"
             android:padding="15dp"
             dot:anr="drop"
             dot:legend="Drop ANR"
@@ -72,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/drag_dot_3"
-            android:layout_toRightOf="@id/drag_dot_3"
+            android:layout_toEndOf="@id/drag_dot_3"
             android:padding="15dp"
             android:visibility="invisible"
             dot:legend="Surprise!"
@@ -83,15 +83,15 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/drag_explanation"
-            android:layout_alignRight="@id/drag_explanation"
-            android:layout_toRightOf="@id/drag_dot_2" />
+            android:layout_alignEnd="@id/drag_explanation"
+            android:layout_toEndOf="@id/drag_dot_2" />
 
         <TextView
             android:id="@+id/drag_text"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_below="@id/drag_dot_3"
-            android:layout_alignLeft="@id/drag_dot_3" />
+            android:layout_alignStart="@id/drag_dot_3" />
 
     </RelativeLayout>
 </LinearLayout>
