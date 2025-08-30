@@ -16,29 +16,27 @@
 
 package com.example.android.apis.accessibility
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.view.accessibility.AccessibilityEvent
 import android.widget.ListView
+import androidx.annotation.RequiresApi
 
 
 /**
  * Acts as a go-between for all AccessibilityEvents sent from items in the ListView, providing the
  * option of sending more context to an AccessibilityService by adding more AccessibilityRecords to
  * an event.
- */
-class TaskListView
-/**
  * Perform inflation from XML. We just call our super's constructor.
  *
  * @param context      The Context the view is running in, through which it can
  * access the current theme, resources, etc.
  * @param attributeSet The attributes of the XML tag that is inflating the view.
  */
-(context: Context, attributeSet: AttributeSet) : ListView(context, attributeSet) {
+class TaskListView(context: Context, attributeSet: AttributeSet) : ListView(context, attributeSet) {
 
     /**
      * This method will fire whenever a child event wants to send an AccessibilityEvent. As a
@@ -59,9 +57,11 @@ class TaskListView
      * @param event The event to be sent.
      * @return True if the event should be sent.
      */
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    @SuppressLint("ObsoleteSdkInt")
+    @RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     override fun onRequestSendAccessibilityEvent(child: View, event: AccessibilityEvent): Boolean {
         // Add a record for ourselves as well.
+        @Suppress("DEPRECATION") // Object pooling has been discontinued. Calling this function now will have no effect.
         val record = AccessibilityEvent.obtain()
         super.onInitializeAccessibilityEvent(record)
 

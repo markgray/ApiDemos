@@ -17,7 +17,6 @@
 package com.example.android.apis.animation
 
 import android.content.Context
-import android.view.View
 import android.view.ViewGroup
 
 /**
@@ -29,19 +28,18 @@ import android.view.ViewGroup
  *
  * This class was copied from the FixedGridLayout Api demo; see that demo for more information on
  * using the layout.
- */
-@Suppress("MemberVisibilityCanBePrivate")
-class FixedGridLayout
-/**
+ *
  * Creates a FixedGridLayout with the Context context. We just call our super's constructor.
  *
  * @param context Context of the activity creating the ViewGroup
  */
-(context: Context) : ViewGroup(context) {
+@Suppress("MemberVisibilityCanBePrivate")
+class FixedGridLayout(context: Context) : ViewGroup(context) {
     /**
      * Width of each of our children's views.
      */
     internal var mCellWidth: Int = 0
+
     /**
      * Height of each of our children's views.
      */
@@ -89,10 +87,14 @@ class FixedGridLayout
      * [android.view.View.MeasureSpec].
      */
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val cellWidthSpec = MeasureSpec.makeMeasureSpec(mCellWidth,
-                MeasureSpec.AT_MOST)
-        val cellHeightSpec = MeasureSpec.makeMeasureSpec(mCellHeight,
-                MeasureSpec.AT_MOST)
+        val cellWidthSpec = MeasureSpec.makeMeasureSpec(
+            mCellWidth,
+            MeasureSpec.AT_MOST
+        )
+        val cellHeightSpec = MeasureSpec.makeMeasureSpec(
+            mCellHeight,
+            MeasureSpec.AT_MOST
+        )
 
         val count = childCount
         for (index in 0 until count) {
@@ -102,8 +104,10 @@ class FixedGridLayout
         // Use the size our parents gave us, but default to a minimum size to avoid
         // clipping transitioning children
         val minCount = if (count > 3) count else 3
-        setMeasuredDimension(View.resolveSize(mCellWidth * minCount, widthMeasureSpec),
-                View.resolveSize(mCellHeight * minCount, heightMeasureSpec))
+        setMeasuredDimension(
+            /* measuredWidth = */ resolveSize(mCellWidth * minCount, widthMeasureSpec),
+            /* measuredHeight = */ resolveSize(mCellHeight * minCount, heightMeasureSpec)
+        )
     }
 
     /**

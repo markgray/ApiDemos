@@ -17,13 +17,12 @@
 package com.example.android.apis.animation
 
 import android.animation.Animator
-import android.animation.ObjectAnimator
 import android.animation.AnimatorListenerAdapter
 import android.animation.Keyframe
 import android.animation.LayoutTransition
+import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -31,6 +30,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -40,12 +40,14 @@ import com.example.android.apis.R
  * "Custom Animations" CheckBox is checked causes a crash which blanks out the system wallpaper.
  * (Sometimes? This may be fixed as of Android Q -- at least it doesn't seem to happen anymore).
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class LayoutAnimationsHideShow : AppCompatActivity() {
     /**
      * `LinearLayout` into which we place the buttons we are hiding or showing.
      */
     internal var container: ViewGroup? = null
+
     /**
      * `LayoutTransition` used by our `ViewGroup container`, either a default one or the
      * custom one created when we check the "Custom Animations" CheckBox.
@@ -83,8 +85,10 @@ class LayoutAnimationsHideShow : AppCompatActivity() {
         val hideGoneCB = findViewById<CheckBox>(R.id.hideGoneCB)
 
         container = LinearLayout(this)
-        container!!.layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT)
+        container!!.layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
 
         // Add a slew of buttons to the container. We won't add any more buttons at runtime, but
         // will just show/hide the buttons we've already created
@@ -210,8 +214,9 @@ class LayoutAnimationsHideShow : AppCompatActivity() {
         val pvhScaleX = PropertyValuesHolder.ofFloat("scaleX", 1f, 0f, 1f)
         val pvhScaleY = PropertyValuesHolder.ofFloat("scaleY", 1f, 0f, 1f)
         val changeIn = ObjectAnimator.ofPropertyValuesHolder(
-                this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhScaleX, pvhScaleY)
-                .setDuration(mTransitioner!!.getDuration(LayoutTransition.CHANGE_APPEARING))
+            this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhScaleX, pvhScaleY
+        )
+            .setDuration(mTransitioner!!.getDuration(LayoutTransition.CHANGE_APPEARING))
         mTransitioner!!.setAnimator(LayoutTransition.CHANGE_APPEARING, changeIn)
         changeIn.addListener(object : AnimatorListenerAdapter() {
             /**
@@ -233,10 +238,10 @@ class LayoutAnimationsHideShow : AppCompatActivity() {
         val kf1 = Keyframe.ofFloat(.9999f, 360f)
         val kf2 = Keyframe.ofFloat(1f, 0f)
         val pvhRotation = PropertyValuesHolder
-                .ofKeyframe("rotation", kf0, kf1, kf2)
+            .ofKeyframe("rotation", kf0, kf1, kf2)
         val changeOut = ObjectAnimator.ofPropertyValuesHolder(
-                this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhRotation)
-                .setDuration(mTransitioner!!.getDuration(LayoutTransition.CHANGE_DISAPPEARING))
+            this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhRotation
+        ).setDuration(mTransitioner!!.getDuration(LayoutTransition.CHANGE_DISAPPEARING))
         mTransitioner!!.setAnimator(LayoutTransition.CHANGE_DISAPPEARING, changeOut)
         changeOut.addListener(object : AnimatorListenerAdapter() {
             /**
@@ -253,8 +258,9 @@ class LayoutAnimationsHideShow : AppCompatActivity() {
 
         // Adding
         val animIn = ObjectAnimator.ofFloat(
-                null, "rotationY", 90f, 0f)
-                .setDuration(mTransitioner!!.getDuration(LayoutTransition.APPEARING))
+            null, "rotationY", 90f, 0f
+        )
+            .setDuration(mTransitioner!!.getDuration(LayoutTransition.APPEARING))
         mTransitioner!!.setAnimator(LayoutTransition.APPEARING, animIn)
         animIn.addListener(object : AnimatorListenerAdapter() {
             /**
@@ -271,8 +277,9 @@ class LayoutAnimationsHideShow : AppCompatActivity() {
 
         // Removing
         val animOut = ObjectAnimator.ofFloat(
-                null, "rotationX", 0f, 90f)
-                .setDuration(mTransitioner!!.getDuration(LayoutTransition.DISAPPEARING))
+            null, "rotationX", 0f, 90f
+        )
+            .setDuration(mTransitioner!!.getDuration(LayoutTransition.DISAPPEARING))
         mTransitioner!!.setAnimator(LayoutTransition.DISAPPEARING, animOut)
         animOut.addListener(object : AnimatorListenerAdapter() {
             /**

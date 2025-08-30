@@ -46,9 +46,9 @@ import com.example.android.apis.R
  *  1. Simple demonstration of how to use the accessibility APIs.
  *  1. Hands-on example of various ways to utilize the accessibility API for providing
  *  alternative and complementary feedback.
- *  1. Providing application specific feedback  the service handles only accessibility
- * events from the clock application.
- *  1. Providing dynamic, context-dependent feedback  feedback type changes depending
+ *  1. Providing application specific feedback: the service handles only accessibility
+ *  events from the clock application.
+ *  1. Providing dynamic, context-dependent feedback: feedback type changes depending
  *  on the ringer state.
  */
 class ClockBackService : AccessibilityService() {
@@ -134,7 +134,12 @@ class ClockBackService : AccessibilityService() {
             when (message.what) {
                 MESSAGE_SPEAK -> {
                     val utterance = message.obj as String
-                    mTts!!.speak(utterance, QUEUING_MODE_INTERRUPT, null, null)
+                    mTts!!.speak(
+                        /* text = */ utterance,
+                        /* queueMode = */ QUEUING_MODE_INTERRUPT,
+                        /* params = */ null,
+                        /* utteranceId = */ null
+                    )
                     return
                 }
 
@@ -227,14 +232,14 @@ class ClockBackService : AccessibilityService() {
             when (val action = intent.action) {
                 AudioManager.RINGER_MODE_CHANGED_ACTION -> {
                     val ringerMode = intent.getIntExtra(
-                        AudioManager.EXTRA_RINGER_MODE,
-                        AudioManager.RINGER_MODE_NORMAL
+                        /* name = */ AudioManager.EXTRA_RINGER_MODE,
+                        /* defaultValue = */ AudioManager.RINGER_MODE_NORMAL
                     )
-                    configureForRingerMode(ringerMode)
+                    configureForRingerMode(ringerMode = ringerMode)
                 }
 
-                Intent.ACTION_SCREEN_ON -> provideScreenStateChangeFeedback(INDEX_SCREEN_ON)
-                Intent.ACTION_SCREEN_OFF -> provideScreenStateChangeFeedback(INDEX_SCREEN_OFF)
+                Intent.ACTION_SCREEN_ON -> provideScreenStateChangeFeedback(feedbackIndex = INDEX_SCREEN_ON)
+                Intent.ACTION_SCREEN_OFF -> provideScreenStateChangeFeedback(feedbackIndex = INDEX_SCREEN_OFF)
                 else -> Log.w(LOG_TAG, "Registered for but not handling action " + action!!)
             }
         }
@@ -263,7 +268,7 @@ class ClockBackService : AccessibilityService() {
             // We take a specific action depending on the feedback we currently provide.
             when (mProvidedFeedbackType) {
                 AccessibilityServiceInfo.FEEDBACK_SPOKEN -> {
-                    val utterance = generateScreenOnOrOffUtternace(feedbackIndex)
+                    val utterance: String = generateScreenOnOrOffUtternace(feedbackIndex)
                     mHandler.obtainMessage(MESSAGE_SPEAK, utterance).sendToTarget()
                     return
                 }

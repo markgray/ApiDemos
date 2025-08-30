@@ -15,17 +15,18 @@
  */
 package com.example.android.apis.animation
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toDrawable
 import com.example.android.apis.R
 
 /**
@@ -85,7 +86,7 @@ class ActivityTransitionDetails : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.setBackgroundDrawable(ColorDrawable(randomColor()))
+        window.setBackgroundDrawable(randomColor().toDrawable())
         setContentView(R.layout.image_details)
         val titleImage = findViewById<ImageView>(R.id.titleImage)
         titleImage.setImageDrawable(heroDrawable)
@@ -106,14 +107,15 @@ class ActivityTransitionDetails : AppCompatActivity() {
      *
      * @param v ImageView R.id.titleImage clicked on
      */
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @SuppressLint("ObsoleteSdkInt")
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun clicked(v: View) {
         val intent = Intent(this, ActivityTransition::class.java)
         intent.putExtra(KEY_ID, mName)
         val activityOptions = ActivityOptions.makeSceneTransitionAnimation(
-                this,
-                v,
-                "hero"
+            /* activity = */ this,
+            /* sharedElement = */ v,
+            /* sharedElementName = */ "hero"
         )
         startActivity(intent, activityOptions.toBundle())
     }

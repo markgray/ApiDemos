@@ -43,7 +43,7 @@ import kotlin.math.min
 class MagnificationService : AccessibilityService() {
 
     /**
-     * Callback for [android.view.accessibility.AccessibilityEvent]s. We do not need.
+     * Callback for [AccessibilityEvent]s. We do not need.
      *
      * @param event The new event. This event is owned by the caller and cannot be used after
      * this method returns. Services wishing to use the event after this method returns should
@@ -131,11 +131,16 @@ class MagnificationService : AccessibilityService() {
     private fun handleVolumeKey(isVolumeUp: Boolean): Boolean {
         // Obtain the controller on-demand, which allows us to avoid
         // dependencies on the accessibility service's lifecycle.
-        val controller = magnificationController
+        val controller: MagnificationController = magnificationController
 
         // Adjust the current scale based on which volume key was pressed,
         // constraining the scale between 1x and 5x.
-        val currScale = controller.scale
+        val currScale: Float = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            controller.getMagnificationConfig()!!.scale
+        } else {
+            @Suppress("DEPRECATION") // Needed for devices older than TIRAMISU
+            controller.scale
+        }
         val increment = if (isVolumeUp) 0.1f else -0.1f
         val nextScale = max(1f, min(5f, currScale + increment))
         if (nextScale == currScale) {
@@ -144,7 +149,9 @@ class MagnificationService : AccessibilityService() {
 
         // Set the pivot, then scale around it.
         val metrics = resources.displayMetrics
+        @Suppress("DEPRECATION") // TODO: Use MagnificationConfig.Builder for "T"
         controller.setScale(nextScale, true /* animate */)
+        @Suppress("DEPRECATION") // TODO: Use MagnificationConfig.Builder for "T"
         controller.setCenter(
             metrics.widthPixels / 2f,
             metrics.heightPixels / 2f,
@@ -170,9 +177,9 @@ class MagnificationService : AccessibilityService() {
      */
     public override fun onServiceConnected() {
         val info = serviceInfo
-                ?: // If we fail to obtain the service info, the service is not really
-                // connected and we should avoid setting anything up.
-                return
+            ?: // If we fail to obtain the service info, the service is not really
+            // connected and we should avoid setting anything up.
+            return
 
         // We declared our intent to request key filtering in the meta-data
         // attached to our service in the manifest. Now, we can explicitly

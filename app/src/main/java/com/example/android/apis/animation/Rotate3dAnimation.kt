@@ -22,9 +22,6 @@ import android.view.animation.Transformation
 /**
  * An animation that rotates the view on the Y axis between two specified angles.
  * This animation also adds a translation on the Z axis (depth) to improve the effect.
- */
-class Rotate3dAnimation
-/**
  * Creates a new 3D rotation on the Y axis. The rotation is defined by its
  * start angle and its end angle. Both angles are in degrees. The rotation
  * is performed around a center point on the 2D space, definied by a pair
@@ -39,7 +36,7 @@ class Rotate3dAnimation
  * @param mCenterY the Y center of the 3D rotation
  * @param mReverse true if the translation should be reversed, false otherwise
  */
-    (
+class Rotate3dAnimation(
     private val mFromDegrees: Float,
     private val mToDegrees: Float,
     private val mCenterX: Float,

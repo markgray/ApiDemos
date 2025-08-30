@@ -23,26 +23,21 @@ import android.graphics.drawable.ShapeDrawable
 /**
  * A data structure that holds a Shape and various properties that can be used to define
  * how the shape is drawn.
- */
-class ShapeHolder
-/**
  * Constructor which initializes a ShapeHolder instance's Shape shape with a ShapeDrawable s
  *
- * @param shape ShapeDrawable that the ShapeHolder will contain
+ * @property shape ShapeDrawable that the ShapeHolder will contain
  */
-(
-        /**
-         * The `ShapeDrawable` object we are holding.
-         */
-        var shape: ShapeDrawable?) {
+class ShapeHolder(var shape: ShapeDrawable?) {
     /**
      * Our x coordinate.
      */
-    var x = 0f
+    var x: Float = 0f
+
     /**
      * Our y coordinate.
      */
-    var y = 0f
+    var y: Float = 0f
+
     /**
      * Color of the `ShapeDrawable` object we are holding.
      */
@@ -51,14 +46,17 @@ class ShapeHolder
             shape!!.paint.color = value
             field = value
         }
+
     /**
      * `RadialGradient` of the `ShapeDrawable` object we are holding.
      */
     var gradient: RadialGradient? = null
+
     /**
      * Alpha of the `ShapeDrawable` object we are holding.
      */
     private var alpha = 1f
+
     /**
      * `Paint` of the `ShapeDrawable` object we are holding.
      */

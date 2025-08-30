@@ -21,7 +21,6 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.RadialGradient
@@ -36,7 +35,9 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.withTranslation
 import com.example.android.apis.R
 
 /**
@@ -45,8 +46,9 @@ import com.example.android.apis.R
  * for the Sequencer because the api does not support setRepeatCount on a
  * AnimatorSet.
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class AnimatorEvents : AppCompatActivity() {
     /**
      * `TextView` with id R.id.startText ("Start") in "Sequencer Events:" row of the animation
@@ -54,42 +56,49 @@ class AnimatorEvents : AppCompatActivity() {
      * override if the argument passed it is an instance of `AnimatorSet`.
      */
     internal lateinit var startText: TextView
+
     /**
      * `TextView` with id R.id.repeatText ("Repeat") in "Sequencer Events:" row of the animation
      * event display, it has its alpha increased from .5f to 1f in the `onAnimationRepeat`
      * override if the argument passed it is an instance of `AnimatorSet`.
      */
     internal lateinit var repeatText: TextView
+
     /**
      * `TextView` with id R.id.cancelText ("Cancel") in "Sequencer Events:" row of the animation
      * event display, it has its alpha increased from .5f to 1f in the `onAnimationCancel`
      * override if the argument passed it is an instance of `AnimatorSet`.
      */
     internal lateinit var cancelText: TextView
+
     /**
      * `TextView` with id R.id.endText ("End") in "Sequencer Events:" row of the animation
      * event display, it has its alpha increased from .5f to 1f in the `onAnimationEnd`
      * override if the argument passed it is an instance of `AnimatorSet`.
      */
     internal lateinit var endText: TextView
+
     /**
      * `TextView` with id R.id.startTextAnimator ("Start") in "Animator Events:" row of the
      * animation event display, it has its alpha increased from .5f to 1f in the `onAnimationStart`
      * override if the argument passed it is NOT an instance of `AnimatorSet`.
      */
     internal lateinit var startTextAnimator: TextView
+
     /**
      * `TextView` with id R.id.repeatTextAnimator ("Repeat") in "Animator Events:" row of the
      * animation event display, it has its alpha increased from .5f to 1f in the `onAnimationRepeat`
      * override if the argument passed it is NOT an instance of `AnimatorSet`.
      */
     internal lateinit var repeatTextAnimator: TextView
+
     /**
      * `TextView` with id R.id.cancelTextAnimator ("Cancel") in "Animator Events:" row of the
      * animation event display, it has its alpha increased from .5f to 1f in the `onAnimationCancel`
      * override if the argument passed it is NOT an instance of `AnimatorSet`.
      */
     internal lateinit var cancelTextAnimator: TextView
+
     /**
      * `TextView` with id R.id.endTextAnimator ("End") in "Animator Events:" row of the
      * animation event display, it has its alpha increased from .5f to 1f in the `onAnimationEnd`
@@ -185,19 +194,23 @@ class AnimatorEvents : AppCompatActivity() {
      *
      * @param context context of the Application
      */
-    (context: Context) : View(context), Animator.AnimatorListener, ValueAnimator.AnimatorUpdateListener {
+        (context: Context) : View(context), Animator.AnimatorListener,
+        ValueAnimator.AnimatorUpdateListener {
 
         @Suppress("unused")
-        val balls = ArrayList<ShapeHolder>()
+        val balls: ArrayList<ShapeHolder> = ArrayList()
+
         /**
          * `AnimatorSet` created in method `createAnimation` which moves
          * `ShapeHolder ball` in both x and y directions
          */
         internal var animation: Animator? = null
+
         /**
          * The ball which we move.
          */
         internal var ball: ShapeHolder
+
         /**
          * Flag set when "End Immediately" checkbox is checked, if true in `onAnimationStart`
          * callback causes the `end` method of `Animator animation` to be called
@@ -234,16 +247,20 @@ class AnimatorEvents : AppCompatActivity() {
          */
         private fun createAnimation() {
             if (animation == null) {
-                val yAnim = ObjectAnimator.ofFloat(ball, "y",
-                        ball.y, height - 50f).setDuration(1500)
+                val yAnim = ObjectAnimator.ofFloat(
+                    ball, "y",
+                    ball.y, height - 50f
+                ).setDuration(1500)
                 yAnim.repeatCount = 2
                 yAnim.repeatMode = ValueAnimator.REVERSE
                 yAnim.interpolator = AccelerateInterpolator(2f)
                 yAnim.addUpdateListener(this)
                 yAnim.addListener(this)
 
-                val xAnim = ObjectAnimator.ofFloat(ball, "x",
-                        ball.x, ball.x + 300).setDuration(1000)
+                val xAnim = ObjectAnimator.ofFloat(
+                    ball, "x",
+                    ball.x, ball.x + 300
+                ).setDuration(1000)
                 xAnim.startDelay = 0
                 xAnim.repeatCount = 2
                 xAnim.repeatMode = ValueAnimator.REVERSE
@@ -252,6 +269,7 @@ class AnimatorEvents : AppCompatActivity() {
                 val alphaAnim = ObjectAnimator
                     .ofFloat(ball, "alpha", 1f, .5f)
                     .setDuration(1000)
+
                 @SuppressLint("Recycle") // Lint is right: start() is never called, how odd.
                 val alphaSeq = AnimatorSet()
                 alphaSeq.play(alphaAnim)
@@ -347,8 +365,10 @@ class AnimatorEvents : AppCompatActivity() {
             val color = -0x1000000 or (red shl 16) or (green shl 8) or blue
             val paint = drawable.paint //new Paint(Paint.ANTI_ALIAS_FLAG);
             val darkColor = -0x1000000 or (red / 4 shl 16) or (green / 4 shl 8) or blue / 4
-            val gradient = RadialGradient(37.5f, 12.5f,
-                    50f, color, darkColor, Shader.TileMode.CLAMP)
+            val gradient = RadialGradient(
+                37.5f, 12.5f,
+                50f, color, darkColor, Shader.TileMode.CLAMP
+            )
             paint.shader = gradient
             shapeHolder.paint = paint
             return shapeHolder
@@ -365,10 +385,9 @@ class AnimatorEvents : AppCompatActivity() {
          * @param canvas the canvas on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
-            canvas.save()
-            canvas.translate(ball.x, ball.y)
-            ball.shape!!.draw(canvas)
-            canvas.restore()
+            canvas.withTranslation(x = ball.x, y = ball.y) {
+                ball.shape!!.draw(this)
+            }
         }
 
         /**

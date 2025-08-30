@@ -75,7 +75,7 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
      * For example, `AccessibilityNodeInfo` was introduced in
      * `ICE_CREAM_SANDWICH API 14`, thus overriding
      * `View.onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo)`
-     * will prevent you application from running on a platform older than
+     * will prevent your application from running on a platform older than
      * `ICE_CREAM_SANDWICH API 14`.
      */
     class AccessibleCompoundButtonInheritance

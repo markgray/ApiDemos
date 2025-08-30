@@ -15,7 +15,7 @@
  */
 package com.example.android.apis.animation
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.transition.Scene
@@ -23,6 +23,7 @@ import android.transition.TransitionInflater
 import android.transition.TransitionManager
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -32,26 +33,31 @@ import com.example.android.apis.R
  * are loaded from resource files and transitions are run between those scenes
  * as well as a dynamically-configured scene.
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.KITKAT)
+@RequiresApi(Build.VERSION_CODES.KITKAT)
 class Transitions : AppCompatActivity() {
 
     /**
      * `Scene` created from the layout file R.layout.transition_scene1
      */
     internal lateinit var mScene1: Scene
+
     /**
      * `Scene` created from the layout file R.layout.transition_scene2
      */
     internal lateinit var mScene2: Scene
+
     /**
      * `Scene` created from the layout file R.layout.transition_scene3
      */
     internal lateinit var mScene3: Scene
+
     /**
      * `LinearLayout` in our layout file which we use to display our "Scenes".
      */
     internal lateinit var mSceneRoot: ViewGroup
+
     /**
      * [TransitionManager] object loaded from the xml file R.transition.transitions_mgr
      */
@@ -88,8 +94,10 @@ class Transitions : AppCompatActivity() {
         mScene1 = Scene.getSceneForLayout(mSceneRoot, R.layout.transition_scene1, this)
         mScene2 = Scene.getSceneForLayout(mSceneRoot, R.layout.transition_scene2, this)
         mScene3 = Scene.getSceneForLayout(mSceneRoot, R.layout.transition_scene3, this)
-        mTransitionManager = inflater.inflateTransitionManager(R.transition.transitions_mgr,
-                mSceneRoot)
+        mTransitionManager = inflater.inflateTransitionManager(
+            R.transition.transitions_mgr,
+            mSceneRoot
+        )
     }
 
     /**

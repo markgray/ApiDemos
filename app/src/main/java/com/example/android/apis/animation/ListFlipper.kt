@@ -24,7 +24,7 @@ package com.example.android.apis.animation
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -33,7 +33,9 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
 import com.example.android.apis.R
 
 /**
@@ -42,13 +44,15 @@ import com.example.android.apis.R
  * when they are to be "flipped". The english list starts as the visible list as defined in the
  * Layout xml file.
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class ListFlipper : AppCompatActivity() {
 
     /**
      * `ListView` in our layout with id R.id.list_en, hold our english numbers.
      */
     internal lateinit var mEnglishList: ListView
+
     /**
      * `ListView` in our layout with id R.id.list_fr, hold our french numbers.
      */
@@ -59,6 +63,7 @@ class ListFlipper : AppCompatActivity() {
      * visible `ListView` around the "y" axis until it becomes invisible.
      */
     private val accelerator = AccelerateInterpolator()
+
     /**
      * `DecelerateInterpolator` used for `ObjectAnimator invisToVis` which rotates the
      * invisible `ListView` around the "y" axis until it becomes visible.
@@ -87,11 +92,15 @@ class ListFlipper : AppCompatActivity() {
         mFrenchList = findViewById(R.id.list_fr)
 
         // Prepare the ListView
-        val adapterEn = ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, LIST_STRINGS_EN)
+        val adapterEn = ArrayAdapter(
+            this,
+            android.R.layout.simple_list_item_1, LIST_STRINGS_EN
+        )
         // Prepare the ListView
-        val adapterFr = ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, LIST_STRINGS_FR)
+        val adapterFr = ArrayAdapter(
+            this,
+            android.R.layout.simple_list_item_1, LIST_STRINGS_FR
+        )
 
         mEnglishList.adapter = adapterEn
         mFrenchList.adapter = adapterFr
@@ -119,7 +128,7 @@ class ListFlipper : AppCompatActivity() {
     private fun flipit() {
         val visibleList: ListView
         val invisibleList: ListView
-        if (mEnglishList.visibility == View.GONE) {
+        if (mEnglishList.isGone) {
             visibleList = mFrenchList
             invisibleList = mEnglishList
         } else {
@@ -129,8 +138,10 @@ class ListFlipper : AppCompatActivity() {
         val visToInvis = ObjectAnimator.ofFloat(visibleList, "rotationY", 0f, 90f)
         visToInvis.duration = 500
         visToInvis.interpolator = accelerator
-        val invisToVis = ObjectAnimator.ofFloat(invisibleList, "rotationY",
-                -90f, 0f)
+        val invisToVis = ObjectAnimator.ofFloat(
+            invisibleList, "rotationY",
+            -90f, 0f
+        )
         invisToVis.duration = 500
         invisToVis.interpolator = decelerator
         visToInvis.addListener(object : AnimatorListenerAdapter() {
@@ -156,6 +167,7 @@ class ListFlipper : AppCompatActivity() {
          * Our list of english numbers.
          */
         private val LIST_STRINGS_EN = arrayOf("One", "Two", "Three", "Four", "Five", "Six")
+
         /**
          * Our list of french numbers.
          */

@@ -17,7 +17,7 @@
 
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
@@ -28,6 +28,7 @@ import android.view.ViewGroup.LayoutParams
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBar.Tab
 import androidx.appcompat.app.AppCompatActivity
@@ -38,9 +39,14 @@ import com.example.android.apis.R
  * This demo shows how various action bar display option flags can be combined
  * and their effects.
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
 class ActionBarDisplayOptions : AppCompatActivity(), View.OnClickListener, ActionBar.TabListener,
-        AdapterView.OnItemSelectedListener, ActionBar.OnNavigationListener {
+    AdapterView.OnItemSelectedListener, ActionBar.OnNavigationListener {
+
+    /**
+     *  [View] inflated from `R.layout.action_bar_display_options_custom` in [onCreate]
+     */
     private var mCustomView: View? = null
 
     /**
@@ -76,16 +82,20 @@ class ActionBarDisplayOptions : AppCompatActivity(), View.OnClickListener, Actio
 
         (findViewById<View>(R.id.toggle_navigation) as Spinner).onItemSelectedListener = this
 
-        mCustomView = layoutInflater.inflate(R.layout.action_bar_display_options_custom,
-                findViewById<View>(android.R.id.content) as ViewGroup, false)
+        mCustomView = layoutInflater.inflate(
+            R.layout.action_bar_display_options_custom,
+            findViewById<View>(android.R.id.content) as ViewGroup, false
+        )
         // Configure several action bar elements that will be toggled by display options.
         val bar = supportActionBar
         bar!!.setIcon(R.drawable.app_sample_code)
         bar.setDisplayShowHomeEnabled(true)
         bar.setDisplayUseLogoEnabled(false)
 
-        bar.setCustomView(mCustomView,
-                ActionBar.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
+        bar.setCustomView(
+            mCustomView,
+            ActionBar.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        )
 
         bar.addTab(bar.newTab().setText("Tab 1").setTabListener(this))
         bar.addTab(bar.newTab().setText("Tab 2").setTabListener(this))
@@ -184,13 +194,14 @@ class ActionBarDisplayOptions : AppCompatActivity(), View.OnClickListener, Actio
             R.id.toggle_show_home -> flags = ActionBar.DISPLAY_SHOW_HOME
             R.id.toggle_use_logo -> {
                 flags = ActionBar.DISPLAY_USE_LOGO
-                if(flags and bar!!.displayOptions == 0) {
+                if (flags and bar!!.displayOptions == 0) {
                     bar.setIcon(R.drawable.apidemo_androidlogo)
                 } else {
                     bar.setIcon(R.drawable.app_sample_code)
                 }
 
             }
+
             R.id.toggle_show_title -> flags = ActionBar.DISPLAY_SHOW_TITLE
             R.id.toggle_show_custom -> flags = ActionBar.DISPLAY_SHOW_CUSTOM
             R.id.cycle_custom_gravity -> {
@@ -201,11 +212,13 @@ class ActionBarDisplayOptions : AppCompatActivity(), View.OnClickListener, Actio
                     Gravity.CENTER_HORIZONTAL -> newGravity = Gravity.END
                     Gravity.END -> newGravity = Gravity.START
                 }
-                lp.gravity = lp.gravity and Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK.inv() or newGravity
+                lp.gravity =
+                    lp.gravity and Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK.inv() or newGravity
 
                 bar!!.setCustomView(mCustomView, lp)
                 return
             }
+
             R.id.toggle_visibility -> {
 
                 if (bar!!.isShowing) {
@@ -215,6 +228,7 @@ class ActionBarDisplayOptions : AppCompatActivity(), View.OnClickListener, Actio
                 }
                 return
             }
+
             R.id.toggle_system_ui -> {
                 if (window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_FULLSCREEN != 0) {
                     window.decorView.systemUiVisibility = 0

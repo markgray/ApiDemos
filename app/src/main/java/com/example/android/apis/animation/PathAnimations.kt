@@ -19,7 +19,6 @@ import android.animation.ObjectAnimator
 import android.animation.TypeConverter
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Matrix
@@ -36,6 +35,7 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
 import android.widget.RadioGroup
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import kotlin.math.roundToInt
@@ -64,9 +64,11 @@ import kotlin.math.sqrt
  * which way to use need to be in an HorizontalScrollView not a ScrollView in order
  * to be seen on narrow screens.
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-class PathAnimations : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, View.OnLayoutChangeListener {
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+class PathAnimations : AppCompatActivity(), RadioGroup.OnCheckedChangeListener,
+    View.OnLayoutChangeListener {
 
     /**
      * The `CanvasView` with id R.id.canvas in our layout file, it contains the smiley face
@@ -161,9 +163,12 @@ class PathAnimations : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, 
      * @param oldRight The previous value of the view's right property.
      * @param oldBottom The previous value of the view's bottom property.
      */
-    override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int,
-                                oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
-        val checkedId = (findViewById<View>(R.id.path_animation_type) as RadioGroup).checkedRadioButtonId
+    override fun onLayoutChange(
+        v: View, left: Int, top: Int, right: Int, bottom: Int,
+        oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int
+    ) {
+        val checkedId =
+            (findViewById<View>(R.id.path_animation_type) as RadioGroup).checkedRadioButtonId
         if (checkedId != RadioGroup.NO_ID) {
             startAnimator(checkedId)
         }
@@ -264,26 +269,30 @@ class PathAnimations : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, 
                 // An int version of this method also exists for animating
                 // int Properties.
                 mAnimator = ObjectAnimator.ofFloat(view, "x", "y", path)
+
             R.id.property_components ->
                 // Use two Properties for individual (x, y) coordinates of the Path
                 // and set them on the view object.
                 // An int version of this method also exists for animating
                 // int Properties.
                 mAnimator = ObjectAnimator.ofFloat(view, View.X, View.Y, path)
+
             R.id.multi_int ->
                 // Use a multi-int setter to animate along a Path. The method
                 // setCoordinates(int x, int y) is called on this during the animation.
                 // Either "setCoordinates" or "coordinates" are acceptable parameters
                 // because the "set" can be implied.
                 mAnimator = ObjectAnimator.ofMultiInt(this, "setCoordinates", path)
+
             R.id.multi_float ->
                 // Use a multi-float setter to animate along a Path. The method
                 // changeCoordinates(float x, float y) is called on this during the animation.
                 mAnimator = ObjectAnimator.ofMultiFloat(
-                        this,
-                        "changeCoordinates",
-                        path
+                    this,
+                    "changeCoordinates",
+                    path
                 )
+
             R.id.named_setter ->
                 // Use the named "point" property to animate along the Path.
                 // There must be a method setPoint(PointF) on the animated object.
@@ -291,17 +300,20 @@ class PathAnimations : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, 
                 // In this case, the animated object is PathAnimations.
 
                 mAnimator = ObjectAnimator.ofObject(
-                        this,
-                        "point",
-                        hack, // a null TypeConverter<PointF, *> (pitiful!)
-                        path
+                    this,
+                    "point",
+                    hack, // a null TypeConverter<PointF, *> (pitiful!)
+                    path
                 )
+
             R.id.property_setter ->
                 // Use the POINT_PROPERTY property to animate along the Path.
                 // POINT_PROPERTY takes a Point, not a PointF, so the TypeConverter
                 // PointFToPointConverter is necessary.
-                mAnimator = ObjectAnimator.ofObject(this, POINT_PROPERTY,
-                        PointFToPointConverter(), path)
+                mAnimator = ObjectAnimator.ofObject(
+                    this, POINT_PROPERTY,
+                    PointFToPointConverter(), path
+                )
         }
 
         mAnimator!!.duration = 10000
@@ -321,7 +333,7 @@ class PathAnimations : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, 
          *
          * @return the value of the field Path mPath.
          */
-        var path = Path()
+        var path: Path = Path()
             internal set
 
         /**
@@ -358,7 +370,11 @@ class PathAnimations : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, 
          * @param attrs    Attributes defined in xml
          * @param defStyle android:style attribute
          */
-        constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
+        constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
+            context,
+            attrs,
+            defStyle
+        ) {
             init()
         }
 
@@ -415,7 +431,7 @@ class PathAnimations : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, 
      * animation type.
      */
     private class PointFToPointConverter : TypeConverter<PointF, Point>(
-            PointF::class.java, Point::class.java
+        PointF::class.java, Point::class.java
     ) {
         var mPoint = Point()
 
@@ -438,10 +454,12 @@ class PathAnimations : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, 
          * A silly hack to help the kotlin compiler disambiguate between ambiguous overloads.
          */
         val hack: TypeConverter<PointF, *>? = null
+
         /**
          * Smiley face path that our frog traces.
          */
         internal val sTraversalPath = Path()
+
         /**
          * Scaling factor our `CanvasView` uses when scaling `Path sTraversalPath` into the
          * `Path mPath` which it draws.
@@ -451,30 +469,31 @@ class PathAnimations : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, 
         /**
          * This static field is used for the animation when the "Property" RadioButton is selected.
          */
-        internal val POINT_PROPERTY: Property<PathAnimations, Point> = object : Property<PathAnimations, Point>(Point::class.java, "point") {
-            /**
-             * Returns the current value that this property represents on the given **object**.
-             *
-             * @param object the PathAnimations instance in question ("this" essentially)
-             * @return a Point containing the current (x,y) coordinates of the animation
-             */
-            override fun get(`object`: PathAnimations): Point {
-                val v = `object`.findViewById<View>(R.id.moved_item)
-                return Point(v.x.roundToInt(), v.y.roundToInt())
-            }
+        internal val POINT_PROPERTY: Property<PathAnimations, Point> =
+            object : Property<PathAnimations, Point>(Point::class.java, "point") {
+                /**
+                 * Returns the current value that this property represents on the given **object**.
+                 *
+                 * @param object the PathAnimations instance in question ("this" essentially)
+                 * @return a Point containing the current (x,y) coordinates of the animation
+                 */
+                override fun get(`object`: PathAnimations): Point {
+                    val v = `object`.findViewById<View>(R.id.moved_item)
+                    return Point(v.x.roundToInt(), v.y.roundToInt())
+                }
 
-            /**
-             * Sets the value on "object" which this property represents. If the method is unable to
-             * set the value on the target object it will throw an UnsupportedOperationException
-             * exception.
-             *
-             * @param targetObject the PathAnimations instance in question ("this" essentially)
-             * @param value a Point containing the (x,y) coordinates to set out animation to
-             */
-            override fun set(targetObject: PathAnimations, value: Point) {
-                targetObject.setCoordinates(value.x, value.y)
+                /**
+                 * Sets the value on "object" which this property represents. If the method is unable to
+                 * set the value on the target object it will throw an UnsupportedOperationException
+                 * exception.
+                 *
+                 * @param targetObject the PathAnimations instance in question ("this" essentially)
+                 * @param value a Point containing the (x,y) coordinates to set out animation to
+                 */
+                override fun set(targetObject: PathAnimations, value: Point) {
+                    targetObject.setCoordinates(value.x, value.y)
+                }
             }
-        }
 
         /*
          * Here we set up the path of `Path sTraversalPath`
@@ -485,8 +504,10 @@ class PathAnimations : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, 
             sTraversalPath.addArc(bounds, 45f, 180f)
             sTraversalPath.addArc(bounds, 225f, 180f)
 
-            bounds.set(1.5f + inverseSqrt8, 1.5f + inverseSqrt8, 2.5f + inverseSqrt8,
-                    2.5f + inverseSqrt8)
+            bounds.set(
+                1.5f + inverseSqrt8, 1.5f + inverseSqrt8, 2.5f + inverseSqrt8,
+                2.5f + inverseSqrt8
+            )
             sTraversalPath.addArc(bounds, 45f, 180f)
             sTraversalPath.addArc(bounds, 225f, 180f)
 
@@ -494,7 +515,12 @@ class PathAnimations : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, 
             sTraversalPath.addArc(bounds, 135f, -180f)
             sTraversalPath.addArc(bounds, -45f, -180f)
 
-            bounds.set(4.5f - inverseSqrt8, 1.5f + inverseSqrt8, 5.5f - inverseSqrt8, 2.5f + inverseSqrt8)
+            bounds.set(
+                4.5f - inverseSqrt8,
+                1.5f + inverseSqrt8,
+                5.5f - inverseSqrt8,
+                2.5f + inverseSqrt8
+            )
             sTraversalPath.addArc(bounds, 135f, -180f)
             sTraversalPath.addArc(bounds, -45f, -180f)
 

@@ -16,9 +16,6 @@
 
 package com.example.android.apis.animation
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.Keyframe
@@ -26,7 +23,6 @@ import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -34,6 +30,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import kotlin.math.min
@@ -42,78 +39,93 @@ import kotlin.math.min
  * This application demonstrates how to use LayoutTransition to automate transition animations
  * as items are removed from or added to a container.
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class LayoutAnimations : AppCompatActivity() {
     /**
      * Counter of the number of buttons that have been added, used as the button label.
      */
     private var numButtons = 1
+
     /**
      * `FixedGridLayout` into which we place our buttons.
      */
     internal var container: ViewGroup? = null
+
     /**
      * Default `Animator` returned for `LayoutTransition.APPEARING` by the `getAnimator`
      * method of `LayoutTransition`, it is the animation that runs on those items that are appearing
      * in the container
      */
     internal lateinit var defaultAppearingAnim: Animator
+
     /**
      * Default `Animator` returned for `LayoutTransition.DISAPPEARING` by the `getAnimator`
      * method of `LayoutTransition`, it is the animation that runs on those items that are disappearing
      * from the container
      */
     internal lateinit var defaultDisappearingAnim: Animator
+
     /**
      * Default `Animator` returned for `LayoutTransition.CHANGE_APPEARING` by the `getAnimator`
      * method of `LayoutTransition`, it is the animation that runs on those items that are changing
      * due to a new item appearing in the container.
      */
     internal lateinit var defaultChangingAppearingAnim: Animator
+
     /**
      * Default `Animator` returned for `LayoutTransition.CHANGE_DISAPPEARING` by the `getAnimator`
      * method of `LayoutTransition`, it is the animation that runs on those items that are changing
      * due to a new item disappearing from the container.
      */
     internal lateinit var defaultChangingDisappearingAnim: Animator
+
     /**
      * Our custom `Animator` for the `LayoutTransition.APPEARING` animation, it is the
      * animation that runs on those items that are appearing in the container.
      */
     internal lateinit var customAppearingAnim: Animator
+
     /**
      * Our custom `Animator` for the `LayoutTransition.DISAPPEARING` animation, it is the
      * animation that runs on those items that are disappearing from the container
      */
     internal lateinit var customDisappearingAnim: Animator
+
     /**
      * Our custom `Animator` for the `LayoutTransition.CHANGE_APPEARING` animation, it is the
      * animation that runs on those items that are changing due to a new item appearing in the container.
      */
     internal lateinit var customChangingAppearingAnim: Animator
+
     /**
      * Our custom `Animator` for the `LayoutTransition.CHANGE_DISAPPEARING` animation, it is the
      * animation that runs on those items that are changing due to a new item disappearing from
      * the container.
      */
     internal lateinit var customChangingDisappearingAnim: Animator
+
     /**
      * Just a copy of `defaultAppearingAnim` made for no apparent reason.
      */
     internal lateinit var currentAppearingAnim: Animator
+
     /**
      * Just a copy of `defaultDisappearingAnim` made for no apparent reason.
      */
     internal lateinit var currentDisappearingAnim: Animator
+
     /**
      * Just a copy of `defaultChangingAppearingAnim` made for no apparent reason.
      */
     internal lateinit var currentChangingAppearingAnim: Animator
+
     /**
      * Just a copy of `defaultChangingDisappearingAnim` made for no apparent reason.
      */
     internal lateinit var currentChangingDisappearingAnim: Animator
+
     /**
      * Logical screen density of our display.
      */
@@ -153,7 +165,8 @@ class LayoutAnimations : AppCompatActivity() {
         defaultAppearingAnim = transitioner.getAnimator(LayoutTransition.APPEARING)
         defaultDisappearingAnim = transitioner.getAnimator(LayoutTransition.DISAPPEARING)
         defaultChangingAppearingAnim = transitioner.getAnimator(LayoutTransition.CHANGE_APPEARING)
-        defaultChangingDisappearingAnim = transitioner.getAnimator(LayoutTransition.CHANGE_DISAPPEARING)
+        defaultChangingDisappearingAnim =
+            transitioner.getAnimator(LayoutTransition.CHANGE_DISAPPEARING)
         createCustomAnimations(transitioner)
         currentAppearingAnim = defaultAppearingAnim
         currentDisappearingAnim = defaultDisappearingAnim
@@ -260,29 +273,37 @@ class LayoutAnimations : AppCompatActivity() {
         val disappearingCB = findViewById<CheckBox>(R.id.disappearingCB)
         val changingAppearingCB = findViewById<CheckBox>(R.id.changingAppearingCB)
         val changingDisappearingCB = findViewById<CheckBox>(R.id.changingDisappearingCB)
-        transition.setAnimator(LayoutTransition.APPEARING, if (appearingCB.isChecked)
-            if (customAnimCB.isChecked) customAppearingAnim else defaultAppearingAnim
-        else
-            null)
-        transition.setAnimator(LayoutTransition.DISAPPEARING, if (disappearingCB.isChecked)
-            if (customAnimCB.isChecked) customDisappearingAnim else defaultDisappearingAnim
-        else
-            null)
-        transition.setAnimator(LayoutTransition.CHANGE_APPEARING, if (changingAppearingCB.isChecked)
-            if (customAnimCB.isChecked)
-                customChangingAppearingAnim
+        transition.setAnimator(
+            LayoutTransition.APPEARING, if (appearingCB.isChecked)
+                if (customAnimCB.isChecked) customAppearingAnim else defaultAppearingAnim
             else
-                defaultChangingAppearingAnim
-        else
-            null)
-        transition.setAnimator(LayoutTransition.CHANGE_DISAPPEARING,
-                if (changingDisappearingCB.isChecked)
-                    if (customAnimCB.isChecked)
-                        customChangingDisappearingAnim
-                    else
-                        defaultChangingDisappearingAnim
+                null
+        )
+        transition.setAnimator(
+            LayoutTransition.DISAPPEARING, if (disappearingCB.isChecked)
+                if (customAnimCB.isChecked) customDisappearingAnim else defaultDisappearingAnim
+            else
+                null
+        )
+        transition.setAnimator(
+            LayoutTransition.CHANGE_APPEARING, if (changingAppearingCB.isChecked)
+                if (customAnimCB.isChecked)
+                    customChangingAppearingAnim
                 else
-                    null)
+                    defaultChangingAppearingAnim
+            else
+                null
+        )
+        transition.setAnimator(
+            LayoutTransition.CHANGE_DISAPPEARING,
+            if (changingDisappearingCB.isChecked)
+                if (customAnimCB.isChecked)
+                    customChangingDisappearingAnim
+                else
+                    defaultChangingDisappearingAnim
+            else
+                null
+        )
     }
 
     /**
@@ -348,8 +369,9 @@ class LayoutAnimations : AppCompatActivity() {
         val pvhScaleY = PropertyValuesHolder.ofFloat("scaleY", 1f, 0f, 1f)
         @SuppressLint("Recycle")
         customChangingAppearingAnim = ObjectAnimator.ofPropertyValuesHolder(
-                this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhScaleX, pvhScaleY)
-                .setDuration(transition.getDuration(LayoutTransition.CHANGE_APPEARING) * 100)
+            this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhScaleX, pvhScaleY
+        )
+            .setDuration(transition.getDuration(LayoutTransition.CHANGE_APPEARING) * 100)
         customChangingAppearingAnim.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(anim: Animator) {
                 val view = (anim as ObjectAnimator).target as View?
@@ -365,8 +387,9 @@ class LayoutAnimations : AppCompatActivity() {
         val pvhRotation = PropertyValuesHolder.ofKeyframe("rotation", kf0, kf1, kf2)
         @SuppressLint("Recycle")
         customChangingDisappearingAnim = ObjectAnimator.ofPropertyValuesHolder(
-                this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhRotation)
-                .setDuration(transition.getDuration(LayoutTransition.CHANGE_DISAPPEARING) * 100)
+            this, pvhLeft, pvhTop, pvhRight, pvhBottom, pvhRotation
+        )
+            .setDuration(transition.getDuration(LayoutTransition.CHANGE_DISAPPEARING) * 100)
         customChangingDisappearingAnim.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(anim: Animator) {
                 val view = (anim as ObjectAnimator).target as View?
@@ -377,8 +400,9 @@ class LayoutAnimations : AppCompatActivity() {
         // Adding
         @SuppressLint("Recycle")
         customAppearingAnim = ObjectAnimator.ofFloat(
-                null, "rotationY", 90f, 0f)
-                .setDuration(transition.getDuration(LayoutTransition.APPEARING) * 100)
+            null, "rotationY", 90f, 0f
+        )
+            .setDuration(transition.getDuration(LayoutTransition.APPEARING) * 100)
         customAppearingAnim.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(anim: Animator) {
                 val view = (anim as ObjectAnimator).target as View?
@@ -389,8 +413,9 @@ class LayoutAnimations : AppCompatActivity() {
         // Removing
         @SuppressLint("Recycle")
         customDisappearingAnim = ObjectAnimator.ofFloat(
-                null, "rotationX", 0f, 90f)
-                .setDuration(transition.getDuration(LayoutTransition.DISAPPEARING) * 100)
+            null, "rotationX", 0f, 90f
+        )
+            .setDuration(transition.getDuration(LayoutTransition.DISAPPEARING) * 100)
         customDisappearingAnim.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(anim: Animator) {
                 val view = (anim as ObjectAnimator).target as View?

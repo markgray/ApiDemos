@@ -20,7 +20,6 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.RadialGradient
@@ -35,6 +34,7 @@ import android.view.animation.BounceInterpolator
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.SeekBar
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -43,8 +43,9 @@ import com.example.android.apis.R
  * UI allows you to set the position of the animation. Pressing the Run button will play from
  * the current position of the animation.
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class AnimationSeeking : AppCompatActivity() {
     /**
      * The `SeekBar` in our layout with id R.id.seekBar used by the user to adjust the position
@@ -133,16 +134,19 @@ class AnimationSeeking : AppCompatActivity() {
      *
      * @param context AnimationSeeking Activity context
      */
-    (context: Context) : View(context), ValueAnimator.AnimatorUpdateListener, Animator.AnimatorListener {
+        (context: Context) : View(context), ValueAnimator.AnimatorUpdateListener,
+        Animator.AnimatorListener {
 
         /**
          * List of balls contained inside `ShapeHolder` objects, which we do not actually use
          */
-        val balls = ArrayList<ShapeHolder>()
+        val balls: ArrayList<ShapeHolder> = ArrayList()
+
         /**
          * `ObjectAnimator` which bounces the ball using a `BounceInterpolator`
          */
         internal var bounceAnim: ValueAnimator? = null
+
         /**
          * The one and only ball, which bounces and whose animation is controlled by the seekbar
          */
@@ -167,10 +171,10 @@ class AnimationSeeking : AppCompatActivity() {
             if (bounceAnim == null) {
                 @SuppressLint("Recycle") // It is started in startAnimation()
                 bounceAnim = ObjectAnimator.ofFloat(
-                        ball,
-                        "y",
-                        ball.y,
-                        height - BALL_SIZE
+                    ball,
+                    "y",
+                    ball.y,
+                    height - BALL_SIZE
                 ).setDuration(1500)
                 bounceAnim!!.interpolator = BounceInterpolator()
                 bounceAnim!!.addUpdateListener(this)
@@ -229,8 +233,10 @@ class AnimationSeeking : AppCompatActivity() {
             val color = -0x1000000 or (red shl 16) or (green shl 8) or blue
             val paint = drawable.paint
             val darkColor = -0x1000000 or (red / 4 shl 16) or (green / 4 shl 8) or blue / 4
-            val gradient = RadialGradient(37.5f, 12.5f,
-                    50f, color, darkColor, Shader.TileMode.CLAMP)
+            val gradient = RadialGradient(
+                37.5f, 12.5f,
+                50f, color, darkColor, Shader.TileMode.CLAMP
+            )
             paint.shader = gradient
             shapeHolder.paint = paint
             balls.add(shapeHolder)
@@ -262,7 +268,7 @@ class AnimationSeeking : AppCompatActivity() {
          */
         override fun onAnimationUpdate(animation: ValueAnimator) {
             invalidate()
-            @Suppress("UNUSED_VARIABLE")
+            @Suppress("UNUSED_VARIABLE", "unused")
             val playtime = bounceAnim!!.currentPlayTime
             //mSeekBar.setProgress((int)playtime);
         }
@@ -312,10 +318,12 @@ class AnimationSeeking : AppCompatActivity() {
          * Maximum value to use for our `SeekBar`.
          */
         private const val DURATION = 1500
+
         /**
          * TAG used for logging.
          */
         private const val TAG = "AnimationSeeking"
+
         /**
          * Ball size in pixels
          */

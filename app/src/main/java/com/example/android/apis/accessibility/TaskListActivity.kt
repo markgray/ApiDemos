@@ -49,8 +49,10 @@ class TaskListActivity : AppCompatActivity() {
 
         // Hard-coded hand-waving here.
         val checkboxes = booleanArrayOf(true, true, false, true, false, false, false)
-        val labels = arrayOf("Take out Trash", "Do Laundry", "Conquer World", "Nap",
-                "Do Taxes", "Abolish IRS", "Tea with Aunt Sharon")
+        val labels = arrayOf(
+            "Take out Trash", "Do Laundry", "Conquer World", "Nap",
+            "Do Taxes", "Abolish IRS", "Tea with Aunt Sharon"
+        )
 
         val myAdapter = TaskAdapter(this, labels, checkboxes)
         val taskListView: ListView = findViewById(R.id.list)

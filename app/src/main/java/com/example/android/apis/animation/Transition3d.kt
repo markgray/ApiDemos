@@ -158,15 +158,11 @@ class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListe
     /**
      * This class listens for the end of the first half of the animation. It then posts a new action
      * that effectively swaps the views when the container is rotated 90 degrees and thus invisible.
+     *
+     * @property mPosition Position in the [ListView] field [mPhotosList] whose photo is being
+     * transitioned to, or -1 if we are transitioning back to [mPhotosList].
      */
-    private inner class DisplayNextView(
-        /**
-         * Position in the [ListView] field [mPhotosList] whose photo is being transitioned to,
-         * or -1 if we are transitioning back to [mPhotosList].
-         */
-        private val mPosition: Int
-
-    ) : Animation.AnimationListener {
+    private inner class DisplayNextView(private val mPosition: Int) : Animation.AnimationListener {
 
         /**
          * Notifies us that the animation has started. We ignore it.
@@ -197,15 +193,11 @@ class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListe
 
     /**
      * This class is responsible for swapping the views and starting the second half of the animation.
+     *
+     * @property mPosition Position in the [ListView] field [mPhotosList] whose photo is being
+     * transitioned to, or -1 if we are transitioning back to [mPhotosList].
      */
-    private inner class SwapViews(
-        /**
-         * Position in the [ListView] field [mPhotosList] whose photo is being transitioned to,
-         * or -1 if we are transitioning back to [mPhotosList].
-         */
-        private val mPosition: Int
-
-    ) : Runnable {
+    private inner class SwapViews(private val mPosition: Int) : Runnable {
 
         /**
          * Starts executing the active part our code. First we determine the center `(centerX,centerY)`

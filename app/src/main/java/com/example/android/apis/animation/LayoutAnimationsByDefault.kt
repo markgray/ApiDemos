@@ -16,9 +16,6 @@
 
 package com.example.android.apis.animation
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-
 import android.os.Bundle
 import android.widget.Button
 import android.widget.GridLayout

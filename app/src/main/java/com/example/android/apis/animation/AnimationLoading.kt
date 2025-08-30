@@ -22,7 +22,6 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -35,6 +34,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -54,8 +54,9 @@ import com.example.android.apis.R
  * balls[5], As these two animations use the exact same path, the effect of the per-keyframe
  * interpolator has been made obvious.)
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class AnimationLoading : AppCompatActivity() {
 
     /**
@@ -85,9 +86,6 @@ class AnimationLoading : AppCompatActivity() {
 
     /**
      * This is the custom View which contains our animation demonstration
-     */
-    inner class MyAnimationView
-    /**
      * Creates the eight balls (0-7) which are in our View. (Two of the balls (5 and 7) start in
      * the same place). The method `addBall` is called with the x and y coordinates for the
      * call being created with the 2 argument version assigning a random color to the ball for
@@ -98,26 +96,28 @@ class AnimationLoading : AppCompatActivity() {
      * current theme, resources, etc., "this" in the `onCreate` method
      * of the `AnimationLoading` activity.
      */
-    (context: Context) : View(context), ValueAnimator.AnimatorUpdateListener {
+    inner class MyAnimationView(context: Context) : View(context),
+        ValueAnimator.AnimatorUpdateListener {
 
         /**
          * List holding the `ShapeHolder` objects which hold the balls
          */
-        val balls = ArrayList<ShapeHolder>()
+        val balls: ArrayList<ShapeHolder> = ArrayList()
+
         /**
          * `AnimatorSet` which holds all the animations for the 8 balls we animate
          */
         internal var animation: Animator? = null
 
         init {
-            addBall(50f, 50f)
-            addBall(200f, 50f)
-            addBall(350f, 50f)
-            addBall(500f, 50f, Color.GREEN)
-            addBall(650f, 50f)
-            addBall(800f, 50f)
-            addBall(950f, 50f)
-            addBall(800f, 50f, Color.YELLOW)
+            addBall(x = 50f, y = 50f)
+            addBall(x = 200f, y = 50f)
+            addBall(x = 350f, y = 50f)
+            addBall(x = 500f, y = 50f, color = Color.GREEN)
+            addBall(x = 650f, y = 50f)
+            addBall(x = 800f, y = 50f)
+            addBall(x = 950f, y = 50f)
+            addBall(x = 800f, y = 50f, color = Color.YELLOW)
         }
 
         /**
@@ -172,28 +172,46 @@ class AnimationLoading : AppCompatActivity() {
             val appContext = this@AnimationLoading
 
             if (animation == null) {
-                val anim = AnimatorInflater.loadAnimator(appContext, R.animator.object_animator) as ObjectAnimator
+                val anim = AnimatorInflater.loadAnimator(
+                    appContext,
+                    R.animator.object_animator
+                ) as ObjectAnimator
                 anim.addUpdateListener(this)
                 anim.target = balls[0]
 
-                val fader = AnimatorInflater.loadAnimator(appContext, R.animator.animator) as ValueAnimator
+                val fader =
+                    AnimatorInflater.loadAnimator(appContext, R.animator.animator) as ValueAnimator
                 fader.addUpdateListener { animation -> balls[1].setAlpha(animation.animatedValue as Float) }
 
-                val seq = AnimatorInflater.loadAnimator(appContext,
-                        R.animator.animator_set) as AnimatorSet
+                val seq = AnimatorInflater.loadAnimator(
+                    appContext,
+                    R.animator.animator_set
+                ) as AnimatorSet
                 seq.setTarget(balls[2])
 
-                val colorizer = AnimatorInflater.loadAnimator(appContext, R.animator.color_animator) as ObjectAnimator
+                val colorizer = AnimatorInflater.loadAnimator(
+                    appContext,
+                    R.animator.color_animator
+                ) as ObjectAnimator
                 colorizer.target = balls[3]
 
-                val animPvh = AnimatorInflater.loadAnimator(appContext, R.animator.object_animator_pvh) as ObjectAnimator
+                val animPvh = AnimatorInflater.loadAnimator(
+                    appContext,
+                    R.animator.object_animator_pvh
+                ) as ObjectAnimator
                 animPvh.target = balls[4]
 
 
-                val animPvhKf = AnimatorInflater.loadAnimator(appContext, R.animator.object_animator_pvh_kf) as ObjectAnimator
+                val animPvhKf = AnimatorInflater.loadAnimator(
+                    appContext,
+                    R.animator.object_animator_pvh_kf
+                ) as ObjectAnimator
                 animPvhKf.target = balls[5]
 
-                val faderKf = AnimatorInflater.loadAnimator(appContext, R.animator.value_animator_pvh_kf) as ValueAnimator
+                val faderKf = AnimatorInflater.loadAnimator(
+                    appContext,
+                    R.animator.value_animator_pvh_kf
+                ) as ValueAnimator
                 faderKf.addUpdateListener { animation -> balls[6].setAlpha(animation.animatedValue as Float) }
 
                 // This animation has an accelerate interpolator applied on each
@@ -202,13 +220,18 @@ class AnimationLoading : AppCompatActivity() {
                 // throughout the animation. As these two animations use the
                 // exact same path, the effect of the per-keyframe interpolator
                 // has been made obvious.
-                val animPvhKfInterpolated = AnimatorInflater.loadAnimator(appContext, R.animator.object_animator_pvh_kf_interpolated) as ObjectAnimator
+                val animPvhKfInterpolated = AnimatorInflater.loadAnimator(
+                    appContext,
+                    R.animator.object_animator_pvh_kf_interpolated
+                ) as ObjectAnimator
                 animPvhKfInterpolated.target = balls[7]
 
                 @SuppressLint("Recycle") // It is started in startAnimation()
                 animation = AnimatorSet()
-                (animation as AnimatorSet).playTogether(anim, fader, seq, colorizer, animPvh,
-                        animPvhKf, faderKf, animPvhKfInterpolated)
+                (animation as AnimatorSet).playTogether(
+                    anim, fader, seq, colorizer, animPvh,
+                    animPvhKf, faderKf, animPvhKfInterpolated
+                )
 
             }
         }
@@ -298,8 +321,10 @@ class AnimationLoading : AppCompatActivity() {
             val color = -0x1000000 or (red shl 16) or (green shl 8) or blue
             val paint = shapeHolder.shape!!.paint
             val darkColor = -0x1000000 or (red / 4 shl 16) or (green / 4 shl 8) or blue / 4
-            val gradient = RadialGradient(37.5f, 12.5f,
-                    50f, color, darkColor, Shader.TileMode.CLAMP)
+            val gradient = RadialGradient(
+                37.5f, 12.5f,
+                50f, color, darkColor, Shader.TileMode.CLAMP
+            )
             paint.shader = gradient
             balls.add(shapeHolder)
         }

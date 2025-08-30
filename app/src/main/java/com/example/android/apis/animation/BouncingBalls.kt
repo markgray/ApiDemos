@@ -23,7 +23,6 @@ import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.RadialGradient
@@ -37,9 +36,10 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.withTranslation
 import com.example.android.apis.R
-import java.util.ArrayList
 
 /**
  * Uses several different kinds of ObjectAnimator to animate bouncing color changing balls.
@@ -50,7 +50,8 @@ import java.util.ArrayList
  * of the fade animation is set to an AnimatorListenerAdapter which removes the ball when
  * the animation is done.
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class BouncingBalls : AppCompatActivity() {
 
     /**
@@ -71,9 +72,6 @@ class BouncingBalls : AppCompatActivity() {
      * This class does all the work of creating and animating the bouncing balls. The balls
      * are placed inside an .animation.ShapeHolder as they are created and an animation set is
      * used to perform animation operations on that ShapeHolder.
-     */
-    inner class MyAnimationView
-    /**
      * Our constructor. First we call our super's constructor. We initialize `ValueAnimator colorAnim`
      * with an `ObjectAnimator` that animates between int values of the "backgroundColor" property
      * value of this `View` between RED and BLUE. Set its duration to 3000 milliseconds, set the
@@ -84,12 +82,12 @@ class BouncingBalls : AppCompatActivity() {
      * @param context `Context` to use to access resources, *this* in the `onCreate`
      * override of `BouncingBalls`.
      */
-    (context: Context) : View(context) {
+    inner class MyAnimationView(context: Context) : View(context) {
 
         /**
          * `ArrayList` holding all our balls, each inside its own `ShapeHolder` container.
          */
-        val balls = ArrayList<ShapeHolder>()
+        val balls: ArrayList<ShapeHolder> = ArrayList()
 
         init {
 
@@ -98,10 +96,11 @@ class BouncingBalls : AppCompatActivity() {
             // view, so that the animated color, and the bouncing balls, get redisplayed on
             // every frame of the animation.
             val colorAnim = ObjectAnimator.ofInt(
-                    this,
-                    "backgroundColor",
-                    RED,
-                    BLUE)
+                /* target = */ this,
+                /* propertyName = */ "backgroundColor",
+                /* ...values = */ RED,
+                BLUE
+            )
             colorAnim.duration = 3000
             colorAnim.setEvaluator(ArgbEvaluator())
             colorAnim.repeatCount = ValueAnimator.INFINITE
@@ -137,32 +136,42 @@ class BouncingBalls : AppCompatActivity() {
             val bounceAnim = ObjectAnimator.ofFloat(newBall, "y", startY, endY)
             bounceAnim.duration = duration.toLong()
             bounceAnim.interpolator = AccelerateInterpolator()
-            val squashAnim1 = ObjectAnimator.ofFloat(newBall, "x", newBall.x,
-                    newBall.x - 25f)
+            val squashAnim1 = ObjectAnimator.ofFloat(
+                newBall, "x", newBall.x,
+                newBall.x - 25f
+            )
             squashAnim1.duration = (duration / 4).toLong()
             squashAnim1.repeatCount = 1
             squashAnim1.repeatMode = ValueAnimator.REVERSE
             squashAnim1.interpolator = DecelerateInterpolator()
-            val squashAnim2 = ObjectAnimator.ofFloat(newBall, "width", newBall.width,
-                    newBall.width + 50)
+            val squashAnim2 = ObjectAnimator.ofFloat(
+                newBall, "width", newBall.width,
+                newBall.width + 50
+            )
             squashAnim2.duration = (duration / 4).toLong()
             squashAnim2.repeatCount = 1
             squashAnim2.repeatMode = ValueAnimator.REVERSE
             squashAnim2.interpolator = DecelerateInterpolator()
-            val stretchAnim1 = ObjectAnimator.ofFloat(newBall, "y", endY,
-                    endY + 25f)
+            val stretchAnim1 = ObjectAnimator.ofFloat(
+                newBall, "y", endY,
+                endY + 25f
+            )
             stretchAnim1.duration = (duration / 4).toLong()
             stretchAnim1.repeatCount = 1
             stretchAnim1.interpolator = DecelerateInterpolator()
             stretchAnim1.repeatMode = ValueAnimator.REVERSE
-            val stretchAnim2 = ObjectAnimator.ofFloat(newBall, "height",
-                    newBall.height, newBall.height - 25)
+            val stretchAnim2 = ObjectAnimator.ofFloat(
+                newBall, "height",
+                newBall.height, newBall.height - 25
+            )
             stretchAnim2.duration = (duration / 4).toLong()
             stretchAnim2.repeatCount = 1
             stretchAnim2.interpolator = DecelerateInterpolator()
             stretchAnim2.repeatMode = ValueAnimator.REVERSE
-            val bounceBackAnim = ObjectAnimator.ofFloat(newBall, "y", endY,
-                    startY)
+            val bounceBackAnim = ObjectAnimator.ofFloat(
+                newBall, "y", endY,
+                startY
+            )
             bounceBackAnim.duration = duration.toLong()
             bounceBackAnim.interpolator = DecelerateInterpolator()
             // Sequence the down/squash&stretch/up animations
@@ -228,8 +237,10 @@ class BouncingBalls : AppCompatActivity() {
             val color = -0x1000000 or (red shl 16) or (green shl 8) or blue
             val paint = drawable.paint //new Paint(Paint.ANTI_ALIAS_FLAG);
             val darkColor = -0x1000000 or (red / 4 shl 16) or (green / 4 shl 8) or blue / 4
-            val gradient = RadialGradient(37.5f, 12.5f,
-                    50f, color, darkColor, Shader.TileMode.CLAMP)
+            val gradient = RadialGradient(
+                37.5f, 12.5f,
+                50f, color, darkColor, Shader.TileMode.CLAMP
+            )
             paint.shader = gradient
             shapeHolder.paint = paint
             balls.add(shapeHolder)
@@ -248,13 +259,13 @@ class BouncingBalls : AppCompatActivity() {
         override fun onDraw(canvas: Canvas) {
             for (i in balls.indices) {
                 val shapeHolder = balls[i]
-                canvas.save()
-                canvas.translate(shapeHolder.x, shapeHolder.y)
-                shapeHolder.shape!!.draw(canvas)
-                canvas.restore()
+                canvas.withTranslation(x = shapeHolder.x, y = shapeHolder.y) {
+                    shapeHolder.shape!!.draw(this)
+                }
             }
         }
     }
+
     companion object {
 
         /**
@@ -262,6 +273,7 @@ class BouncingBalls : AppCompatActivity() {
          * color and BLUE
          */
         private const val RED = -0x7f80
+
         /**
          * The background color property of our `MyAnimationView` is animated between this
          * color and RED

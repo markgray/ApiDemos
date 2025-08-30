@@ -22,7 +22,6 @@ package com.example.android.apis.animation
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.RadialGradient
@@ -35,15 +34,18 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.withTranslation
 import com.example.android.apis.R
 
 /**
  * Demonstrates the use of android.animation.ValueAnimator.reverse() method to play an
  * animation in "reverse".
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class ReversingAnimation : AppCompatActivity() {
 
     /**
@@ -83,20 +85,19 @@ class ReversingAnimation : AppCompatActivity() {
      * If MyAnimationView.startAnimation is called it falls from the top to the bottom of the View
      * and stays there. If MyAnimationView.reverseAnimation is called it "falls" from the bottom
      * to the top of the View (no matter where it starts) and stays there.
-     */
-    inner class MyAnimationView
-    /**
      * Initializes a new instance of MyAnimationView. First calls our super's constructor,
      * then creates a ShapeHolder ball containing a 25px by 25px ball.
      *
      * @param context ReversingAnimation Activity Context
      */
-    (context: Context) : View(context), ValueAnimator.AnimatorUpdateListener {
+    inner class MyAnimationView(context: Context) : View(context),
+        ValueAnimator.AnimatorUpdateListener {
 
         /**
          * `ObjectAnimator` which animates our `ShapeHolder ball`
          */
         internal var bounceAnim: ValueAnimator? = null
+
         /**
          * `ShapeHolder` holding our ball, it is the object which is moved via its "y" property
          */
@@ -118,7 +119,7 @@ class ReversingAnimation : AppCompatActivity() {
             if (bounceAnim == null) {
                 @SuppressLint("Recycle")
                 bounceAnim = ObjectAnimator.ofFloat(ball, "y", ball.y, height - 50f)
-                        .setDuration(1500)
+                    .setDuration(1500)
                 bounceAnim!!.interpolator = AccelerateInterpolator(2f)
                 bounceAnim!!.addUpdateListener(this)
             }
@@ -188,8 +189,10 @@ class ReversingAnimation : AppCompatActivity() {
             val color = -0x1000000 or (red shl 16) or (green shl 8) or blue
             val paint = drawable.paint //new Paint(Paint.ANTI_ALIAS_FLAG);
             val darkColor = -0x1000000 or (red / 4 shl 16) or (green / 4 shl 8) or blue / 4
-            val gradient = RadialGradient(37.5f, 12.5f,
-                    50f, color, darkColor, Shader.TileMode.CLAMP)
+            val gradient = RadialGradient(
+                37.5f, 12.5f,
+                50f, color, darkColor, Shader.TileMode.CLAMP
+            )
             paint.shader = gradient
             shapeHolder.paint = paint
             return shapeHolder
@@ -205,11 +208,9 @@ class ReversingAnimation : AppCompatActivity() {
          * @param canvas the canvas on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
-            canvas.save()
-            canvas.translate(ball.x, ball.y)
-
-            ball.shape!!.draw(canvas)
-            canvas.restore()
+            canvas.withTranslation(x = ball.x, y = ball.y) {
+                ball.shape!!.draw(this)
+            }
         }
 
         /**

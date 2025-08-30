@@ -15,17 +15,20 @@
  */
 package com.example.android.apis.animation
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.app.SharedElementCallback
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toDrawable
 import com.example.android.apis.R
+import com.example.android.apis.animation.ActivityTransition.Companion.getIdForKey
+import com.example.android.apis.animation.ActivityTransition.Companion.randomColor
 
 /**
  * Uses ActivityOptions.makeSceneTransitionAnimation to transition using a
@@ -39,8 +42,9 @@ import com.example.android.apis.R
  * AndroidManifest android:theme="@style/ActivityTransitionTheme" which contains elements which point
  * to files in res/transition
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class ActivityTransition : AppCompatActivity() {
 
     /**
@@ -62,7 +66,7 @@ class ActivityTransition : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.setBackgroundDrawable(ColorDrawable(randomColor()))
+        window.setBackgroundDrawable(randomColor().toDrawable())
         setContentView(R.layout.image_block)
         setupHero()
     }
@@ -95,8 +99,10 @@ class ActivityTransition : AppCompatActivity() {
                  * @param sharedElements The mapping of shared element names to Views. The best guess
                  * will be filled into sharedElements based on the transitionNames.
                  */
-                override fun onMapSharedElements(names: List<String>,
-                                                 sharedElements: MutableMap<String, View>) {
+                override fun onMapSharedElements(
+                    names: List<String>,
+                    sharedElements: MutableMap<String, View>
+                ) {
                     sharedElements["hero"] = mHero as View
                 }
             })
@@ -120,15 +126,15 @@ class ActivityTransition : AppCompatActivity() {
      *
      * @param v View in the GridView which has been clicked
      */
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun clicked(v: View) {
         mHero = v as ImageView
         val intent = Intent(this, ActivityTransitionDetails::class.java)
-        val transitionName = v.getTransitionName()
+        val transitionName = v.transitionName
         intent.putExtra(KEY_ID, transitionName)
         val activityOptions = ActivityOptions.makeSceneTransitionAnimation(
-                this, mHero,
-                "hero"
+            this, mHero,
+            "hero"
         )
         startActivity(intent, activityOptions.toBundle())
     }
@@ -152,18 +158,18 @@ class ActivityTransition : AppCompatActivity() {
         /**
          * This is the list of the jpg drawables which populates our `GridView`
          */
-        val DRAWABLES = intArrayOf(
-                R.drawable.ball, R.drawable.block, R.drawable.ducky, R.drawable.jellies,
-                R.drawable.mug, R.drawable.pencil, R.drawable.scissors, R.drawable.woot
+        val DRAWABLES: IntArray = intArrayOf(
+            R.drawable.ball, R.drawable.block, R.drawable.ducky, R.drawable.jellies,
+            R.drawable.mug, R.drawable.pencil, R.drawable.scissors, R.drawable.woot
         )
 
         /**
          * This is the list of the resource ids of the `ImageView`s in our layout file's
          * `GridView` (file layout/image_block.xml)
          */
-        val IDS = intArrayOf(
-                R.id.ball, R.id.block, R.id.ducky, R.id.jellies,
-                R.id.mug, R.id.pencil, R.id.scissors, R.id.woot
+        val IDS: IntArray = intArrayOf(
+            R.id.ball, R.id.block, R.id.ducky, R.id.jellies,
+            R.id.mug, R.id.pencil, R.id.scissors, R.id.woot
         )
 
         /**
@@ -172,8 +178,8 @@ class ActivityTransition : AppCompatActivity() {
          * passed as an extra to the `Intent` that launches both us and `ActivityTransitionDetails`
          * stored under the key KEY_ID ("ViewTransitionValues:id")
          */
-        val NAMES = arrayOf(
-                "ball", "block", "ducky", "jellies", "mug", "pencil", "scissors", "woot"
+        val NAMES: Array<String> = arrayOf(
+            "ball", "block", "ducky", "jellies", "mug", "pencil", "scissors", "woot"
         )
 
         /**

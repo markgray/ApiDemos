@@ -12,9 +12,6 @@ import com.example.android.apis.R
 
 /**
  * Adds Accessibility information to individual child views of rows in the list.
- */
-class TaskAdapter
-/**
  * Our constructor. First we call our super's constructor, then we save our parameters
  * `Context context` in our field `Context mContext`, `String[] labels`
  * in our field `String[] mLabels` and `boolean[] checkboxes` in our field
@@ -24,15 +21,18 @@ class TaskAdapter
  * @param labels     labels to use for our checkboxes
  * @param checkboxes initial state of our checkboxes
  */
-(context: Context, labels: Array<String>, checkboxes: BooleanArray) : BaseAdapter() {
+class TaskAdapter(context: Context, labels: Array<String>, checkboxes: BooleanArray) :
+    BaseAdapter() {
     /**
      * Labels to use for our checkboxes, set by our constructor
      */
     private var mLabels: Array<String>? = null
+
     /**
      * Current state of our checkboxes (true if checked, false if unchecked)
      */
     private var mCheckboxes: BooleanArray? = null
+
     /**
      * `Context` passed to our constructor ("this" in the `onCreate` method of
      * `TaskListActivity`
@@ -91,9 +91,9 @@ class TaskAdapter
         label.text = mLabels!![position]
 
         val contentDescription = StringBuilder()
-                .append(mContext!!.getString(R.string.task_name))
-                .append(' ')
-                .append(mLabels!![position]).toString()
+            .append(mContext!!.getString(R.string.task_name))
+            .append(' ')
+            .append(mLabels!![position]).toString()
         label.contentDescription = contentDescription
 
         convertViewLocal.tag = position

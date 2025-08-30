@@ -23,7 +23,6 @@ import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.RadialGradient
@@ -37,17 +36,18 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.BounceInterpolator
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.ArrayList
 
 /**
  * Uses AnimatorSet.playTogether(Animator... items) to play four different
  * animations at once: yBouncer, yAlphaBouncer, whxyBouncer, and yxBouncer,
  * all of which are set up in the method createAnimation().
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class MultiPropertyAnimation : AppCompatActivity() {
 
     /**
@@ -76,25 +76,23 @@ class MultiPropertyAnimation : AppCompatActivity() {
     /**
      * This is the View that the demo runs in. It consists of 4 balls with different animations
      * assigned to each of them: yBouncer, yAlphaBouncer, whxyBouncer, and yxBouncer.
-     */
-    inner class MyAnimationView
-    /**
      * Adds four balls to the `ArrayList<ShapeHolder> balls`.
      *
      * @param context the MultiPropertyAnimation Activity context
      */
-    (context: Context) : View(context), ValueAnimator.AnimatorUpdateListener {
+    inner class MyAnimationView(context: Context) : View(context),
+        ValueAnimator.AnimatorUpdateListener {
 
-        val balls = ArrayList<ShapeHolder>()
+        val balls: ArrayList<ShapeHolder> = ArrayList()
         internal var animation: AnimatorSet? = null
         internal var bounceAnim: Animator? = null
         internal var ball: ShapeHolder? = null
 
         init {
-            addBall(50f, 0f)
-            addBall(150f, 0f)
-            addBall(250f, 0f)
-            addBall(350f, 0f)
+            addBall(x = 50f, y = 0f)
+            addBall(x = 150f, y = 0f)
+            addBall(x = 250f, y = 0f)
+            addBall(x = 350f, y = 0f)
         }
 
         /**
@@ -137,29 +135,29 @@ class MultiPropertyAnimation : AppCompatActivity() {
             if (bounceAnim == null) {
                 var ball: ShapeHolder = balls[0]
                 val yBouncer = ObjectAnimator.ofFloat(
-                        ball,
-                        "y",
-                        ball.y,
-                        height - BALL_SIZE
+                    ball,
+                    "y",
+                    ball.y,
+                    height - BALL_SIZE
                 ).setDuration(DURATION.toLong())
                 yBouncer.interpolator = BounceInterpolator()
                 yBouncer.addUpdateListener(this)
 
                 ball = balls[1]
                 var pvhY = PropertyValuesHolder.ofFloat(
-                        "y",
-                        ball.y,
-                        height - BALL_SIZE
+                    "y",
+                    ball.y,
+                    height - BALL_SIZE
                 )
                 val pvhAlpha = PropertyValuesHolder.ofFloat(
-                        "alpha",
-                        1.0f,
-                        0f
+                    "alpha",
+                    1.0f,
+                    0f
                 )
                 val yAlphaBouncer = ObjectAnimator.ofPropertyValuesHolder(
-                        ball,
-                        pvhY,
-                        pvhAlpha
+                    ball,
+                    pvhY,
+                    pvhAlpha
                 ).setDuration((DURATION / 2).toLong())
                 yAlphaBouncer.interpolator = AccelerateInterpolator()
                 yAlphaBouncer.repeatCount = 1
@@ -168,53 +166,53 @@ class MultiPropertyAnimation : AppCompatActivity() {
 
                 ball = balls[2]
                 val pvhW = PropertyValuesHolder.ofFloat(
-                        "width",
-                        ball.width, ball.width * 2
+                    "width",
+                    ball.width, ball.width * 2
                 )
                 val pvhH = PropertyValuesHolder.ofFloat(
-                        "height",
-                        ball.height,
-                        ball.height * 2
+                    "height",
+                    ball.height,
+                    ball.height * 2
                 )
                 val pvTX = PropertyValuesHolder.ofFloat(
-                        "x",
-                        ball.x,
-                        ball.x - BALL_SIZE / 2f
+                    "x",
+                    ball.x,
+                    ball.x - BALL_SIZE / 2f
                 )
                 val pvTY = PropertyValuesHolder.ofFloat(
-                        "y",
-                        ball.y,
-                        ball.y - BALL_SIZE / 2f
+                    "y",
+                    ball.y,
+                    ball.y - BALL_SIZE / 2f
                 )
                 val whxyBouncer = ObjectAnimator.ofPropertyValuesHolder(
-                        ball, pvhW,
-                        pvhH,
-                        pvTX,
-                        pvTY
+                    ball, pvhW,
+                    pvhH,
+                    pvTX,
+                    pvTY
                 ).setDuration((DURATION / 2).toLong())
                 whxyBouncer.repeatCount = 1
                 whxyBouncer.repeatMode = ValueAnimator.REVERSE
 
                 ball = balls[3]
                 pvhY = PropertyValuesHolder.ofFloat(
-                        "y",
-                        ball.y,
-                        height - BALL_SIZE
+                    "y",
+                    ball.y,
+                    height - BALL_SIZE
                 )
                 val ballX = ball.x
                 val kf0 = Keyframe.ofFloat(0f, ballX)
                 val kf1 = Keyframe.ofFloat(.5f, ballX + 100f)
                 val kf2 = Keyframe.ofFloat(1f, ballX + 50f)
                 val pvhX = PropertyValuesHolder.ofKeyframe(
-                        "x",
-                        kf0,
-                        kf1,
-                        kf2
+                    "x",
+                    kf0,
+                    kf1,
+                    kf2
                 )
                 val yxBouncer = ObjectAnimator.ofPropertyValuesHolder(
-                        ball,
-                        pvhY,
-                        pvhX
+                    ball,
+                    pvhY,
+                    pvhX
                 ).setDuration((DURATION / 2).toLong())
                 yxBouncer.repeatCount = 1
                 yxBouncer.repeatMode = ValueAnimator.REVERSE
@@ -222,10 +220,10 @@ class MultiPropertyAnimation : AppCompatActivity() {
                 @SuppressLint("Recycle")
                 bounceAnim = AnimatorSet()
                 (bounceAnim as AnimatorSet).playTogether(
-                        yBouncer,
-                        yAlphaBouncer,
-                        whxyBouncer,
-                        yxBouncer
+                    yBouncer,
+                    yAlphaBouncer,
+                    whxyBouncer,
+                    yxBouncer
                 )
             }
         }
@@ -262,8 +260,10 @@ class MultiPropertyAnimation : AppCompatActivity() {
             val color = -0x1000000 or (red shl 16) or (green shl 8) or blue
             val paint = drawable.paint
             val darkColor = -0x1000000 or (red / 4 shl 16) or (green / 4 shl 8) or blue / 4
-            val gradient = RadialGradient(37.5f, 12.5f,
-                    50f, color, darkColor, Shader.TileMode.CLAMP)
+            val gradient = RadialGradient(
+                37.5f, 12.5f,
+                50f, color, darkColor, Shader.TileMode.CLAMP
+            )
             paint.shader = gradient
             shapeHolder.paint = paint
             balls.add(shapeHolder)
@@ -304,7 +304,6 @@ class MultiPropertyAnimation : AppCompatActivity() {
     }
 
     companion object {
-
         private const val DURATION = 1500
         private const val BALL_SIZE = 100f
     }

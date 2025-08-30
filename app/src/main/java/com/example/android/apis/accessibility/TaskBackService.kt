@@ -17,6 +17,7 @@
 package com.example.android.apis.accessibility
 
 import android.accessibilityservice.AccessibilityService
+import android.annotation.SuppressLint
 import android.os.Build
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.OnInitListener
@@ -24,6 +25,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
+import android.view.accessibility.AccessibilityNodeInfo.CHECKED_STATE_TRUE
 import com.example.android.apis.R
 import java.util.Locale
 
@@ -73,12 +75,14 @@ class TaskBackService : AccessibilityService(), OnInitListener {
         // Using this parent, get references to both child nodes, the label and the checkbox.
         val labelNode = rowNode.getChild(0)
         if (labelNode == null) {
+            @Suppress("DEPRECATION") // Object pooling has been discontinued. Calling this function now will have no effect.
             rowNode.recycle()
             return
         }
 
         val completeNode = rowNode.getChild(1)
         if (completeNode == null) {
+            @Suppress("DEPRECATION") // Object pooling has been discontinued. Calling this function now will have no effect.
             rowNode.recycle()
             return
         }
@@ -86,12 +90,18 @@ class TaskBackService : AccessibilityService(), OnInitListener {
         // Determine what the task is and whether or not it's complete, based on
         // the text inside the label, and the state of the check-box.
         if (rowNode.childCount < 2 || !rowNode.getChild(1).isCheckable) {
+            @Suppress("DEPRECATION") // Object pooling has been discontinued. Calling this function now will have no effect.
             rowNode.recycle()
             return
         }
 
         val taskLabel = labelNode.text
-        val isComplete = completeNode.isChecked
+        val isComplete = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+            completeNode.checked == CHECKED_STATE_TRUE
+        } else {
+            @Suppress("DEPRECATION") // Needed for older than BAKLAVA
+            completeNode.isChecked
+        }
 
         val completeStr: String = if (isComplete) {
             getString(R.string.task_complete)
@@ -115,6 +125,7 @@ class TaskBackService : AccessibilityService(), OnInitListener {
         }
 
         // Announce the utterance.
+        @SuppressLint("ObsoleteSdkInt")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mTts!!.speak(utterance.toString(), TextToSpeech.QUEUE_FLUSH, null, null)
         } else {
@@ -134,6 +145,7 @@ class TaskBackService : AccessibilityService(), OnInitListener {
             // NOTE: Recycle the infos.
             val oldCurrent = current
             current = parent
+            @Suppress("DEPRECATION") // Object pooling has been discontinued. Calling this function now will have no effect.
             oldCurrent.recycle()
         }
     }
@@ -176,6 +188,7 @@ class TaskBackService : AccessibilityService(), OnInitListener {
         private const val SEPARATOR = ", "
 
         /** The class name of TaskListView - for simplicity we speak only its items.  */
-        private const val TASK_LIST_VIEW_CLASS_NAME = "com.example.android.apis.accessibility.TaskListView"
+        private const val TASK_LIST_VIEW_CLASS_NAME =
+            "com.example.android.apis.accessibility.TaskListView"
     }
 }

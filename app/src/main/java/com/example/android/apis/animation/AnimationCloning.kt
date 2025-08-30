@@ -16,14 +16,10 @@
 
 package com.example.android.apis.animation
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.RadialGradient
@@ -37,7 +33,9 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.withTranslation
 import com.example.android.apis.R
 
 /**
@@ -51,8 +49,9 @@ import com.example.android.apis.R
  * playTogether(ObjectAnimator1,ObjectAnimator2,AnimatorSet1), and the second AnimatorSet
  * to run after the first AnimatorSet by calling playSequentially(AnimatorSet1,AnimatorSet2).
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class AnimationCloning : AppCompatActivity() {
 
     /**
@@ -83,26 +82,26 @@ class AnimationCloning : AppCompatActivity() {
 
     /**
      * A custom view with 4 animated balls in it.
-     */
-    inner class MyAnimationView
-    /**
      * Our constructor. First we call our super's constructor then we initialize our field
      * `float mDensity` with the logical density of the display. Then we create 4 balls
      * and add them to the `ArrayList<ShapeHolder> balls` using our method `addBall`
      *
      * @param context Context which in our case is derived from super of Activity
      */
-    (context: Context) : View(context), ValueAnimator.AnimatorUpdateListener {
+    inner class MyAnimationView(context: Context) : View(context),
+        ValueAnimator.AnimatorUpdateListener {
 
         /**
          * List holding our 4 balls.
          */
-        val balls = ArrayList<ShapeHolder>()
+        val balls: ArrayList<ShapeHolder> = ArrayList()
+
         /**
          * `AnimatorSet` we use to hold the animations for all 4 balls, created in our method
          * `createAnimation` and started by our method `startAnimation`.
          */
         internal var animation: AnimatorSet? = null
+
         /**
          * logical density of the display.
          */
@@ -140,18 +139,24 @@ class AnimationCloning : AppCompatActivity() {
          */
         private fun createAnimation() {
             if (animation == null) {
-                val anim1 = ObjectAnimator.ofFloat(balls[0], "y",
-                        0f, height - balls[0].height).setDuration(500)
+                val anim1 = ObjectAnimator.ofFloat(
+                    balls[0], "y",
+                    0f, height - balls[0].height
+                ).setDuration(500)
                 val anim2 = anim1.clone()
                 anim2.target = balls[1]
                 anim1.addUpdateListener(this)
 
                 val ball2 = balls[2]
-                val animDown = ObjectAnimator.ofFloat(ball2, "y",
-                        0f, height - ball2.height).setDuration(500)
+                val animDown = ObjectAnimator.ofFloat(
+                    ball2, "y",
+                    0f, height - ball2.height
+                ).setDuration(500)
                 animDown.interpolator = AccelerateInterpolator()
-                val animUp = ObjectAnimator.ofFloat(ball2, "y",
-                        height - ball2.height, 0f).setDuration(500)
+                val animUp = ObjectAnimator.ofFloat(
+                    ball2, "y",
+                    height - ball2.height, 0f
+                ).setDuration(500)
                 animUp.interpolator = DecelerateInterpolator()
                 val s1 = AnimatorSet()
                 s1.playSequentially(animDown, animUp)
@@ -205,8 +210,10 @@ class AnimationCloning : AppCompatActivity() {
             val color = -0x1000000 or (red shl 16) or (green shl 8) or blue
             val paint = drawable.paint //new Paint(Paint.ANTI_ALIAS_FLAG);
             val darkColor = -0x1000000 or (red / 4 shl 16) or (green / 4 shl 8) or blue / 4
-            val gradient = RadialGradient(37.5f, 12.5f,
-                    50f, color, darkColor, Shader.TileMode.CLAMP)
+            val gradient = RadialGradient(
+                37.5f, 12.5f,
+                50f, color, darkColor, Shader.TileMode.CLAMP
+            )
             paint.shader = gradient
             shapeHolder.paint = paint
             balls.add(shapeHolder)
@@ -228,10 +235,9 @@ class AnimationCloning : AppCompatActivity() {
         override fun onDraw(canvas: Canvas) {
             for (i in balls.indices) {
                 val shapeHolder = balls[i]
-                canvas.save()
-                canvas.translate(shapeHolder.x, shapeHolder.y)
-                shapeHolder.shape!!.draw(canvas)
-                canvas.restore()
+                canvas.withTranslation(x = shapeHolder.x, y = shapeHolder.y) {
+                    shapeHolder.shape!!.draw(this)
+                }
             }
         }
 
