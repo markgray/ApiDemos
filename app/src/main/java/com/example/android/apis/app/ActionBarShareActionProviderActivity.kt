@@ -16,7 +16,7 @@
 
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Intent
 import android.net.Uri
@@ -24,11 +24,10 @@ import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Menu
-
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.ShareActionProvider
 import androidx.core.view.MenuItemCompat
-
 import com.example.android.apis.R
 
 /**
@@ -38,7 +37,8 @@ import com.example.android.apis.R
  * a menu item with [ShareActionProvider] as its action provider. The
  * [ShareActionProvider] is responsible for managing the UI for sharing actions.
  */
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class ActionBarShareActionProviderActivity : AppCompatActivity() {
 
     /**
@@ -88,8 +88,9 @@ class ActionBarShareActionProviderActivity : AppCompatActivity() {
         // Set file with share history to the provider and set the share intent.
         val overflowItem = menu.findItem(R.id.menu_item_share_action_provider_overflow)
         val overflowProvider = MenuItemCompat.getActionProvider(overflowItem) as ShareActionProvider
-                overflowProvider.setShareHistoryFileName(
-                ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME)
+        overflowProvider.setShareHistoryFileName(
+            ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME
+        )
         // Note that you can set/change the intent any time,
         // say when the user has selected an image.
         overflowProvider.setShareIntent(createShareIntent())

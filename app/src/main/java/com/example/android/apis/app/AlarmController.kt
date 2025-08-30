@@ -20,11 +20,11 @@ package com.example.android.apis.app
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.Toast
@@ -64,7 +64,7 @@ class AlarmController : AppCompatActivity() {
      * ("One Shot While-Idle Alarm"), its `onClick` override switches on the id of the view that
      * triggered it to differentiate.
      */
-    private val mOneShotListener = OnClickListener { v ->
+    private val mOneShotListener = OnClickListener { v: View ->
         /**
          * Called when our view has been clicked. We initialize `Intent intent` with an instance
          * intended for the `BroadcastReceiver` with the class `OneShotAlarm.class`, then
@@ -107,16 +107,21 @@ class AlarmController : AppCompatActivity() {
         calendar.add(Calendar.SECOND, 30)
 
         // Schedule the alarm!
-        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val am = getSystemService(ALARM_SERVICE) as AlarmManager
 
 
         when (v.id) {
             R.id.one_shot ->
                 am.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, sender)
-            else ->
+
+            else -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    am.canScheduleExactAlarms()
+                }
                 am.setExactAndAllowWhileIdle(
                     AlarmManager.RTC_WAKEUP, calendar.timeInMillis, sender
                 )
+            }
         }
 
         // Tell the user about what we did.
@@ -167,7 +172,7 @@ class AlarmController : AppCompatActivity() {
         firstTime += (15 * 1000).toLong()
 
         // Schedule the alarm!
-        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val am = getSystemService(ALARM_SERVICE) as AlarmManager
 
         am.setRepeating(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
@@ -209,7 +214,7 @@ class AlarmController : AppCompatActivity() {
         )
 
         // And cancel the alarm.
-        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val am = getSystemService(ALARM_SERVICE) as AlarmManager
 
         am.cancel(sender)
 

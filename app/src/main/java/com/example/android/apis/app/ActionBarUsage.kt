@@ -15,7 +15,7 @@
  */
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -23,12 +23,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
-
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
-
 import com.example.android.apis.R
 
 /**
@@ -37,14 +36,16 @@ import com.example.android.apis.R
  * menu data itself. If you'd like to see how these things work under the hood, see
  * [ActionBarMechanics].
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class ActionBarUsage : AppCompatActivity(), OnQueryTextListener {
     /**
      * The [TextView] we use as our content view, we set its text in our [onQueryTextChange]
      * to the new content of the query text, which happens for every key stroke.
      */
     internal lateinit var mSearchText: TextView
+
     /**
      * Menu item id of the last sort submenu item selected, -1 means none have been selected yet,
      * R.id.action_sort_size for "By size", or R.id.ic_menu_sort_alphabetically for "Alphabetically".

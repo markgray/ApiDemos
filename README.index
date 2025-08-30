@@ -641,7 +641,7 @@ App
   Alarm
     App/Alarm/Alarm Controller             v23
         .app.AlarmController
-        ..layout.alarm_controller.xml
+        .layout.alarm_controller.xml
         .app.OneShotAlarm
         .app.RepeatingAlarm
             Shows how to schedule both one-shot alarms (OneShotAlarm.java), and repeating

@@ -20,7 +20,6 @@ package com.example.android.apis.app
 // class is in a sub-package.
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.ActivityOptions
 import android.content.Intent
 import android.graphics.Canvas
@@ -30,6 +29,7 @@ import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Button
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -37,7 +37,8 @@ import com.example.android.apis.R
  * TODO: Remove deprecated use of drawing cache (unneeded since SDK 14)
  * Example of using a custom animation when transitioning between activities.
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
 class Animation : AppCompatActivity() {
 
     /**
@@ -58,6 +59,7 @@ class Animation : AppCompatActivity() {
         // activity on top.  Note that we need to also supply an animation
         // (here just doing nothing for the same amount of time) for the
         // old activity to prevent it from going away too soon.
+        @Suppress("DEPRECATION") // TODO: overrideActivityTransition does not work right
         overridePendingTransition(R.anim.fade, R.anim.hold)
     }
 
@@ -81,6 +83,7 @@ class Animation : AppCompatActivity() {
         // the duration of the animation we force the exiting activity
         // to be Z-ordered on top (even though it really isn't) to achieve
         // the effect we want.
+        @Suppress("DEPRECATION") // TODO: overrideActivityTransition does not work right
         overridePendingTransition(R.anim.zoom_enter, R.anim.zoom_exit)
     }
 
@@ -101,10 +104,15 @@ class Animation : AppCompatActivity() {
         // the duration of the animation we force the exiting activity
         // to be Z-ordered on top (even though it really isn't) to achieve
         // the effect we want.
-        val opts = ActivityOptions.makeCustomAnimation(this@Animation,
-            R.anim.fade, R.anim.hold)
+        val opts = ActivityOptions.makeCustomAnimation(
+            this@Animation,
+            R.anim.fade, R.anim.hold
+        )
         // Request the activity be started, using the custom animation options.
-        startActivity(Intent(this@Animation, AlertDialogSamples::class.java), opts.toBundle())
+        startActivity(
+            Intent(this@Animation, AlertDialogSamples::class.java),
+            opts.toBundle()
+        )
     }
 
     /**
@@ -125,8 +133,10 @@ class Animation : AppCompatActivity() {
         // the duration of the animation we force the exiting activity
         // to be Z-ordered on top (even though it really isn't) to achieve
         // the effect we want.
-        val opts = ActivityOptions.makeCustomAnimation(this@Animation,
-            R.anim.zoom_enter, R.anim.zoom_enter)
+        val opts = ActivityOptions.makeCustomAnimation(
+            this@Animation,
+            R.anim.zoom_enter, R.anim.zoom_enter
+        )
         // Request the activity be started, using the custom animation options.
         startActivity(Intent(this@Animation, AlertDialogSamples::class.java), opts.toBundle())
     }
@@ -146,7 +156,8 @@ class Animation : AppCompatActivity() {
         // Create a scale-up animation that originates at the button
         // being pressed.
         val opts = ActivityOptions.makeScaleUpAnimation(
-            v, 0, 0, v.width, v.height)
+            v, 0, 0, v.width, v.height
+        )
         // Request the activity be started, using the custom animation options.
         startActivity(Intent(this@Animation, AlertDialogSamples::class.java), opts.toBundle())
     }
@@ -180,11 +191,12 @@ class Animation : AppCompatActivity() {
         @Suppress("DEPRECATION")
         val bm = v.drawingCache
 
-        @Suppress("UNUSED_VARIABLE")
+        @Suppress("UNUSED_VARIABLE", "unused")
         val c = Canvas(bm)
         //c.drawARGB(255, 255, 0, 0);
         val opts = ActivityOptions.makeThumbnailScaleUpAnimation(
-            v, bm, 0, 0)
+            v, bm, 0, 0
+        )
         // Request the activity be started, using the custom animation options.
         startActivity(Intent(this@Animation, AlertDialogSamples::class.java), opts.toBundle())
         @Suppress("DEPRECATION")
@@ -202,7 +214,16 @@ class Animation : AppCompatActivity() {
         Log.i(TAG, "Starting no animation transition...")
         // Request the next activity transition (here starting a new one).
         startActivity(Intent(this@Animation, AlertDialogSamples::class.java))
-        overridePendingTransition(0, 0)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            overrideActivityTransition(
+                OVERRIDE_TRANSITION_OPEN,
+                0,
+                0
+            )
+        } else {
+            @Suppress("DEPRECATION") // Needed for SDK < UPSIDE_DOWN_CAKE
+            overridePendingTransition(0, 0)
+        }
     }
 
     /**

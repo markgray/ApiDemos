@@ -17,7 +17,6 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -29,11 +28,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
-
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ActionProvider
-
 import com.example.android.apis.R
 
 /**
@@ -42,8 +40,9 @@ import com.example.android.apis.R
  * ActionProvider for launching the system settings and adds a menu item with that
  * provider.
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+@RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class ActionBarSettingsActionProviderActivity : AppCompatActivity() {
 
     /**
@@ -58,7 +57,8 @@ class ActionBarSettingsActionProviderActivity : AppCompatActivity() {
      * `Menu menu` given us. Finally we return true so the menu will be displayed.
      *
      * @param menu The options menu in which you place your items.
-     * @return You must return true for the menu to be displayed; if you return false it will not be shown.
+     * @return You must return true for the menu to be displayed; if you return false it will
+     * not be shown.
      */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
@@ -71,21 +71,24 @@ class ActionBarSettingsActionProviderActivity : AppCompatActivity() {
     /**
      * This hook is called whenever an item in your options menu is selected. We simply toast the
      * message "Handling in onOptionsItemSelected avoided" and return false and the class we specify
-     * by the android:actionProviderClass in the menu xml is used to call that class's implementation
-     * of onPerformDefaultAction. This callback is only called from the "Settings" item in the
-     * overflow menu, NOT from the icon shown (ifRoom) in the ActionBar, onPerformDefaultAction is
-     * just called.
+     * by the android:actionProviderClass in the menu xml is used to call that class's
+     * implementation of onPerformDefaultAction. This callback is only called from the "Settings"
+     * item in the overflow menu, NOT from the icon shown (ifRoom) in the ActionBar,
+     * onPerformDefaultAction is just called.
      *
      * @param item The menu item that was selected.
-     * @return boolean Return false to allow normal menu processing to proceed, true to consume it here.
+     * @return boolean Return false to allow normal menu processing to proceed, true to
+     * consume it here.
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // If this callback does not handle the item click, onPerformDefaultAction
         // of the ActionProvider is invoked. Hence, the provider encapsulates the
         // complete functionality of the menu item.
         Log.i(TAG, "onOptionsItemSelected has been called")
-        Toast.makeText(this, R.string.action_bar_settings_action_provider_no_handling,
-                Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this, R.string.action_bar_settings_action_provider_no_handling,
+            Toast.LENGTH_SHORT
+        ).show()
         return false
     }
 
@@ -93,15 +96,12 @@ class ActionBarSettingsActionProviderActivity : AppCompatActivity() {
      * This class is specified using the xml attribute android:actionProviderClass in our menu
      * xml file. It extends the abstract class ActionProvider, implementing the abstract callbacks
      * onCreateActionView and onPerformDefaultAction
-     */
-    class SettingsActionProvider
-    /**
      * Creates a new instance. We first call through to our super's constructor, then save the
      * Context passed us for use in onCreateActionView.
+     *
+     * @property mContext Context for accessing resources.
      */
-    (
-            /** Context for accessing resources.  */
-            private val mContext: Context) : ActionProvider(mContext) {
+    class SettingsActionProvider(private val mContext: Context) : ActionProvider(mContext) {
 
         /**
          * Factory method called by the Android framework to create new action views. First we fetch
@@ -117,6 +117,7 @@ class ActionBarSettingsActionProviderActivity : AppCompatActivity() {
         override fun onCreateActionView(): View {
             // Inflate the action view to be shown on the action bar.
             val layoutInflater = LayoutInflater.from(mContext)
+
             @SuppressLint("InflateParams")
             val view = layoutInflater.inflate(R.layout.action_bar_settings_action_provider, null)
             val button = view.findViewById<ImageButton>(R.id.button)

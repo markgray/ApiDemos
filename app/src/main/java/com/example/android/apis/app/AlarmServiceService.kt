@@ -19,13 +19,12 @@ package com.example.android.apis.app
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Binder
@@ -35,6 +34,7 @@ import android.os.Parcel
 import android.os.RemoteException
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.example.android.apis.R
 
 /**
@@ -47,7 +47,7 @@ import com.example.android.apis.R
  * @see AlarmServiceService
  */
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.O)
 class AlarmServiceService : Service() {
     /**
      * Handle to the NOTIFICATION_SERVICE system level service,
@@ -131,9 +131,11 @@ class AlarmServiceService : Service() {
      */
     override fun onCreate() {
         Log.i(TAG, "onCreate has been called")
-        mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val chan1 = NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
-            NotificationManager.IMPORTANCE_DEFAULT)
+        mNM = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val chan1 = NotificationChannel(
+            PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
         chan1.lightColor = Color.GREEN
         chan1.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
         mNM.createNotificationChannel(chan1)
@@ -204,6 +206,7 @@ class AlarmServiceService : Service() {
         val text = getText(R.string.alarm_service_started)
 
         // The PendingIntent to launch our activity if the user selects this notification
+        @SuppressLint("ObsoleteSdkInt")
         val contentIntent = PendingIntent.getActivity(
             this,
             0,
@@ -237,12 +240,12 @@ class AlarmServiceService : Service() {
         /**
          * The id of the primary notification channel
          */
-        const val PRIMARY_CHANNEL = "default"
+        const val PRIMARY_CHANNEL: String = "default"
 
         /**
          * TAG used for logging.
          */
-        const val TAG = "AlarmServiceService"
+        const val TAG: String = "AlarmServiceService"
     }
 }
 

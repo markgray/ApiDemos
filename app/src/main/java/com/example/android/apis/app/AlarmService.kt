@@ -19,7 +19,6 @@ package com.example.android.apis.app
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -28,9 +27,6 @@ import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
 import com.example.android.apis.R
 
 
@@ -72,14 +68,18 @@ class AlarmService : AppCompatActivity() {
         val firstTime = SystemClock.elapsedRealtime()
 
         // Schedule the alarm!
-        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val am = getSystemService(ALARM_SERVICE) as AlarmManager
 
-        am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            firstTime, (30 * 1000).toLong(), mAlarmSender!!)
+        am.setRepeating(
+            AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            firstTime, (30 * 1000).toLong(), mAlarmSender!!
+        )
 
         // Tell the user about what we did.
-        Toast.makeText(this@AlarmService, R.string.repeating_scheduled,
-            Toast.LENGTH_LONG).show()
+        Toast.makeText(
+            this@AlarmService, R.string.repeating_scheduled,
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     /**
@@ -92,13 +92,15 @@ class AlarmService : AppCompatActivity() {
      */
     private val mStopAlarmListener = OnClickListener {
         // And cancel the alarm.
-        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val am = getSystemService(ALARM_SERVICE) as AlarmManager
 
         am.cancel(mAlarmSender!!)
 
         // Tell the user about what we did.
-        Toast.makeText(this@AlarmService, R.string.repeating_unscheduled,
-            Toast.LENGTH_LONG).show()
+        Toast.makeText(
+            this@AlarmService, R.string.repeating_unscheduled,
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     /**

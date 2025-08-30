@@ -16,6 +16,7 @@
 
 package com.example.android.apis.app
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -93,6 +94,7 @@ class CustomTitle : AppCompatActivity() {
      *
      * @param savedInstanceState always null since we not override onSaveInstanceState
      */
+    @SuppressLint("ObsoleteSdkInt")
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,8 +119,8 @@ class CustomTitle : AppCompatActivity() {
         )
 
         Log.i(TAG, "Before first call to findViewById")
-        val leftText = findViewById<TextView>(R.id.left_text)
-        val rightText = findViewById<TextView>(R.id.right_text)
+        val leftText = mCustomView!!.findViewById<TextView>(R.id.left_text)
+        val rightText = mCustomView!!.findViewById<TextView>(R.id.right_text)
         val leftTextEdit = findViewById<EditText>(R.id.left_text_edit)
         val rightTextEdit = findViewById<EditText>(R.id.right_text_edit)
         val leftButton = findViewById<Button>(R.id.left_text_button)

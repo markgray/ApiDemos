@@ -16,16 +16,14 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
-
+import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
@@ -35,8 +33,8 @@ import com.example.android.apis.R
  * the "up" button works as "up", otherwise it works as "Back". Uses the
  * attribute android:taskAffinity=":bar_navigation" to associate the activities.
  */
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-@SuppressLint("SetTextI18n")
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
 class ActionBarNavigation : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation

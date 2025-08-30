@@ -16,11 +16,12 @@
 
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.View.OnClickListener
 import android.widget.Button
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -29,8 +30,9 @@ import com.example.android.apis.R
  * (original version did not initialize the field that the current theme is kept in, causing
  * it to crash on Material Light default devices.)
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class ActivityRecreate : AppCompatActivity() {
     /**
      * Theme in use for this instance of the Activity
