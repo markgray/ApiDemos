@@ -28,7 +28,6 @@ import com.example.android.apis.R
 
 
 /**
- *
  * Example of removing yourself from the history stack after forwarding to
  * another activity. This can be useful, for example, to implement
  * a confirmation dialog before the user goes on to another activity -- once the

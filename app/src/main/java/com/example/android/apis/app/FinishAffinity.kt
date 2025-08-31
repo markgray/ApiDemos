@@ -17,7 +17,6 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -25,6 +24,7 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -34,13 +34,14 @@ import com.example.android.apis.R
  * immediately below it in the current task that have the same affinity.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-@SuppressLint("SetTextI18n")
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
+@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
 class FinishAffinity : AppCompatActivity() {
     /**
      * Nesting level for this instance of `FinishAffinity`.
      */
     internal var mNesting: Int = 0
+
     /**
      * OnClickListener for the R.id.nest ("Nest some more") Button, it starts another instance of
      * this Activity when the Button is clicked. We create Intent intent which will start another
@@ -55,6 +56,7 @@ class FinishAffinity : AppCompatActivity() {
         intent.putExtra("nesting", mNesting + 1)
         startActivity(intent)
     }
+
     /**
      * OnClickListener for the R.id.finish ("FINISH") Button, it simply calls the method
      * Activity.finishAffinity() which finishes this activity as well as all activities

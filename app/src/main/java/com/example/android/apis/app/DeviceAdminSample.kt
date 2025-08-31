@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION") // TODO: replace deprecated android.preference with androidx
+@file:Suppress("DEPRECATION")
+// TODO: Use the AndroidX Preference Library for consistent behavior across all devices. For more
+//  information on using the AndroidX Preference Library see Settings.
 
 package com.example.android.apis.app
 
@@ -81,7 +83,7 @@ class DeviceAdminSample : PreferenceActivity() {
         super.onCreate(savedInstanceState)
 
         // Prepare to work with the DPM
-        mDPM = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        mDPM = getSystemService(DEVICE_POLICY_SERVICE) as DevicePolicyManager
         mDeviceAdminSample = ComponentName(this, DeviceAdminSampleReceiver::class.java)
     }
 
@@ -127,19 +129,19 @@ class DeviceAdminSample : PreferenceActivity() {
      */
     @Deprecated("Deprecated in Java")
     override fun isValidFragment(fragmentName: String): Boolean {
-        return ((GeneralFragment::class.java.name == fragmentName) || (QualityFragment::class.java.name == fragmentName) || (ExpirationFragment::class.java.name == fragmentName) || (LockWipeFragment::class.java.name == fragmentName) || (EncryptionFragment::class.java.name == fragmentName))
+        return ((GeneralFragment::class.java.name == fragmentName) ||
+            (QualityFragment::class.java.name == fragmentName) ||
+            (ExpirationFragment::class.java.name == fragmentName) ||
+            (LockWipeFragment::class.java.name == fragmentName) ||
+            (EncryptionFragment::class.java.name == fragmentName))
     }
 
     /**
      * Common fragment code for DevicePolicyManager access. Provides two shared elements:
      *
-     *  *
      * 1. Provides instance variables to access activity/context, DevicePolicyManager, etc.
      *
-     *  *
      * 2. Provides support for the "set password" button(s) shared by multiple fragments.
-     *
-     *
      */
     open class AdminSampleFragment : PreferenceFragment(), Preference.OnPreferenceChangeListener,
         Preference.OnPreferenceClickListener {
@@ -167,7 +169,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * Cached value of a call to the `isActiveAdmin` method of `mActivity`, saves
          * repeated calls to the `DevicePolicyManager.isAdminActive` method.
          */
-        protected var mAdminActive = false
+        protected var mAdminActive: Boolean = false
         // Optional shared UI
         /**
          * Reference to the KEY_SET_PASSWORD ("key_set_password") `PreferenceScreen` in our UI
@@ -201,7 +203,7 @@ class DeviceAdminSample : PreferenceActivity() {
          *
          * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
          */
-        @Deprecated("Deprecated in Java")
+        @Deprecated("Deprecated in Java") //
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
 
@@ -527,7 +529,7 @@ class DeviceAdminSample : PreferenceActivity() {
          * feature bitmask they disable are:
          *
          *  *
-         * `mDisableKeyguardWidgetsCheckbox` ("Disable keyguard widgets"): KEYGUARD_DISABLE_WIDGETS_ALL
+         *  `mDisableKeyguardWidgetsCheckbox` ("Disable keyguard widgets"): KEYGUARD_DISABLE_WIDGETS_ALL
          * Disable all keyguard widgets, has no effect starting from LOLLIPOP since keyguard
          * widget is only supported on Android versions lower than 5.0.
          *
@@ -574,19 +576,33 @@ class DeviceAdminSample : PreferenceActivity() {
         fun createKeyguardDisabledFlag(): Int {
             var flags = DevicePolicyManager.KEYGUARD_DISABLE_FEATURES_NONE
             flags =
-                flags or if (mDisableKeyguardWidgetsCheckbox!!.isChecked) DevicePolicyManager.KEYGUARD_DISABLE_WIDGETS_ALL else 0
+                flags or if (mDisableKeyguardWidgetsCheckbox!!.isChecked) {
+                    DevicePolicyManager.KEYGUARD_DISABLE_WIDGETS_ALL
+                } else 0
             flags =
-                flags or if (mDisableKeyguardSecureCameraCheckbox!!.isChecked) DevicePolicyManager.KEYGUARD_DISABLE_SECURE_CAMERA else 0
+                flags or if (mDisableKeyguardSecureCameraCheckbox!!.isChecked) {
+                    DevicePolicyManager.KEYGUARD_DISABLE_SECURE_CAMERA
+                } else 0
             flags =
-                flags or if (mDisableKeyguardNotificationCheckbox!!.isChecked) DevicePolicyManager.KEYGUARD_DISABLE_SECURE_NOTIFICATIONS else 0
+                flags or if (mDisableKeyguardNotificationCheckbox!!.isChecked) {
+                    DevicePolicyManager.KEYGUARD_DISABLE_SECURE_NOTIFICATIONS
+                } else 0
             flags =
-                flags or if (mDisableKeyguardUnredactedCheckbox!!.isChecked) DevicePolicyManager.KEYGUARD_DISABLE_UNREDACTED_NOTIFICATIONS else 0
+                flags or if (mDisableKeyguardUnredactedCheckbox!!.isChecked) {
+                    DevicePolicyManager.KEYGUARD_DISABLE_UNREDACTED_NOTIFICATIONS
+                } else 0
             flags =
-                flags or if (mDisableKeyguardTrustAgentCheckbox!!.isChecked) DevicePolicyManager.KEYGUARD_DISABLE_TRUST_AGENTS else 0
+                flags or if (mDisableKeyguardTrustAgentCheckbox!!.isChecked) {
+                    DevicePolicyManager.KEYGUARD_DISABLE_TRUST_AGENTS
+                } else 0
             flags =
-                flags or if (mDisableKeyguardFingerprintCheckbox!!.isChecked) DevicePolicyManager.KEYGUARD_DISABLE_FINGERPRINT else 0
+                flags or if (mDisableKeyguardFingerprintCheckbox!!.isChecked) {
+                    DevicePolicyManager.KEYGUARD_DISABLE_FINGERPRINT
+                } else 0
             flags =
-                flags or if (mDisableKeyguardRemoteInputCheckbox!!.isChecked) DevicePolicyManager.KEYGUARD_DISABLE_REMOTE_INPUT else 0
+                flags or if (mDisableKeyguardRemoteInputCheckbox!!.isChecked) {
+                    DevicePolicyManager.KEYGUARD_DISABLE_REMOTE_INPUT
+                } else 0
             return flags
         }
 
@@ -617,8 +633,6 @@ class DeviceAdminSample : PreferenceActivity() {
          * to remove the administration component `ComponentName mDeviceAdminSample` then
          * call our method `enableDeviceCapabilitiesArea` to update the device capabilities
          * area of our UI by disabling the widgets.
-         *
-         *
          *
          *  *
          * `mDisableCameraCheckbox` "Disable all device cameras" `CheckBoxPreference` in the
@@ -672,9 +686,8 @@ class DeviceAdminSample : PreferenceActivity() {
          * we call our `postReloadSummaries` method to delay a call to `reloadSummaries`
          * until after the preference change has been applied.
          *
-         *
-         *
-         * Finally we return true to the caller to have the state of the Preference updated with the new value.
+         * Finally we return `true` to the caller to have the state of the Preference updated
+         * with the new value.
          *
          * @param preference The changed Preference.
          * @param newValue The new value of the Preference.
@@ -691,7 +704,10 @@ class DeviceAdminSample : PreferenceActivity() {
                     if (value) {
                         // Launch the activity to have the user enable our admin.
                         val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
-                        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, mDeviceAdminSample)
+                        intent.putExtra(
+                            DevicePolicyManager.EXTRA_DEVICE_ADMIN,
+                            mDeviceAdminSample
+                        )
                         intent.putExtra(
                             DevicePolicyManager.EXTRA_ADD_EXPLANATION,
                             mActivity!!.getString(R.string.add_admin_extra_app_text)
@@ -750,7 +766,11 @@ class DeviceAdminSample : PreferenceActivity() {
                                 "features",
                                 featureString.split(",").toTypedArray()
                             )
-                            mDPM!!.setTrustAgentConfiguration((mDeviceAdminSample)!!, agent, bundle)
+                            mDPM!!.setTrustAgentConfiguration(
+                                (mDeviceAdminSample)!!,
+                                agent,
+                                bundle
+                            )
                         }
                     } else {
                         Log.w(TAG, "Invalid component: $component")
@@ -774,20 +794,21 @@ class DeviceAdminSample : PreferenceActivity() {
          * keyguard feature `CheckBoxPreference` widgets in our UI:
          *
          *  *
-         * `mDisableKeyguardWidgetsCheckbox` "Disable keyguard widgets" -- If the KEYGUARD_DISABLE_WIDGETS_ALL
-         * bit is set in `disable` we initialize `String keyguardWidgetSummary` to the
-         * string with resource id R.string.keyguard_widgets_disabled ("Keyguard widgets disabled"),
-         * if unset we initialize `String keyguardWidgetSummary` to the string with resource id
-         * R.string.keyguard_widgets_enabled ("Keyguard widgets enabled"). Then we set the summary
-         * of `mDisableKeyguardWidgetsCheckbox` to `keyguardWidgetSummary`.
+         * `mDisableKeyguardWidgetsCheckbox` "Disable keyguard widgets" -- If the
+         * KEYGUARD_DISABLE_WIDGETS_ALL bit is set in `disable` we initialize [String] variable
+         * `keyguardWidgetSummary` to the string with resource id R.string.keyguard_widgets_disabled
+         * ("Keyguard widgets disabled"), if unset we initialize `keyguardWidgetSummary` to the
+         * [String] with resource id R.string.keyguard_widgets_enabled ("Keyguard widgets enabled").
+         * Then we set the summary of `mDisableKeyguardWidgetsCheckbox` to `keyguardWidgetSummary`.
          *
          *  *
          * `mDisableKeyguardSecureCameraCheckbox` "Disable keyguard secure camera" -- If the
-         * KEYGUARD_DISABLE_SECURE_CAMERA bit is set in `disable` we initialize `String keyguardSecureCameraSummary`
-         * to the string with resource id R.string.keyguard_secure_camera_disabled ("Keyguard secure camera disabled"),
-         * if unset we initialize `String keyguardSecureCameraSummary` to the string with resource id
-         * R.string.keyguard_secure_camera_enabled ("Keyguard secure camera enabled"). Then we set the summary
-         * of `mDisableKeyguardSecureCameraCheckbox` to `keyguardSecureCameraSummary`.
+         * KEYGUARD_DISABLE_SECURE_CAMERA bit is set in `disable` we initialize [String] variable
+         * `keyguardSecureCameraSummary` to the string with resource id
+         * `R.string.keyguard_secure_camera_disabled` ("Keyguard secure camera disabled"), if unset
+         * we initialize `keyguardSecureCameraSummary` to the [String] with resource id
+         * `R.string.keyguard_secure_camera_enabled` ("Keyguard secure camera enabled"). Then we set
+         * the summary of `mDisableKeyguardSecureCameraCheckbox` to `keyguardSecureCameraSummary`.
          *
          *  *
          * `mDisableKeyguardNotificationCheckbox` "Disable keyguard notifications" -- If the
@@ -801,19 +822,21 @@ class DeviceAdminSample : PreferenceActivity() {
          *
          *  *
          * `mDisableKeyguardUnredactedCheckbox` "Disable keyguard unredacted notifications" -- If the
-         * KEYGUARD_DISABLE_UNREDACTED_NOTIFICATIONS bit is set in `disable` we initialize
-         * `String keyguardUnredactedSummary` to the string with resource id R.string.keyguard_unredacted_notifications_disabled
-         * ("Keyguard unredacted notifications disabled"), if unset we initialize `String keyguardUnredactedSummary`
-         * to the string with resource id R.string.keyguard_unredacted_notifications_enabled ("Keyguard unredacted notifications enabled").
-         * Then we set the summary of `mDisableKeyguardUnredactedCheckbox` to `keyguardUnredactedSummary`.
+         * KEYGUARD_DISABLE_UNREDACTED_NOTIFICATIONS bit is set in `disable` we initialize [String]
+         * variable `keyguardUnredactedSummary` to the string with resource id
+         * `R.string.keyguard_unredacted_notifications_disabled` ("Keyguard unredacted notifications
+         * disabled"), if unset we initialize `keyguardUnredactedSummary` to the string with resource
+         * id `R.string.keyguard_unredacted_notifications_enabled` ("Keyguard unredacted notifications
+         * enabled"). Then we set the summary of `mDisableKeyguardUnredactedCheckbox` to `keyguardUnredactedSummary`.
          *
          *  *
          * `mDisableKeyguardTrustAgentCheckbox` "Disable keyguard Trust Agents" -- If the
-         * KEYGUARD_DISABLE_TRUST_AGENTS bit is set in `disable` we initialize `String keyguardEnableTrustAgentSummary`
-         * to the string with resource id R.string.keyguard_trust_agents_disabled ("Keyguard Trust Agents disabled"), if unset we
-         * initialize `String keyguardEnableTrustAgentSummary` to the string with resource id R.string.keyguard_trust_agents_enabled
-         * ("Keyguard Trust Agents enabled"). Then we set the summary of `mDisableKeyguardTrustAgentCheckbox` to
-         * `keyguardEnableTrustAgentSummary`.
+         * KEYGUARD_DISABLE_TRUST_AGENTS bit is set in `disable` we initialize [String] variable
+         * `keyguardEnableTrustAgentSummary` to the string with resource id
+         * R.string.keyguard_trust_agents_disabled ("Keyguard Trust Agents disabled"), if unset we
+         * initialize `keyguardEnableTrustAgentSummary` to the string with resource id
+         * `R.string.keyguard_trust_agents_enabled` ("Keyguard Trust Agents enabled"). Then we set
+         * the summary of `mDisableKeyguardTrustAgentCheckbox` to `keyguardEnableTrustAgentSummary`.
          *
          *  *
          * `mDisableKeyguardFingerprintCheckbox` "Disable keyguard Fingerprint" -- If the
@@ -1120,7 +1143,7 @@ class DeviceAdminSample : PreferenceActivity() {
             var value = 0
             try {
                 value = valueString.toInt()
-            } catch (nfe: NumberFormatException) {
+            } catch (_: NumberFormatException) {
                 val warning = mActivity!!.getString(R.string.number_format_warning, valueString)
                 Toast.makeText(mActivity, warning, Toast.LENGTH_SHORT).show()
             }
@@ -1128,24 +1151,31 @@ class DeviceAdminSample : PreferenceActivity() {
                 preference === mPasswordQuality -> {
                     mDPM!!.setPasswordQuality((mDeviceAdminSample)!!, value)
                 }
+
                 preference === mMinLength -> {
                     mDPM!!.setPasswordMinimumLength((mDeviceAdminSample)!!, value)
                 }
+
                 preference === mMinLetters -> {
                     mDPM!!.setPasswordMinimumLetters((mDeviceAdminSample)!!, value)
                 }
+
                 preference === mMinNumeric -> {
                     mDPM!!.setPasswordMinimumNumeric((mDeviceAdminSample)!!, value)
                 }
+
                 preference === mMinLowerCase -> {
                     mDPM!!.setPasswordMinimumLowerCase((mDeviceAdminSample)!!, value)
                 }
+
                 preference === mMinUpperCase -> {
                     mDPM!!.setPasswordMinimumUpperCase((mDeviceAdminSample)!!, value)
                 }
+
                 preference === mMinSymbols -> {
                     mDPM!!.setPasswordMinimumSymbols((mDeviceAdminSample)!!, value)
                 }
+
                 preference === mMinNonLetter -> {
                     mDPM!!.setPasswordMinimumNonLetter((mDeviceAdminSample)!!, value)
                 }
@@ -1184,7 +1214,7 @@ class DeviceAdminSample : PreferenceActivity() {
              * Password quality values. This list must match the list found in res/values/arrays.xml
              * for the "password_qualities" string-array.
              */
-            val mPasswordQualityValues = intArrayOf(
+            val mPasswordQualityValues: IntArray = intArrayOf(
                 DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED,
                 DevicePolicyManager.PASSWORD_QUALITY_SOMETHING,
                 DevicePolicyManager.PASSWORD_QUALITY_NUMERIC,
@@ -1198,7 +1228,7 @@ class DeviceAdminSample : PreferenceActivity() {
              * Password quality values (as strings, for the ListPreference entryValues). This list must
              * match the list found in res/values/arrays.xml for the "password_qualities" string-array.
              */
-            val mPasswordQualityValueStrings = arrayOf(
+            val mPasswordQualityValueStrings: Array<String> = arrayOf(
                 DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED.toString(),
                 DevicePolicyManager.PASSWORD_QUALITY_SOMETHING.toString(),
                 DevicePolicyManager.PASSWORD_QUALITY_NUMERIC.toString(),
@@ -1353,14 +1383,17 @@ class DeviceAdminSample : PreferenceActivity() {
             var value = 0
             try {
                 value = valueString.toInt()
-            } catch (nfe: NumberFormatException) {
+            } catch (_: NumberFormatException) {
                 val warning = mActivity!!.getString(R.string.number_format_warning, valueString)
                 Toast.makeText(mActivity, warning, Toast.LENGTH_SHORT).show()
             }
             if (preference === mHistory) {
                 mDPM!!.setPasswordHistoryLength((mDeviceAdminSample)!!, value)
             } else if (preference === mExpirationTimeout) {
-                mDPM!!.setPasswordExpirationTimeout((mDeviceAdminSample)!!, value * MS_PER_MINUTE)
+                mDPM!!.setPasswordExpirationTimeout(
+                    (mDeviceAdminSample)!!,
+                    value * MS_PER_MINUTE
+                )
             }
             // Delay update because the change is only applied after exiting this method.
             postReloadSummaries()
@@ -1411,7 +1444,6 @@ class DeviceAdminSample : PreferenceActivity() {
          * ("Password will expire %1$s from now") otherwise we set it to the formatted string created from
          * `dms` using the format string with resource id R.string.expiration_status_past
          * ("Password expired %1$s ago").
-         *
          *
          * We then declare `String global` and if `globalExpiration` is 0 we set it to the
          * string with resource id R.string.expiration_status_none ("None"), otherwise we subtract
@@ -1592,11 +1624,10 @@ class DeviceAdminSample : PreferenceActivity() {
          * `EditTextPreference mMaxFailures` "Max password failures for local wipe" we first
          * call our method `alertIfMonkey` to make sure we are not being run by an automated
          * test, toasting the message "You can't wipe my data, you are a monkey!" if so and returning
-         * true without doing more if is returns true. If it returns false we call the
+         * true without doing more if is returns `true`. If it returns `false` we call the
          * `setMaximumFailedPasswordsForWipe` method of `DevicePolicyManager mDPM`
          * to set the number of failed password attempts at which point the device or profile will
          * be wiped to `value`.
-         *
          *
          * We then call our method `postReloadSummaries` to post a call to `reloadSummaries`
          * on the UI queue so that it won't run until after the preference change has been applied
@@ -1619,7 +1650,7 @@ class DeviceAdminSample : PreferenceActivity() {
             var value = 0
             try {
                 value = valueString.toInt()
-            } catch (nfe: NumberFormatException) {
+            } catch (_: NumberFormatException) {
                 val warning = mActivity!!.getString(R.string.number_format_warning, valueString)
                 Toast.makeText(mActivity, warning, Toast.LENGTH_SHORT).show()
             }
@@ -1968,7 +1999,6 @@ class DeviceAdminSample : PreferenceActivity() {
          * ENCRYPTION_STATUS_ACTIVE we set `newStatus` to the resource id
          * R.string.encryption_status_active (the string: "active") and break.
          *
-         *
          * Finally we return the string that the `getString` method of `DeviceAdminSample mActivity`
          * returns for the resource id in `newStatus`.
          *
@@ -1980,10 +2010,13 @@ class DeviceAdminSample : PreferenceActivity() {
             when (newStatusCode) {
                 DevicePolicyManager.ENCRYPTION_STATUS_UNSUPPORTED -> newStatus =
                     R.string.encryption_status_unsupported
+
                 DevicePolicyManager.ENCRYPTION_STATUS_INACTIVE -> newStatus =
                     R.string.encryption_status_inactive
+
                 DevicePolicyManager.ENCRYPTION_STATUS_ACTIVATING -> newStatus =
                     R.string.encryption_status_activating
+
                 DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE -> newStatus =
                     R.string.encryption_status_active
             }
@@ -2159,7 +2192,7 @@ class DeviceAdminSample : PreferenceActivity() {
          */
         @Deprecated("From {@link android.os.Build.VERSION_CODES#O}, use\n" + "          {@code onPasswordExpiring(Context, Intent, UserHandle)} instead.")
         override fun onPasswordExpiring(context: Context, intent: Intent) {
-            val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+            val dpm = context.getSystemService(DEVICE_POLICY_SERVICE) as DevicePolicyManager
             val expr = dpm.getPasswordExpiration(
                 ComponentName(
                     context,

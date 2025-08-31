@@ -16,7 +16,7 @@
 
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
@@ -25,16 +25,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.content.withStyledAttributes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.example.android.apis.R
+import com.example.android.apis.app.FragmentArguments.MyFragment.Companion.newInstance
 
 /**
  * Demonstrates a fragment that can be configured through both Bundle arguments
  * and layout attributes.
  */
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class FragmentArguments : FragmentActivity() {
 
     /**
@@ -57,7 +61,7 @@ class FragmentArguments : FragmentActivity() {
         if (savedInstanceState == null) {
             // First-time init; create fragment to embed in activity.
             val ft = supportFragmentManager.beginTransaction()
-            val newFragment = MyFragment.newInstance("From Arguments")
+            val newFragment = newInstance("From Arguments")
             ft.add(R.id.created, newFragment)
             ft.commit()
         }
@@ -97,9 +101,9 @@ class FragmentArguments : FragmentActivity() {
         override fun onInflate(context: Context, attrs: AttributeSet, savedInstanceState: Bundle?) {
             super.onInflate(context, attrs, savedInstanceState)
 
-            val a = context.obtainStyledAttributes(attrs, R.styleable.FragmentArguments)
-            mLabel = a.getText(R.styleable.FragmentArguments_android_label)
-            a.recycle()
+            context.withStyledAttributes(set = attrs, attrs = R.styleable.FragmentArguments) {
+                mLabel = getText(R.styleable.FragmentArguments_android_label)
+            }
         }
 
         /**
@@ -146,12 +150,10 @@ class FragmentArguments : FragmentActivity() {
             val v = inflater.inflate(R.layout.hello_world, container, false)
             val tv = v.findViewById<View>(R.id.text)
             (tv as TextView).text = if (mLabel != null) mLabel else "(no label)"
-            tv.setBackground(
-                ResourcesCompat.getDrawable(
-                    resources,
-                    android.R.drawable.gallery_thumb,
-                    null
-                )
+            tv.background = ResourcesCompat.getDrawable(
+                resources,
+                android.R.drawable.gallery_thumb,
+                null
             )
             return v
         }

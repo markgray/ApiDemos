@@ -25,8 +25,8 @@ import com.example.android.apis.R
 
 
 /**
- * Example of removing yourself from the history stack after forwarding to
- * another activity.
+ * Target of Example of removing yourself from the history stack after forwarding to
+ * another activity, see [Forwarding].
  */
 class ForwardTarget : AppCompatActivity() {
     /**

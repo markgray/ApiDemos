@@ -16,9 +16,6 @@
 
 package com.example.android.apis.app
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-
 import android.os.Bundle
 import android.view.View.OnClickListener
 import android.view.Window
@@ -111,8 +108,10 @@ class DialogActivity : AppCompatActivity() {
         setContentView(R.layout.dialog_activity)
         window.setTitle("This is just a test")
 
-        window.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,
-                android.R.drawable.ic_dialog_alert)
+        window.setFeatureDrawableResource(
+            Window.FEATURE_LEFT_ICON,
+            android.R.drawable.ic_dialog_alert
+        )
 
         var button = findViewById<Button>(R.id.add)
         button.setOnClickListener(mAddContentListener)

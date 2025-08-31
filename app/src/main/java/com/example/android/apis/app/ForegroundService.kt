@@ -5,7 +5,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -15,10 +14,9 @@ import android.os.Looper
 import android.os.PowerManager
 import android.os.PowerManager.WakeLock
 import android.util.Log
-
 import androidx.annotation.RequiresApi
-
 import com.example.android.apis.R
+import com.example.android.apis.app.ForegroundService.Companion.PRIMARY_CHANNEL
 
 @Suppress("MemberVisibilityCanBePrivate")
 @RequiresApi(Build.VERSION_CODES.O)
@@ -37,7 +35,7 @@ open class ForegroundService : Service() {
     /**
      * `Handler` we use to run our `Runnable mPulser` every 5 seconds.
      */
-    val mHandler = Handler(Looper.myLooper()!!)
+    val mHandler: Handler = Handler(Looper.myLooper()!!)
 
     /**
      * LOGS the message "PULSE!" every 5 seconds while we are running whether foreground or background
@@ -66,7 +64,7 @@ open class ForegroundService : Service() {
      * create the notification channel `chan1`.
      */
     override fun onCreate() {
-        mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        mNM = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         val chan1 = NotificationChannel(
             PRIMARY_CHANNEL, PRIMARY_CHANNEL,
             NotificationManager.IMPORTANCE_DEFAULT
@@ -144,7 +142,8 @@ open class ForegroundService : Service() {
      * continue running until it is explicitly stopped.
      */
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (ACTION_FOREGROUND == intent.action || ACTION_FOREGROUND_WAKELOCK == intent.action) { // In this sample, we'll use the same text for the ticker and the expanded notification
+        if (ACTION_FOREGROUND == intent.action || ACTION_FOREGROUND_WAKELOCK == intent.action) {
+            // In this sample, we'll use the same text for the ticker and the expanded notification
             val text = getText(R.string.foreground_service_started)
             val contentIntent = PendingIntent.getActivity(
                 this,
@@ -162,10 +161,14 @@ open class ForegroundService : Service() {
                 .setContentIntent(contentIntent) // The intent to send when clicked
                 .build()
             startForeground(R.string.foreground_service_started, notification)
-        } else if (ACTION_BACKGROUND == intent.action || ACTION_BACKGROUND_WAKELOCK == intent.action) {
+        } else if (ACTION_BACKGROUND == intent.action ||
+            ACTION_BACKGROUND_WAKELOCK == intent.action
+        ) {
             stopForeground(STOP_FOREGROUND_DETACH)
         }
-        if (ACTION_FOREGROUND_WAKELOCK == intent.action || ACTION_BACKGROUND_WAKELOCK == intent.action) {
+        if (ACTION_FOREGROUND_WAKELOCK == intent.action ||
+            ACTION_BACKGROUND_WAKELOCK == intent.action
+        ) {
             if (mWakeLock == null) {
                 mWakeLock = getSystemService(PowerManager::class.java)!!.newWakeLock(
                     PowerManager.PARTIAL_WAKE_LOCK, "myapp:wake-service"
@@ -178,7 +181,7 @@ open class ForegroundService : Service() {
         mHandler.removeCallbacks(mPulser)
         mPulser.run()
         // We want this service to continue running until it is explicitly
-// stopped, so return sticky.
+        // stopped, so return sticky.
         return START_STICKY
     }
 
@@ -224,26 +227,28 @@ open class ForegroundService : Service() {
         /**
          * Action of the [Intent] that will launch us in the foreground.
          */
-        const val ACTION_FOREGROUND = "com.example.android.apis.FOREGROUND"
+        const val ACTION_FOREGROUND: String = "com.example.android.apis.FOREGROUND"
 
         /**
          * Action of the [Intent] that will launch us in the foreground with a WAKELOCK.
          */
-        const val ACTION_FOREGROUND_WAKELOCK = "com.example.android.apis.FOREGROUND_WAKELOCK"
+        const val ACTION_FOREGROUND_WAKELOCK: String =
+            "com.example.android.apis.FOREGROUND_WAKELOCK"
 
         /**
          * Action of the [Intent] that will launch us in the background.
          */
-        const val ACTION_BACKGROUND = "com.example.android.apis.BACKGROUND"
+        const val ACTION_BACKGROUND: String = "com.example.android.apis.BACKGROUND"
 
         /**
          * Action of the [Intent] that will launch us in the background with a WAKELOCK.
          */
-        const val ACTION_BACKGROUND_WAKELOCK = "com.example.android.apis.BACKGROUND_WAKELOCK"
+        const val ACTION_BACKGROUND_WAKELOCK: String =
+            "com.example.android.apis.BACKGROUND_WAKELOCK"
 
         /**
          * The id of the primary notification channel
          */
-        const val PRIMARY_CHANNEL = "default"
+        const val PRIMARY_CHANNEL: String = "default"
     }
 }

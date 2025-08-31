@@ -2,6 +2,7 @@ package com.example.android.apis.app
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_MUTABLE
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -120,6 +121,7 @@ class ForegroundServiceController : AppCompatActivity() {
         intent.setClass(this@ForegroundServiceController, ForegroundService::class.java)
         startService(intent)
     }
+
     /**
      * Called when the button with id R.id.stop is clicked. We the [stopService] method
      * to stop [ForegroundService].
@@ -164,11 +166,21 @@ class ForegroundServiceController : AppCompatActivity() {
         val ctx: Context = this@ForegroundServiceController
         val intent = Intent(ForegroundService.ACTION_FOREGROUND)
         intent.setClass(ctx, ForegroundService2::class.java)
-        val pi = PendingIntent.getForegroundService(ctx, 0, intent, 0)
-        val am = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        am.setExact(AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime() + 15000,
-                pi)
+        var pi = PendingIntent.getForegroundService(
+            ctx,
+            0,
+            intent,
+            FLAG_MUTABLE
+        )
+        val am = ctx.getSystemService(ALARM_SERVICE) as AlarmManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            am.canScheduleExactAlarms()
+        }
+        am.setExact(
+            AlarmManager.ELAPSED_REALTIME,
+            SystemClock.elapsedRealtime() + 15000,
+            pi
+        )
         Log.i("ForegroundService", "Starting service in 15 seconds")
     }
 
@@ -179,5 +191,6 @@ class ForegroundServiceController : AppCompatActivity() {
      * Parameter: `View` that was clicked.
      */
     private val mStopListener2: View.OnClickListener = View.OnClickListener {
-        stopService(Intent(this@ForegroundServiceController, ForegroundService2::class.java)) }
+        stopService(Intent(this@ForegroundServiceController, ForegroundService2::class.java))
+    }
 }
