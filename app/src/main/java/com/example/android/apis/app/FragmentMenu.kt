@@ -38,14 +38,17 @@ class FragmentMenu : FragmentActivity() {
      * [MenuFragment] instance for our app
      */
     internal var mFragment1: Fragment? = null
+
     /**
      * [Menu2Fragment] instance for our app
      */
     internal var mFragment2: Fragment? = null
+
     /**
      * [CheckBox] in layout used to show/hide [mFragment1]
      */
     internal lateinit var mCheckBox1: CheckBox
+
     /**
      * [CheckBox] in layout used to show/hide [mFragment2]
      */
@@ -255,10 +258,11 @@ class FragmentMenu : FragmentActivity() {
          * @param menu The options menu in which you place your items.
          * @param inflater could be used to instantiate menu XML files into Menu objects.
          */
-        @Deprecated("Deprecated in Java", ReplaceWith(
-            "menu.add(\"Menu 2\").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)",
-            "android.view.MenuItem"
-        )
+        @Deprecated(
+            "Deprecated in Java", ReplaceWith(
+                "menu.add(\"Menu 2\").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)",
+                "android.view.MenuItem"
+            )
         )
         override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
             menu.add("Menu 2").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)

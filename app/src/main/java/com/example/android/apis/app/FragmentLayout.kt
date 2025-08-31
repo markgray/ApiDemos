@@ -16,11 +16,14 @@
 
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -29,12 +32,14 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.ListFragment
 import com.example.android.apis.R
 import com.example.android.apis.Shakespeare
+import androidx.core.view.isVisible
 
 /**
  * Demonstration of using fragments to implement different activity layouts.
@@ -47,7 +52,8 @@ import com.example.android.apis.Shakespeare
  * This was obviously added by a runaway modification script, and the container
  * id should be R.id.details
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentLayout : FragmentActivity() {
 
     /**
@@ -101,7 +107,10 @@ class FragmentLayout : FragmentActivity() {
                 // During initial setup, plug in the details fragment.
                 val details = DetailsFragment()
                 details.arguments = intent.extras
-                supportFragmentManager.beginTransaction().add(android.R.id.content, details).commit()
+                supportFragmentManager
+                    .beginTransaction()
+                    .add(android.R.id.content, details)
+                    .commit()
             }
         }
     }
@@ -117,6 +126,7 @@ class FragmentLayout : FragmentActivity() {
          * Flag to indicate whether we are in ORIENTATION_LANDSCAPE dual pane mode
          */
         internal var mDualPane: Boolean = false
+
         /**
          * Currently selected title to be displayed
          */
@@ -146,13 +156,15 @@ class FragmentLayout : FragmentActivity() {
 
             // Populate list with our static array of titles.
 
-            listAdapter = ArrayAdapter(requireActivity(),
-                android.R.layout.simple_list_item_activated_1, Shakespeare.TITLES)
+            listAdapter = ArrayAdapter(
+                requireActivity(),
+                android.R.layout.simple_list_item_activated_1, Shakespeare.TITLES
+            )
 
             // Check to see if we have a frame in which to embed the details
             // fragment directly in the containing UI.
             val detailsFrame = requireActivity().findViewById<View>(R.id.details)
-            mDualPane = detailsFrame != null && detailsFrame.visibility == View.VISIBLE
+            mDualPane = detailsFrame != null && detailsFrame.isVisible
 
             if (savedInstanceState != null) {
                 // Restore last state for checked position.
@@ -226,7 +238,7 @@ class FragmentLayout : FragmentActivity() {
          * our new `details` [DetailsFragment], set a transition animation of TRANSIT_FRAGMENT_FADE,
          * and finally commit the [FragmentTransaction]. If we are not in dual pane mode (i.e.
          * [mDualPane] is false: device is using layout/fragment_layout.xml) we create an [Intent]
-         * to initialize our variable `var intent`, set its class to [DetailsActivity.class], add
+         * to initialize our variable `var intent`, set its class to `DetailsActivity.class`, add
          * extended data for the parameter [index] under the key "index" to the intent, and start
          * that Intent as a new Activity.
          *
@@ -242,7 +254,9 @@ class FragmentLayout : FragmentActivity() {
 
                 // Check what fragment is currently shown, replace if needed.
 
-                var details = requireActivity().supportFragmentManager.findFragmentById(R.id.details) as DetailsFragment?
+                var details = requireActivity()
+                    .supportFragmentManager
+                    .findFragmentById(R.id.details) as DetailsFragment?
                 if (details == null || details.shownIndex != index) {
                     // Make new fragment to show this selection.
                     details = DetailsFragment.newInstance(index)
@@ -306,7 +320,11 @@ class FragmentLayout : FragmentActivity() {
          *
          * @return Return the View for the fragment's UI, or null
          */
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
             if (container == null) {
                 // We have different layouts, and in one of them this
                 // fragment's containing frame doesn't exist.  The fragment
@@ -319,14 +337,40 @@ class FragmentLayout : FragmentActivity() {
             }
 
             val scroller = ScrollView(activity)
+            scroller.setPadding(
+                dpToPixel(8, container.context),
+                dpToPixel(120, container.context),
+                dpToPixel(8, container.context),
+                dpToPixel(60, container.context)
+            )
             val text = TextView(activity)
 
-            val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                    4f, requireActivity().resources.displayMetrics).toInt()
+            val padding = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                4f, requireActivity().resources.displayMetrics
+            ).toInt()
             text.setPadding(padding, padding, padding, padding)
             scroller.addView(text)
             text.text = Shakespeare.DIALOGUE[shownIndex]
             return scroller
+        }
+
+        /**
+         * This method converts dp unit to equivalent pixels, depending on device density. First we
+         * fetch a [Resources] instance for `val resources`, then we fetch the current display
+         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+         * dots-per-inch, divided by the reference density used throughout the system.
+         *
+         * @param dp      A value in dp (density independent pixels) unit which we need to convert
+         *                into pixels
+         * @param context [Context] to get resources and device specific display metrics
+         * @return An [Int] value to represent px equivalent to dp depending on device density
+         */
+        private fun dpToPixel(dp: Int, context: Context): Int {
+            val resources: Resources = context.resources
+            val metrics = resources.displayMetrics
+            return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
         }
 
         /**

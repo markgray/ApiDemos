@@ -644,8 +644,8 @@ App
         .layout.alarm_controller.xml
         .app.OneShotAlarm
         .app.RepeatingAlarm
-            Shows how to schedule both one-shot alarms (OneShotAlarm.java), and repeating
-            alarms (RepeatingAlarm.java) using AlarmManager.set() for one-shot and 
+            Shows how to schedule both one-shot alarms (OneShotAlarm.kt), and repeating
+            alarms (RepeatingAlarm.kt) using AlarmManager.set() for one-shot and
             AlarmManager.setRepeating() for the repeating alarm. OneShotAlarm and RepeatingAlarm
             are declared as <receiver>'s in AndroidManifest.xml
 
@@ -699,7 +699,7 @@ App
 
     App/Fragment/Arguments                 v11
         .app.FragmentArguments
-        .app.FragmentArgumentsFragment only used in FragmentNestingTabs.java
+        .app.FragmentArgumentsFragment only used in FragmentNestingTabs.kt
         .layout.fragment_arguments_fragment.xml
         .layout.fragment_arguments.xml
             Demonstrates a fragment that can be configured through both Bundle arguments
@@ -791,8 +791,8 @@ App
         .app.FragmentNestingTabs
         .layout.fragment_tabs_fragment.xml
             Uses tabs in the ActionBar to select between other activities in App/Fragment:
-            FragmentMenuFragment.java, FragmentArgumentsFragment.java, FragmentStackFragment.java,
-            FragmentTabsFragment.java. Uses FragmentManager.enableDebugLogging(true) to produce
+            FragmentMenuFragment.kt, FragmentArgumentsFragment.kt, FragmentStackFragment.kt,
+            FragmentTabsFragment.kt. Uses FragmentManager.enableDebugLogging(true) to produce
             debugging info from the FragmentManager (very useful)
 
     App/Fragment/Receive Result            v11
@@ -1027,14 +1027,14 @@ App
         .app.LocalService
             This demonstrates the implementation of a service that runs in the same 
             process as the rest of the application, which is explicitly started and 
-            stopped as desired. Binds to app.LocalService.java
+            stopped as desired. Binds to app.LocalService.kt
 
     App/Service/Local Service Controller       -- all
         .app.LocalServiceActivities$Controller
         .layout.local_service_controller.xml
-        .app.LocalService.java
+        .app.LocalService.kt
             Example of explicitly starting and stopping the local service. Starts 
-            app.LocalService.java
+            app.LocalService.kt
 
     App/Service/Messenger Service              -- all -> v26
         .app.MessengerServiceActivities$Binding
@@ -1350,11 +1350,11 @@ Graphics
 
   BitmapDecode
     Graphics/BitmapDecode               all crashes LG-8.3, works: froyo, Nexus 7. Nexus 4, Nexus 9
-        .graphics.BitmapDecode             Crash in android.graphics.Movie.java native method draw
+        .graphics.BitmapDecode             Crash in android.graphics.Movie.kt native method draw
             line 40. Shows how to decode various image file formats into displayable bitmaps:
             drawable/beach.jpg, drawable/frog.gif (creates also an Bitmap.Config.ARGB_8888 bitmap,
             and a Bitmap.Config.ARGB_4444 bitmap from that bitmap), drawable/button.9.png, and
-            drawable/animated_gif.gif which it animates using android.graphics.Movie.java
+            drawable/animated_gif.gif which it animates using android.graphics.Movie.kt
             TODO: replace Movie with android.graphics.drawable.AnimatedImageDrawable
 
   BitmapMesh
@@ -1488,7 +1488,7 @@ Graphics
         .graphics.Cube
             Wrapper activity demonstrating the use of GLSurfaceView, a view that uses OpenGL
             drawing into a dedicated surface. Uses CubeRenderer to render a pair of tumbling
-            cubes created and draw(n) by Cube.java
+            cubes created and draw(n) by Cube.kt
 
    Kube
     Graphics/OpenGL ES/Kube                all
@@ -2529,7 +2529,7 @@ Views
             method, so views that call android.view.View#requestRectangleOnScreen that are embedded
             within either android.widget.ScrollView's or android.widget.ListView's can expect to
             keep their internal interesting rectangle visible.  Needs keyboard and a fix to
-            background colors in InternalSelectView.java
+            background colors in InternalSelectView.kt
 
     TableLayout
     Views/Layouts/TableLayout/01. Basic    all
@@ -3173,7 +3173,7 @@ Views
         .layout.log_text_box_1.xml
         .text.LogTextBox
             Using a LogTextBox to display a scrollable text area to which text is
-            appended. LogTextBox.java is a custom TextView that is Editable and by
+            appended. LogTextBox.kt is a custom TextView that is Editable and by
             default scrollable, like EditText without a cursor.
 
     Views/Text/Marquee                           all

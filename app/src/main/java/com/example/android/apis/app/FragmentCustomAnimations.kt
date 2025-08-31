@@ -17,7 +17,6 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,6 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -43,8 +43,8 @@ import com.example.android.apis.R
  * to set the int argument "num" passed to the new fragment when it is created.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-@SuppressLint("DefaultLocale")
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+@SuppressLint("DefaultLocale", "ObsoleteSdkInt")
 class FragmentCustomAnimations : FragmentActivity() {
     /**
      * Stack level for the next fragment
@@ -81,7 +81,7 @@ class FragmentCustomAnimations : FragmentActivity() {
         button.setOnClickListener { addFragmentToStack() }
 
         button = findViewById(R.id.delete_fragment)
-        button.setOnClickListener { onBackPressed() }
+        button.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
         if (savedInstanceState == null) {
             // Do first time initialization -- add initial fragment.
@@ -135,10 +135,12 @@ class FragmentCustomAnimations : FragmentActivity() {
         // Add the fragment to the activity, pushing this transaction
         // on to the back stack.
         val ft = supportFragmentManager.beginTransaction()
-        ft.setCustomAnimations(R.animator.fragment_slide_left_enter,
-                R.animator.fragment_slide_left_exit,
-                R.animator.fragment_slide_right_enter,
-                R.animator.fragment_slide_right_exit)
+        ft.setCustomAnimations(
+            R.animator.fragment_slide_left_enter,
+            R.animator.fragment_slide_left_exit,
+            R.animator.fragment_slide_right_enter,
+            R.animator.fragment_slide_right_exit
+        )
         ft.replace(R.id.simple_fragment, newFragment)
         ft.addToBackStack(null)
         ft.commit()
@@ -190,12 +192,10 @@ class FragmentCustomAnimations : FragmentActivity() {
             val v = inflater.inflate(R.layout.hello_world, container, false)
             val tv = v.findViewById<View>(R.id.text)
             (tv as TextView).text = String.format("%s%d", getString(R.string.fragment_number), mNum)
-            tv.setBackground(
-                ResourcesCompat.getDrawable(
-                    resources,
-                    android.R.drawable.gallery_thumb,
-                    null
-                )
+            tv.background = ResourcesCompat.getDrawable(
+                resources,
+                android.R.drawable.gallery_thumb,
+                null
             )
             return v
         }

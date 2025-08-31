@@ -16,7 +16,7 @@
 
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.ContextMenu
@@ -27,16 +27,16 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-
-import androidx.fragment.app.FragmentActivity
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-
+import androidx.fragment.app.FragmentActivity
 import com.example.android.apis.R
 
 /**
  * Demonstration of displaying a context menu from a fragment.
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentContextMenu : FragmentActivity() {
 
     /**
@@ -81,8 +81,16 @@ class FragmentContextMenu : FragmentActivity() {
          *
          * @return View for the fragment's UI
          */
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            val view = inflater.inflate(R.layout.fragment_context_menu, container, false)
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
+            val view = inflater.inflate(
+                R.layout.fragment_context_menu,
+                container,
+                false
+            )
             registerForContextMenu(view.findViewById(R.id.long_press))
             return view
         }
@@ -135,11 +143,20 @@ class FragmentContextMenu : FragmentActivity() {
         override fun onContextItemSelected(item: MenuItem): Boolean {
             when (item.itemId) {
                 R.id.a_item -> {
-                    Toast.makeText(activity, "Item 1a was chosen", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        activity,
+                        "Item 1a was chosen",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     return true
                 }
+
                 R.id.b_item -> {
-                    Toast.makeText(activity, "Item 1b was chosen", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        activity,
+                        "Item 1b was chosen",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     return true
                 }
             }

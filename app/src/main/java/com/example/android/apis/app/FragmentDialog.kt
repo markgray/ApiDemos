@@ -16,7 +16,7 @@
 // TODO: think of appropriate replacement for use of "Theme_Holo" themes
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,6 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.example.android.apis.R
@@ -38,8 +39,9 @@ import com.example.android.apis.R
  * with light theme; STYLE_NO_TITLE with light theme; STYLE_NO_FRAME with light
  * theme; STYLE_NORMAL with light fullscreen theme; and STYLE_NORMAL.
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentDialog : AppCompatActivity() {
     /**
      * Level used to choose style of dialog (and stack level)
@@ -210,7 +212,11 @@ class FragmentDialog : AppCompatActivity() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
         ): View? {
-            val v = inflater.inflate(R.layout.fragment_dialog, container, false)
+            val v = inflater.inflate(
+                R.layout.fragment_dialog,
+                container,
+                false
+            )
             val tv = v.findViewById<View>(R.id.text)
             val dialogLabel =
                 getString(R.string.dialog_number) + mNum + ": using style " + getNameForNum(mNum)
@@ -227,7 +233,6 @@ class FragmentDialog : AppCompatActivity() {
              */
             button.setOnClickListener {
                 // When button is clicked, call up to owning activity.
-
                 (activity as FragmentDialog).showDialog()
             }
 

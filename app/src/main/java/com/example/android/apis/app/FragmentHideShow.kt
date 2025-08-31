@@ -75,9 +75,9 @@ class FragmentHideShow : FragmentActivity() {
         val fragment2: Fragment?
         if (savedInstanceState != null) {
             fragment1 = fm.findFragmentById(R.id.fragment1)
-                    ?: throw RuntimeException("fragment1 is null")
+                ?: throw RuntimeException("fragment1 is null")
             fragment2 = fm.findFragmentById(R.id.fragment2)
-                    ?: throw RuntimeException("fragment2 is null")
+                ?: throw RuntimeException("fragment2 is null")
         } else {
             val ft: FragmentTransaction = fm.beginTransaction()
             fragment1 = FirstFragment()
@@ -166,7 +166,11 @@ class FragmentHideShow : FragmentActivity() {
          *
          * @return Return the View for the fragment's UI, or null.
          */
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
             return inflater.inflate(R.layout.labeled_text_edit, container, false)
         }
 
@@ -237,8 +241,16 @@ class FragmentHideShow : FragmentActivity() {
          *
          * @return Return the View for the fragment's UI, or null.
          */
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            return inflater.inflate(R.layout.labeled_text_edit, container, false)
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
+            return inflater.inflate(
+                R.layout.labeled_text_edit,
+                container,
+                false
+            )
         }
 
         /**

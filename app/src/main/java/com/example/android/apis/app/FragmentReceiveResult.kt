@@ -16,8 +16,7 @@
 
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
-import android.app.Activity
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -33,10 +32,10 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.example.android.apis.R
-import com.example.android.apis.app.FragmentReceiveResult.ReceiveResultFragment
 
 /**
  * [FragmentReceiveResult] builds a [FrameLayout] in java -- no xml layout. To this it adds
@@ -46,7 +45,8 @@ import com.example.android.apis.app.FragmentReceiveResult.ReceiveResultFragment
  * receives in the callback [onActivityResult] and then appends it to the Editable [TextView]
  * with the ID R.id.results contained in the layout R.layout.receive_result.
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentReceiveResult : FragmentActivity() {
 
     /**
@@ -147,7 +147,7 @@ class FragmentReceiveResult : FragmentActivity() {
                 // This is a standard resultCode that is sent back if the
                 // activity doesn't supply an explicit result.  It will also
                 // be returned if the activity failed to launch.
-                if (result.resultCode == Activity.RESULT_CANCELED) {
+                if (result.resultCode == RESULT_CANCELED) {
                     text.append("(cancelled)")
 
                     // Our protocol with the sending activity is that it will send

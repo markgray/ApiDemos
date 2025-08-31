@@ -15,13 +15,14 @@
  */
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.android.apis.R
 import com.example.android.apis.app.FragmentMenu.Menu2Fragment
@@ -31,8 +32,9 @@ import com.example.android.apis.app.FragmentMenu.MenuFragment
  * Demonstrates how fragments can participate in the options menu.
  */
 // it is used by FragmentNestingTabs
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate", "UNUSED_ANONYMOUS_PARAMETER")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentMenuFragment : Fragment() {
     /**
      * Our [MenuFragment] instance.
@@ -58,7 +60,8 @@ class FragmentMenuFragment : Fragment() {
      * Update fragment visibility when check boxes [mCheckBox1] and [mCheckBox2] are changed by
      * calling our method [updateFragmentVisibility]
      */
-    val mClickListener = View.OnClickListener { v: View? -> updateFragmentVisibility() }
+    val mClickListener: View.OnClickListener =
+        View.OnClickListener { v: View? -> updateFragmentVisibility() }
 
     /**
      * Called to have the fragment instantiate its user interface view. We use our [LayoutInflater]
@@ -90,7 +93,7 @@ class FragmentMenuFragment : Fragment() {
      *
      * @return Return the View for the fragment's UI, or null.
      */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -147,7 +150,7 @@ class FragmentMenuFragment : Fragment() {
      * [Fragment] field [mFragment2], and if unchecked we use `ft` to hide it. We then schedule a
      * commit of the `FragmentTransaction` we composed in `ft`.
      */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     fun updateFragmentVisibility() {
         val ft = childFragmentManager.beginTransaction()
         if (mCheckBox1!!.isChecked) ft.show(mFragment1!!) else ft.hide(mFragment1!!)

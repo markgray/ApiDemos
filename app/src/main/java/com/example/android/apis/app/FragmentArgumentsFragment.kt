@@ -16,21 +16,22 @@
 
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.android.apis.R
 
 /**
  * Demonstrates a fragment that can be configured through both Bundle arguments
- * and layout attributes. Currently only used in FragmentNestingTabs.java which
- * is commented out until I finish migrating all the Fragments it uses.
+ * and layout attributes. Currently only used in FragmentNestingTabs.kt
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 class FragmentArgumentsFragment : Fragment() {
     /**
      * Called to do initial creation of a fragment. This is called after [onAttach] and before
@@ -88,10 +89,15 @@ class FragmentArgumentsFragment : Fragment() {
      * @return Return the View for the fragment's UI, or null.
      */
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_arguments_fragment, container, false)
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(
+            R.layout.fragment_arguments_fragment,
+            container,
+            false
+        )
     }
 
 }
