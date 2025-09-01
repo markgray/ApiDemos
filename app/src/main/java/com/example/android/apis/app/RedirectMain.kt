@@ -28,6 +28,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 
 import com.example.android.apis.R
+import androidx.core.content.edit
 
 /**
  * Launched by a push of a Button in the Activity RedirectEnter we will immediately start
@@ -40,7 +41,8 @@ import com.example.android.apis.R
  */
 class RedirectMain : AppCompatActivity() {
 
-    private var mTextPref: String? = null // String stored in shared preferences file by RedirectGetter
+    private var mTextPref: String? =
+        null // String stored in shared preferences file by RedirectGetter
 
     /**
      * Called when the "Clear and exit" Button is clicked. First we open the shared preference
@@ -54,7 +56,7 @@ class RedirectMain : AppCompatActivity() {
     private val mClearListener = OnClickListener {
         // Erase the preferences and exit!
         val preferences = getSharedPreferences("RedirectData", 0)
-        preferences.edit().remove("text").apply()
+        preferences.edit { remove("text") }
         finish()
     }
 
@@ -135,15 +137,17 @@ class RedirectMain : AppCompatActivity() {
      * method to reload the text that was saved by [RedirectGetter] in our shared preferences file.
      */
     private val initTextRequestLauncher: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
 
             // If the request was cancelled, then we are cancelled as well.
             if (result.resultCode == RESULT_CANCELED) {
                 finish()
 
-            // Otherwise, there now should be text...  reload the prefs,
-            // and show our UI.  (Optionally we could verify that the text
-            // is now set and exit if it isn't.)
+                // Otherwise, there now should be text...  reload the prefs,
+                // and show our UI.  (Optionally we could verify that the text
+                // is now set and exit if it isn't.)
             } else {
                 loadPrefs()
             }
@@ -155,7 +159,7 @@ class RedirectMain : AppCompatActivity() {
      * display what it found and returns true to the caller. If no "text" was found in the shared
      * preference file it returns false.
      *
-     * @return true if there was text stored under "text" in the shared preference file, false otherwise
+     * @return `true` if there was text stored under "text" in the shared preference file, false otherwise
      */
     private fun loadPrefs(): Boolean {
         // Retrieve the current redirect values.

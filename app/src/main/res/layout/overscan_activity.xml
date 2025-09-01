@@ -14,7 +14,6 @@
      limitations under the License.
 -->
 
-
 <!-- This layout is designed for use with FLAG_LAYOUT_IN_OVERSCAN, so its window will
      be placed into the overscan region of the display (if there is one).  Thus the contents
      of the top-level view may be obscured around the edges by the display, leaving the
@@ -51,10 +50,12 @@
             android:layout_height="match_parent"
             android:src="@drawable/frantic"
             android:scaleType="fitXY" />
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/box_white" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

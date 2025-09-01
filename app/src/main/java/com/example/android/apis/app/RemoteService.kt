@@ -16,14 +16,12 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.graphics.Color
@@ -41,10 +39,10 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import com.example.android.apis.app.RemoteService.Binding
-import com.example.android.apis.app.RemoteService.Controller
+
 
 /**
  * This is an example of implementing an application service that runs in a
@@ -58,7 +56,7 @@ import com.example.android.apis.app.RemoteService.Controller
  * running in its own process, the [LocalService] sample shows a much
  * simpler way to interact with it.
  */
-@TargetApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("SetTextI18n")
 class RemoteService : Service() {
     /**
@@ -66,12 +64,13 @@ class RemoteService : Service() {
      * service. Note that this is public scoped (instead of private) so
      * that it can be accessed more efficiently from inner classes.
      */
-    val mCallbacks = RemoteCallbackList<IRemoteServiceCallback>()
+    val mCallbacks: RemoteCallbackList<IRemoteServiceCallback> =
+        RemoteCallbackList<IRemoteServiceCallback>()
 
     /**
      * Value that we increment and send to our clients
      */
-    var mValue = 0
+    var mValue: Int = 0
 
     /**
      * Handle to the system level NOTIFICATION_SERVICE service
@@ -92,9 +91,11 @@ class RemoteService : Service() {
      * set to REPORT_MSG to all the clients registered with us.
      */
     override fun onCreate() {
-        mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val chan1 = NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
-            NotificationManager.IMPORTANCE_DEFAULT)
+        mNM = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val chan1 = NotificationChannel(
+            PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
         chan1.lightColor = Color.GREEN
         chan1.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
         mNM!!.createNotificationChannel(chan1)
@@ -258,8 +259,10 @@ class RemoteService : Service() {
          * @param aDouble unused
          * @param aString unused
          */
-        override fun basicTypes(anInt: Int, aLong: Long, aBoolean: Boolean,
-                                aFloat: Float, aDouble: Double, aString: String) {
+        override fun basicTypes(
+            anInt: Int, aLong: Long, aBoolean: Boolean,
+            aFloat: Float, aDouble: Double, aString: String
+        ) {
         }
     }
 
@@ -311,7 +314,7 @@ class RemoteService : Service() {
                 for (i in 0 until n) {
                     try {
                         mCallbacks.getBroadcastItem(i).valueChanged(value)
-                    } catch (e: RemoteException) {
+                    } catch (_: RemoteException) {
                         /**
                          * The RemoteCallbackList will take care of removing the dead object for us.
                          */
@@ -552,7 +555,7 @@ class RemoteService : Service() {
                  */
                 try {
                     mService!!.registerCallback(mCallback)
-                } catch (e: RemoteException) {
+                } catch (_: RemoteException) {
                     /**
                      * In this case the service has crashed before we could even
                      * do anything with it; we can count on soon being
@@ -563,7 +566,8 @@ class RemoteService : Service() {
                 /**
                  * As part of the sample, tell the user what happened.
                  */
-                Toast.makeText(this@Binding, R.string.remote_service_connected, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Binding, R.string.remote_service_connected, Toast.LENGTH_SHORT)
+                    .show()
             }
 
             /**
@@ -593,7 +597,11 @@ class RemoteService : Service() {
                 /**
                  * As part of the sample, tell the user what happened.
                  */
-                Toast.makeText(this@Binding, R.string.remote_service_disconnected, Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@Binding,
+                    R.string.remote_service_disconnected,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -673,9 +681,9 @@ class RemoteService : Service() {
              */
             val intent = Intent(this@Binding, RemoteService::class.java)
             intent.action = IRemoteService::class.java.name
-            bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+            bindService(intent, mConnection, BIND_AUTO_CREATE)
             intent.action = ISecondary::class.java.name
-            bindService(intent, mSecondaryConnection, Context.BIND_AUTO_CREATE)
+            bindService(intent, mSecondaryConnection, BIND_AUTO_CREATE)
             mIsBound = true
             mCallbackText!!.text = "Binding."
         }
@@ -702,7 +710,7 @@ class RemoteService : Service() {
                 if (mService != null) {
                     try {
                         mService!!.unregisterCallback(mCallback)
-                    } catch (e: RemoteException) {
+                    } catch (_: RemoteException) {
                         /**
                          * There is nothing special we need to do if the service has crashed.
                          */
@@ -751,12 +759,16 @@ class RemoteService : Service() {
                      */
                     Process.killProcess(pid)
                     mCallbackText!!.text = "Killed service process."
-                } catch (ex: RemoteException) {
+                } catch (_: RemoteException) {
                     /**
                      * Recover gracefully from the process hosting the server dying.
                      * Just for purposes of the sample, put up a notification.
                      */
-                    Toast.makeText(this@Binding, R.string.remote_call_failed, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@Binding,
+                        R.string.remote_call_failed,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -892,7 +904,11 @@ class RemoteService : Service() {
                     return
                 }
                 mCallbackText!!.text = "Attached."
-                Toast.makeText(this@BindingOptions, R.string.remote_service_connected, Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@BindingOptions,
+                    R.string.remote_service_connected,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
             /**
@@ -917,11 +933,19 @@ class RemoteService : Service() {
                     return
                 }
                 mCallbackText!!.text = "Disconnected."
-                Toast.makeText(this@BindingOptions, R.string.remote_service_disconnected, Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@BindingOptions,
+                    R.string.remote_service_disconnected,
+                    Toast.LENGTH_SHORT
+                ).show()
                 if (mUnbindOnDisconnect) {
                     unbindService(this)
                     mCurConnection = null
-                    Toast.makeText(this@BindingOptions, R.string.remote_service_unbind_disconn, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@BindingOptions,
+                        R.string.remote_service_unbind_disconn,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -989,7 +1013,7 @@ class RemoteService : Service() {
                 mCurConnection = null
             }
             val conn: ServiceConnection = MyServiceConnection()
-            if (bindService(mBindIntent!!, conn, Context.BIND_AUTO_CREATE)) {
+            if (bindService(mBindIntent!!, conn, BIND_AUTO_CREATE)) {
                 mCurConnection = conn
             }
         }
@@ -1012,7 +1036,7 @@ class RemoteService : Service() {
                 mCurConnection = null
             }
             val conn: ServiceConnection = MyServiceConnection()
-            val flags = Context.BIND_AUTO_CREATE or Context.BIND_NOT_FOREGROUND
+            val flags = BIND_AUTO_CREATE or BIND_NOT_FOREGROUND
             if (bindService(mBindIntent!!, conn, flags)) {
                 mCurConnection = conn
             }
@@ -1036,7 +1060,7 @@ class RemoteService : Service() {
                 mCurConnection = null
             }
             val conn: ServiceConnection = MyServiceConnection()
-            val flags = Context.BIND_AUTO_CREATE or Context.BIND_ABOVE_CLIENT
+            val flags = BIND_AUTO_CREATE or BIND_ABOVE_CLIENT
             if (bindService(mBindIntent!!, conn, flags)) {
                 mCurConnection = conn
             }
@@ -1060,7 +1084,7 @@ class RemoteService : Service() {
                 mCurConnection = null
             }
             val conn: ServiceConnection = MyServiceConnection()
-            val flags = Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_OOM_MANAGEMENT
+            val flags = BIND_AUTO_CREATE or BIND_ALLOW_OOM_MANAGEMENT
             if (bindService(mBindIntent!!, conn, flags)) {
                 mCurConnection = conn
             }
@@ -1085,7 +1109,7 @@ class RemoteService : Service() {
                 mCurConnection = null
             }
             val conn: ServiceConnection = MyServiceConnection(true)
-            val flags = Context.BIND_AUTO_CREATE or Context.BIND_WAIVE_PRIORITY
+            val flags = BIND_AUTO_CREATE or BIND_WAIVE_PRIORITY
             if (bindService(mBindIntent!!, conn, flags)) {
                 mCurConnection = conn
             }
@@ -1109,7 +1133,7 @@ class RemoteService : Service() {
                 mCurConnection = null
             }
             val conn: ServiceConnection = MyServiceConnection()
-            val flags = Context.BIND_AUTO_CREATE or Context.BIND_IMPORTANT
+            val flags = BIND_AUTO_CREATE or BIND_IMPORTANT
             if (bindService(mBindIntent!!, conn, flags)) {
                 mCurConnection = conn
             }
@@ -1133,9 +1157,9 @@ class RemoteService : Service() {
                 mCurConnection = null
             }
             val conn: ServiceConnection = MyServiceConnection()
-            val flags = (Context.BIND_AUTO_CREATE
-                or Context.BIND_ADJUST_WITH_ACTIVITY
-                or Context.BIND_WAIVE_PRIORITY)
+            val flags = (BIND_AUTO_CREATE
+                or BIND_ADJUST_WITH_ACTIVITY
+                or BIND_WAIVE_PRIORITY)
             if (bindService(mBindIntent!!, conn, flags)) {
                 mCurConnection = conn
             }
@@ -1163,7 +1187,7 @@ class RemoteService : Service() {
         /**
          * The id of the primary notification channel
          */
-        const val PRIMARY_CHANNEL = "default"
+        const val PRIMARY_CHANNEL: String = "default"
 
         /**
          * Used as `what` field of message sent to `mHandler` which causes `mValue`

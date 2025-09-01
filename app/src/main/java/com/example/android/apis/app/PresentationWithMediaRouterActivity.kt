@@ -17,7 +17,6 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.Presentation
 import android.content.Context
 import android.content.DialogInterface
@@ -66,30 +65,36 @@ import com.example.android.apis.graphics.CubeRenderer
  * to enumerate displays and to show multiple simultaneous presentations on different
  * displays.
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 class PresentationWithMediaRouterActivity : AppCompatActivity() {
 
     /**
      * [MediaRouter] we will use control the routing of media channels
      */
     private var mMediaRouter: MediaRouter? = null
+
     /**
      * The presentation to show on the secondary display.
      */
     private var mPresentation: DemoPresentation? = null
+
     /**
      * [GLSurfaceView] in our layout for our openGL demo
      */
     private var mSurfaceView: GLSurfaceView? = null
+
     /**
      * text view where we will show information about what's happening.
      */
     private var mInfoTextView: TextView? = null
+
     /**
      * Flag set in [onPause] to true, set to false in [onResume] so [updateContents] knows which
      * of the two overrides to propagate to the surfaceView of the presentation.
      */
     private var mPaused: Boolean = false
+
     /**
      * The [MediaRouteSelector] we use to describe the capabilities of routes that we would like to
      * discover and use.
@@ -149,7 +154,7 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
     /**
      * Listens for when presentations are dismissed. Used in [updatePresentation]
      */
-    private val mOnDismissListener = DialogInterface.OnDismissListener { dialog ->
+    private val mOnDismissListener = DialogInterface.OnDismissListener { dialog: DialogInterface ->
         /**
          * This method will be invoked when the dialog is dismissed. We check to make sure
          * the the dialog passed us is the current [DemoPresentation] field [mPresentation],
@@ -168,7 +173,7 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
 
     /**
      * Initialization of the Activity after it is first created. Must at least call
-     * [setContentView()][androidx.appcompat.app.AppCompatActivity.setContentView] to
+     * [setContentView()][setContentView] to
      * describe what is to be displayed in the screen.
      *
      * First we call through to our super's implementation of `onCreate`. Then we initialize our
@@ -193,9 +198,9 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
         mMediaRouter = MediaRouter.getInstance(this)
 
         mSelector = MediaRouteSelector.Builder()
-                .addControlCategory(MediaControlIntent.CATEGORY_LIVE_VIDEO)
-                .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
-                .build()
+            .addControlCategory(MediaControlIntent.CATEGORY_LIVE_VIDEO)
+            .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
+            .build()
 
         // See assets/res/any/layout/presentation_with_media_router_activity.xml for this
         // view layout definition, which is being set here as
@@ -300,7 +305,7 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
 
         val mediaRouteMenuItem = menu.findItem(R.id.menu_media_route)
         val mediaRouteActionProvider =
-                MenuItemCompat.getActionProvider(mediaRouteMenuItem) as MediaRouteActionProvider
+            MenuItemCompat.getActionProvider(mediaRouteMenuItem) as MediaRouteActionProvider
         mediaRouteActionProvider.routeSelector = mSelector!!
 
         // Return true to show the menu.
@@ -325,7 +330,7 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
      * activity or on the external display and will display some text explaining what is happening.
      */
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    @SuppressLint("NewApi")
+    @SuppressLint("NewApi", "ObsoleteSdkInt")
     private fun updatePresentation() {
         // Get the current route and its presentation display.
         val route = mMediaRouter!!.selectedRoute
@@ -333,7 +338,10 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
 
         // Dismiss the current presentation if the display has changed.
         if (mPresentation != null && mPresentation!!.display != presentationDisplay) {
-            Log.i(TAG, "Dismissing presentation because the current route no longer " + "has a presentation display.")
+            Log.i(
+                TAG,
+                "Dismissing presentation because the current route no longer " + "has a presentation display."
+            )
             mPresentation!!.dismiss()
             mPresentation = null
         }
@@ -346,7 +354,11 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
             try {
                 mPresentation!!.show()
             } catch (ex: WindowManager.InvalidDisplayException) {
-                Log.w(TAG, "Couldn't show presentation!  Display was removed in " + "the meantime.", ex)
+                Log.w(
+                    TAG,
+                    "Couldn't show presentation!  Display was removed in " + "the meantime.",
+                    ex
+                )
                 mPresentation = null
             }
 
@@ -377,8 +389,9 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
         // along with some descriptive text about what is happening.
         if (mPresentation != null) {
             mInfoTextView!!.text = resources.getString(
-                    R.string.presentation_with_media_router_now_playing_remotely,
-                    mPresentation!!.display.name)
+                R.string.presentation_with_media_router_now_playing_remotely,
+                mPresentation!!.display.name
+            )
             mSurfaceView!!.visibility = View.INVISIBLE
             mSurfaceView!!.onPause()
             if (mPaused) {
@@ -389,8 +402,9 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
         } else {
             @Suppress("DEPRECATION")
             mInfoTextView!!.text = resources.getString(
-                    R.string.presentation_with_media_router_now_playing_locally,
-                    windowManager.defaultDisplay.name)
+                R.string.presentation_with_media_router_now_playing_locally,
+                windowManager.defaultDisplay.name
+            )
             mSurfaceView!!.visibility = View.VISIBLE
             if (mPaused) {
                 mSurfaceView!!.onPause()
@@ -406,9 +420,6 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
      * Note that this display may have different metrics from the display on which
      * the main activity is showing so we must be careful to use the presentation's
      * own [Context] whenever we load resources.
-     */
-    private class DemoPresentation
-    /**
      * Creates a new presentation that is attached to the specified display using the default theme.
      *
      * @param context The context of the application that is showing the presentation. The
@@ -416,7 +427,10 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
      * this context and information about the associated display.
      * @param display The display to which the presentation should be attached.
      */
-    (context: Context, display: Display) : Presentation(context, display) {
+    private class DemoPresentation(
+        context: Context,
+        display: Display
+    ) : Presentation(context, display) {
         /**
          * Getter method for our [GLSurfaceView] field [mSurfaceView], used in [updateContents].
          *
@@ -426,7 +440,7 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
             private set // The GLSurfaceView in the presentation layout
 
         /**
-         * Similar to [androidx.appcompat.app.AppCompatActivity.onCreate], you should initialize
+         * Similar to [AppCompatActivity.onCreate], you should initialize
          * your dialog in this method, including calling [setContentView].
          *
          * First we call our super's implementation of `onCreate`, then we set our content view to
@@ -445,7 +459,7 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
             // Get the resources for the context of the presentation.
             // Notice that we are getting the resources from the context of the presentation.
 
-            @Suppress("UNUSED_VARIABLE")
+            @Suppress("unused", "UnusedVariable")
             val r = context.resources
 
             // Inflate the layout.

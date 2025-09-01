@@ -25,6 +25,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
+import androidx.core.content.edit
 
 /**
  * Simple example of using persistent preferences to retain a screen's state.
@@ -79,7 +80,8 @@ class PersistentState : AppCompatActivity() {
         setContentView(R.layout.save_restore_state)
 
         // Set message to be appropriate for this screen.
-        (findViewById<View>(R.id.msg) as TextView).setText(R.string.persistent_msg)
+        (findViewById<View>(R.id.msg) as TextView)
+            .setText(R.string.persistent_msg)
 
         // Retrieve the EditText widget whose state we will save.
         mSaved = findViewById(R.id.saved)
@@ -134,10 +136,10 @@ class PersistentState : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
 
-        val editor = getPreferences(0).edit()
-        editor.putString("text", mSaved!!.text.toString())
-        editor.putInt("selection-start", mSaved!!.selectionStart)
-        editor.putInt("selection-end", mSaved!!.selectionEnd)
-        editor.apply()
+        getPreferences(0).edit {
+            putString("text", mSaved!!.text.toString())
+            putInt("selection-start", mSaved!!.selectionStart)
+            putInt("selection-end", mSaved!!.selectionEnd)
+        }
     }
 }

@@ -15,8 +15,7 @@
  */
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
-import android.content.Context
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.os.CancellationSignal
@@ -29,6 +28,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -43,7 +43,8 @@ import com.example.android.apis.R
  * @see PrintManager
  * @see WebView
  */
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class PrintHtmlOffScreen : AppCompatActivity() {
     /**
      * WebView we load our HTML file into and print
@@ -143,7 +144,7 @@ class PrintHtmlOffScreen : AppCompatActivity() {
         /**
          * Get the print manager.
          */
-        val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
+        val printManager = getSystemService(PRINT_SERVICE) as PrintManager
 
         /**
          * Create a wrapper [PrintDocumentAdapter] to clean up when done.

@@ -16,9 +16,12 @@
 
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -28,10 +31,11 @@ import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-
 import com.example.android.apis.R
+import com.example.android.apis.app.MenuInflateFromXml.Companion.sMenuExampleNames
+import com.example.android.apis.app.MenuInflateFromXml.Companion.sMenuExampleResources
 
 /**
  * Demonstrates inflating menus from XML. There are 6 different menu XML resources that the user can
@@ -42,7 +46,8 @@ import com.example.android.apis.R
  * First, select an example resource from the spinner, and then hit the menu button. To choose
  * another, back out of the activity and start over.
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class MenuInflateFromXml : AppCompatActivity() {
 
     /**
@@ -95,10 +100,18 @@ class MenuInflateFromXml : AppCompatActivity() {
         // Create a simple layout
         val layout = LinearLayout(this)
         layout.orientation = LinearLayout.VERTICAL
+        layout.setPadding(
+            dpToPixel(8, layout.context),
+            dpToPixel(120, layout.context),
+            dpToPixel(8, layout.context),
+            dpToPixel(60, layout.context)
+        )
 
         // Create the spinner to allow the user to choose a menu XML
-        val adapter = ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, sMenuExampleNames)
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item, sMenuExampleNames
+        )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mSpinner = Spinner(this)
         // When programmatically creating views, make sure to set an ID
@@ -117,7 +130,12 @@ class MenuInflateFromXml : AppCompatActivity() {
              * @param position The position of the view in the adapter (Unused)
              * @param id The row id of the item that is selected (Unused)
              */
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 invalidateOptionsMenu()
             }
 
@@ -132,25 +150,48 @@ class MenuInflateFromXml : AppCompatActivity() {
         }
 
         // Add the spinner
-        layout.addView(mSpinner,
-                LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT))
+        layout.addView(
+            mSpinner,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        )
 
         // Create help text
         mInstructionsText = TextView(this)
         mInstructionsText!!.text = resources.getString(
-                R.string.menu_from_xml_instructions_press_menu)
+            R.string.menu_from_xml_instructions_press_menu
+        )
 
         // Add the help, make it look decent
         val lp = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT)
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
         lp.setMargins(10, 10, 10, 10)
         layout.addView(mInstructionsText, lp)
 
         // Set the layout as our content view
         setContentView(layout)
+    }
+
+    /**
+     * This method converts dp unit to equivalent pixels, depending on device density. First we
+     * fetch a [Resources] instance for `val resources`, then we fetch the current display
+     * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+     * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+     * dots-per-inch, divided by the reference density used throughout the system.
+     *
+     * @param dp      A value in dp (density independent pixels) unit which we need to convert
+     *                into pixels
+     * @param context [Context] to get resources and device specific display metrics
+     * @return An [Int] value to represent px equivalent to dp depending on device density
+     */
+    private fun dpToPixel(dp: Int, context: Context): Int {
+        val resources: Resources = context.resources
+        val metrics = resources.displayMetrics
+        return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
     }
 
     /**
@@ -258,32 +299,32 @@ class MenuInflateFromXml : AppCompatActivity() {
          * Different example menu resources.
          */
         private val sMenuExampleResources = intArrayOf(
-                R.menu.title_icon,
-                R.menu.title_only,
-                R.menu.submenu,
-                R.menu.groups,
-                R.menu.checkable,
-                R.menu.shortcuts,
-                R.menu.order,
-                R.menu.category_order,
-                R.menu.visible,
-                R.menu.disabled
+            R.menu.title_icon,
+            R.menu.title_only,
+            R.menu.submenu,
+            R.menu.groups,
+            R.menu.checkable,
+            R.menu.shortcuts,
+            R.menu.order,
+            R.menu.category_order,
+            R.menu.visible,
+            R.menu.disabled
         )
 
         /**
          * Names corresponding to the different example menu resources.
          */
         private val sMenuExampleNames = arrayOf(
-                "Title and Icon",
-                "Title only",
-                "Submenu",
-                "Groups",
-                "Checkable",
-                "Shortcuts",
-                "Order",
-                "Category and Order",
-                "Visible",
-                "Disabled"
+            "Title and Icon",
+            "Title only",
+            "Submenu",
+            "Groups",
+            "Checkable",
+            "Shortcuts",
+            "Order",
+            "Category and Order",
+            "Visible",
+            "Disabled"
         )
     }
 

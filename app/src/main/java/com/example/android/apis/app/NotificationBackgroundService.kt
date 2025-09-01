@@ -65,7 +65,7 @@ class NotificationBackgroundService : Service() {
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
 
         Log.i("NotificationBService", " I have been started")
-        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+        (getSystemService(NOTIFICATION_SERVICE) as NotificationManager)
             .cancel(R.layout.notification_background_service)
         stopSelf(startId)
         return START_NOT_STICKY
@@ -124,9 +124,11 @@ class NotificationBackgroundService : Service() {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.notification_background_service)
 
-            mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val chan1 = NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
-                NotificationManager.IMPORTANCE_DEFAULT)
+            mNM = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            val chan1 = NotificationChannel(
+                PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
             chan1.lightColor = Color.GREEN
             chan1.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
             mNM!!.createNotificationChannel(chan1)
@@ -181,7 +183,7 @@ class NotificationBackgroundService : Service() {
             /**
              * The id of the primary notification channel
              */
-            const val PRIMARY_CHANNEL = "default"
+            const val PRIMARY_CHANNEL: String = "default"
         }
     }
 }

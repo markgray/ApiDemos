@@ -50,8 +50,10 @@ class LocalSampleInstrumentation : Instrumentation() {
         val activity = startActivitySync(intent) as SaveRestoreState
 
         // This is the Activity object that was started, to do with as we want.
-        Log.i("LocalSampleInstr...",
-                "Initial text: " + activity.savedText)
+        Log.i(
+            "LocalSampleInstr...",
+            "Initial text: " + activity.savedText
+        )
 
         // Clear the text so we start fresh.
         runOnMainSync(object : ActivityRunnable(activity) {
@@ -73,8 +75,10 @@ class LocalSampleInstrumentation : Instrumentation() {
         waitForIdleSync()
 
         // Retrieve the text we should have written...
-        Log.i("LocalSampleInstr...",
-                "Final text: " + activity.savedText)
+        Log.i(
+            "LocalSampleInstr...",
+            "Final text: " + activity.savedText
+        )
 
         // And we are done!
         Log.i("ContactsFilterInstru...", "Done!")

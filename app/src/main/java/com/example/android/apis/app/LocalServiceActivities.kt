@@ -16,20 +16,22 @@
 package com.example.android.apis.app
 
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-
 import com.example.android.apis.R
 import com.example.android.apis.app.LocalService.LocalBinder
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Suppress("MemberVisibilityCanBePrivate")
 class LocalServiceActivities {
     /**
@@ -112,6 +114,7 @@ class LocalServiceActivities {
          * service unless the client has received some information about the service's state.
          */
         private var mShouldUnbind = false
+
         /**
          * Service object we use to interact with the service. Since [LocalService] service
          * always runs in the same process as its clients, the [IBinder] `service` passed to
@@ -119,6 +122,7 @@ class LocalServiceActivities {
          * it and its `getService` method just returns "this".
          */
         private var mBoundService: LocalService? = null
+
         /**
          * [ServiceConnection] object passed to the `bindService`, receives information
          * in its callbacks as the service is started and stopped.
@@ -149,8 +153,10 @@ class LocalServiceActivities {
                 /**
                  * Tell the user about this for our demo.
                  */
-                Toast.makeText(this@Binding, R.string.local_service_connected,
-                        Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@Binding, R.string.local_service_connected,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
             /**
@@ -174,8 +180,10 @@ class LocalServiceActivities {
                  * see this happen.
                  */
                 mBoundService = null
-                Toast.makeText(this@Binding, R.string.local_service_disconnected,
-                        Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@Binding, R.string.local_service_disconnected,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -198,12 +206,17 @@ class LocalServiceActivities {
              * (and thus won't be supporting component replacement by other
              * applications).
              */
-            if (bindService(Intent(this@Binding, LocalService::class.java),
-                            mConnection, Context.BIND_AUTO_CREATE)) {
+            if (bindService(
+                    Intent(this@Binding, LocalService::class.java),
+                    mConnection, BIND_AUTO_CREATE
+                )
+            ) {
                 mShouldUnbind = true
             } else {
-                Log.e("MY_APP_TAG", "Error: The requested service doesn't " +
-                        "exist, or this client isn't allowed access to it.")
+                Log.e(
+                    "MY_APP_TAG", "Error: The requested service doesn't " +
+                        "exist, or this client isn't allowed access to it."
+                )
             }
         }
 

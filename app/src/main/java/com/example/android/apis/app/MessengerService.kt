@@ -16,13 +16,11 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -33,10 +31,8 @@ import android.os.Message
 import android.os.Messenger
 import android.os.RemoteException
 import android.widget.Toast
-
+import androidx.annotation.RequiresApi
 import com.example.android.apis.R
-
-import java.util.ArrayList
 
 /**
  * This is an example of implementing an application service that uses the
@@ -50,20 +46,22 @@ import java.util.ArrayList
  * calling `startActivity()`.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.O)
 class MessengerService : Service() {
     /**
      * For showing and hiding our notification.
      */
     var mNM: NotificationManager? = null
+
     /**
      * Keeps track of all current registered clients.
      */
-    var mClients = ArrayList<Messenger>()
+    var mClients: ArrayList<Messenger> = ArrayList()
+
     /**
      * Holds last value set by a client.
      */
-    var mValue = 0
+    var mValue: Int = 0
 
     /**
      * Handler of incoming messages from clients.
@@ -98,7 +96,7 @@ class MessengerService : Service() {
                     while (i >= 0) {
                         try {
                             mClients[i].send(Message.obtain(null, MSG_SET_VALUE, mValue, 0))
-                        } catch (e: RemoteException) {
+                        } catch (_: RemoteException) {
                             /**
                              * The client is dead. Remove it from the list;
                              * we are going through the list from back to front
@@ -109,6 +107,7 @@ class MessengerService : Service() {
                         i--
                     }
                 }
+
                 else -> super.handleMessage(msg)
             }
         }
@@ -117,7 +116,7 @@ class MessengerService : Service() {
     /**
      * Target we publish for clients to send messages to [IncomingHandler].
      */
-    val mMessenger = Messenger(IncomingHandler())
+    val mMessenger: Messenger = Messenger(IncomingHandler())
 
     /**
      * Called by the system when the service is first created. We initialize our field
@@ -132,9 +131,11 @@ class MessengerService : Service() {
      * notification that we are running.
      */
     override fun onCreate() {
-        mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val chan1 = NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
-                NotificationManager.IMPORTANCE_DEFAULT)
+        mNM = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val chan1 = NotificationChannel(
+            PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
         chan1.lightColor = Color.GREEN
         chan1.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
         mNM!!.createNotificationChannel(chan1)
@@ -188,26 +189,28 @@ class MessengerService : Service() {
          * In this sample, we'll use the same text for the ticker and the expanded notification
          */
         val text = getText(R.string.remote_service_started)
+
         /**
          * The PendingIntent to launch our controlling activity if the user selects this notification
          */
         val contentIntent = PendingIntent.getActivity(
-                this,
-                0,
-                Intent(this, MessengerServiceActivities.Binding::class.java),
-                PendingIntent.FLAG_IMMUTABLE
+            this,
+            0,
+            Intent(this, MessengerServiceActivities.Binding::class.java),
+            PendingIntent.FLAG_IMMUTABLE
         )
+
         /**
          * Set the info for the views that show in the notification panel.
          */
         val notification = Notification.Builder(this, PRIMARY_CHANNEL)
-                .setSmallIcon(R.drawable.stat_sample) // the status icon
-                .setTicker(text) // the status text
-                .setWhen(System.currentTimeMillis()) // the time stamp
-                .setContentTitle(getText(R.string.local_service_label)) // the label of the entry
-                .setContentText(text) // the contents of the entry
-                .setContentIntent(contentIntent) // The intent to send when the entry is clicked
-                .build()
+            .setSmallIcon(R.drawable.stat_sample) // the status icon
+            .setTicker(text) // the status text
+            .setWhen(System.currentTimeMillis()) // the time stamp
+            .setContentTitle(getText(R.string.local_service_label)) // the label of the entry
+            .setContentText(text) // the contents of the entry
+            .setContentIntent(contentIntent) // The intent to send when the entry is clicked
+            .build()
         /**
          * Send the notification. We use a string id because it is a unique number.
          * We use it later to cancel.
@@ -222,24 +225,27 @@ class MessengerService : Service() {
         /**
          * The id of the primary notification channel
          */
-        const val PRIMARY_CHANNEL = "default"
+        const val PRIMARY_CHANNEL: String = "default"
+
         /**
          * Command to the service to register a client, receiving callbacks
          * from the service.  The Message's replyTo field must be a Messenger of
          * the client where callbacks should be sent.
          */
-        const val MSG_REGISTER_CLIENT = 1
+        const val MSG_REGISTER_CLIENT: Int = 1
+
         /**
          * Command to the service to unregister a client, ot stop receiving callbacks
          * from the service.  The Message's replyTo field must be a Messenger of
          * the client as previously given with MSG_REGISTER_CLIENT.
          */
-        const val MSG_UNREGISTER_CLIENT = 2
+        const val MSG_UNREGISTER_CLIENT: Int = 2
+
         /**
          * Command to service to set a new value.  This can be sent to the
          * service to supply a new value, and will be sent by the service to
          * any registered clients with the new value.
          */
-        const val MSG_SET_VALUE = 3
+        const val MSG_SET_VALUE: Int = 3
     }
 }

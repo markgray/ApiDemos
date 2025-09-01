@@ -2,9 +2,9 @@ package com.example.android.apis.app
 
 import android.annotation.SuppressLint
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
@@ -16,11 +16,12 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-
 import com.example.android.apis.R
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Suppress("MemberVisibilityCanBePrivate")
 @SuppressLint("SetTextI18n")
 class MessengerServiceActivities {
@@ -34,10 +35,12 @@ class MessengerServiceActivities {
          * [Messenger] for communicating with service.
          */
         var mService: Messenger? = null
+
         /**
          * Flag indicating whether we have called bind on the service.
          */
-        var mIsBound = false
+        var mIsBound: Boolean = false
+
         /**
          * The [TextView] we are using to show state information.
          */
@@ -84,7 +87,8 @@ class MessengerServiceActivities {
         /**
          * Target we publish for clients to send messages to IncomingHandler.
          */
-        val mMessenger = Messenger(IncomingHandler())
+        val mMessenger: Messenger = Messenger(IncomingHandler())
+
         /**
          * Class for interacting with the main interface of the service.
          */
@@ -137,7 +141,7 @@ class MessengerServiceActivities {
                      */
                     msg = Message.obtain(null, MessengerService.MSG_SET_VALUE, this.hashCode(), 0)
                     mService!!.send(msg)
-                } catch (e: RemoteException) {
+                } catch (_: RemoteException) {
                     /**
                      * In this case the service has crashed before we could even
                      * do anything with it; we can count on soon being
@@ -146,7 +150,8 @@ class MessengerServiceActivities {
                      */
                 }
                 // As part of the sample, tell the user what happened.
-                Toast.makeText(this@Binding, R.string.remote_service_connected, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Binding, R.string.remote_service_connected, Toast.LENGTH_SHORT)
+                    .show()
             }
 
             /**
@@ -166,7 +171,11 @@ class MessengerServiceActivities {
                 mService = null
                 mCallbackText!!.text = "Disconnected."
                 // As part of the sample, tell the user what happened.
-                Toast.makeText(this@Binding, R.string.remote_service_disconnected, Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@Binding,
+                    R.string.remote_service_disconnected,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -188,7 +197,11 @@ class MessengerServiceActivities {
              * class name because there is no reason to be able to let other
              * applications replace our component.
              */
-            bindService(Intent(this@Binding, MessengerService::class.java), mConnection, Context.BIND_AUTO_CREATE)
+            bindService(
+                Intent(this@Binding, MessengerService::class.java),
+                mConnection,
+                BIND_AUTO_CREATE
+            )
             mIsBound = true
             mCallbackText!!.text = "Binding."
         }
@@ -218,7 +231,7 @@ class MessengerServiceActivities {
                         val msg = Message.obtain(null, MessengerService.MSG_UNREGISTER_CLIENT)
                         msg.replyTo = mMessenger
                         mService!!.send(msg)
-                    } catch (e: RemoteException) {
+                    } catch (_: RemoteException) {
                         /**
                          * There is nothing special we need to do if the service has crashed.
                          */
@@ -262,6 +275,7 @@ class MessengerServiceActivities {
          * [doBindService] when clicked.
          */
         private val mBindListener = View.OnClickListener { doBindService() }
+
         /**
          * `OnClickListener` for the R.id.unbind ("Unbind Service") Button, it calls our method
          * [doUnbindService] when clicked.

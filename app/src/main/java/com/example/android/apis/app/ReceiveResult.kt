@@ -16,7 +16,6 @@
 
 package com.example.android.apis.app
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -26,11 +25,7 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-
 import androidx.appcompat.app.AppCompatActivity
-
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
 import com.example.android.apis.R
 
 /**
@@ -141,7 +136,7 @@ class ReceiveResult : AppCompatActivity() {
             // This is a standard resultCode that is sent back if the
             // activity doesn't supply an explicit result.  It will also
             // be returned if the activity failed to launch.
-            if (result.resultCode == Activity.RESULT_CANCELED) {
+            if (result.resultCode == RESULT_CANCELED) {
                 text.append("(cancelled)")
 
                 // Our protocol with the sending activity is that it will send

@@ -19,6 +19,7 @@ package com.example.android.apis.app
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
@@ -70,6 +71,11 @@ class OneShotAlarm : BroadcastReceiver() {
      */
     override fun onReceive(context: Context, intent: Intent) {
         Toast.makeText(context, R.string.one_shot_received, Toast.LENGTH_SHORT).show()
+        Log.i(TAG, "Received one shot alarm")
+    }
+
+    companion object {
+        private const val TAG = "OneShotAlarm"
     }
 }
 

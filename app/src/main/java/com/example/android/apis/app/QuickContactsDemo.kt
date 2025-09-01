@@ -77,10 +77,6 @@ class QuickContactsDemo : ListActivity() {
 
     /**
      * This is the class we use to display contact items in our ListActivity's List.
-     */
-    private inner class ContactListItemAdapter
-    /**
-     * Creates a ContactListItemAdapter.
      *
      * @param context The context where the ListView associated with this adapter is running
      * @param layout resource identifier of a layout file that defines the views for this list
@@ -88,7 +84,11 @@ class QuickContactsDemo : ListActivity() {
      * and the drop down views
      * @param c Cursor
      */
-        (context: Context, layout: Int, c: Cursor) : ResourceCursorAdapter(context, layout, c) {
+    private inner class ContactListItemAdapter(
+        context: Context,
+        layout: Int,
+        c: Cursor
+    ) : ResourceCursorAdapter(context, layout, c) {
 
         /**
          * Bind an existing view to the data pointed to by cursor. First we retrieve the Tag from

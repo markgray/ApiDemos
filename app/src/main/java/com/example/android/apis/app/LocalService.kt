@@ -15,13 +15,11 @@
  */
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Binder
@@ -29,7 +27,7 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import android.widget.Toast
-
+import androidx.annotation.RequiresApi
 import com.example.android.apis.R
 
 /**
@@ -43,7 +41,7 @@ import com.example.android.apis.R
  * interact with the user, rather than doing something more disruptive such as
  * calling `startActivity()`.
  */
-@TargetApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.O)
 class LocalService : Service() {
     /**
      * handle to the system level NOTIFICATION_SERVICE service
@@ -73,7 +71,7 @@ class LocalService : Service() {
      * the notification that we are running
      */
     override fun onCreate() {
-        mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        mNM = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         val chan1 = NotificationChannel(
             PRIMARY_CHANNEL,
             PRIMARY_CHANNEL,
@@ -214,7 +212,7 @@ class LocalService : Service() {
         /**
          * The id of the primary notification channel
          */
-        const val PRIMARY_CHANNEL = "default"
+        const val PRIMARY_CHANNEL: String = "default"
 
         /**
          * Unique Identification Number for the Notification.

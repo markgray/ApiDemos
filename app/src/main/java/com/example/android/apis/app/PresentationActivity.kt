@@ -17,7 +17,6 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.AlertDialog
 import android.app.Presentation
 import android.content.Context
@@ -46,10 +45,10 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.Spinner
 import android.widget.TextView
-
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-
+import androidx.core.util.size
 import com.example.android.apis.R
 import kotlin.math.max
 
@@ -77,7 +76,7 @@ import kotlin.math.max
  * on which to show content based on the currently selected route.
  */
 @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-@TargetApi(Build.VERSION_CODES.M)
+@RequiresApi(Build.VERSION_CODES.M)
 class PresentationActivity
     : AppCompatActivity(), OnCheckedChangeListener, OnClickListener, OnItemSelectedListener {
 
@@ -233,13 +232,21 @@ class PresentationActivity
 
         // Restore saved instance state.
         mSavedPresentationContents = if (savedInstanceState != null) {
-            savedInstanceState.getSparseParcelableArray(PRESENTATION_KEY)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                savedInstanceState.getSparseParcelableArray(
+                    PRESENTATION_KEY,
+                    DemoPresentationContents::class.java
+                )
+            } else {
+                @Suppress("DEPRECATION") // Needed for older than TIRAMISU
+                savedInstanceState.getSparseParcelableArray(PRESENTATION_KEY)
+            }
         } else {
             SparseArray()
         }
 
         // Get the display manager service.
-        mDisplayManager = getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
+        mDisplayManager = getSystemService(DISPLAY_SERVICE) as DisplayManager
 
         // See assets/res/any/layout/presentation_activity.xml for this
         // view layout definition, which is being set here as
@@ -319,7 +326,7 @@ class PresentationActivity
 
         // Dismiss all of our presentations but remember their contents.
         Log.d(TAG, "Activity is being paused.  Dismissing all active presentation.")
-        for (i in 0 until mActivePresentations.size()) {
+        for (i in 0 until mActivePresentations.size) {
             val presentation = mActivePresentations.valueAt(i)
             val displayId = mActivePresentations.keyAt(i)
             mSavedPresentationContents!!.put(displayId, presentation.mContents)
@@ -534,19 +541,13 @@ class PresentationActivity
     /**
      * Display list adapter.
      * Shows information about all displays.
-     */
-    private inner class DisplayListAdapter
-    /**
      * Initializes this instance of `DisplayListAdapter` by first calling through to our
      * super's constructor using the layout file R.layout.presentation_list_item for it to use when
-     * instantiating views, and then we save our parameter context in our field Context mContext.
+     * instantiating views.
      *
-     * Parameter: context PresentationActivity Context ("this" in onCreate())
+     * @property mContext PresentationActivity Context ("this" in onCreate())
      */
-        (
-        /**
-         * `Context` passed to our constructor.
-         */
+    private inner class DisplayListAdapter(
         val mContext: Context
     ) : ArrayAdapter<Display>(mContext, R.layout.presentation_list_item) {
 
@@ -720,23 +721,16 @@ class PresentationActivity
      * Note that the presentation display may have different metrics from the display on which
      * the main activity is showing so we must be careful to use the presentation's
      * own [Context] whenever we load resources.
-     */
-    private inner class DemoPresentation
-    /**
-     * Initializes this instance by saving the parameter `contents` in our field
-     * `DemoPresentationContents mContents` (after calling our super's constructor).
      *
      * @param context The context of the application that is showing the presentation. The
      * presentation will create its own context (see getContext()) based on this context
      * and information about the associated display.
      * @param display The display to which the presentation should be attached.
-     * Parameter: contents Information about the content we want to show in the presentation.
+     * @param mContents Information about the content we want to show in the presentation.
      */
-        (
-        context: Context, display: Display,
-        /**
-         * Information about the content we are showing in the presentation.
-         */
+    private inner class DemoPresentation(
+        context: Context,
+        display: Display,
         val mContents: DemoPresentationContents
     ) : Presentation(context, display) {
 

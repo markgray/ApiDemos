@@ -15,7 +15,7 @@
  */
 package com.example.android.apis.app
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.print.PrintManager
@@ -38,6 +38,7 @@ import com.example.android.apis.R
  * @see PrintManager
  * @see WebView
  */
+@SuppressLint("ObsoleteSdkInt")
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class PrintHtmlFromScreen : AppCompatActivity() {
     /**
@@ -131,7 +132,7 @@ class PrintHtmlFromScreen : AppCompatActivity() {
      * and the print job name "MotoGP stats".
      */
     private fun print() { // Get the print manager.
-        val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
+        val printManager = getSystemService(PRINT_SERVICE) as PrintManager
         // Pass in the ViewView's document adapter.
         printManager.print(
             "MotoGP stats",

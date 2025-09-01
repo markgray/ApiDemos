@@ -16,9 +16,6 @@
 
 package com.example.android.apis.app
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-
 import android.content.Intent
 import android.os.Bundle
 import android.view.View.OnClickListener
@@ -39,7 +36,9 @@ class NotifyingController : AppCompatActivity() {
      * Parameter: View of the [Button] that was clicked
      */
     private val mStartListener = OnClickListener {
-        startService(Intent(this@NotifyingController, NotifyingService::class.java))
+        startService(
+            Intent(this@NotifyingController, NotifyingService::class.java)
+        )
     }
 
     /**
@@ -49,7 +48,9 @@ class NotifyingController : AppCompatActivity() {
      * Parameter: View of the Button that was clicked
      */
     private val mStopListener = OnClickListener {
-        stopService(Intent(this@NotifyingController, NotifyingService::class.java))
+        stopService(
+            Intent(this@NotifyingController, NotifyingService::class.java)
+        )
     }
 
     /**

@@ -16,13 +16,11 @@
 
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Binder
@@ -31,9 +29,7 @@ import android.os.ConditionVariable
 import android.os.IBinder
 import android.os.Parcel
 import android.os.RemoteException
-
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
+import androidx.annotation.RequiresApi
 import com.example.android.apis.R
 
 /**
@@ -41,7 +37,7 @@ import com.example.android.apis.R
  * a [ConditionVariable] to implement the condition variable locking paradigm, blocking
  * for 5*1000 milliseconds after every notification (very useful approach).
  */
-@TargetApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.O)
 class NotifyingService : Service() {
 
     /**
@@ -67,6 +63,7 @@ class NotifyingService : Service() {
      * [stopSelf].
      */
     private val mTask = Runnable {
+        @Suppress("unused")
         for (i in 0..3) {
             showNotification(
                 R.drawable.stat_happy,
@@ -116,7 +113,7 @@ class NotifyingService : Service() {
      * Finally we start `notifyingThread` running.
      */
     override fun onCreate() {
-        mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        mNM = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         val chan1 = NotificationChannel(
             PRIMARY_CHANNEL, PRIMARY_CHANNEL,
             NotificationManager.IMPORTANCE_DEFAULT
@@ -218,6 +215,6 @@ class NotifyingService : Service() {
         /**
          * The id of the primary notification channel
          */
-        const val PRIMARY_CHANNEL = "default"
+        const val PRIMARY_CHANNEL: String = "default"
     }
 }

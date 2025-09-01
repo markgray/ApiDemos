@@ -38,7 +38,11 @@ class LocalSample : AppCompatActivity() {
     }
 
     private val mGoListener = View.OnClickListener {
-        startInstrumentation(ComponentName(this@LocalSample,
-                LocalSampleInstrumentation::class.java), null, null)
+        startInstrumentation(
+            ComponentName(
+                this@LocalSample,
+                LocalSampleInstrumentation::class.java
+            ), null, null
+        )
     }
 }

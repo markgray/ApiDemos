@@ -16,20 +16,15 @@
 
 package com.example.android.apis.app
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-import com.example.android.apis.R
-
 import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.RelativeLayout
-
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * Activity used by [StatusBarNotifications] to show the notification to the user.
@@ -53,8 +48,10 @@ class NotificationDisplay : AppCompatActivity(), View.OnClickListener {
         super.onCreate(icicle)
 
         // Have the system dim any windows behind this one.
-        window.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,
-                WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_DIM_BEHIND,
+            WindowManager.LayoutParams.FLAG_DIM_BEHIND
+        )
 
         val container = RelativeLayout(this)
 
@@ -63,8 +60,9 @@ class NotificationDisplay : AppCompatActivity(), View.OnClickListener {
         button.setOnClickListener(this)
 
         val lp = RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT)
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        )
         lp.addRule(RelativeLayout.CENTER_IN_PARENT)
 
         container.addView(button, lp)
@@ -86,8 +84,8 @@ class NotificationDisplay : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         // The user has confirmed this notification, so remove it.
 
-        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
-                .cancel(R.layout.status_bar_notifications)
+        (getSystemService(NOTIFICATION_SERVICE) as NotificationManager)
+            .cancel(R.layout.status_bar_notifications)
 
         // Pressing on the button brings the user back to our mood ring,
         // as part of the api demos app.  Note the use of NEW_TASK here,

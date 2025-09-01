@@ -24,6 +24,7 @@ import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.UriMatcher
+import android.content.res.Resources
 import android.database.Cursor
 import android.database.DatabaseUtils
 import android.database.SQLException
@@ -35,6 +36,7 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.BaseColumns
 import android.text.TextUtils
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
@@ -47,7 +49,7 @@ import androidx.fragment.app.ListFragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
-import com.example.android.apis.app.LoaderThrottle.SimpleProvider
+import androidx.core.net.toUri
 
 /**
  * Demonstration of bottom to top implementation of a content provider holding
@@ -102,48 +104,52 @@ class LoaderThrottle : AppCompatActivity() {
              * The content:// style URL for this table:
              * "content://com.example.android.apis.app.LoaderThrottle/main"
              */
-            val CONTENT_URI: Uri = Uri.parse("content://$AUTHORITY/main")
+            val CONTENT_URI: Uri = "content://$AUTHORITY/main".toUri()
 
             /**
              * The content URI base for a single row of data. Callers must
              * append a numeric row id to this Uri to retrieve a row:
              * "content://com.example.android.apis.app.LoaderThrottle/main/"
              */
-            val CONTENT_ID_URI_BASE: Uri = Uri.parse("content://$AUTHORITY/main/")
+            val CONTENT_ID_URI_BASE: Uri = "content://$AUTHORITY/main/".toUri()
 
             /**
              * The MIME type of [CONTENT_URI].
              */
-            const val CONTENT_TYPE = "vnd.android.cursor.dir/vnd.example.api-demos-throttle"
+            const val CONTENT_TYPE: String = "vnd.android.cursor.dir/vnd.example.api-demos-throttle"
 
             /**
              * The MIME type of a [CONTENT_URI] sub-directory of a single row.
              */
-            const val CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.example.api-demos-throttle"
+            const val CONTENT_ITEM_TYPE: String =
+                "vnd.android.cursor.item/vnd.example.api-demos-throttle"
+
             /**
              * The default sort order for this table
              */
-            const val DEFAULT_SORT_ORDER = "data COLLATE LOCALIZED ASC"
+            const val DEFAULT_SORT_ORDER: String = "data COLLATE LOCALIZED ASC"
 
             /**
              * Column name for the single column holding our data. Type: TEXT
              */
-            const val COLUMN_NAME_DATA = "data"
+            const val COLUMN_NAME_DATA: String = "data"
         }
     }
 
     /**
      * This class helps open, create, and upgrade the database file.
-     */
-    internal class DatabaseHelper
-    /**
      * Constructor which simply calls the super's constructor to create an [SQLiteOpenHelper]
      * using our DATABASE_NAME, DATABASE_VERSION, and requesting the default cursor factory.
      *
      * @param context [Context] the [SimpleProvider] subclass of [ContentProvider] is running in
      */
-    (context: Context)// calls the super constructor, requesting the default cursor factory.
-        : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+    internal class DatabaseHelper(context: Context) :
+        SQLiteOpenHelper(
+            context,
+            DATABASE_NAME,
+            null,
+            DATABASE_VERSION
+        ) {
 
         /**
          * Called when the database is created for the first time. This is where the
@@ -160,10 +166,12 @@ class LoaderThrottle : AppCompatActivity() {
          * @param db The database.
          */
         override fun onCreate(db: SQLiteDatabase) {
-            db.execSQL("CREATE TABLE " + MainTable.TABLE_NAME + " ("
+            db.execSQL(
+                "CREATE TABLE " + MainTable.TABLE_NAME + " ("
                     + BaseColumns._ID + " INTEGER PRIMARY KEY,"
                     + MainTable.COLUMN_NAME_DATA + " TEXT"
-                    + ");")
+                    + ");"
+            )
         }
 
         /**
@@ -198,8 +206,10 @@ class LoaderThrottle : AppCompatActivity() {
         override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
 
             // Logs that the database is being upgraded
-            Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-                    + newVersion + ", which will destroy all old data")
+            Log.w(
+                TAG, "Upgrading database from version " + oldVersion + " to "
+                    + newVersion + ", which will destroy all old data"
+            )
 
             // Kills the table and existing data
             db.execSQL("DROP TABLE IF EXISTS notes")
@@ -353,8 +363,10 @@ class LoaderThrottle : AppCompatActivity() {
          * is free to define the sort order.
          * @return a [Cursor] or *null*.
          */
-        override fun query(uri: Uri, projection: Array<String>?, selection: String?,
-                           selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
+        override fun query(
+            uri: Uri, projection: Array<String>?, selection: String?,
+            selectionArgs: Array<String>?, sortOrder: String?
+        ): Cursor? {
             var selectionArgsLocal = selectionArgs
             var sortOrderLocal = sortOrder
 
@@ -371,8 +383,10 @@ class LoaderThrottle : AppCompatActivity() {
                     // The incoming URI is for a single row.
                     qb.projectionMap = mNotesProjectionMap
                     qb.appendWhere(BaseColumns._ID + "=?")
-                    selectionArgsLocal = DatabaseUtils.appendSelectionArgs(selectionArgsLocal,
-                            arrayOf(uri.lastPathSegment!!))
+                    selectionArgsLocal = DatabaseUtils.appendSelectionArgs(
+                        selectionArgsLocal,
+                        arrayOf(uri.lastPathSegment!!)
+                    )
                 }
 
                 else -> throw IllegalArgumentException("Unknown URI $uri")
@@ -385,7 +399,15 @@ class LoaderThrottle : AppCompatActivity() {
 
             val db = mOpenHelper!!.readableDatabase
 
-            val c = qb.query(db, projection, selection, selectionArgsLocal, null, null, sortOrderLocal)/* no group *//* no filter */
+            val c = qb.query(
+                db,
+                projection,
+                selection,
+                selectionArgsLocal,
+                null,
+                null,
+                sortOrderLocal
+            )/* no group *//* no filter */
 
 
             c.setNotificationUri(context!!.contentResolver, uri)
@@ -544,7 +566,8 @@ class LoaderThrottle : AppCompatActivity() {
                     // If URI is for a particular row ID, delete is based on incoming
                     // data but modified to restrict to the given ID.
                     finalWhere = DatabaseUtils.concatenateWhere(
-                            BaseColumns._ID + " = " + ContentUris.parseId(uri), where)
+                        BaseColumns._ID + " = " + ContentUris.parseId(uri), where
+                    )
                     count = db.delete(MainTable.TABLE_NAME, finalWhere, whereArgs)
                 }
 
@@ -593,7 +616,12 @@ class LoaderThrottle : AppCompatActivity() {
          * bound as Strings.
          * @return the number of rows affected.
          */
-        override fun update(uri: Uri, values: ContentValues?, where: String?, whereArgs: Array<String>?): Int {
+        override fun update(
+            uri: Uri,
+            values: ContentValues?,
+            where: String?,
+            whereArgs: Array<String>?
+        ): Int {
             val db = mOpenHelper!!.writableDatabase
             val count: Int
             val finalWhere: String
@@ -607,7 +635,8 @@ class LoaderThrottle : AppCompatActivity() {
                     // If URI is for a particular row ID, update is based on incoming
                     // data but modified to restrict to the given ID.
                     finalWhere = DatabaseUtils.concatenateWhere(
-                            BaseColumns._ID + " = " + ContentUris.parseId(uri), where)
+                        BaseColumns._ID + " = " + ContentUris.parseId(uri), where
+                    )
                     count = db.update(MainTable.TABLE_NAME, values, finalWhere, whereArgs)
                 }
 
@@ -645,7 +674,7 @@ class LoaderThrottle : AppCompatActivity() {
         /**
          * This is the Adapter being used to display the list's data.
          */
-        internal lateinit var mAdapter: SimpleCursorAdapter
+        internal lateinit var simpleCursorAdapter: SimpleCursorAdapter
 
         /**
          * If non-null, this is the current filter the user has provided. (unused legacy of code pasting
@@ -666,14 +695,14 @@ class LoaderThrottle : AppCompatActivity() {
          * populating the options menu by receiving a call to [onCreateOptionsMenu] and related
          * methods.
          *
-         * Next we initialize our [SimpleCursorAdapter] field [mAdapter] with a new instance of
+         * Next we initialize our [SimpleCursorAdapter] field [simpleCursorAdapter] with a new instance of
          * [SimpleCursorAdapter] (an empty adapter we will use to display the loaded data).
          * We use the Activity this fragment is currently associated with as the [Context],
          * the system layout file android.R.layout.simple_list_item_1 for the item layout, *null*
          * for the [Cursor] (since we will create an assign the cursor later), the single column
          * MainTable.COLUMN_NAME_DATA for the list of column names representing the data to bind to
          * the UI, and the single resource ID android.R.id.text1 for the view that the data in the
-         * column should be displayed in. Having created [mAdapter] we use it to provide the
+         * column should be displayed in. Having created [simpleCursorAdapter] we use it to provide the
          * cursor for our `ListView`.
          *
          * Next call `setListShown(false)` in order to start out with a progress indicator.
@@ -686,17 +715,25 @@ class LoaderThrottle : AppCompatActivity() {
         @Deprecated("Deprecated in Java")
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
+            getListView().setPadding(
+                dpToPixel(8, getListView().context),
+                dpToPixel(120, getListView().context),
+                dpToPixel(8, getListView().context),
+                dpToPixel(60, getListView().context)
+            )
 
             setEmptyText("No data.  Select 'Populate' to fill with data from Z to A at a rate of 4 per second.")
             setHasOptionsMenu(true)
 
             // Create an empty adapter we will use to display the loaded data.
 
-            mAdapter = SimpleCursorAdapter(requireActivity(),
-                    android.R.layout.simple_list_item_1, null,
-                    arrayOf(MainTable.COLUMN_NAME_DATA),
-                    intArrayOf(android.R.id.text1), 0)
-            listAdapter = mAdapter
+            simpleCursorAdapter = SimpleCursorAdapter(
+                requireActivity(),
+                android.R.layout.simple_list_item_1, null,
+                arrayOf(MainTable.COLUMN_NAME_DATA),
+                intArrayOf(android.R.id.text1), 0
+            )
+            listAdapter = simpleCursorAdapter
 
             // Start out with a progress indicator.
             setListShown(false)
@@ -704,6 +741,24 @@ class LoaderThrottle : AppCompatActivity() {
             // Prepare the loader.  Either re-connect with an existing one,
             // or start a new one.
             LoaderManager.getInstance(this).initLoader(0, null, this)
+        }
+
+        /**
+         * This method converts dp unit to equivalent pixels, depending on device density. First we
+         * fetch a [Resources] instance for `val resources`, then we fetch the current display
+         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+         * dots-per-inch, divided by the reference density used throughout the system.
+         *
+         * @param dp      A value in dp (density independent pixels) unit which we need to convert
+         *                into pixels
+         * @param context [Context] to get resources and device specific display metrics
+         * @return An [Int] value to represent px equivalent to dp depending on device density
+         */
+        private fun dpToPixel(dp: Int, context: Context): Int {
+            val resources: Resources = context.resources
+            val metrics = resources.displayMetrics
+            return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
         }
 
         /**
@@ -723,9 +778,9 @@ class LoaderThrottle : AppCompatActivity() {
         @Deprecated("Deprecated in Java")
         override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
             menu.add(Menu.NONE, POPULATE_ID, 0, "Populate")
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             menu.add(Menu.NONE, CLEAR_ID, 0, "Clear")
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         }
 
         /**
@@ -805,7 +860,7 @@ class LoaderThrottle : AppCompatActivity() {
                                 // Wait a bit between each insert.
                                 try {
                                     Thread.sleep(250)
-                                } catch (e: InterruptedException) {
+                                } catch (_: InterruptedException) {
                                     Log.i(TAG, "Sleep interrupted")
                                 }
 
@@ -815,7 +870,8 @@ class LoaderThrottle : AppCompatActivity() {
                         }
                     }
                     mPopulatingTask!!.executeOnExecutor(
-                            AsyncTask.THREAD_POOL_EXECUTOR, null, null)
+                        AsyncTask.THREAD_POOL_EXECUTOR, null, null
+                    )
                     return true
                 }
 
@@ -878,12 +934,12 @@ class LoaderThrottle : AppCompatActivity() {
         override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
 
             val cl = CursorLoader(
-                    requireActivity(),
-                    MainTable.CONTENT_URI,
-                    PROJECTION,
-                    null,
-                    null,
-                    null
+                requireActivity(),
+                MainTable.CONTENT_URI,
+                PROJECTION,
+                null,
+                null,
+                null
             )
             cl.setUpdateThrottle(2000) // update at most every 2 seconds.
             return cl
@@ -899,7 +955,7 @@ class LoaderThrottle : AppCompatActivity() {
          * @param data   The data generated by the Loader.
          */
         override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor) {
-            mAdapter.swapCursor(data)
+            simpleCursorAdapter.swapCursor(data)
 
             // The list should now be shown.
             if (isResumed) {
@@ -913,12 +969,12 @@ class LoaderThrottle : AppCompatActivity() {
          * Called when a previously created loader is being reset, and thus
          * making its data unavailable. The application should at this point
          * remove any references it has to the Loader's data. We just swap in
-         * a null [Cursor] for our [SimpleCursorAdapter] field [mAdapter] to use.
+         * a null [Cursor] for our [SimpleCursorAdapter] field [simpleCursorAdapter] to use.
          *
          * @param loader The Loader that is being reset.
          */
         override fun onLoaderReset(loader: Loader<Cursor>) {
-            mAdapter.swapCursor(null)
+            simpleCursorAdapter.swapCursor(null)
         }
 
         /**
@@ -931,6 +987,7 @@ class LoaderThrottle : AppCompatActivity() {
              * Convenience constant for locating the "Populate" menu item
              */
             internal const val POPULATE_ID = Menu.FIRST
+
             /**
              * Convenience constant for locating the "Clear" menu item
              */

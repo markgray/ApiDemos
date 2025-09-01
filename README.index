@@ -523,7 +523,7 @@ App
         .layout.reorder_two.xml
         .app.ReorderThree
         .layout.reorder_three.xml
-        .app.ReoderFour
+        .app.ReorderFour
         .layout.reorder_four.xml
             ReorderOnLaunch is the first of a sequence of four Activities: ReorderTwo,
             ReorderThree, and ReoderFour follow.  A button on the fourth will use the 

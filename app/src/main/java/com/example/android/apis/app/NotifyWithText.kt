@@ -63,8 +63,10 @@ class NotifyWithText : AppCompatActivity() {
             // resource id (R.string.short_notification_text). There is also
             // a version that takes a CharSequence if you must construct
             // the text yourself.
-            Toast.makeText(this@NotifyWithText, R.string.short_notification_text,
-                    Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this@NotifyWithText, R.string.short_notification_text,
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
 
@@ -79,8 +81,10 @@ class NotifyWithText : AppCompatActivity() {
          * Parameter: View of the Button that was clicked
          */
         button.setOnClickListener {
-            Toast.makeText(this@NotifyWithText, R.string.long_notification_text,
-                    Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this@NotifyWithText, R.string.long_notification_text,
+                Toast.LENGTH_LONG
+            ).show()
         }
 
     }

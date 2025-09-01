@@ -18,7 +18,6 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.ListActivity
 import android.content.Context
 import android.content.res.Configuration
@@ -44,12 +43,11 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
-
+import androidx.annotation.RequiresApi
 import com.example.android.apis.R
-
 import java.io.FileOutputStream
 import java.io.IOException
-import java.util.ArrayList
+import androidx.core.util.size
 
 /**
  * This class demonstrates how to implement custom printing support.
@@ -75,7 +73,8 @@ import java.util.ArrayList
  * @see PrintManager
  * @see PrintDocumentAdapter
  */
-@TargetApi(Build.VERSION_CODES.KITKAT)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.KITKAT)
 class PrintCustomContent : ListActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -132,7 +131,7 @@ class PrintCustomContent : ListActivity() {
      * `PrintAttributes`.
      */
     private fun print() {
-        val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
+        val printManager = getSystemService(PRINT_SERVICE) as PrintManager
         printManager.print("MotoGp stats", PrintMotoGpAdapter(), null)
     }
 
@@ -179,25 +178,13 @@ class PrintCustomContent : ListActivity() {
      * `ListAdapter` used to hold the List of `MotoGpStatItem`'s for display in our
      * `ListView` and for `PrintMotoGpAdapter` to use to supply information when it
      * is acting as a `PrintDocumentAdapter`
-     */
-    private inner class MotoGpStatAdapter
-    /**
-     * Constructor that initializes our fields `List<MotoGpStatItem> mItems`, and
-     * `LayoutInflater mInflater` to our parameters `items` and `inflater`
-     * respectively.
      *
-     * Parameter: items    `List` of `MotoGpStatItem` data items for MotoGp winners
-     * Parameter: inflater `LayoutInflater` to use in `getView` override
+     * @property mItems `List` of `MotoGpStatItem` data items for MotoGp winners
+     * @property mInflater `LayoutInflater` to use in `getView` override to inflate our xml layout file
+     * R.layout.motogp_stat_item
      */
-        (
-        /**
-         * `List` of data Objects for MotoGp winners initialized in constructor
-         */
+    private inner class MotoGpStatAdapter(
         private val mItems: List<MotoGpStatItem>,
-        /**
-         * `LayoutInflater` to use in `getView` override to inflate our xml layout file
-         * R.layout.motogp_stat_item
-         */
         private val mInflater: LayoutInflater
     ) : BaseAdapter() {
 
@@ -647,7 +634,7 @@ class PrintCustomContent : ListActivity() {
             /**
              * Size of the [writtenPages] array, number of pages stored in it.
              */
-            val writtenPageCount = writtenPages.size()
+            val writtenPageCount = writtenPages.size
             var i = 0
             while (i < writtenPageCount) {
                 start = writtenPages.valueAt(i)
@@ -695,43 +682,28 @@ class PrintCustomContent : ListActivity() {
         /**
          * Background task to perform all the layouts required by the `onLayout` callback in
          * order to calculate a [PrintDocumentInfo] for the [PrintDocumentAdapter].
-         */
-        @SuppressLint("StaticFieldLeak")
-        private inner class MotoGpOnLayoutAsyncTask
-        /**
-         * Constructor which initializes our fields with its parameters of the same name.
          *
          * @param cancellationSignal Signal for observing cancel layout requests passed to `onLayout`
+         * which allows us to be canceled by setting a `OnCancelListener` on it.
          * @param newAttributes The new print attributes passed to `onLayout`
-         * @param items A clone of the List of `MotoGpStatItem`'s displayed by our UI
+         * This is a copy of the [PrintAttributes] passed to `onLayout` which represents the
+         * attributes of the print job. These attributes describe how the printed content should be
+         * laid out.
+         * @param items List of [MotoGpStatItem]'s which we display in our ListView and want to print.
          * @param callback Callback to inform the system for the layout result passed to `onLayout`
+         * Provides access to the three callbacks we need to return our result when we are done:
+         *  * `onLayoutFinished` - layout was successful, returns a `PrintDocumentInfo` which
+         *  contains the information our layout determined.
+         *  * `onLayoutCancelled` - Notifies that layout was cancelled as a result of a
+         *  cancellation request.
+         *  * `onLayoutFailed` - Notifies that an error occurred while laying out the
+         *  document, the argument is a `CharSequence` describing the error.
          */
-        constructor(
-            /**
-             * This is a copy of the [CancellationSignal] passed to `onLayout` which allows
-             * us to be canceled by setting a `OnCancelListener` on it.
-             */
+        @SuppressLint("StaticFieldLeak")
+        private inner class MotoGpOnLayoutAsyncTask(
             private val cancellationSignal: CancellationSignal,
-            /**
-             * This is a copy of the [PrintAttributes] passed to `onLayout` which
-             * represents the attributes of the print job. These attributes describe
-             * how the printed content should be laid out.
-             */
             private val newAttributes: PrintAttributes,
-            /**
-             * List of [MotoGpStatItem]'s which we display in our ListView and want to print.
-             */
             private val items: List<MotoGpStatItem>,
-            /**
-             * Provides access to the three callbacks we need to return our result when
-             * we are done:
-             *  * `onLayoutFinished` - layout was successful, returns a `PrintDocumentInfo`
-             *  which contains the information our layout determined.
-             *  * `onLayoutCancelled` - Notifies that layout was cancelled as a result of a
-             *  cancellation request.
-             *  * `onLayoutFailed` - Notifies that an error occurred while laying out the
-             *  document, the argument is a `CharSequence` describing the error.
-             */
             private val callback: LayoutResultCallback
 
         ) : AsyncTask<Void?, Void?, PrintDocumentInfo?>() {
@@ -780,7 +752,7 @@ class PrintCustomContent : ListActivity() {
                      * to load resources for the printer density.
                      */
                     val inflater = mPrintContext!!
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                        .getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
                     val adapter = MotoGpStatAdapter(items, inflater)
 
                     /**
@@ -904,30 +876,22 @@ class PrintCustomContent : ListActivity() {
          * Background task launched from `PrintDocumentAdapter.onWrite` callback which is
          * called when specific pages of the content should be written in the form of a PDF file to
          * the given [ParcelFileDescriptor] file descriptor [destination].
+         *
+         * @property cancellationSignal Signal for observing cancel writing requests. It is used to
+         * propagate requests from the system to your application for canceling the current write
+         * operation.
+         * @property items List of MotoGp winners data Objects for our [MotoGpStatAdapter] to hold
+         * for this [MotoGpOnWriteAsyncTask] to format and write.
+         * @property pages The pages that we should print.
+         * @property destination The destination file descriptor to write to.
+         * @property callback Callback to inform the system of the write result.
          */
         @SuppressLint("StaticFieldLeak")
-        private inner class MotoGpOnWriteAsyncTask constructor(
-            /**
-             * Signal for observing cancel writing requests. It is used to propagate requests
-             * from the system to your application for canceling the current write operation.
-             */
+        private inner class MotoGpOnWriteAsyncTask(
             private val cancellationSignal: CancellationSignal,
-            /**
-             * List of MotoGp winners data Objects for our [MotoGpStatAdapter] to hold for this
-             * [MotoGpOnWriteAsyncTask] to format and write.
-             */
             private val items: List<MotoGpStatItem>,
-            /**
-             * The pages that we should print.
-             */
             private val pages: Array<PageRange>,
-            /**
-             * The destination file descriptor to write to.
-             */
             private val destination: ParcelFileDescriptor,
-            /**
-             * Callback to inform the system of the write result.
-             */
             private val callback: WriteResultCallback
         ) : AsyncTask<Void?, Void?, Void?>() {
             /**
@@ -1028,7 +992,8 @@ class PrintCustomContent : ListActivity() {
                  */
                 val adapter = MotoGpStatAdapter(
                     items,
-                    mPrintContext!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                    mPrintContext!!
+                        .getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
                 )
 
                 /**
@@ -1121,7 +1086,7 @@ class PrintCustomContent : ListActivity() {
                             /**
                              * Keep track which pages are written.
                              */
-                            mWrittenPages.append(mWrittenPages.size(), currentPage)
+                            mWrittenPages.append(mWrittenPages.size, currentPage)
                         } else {
                             page = null
                         }
@@ -1158,7 +1123,7 @@ class PrintCustomContent : ListActivity() {
                      */
                     val pageRanges = computeWrittenPageRanges(mWrittenPages)
                     callback.onWriteFinished(pageRanges)
-                } catch (ioe: IOException) {
+                } catch (_: IOException) {
                     callback.onWriteFailed(null)
                 } finally {
                     mPdfDocument.close()
