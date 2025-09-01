@@ -16,15 +16,12 @@
 
 package com.example.android.apis.app
 
-import com.example.android.apis.R
-
 import android.app.NotificationManager
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.R
 
 /**
  * This activity is run as the click activity for [IncomingMessage], and also
@@ -50,11 +47,13 @@ class IncomingMessageView : AppCompatActivity() {
         setContentView(R.layout.incoming_message_view)
 
         // Fill in the message content.
-        (findViewById<View>(R.id.from) as TextView).text = intent.getCharSequenceExtra(KEY_FROM)
-        (findViewById<View>(R.id.message) as TextView).text = intent.getCharSequenceExtra(KEY_MESSAGE)
+        (findViewById<View>(R.id.from) as TextView).text =
+            intent.getCharSequenceExtra(KEY_FROM)
+        (findViewById<View>(R.id.message) as TextView).text =
+            intent.getCharSequenceExtra(KEY_MESSAGE)
 
         // look up the notification manager service
-        val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val nm = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         // cancel the notification that we started in IncomingMessage
 
@@ -68,11 +67,12 @@ class IncomingMessageView : AppCompatActivity() {
         /**
          * Extra that can be supplied to Intent: who the message is from.
          */
-        const val KEY_FROM = "from"
+        const val KEY_FROM: String = "from"
+
         /**
          * Extra that can be supplied to Intent: the message that was sent.
          */
-        const val KEY_MESSAGE = "message"
+        const val KEY_MESSAGE: String = "message"
     }
 }
 

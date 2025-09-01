@@ -1,6 +1,6 @@
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.app.PendingIntent.CanceledException
 import android.content.ComponentName
@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View.OnClickListener
 import android.widget.Button
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -24,7 +25,8 @@ import com.example.android.apis.R
  * FLAG_ACTIVITY_CLEAR_TASK button is pressed, or putting them into a PendingIntent which it
  * "later" calls using PendingIntent.send()
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class IntentActivityFlags : AppCompatActivity() {
 
     /**
@@ -119,16 +121,26 @@ class IntentActivityFlags : AppCompatActivity() {
         // First: root activity of ApiDemos.
         // This is a convenient way to make the proper Intent to launch and
         // reset an application's task.
-        intents[0] = Intent.makeRestartActivityTask(ComponentName(this,
-                com.example.android.apis.ApiDemos::class.java))
+        intents[0] = Intent.makeRestartActivityTask(
+            ComponentName(
+                this,
+                com.example.android.apis.ApiDemos::class.java
+            )
+        )
 
         var intent = Intent(Intent.ACTION_MAIN)
-        intent.setClass(this@IntentActivityFlags, com.example.android.apis.ApiDemos::class.java)
+        intent.setClass(
+            this@IntentActivityFlags,
+            com.example.android.apis.ApiDemos::class.java
+        )
         intent.putExtra("com.example.android.apis.Path", "Views")
         intents[1] = intent
 
         intent = Intent(Intent.ACTION_MAIN)
-        intent.setClass(this@IntentActivityFlags, com.example.android.apis.ApiDemos::class.java)
+        intent.setClass(
+            this@IntentActivityFlags,
+            com.example.android.apis.ApiDemos::class.java
+        )
         intent.putExtra("com.example.android.apis.Path", "Views/Lists")
 
         intents[2] = intent

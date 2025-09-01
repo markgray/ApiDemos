@@ -20,17 +20,14 @@ import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.app.job.JobWorkItem
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Process
 import android.view.View
 import android.widget.Button
-
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-
 import com.example.android.apis.R
 
 /**
@@ -43,6 +40,7 @@ class JobWorkServiceActivity : AppCompatActivity() {
      * Handle to the JOB_SCHEDULER_SERVICE system level service
      */
     internal lateinit var mJobScheduler: JobScheduler
+
     /**
      * Container of data passed to the [android.app.job.JobScheduler] fully encapsulating the
      * parameters required to schedule work against the calling application. Uses the resource id
@@ -61,8 +59,12 @@ class JobWorkServiceActivity : AppCompatActivity() {
      * Parameter: View that was clicked.
      */
     private val mEnqueue1Listener = View.OnClickListener {
-        mJobScheduler.enqueue(mJobInfo, JobWorkItem(
-                Intent("com.example.android.apis.ONE").putExtra("name", "One")))
+        mJobScheduler.enqueue(
+            /* job = */ mJobInfo,
+            /* work = */ JobWorkItem(
+                Intent("com.example.android.apis.ONE").putExtra("name", "One")
+            )
+        )
     }
 
     /**
@@ -75,8 +77,13 @@ class JobWorkServiceActivity : AppCompatActivity() {
      * Parameter: View that was clicked.
      */
     private val mEnqueue2Listener = View.OnClickListener {
-        mJobScheduler.enqueue(mJobInfo, JobWorkItem(
-                Intent("com.example.android.apis.TWO").putExtra("name", "Two")))
+        mJobScheduler.enqueue(
+            /* job = */ mJobInfo,
+            /* work = */ JobWorkItem(
+                Intent("com.example.android.apis.TWO")
+                    .putExtra("name", "Two")
+            )
+        )
     }
 
     /**
@@ -89,8 +96,13 @@ class JobWorkServiceActivity : AppCompatActivity() {
      * Parameter: View that was clicked.
      */
     private val mEnqueue3Listener = View.OnClickListener {
-        mJobScheduler.enqueue(mJobInfo, JobWorkItem(
-                Intent("com.example.android.apis.THREE").putExtra("name", "Three")))
+        mJobScheduler.enqueue(
+            /* job = */ mJobInfo,
+            /* work = */ JobWorkItem(
+                Intent("com.example.android.apis.THREE")
+                    .putExtra("name", "Three")
+            )
+        )
     }
 
     /**
@@ -132,9 +144,11 @@ class JobWorkServiceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.job_work_service_activity)
 
-        mJobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-        mJobInfo = JobInfo.Builder(R.string.job_service_created,
-                ComponentName(this, JobWorkService::class.java)).setOverrideDeadline(0).build()
+        mJobScheduler = getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
+        mJobInfo = JobInfo.Builder(
+            R.string.job_service_created,
+            ComponentName(this, JobWorkService::class.java)
+        ).setOverrideDeadline(0).build()
 
         // Watch for button clicks.
         var button: Button = findViewById(R.id.enqueue1)

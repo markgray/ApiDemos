@@ -16,10 +16,10 @@
 
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
 import android.os.Build
 import android.os.Bundle
 import android.widget.Button
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -28,7 +28,7 @@ import com.example.android.apis.R
  * that is posted by [IncomingMessage]. It allows the user to switch
  * to the app in its appropriate state if they want.
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@RequiresApi(Build.VERSION_CODES.O)
 class IncomingMessageInterstitial : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of

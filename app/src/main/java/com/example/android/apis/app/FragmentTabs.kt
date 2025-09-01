@@ -15,14 +15,16 @@
  */
 @file:Suppress("DEPRECATION")
 // TODO: Replace Tab use with modern navigation UI
+// TODO: Figure out how to add padding for edgeToEdge!!
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBar.Tab
 import androidx.appcompat.app.AppCompatActivity
@@ -36,7 +38,8 @@ import androidx.fragment.app.FragmentTransaction
  *
  * `TabListener<T extends Fragment> implements ActionBar.TabListener`
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 class FragmentTabs : AppCompatActivity() {
 
     /**
@@ -70,33 +73,53 @@ class FragmentTabs : AppCompatActivity() {
         bar!!.navigationMode = ActionBar.NAVIGATION_MODE_TABS
         bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE)
 
-        bar.addTab(bar.newTab()
+        bar.addTab(
+            bar.newTab()
                 .setText("Simple")
-                .setTabListener(TabListener(
+                .setTabListener(
+                    TabListener(
                         this,
                         "simple1",
-                        FragmentStack.CountingFragment::class.java)))
+                        FragmentStack.CountingFragment::class.java
+                    )
+                )
+        )
 
-        bar.addTab(bar.newTab()
+        bar.addTab(
+            bar.newTab()
                 .setText("Contacts")
-                .setTabListener(TabListener(
+                .setTabListener(
+                    TabListener(
                         this,
                         "contacts",
-                        LoaderCursor.CursorLoaderListFragment::class.java)))
+                        LoaderCursor.CursorLoaderListFragment::class.java
+                    )
+                )
+        )
 
-        bar.addTab(bar.newTab()
+        bar.addTab(
+            bar.newTab()
                 .setText("Apps")
-                .setTabListener(TabListener(
+                .setTabListener(
+                    TabListener(
                         this,
                         "apps",
-                        LoaderCustom.AppListFragment::class.java)))
+                        LoaderCustom.AppListFragment::class.java
+                    )
+                )
+        )
 
-        bar.addTab(bar.newTab()
+        bar.addTab(
+            bar.newTab()
                 .setText("Throttle")
-                .setTabListener(TabListener(
+                .setTabListener(
+                    TabListener(
                         this,
                         "throttle",
-                        LoaderThrottle.ThrottledLoaderListFragment::class.java)))
+                        LoaderThrottle.ThrottledLoaderListFragment::class.java
+                    )
+                )
+        )
 
         if (savedInstanceState != null) {
             bar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0))
@@ -127,10 +150,6 @@ class FragmentTabs : AppCompatActivity() {
      * instantiate or reattach the [Fragment] class it was constructed for, when its
      * `onTabUnselected` override is called it will detach its `Fragment`.
      *
-     * @param T Class type we create when our tab is selected.
-     */
-    class TabListener<T : Fragment>
-    /**
      * Constructor for a [Fragment] which requires an argument [Bundle]. We first use our parameters
      * to initialize our [Activity] field [mActivity], [String] field [mTag], `Class<T>` field
      * [mClass], and [Bundle] field [mArgs] respectively. Then we use the support `FragmentManager`
@@ -142,15 +161,18 @@ class FragmentTabs : AppCompatActivity() {
      * to begin a new [FragmentTransaction] to initialize our variable `val ft`, use `ft` to detach
      * [mFragment], and commit the transaction.
      *
-     * @param mActivity used for Context in various places
-     * @param mTag      tag name to use when adding our Fragment
-     * @param mClass    Class name of the Fragment instance we create and control
-     * @param mArgs     Bundle of arguments which will be passed to our Fragment when we instantiate it
+     * @param T Class type we create when our tab is selected.
+     * @param mActivity Activity passed to our constructor used when Context is needed, "this" from
+     * FragmentTabs onCreate.
+     * @param mTag tag name to use when adding our Fragment
+     * @param mClass Class name of the Fragment instance we create and control
+     * @param mArgs Bundle of arguments which will be passed to our Fragment when we instantiate it
      */
-    (private val mActivity: Activity // Activity passed to our constructor used when Context is needed, "this" from FragmentTabs onCreate
-     , private val mTag: String // tag passed to our constructor used as tag name for the Fragment we add
-     , private val mClass: Class<T> // Class of the Fragment we control
-     , private val mArgs: Bundle? // Arguments Bundle for the Fragment we instantiate (we do not use this feature, all Fragment's are created without arguments
+    class TabListener<T : Fragment>(
+        private val mActivity: Activity,
+        private val mTag: String,
+        private val mClass: Class<T>,
+        private val mArgs: Bundle?
     ) : ActionBar.TabListener {
         /**
          * Reference to [Fragment] instance we have created
@@ -167,9 +189,9 @@ class FragmentTabs : AppCompatActivity() {
          * @param clz      [Class] name of the [Fragment] instance we create and control
          */
         constructor(
-                activity: AppCompatActivity,
-                tag: String,
-                clz: Class<T>
+            activity: AppCompatActivity,
+            tag: String,
+            clz: Class<T>
         ) : this(activity, tag, clz, null)
 
         init {
@@ -177,7 +199,8 @@ class FragmentTabs : AppCompatActivity() {
             // Check to see if we already have a fragment for this tab, probably
             // from a previously saved state.  If so, deactivate it, because our
             // initial state is that a tab isn't shown.
-            mFragment = (mActivity as AppCompatActivity).supportFragmentManager.findFragmentByTag(mTag)
+            mFragment =
+                (mActivity as AppCompatActivity).supportFragmentManager.findFragmentByTag(mTag)
             if (mFragment != null && !mFragment!!.isDetached) {
                 val ft = mActivity.supportFragmentManager.beginTransaction()
                 ft.detach(mFragment!!)

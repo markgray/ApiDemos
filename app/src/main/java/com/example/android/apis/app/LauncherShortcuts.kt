@@ -16,7 +16,6 @@
 
 package com.example.android.apis.app
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
@@ -139,12 +138,13 @@ class LauncherShortcuts : AppCompatActivity() {
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent)
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.shortcut_name))
         val iconResource = Intent.ShortcutIconResource.fromContext(
-                this, R.drawable.app_sample_code)
+            this, R.drawable.app_sample_code
+        )
         intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource)
 
         // Now, return the result to the launcher
 
-        setResult(Activity.RESULT_OK, intent)
+        setResult(RESULT_OK, intent)
     }
 
     /**

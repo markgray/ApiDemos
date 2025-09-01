@@ -3,7 +3,6 @@ package com.example.android.apis.app
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
@@ -39,7 +38,7 @@ class IsolatedServiceController : AppCompatActivity() {
         /**
          * [TextView] to display status in
          */
-        lateinit var mStatus: TextView
+        var mStatus: TextView
 
         /**
          * [Boolean] flag for whether we are bound to or not = false
@@ -93,7 +92,7 @@ class IsolatedServiceController : AppCompatActivity() {
                     if (mActivity.bindService(
                             Intent(mActivity, mClz),
                             mConnection,
-                            Context.BIND_AUTO_CREATE
+                            BIND_AUTO_CREATE
                         )
                     ) {
                         mServiceBound = true

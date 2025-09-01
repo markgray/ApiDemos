@@ -20,7 +20,6 @@ import android.R.drawable
 import android.R.id
 import android.R.layout
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -32,10 +31,10 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.os.OperationCanceledException
 import android.text.TextUtils
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -59,9 +58,7 @@ import androidx.loader.content.Loader
 import com.example.android.apis.R
 import java.io.File
 import java.text.Collator
-import java.util.ArrayList
 import java.util.Collections
-import java.util.Comparator
 
 /**
  * Demonstration of the implementation of a custom Loader. Shows how to implement a custom
@@ -101,9 +98,6 @@ class LoaderCustom : AppCompatActivity() {
 
     /**
      * This class holds the per-item data in our Loader.
-     */
-    class AppEntry
-    /**
      * Constructor for an instance holding `ApplicationInfo info` describing a particular
      * package. We initialize our [AppListLoader] field [mLoader] with the value of our
      * parameter `AppListLoader loader`, and our field `ApplicationInfo mInfo` with
@@ -111,18 +105,13 @@ class LoaderCustom : AppCompatActivity() {
      * `File mApkFile` with a new `File` instance derived from the pathname given in
      * the field `info.sourceDir` (full path to the base APK for the application).
      *
-     * Parameter: loader "this" when called in our `AppListLoader` background thread
-     * Parameter: info   one of the `ApplicationInfo` instances of the list that is returned
-     * from the call to `PackageManager.getInstalledApplications`
+     * @property mLoader [AppListLoader] which created us using its *this*
+     * @property applicationInfo ApplicationInfo for package we are assigned to, one of the
+     * [ApplicationInfo] instances from the list that is returned from the call to
+     * `PackageManager.getInstalledApplications`
      */
-        (
-        /**
-         * [AppListLoader] which created us using its *this*
-         */
+    class AppEntry(
         private val mLoader: AppListLoader,
-        /**
-         * ApplicationInfo for package we are assigned to
-         */
         val applicationInfo: ApplicationInfo
     ) {
         /**
@@ -315,9 +304,6 @@ class LoaderCustom : AppCompatActivity() {
      * Then it calls the `onContentChanged` method of our [AppListLoader] field [mLoader] (which it
      * inherits unchanged from its superclass [AsyncTaskLoader]) when it receives one of these
      * [Intent]'s in its [onReceive] override.
-     */
-    class PackageIntentReceiver
-    /**
      * Constructor that initializes our [AppListLoader] field [mLoader] with the parameter
      * passed it, and registers itself to receive the broadcast `Intent`'s we are interested
      * in. The default constructor saves its parameter in our [AppListLoader] field [mLoader].
@@ -335,10 +321,7 @@ class LoaderCustom : AppCompatActivity() {
      * `onContentChanged` (which it  inherits unchanged from its superclass `AsyncTaskLoader`)
      * when the [AppListLoader] needs to reload its data.
      */
-        (
-        /**
-         * [Loader] that is interested in changes made to installed apps.
-         */
+    class PackageIntentReceiver(
         internal val mLoader: AppListLoader
     ) : BroadcastReceiver() {
 
@@ -372,15 +355,12 @@ class LoaderCustom : AppCompatActivity() {
 
     /**
      * A custom [Loader] that loads all of the installed applications.
-     */
-    open class AppListLoader
-    /**
      * Constructor which initializes our [PackageManager] field [mPm] with a
      * [PackageManager] instance.
      *
      * @param context used only to pass on to our super's constructor
      */
-        (context: Context) : AsyncTaskLoader<List<AppEntry>>(context) {
+    open class AppListLoader(context: Context) : AsyncTaskLoader<List<AppEntry>>(context) {
 
         /**
          * Helper for determining if the configuration has changed in a way that may require us
@@ -434,7 +414,6 @@ class LoaderCustom : AppCompatActivity() {
                     or PackageManager.MATCH_DISABLED_COMPONENTS
             )
 
-            @Suppress("KotlinConstantConditions")
             if (apps == null) {
                 apps = ArrayList()
             }
@@ -624,9 +603,6 @@ class LoaderCustom : AppCompatActivity() {
     /**
      * `ListAdapter` used as cursor to populate the [ListFragment]'s list of our Fragment
      * [AppListFragment]
-     */
-    class AppListAdapter
-    /**
      * Constructor for a new instance of [AppListAdapter]. First we call through to our super's
      * constructor supplying a stock system layout for a `TwoLineListItem` (for no apparent
      * reason since we use our own layout file for our list item Views), and then we initialize our
@@ -636,7 +612,8 @@ class LoaderCustom : AppCompatActivity() {
      * @param context This is the [Context] to use, in our case it is the [Activity]
      * returned by `getActivity()`
      */
-        (context: Context) : ArrayAdapter<AppEntry>(context, layout.simple_list_item_2) {
+    class AppListAdapter(context: Context) :
+        ArrayAdapter<AppEntry>(context, layout.simple_list_item_2) {
 
         /**
          * `LayoutInflater` created in constructor using the `Context` passed it to get
@@ -646,7 +623,7 @@ class LoaderCustom : AppCompatActivity() {
          * for a `List` item `View`.
          */
         private val mInflater: LayoutInflater =
-            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            context.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         /**
          * Sets the contents of our [ArrayAdapter]. First we remove all elements from our list,
@@ -706,7 +683,7 @@ class LoaderCustom : AppCompatActivity() {
         /**
          * This is the Adapter being used to display the list's data.
          */
-        internal lateinit var mAdapter: AppListAdapter
+        internal lateinit var appListAdapter: AppListAdapter
 
         /**
          * The [SearchView] for doing filtering.
@@ -725,9 +702,9 @@ class LoaderCustom : AppCompatActivity() {
          * in our [ListView] if we are unable to load any data to the string "No applications". Then
          * we report that this fragment would like to participate in populating the options menu by
          * receiving a call to [onCreateOptionsMenu] and related methods. We initialize our
-         * [AppListAdapter] field [mAdapter] with an instance of our custom adapter [AppListAdapter]
+         * [AppListAdapter] field [appListAdapter] with an instance of our custom adapter [AppListAdapter]
          * using the [Activity] our Fragment is associated with as the [Context]. and set our list
-         * adapter to [mAdapter]. We set our [ListView] to display an indeterminate progress
+         * adapter to [appListAdapter]. We set our [ListView] to display an indeterminate progress
          * indicator while we wait for our loader to finish loading its data. Then we initialize
          * the loader using *this* for the [LoaderManager.LoaderCallbacks] parameter (so our methods
          * [onCreateLoader], [onLoadFinished], and [onLoaderReset] will be called.)
@@ -736,6 +713,13 @@ class LoaderCustom : AppCompatActivity() {
          */
         override fun onViewStateRestored(savedInstanceState: Bundle?) {
             super.onViewStateRestored(savedInstanceState)
+            getListView().setPadding(
+                dpToPixel(8, getListView().context),
+                dpToPixel(150, getListView().context),
+                dpToPixel(8, getListView().context),
+                dpToPixel(60, getListView().context)
+            )
+
             // Give some text to display if there is no data.  In a real
             // application this would come from a resource.
             setEmptyText("No applications")
@@ -745,8 +729,8 @@ class LoaderCustom : AppCompatActivity() {
             setHasOptionsMenu(true)
 
             // Create an empty adapter we will use to display the loaded data.
-            mAdapter = AppListAdapter(activity as Context)
-            listAdapter = mAdapter
+            appListAdapter = AppListAdapter(activity as Context)
+            listAdapter = appListAdapter
 
             // Start out with a progress indicator.
             setListShown(false)
@@ -754,6 +738,24 @@ class LoaderCustom : AppCompatActivity() {
             // Prepare the loader.  Either re-connect with an existing one,
             // or start a new one.
             LoaderManager.getInstance(this).initLoader(0, null, this)
+        }
+
+        /**
+         * This method converts dp unit to equivalent pixels, depending on device density. First we
+         * fetch a [Resources] instance for `val resources`, then we fetch the current display
+         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+         * dots-per-inch, divided by the reference density used throughout the system.
+         *
+         * @param dp      A value in dp (density independent pixels) unit which we need to convert
+         *                into pixels
+         * @param context [Context] to get resources and device specific display metrics
+         * @return An [Int] value to represent px equivalent to dp depending on device density
+         */
+        private fun dpToPixel(dp: Int, context: Context): Int {
+            val resources: Resources = context.resources
+            val metrics = resources.displayMetrics
+            return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
         }
 
         /**
@@ -817,7 +819,7 @@ class LoaderCustom : AppCompatActivity() {
         /**
          * Called when the query text is changed by the user. If the [newText] entered by the
          * user is not empty, we set our [String] field [mCurFilter] to it, otherwise we set
-         * [mCurFilter] to *null*. We get a `Filter` for our [AppListAdapter] field [mAdapter]
+         * [mCurFilter] to *null*. We get a `Filter` for our [AppListAdapter] field [appListAdapter]
          * and then use it to start an asynchronous filtering operation using [mCurFilter]
          * (canceling all previous non-executed filtering requests and posting a new filtering
          * request that will be executed later.) Finally we return *true* to indicate that the
@@ -831,7 +833,7 @@ class LoaderCustom : AppCompatActivity() {
             // Called when the action bar search text has changed.  Since this
             // is a simple array adapter, we can just have it do the filtering.
             mCurFilter = if (!TextUtils.isEmpty(newText)) newText else null
-            mAdapter.filter.filter(mCurFilter)
+            appListAdapter.filter.filter(mCurFilter)
             return true
         }
 
@@ -901,7 +903,7 @@ class LoaderCustom : AppCompatActivity() {
 
         /**
          * Called when a previously created loader has finished its load. We set the data of our
-         * [AppListAdapter] field [mAdapter] to our `List<AppEntry>` parameter [data]. If our
+         * [AppListAdapter] field [appListAdapter] to our `List<AppEntry>` parameter [data]. If our
          * Fragment is in the `Resumed` state (newly created) we set our `List` to be shown,
          * otherwise (an orientation change has occurred) we set our `List` to be shown without the
          * animation from the previous state (don't know why, because the animation looks nifty).
@@ -911,7 +913,7 @@ class LoaderCustom : AppCompatActivity() {
          */
         override fun onLoadFinished(loader: Loader<List<AppEntry>>, data: List<AppEntry>) {
             // Set the new data in the adapter.
-            mAdapter.setData(data)
+            appListAdapter.setData(data)
 
             // The list should now be shown.
             if (isResumed) {
@@ -926,13 +928,13 @@ class LoaderCustom : AppCompatActivity() {
          * making its data unavailable. The application should at this point
          * remove any references it has to the Loader's data.
          *
-         * We simply set the data of our [AppListAdapter] field [mAdapter] to null.
+         * We simply set the data of our [AppListAdapter] field [appListAdapter] to null.
          *
          * @param loader The Loader that is being reset.
          */
         override fun onLoaderReset(loader: Loader<List<AppEntry>>) {
             // Clear the data in the adapter.
-            mAdapter.setData(null)
+            appListAdapter.setData(null)
         }
     }
 
@@ -982,5 +984,4 @@ class LoaderCustom : AppCompatActivity() {
             }
         }
     }
-
 }

@@ -25,7 +25,6 @@ import android.app.PendingIntent
 import android.app.job.JobParameters
 import android.app.job.JobService
 import android.app.job.JobWorkItem
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.AsyncTask
@@ -54,18 +53,11 @@ class JobWorkService : JobService() {
 
     /**
      * This is a task to dequeue and process work in the background.
+     *
+     * @property mParams the [JobParameters] passed to the [onStartJob] override
      */
     @SuppressLint("StaticFieldLeak") // We may indeed leak instances! TODO: check this out.
-    internal inner class CommandProcessor
-    /**
-     * Our constructor, we just save our parameters in our [JobParameters] field [mParams].
-     *
-     * Parameter: the `JobParameters` passed to the `onStartJob` override
-     */
-        (
-        /**
-         * The `JobParameters` we were constructed to process.
-         */
+    internal inner class CommandProcessor(
         private val mParams: JobParameters
     ) : AsyncTask<Void, Void, Void>() {
 
@@ -122,7 +114,7 @@ class JobWorkService : JobService() {
                 // Process work here...  we'll pretend by sleeping.
                 try {
                     Thread.sleep(5000)
-                } catch (e: InterruptedException) {
+                } catch (_: InterruptedException) {
                     Log.i("JobWorkService", "Interrupted while sleeping")
                 }
 
@@ -130,7 +122,7 @@ class JobWorkService : JobService() {
 
                 // Tell system we have finished processing the work.
                 Log.i("JobWorkService", "Done with: $work")
-                mParams.completeWork(work as JobWorkItem)
+                mParams.completeWork(work)
                 b = run {
                     cancelled = isCancelled
                     work = mParams.dequeueWork()
@@ -159,7 +151,7 @@ class JobWorkService : JobService() {
      * ("Service created.")
      */
     override fun onCreate() {
-        mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        mNM = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         val chan1 = NotificationChannel(
             PRIMARY_CHANNEL, PRIMARY_CHANNEL,
             NotificationManager.IMPORTANCE_DEFAULT
@@ -277,6 +269,6 @@ class JobWorkService : JobService() {
         /**
          * The id of the primary notification channel
          */
-        const val PRIMARY_CHANNEL = "default"
+        const val PRIMARY_CHANNEL: String = "default"
     }
 }

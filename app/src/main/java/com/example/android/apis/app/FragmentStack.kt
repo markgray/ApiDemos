@@ -17,7 +17,6 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,6 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -39,8 +39,9 @@ import com.example.android.apis.app.FragmentStack.CountingFragment.Companion.new
  * one fragment, using a fancy animation for push and pop. (Not really visible on
  * Nexus 6 Marshmallow, but striking on Excite 10.)
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
 class FragmentStack : FragmentActivity() {
     /**
      * stack level of next [CountingFragment] to add to back stack
@@ -173,7 +174,7 @@ class FragmentStack : FragmentActivity() {
          */
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
-            mNum = if (arguments != null) arguments!!.getInt("num") else 1
+            mNum = if (arguments != null) requireArguments().getInt("num") else 1
         }
 
         /**
@@ -194,14 +195,25 @@ class FragmentStack : FragmentActivity() {
          * @return Return the [View] for the fragment's UI, or null.
          */
         @SuppressLint("DefaultLocale")
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            val v = inflater.inflate(R.layout.hello_world, container, false)
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
+            val v = inflater.inflate(
+                R.layout.hello_world,
+                container,
+                false
+            )
             val tv = v.findViewById<View>(R.id.text)
             (tv as TextView).text = String.format("%s%d", getString(R.string.fragment_num), mNum)
-            @Suppress("DEPRECATION")
-            tv.setBackground(
-                ResourcesCompat.getDrawable(resources, android.R.drawable.gallery_thumb, null)
-            )
+            tv.background =
+                ResourcesCompat.getDrawable(
+                    resources,
+                    android.R.drawable.gallery_thumb,
+                    null
+                )
+
             return v
         }
 

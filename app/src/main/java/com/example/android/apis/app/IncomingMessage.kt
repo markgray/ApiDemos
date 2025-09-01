@@ -16,7 +16,6 @@
 
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -28,10 +27,11 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.widget.Button
-
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-
+import com.example.android.apis.ApiDemos
 import com.example.android.apis.R
+import com.example.android.apis.app.IncomingMessage.Companion.makeMessageIntentStack
 import java.util.Random
 
 /**
@@ -42,7 +42,7 @@ import java.util.Random
  * to launch [IncomingMessageView].
  */
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.O)
 class IncomingMessage : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -116,9 +116,12 @@ class IncomingMessage : AppCompatActivity() {
      */
     internal fun showAppNotification() {
         // look up the notification manager service
-        val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val chan1 = NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
-                NotificationManager.IMPORTANCE_DEFAULT)
+        val nm = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val chan1 = NotificationChannel(
+            PRIMARY_CHANNEL,
+            PRIMARY_CHANNEL,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
         chan1.lightColor = Color.GREEN
         chan1.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
 
@@ -136,21 +139,23 @@ class IncomingMessage : AppCompatActivity() {
         // notification.  Note the use of FLAG_CANCEL_CURRENT so that, if there
         // is already an active matching pending intent, cancel it and replace
         // it with the new array of Intents.
-        val contentIntent = PendingIntent.getActivities(this, 0,
-                makeMessageIntentStack(this, from, message),
-                PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val contentIntent = PendingIntent.getActivities(
+            this, 0,
+            makeMessageIntentStack(this, from, message),
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         // The ticker text, this uses a formatted string so our message could be localized
         val tickerText = getString(R.string.imcoming_message_ticker_text, message)
 
         // Set the info for the views that show in the notification panel.
         val notifBuilder = Notification.Builder(this, PRIMARY_CHANNEL)
-                .setSmallIcon(R.drawable.stat_sample)  // the status icon
-                .setTicker(tickerText)  // the status text
-                .setWhen(System.currentTimeMillis())  // the time stamp
-                .setContentTitle(from)  // the label of the entry
-                .setContentText(message)  // the contents of the entry
-                .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
+            .setSmallIcon(R.drawable.stat_sample)  // the status icon
+            .setTicker(tickerText)  // the status text
+            .setWhen(System.currentTimeMillis())  // the time stamp
+            .setContentTitle(from)  // the label of the entry
+            .setContentText(message)  // the contents of the entry
+            .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
 
         // We'll have this notification do the default sound, vibration, and led.
         // Note that if you want any of these behaviors, you should always have
@@ -200,9 +205,11 @@ class IncomingMessage : AppCompatActivity() {
      */
     internal fun showInterstitialNotification() {
         // look up the notification manager service
-        val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val chan1 = NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
-                NotificationManager.IMPORTANCE_DEFAULT)
+        val nm = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val chan1 = NotificationChannel(
+            PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
         chan1.lightColor = Color.GREEN
         chan1.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
 
@@ -224,20 +231,22 @@ class IncomingMessage : AppCompatActivity() {
         intent.putExtra(IncomingMessageView.KEY_FROM, from)
         intent.putExtra(IncomingMessageView.KEY_MESSAGE, message)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        val contentIntent = PendingIntent.getActivity(this, 0,
-                intent, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val contentIntent = PendingIntent.getActivity(
+            this, 0,
+            intent, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         // The ticker text, this uses a formatted string so our message could be localized
         val tickerText = getString(R.string.imcoming_message_ticker_text, message)
 
         // Set the info for the views that show in the notification panel.
         val notifBuilder = Notification.Builder(this, PRIMARY_CHANNEL)
-                .setSmallIcon(R.drawable.stat_sample)  // the status icon
-                .setTicker(tickerText)  // the status text
-                .setWhen(System.currentTimeMillis())  // the time stamp
-                .setContentTitle(from)  // the label of the entry
-                .setContentText(message)  // the contents of the entry
-                .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
+            .setSmallIcon(R.drawable.stat_sample)  // the status icon
+            .setTicker(tickerText)  // the status text
+            .setWhen(System.currentTimeMillis())  // the time stamp
+            .setContentTitle(from)  // the label of the entry
+            .setContentText(message)  // the contents of the entry
+            .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
 
         // We'll have this notification do the default sound, vibration, and led.
         // Note that if you want any of these behaviors, you should always have
@@ -260,7 +269,7 @@ class IncomingMessage : AppCompatActivity() {
         /**
          * The id of the primary notification channel
          */
-        const val PRIMARY_CHANNEL = "default"
+        const val PRIMARY_CHANNEL: String = "default"
 
         /**
          * This method creates an array of Intent objects representing the activity stack for the
@@ -298,9 +307,9 @@ class IncomingMessage : AppCompatActivity() {
          * @return a properly configured back stack for launching the `Activity` `IncomingMessageView`
          */
         fun makeMessageIntentStack(
-                context: Context,
-                from: CharSequence,
-                msg: CharSequence
+            context: Context,
+            from: CharSequence,
+            msg: CharSequence
         ): Array<Intent?> {
             // A typical convention for notifications is to launch the user deeply
             // into an application representing the data in the notification; to
@@ -311,14 +320,18 @@ class IncomingMessage : AppCompatActivity() {
             // First: root activity of ApiDemos.
             // This is a convenient way to make the proper Intent to launch and
             // reset an application's task.
-            intents[0] = Intent.makeRestartActivityTask(ComponentName(context,
-                    com.example.android.apis.ApiDemos::class.java))
+            intents[0] = Intent.makeRestartActivityTask(
+                ComponentName(
+                    context,
+                    ApiDemos::class.java
+                )
+            )
 
             // "App"
-            intents[1] = Intent(context, com.example.android.apis.ApiDemos::class.java)
+            intents[1] = Intent(context, ApiDemos::class.java)
             intents[1]!!.putExtra("com.example.android.apis.Path", "App")
             // "App/Notification"
-            intents[2] = Intent(context, com.example.android.apis.ApiDemos::class.java)
+            intents[2] = Intent(context, ApiDemos::class.java)
             intents[2]!!.putExtra("com.example.android.apis.Path", "App/Notification")
 
             // Now the activity to display to the user.  Also fill in the data it

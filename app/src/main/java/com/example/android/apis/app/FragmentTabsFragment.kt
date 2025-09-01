@@ -15,10 +15,10 @@
  */
 @file:Suppress("DEPRECATION")
 // TODO: Replace Tab use with modern navigation UI
+// TODO: Fix the TABS fragment TAB to respect system bar.
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
@@ -29,24 +29,21 @@ import android.widget.TabHost
 import android.widget.TabHost.OnTabChangeListener
 import android.widget.TabHost.TabContentFactory
 import android.widget.TabHost.TabSpec
-
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-
 import com.example.android.apis.R
-
 import com.example.android.apis.app.FragmentReceiveResult.ReceiveResultFragment
 import com.example.android.apis.app.LoaderCustom.AppListFragment
 import com.example.android.apis.app.LoaderThrottle.ThrottledLoaderListFragment
 
-import java.util.ArrayList
-
 /**
  * Sample fragment that contains tabs of other fragments.
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentTabsFragment : Fragment() {
     /**
      * Our custom [OnTabChangeListener] (Should use `FragmentTabHost` instead) Its `onTabChanged`
@@ -63,13 +60,13 @@ class FragmentTabsFragment : Fragment() {
      * @param savedInstanceState If the fragment is being re-created from
      * a previous saved state, this is the state.
      */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mTabManager = TabManager(
-                (activity as Context),
-                childFragmentManager,
-                R.id.realtabcontent
+            (activity as Context),
+            childFragmentManager,
+            R.id.realtabcontent
         )
     }
 
@@ -103,37 +100,36 @@ class FragmentTabsFragment : Fragment() {
      *
      * @return Return the View for the fragment's UI
      */
-    @SuppressLint("UseRequireInsteadOfGet")
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         val v = inflater.inflate(
-                R.layout.fragment_tabs_fragment,
-                container,
-                false
+            R.layout.fragment_tabs_fragment,
+            container,
+            false
         )
         val host = mTabManager!!.handleCreateView(v)
         mTabManager!!.addTab(
-                host!!.newTabSpec("result").setIndicator("Result"),
-                ReceiveResultFragment::class.java,
-                null
+            host!!.newTabSpec("result").setIndicator("Result"),
+            ReceiveResultFragment::class.java,
+            null
         )
         mTabManager!!.addTab(
-                host.newTabSpec("contacts").setIndicator("Contacts"),
-                LoaderCursor.CursorLoaderListFragment::class.java,
-                null
+            host.newTabSpec("contacts").setIndicator("Contacts"),
+            LoaderCursor.CursorLoaderListFragment::class.java,
+            null
         )
         mTabManager!!.addTab(
-                host.newTabSpec("apps").setIndicator("Apps"),
-                AppListFragment::class.java,
-                null
+            host.newTabSpec("apps").setIndicator("Apps"),
+            AppListFragment::class.java,
+            null
         )
         mTabManager!!.addTab(
-                host.newTabSpec("throttle").setIndicator("Throttle"),
-                ThrottledLoaderListFragment::class.java,
-                null
+            host.newTabSpec("throttle").setIndicator("Throttle"),
+            ThrottledLoaderListFragment::class.java,
+            null
         )
         return v
     }
@@ -189,18 +185,18 @@ class FragmentTabsFragment : Fragment() {
      * a simpler way even).
      */
     class TabManager(
-            /**
-             * [Context] to use to access resources.
-             */
-            private val mContext: Context,
-            /**
-             * Child fragment manager for placing and managing Fragments inside of our Fragment.
-             */
-            private val mManager: FragmentManager,
-            /**
-             * The resource ID for the [TabHost] widget in our parent's layout file.
-             */
-            private val mContainerId: Int
+        /**
+         * [Context] to use to access resources.
+         */
+        private val mContext: Context,
+        /**
+         * Child fragment manager for placing and managing Fragments inside of our Fragment.
+         */
+        private val mManager: FragmentManager,
+        /**
+         * The resource ID for the [TabHost] widget in our parent's layout file.
+         */
+        private val mContainerId: Int
     ) : OnTabChangeListener {
 
         /**
@@ -234,18 +230,18 @@ class FragmentTabsFragment : Fragment() {
          * we manage.
          */
         internal class TabInfo(
-                /**
-                 * The tag name for the tab
-                 */
-                val tag: String,
-                /**
-                 * The fragment loaded when the tab is selected.
-                 */
-                val clss: Class<*>,
-                /**
-                 * Optional argument [Bundle] for the fragment.
-                 */
-                val args: Bundle?
+            /**
+             * The tag name for the tab
+             */
+            val tag: String,
+            /**
+             * The fragment loaded when the tab is selected.
+             */
+            val clss: Class<*>,
+            /**
+             * Optional argument [Bundle] for the fragment.
+             */
+            val args: Bundle?
         ) {
             var fragment: Fragment? = null
         }
@@ -348,7 +344,7 @@ class FragmentTabsFragment : Fragment() {
          * @param savedInstanceState the previous saved state passed to the `onViewStateRestored`
          * override of our parent fragment.
          */
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+        @RequiresApi(Build.VERSION_CODES.HONEYCOMB_MR2)
         fun handleViewStateRestored(savedInstanceState: Bundle?) {
             if (savedInstanceState != null) {
                 mCurrentTabTag = savedInstanceState.getString("tab")
@@ -414,7 +410,10 @@ class FragmentTabsFragment : Fragment() {
          * @param outState [Bundle] in which to place your saved state.
          */
         fun handleSaveInstanceState(outState: Bundle) {
-            outState.putString("tab", if (mTabHost != null) mTabHost!!.currentTabTag else mCurrentTabTag)
+            outState.putString(
+                "tab",
+                if (mTabHost != null) mTabHost!!.currentTabTag else mCurrentTabTag
+            )
         }
 
         /**
@@ -469,7 +468,7 @@ class FragmentTabsFragment : Fragment() {
          *
          * @return a [FragmentTransaction] which includes the commands necessary to switch tabs.
          */
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+        @RequiresApi(Build.VERSION_CODES.HONEYCOMB_MR2)
         private fun doTabChanged(tabId: String?, ft: FragmentTransaction?): FragmentTransaction? {
             var ftVar = ft
             var newTab: TabInfo? = null
@@ -482,6 +481,7 @@ class FragmentTabsFragment : Fragment() {
             checkNotNull(newTab) { "No tab known for tag $tabId" }
             if (mLastTab != newTab) {
                 if (ftVar == null) {
+                    @SuppressLint("DetachAndAttachSameFragment")
                     ftVar = mManager.beginTransaction()
                 }
                 if (mLastTab != null) {
@@ -492,9 +492,9 @@ class FragmentTabsFragment : Fragment() {
                 if (newTab.fragment == null) {
                     @Suppress("DEPRECATION")
                     newTab.fragment = instantiate(
-                            mContext,
-                            newTab.clss.name,
-                            newTab.args
+                        mContext,
+                        newTab.clss.name,
+                        newTab.args
                     )
                     ftVar.add(mContainerId, newTab.fragment!!, newTab.tag)
                 } else {

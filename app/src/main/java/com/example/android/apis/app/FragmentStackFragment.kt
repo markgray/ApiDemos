@@ -15,20 +15,22 @@
  */
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.android.apis.R
 import com.example.android.apis.app.FragmentStack.CountingFragment.Companion.newInstance
 
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 /**
  * Used by the FragmentNestingTabs demo. It uses the CountingFragment code from the FragmentStack
  * demo to create a stack of `TextView`s displaying the fragment's depth in the stack.
@@ -37,7 +39,7 @@ class FragmentStackFragment : Fragment() {
     /**
      * stack level of next `CountingFragment` to add to back stack
      */
-    var mStackLevel = 1
+    var mStackLevel: Int = 1
 
     /**
      * Called to do initial creation of our fragment. First we call our super's implementation of
@@ -55,7 +57,7 @@ class FragmentStackFragment : Fragment() {
      * @param savedInstanceState If the fragment is being re-created from
      * a previous saved state, this is the state.
      */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
@@ -95,7 +97,11 @@ class FragmentStackFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val v = inflater.inflate(R.layout.fragment_stack, container, false)
+        val v = inflater.inflate(
+            R.layout.fragment_stack,
+            container,
+            false
+        )
 
         // Watch for button clicks.
         var button = v.findViewById<Button>(R.id.new_fragment)
@@ -130,7 +136,7 @@ class FragmentStackFragment : Fragment() {
      * and have `ft` add the transaction to the back stack with null as the name. Finally we call
      * the `commit` method of `ft` to schedule a commit of the transaction.
      */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     fun addFragmentToStack() {
         mStackLevel++
 

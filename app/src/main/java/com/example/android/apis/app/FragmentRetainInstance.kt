@@ -16,8 +16,9 @@
 
 package com.example.android.apis.app
 // TODO: Replace suppresssed deprecation warnings with modern solution.
+// TODO: Fix comments
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,6 +26,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.example.android.apis.R
@@ -36,8 +38,9 @@ import com.example.android.apis.R
  * threads) across activity instances when an activity needs to be restarted. This is
  * a lot easier than using the raw `Activity.onRetainNonConfigurationInstance()` API.
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN", "MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentRetainInstance : FragmentActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -58,8 +61,8 @@ class FragmentRetainInstance : FragmentActivity() {
         // First time init, create the UI.
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .add(android.R.id.content, UiFragment())
-                    .commit()
+                .add(android.R.id.content, UiFragment())
+                .commit()
         }
     }
 
@@ -81,18 +84,25 @@ class FragmentRetainInstance : FragmentActivity() {
          * the `restart()` method of [mWorkFragment] when the [Button] is clicked, and finally we
          * return `v` to the caller.
          *
-         * @param inflater           The LayoutInflater object that can be used to inflate any views
+         * @param inflater The LayoutInflater object that can be used to inflate any views
          * in the fragment,
-         * @param container          If non-null, this is the parent view that the fragment's UI
-         * should be attached to.  The fragment should not add the view
-         * itself, but this can be used to generate the LayoutParams of
-         * the view.
+         * @param container If non-null, this is the parent view that the fragment's UI will be
+         * attached to. The fragment should not add the view itself, but this can be used to
+         * generate the LayoutParams of the view.
          * @param savedInstanceState If non-null, this fragment is being re-constructed from a
          * previous saved state as given here.
          * @return Return the View for the fragment's UI, or null.
          */
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            val v = inflater.inflate(R.layout.fragment_retain_instance, container, false)
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
+            val v = inflater.inflate(
+                R.layout.fragment_retain_instance,
+                container,
+                false
+            )
 
             // Watch for button clicks.
             val button = v.findViewById<Button>(R.id.restart)
@@ -156,6 +166,7 @@ class FragmentRetainInstance : FragmentActivity() {
          * [ProgressBar] we are incrementing
          */
         internal var mProgressBar: ProgressBar? = null
+
         /**
          * Current position of the ProgressBar 0-500 (maximum is set in layout xml)
          */
@@ -193,18 +204,23 @@ class FragmentRetainInstance : FragmentActivity() {
              * before continuing the loop.
              */
             override fun run() {
+                // Log.i(TAG, "mThread.run called")
                 // We'll figure the real value out later.
                 var max = 10000
 
                 // This thread runs almost forever.
                 while (true) {
+                    // Log.i(TAG, "Before call to synchronized")
 
                     // Update our shared state with the UI.
-                    synchronized(this) {
+                    synchronized(this as Object) {
+                        // Log.i(TAG, "After call to synchronized")
                         // Our thread is stopped if the UI is not ready
                         // or it has completed its work.
+                        // Log.i(TAG, "mReady is $mReady, mPosition is $mPosition and max is $max")
                         while (!mReady || mPosition >= max) {
                             if (mQuiting) {
+                                // Log.i(TAG, "Quiting with progress of $mPosition")
                                 return
                             }
                             try {
@@ -221,11 +237,12 @@ class FragmentRetainInstance : FragmentActivity() {
                         mPosition++
                         max = mProgressBar!!.max
                         mProgressBar!!.progress = mPosition
+                        // Log.i(TAG, "New progress is $mPosition")
                     }
 
                     // Normally we would be doing some work, but put a kludge
                     // here to pretend like we are.
-                    synchronized(this) {
+                    synchronized(this as Object) {
                         try {
                             (this as Object).wait(50)
                         } catch (e: InterruptedException) {
@@ -247,12 +264,22 @@ class FragmentRetainInstance : FragmentActivity() {
          */
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
+            // Log.i(TAG, "onCreate called")
 
             // Tell the framework to try to keep this fragment around
             // during a configuration change.
             @Suppress("DEPRECATION")
             retainInstance = true
 
+            @Suppress("DEPRECATION")
+            mProgressBar = targetFragment!!
+                .requireView()
+                .findViewById(R.id.progress_horizontal)
+            // Log.i(TAG, "mProgressBar is $mProgressBar")
+            synchronized(mThread as Object) {
+                mReady = true
+                (mThread as Object).notify()
+            }
             // Start up the worker thread.
             mThread.start()
         }
@@ -281,9 +308,10 @@ class FragmentRetainInstance : FragmentActivity() {
             mProgressBar = targetFragment!!
                 .requireView()
                 .findViewById(R.id.progress_horizontal)
+            // Log.i(TAG, "mProgressBar is $mProgressBar")
 
             // We are ready for our thread to go.
-            synchronized(mThread) {
+            synchronized(mThread as Object) {
                 mReady = true
                 (mThread as Object).notify()
             }
@@ -306,7 +334,7 @@ class FragmentRetainInstance : FragmentActivity() {
          */
         override fun onDestroy() {
             // Make the thread go away.
-            synchronized(mThread) {
+            synchronized(mThread as Object) {
                 mReady = false
                 mQuiting = true
                 (mThread as Object).notify()
@@ -327,7 +355,7 @@ class FragmentRetainInstance : FragmentActivity() {
             // This fragment is being detached from its activity.  We need
             // to make sure its thread is not going to touch any activity
             // state after returning from this function.
-            synchronized(mThread) {
+            synchronized(mThread as Object) {
                 mProgressBar = null
                 mReady = false
                 (mThread as Object).notify()
@@ -343,10 +371,16 @@ class FragmentRetainInstance : FragmentActivity() {
          * obtain the lock on [mThread].
          */
         fun restart() {
-            synchronized(mThread) {
+            // Log.i(TAG, "Restart called")
+            synchronized(mThread as Object) {
                 mPosition = 0
                 (mThread as Object).notify()
             }
+        }
+
+        companion object {
+            @Suppress("unused")
+            private const val TAG = "RetainedFragment"
         }
     }
 }

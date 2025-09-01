@@ -18,11 +18,13 @@ package com.example.android.apis.app
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract.Contacts
 import android.text.TextUtils
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
@@ -39,7 +41,6 @@ import androidx.fragment.app.ListFragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
-import com.example.android.apis.app.LoaderCursor.CursorLoaderListFragment
 
 /**
  * Demonstration of the use of a CursorLoader to load and display contacts data in a fragment.
@@ -82,16 +83,13 @@ class LoaderCursor : AppCompatActivity() {
     /**
      * This [ListFragment] fills its `List` with data returned from a [SimpleCursorAdapter]
      */
-    class CursorLoaderListFragment
-        : ListFragment(),
-            OnQueryTextListener,
-            OnCloseListener, LoaderManager.LoaderCallbacks<Cursor>
-    {
+    class CursorLoaderListFragment : ListFragment(), OnQueryTextListener, OnCloseListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
         /**
          * This is the Adapter being used to display the list's data.
          */
-        internal lateinit var mAdapter: SimpleCursorAdapter
+        internal lateinit var simpleCursorAdapter: SimpleCursorAdapter
 
         /**
          * The SearchView for doing filtering.
@@ -111,7 +109,7 @@ class LoaderCursor : AppCompatActivity() {
          * report that this fragment would like to participate in populating the options menu by
          * receiving a call to [onCreateOptionsMenu] and related methods. Next we create an instance
          * of [SimpleCursorAdapter] with a *null* cursor (we will set the cursor for the adapter
-         * later) and save a reference to it in our [SimpleCursorAdapter] field [mAdapter], which we
+         * later) and save a reference to it in our [SimpleCursorAdapter] field [simpleCursorAdapter], which we
          * then use to set our ListView's adapter. We call the [ListFragment] method `setListShown`
          * with `false` so that a indeterminate progress bar will be displayed while we wait for our
          * Adapter to have data available for the List. Finally we start a loader (or reconnect)
@@ -121,6 +119,12 @@ class LoaderCursor : AppCompatActivity() {
          */
         override fun onViewStateRestored(savedInstanceState: Bundle?) {
             super.onViewStateRestored(savedInstanceState)
+            getListView().setPadding(
+                dpToPixel(8, getListView().context),
+                dpToPixel(150, getListView().context),
+                dpToPixel(8, getListView().context),
+                dpToPixel(60, getListView().context)
+            )
 
             // Give some text to display if there is no data.  In a real
             // application this would come from a resource.
@@ -131,11 +135,13 @@ class LoaderCursor : AppCompatActivity() {
             setHasOptionsMenu(true)
 
             // Create an empty adapter we will use to display the loaded data.
-            mAdapter = SimpleCursorAdapter(activity,
+            simpleCursorAdapter = SimpleCursorAdapter(
+                activity,
                 android.R.layout.simple_list_item_2, null,
                 arrayOf(Contacts.DISPLAY_NAME, Contacts.CONTACT_STATUS),
-                intArrayOf(android.R.id.text1, android.R.id.text2), 0)
-            listAdapter = mAdapter
+                intArrayOf(android.R.id.text1, android.R.id.text2), 0
+            )
+            listAdapter = simpleCursorAdapter
 
             // Start out with a progress indicator.
             setListShown(false)
@@ -146,18 +152,33 @@ class LoaderCursor : AppCompatActivity() {
         }
 
         /**
+         * This method converts dp unit to equivalent pixels, depending on device density. First we
+         * fetch a [Resources] instance for `val resources`, then we fetch the current display
+         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+         * dots-per-inch, divided by the reference density used throughout the system.
+         *
+         * @param dp      A value in dp (density independent pixels) unit which we need to convert
+         *                into pixels
+         * @param context [Context] to get resources and device specific display metrics
+         * @return An [Int] value to represent px equivalent to dp depending on device density
+         */
+        private fun dpToPixel(dp: Int, context: Context): Int {
+            val resources: Resources = context.resources
+            val metrics = resources.displayMetrics
+            return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
+        }
+
+        /**
          * Custom [SearchView] which clears the search text when the [SearchView] is
          * collapsed by the user.
-         */
-        class MySearchView
-        /**
          * Constructor which simply calls our super's constructor.
          *
          * @param context Context used by super (`getActivity()` called from menu of our
          * `CursorLoaderListFragment` would return `LoaderCurstor` as the Activity Context
          * in our case)
          */
-        (context: Context) : SearchView(context) {
+        class MySearchView(context: Context) : SearchView(context) {
 
             /**
              * Called when this view is collapsed as an action view.
@@ -328,8 +349,10 @@ class LoaderCursor : AppCompatActivity() {
             // First, pick the base URI to use depending on whether we are
             // currently filtering.
             val baseUri: Uri = if (mCurFilter != null) {
-                Uri.withAppendedPath(Contacts.CONTENT_FILTER_URI,
-                        Uri.encode(mCurFilter))
+                Uri.withAppendedPath(
+                    Contacts.CONTENT_FILTER_URI,
+                    Uri.encode(mCurFilter)
+                )
             } else {
                 Contacts.CONTENT_URI
             }
@@ -337,12 +360,14 @@ class LoaderCursor : AppCompatActivity() {
             // Now create and return a CursorLoader that will take care of
             // creating a Cursor for the data being displayed.
             val select = ("((" + Contacts.DISPLAY_NAME + " NOTNULL) AND ("
-                    + Contacts.HAS_PHONE_NUMBER + "=1) AND ("
-                    + Contacts.DISPLAY_NAME + " != '' ))")
+                + Contacts.HAS_PHONE_NUMBER + "=1) AND ("
+                + Contacts.DISPLAY_NAME + " != '' ))")
 
-            return CursorLoader(requireActivity(), baseUri,
-                    CONTACTS_SUMMARY_PROJECTION, select, null,
-                    Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC")
+            return CursorLoader(
+                requireActivity(), baseUri,
+                CONTACTS_SUMMARY_PROJECTION, select, null,
+                Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC"
+            )
         }
 
         /**
@@ -378,7 +403,7 @@ class LoaderCursor : AppCompatActivity() {
          * use the [android.widget.CursorAdapter.swapCursor] method so that the old Cursor
          * is not closed.
          *
-         * First we instruct our [SimpleCursorAdapter] field [mAdapter] to swap in our newly
+         * First we instruct our [SimpleCursorAdapter] field [simpleCursorAdapter] to swap in our newly
          * loaded [Cursor] parameter [data], and then if our `Fragment` is in the resumed state
          * we toggle our `List` to be shown now. If we are not in the resumed state we toggle our
          * `List` to be shown ommitting the animation.
@@ -389,7 +414,7 @@ class LoaderCursor : AppCompatActivity() {
         override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor) {
             // Swap the new cursor in.  (The framework will take care of closing the
             // old cursor once we return.)
-            mAdapter.swapCursor(data)
+            simpleCursorAdapter.swapCursor(data)
 
             // The list should now be shown.
             if (isResumed) {
@@ -404,7 +429,7 @@ class LoaderCursor : AppCompatActivity() {
          * making its data unavailable. The application should at this point
          * remove any references it has to the Loader's data.
          *
-         * We simply instruct our [SimpleCursorAdapter] field [mAdapter] to swap in a null [Cursor].
+         * We simply instruct our [SimpleCursorAdapter] field [simpleCursorAdapter] to swap in a null [Cursor].
          *
          * @param loader The Loader that is being reset.
          */
@@ -412,7 +437,7 @@ class LoaderCursor : AppCompatActivity() {
             // This is called when the last Cursor provided to onLoadFinished()
             // above is about to be closed.  We need to make sure we are no
             // longer using it.
-            mAdapter.swapCursor(null)
+            simpleCursorAdapter.swapCursor(null)
         }
 
         /**
@@ -423,12 +448,14 @@ class LoaderCursor : AppCompatActivity() {
             /**
              * These are the Contacts rows that we will retrieve.
              */
-            internal val CONTACTS_SUMMARY_PROJECTION = arrayOf(Contacts._ID, // The unique ID for a row
-                    Contacts.DISPLAY_NAME, // The display name for the contact
-                    Contacts.CONTACT_STATUS, // Contact's latest status updat
-                    Contacts.CONTACT_PRESENCE, // Contact presence status
-                    Contacts.PHOTO_ID, // Reference to the row in the data table holding the photo
-                    Contacts.LOOKUP_KEY)// An opaque value that contains hints on how to find the contact
+            internal val CONTACTS_SUMMARY_PROJECTION = arrayOf(
+                Contacts._ID, // The unique ID for a row
+                Contacts.DISPLAY_NAME, // The display name for the contact
+                Contacts.CONTACT_STATUS, // Contact's latest status updat
+                Contacts.CONTACT_PRESENCE, // Contact presence status
+                Contacts.PHOTO_ID, // Reference to the row in the data table holding the photo
+                Contacts.LOOKUP_KEY
+            )// An opaque value that contains hints on how to find the contact
         }
     }
 
