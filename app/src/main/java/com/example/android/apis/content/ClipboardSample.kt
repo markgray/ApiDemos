@@ -16,11 +16,9 @@
 package com.example.android.apis.content
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.ClipboardManager.OnPrimaryClipChangedListener
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -32,49 +30,58 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import com.example.android.apis.R
 
 /**
  * Shows how to copy to, and paste from the clipboard using the different conversion methods available
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-@SuppressLint("SetTextI18n")
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
+@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
 class ClipboardSample : AppCompatActivity() {
     /**
      * Handle to the CLIPBOARD_SERVICE system-level service (Interface to the clipboard service,
      * for placing and retrieving text in the global clipboard)
      */
     private var mClipboard: ClipboardManager? = null
+
     /**
      * [Spinner] in our UI with ID R.id.clip_type, it is filled from the string array resource
      * R.array.clip_data_types and allows the user to choose options as to how to deal with the
      * contents of the clipboard.
      */
     var mSpinner: Spinner? = null
+
     /**
      * Displays the Mime types describing the current primary clip on the clipboard
      */
     private var mMimeTypes: TextView? = null
+
     /**
      * Output [TextView] for displaying the contents of the clipboard as coerced by the selection
      * in the [Spinner] field [mSpinner].
      */
     private var mDataText: TextView? = null
+
     /**
      * [CharSequence] used to hold the styled text resource String R.string.styled_text
      * ("`Plain, <b>bold</b>, <i>italic</i>, <b><i>bold-italic</i></b>`")
      */
     private var mStyledText: CharSequence? = null
+
     /**
      * [String] containing the result of converting [CharSequence] field [mStyledText] to a
      * plain text string using `toString` method.
      */
     private var mPlainText: String? = null
+
     /**
      * The constant HTML [String] `"<b>Link:</b> <a href=\"http://www.android.com\">Android</a>"`
      */
     private var mHtmlText: String? = null
+
     /**
      * The constant [String] "Link: http://www.android.com"
      */
@@ -87,9 +94,10 @@ class ClipboardSample : AppCompatActivity() {
      * types of the [ClipData] in order to display them, positions the [Spinner] field [mSpinner]
      * appropriately, and updates the contents of the various [TextView]'s in the UI.
      */
-    private var mPrimaryChangeListener: OnPrimaryClipChangedListener = OnPrimaryClipChangedListener {
-        updateClipData(true)
-    }
+    private var mPrimaryChangeListener: OnPrimaryClipChangedListener =
+        OnPrimaryClipChangedListener {
+            updateClipData(true)
+        }
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -131,7 +139,7 @@ class ClipboardSample : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.clipboard)
-        mClipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        mClipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         mStyledText = getText(R.string.styled_text)
         var tv: TextView = findViewById(R.id.styled_text)
         tv.text = mStyledText
@@ -143,9 +151,11 @@ class ClipboardSample : AppCompatActivity() {
         tv = findViewById(R.id.html_text)
         tv.text = mHtmlText
         mSpinner = findViewById(R.id.clip_type)
-        val adapter = ArrayAdapter.createFromResource(this,
-                R.array.clip_data_types,
-                android.R.layout.simple_spinner_item)
+        val adapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.clip_data_types,
+            android.R.layout.simple_spinner_item
+        )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mSpinner!!.adapter = adapter
         mSpinner!!.onItemSelectedListener = object : OnItemSelectedListener {
@@ -163,9 +173,15 @@ class ClipboardSample : AppCompatActivity() {
              * @param position The position of the view in the adapter
              * @param id The row id of the item that is selected
              */
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 updateClipData(false)
             }
+
             /**
              * Callback method to be invoked when the selection disappears from this view. The
              * selection can disappear for instance when touch is activated or when the adapter
@@ -247,7 +263,7 @@ class ClipboardSample : AppCompatActivity() {
      */
     @Suppress("UNUSED_PARAMETER")
     fun pasteIntent(button: View?) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.android.com/"))
+        val intent = Intent(Intent.ACTION_VIEW, "http://www.android.com/".toUri())
         mClipboard!!.setPrimaryClip(ClipData.newIntent("VIEW intent", intent))
     }
 
@@ -262,7 +278,7 @@ class ClipboardSample : AppCompatActivity() {
      */
     @Suppress("UNUSED_PARAMETER")
     fun pasteUri(button: View?) {
-        mClipboard!!.setPrimaryClip(ClipData.newRawUri("URI", Uri.parse("http://www.android.com/")))
+        mClipboard!!.setPrimaryClip(ClipData.newRawUri("URI", "http://www.android.com/".toUri()))
     }
 
     /**
@@ -335,15 +351,19 @@ class ClipboardSample : AppCompatActivity() {
                     item.htmlText != null -> {
                         mSpinner!!.setSelection(2) // HTML Text clip
                     }
+
                     item.text != null -> {
                         mSpinner!!.setSelection(1) // Text clip
                     }
+
                     item.intent != null -> {
                         mSpinner!!.setSelection(3) // Intent clip
                     }
+
                     item.uri != null -> {
                         mSpinner!!.setSelection(4) // Uri clip
                     }
+
                     else -> {
                         mSpinner!!.setSelection(0) // No data in clipboard
                     }
@@ -366,6 +386,7 @@ class ClipboardSample : AppCompatActivity() {
                         mDataText!!.text = "(No Intent)"
                     }
                 }
+
                 4 -> {
                     val itemUri = item.uri
                     if (itemUri != null) {
@@ -374,6 +395,7 @@ class ClipboardSample : AppCompatActivity() {
                         mDataText!!.text = "(No URI)"
                     }
                 }
+
                 5 -> mDataText!!.text = item.coerceToText(this)
                 6 -> mDataText!!.text = item.coerceToStyledText(this)
                 7 -> mDataText!!.text = item.coerceToHtmlText(this)

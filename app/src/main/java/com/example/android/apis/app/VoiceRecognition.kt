@@ -171,16 +171,18 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
          * where the first result is the one with higher confidence.
          */
         intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5)
-        /**
-         * Specify the recognition language. This parameter has to be specified only if the
-         * recognition has to be done in a specific language and not the default one (i.e., the
-         * system locale). Most of the applications do not have to set this parameter.
-         */
-        if (mSupportedLanguageView!!.selectedItem.toString() != "Default") {
-            intent.putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE,
-                mSupportedLanguageView!!.selectedItem.toString()
-            )
+        if (mSupportedLanguageView!!.selectedItem != null) {
+            /**
+             * Specify the recognition language. This parameter has to be specified only if the
+             * recognition has to be done in a specific language and not the default one (i.e., the
+             * system locale). Most of the applications do not have to set this parameter.
+             */
+            if (mSupportedLanguageView!!.selectedItem.toString() != "Default") {
+                intent.putExtra(
+                    RecognizerIntent.EXTRA_LANGUAGE,
+                    mSupportedLanguageView!!.selectedItem.toString()
+                )
+            }
         }
         voiceToTextRequestLauncher.launch(intent)
     }

@@ -30,6 +30,21 @@ import java.util.ArrayList
  * instance created, in order to only receive notifications when we need them.
  */
 class ExampleBroadcastReceiver : BroadcastReceiver() {
+    /**
+     * This method is called when the BroadcastReceiver is receiving an Intent
+     * broadcast. We are logging that we were called, then if the action of the
+     * Intent is ACTION_TIMEZONE_CHANGED (The time zone has changed) or
+     * ACTION_TIME_CHANGED (The time was set) we retrieve the AppWidgetManager
+     * for our Context to `val gm`, initialize `ArrayList<Int?> appWidgetIds` and
+     * `ArrayList<String?> texts` then call our method `loadAllTitlePrefs` to
+     * load all of the title preferences for all of our app widgets into `appWidgetIds`
+     * (the appWidgetId's) and `texts` (the widget text). We then loop through all of
+     * the appWidgetId's calling our method `updateAppWidget` to update the app widget
+     * with appWidgetId `appWidgetIds[ i ]` with the text `texts[ i ]`.
+     *
+     * @param context The Context in which the receiver is running.
+     * @param intent The Intent being received.
+     */
     override fun onReceive(context: Context, intent: Intent) {
         Log.d("ExampleBroadcastReceive", "intent=$intent")
 

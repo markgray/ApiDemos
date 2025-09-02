@@ -17,17 +17,18 @@
 package com.example.android.apis.content
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
+import android.content.res.Resources
 import android.database.Cursor
 import android.database.CursorWrapper
 import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -36,7 +37,10 @@ import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
@@ -46,7 +50,8 @@ import androidx.loader.content.Loader
  * a certain time. Layout is created by java code, includes instructive use of a [ListView] to
  * contain the results of the [Cursor] queries.
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
     /**
      * To see this in action, "clear data" for the contacts storage app in the system settings.
@@ -162,6 +167,12 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         mChangeAdapter = ChangeAdapter(this, null, 0)
         val main = LinearLayout(this)
         main.orientation = LinearLayout.VERTICAL
+        main.setPadding(
+            dpToPixel(8, this),
+            dpToPixel(150, this),
+            dpToPixel(8, this),
+            dpToPixel(60, this)
+        )
         mChangeButton = Button(this)
         mChangeButton!!.text = "Changed since " + getLastTimestamp(0, PREF_KEY_CHANGE)
         mChangeButton!!.setOnClickListener { changeClick() }
@@ -189,6 +200,24 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     }
 
     /**
+     * This method converts dp unit to equivalent pixels, depending on device density. First we
+     * fetch a [Resources] instance for `val resources`, then we fetch the current display
+     * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+     * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+     * dots-per-inch, divided by the reference density used throughout the system.
+     *
+     * @param dp      A value in dp (density independent pixels) unit which we need to convert
+     *                into pixels
+     * @param context [Context] to get resources and device specific display metrics
+     * @return An [Int] value to represent px equivalent to dp depending on device density
+     */
+    private fun dpToPixel(dp: Int, context: Context): Int {
+        val resources: Resources = context.resources
+        val metrics = resources.displayMetrics
+        return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
+    }
+
+    /**
      * Called after [onRestoreInstanceState], [onRestart], or [onPause], for your activity to start
      * interacting with the user. This is a good place to begin animations, open exclusive-access
      * devices (such as the camera), etc.
@@ -201,7 +230,12 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         super.onResume()
         val filter = IntentFilter()
         filter.addAction(ContactsContract.Intents.CONTACTS_DATABASE_CREATED)
-        registerReceiver(mReceiver, filter)
+        ContextCompat.registerReceiver(
+            /* context = */ this,
+            /* receiver = */ mReceiver,
+            /* filter = */ filter,
+            /* flags = */ ContextCompat.RECEIVER_EXPORTED
+        )
     }
 
     /**
@@ -250,10 +284,10 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      * @param key  key to save the timestamp under
      */
     private fun saveLastTimestamp(time: Long, key: String) {
-        val pref = getSharedPreferences(CLASS, Context.MODE_PRIVATE)
-        val editor = pref.edit()
-        editor.putLong(key, time)
-        editor.apply()
+        val pref = getSharedPreferences(CLASS, MODE_PRIVATE)
+        pref.edit {
+            putLong(key, time)
+        }
     }
 
     /**
@@ -268,7 +302,7 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      */
     @Suppress("SameParameterValue")
     private fun getLastTimestamp(time: Long, key: String): Long {
-        val pref = getSharedPreferences(CLASS, Context.MODE_PRIVATE)
+        val pref = getSharedPreferences(CLASS, MODE_PRIVATE)
         return pref.getLong(key, time)
     }
 
@@ -320,9 +354,15 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
             mSearchTime = getLastTimestamp(0, PREF_KEY_CHANGE)
             val selection = ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP + " > ?"
             val bindArgs = arrayOf(mSearchTime.toString() + "")
-            return CursorLoader(this, ContactsContract.Data.CONTENT_URI, projection,
-                selection, bindArgs, ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP
-                + " desc, " + ContactsContract.Data.CONTACT_ID + " desc")
+            return CursorLoader(
+                this,
+                ContactsContract.Data.CONTENT_URI,
+                projection,
+                selection,
+                bindArgs,
+                ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP
+                    + " desc, " + ContactsContract.Data.CONTACT_ID + " desc"
+            )
         }
 
     /**
@@ -348,9 +388,14 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
             mSearchTime = getLastTimestamp(0, PREF_KEY_DELETE)
             val selection = ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP + " > ?"
             val bindArgs = arrayOf(mSearchTime.toString() + "")
-            return CursorLoader(this, ContactsContract.DeletedContacts.CONTENT_URI, projection,
-                selection, bindArgs, ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP +
-                " desc")
+            return CursorLoader(
+                this,
+                ContactsContract.DeletedContacts.CONTENT_URI,
+                projection,
+                selection,
+                bindArgs,
+                ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP + " desc"
+            )
         }
 
     /**
@@ -395,7 +440,8 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                  * Save the largest timestamp returned. Only need the first one due to the sort order.
                  */
                 if (data.moveToNext()) {
-                    val columnIndexLastUpdatedTime = data.getColumnIndex(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP)
+                    val columnIndexLastUpdatedTime =
+                        data.getColumnIndex(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP)
                     timestamp = data.getLong(columnIndexLastUpdatedTime)
                     data.moveToPrevious()
                 }
@@ -404,12 +450,14 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
                     mChangeButton!!.text = "Changed since $timestamp"
                 }
             }
+
             ID_DELETE_LOADER -> {
                 mDisplayView!!.text = data.count.toString() + " delete(s) since " + mSearchTime
                 mList!!.adapter = mDeleteAdapter
                 mDeleteAdapter!!.swapCursor(DeleteCursorWrapper(data))
                 if (data.moveToNext()) {
-                    val columnIndexDeletedTime = data.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP)
+                    val columnIndexDeletedTime =
+                        data.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP)
                     timestamp = data.getLong(columnIndexDeletedTime)
                     data.moveToPrevious()
                 }
@@ -444,14 +492,11 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     /**
      * Wrapper class for Cursor that delegates all calls to the actual cursor object. We use this to
      * extend a cursor while overriding only the method [getColumnIndexOrThrow].
-     */
-    private inner class DeleteCursorWrapper
-    /**
      * Creates a cursor wrapper.
      *
      * @param cursor The underlying cursor to wrap.
      */
-    (cursor: Cursor?) : CursorWrapper(cursor) {
+    private inner class DeleteCursorWrapper(cursor: Cursor?) : CursorWrapper(cursor) {
         /**
          * The super's implementation of this returns the zero-based index for the given column name,
          * or throws [IllegalArgumentException] if the column doesn't exist.
@@ -478,9 +523,6 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      * A subclass of [CursorAdapter] customized to display the contents of a [DeleteCursorWrapper]
      * wrapped [CursorLoader] configured to retrieve the deleted contact table of the contacts
      * provider.
-     */
-    private class DeleteAdapter
-    /**
      * Recommended constructor. First we call through to our super's constructor, then we save
      * the `Context context` parameter in our field `Context mContext` for later use.
      *
@@ -490,7 +532,8 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      * be any combination of [.FLAG_AUTO_REQUERY] and
      * [.FLAG_REGISTER_CONTENT_OBSERVER].
      */
-    (private val mContext: Context, c: Cursor?, flags: Int) : CursorAdapter(mContext, c, flags) {
+    private class DeleteAdapter(private val mContext: Context, c: Cursor?, flags: Int) :
+        CursorAdapter(mContext, c, flags) {
 
         /**
          * Makes a new view to hold the data pointed to by cursor. We create a [LinearLayout] for
@@ -524,9 +567,11 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
          */
         override fun bindView(view: View, context: Context, cursor: Cursor) {
             val item = view as LinearLayout
-            val columnIndexDeletedContactId = cursor.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_ID)
+            val columnIndexDeletedContactId =
+                cursor.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_ID)
             val id = cursor.getString(columnIndexDeletedContactId)
-            val columnIndexDeletedTime = cursor.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP)
+            val columnIndexDeletedTime =
+                cursor.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP)
             val timestamp = cursor.getString(columnIndexDeletedTime)
             setText(item.getChildAt(0), id)
             setText(item.getChildAt(1), timestamp)
@@ -537,9 +582,6 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
     /**
      * A subclass of [CursorAdapter] customized to display the contents of a [CursorLoader]
      * configured to retrieve the "changed after" contacts from the contacts provider
-     */
-    private class ChangeAdapter
-    /**
      * Recommended constructor. First we call through to our super's constructor, then we save
      * the `Context context` parameter in our field `Context mContext` for later use.
      *
@@ -549,7 +591,8 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      * be any combination of [.FLAG_AUTO_REQUERY] and
      * [.FLAG_REGISTER_CONTENT_OBSERVER].
      */
-    (private val mContext: Context, c: Cursor?, flags: Int) : CursorAdapter(mContext, c, flags) {
+    private class ChangeAdapter(private val mContext: Context, c: Cursor?, flags: Int) :
+        CursorAdapter(mContext, c, flags) {
 
         /**
          * Makes a new view to hold the data pointed to by cursor. We create a [LinearLayout] for
@@ -585,11 +628,16 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
          */
         override fun bindView(view: View, context: Context, cursor: Cursor) {
             val item = view as LinearLayout
-            val columnIndexContactId = cursor.getColumnIndex(ContactsContract.Data.CONTACT_ID)
+            val columnIndexContactId = cursor
+                .getColumnIndex(ContactsContract.Data.CONTACT_ID)
             val id = cursor.getString(columnIndexContactId)
-            val columnIndexDisplayName = cursor.getColumnIndex(ContactsContract.Data.DISPLAY_NAME)
+            val columnIndexDisplayName = cursor
+                .getColumnIndex(ContactsContract.Data.DISPLAY_NAME)
             val name = cursor.getString(columnIndexDisplayName)
-            val columnIndexUpdatedTime = cursor.getColumnIndex(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP)
+            val columnIndexUpdatedTime = cursor
+                .getColumnIndex(
+                    ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP
+                )
             val timestamp = cursor.getString(columnIndexUpdatedTime)
             setText(item.getChildAt(0), id)
             setText(item.getChildAt(1), name)
@@ -606,7 +654,7 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         /**
          * Copy of the WRAP_CONTENT field of [ViewGroup.LayoutParams]
          */
-        const val WRAP = ViewGroup.LayoutParams.WRAP_CONTENT
+        const val WRAP: Int = ViewGroup.LayoutParams.WRAP_CONTENT
 
         /**
          * Used for the preferences file 'name' when accessing shared preferences

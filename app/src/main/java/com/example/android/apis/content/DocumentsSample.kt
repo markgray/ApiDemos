@@ -20,10 +20,12 @@ import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.DocumentsContract
+import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
@@ -45,7 +47,7 @@ import java.io.OutputStream
 /**
  * Example that exercises client side of [DocumentsContract].
  */
-@SuppressLint("SetTextI18n")
+@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 class DocumentsSample : AppCompatActivity() {
     /**
@@ -118,6 +120,12 @@ class DocumentsSample : AppCompatActivity() {
          */
         val view = LinearLayout(context)
         view.orientation = LinearLayout.VERTICAL
+        view.setPadding(
+            dpToPixel(8, this),
+            dpToPixel(150, this),
+            dpToPixel(8, this),
+            dpToPixel(60, this)
+        )
         mResult = TextView(context)
         view.addView(mResult)
         /**
@@ -188,8 +196,11 @@ class DocumentsSample : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
             intent.addCategory(Intent.CATEGORY_OPENABLE)
             intent.type = "*/*"
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf(
-                "text/plain", "application/msword"))
+            intent.putExtra(
+                Intent.EXTRA_MIME_TYPES, arrayOf(
+                    "text/plain", "application/msword"
+                )
+            )
             if (multiple.isChecked) {
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             }
@@ -265,10 +276,31 @@ class DocumentsSample : AppCompatActivity() {
     }
 
     /**
+     * This method converts dp unit to equivalent pixels, depending on device density. First we
+     * fetch a [Resources] instance for `val resources`, then we fetch the current display
+     * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+     * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+     * dots-per-inch, divided by the reference density used throughout the system.
+     *
+     * @param dp      A value in dp (density independent pixels) unit which we need to convert
+     *                into pixels
+     * @param context [Context] to get resources and device specific display metrics
+     * @return An [Int] value to represent px equivalent to dp depending on device density
+     */
+    private fun dpToPixel(dp: Int, context: Context): Int {
+        val resources: Resources = context.resources
+        val metrics = resources.displayMetrics
+        return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
+    }
+
+
+    /**
      * [ActivityResultLauncher] used to launch a [CODE_READ] request code [Intent].
      */
     private val launcherCodeRead: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
             handleRequestCodes(
                 requestCode = CODE_READ,
                 resultCode = result.resultCode,
@@ -280,7 +312,9 @@ class DocumentsSample : AppCompatActivity() {
      * [ActivityResultLauncher] used to launch a [CODE_WRITE] request code [Intent].
      */
     private val launcherCodeWrite: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
             handleRequestCodes(
                 requestCode = CODE_WRITE,
                 resultCode = result.resultCode,
@@ -292,7 +326,9 @@ class DocumentsSample : AppCompatActivity() {
      * [ActivityResultLauncher] used to launch a [CODE_TREE] request code [Intent].
      */
     private val launcherCodeTree: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
             handleRequestCodes(
                 requestCode = CODE_TREE,
                 resultCode = result.resultCode,
@@ -304,7 +340,9 @@ class DocumentsSample : AppCompatActivity() {
      * [ActivityResultLauncher] used to launch a [CODE_RENAME] request code [Intent].
      */
     private val launcherCodeRename: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
             handleRequestCodes(
                 requestCode = CODE_RENAME,
                 resultCode = result.resultCode,
@@ -520,8 +558,13 @@ class DocumentsSample : AppCompatActivity() {
         displayName: String
     ): Uri? {
         return try {
-            DocumentsContract.createDocument(resolver, documentUri!!, mimeType, displayName)
-        } catch (e: Exception) {
+            DocumentsContract.createDocument(
+                resolver,
+                documentUri!!,
+                mimeType,
+                displayName
+            )
+        } catch (_: Exception) {
             null
         }
     }
@@ -538,7 +581,7 @@ class DocumentsSample : AppCompatActivity() {
     private fun deleteDocument(resolver: ContentResolver, documentUri: Uri?): Boolean {
         return try {
             DocumentsContract.deleteDocument(resolver, documentUri!!)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             false
         }
     }
@@ -558,7 +601,7 @@ class DocumentsSample : AppCompatActivity() {
     private fun renameDocument(resolver: ContentResolver, uri: Uri, newName: String): Uri? {
         return try {
             DocumentsContract.renameDocument(resolver, uri, newName)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }
@@ -668,7 +711,7 @@ class DocumentsSample : AppCompatActivity() {
                     closeable.close()
                 } catch (rethrown: RuntimeException) {
                     throw rethrown
-                } catch (ignored: Exception) {
+                } catch (_: Exception) {
                 }
             }
         }
