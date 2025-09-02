@@ -15,15 +15,18 @@
  */
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.OnInitListener
 import android.util.Log
 import android.widget.Button
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
+import com.example.android.apis.app.TextToSpeechActivity.Companion.HELLOS
+import com.example.android.apis.app.TextToSpeechActivity.Companion.RANDOM
 import java.util.Locale
 import java.util.Random
 
@@ -39,7 +42,8 @@ import java.util.Random
  * Documentation:
  * http://developer.android.com/reference/android/speech/tts/package-summary.html
  */
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class TextToSpeechActivity : AppCompatActivity(), OnInitListener {
     /**
      * [TextToSpeech] instance we use to read our text aloud.
@@ -128,7 +132,8 @@ class TextToSpeechActivity : AppCompatActivity(), OnInitListener {
              * `result = mTts.setLanguage(Locale.FRANCE);`
              */
             if (result == TextToSpeech.LANG_MISSING_DATA ||
-                result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                result == TextToSpeech.LANG_NOT_SUPPORTED
+            ) {
                 /**
                  * Language data is missing or the language is not supported.
                  */
@@ -168,10 +173,12 @@ class TextToSpeechActivity : AppCompatActivity(), OnInitListener {
         val helloLength = HELLOS.size
         val hello = HELLOS[RANDOM.nextInt(helloLength)]
         val dummy: Bundle? = null
-        mTts!!.speak(hello,
+        mTts!!.speak(
+            hello,
             TextToSpeech.QUEUE_FLUSH, // Drop all pending entries in the playback queue.
             dummy,
-            hello)
+            hello
+        )
     }
 
     /**

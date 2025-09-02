@@ -16,11 +16,12 @@
 
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.opengl.GLSurfaceView
 import android.os.Build
 import android.os.Bundle
 import android.view.SurfaceView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import com.example.android.apis.graphics.CubeRenderer
@@ -44,7 +45,8 @@ import com.example.android.apis.graphics.CubeRenderer
  *  - Try mirroring the secure surface onto a secure display such as an
  * HDMI display with HDCP enabled.  The contents of the secure surface should appear
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 class SecureSurfaceViewActivity : AppCompatActivity() {
     /**
      * GLSurfaceView in our layout

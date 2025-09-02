@@ -62,7 +62,9 @@ class SecureWindowActivity : AppCompatActivity() {
 
         // Make the window secure.  This must be done at the time the activity
         // is created.  It cannot be changed later.
-        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
-                WindowManager.LayoutParams.FLAG_SECURE)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
     }
 }

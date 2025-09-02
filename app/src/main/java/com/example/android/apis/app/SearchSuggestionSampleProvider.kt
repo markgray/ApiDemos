@@ -33,13 +33,14 @@ class SearchSuggestionSampleProvider : SearchRecentSuggestionsProvider() {
          * Manifest file, and any time you instantiate a
          * [android.provider.SearchRecentSuggestions] helper class.
          */
-        const val AUTHORITY = "com.example.android.apis.SuggestionProvider"
+        const val AUTHORITY: String = "com.example.android.apis.SuggestionProvider"
+
         /**
          * These flags determine the operating mode of the suggestions provider.  This value should
          * not change from run to run, because when it does change, your suggestions database may
          * be wiped.
          */
-        const val MODE = DATABASE_MODE_QUERIES
+        const val MODE: Int = DATABASE_MODE_QUERIES
     }
 
     /**

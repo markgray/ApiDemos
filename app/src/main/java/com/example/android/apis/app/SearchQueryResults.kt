@@ -40,10 +40,12 @@ class SearchQueryResults : AppCompatActivity() {
      * [TextView] we will display our query text in
      */
     private var mQueryText: TextView? = null
+
     /**
      * [TextView] we will display our application-specific context (if any)
      */
     private var mAppDataText: TextView? = null
+
     /**
      * [TextView] we will use to inform user whether we were started by a search or by launching.
      */
@@ -128,14 +130,19 @@ class SearchQueryResults : AppCompatActivity() {
      * our [TextView] field [mDeliveredByText]
      */
     @SuppressLint("SetTextI18n")
-    private fun doSearchQuery(queryIntent: Intent, entryPoint: String) { // The search query is provided as an "extra" string in the query intent
+    private fun doSearchQuery(
+        queryIntent: Intent,
+        entryPoint: String
+    ) { // The search query is provided as an "extra" string in the query intent
         val queryString = queryIntent.getStringExtra(SearchManager.QUERY)
         mQueryText!!.text = queryString
         /**
          * Record the query string in the recent queries suggestions provider.
          */
-        val suggestions = SearchRecentSuggestions(this,
-                SearchSuggestionSampleProvider.AUTHORITY, SearchSuggestionSampleProvider.MODE)
+        val suggestions = SearchRecentSuggestions(
+            this,
+            SearchSuggestionSampleProvider.AUTHORITY, SearchSuggestionSampleProvider.MODE
+        )
         suggestions.saveRecentQuery(queryString, null)
         /**
          * If your application provides context data for its searches,

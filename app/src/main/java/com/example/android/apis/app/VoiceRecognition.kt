@@ -117,8 +117,8 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
     }
 
     /**
-     * Handle the click on the start recognition button. If the ID of the View clicked was R.id.btn_speak
-     * (Our "Speak!" [Button]) we call our method [startVoiceRecognitionActivity].
+     * Handle the click on the start recognition button. If the ID of the View clicked was
+     * R.id.btn_speak (Our "Speak!" [Button]) we call our method [startVoiceRecognitionActivity].
      *
      * @param v View of the Button that was clicked
      */
@@ -149,7 +149,10 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
         /**
          * Specify the calling package to identify your application
          */
-        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, javaClass.getPackage()!!.name)
+        intent.putExtra(
+            RecognizerIntent.EXTRA_CALLING_PACKAGE,
+            javaClass.getPackage()!!.name
+        )
         /**
          * Display an hint to the user about what he should say.
          */
@@ -197,14 +200,20 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
      * no data Intent returned from Voice to text".
      */
     private val voiceToTextRequestLauncher: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
 
             if (result.resultCode == RESULT_OK) {
                 val data: Intent? = result.data
                 if (data != null) {
                     val matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     mList!!.adapter =
-                        ArrayAdapter(this, android.R.layout.simple_list_item_1, matches!!)
+                        ArrayAdapter(
+                            this,
+                            android.R.layout.simple_list_item_1,
+                            matches!!
+                        )
                 } else {
                     Log.i(TAG, "There was no data Intent returned from Voice to text")
                 }
@@ -220,6 +229,11 @@ class VoiceRecognition : AppCompatActivity(), View.OnClickListener {
      */
     private fun refreshVoiceSettings() {
         Log.i(TAG, "Sending broadcast")
+        val intent: Intent? = RecognizerIntent.getVoiceDetailsIntent(this)
+        if (intent == null) {
+            Log.i(TAG, "Intent is null")
+            return
+        }
         sendOrderedBroadcast(
             RecognizerIntent.getVoiceDetailsIntent(this),
             null,

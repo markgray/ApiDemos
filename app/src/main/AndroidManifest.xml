@@ -4,7 +4,12 @@
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -111,8 +116,7 @@
             android:enabled="@bool/atLeastJellyBeanMR2"
             android:exported="true"
             android:label="@string/activity_overscan"
-            android:theme="@style/Theme.MyOverscanStyle"
-            tools:targetApi="jelly_bean_mr2">
+            android:theme="@style/Theme.MyOverscanStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -309,7 +313,8 @@
             android:name=".app.RotationAnimation"
             android:exported="true"
             android:label="@string/activity_rotation_animation"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:targetApi="26">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -343,7 +348,7 @@
             android:resizeableActivity="true"
             android:supportsPictureInPicture="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            tools:targetApi="n">
+            tools:targetApi="26">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -357,7 +362,7 @@
             android:resizeableActivity="false"
             android:theme="@style/Theme.AppCompat.Light"
             tools:targetApi="26"
-            tools:ignore="NonResizeableActivity">
+            tools:ignore="DiscouragedApi,NonResizeableActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -371,7 +376,7 @@
             android:resizeableActivity="false"
             android:theme="@style/Theme.AppCompat.Light"
             tools:targetApi="26"
-            tools:ignore="NonResizeableActivity">
+            tools:ignore="DiscouragedApi,NonResizeableActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -393,7 +398,8 @@
             android:name=".app.PresentationActivity"
             android:exported="true"
             android:label="@string/activity_presentation"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:targetApi="23">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -681,14 +687,16 @@
         <!-- Service Samples -->
         <service
             android:name=".app.LocalService"
-            android:stopWithTask="true" />
+            android:stopWithTask="true"
+            tools:targetApi="26" />
 
         <activity
             android:name=".app.LocalServiceActivities$Controller"
             android:exported="true"
             android:label="@string/activity_local_service_controller"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:targetApi="26">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -698,7 +706,8 @@
             android:name=".app.LocalServiceActivities$Binding"
             android:exported="true"
             android:label="@string/activity_local_service_binding"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:targetApi="26">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -707,13 +716,15 @@
 
         <service
             android:name=".app.MessengerService"
-            android:process=":remote" />
+            android:process=":remote"
+            tools:targetApi="26" />
 
         <activity
             android:name=".app.MessengerServiceActivities$Binding"
             android:exported="true"
             android:label="@string/activity_messenger_service_binding"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:targetApi="26">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -722,14 +733,16 @@
 
         <service
             android:name=".app.RemoteService"
-            android:process=":remote" />
+            android:process=":remote"
+            tools:targetApi="26" />
 
         <activity
             android:name=".app.RemoteService$Controller"
             android:exported="true"
             android:label="@string/activity_remote_service_controller"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:targetApi="26">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -739,7 +752,8 @@
             android:name=".app.RemoteService$Binding"
             android:exported="true"
             android:label="@string/activity_remote_service_binding"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:targetApi="26">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -749,21 +763,24 @@
             android:name=".app.RemoteService$BindingOptions"
             android:exported="true"
             android:label="@string/activity_remote_service_binding_options"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:targetApi="26">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
 
-        <service android:name=".app.ServiceStartArguments" />
+        <service android:name=".app.ServiceStartArguments"
+            tools:targetApi="26" />
 
         <activity
             android:name=".app.ServiceStartArguments$Controller"
             android:exported="true"
             android:label="@string/activity_service_start_arguments_controller"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:targetApi="26">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -843,7 +860,8 @@
             android:name=".app.AlarmController"
             android:exported="true"
             android:label="@string/activity_alarm_controller"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:targetApi="23">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -852,7 +870,8 @@
 
         <service
             android:name=".app.AlarmServiceService"
-            android:process=":remote" />
+            android:process=":remote"
+            tools:targetApi="26" />
 
         <activity
             android:name=".app.AlarmService"
@@ -899,7 +918,8 @@
             android:name=".accessibility.MagnificationService"
             android:exported="false"
             android:label="@string/magnification_service_label"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            tools:targetApi="24">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
@@ -984,7 +1004,8 @@
             android:name=".app.IncomingMessage"
             android:exported="true"
             android:label="App/Notification/IncomingMessage"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:targetApi="26">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -1002,7 +1023,8 @@
             android:label="You have messages"
             android:launchMode="singleTask"
             android:taskAffinity=""
-            android:theme="@style/ThemeCurrentDialog" />
+            android:theme="@style/ThemeCurrentDialog"
+            tools:targetApi="26" />
         <!--
              This is used to display a notification selected by the user
              from StatusBarNotifications.  Note the configuration here so
@@ -1028,7 +1050,8 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".app.NotifyingService" />
+        <service android:name=".app.NotifyingService"
+            tools:targetApi="26" />
 
         <activity
             android:name=".app.NotifyingController"
@@ -1041,13 +1064,15 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".app.NotificationBackgroundService" />
+        <service android:name=".app.NotificationBackgroundService"
+            tools:targetApi="26" />
 
         <activity
             android:name=".app.NotificationBackgroundService$Controller"
             android:exported="true"
             android:label="App/Notification/Background Service"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:targetApi="26">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -1187,7 +1212,8 @@
         <activity
             android:name=".app.DeviceAdminSample"
             android:exported="true"
-            android:label="@string/activity_sample_device_admin">
+            android:label="@string/activity_sample_device_admin"
+            tools:targetApi="24">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -1199,7 +1225,8 @@
             android:description="@string/sample_device_admin_description"
             android:exported="true"
             android:label="@string/sample_device_admin"
-            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            android:permission="android.permission.BIND_DEVICE_ADMIN"
+            tools:targetApi="24">
             <meta-data
                 android:name="android.app.device_admin"
                 android:resource="@xml/device_admin_sample" />
@@ -1213,7 +1240,8 @@
             android:description="@string/sample_device_admin_description2"
             android:exported="true"
             android:label="@string/sample_device_admin2"
-            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            android:permission="android.permission.BIND_DEVICE_ADMIN"
+            tools:targetApi="24">
             <meta-data
                 android:name="android.app.device_admin"
                 android:resource="@xml/device_admin_sample" />
@@ -1396,8 +1424,7 @@
 
                 <data
                     android:scheme="package"
-                    android:ssp="com.example.android.apis"
-                    tools:targetApi="kitkat" />
+                    android:ssp="com.example.android.apis" />
             </intent-filter>
         </receiver>
 
@@ -1430,7 +1457,8 @@
             android:name=".preference.PreferencesFromXml"
             android:exported="true"
             android:label="@string/preferences_from_xml"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:ignore="ExportedPreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -1440,7 +1468,8 @@
             android:name=".preference.PreferencesFromCode"
             android:exported="true"
             android:label="@string/preferences_from_code"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:ignore="ExportedPreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -1450,7 +1479,8 @@
             android:name=".preference.AdvancedPreferences"
             android:exported="true"
             android:label="@string/advanced_preferences"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:ignore="ExportedPreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -1470,7 +1500,8 @@
             android:name=".preference.PreferenceDependencies"
             android:exported="true"
             android:label="@string/preference_dependencies"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:ignore="ExportedPreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -1480,7 +1511,8 @@
             android:name=".preference.DefaultValues"
             android:exported="true"
             android:label="@string/default_values"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:ignore="ExportedPreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -1491,7 +1523,8 @@
             android:enabled="@bool/atLeastIceCreamSandwich"
             android:exported="true"
             android:label="@string/switch_preference"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:ignore="ExportedPreferenceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -1642,7 +1675,8 @@
             android:name=".content.MediaContentObserver"
             android:exported="true"
             android:label="@string/activity_media_content_observer"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:targetApi="24">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -1651,10 +1685,12 @@
 
         <service
             android:name=".content.MediaContentJob"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            tools:targetApi="24" />
         <service
             android:name=".content.PhotosContentJob"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            tools:targetApi="24" />
 
         <activity
             android:name=".content.InstallApk"
@@ -1777,7 +1813,8 @@
             android:exported="true"
             android:label="OS/Rotation Vector"
             android:screenOrientation="nosensor"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:ignore="DiscouragedApi">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -2794,7 +2831,8 @@
             android:name=".inputmethod.HintLocales"
             android:exported="true"
             android:label="Views/Input Method/HintLocales"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:targetApi="24">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3027,8 +3065,7 @@
             android:enabled="@bool/atLeastLRelease"
             android:exported="true"
             android:label="Views/Controls/5. Material Light Theme v24"
-            android:theme="@style/Theme.MyMaterialLight"
-            tools:targetApi="lollipop">
+            android:theme="@style/Theme.MyMaterialLight">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3039,8 +3076,7 @@
             android:enabled="@bool/atLeastLRelease"
             android:exported="true"
             android:label="Views/Controls/6. Material Dark Theme v24"
-            android:theme="@style/Theme.MyMaterial"
-            tools:targetApi="lollipop">
+            android:theme="@style/Theme.MyMaterial">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3051,8 +3087,7 @@
             android:enabled="@bool/atLeastLRelease"
             android:exported="true"
             android:label="Views/Controls/5. Material Light Theme v21"
-            android:theme="@style/Theme.MyMaterialLight"
-            tools:targetApi="lollipop">
+            android:theme="@style/Theme.MyMaterialLight">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3063,8 +3098,7 @@
             android:enabled="@bool/atLeastLRelease"
             android:exported="true"
             android:label="Views/Controls/6. Material Dark Theme v21"
-            android:theme="@style/Theme.MyMaterial"
-            tools:targetApi="lollipop">
+            android:theme="@style/Theme.MyMaterial">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3234,7 +3268,8 @@
             android:name=".view.OverlayWindowActivity"
             android:exported="true"
             android:label="Views/Overlay Window"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:targetApi="26">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3505,8 +3540,7 @@
             android:enabled="@bool/atLeastKitKat"
             android:exported="true"
             android:label="Views/System UI Visibility/Translucent Bars"
-            android:theme="@style/Theme.NoActionBar.MyTranslucentDecor"
-            tools:targetApi="kitkat">
+            android:theme="@style/Theme.NoActionBar.MyTranslucentDecor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3547,7 +3581,8 @@
             android:name=".view.Tooltips"
             android:exported="true"
             android:label="Views/Tooltips"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:targetApi="26">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3584,7 +3619,7 @@
             android:label="Graphics/CameraPreview"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light"
-            tools:ignore="LockedOrientationActivity">
+            tools:ignore="DiscouragedApi,LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3694,7 +3729,8 @@
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:exported="true"
             android:label="Graphics/OpenGL ES/Touch Rotate"
-            android:theme="@style/Theme.MyThemeNotitleBar">
+            android:theme="@style/Theme.MyThemeNotitleBar"
+            tools:targetApi="26">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3754,8 +3790,7 @@
             android:name=".graphics.ShadowCardStack"
             android:exported="true"
             android:label="Graphics/Shadow Card Stack"
-            android:theme="@style/Theme.AppCompat.Light"
-            tools:targetApi="lollipop">
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3765,8 +3800,7 @@
             android:name=".graphics.ShadowCardDrag"
             android:exported="true"
             android:label="Graphics/Shadow Card Drag"
-            android:theme="@style/Theme.AppCompat.Light"
-            tools:targetApi="lollipop">
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3994,7 +4028,7 @@
             android:label="Graphics/ColorFilters"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light"
-            tools:ignore="LockedOrientationActivity">
+            tools:ignore="DiscouragedApi,LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -4258,7 +4292,7 @@
         <activity
             android:name=".AskForPermissions"
             android:exported="true"
-            android:label="AskForPermission"
+            android:label="000 AskForPermission"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

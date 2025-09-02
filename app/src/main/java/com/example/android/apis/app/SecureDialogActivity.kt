@@ -82,14 +82,16 @@ class SecureDialogActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         // Create a dialog.
         val dialog = AlertDialog.Builder(this)
-                .setPositiveButton(android.R.string.ok, null)
-                .setMessage(R.string.secure_dialog_dialog_text)
-                .create()
+            .setPositiveButton(android.R.string.ok, null)
+            .setMessage(R.string.secure_dialog_dialog_text)
+            .create()
 
         // Make the dialog secure.  This must be done at the time the dialog is
         // created. It cannot be changed after the dialog has been shown.
-        dialog.window!!.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
-                WindowManager.LayoutParams.FLAG_SECURE)
+        dialog.window!!.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
 
         // Show the dialog.
         dialog.show()

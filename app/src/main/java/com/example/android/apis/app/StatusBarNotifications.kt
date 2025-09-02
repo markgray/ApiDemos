@@ -16,29 +16,26 @@
 
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.RemoteViews
-
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-
 import com.example.android.apis.R
 
 /**
  * Demonstrates adding notifications to the status bar. Displays icon, and text when
  * buttons pressed. Marquee does not work lollipop.
  */
-@TargetApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.O)
 class StatusBarNotifications : AppCompatActivity() {
 
     /**
@@ -97,71 +94,107 @@ class StatusBarNotifications : AppCompatActivity() {
         setContentView(R.layout.status_bar_notifications)
 
         // Get the notification manager service.
-        mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val chan1 = NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
-            NotificationManager.IMPORTANCE_DEFAULT)
+        mNotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val chan1 = NotificationChannel(
+            PRIMARY_CHANNEL,
+            PRIMARY_CHANNEL,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
         chan1.lightColor = Color.GREEN
         chan1.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
         mNotificationManager!!.createNotificationChannel(chan1)
 
         var button: Button = findViewById(R.id.happy)
         button.setOnClickListener {
-            setMood(R.drawable.stat_happy, R.string.status_bar_notifications_happy_message, false)
+            setMood(
+                moodId = R.drawable.stat_happy,
+                textId = R.string.status_bar_notifications_happy_message,
+                showTicker = false
+            )
         }
 
         button = findViewById(R.id.neutral)
         button.setOnClickListener {
-            setMood(R.drawable.stat_neutral, R.string.status_bar_notifications_ok_message, false)
+            setMood(
+                moodId = R.drawable.stat_neutral,
+                textId = R.string.status_bar_notifications_ok_message,
+                showTicker = false
+            )
         }
 
         button = findViewById(R.id.sad)
         button.setOnClickListener {
-            setMood(R.drawable.stat_sad, R.string.status_bar_notifications_sad_message, false)
+            setMood(
+                moodId = R.drawable.stat_sad,
+                textId = R.string.status_bar_notifications_sad_message,
+                showTicker = false
+            )
         }
 
         button = findViewById(R.id.happyMarquee)
         button.setOnClickListener {
-            setMood(R.drawable.stat_happy, R.string.status_bar_notifications_happy_message, true)
+            setMood(
+                moodId = R.drawable.stat_happy,
+                textId = R.string.status_bar_notifications_happy_message,
+                showTicker = true
+            )
         }
 
         button = findViewById(R.id.neutralMarquee)
         button.setOnClickListener {
-            setMood(R.drawable.stat_neutral, R.string.status_bar_notifications_ok_message, true)
+            setMood(
+                moodId = R.drawable.stat_neutral,
+                textId = R.string.status_bar_notifications_ok_message,
+                showTicker = true
+            )
         }
 
         button = findViewById(R.id.sadMarquee)
         button.setOnClickListener {
-            setMood(R.drawable.stat_sad, R.string.status_bar_notifications_sad_message, true)
+            setMood(
+                moodId = R.drawable.stat_sad,
+                textId = R.string.status_bar_notifications_sad_message,
+                showTicker = true
+            )
         }
 
         button = findViewById(R.id.happyViews)
         button.setOnClickListener {
-            setMoodView(R.drawable.stat_happy, R.string.status_bar_notifications_happy_message)
+            setMoodView(
+                moodId = R.drawable.stat_happy,
+                textId = R.string.status_bar_notifications_happy_message
+            )
         }
 
         button = findViewById(R.id.neutralViews)
         button.setOnClickListener {
-            setMoodView(R.drawable.stat_neutral, R.string.status_bar_notifications_ok_message)
+            setMoodView(
+                moodId = R.drawable.stat_neutral,
+                textId = R.string.status_bar_notifications_ok_message
+            )
         }
 
         button = findViewById(R.id.sadViews)
         button.setOnClickListener {
-            setMoodView(R.drawable.stat_sad, R.string.status_bar_notifications_sad_message)
+            setMoodView(
+                moodId = R.drawable.stat_sad,
+                textId = R.string.status_bar_notifications_sad_message
+            )
         }
 
         button = findViewById(R.id.defaultSound)
         button.setOnClickListener {
-            setDefault(Notification.DEFAULT_SOUND)
+            setDefault(defaults = Notification.DEFAULT_SOUND)
         }
 
         button = findViewById(R.id.defaultVibrate)
         button.setOnClickListener {
-            setDefault(Notification.DEFAULT_VIBRATE)
+            setDefault(defaults = Notification.DEFAULT_VIBRATE)
         }
 
         button = findViewById(R.id.defaultAll)
         button.setOnClickListener {
-            setDefault(Notification.DEFAULT_ALL)
+            setDefault(defaults = Notification.DEFAULT_ALL)
         }
 
         button = findViewById(R.id.clear)
@@ -186,7 +219,10 @@ class StatusBarNotifications : AppCompatActivity() {
         return PendingIntent.getActivity(
             this,
             0,
-            Intent(this, NotificationDisplay::class.java).putExtra("moodimg", moodId),
+            Intent(
+                this,
+                NotificationDisplay::class.java
+            ).putExtra("moodimg", moodId),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
@@ -218,18 +254,31 @@ class StatusBarNotifications : AppCompatActivity() {
         // First: root activity of ApiDemos.
         // This is a convenient way to make the proper Intent to launch and
         // reset an application's task.
-        intents[0] = Intent.makeRestartActivityTask(ComponentName(this,
-            com.example.android.apis.ApiDemos::class.java))
+        intents[0] = Intent.makeRestartActivityTask(
+            ComponentName(
+                this,
+                com.example.android.apis.ApiDemos::class.java
+            )
+        )
 
         // "App"
-        intents[1] = Intent(this, com.example.android.apis.ApiDemos::class.java)
+        intents[1] = Intent(
+            this,
+            com.example.android.apis.ApiDemos::class.java
+        )
         intents[1]!!.putExtra("com.example.android.apis.Path", "App")
         // "App/Notification"
-        intents[2] = Intent(this, com.example.android.apis.ApiDemos::class.java)
+        intents[2] = Intent(
+            this,
+            com.example.android.apis.ApiDemos::class.java
+        )
         intents[2]!!.putExtra("com.example.android.apis.Path", "App/Notification")
 
         // Now the activity to display to the user.
-        intents[3] = Intent(this, StatusBarNotifications::class.java)
+        intents[3] = Intent(
+            this,
+            StatusBarNotifications::class.java
+        )
 
         // The PendingIntent to launch our activity if the user selects this
         // notification.  Note the use of FLAG_UPDATE_CURRENT so that if there
@@ -382,7 +431,8 @@ class StatusBarNotifications : AppCompatActivity() {
         mNotificationManager!!.notify(
             MOOD_NOTIFICATIONS, // we use a string id because it is a unique
             // number.  we use it later to cancel the notification
-            notification)
+            notification
+        )
     }
 
     /**
@@ -392,7 +442,7 @@ class StatusBarNotifications : AppCompatActivity() {
         /**
          * The id of the primary notification channel
          */
-        const val PRIMARY_CHANNEL = "default"
+        const val PRIMARY_CHANNEL: String = "default"
 
         /**
          * Use our layout id for a unique identifier for our notifications

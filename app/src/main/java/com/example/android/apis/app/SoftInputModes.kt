@@ -1,6 +1,6 @@
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -27,7 +28,8 @@ import com.example.android.apis.R
  *
  * They are set with: `getWindow().setSoftInputMode(mResizeModeValues[ position ])`
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class SoftInputModes : AppCompatActivity() {
     /**
      * spinner used to select the soft input mode
@@ -78,8 +80,11 @@ class SoftInputModes : AppCompatActivity() {
         setContentView(R.layout.soft_input_modes)
 
         mResizeMode = findViewById<View>(R.id.resize_mode) as Spinner
-        val adapter = ArrayAdapter(this,
-            android.R.layout.simple_spinner_item, mResizeModeLabels)
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            mResizeModeLabels
+        )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mResizeMode.adapter = adapter
         mResizeMode.setSelection(0)
@@ -94,7 +99,12 @@ class SoftInputModes : AppCompatActivity() {
              * @param position The position of the [View] in the adapter
              * @param id The row id of the item that is selected
              */
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 window.setSoftInputMode(mResizeModeValues[position])
             }
 

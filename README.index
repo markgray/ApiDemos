@@ -591,7 +591,7 @@ App
             wallpaper, modifies it and sets the modified bitmap as system wallpaper. The
             image it uses is too small for larger screens because the current wallpaper
             is compressed to fit in the ImageView used by the layout, which is then used
-            to set the new wallpaper. TODO: Fix external file access.
+            to set the new wallpaper. TODO: Requires external file access permission so does not work
 
     App/Activity/Soft Input Modes          all
         .app.SoftInputModes

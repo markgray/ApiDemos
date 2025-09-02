@@ -52,8 +52,10 @@ class TranslucentBlurActivity : AppCompatActivity() {
 
         // Have the system blur any windows behind this one.
 
-        window.setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
-            WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
+            WindowManager.LayoutParams.FLAG_BLUR_BEHIND
+        )
 
         // See assets/res/any/layout/translucent_background.xml for this
         // view layout definition, which is being set here as

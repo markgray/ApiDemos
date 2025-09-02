@@ -15,13 +15,11 @@
  */
 package com.example.android.apis.app
 
-import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -36,11 +34,9 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
-
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-
 import com.example.android.apis.R
-import com.example.android.apis.app.ServiceStartArguments.Controller
 
 /**
  * This is an example of implementing an application service that runs locally
@@ -57,7 +53,7 @@ import com.example.android.apis.app.ServiceStartArguments.Controller
  * work of creating the extra thread and dispatching commands to it.
  */
 @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
-@TargetApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.O)
 class ServiceStartArguments : Service() {
     /**
      * Handle to the system level [NotificationManager] service
@@ -148,9 +144,11 @@ class ServiceStartArguments : Service() {
      * [mServiceHandler].
      */
     override fun onCreate() {
-        mNM = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val chan1 = NotificationChannel(PRIMARY_CHANNEL, PRIMARY_CHANNEL,
-            NotificationManager.IMPORTANCE_DEFAULT)
+        mNM = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val chan1 = NotificationChannel(
+            PRIMARY_CHANNEL, PRIMARY_CHANNEL,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
         chan1.lightColor = Color.GREEN
         chan1.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
         mNM!!.createNotificationChannel(chan1)
@@ -159,7 +157,10 @@ class ServiceStartArguments : Service() {
 // separate thread because the service normally runs in the process's
 // main thread, which we don't want to block.  We also make it
 // background priority so CPU-intensive work will not disrupt our UI.
-        val thread = HandlerThread("ServiceStartArgumentsBackground", Process.THREAD_PRIORITY_BACKGROUND)
+        val thread = HandlerThread(
+            "ServiceStartArgumentsBackground",
+            Process.THREAD_PRIORITY_BACKGROUND
+        )
         thread.start()
         mServiceLooper = thread.looper
         mServiceHandler = ServiceHandler(mServiceLooper)
@@ -248,7 +249,11 @@ class ServiceStartArguments : Service() {
         /**
          * Tell the user we stopped.
          */
-        Toast.makeText(this@ServiceStartArguments, R.string.service_destroyed, Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this@ServiceStartArguments,
+            R.string.service_destroyed,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     /**
@@ -360,8 +365,12 @@ class ServiceStartArguments : Service() {
          * key "name".
          */
         private val mStart1Listener = View.OnClickListener {
-            startService(Intent(this@Controller, ServiceStartArguments::class.java)
-                .putExtra("name", "One"))
+            startService(
+                Intent(
+                    this@Controller,
+                    ServiceStartArguments::class.java
+                ).putExtra("name", "One")
+            )
         }
 
         /**
@@ -371,8 +380,12 @@ class ServiceStartArguments : Service() {
          * key "name".
          */
         private val mStart2Listener = View.OnClickListener {
-            startService(Intent(this@Controller, ServiceStartArguments::class.java)
-                .putExtra("name", "Two"))
+            startService(
+                Intent(
+                    this@Controller,
+                    ServiceStartArguments::class.java
+                ).putExtra("name", "Two")
+            )
         }
 
         /**
@@ -382,9 +395,13 @@ class ServiceStartArguments : Service() {
          * key "name", and an [Boolean] extra *true* stored under the key "redeliver"
          */
         private val mStart3Listener = View.OnClickListener {
-            startService(Intent(this@Controller, ServiceStartArguments::class.java)
-                .putExtra("name", "Three")
-                .putExtra("redeliver", true))
+            startService(
+                Intent(
+                    this@Controller,
+                    ServiceStartArguments::class.java
+                ).putExtra("name", "Three")
+                    .putExtra("redeliver", true)
+            )
         }
 
         /**
@@ -394,9 +411,13 @@ class ServiceStartArguments : Service() {
          * key "name", and an [Boolean] extra *true* stored under the key "fail"
          */
         private val mStartFailListener = View.OnClickListener {
-            startService(Intent(this@Controller, ServiceStartArguments::class.java)
-                .putExtra("name", "Failure")
-                .putExtra("fail", true))
+            startService(
+                Intent(
+                    this@Controller,
+                    ServiceStartArguments::class.java
+                ).putExtra("name", "Failure")
+                    .putExtra("fail", true)
+            )
         }
 
         /**
@@ -418,11 +439,11 @@ class ServiceStartArguments : Service() {
         /**
          * TAG for logging
          */
-        const val TAG = "ServiceStartArguments"
+        const val TAG: String = "ServiceStartArguments"
 
         /**
          * The id of the primary notification channel
          */
-        const val PRIMARY_CHANNEL = "default"
+        const val PRIMARY_CHANNEL: String = "default"
     }
 }

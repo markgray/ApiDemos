@@ -14,7 +14,7 @@ class AskForPermissions : AppCompatActivity() {
     /**
      * List of permissions requested in AndroidManifest.xml
      */
-    var permissions: Array<String> = arrayOf(
+    var permissions: MutableList<String> = mutableListOf(
         Manifest.permission.READ_CONTACTS,
         Manifest.permission.WRITE_CONTACTS,
         Manifest.permission.VIBRATE,
@@ -47,13 +47,21 @@ class AskForPermissions : AppCompatActivity() {
         setContentView(R.layout.activity_ask_for_permissions)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            permissions += Manifest.permission.POST_NOTIFICATIONS
+            permissions
+                .addAll(
+                    listOf(
+                        Manifest.permission.POST_NOTIFICATIONS,
+                        Manifest.permission.READ_MEDIA_IMAGES,
+                        Manifest.permission.READ_MEDIA_VIDEO,
+                        Manifest.permission.READ_MEDIA_AUDIO
+                    )
+                )
         }
         val askUser = findViewById<Button>(R.id.ask_for_permission)
         askUser?.setOnClickListener { v ->
             ActivityCompat.requestPermissions(
                 this@AskForPermissions,
-                permissions,
+                permissions.toTypedArray(),
                 1
             )
         }

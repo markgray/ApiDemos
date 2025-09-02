@@ -105,7 +105,10 @@ class SearchInvoke : AppCompatActivity() {
          * Populate items
          */
         val adapter = ArrayAdapter.createFromResource(
-            this, R.array.search_menuModes, android.R.layout.simple_spinner_item)
+            this,
+            R.array.search_menuModes,
+            android.R.layout.simple_spinner_item
+        )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mMenuMode!!.adapter = adapter
         /**
@@ -114,16 +117,21 @@ class SearchInvoke : AppCompatActivity() {
          * the default key mode in your activity's onCreate() handler.
          */
         mMenuMode!!.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 if (position == MENUMODE_TYPE_TO_SEARCH) {
-                    setDefaultKeyMode(Activity.DEFAULT_KEYS_SEARCH_LOCAL)
+                    setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL)
                 } else {
-                    setDefaultKeyMode(Activity.DEFAULT_KEYS_DISABLE)
+                    setDefaultKeyMode(DEFAULT_KEYS_DISABLE)
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                setDefaultKeyMode(Activity.DEFAULT_KEYS_DISABLE)
+                setDefaultKeyMode(DEFAULT_KEYS_DISABLE)
             }
         }
         /**
@@ -159,15 +167,18 @@ class SearchInvoke : AppCompatActivity() {
          */
         menu.removeItem(0)
         menu.removeItem(1)
+        @Suppress("AssignedValueIsNeverRead")
         when (mMenuMode!!.selectedItemPosition) {
             MENUMODE_SEARCH_KEY -> item = menu.add(Menu.NONE, 0, Menu.NONE, "(Search Key)")
             MENUMODE_MENU_ITEM -> {
                 item = menu.add(Menu.NONE, 0, Menu.NONE, "Search")
                 item.alphabeticShortcut = SearchManager.MENU_KEY
             }
+
             MENUMODE_TYPE_TO_SEARCH -> item = menu.add(Menu.NONE, 0, Menu.NONE, "(Type-To-Search)")
             MENUMODE_DISABLED -> item = menu.add(Menu.NONE, 0, Menu.NONE, "(Disabled)")
         }
+        @Suppress("AssignedValueIsNeverRead")
         item = menu.add(Menu.NONE, 1, Menu.NONE, "Clear History")
         return true
     }
@@ -196,20 +207,25 @@ class SearchInvoke : AppCompatActivity() {
         when (item.itemId) {
             0 -> when (mMenuMode!!.selectedItemPosition) {
                 MENUMODE_SEARCH_KEY -> AlertDialog.Builder(this)
-                    .setMessage("To invoke search, dismiss this dialog and press the search key" +
-                        " (F5 on the simulator).")
+                    .setMessage(
+                        "To invoke search, dismiss this dialog and press the search key" +
+                            " (F5 on the simulator)."
+                    )
                     .setPositiveButton("OK", null)
                     .show()
+
                 MENUMODE_MENU_ITEM -> onSearchRequested()
                 MENUMODE_TYPE_TO_SEARCH -> AlertDialog.Builder(this)
                     .setMessage("To invoke search, dismiss this dialog and start typing.")
                     .setPositiveButton("OK", null)
                     .show()
+
                 MENUMODE_DISABLED -> AlertDialog.Builder(this)
                     .setMessage("You have disabled search.")
                     .setPositiveButton("OK", null)
                     .show()
             }
+
             1 -> clearSearchHistory()
         }
         return super.onOptionsItemSelected(item)
@@ -294,8 +310,11 @@ class SearchInvoke : AppCompatActivity() {
      * operation.
      */
     private fun clearSearchHistory() {
-        val suggestions = SearchRecentSuggestions(this,
-            SearchSuggestionSampleProvider.AUTHORITY, SearchSuggestionSampleProvider.MODE)
+        val suggestions = SearchRecentSuggestions(
+            this,
+            SearchSuggestionSampleProvider.AUTHORITY,
+            SearchSuggestionSampleProvider.MODE
+        )
         suggestions.clearHistory()
     }
 
@@ -310,22 +329,22 @@ class SearchInvoke : AppCompatActivity() {
         /**
          * "Search Key" Uses the search key to launch searches (Needs keyboard)
          */
-        const val MENUMODE_SEARCH_KEY = 0
+        const val MENUMODE_SEARCH_KEY: Int = 0
 
         /**
          * "Menu Item" Uses the menu item itself to launch searches
          */
-        const val MENUMODE_MENU_ITEM = 1
+        const val MENUMODE_MENU_ITEM: Int = 1
 
         /**
          * "Type-To-Search" unhandled keystrokes will start an application-defined search
          * (needs keyboard)
          */
-        const val MENUMODE_TYPE_TO_SEARCH = 2
+        const val MENUMODE_TYPE_TO_SEARCH: Int = 2
 
         /**
          * "Disabled" Search is disabled
          */
-        const val MENUMODE_DISABLED = 3
+        const val MENUMODE_DISABLED: Int = 3
     }
 }
