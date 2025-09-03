@@ -17,7 +17,7 @@
 // TODO: replace use of Camera with android.hardware.camera2
 package com.example.android.apis.graphics
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.hardware.Camera
@@ -34,20 +34,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
-
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-
 import com.example.android.apis.R
-
 import java.io.IOException
 import kotlin.math.abs
+import androidx.core.view.isNotEmpty
 
 // ----------------------------------------------------------------------
 /**
  * Shows how to create a SurfaceView for the deprecated Camera api (use android.hardware.camera2)
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.GINGERBREAD)
+@RequiresApi(Build.VERSION_CODES.GINGERBREAD)
 class CameraPreview : AppCompatActivity() {
     /**
      * Our instance of our class [Preview]
@@ -62,17 +62,17 @@ class CameraPreview : AppCompatActivity() {
     /**
      * The number of physical cameras available on this device
      */
-    var numberOfCameras = 0
+    var numberOfCameras: Int = 0
 
     /**
      * Physical camera number that we currently have open
      */
-    var cameraCurrentlyLocked = 0
+    var cameraCurrentlyLocked: Int = 0
 
     /**
      * The first rear facing camera
      */
-    var defaultCameraId = 0
+    var defaultCameraId: Int = 0
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -236,6 +236,7 @@ class CameraPreview : AppCompatActivity() {
                 mCamera!!.startPreview()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -349,8 +350,8 @@ class CameraPreview : AppCompatActivity() {
              * wrapper to a SurfaceView that centers the camera preview instead
              * of stretching it.
              */
-            val width = View.resolveSize(suggestedMinimumWidth, widthMeasureSpec)
-            val height = View.resolveSize(suggestedMinimumHeight, heightMeasureSpec)
+            val width = resolveSize(suggestedMinimumWidth, widthMeasureSpec)
+            val height = resolveSize(suggestedMinimumHeight, heightMeasureSpec)
             setMeasuredDimension(width, height)
             if (mSupportedPreviewSizes != null) {
                 mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, width, height)
@@ -376,7 +377,7 @@ class CameraPreview : AppCompatActivity() {
          * @param b       Bottom position, relative to parent
          */
         override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-            if (changed && childCount > 0) {
+            if (changed && isNotEmpty()) {
                 val child = getChildAt(0)
                 val width = r - l
                 val height = b - t
@@ -392,10 +393,20 @@ class CameraPreview : AppCompatActivity() {
                  */
                 if (width * previewHeight > height * previewWidth) {
                     val scaledChildWidth = previewWidth * height / previewHeight
-                    child.layout((width - scaledChildWidth) / 2, 0, (width + scaledChildWidth) / 2, height)
+                    child.layout(
+                        (width - scaledChildWidth) / 2,
+                        0,
+                        (width + scaledChildWidth) / 2,
+                        height
+                    )
                 } else {
                     val scaledChildHeight = previewHeight * width / previewWidth
-                    child.layout(0, (height - scaledChildHeight) / 2, width, (height + scaledChildHeight) / 2)
+                    child.layout(
+                        0,
+                        (height - scaledChildHeight) / 2,
+                        width,
+                        (height + scaledChildHeight) / 2
+                    )
                 }
             }
         }
@@ -530,7 +541,10 @@ class CameraPreview : AppCompatActivity() {
         }
 
         companion object {
-            const val ASPECT_TOLERANCE = 0.1
+            /**
+             * Tolerance for aspect ratio
+             */
+            const val ASPECT_TOLERANCE: Double = 0.1
 
             /**
              * TAG for logging

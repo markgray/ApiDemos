@@ -46,6 +46,8 @@ class AnimateDrawables : GraphicsActivity() {
      * Custom View which contains an instance of [AnimateDrawable] which it creates from a
      * resource drawable (R.drawable.beach) and an [TranslateAnimation] which will move the
      * drawable from (0,0) to (100,200)
+     *
+     * @param context `Context` to use to fetch resources
      */
     private class SampleView(context: Context) : View(context) {
         /**
@@ -91,7 +93,7 @@ class AnimateDrawables : GraphicsActivity() {
             dr!!.setBounds(0, 0, dr.intrinsicWidth, dr.intrinsicHeight)
             val an: Animation = TranslateAnimation(
                 0f, 100f,
-                0f, 200f
+                240f, 440f
             )
             an.duration = 2000
             an.repeatCount = Animation.INFINITE

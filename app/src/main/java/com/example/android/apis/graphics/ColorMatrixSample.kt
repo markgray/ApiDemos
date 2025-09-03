@@ -50,6 +50,8 @@ class ColorMatrixSample : GraphicsActivity() {
      * Custom [View] class which displays the same jpg (R.drawable.balloons) four different ways,
      * one without any animation of the [ColorMatrix] used to draw it, and three with the
      * [ColorMatrix] used to draw it animated in different ways.
+     *
+     * @param context the [Context] the view is to be displayed in
      */
     private class SampleView(context: Context) : View(context) {
         /**
@@ -58,11 +60,13 @@ class ColorMatrixSample : GraphicsActivity() {
          * only after copying it to [Paint] variable `val paint`.
          */
         private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
         /**
          * [Bitmap] of our resource jpg R.drawable.balloons
          */
         private val mBitmap: Bitmap =
-                BitmapFactory.decodeResource(context.resources, R.drawable.balloons)
+            BitmapFactory.decodeResource(context.resources, R.drawable.balloons)
+
         /**
          * Animated angle [-180...180] incremented in steps of 2 degrees round robin every time the
          * [onDraw] method is called. It is used to create a contrast value of [-1..1], which is
@@ -103,6 +107,7 @@ class ColorMatrixSample : GraphicsActivity() {
          */
         @SuppressLint("DrawAllocation")
         override fun onDraw(canvas: Canvas) {
+            canvas.translate(0f, 240f)
             val paint = mPaint
             val x = 20f
             val y = 20f
@@ -150,12 +155,13 @@ class ColorMatrixSample : GraphicsActivity() {
              */
             @Suppress("unused")
             private fun setTranslate(cm: ColorMatrix, dr: Float, dg: Float, db: Float, da: Float) {
-                cm.set(floatArrayOf(
+                cm.set(
+                    floatArrayOf(
                         2f, 0f, 0f, 0f, dr,
                         0f, 2f, 0f, 0f, dg,
                         0f, 0f, 2f, 0f, db,
                         0f, 0f, 0f, 1f, da
-                      )
+                    )
                 )
             }
 
@@ -171,12 +177,13 @@ class ColorMatrixSample : GraphicsActivity() {
             private fun setContrast(cm: ColorMatrix, contrast: Float) {
                 val scale = contrast + 1f
                 val translate = (-.5f * scale + .5f) * 255f
-                cm.set(floatArrayOf(
+                cm.set(
+                    floatArrayOf(
                         scale, 0f, 0f, 0f, translate,
                         0f, scale, 0f, 0f, translate,
                         0f, 0f, scale, 0f, translate,
                         0f, 0f, 0f, 1f, 0f
-                       )
+                    )
                 )
             }
 
@@ -191,7 +198,30 @@ class ColorMatrixSample : GraphicsActivity() {
             private fun setContrastTranslateOnly(cm: ColorMatrix, contrast: Float) {
                 val scale = contrast + 1f
                 val translate = (-.5f * scale + .5f) * 255f
-                cm.set(floatArrayOf(1f, 0f, 0f, 0f, translate, 0f, 1f, 0f, 0f, translate, 0f, 0f, 1f, 0f, translate, 0f, 0f, 0f, 1f, 0f))
+                cm.set(
+                    floatArrayOf(
+                        1f,
+                        0f,
+                        0f,
+                        0f,
+                        translate,
+                        0f,
+                        1f,
+                        0f,
+                        0f,
+                        translate,
+                        0f,
+                        0f,
+                        1f,
+                        0f,
+                        translate,
+                        0f,
+                        0f,
+                        0f,
+                        1f,
+                        0f
+                    )
+                )
             }
 
             /**
@@ -204,13 +234,16 @@ class ColorMatrixSample : GraphicsActivity() {
              */
             private fun setContrastScaleOnly(cm: ColorMatrix, contrast: Float) {
                 val scale = contrast + 1f
-                @Suppress("UNUSED_VARIABLE")
+
+                @Suppress("unused", "UnusedVariable")
                 val translate = (-.5f * scale + .5f) * 255f
-                cm.set(floatArrayOf(
+                cm.set(
+                    floatArrayOf(
                         scale, 0f, 0f, 0f, 0f, 0f,
                         scale, 0f, 0f, 0f, 0f, 0f,
                         scale, 0f, 0f, 0f, 0f, 0f, 1f, 0f
-                ))
+                    )
+                )
             }
         }
 

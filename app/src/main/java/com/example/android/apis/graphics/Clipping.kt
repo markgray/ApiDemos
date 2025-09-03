@@ -24,6 +24,7 @@ import android.graphics.Region
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.core.graphics.withTranslation
 
 /**
  * Shows how to use android.graphics.Canvas methods clipPath and clipRect, as well as some other
@@ -120,29 +121,27 @@ class Clipping : GraphicsActivity() {
         override fun onDraw(canvas: Canvas) {
             canvas.scale(SCREEN_DENSITY, SCREEN_DENSITY)
             canvas.drawColor(Color.GRAY)
-            canvas.save()
-            canvas.translate(10f, 10f)
-            drawScene(canvas)
-            canvas.restore()
-            canvas.save()
-            canvas.translate(160f, 10f)
-            canvas.clipRect(10, 10, 90, 90)
-            // This used to be
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                canvas.clipOutRect(30f, 30f, 70f, 70f)
-            } else {
-                @Suppress("DEPRECATION")
-                canvas.clipRect(30f, 30f, 70f, 70f, Region.Op.DIFFERENCE)
+            canvas.translate(0f, 240f)
+            canvas.withTranslation(10f, 10f) {
+                drawScene(this)
             }
-            drawScene(canvas)
-            canvas.restore()
-            canvas.save()
-            canvas.translate(10f, 160f)
-            mPath.reset()
-            mPath.addCircle(50f, 50f, 50f, Path.Direction.CCW)
-            canvas.clipPath(mPath)
-            drawScene(canvas)
-            canvas.restore()
+            canvas.withTranslation(160f, 10f) {
+                clipRect(10, 10, 90, 90)
+                // This used to be
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    clipOutRect(30f, 30f, 70f, 70f)
+                } else {
+                    @Suppress("DEPRECATION")
+                    clipRect(30f, 30f, 70f, 70f, Region.Op.DIFFERENCE)
+                }
+                drawScene(this)
+            }
+            canvas.withTranslation(10f, 160f) {
+                mPath.reset()
+                mPath.addCircle(50f, 50f, 50f, Path.Direction.CCW)
+                clipPath(mPath)
+                drawScene(this)
+            }
         }
 
         /**

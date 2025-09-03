@@ -15,6 +15,7 @@
  */
 package com.example.android.apis.graphics
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -24,6 +25,7 @@ import android.os.Bundle
 import android.view.View
 import java.nio.IntBuffer
 import java.nio.ShortBuffer
+import androidx.core.graphics.createBitmap
 
 /**
  * Supposed to show Bitmap.Config.ARGB_8888, Bitmap.Config.RGB_565, and Bitmap.Config.ARGB_4444
@@ -48,7 +50,9 @@ class BitmapPixels : GraphicsActivity() {
      * Custom [View] subclass which displays three [Bitmap]'s displaying the same color ramp using
      * different values for their [Bitmap.Config]
      *
+     * @param context the [Context] to use to retrieve resources
      */
+    @SuppressLint("ObsoleteSdkInt")
     private class SampleView(context: Context?) : View(context) {
         /**
          * Color ramp [Bitmap] using [Bitmap.Config.ARGB_8888] as its resolution
@@ -77,6 +81,7 @@ class BitmapPixels : GraphicsActivity() {
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(-0x333334)
+            canvas.translate(0f, 240f)
             var y = 10
             canvas.drawBitmap(mBitmap1, 10f, y.toFloat(), null)
             y += mBitmap1.height + 10
@@ -226,9 +231,11 @@ class BitmapPixels : GraphicsActivity() {
              * @param ramp4444 ARGB_4444 color format ramp
              */
             @Suppress("SameParameterValue")
-            private fun makeRamp(from: Int, to: Int, n: Int,
-                                 ramp8888: IntArray, ramp565: ShortArray,
-                                 ramp4444: ShortArray) {
+            private fun makeRamp(
+                from: Int, to: Int, n: Int,
+                ramp8888: IntArray, ramp565: ShortArray,
+                ramp4444: ShortArray
+            ) {
                 var r = getR32(from) shl 23
                 var g = getG32(from) shl 23
                 var b = getB32(from) shl 23
@@ -264,6 +271,7 @@ class BitmapPixels : GraphicsActivity() {
             @Suppress("SameParameterValue")
             private fun makeBuffer(src: IntArray, n: Int): IntBuffer {
                 val dst = IntBuffer.allocate(n * n)
+                @Suppress("unused")
                 for (i in 0 until n) {
                     dst.put(src)
                 }
@@ -286,6 +294,7 @@ class BitmapPixels : GraphicsActivity() {
             @Suppress("SameParameterValue")
             private fun makeBuffer(src: ShortArray, n: Int): ShortBuffer {
                 val dst = ShortBuffer.allocate(n * n)
+                @Suppress("unused")
                 for (i in 0 until n) {
                     dst.put(src)
                 }
@@ -324,13 +333,13 @@ class BitmapPixels : GraphicsActivity() {
                 premultiplyColor(Color.GREEN),
                 n, data8888, data565, data4444
             )
-            mBitmap1 = Bitmap.createBitmap(n, n, Bitmap.Config.ARGB_8888)
-            mBitmap2 = Bitmap.createBitmap(n, n, Bitmap.Config.RGB_565)
+            mBitmap1 = createBitmap(n, n)
+            mBitmap2 = createBitmap(n, n, Bitmap.Config.RGB_565)
             mBitmap3 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                Bitmap.createBitmap(n, n, Bitmap.Config.RGB_565)
+                createBitmap(n, n, Bitmap.Config.RGB_565)
             } else {
                 @Suppress("DEPRECATION") // this works for SDK less than KITKAT
-                Bitmap.createBitmap(n, n, Bitmap.Config.ARGB_4444)
+                createBitmap(n, n, Bitmap.Config.ARGB_4444)
             }
             mBitmap1.copyPixelsFromBuffer(makeBuffer(data8888, n))
             mBitmap2.copyPixelsFromBuffer(makeBuffer(data565, n))

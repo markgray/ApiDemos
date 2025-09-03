@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.Transformation
+import androidx.core.graphics.withSave
 
 /**
  * Used by the [AnimateDrawables] demo which:
@@ -35,6 +36,7 @@ class AnimateDrawable : ProxyDrawable {
      * [draw] method.
      */
     var mAnimation: Animation? = null
+
     /**
      * [Transformation] which we modify for each animation step then use to modify the matrix of the
      * [Canvas] passed to our [draw] method.
@@ -102,17 +104,17 @@ class AnimateDrawable : ProxyDrawable {
     override fun draw(canvas: Canvas) {
         val dr = mProxy
         if (dr != null) {
-            val sc = canvas.save()
-            val anim = mAnimation
-            if (anim != null) {
-                anim.getTransformation(
-                        AnimationUtils.currentAnimationTimeMillis(),
-                        mTransformation
-                )
-                canvas.concat(mTransformation.matrix)
+            canvas.withSave {
+                val anim = mAnimation
+                if (anim != null) {
+                    anim.getTransformation(
+                        /* currentTime = */ AnimationUtils.currentAnimationTimeMillis(),
+                        /* outTransformation = */ mTransformation
+                    )
+                    canvas.concat(mTransformation.matrix)
+                }
+                dr.draw(canvas)
             }
-            dr.draw(canvas)
-            canvas.restoreToCount(sc)
         }
     }
 }

@@ -22,6 +22,8 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.os.Bundle
 import android.view.View
+import com.example.android.apis.graphics.Arcs.SampleView.Companion.START_INC
+import com.example.android.apis.graphics.Arcs.SampleView.Companion.SWEEP_INC
 
 /**
  * Shows how to draw arcs and rectangles to a [Canvas] -- need to figure out what slows down
@@ -44,42 +46,51 @@ class Arcs : GraphicsActivity() {
      * inside rectangles. Rotating arcs are drawn inside each of these circles, with four different
      * paints and "use centers" arguments used for the small circles, and a rotation of those four
      * combos for the big circle which changes every 360 degrees.
+     *
+     * @param context [Context] we are to use for resource access
      */
     private class SampleView(context: Context?) : View(context) {
         /**
          * The four [Paint] objects used for the small circles, and cycled through for the big one
          */
         private val mPaints: Array<Paint?> = arrayOfNulls(4)
+
         /**
          * [Paint] used for the rectangles drawn around the 5 circles.
          */
         private val mFramePaint: Paint
+
         /**
          * [Boolean] flag passed to `drawArc` for each of the circles, it is *true* for 2 and
          * false for 2. If *true*, includes the center of the oval in the arc, and close it if it
          * is being stroked. This will draw a wedge.
          */
         private val mUseCenters: BooleanArray = BooleanArray(4)
+
         /**
          * Rectangles for the four small circles in a rectangle, defined by (left, top, right, bottom)
          * float pixel values
          */
         private val mOvals: Array<RectF?> = arrayOfNulls(4)
+
         /**
          * Rectangle for the large circle in a rectangle, defined by (left, top, right, bottom)
          * float pixel values
          */
         private val mBigOval: RectF
+
         /**
          * Starting angle for the arcs being drawn, starts at 0 degrees, incremented by 15 degrees
          * every time [mSweep] reaches 360 degrees
          */
         private var mStart = 0f
+
         /**
          * Sweep angle for the arcs being drawn, starts at 0 degrees, incremented by 2 degrees every
          * time `onDraw` is called and reset to 0 when it reaches 360 degrees.
          */
         private var mSweep = 0f
+
         /**
          * Index 0-3 of values used by the large circle in a rectangle, chooses which of the small
          * circles in a rectangle the large circle mirrors, it is incremented modulo 4 every 360
@@ -123,6 +134,7 @@ class Arcs : GraphicsActivity() {
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(Color.WHITE)
+            canvas.translate(0f, 240f)
             drawArcs(canvas, mBigOval, mUseCenters[mBigIndex], mPaints[mBigIndex])
             for (i in 0..3) {
                 drawArcs(canvas, mOvals[i], mUseCenters[i], mPaints[i])
@@ -147,6 +159,7 @@ class Arcs : GraphicsActivity() {
              * Number of degrees that [mSweep] is incremented every time [onDraw] is called
              */
             private const val SWEEP_INC = 2f
+
             /**
              * Number of degrees that [mStart] is incremented every 360 degrees of arc sweep
              */

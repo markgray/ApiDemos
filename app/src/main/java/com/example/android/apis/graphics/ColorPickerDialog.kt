@@ -34,31 +34,22 @@ import kotlin.math.roundToInt
 
 /**
  * Custom `Dialog` to pick colors, used only by `FingerPaint`
- */
-class ColorPickerDialog
-/**
  * Constructor for our [ColorPickerDialog] instance. First we call through to our super's
  * constructor, then we save our `OnColorChangedListener` parameter `listener` in our field
  * `mListener`, and `initialColor` in our field `mInitialColor`.
  *
  * @param context      `Context` to use for resources, in our case "this" when called from
  * `FingerPaint`'s `onOptionsItemSelected` override
- * @param mListener     `OnColorChangedListener` whose `colorChanged` method we should
+ * @property mListener     `OnColorChangedListener` whose `colorChanged` method we should
  * call when user has selected a color, in our case "this" when called from
  * `FingerPaint`'s `onOptionsItemSelected` override
- * @param mInitialColor initial color currently being used by `FingerPaint`
+ * @property mInitialColor initial color currently being used by `FingerPaint`
  */
-(context: Context?,
-    /**
-     * Set in constructor of `ColorPickerDialog`, and called in `ColorPickerView` when
-     * the user has selected a color. Do not confuse with `ColorPickerView.mListener` which
-     * is an anonymous class which calls `ColorPickerDialog.mListener.colorChanged`
-     */
+class ColorPickerDialog(
+    context: Context?,
     private val mListener: OnColorChangedListener,
-    /**
-     * The current color being used by `FingerPaint`, passed to us as a constructor argument.
-     */
-    private val mInitialColor: Int) : Dialog(context!!) {
+    private val mInitialColor: Int
+) : Dialog(context!!) {
     /**
      * This interface defines the method `colorChanged` which we will call when the user has
      * chosen a new color
@@ -96,14 +87,14 @@ class ColorPickerDialog
      * Custom View that draws a color wheel that the user can choose a color from.
      */
     private class ColorPickerView(
-            context: Context?,
-            /**
-             * The `OnColorChangedListener` we were constructed with, its `colorChanged` method
-             * will be called once the user the has clicked "select color and dismiss" circle at
-             * the center of the color wheel. Do not confuse with `ColorPickerDialog.mListener`.
-             */
-            private val mListener: OnColorChangedListener,
-            color: Int
+        context: Context?,
+        /**
+         * The `OnColorChangedListener` we were constructed with, its `colorChanged` method
+         * will be called once the user the has clicked "select color and dismiss" circle at
+         * the center of the color wheel. Do not confuse with `ColorPickerDialog.mListener`.
+         */
+        private val mListener: OnColorChangedListener,
+        color: Int
     ) : View(context) {
         /**
          * [Paint] with a [SweepGradient] shader used to draw a color spectrum circular
@@ -112,20 +103,23 @@ class ColorPickerDialog
          * for our [Paint] field [mCenterPaint].
          */
         private val mPaint: Paint
+
         /**
          * [Paint] used to draw the "select color and dismiss" circle at the center of the color wheel.
          * It is set to the current color, either the one we are constructed with, or the one the user
          * has selected on the color wheel.
          */
         private val mCenterPaint: Paint
+
         /**
          * Colors used to construct the `SweepGradient` that is used as the shader for
          * [Paint] field [mPaint], which is used to draw the color wheel.
          */
         private val mColors: IntArray = intArrayOf(
-                -0x10000, -0xff01, -0xffff01, -0xff0001,
-                -0xff0100, -0x100, -0x10000
+            -0x10000, -0xff01, -0xffff01, -0xff0001,
+            -0xff0100, -0x100, -0x10000
         )
+
         /**
          * Flag indicating whether the finger's last ACTION_DOWN [MotionEvent] was in the center
          * circle used to "select the current color" and is used to keep track of the finger movement
@@ -134,6 +128,7 @@ class ColorPickerDialog
          * his mind and wishes to continue the search for a color.
          */
         private var mTrackingCenter = false
+
         /**
          * Flag indicating that a halo should be drawn around the center circle, it is set to the
          * [Boolean] value `inCenter` (a flag indicating the location is in the center circle)
@@ -173,9 +168,9 @@ class ColorPickerDialog
                     mCenterPaint.alpha = 0x80
                 }
                 canvas.drawCircle(
-                        0f, 0f,
-                        CENTER_RADIUS + mCenterPaint.strokeWidth,
-                        mCenterPaint
+                    0f, 0f,
+                    CENTER_RADIUS + mCenterPaint.strokeWidth,
+                    mCenterPaint
                 )
                 mCenterPaint.style = Paint.Style.FILL
                 mCenterPaint.color = c
@@ -256,6 +251,7 @@ class ColorPickerDialog
                         invalidate()
                         return true
                     }
+                    @Suppress("KotlinConstantConditions")
                     if (mTrackingCenter) {
                         if (mHighlightCenter != inCenter) {
                             mHighlightCenter = inCenter
@@ -272,6 +268,7 @@ class ColorPickerDialog
                         invalidate()
                     }
                 }
+
                 MotionEvent.ACTION_MOVE -> if (mTrackingCenter) {
                     if (mHighlightCenter != inCenter) {
                         mHighlightCenter = inCenter
@@ -286,6 +283,7 @@ class ColorPickerDialog
                     mCenterPaint.color = interpColor(mColors, unit)
                     invalidate()
                 }
+
                 MotionEvent.ACTION_UP -> if (mTrackingCenter) {
                     if (inCenter) {
                         mListener.colorChanged(mCenterPaint.color)
@@ -389,8 +387,10 @@ class ColorPickerDialog
             val ir = floatToByte(a[0] * r + a[1] * g + a[2] * b)
             val ig = floatToByte(a[5] * r + a[6] * g + a[7] * b)
             val ib = floatToByte(a[10] * r + a[11] * g + a[12] * b)
-            return Color.argb(Color.alpha(color), pinToByte(ir),
-                    pinToByte(ig), pinToByte(ib))
+            return Color.argb(
+                Color.alpha(color), pinToByte(ir),
+                pinToByte(ig), pinToByte(ib)
+            )
         }
 
         companion object {
@@ -398,18 +398,21 @@ class ColorPickerDialog
              * x coordinate of the center of the center circle
              */
             private var CENTER_X = 100
+
             /**
              * y coordinate of the center of the center circle
              */
             private var CENTER_Y = 100
+
             /**
              * radius of the center circle
              */
             private var CENTER_RADIUS = 32
+
             /**
              * constant pi value used for circle calculations when a color on the wheel is being selected
              */
-            private const val PI = 3.1415926f
+            private const val PI = 3.1415925f
 
             var density: Float = 1.0f
         }

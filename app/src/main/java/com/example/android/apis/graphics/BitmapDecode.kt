@@ -62,27 +62,33 @@ class BitmapDecode : GraphicsActivity() {
          * Decoded R.raw.beach jpg, scaled down by 4
          */
         private val mBitmap: Bitmap?
+
         /**
          * Decoded R.raw.frog gif
          */
         private val mBitmap2: Bitmap
+
         /**
          * Deep copy of the pixels of [mBitmap2] using the Bitmap.Config ARGB_8888
          */
         private val mBitmap3: Bitmap
+
         /**
          * Deep copy of the pixels of [mBitmap2] using the Bitmap.Config ARGB_4444
          */
         private val mBitmap4: Bitmap
+
         /**
          * R.drawable.button.9.png [Drawable]
          */
         private val mDrawable: Drawable
+
         /**
          * [Movie] used to play the animated gif R.raw.animated_gif
          */
         @Suppress("DEPRECATION")
         private var mMovie: Movie? = null
+
         /**
          * Start time in milliseconds of the [Movie] used to calculate the relative time of the
          * animation before asking [mMovie] to draw the frame that is scheduled for that time.
@@ -113,6 +119,7 @@ class BitmapDecode : GraphicsActivity() {
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(-0x333334)
+            canvas.translate(0f, 240f)
             if (mBitmap != null) {
                 canvas.drawBitmap(mBitmap, 10f, 10f, null)
             }
@@ -134,7 +141,11 @@ class BitmapDecode : GraphicsActivity() {
                 @Suppress("DEPRECATION")
                 mMovie!!.setTime(relTime)
                 @Suppress("DEPRECATION")
-                mMovie!!.draw(canvas, width - mMovie!!.width().toFloat(), height - mMovie!!.height().toFloat())
+                mMovie!!.draw(
+                    canvas,
+                    width - mMovie!!.width().toFloat(),
+                    height - mMovie!!.height().toFloat() - 300f
+                )
                 invalidate()
             }
         }
@@ -147,6 +158,7 @@ class BitmapDecode : GraphicsActivity() {
              * TAG for logging
              */
             private const val TAG = "BitMapDecode"
+
             /**
              * Set to *false* to use [Movie.decodeByteArray] instead of [Movie.decodeStream]
              */
@@ -256,7 +268,6 @@ class BitmapDecode : GraphicsActivity() {
             mDrawable = ResourcesCompat.getDrawable(resources, R.drawable.button, null)!!
             mDrawable.setBounds(150, 20, 300, 100)
             inputStream = context.resources.openRawResource(R.raw.animated_gif)
-            @Suppress("ConstantConditionIf")
             mMovie = if (DECODE_STREAM) {
                 @Suppress("DEPRECATION")
                 Movie.decodeStream(inputStream)

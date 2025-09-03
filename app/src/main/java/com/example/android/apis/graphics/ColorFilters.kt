@@ -55,23 +55,23 @@ class ColorFilters : GraphicsActivity() {
     /**
      * View that displays 7 rows of the same 4 buttons, with each row using different Porter-Duff
      * color filters
+     *
+     * @param mActivity `Activity` used to construct us, we use it to set the title bar of its window
      */
     private class SampleView(
-            /**
-             * `Activity` used to construct us, we use it to set the title bar of its window
-             */
-            private val mActivity: AppCompatActivity
-
+        private val mActivity: AppCompatActivity
     ) : View(mActivity) {
         /**
          * The resource button R.drawable.btn_default_normal
          */
         private val mDrawable: Drawable
+
         /**
          * The three resource buttons R.drawable.btn_circle_normal, R.drawable.btn_check_off, and
          * R.drawable.btn_check_on
          */
         private val mDrawables: Array<Drawable?>
+
         /**
          * [Paint] used to draw the text "Label" inside the button [Drawable] field [mDrawable],
          * it alternates between 0xFF000000 (Black) and 0xFFFFFFFF (White), and is used in
@@ -79,6 +79,7 @@ class ColorFilters : GraphicsActivity() {
          * first offset by (1,1) and [mPaint] being drawn second.
          */
         private val mPaint: Paint
+
         /**
          * [Paint] used to draw the text "Label" inside the button [Drawable] field [mDrawable],
          * it alternates between 0xFF000000 (Black) and 0xFFFFFFFF (White), and is used in
@@ -86,11 +87,13 @@ class ColorFilters : GraphicsActivity() {
          * first offset by (1,1) and [mPaint] being drawn second.
          */
         private val mPaint2: Paint
+
         /**
          * 1/2 of the sum of the ascent and descent of the FontMetrics of text at size 16, it is
          * used to position the text "Label" when drawing it into [Drawable] field [mDrawable].
          */
         private val mPaintTextOffset: Float
+
         /**
          * An array containing the colors 0, 0xCC0000FF, 0x880000FF, 0x440000FF, 0xFFCCCCFF,
          * 0xFF8888FF, and 0xFF4444FF. They are used as an argument to construct a [PorterDuffColorFilter]
@@ -98,6 +101,7 @@ class ColorFilters : GraphicsActivity() {
          * [PorterDuff.Mode] array field [mModes]
          */
         private val mColors: IntArray
+
         /**
          * The two PortDuff modes PorterDuff.Mode.SRC_ATOP, and PorterDuff.Mode.MULTIPLY, They are
          * used as an argument to construct the [PorterDuffColorFilter] for all the rows of
@@ -106,12 +110,14 @@ class ColorFilters : GraphicsActivity() {
          * of the [mModeIndex] field.
          */
         private val mModes: Array<PorterDuff.Mode>
+
         /**
          * Index into the [PorterDuff.Mode] array field [mModes] used to choose which Porter-Duff
          * mode to use. It is incremented modulo the length of [mModes] every second time the canvas
          * is touched.
          */
         private var mModeIndex: Int
+
         /**
          * The height of each row of buttons, used to translate the canvas to the row to be drawn
          */
@@ -193,6 +199,7 @@ class ColorFilters : GraphicsActivity() {
          */
         @SuppressLint("DrawAllocation")
         override fun onDraw(canvas: Canvas) {
+            canvas.translate(0f, 240f)
             canvas.drawColor(-0x333334)
             canvas.translate(8f, mHeightOffset.toFloat())
             for (color in mColors) {
@@ -228,8 +235,10 @@ class ColorFilters : GraphicsActivity() {
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                 }
+
                 MotionEvent.ACTION_UP -> {
                     // update mode every other time we change paint colors
                     if (mPaint.color == -0x1) {
@@ -331,9 +340,9 @@ class ColorFilters : GraphicsActivity() {
             mDrawable.setBounds(0, 0, 150, 48)
             // mDrawable.setDither(true) this is ignored starting when?
             val resIDs = intArrayOf(
-                    R.drawable.btn_circle_normal,
-                    R.drawable.btn_check_off,
-                    R.drawable.btn_check_on
+                R.drawable.btn_circle_normal,
+                R.drawable.btn_check_off,
+                R.drawable.btn_check_on
             )
             mDrawables = arrayOfNulls(resIDs.size)
             var prev: Drawable? = mDrawable
@@ -352,16 +361,18 @@ class ColorFilters : GraphicsActivity() {
             val fm = mPaint.fontMetrics
             mPaintTextOffset = (fm.descent + fm.ascent) * 0.5f
             mColors = intArrayOf(
-                    0,
-                    -0x33ffff01,
-                    -0x77ffff01,
-                    0x440000FF,
-                    -0x333301,
-                    -0x777701,
-                    -0xbbbb01)
+                0,
+                -0x33ffff01,
+                -0x77ffff01,
+                0x440000FF,
+                -0x333301,
+                -0x777701,
+                -0xbbbb01
+            )
             mModes = arrayOf(
-                    PorterDuff.Mode.SRC_ATOP,
-                    PorterDuff.Mode.MULTIPLY)
+                PorterDuff.Mode.SRC_ATOP,
+                PorterDuff.Mode.MULTIPLY
+            )
             mModeIndex = 0
             updateTitle()
         }
@@ -374,6 +385,6 @@ class ColorFilters : GraphicsActivity() {
         /**
          * TAG used for logging
          */
-        const val TAG = "ColorFilters"
+        const val TAG: String = "ColorFilters"
     }
 }
