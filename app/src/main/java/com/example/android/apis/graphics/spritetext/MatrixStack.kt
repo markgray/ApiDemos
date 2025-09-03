@@ -16,6 +16,8 @@
 package com.example.android.apis.graphics.spritetext
 
 import android.opengl.Matrix
+import com.example.android.apis.graphics.spritetext.MatrixStack.Companion.DEFAULT_MAX_DEPTH
+import com.example.android.apis.graphics.spritetext.MatrixStack.Companion.MATRIX_SIZE
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
 
@@ -28,11 +30,13 @@ class MatrixStack {
      * storage for [DEFAULT_MAX_DEPTH] times [MATRIX_SIZE] entries.
      */
     private lateinit var mMatrix: FloatArray
+
     /**
      * Index of the current top of matrix stack, it goes from 0 to [MATRIX_SIZE] time the quantity
      * [DEFAULT_MAX_DEPTH] minus one in steps of [MATRIX_SIZE].
      */
     private var mTop = 0
+
     /**
      * Temporary storage for holding two matrices each having a size of [MATRIX_SIZE].
      */
@@ -101,9 +105,11 @@ class MatrixStack {
      * @param far    far depth clipping planes
      */
     fun glFrustumx(left: Int, right: Int, bottom: Int, top: Int, near: Int, far: Int) {
-        glFrustumf(fixedToFloat(left), fixedToFloat(right),
-                fixedToFloat(bottom), fixedToFloat(top),
-                fixedToFloat(near), fixedToFloat(far))
+        glFrustumf(
+            fixedToFloat(left), fixedToFloat(right),
+            fixedToFloat(bottom), fixedToFloat(top),
+            fixedToFloat(near), fixedToFloat(far)
+        )
     }
 
     /**
@@ -266,9 +272,11 @@ class MatrixStack {
      * @param far    far depth clipping plane
      */
     fun glOrthox(left: Int, right: Int, bottom: Int, top: Int, near: Int, far: Int) {
-        glOrthof(fixedToFloat(left), fixedToFloat(right),
-                fixedToFloat(bottom), fixedToFloat(top),
-                fixedToFloat(near), fixedToFloat(far))
+        glOrthof(
+            fixedToFloat(left), fixedToFloat(right),
+            fixedToFloat(bottom), fixedToFloat(top),
+            fixedToFloat(near), fixedToFloat(far)
+        )
     }
 
     /**
@@ -293,7 +301,13 @@ class MatrixStack {
      */
     fun glPushMatrix() {
         preflightAdjust(1)
-        System.arraycopy(mMatrix, mTop, mMatrix, mTop + MATRIX_SIZE, MATRIX_SIZE)
+        System.arraycopy(
+            mMatrix,
+            mTop,
+            mMatrix,
+            mTop + MATRIX_SIZE,
+            MATRIX_SIZE
+        )
         adjust(1)
     }
 
@@ -311,8 +325,21 @@ class MatrixStack {
      */
     fun glRotatef(angle: Float, x: Float, y: Float, z: Float) {
         Matrix.setRotateM(mTemp, 0, angle, x, y, z)
-        System.arraycopy(mMatrix, mTop, mTemp, MATRIX_SIZE, MATRIX_SIZE)
-        Matrix.multiplyMM(mMatrix, mTop, mTemp, MATRIX_SIZE, mTemp, 0)
+        System.arraycopy(
+            mMatrix,
+            mTop,
+            mTemp,
+            MATRIX_SIZE,
+            MATRIX_SIZE
+        )
+        Matrix.multiplyMM(
+            mMatrix,
+            mTop,
+            mTemp,
+            MATRIX_SIZE,
+            mTemp,
+            0
+        )
     }
 
     /**
@@ -326,7 +353,12 @@ class MatrixStack {
      * @param z     z coordinate of vector to rotate around
      */
     fun glRotatex(angle: Int, x: Int, y: Int, z: Int) {
-        glRotatef(angle.toFloat(), fixedToFloat(x), fixedToFloat(y), fixedToFloat(z))
+        glRotatef(
+            angle.toFloat(),
+            fixedToFloat(x),
+            fixedToFloat(y),
+            fixedToFloat(z)
+        )
     }
 
     /**
@@ -351,7 +383,11 @@ class MatrixStack {
      * @param z scale factor along the z axis
      */
     fun glScalex(x: Int, y: Int, z: Int) {
-        glScalef(fixedToFloat(x), fixedToFloat(y), fixedToFloat(z))
+        glScalef(
+            fixedToFloat(x),
+            fixedToFloat(y),
+            fixedToFloat(z)
+        )
     }
 
     /**
@@ -376,7 +412,11 @@ class MatrixStack {
      * @param z z coordinate of the translation vector
      */
     fun glTranslatex(x: Int, y: Int, z: Int) {
-        glTranslatef(fixedToFloat(x), fixedToFloat(y), fixedToFloat(z))
+        glTranslatef(
+            fixedToFloat(x),
+            fixedToFloat(y),
+            fixedToFloat(z)
+        )
     }
 
     /**
@@ -386,7 +426,13 @@ class MatrixStack {
      * @param offset index of first location to copy to
      */
     fun getMatrix(dest: FloatArray?, offset: Int) {
-        System.arraycopy(mMatrix, mTop, dest!!, offset, MATRIX_SIZE)
+        System.arraycopy(
+            mMatrix,
+            mTop,
+            dest!!,
+            offset,
+            MATRIX_SIZE
+        )
     }
 
     /**
@@ -427,6 +473,7 @@ class MatrixStack {
          * Default depth of our matrix stack
          */
         private const val DEFAULT_MAX_DEPTH = 32
+
         /**
          * Size of each matrix in our stack
          */

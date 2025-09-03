@@ -19,45 +19,51 @@ package com.example.android.apis.graphics.kube
  * Class representing a single cube of the 3x3x3 cube Rubic cube.
  */
 class Cube(
-        world: GLWorld?,
-        left: Float,
-        bottom: Float,
-        back: Float,
-        right: Float,
-        top: Float,
-        front: Float
+    world: GLWorld?,
+    left: Float,
+    bottom: Float,
+    back: Float,
+    right: Float,
+    top: Float,
+    front: Float
 ) : GLShape(world!!) {
+    @Suppress("ConstPropertyName")
     companion object {
         /**
          * index number of the bottom `GLFace` of our `GLShape` in our super's list of faces
          * `ArrayList<GLFace> mFaceList` (determined by the order we call `GLShape.addFace`)
          */
-        const val kBottom = 0
+        const val kBottom: Int = 0
+
         /**
          * index number of the front `GLFace` of our `GLShape` in our super's list of faces
          * `ArrayList<GLFace> mFaceList` (determined by the order we call `GLShape.addFace`)
          */
-        const val kFront = 1
+        const val kFront: Int = 1
+
         /**
          * index number of the left `GLFace` of our `GLShape` in our super's list of faces
          * `ArrayList<GLFace> mFaceList` (determined by the order we call `GLShape.addFace`)
          */
-        const val kLeft = 2
+        const val kLeft: Int = 2
+
         /**
          * index number of the right `GLFace` of our `GLShape` in our super's list of faces
          * `ArrayList<GLFace> mFaceList` (determined by the order we call `GLShape.addFace`)
          */
-        const val kRight = 3
+        const val kRight: Int = 3
+
         /**
          * index number of the back `GLFace` of our `GLShape` in our super's list of faces
          * `ArrayList<GLFace> mFaceList` (determined by the order we call `GLShape.addFace`)
          */
-        const val kBack = 4
+        const val kBack: Int = 4
+
         /**
          * index number of the top `GLFace` of our `GLShape` in our super's list of faces
          * `ArrayList<GLFace> mFaceList` (determined by the order we call `GLShape.addFace`)
          */
-        const val kTop = 5
+        const val kTop: Int = 5
     }
 
     /**
@@ -124,7 +130,7 @@ class Cube(
         val rightTopFront = addVertex(right, top, front)
         /**
          * vertices are added in a clockwise orientation (when viewed from the outside)
-          */
+         */
         // bottom
         addFace(GLFace(leftBottomBack, leftBottomFront, rightBottomFront, rightBottomBack))
         // front

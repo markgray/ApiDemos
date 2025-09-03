@@ -38,18 +38,21 @@ class MediaContentObserver : AppCompatActivity() {
      * override appends the changed content Uri to our [TextView] field [mDataText]
      */
     var mContentObserver: ContentObserver? = null
+
     /**
      * `Button` in our layout with id R.id.schedule_media_job ("Schedule media job"), its
      * `OnClickListener` calls the `scheduleJob` method of [MediaContentJob] to schedule a
      * [MediaContentJob] job to monitor when there is a change to any media content URI.
      */
     var mScheduleMediaJob: View? = null
+
     /**
      * `Button` in our layout with id R.id.cancel_media_job ("Cancel media job"), its
      * `OnClickListener` calls the `cancelJob` method of [MediaContentJob] to cancel the
      * [MediaContentJob]
      */
     var mCancelMediaJob: View? = null
+
     /**
      * `Button` in our layout with id R.id.schedule_photos_job ("Schedule photos job"), its
      * `OnClickListener` requests the permission READ_EXTERNAL_STORAGE if it is not already
@@ -58,12 +61,14 @@ class MediaContentObserver : AppCompatActivity() {
      * media provider.
      */
     var mSchedulePhotosJob: View? = null
+
     /**
      * `Button` in our layout with id R.id.cancel_photos_job ("Cancel photos job"), its
      * `OnClickListener` calls the `cancelJob` method of [PhotosContentJob] to cancel the
      * [PhotosContentJob]
      */
     var mCancelPhotosJob: View? = null
+
     /**
      * [TextView] in our layout with id R.id.changes_text, the `onChange` override of
      * [ContentObserver] field [mContentObserver] appends the changed content Uri it
@@ -142,9 +147,12 @@ class MediaContentObserver : AppCompatActivity() {
         }
         mSchedulePhotosJob!!.setOnClickListener {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                        REQ_PHOTOS_PERM)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermissions(
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    REQ_PHOTOS_PERM
+                )
             } else {
                 PhotosContentJob.scheduleJob(this@MediaContentObserver)
                 updateButtons()
@@ -155,8 +163,10 @@ class MediaContentObserver : AppCompatActivity() {
             updateButtons()
         }
         updateButtons()
-        contentResolver.registerContentObserver(MediaContentJob.MEDIA_URI, true,
-                mContentObserver!!)
+        contentResolver.registerContentObserver(
+            MediaContentJob.MEDIA_URI, true,
+            mContentObserver!!
+        )
     }
 
     /**
@@ -175,9 +185,9 @@ class MediaContentObserver : AppCompatActivity() {
      * Never *null*.
      */
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQ_PHOTOS_PERM) {
@@ -233,6 +243,6 @@ class MediaContentObserver : AppCompatActivity() {
          * Request code passed to [requestPermissions] when we request READ_EXTERNAL_STORAGE,
          * later passed to our [onRequestPermissionsResult] callback when the user responds.
          */
-        const val REQ_PHOTOS_PERM = 1
+        const val REQ_PHOTOS_PERM: Int = 1
     }
 }

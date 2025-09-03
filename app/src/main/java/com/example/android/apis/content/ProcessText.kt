@@ -1,17 +1,15 @@
 package com.example.android.apis.content
 
-import android.annotation.TargetApi
-import android.app.Activity
+//class is in a sub-package.
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.widget.Button
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-
-//Need the following import to get access to the app resources, since this
-//class is in a sub-package.
 import com.example.android.apis.R
 
 /**
@@ -27,7 +25,7 @@ import com.example.android.apis.R
  *
  * and a `<data>` element with the attribute android:mimeType="text/plain".
  */
-@TargetApi(Build.VERSION_CODES.M)
+@RequiresApi(Build.VERSION_CODES.M)
 class ProcessText : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -75,9 +73,11 @@ class ProcessText : AppCompatActivity() {
      */
     override fun finish() {
         val edit = findViewById<EditText>(R.id.process_text_received_text_editable)
+
+        @SuppressLint("UnsafeIntentLaunch")
         val intent = intent
         intent.putExtra(Intent.EXTRA_PROCESS_TEXT, edit.text)
-        setResult(Activity.RESULT_OK, intent)
+        setResult(RESULT_OK, intent)
         super.finish()
     }
 

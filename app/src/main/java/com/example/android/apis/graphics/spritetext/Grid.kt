@@ -67,21 +67,23 @@ internal class Grid(w: Int, h: Int) {
         mW = w
         mH = h
         val size = w * h
+
         @Suppress("LocalVariableName")
         val FLOAT_SIZE = 4
+
         @Suppress("LocalVariableName")
         val CHAR_SIZE = 2
         mVertexBuffer = ByteBuffer.allocateDirect(FLOAT_SIZE * size * 3)
-                .order(ByteOrder.nativeOrder()).asFloatBuffer()
+            .order(ByteOrder.nativeOrder()).asFloatBuffer()
         mTexCoordBuffer = ByteBuffer.allocateDirect(FLOAT_SIZE * size * 2)
-                .order(ByteOrder.nativeOrder()).asFloatBuffer()
+            .order(ByteOrder.nativeOrder()).asFloatBuffer()
         val quadW = mW - 1
         val quadH = mH - 1
         val quadCount = quadW * quadH
         val indexCount = quadCount * 6
         mIndexCount = indexCount
         mIndexBuffer = ByteBuffer.allocateDirect(CHAR_SIZE * indexCount)
-                .order(ByteOrder.nativeOrder()).asCharBuffer()
+            .order(ByteOrder.nativeOrder()).asCharBuffer()
 
         /*
          * Initialize triangle list mesh.

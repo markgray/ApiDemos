@@ -23,34 +23,21 @@ import javax.microedition.khronos.opengles.GL10
  * Example of how to use OpenGL|ES in a custom view. This is the [GLSurfaceView.Renderer]
  * implementation which is set as the renderer of our [GLSurfaceView] in the `onCreate`
  * override of [Kube].
- */
-internal class KubeRenderer
-/**
- * Our constructor, we merely save our argument `GLWorld world` in our field `mWorld`
- * and our argument `AnimationCallback callback` in our field `mCallback`.
  *
- * Parameter: world    `GLWorld` object containing the model of the rubic cube, we use it for
- * its `draw` method
- * Parameter: callback Callback we use to update the openGL buffers before instructing `mWorld`
- * to draw itself.
+ * @property mWorld The [GLWorld] instance for our rubic cube, it is created in the method
+ * [Kube.makeGLWorld] and used as an argument to our constructor when the [Kube.onCreate] method
+ * initializes its [KubeRenderer] field `mRenderer` with the instance of [KubeRenderer] it uses as
+ * the renderer for its [GLSurfaceView] field `mView`.
+ * @property mCallback The class that implements our interface [AnimationCallback], it is set by one
+ * of the arguments to our constructor (in our case it is "this" when [Kube.onCreate] initializes
+ * its [KubeRenderer] field `mRenderer` with the instance of [KubeRenderer] it uses as the renderer
+ * for its [GLSurfaceView] field `mView`. We call its method `animate` from our [onDrawFrame] method
+ * when we want the openGL buffers to be updated to the next step of the animation before we call
+ * the `draw` method of [mWorld] to draw the next frame.
  */
-(
-        /**
-         * The [GLWorld] instance for our rubic cube, it is created in the method [Kube.makeGLWorld]
-         * and used as an argument to our constructor when the [Kube.onCreate] method initializes its
-         * [KubeRenderer] field `mRenderer` with the instance of [KubeRenderer] it uses as the renderer
-         * for its [GLSurfaceView] field `mView`.
-         */
-        private val mWorld: GLWorld,
-        /**
-         * The class that implements our interface [AnimationCallback], it is set by one of the
-         * arguments to our constructor (in our case it is "this" when [Kube.onCreate] initializes
-         * its [KubeRenderer] field `mRenderer` with the instance of [KubeRenderer] it uses as
-         * the renderer for its [GLSurfaceView] field `mView`. We call its method `animate`
-         * from our [onDrawFrame] method when we want the openGL buffers to be updated to the next
-         * step of the animation before we call the `draw` method of [mWorld] to draw the next frame.
-         */
-        private val mCallback: AnimationCallback?
+internal class KubeRenderer(
+    private val mWorld: GLWorld,
+    private val mCallback: AnimationCallback?
 ) : GLSurfaceView.Renderer {
 
     /**

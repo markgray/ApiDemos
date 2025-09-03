@@ -32,7 +32,9 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import java.util.ArrayList
+import androidx.core.net.toUri
+import com.example.android.apis.content.PhotosContentJob.Companion.JOB_INFO
+import com.example.android.apis.content.PhotosContentJob.Companion.scheduleJob
 
 /**
  * Example stub job to monitor when there is a change to photos in the media provider.
@@ -45,32 +47,40 @@ class PhotosContentJob : JobService() {
          * The root URI of the media provider, to monitor for generic changes
          * to its content: "content://media/"
          */
-        val MEDIA_URI: Uri = Uri.parse("content://" + MediaStore.AUTHORITY + "/")
+        val MEDIA_URI: Uri = ("content://" + MediaStore.AUTHORITY + "/").toUri()
+
         /**
          * Path segments for image-specific URIs in the provider: "external", "images", and "media".
          */
-        val EXTERNAL_PATH_SEGMENTS: MutableList<String> = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.pathSegments
+        val EXTERNAL_PATH_SEGMENTS: MutableList<String> =
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI.pathSegments
+
         /**
          * The columns we want to retrieve about a particular image.
          */
         @Suppress("DEPRECATION")
-        val PROJECTION = arrayOf(
-                MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATA
+        val PROJECTION: Array<String> = arrayOf(
+            MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATA
         )
+
         /**
          * Column number of the _ID column in the [Cursor] returned by our query
          */
-        const val PROJECTION_ID = 0
+        const val PROJECTION_ID: Int = 0
+
         /**
          * Column number of the DATA column in the [Cursor] returned by our query
          */
-        const val PROJECTION_DATA = 1
+        const val PROJECTION_DATA: Int = 1
+
         /**
          * This is the external storage directory where cameras place pictures: /storage/emulated/0/DCIM
          */
         @Suppress("DEPRECATION")
         val DCIM_DIR: String = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM).path
+            Environment.DIRECTORY_DCIM
+        ).path
+
         /**
          * A pre-built JobInfo we use for scheduling our job, built in our *init* block.
          */
@@ -142,12 +152,17 @@ class PhotosContentJob : JobService() {
          * `JobInfo` it creates to initialize our field `JOB_INFO`
          */
         init {
-            val builder = JobInfo.Builder(JobIds.PHOTOS_CONTENT_JOB,
-                    ComponentName("com.example.android.apis", PhotosContentJob::class.java.name))
+            val builder = JobInfo.Builder(
+                JobIds.PHOTOS_CONTENT_JOB,
+                ComponentName("com.example.android.apis", PhotosContentJob::class.java.name)
+            )
             // Look for specific changes to images in the provider.
-           builder.addTriggerContentUri(TriggerContentUri(
+            builder.addTriggerContentUri(
+                TriggerContentUri(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS))
+                    TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS
+                )
+            )
             // Also look for general reports of changes in the overall provider.
             builder.addTriggerContentUri(TriggerContentUri(MEDIA_URI, 0))
             JOB_INFO = builder.build()
@@ -159,7 +174,7 @@ class PhotosContentJob : JobService() {
     /**
      * [Handler] we use to delay our work by 10 seconds so we can see batching happen.
      */
-    val mHandler = Handler(Looper.myLooper()!!)
+    val mHandler: Handler = Handler(Looper.myLooper()!!)
 
     /**
      * [Runnable] which does all our "work" after a ten second delay. When an object implementing
@@ -286,7 +301,7 @@ class PhotosContentJob : JobService() {
                         rescanNeeded = true
                     }
                 }
-                if (ids.size > 0) {
+                if (ids.isNotEmpty()) {
                     /**
                      * If we found some ids that changed, we want to determine what they are.
                      * First, we do a query with content provider to ask about all of them.
@@ -309,8 +324,9 @@ class PhotosContentJob : JobService() {
                     var haveFiles = false
                     try {
                         cursor = contentResolver.query(
-                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                PROJECTION, selection.toString(), null, null)
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                            PROJECTION, selection.toString(), null, null
+                        )
                         while (cursor!!.moveToNext()) {
                             /**
                              * We only care about files in the DCIM directory.
@@ -327,7 +343,7 @@ class PhotosContentJob : JobService() {
                                 sb.append("\n")
                             }
                         }
-                    } catch (e: SecurityException) {
+                    } catch (_: SecurityException) {
                         sb.append("Error: no access to media!")
                     } finally {
                         cursor?.close()

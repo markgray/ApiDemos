@@ -242,15 +242,17 @@ class ExternalStorage : AppCompatActivity() {
         when {
             Environment.MEDIA_MOUNTED == state -> {
                 mExternalStorageWriteable = true
-                mExternalStorageAvailable = mExternalStorageWriteable
+                mExternalStorageAvailable = true
             }
+
             Environment.MEDIA_MOUNTED_READ_ONLY == state -> {
                 mExternalStorageAvailable = true
                 mExternalStorageWriteable = false
             }
+
             else -> {
                 mExternalStorageWriteable = false
-                mExternalStorageAvailable = mExternalStorageWriteable
+                mExternalStorageAvailable = false
             }
         }
         handleExternalStorageState(mExternalStorageAvailable, mExternalStorageWriteable)
@@ -476,7 +478,8 @@ class ExternalStorage : AppCompatActivity() {
              * Tell the media scanner about the new file so
              * that it is immediately available to the user.
              */
-            MediaScannerConnection.scanFile(this, arrayOf(file.toString()), null
+            MediaScannerConnection.scanFile(
+                this, arrayOf(file.toString()), null
             ) { pathScanned, uri ->
                 /**
                  * Called to notify the client when the media scanner has finished
@@ -667,7 +670,7 @@ class ExternalStorage : AppCompatActivity() {
         createClick: View.OnClickListener?,
         deleteClick: View.OnClickListener?
     ): Item {
-        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val item = Item()
         item.mRoot = inflater.inflate(R.layout.external_storage_item, mLayout, false)
         var tv = item.mRoot!!.findViewById<TextView>(R.id.label)

@@ -16,7 +16,6 @@
 package com.example.android.apis.graphics.kube
 
 import java.nio.ShortBuffer
-import java.util.ArrayList
 
 /**
  * Base class for [Cube], which uses its methods [addVertex] and [addFace] to add
@@ -43,6 +42,7 @@ open class GLShape(
      * called from the `onDrawFrame` method of [KubeRenderer].
      */
     var mTransform: M4? = null
+
     /**
      * Transform to multiply [mTransform] field [M4] by in order to move this instance of [GLShape]
      * to the next step in its animation. It is set by a call to our method [animateTransform],
@@ -50,23 +50,26 @@ open class GLShape(
      * gets called from the `onDrawFrame` method of [KubeRenderer].
      */
     var mAnimateTransform: M4? = null
+
     /**
      * List of [GLFace] faces making up our [GLShape], it is added to by our method
      * [addFace], which is called from the constructor for a [Cube] object (our one
      * and only subclass).
      */
-    protected var mFaceList = ArrayList<GLFace>()
+    protected var mFaceList: ArrayList<GLFace> = ArrayList()
+
     /**
      * List of [GLVertex] vertices making up our [GLShape], it is added to by our method
      * [addVertex], which is called from the constructor for a [Cube] object (our one and
      * only subclass).
      */
-    protected var mVertexList = ArrayList<GLVertex>()
+    protected var mVertexList: ArrayList<GLVertex> = ArrayList()
+
     /**
      * We do not use, so who cares?
      */
     @Suppress("unused")
-    protected var mIndexList = ArrayList<Int>() // make more efficient?
+    protected var mIndexList: ArrayList<Int> = ArrayList() // make more efficient?
 
     /**
      * Adds a [GLFace] to our list `ArrayList<GLFace>` field [mFaceList]. Called only from the

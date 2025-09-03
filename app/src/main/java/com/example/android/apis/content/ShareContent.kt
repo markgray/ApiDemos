@@ -15,7 +15,7 @@
  */
 package com.example.android.apis.content
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Intent
 import android.net.Uri
@@ -23,6 +23,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -30,7 +31,8 @@ import com.example.android.apis.R
  * Example of sharing content from a private content provider. Uses the `provider`
  * ".content.FileProvider" to pipe the image/jpeg to the app that the user selects to handle it.
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
 class ShareContent : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of

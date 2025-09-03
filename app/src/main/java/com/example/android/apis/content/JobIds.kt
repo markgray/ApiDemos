@@ -19,6 +19,6 @@ package com.example.android.apis.content
  * Global constant job IDs used by the app.
  */
 object JobIds {
-    const val MEDIA_CONTENT_JOB = 1
-    const val PHOTOS_CONTENT_JOB = 2
+    const val MEDIA_CONTENT_JOB: Int = 1
+    const val PHOTOS_CONTENT_JOB: Int = 2
 }

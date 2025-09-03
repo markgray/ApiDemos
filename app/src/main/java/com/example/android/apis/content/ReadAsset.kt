@@ -53,12 +53,14 @@ class ReadAsset : AppCompatActivity() {
         setContentView(R.layout.read_asset)
         try {
             val inputStream = assets.open("read_asset.txt")
+
             /**
              * We guarantee that the available method returns the total
              * size of the asset...  of course, this does mean that a single
              * asset can't be more than 2 gigs.
              */
             val size = inputStream.available()
+
             /**
              * Read the entire asset into a local byte buffer.
              */
@@ -69,6 +71,7 @@ class ReadAsset : AppCompatActivity() {
              * Convert the buffer into a string.
              */
             val text = String(buffer)
+
             /**
              * Finally stick the string into the text view.
              */

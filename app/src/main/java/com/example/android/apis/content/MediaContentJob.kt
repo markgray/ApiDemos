@@ -30,6 +30,9 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
+import com.example.android.apis.content.MediaContentJob.Companion.MEDIA_URI
+import com.example.android.apis.content.MediaContentJob.Companion.scheduleJob
 
 /**
  * Example stub job to monitor when there is a change to any media: content URI.
@@ -40,7 +43,8 @@ class MediaContentJob : JobService() {
     /**
      * `Handler` we use to delay our work by 10 seconds so we can see batching happen.
      */
-    val mHandler = Handler(Looper.myLooper()!!)
+    val mHandler: Handler = Handler(Looper.myLooper()!!)
+
     /**
      * [Runnable] which does all our "work" after a ten second delay. When an object implementing
      * interface [Runnable] is used to create a thread, starting the thread causes the object's
@@ -160,7 +164,7 @@ class MediaContentJob : JobService() {
         /**
          * [Uri] we observe using our [TriggerContentUri]
          */
-        val MEDIA_URI: Uri = Uri.parse("content://" + MediaStore.AUTHORITY + "/")
+        val MEDIA_URI: Uri = ("content://" + MediaStore.AUTHORITY + "/").toUri()
 
         /**
          * Called to Schedule a [MediaContentJob] job to be executed. We initialize [JobScheduler]
@@ -181,10 +185,16 @@ class MediaContentJob : JobService() {
          */
         fun scheduleJob(context: Context) {
             val js = context.getSystemService(JobScheduler::class.java)
-            val builder = JobInfo.Builder(JobIds.MEDIA_CONTENT_JOB,
-                    ComponentName(context, MediaContentJob::class.java))
-            builder.addTriggerContentUri(TriggerContentUri(MEDIA_URI,
-                    TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS))
+            val builder = JobInfo.Builder(
+                JobIds.MEDIA_CONTENT_JOB,
+                ComponentName(context, MediaContentJob::class.java)
+            )
+            builder.addTriggerContentUri(
+                TriggerContentUri(
+                    MEDIA_URI,
+                    TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS
+                )
+            )
             js!!.schedule(builder.build())
             Log.i("MediaContentJob", "JOB SCHEDULED!")
         }

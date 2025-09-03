@@ -27,22 +27,26 @@ class GLVertex {
      */
     @JvmField
     var x: Float
+
     /**
      * y coordinate of the vertex
      */
     @JvmField
     var y: Float
+
     /**
      * z coordinate of the vertex
      */
     @JvmField
     var z: Float
+
     /**
      * Index number of this vertex in the field `ArrayList<GLVertex> mVertexList` of our instance
      * of [GLWorld].
      */
     val index // index in vertex table
-            : Short
+        : Short
+
     /**
      * Color of this vertex.
      */

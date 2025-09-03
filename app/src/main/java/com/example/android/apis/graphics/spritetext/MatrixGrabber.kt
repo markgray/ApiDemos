@@ -26,6 +26,7 @@ internal class MatrixGrabber {
      */
     @JvmField
     var mModelView: FloatArray = FloatArray(16)
+
     /**
      * Our copy of the projection view matrix
      */

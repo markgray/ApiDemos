@@ -37,20 +37,23 @@ import javax.microedition.khronos.opengles.GL11Ext
  * as compared to the way the math is implemented by the OpenGL ES
  * driver.
  */
-@Suppress("MemberVisibilityCanBePrivate", "ConstantConditionIf")
+@Suppress("MemberVisibilityCanBePrivate")
 internal class MatrixTrackingGL(gl: GL) : GL, GL10, GL10Ext, GL11, GL11Ext {
     /**
      * The `GL gl` interface passed to our constructor, cast to `GL10`.
      */
     private val mgl: GL10 = gl as GL10
+
     /**
      * The `GL gl` interface passed to our constructor, cast to `GL10Ext`.
      */
     private var mgl10Ext: GL10Ext? = null
+
     /**
      * The `GL gl` interface passed to our constructor, cast to `GL11`.
      */
     private var mgl11: GL11? = null
+
     /**
      * The `GL gl` interface passed to our constructor, cast to `GL11Ext`.
      */
@@ -64,44 +67,52 @@ internal class MatrixTrackingGL(gl: GL) : GL, GL10, GL10Ext, GL11, GL11Ext {
      */
     var matrixMode: Int
         private set
+
     /**
      * Current matrix stack, set in `glMatrixMode` to point to the model view matrix stack
      * `mModelView`, texture matrix stack `mTexture`, or projection matrix stack
      * `mProjection`. Initially set to `mModelView` in our constructor.
      */
     private var mCurrent: MatrixStack
+
     /**
      * Model view matrix stack
      */
     private val mModelView: MatrixStack
+
     /**
      * Texture matrix stack
      */
     private val mTexture: MatrixStack
+
     /**
      * Projection matrix stack
      */
     private val mProjection: MatrixStack
+
     /**
      * `ByteBuffer` used by our method `check` to read the current matrix from the GPU
      */
     var mByteBuffer: ByteBuffer? = null
+
     /**
      * `FloatBuffer` view of `ByteBuffer mByteBuffer` to allow our method `check`
      * to read the GPU matrix into temp storage for its comparison.
      */
     var mFloatBuffer: FloatBuffer? = null
+
     /**
      * Temp storage for our current matrix (used only by `check`
      */
     lateinit var mCheckA: FloatArray
+
     /**
      * Temp storage for the GPU current matrix (used only by `check`
      */
     lateinit var mCheckB: FloatArray
 
-    // ---------------------------------------------------------------------
-// GL10 methods:
+// GL10 methods ---------------------------------------------------------------------
+
     override fun glActiveTexture(texture: Int) {
         mgl.glActiveTexture(texture)
     }
@@ -166,26 +177,53 @@ internal class MatrixTrackingGL(gl: GL) : GL, GL10, GL10Ext, GL11, GL11Ext {
         mgl.glColorPointer(size, type, stride, pointer)
     }
 
-    override fun glCompressedTexImage2D(target: Int, level: Int, internalformat: Int,
-                                        width: Int, height: Int, border: Int,
-                                        imageSize: Int, data: Buffer) {
-        mgl.glCompressedTexImage2D(target, level, internalformat, width, height, border, imageSize, data)
+    override fun glCompressedTexImage2D(
+        target: Int, level: Int, internalformat: Int,
+        width: Int, height: Int, border: Int,
+        imageSize: Int, data: Buffer
+    ) {
+        mgl.glCompressedTexImage2D(
+            target,
+            level,
+            internalformat,
+            width,
+            height,
+            border,
+            imageSize,
+            data
+        )
     }
 
-    override fun glCompressedTexSubImage2D(target: Int, level: Int,
-                                           xoffset: Int, yoffset: Int,
-                                           width: Int, height: Int,
-                                           format: Int, imageSize: Int, data: Buffer) {
-        mgl.glCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, imageSize, data)
+    override fun glCompressedTexSubImage2D(
+        target: Int, level: Int,
+        xoffset: Int, yoffset: Int,
+        width: Int, height: Int,
+        format: Int, imageSize: Int, data: Buffer
+    ) {
+        mgl.glCompressedTexSubImage2D(
+            target,
+            level,
+            xoffset,
+            yoffset,
+            width,
+            height,
+            format,
+            imageSize,
+            data
+        )
     }
 
-    override fun glCopyTexImage2D(target: Int, level: Int, internalformat: Int,
-                                  x: Int, y: Int, width: Int, height: Int, border: Int) {
+    override fun glCopyTexImage2D(
+        target: Int, level: Int, internalformat: Int,
+        x: Int, y: Int, width: Int, height: Int, border: Int
+    ) {
         mgl.glCopyTexImage2D(target, level, internalformat, x, y, width, height, border)
     }
 
-    override fun glCopyTexSubImage2D(target: Int, level: Int, xoffset: Int,
-                                     yoffset: Int, x: Int, y: Int, width: Int, height: Int) {
+    override fun glCopyTexSubImage2D(
+        target: Int, level: Int, xoffset: Int,
+        yoffset: Int, x: Int, y: Int, width: Int, height: Int
+    ) {
         mgl.glCopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height)
     }
 
@@ -277,8 +315,10 @@ internal class MatrixTrackingGL(gl: GL) : GL, GL10, GL10Ext, GL11, GL11Ext {
         mgl.glFrontFace(mode)
     }
 
-    override fun glFrustumf(left: Float, right: Float, bottom: Float, top: Float,
-                            near: Float, far: Float) {
+    override fun glFrustumf(
+        left: Float, right: Float, bottom: Float, top: Float,
+        near: Float, far: Float
+    ) {
         mCurrent.glFrustumf(left, right, bottom, top, near, far)
         mgl.glFrustumf(left, right, bottom, top, near, far)
         if (CHECK) check()
@@ -496,7 +536,14 @@ internal class MatrixTrackingGL(gl: GL) : GL, GL10, GL10Ext, GL11, GL11Ext {
         mgl.glNormalPointer(type, stride, pointer)
     }
 
-    override fun glOrthof(left: Float, right: Float, bottom: Float, top: Float, near: Float, far: Float) {
+    override fun glOrthof(
+        left: Float,
+        right: Float,
+        bottom: Float,
+        top: Float,
+        near: Float,
+        far: Float
+    ) {
         mCurrent.glOrthof(left, right, bottom, top, near, far)
         mgl.glOrthof(left, right, bottom, top, near, far)
         if (CHECK) check()
@@ -540,7 +587,15 @@ internal class MatrixTrackingGL(gl: GL) : GL, GL10, GL10Ext, GL11, GL11Ext {
         if (CHECK) check()
     }
 
-    override fun glReadPixels(x: Int, y: Int, width: Int, height: Int, format: Int, type: Int, pixels: Buffer) {
+    override fun glReadPixels(
+        x: Int,
+        y: Int,
+        width: Int,
+        height: Int,
+        format: Int,
+        type: Int,
+        pixels: Buffer
+    ) {
         mgl.glReadPixels(x, y, width, height, format, type, pixels)
     }
 
@@ -624,12 +679,16 @@ internal class MatrixTrackingGL(gl: GL) : GL, GL10, GL10Ext, GL11, GL11Ext {
         mgl.glTexEnvxv(target, pname, params)
     }
 
-    override fun glTexImage2D(target: Int, level: Int, internalformat: Int,
-                              width: Int, height: Int, border: Int,
-                              format: Int, type: Int, pixels: Buffer) {
-        mgl.glTexImage2D(target, level, internalformat,
-                width, height, border,
-                format, type, pixels)
+    override fun glTexImage2D(
+        target: Int, level: Int, internalformat: Int,
+        width: Int, height: Int, border: Int,
+        format: Int, type: Int, pixels: Buffer
+    ) {
+        mgl.glTexImage2D(
+            target, level, internalformat,
+            width, height, border,
+            format, type, pixels
+        )
     }
 
     override fun glTexParameterf(target: Int, pname: Int, param: Float) {
@@ -648,9 +707,11 @@ internal class MatrixTrackingGL(gl: GL) : GL, GL10, GL10Ext, GL11, GL11Ext {
         mgl11!!.glTexParameteriv(target, pname, params)
     }
 
-    override fun glTexSubImage2D(target: Int, level: Int,
-                                 xoffset: Int, yoffset: Int, width: Int, height: Int,
-                                 format: Int, type: Int, pixels: Buffer) {
+    override fun glTexSubImage2D(
+        target: Int, level: Int,
+        xoffset: Int, yoffset: Int, width: Int, height: Int,
+        format: Int, type: Int, pixels: Buffer
+    ) {
         mgl.glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels)
     }
 
@@ -739,7 +800,12 @@ internal class MatrixTrackingGL(gl: GL) : GL, GL10, GL10Ext, GL11, GL11Ext {
         mgl11Ext!!.glDrawTexxvOES(coords)
     }
 
-    override fun glQueryMatrixxOES(mantissa: IntArray, mantissaOffset: Int, exponent: IntArray, exponentOffset: Int): Int {
+    override fun glQueryMatrixxOES(
+        mantissa: IntArray,
+        mantissaOffset: Int,
+        exponent: IntArray,
+        exponentOffset: Int
+    ): Int {
         return mgl10Ext!!.glQueryMatrixxOES(mantissa, mantissaOffset, exponent, exponentOffset)
     }
 
@@ -1049,8 +1115,10 @@ internal class MatrixTrackingGL(gl: GL) : GL, GL10, GL10Ext, GL11, GL11Ext {
         var fail = false
         for (i in 0..15) {
             if (mCheckA[i] != mCheckB[i]) {
-                Log.d("GLMatWrap", "i:" + i + " a:" + mCheckA[i]
-                        + " a:" + mCheckB[i])
+                Log.d(
+                    "GLMatWrap", "i:" + i + " a:" + mCheckA[i]
+                        + " a:" + mCheckB[i]
+                )
                 fail = true
             }
         }

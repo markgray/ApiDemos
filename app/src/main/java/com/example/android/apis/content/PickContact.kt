@@ -104,7 +104,7 @@ class PickContact : AppCompatActivity() {
             handleRequestCodes(
                 requestCode = 1,
                 resultCode = result.resultCode,
-                data =  result.data
+                data = result.data
             )
 
         }
@@ -208,24 +208,25 @@ class PickContact : AppCompatActivity() {
          * The MIME type of a CONTENT_URI subdirectory of a single person.
          * Constant Value: "vnd.android.cursor.item/contact"
          */
-        const val CONTACT = ContactsContract.Contacts.CONTENT_ITEM_TYPE
+        const val CONTACT: String = ContactsContract.Contacts.CONTENT_ITEM_TYPE
 
         /**
          * The MIME type of a CONTENT_URI subdirectory of a single person.
          * Constant Value: "vnd.android.cursor.item/person"
          */
-        const val PERSON = "vnd.android.cursor.item/person"
+        const val PERSON: String = "vnd.android.cursor.item/person"
 
         /**
          * A data kind representing a telephone number. MIME type used when storing this in data table.
          * Constant Value: "vnd.android.cursor.item/phone_v2"
          */
-        const val PHONE = ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
+        const val PHONE: String = ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
 
         /**
          * A data kind representing a postal addresses and MIME type used when storing this in data table.
          * Constant Value: "vnd.android.cursor.item/postal-address_v2"
          */
-        const val POSTAL = ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE
+        const val POSTAL: String =
+            ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE
     }
 }

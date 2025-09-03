@@ -26,22 +26,26 @@ internal class Projector {
      * [MatrixGrabber] we use to get a copy of the GPU model view and projection matrices
      */
     private val mGrabber: MatrixGrabber = MatrixGrabber()
+
     /**
      * Flag to indicate whether our [FloatArray] field [mMVP] contains an up to date model view
      * projection matrix. If *false*, our method [project] must compute it before applying the
      * matrix to its vector input parameter.
      */
     private var mMVPComputed = false
+
     /**
      * Model view projection matrix we compute using the current GPU model view and projection
      * matrices
      */
     private val mMVP: FloatArray = FloatArray(16)
+
     /**
      * Used by our method [project] to hold the result of multiplying its input parameter vector
      * by our model view projection matrix [FloatArray] field [mMVP].
      */
     private val mV: FloatArray = FloatArray(4)
+
     /**
      * The `x` coordinate passed to our method [setCurrentView] by the `onSurfaceChanged`
      * method of [SpriteTextRenderer] (always 0). It is used as part of the calculation of the
@@ -49,12 +53,14 @@ internal class Projector {
      * to find where to place a label on the rotating triangle.
      */
     private var mX = 0
+
     /**
      * The `y` coordinate passed to our method [setCurrentView] by the `onSurfaceChanged`
      * method of [SpriteTextRenderer] (always 0). It is used as part of the calculation of
      * the projection of the input parameter vector of our method [project].
      */
     private var mY = 0
+
     /**
      * The `width` dimension passed to our method [setCurrentView] by the `onSurfaceChanged`
      * method of [SpriteTextRenderer] (it is the same as the `w` parameter passed to it). It
@@ -62,6 +68,7 @@ internal class Projector {
      * our method [project].
      */
     private var mViewWidth = 0
+
     /**
      * The `height` dimension passed to our method [setCurrentView] by the `onSurfaceChanged`
      * method of [SpriteTextRenderer] (it is the same as the `h` parameter passed to it). It
@@ -124,13 +131,20 @@ internal class Projector {
     fun project(obj: FloatArray?, objOffset: Int, win: FloatArray, winOffset: Int) {
         if (!mMVPComputed) {
             Matrix.multiplyMM(
-                    mMVP, 0,
-                    mGrabber.mProjection, 0,
-                    mGrabber.mModelView, 0
+                mMVP, 0,
+                mGrabber.mProjection, 0,
+                mGrabber.mModelView, 0
             )
             mMVPComputed = true
         }
-        Matrix.multiplyMV(mV, 0, mMVP, 0, obj, objOffset)
+        Matrix.multiplyMV(
+            /* resultVec = */ mV,
+            /* resultVecOffset = */ 0,
+            /* lhsMat = */ mMVP,
+            /* lhsMatOffset = */ 0,
+            /* rhsVec = */ obj,
+            /* rhsVecOffset = */ objOffset
+        )
         val rw = 1.0f / mV[3]
         win[winOffset] = mX + mViewWidth * (mV[0] * rw + 1.0f) * 0.5f
         win[winOffset + 1] = mY + mViewHeight * (mV[1] * rw + 1.0f) * 0.5f

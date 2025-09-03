@@ -19,6 +19,7 @@ import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.graphics.kube.Kube.Companion.mLayerPermutations
 import java.util.Random
 
 /**
@@ -31,46 +32,55 @@ class Kube : AppCompatActivity(), KubeRenderer.AnimationCallback {
      * as its renderer.
      */
     var mView: GLSurfaceView? = null
+
     /**
      * Renderer which performs the drawing to our [GLSurfaceView] field [mView] using the Rubic cube
      * we construct and initialize in the instance of [GLWorld] we pass to its constructor for
      * its data (see our method [makeGLWorld] for how we do this).
      */
     private var mRenderer: KubeRenderer? = null
+
     /**
      * The 27 [Cube] objects which represent our Rubic cube
      */
-    var mCubes = arrayOfNulls<Cube>(27)
+    var mCubes: Array<Cube?> = arrayOfNulls(27)
+
     /**
      * a [Layer] for each possible move, each layer consists of the 9 [Cube] objects in
      * a plane which can be rotated around its center [Cube], 3 rotating around x, 3 rotating
      * around y, and 3 rotating around z.
      */
-    var mLayers = arrayOfNulls<Layer>(9)
+    var mLayers: Array<Layer?> = arrayOfNulls(9)
+
     /**
      * Permutation that needs to be done after the current rotation is finished (and the initial
      * solved permutation (0, 1, ... ,26) as well).
      */
     lateinit var mPermutation: IntArray
+
     /**
      * random number generator for random cube movements
      */
-    var mRandom = Random(System.currentTimeMillis())
+    var mRandom: Random = Random(System.currentTimeMillis())
+
     /**
      * Currently turning layer, set to *null* when the layer reaches its [mEndAngle]. It is set to
      * a random value in our method [animate] if it is *null* and is the same layer as the layer
      * chosen to be permutated from [mLayerPermutations] of course.
      */
     var mCurrentLayer: Layer? = null
+
     /**
      * Current and final angle for current Layer animation
      */
-    var mCurrentAngle = 0f
-    var mEndAngle = 0f
+    var mCurrentAngle: Float = 0f
+    var mEndAngle: Float = 0f
+
     /**
      * Amount to increment angle
      */
-    var mAngleIncrement = 0f
+    var mAngleIncrement: Float = 0f
+
     /**
      * Temporary storage for the [mLayerPermutations] chosen for the next rotation which is
      * then used to permutate [mPermutation] to create a new [mPermutation] when the rotation
@@ -531,13 +541,15 @@ class Kube : AppCompatActivity(), KubeRenderer.AnimationCallback {
             mCurrentLayer = mLayers[layerID]
             mCurrentLayerPermutation = mLayerPermutations[layerID]
             mCurrentLayer!!.startAnimation()
-            @Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER")
+            @Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER", "VariableInitializerIsRedundant")
             var direction = mRandom.nextBoolean()
-            @Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER")
+
+            @Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER", "VariableInitializerIsRedundant")
             var count = mRandom.nextInt(3) + 1
             count = 1
             direction = false
             mCurrentAngle = 0f
+            @Suppress("KotlinConstantConditions")
             if (direction) {
                 mAngleIncrement = Math.PI.toFloat() / 50
                 mEndAngle = mCurrentAngle + Math.PI.toFloat() * count / 2f
@@ -548,7 +560,8 @@ class Kube : AppCompatActivity(), KubeRenderer.AnimationCallback {
         }
         mCurrentAngle += mAngleIncrement
         if (mAngleIncrement > 0f && mCurrentAngle >= mEndAngle ||
-                mAngleIncrement < 0f && mCurrentAngle <= mEndAngle) {
+            mAngleIncrement < 0f && mCurrentAngle <= mEndAngle
+        ) {
             mCurrentLayer!!.setAngle(mEndAngle)
             mCurrentLayer!!.endAnimation()
             mCurrentLayer = null
@@ -565,6 +578,7 @@ class Kube : AppCompatActivity(), KubeRenderer.AnimationCallback {
         }
     }
 
+    @Suppress("ConstPropertyName")
     companion object {
         /**
          * permutations corresponding to a pi/2 (90 degree) rotation of each of the layers about its axis.
@@ -574,43 +588,313 @@ class Kube : AppCompatActivity(), KubeRenderer.AnimationCallback {
          * it permutates, and represents the layer assignments of each of the `GLShape` objects that
          * need to be made after the rotation completes.
          */
-        var mLayerPermutations = arrayOf(intArrayOf(2, 5, 8, 1, 4, 7, 0, 3, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), intArrayOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 20, 23, 26, 19, 22, 25, 18, 21, 24), intArrayOf(6, 1, 2, 15, 4, 5, 24, 7, 8, 3, 10, 11, 12, 13, 14, 21, 16, 17, 0, 19, 20, 9, 22, 23, 18, 25, 26), intArrayOf(0, 1, 8, 3, 4, 17, 6, 7, 26, 9, 10, 5, 12, 13, 14, 15, 16, 23, 18, 19, 2, 21, 22, 11, 24, 25, 20), intArrayOf(0, 1, 2, 3, 4, 5, 24, 15, 6, 9, 10, 11, 12, 13, 14, 25, 16, 7, 18, 19, 20, 21, 22, 23, 26, 17, 8), intArrayOf(18, 9, 0, 3, 4, 5, 6, 7, 8, 19, 10, 1, 12, 13, 14, 15, 16, 17, 20, 11, 2, 21, 22, 23, 24, 25, 26), intArrayOf(0, 7, 2, 3, 16, 5, 6, 25, 8, 9, 4, 11, 12, 13, 14, 15, 22, 17, 18, 1, 20, 21, 10, 23, 24, 19, 26), intArrayOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 11, 14, 17, 10, 13, 16, 9, 12, 15, 18, 19, 20, 21, 22, 23, 24, 25, 26), intArrayOf(0, 1, 2, 21, 12, 3, 6, 7, 8, 9, 10, 11, 22, 13, 4, 15, 16, 17, 18, 19, 20, 23, 14, 5, 24, 25, 26))
+        var mLayerPermutations: Array<IntArray> = arrayOf(
+            intArrayOf(
+                2,
+                5,
+                8,
+                1,
+                4,
+                7,
+                0,
+                3,
+                6,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26
+            ),
+            intArrayOf(
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                20,
+                23,
+                26,
+                19,
+                22,
+                25,
+                18,
+                21,
+                24
+            ),
+            intArrayOf(
+                6,
+                1,
+                2,
+                15,
+                4,
+                5,
+                24,
+                7,
+                8,
+                3,
+                10,
+                11,
+                12,
+                13,
+                14,
+                21,
+                16,
+                17,
+                0,
+                19,
+                20,
+                9,
+                22,
+                23,
+                18,
+                25,
+                26
+            ),
+            intArrayOf(
+                0,
+                1,
+                8,
+                3,
+                4,
+                17,
+                6,
+                7,
+                26,
+                9,
+                10,
+                5,
+                12,
+                13,
+                14,
+                15,
+                16,
+                23,
+                18,
+                19,
+                2,
+                21,
+                22,
+                11,
+                24,
+                25,
+                20
+            ),
+            intArrayOf(
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                24,
+                15,
+                6,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                25,
+                16,
+                7,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                26,
+                17,
+                8
+            ),
+            intArrayOf(
+                18,
+                9,
+                0,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                19,
+                10,
+                1,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                20,
+                11,
+                2,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26
+            ),
+            intArrayOf(
+                0,
+                7,
+                2,
+                3,
+                16,
+                5,
+                6,
+                25,
+                8,
+                9,
+                4,
+                11,
+                12,
+                13,
+                14,
+                15,
+                22,
+                17,
+                18,
+                1,
+                20,
+                21,
+                10,
+                23,
+                24,
+                19,
+                26
+            ),
+            intArrayOf(
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                11,
+                14,
+                17,
+                10,
+                13,
+                16,
+                9,
+                12,
+                15,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26
+            ),
+            intArrayOf(
+                0,
+                1,
+                2,
+                21,
+                12,
+                3,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                22,
+                13,
+                4,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                23,
+                14,
+                5,
+                24,
+                25,
+                26
+            )
+        )
         // names for our 9 layers (based on notation from http://www.cubefreak.net/notation.html)
         /**
          * Up layer (top 9 cubes)
          */
-        const val kUp = 0
+        const val kUp: Int = 0
+
         /**
          * Down layer (bottom 9 cubes)
          */
-        const val kDown = 1
+        const val kDown: Int = 1
+
         /**
          * Left layer (9 cubes on left side)
          */
-        const val kLeft = 2
+        const val kLeft: Int = 2
+
         /**
          * Right layer (9 cubes on right side)
          */
-        const val kRight = 3
+        const val kRight: Int = 3
+
         /**
          * Front layer (layer in front of you)
          */
-        const val kFront = 4
+        const val kFront: Int = 4
+
         /**
          * Back layer (layer at the back of the Rubic cube)
          */
-        const val kBack = 5
+        const val kBack: Int = 5
+
         /**
          * Middle layer (layer between left and right)
          */
-        const val kMiddle = 6
+        const val kMiddle: Int = 6
+
         /**
          * Equator layer (layer between up and down)
          */
-        const val kEquator = 7
+        const val kEquator: Int = 7
+
         /**
          * Side layer (layer between front and back)
          */
-        const val kSide = 8
+        const val kSide: Int = 8
     }
 }

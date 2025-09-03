@@ -17,7 +17,6 @@ package com.example.android.apis.graphics.kube
 
 import android.util.Log
 import java.nio.ShortBuffer
-import java.util.ArrayList
 
 /**
  * Class representing a flat surface of a [GLShape], a quadrilateral (square) in the case of
@@ -29,6 +28,7 @@ class GLFace {
      * List of vertices which define our [GLFace]
      */
     private val mVertexList = ArrayList<GLVertex>()
+
     /**
      * Color of this face (and the last one of its vertices)
      */

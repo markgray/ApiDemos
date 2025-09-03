@@ -27,6 +27,10 @@ import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
+import com.example.android.apis.content.TextUndoActivity.Companion.CREDIT_CARD_CHARS
+import com.example.android.apis.content.TextUndoActivity.CreditCardTextWatcher.Companion.addSpaces
+import com.example.android.apis.content.TextUndoActivity.CreditCardTextWatcher.Companion.getNumbers
+import com.example.android.apis.content.TextUndoActivity.CreditCardTextWatcher.Companion.isNumber
 
 /**
  * Simple example of using an UndoManager for editing text in a TextView.
@@ -37,10 +41,12 @@ class TextUndoActivity : AppCompatActivity() {
      * ID R.id.default_text in layout file, it is the "TextView with the default Control-Z undo behavior."
      */
     private lateinit var mDefaultText: EditText
+
     /**
      * ID R.id.length_limit_text in layout file, it is the "TextView with a length limit InputFilter."
      */
     private lateinit var mLengthLimitText: EditText
+
     /**
      * ID R.id.credit_card_text in the layout file, it is the "Credit card input field with a TextWatcher."
      */

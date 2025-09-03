@@ -15,9 +15,6 @@
  */
 package com.example.android.apis.content
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
-
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
@@ -40,6 +37,7 @@ import java.io.IOException
  *
  * @see InstallApk for a demo of the original
  */
+@SuppressLint("ObsoleteSdkInt")
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 class InstallApkSessionApi : AppCompatActivity() {
     /**
@@ -51,6 +49,7 @@ class InstallApkSessionApi : AppCompatActivity() {
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
+    @SuppressLint("RequestInstallPackagesPolicy") // Android no longer allows apk install
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.install_apk_session_api)
@@ -238,6 +237,7 @@ class InstallApkSessionApi : AppCompatActivity() {
                     /**
                      * This test app isn't privileged, so the user has to confirm the install.
                      */
+                    @Suppress("DEPRECATION")
                     val confirmIntent = extras[Intent.EXTRA_INTENT] as Intent?
                     startActivity(confirmIntent)
                 }
@@ -275,11 +275,12 @@ class InstallApkSessionApi : AppCompatActivity() {
         /**
          * Action of the [Intent] used for the install status receiver.
          */
-        private const val PACKAGE_INSTALLED_ACTION = "com.example.android.apis.content.SESSION_API_PACKAGE_INSTALLED"
+        private const val PACKAGE_INSTALLED_ACTION =
+            "com.example.android.apis.content.SESSION_API_PACKAGE_INSTALLED"
 
         /**
          * TAG used for logging.
-          */
+         */
         private const val TAG = "InstallApkSessionApi"
     }
 }

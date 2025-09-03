@@ -38,11 +38,11 @@ import javax.microedition.khronos.opengles.GL10
  */
 class SpriteTextRenderer(
 
-        /**
-         * [Context] to use for accessing resources ("this" when called from the `onCreate` method
-         * of the activity [SpriteTextActivity]).
-         */
-        private val mContext: Context
+    /**
+     * [Context] to use for accessing resources ("this" when called from the `onCreate` method
+     * of the activity [SpriteTextActivity]).
+     */
+    private val mContext: Context
 
 ) : GLSurfaceView.Renderer {
     /**
@@ -50,67 +50,82 @@ class SpriteTextRenderer(
      * passed to our method [onSurfaceChanged].
      */
     private var mWidth = 0
+
     /**
      * Height of the [GLSurfaceView] we are rendering to, set using the `h` parameter
      * passed to our method [onSurfaceChanged].
      */
     private var mHeight = 0
+
     /**
      * Rotating [Triangle] instance that we render.
      */
     private val mTriangle: Triangle = Triangle()
+
     /**
      * Texture name we use for our texture image robot.png
      */
     private var mTextureID = 0
+
     /**
      * Frame counter we use to determine milliseconds per frame value (goes from 0 to SAMPLE_PERIOD_FRAMES)
      */
     private var mFrames = 0
+
     /**
      * Current milliseconds per frame value, recalculated every SAMPLE_PERIOD_FRAMES frames
      */
     private var mMsPerFrame = 0
+
     /**
      * Start time for current counting of frames used to calculate the value of [mMsPerFrame]
      */
     private var mStartTime: Long = 0
+
     /**
      * [LabelMaker] containing labels for the three vertices of our triangle "A", "B", and "C",
      * as well as the label "ms/f"
      */
     private var mLabels: LabelMaker? = null
+
     /**
      * [Paint] instance we use for our labels as well as the labels that [NumericSprite]
      * draws to display our millisecond per frame data.
      */
     private val mLabelPaint: Paint = Paint()
+
     /**
      * `Label` index pointing to the `Label` "A" in [LabelMaker] field [mLabels]
      */
     private var mLabelA = 0
+
     /**
      * `Label` index pointing to the `Label` "B" in [LabelMaker] field [mLabels]
      */
     private var mLabelB = 0
+
     /**
      * `Label` index pointing to the `Label` "C" in [LabelMaker] field [mLabels]
      */
     private var mLabelC = 0
+
     /**
      * `Label` index pointing to the `Label` "ms/f" in [LabelMaker] field [mLabels]
      */
     private var mLabelMsPF = 0
+
     /**
      * [Projector] we use to "project" our vertex labels to the correct position on our rotating
      * triangle.
      */
     private val mProjector: Projector = Projector()
+
     /**
      * [NumericSprite] instance we use to draw the digit labels to display our [mMsPerFrame]
      * (milliseconds per frame) data at the bottom of the `SurfaceView`.
      */
     private var mNumericSprite: NumericSprite? = null
+
     /**
      * Scratch array we use in our call to [Projector.project] to calculate the correct location
      * of our triangle vertex labels.
@@ -194,12 +209,25 @@ class SpriteTextRenderer(
         gl.glGenTextures(1, textures, 0)
         mTextureID = textures[0]
         gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID)
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST.toFloat())
+        gl.glTexParameterf(
+            GL10.GL_TEXTURE_2D,
+            GL10.GL_TEXTURE_MIN_FILTER,
+            GL10.GL_NEAREST.toFloat()
+        )
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR.toFloat())
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE.toFloat())
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE.toFloat())
+        gl.glTexParameterf(
+            GL10.GL_TEXTURE_2D,
+            GL10.GL_TEXTURE_WRAP_S,
+            GL10.GL_CLAMP_TO_EDGE.toFloat()
+        )
+        gl.glTexParameterf(
+            GL10.GL_TEXTURE_2D,
+            GL10.GL_TEXTURE_WRAP_T,
+            GL10.GL_CLAMP_TO_EDGE.toFloat()
+        )
         gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE.toFloat())
         val inputStream: InputStream = mContext.resources.openRawResource(R.raw.robot)
+
         @Suppress("JoinDeclarationAndAssignment")
         val bitmap: Bitmap
         bitmap = try {
@@ -207,7 +235,7 @@ class SpriteTextRenderer(
         } finally {
             try {
                 inputStream.close()
-            } catch (e: IOException) { // Ignore.
+            } catch (_: IOException) { // Ignore.
             }
         }
         GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0)
@@ -286,9 +314,11 @@ class SpriteTextRenderer(
          * Now we're ready to draw some 3D objects
          */gl.glMatrixMode(GL10.GL_MODELVIEW)
         gl.glLoadIdentity()
-        GLU.gluLookAt(gl, 0.0f, 0.0f, -2.5f,
-                0.0f, 0.0f, 0.0f,
-                0.0f, 1.0f, 0.0f)
+        GLU.gluLookAt(
+            gl, 0.0f, 0.0f, -2.5f,
+            0.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f
+        )
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY)
         gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY)
         gl.glActiveTexture(GL10.GL_TEXTURE0)
@@ -429,6 +459,7 @@ class SpriteTextRenderer(
          * Number of frames to draw before updating the value of `mMsPerFrame`
          */
         private const val SAMPLE_PERIOD_FRAMES = 12
+
         /**
          * Factor to multiply elapsed time for drawing SAMPLE_PERIOD_FRAMES frames to calculate the
          * value of `mMsPerFrame`
@@ -455,10 +486,12 @@ internal class Triangle {
      * Native heap [FloatBuffer] we use to hold our vertex coordinates in.
      */
     private val mFVertexBuffer: FloatBuffer
+
     /**
      * Native heap [FloatBuffer] we use to hold our texture coordinates in.
      */
     private val mTexBuffer: FloatBuffer
+
     /**
      * Native heap [ShortBuffer] we use to hold our indices in.
      */
@@ -511,13 +544,15 @@ internal class Triangle {
          * number of vertices of our object.
          */
         private const val VERTS = 3
+
         /**
          * (x,y,z) coordinates for a unit-sided equilateral triangle centered on the origin.
          */
         private val sCoords: FloatArray = floatArrayOf( // X, Y, Z
-                -0.5f, -0.25f, 0f,
-                0.5f, -0.25f, 0f,
-                0.0f, 0.559016994f, 0f)
+            -0.5f, -0.25f, 0f,
+            0.5f, -0.25f, 0f,
+            0.0f, 0.559017f, 0f
+        )
     }
 
     /**

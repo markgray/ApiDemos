@@ -16,8 +16,6 @@
 package com.example.android.apis.content
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -32,11 +30,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
+import androidx.core.net.toUri
 import com.example.android.apis.R
-
+import com.example.android.apis.content.InstallApk.Companion.REQUEST_INSTALL
+import com.example.android.apis.content.InstallApk.Companion.REQUEST_UNINSTALL
 import java.io.File
 import java.io.IOException
 
@@ -46,6 +43,7 @@ import java.io.IOException
  *
  * @see InstallApkSessionApi for a demo of the newer Session API.
  */
+@SuppressLint("ObsoleteSdkInt")
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 class InstallApk : AppCompatActivity() {
     /**
@@ -107,24 +105,28 @@ class InstallApk : AppCompatActivity() {
     private fun handleRequestCodes(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_INSTALL) {
             when (resultCode) {
-                Activity.RESULT_OK -> {
+                RESULT_OK -> {
                     Toast.makeText(this, "Install succeeded!", Toast.LENGTH_SHORT).show()
                 }
-                Activity.RESULT_CANCELED -> {
+
+                RESULT_CANCELED -> {
                     Toast.makeText(this, "Install canceled!", Toast.LENGTH_SHORT).show()
                 }
+
                 else -> {
                     Toast.makeText(this, "Install Failed!", Toast.LENGTH_SHORT).show()
                 }
             }
         } else if (requestCode == REQUEST_UNINSTALL) {
             when (resultCode) {
-                Activity.RESULT_OK -> {
+                RESULT_OK -> {
                     Toast.makeText(this, "Uninstall succeeded!", Toast.LENGTH_SHORT).show()
                 }
-                Activity.RESULT_CANCELED -> {
+
+                RESULT_CANCELED -> {
                     Toast.makeText(this, "Uninstall canceled!", Toast.LENGTH_SHORT).show()
                 }
+
                 else -> {
                     Toast.makeText(this, "Uninstall Failed!", Toast.LENGTH_SHORT).show()
                 }
@@ -141,6 +143,7 @@ class InstallApk : AppCompatActivity() {
      * perform read operations on the URI in the Intent's data and any URIs specified in its
      * `ClipData`). Finally it uses `intent` to launch the activity requested.
      */
+    @SuppressLint("RequestInstallPackagesPolicy") // Android no longer allows apk install
     private val mUnknownSourceListener = View.OnClickListener {
         @Suppress("DEPRECATION")
         val intent = Intent(Intent.ACTION_INSTALL_PACKAGE)
@@ -165,6 +168,7 @@ class InstallApk : AppCompatActivity() {
      * the launch method of [requestInstallLauncher] to launch the activity requested by `intent`,
      * asking for it to return a result.
      */
+    @SuppressLint("RequestInstallPackagesPolicy") // Android no longer allows apk install
     private val mMySourceListener = View.OnClickListener {
         @Suppress("DEPRECATION")
         val intent = Intent(Intent.ACTION_INSTALL_PACKAGE)
@@ -187,10 +191,11 @@ class InstallApk : AppCompatActivity() {
             handleRequestCodes(
                 requestCode = REQUEST_INSTALL, // This needs to be set for each request code used in app
                 resultCode = result.resultCode,
-                data =  result.data
+                data = result.data
             )
 
         }
+
     /**
      * `OnClickListener` for the [Button] with ID R.id.uninstall "UNINSTALL". When clicked it
      * creates an [Intent] variable `val intent` with the action ACTION_UNINSTALL_PACKAGE, sets
@@ -201,7 +206,7 @@ class InstallApk : AppCompatActivity() {
     private val mUninstallListener = View.OnClickListener {
         @Suppress("DEPRECATION")
         val intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE)
-        intent.data = Uri.parse("package:com.example.android.helloactivity")
+        intent.data = "package:com.example.android.helloactivity".toUri()
         startActivity(intent)
     }
 
@@ -218,7 +223,7 @@ class InstallApk : AppCompatActivity() {
     private val mUninstallResultListener = View.OnClickListener {
         @Suppress("DEPRECATION")
         val intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE)
-        intent.data = Uri.parse("package:com.example.android.helloactivity")
+        intent.data = "package:com.example.android.helloactivity".toUri()
         intent.putExtra(Intent.EXTRA_RETURN_RESULT, true)
         requestUninstallLauncher.launch(intent) // REQUEST_UNINSTALL ActivityResultLauncher
     }
@@ -234,7 +239,7 @@ class InstallApk : AppCompatActivity() {
             handleRequestCodes(
                 requestCode = REQUEST_UNINSTALL,
                 resultCode = result.resultCode,
-                data =  result.data
+                data = result.data
             )
 
         }
@@ -284,7 +289,7 @@ class InstallApk : AppCompatActivity() {
 
         @Suppress("DEPRECATION")
         @SuppressLint("WorldReadableFiles")
-        val fileMode = if (useFileProvider) Context.MODE_PRIVATE else Context.MODE_WORLD_READABLE
+        val fileMode = if (useFileProvider) MODE_PRIVATE else MODE_WORLD_READABLE
         try {
             assets.open(assetName).use { inputStream ->
                 openFileOutput(tempFilename, fileMode).use { fout ->
@@ -300,7 +305,8 @@ class InstallApk : AppCompatActivity() {
         return if (useFileProvider) {
             val toInstall = File(this.filesDir, tempFilename)
             FileProvider.getUriForFile(
-                this, "com.example.android.apis.installapkprovider", toInstall)
+                this, "com.example.android.apis.installapkprovider", toInstall
+            )
         } else {
             Uri.fromFile(getFileStreamPath(tempFilename))
         }
@@ -315,14 +321,14 @@ class InstallApk : AppCompatActivity() {
          * the action ACTION_INSTALL_PACKAGE, and checked for in `onActivityResult` when the
          * activity is completed.
          */
-        const val REQUEST_INSTALL = 1
+        const val REQUEST_INSTALL: Int = 1
 
         /**
          * Request code used for `startActivityForResult` when starting the `Intent` with
          * the action ACTION_UNINSTALL_PACKAGE, and checked for in `onActivityResult` when the
          * activity is completed.
          */
-        const val REQUEST_UNINSTALL = 2
+        const val REQUEST_UNINSTALL: Int = 2
 
         /**
          * TAG used for logging

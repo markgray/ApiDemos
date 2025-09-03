@@ -15,7 +15,7 @@
  */
 package com.example.android.apis.content
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.content.ContentProvider
 import android.content.ContentProvider.PipeDataWriter
 import android.content.ContentValues
@@ -28,6 +28,7 @@ import android.os.Bundle
 import android.os.ParcelFileDescriptor
 import android.provider.OpenableColumns
 import android.util.Log
+import androidx.annotation.RequiresApi
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
@@ -38,7 +39,8 @@ import java.io.InputStream
  * Used by `ActionBarShareActionProviderActivity`, `ShareContent`, `ContentBrowserActivity`,
  * `ContentBrowserNavActivity`, `SystemUIModes`, `VideoPlayerActivity`.
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class FileProvider : ContentProvider(), PipeDataWriter<InputStream> {
     /**
      * Implement this to initialize your content provider on startup, we simply return *true*
@@ -99,7 +101,8 @@ class FileProvider : ContentProvider(), PipeDataWriter<InputStream> {
         if (projectionLocal == null) {
             projectionLocal = arrayOf(
                 OpenableColumns.DISPLAY_NAME,
-                OpenableColumns.SIZE)
+                OpenableColumns.SIZE
+            )
         }
         for (i in projectionLocal.indices) {
             if (OpenableColumns.DISPLAY_NAME == projectionLocal[i]) {
@@ -163,7 +166,12 @@ class FileProvider : ContentProvider(), PipeDataWriter<InputStream> {
      * @param selection An optional filter to match rows to update.
      * @return the number of rows affected (we always return 0)
      */
-    override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<String>?): Int { // Don't support updates.
+    override fun update(
+        uri: Uri,
+        values: ContentValues?,
+        selection: String?,
+        selectionArgs: Array<String>?
+    ): Int { // Don't support updates.
         return 0
     }
 
@@ -215,7 +223,10 @@ class FileProvider : ContentProvider(), PipeDataWriter<InputStream> {
      * to access the file.
      */
     @Throws(FileNotFoundException::class)
-    override fun openFile(uri: Uri, mode: String): ParcelFileDescriptor? { // Try to open an asset with the given name.
+    override fun openFile(
+        uri: Uri,
+        mode: String
+    ): ParcelFileDescriptor? { // Try to open an asset with the given name.
         return try {
             val path = uri.path
             val off = path!!.indexOf('/', 1)
@@ -226,13 +237,14 @@ class FileProvider : ContentProvider(), PipeDataWriter<InputStream> {
             val assetPath = path.substring(off + 1)
             val asset: AssetFileDescriptor = context!!.assets.openNonAssetFd(cookie, assetPath)
             ParcelFileDescriptor(
-                openPipeHelper(uri, "image/jpeg",
+                openPipeHelper(
+                    uri, "image/jpeg",
                     null,
                     asset.createInputStream(),
                     this
                 )
             )
-        } catch (e: IOException) {
+        } catch (_: IOException) {
             throw FileNotFoundException("Unable to open $uri")
         }
     }
@@ -260,11 +272,13 @@ class FileProvider : ContentProvider(), PipeDataWriter<InputStream> {
      * @param args Our own custom arguments, the [InputStream] we will use to read our resource
      * file from.
      */
-    override fun writeDataToPipe(output: ParcelFileDescriptor,
-                                 uri: Uri,
-                                 mimeType: String,
-                                 opts: Bundle?,
-                                 args: InputStream?) {
+    override fun writeDataToPipe(
+        output: ParcelFileDescriptor,
+        uri: Uri,
+        mimeType: String,
+        opts: Bundle?,
+        args: InputStream?
+    ) {
         /**
          * Transfer data from the asset to the pipe the client is reading.
          */

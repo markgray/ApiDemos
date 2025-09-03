@@ -16,6 +16,7 @@
 package com.example.android.apis.graphics.spritetext
 
 import android.graphics.Paint
+import com.example.android.apis.graphics.spritetext.NumericSprite.Companion.sStrike
 import javax.microedition.khronos.opengles.GL10
 import kotlin.math.ceil
 
@@ -32,16 +33,19 @@ class NumericSprite
      * Our [LabelMaker]
      */
     private var mLabelMaker: LabelMaker? = null
+
     /**
      * Numeric text we are to draw. It is set to the number of milliseconds per frame using our
      * method [setValue] by the `drawMsPF` method of [SpriteTextRenderer] which is called every
      * time its `onDrawFrame` method is called
      */
     private var mText = ""
+
     /**
      * Width of each of our ten numeric labels
      */
     private val mWidth = IntArray(10)
+
     /**
      * Label index for each of our ten numeric labels.
      */
@@ -187,6 +191,7 @@ class NumericSprite
         return value.toString()
     }
 
+    @Suppress("ConstPropertyName")
     companion object {
         /**
          * String of digits used to initialize our ten numeric labels with the

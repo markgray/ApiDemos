@@ -22,23 +22,20 @@ import kotlin.math.sin
  * Class containing the 9 [Cube] ([GLShape]) objects which comprise one of the planes of
  * the Rubic cube. A plane is that group of objects which can be rotated around an axis, and there
  * are 9 of them - all contained in the array of [Layer] field `Kube.mLayers`.
+ *
+ * @property mAxis which axis do we rotate around? 0 for X, 1 for Y, 2 for Z
  */
 @Suppress("MemberVisibilityCanBePrivate")
-class Layer(
-        /**
-         * which axis do we rotate around? 0 for X, 1 for Y, 2 for Z
-         */
-        var mAxis: Int) {
+class Layer(var mAxis: Int) {
 
     /**
-     * The [Cube] ([GLShape]) objects presently in this [Layer]. All 9 of the
-     * [Layer] planes are initialized in the method [Kube.updateLayers] using a
-     * (0,1, ... 26) initial `mPermutation` of the [Cube] objects in its [Cube] array field
-     * `mCubes`, and then `mPermutation` is randomly chosen from one of the permutations in
-     * [Kube.mLayerPermutations] to rotate the 9 [Layer] objects (also using the method
-     * [Kube.updateLayers])
+     * The [Cube] ([GLShape]) objects presently in this [Layer]. All 9 of the [Layer]
+     * planes are initialized in the method [Kube.updateLayers] using a (0,1, ... 26) initial
+     * `mPermutation` of the [Cube] objects in its [Cube] array field `mCubes`, and then
+     * `mPermutation` is randomly chosen from one of the permutations in [Kube.mLayerPermutations]
+     * to rotate the 9 [Layer] objects (also using the method [Kube.updateLayers])
      */
-    var mShapes = arrayOfNulls<GLShape>(9)
+    var mShapes: Array<GLShape?> = arrayOfNulls(9)
 
     /**
      * Transform matrix which will rotate our layer instance around its x, y, or z axis, depending
@@ -49,7 +46,7 @@ class Layer(
      * passed, which is the angle in radians to rotate this layer instance around its appropriate
      * [mAxis] axis.
      */
-    var mTransform = M4()
+    var mTransform: M4 = M4()
 
     /**
      * Called from [Kube.animate], which is called from [KubeRenderer.onDrawFrame]. For
@@ -133,6 +130,7 @@ class Layer(
                     m[0][1] = m[0][2]
                 }
             }
+
             kAxisY -> {
                 m[0][0] = cos
                 m[0][2] = sin
@@ -146,6 +144,7 @@ class Layer(
                     m[0][1] = m[1][0]
                 }
             }
+
             kAxisZ -> {
                 m[0][0] = cos
                 m[0][1] = sin
@@ -166,19 +165,22 @@ class Layer(
         }
     }
 
+    @Suppress("ConstPropertyName")
     companion object {
         /**
          * Convenience constant for rotation around the x axis.
          */
-        const val kAxisX = 0
+        const val kAxisX: Int = 0
+
         /**
          * Convenience constant for rotation around the y axis.
          */
-        const val kAxisY = 1
+        const val kAxisY: Int = 1
+
         /**
          * Convenience constant for rotation around the z axis.
          */
-        const val kAxisZ = 2
+        const val kAxisZ: Int = 2
     }
 
     /**

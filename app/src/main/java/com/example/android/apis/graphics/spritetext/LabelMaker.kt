@@ -21,7 +21,11 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.opengl.GLUtils
-import java.util.ArrayList
+import androidx.core.graphics.createBitmap
+import com.example.android.apis.graphics.spritetext.LabelMaker.Companion.STATE_ADDING
+import com.example.android.apis.graphics.spritetext.LabelMaker.Companion.STATE_DRAWING
+import com.example.android.apis.graphics.spritetext.LabelMaker.Companion.STATE_INITIALIZED
+import com.example.android.apis.graphics.spritetext.LabelMaker.Companion.STATE_NEW
 import javax.microedition.khronos.opengles.GL10
 import javax.microedition.khronos.opengles.GL11
 import javax.microedition.khronos.opengles.GL11Ext
@@ -42,36 +46,39 @@ import kotlin.math.ceil
  * texture, and you have to recreate the whole texture if any label text changes.
  */
 class LabelMaker(
-        /**
-         * *true* if we want a full color backing store (8888), otherwise we generate a grey L8
-         * backing store. Set to the [Boolean] `fullColor` parameter of our constructor, always
-         * *true* in our case.
-         */
-        private val mFullColor: Boolean,
-        /**
-         * Width of text, rounded up to power of 2, set to the `strikeWidth` parameter to our
-         * constructor.
-         */
-        private val mStrikeWidth: Int,
-        /**
-         * Height of text, rounded up to power of 2, set to the `strikeHeight` parameter to our
-         * constructor.
-         */
-        private val mStrikeHeight: Int
+    /**
+     * *true* if we want a full color backing store (8888), otherwise we generate a grey L8
+     * backing store. Set to the [Boolean] `fullColor` parameter of our constructor, always
+     * *true* in our case.
+     */
+    private val mFullColor: Boolean,
+    /**
+     * Width of text, rounded up to power of 2, set to the `strikeWidth` parameter to our
+     * constructor.
+     */
+    private val mStrikeWidth: Int,
+    /**
+     * Height of text, rounded up to power of 2, set to the `strikeHeight` parameter to our
+     * constructor.
+     */
+    private val mStrikeHeight: Int
 ) {
     /**
      * [Bitmap] we create our labels in, and when done creating the labels we upload it as
      * GL_TEXTURE_2D for drawing the labels (and then recycle it).
      */
     private var mBitmap: Bitmap? = null
+
     /**
      * [Canvas] we use to draw into [Bitmap] field [mBitmap].
      */
     private var mCanvas: Canvas? = null
+
     /**
      * We create this as a black [Paint], alpha 0, with a style of FILL but never actually use it.
      */
     private val mClearPaint: Paint = Paint()
+
     /**
      * Texture name of our label texture.
      */
@@ -82,6 +89,7 @@ class LabelMaker(
      */
     @Suppress("unused")
     private val mTexelWidth: Float = (1.0 / mStrikeWidth).toFloat()
+
     /**
      * Convert texel to V
      */
@@ -92,20 +100,24 @@ class LabelMaker(
      * `u` (x) coordinate to use when adding next label to our texture.
      */
     private var mU = 0
+
     /**
      * `v` (y) coordinate to use when adding next label to our texture.
      */
     private var mV = 0
+
     /**
      * Height of the current line of labels.
      */
     private var mLineHeight = 0
+
     /**
      * List of the [Label] objects in our texture. A [Label] instance contains information
      * about the location and size of the label's text in the texture, as well as the cropping
      * parameters to use to draw only that [Label].
      */
     private val mLabels = ArrayList<Label>()
+
     /**
      * State that our [LabelMaker] instance is in, one of [STATE_NEW], [STATE_INITIALIZED],
      * [STATE_ADDING], or [STATE_DRAWING]. It is used by our method [checkState] to make sure
@@ -143,10 +155,26 @@ class LabelMaker(
         mTextureID = textures[0]
         gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID)
         // Use Nearest for performance.
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST.toFloat())
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST.toFloat())
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE.toFloat())
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE.toFloat())
+        gl.glTexParameterf(
+            GL10.GL_TEXTURE_2D,
+            GL10.GL_TEXTURE_MIN_FILTER,
+            GL10.GL_NEAREST.toFloat()
+        )
+        gl.glTexParameterf(
+            GL10.GL_TEXTURE_2D,
+            GL10.GL_TEXTURE_MAG_FILTER,
+            GL10.GL_NEAREST.toFloat()
+        )
+        gl.glTexParameterf(
+            GL10.GL_TEXTURE_2D,
+            GL10.GL_TEXTURE_WRAP_S,
+            GL10.GL_CLAMP_TO_EDGE.toFloat()
+        )
+        gl.glTexParameterf(
+            GL10.GL_TEXTURE_2D,
+            GL10.GL_TEXTURE_WRAP_T,
+            GL10.GL_CLAMP_TO_EDGE.toFloat()
+        )
         gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE.toFloat())
     }
 
@@ -192,7 +220,7 @@ class LabelMaker(
         mV = 0
         mLineHeight = 0
         val config = if (mFullColor) Bitmap.Config.ARGB_8888 else Bitmap.Config.ALPHA_8
-        mBitmap = Bitmap.createBitmap(mStrikeWidth, mStrikeHeight, config)
+        mBitmap = createBitmap(width = mStrikeWidth, height = mStrikeHeight, config = config)
         mCanvas = Canvas(mBitmap!!)
         mBitmap!!.eraseColor(0)
     }
@@ -223,6 +251,7 @@ class LabelMaker(
     fun add(gl: GL10?, background: Drawable?, minWidth: Int, minHeight: Int): Int {
         return add(gl, background, null, null, minWidth, minHeight)
     }
+
     /**
      * Call to add a label. First we call our method [checkState] to make sure we are in the
      * state [STATE_ADDING] (our method [beginAdding] has been called). Next we determine if
@@ -268,12 +297,12 @@ class LabelMaker(
     @Suppress("UNUSED_PARAMETER")
     @JvmOverloads
     fun add(
-            gl: GL10?,
-            background: Drawable?,
-            text: String?,
-            textPaint: Paint?,
-            minWidth: Int = 0,
-            minHeight: Int = 0
+        gl: GL10?,
+        background: Drawable?,
+        text: String?,
+        textPaint: Paint?,
+        minWidth: Int = 0,
+        minHeight: Int = 0
     ): Int {
         var minWidthVar = minWidth
         var minHeightVar = minHeight
@@ -282,7 +311,7 @@ class LabelMaker(
         val drawText = text != null && textPaint != null
         val padding = Rect()
         if (drawBackground) {
-            background!!.getPadding(padding)
+            background.getPadding(padding)
             minWidthVar = minWidthVar.coerceAtLeast(background.minimumWidth)
             minHeightVar = minHeightVar.coerceAtLeast(background.minimumHeight)
         }
@@ -290,7 +319,7 @@ class LabelMaker(
         var descent = 0
         var measuredTextWidth = 0
         if (drawText) { // Paint.ascent is negative, so negate it.
-            ascent = ceil(-textPaint!!.ascent().toDouble()).toInt()
+            ascent = ceil(-textPaint.ascent().toDouble()).toInt()
             descent = ceil(textPaint.descent().toDouble()).toInt()
             measuredTextWidth = ceil(textPaint.measureText(text).toDouble()).toInt()
         }
@@ -304,6 +333,7 @@ class LabelMaker(
         val effectiveTextWidth = width - padWidth
         val centerOffsetHeight = (effectiveTextHeight - textHeight) / 2
         val centerOffsetWidth = (effectiveTextWidth - textWidth) / 2
+
         /**
          * Make changes to the local variables, only commit them to the member
          * variables after we've decided not to throw any exceptions.
@@ -327,17 +357,20 @@ class LabelMaker(
         @Suppress("UNUSED_VARIABLE")
         val u2 = u + width
         val vBase = v + ascent
+
         @Suppress("UNUSED_VARIABLE")
         val v2 = v + height
         if (drawBackground) {
-            background!!.setBounds(u, v, u + width, v + height)
+            background.setBounds(u, v, u + width, v + height)
             background.draw(mCanvas!!)
         }
         if (drawText) {
-            mCanvas!!.drawText(text!!,
-                    u + padding.left + centerOffsetWidth.toFloat(),
-                    vBase + padding.top + centerOffsetHeight.toFloat(),
-                    textPaint!!)
+            mCanvas!!.drawText(
+                text,
+                u + padding.left + centerOffsetWidth.toFloat(),
+                vBase + padding.top + centerOffsetHeight.toFloat(),
+                textPaint
+            )
         }
         /**
          * We know there's enough space, so update the member variables
@@ -345,7 +378,17 @@ class LabelMaker(
         mU = u + width
         mV = v
         mLineHeight = lineHeight
-        mLabels.add(Label(width.toFloat(), height.toFloat(), ascent.toFloat(), u, v + height, width, -height))
+        mLabels.add(
+            Label(
+                width.toFloat(),
+                height.toFloat(),
+                ascent.toFloat(),
+                u,
+                v + height,
+                width,
+                -height
+            )
+        )
         return mLabels.size - 1
     }
 
@@ -469,14 +512,14 @@ class LabelMaker(
         val label = mLabels[labelID]
         gl.glEnable(GL10.GL_TEXTURE_2D)
         (gl as GL11).glTexParameteriv(
-                GL10.GL_TEXTURE_2D,
-                GL11Ext.GL_TEXTURE_CROP_RECT_OES,
-                label.mCrop,
-                0
+            GL10.GL_TEXTURE_2D,
+            GL11Ext.GL_TEXTURE_CROP_RECT_OES,
+            label.mCrop,
+            0
         )
         (gl as GL11Ext).glDrawTexiOES(
-                x.toInt(), y.toInt(), 0,
-                label.width.toInt(), label.height.toInt()
+            x.toInt(), y.toInt(), 0,
+            label.width.toInt(), label.height.toInt()
         )
     }
 
@@ -515,18 +558,18 @@ class LabelMaker(
      * GL_TEXTURE_2D label texture.
      */
     private class Label(
-            /**
-             * width of the label in pixels
-             */
-            var width: Float,
-            /**
-             * height of the label in pixels
-             */
-            var height: Float,
-            /**
-             * Unused, but set to the ascent value of the font and font size of the paint used to draw
-             */
-            var baseline: Float, cropU: Int, cropV: Int, cropW: Int, cropH: Int
+        /**
+         * width of the label in pixels
+         */
+        var width: Float,
+        /**
+         * height of the label in pixels
+         */
+        var height: Float,
+        /**
+         * Unused, but set to the ascent value of the font and font size of the paint used to draw
+         */
+        var baseline: Float, cropU: Int, cropV: Int, cropW: Int, cropH: Int
     ) {
         /**
          * Defines the location and size of the label in the texture, it is used to crop the texture
@@ -539,11 +582,8 @@ class LabelMaker(
          * array containing the values of the constructor parameters:
          *
          *  * cropU    u coordinate of left side of label in texture
-         *
          *  * cropV    v coordinate of top of texture
-         *
          *  * cropW    width of label in texture
-         *
          *  * cropH    height of the crop region, the negative value in our case specifies that the
          *  region lies below the coordinate (u,v) in the texture image.
          */
@@ -564,6 +604,7 @@ class LabelMaker(
          * our `GLSurface` is destroyed.
          */
         private const val STATE_NEW = 0
+
         /**
          * Constant used to set our field [mState] to indicate that our [initialize] method
          * has been called, and we are ready to begin adding labels. We have acquired a texture name
@@ -571,6 +612,7 @@ class LabelMaker(
          * a texture which needs to be freed if our `GLSurface` is destroyed.
          */
         private const val STATE_INITIALIZED = 1
+
         /**
          * Constant used to set our field [mState] to indicate that our [beginAdding] method
          * has been called, and we are ready to add a label (or an additional label). [initialize]
@@ -578,6 +620,7 @@ class LabelMaker(
          * so there is some cleanup needed if our `GLSurface` is destroyed.
          */
         private const val STATE_ADDING = 2
+
         /**
          * Constant used to set our field [mState] to indicate that our [beginDrawing] method
          * has been called and we are in the process of drawing the various [Label] objects located

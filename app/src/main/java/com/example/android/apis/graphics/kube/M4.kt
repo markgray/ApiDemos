@@ -22,7 +22,7 @@ class M4 {
     /**
      * Our 4x4 float matrix which our methods operate on.
      */
-    var m = Array(4) { FloatArray(4) }
+    var m: Array<FloatArray> = Array(4) { FloatArray(4) }
 
     /**
      * Our basic constructor, which does nothing, but gives us an all zero [Float] array field
@@ -71,7 +71,11 @@ class M4 {
         val m2 = other.m
         for (i in 0..3) {
             for (j in 0..3) {
-                result.m[i][j] = m1[i][0] * m2[0][j] + m1[i][1] * m2[1][j] + m1[i][2] * m2[2][j] + m1[i][3] * m2[3][j]
+                result.m[i][j] =
+                    m1[i][0] * m2[0][j] +
+                        m1[i][1] * m2[1][j] +
+                        m1[i][2] * m2[2][j] +
+                        m1[i][3] * m2[3][j]
             }
         }
         return result

@@ -20,9 +20,6 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
 import com.example.android.apis.R
 
 /**
@@ -57,14 +54,13 @@ class ResourcesSample : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         // See res/any/layout/resources.xml for this view layout definition.
         setContentView(R.layout.resources)
-        var cs: CharSequence?
         /**
          * ====== Using the Context.getText() convenience method ===========
          * Using the getText() convenience method, retrieve a string
          * resource that happens to have style information.  Note the use of
          * CharSequence instead of String so we don't lose the style info.
          */
-        cs = getText(R.string.styled_text)
+        var cs = getText(R.string.styled_text)
         var tv: TextView = findViewById(R.id.styled_text)
         tv.text = cs
         /**
@@ -81,6 +77,7 @@ class ResourcesSample : AppCompatActivity() {
          * In this case it's just 'this' since Activity is a context.
          */
         val context: Context = this
+
         /**
          * Get the Resources object from our context
          */

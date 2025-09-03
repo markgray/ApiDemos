@@ -24,16 +24,19 @@ class GLColor {
      */
     @JvmField
     val red: Int
+
     /**
      * green component of color
      */
     @JvmField
     val green: Int
+
     /**
      * blue component of color
      */
     @JvmField
     val blue: Int
+
     /**
      * alpha component of color
      */

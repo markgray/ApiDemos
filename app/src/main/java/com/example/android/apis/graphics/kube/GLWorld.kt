@@ -19,7 +19,6 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.IntBuffer
 import java.nio.ShortBuffer
-import java.util.ArrayList
 import javax.microedition.khronos.opengles.GL10
 
 /**
@@ -38,21 +37,25 @@ class GLWorld {
     /**
      * Count of number of times our [draw] method has been called (for debugging purposes?)
      */
-    var count = 0
+    var count: Int = 0
+
     /**
      * List of all the [GLShape] objects comprising our rubic cube.
      */
     private val mShapeList = ArrayList<GLShape>()
+
     /**
      * List of all the [GLVertex] objects comprising our rubic cube.
      */
     private val mVertexList = ArrayList<GLVertex>()
+
     /**
      * Count of number of indices required to divide our Rubic cube into GL_TRIANGLES, it is used to
      * allocate space for [ShortBuffer] field [mIndexBuffer] and as the `count` argument to the
      * call of `glDrawElements`.
      */
     private var mIndexCount = 0
+
     /**
      * Direct allocated buffer used as the vertex buffer in the call of `glDrawElements`, once
      * the entire Rubic cube has been generated, each [GLVertex] in our list [mVertexList]
@@ -60,6 +63,7 @@ class GLWorld {
      * [GLVertex.put] which adds its color to [IntBuffer] field [mColorBuffer]).
      */
     private var mVertexBuffer: IntBuffer? = null
+
     /**
      * Direct allocated buffer used as the color buffer in the call of `glDrawElements`, once
      * the entire Rubic cube has been generated, each [GLVertex] in our list [mVertexList]
@@ -67,6 +71,7 @@ class GLWorld {
      * [GLVertex.put] which adds its x,y,z coordinates to [mVertexBuffer]).
      */
     private var mColorBuffer: IntBuffer? = null
+
     /**
      * Direct allocated buffer used as the index buffer in the call of `glDrawElements`, it is
      * constructed in our method [generate] by requesting each [GLShape] in our list

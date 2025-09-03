@@ -27,6 +27,7 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.Shader
 import android.os.Bundle
 import android.view.View
+import androidx.core.graphics.createBitmap
 import com.example.android.apis.R
 
 /**
@@ -73,20 +74,24 @@ class AlphaBitmap : GraphicsActivity() {
          * Contains the [Bitmap] decoded from our raw png image file R.raw.app_sample_code.
          */
         private val mBitmap: Bitmap
+
         /**
          * The alpha values of [Bitmap] field [mBitmap]. This may be drawn with [Canvas.drawBitmap],
          * where the color(s) will be taken from the paint that is passed to the draw call.
          */
         private val mBitmap2: Bitmap
+
         /**
          * [Bitmap] into which we draw a [android.graphics.LinearGradient] colored circle and text
          * using [Canvas.drawCircle] and [Canvas.drawText].
          */
         private val mBitmap3: Bitmap
+
         /**
          * [android.graphics.LinearGradient] instance [Shader] used to draw [mBitmap3]
          */
         private val mShader: Shader
+
         /**
          * [Paint] instance used in call to [Canvas.drawBitmap] for all the Bitmaps
          */
@@ -123,7 +128,7 @@ class AlphaBitmap : GraphicsActivity() {
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(Color.WHITE)
-            var y = 10f
+            var y = 360f
             p.color = Color.RED
             canvas.drawBitmap(mBitmap, 10f, y, p)
             y += mBitmap.height + 10f
@@ -211,14 +216,16 @@ class AlphaBitmap : GraphicsActivity() {
          */
         init {
             isFocusable = true
-            mShader = LinearGradient(0F, 0F, 100F, 70F,
-                    intArrayOf(Color.RED, Color.GREEN, Color.BLUE),
-                    null, Shader.TileMode.MIRROR)
+            mShader = LinearGradient(
+                0F, 0F, 100F, 70F,
+                intArrayOf(Color.RED, Color.GREEN, Color.BLUE),
+                null, Shader.TileMode.MIRROR
+            )
             p = Paint()
             val inputStream = context.resources.openRawResource(R.raw.app_sample_code)
             mBitmap = BitmapFactory.decodeStream(inputStream)
             mBitmap2 = mBitmap.extractAlpha()
-            mBitmap3 = Bitmap.createBitmap(200, 200, Bitmap.Config.ALPHA_8)
+            mBitmap3 = createBitmap(200, 200, Bitmap.Config.ALPHA_8)
             drawIntoBitmap(mBitmap3)
         }
     }
