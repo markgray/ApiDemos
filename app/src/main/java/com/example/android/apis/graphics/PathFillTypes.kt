@@ -26,6 +26,7 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.View
 import kotlin.math.roundToInt
+import androidx.core.graphics.withTranslation
 
 /**
  * Shows the effect of four different Path.FillType's on the same Path, which consists of two
@@ -46,6 +47,10 @@ class PathFillTypes : GraphicsActivity() {
 
     /**
      * Sample view which draws two intersecting circles using 4 different `Path.FillType`.
+     *
+     * @param context The Context the view is running in, through which it can
+     * access the current theme, resources, etc.
+     * (See our init block for our constructor details)
      */
     private class SampleView(context: Context) : View(context) {
         /**
@@ -80,13 +85,16 @@ class PathFillTypes : GraphicsActivity() {
          * @param paint  [Paint] to use when drawing.
          */
         private fun showPath(canvas: Canvas, x: Int, y: Int, ft: FillType, paint: Paint) {
-            canvas.save()
-            canvas.translate(x.toFloat(), y.toFloat())
-            canvas.clipRect(0f, 0f, 120 * mPixelMultiplier, 120 * mPixelMultiplier)
-            canvas.drawColor(Color.WHITE)
-            mPath.fillType = ft
-            canvas.drawPath(mPath, paint)
-            canvas.restore()
+            canvas.withTranslation(x = x.toFloat(), y = y.toFloat()) {
+                clipRect(
+                    /* left = */ 0f, /* top = */ 0f,
+                    /* right = */ 120 * mPixelMultiplier,
+                    /* bottom = */ 120 * mPixelMultiplier
+                )
+                drawColor(Color.WHITE)
+                mPath.fillType = ft
+                drawPath(/* path = */ mPath, /* paint = */ paint)
+            }
         }
 
         /**
@@ -117,7 +125,7 @@ class PathFillTypes : GraphicsActivity() {
         override fun onDraw(canvas: Canvas) {
             val paint = mPaint
             canvas.drawColor(-0x333334)
-            canvas.translate(20 * mPixelMultiplier, 20 * mPixelMultiplier)
+            canvas.translate(20 * mPixelMultiplier, 240 * mPixelMultiplier)
             paint.isAntiAlias = true
             val m160 = (160 * mPixelMultiplier).roundToInt()
             showPath(canvas, 0, 0, FillType.WINDING, paint)
@@ -139,8 +147,18 @@ class PathFillTypes : GraphicsActivity() {
             isFocusableInTouchMode = true
             mPixelMultiplier = convertDpToPixel(1f, context)
             mPath = Path()
-            mPath.addCircle(40 * mPixelMultiplier, 40 * mPixelMultiplier, 45 * mPixelMultiplier, Path.Direction.CCW)
-            mPath.addCircle(80 * mPixelMultiplier, 80 * mPixelMultiplier, 45 * mPixelMultiplier, Path.Direction.CCW)
+            mPath.addCircle(
+                /* x = */ 40 * mPixelMultiplier,
+                /* y = */ 40 * mPixelMultiplier,
+                /* radius = */ 45 * mPixelMultiplier,
+                /* dir = */ Path.Direction.CCW
+            )
+            mPath.addCircle(
+                /* x = */ 80 * mPixelMultiplier,
+                /* y = */ 80 * mPixelMultiplier,
+                /* radius = */ 45 * mPixelMultiplier,
+                /* dir = */ Path.Direction.CCW
+            )
         }
     }
 

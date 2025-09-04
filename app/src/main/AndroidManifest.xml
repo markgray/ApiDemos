@@ -3863,7 +3863,7 @@
             android:name=".graphics.Patterns"
             android:exported="true"
             android:label="Graphics/Patterns"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

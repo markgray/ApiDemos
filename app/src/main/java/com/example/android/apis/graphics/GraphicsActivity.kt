@@ -35,7 +35,6 @@ open class GraphicsActivity : AppCompatActivity() {
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @Suppress("RedundantOverride")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -52,7 +51,6 @@ open class GraphicsActivity : AppCompatActivity() {
      */
     override fun setContentView(view: View) {
         var viewVar: View? = view
-        @Suppress("ConstantConditionIf")
         if (TEST_PICTURE) {
             val vg: ViewGroup = PictureLayout(this)
             vg.addView(viewVar)

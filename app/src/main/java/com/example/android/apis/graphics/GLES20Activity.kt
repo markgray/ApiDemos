@@ -16,7 +16,6 @@
 package com.example.android.apis.graphics
 
 import android.app.ActivityManager
-import android.content.Context
 import android.content.pm.ConfigurationInfo
 import android.opengl.GLSurfaceView
 import android.os.Bundle
@@ -82,7 +81,7 @@ class GLES20Activity : AppCompatActivity() {
      * @return *true* if the device supports OpenGL ES 2.0 or above, *false* otherwise
      */
     private fun detectOpenGLES20(): Boolean {
-        val am = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val am = getSystemService(ACTIVITY_SERVICE) as ActivityManager
         val info: ConfigurationInfo = am.deviceConfigurationInfo
         return info.reqGlEsVersion >= 0x20000
     }

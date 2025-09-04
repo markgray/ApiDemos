@@ -48,20 +48,25 @@ class MeasureText : GraphicsActivity() {
     /**
      * Custom view which displays three lines of text, and using the text measuring methods draws a
      * tight, light green rectangle around the text, and a RED line at the baseline of the text.
+     *
+     * @param context the context we are running in, through to the super's constructor
+     * (See our init block for our constructor details)
      */
     private class SampleView(context: Context?) : View(context) {
         /**
          * [Paint] used to draw with in the method [showText] which is called from [onDraw].
          */
         private val mPaint: Paint
+
         /**
          * Starting x coordinate for our [onDraw] override to draw to its [Canvas]
          */
         private val mOriginX = 10f
+
         /**
          * Starting y coordinate for our [onDraw] override to draw to its [Canvas]
          */
-        private val mOriginY = 80f
+        private val mOriginY = 320f
 
         /**
          * Convenience method to measure the [String] parameter [text], draw a light green rectangle
@@ -97,7 +102,11 @@ class MeasureText : GraphicsActivity() {
          * @param align  not used
          */
         @Suppress("UNUSED_PARAMETER")
-        private fun showText(canvas: Canvas, text: String, align: Align) { //   mPaint.setTextAlign(align);
+        private fun showText(
+            canvas: Canvas,
+            text: String,
+            align: Align
+        ) { //   mPaint.setTextAlign(align);
             val bounds = Rect()
             val widths = FloatArray(text.length)
             mPaint.textSize = 100.0.toFloat()
@@ -167,10 +176,12 @@ class MeasureText : GraphicsActivity() {
          * Only used in `createColors` so unused
          */
         private const val WIDTH = 50
+
         /**
          * Only used in `createColors` so unused
          */
         private const val HEIGHT = 50
+
         /**
          * Only used in `createColors` so unused
          */

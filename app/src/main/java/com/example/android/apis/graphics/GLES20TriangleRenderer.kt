@@ -35,14 +35,12 @@ import javax.microedition.khronos.opengles.GL10
 
 /**
  * Draws a textured rotating triangle using OpenGL ES 2.0 -- used in GLES20Activity.kt
+ *
+ * @property mContext [Context] we were constructed with, used to retrieve resources.
+ * (See our init block for our constructor details)
  */
 internal class GLES20TriangleRenderer(
-
-    /**
-     * [Context] we were constructed with, used to retrieve resources.
-     */
     private val mContext: Context
-
 ) : GLSurfaceView.Renderer {
 
     /**
@@ -52,8 +50,8 @@ internal class GLES20TriangleRenderer(
         -1.0f, -0.5f, 0f,         // X
         -0.5f, 0.0f, 1.0f,        // Y
         -0.5f, 0f, 1.5f,          // Z
-        -0.0f, 0.0f, 1.11803399f, // U
-        0f, 0.5f, 1.61803399f     // V
+        -0.0f, 0.0f, 1.118034f, // U
+        0f, 0.5f, 1.618034f     // V
     )
 
     /**
@@ -308,24 +306,47 @@ internal class GLES20TriangleRenderer(
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureID)
         mTriangleVertices.position(TRIANGLE_VERTICES_DATA_POS_OFFSET)
-        GLES20.glVertexAttribPointer(maPositionHandle, 3, GLES20.GL_FLOAT, false,
-            TRIANGLE_VERTICES_DATA_STRIDE_BYTES, mTriangleVertices)
+        GLES20.glVertexAttribPointer(
+            maPositionHandle, 3, GLES20.GL_FLOAT, false,
+            TRIANGLE_VERTICES_DATA_STRIDE_BYTES, mTriangleVertices
+        )
         checkGlError("glVertexAttribPointer maPosition")
         mTriangleVertices.position(TRIANGLE_VERTICES_DATA_UV_OFFSET)
         GLES20.glEnableVertexAttribArray(maPositionHandle)
         checkGlError("glEnableVertexAttribArray maPositionHandle")
-        GLES20.glVertexAttribPointer(maTextureHandle, 2, GLES20.GL_FLOAT, false,
-            TRIANGLE_VERTICES_DATA_STRIDE_BYTES, mTriangleVertices)
+        GLES20.glVertexAttribPointer(
+            maTextureHandle, 2, GLES20.GL_FLOAT, false,
+            TRIANGLE_VERTICES_DATA_STRIDE_BYTES, mTriangleVertices
+        )
         checkGlError("glVertexAttribPointer maTextureHandle")
         GLES20.glEnableVertexAttribArray(maTextureHandle)
         checkGlError("glEnableVertexAttribArray maTextureHandle")
         val time = SystemClock.uptimeMillis() % 4000L
         val angle = 0.090f * time.toInt()
-        Matrix.setRotateM(mMMatrix, 0, angle, 0f, 0f, 1.0f)
-        Matrix.multiplyMM(mMVPMatrix, 0, mVMatrix, 0, mMMatrix, 0)
-        Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mMVPMatrix, 0)
-        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mMVPMatrix, 0)
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 3)
+        Matrix.setRotateM(
+            /* rm = */ mMMatrix,
+            /* rmOffset = */ 0,
+            /* a = */ angle,
+            /* x = */ 0f, /* y = */ 0f, /* z = */ 1.0f
+        )
+        Matrix.multiplyMM(
+            /* result = */ mMVPMatrix,/* resultOffset = */ 0,
+            /* lhs = */ mVMatrix,/* lhsOffset = */ 0,
+            /* rhs = */ mMMatrix, /* rhsOffset = */ 0
+        )
+        Matrix.multiplyMM(
+            /* result = */ mMVPMatrix, /* resultOffset = */ 0,
+            /* lhs = */ mProjMatrix, /* lhsOffset = */ 0,
+            /* rhs = */ mMVPMatrix, /* rhsOffset = */ 0
+        )
+        GLES20.glUniformMatrix4fv(
+            /* location = */ muMVPMatrixHandle,
+            /* count = */ 1,
+            /* transpose = */ false,
+            /* value = */ mMVPMatrix,
+            /* offset = */ 0
+        )
+        GLES20.glDrawArrays(/* mode = */ GLES20.GL_TRIANGLES, /* first = */ 0, /* count = */ 3)
         checkGlError("glDrawArrays")
     }
 
@@ -352,7 +373,12 @@ internal class GLES20TriangleRenderer(
          */
         GLES20.glViewport(0, 0, width, height)
         val ratio = width.toFloat() / height
-        Matrix.frustumM(mProjMatrix, 0, -ratio, ratio, -1f, 1f, 3f, 7f)
+        Matrix.frustumM(
+            /* m = */ mProjMatrix, /* offset = */ 0,
+            /* left = */ -ratio, /* right = */ ratio,
+            /* bottom = */ -1f, /* top = */ 1f,
+            /* near = */ 3f, /* far = */ 7f
+        )
     }
 
     /**
@@ -434,15 +460,32 @@ internal class GLES20TriangleRenderer(
          * Create our texture. This has to be done each time the
          * surface is created.
          */
-        val textures = IntArray(1)
-        GLES20.glGenTextures(1, textures, 0)
+        val textures = IntArray(size = 1)
+        GLES20.glGenTextures(/* n = */ 1, /* textures = */ textures, /* offset = */ 0)
         mTextureID = textures[0]
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureID)
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST.toFloat())
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR.toFloat())
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT)
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT)
+        GLES20.glBindTexture(/* target = */ GLES20.GL_TEXTURE_2D, /* texture = */ mTextureID)
+        GLES20.glTexParameterf(
+            /* target = */ GLES20.GL_TEXTURE_2D,
+            /* pname = */ GLES20.GL_TEXTURE_MIN_FILTER,
+            /* param = */ GLES20.GL_NEAREST.toFloat()
+        )
+        GLES20.glTexParameterf(
+            /* target = */ GLES20.GL_TEXTURE_2D,
+            /* pname = */ GLES20.GL_TEXTURE_MAG_FILTER,
+            /* param = */ GLES20.GL_LINEAR.toFloat()
+        )
+        GLES20.glTexParameteri(
+            /* target = */ GLES20.GL_TEXTURE_2D,
+            /* pname = */ GLES20.GL_TEXTURE_WRAP_S,
+            /* param = */ GLES20.GL_REPEAT
+        )
+        GLES20.glTexParameteri(
+            /* target = */ GLES20.GL_TEXTURE_2D,
+            /* pname = */ GLES20.GL_TEXTURE_WRAP_T,
+            /* param = */ GLES20.GL_REPEAT
+        )
         val inputStream: InputStream = mContext.resources.openRawResource(R.raw.robot)
+
         @Suppress("JoinDeclarationAndAssignment")
         val bitmap: Bitmap
         bitmap = try {
@@ -450,15 +493,21 @@ internal class GLES20TriangleRenderer(
         } finally {
             try {
                 inputStream.close()
-            } catch (e: IOException) { // Ignore.
+            } catch (_: IOException) { // Ignore.
             }
         }
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0)
+        GLUtils.texImage2D(
+            /* target = */ GLES20.GL_TEXTURE_2D,
+            /* level = */ 0,
+            /* bitmap = */ bitmap,
+            /* border = */ 0
+        )
         bitmap.recycle()
-        Matrix.setLookAtM(mVMatrix, 0,
-            0f, 0f, -5f,
-            0f, 0f, 0f,
-            0f, 1.0f, 0.0f
+        Matrix.setLookAtM(
+            /* rm = */ mVMatrix, /* rmOffset = */ 0,
+            /* eyeX = */ 0f, /* eyeY = */ 0f, /* eyeZ = */ -5f,
+            /* centerX = */ 0f, /* centerY = */ 0f, /* centerZ = */ 0f,
+            /* upX = */ 0f, /* upY = */ 1.0f, /* upZ = */ 0.0f
         )
     }
 
@@ -543,11 +592,16 @@ internal class GLES20TriangleRenderer(
             checkGlError("glAttachShader")
             GLES20.glLinkProgram(program)
             val linkStatus = IntArray(1)
-            GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0)
+            GLES20.glGetProgramiv(
+                /* program = */ program,
+                /* pname = */ GLES20.GL_LINK_STATUS,
+                /* params = */ linkStatus,
+                /* offset = */ 0
+            )
             if (linkStatus[0] != GLES20.GL_TRUE) {
                 Log.e(TAG, "Could not link program: ")
                 Log.e(TAG, GLES20.glGetProgramInfoLog(program))
-                GLES20.glDeleteProgram(program)
+                GLES20.glDeleteProgram(/* program = */ program)
                 program = 0
             }
         }

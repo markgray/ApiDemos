@@ -29,7 +29,7 @@ import android.graphics.Shader
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
-import com.example.android.apis.graphics.Patterns.SampleView
+import androidx.core.graphics.createBitmap
 
 /**
  * Creates two [Bitmap]'s: a blue rectangle on a red background, and a green circle on a clear
@@ -55,20 +55,27 @@ class Patterns : GraphicsActivity() {
     /**
      * A custom [View] consisting of two [Shader] objects, one stationary consisting of
      * a rectangle pattern, and one movable on top of it consisting of a circle pattern.
+     *
+     * @param context The Context the view is running in, through which it can
+     * access the current theme, resources, etc.
+     * (See our init block for our constructor details)
      */
     private class SampleView(context: Context?) : View(context) {
         /**
          * [Shader] consisting of a pattern of blue rectangles on a red background.
          */
         private val mShader1: Shader
+
         /**
          * [Shader] consisting of a pattern of green circles on an uncolored background.
          */
         private val mShader2: Shader
+
         /**
          * [Paint] used to draw to our [Canvas]
          */
         private val mPaint: Paint
+
         /**
          * [PaintFlagsDrawFilter] that clears the [Paint.FILTER_BITMAP_FLAG] and [Paint.DITHER_FLAG]
          * of the [Paint] used to draw to the [Canvas] when it is set as the draw filter of that
@@ -76,22 +83,27 @@ class Patterns : GraphicsActivity() {
          * received (and [mDF] is set to *null* on an ACTION_UP event). See [mDF].
          */
         private val mFastDF: DrawFilter
+
         /**
          * x coordinate of the last ACTION_DOWN event
          */
         private var mTouchStartX = 0f
+
         /**
          * y coordinate of the last ACTION_DOWN event
          */
         private var mTouchStartY = 0f
+
         /**
          * x coordinate of the last ACTION_MOVE event
          */
         private var mTouchCurrX = 0f
+
         /**
          * y coordinate of the last ACTION_MOVE event
          */
         private var mTouchCurrY = 0f
+
         /**
          * [DrawFilter] that is used as the draw filter of the [Canvas] we are drawing to.
          * It is set to [DrawFilter] field [mFastDF] on an ACTION_DOWN event and to *null*
@@ -118,8 +130,10 @@ class Patterns : GraphicsActivity() {
             canvas.drawFilter = mDF
             mPaint.shader = mShader1
             canvas.drawPaint(mPaint)
-            canvas.translate(mTouchCurrX - mTouchStartX,
-                    mTouchCurrY - mTouchStartY)
+            canvas.translate(
+                mTouchCurrX - mTouchStartX,
+                mTouchCurrY - mTouchStartY
+            )
             mPaint.shader = mShader2
             canvas.drawPaint(mPaint)
         }
@@ -162,11 +176,13 @@ class Patterns : GraphicsActivity() {
                     mDF = mFastDF
                     invalidate()
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     mTouchCurrX = x
                     mTouchCurrY = y
                     invalidate()
                 }
+
                 MotionEvent.ACTION_UP -> {
                     mDF = null
                     invalidate()
@@ -221,7 +237,7 @@ class Patterns : GraphicsActivity() {
          * its red background.
          */
         private fun makeBitmap1(): Bitmap {
-            val bm = Bitmap.createBitmap(40, 40, Bitmap.Config.RGB_565)
+            val bm = createBitmap(40, 40, Bitmap.Config.RGB_565)
             val c = Canvas(bm)
             c.drawColor(Color.RED)
             val p = Paint()
@@ -243,7 +259,7 @@ class Patterns : GraphicsActivity() {
          * of its uncolored background.
          */
         private fun makeBitmap2(): Bitmap {
-            val bm = Bitmap.createBitmap(64, 64, Bitmap.Config.ARGB_8888)
+            val bm = createBitmap(64, 64)
             val c = Canvas(bm)
             val p = Paint(Paint.ANTI_ALIAS_FLAG)
             p.color = Color.GREEN

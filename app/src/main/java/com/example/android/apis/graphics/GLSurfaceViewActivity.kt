@@ -44,7 +44,7 @@ class GLSurfaceViewActivity : AppCompatActivity() {
          * Create our Preview view and set it as the content of our Activity
          */
         mGLSurfaceView = GLSurfaceView(this)
-        mGLSurfaceView!!.setRenderer(CubeRenderer(false))
+        mGLSurfaceView!!.setRenderer(CubeRenderer(mTranslucentBackground = false))
         setContentView(mGLSurfaceView)
     }
 

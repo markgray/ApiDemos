@@ -15,6 +15,7 @@
  */
 package com.example.android.apis.graphics
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -29,6 +30,7 @@ import androidx.annotation.RequiresApi
  * Shows the use of Canvas.saveLayerAlpha() and Canvas.restore() to save and restore
  * Canvas settings while doing some drawing in an off screen buffer.
  */
+@SuppressLint("ObsoleteSdkInt")
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 class Layers : GraphicsActivity() {
     /**
@@ -46,6 +48,10 @@ class Layers : GraphicsActivity() {
      * This custom [View] consists solely of a BLUE circle drawn slightly offset on top of a
      * RED circle. The drawing is done to an offscreen bitmap allocated and redirected to by the
      * method `saveLayerAlpha`, then displayed onscreen by `restore`.
+     *
+     * @param context The Context the view is running in, through which it can
+     * access the current theme, resources, etc.
+     * (See our init block for our constructor details)
      */
     private class SampleView(context: Context?) : View(context) {
         /**
@@ -72,6 +78,7 @@ class Layers : GraphicsActivity() {
          * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
+            canvas.translate(0f, 240f)
             canvas.drawColor(Color.WHITE)
             canvas.translate(10f, 10f)
             // Saves future drawing commands to offscreen bitmap buffer

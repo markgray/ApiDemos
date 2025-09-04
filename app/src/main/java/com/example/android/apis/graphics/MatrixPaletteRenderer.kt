@@ -40,21 +40,12 @@ import kotlin.math.sin
 /**
  * This renderer is part of the [MatrixPaletteActivity] sample which shows how to implement a
  * Matrix Palette, which is used to rock a column back and forth.
- */
-class MatrixPaletteRenderer
-/**
- * Our constructor, we simply save our parameter in our [Context] field [mContext].
  *
- * Parameter: [mContext] the [Context] to use to retrieve resources, this when called from the
+ * @property mContext the [Context] to use to retrieve resources, `this` when called from the
  * `onCreate` method of the [MatrixPaletteActivity] `Activity`.
  */
-(
-    /**
-     * Context used to retrieve resources, set in our constructor ("this" when called from the
-     * `onCreate` method of `MatrixPaletteActivity`).
-     */
+class MatrixPaletteRenderer(
     private val mContext: Context
-
 ) : GLSurfaceView.Renderer {
     /**
      * [Grid] containing our column vertices. It is created and configured by our method
@@ -156,14 +147,16 @@ class MatrixPaletteRenderer
          * @param p0 [Int] index of palette matrix that w0 refers to (always 0)
          * @param p1 [Int] index of palette matrix that w1 refers to (always 1)
          */
-        operator fun set(i: Int, j: Int,
-                         x: Float, y: Float, z: Float,
-                         u: Float, v: Float,
-                         w0: Float, w1: Float,
-                         p0: Int, p1: Int) {
-            require(!(i < 0 || i >= mW)) { "i" }
-            require(!(j < 0 || j >= mH)) { "j" }
-            require(w0 + w1 == 1.0f) { "Weights must add up to 1.0f" }
+        operator fun set(
+            i: Int, j: Int,
+            x: Float, y: Float, z: Float,
+            u: Float, v: Float,
+            w0: Float, w1: Float,
+            p0: Int, p1: Int
+        ) {
+            require(value = !(i < 0 || i >= mW)) { "i" }
+            require(value = !(j < 0 || j >= mH)) { "j" }
+            require(value = w0 + w1 == 1.0f) { "Weights must add up to 1.0f" }
             val index = mW * j + i
             mVertexBuffer!!.position(index * VERTEX_SIZE / FLOAT_SIZE)
             mVertexBuffer!!.put(x)
@@ -210,28 +203,34 @@ class MatrixPaletteRenderer
              */
             val vboIds = IntArray(2)
             val gl11 = gl as GL11
-            gl11.glGenBuffers(2, vboIds, 0)
+            gl11.glGenBuffers(/* n = */ 2, /* buffers = */ vboIds, /* offset = */ 0)
             mVertexBufferObjectId = vboIds[0]
             mElementBufferObjectId = vboIds[1]
 
             /**
              * Upload the vertex data
              */
-            gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, mVertexBufferObjectId)
+            gl11.glBindBuffer(
+                /* target = */ GL11.GL_ARRAY_BUFFER,
+                /* buffer = */ mVertexBufferObjectId
+            )
             mVertexByteBuffer!!.position(0)
             gl11.glBufferData(
-                GL11.GL_ARRAY_BUFFER,
-                mVertexByteBuffer!!.capacity(),
-                mVertexByteBuffer,
-                GL11.GL_STATIC_DRAW
+                /* target = */ GL11.GL_ARRAY_BUFFER,
+                /* size = */ mVertexByteBuffer!!.capacity(),
+                /* data = */ mVertexByteBuffer,
+                /* usage = */ GL11.GL_STATIC_DRAW
             )
-            gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, mElementBufferObjectId)
-            mIndexBuffer!!.position(0)
+            gl11.glBindBuffer(
+                /* target = */ GL11.GL_ELEMENT_ARRAY_BUFFER,
+                /* buffer = */ mElementBufferObjectId
+            )
+            mIndexBuffer!!.position(/* newPosition = */ 0)
             gl11.glBufferData(
-                GL11.GL_ELEMENT_ARRAY_BUFFER,
-                mIndexBuffer!!.capacity() * CHAR_SIZE,
-                mIndexBuffer,
-                GL11.GL_STATIC_DRAW
+                /* target = */ GL11.GL_ELEMENT_ARRAY_BUFFER,
+                /* size = */ mIndexBuffer!!.capacity() * CHAR_SIZE,
+                /* data = */ mIndexBuffer,
+                /* usage = */ GL11.GL_STATIC_DRAW
             )
 
             /**
@@ -283,21 +282,52 @@ class MatrixPaletteRenderer
         fun draw(gl: GL10) {
             val gl11 = gl as GL11
             val gl11Ext = gl as GL11Ext
-            gl.glEnableClientState(GL10.GL_VERTEX_ARRAY)
-            gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, mVertexBufferObjectId)
-            gl11.glVertexPointer(3, GL10.GL_FLOAT, VERTEX_SIZE, 0)
-            gl11.glTexCoordPointer(2, GL10.GL_FLOAT, VERTEX_SIZE, VERTEX_TEXTURE_BUFFER_INDEX_OFFSET * FLOAT_SIZE)
-            gl.glEnableClientState(GL11Ext.GL_MATRIX_INDEX_ARRAY_OES)
-            gl.glEnableClientState(GL11Ext.GL_WEIGHT_ARRAY_OES)
-            gl11Ext.glWeightPointerOES(2, GL10.GL_FLOAT, VERTEX_SIZE, VERTEX_WEIGHT_BUFFER_INDEX_OFFSET * FLOAT_SIZE)
-            gl11Ext.glMatrixIndexPointerOES(2, GL10.GL_UNSIGNED_BYTE, VERTEX_SIZE, VERTEX_PALETTE_INDEX_OFFSET)
-            gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, mElementBufferObjectId)
-            gl11.glDrawElements(GL10.GL_TRIANGLES, mIndexCount, GL10.GL_UNSIGNED_SHORT, 0)
-            gl.glDisableClientState(GL10.GL_VERTEX_ARRAY)
-            gl.glDisableClientState(GL11Ext.GL_MATRIX_INDEX_ARRAY_OES)
-            gl.glDisableClientState(GL11Ext.GL_WEIGHT_ARRAY_OES)
-            gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0)
-            gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0)
+            gl.glEnableClientState(/* array = */ GL10.GL_VERTEX_ARRAY)
+            gl11.glBindBuffer(
+                /* target = */ GL11.GL_ARRAY_BUFFER,
+                /* buffer = */ mVertexBufferObjectId
+            )
+            gl11.glVertexPointer(
+                /* size = */ 3,
+                /* type = */ GL10.GL_FLOAT,
+                /* stride = */ VERTEX_SIZE,
+                /* offset = */ 0
+            )
+            gl11.glTexCoordPointer(
+                /* size = */ 2,
+                /* type = */ GL10.GL_FLOAT,
+                /* stride = */ VERTEX_SIZE,
+                /* offset = */ VERTEX_TEXTURE_BUFFER_INDEX_OFFSET * FLOAT_SIZE
+            )
+            gl.glEnableClientState(/* array = */ GL11Ext.GL_MATRIX_INDEX_ARRAY_OES)
+            gl.glEnableClientState(/* array = */ GL11Ext.GL_WEIGHT_ARRAY_OES)
+            gl11Ext.glWeightPointerOES(
+                /* size = */ 2,
+                /* type = */ GL10.GL_FLOAT,
+                /* stride = */ VERTEX_SIZE,
+                /* offset = */ VERTEX_WEIGHT_BUFFER_INDEX_OFFSET * FLOAT_SIZE
+            )
+            gl11Ext.glMatrixIndexPointerOES(
+                /* size = */ 2,
+                /* type = */ GL10.GL_UNSIGNED_BYTE,
+                /* stride = */ VERTEX_SIZE,
+                /* offset = */ VERTEX_PALETTE_INDEX_OFFSET
+            )
+            gl11.glBindBuffer(
+                /* target = */ GL11.GL_ELEMENT_ARRAY_BUFFER,
+                /* buffer = */ mElementBufferObjectId
+            )
+            gl11.glDrawElements(
+                /* mode = */ GL10.GL_TRIANGLES,
+                /* count = */ mIndexCount,
+                /* type = */ GL10.GL_UNSIGNED_SHORT,
+                /* offset = */ 0
+            )
+            gl.glDisableClientState(/* array = */ GL10.GL_VERTEX_ARRAY)
+            gl.glDisableClientState(/* array = */ GL11Ext.GL_MATRIX_INDEX_ARRAY_OES)
+            gl.glDisableClientState(/* array = */ GL11Ext.GL_WEIGHT_ARRAY_OES)
+            gl11.glBindBuffer(/* target = */ GL11.GL_ARRAY_BUFFER, /* buffer = */ 0)
+            gl11.glBindBuffer(/* target = */ GL11.GL_ELEMENT_ARRAY_BUFFER, /* buffer = */ 0)
         }
 
         companion object {
@@ -385,9 +415,9 @@ class MatrixPaletteRenderer
          * Parameter: h height of our `Grid` in vertices
          */
         init {
-            require(!(w < 0 || w >= 65536)) { "w" }
-            require(!(h < 0 || h >= 65536)) { "h" }
-            require(w * h < 65536) { "w * h >= 65536" }
+            require(value = !(w < 0 || w >= 65536)) { "w" }
+            require(value = !(h < 0 || h >= 65536)) { "h" }
+            require(value = w * h < 65536) { "w * h >= 65536" }
             mW = w
             mH = h
             val size = w * h
@@ -400,7 +430,9 @@ class MatrixPaletteRenderer
             val quadCount = quadW * quadH
             val indexCount = quadCount * 6
             mIndexCount = indexCount
-            mIndexBuffer = ByteBuffer.allocateDirect(CHAR_SIZE * indexCount).order(ByteOrder.nativeOrder()).asCharBuffer()
+            mIndexBuffer =
+                ByteBuffer.allocateDirect(CHAR_SIZE * indexCount).order(ByteOrder.nativeOrder())
+                    .asCharBuffer()
             /*
              * Initialize triangle list mesh. (Original comment got this diagram wrong (I think?))
              * the author confused View coordinates which start at 0 at the top and and increase down
@@ -497,29 +529,52 @@ class MatrixPaletteRenderer
          * but reduce performance. One might want to tweak that
          * especially on software renderer.
          */
-        gl.glDisable(GL10.GL_DITHER)
+        gl.glDisable(/* cap = */ GL10.GL_DITHER)
         /**
          * Some one-time OpenGL initialization can be made here
          * probably based on features of this particular context
          */
-        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST)
-        gl.glClearColor(.5f, .5f, .5f, 1f)
-        gl.glShadeModel(GL10.GL_SMOOTH)
-        gl.glEnable(GL10.GL_DEPTH_TEST)
-        gl.glEnable(GL10.GL_TEXTURE_2D)
+        gl.glHint(
+            /* target = */ GL10.GL_PERSPECTIVE_CORRECTION_HINT,
+            /* mode = */ GL10.GL_FASTEST
+        )
+        gl.glClearColor(/* red = */ .5f, /* green = */ .5f, /* blue = */ .5f, /* alpha = */ 1f)
+        gl.glShadeModel(/* mode = */ GL10.GL_SMOOTH)
+        gl.glEnable(/* cap = */ GL10.GL_DEPTH_TEST)
+        gl.glEnable(/* cap = */ GL10.GL_TEXTURE_2D)
         /**
          * Create our texture. This has to be done each time the
          * surface is created.
          */
-        val textures = IntArray(1)
-        gl.glGenTextures(1, textures, 0)
+        val textures = IntArray(size = 1)
+        gl.glGenTextures(/* n = */ 1, /* textures = */ textures, /* offset = */ 0)
         mTextureID = textures[0]
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID)
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST.toFloat())
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR.toFloat())
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE.toFloat())
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE.toFloat())
-        gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE.toFloat())
+        gl.glBindTexture(/* target = */ GL10.GL_TEXTURE_2D, /* texture = */ mTextureID)
+        gl.glTexParameterf(
+            /* target = */ GL10.GL_TEXTURE_2D,
+            /* pname = */ GL10.GL_TEXTURE_MIN_FILTER,
+            /* param = */ GL10.GL_NEAREST.toFloat()
+        )
+        gl.glTexParameterf(
+            /* target = */ GL10.GL_TEXTURE_2D,
+            /* pname = */ GL10.GL_TEXTURE_MAG_FILTER,
+            /* param = */ GL10.GL_LINEAR.toFloat()
+        )
+        gl.glTexParameterf(
+            /* target = */ GL10.GL_TEXTURE_2D,
+            /* pname = */ GL10.GL_TEXTURE_WRAP_S,
+            /* param = */ GL10.GL_CLAMP_TO_EDGE.toFloat()
+        )
+        gl.glTexParameterf(
+            /* target = */ GL10.GL_TEXTURE_2D,
+            /* pname = */ GL10.GL_TEXTURE_WRAP_T,
+            /* param = */ GL10.GL_CLAMP_TO_EDGE.toFloat()
+        )
+        gl.glTexEnvf(
+            /* target = */ GL10.GL_TEXTURE_ENV,
+            /* pname = */ GL10.GL_TEXTURE_ENV_MODE,
+            /* param = */ GL10.GL_REPLACE.toFloat()
+        )
         val inputStream: InputStream = mContext.resources.openRawResource(R.raw.robot)
 
         @Suppress("JoinDeclarationAndAssignment")
@@ -529,7 +584,7 @@ class MatrixPaletteRenderer
         } finally {
             try {
                 inputStream.close()
-            } catch (e: IOException) { // Ignore.
+            } catch (_: IOException) { // Ignore.
             }
         }
         GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0)
@@ -596,32 +651,45 @@ class MatrixPaletteRenderer
          * but reduce performance. One might want to tweak that
          * especially on software renderer.
          */
-        gl.glDisable(GL10.GL_DITHER)
-        gl.glTexEnvx(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE)
+        gl.glDisable(/* cap = */ GL10.GL_DITHER)
+        gl.glTexEnvx(
+            /* target = */ GL10.GL_TEXTURE_ENV,
+            /* pname = */ GL10.GL_TEXTURE_ENV_MODE,
+            /* param = */ GL10.GL_MODULATE
+        )
         /**
          * Usually, the first thing one might want to do is to clear
          * the screen. The most efficient way of doing this is to use
          * glClear().
          */
-        gl.glClear(GL10.GL_COLOR_BUFFER_BIT or GL10.GL_DEPTH_BUFFER_BIT)
-        gl.glEnable(GL10.GL_DEPTH_TEST)
-        gl.glEnable(GL10.GL_CULL_FACE)
+        gl.glClear(/* mask = */ GL10.GL_COLOR_BUFFER_BIT or GL10.GL_DEPTH_BUFFER_BIT)
+        gl.glEnable(/* cap = */ GL10.GL_DEPTH_TEST)
+        gl.glEnable(/* cap = */ GL10.GL_CULL_FACE)
         /**
          * Now we're ready to draw some 3D objects
          */
-        gl.glMatrixMode(GL10.GL_MODELVIEW)
+        gl.glMatrixMode(/* mode = */ GL10.GL_MODELVIEW)
         gl.glLoadIdentity()
-        GLU.gluLookAt(gl,
-            0f, 0f, -5f,
-            0f, 0f, 0f,
-            0f, 1.0f, 0.0f
+        GLU.gluLookAt(
+            /* gl = */ gl,
+            /* eyeX = */ 0f, /* eyeY = */ 0f, /* eyeZ = */ -5f,
+            /* centerX = */ 0f, /* centerY = */ 0f, /* centerZ = */ 0f,
+            /* upX = */ 0f, /* upY = */ 1.0f, /* upZ = */ 0.0f
         )
-        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY)
-        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY)
-        gl.glActiveTexture(GL10.GL_TEXTURE0)
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID)
-        gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT)
-        gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT)
+        gl.glEnableClientState(/* array = */ GL10.GL_VERTEX_ARRAY)
+        gl.glEnableClientState(/* array = */ GL10.GL_TEXTURE_COORD_ARRAY)
+        gl.glActiveTexture(/* texture = */ GL10.GL_TEXTURE0)
+        gl.glBindTexture(/* target = */ GL10.GL_TEXTURE_2D, /* texture = */ mTextureID)
+        gl.glTexParameterx(
+            /* target = */ GL10.GL_TEXTURE_2D,
+            /* pname = */ GL10.GL_TEXTURE_WRAP_S,
+            /* param = */ GL10.GL_REPEAT
+        )
+        gl.glTexParameterx(
+            /* target = */ GL10.GL_TEXTURE_2D,
+            /* pname = */ GL10.GL_TEXTURE_WRAP_T,
+            /* param = */ GL10.GL_REPEAT
+        )
         val time = SystemClock.uptimeMillis() % 4000L
 
         /**
@@ -630,22 +698,22 @@ class MatrixPaletteRenderer
         val animationUnit = time.toDouble() / 4000
         val unitAngle = cos(animationUnit * 2 * Math.PI).toFloat()
         val angle = unitAngle * 135f
-        gl.glEnable(GL11Ext.GL_MATRIX_PALETTE_OES)
-        gl.glMatrixMode(GL11Ext.GL_MATRIX_PALETTE_OES)
+        gl.glEnable(/* cap = */ GL11Ext.GL_MATRIX_PALETTE_OES)
+        gl.glMatrixMode(/* mode = */ GL11Ext.GL_MATRIX_PALETTE_OES)
         val gl11Ext = gl as GL11Ext
         /**
          * matrix 0: no transformation
          */
-        gl11Ext.glCurrentPaletteMatrixOES(0)
+        gl11Ext.glCurrentPaletteMatrixOES(/* matrixpaletteindex = */ 0)
         gl11Ext.glLoadPaletteFromModelViewMatrixOES()
         /**
          * matrix 1: rotate by "angle" NOTE: This comment is wrong(?), matrix 0 is rotated!
          */
-        gl.glRotatef(angle, 0f, 0f, 1.0f)
-        gl11Ext.glCurrentPaletteMatrixOES(1)
+        gl.glRotatef(/* angle = */ angle, /* x = */ 0f, /* y = */ 0f, /* z = */ 1.0f)
+        gl11Ext.glCurrentPaletteMatrixOES(/* matrixpaletteindex = */ 1)
         gl11Ext.glLoadPaletteFromModelViewMatrixOES()
-        mGrid!!.draw(gl)
-        gl.glDisable(GL11Ext.GL_MATRIX_PALETTE_OES)
+        mGrid!!.draw(gl = gl)
+        gl.glDisable(/* cap = */ GL11Ext.GL_MATRIX_PALETTE_OES)
     }
 
     /**
@@ -663,7 +731,7 @@ class MatrixPaletteRenderer
      * @param h  new height of the surface
      */
     override fun onSurfaceChanged(gl: GL10, w: Int, h: Int) {
-        gl.glViewport(0, 0, w, h)
+        gl.glViewport(/* x = */ 0, /* y = */ 0, /* width = */ w, /* height = */ h)
 
         /**
          * Set our projection matrix. This doesn't have to be done
@@ -671,9 +739,13 @@ class MatrixPaletteRenderer
          * be set when the viewport is resized.
          */
         val ratio = w.toFloat() / h
-        gl.glMatrixMode(GL10.GL_PROJECTION)
+        gl.glMatrixMode(/* mode = */ GL10.GL_PROJECTION)
         gl.glLoadIdentity()
-        gl.glFrustumf(-ratio, ratio, -1f, 1f, 3f, 7f)
+        gl.glFrustumf(
+            /* left = */ -ratio, /* right = */ ratio,
+            /* bottom = */ -1f, /* top = */ 1f,
+            /* zNear = */ 3f, /* zFar = */ 7f
+        )
     }
 
     /**
@@ -740,7 +812,7 @@ class MatrixPaletteRenderer
                 grid[i, j, x, y, z, u, v, w0, w1, 0] = 1
             }
         }
-        grid.createBufferObjects(gl)
+        grid.createBufferObjects(gl = gl)
         return grid
     }
 

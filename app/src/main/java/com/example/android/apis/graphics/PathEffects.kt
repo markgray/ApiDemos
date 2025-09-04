@@ -49,30 +49,37 @@ class PathEffects : GraphicsActivity() {
         val scale = resources.displayMetrics.density
         DISTANCE_BETWEEN_LINES = (28 * scale).toInt()
         X_INCREMENT = (20 * scale).toInt()
-        setContentView(SampleView(this))
+        setContentView(SampleView(context = this))
     }
 
     /**
      * Class which displays several animated dashed lines, and smoothed, rounded lines.
+     *
+     * @param context the [Context] of the activity
+     * (See our init block for our constructor details)
      */
     private class SampleView(context: Context?) : View(context) {
         /**
          * [Paint] instance that we use to draw our lines.
          */
         private val mPaint: Paint
+
         /**
          * Random zigzag [Path] we use to draw each line
          */
         private var mPath: Path
+
         /**
          * Our 6 kinds of [PathEffect] examples (including null - no effect).
          */
         private val mEffects: Array<PathEffect?>
+
         /**
          * The 6 colors we use for our lines: Color.BLACK, Color.RED, Color.BLUE, Color.GREEN,
          * Color.MAGENTA, and Color.BLACK
          */
         private val mColors: IntArray
+
         /**
          * Offset into the intervals array (mod the sum of all of the intervals) used when creating
          * dash effect lines. By incrementing it in the `onDraw` method the lines appear to
@@ -101,6 +108,7 @@ class PathEffects : GraphicsActivity() {
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(Color.WHITE)
+            canvas.translate(0f, 240f)
             @SuppressLint("DrawAllocation")
             val bounds = RectF()
             mPath.computeBounds(bounds, false)
@@ -184,7 +192,8 @@ class PathEffects : GraphicsActivity() {
                 e[0] = null // no effect
                 e[1] = CornerPathEffect(10f)
                 e[2] = DashPathEffect(floatArrayOf(10f, 5f, 5f, 5f), phase)
-                e[3] = PathDashPathEffect(makePathDash(), 12f, phase, PathDashPathEffect.Style.ROTATE)
+                e[3] =
+                    PathDashPathEffect(makePathDash(), 12f, phase, PathDashPathEffect.Style.ROTATE)
                 e[4] = ComposePathEffect(e[2], e[1])
                 e[5] = ComposePathEffect(e[3], e[1])
             }
@@ -239,8 +248,9 @@ class PathEffects : GraphicsActivity() {
             mPaint.strokeWidth = 6f
             mPath = makeFollowPath()
             mEffects = arrayOfNulls(6)
-            mColors = intArrayOf(Color.BLACK, Color.RED, Color.BLUE,
-                    Color.GREEN, Color.MAGENTA, Color.BLACK
+            mColors = intArrayOf(
+                Color.BLACK, Color.RED, Color.BLUE,
+                Color.GREEN, Color.MAGENTA, Color.BLACK
             )
             setOnClickListener { mPath = makeFollowPath() }
         }
@@ -250,10 +260,11 @@ class PathEffects : GraphicsActivity() {
         /**
          * The distance to translate the canvas between each line
          */
-        var DISTANCE_BETWEEN_LINES = 28
+        var DISTANCE_BETWEEN_LINES: Int = 28
+
         /**
          * The X increment for the length of lines making up our paths
          */
-        var X_INCREMENT = 20
+        var X_INCREMENT: Int = 20
     }
 }
