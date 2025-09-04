@@ -22,6 +22,8 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.View
+import com.example.android.apis.graphics.DrawPoints.SampleView.Companion.SEGS
+import com.example.android.apis.graphics.DrawPoints.SampleView.Companion.SIZE
 import kotlin.math.roundToInt
 
 /**
@@ -43,6 +45,9 @@ class DrawPoints : GraphicsActivity() {
     /**
      * Demonstrates how to use the [Canvas.drawLines] and [Canvas.drawPoints] methods to
      * draw lines and points.
+     *
+     * @param context the [Context] to use for resources, `this` when called from onCreate
+     * (See our init block for our constructor details)
      */
     private class SampleView(context: Context) : View(context) {
         /**
@@ -102,7 +107,7 @@ class DrawPoints : GraphicsActivity() {
          */
         override fun onDraw(canvas: Canvas) {
             val paint = mPaint
-            canvas.translate(10f, 10f)
+            canvas.translate(10f, 350f)
             canvas.drawColor(Color.WHITE)
             paint.color = Color.RED
             paint.strokeWidth = 0f
@@ -143,7 +148,8 @@ class DrawPoints : GraphicsActivity() {
          */
         init {
             val displayMetrics = context.resources.displayMetrics
-            SIZE = (300 * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT)).roundToInt().toFloat()
+            SIZE = (300 * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT)).roundToInt()
+                .toFloat()
             buildPoints()
         }
     }

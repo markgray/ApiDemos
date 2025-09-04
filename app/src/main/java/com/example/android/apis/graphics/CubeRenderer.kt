@@ -23,17 +23,16 @@ import javax.microedition.khronos.opengles.GL10
  * Render a pair of tumbling cubes. Used in GLSurfaceViewActivity.kt, PresentationWithMediaRouterActivity.kt,
  * SecureSurfaceViewActivity.kt, SurfaceViewOverlay.kt, TranslucentGLSurfaceViewActivity.kt
  *
+ * @property mTranslucentBackground Flag to use a translucent background (glClearColor(0,0,0,0)
  */
 class CubeRenderer(
-        /**
-         * Flag to use a translucent background (glClearColor(0,0,0,0)
-         */
-        private val mTranslucentBackground : Boolean
+    private val mTranslucentBackground: Boolean
 ) : GLSurfaceView.Renderer {
     /**
      * an instance of a vertex shaded cube
      */
-    private val mCube : Cube = Cube()
+    private val mCube: Cube = Cube()
+
     /**
      * ever increasing angle that is used to rotate the two cubes
      */

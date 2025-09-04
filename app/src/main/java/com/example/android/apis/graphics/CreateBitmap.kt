@@ -24,6 +24,9 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
+import androidx.core.graphics.createBitmap
+import com.example.android.apis.graphics.CreateBitmap.Companion.SCREEN_DENSITY
+import com.example.android.apis.graphics.CreateBitmap.SampleView.Companion.codec
 import java.io.ByteArrayOutputStream
 
 /**
@@ -46,6 +49,10 @@ class CreateBitmap : GraphicsActivity() {
 
     /**
      * Custom View which creates and then draws an array of colors using different techniques.
+     * (See our init block for our constructor details)
+     *
+     * @param context `Context` to use for resources, "this" `Activity` when called from `onCreate`
+     * in our case.
      */
     private class SampleView(context: Context?) : View(context) {
         /**
@@ -97,6 +104,7 @@ class CreateBitmap : GraphicsActivity() {
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(Color.WHITE)
             canvas.scale(SCREEN_DENSITY, SCREEN_DENSITY)
+            canvas.translate(0f, 240f)
             for (i in mBitmaps.indices) {
                 canvas.drawBitmap(mBitmaps[i]!!, 0f, 0f, null)
                 canvas.drawBitmap(mJPEG[i]!!, 80f, 0f, null)
@@ -204,10 +212,10 @@ class CreateBitmap : GraphicsActivity() {
                 Bitmap.Config.ARGB_4444
             )
             // these three will have their colors set later
-            mBitmaps[3] = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888)
-            mBitmaps[4] = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.RGB_565)
+            mBitmaps[3] = createBitmap(WIDTH, HEIGHT)
+            mBitmaps[4] = createBitmap(WIDTH, HEIGHT, Bitmap.Config.RGB_565)
             @Suppress("DEPRECATION")
-            mBitmaps[5] = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_4444)
+            mBitmaps[5] = createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_4444)
             for (i in 3..5) {
                 mBitmaps[i]!!.setPixels(colors, 0, STRIDE, 0, 0, WIDTH, HEIGHT)
             }
@@ -231,7 +239,7 @@ class CreateBitmap : GraphicsActivity() {
          * Logical screen density, used to scale the [Canvas] of the view to correctly display
          * the demo on high density screens.
          */
-        var SCREEN_DENSITY = 0f
+        var SCREEN_DENSITY: Float = 0f
 
         /**
          * Width of the [Bitmap]'s being created and displayed

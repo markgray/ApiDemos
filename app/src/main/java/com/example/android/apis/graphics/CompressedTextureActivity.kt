@@ -63,7 +63,6 @@ class CompressedTextureActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mGLView = GLSurfaceView(this)
         mGLView!!.setEGLConfigChooser(false)
-        @Suppress("ConstantConditionIf")
         val loader: TextureLoader = if (TEST_CREATE_TEXTURE) {
             SyntheticCompressedTextureLoader()
         } else {
@@ -117,14 +116,20 @@ class CompressedTextureActivity : AppCompatActivity() {
             Log.w(TAG, "ETC1 texture support: " + ETC1Util.isETC1Supported())
             val input: InputStream = resources.openRawResource(R.raw.androids)
             try {
-                ETC1Util.loadTexture(GLES10.GL_TEXTURE_2D, 0, 0,
-                    GLES10.GL_RGB, GLES10.GL_UNSIGNED_SHORT_5_6_5, input)
+                ETC1Util.loadTexture(
+                    GLES10.GL_TEXTURE_2D,
+                    0,
+                    0,
+                    GLES10.GL_RGB,
+                    GLES10.GL_UNSIGNED_SHORT_5_6_5,
+                    input
+                )
             } catch (e: IOException) {
                 Log.w(TAG, "Could not load texture: $e")
             } finally {
                 try {
                     input.close()
-                } catch (e: IOException) { // ignore exception thrown from close.
+                } catch (_: IOException) { // ignore exception thrown from close.
                 }
             }
         }
@@ -156,20 +161,31 @@ class CompressedTextureActivity : AppCompatActivity() {
             val height = 128
             val image = createImage(width, height)
             val etc1Texture = ETC1Util.compressTexture(image, width, height, 3, 3 * width)
-            @Suppress("ConstantConditionIf")
             if (USE_STREAM_IO) { // Test the ETC1Util APIs for reading and writing compressed textures to I/O streams.
                 try {
                     val bos = ByteArrayOutputStream()
                     ETC1Util.writeTexture(etc1Texture, bos)
                     val bis = ByteArrayInputStream(bos.toByteArray())
-                    ETC1Util.loadTexture(GLES10.GL_TEXTURE_2D, 0, 0,
-                        GLES10.GL_RGB, GLES10.GL_UNSIGNED_SHORT_5_6_5, bis)
+                    ETC1Util.loadTexture(
+                        GLES10.GL_TEXTURE_2D,
+                        0,
+                        0,
+                        GLES10.GL_RGB,
+                        GLES10.GL_UNSIGNED_SHORT_5_6_5,
+                        bis
+                    )
                 } catch (e: IOException) {
                     Log.w(TAG, "Could not load texture: $e")
                 }
             } else {
-                ETC1Util.loadTexture(GLES10.GL_TEXTURE_2D, 0, 0,
-                    GLES10.GL_RGB, GLES10.GL_UNSIGNED_SHORT_5_6_5, etc1Texture)
+                ETC1Util.loadTexture(
+                    GLES10.GL_TEXTURE_2D,
+                    0,
+                    0,
+                    GLES10.GL_RGB,
+                    GLES10.GL_UNSIGNED_SHORT_5_6_5,
+                    etc1Texture
+                )
             }
         }
 

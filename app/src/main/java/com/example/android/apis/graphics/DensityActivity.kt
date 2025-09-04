@@ -360,19 +360,12 @@ class DensityActivity : AppCompatActivity() {
     /**
      * Custom [View] which uses the scaled width and height of the [Bitmap] it contains
      * given the target density of the current display metrics.
-     */
-    private inner class ScaledBitmapView
-    /**
-     * Simple constructor, first we call through to our super's constructor, then we save our parameter
-     * `Bitmap bitmap` in our field `Bitmap mBitmap`
      *
      * @param context `Context` to use for resources, "this" `DensityActivity` in our case
-     * Parameter: bitmap `Bitmap` we are to hold and Display.
-     */(
+     * @property mBitmap [Bitmap] we were created to hold and draw when our [onDraw] override is called.
+     */
+    private inner class ScaledBitmapView(
         context: Context?,
-        /**
-         * [Bitmap] we were created to hold and draw when our [onDraw] override is called.
-         */
         private val mBitmap: Bitmap
     ) : View(context) {
 

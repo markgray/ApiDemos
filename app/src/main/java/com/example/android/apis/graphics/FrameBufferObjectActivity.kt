@@ -16,11 +16,12 @@
 package com.example.android.apis.graphics
 
 import android.opengl.GLSurfaceView
-import android.view.SurfaceView
 import android.opengl.GLU
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.SurfaceView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.graphics.FrameBufferObjectActivity.Companion.checkGLError
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL
 import javax.microedition.khronos.opengles.GL10
@@ -47,16 +48,19 @@ class FrameBufferObjectActivity : AppCompatActivity() {
          * extension
          */
         private var mContextSupportsFrameBufferObject = false
+
         /**
          * Texture ID of the texture we use for our demo, it is bound to GL_TEXTURE_2D in our method
          * [drawOnscreen] which is called by our override of [onDrawFrame].
          */
         private var mTargetTexture = 0
+
         /**
          * Framebuffer object name we use to draw our offscreen texture to, it is bound to
          * [GL11ExtensionPack.GL_FRAMEBUFFER_OES] in our [onDrawFrame] override
          */
         private var mFramebuffer = 0
+
         /**
          * Width of the Framebuffer object, it is used in our method [createTargetTexture] to
          * specify the width of the two-dimensional texture image for the GL_TEXTURE_2D target
@@ -65,6 +69,7 @@ class FrameBufferObjectActivity : AppCompatActivity() {
          * (which is our [mFramebuffer]).
          */
         private val mFramebufferWidth = 256
+
         /**
          * Height of the Framebuffer object, it is used in our method [createTargetTexture] to
          * specify the height of the two-dimensional texture image for the GL_TEXTURE_2D target
@@ -73,14 +78,17 @@ class FrameBufferObjectActivity : AppCompatActivity() {
          * (which is our [mFramebuffer]).
          */
         private val mFramebufferHeight = 256
+
         /**
          * Width of our [SurfaceView] which is set in our [onSurfaceChanged] callback
          */
         private var mSurfaceWidth = 0
+
         /**
          * Height of our [SurfaceView] which is set in our [onSurfaceChanged] callback
          */
         private var mSurfaceHeight = 0
+
         /**
          * [Triangle] instance which we draw in our method [drawOnscreen] every time our
          * callback [onDrawFrame] is called, it is rotated by a function of the system time
@@ -89,12 +97,14 @@ class FrameBufferObjectActivity : AppCompatActivity() {
          * rotating [Cube] objects being drawn into it).
          */
         private var mTriangle: Triangle? = null
+
         /**
          * [Cube] instance that we use twice to produce the texture used by our [Triangle] instance
          * (the second rotated around the (y,z) axis by twice the angle the first is rotated by, and
          * translated by (0.5, 0.5, 0.5))
          */
         private var mCube: Cube? = null
+
         /**
          * Angle used to draw the two [Cube] objects we use as our texture, it is advanced by
          * 1.2 degrees every frame.
@@ -120,8 +130,7 @@ class FrameBufferObjectActivity : AppCompatActivity() {
             checkGLError(gl)
             if (mContextSupportsFrameBufferObject) {
                 val gl11ep = gl as GL11ExtensionPack
-                @Suppress("ConstantConditionIf")
-                if (Companion.DEBUG_RENDER_OFFSCREEN_ONSCREEN) {
+                if (DEBUG_RENDER_OFFSCREEN_ONSCREEN) {
                     drawOffscreenImage(gl, mSurfaceWidth, mSurfaceHeight)
                 } else {
                     gl11ep.glBindFramebufferOES(GL11ExtensionPack.GL_FRAMEBUFFER_OES, mFramebuffer)
@@ -179,7 +188,12 @@ class FrameBufferObjectActivity : AppCompatActivity() {
             mContextSupportsFrameBufferObject = checkIfContextSupportsFrameBufferObject(gl)
             if (mContextSupportsFrameBufferObject) {
                 mTargetTexture = createTargetTexture(gl, mFramebufferWidth, mFramebufferHeight)
-                mFramebuffer = createFrameBuffer(gl, mFramebufferWidth, mFramebufferHeight, mTargetTexture)
+                mFramebuffer = createFrameBuffer(
+                    gl = gl,
+                    width = mFramebufferWidth,
+                    height = mFramebufferHeight,
+                    targetTextureId = mTargetTexture
+                )
                 mCube = Cube()
                 mTriangle = Triangle()
             }
@@ -231,7 +245,11 @@ class FrameBufferObjectActivity : AppCompatActivity() {
             gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE.toFloat())
             gl.glMatrixMode(GL10.GL_MODELVIEW)
             gl.glLoadIdentity()
-            GLU.gluLookAt(gl, 0f, 0f, -5f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
+            GLU.gluLookAt(
+                gl, 0f, 0f, -5f,
+                0f, 0f, 0f,
+                0f, 1.0f, 0.0f
+            )
             gl.glEnableClientState(GL10.GL_VERTEX_ARRAY)
             gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY)
             gl.glActiveTexture(GL10.GL_TEXTURE0)
@@ -352,14 +370,40 @@ class FrameBufferObjectActivity : AppCompatActivity() {
         private fun createTargetTexture(gl: GL10, width: Int, height: Int): Int {
             val texture: Int
             val textures = IntArray(1)
-            gl.glGenTextures(1, textures, 0)
+            gl.glGenTextures(/* n = */ 1, /* textures = */ textures, /* offset = */ 0)
             texture = textures[0]
-            gl.glBindTexture(GL10.GL_TEXTURE_2D, texture)
-            gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA, width, height, 0, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, null)
-            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST.toFloat())
-            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR.toFloat())
-            gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT)
-            gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT)
+            gl.glBindTexture(/* target = */ GL10.GL_TEXTURE_2D, /* texture = */ texture)
+            gl.glTexImage2D(
+                /* target = */ GL10.GL_TEXTURE_2D,
+                /* level = */ 0,
+                /* internalformat = */ GL10.GL_RGBA,
+                /* width = */ width,
+                /* height = */ height,
+                /* border = */ 0,
+                /* format = */ GL10.GL_RGBA,
+                /* type = */ GL10.GL_UNSIGNED_BYTE,
+                /* pixels = */ null
+            )
+            gl.glTexParameterf(
+                /* target = */ GL10.GL_TEXTURE_2D,
+                /* pname = */ GL10.GL_TEXTURE_MIN_FILTER,
+                /* param = */ GL10.GL_NEAREST.toFloat()
+            )
+            gl.glTexParameterf(
+                /* target = */ GL10.GL_TEXTURE_2D,
+                /* pname = */ GL10.GL_TEXTURE_MAG_FILTER,
+                /* param = */ GL10.GL_LINEAR.toFloat()
+            )
+            gl.glTexParameterx(
+                /* target = */ GL10.GL_TEXTURE_2D,
+                /* pname = */ GL10.GL_TEXTURE_WRAP_S,
+                /* param = */ GL10.GL_REPEAT
+            )
+            gl.glTexParameterx(
+                /* target = */ GL10.GL_TEXTURE_2D,
+                /* pname = */ GL10.GL_TEXTURE_WRAP_T,
+                /* param = */ GL10.GL_REPEAT
+            )
             return texture
         }
 
@@ -398,32 +442,67 @@ class FrameBufferObjectActivity : AppCompatActivity() {
          * @return a framebuffer object name bound to GL_RENDERBUFFER_OES and configured as we wish it.
          */
         @Suppress("SameParameterValue")
-        private fun createFrameBuffer(gl: GL10, width: Int, height: Int, targetTextureId: Int): Int {
+        private fun createFrameBuffer(
+            gl: GL10,
+            width: Int,
+            height: Int,
+            targetTextureId: Int
+        ): Int {
             val gl11ep = gl as GL11ExtensionPack
             val framebuffer: Int
             val framebuffers = IntArray(1)
-            gl11ep.glGenFramebuffersOES(1, framebuffers, 0)
+            gl11ep.glGenFramebuffersOES(
+                /* n = */ 1,
+                /* framebuffers = */ framebuffers,
+                /* offset = */ 0
+            )
             framebuffer = framebuffers[0]
-            gl11ep.glBindFramebufferOES(GL11ExtensionPack.GL_FRAMEBUFFER_OES, framebuffer)
+            gl11ep.glBindFramebufferOES(
+                /* target = */ GL11ExtensionPack.GL_FRAMEBUFFER_OES,
+                /* framebuffer = */ framebuffer
+            )
             val depthbuffer: Int
             val renderbuffers = IntArray(1)
-            gl11ep.glGenRenderbuffersOES(1, renderbuffers, 0)
+            gl11ep.glGenRenderbuffersOES(
+                /* n = */ 1,
+                /* renderbuffers = */ renderbuffers,
+                /* offset = */ 0
+            )
             depthbuffer = renderbuffers[0]
-            gl11ep.glBindRenderbufferOES(GL11ExtensionPack.GL_RENDERBUFFER_OES, depthbuffer)
-            gl11ep.glRenderbufferStorageOES(GL11ExtensionPack.GL_RENDERBUFFER_OES,
-                    GL11ExtensionPack.GL_DEPTH_COMPONENT16, width, height)
-            gl11ep.glFramebufferRenderbufferOES(GL11ExtensionPack.GL_FRAMEBUFFER_OES,
-                    GL11ExtensionPack.GL_DEPTH_ATTACHMENT_OES,
-                    GL11ExtensionPack.GL_RENDERBUFFER_OES, depthbuffer)
-            gl11ep.glFramebufferTexture2DOES(GL11ExtensionPack.GL_FRAMEBUFFER_OES,
-                    GL11ExtensionPack.GL_COLOR_ATTACHMENT0_OES, GL10.GL_TEXTURE_2D,
-                    targetTextureId, 0)
-            val status = gl11ep.glCheckFramebufferStatusOES(GL11ExtensionPack.GL_FRAMEBUFFER_OES)
+            gl11ep.glBindRenderbufferOES(
+                /* target = */ GL11ExtensionPack.GL_RENDERBUFFER_OES,
+                /* renderbuffer = */ depthbuffer
+            )
+            gl11ep.glRenderbufferStorageOES(
+                GL11ExtensionPack.GL_RENDERBUFFER_OES,
+                GL11ExtensionPack.GL_DEPTH_COMPONENT16, width, height
+            )
+            gl11ep.glFramebufferRenderbufferOES(
+                /* target = */ GL11ExtensionPack.GL_FRAMEBUFFER_OES,
+                /* attachment = */ GL11ExtensionPack.GL_DEPTH_ATTACHMENT_OES,
+                /* renderbuffertarget = */ GL11ExtensionPack.GL_RENDERBUFFER_OES,
+                /* renderbuffer = */ depthbuffer
+            )
+            gl11ep.glFramebufferTexture2DOES(
+                /* target = */ GL11ExtensionPack.GL_FRAMEBUFFER_OES,
+                /* attachment = */ GL11ExtensionPack.GL_COLOR_ATTACHMENT0_OES,
+                /* textarget = */ GL10.GL_TEXTURE_2D,
+                /* texture = */ targetTextureId,
+                /* level = */ 0
+            )
+            val status = gl11ep.glCheckFramebufferStatusOES(
+                /* target = */ GL11ExtensionPack.GL_FRAMEBUFFER_OES
+            )
             if (status != GL11ExtensionPack.GL_FRAMEBUFFER_COMPLETE_OES) {
-                throw RuntimeException("Framebuffer is not complete: " +
-                        Integer.toHexString(status))
+                throw RuntimeException(
+                    "Framebuffer is not complete: " +
+                        Integer.toHexString(status)
+                )
             }
-            gl11ep.glBindFramebufferOES(GL11ExtensionPack.GL_FRAMEBUFFER_OES, 0)
+            gl11ep.glBindFramebufferOES(
+                /* target = */ GL11ExtensionPack.GL_FRAMEBUFFER_OES,
+                /* framebuffer = */ 0
+            )
             return framebuffer
         }
 

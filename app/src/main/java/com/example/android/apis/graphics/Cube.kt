@@ -30,12 +30,14 @@ internal class Cube {
      * `VertexBuffer` for the eight corners of our cube.
      */
     private val mVertexBuffer: IntBuffer
+
     /**
      * Array of colors used to draw our cube's surface, one for each vertex. `glDrawElements`
      * will smoothly morph between the color at a vertex to the color of each connected vertex when
      * drawing the surface of the triangle defined by three vertices.
      */
     private val mColorBuffer: IntBuffer
+
     /**
      * Array of indices pointing to [mVertexBuffer] vertices with three indices per triangle
      * specified in a counter clockwise manner so that the normal points out of the triangle. There
@@ -93,37 +95,40 @@ internal class Cube {
          * xyz coordinates of the eight corners of the cube
          */
         val vertices = intArrayOf(
-                -one, -one, -one,
-                one, -one, -one,
-                one, one, -one,
-                -one, one, -one,
-                -one, -one, one,
-                one, -one, one,
-                one, one, one,
-                -one, one, one)
+            -one, -one, -one,
+            one, -one, -one,
+            one, one, -one,
+            -one, one, -one,
+            -one, -one, one,
+            one, -one, one,
+            one, one, one,
+            -one, one, one
+        )
         /*
          * Colors for the eight vertices of the cube
          */
         val colors = intArrayOf(
-                0, 0, 0, one,
-                one, 0, 0, one,
-                one, one, 0, one,
-                0, one, 0, one,
-                0, 0, one, one,
-                one, 0, one, one,
-                one, one, one, one,
-                0, one, one, one)
+            0, 0, 0, one,
+            one, 0, 0, one,
+            one, one, 0, one,
+            0, one, 0, one,
+            0, 0, one, one,
+            one, 0, one, one,
+            one, one, one, one,
+            0, one, one, one
+        )
         /*
          * Indexes to define the 12 triangles used to draw the cube
          */
         val indices = byteArrayOf(
-                0, 4, 5, 0, 5, 1,
-                1, 5, 6, 1, 6, 2,
-                2, 6, 7, 2, 7, 3,
-                3, 7, 4, 3, 4, 0,
-                4, 7, 6, 4, 6, 5,
-                3, 0, 1, 3, 1, 2
+            0, 4, 5, 0, 5, 1,
+            1, 5, 6, 1, 6, 2,
+            2, 6, 7, 2, 7, 3,
+            3, 7, 4, 3, 4, 0,
+            4, 7, 6, 4, 6, 5,
+            3, 0, 1, 3, 1, 2
         )
+
         /**
          * Buffers to be passed to gl*Pointer() functions
          * must be direct, i.e., they must be placed on the

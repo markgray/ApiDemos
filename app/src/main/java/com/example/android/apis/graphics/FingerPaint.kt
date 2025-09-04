@@ -31,6 +31,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.graphics.createBitmap
 import com.example.android.apis.graphics.ColorPickerDialog.OnColorChangedListener
 import kotlin.math.abs
 
@@ -42,11 +43,13 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
      * Current [Paint] to use for drawing loci of finger movements.
      */
     private var mPaint: Paint? = null
+
     /**
      * An [EmbossMaskFilter] which can be added to [mPaint] using the options menu,
      * applies a shadow like effect to the line being drawn.
      */
     private var mEmboss: MaskFilter? = null
+
     /**
      * A [BlurMaskFilter] which can be added to [mPaint] using the options menu,
      * applies a blur effect to the line being drawn.
@@ -80,8 +83,10 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
         mPaint!!.strokeCap = Paint.Cap.ROUND
         mPaint!!.strokeWidth = 12f
         @Suppress("DEPRECATION") // "This subclass is not supported and should not be instantiated"
-        mEmboss = EmbossMaskFilter(floatArrayOf(1f, 1f, 1f),
-                0.4f, 6F, 3.5f)
+        mEmboss = EmbossMaskFilter(
+            floatArrayOf(1f, 1f, 1f),
+            0.4f, 6F, 3.5f
+        )
         mBlur = BlurMaskFilter(8F, BlurMaskFilter.Blur.NORMAL)
     }
 
@@ -98,6 +103,8 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
 
     /**
      * Custom View which displays the loci drawn by the user's finger.
+     *
+     * @param c [Context] to use for resources.
      */
     inner class MyView(c: Context?) : View(c) {
         /**
@@ -108,16 +115,19 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
          * before drawing the current [mPath].
          */
         private var mBitmap: Bitmap? = null
+
         /**
          * [Canvas] for the [Bitmap] field [mBitmap] created in [onSizeChanged] that allows
          * us to draw into [mBitmap]
          */
         private var mCanvas: Canvas? = null
+
         /**
          * [Path] traced by user's finger, collected from `MotionEvent`'s received in our
          * `MyView.onTouchEvent` method.
          */
         private val mPath: Path = Path()
+
         /**
          * [Paint] used to draw [Bitmap] field [mBitmap] (the accumulated finger loci tracing)
          * used in our [onDraw] override.
@@ -141,7 +151,7 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
          */
         override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
             super.onSizeChanged(w, h, oldw, oldh)
-            mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            mBitmap = createBitmap(w, h)
             mCanvas = Canvas(mBitmap!!)
         }
 
@@ -195,7 +205,7 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
         private fun touchMove(x: Float, y: Float) {
             val dx = abs(x - mX)
             val dy = abs(y - mY)
-            if (dx >= Companion.TOUCH_TOLERANCE || dy >= Companion.TOUCH_TOLERANCE) {
+            if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
                 mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2)
                 mX = x
                 mY = y
@@ -250,10 +260,12 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
                     touchStart(x, y)
                     invalidate()
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     touchMove(x, y)
                     invalidate()
                 }
+
                 MotionEvent.ACTION_UP -> {
                     touchUp()
                     invalidate()
@@ -288,15 +300,15 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         menu.add(0, COLOR_MENU_ID, 0, "Color")
-                .setShortcut('3', 'c')
+            .setShortcut('3', 'c')
         menu.add(0, EMBOSS_MENU_ID, 0, "Emboss")
-                .setShortcut('4', 's')
+            .setShortcut('4', 's')
         menu.add(0, BLUR_MENU_ID, 0, "Blur")
-                .setShortcut('5', 'z')
+            .setShortcut('5', 'z')
         menu.add(0, ERASE_MENU_ID, 0, "Erase")
-                .setShortcut('5', 'z')
+            .setShortcut('5', 'z')
         menu.add(0, SRCATOP_MENU_ID, 0, "SrcATop")
-                .setShortcut('5', 'z')
+            .setShortcut('5', 'z')
         /*   Is this the mechanism to extend with filter effects?
         Intent intent = new Intent(null, getIntent().getData());
         intent.addCategory(Intent.CATEGORY_ALTERNATIVE);
@@ -371,6 +383,7 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
                 ColorPickerDialog(this, this, mPaint!!.color).show()
                 return true
             }
+
             EMBOSS_MENU_ID -> {
                 if (mPaint!!.maskFilter !== mEmboss) {
                     mPaint!!.maskFilter = mEmboss
@@ -379,6 +392,7 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
                 }
                 return true
             }
+
             BLUR_MENU_ID -> {
                 if (mPaint!!.maskFilter !== mBlur) {
                     mPaint!!.maskFilter = mBlur
@@ -387,10 +401,12 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
                 }
                 return true
             }
+
             ERASE_MENU_ID -> {
                 mPaint!!.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
                 return true
             }
+
             SRCATOP_MENU_ID -> {
                 mPaint!!.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP)
                 mPaint!!.alpha = 0x80
@@ -405,22 +421,27 @@ class FingerPaint : GraphicsActivity(), OnColorChangedListener {
          * Menu ID for our "Color" option
          */
         private const val COLOR_MENU_ID = Menu.FIRST
+
         /**
          * Menu ID for our "Emboss" option
          */
         private const val EMBOSS_MENU_ID = Menu.FIRST + 1
+
         /**
          * Menu ID for our "Blur" option
          */
         private const val BLUR_MENU_ID = Menu.FIRST + 2
+
         /**
          * Menu ID for our "Erase" option
          */
         private const val ERASE_MENU_ID = Menu.FIRST + 3
+
         /**
          * Menu ID for our "SrcATop" option
          */
         private const val SRCATOP_MENU_ID = Menu.FIRST + 4
+
         /**
          * Finger movements below this value are ignored.
          */

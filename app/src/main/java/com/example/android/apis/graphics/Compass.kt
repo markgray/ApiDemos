@@ -40,15 +40,18 @@ class Compass : GraphicsActivity() {
      * lets you access the device's sensors.
      */
     private var mSensorManager: SensorManager? = null
+
     /**
      * Default [Sensor] for the type Sensor.TYPE_ORIENTATION, an orientation sensor type.
      */
     private var mSensor: Sensor? = null
+
     /**
      * An instance of [SampleView] which is used as our content view and displays the compass
      * pointer which is updated as our orientation sensor changes directions.
      */
     private var mView: SampleView? = null
+
     /**
      * Rotation vector returned in the latest [SensorEvent] received from our orientation sensor.
      * It consists of values[0]: Azimuth, angle between the magnetic north direction and the y-axis,
@@ -58,6 +61,7 @@ class Compass : GraphicsActivity() {
      * moves clockwise.
      */
     private var mValues: FloatArray? = null
+
     /**
      * Listener we register for updates to our [Sensor] field [mSensor] orientation sensor
      */
@@ -73,7 +77,10 @@ class Compass : GraphicsActivity() {
          */
         override fun onSensorChanged(event: SensorEvent) {
             if (false) {
-                Log.d(TAG, "sensorChanged (${event.values[0]}, ${event.values[1]}, ${event.values[2]})")
+                Log.d(
+                    TAG,
+                    "sensorChanged (${event.values[0]}, ${event.values[1]}, ${event.values[2]})"
+                )
             }
             mValues = event.values
             if (mView != null) {
@@ -101,7 +108,7 @@ class Compass : GraphicsActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         @Suppress("DEPRECATION")
         mSensor = mSensorManager!!.getDefaultSensor(Sensor.TYPE_ORIENTATION)
         mView = SampleView(this)
@@ -139,16 +146,21 @@ class Compass : GraphicsActivity() {
 
     /**
      * Custom view which displays our compass pointer.
+     *
+     * @param context Activity `Context` of "this" when called from `onCreate`
+     * (See our init block for our constructor details)
      */
     private inner class SampleView(context: Context?) : View(context) {
         /**
          * [Paint] instance we use in our [onDraw] method
          */
         private val mPaint = Paint()
+
         /**
          * `Path` containing a wedge-shaped path which is used as our compass pointer
          */
         private val mPath = Path()
+
         /**
          * [Boolean] flag which is set to *true* in [onAttachedToWindow] and to *false* in
          * [onDetachedFromWindow] which we do not actually use for anything?
@@ -220,11 +232,8 @@ class Compass : GraphicsActivity() {
         }
 
         /**
-         * Constructs and initializes our `View`. First we call our super's constructor, then
-         * we initialize our `Path` field `mPath` using `Path` methods to draw a wedge-shaped
+         * We initialize our `Path` field `mPath` using `Path` methods to draw a wedge-shaped
          * path which we will use as our compass pointer.
-         *
-         * Parameter: Activity `Context` of "this" when called from `onCreate`
          */
         init {
             // Construct a wedge-shaped path
