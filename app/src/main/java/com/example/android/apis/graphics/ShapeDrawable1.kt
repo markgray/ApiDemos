@@ -16,6 +16,7 @@
 package com.example.android.apis.graphics
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapShader
 import android.graphics.Canvas
@@ -37,6 +38,7 @@ import android.graphics.drawable.shapes.RectShape
 import android.graphics.drawable.shapes.RoundRectShape
 import android.graphics.drawable.shapes.Shape
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
 
 /**
@@ -56,6 +58,9 @@ class ShapeDrawable1 : GraphicsActivity() {
 
     /**
      * Custom view which holds and draws our 7 [ShapeDrawable] examples.
+     *
+     * @param context the [Context] of the activity using us.
+     * (See our `init` block for the details of our constructor)
      */
     private class SampleView(context: Context?) : View(context) {
         /**
@@ -68,6 +73,9 @@ class ShapeDrawable1 : GraphicsActivity() {
          * passed to its [onDraw] method, and once using its private [Paint] (which is
          * configured to be a stroked style paint, and can be accessed and customized using the
          * getter method `getStrokePaint`)
+         *
+         * @param s the [Shape] we are to pass to our [ShapeDrawable] super.
+         * (See our `init` block for the details of our constructor)
          */
         private class MyShapeDrawable(s: Shape?) : ShapeDrawable(s) {
             /**
@@ -138,11 +146,31 @@ class ShapeDrawable1 : GraphicsActivity() {
             var y = (10 * scale).toInt()
             val width = (300 * scale).toInt()
             val height = (50 * scale).toInt()
+            canvas.translate(0f, dpToPixel(160, context).toFloat())
             for (dr in mDrawables) {
                 dr!!.setBounds(x, y, x + width, y + height)
                 dr.draw(canvas)
                 y += height + (5 * scale).toInt()
             }
+        }
+
+        /**
+         * This method converts dp unit to equivalent pixels, depending on device density. First we
+         * fetch a [Resources] instance for `val resources`, then we fetch the current display
+         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+         * dots-per-inch, divided by the reference density used throughout the system.
+         *
+         * @param dp      A value in dp (density independent pixels) unit which we need to convert
+         *                into pixels
+         * @param context [Context] to get resources and device specific display metrics
+         * @return An [Int] value to represent px equivalent to dp depending on device density
+         */
+        @Suppress("SameParameterValue")
+        private fun dpToPixel(dp: Int, context: Context): Int {
+            val resources: Resources = context.resources
+            val metrics = resources.displayMetrics
+            return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
         }
 
         /**
@@ -158,9 +186,9 @@ class ShapeDrawable1 : GraphicsActivity() {
              */
             private fun makeSweep(): Shader {
                 return SweepGradient(
-                        150f, 25f,
-                        intArrayOf(-0x10000, -0xff0100, -0xffff01, -0x10000),
-                        null
+                    150f, 25f,
+                    intArrayOf(-0x10000, -0xff0100, -0xffff01, -0x10000),
+                    null
                 )
             }
 
@@ -177,9 +205,9 @@ class ShapeDrawable1 : GraphicsActivity() {
              */
             private fun makeLinear(): Shader {
                 return LinearGradient(
-                        0f, 0f, 50f, 50f,
-                        intArrayOf(-0x10000, -0xff0100, -0xffff01),
-                        null, Shader.TileMode.MIRROR
+                    0f, 0f, 50f, 50f,
+                    intArrayOf(-0x10000, -0xff0100, -0xffff01),
+                    null, Shader.TileMode.MIRROR
                 )
             }
 

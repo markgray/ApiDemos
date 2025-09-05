@@ -24,15 +24,10 @@ import android.graphics.drawable.Drawable
  * Only used by [AnimateDrawable], which extends us. We implement all the methods required by
  * the [Drawable] abstract class, allowing a subclass to only override the methods it needs
  * to customize.
+ *
+ * @property mProxy "Real" [Drawable] that we are proxy for
  */
-open class ProxyDrawable
-/**
- * Saves the [Drawable] parameter [mProxy], so it can be used in the `draw` override of our subclass
- */
-(
-    /**
-     * "Real" [Drawable] that we are proxy for
-     */
+open class ProxyDrawable(
     var mProxy: Drawable?
 ) : Drawable() {
 

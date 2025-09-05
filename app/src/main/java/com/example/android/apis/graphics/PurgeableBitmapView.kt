@@ -17,12 +17,14 @@ package com.example.android.apis.graphics
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.util.DisplayMetrics
 import android.view.View
 import com.example.android.apis.graphics.PurgeableBitmap.RefreshHandler
 import java.io.ByteArrayOutputStream
@@ -35,6 +37,10 @@ import java.io.ByteArrayOutputStream
  * PurgeableBitmapView decodes an encoded bitstream to a Bitmap each time update()
  * is invoked(), and its onDraw() draws the Bitmap and a number to screen.
  * The number is used to indicate the number of Bitmaps that have been decoded.
+ *
+ * @param context the [Context] of the activity using us.
+ * @param isPurgeable if `true` our [Bitmap] is purgeable.
+ * (See our `init` block for the details of our constructor)
  */
 @SuppressLint("ViewConstructor")
 class PurgeableBitmapView(context: Context?, isPurgeable: Boolean) : View(context) {
@@ -123,16 +129,22 @@ class PurgeableBitmapView(context: Context?, isPurgeable: Boolean) : View(contex
      */
     fun update(handler: RefreshHandler): Int {
         return try {
-            mBitmapArray[mDecodingCount] = BitmapFactory.decodeByteArray(bitstream, 0, bitstream.size, mOptions)
+            mBitmapArray[mDecodingCount] =
+                BitmapFactory.decodeByteArray(
+                    /* data = */ bitstream,
+                    /* offset = */ 0,
+                    /* length = */ bitstream.size,
+                    /* opts = */ mOptions
+                )
             mBitmap = mBitmapArray[mDecodingCount]
             mDecodingCount++
             if (mDecodingCount < mArraySize) {
-                handler.sleep(delay.toLong())
+                handler.sleep(DELAY.toLong())
                 0
             } else {
                 -mDecodingCount
             }
-        } catch (error: OutOfMemoryError) {
+        } catch (_: OutOfMemoryError) {
             var i = 0
             while (i < mDecodingCount) {
                 mBitmapArray[i]!!.recycle()
@@ -151,10 +163,33 @@ class PurgeableBitmapView(context: Context?, isPurgeable: Boolean) : View(contex
      */
     override fun onDraw(canvas: Canvas) {
         canvas.drawColor(Color.WHITE)
+        canvas.translate(
+            dpToPixel(160, context).toFloat(),
+            dpToPixel(160, context).toFloat()
+        )
         if (mBitmap != null) {
             canvas.drawBitmap(mBitmap!!, 0f, 0f, null)
         }
         canvas.drawText(mDecodingCount.toString(), WIDTH / 2f - 20f, HEIGHT / 2f, mPaint)
+    }
+
+    /**
+     * This method converts dp unit to equivalent pixels, depending on device density. First we
+     * fetch a [Resources] instance for `val resources`, then we fetch the current display
+     * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+     * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+     * dots-per-inch, divided by the reference density used throughout the system.
+     *
+     * @param dp      A value in dp (density independent pixels) unit which we need to convert
+     *                into pixels
+     * @param context [Context] to get resources and device specific display metrics
+     * @return An [Int] value to represent px equivalent to dp depending on device density
+     */
+    @Suppress("SameParameterValue")
+    private fun dpToPixel(dp: Int, context: Context): Int {
+        val resources: Resources = context.resources
+        val metrics = resources.displayMetrics
+        return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
     }
 
     /**
@@ -204,7 +239,7 @@ class PurgeableBitmapView(context: Context?, isPurgeable: Boolean) : View(contex
          * `handleMessage` method of the `PurgeableBitmap.RefreshHandler` which `PurgeableBitmap`
          * uses).
          */
-        private const val delay = 100
+        private const val DELAY = 100
     }
 
     /**

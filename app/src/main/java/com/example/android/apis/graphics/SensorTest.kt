@@ -41,14 +41,17 @@ class SensorTest : GraphicsActivity() {
      * [SensorManager] for accessing sensors
      */
     private var mSensorManager: SensorManager? = null
+
     /**
      * Default [Sensor] for the accelerometer sensor type TYPE_ACCELEROMETER
      */
     private var mSensor: Sensor? = null
+
     /**
      * Our display of an arrow
      */
     private var mView: SampleView? = null
+
     /**
      * The `onDraw` method of [SampleView] rotates the canvas based on the value of
      * `mValues[0]` - must have been copied from the compass example.
@@ -66,7 +69,7 @@ class SensorTest : GraphicsActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         mSensor = mSensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         mView = SampleView(this)
         setContentView(mView!!)
@@ -149,11 +152,13 @@ class SensorTest : GraphicsActivity() {
          * "serious" move left/right or up/down.
          */
         private val mScale = floatArrayOf(2f, 2.5f, 0.5f) // acceleration
+
         /**
          * Values of the previous [SensorEvent.values] array, used to detect change in the
          * sensor readings.
          */
         private val mPrev = FloatArray(3)
+
         /**
          * Time in milliseconds since boot of the last time we logged a gesture. Used to limit that
          * output to 1 per second.
@@ -202,10 +207,12 @@ class SensorTest : GraphicsActivity() {
                  * only shows if we think the delta is big enough, in an attempt
                  * to detect "serious" moves left/right or up/down
                  */
-                Log.e(TAG, "sensorChanged " + event.sensor.name +
+                Log.e(
+                    TAG, "sensorChanged " + event.sensor.name +
                         " (" + event.values[0] + ", " + event.values[1] + ", " +
                         event.values[2] + ")" + " diff(" + diff[0] +
-                        " " + diff[1] + " " + diff[2] + ")")
+                        " " + diff[1] + " " + diff[2] + ")"
+                )
                 mValues!![0] = (mValues[0] + 5) % 360
                 mView!!.invalidate()
             }
@@ -247,16 +254,21 @@ class SensorTest : GraphicsActivity() {
     /**
      * Custom [View] which just displays a compass arrow, rotated by the value of `-mValues[0]`
      * for no apparent reason.
+     *
+     * @param context the [Context] of the activity using us.
+     * (See our `init` block for the details of our constructor)
      */
     private inner class SampleView(context: Context?) : View(context) {
         /**
          * [Paint] we use to draw our compass arrow.
          */
         private val mPaint = Paint()
+
         /**
          * [Path] that draws a compass arrow.
          */
         private val mPath = Path()
+
         /**
          * Flag which we do not actually use, but set to true when our method [onAttachedToWindow]
          * is called and set to false when our method [onDetachedFromWindow] is called.

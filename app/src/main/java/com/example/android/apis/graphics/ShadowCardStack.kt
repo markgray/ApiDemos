@@ -19,14 +19,13 @@ import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.os.Build
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.ArrayList
 
 /**
  * Clever use of [Animator] and [AnimatorSet] to move card stack using "material design" shadowing.
@@ -34,8 +33,9 @@ import java.util.ArrayList
  * rotationY and translationX (moveAwayAnimators), rotationY and translationX (moveBackAnimators),
  * translationZ (awayAnimators), and translationY (collapseAnimators).
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class ShadowCardStack : AppCompatActivity() {
     /**
      * Turns a list of [Animator] objects into an [AnimatorSet], with the [Animator] objects set to
@@ -158,28 +158,25 @@ class ShadowCardStack : AppCompatActivity() {
         }
         val totalSet = AnimatorSet()
         totalSet.playSequentially(
-                createSet(expandAnimators, 250),
-                createSet(towardAnimators, 0),
-                createSet(moveAwayAnimators, 250),
-                createSet(moveBackAnimators, 0),
-                createSet(awayAnimators, 250),
-                createSet(collapseAnimators, 0))
+            createSet(expandAnimators, 250),
+            createSet(towardAnimators, 0),
+            createSet(moveAwayAnimators, 250),
+            createSet(moveBackAnimators, 0),
+            createSet(awayAnimators, 250),
+            createSet(collapseAnimators, 0)
+        )
         totalSet.start()
         totalSet.addListener(RepeatListener(totalSet))
     }
 
     /**
      * [Animator.AnimatorListener] which starts its animation over again when it ends.
+     *
+     * @param mRepeatAnimator The [Animator] we were constructed to listen to.
      */
-    class RepeatListener
-    /**
-     * Our constructor simply saves its argument in our [Animator] field [mRepeatAnimator].
-     */
-    (
-            /**
-             * The [Animator] we were constructed to listen to.
-             */
-            val mRepeatAnimator: Animator) : Animator.AnimatorListener {
+    class RepeatListener(
+        val mRepeatAnimator: Animator
+    ) : Animator.AnimatorListener {
 
         /**
          * Notifies the start of the animation. We ignore.
@@ -222,6 +219,7 @@ class ShadowCardStack : AppCompatActivity() {
          * is scaled to pixels using the display's logical density before being used).
          */
         private const val X_SHIFT_DP = 1000f
+
         /**
          * Used to calculate the `targetY` for each individual card that that card "expands to"
          * in the `Animator expand`, (where it is scaled to pixels using the display's logical
@@ -229,6 +227,7 @@ class ShadowCardStack : AppCompatActivity() {
          * card that is visible when the stack is expanded.
          */
         private const val Y_SHIFT_DP = 50f
+
         /**
          * Each card has an animation of its "translationZ" attribute by a multiple of this depending
          * on the location of the card in the stack in the `Animator toward`, (where it is scaled to
@@ -236,6 +235,7 @@ class ShadowCardStack : AppCompatActivity() {
          * of a card above the card below it when the stack is expanded.
          */
         private const val Z_LIFT_DP = 8f
+
         /**
          * Angle to which the cards are rotated around the y axis using the "rotationY" attribute as
          * they begin to "slide away" in the `Animator rotateAway`. It is a subtle animation when

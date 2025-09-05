@@ -17,7 +17,6 @@ package com.example.android.apis.graphics
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Outline
@@ -42,15 +41,16 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.ArrayList
 
 /**
  * Shows "material design" effects of simple draggable shapes that generate a shadow casting outline
  * on touching the screen.
  */
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class ShadowCardDrag : AppCompatActivity() {
     /**
      * [ShapeDrawable] presently being used for the draggable, it is cycled by the R.id.shape_select
@@ -58,6 +58,7 @@ class ShadowCardDrag : AppCompatActivity() {
      * are contained in our `ArrayList<Shape>` field [mShapes].
      */
     private val mCardBackground = ShapeDrawable()
+
     /**
      * List containing the different [Shape] types which our draggable card can be set to, it
      * is filled in our [onCreate] method with a [RectShape], [OvalShape], [RoundRectShape] and
@@ -65,6 +66,7 @@ class ShadowCardDrag : AppCompatActivity() {
      * is pressed.
      */
     private val mShapes = ArrayList<Shape>()
+
     /**
      * The logical density of the display. This is a scaling factor for the Density Independent Pixel
      * unit, where one DIP is one pixel on an approximately 160 dpi screen (for example a 240x320,
@@ -74,19 +76,23 @@ class ShadowCardDrag : AppCompatActivity() {
      * whenever it is necessary to scale DPI measurements to pixels.
      */
     private var mDensity = 0f
+
     /**
      * Our draggable card, ID R.id.card in our layout file R.layout.shadow_card_drag.
      */
     private var mCard: View? = null
+
     /**
      * Class which handles tilting and/or shading when those checkboxes are checked.
      */
     private val mDragState = CardDragState()
+
     /**
      * true if the "Enable Tilt" checkbox is checked. The card will be "tilted" in proportion to the
      * velocity of movement.
      */
     private var mTiltEnabled = false
+
     /**
      * true if the "Enable Shading checkbox is checked. If so, a color filter will be applied to the
      * card background darkening it in proportion to the velocity of movement.
@@ -132,12 +138,13 @@ class ShadowCardDrag : AppCompatActivity() {
      * received into movement of the card.
      */
     private fun initTouchListener() {
-    /**
-     * Enable any touch on the parent to drag the card. Note that this doesn't do a proper hit
-     * test, so any drag (including off of the card) will work.
-     *
-     * This enables the user to see the effect more clearly for the purpose of this demo.
-     */
+
+        /**
+         * Enable any touch on the parent to drag the card. Note that this doesn't do a proper hit
+         * test, so any drag (including off of the card) will work.
+         *
+         * This enables the user to see the effect more clearly for the purpose of this demo.
+         */
         val cardParent = findViewById<View>(R.id.card_parent)
         cardParent.setOnTouchListener(object : OnTouchListener {
             /**
@@ -146,12 +153,14 @@ class ShadowCardDrag : AppCompatActivity() {
              * of future ACTION_MOVE events to a new location for the card.
              */
             var downX = 0f
+
             /**
              * Distance in the Y direction of the last ACTION_DOWN `MotionEvent` received with
              * respect to the current Y coordinate of the card. Used to translate the Y coordinate
              * of future ACTION_MOVE events to a new location for the card.
              */
             var downY = 0f
+
             /**
              * The time (in ms) when the user originally pressed down to start a stream of position
              * events. Set when an ACTION_DOWN event is received, but never used.
@@ -200,7 +209,8 @@ class ShadowCardDrag : AppCompatActivity() {
                         downX = event.x - mCard!!.translationX
                         downY = event.y - mCard!!.translationY
                         downTime = event.downTime
-                        val upAnim = ObjectAnimator.ofFloat(mCard!!, "translationZ", MAX_Z_DP * mDensity)
+                        val upAnim =
+                            ObjectAnimator.ofFloat(mCard!!, "translationZ", MAX_Z_DP * mDensity)
                         upAnim.duration = 100
                         upAnim.interpolator = DecelerateInterpolator()
                         upAnim.start()
@@ -208,6 +218,7 @@ class ShadowCardDrag : AppCompatActivity() {
                             mDragState.onDown(event.downTime, event.x, event.y)
                         }
                     }
+
                     MotionEvent.ACTION_MOVE -> {
                         mCard!!.translationX = event.x - downX
                         mCard!!.translationY = event.y - downY
@@ -215,6 +226,7 @@ class ShadowCardDrag : AppCompatActivity() {
                             mDragState.onMove(event.eventTime, event.x, event.y)
                         }
                     }
+
                     MotionEvent.ACTION_UP -> {
                         val downAnim = ObjectAnimator.ofFloat(mCard!!, "translationZ", 0f)
                         downAnim.duration = 100
@@ -244,6 +256,7 @@ class ShadowCardDrag : AppCompatActivity() {
              * being used as the [ShapeDrawable] of [ShapeDrawable] field [mCardBackground].
              */
             var index = 0
+
             /**
              * Called when our button is clicked. First we increment `index` modulo the number
              * of [Shape] objects in the `ArrayList<Shape>` field [mShapes], then we fetch
@@ -295,7 +308,7 @@ class ShadowCardDrag : AppCompatActivity() {
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
     private fun initTiltEnable() {
         val tiltCheck = findViewById<CheckBox>(R.id.tilt_check)
-        tiltCheck.setOnCheckedChangeListener { buttonView, isChecked ->
+        tiltCheck.setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
             /**
              * Called when the checked state of a compound button has changed. First we save the
              * value of [Boolean] parameter `isChecked` in the field [mTiltEnabled] and if it is
@@ -335,23 +348,27 @@ class ShadowCardDrag : AppCompatActivity() {
          * the "tilt" and/or "shading" of the card proportionately.
          */
         var lastEventTime: Long = 0
+
         /**
          * X location of the last event we were informed of when our [onDown] or [onMove] methods
          * were called. Used to calculate the speed that the card is being moved at in order to
          * scale the "tilt" and/or "shading" of the card proportionately.
          */
         var lastX = 0f
+
         /**
          * Y location of the last event we were informed of when our [onDown] or [onMove] methods
          * were called. Used to calculate the speed that the card is being moved at in order to
          * scale the "tilt" and/or "shading" of the card proportionately.
          */
         var lastY = 0f
+
         /**
          * Calculated "momentum" in the X direction of our card, used to scale the tilt about the
          * Y axis, and the shading of the card
          */
         var momentumX = 0f
+
         /**
          * Calculated "momentum" in the Y direction of our card, used to scale the tilt about the
          * X axis, and the shading of the card
@@ -401,8 +418,16 @@ class ShadowCardDrag : AppCompatActivity() {
                 val newMomentumY = (y - lastY) / (mDensity * deltaT)
                 momentumX = 0.9f * momentumX + 0.1f * (newMomentumX * MOMENTUM_SCALE)
                 momentumY = 0.9f * momentumY + 0.1f * (newMomentumY * MOMENTUM_SCALE)
-                momentumX = momentumX.coerceAtMost(MAX_ANGLE.toFloat()).coerceAtLeast(-MAX_ANGLE.toFloat())
-                momentumY = momentumY.coerceAtMost(MAX_ANGLE.toFloat()).coerceAtLeast(-MAX_ANGLE.toFloat())
+                momentumX = momentumX.coerceAtMost(
+                    maximumValue = MAX_ANGLE.toFloat()
+                ).coerceAtLeast(
+                    minimumValue = -MAX_ANGLE.toFloat()
+                )
+                momentumY = momentumY.coerceAtMost(
+                    maximumValue = MAX_ANGLE.toFloat()
+                ).coerceAtLeast(
+                    minimumValue = -MAX_ANGLE.toFloat()
+                )
                 mCard!!.rotationX = -momentumY
                 mCard!!.rotationY = momentumX
                 if (mShadingEnabled) {
@@ -411,7 +436,7 @@ class ShadowCardDrag : AppCompatActivity() {
                     val alphaByte = 0xff - ((alphaDarkening * 255).toInt() and 0xff)
                     val color = Color.rgb(alphaByte, alphaByte, alphaByte)
                     val porterDuffColorFilter = PorterDuffColorFilter(
-                            color, PorterDuff.Mode.MULTIPLY
+                        color, PorterDuff.Mode.MULTIPLY
                     )
                     mCardBackground.colorFilter = porterDuffColorFilter
                 }
@@ -434,11 +459,19 @@ class ShadowCardDrag : AppCompatActivity() {
          * [ShapeDrawable] field [mCardBackground] to null.
          */
         fun onUp() {
-            val flattenX = ObjectAnimator.ofFloat(mCard!!, "rotationX", 0f)
+            val flattenX = ObjectAnimator.ofFloat(
+                /* target = */ mCard!!,
+                /* propertyName = */ "rotationX",
+                /* ...values = */ 0f
+            )
             flattenX.duration = 100
             flattenX.interpolator = AccelerateInterpolator()
             flattenX.start()
-            val flattenY = ObjectAnimator.ofFloat(mCard!!, "rotationY", 0f)
+            val flattenY = ObjectAnimator.ofFloat(
+                /* target = */ mCard!!,
+                /* propertyName = */ "rotationY",
+                /* ...values = */ 0f
+            )
             flattenY.duration = 100
             flattenY.interpolator = AccelerateInterpolator()
             flattenY.start()
@@ -507,11 +540,13 @@ class ShadowCardDrag : AppCompatActivity() {
          * Maximum Z value for animation of the android:translationZ attribute of the draggable card.
          */
         private const val MAX_Z_DP = 10f
+
         /**
          * Scale used to scale the "momentum" in X and Y direction when determining how much to tilt the
          * card (only when the "Enable Tilt" checkbox is checked)
          */
         private const val MOMENTUM_SCALE = 10f
+
         /**
          * Maximum angle for the tilt of the card (used only when the "Enable Tilt" checkbox is checked)
          */

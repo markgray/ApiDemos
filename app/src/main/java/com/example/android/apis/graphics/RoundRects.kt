@@ -16,11 +16,15 @@
 package com.example.android.apis.graphics
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
+import androidx.core.graphics.withTranslation
+import com.example.android.apis.graphics.RoundRects.SampleView.Companion.setCornerRadii
 import kotlin.math.sqrt
 
 /**
@@ -43,11 +47,18 @@ class RoundRects : GraphicsActivity() {
         setContentView(SampleView(this))
     }
 
+    /**
+     * The View that does all the work
+     *
+     * @param context the [Context] of the activity using us.
+     * (See our `init` block for the details of our constructor)
+     */
     private class SampleView(context: Context?) : View(context) {
         /**
          * [Rect] we use to set the bounds of the [GradientDrawable] field [mDrawable] we draw
          */
         private val mRect: Rect
+
         /**
          * [GradientDrawable] that we draw using different gradient types.
          */
@@ -95,46 +106,60 @@ class RoundRects : GraphicsActivity() {
          * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
+            canvas.translate(0f, dpToPixel(160, context).toFloat())
             mDrawable.bounds = mRect
             val r = 16f
-            canvas.save()
-            canvas.translate(10f, 10f)
-            mDrawable.gradientType = GradientDrawable.LINEAR_GRADIENT
-            setCornerRadii(mDrawable, r, r, 0f, 0f)
-            mDrawable.draw(canvas)
-            canvas.restore()
-            canvas.save()
-            canvas.translate(10 + mRect.width() + 10.toFloat(), 10f)
-            mDrawable.gradientType = GradientDrawable.RADIAL_GRADIENT
-            setCornerRadii(mDrawable, 0f, 0f, r, r)
-            mDrawable.draw(canvas)
-            canvas.restore()
+            canvas.withTranslation(x = 10f, y = 10f) {
+                mDrawable.gradientType = GradientDrawable.LINEAR_GRADIENT
+                setCornerRadii(mDrawable, r, r, 0f, 0f)
+                mDrawable.draw(this)
+            }
+            canvas.withTranslation(x = 10 + mRect.width() + 10.toFloat(), y = 10f) {
+                mDrawable.gradientType = GradientDrawable.RADIAL_GRADIENT
+                setCornerRadii(mDrawable, 0f, 0f, r, r)
+                mDrawable.draw(this)
+            }
             canvas.translate(0f, mRect.height() + 10.toFloat())
-            canvas.save()
-            canvas.translate(10f, 10f)
-            mDrawable.gradientType = GradientDrawable.SWEEP_GRADIENT
-            setCornerRadii(mDrawable, 0f, r, r, 0f)
-            mDrawable.draw(canvas)
-            canvas.restore()
-            canvas.save()
-            canvas.translate(10 + mRect.width() + 10.toFloat(), 10f)
-            mDrawable.gradientType = GradientDrawable.LINEAR_GRADIENT
-            setCornerRadii(mDrawable, r, 0f, 0f, r)
-            mDrawable.draw(canvas)
-            canvas.restore()
+            canvas.withTranslation(x = 10f, y = 10f) {
+                mDrawable.gradientType = GradientDrawable.SWEEP_GRADIENT
+                setCornerRadii(mDrawable, 0f, r, r, 0f)
+                mDrawable.draw(this)
+            }
+            canvas.withTranslation(x = 10 + mRect.width() + 10.toFloat(), y = 10f) {
+                mDrawable.gradientType = GradientDrawable.LINEAR_GRADIENT
+                setCornerRadii(mDrawable, r, 0f, 0f, r)
+                mDrawable.draw(this)
+            }
             canvas.translate(0f, mRect.height() + 10.toFloat())
-            canvas.save()
-            canvas.translate(10f, 10f)
-            mDrawable.gradientType = GradientDrawable.RADIAL_GRADIENT
-            setCornerRadii(mDrawable, r, 0f, r, 0f)
-            mDrawable.draw(canvas)
-            canvas.restore()
-            canvas.save()
-            canvas.translate(10 + mRect.width() + 10.toFloat(), 10f)
-            mDrawable.gradientType = GradientDrawable.SWEEP_GRADIENT
-            setCornerRadii(mDrawable, 0f, r, 0f, r)
-            mDrawable.draw(canvas)
-            canvas.restore()
+            canvas.withTranslation(x = 10f, y = 10f) {
+                mDrawable.gradientType = GradientDrawable.RADIAL_GRADIENT
+                setCornerRadii(mDrawable, r, 0f, r, 0f)
+                mDrawable.draw(this)
+            }
+            canvas.withTranslation(x = 10 + mRect.width() + 10.toFloat(), y = 10f) {
+                mDrawable.gradientType = GradientDrawable.SWEEP_GRADIENT
+                setCornerRadii(mDrawable, 0f, r, 0f, r)
+                mDrawable.draw(this)
+            }
+        }
+
+        /**
+         * This method converts dp unit to equivalent pixels, depending on device density. First we
+         * fetch a [Resources] instance for `val resources`, then we fetch the current display
+         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+         * dots-per-inch, divided by the reference density used throughout the system.
+         *
+         * @param dp      A value in dp (density independent pixels) unit which we need to convert
+         *                into pixels
+         * @param context [Context] to get resources and device specific display metrics
+         * @return An [Int] value to represent px equivalent to dp depending on device density
+         */
+        @Suppress("SameParameterValue")
+        private fun dpToPixel(dp: Int, context: Context): Int {
+            val resources: Resources = context.resources
+            val metrics = resources.displayMetrics
+            return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
         }
 
         companion object {
@@ -150,7 +175,13 @@ class RoundRects : GraphicsActivity() {
              * @param r2       bottom-right radius (for both x and y)
              * @param r3       bottom-left radius (for both x and y)
              */
-            fun setCornerRadii(drawable: GradientDrawable, r0: Float, r1: Float, r2: Float, r3: Float) {
+            fun setCornerRadii(
+                drawable: GradientDrawable,
+                r0: Float,
+                r1: Float,
+                r2: Float,
+                r3: Float
+            ) {
                 drawable.cornerRadii = floatArrayOf(r0, r0, r1, r1, r2, r2, r3, r3)
             }
         }
@@ -167,8 +198,8 @@ class RoundRects : GraphicsActivity() {
             isFocusable = true
             mRect = Rect(0, 0, 120, 120)
             mDrawable = GradientDrawable(
-                    GradientDrawable.Orientation.TL_BR,
-                    intArrayOf(-0x10000, -0xff0100, -0xffff01)
+                GradientDrawable.Orientation.TL_BR,
+                intArrayOf(-0x10000, -0xff0100, -0xffff01)
             )
             mDrawable.shape = GradientDrawable.RECTANGLE
             mDrawable.gradientRadius = (sqrt(2.0) * 60).toFloat()

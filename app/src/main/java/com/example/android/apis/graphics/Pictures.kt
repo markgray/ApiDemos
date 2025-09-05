@@ -17,6 +17,7 @@ package com.example.android.apis.graphics
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -25,8 +26,8 @@ import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
-import com.example.android.apis.graphics.Pictures.SampleView
 
 /**
  * Shows how to use the [Picture] class to record drawing instructions performed on the [Canvas]
@@ -51,11 +52,14 @@ class Pictures : GraphicsActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(SampleView(this))
+        setContentView(SampleView(context = this))
     }
 
     /**
      * Custom view demonstrating some of the features of the [Picture] class.
+     *
+     * @param context the [Context] of our activity, `this` in the `onCreate` override
+     * (See our `init` block for the details of our constructor)
      */
     private class SampleView(context: Context?) : View(context) {
         /**
@@ -63,6 +67,7 @@ class Pictures : GraphicsActivity() {
          * lighten the red circle) with the green text "Pictures" partially obscuring it.
          */
         private val mPicture: Picture
+
         /**
          * [PictureDrawable] created out of [Picture] field [mPicture].
          */
@@ -93,9 +98,18 @@ class Pictures : GraphicsActivity() {
         @SuppressLint("DrawAllocation")
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(Color.WHITE)
-            canvas.drawPicture(mPicture)
-            canvas.drawPicture(mPicture, RectF(0f, 100f, width.toFloat(), 200f))
-            mDrawable.setBounds(0, 200, width, 300)
+            canvas.translate(0f, dpToPixel(160, context).toFloat())
+            canvas.drawPicture(/* picture = */ mPicture)
+            canvas.drawPicture(
+                /* picture = */ mPicture,
+                /* dst = */ RectF(0f, 100f, width.toFloat(), 200f)
+            )
+            mDrawable.setBounds(
+                /* left = */ 0,
+                /* top = */ 200,
+                /* right = */ width,
+                /* bottom = */ 300
+            )
             mDrawable.draw(canvas)
 
             /* ***** ***** ******* writeToStream and createFromStream have been removed in API 29
@@ -107,6 +121,25 @@ class Pictures : GraphicsActivity() {
  *          //noinspection deprecation
  *          canvas.drawPicture(Picture.createFromStream(is));
 */
+        }
+
+        /**
+         * This method converts dp unit to equivalent pixels, depending on device density. First we
+         * fetch a [Resources] instance for `val resources`, then we fetch the current display
+         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+         * dots-per-inch, divided by the reference density used throughout the system.
+         *
+         * @param dp      A value in dp (density independent pixels) unit which we need to convert
+         *                into pixels
+         * @param context [Context] to get resources and device specific display metrics
+         * @return An [Int] value to represent px equivalent to dp depending on device density
+         */
+        @Suppress("SameParameterValue")
+        private fun dpToPixel(dp: Int, context: Context): Int {
+            val resources: Resources = context.resources
+            val metrics = resources.displayMetrics
+            return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
         }
 
         companion object {

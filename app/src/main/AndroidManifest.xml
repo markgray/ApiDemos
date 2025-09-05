@@ -3792,7 +3792,7 @@
             android:name=".graphics.ShapeDrawable1"
             android:exported="true"
             android:label="Graphics/Drawable/ShapeDrawable"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -3937,7 +3937,7 @@
             android:name=".graphics.AnimateDrawables"
             android:exported="true"
             android:label="Graphics/AnimateDrawables"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -4132,7 +4132,7 @@
             android:name=".graphics.PurgeableBitmap"
             android:exported="true"
             android:label="Graphics/PurgeableBitmap/NonPurgeable"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

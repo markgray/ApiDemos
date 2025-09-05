@@ -28,7 +28,6 @@ import android.os.Message
  * PurgeableBitmap demonstrates the effects of setting Bitmaps as being
  * purgeable.
  *
- *
  * In the NonPurgeable case, an encoded bitstream is decoded to a different
  * Bitmap over and over again up to 200 times until out-of-memory occurs.
  * In contrast, the Purgeable case shows that the system can complete decoding
@@ -74,10 +73,12 @@ class PurgeableBitmap : GraphicsActivity() {
                 index > 0 -> {
                     showAlertDialog(getDialogMessage(true, index))
                 }
+
                 index < 0 -> {
                     mView!!.invalidate()
                     showAlertDialog(getDialogMessage(false, -index))
                 }
+
                 else -> {
                     mView!!.invalidate()
                 }
@@ -141,9 +142,11 @@ class PurgeableBitmap : GraphicsActivity() {
      */
     private fun detectIfPurgeableRequest(): Boolean {
         val pm = packageManager
-        val labelSeq: CharSequence?
-        labelSeq = try {
-            val info = pm.getActivityInfo(this.componentName, PackageManager.GET_META_DATA)
+        val labelSeq = try {
+            val info = pm.getActivityInfo(
+                /* component = */ this.componentName,
+                /* flags = */ PackageManager.GET_META_DATA
+            )
             info.loadLabel(pm)
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
@@ -173,8 +176,8 @@ class PurgeableBitmap : GraphicsActivity() {
             sb.append("th Bitmap is decoded.")
         } else {
             sb.append("Complete decoding ")
-                    .append(index)
-                    .append(" bitmaps without running out of memory.")
+                .append(index)
+                .append(" bitmaps without running out of memory.")
         }
         return sb.toString()
     }
@@ -188,8 +191,8 @@ class PurgeableBitmap : GraphicsActivity() {
     private fun showAlertDialog(message: String) {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(message)
-                .setCancelable(false)
-                .setPositiveButton("Yes") { dialog: DialogInterface?, id: Int -> }
+            .setCancelable(false)
+            .setPositiveButton("Yes") { dialog: DialogInterface?, id: Int -> }
         val alert = builder.create()
         alert.show()
     }

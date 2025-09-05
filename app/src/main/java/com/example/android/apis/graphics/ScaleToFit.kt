@@ -16,13 +16,20 @@
 package com.example.android.apis.graphics
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.RectF
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
+import androidx.core.graphics.withSave
+import com.example.android.apis.graphics.ScaleToFit.SampleView.Companion.HEIGHT
+import com.example.android.apis.graphics.ScaleToFit.SampleView.Companion.N
+import com.example.android.apis.graphics.ScaleToFit.SampleView.Companion.sFits
+import com.example.android.apis.graphics.ScaleToFit.SampleView.Companion.sSrcData
 
 /**
  * Shows the results of using:
@@ -51,6 +58,9 @@ class ScaleToFit : GraphicsActivity() {
      * Custom view which generates and displays 4 ovals created with different bounding rectangles,
      * then proceeds to demonstrate the results of displaying each using [Matrix.setRectToRect] into
      * a square using the four different types of [Matrix.ScaleToFit] options.
+     *
+     * @param context the [Context] of the activity using us.
+     * (See our `init` block for the details of our constructor)
      */
     private class SampleView(context: Context?) : View(context) {
         /**
@@ -143,13 +153,13 @@ class ScaleToFit : GraphicsActivity() {
          * @param stf    [Matrix.ScaleToFit] option to use in call to [Matrix.setRectToRect]
          */
         private fun drawFit(canvas: Canvas, index: Int, stf: Matrix.ScaleToFit) {
-            canvas.save()
-            setSrcR(index)
-            mMatrix.setRectToRect(mSrcR, mDstR, stf)
-            canvas.concat(mMatrix)
-            drawSrcR(canvas, index)
-            canvas.restore()
-            canvas.drawRect(mDstR, mHairPaint)
+            canvas.withSave {
+                setSrcR(index = index)
+                mMatrix.setRectToRect(/* src = */ mSrcR, /* dst = */ mDstR, /* stf = */ stf)
+                concat(/* matrix = */ mMatrix)
+                drawSrcR(canvas = this, index = index)
+            }
+            canvas.drawRect(/* rect = */ mDstR, /* paint = */ mHairPaint)
         }
 
         /**
@@ -173,26 +183,46 @@ class ScaleToFit : GraphicsActivity() {
          * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
+            canvas.translate(0f, dpToPixel(160, context).toFloat())
             canvas.drawColor(Color.WHITE)
             canvas.translate(10f, 10f)
-            canvas.save()
-            for (i in 0 until N) {
-                setSrcR(i)
-                drawSrcR(canvas, i)
-                canvas.translate(mSrcR.width() + 15, 0f)
+            canvas.withSave {
+                for (i in 0 until N) {
+                    setSrcR(i)
+                    drawSrcR(this, i)
+                    translate(mSrcR.width() + 15, 0f)
+                }
             }
-            canvas.restore()
             canvas.translate(0f, 100f)
             for (j in sFits.indices) {
-                canvas.save()
-                for (i in 0 until N) {
-                    drawFit(canvas, i, sFits[j])
-                    canvas.translate(mDstR.width() + 8, 0f)
+                canvas.withSave {
+                    for (i in 0 until N) {
+                        drawFit(this, i, sFits[j])
+                        translate(mDstR.width() + 8, 0f)
+                    }
+                    drawText(sFitLabels[j], 0f, HEIGHT * 2f / 3, mLabelPaint)
                 }
-                canvas.drawText(sFitLabels[j], 0f, HEIGHT * 2f / 3, mLabelPaint)
-                canvas.restore()
                 canvas.translate(0f, HEIGHT + 20.toFloat())
             }
+        }
+
+        /**
+         * This method converts dp unit to equivalent pixels, depending on device density. First we
+         * fetch a [Resources] instance for `val resources`, then we fetch the current display
+         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+         * dots-per-inch, divided by the reference density used throughout the system.
+         *
+         * @param dp      A value in dp (density independent pixels) unit which we need to convert
+         *                into pixels
+         * @param context [Context] to get resources and device specific display metrics
+         * @return An [Int] value to represent px equivalent to dp depending on device density
+         */
+        @Suppress("SameParameterValue")
+        private fun dpToPixel(dp: Int, context: Context): Int {
+            val resources: Resources = context.resources
+            val metrics = resources.displayMetrics
+            return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
         }
 
         companion object {

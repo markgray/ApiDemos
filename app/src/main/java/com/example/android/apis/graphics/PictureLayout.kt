@@ -15,6 +15,7 @@
  */
 package com.example.android.apis.graphics
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Picture
@@ -23,6 +24,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewParent
+import androidx.core.graphics.withTranslation
 
 /**
  * Extends [ViewGroup] to mirror any single [View] added to it in the four corners of its
@@ -67,7 +69,7 @@ class PictureLayout : ViewGroup {
         var maxWidth = 0
         for (i in 0 until count) {
             val child = getChildAt(i)
-            if (child.visibility != View.GONE) {
+            if (child.visibility != GONE) {
                 measureChild(child, widthMeasureSpec, heightMeasureSpec)
             }
         }
@@ -78,19 +80,22 @@ class PictureLayout : ViewGroup {
             maxHeight = maxHeight.coerceAtLeast(drawable.minimumHeight)
             maxWidth = maxWidth.coerceAtLeast(drawable.minimumWidth)
         }
-        setMeasuredDimension(View.resolveSize(maxWidth, widthMeasureSpec),
-                View.resolveSize(maxHeight, heightMeasureSpec))
+        setMeasuredDimension(
+            resolveSize(maxWidth, widthMeasureSpec),
+            resolveSize(maxHeight, heightMeasureSpec)
+        )
     }
 
-    private fun drawPict(canvas: Canvas, x: Int, y: Int, w: Int, h: Int,
-                         sx: Float, sy: Float) {
-        canvas.save()
-        canvas.translate(x.toFloat(), y.toFloat())
-        canvas.clipRect(0, 0, w, h)
-        canvas.scale(0.5f, 0.5f)
-        canvas.scale(sx, sy, w.toFloat(), h.toFloat())
-        canvas.drawPicture(mPicture)
-        canvas.restore()
+    private fun drawPict(
+        canvas: Canvas, x: Int, y: Int, w: Int, h: Int,
+        sx: Float, sy: Float
+    ) {
+        canvas.withTranslation(x = x.toFloat(), y = y.toFloat()) {
+            clipRect(/* left = */ 0, /* top = */ 0, /* right = */ w, /* bottom = */ h)
+            scale(/* sx = */ 0.5f, /* sy = */ 0.5f)
+            scale(/* sx = */ sx, /* sy = */ sy, /* px = */ w.toFloat(), /* py = */ h.toFloat())
+            drawPicture(mPicture)
+        }
     }
 
     override fun dispatchDraw(canvas: Canvas) {
@@ -118,15 +123,19 @@ class PictureLayout : ViewGroup {
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        @SuppressLint("UseKtx")
         val count = super.getChildCount()
         for (i in 0 until count) {
             val child = getChildAt(i)
-            if (child.visibility != View.GONE) {
+            if (child.visibility != GONE) {
                 val childLeft = paddingLeft
                 val childTop = paddingTop
-                child.layout(childLeft, childTop,
-                        childLeft + child.measuredWidth,
-                        childTop + child.measuredHeight)
+                child.layout(
+                    /* l = */ childLeft,
+                    /* t = */ childTop,
+                    /* r = */ childLeft + child.measuredWidth,
+                    /* b = */ childTop + child.measuredHeight
+                )
             }
         }
     }

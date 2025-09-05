@@ -198,11 +198,31 @@ class StaticTriangleRenderer : GLSurfaceView.Renderer {
         GLES10.glGenTextures(1, textures, 0)
         mTextureID = textures[0]
         GLES10.glBindTexture(GLES10.GL_TEXTURE_2D, mTextureID)
-        GLES10.glTexParameterf(GLES10.GL_TEXTURE_2D, GLES10.GL_TEXTURE_MIN_FILTER, GLES10.GL_NEAREST.toFloat())
-        GLES10.glTexParameterf(GLES10.GL_TEXTURE_2D, GLES10.GL_TEXTURE_MAG_FILTER, GLES10.GL_LINEAR.toFloat())
-        GLES10.glTexParameterf(GLES10.GL_TEXTURE_2D, GLES10.GL_TEXTURE_WRAP_S, GLES10.GL_CLAMP_TO_EDGE.toFloat())
-        GLES10.glTexParameterf(GLES10.GL_TEXTURE_2D, GLES10.GL_TEXTURE_WRAP_T, GLES10.GL_CLAMP_TO_EDGE.toFloat())
-        GLES10.glTexEnvf(GLES10.GL_TEXTURE_ENV, GLES10.GL_TEXTURE_ENV_MODE, GLES10.GL_REPLACE.toFloat())
+        GLES10.glTexParameterf(
+            GLES10.GL_TEXTURE_2D,
+            GLES10.GL_TEXTURE_MIN_FILTER,
+            GLES10.GL_NEAREST.toFloat()
+        )
+        GLES10.glTexParameterf(
+            GLES10.GL_TEXTURE_2D,
+            GLES10.GL_TEXTURE_MAG_FILTER,
+            GLES10.GL_LINEAR.toFloat()
+        )
+        GLES10.glTexParameterf(
+            GLES10.GL_TEXTURE_2D,
+            GLES10.GL_TEXTURE_WRAP_S,
+            GLES10.GL_CLAMP_TO_EDGE.toFloat()
+        )
+        GLES10.glTexParameterf(
+            GLES10.GL_TEXTURE_2D,
+            GLES10.GL_TEXTURE_WRAP_T,
+            GLES10.GL_CLAMP_TO_EDGE.toFloat()
+        )
+        GLES10.glTexEnvf(
+            GLES10.GL_TEXTURE_ENV,
+            GLES10.GL_TEXTURE_ENV_MODE,
+            GLES10.GL_REPLACE.toFloat()
+        )
         mTextureLoader!!.load(gl)
     }
 
@@ -261,7 +281,8 @@ class StaticTriangleRenderer : GLSurfaceView.Renderer {
          */
         GLES10.glMatrixMode(GLES10.GL_MODELVIEW)
         GLES10.glLoadIdentity()
-        GLU.gluLookAt(gl,
+        GLU.gluLookAt(
+            gl,
             0f, 0f, -5f,
             0f, 0f, 0f,
             0f, 1.0f, 0.0f
@@ -337,7 +358,7 @@ class StaticTriangleRenderer : GLSurfaceView.Renderer {
             } finally {
                 try {
                     inputStream.close()
-                } catch (e: IOException) { // Ignore.
+                } catch (_: IOException) { // Ignore.
                 }
             }
             GLUtils.texImage2D(GLES10.GL_TEXTURE_2D, 0, bitmap, 0)
@@ -472,7 +493,8 @@ class StaticTriangleRenderer : GLSurfaceView.Renderer {
             val coords = floatArrayOf( // X, Y, Z
                 -0.5f, -0.25f, 0f,
                 0.5f, -0.25f, 0f,
-                0.0f, 0.559016994f, 0f)
+                0.0f, 0.559017f, 0f
+            )
             for (i in 0 until VERTS) {
                 for (j in 0..2) {
                     mFVertexBuffer.put(coords[i * 3 + j] * 2.0f)

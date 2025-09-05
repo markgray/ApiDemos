@@ -17,12 +17,16 @@ package com.example.android.apis.graphics
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
+import androidx.core.graphics.withSave
+import androidx.core.graphics.withTranslation
 
 /**
  * Shows how to use [Matrix.setPolyToPoly] to move and warp drawings done to a Canvas:
@@ -46,12 +50,15 @@ class PolyToPoly : GraphicsActivity() {
 
     /**
      * Demo showing how to use [Matrix.setPolyToPoly] to move and warp drawings done to a Canvas
+     *
+     * @param context the [Context] of the activity using us
+     * (See our `init` block for the details of our constructor)
      */
     private class SampleView(context: Context?) : View(context) {
         /**
          * [Paint] we use to draw with
          */
-        private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        private val mPaint = Paint(/* flags = */ Paint.ANTI_ALIAS_FLAG)
 
         /**
          * [Matrix] we use to hold transformation that warps our drawings when concatenated to
@@ -92,28 +99,48 @@ class PolyToPoly : GraphicsActivity() {
          * @param dst    array of destination points for a call to `setPolyToPoly`
          */
         private fun doDraw(canvas: Canvas, src: FloatArray, dst: FloatArray) {
-            canvas.save()
-            mMatrix.setPolyToPoly(src, 0, dst, 0, src.size shr 1)
-            canvas.concat(mMatrix)
-            mPaint.color = Color.GRAY
-            mPaint.style = Paint.Style.STROKE
-            canvas.drawRect(0f, 0f, 64f, 64f, mPaint)
-            canvas.drawLine(0f, 0f, 64f, 64f, mPaint)
-            canvas.drawLine(0f, 64f, 64f, 0f, mPaint)
-            mPaint.color = Color.RED
-            mPaint.style = Paint.Style.FILL
-            /**
-             * how to draw the text center on our square
-             * centering in X is easy... use alignment (and X at midpoint)
-             */
-            val x = 64f / 2
+            canvas.withSave {
+                mMatrix.setPolyToPoly(
+                    /* src = */ src, /* srcIndex = */ 0,
+                    /* dst = */ dst, /* dstIndex = */ 0,
+                    /* pointCount = */ src.size shr 1
+                )
+                concat(mMatrix)
+                mPaint.color = Color.GRAY
+                mPaint.style = Paint.Style.STROKE
+                drawRect(
+                    /* left = */ 0f, /* top = */ 0f,
+                    /* right = */ 64f, /* bottom = */ 64f,
+                    /* paint = */ mPaint
+                )
+                drawLine(
+                    /* startX = */ 0f, /* startY = */ 0f,
+                    /* stopX = */ 64f, /* stopY = */ 64f,
+                    /* paint = */ mPaint
+                )
+                drawLine(
+                    /* startX = */ 0f, /* startY = */ 64f,
+                    /* stopX = */ 64f, /* stopY = */ 0f,
+                    /* paint = */ mPaint
+                )
+                mPaint.color = Color.RED
+                mPaint.style = Paint.Style.FILL
+                /**
+                 * how to draw the text center on our square
+                 * centering in X is easy... use alignment (and X at midpoint)
+                 */
+                val x = 64f / 2
 
-            /**
-             * centering in Y, we need to measure ascent/descent first
-             */
-            val y = 64f / 2 - (mFontMetrics.ascent + mFontMetrics.descent) / 2
-            canvas.drawText("${src.size / 2}", x, y, mPaint)
-            canvas.restore()
+                /**
+                 * centering in Y, we need to measure ascent/descent first
+                 */
+                val y = 64f / 2 - (mFontMetrics.ascent + mFontMetrics.descent) / 2
+                drawText(
+                    /* text = */ "${src.size / 2}",
+                    /* x = */ x, /* y = */ y,
+                    /* paint = */ mPaint
+                )
+            }
         }
 
         /**
@@ -146,34 +173,54 @@ class PolyToPoly : GraphicsActivity() {
         @SuppressLint("DrawAllocation")
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(Color.WHITE)
-            canvas.save()
-            canvas.translate(10f, 10f)
-            // translate (1 point)
-            doDraw(canvas, floatArrayOf(0f, 0f), floatArrayOf(5f, 5f))
-            canvas.restore()
-            canvas.save()
-            canvas.translate(160f, 10f)
-            // rotate/uniform-scale (2 points)
-            doDraw(canvas, floatArrayOf(32f, 32f, 64f, 32f), floatArrayOf(32f, 32f, 64f, 48f))
-            canvas.restore()
-            canvas.save()
-            canvas.translate(10f, 110f)
-            // rotate/skew (3 points)
-            doDraw(
-                canvas,
-                floatArrayOf(0f, 0f, 64f, 0f, 0f, 64f),
-                floatArrayOf(0f, 0f, 96f, 0f, 24f, 64f)
-            )
-            canvas.restore()
-            canvas.save()
-            canvas.translate(160f, 110f)
-            // perspective (4 points)
-            doDraw(
-                canvas,
-                floatArrayOf(0f, 0f, 64f, 0f, 64f, 64f, 0f, 64f),
-                floatArrayOf(0f, 0f, 96f, 0f, 64f, 96f, 0f, 64f)
-            )
-            canvas.restore()
+            canvas.translate(0f, dpToPixel(160, context).toFloat())
+            canvas.withTranslation(x = 10f, y = 10f) {
+                // translate (1 point)
+                doDraw(canvas = this, src = floatArrayOf(0f, 0f), dst = floatArrayOf(5f, 5f))
+            }
+            canvas.withTranslation(x = 160f, y = 10f) {
+                // rotate/uniform-scale (2 points)
+                doDraw(
+                    canvas = this,
+                    src = floatArrayOf(32f, 32f, 64f, 32f),
+                    dst = floatArrayOf(32f, 32f, 64f, 48f)
+                )
+            }
+            canvas.withTranslation(x = 10f, y = 110f) {
+                // rotate/skew (3 points)
+                doDraw(
+                    canvas = this,
+                    src = floatArrayOf(0f, 0f, 64f, 0f, 0f, 64f),
+                    dst = floatArrayOf(0f, 0f, 96f, 0f, 24f, 64f)
+                )
+            }
+            canvas.withTranslation(x = 160f, y = 110f) {
+                // perspective (4 points)
+                doDraw(
+                    canvas = this,
+                    src = floatArrayOf(0f, 0f, 64f, 0f, 64f, 64f, 0f, 64f),
+                    dst = floatArrayOf(0f, 0f, 96f, 0f, 64f, 96f, 0f, 64f)
+                )
+            }
+        }
+
+        /**
+         * This method converts dp unit to equivalent pixels, depending on device density. First we
+         * fetch a [Resources] instance for `val resources`, then we fetch the current display
+         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+         * dots-per-inch, divided by the reference density used throughout the system.
+         *
+         * @param dp      A value in dp (density independent pixels) unit which we need to convert
+         *                into pixels
+         * @param context [Context] to get resources and device specific display metrics
+         * @return An [Int] value to represent px equivalent to dp depending on device density
+         */
+        @Suppress("SameParameterValue")
+        private fun dpToPixel(dp: Int, context: Context): Int {
+            val resources: Resources = context.resources
+            val metrics = resources.displayMetrics
+            return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
         }
 
         /**
