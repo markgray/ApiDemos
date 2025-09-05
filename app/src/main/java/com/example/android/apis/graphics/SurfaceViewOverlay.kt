@@ -38,10 +38,12 @@ class SurfaceViewOverlay : AppCompatActivity() {
      * [LinearLayout] which contains our two "Hide Me!" buttons (id R.id.hidecontainer)
      */
     var mVictimContainer: View? = null
+
     /**
      * First "Hide Me!" [Button] (id R.id.hideme1)
      */
     var mVictim1: View? = null
+
     /**
      * Second "Hide Me!" [Button] (id R.id.hideme2)
      */
@@ -88,7 +90,6 @@ class SurfaceViewOverlay : AppCompatActivity() {
      * Called after [onRestoreInstanceState], [onRestart], or [onPause], for our activity to start
      * interacting with the user. We simply call through to our super's implementation of `onResume`.
      */
-    @Suppress("RedundantOverride")
     override fun onResume() {
         /**
          * Ideally a game should implement onResume() and onPause()
@@ -101,7 +102,6 @@ class SurfaceViewOverlay : AppCompatActivity() {
      * Called as part of the activity lifecycle when an activity is going into the background, but
      * has not (yet) been killed. We simply call through to our super's implementation of `onPause`.
      */
-    @Suppress("RedundantOverride")
     override fun onPause() {
         /**
          * Ideally a game should implement onResume() and onPause()
@@ -115,10 +115,11 @@ class SurfaceViewOverlay : AppCompatActivity() {
      * to INVISIBLE.
      */
     internal inner class HideMeListener(
-            /**
-             * `View` we were constructed to make INVISIBLE when it is clicked.
-             */
-            val mTarget: View?) : View.OnClickListener {
+        /**
+         * `View` we were constructed to make INVISIBLE when it is clicked.
+         */
+        val mTarget: View?
+    ) : View.OnClickListener {
 
         /**
          * Called when a view whose [View.OnClickListener] we are has been clicked. We simply set
@@ -137,7 +138,7 @@ class SurfaceViewOverlay : AppCompatActivity() {
      * visibility of [View] fields [mVictim1], [mVictim2] and [mVictimContainer] to VISIBLE when
      * the [Button] is clicked.
      */
-    var mVisibleListener: View.OnClickListener = View.OnClickListener{
+    var mVisibleListener: View.OnClickListener = View.OnClickListener {
         mVictim1!!.visibility = View.VISIBLE
         mVictim2!!.visibility = View.VISIBLE
         mVictimContainer!!.visibility = View.VISIBLE
@@ -148,7 +149,7 @@ class SurfaceViewOverlay : AppCompatActivity() {
      * visibility of [View] fields [mVictim1], [mVictim2] and [mVictimContainer] to INVISIBLE when
      * the [Button] is clicked.
      */
-    var mInvisibleListener: View.OnClickListener = View.OnClickListener{
+    var mInvisibleListener: View.OnClickListener = View.OnClickListener {
         mVictim1!!.visibility = View.INVISIBLE
         mVictim2!!.visibility = View.INVISIBLE
         mVictimContainer!!.visibility = View.INVISIBLE

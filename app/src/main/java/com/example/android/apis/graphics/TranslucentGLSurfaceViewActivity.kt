@@ -55,7 +55,12 @@ class TranslucentGLSurfaceViewActivity : AppCompatActivity() {
          * And we want a depth buffer.
          */
         mGLSurfaceView!!.setEGLConfigChooser(
-                8, 8, 8, 8, 16, 0
+            /* redSize = */ 8,
+            /* greenSize = */ 8,
+            /* blueSize = */ 8,
+            /* alphaSize = */ 8,
+            /* depthSize = */ 16,
+            /* stencilSize = */ 0
         )
         /**
          * Tell the cube renderer that we want to render a translucent version of the cube:

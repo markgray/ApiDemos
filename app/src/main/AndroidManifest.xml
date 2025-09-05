@@ -3728,7 +3728,7 @@
             android:name=".graphics.TriangleActivity"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:exported="true"
-            android:label="Graphics/OpenGL ES/Textured Triangle **HANGS**"
+            android:label="Graphics/OpenGL ES/Textured Triangle"
             android:theme="@style/ThemeCurrentDialog">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -3927,7 +3927,7 @@
             android:exported="true"
             android:hardwareAccelerated="false"
             android:label="Graphics/Vertices"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -4102,7 +4102,7 @@
             android:name=".graphics.Xfermodes"
             android:exported="true"
             android:label="Graphics/Xfermodes"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

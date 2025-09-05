@@ -32,12 +32,14 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.core.graphics.createBitmap
 
 /**
  * Shows the results of using different Xfermode's when drawing an overlapping square and a circle
  * to the same Canvas. It was way too small on the newer devices (froyo OK), so I modified it to
  * scale for dpi.
  */
+@SuppressLint("ObsoleteSdkInt")
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class Xfermodes : GraphicsActivity() {
     /**
@@ -54,6 +56,9 @@ class Xfermodes : GraphicsActivity() {
     /**
      * Our demo custom view. Shows the result of using the 16 different PorterDuff modes with a circle
      * as the "dst" image, and a rectangle for the "src" image.
+     *
+     * @param context The [Context] of the activity that is using this view.
+     * (See our `init` block for details of our constructor.)
      */
     private class SampleView(context: Context?) : View(context) {
 
@@ -119,45 +124,55 @@ class Xfermodes : GraphicsActivity() {
                 paint.style = Paint.Style.STROKE
                 paint.shader = null
                 canvas.drawRect(
-                        x - 0.5f,
-                        y - 0.5f,
-                        x + W + 0.5f,
-                        y + H + 0.5f,
-                        paint
+                    x - 0.5f,
+                    y - 0.5f,
+                    x + W + 0.5f,
+                    y + H + 0.5f,
+                    paint
                 )
 
                 // draw the checker-board pattern
                 paint.style = Paint.Style.FILL
                 paint.shader = mBG
                 canvas.drawRect(
-                        x.toFloat(),
-                        y.toFloat(),
-                        x + W.toFloat(),
-                        y + H.toFloat(),
-                        paint
+                    /* left = */ x.toFloat(),
+                    /* top = */ y.toFloat(),
+                    /* right = */ x + W.toFloat(),
+                    /* bottom = */ y + H.toFloat(),
+                    /* paint = */ paint
                 )
 
                 // draw the src/dst example into our offscreen bitmap
                 val sc = canvas.saveLayer(
-                        x.toFloat(),
-                        y.toFloat(),
-                        x + W.toFloat(),
-                        y + H.toFloat(),
-                        null
+                    /* left = */ x.toFloat(),
+                    /* top = */ y.toFloat(),
+                    /* right = */ x + W.toFloat(),
+                    /* bottom = */ y + H.toFloat(),
+                    /* paint = */ null
                 )
-                canvas.translate(x.toFloat(), y.toFloat())
-                canvas.drawBitmap(mDstB, 0f, 0f, paint)
+                canvas.translate(/* dx = */ x.toFloat(), /* dy = */ y.toFloat())
+                canvas.drawBitmap(
+                    /* bitmap = */ mDstB,
+                    /* left = */ 0f,
+                    /* top = */ 0f,
+                    /* paint = */ paint
+                )
                 paint.xfermode = sModes[i]
-                canvas.drawBitmap(mSrcB, 0f, 0f, paint)
+                canvas.drawBitmap(
+                    /* bitmap = */ mSrcB,
+                    /* left = */ 0f,
+                    /* top = */ 0f,
+                    /* paint = */ paint
+                )
                 paint.xfermode = null
-                canvas.restoreToCount(sc)
+                canvas.restoreToCount(/* saveCount = */ sc)
 
                 // draw the label
                 canvas.drawText(
-                        sLabels[i],
-                        x + W / 2.toFloat(),
-                        y - labelP.textSize / 2,
-                        labelP
+                    /* text = */ sLabels[i],
+                    /* x = */ x + W / 2.toFloat(),
+                    /* y = */ y - labelP.textSize / 2,
+                    /* paint = */ labelP
                 )
                 x += W + 10
 
@@ -175,6 +190,7 @@ class Xfermodes : GraphicsActivity() {
              * the demo on high density screens.
              */
             private var SCREEN_DENSITY: Float = 1f
+
             /**
              * Width used for each of the 16 example PorterDuff xfermode squares.
              */
@@ -194,32 +210,32 @@ class Xfermodes : GraphicsActivity() {
              * Array containing the 16 `PorterDuffXfermode` possibilities.
              */
             private val sModes = arrayOf<Xfermode>(
-                    PorterDuffXfermode(PorterDuff.Mode.CLEAR),
-                    PorterDuffXfermode(PorterDuff.Mode.SRC),
-                    PorterDuffXfermode(PorterDuff.Mode.DST),
-                    PorterDuffXfermode(PorterDuff.Mode.SRC_OVER),
-                    PorterDuffXfermode(PorterDuff.Mode.DST_OVER),
-                    PorterDuffXfermode(PorterDuff.Mode.SRC_IN),
-                    PorterDuffXfermode(PorterDuff.Mode.DST_IN),
-                    PorterDuffXfermode(PorterDuff.Mode.SRC_OUT),
-                    PorterDuffXfermode(PorterDuff.Mode.DST_OUT),
-                    PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP),
-                    PorterDuffXfermode(PorterDuff.Mode.DST_ATOP),
-                    PorterDuffXfermode(PorterDuff.Mode.XOR),
-                    PorterDuffXfermode(PorterDuff.Mode.DARKEN),
-                    PorterDuffXfermode(PorterDuff.Mode.LIGHTEN),
-                    PorterDuffXfermode(PorterDuff.Mode.MULTIPLY),
-                    PorterDuffXfermode(PorterDuff.Mode.SCREEN)
+                PorterDuffXfermode(/* mode = */ PorterDuff.Mode.CLEAR),
+                PorterDuffXfermode(/* mode = */ PorterDuff.Mode.SRC),
+                PorterDuffXfermode(/* mode = */ PorterDuff.Mode.DST),
+                PorterDuffXfermode(/* mode = */ PorterDuff.Mode.SRC_OVER),
+                PorterDuffXfermode(/* mode = */ PorterDuff.Mode.DST_OVER),
+                PorterDuffXfermode(/* mode = */ PorterDuff.Mode.SRC_IN),
+                PorterDuffXfermode(/* mode = */ PorterDuff.Mode.DST_IN),
+                PorterDuffXfermode(/* mode = */ PorterDuff.Mode.SRC_OUT),
+                PorterDuffXfermode(/* mode = */ PorterDuff.Mode.DST_OUT),
+                PorterDuffXfermode(/* mode = */ PorterDuff.Mode.SRC_ATOP),
+                PorterDuffXfermode(/* mode = */ PorterDuff.Mode.DST_ATOP),
+                PorterDuffXfermode(/* mode = */ PorterDuff.Mode.XOR),
+                PorterDuffXfermode(/* mode = */ PorterDuff.Mode.DARKEN),
+                PorterDuffXfermode(/* mode = */ PorterDuff.Mode.LIGHTEN),
+                PorterDuffXfermode(/* mode = */ PorterDuff.Mode.MULTIPLY),
+                PorterDuffXfermode(/* mode = */ PorterDuff.Mode.SCREEN)
             )
 
             /**
              * Labels for the 16 `PorterDuffXfermode` example composite images.
              */
             private val sLabels = arrayOf(
-                    "Clear", "Src", "Dst", "SrcOver",
-                    "DstOver", "SrcIn", "DstIn", "SrcOut",
-                    "DstOut", "SrcATop", "DstATop", "Xor",
-                    "Darken", "Lighten", "Multiply", "Screen"
+                "Clear", "Src", "Dst", "SrcOver",
+                "DstOver", "SrcIn", "DstIn", "SrcOut",
+                "DstOut", "SrcATop", "DstATop", "Xor",
+                "Darken", "Lighten", "Multiply", "Screen"
             )
         }
 
@@ -236,22 +252,29 @@ class Xfermodes : GraphicsActivity() {
          */
         init {
             SCREEN_DENSITY = resources.displayMetrics.density
-            mSrcB = makeSrc(W, H)
-            mDstB = makeDst(W, H)
+            mSrcB = makeSrc(w = W, h = H)
+            mDstB = makeDst(w = W, h = H)
 
             // make a checkerboard pattern
             val bm = Bitmap.createBitmap(
-                    intArrayOf(
-                            0xFFFFFFFF.toInt(),
-                            0xFFCCCCCC.toInt(),
-                            0xFFCCCCCC.toInt(),
-                            0xFFFFFFFF.toInt()
-                    ),
-                    2, 2, Bitmap.Config.RGB_565)
-            mBG = BitmapShader(bm, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
+                /* colors = */ intArrayOf(
+                    0xFFFFFFFF.toInt(),
+                    0xFFCCCCCC.toInt(),
+                    0xFFCCCCCC.toInt(),
+                    0xFFFFFFFF.toInt()
+                ),
+                /* width = */ 2,
+                /* height = */ 2,
+                /* config = */ Bitmap.Config.RGB_565
+            )
+            mBG = BitmapShader(
+                /* bitmap = */ bm,
+                /* tileX = */ Shader.TileMode.REPEAT,
+                /* tileY = */ Shader.TileMode.REPEAT
+            )
             val m = Matrix()
-            m.setScale(6f, 6f)
-            mBG.setLocalMatrix(m)
+            m.setScale(/* sx = */ 6f, /* sy = */ 6f)
+            mBG.setLocalMatrix(/* localM = */ m)
         }
     }
 
@@ -269,18 +292,18 @@ class Xfermodes : GraphicsActivity() {
          * @return [Bitmap] containing a circle
          */
         fun makeDst(w: Int, h: Int): Bitmap {
-            val bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-            val c = Canvas(bm)
-            val p = Paint(Paint.ANTI_ALIAS_FLAG)
+            val bm = createBitmap(width = w, height = h)
+            val c = Canvas(/* bitmap = */ bm)
+            val p = Paint(/* flags = */ Paint.ANTI_ALIAS_FLAG)
             p.color = 0xFFFFCC44.toInt()
             c.drawOval(
-                    RectF(
-                            0f,
-                            0f,
-                            (w * 3 / 4).toFloat(),
-                            (h * 3 / 4).toFloat()
-                    ),
-                    p
+                /* oval = */ RectF(
+                    0f,
+                    0f,
+                    (w * 3 / 4).toFloat(),
+                    (h * 3 / 4).toFloat()
+                ),
+                /* paint = */ p
             )
             return bm
         }
@@ -299,16 +322,16 @@ class Xfermodes : GraphicsActivity() {
          * @return [Bitmap] containing a rect.
          */
         fun makeSrc(w: Int, h: Int): Bitmap {
-            val bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-            val c = Canvas(bm)
-            val p = Paint(Paint.ANTI_ALIAS_FLAG)
+            val bm = createBitmap(width = w, height = h)
+            val c = Canvas(/* bitmap = */ bm)
+            val p = Paint(/* flags = */ Paint.ANTI_ALIAS_FLAG)
             p.color = 0xFF66AAFF.toInt()
             c.drawRect(
-                    w / 3.toFloat(),
-                    h / 3.toFloat(),
-                    w * 19 / 20.toFloat(),
-                    h * 19 / 20.toFloat(),
-                    p
+                /* left = */ w / 3.toFloat(),
+                /* top = */ h / 3.toFloat(),
+                /* right = */ w * 19 / 20.toFloat(),
+                /* bottom = */ h * 19 / 20.toFloat(),
+                /* paint = */ p
             )
             return bm
         }

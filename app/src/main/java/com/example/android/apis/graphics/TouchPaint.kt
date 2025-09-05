@@ -16,7 +16,6 @@
 package com.example.android.apis.graphics
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -34,9 +33,18 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
+import androidx.annotation.RequiresApi
+import com.example.android.apis.graphics.TouchPaint.Companion.BACKGROUND_COLOR
+import com.example.android.apis.graphics.TouchPaint.Companion.COLORS
+import com.example.android.apis.graphics.TouchPaint.Companion.FADE_DELAY
+import com.example.android.apis.graphics.TouchPaint.Companion.MSG_FADE
+import com.example.android.apis.graphics.TouchPaint.PaintView.Companion.FADE_ALPHA
+import com.example.android.apis.graphics.TouchPaint.PaintView.Companion.MAX_FADE_STEPS
 import java.util.Random
 import kotlin.math.cos
 import kotlin.math.sin
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.withSave
 
 /**
  * Demonstrates the handling of touch screen, stylus, mouse and trackball events to
@@ -63,7 +71,8 @@ import kotlin.math.sin
  * of the trackball to move the paint brush around. The trackball may also
  * have a button, which we use to cycle through colors.
  */
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class TouchPaint : GraphicsActivity() {
     /**
      * The view responsible for drawing the window.
@@ -87,6 +96,7 @@ class TouchPaint : GraphicsActivity() {
                     mView!!.fade()
                     scheduleFade()
                 }
+
                 else -> super.handleMessage(msg)
             }
         }
@@ -192,6 +202,7 @@ class TouchPaint : GraphicsActivity() {
                 mView!!.clear()
                 true
             }
+
             FADE_ID -> {
                 mFading = !mFading
                 if (mFading) {
@@ -201,6 +212,7 @@ class TouchPaint : GraphicsActivity() {
                 }
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -337,7 +349,7 @@ class TouchPaint : GraphicsActivity() {
         /**
          * The index of the current color to use.
          */
-        var mColorIndex = 0
+        var mColorIndex: Int = 0
 
         /**
          * Our constructor. First we call our super's constructor, then we call our method [init]
@@ -446,7 +458,12 @@ class TouchPaint : GraphicsActivity() {
                     mPaint.getTextBounds(text, 0, text.length, bounds)
                 }
                 val fm = mPaint.fontMetrics
-                mCanvas!!.drawText(text, (width - bounds.width()) / 2f, (height - size) / 2f - fm.ascent, mPaint)
+                mCanvas!!.drawText(
+                    text,
+                    (width - bounds.width()) / 2f,
+                    (height - size) / 2f - fm.ascent,
+                    mPaint
+                )
                 mFadeSteps = 0
                 invalidate()
             }
@@ -484,7 +501,7 @@ class TouchPaint : GraphicsActivity() {
             }
             if (curW < w) curW = w
             if (curH < h) curH = h
-            val newBitmap = Bitmap.createBitmap(curW, curH, Bitmap.Config.ARGB_8888)
+            val newBitmap = createBitmap(width = curW, height = curH)
             val newCanvas = Canvas()
             newCanvas.setBitmap(newBitmap)
             if (mBitmap != null) {
@@ -525,10 +542,12 @@ class TouchPaint : GraphicsActivity() {
                 val scaleX = event.xPrecision * TRACKBALL_SCALE
                 val scaleY = event.yPrecision * TRACKBALL_SCALE
                 for (i in 0 until n) {
-                    moveTrackball(event.getHistoricalX(i) * scaleX,
-                            event.getHistoricalY(i) * scaleY)
+                    moveTrackball(
+                        deltaX = event.getHistoricalX(i) * scaleX,
+                        deltaY = event.getHistoricalY(i) * scaleY
+                    )
                 }
-                moveTrackball(event.x * scaleX, event.y * scaleY)
+                moveTrackball(deltaX = event.x * scaleX, deltaY = event.y * scaleY)
             }
             return true
         }
@@ -543,11 +562,11 @@ class TouchPaint : GraphicsActivity() {
             val curW = if (mBitmap != null) mBitmap!!.width else 0
             val curH = if (mBitmap != null) mBitmap!!.height else 0
             mCurX = (mCurX + deltaX)
-                    .coerceAtMost(curW - 1.toFloat())
-                    .coerceAtLeast(0f)
+                .coerceAtMost(curW - 1.toFloat())
+                .coerceAtLeast(0f)
             mCurY = (mCurY + deltaY)
-                    .coerceAtMost(curH - 1.toFloat())
-                    .coerceAtLeast(0f)
+                .coerceAtMost(curH - 1.toFloat())
+                .coerceAtLeast(0f)
             paint(PaintMode.Draw, mCurX, mCurY)
         }
 
@@ -618,8 +637,7 @@ class TouchPaint : GraphicsActivity() {
                 // is pressed.
                 advanceColor()
             }
-            val mode: PaintMode
-            mode = if (buttonState and MotionEvent.BUTTON_TERTIARY != 0) {
+            val mode: PaintMode = if (buttonState and MotionEvent.BUTTON_TERTIARY != 0) {
                 // Splat paint when the middle mouse button or second stylus button is pressed.
                 PaintMode.Splat
             } else if (isTouch || buttonState and MotionEvent.BUTTON_PRIMARY != 0) {
@@ -630,32 +648,53 @@ class TouchPaint : GraphicsActivity() {
                 return false
             }
             val action = event.actionMasked
-            if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_HOVER_MOVE) {
+            if (action == MotionEvent.ACTION_DOWN ||
+                action == MotionEvent.ACTION_MOVE ||
+                action == MotionEvent.ACTION_HOVER_MOVE
+            ) {
                 val n = event.historySize
                 val p = event.pointerCount
                 for (i in 0 until n) {
                     for (j in 0 until p) {
-                        paint(getPaintModeForTool(event.getToolType(j), mode),
-                                event.getHistoricalX(j, i),
-                                event.getHistoricalY(j, i),
-                                event.getHistoricalPressure(j, i),
-                                event.getHistoricalTouchMajor(j, i),
-                                event.getHistoricalTouchMinor(j, i),
-                                event.getHistoricalOrientation(j, i),
-                                event.getHistoricalAxisValue(MotionEvent.AXIS_DISTANCE, j, i),
-                                event.getHistoricalAxisValue(MotionEvent.AXIS_TILT, j, i))
+                        paint(
+                            mode = getPaintModeForTool(
+                                toolType = event.getToolType(/* pointerIndex = */ j),
+                                defaultMode = mode
+                            ),
+                            x = event.getHistoricalX(j, i),
+                            y = event.getHistoricalY(j, i),
+                            pressure = event.getHistoricalPressure(j, i),
+                            major = event.getHistoricalTouchMajor(j, i),
+                            minor = event.getHistoricalTouchMinor(j, i),
+                            orientation = event.getHistoricalOrientation(j, i),
+                            distance = event.getHistoricalAxisValue(
+                                /* axis = */ MotionEvent.AXIS_DISTANCE,
+                                /* pointerIndex = */ j,
+                                /* pos = */ i
+                            ),
+                            tilt = event.getHistoricalAxisValue(
+                                /* axis = */ MotionEvent.AXIS_TILT,
+                                /* pointerIndex = */ j,
+                                /* pos = */ i
+                            )
+                        )
                     }
                 }
                 for (j in 0 until p) {
-                    paint(getPaintModeForTool(event.getToolType(j), mode),
-                            event.getX(j),
-                            event.getY(j),
-                            event.getPressure(j),
-                            event.getTouchMajor(j),
-                            event.getTouchMinor(j),
-                            event.getOrientation(j),
-                            event.getAxisValue(MotionEvent.AXIS_DISTANCE, j),
-                            event.getAxisValue(MotionEvent.AXIS_TILT, j))
+                    paint(
+                        mode = getPaintModeForTool(
+                            toolType = event.getToolType(/* pointerIndex = */ j),
+                            defaultMode = mode
+                        ),
+                        x = event.getX(j),
+                        y = event.getY(j),
+                        pressure = event.getPressure(j),
+                        major = event.getTouchMajor(j),
+                        minor = event.getTouchMinor(j),
+                        orientation = event.getOrientation(j),
+                        distance = event.getAxisValue(MotionEvent.AXIS_DISTANCE, j),
+                        tilt = event.getAxisValue(MotionEvent.AXIS_TILT, j)
+                    )
                 }
                 mCurX = event.x
                 mCurY = event.y
@@ -686,6 +725,7 @@ class TouchPaint : GraphicsActivity() {
         private fun advanceColor() {
             mColorIndex = (mColorIndex + 1) % COLORS.size
         }
+
         /**
          * Draws an oval in the manner specified by its parameters. If our field `Bitmap mBitmap`
          * is not null we have a `Canvas mCanvas` that we can use to draw into `mBitmap`
@@ -715,34 +755,28 @@ class TouchPaint : GraphicsActivity() {
          * our `onDraw` method, and fading will start if it was stopped.
          *
          *
-         * Parameter mode        `PaintMode` to use, one of "Draw", "Erase", or "Splat".
-         * Parameter x           x coordinate of oval to be drawn
-         * Parameter y           y coordinate of oval to be drawn
-         * Parameter pressure    "Pressure" of the touch, used to set the alpha of `Paint mPaint`.
-         * Parameter major       used to calculate the x size of the `RectF` of the oval to be drawn.
-         * Parameter minor       used to calculate the y size of the `RectF` of the oval to be drawn.
-         * Parameter orientation used to rotate the canvas before drawing the oval.
-         * Parameter distance    "Distance" to splat the paint if `PaintMode` is "Splat". It is the
+         * @param mode        `PaintMode` to use, one of "Draw", "Erase", or "Splat".
+         * @param x           x coordinate of oval to be drawn
+         * @param y           y coordinate of oval to be drawn
+         * @param pressure    "Pressure" of the touch, used to set the alpha of `Paint mPaint`.
+         * @param major       used to calculate the x size of the `RectF` of the oval to be drawn.
+         * @param minor       used to calculate the y size of the `RectF` of the oval to be drawn.
+         * @param orientation used to rotate the canvas before drawing the oval.
+         * @param distance    "Distance" to splat the paint if `PaintMode` is "Splat". It is the
          * value of the AXIS_DISTANCE axis of the motion event. For a stylus, reports
          * the distance of the stylus from the screen. A value of 0.0 indicates direct
          * contact and larger values indicate increasing distance from the surface.
-         * Parameter tilt        "Tilt" to use to splat the paint if `PaintMode` is "Splat". It is the
+         * @param tilt        "Tilt" to use to splat the paint if `PaintMode` is "Splat". It is the
          * value of the AXIS_TILT tilt axis of a motion event. Which for a stylus,
          * reports the tilt angle of the stylus in radians where 0 radians indicates
          * that the stylus is being held perpendicular to the surface, and PI/2 radians
          * indicates that the stylus is being held flat against the surface.
          */
-        /**
-         * Convenience method to call `paint` specifying only the `PaintMode mode`,
-         * `x` and `y` parameters. The other parameters are given default values.
-         *
-         * @param mode `PaintMode` to use, one of "Draw", "Erase", or "Splat".
-         * @param x    x coordinate of oval to be drawn
-         * @param y    y coordinate of oval to be drawn
-         */
-        private fun paint(mode: PaintMode, x: Float, y: Float, pressure: Float = 1.0f,
-                          major: Float = 0f, minor: Float = 0f, orientation: Float = 0f,
-                          distance: Float = 0f, tilt: Float = 0f) {
+        private fun paint(
+            mode: PaintMode, x: Float, y: Float, pressure: Float = 1.0f,
+            major: Float = 0f, minor: Float = 0f, orientation: Float = 0f,
+            distance: Float = 0f, tilt: Float = 0f
+        ) {
             var majorVar = major
             var minorVar = minor
             if (mBitmap != null) {
@@ -754,18 +788,44 @@ class TouchPaint : GraphicsActivity() {
                 when (mode) {
                     PaintMode.Draw -> {
                         mPaint.color = COLORS[mColorIndex]
-                        mPaint.alpha = (pressure * 128).toInt().coerceAtMost(255)
-                        drawOval(mCanvas, x, y, majorVar, minorVar, orientation, mPaint)
+                        mPaint.alpha = (pressure * 128).toInt().coerceAtMost(maximumValue = 255)
+                        drawOval(
+                            canvas = mCanvas,
+                            x = x,
+                            y = y,
+                            major = majorVar,
+                            minor = minorVar,
+                            orientation = orientation,
+                            paint = mPaint
+                        )
                     }
+
                     PaintMode.Erase -> {
                         mPaint.color = BACKGROUND_COLOR
                         mPaint.alpha = (pressure * 128).toInt().coerceAtMost(255)
-                        drawOval(mCanvas, x, y, majorVar, minorVar, orientation, mPaint)
+                        drawOval(
+                            canvas = mCanvas,
+                            x = x,
+                            y = y,
+                            major = majorVar,
+                            minor = minorVar,
+                            orientation = orientation,
+                            paint = mPaint
+                        )
                     }
+
                     PaintMode.Splat -> {
                         mPaint.color = COLORS[mColorIndex]
                         mPaint.alpha = 64
-                        drawSplat(mCanvas, x, y, orientation, distance, tilt, mPaint)
+                        drawSplat(
+                            canvas = mCanvas,
+                            x = x,
+                            y = y,
+                            orientation = orientation,
+                            distance = distance,
+                            tilt = tilt,
+                            paint = mPaint
+                        )
                     }
                 }
             }
@@ -797,15 +857,23 @@ class TouchPaint : GraphicsActivity() {
          * @param orientation radians clockwise from vertical to rotate the oval
          * @param paint       `Paint` to use to draw our oval
          */
-        private fun drawOval(canvas: Canvas?, x: Float, y: Float, major: Float, minor: Float, orientation: Float, paint: Paint) {
-            canvas!!.save()
-            canvas.rotate((orientation * 180 / Math.PI).toFloat(), x, y)
-            mReusableOvalRect.left = x - minor / 2
-            mReusableOvalRect.right = x + minor / 2
-            mReusableOvalRect.top = y - major / 2
-            mReusableOvalRect.bottom = y + major / 2
-            canvas.drawOval(mReusableOvalRect, paint)
-            canvas.restore()
+        private fun drawOval(
+            canvas: Canvas?,
+            x: Float,
+            y: Float,
+            major: Float,
+            minor: Float,
+            orientation: Float,
+            paint: Paint
+        ) {
+            canvas!!.withSave {
+                canvas.rotate((orientation * 180 / Math.PI).toFloat(), x, y)
+                mReusableOvalRect.left = x - minor / 2
+                mReusableOvalRect.right = x + minor / 2
+                mReusableOvalRect.top = y - major / 2
+                mReusableOvalRect.bottom = y + major / 2
+                canvas.drawOval(mReusableOvalRect, paint)
+            }
         }
 
         /**
@@ -832,8 +900,10 @@ class TouchPaint : GraphicsActivity() {
          * @param paint       `Paint` to use to splatter the `Canvas mCanvas`.
          */
         @Suppress("UNUSED_PARAMETER")
-        private fun drawSplat(canvas: Canvas?, x: Float, y: Float, orientation: Float,
-                              distance: Float, tilt: Float, paint: Paint) {
+        private fun drawSplat(
+            canvas: Canvas?, x: Float, y: Float, orientation: Float,
+            distance: Float, tilt: Float, paint: Paint
+        ) {
             val z = distance * 2 + 10
 
             // Calculate the center of the spray.
@@ -930,13 +1000,14 @@ class TouchPaint : GraphicsActivity() {
         /**
          * Colors to cycle through.
          */
-        val COLORS = intArrayOf(
-                Color.WHITE, Color.RED, Color.YELLOW, Color.GREEN,
-                Color.CYAN, Color.BLUE, Color.MAGENTA)
+        val COLORS: IntArray = intArrayOf(
+            Color.WHITE, Color.RED, Color.YELLOW, Color.GREEN,
+            Color.CYAN, Color.BLUE, Color.MAGENTA
+        )
 
         /**
          * Background color.
          */
-        const val BACKGROUND_COLOR = Color.BLACK
+        const val BACKGROUND_COLOR: Int = Color.BLACK
     }
 }

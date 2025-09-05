@@ -16,6 +16,7 @@
 package com.example.android.apis.graphics
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
@@ -23,6 +24,7 @@ import android.graphics.Paint
 import android.graphics.Shader
 import android.graphics.SweepGradient
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -46,6 +48,9 @@ class Sweep : GraphicsActivity() {
 
     /**
      * Our custom view, which simply draws a circle with an animated [SweepGradient] as its [Shader].
+     *
+     * @param context The [Context] of the activity creating this view.
+     * (See our `init` block for details of our constructor.)
      */
     private class SampleView(context: Context?) : View(context) {
         /**
@@ -93,6 +98,7 @@ class Sweep : GraphicsActivity() {
          * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
+            canvas.translate(0f, dpToPixel(160, context).toFloat())
             val paint = mPaint
             val x = 160f * densityScale
             val y = 100f * densityScale
@@ -107,7 +113,7 @@ class Sweep : GraphicsActivity() {
             invalidate()
             if (mDoTiming) {
                 var now = System.currentTimeMillis()
-                for (i in 0..19) {
+                repeat(times = 20) {
                     canvas.drawCircle(x, y, 80f * densityScale, paint)
                 }
                 now = System.currentTimeMillis() - now
@@ -115,6 +121,25 @@ class Sweep : GraphicsActivity() {
             } else {
                 canvas.drawCircle(x, y, 80f * densityScale, paint)
             }
+        }
+
+        /**
+         * This method converts dp unit to equivalent pixels, depending on device density. First we
+         * fetch a [Resources] instance for `val resources`, then we fetch the current display
+         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+         * dots-per-inch, divided by the reference density used throughout the system.
+         *
+         * @param dp      A value in dp (density independent pixels) unit which we need to convert
+         *                into pixels
+         * @param context [Context] to get resources and device specific display metrics
+         * @return An [Int] value to represent px equivalent to dp depending on device density
+         */
+        @Suppress("SameParameterValue")
+        private fun dpToPixel(dp: Int, context: Context): Int {
+            val resources: Resources = context.resources
+            val metrics = resources.displayMetrics
+            return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
         }
 
         /**
@@ -134,6 +159,7 @@ class Sweep : GraphicsActivity() {
                     invalidate()
                     return true
                 }
+
                 KeyEvent.KEYCODE_T -> {
                     mDoTiming = !mDoTiming
                     invalidate()
@@ -173,6 +199,6 @@ class Sweep : GraphicsActivity() {
          * The logical density of the display, set in our [onCreate] method from the current display
          * metrics `density` field, and used to scale DP values to pixels where needed.
          */
-        var densityScale = 1f
+        var densityScale: Float = 1f
     }
 }

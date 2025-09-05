@@ -27,7 +27,6 @@ import androidx.appcompat.app.AppCompatActivity
  * to the C OpenGL ES APIs, which may make it easier to reuse code and documentation written for
  * the C OpenGL ES APIs. It uses android:theme="@style/ThemeCurrentDialog" in AndroidManifest.xml
  * so the SurfaceView is shrunk to appear in a dialog size window.
- * TODO: Fix hang
  */
 class TriangleActivity : AppCompatActivity() {
     /**

@@ -96,6 +96,7 @@ class TouchRotateActivity : AppCompatActivity() {
          * Renderer for our [GLSurfaceView].
          */
         private val mRenderer: CubeRenderer
+
         /**
          * Last x coordinate of a [MotionEvent] received by our [onTouchEvent] override. It
          * is set by all types of [MotionEvent] but then only used when the touch event is of the
@@ -103,6 +104,7 @@ class TouchRotateActivity : AppCompatActivity() {
          * to calculate a new angle to rotate for [CubeRenderer] field [mRenderer]
          */
         private var mPreviousX = 0f
+
         /**
          * Last y coordinate of a [MotionEvent] received by our [onTouchEvent] override. It
          * is set by all types of [MotionEvent] but then only used when the touch event is of the
@@ -161,7 +163,11 @@ class TouchRotateActivity : AppCompatActivity() {
         override fun onTouchEvent(e: MotionEvent): Boolean {
             val action = e.actionMasked
             if (action == MotionEvent.ACTION_MOVE) {
-                updateAngles(e.x - mPreviousX, e.y - mPreviousY, TOUCH_SCALE_FACTOR)
+                updateAngles(
+                    dx = e.x - mPreviousX,
+                    dy = e.y - mPreviousY,
+                    scaleFactor = TOUCH_SCALE_FACTOR
+                )
             } else if (action == MotionEvent.ACTION_DOWN) {
                 if (e.isFromSource(InputDevice.SOURCE_MOUSE)) {
                     requestPointerCapture()
@@ -191,7 +197,7 @@ class TouchRotateActivity : AppCompatActivity() {
             if (e.actionMasked == MotionEvent.ACTION_DOWN) {
                 releasePointerCapture()
             } else {
-                updateAngles(e.x, e.y, TOUCH_SCALE_FACTOR)
+                updateAngles(dx = e.x, dy = e.y, scaleFactor = TOUCH_SCALE_FACTOR)
             }
             return true
         }
@@ -241,11 +247,13 @@ class TouchRotateActivity : AppCompatActivity() {
              * [Cube] instance we have draw itself in our [GLSurfaceView].
              */
             private val mCube: Cube = Cube()
+
             /**
              * Angle in degrees to rotate our model view matrix around the y axis before having our
              * [Cube] field [mCube] draw itself
              */
             var mAngleX = 0f
+
             /**
              * Angle in degrees to rotate our model view matrix around the x axis before having our
              * [Cube] field [mCube] draw itself
@@ -300,15 +308,22 @@ class TouchRotateActivity : AppCompatActivity() {
              */
             override fun onSurfaceChanged(gl: GL10, width: Int, height: Int) {
                 gl.glViewport(0, 0, width, height)
-               /**
-                * Set our projection matrix. This doesn't have to be done
-                * each time we draw, but usually a new projection needs to
-                * be set when the viewport is resized.
-                */
+                /**
+                 * Set our projection matrix. This doesn't have to be done
+                 * each time we draw, but usually a new projection needs to
+                 * be set when the viewport is resized.
+                 */
                 val ratio = width.toFloat() / height
                 gl.glMatrixMode(GL10.GL_PROJECTION)
                 gl.glLoadIdentity()
-                gl.glFrustumf(-ratio, ratio, -1f, 1f, 1f, 10f)
+                gl.glFrustumf(
+                    /* left = */ -ratio,
+                    /* right = */ ratio,
+                    /* bottom = */ -1f,
+                    /* top = */ 1f,
+                    /* zNear = */ 1f,
+                    /* zFar = */ 10f
+                )
             }
 
             /**
@@ -335,16 +350,19 @@ class TouchRotateActivity : AppCompatActivity() {
                  * but reduce performance. One might want to tweak that
                  * especially on software renderer.
                  */
-                gl.glDisable(GL10.GL_DITHER)
+                gl.glDisable(/* cap = */ GL10.GL_DITHER)
                 /**
                  * Some one-time OpenGL initialization can be made here
                  * probably based on features of this particular context
                  */
-                gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST)
-                gl.glClearColor(1f, 1f, 1f, 1f)
-                gl.glEnable(GL10.GL_CULL_FACE)
-                gl.glShadeModel(GL10.GL_SMOOTH)
-                gl.glEnable(GL10.GL_DEPTH_TEST)
+                gl.glHint(
+                    /* target = */ GL10.GL_PERSPECTIVE_CORRECTION_HINT,
+                    /* mode = */ GL10.GL_FASTEST
+                )
+                gl.glClearColor(/* red = */ 1f, /* green = */ 1f, /* blue = */ 1f, /* alpha = */ 1f)
+                gl.glEnable(/* cap = */ GL10.GL_CULL_FACE)
+                gl.glShadeModel(/* mode = */ GL10.GL_SMOOTH)
+                gl.glEnable(/* cap = */ GL10.GL_DEPTH_TEST)
             }
 
         }
@@ -355,6 +373,7 @@ class TouchRotateActivity : AppCompatActivity() {
              * to rotate the `Cube`.
              */
             private const val TOUCH_SCALE_FACTOR = 180.0f / 320
+
             /**
              * Scale factor for a trackball `MotionEvent`. Scales a x or y movement of the trackball
              * to an angle to rotate the `Cube`.

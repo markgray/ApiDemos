@@ -16,10 +16,12 @@
 package com.example.android.apis.graphics
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.KeyEvent
 import android.view.View
 import android.view.Window
@@ -110,10 +112,21 @@ class UnicodeChart : GraphicsActivity() {
             for (i in 0..255) {
                 val unichar = base + i
                 chars[i] = unichar.toChar()
-                canvas.drawText(Integer.toHexString(unichar), computeX(i), computeY(i), mLabelPaint)
+                canvas.drawText(
+                    /* text = */ Integer.toHexString(unichar),
+                    /* x = */ computeX(i),
+                    /* y = */ computeY(i),
+                    /* paint = */ mLabelPaint
+                )
             }
             @Suppress("DEPRECATION")
-            canvas.drawPosText(chars, 0, 256, mPos, mBigCharPaint)
+            canvas.drawPosText(
+                /* text = */ chars,
+                /* index = */ 0,
+                /* count = */ 256,
+                /* pos = */ mPos,
+                /* paint = */ mBigCharPaint
+            )
         }
 
         /**
@@ -125,10 +138,29 @@ class UnicodeChart : GraphicsActivity() {
          * @param canvas the canvas on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
+            canvas.translate(0f, dpToPixel(160, context).toFloat())
             canvas.drawColor(Color.WHITE)
-            canvas.scale(SCREEN_DENSITY, SCREEN_DENSITY)
-            canvas.translate(0f, 1f)
-            drawChart(canvas, mBase * 256)
+            canvas.scale(/* sx = */ SCREEN_DENSITY, /* sy = */ SCREEN_DENSITY)
+            canvas.translate(/* dx = */ 0f, /* dy = */ 1f)
+            drawChart(canvas = canvas, base = mBase * 256)
+        }
+
+        /**
+         * This method converts dp unit to equivalent pixels, depending on device density. First we
+         * fetch a [Resources] instance for `val resources`, then we fetch the current display
+         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+         * dots-per-inch, divided by the reference density used throughout the system.
+         *
+         * @param dp      A value in dp (density independent pixels) unit which we need to convert
+         *                into pixels
+         * @param context [Context] to get resources and device specific display metrics
+         * @return An [Int] value to represent px equivalent to dp depending on device density
+         */
+        private fun dpToPixel(dp: Int, context: Context): Int {
+            val resources: Resources = context.resources
+            val metrics = resources.displayMetrics
+            return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
         }
 
         /**
@@ -157,11 +189,13 @@ class UnicodeChart : GraphicsActivity() {
                     }
                     return true
                 }
+
                 KeyEvent.KEYCODE_DPAD_RIGHT -> {
                     mBase += 1
                     invalidate()
                     return true
                 }
+
                 else -> {
                 }
             }
@@ -183,6 +217,7 @@ class UnicodeChart : GraphicsActivity() {
              * Offset from the top of the screen for determining Y coordinate of the characters.
              */
             private const val YBASE = 18
+
             /**
              * The logical density of the display. This is a scaling factor for the Density Independent
              * Pixel unit, where one DIP is one pixel on an approximately 160 dpi screen (for example a

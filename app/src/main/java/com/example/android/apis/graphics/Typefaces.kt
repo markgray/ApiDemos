@@ -16,11 +16,13 @@
 package com.example.android.apis.graphics
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
 
 /**
@@ -41,6 +43,9 @@ class Typefaces : GraphicsActivity() {
     /**
      * Simple custom view which just draws two lines of text, one using the default font and one
      * using the custom font "fonts/samplefont.ttf"
+     *
+     * @param context the [Context] we are running in
+     * (See our `init` block for the details of our constructor.)
      */
     private class SampleView(context: Context) : View(context) {
         /**
@@ -52,8 +57,8 @@ class Typefaces : GraphicsActivity() {
          * Our custom font, loaded from "fonts/samplefont.ttf"
          */
         private val mFace: Typeface = Typeface.createFromAsset(
-                context.assets,
-                "fonts/samplefont.ttf"
+            /* mgr = */ context.assets,
+            /* path = */ "fonts/samplefont.ttf"
         )
 
         /**
@@ -68,14 +73,53 @@ class Typefaces : GraphicsActivity() {
          * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
+            canvas.translate(0f, dpToPixel(160, context).toFloat())
             canvas.drawColor(Color.WHITE)
             mPaint.typeface = null
-            canvas.drawText("Draw with Default:", 10f, 100f, mPaint)
-            canvas.drawText("  SAMPLE TEXT", 10f, 200f, mPaint)
-            canvas.drawText("Draw with Custom Font", 10f, 400f, mPaint)
-            canvas.drawText("(Custom Font draws 'A' with solid triangle.)", 10f, 500f, mPaint)
+            canvas.drawText(
+                /* text = */ "Draw with Default:",
+                /* x = */ 10f, /* y = */ 100f,
+                /* paint = */ mPaint
+            )
+            canvas.drawText(
+                /* text = */ "  SAMPLE TEXT",
+                /* x = */ 10f, /* y = */ 200f,
+                /* paint = */ mPaint
+            )
+            canvas.drawText(
+                /* text = */ "Draw with Custom Font",
+                /* x = */ 10f, /* y = */ 400f,
+                /* paint = */ mPaint
+            )
+            canvas.drawText(
+                /* text = */ "(Custom Font draws 'A' with solid triangle.)",
+                /* x = */ 10f, /* y = */ 500f,
+                /* paint = */ mPaint
+            )
             mPaint.typeface = mFace
-            canvas.drawText("  SAMPLE TEXT", 10f, 600f, mPaint)
+            canvas.drawText(
+                /* text = */ "  SAMPLE TEXT",
+                /* x = */ 10f, /* y = */ 600f,
+                /* paint = */ mPaint
+            )
+        }
+
+        /**
+         * This method converts dp unit to equivalent pixels, depending on device density. First we
+         * fetch a [Resources] instance for `val resources`, then we fetch the current display
+         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+         * dots-per-inch, divided by the reference density used throughout the system.
+         *
+         * @param dp      A value in dp (density independent pixels) unit which we need to convert
+         *                into pixels
+         * @param context [Context] to get resources and device specific display metrics
+         * @return An [Int] value to represent px equivalent to dp depending on device density
+         */
+        private fun dpToPixel(dp: Int, context: Context): Int {
+            val resources: Resources = context.resources
+            val metrics = resources.displayMetrics
+            return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
         }
 
         /**

@@ -16,12 +16,14 @@
 package com.example.android.apis.graphics
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
 
 /**
@@ -42,6 +44,9 @@ class TextAlign : GraphicsActivity() {
 
     /**
      * Our custom View, it simply displays our text samples.
+     *
+     * @param context The [Context] of the activity that is using us.
+     * (See our `init` block for details of our constructor)
      */
     private class SampleView(context: Context?) : View(context) {
         /**
@@ -152,6 +157,7 @@ class TextAlign : GraphicsActivity() {
          * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun onDraw(canvas: Canvas) {
+            canvas.translate(0f, dpToPixel(160, context).toFloat())
             canvas.drawColor(Color.WHITE)
             val p = mPaint
             val x = mX
@@ -176,8 +182,11 @@ class TextAlign : GraphicsActivity() {
             // now draw the positioned strings
             p.color = -0x44ff0100
             for (i in 0 until pos.size / 2) {
-                canvas.drawLine(pos[i * 2 + 0], pos[i * 2 + 1] - DY,
-                        pos[i * 2 + 0], pos[i * 2 + 1] + DY * 2, p)
+                canvas.drawLine(
+                    /* startX = */ pos[i * 2 + 0], /* startY = */ pos[i * 2 + 1] - DY,
+                    /* stopX = */ pos[i * 2 + 0], /* stopY = */ pos[i * 2 + 1] + DY * 2,
+                    /* paint = */ p
+                )
             }
             p.color = Color.BLACK
             p.textAlign = Paint.Align.LEFT
@@ -205,6 +214,24 @@ class TextAlign : GraphicsActivity() {
             canvas.drawPath(mPath, mPathPaint)
             p.textAlign = Paint.Align.RIGHT
             canvas.drawTextOnPath(TEXTONPATH, mPath, 0f, 0f, p)
+        }
+
+        /**
+         * This method converts dp unit to equivalent pixels, depending on device density. First we
+         * fetch a [Resources] instance for `val resources`, then we fetch the current display
+         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
+         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
+         * dots-per-inch, divided by the reference density used throughout the system.
+         *
+         * @param dp      A value in dp (density independent pixels) unit which we need to convert
+         *                into pixels
+         * @param context [Context] to get resources and device specific display metrics
+         * @return An [Int] value to represent px equivalent to dp depending on device density
+         */
+        private fun dpToPixel(dp: Int, context: Context): Int {
+            val resources: Resources = context.resources
+            val metrics = resources.displayMetrics
+            return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
         }
 
         /**

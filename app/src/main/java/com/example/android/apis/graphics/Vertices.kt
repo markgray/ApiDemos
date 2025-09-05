@@ -27,7 +27,9 @@ import android.graphics.Shader
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.graphics.withMatrix
 import com.example.android.apis.R
+import com.example.android.apis.graphics.Vertices.SampleView.Companion.setXY
 
 /**
  * Shows how to use [Canvas.drawVertices] with [BitmapShader] to draw warp-able [Bitmap]'s. The
@@ -47,6 +49,13 @@ class Vertices : GraphicsActivity() {
         setContentView(SampleView(this))
     }
 
+    /**
+     * Custom [View] which draws a bitmap (R.drawable.beach) twice using the [Canvas.drawVertices]
+     * method. It is focusable. The `init` block initializes its fields: the image R.drawable.beach
+     *
+     * @param context the context of the activity using us.
+     * (See our `init` bclock for details of our constructor).
+     */
     private class SampleView(context: Context?) : View(context) {
         /**
          * [Paint] used to draw our bitmaps.
@@ -112,26 +121,37 @@ class Vertices : GraphicsActivity() {
          */
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(-0x333334)
-            canvas.save()
-            canvas.concat(mMatrix)
-            canvas.drawVertices(
-                    Canvas.VertexMode.TRIANGLE_FAN, 10,
-                    mVerts,0,
-                    mTexs, 0,
-                    null, 0,
-                    null, 0,
-                    0, mPaint
-            )
-            canvas.translate(0f, 240 * SCREEN_DENSITY)
-            canvas.drawVertices(
-                    Canvas.VertexMode.TRIANGLE_FAN, 10,
-                    mVerts, 0,
-                    mTexs, 0,
-                    null, 0,
-                    mIndices, 0,
-                    6, mPaint
-            )
-            canvas.restore()
+            canvas.withMatrix(mMatrix) {
+                drawVertices(
+                    /* mode = */ Canvas.VertexMode.TRIANGLE_FAN,
+                    /* vertexCount = */ 10,
+                    /* verts = */ mVerts,
+                    /* vertOffset = */ 0,
+                    /* texs = */ mTexs,
+                    /* texOffset = */ 0,
+                    /* colors = */ null,
+                    /* colorOffset = */ 0,
+                    /* indices = */ null,
+                    /* indexOffset = */ 0,
+                    /* indexCount = */ 0,
+                    /* paint = */ mPaint
+                )
+                translate(/* dx = */ 0f, /* dy = */ 240 * SCREEN_DENSITY)
+                drawVertices(
+                    /* mode = */ Canvas.VertexMode.TRIANGLE_FAN,
+                    /* vertexCount = */ 10,
+                    /* verts = */ mVerts,
+                    /* vertOffset = */ 0,
+                    /* texs = */ mTexs,
+                    /* texOffset = */ 0,
+                    /* colors = */ null,
+                    /* colorOffset = */ 0,
+                    /* indices = */ mIndices,
+                    /* indexOffset = */ 0,
+                    /* indexCount = */ 6,
+                    /* paint = */ mPaint
+                )
+            }
         }
 
         /**
@@ -149,8 +169,8 @@ class Vertices : GraphicsActivity() {
         @SuppressLint("ClickableViewAccessibility")
         override fun onTouchEvent(event: MotionEvent): Boolean {
             val pt = floatArrayOf(event.x, event.y)
-            mInverse.mapPoints(pt)
-            setXY(mVerts, 0, pt[0], pt[1])
+            mInverse.mapPoints(/* pts = */ pt)
+            setXY(array = mVerts, index = 0, x = pt[0], y = pt[1])
             invalidate()
             return true
         }

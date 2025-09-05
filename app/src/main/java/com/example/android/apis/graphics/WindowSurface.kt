@@ -1,6 +1,6 @@
 package com.example.android.apis.graphics
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.os.Build
@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.Window
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.math.abs
 
@@ -16,13 +17,14 @@ import kotlin.math.abs
  * through the view hierarchy). Good example of how to use a background thread to do your drawing.
  * Shows use of life cycle callbacks when a thread is running in the background.
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN", "MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.GINGERBREAD)
+@RequiresApi(Build.VERSION_CODES.GINGERBREAD)
 class WindowSurface : AppCompatActivity(), SurfaceHolder.Callback2 {
     /**
      * Our [DrawingThread] instance for background drawing.
      */
-    val mDrawingThread = DrawingThread()
+    val mDrawingThread: DrawingThread = DrawingThread()
 
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -167,19 +169,22 @@ class WindowSurface : AppCompatActivity(), SurfaceHolder.Callback2 {
         /**
          * Our current x coordinate
          */
-        var x = 0f
+        var x: Float = 0f
+
         /**
          * Our current y coordinate
          */
-        var y = 0f
+        var y: Float = 0f
+
         /**
          * Our current change in x coordinate for the next call to our method [step]
          */
-        var dx = 0f
+        var dx: Float = 0f
+
         /**
          * Our current change in y coordinate for the next call to our method [step]
          */
-        var dy = 0f
+        var dy: Float = 0f
 
         /**
          * Initializes our fields with random numbers based on the constraints of the input parameters.
@@ -258,84 +263,98 @@ class WindowSurface : AppCompatActivity(), SurfaceHolder.Callback2 {
          * finish editing pixels in the surface so they can be displayed.
          */
         var mSurface: SurfaceHolder? = null
+
         /**
          * Flag indicating whether our thread should be running (true) or not (false). If is set to
          * true in the `onResume` method of `WindowSurface` and to false in its `onPause` method.
          */
-        var mRunning = false
+        var mRunning: Boolean = false
+
         /**
          * Flag indicating that we are currently running and drawing to the surface. The main thread's
          * `surfaceDestroyed` uses this flag to loop before returning to its caller to make sure all
          * drawing to the surface has stopped.
          */
-        var mActive = false
+        var mActive: Boolean = false
+
         /**
          * Flag to indicate that we should stop running by returning to the caller of our `run`
          * method. It is set to true by the `onDestroy` method of the main thread.
          */
-        var mQuit = false
+        var mQuit: Boolean = false
 
         // Internal state.
         /**
          * Width of the lines that we draw, calculated using the current logical display density.
          */
-        var mLineWidth = 0
+        var mLineWidth: Int = 0
+
         /**
          * Minimum change in x and y coordinate, calculated to be 2 times [mLineWidth]
          */
-        var mMinStep = 0f
+        var mMinStep: Float = 0f
+
         /**
          * Maximum change in x and y coordinate, calculated to be 3 times [mMinStep]
          */
-        var mMaxStep = 0f
+        var mMaxStep: Float = 0f
+
         /**
          * Flag to indicate whether we have initialized everything. Set to true first time our
          * drawing loop is run so that we only call the `init` methods of the end points of our
          * lines [MovingPoint] field [mPoint1] and [MovingPoint] field [mPoint2] and the associated
          * color value [MovingPoint] field [mColor] once and only once.
          */
-        var mInitialized = false
+        var mInitialized: Boolean = false
+
         /**
          * First point of the newest line to be drawn
          */
-        val mPoint1 = MovingPoint()
+        val mPoint1: MovingPoint = MovingPoint()
+
         /**
          * Second point of the newest line to be drawn
          */
-        val mPoint2 = MovingPoint()
+        val mPoint2: MovingPoint = MovingPoint()
+
         /**
          * Current number of old lines in our refresh buffer.
          */
-        var mNumOld = 0
+        var mNumOld: Int = 0
+
         /**
          * Array to hold our old line endpoints so they can be redrawn.
          */
-        val mOld = FloatArray(Companion.NUM_OLD * 4)
+        val mOld: FloatArray = FloatArray(NUM_OLD * 4)
+
         /**
          * Array to hold the colors of our old lines so they can be redrawn.
          */
-        val mOldColor = IntArray(Companion.NUM_OLD)
+        val mOldColor: IntArray = IntArray(NUM_OLD)
+
         /**
          * Ranges from -2 to NUM_OLD*2 then back to -2, it is incremented by 2 every time the surface
          * is drawn. It is used to determine which of the old lines are shaded to green by the method
          * `makeGreen` (those whose `index` is within +/-10 of `mBrightLine`
          */
-        var mBrightLine = 0
+        var mBrightLine: Int = 0
         // X is red, Y is blue.
         /**
          * Random Color used for the newest line.
          */
-        val mColor = MovingPoint()
+        val mColor: MovingPoint = MovingPoint()
+
         /**
          * [Paint] used to contain the color for the background, its color is set to black near the
          * beginning of the `run` method and the color is retrieved for a call to the `drawColor`
          * method of our `Canvas canvas`.
          */
-        val mBackground = Paint()
+        val mBackground: Paint = Paint()
+
         /**
          * [Paint] used to draw our lines.
          */
-        val mForeground = Paint()
+        val mForeground: Paint = Paint()
 
         /**
          * Calculates whether the old line at [index] should have its color tinged green and
@@ -482,7 +501,7 @@ class WindowSurface : AppCompatActivity(), SurfaceHolder.Callback2 {
                         mColor.step(127, 127, 1f, 3f)
                     }
                     mBrightLine += 2
-                    if (mBrightLine > Companion.NUM_OLD * 2) {
+                    if (mBrightLine > NUM_OLD * 2) {
                         mBrightLine = -2
                     }
                     // Clear background.
@@ -490,9 +509,13 @@ class WindowSurface : AppCompatActivity(), SurfaceHolder.Callback2 {
                     // Draw old lines.
                     for (i in mNumOld - 1 downTo 0) {
                         mForeground.color = mOldColor[i] or makeGreen(i)
-                        mForeground.alpha = (Companion.NUM_OLD - i) * 255 / Companion.NUM_OLD
+                        mForeground.alpha = (NUM_OLD - i) * 255 / NUM_OLD
                         val p = i * 4
-                        canvas.drawLine(mOld[p], mOld[p + 1], mOld[p + 2], mOld[p + 3], mForeground)
+                        canvas.drawLine(
+                            /* startX = */ mOld[p], /* startY = */ mOld[p + 1],
+                            /* stopX = */ mOld[p + 2], /* stopY = */ mOld[p + 3],
+                            /* paint = */ mForeground
+                        )
                     }
                     // Draw new line.
                     var red = mColor.x.toInt() + 128
@@ -501,13 +524,25 @@ class WindowSurface : AppCompatActivity(), SurfaceHolder.Callback2 {
                     if (blue > 255) blue = 255
                     val color = -0x1000000 or (red shl 16) or blue
                     mForeground.color = color or makeGreen(-2)
-                    canvas.drawLine(mPoint1.x, mPoint1.y, mPoint2.x, mPoint2.y, mForeground)
+                    canvas.drawLine(
+                        /* startX = */ mPoint1.x, /* startY = */ mPoint1.y,
+                        /* stopX = */ mPoint2.x, /* stopY = */ mPoint2.y,
+                        /* paint = */ mForeground
+                    )
                     // Add in the new line.
                     if (mNumOld > 1) {
-                        System.arraycopy(mOld, 0, mOld, 4, (mNumOld - 1) * 4)
-                        System.arraycopy(mOldColor, 0, mOldColor, 1, mNumOld - 1)
+                        System.arraycopy(
+                            /* src = */ mOld, /* srcPos = */ 0,
+                            /* dest = */ mOld, /* destPos = */ 4,
+                            /* length = */ (mNumOld - 1) * 4
+                        )
+                        System.arraycopy(
+                            /* src = */ mOldColor, /* srcPos = */ 0,
+                            /* dest = */ mOldColor, /* destPos = */ 1,
+                            /* length = */ mNumOld - 1
+                        )
                     }
-                    if (mNumOld < Companion.NUM_OLD) mNumOld++
+                    if (mNumOld < NUM_OLD) mNumOld++
                     mOld[0] = mPoint1.x
                     mOld[1] = mPoint1.y
                     mOld[2] = mPoint2.x
@@ -527,9 +562,10 @@ class WindowSurface : AppCompatActivity(), SurfaceHolder.Callback2 {
          * TAG for logging.
          */
         private const val TAG = "WindowSurface"
+
         /**
          * Number of old lines to remember for next display refresh.
          */
-        const val NUM_OLD = 100
+        const val NUM_OLD: Int = 100
     }
 }

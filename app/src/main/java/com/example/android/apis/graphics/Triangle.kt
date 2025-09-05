@@ -15,11 +15,13 @@ class Triangle {
      * Vertex Buffer loaded with (x,y,z) coordinates of our triangle
      */
     private val mFVertexBuffer: FloatBuffer
+
     /**
      * Texture buffer loaded with (x,y,z) coordinates of our triangle offset by 0.5 so that
      * the texture is centered.
      */
     private val mTexBuffer: FloatBuffer
+
     /**
      * Indices of the triangle (0,1,2) in counter clockwise order so that the normal points towards us
      */
@@ -42,11 +44,26 @@ class Triangle {
      * @param gl the GL interface.
      */
     fun draw(gl: GL10) {
-        gl.glFrontFace(GL10.GL_CCW)
-        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mFVertexBuffer)
-        gl.glEnable(GL10.GL_TEXTURE_2D)
-        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTexBuffer)
-        gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, VERTS, GL10.GL_UNSIGNED_SHORT, mIndexBuffer)
+        gl.glFrontFace(/* mode = */ GL10.GL_CCW)
+        gl.glVertexPointer(
+            /* size = */ 3,
+            /* type = */ GL10.GL_FLOAT,
+            /* stride = */ 0,
+            /* pointer = */ mFVertexBuffer
+        )
+        gl.glEnable(/* cap = */ GL10.GL_TEXTURE_2D)
+        gl.glTexCoordPointer(
+            /* size = */ 2,
+            /* type = */ GL10.GL_FLOAT,
+            /* stride = */ 0,
+            /* pointer = */ mTexBuffer
+        )
+        gl.glDrawElements(
+            /* mode = */ GL10.GL_TRIANGLE_STRIP,
+            /* count = */ VERTS,
+            /* type = */ GL10.GL_UNSIGNED_SHORT,
+            /* indices = */ mIndexBuffer
+        )
     }
 
     companion object {
@@ -95,9 +112,10 @@ class Triangle {
         mIndexBuffer = ibb.asShortBuffer()
         // A unit-sided equilateral triangle centered on the origin.
         val coords = floatArrayOf( // X, Y, Z
-                -0.5f, -0.25f, 0f,
-                0.5f, -0.25f, 0f,
-                0.0f, 0.559016994f, 0f)
+            -0.5f, -0.25f, 0f,
+            0.5f, -0.25f, 0f,
+            0.0f, 0.559017f, 0f
+        )
         for (i in 0 until VERTS) {
             for (j in 0..2) {
                 mFVertexBuffer.put(coords[i * 3 + j] * 2.0f)

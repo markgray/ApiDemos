@@ -1434,6 +1434,12 @@ Graphics
         .graphics.ShapeDrawable1
             Drawing using the Drawable class methods, many of them usable in <shape> xml drawables.
 
+    Graphics/SurfaceView Overlay
+        .graphics.SurfaceViewOverlay
+            Demonstration of overlays placed on top of a SurfaceView. Shows how to use a FrameLayout
+            to layer views within it, and how to use View.setVisibility(View.VISIBLE), View.INVISIBLE,
+            and View.GONE to toggle which ones are shown. Good use of a translucent background as well.
+
   FingerPaint
     Graphics/FingerPaint                   all
         .graphics.FingerPaint
@@ -1554,7 +1560,7 @@ Graphics
             which may make it easier to reuse code and documentation written for the C 
             OpenGL ES APIs. It uses android:theme="@style/ThemeCurrentDialog" in the
             AndroidManifest.xml so the SurfaceView is shrunk to appear in a dialog size
-            window TODO: Appears to be very broken on Pixel 2 XL - find out why.
+            window
 
    Touch Rotate
     Graphics/OpenGL ES/Touch Rotate        v26
