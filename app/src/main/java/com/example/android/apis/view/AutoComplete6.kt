@@ -45,9 +45,9 @@ class AutoComplete6 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.autocomplete_6)
         val adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_dropdown_item_1line,
-            COUNTRIES
+            /* context = */ this,
+            /* resource = */ android.R.layout.simple_dropdown_item_1line,
+            /* objects = */ COUNTRIES
         )
         val textView = findViewById<MultiAutoCompleteTextView>(R.id.edit)
         textView.setAdapter(adapter)
@@ -55,7 +55,7 @@ class AutoComplete6 : AppCompatActivity() {
     }
 
     companion object {
-        val COUNTRIES = arrayOf(
+        val COUNTRIES: Array<String> = arrayOf(
             "Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra",
             "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina",
             "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan",

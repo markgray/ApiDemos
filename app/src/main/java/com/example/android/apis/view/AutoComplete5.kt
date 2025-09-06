@@ -56,11 +56,11 @@ class AutoComplete5 : AppCompatActivity() {
         val content: ContentResolver = contentResolver
 
         val cursor: Cursor? = content.query(
-            ContactsContract.Contacts.CONTENT_URI,
-            CONTACT_PROJECTION,
-            null,
-            null,
-            null
+            /* uri = */ ContactsContract.Contacts.CONTENT_URI,
+            /* projection = */ CONTACT_PROJECTION,
+            /* selection = */ null,
+            /* selectionArgs = */ null,
+            /* sortOrder = */ null
         )
         val adapter = ContactListAdapter(this, cursor)
         val textView: AutoCompleteTextView = findViewById(R.id.edit)
@@ -70,6 +70,9 @@ class AutoComplete5 : AppCompatActivity() {
     /**
      * [CursorAdapter] subclass we use to populate the suggestions of our [AutoCompleteTextView]
      * with data from the contacts database.
+     *
+     * @param context The context we are running in
+     * @param c       The cursor from which to get the data.
      */
     class ContactListAdapter(
         context: Context,
@@ -153,14 +156,15 @@ class AutoComplete5 : AppCompatActivity() {
                 return filter.runQuery(constraint)
             }
             val uri = Uri.withAppendedPath(
-                ContactsContract.Contacts.CONTENT_FILTER_URI,
-                Uri.encode(constraint.toString()))
+                /* baseUri = */ ContactsContract.Contacts.CONTENT_FILTER_URI,
+                /* pathSegment = */ Uri.encode(constraint.toString())
+            )
             return mContent.query(
-                uri,
-                CONTACT_PROJECTION,
-                null,
-                null,
-                null
+                /* uri = */ uri,
+                /* projection = */ CONTACT_PROJECTION,
+                /* selection = */ null,
+                /* selectionArgs = */ null,
+                /* sortOrder = */ null
             )!!
         }
 
@@ -171,7 +175,7 @@ class AutoComplete5 : AppCompatActivity() {
          * Projection containing a list of which columns to return from the contacts database.
          */
         @JvmField
-        val CONTACT_PROJECTION = arrayOf(
+        val CONTACT_PROJECTION: Array<String> = arrayOf(
             ContactsContract.Contacts._ID,
             ContactsContract.Contacts.DISPLAY_NAME
         )
@@ -179,6 +183,6 @@ class AutoComplete5 : AppCompatActivity() {
         /**
          * Index of the column in the cursor containing Contacts.DISPLAY_NAME
          */
-        const val COLUMN_DISPLAY_NAME = 1
+        const val COLUMN_DISPLAY_NAME: Int = 1
     }
 }

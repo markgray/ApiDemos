@@ -49,8 +49,11 @@ open class Controls1 : AppCompatActivity() {
         val disabledButton = findViewById<Button>(R.id.button_disabled)
         disabledButton.isEnabled = false
         val s1 = findViewById<Spinner>(R.id.spinner1)
-        val adapter = ArrayAdapter(this,
-            android.R.layout.simple_spinner_item, mStrings)
+        val adapter = ArrayAdapter(
+            /* context = */ this,
+            /* resource = */ android.R.layout.simple_spinner_item,
+            /* objects = */ mStrings
+        )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         s1.adapter = adapter
     }

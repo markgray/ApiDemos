@@ -44,7 +44,7 @@ class Animation2 : AppCompatActivity(), OnItemSelectedListener {
      * Strings used for the `Adapter` used by the [Spinner] with ID R.id.spinner
      */
     private val mStrings = arrayOf(
-            "Push up", "Push left", "Cross fade", "Hyperspace"
+        "Push up", "Push left", "Cross fade", "Hyperspace"
     )
 
     /**
@@ -71,8 +71,10 @@ class Animation2 : AppCompatActivity(), OnItemSelectedListener {
         mFlipper = findViewById(R.id.flipper)
         mFlipper!!.startFlipping()
         val s = findViewById<Spinner>(R.id.spinner)
-        val adapter = ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, mStrings)
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item, mStrings
+        )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         s.adapter = adapter
         s.onItemSelectedListener = this
@@ -146,20 +148,31 @@ class Animation2 : AppCompatActivity(), OnItemSelectedListener {
     override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, id: Long) {
         when (position) {
             0 -> {
-                mFlipper!!.inAnimation = AnimationUtils.loadAnimation(this, R.anim.push_up_in)
-                mFlipper!!.outAnimation = AnimationUtils.loadAnimation(this, R.anim.push_up_out)
+                mFlipper!!.inAnimation =
+                    AnimationUtils.loadAnimation(this, R.anim.push_up_in)
+                mFlipper!!.outAnimation =
+                    AnimationUtils.loadAnimation(this, R.anim.push_up_out)
             }
+
             1 -> {
-                mFlipper!!.inAnimation = AnimationUtils.loadAnimation(this, R.anim.push_left_in)
-                mFlipper!!.outAnimation = AnimationUtils.loadAnimation(this, R.anim.push_left_out)
+                mFlipper!!.inAnimation =
+                    AnimationUtils.loadAnimation(this, R.anim.push_left_in)
+                mFlipper!!.outAnimation =
+                    AnimationUtils.loadAnimation(this, R.anim.push_left_out)
             }
+
             2 -> {
-                mFlipper!!.inAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
-                mFlipper!!.outAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_out)
+                mFlipper!!.inAnimation =
+                    AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
+                mFlipper!!.outAnimation =
+                    AnimationUtils.loadAnimation(this, android.R.anim.fade_out)
             }
+
             else -> {
-                mFlipper!!.inAnimation = AnimationUtils.loadAnimation(this, R.anim.hyperspace_in)
-                mFlipper!!.outAnimation = AnimationUtils.loadAnimation(this, R.anim.hyperspace_out)
+                mFlipper!!.inAnimation =
+                    AnimationUtils.loadAnimation(this, R.anim.hyperspace_in)
+                mFlipper!!.outAnimation =
+                    AnimationUtils.loadAnimation(this, R.anim.hyperspace_out)
             }
         }
     }

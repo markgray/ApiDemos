@@ -43,9 +43,9 @@ class AutoComplete2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.autocomplete_2)
         val adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_dropdown_item_1line,
-            AutoComplete1.COUNTRIES
+            /* context = */ this,
+            /* resource = */ android.R.layout.simple_dropdown_item_1line,
+            /* objects = */ AutoComplete1.COUNTRIES
         )
         val textView = findViewById<AutoCompleteTextView>(R.id.edit)
         textView.setAdapter(adapter)

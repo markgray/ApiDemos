@@ -16,7 +16,6 @@
 package com.example.android.apis.view
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Rect
 import android.os.Build
@@ -25,7 +24,9 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RemoteViews.RemoteView
+import androidx.annotation.RequiresApi
 import com.example.android.apis.R
+import androidx.core.content.withStyledAttributes
 
 /**
  * Example of writing a custom layout manager. This is a fairly full-featured
@@ -33,7 +34,8 @@ import com.example.android.apis.R
  * can simplify it for more specific cases. Used by CustomLayoutActivity.kt in
  * its layout file layout/custom_layout.xml
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 @RemoteView
 class CustomLayout : ViewGroup {
     /**
@@ -75,9 +77,9 @@ class CustomLayout : ViewGroup {
      */
     @JvmOverloads
     constructor(
-            context: Context?,
-            attrs: AttributeSet?,
-            defStyle: Int = 0
+        context: Context?,
+        attrs: AttributeSet?,
+        defStyle: Int = 0
     ) : super(context, attrs, defStyle)
 
     /**
@@ -148,9 +150,15 @@ class CustomLayout : ViewGroup {
         // from their size.
         for (i in 0 until count) {
             val child = getChildAt(i)
-            if (child.visibility != View.GONE) {
+            if (child.visibility != GONE) {
                 // Measure the child.
-                measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
+                measureChildWithMargins(
+                    /* child = */ child,
+                    /* parentWidthMeasureSpec = */ widthMeasureSpec,
+                    /* widthUsed = */ 0,
+                    /* parentHeightMeasureSpec = */ heightMeasureSpec,
+                    /* heightUsed = */ 0
+                )
 
                 // Update our size information based on the layout params.  Children
                 // that asked to be positioned on the left or right go in those gutters.
@@ -158,24 +166,26 @@ class CustomLayout : ViewGroup {
                 when (lp.position) {
                     LayoutParams.POSITION_LEFT -> {
                         mLeftWidth += maxWidth.coerceAtLeast(
-                                child.measuredWidth + lp.leftMargin + lp.rightMargin
+                            child.measuredWidth + lp.leftMargin + lp.rightMargin
                         )
                     }
+
                     LayoutParams.POSITION_RIGHT -> {
                         mRightWidth += maxWidth.coerceAtLeast(
-                                child.measuredWidth + lp.leftMargin + lp.rightMargin
+                            child.measuredWidth + lp.leftMargin + lp.rightMargin
                         )
                     }
+
                     else -> {
                         maxWidth = maxWidth.coerceAtLeast(
-                                child.measuredWidth + lp.leftMargin + lp.rightMargin
+                            child.measuredWidth + lp.leftMargin + lp.rightMargin
                         )
                     }
                 }
                 maxHeight = maxHeight.coerceAtLeast(
-                        child.measuredHeight + lp.topMargin + lp.bottomMargin
+                    child.measuredHeight + lp.topMargin + lp.bottomMargin
                 )
-                childState = View.combineMeasuredStates(childState, child.measuredState)
+                childState = combineMeasuredStates(childState, child.measuredState)
             }
         }
 
@@ -187,9 +197,18 @@ class CustomLayout : ViewGroup {
         maxWidth = maxWidth.coerceAtLeast(suggestedMinimumWidth)
 
         // Report our final dimensions.
-        setMeasuredDimension(View.resolveSizeAndState(maxWidth, widthMeasureSpec, childState),
-                View.resolveSizeAndState(maxHeight, heightMeasureSpec,
-                        childState shl View.MEASURED_HEIGHT_STATE_SHIFT))
+        setMeasuredDimension(
+            /* measuredWidth = */ resolveSizeAndState(
+                /* size = */ maxWidth,
+                /* measureSpec = */ widthMeasureSpec,
+                /* childMeasuredState = */ childState
+            ),
+            /* measuredHeight = */ resolveSizeAndState(
+                /* size = */ maxHeight,
+                /* measureSpec = */ heightMeasureSpec,
+                /* childMeasuredState = */ childState shl MEASURED_HEIGHT_STATE_SHIFT
+            )
+        )
     }
 
     /**
@@ -263,7 +282,7 @@ class CustomLayout : ViewGroup {
         val parentBottom = bottom - top - paddingBottom
         for (i in 0 until count) {
             val child = getChildAt(i)
-            if (child.visibility != View.GONE) {
+            if (child.visibility != GONE) {
                 val lp = child.layoutParams as LayoutParams
                 val width = child.measuredWidth
                 val height = child.measuredHeight
@@ -275,11 +294,13 @@ class CustomLayout : ViewGroup {
                         mTmpContainerRect.right = leftPos + width + lp.rightMargin
                         leftPos = mTmpContainerRect.right
                     }
+
                     LayoutParams.POSITION_RIGHT -> {
                         mTmpContainerRect.right = rightPos - lp.rightMargin
                         mTmpContainerRect.left = rightPos - width - lp.leftMargin
                         rightPos = mTmpContainerRect.left
                     }
+
                     else -> {
                         mTmpContainerRect.left = middleLeft + lp.leftMargin
                         mTmpContainerRect.right = middleRight - lp.rightMargin
@@ -290,11 +311,19 @@ class CustomLayout : ViewGroup {
 
                 // Use the child's gravity and size to determine its final
                 // frame within its container.
-                Gravity.apply(lp.gravity, width, height, mTmpContainerRect, mTmpChildRect)
+                Gravity.apply(
+                    /* gravity = */ lp.gravity,
+                    /* w = */ width,
+                    /* h = */ height,
+                    /* container = */ mTmpContainerRect,
+                    /* outRect = */ mTmpChildRect
+                )
 
                 // Place the child.
-                child.layout(mTmpChildRect.left, mTmpChildRect.top,
-                        mTmpChildRect.right, mTmpChildRect.bottom)
+                child.layout(
+                    mTmpChildRect.left, mTmpChildRect.top,
+                    mTmpChildRect.right, mTmpChildRect.bottom
+                )
             }
         }
     }
@@ -323,7 +352,10 @@ class CustomLayout : ViewGroup {
      * @return a set of default layout parameters or null
      */
     override fun generateDefaultLayoutParams(): LayoutParams {
-        return LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        return LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
     }
 
     /**
@@ -357,12 +389,12 @@ class CustomLayout : ViewGroup {
         /**
          * The gravity to apply with the View to which these layout parameters are associated.
          */
-        var gravity = Gravity.TOP or Gravity.START
+        var gravity: Int = Gravity.TOP or Gravity.START
 
         /**
          * Position of the child whose to which these layout parameters are associated.
          */
-        var position = POSITION_MIDDLE
+        var position: Int = POSITION_MIDDLE
 
         /**
          * Creates a new set of layout parameters. The values are extracted from the supplied
@@ -384,11 +416,10 @@ class CustomLayout : ViewGroup {
             // Pull the layout param values from the layout XML during
             // inflation.  This is not needed if you don't care about
             // changing the layout behavior in XML.
-            @SuppressLint("CustomViewStyleable")
-            val a = c.obtainStyledAttributes(attrs, R.styleable.CustomLayoutLP)
-            gravity = a.getInt(R.styleable.CustomLayoutLP_android_layout_gravity, gravity)
-            position = a.getInt(R.styleable.CustomLayoutLP_layout_position, position)
-            a.recycle()
+            c.withStyledAttributes(set = attrs, attrs = R.styleable.CustomLayoutLP) {
+                gravity = getInt(R.styleable.CustomLayoutLP_android_layout_gravity, gravity)
+                position = getInt(R.styleable.CustomLayoutLP_layout_position, position)
+            }
         }
 
         /**
@@ -412,17 +443,17 @@ class CustomLayout : ViewGroup {
             /**
              * Constant for a child located in the middle of its parent
              */
-            var POSITION_MIDDLE = 0
+            var POSITION_MIDDLE: Int = 0
 
             /**
              * Constant for a child located in the left gutter
              */
-            var POSITION_LEFT = 1
+            var POSITION_LEFT: Int = 1
 
             /**
              * Constant for a child located in the right gutter
              */
-            var POSITION_RIGHT = 2
+            var POSITION_RIGHT: Int = 2
         }
     }
 }

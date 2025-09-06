@@ -19,7 +19,7 @@
 // TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
 package com.example.android.apis.view
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
@@ -38,6 +38,7 @@ import android.widget.ScrollView
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -52,24 +53,23 @@ import com.example.android.apis.R
  * the status bar. The difference is the addition of the flags
  * SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION, and SYSTEM_UI_FLAG_IMMERSIVE.
  */
-@Suppress("UNUSED_PARAMETER", "MemberVisibilityCanBePrivate", "RedundantOverride")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("ObsoleteSdkInt")
+@Suppress("UNUSED_PARAMETER", "MemberVisibilityCanBePrivate")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class ContentBrowserNavActivity :
-        AppCompatActivity(),
-        SearchView.OnQueryTextListener,
-        ActionBar.TabListener
-{
+    AppCompatActivity(),
+    SearchView.OnQueryTextListener,
+    ActionBar.TabListener {
     /**
      * Implementation of a view for displaying immersive content, using system UI
      * flags to transition in and out of modes where the user is focused on that
      * content.
      */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     class Content(context: Context, attrs: AttributeSet?) :
-            ScrollView(context, attrs),
-            OnSystemUiVisibilityChangeListener,
-            View.OnClickListener
-    {
+        ScrollView(context, attrs),
+        OnSystemUiVisibilityChangeListener,
+        View.OnClickListener {
         /**
          * [TextView] we use to display our "content" in (the string with the resource id
          * R.string.alert_dialog_two_buttons2ultra_msg)
@@ -94,7 +94,7 @@ class ContentBrowserNavActivity :
          * UNUSED
          */
         @Suppress("unused")
-        var mNavVisible = false
+        var mNavVisible: Boolean = false
 
         /**
          * These are the visibility flags to be given to `setSystemUiVisibility(int)`, they are
@@ -121,21 +121,21 @@ class ContentBrowserNavActivity :
          * that mode, at the expense that some of its user interface may be covered by screen decorations
          * when they are shown.
          */
-        var mBaseSystemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
+        var mBaseSystemUiVisibility: Int = (SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            or SYSTEM_UI_FLAG_LAYOUT_STABLE or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
 
         /**
          * Current global UI visibility flags received by our [onSystemUiVisibilityChange]
          * callback.
          */
-        var mLastSystemUiVis = 0
+        var mLastSystemUiVis: Int = 0
 
         /**
          * [Runnable] that makes the navigation invisible after a delay of 2000ms. Used by our
          * [onWindowVisibilityChanged] callback in order to show our navigation elements briefly
          * before hiding them.
          */
-        var mNavHider = Runnable { setNavVisibility(false) }
+        var mNavHider: Runnable = Runnable { setNavVisibility(false) }
 
         /**
          * Called by the containing activity to supply the surrounding state of the content browser
@@ -174,8 +174,9 @@ class ContentBrowserNavActivity :
             // is changing from its last state, and turning off.
             val diff = mLastSystemUiVis xor visibility
             mLastSystemUiVis = visibility
-            if (diff and View.SYSTEM_UI_FLAG_LOW_PROFILE != 0
-                    && visibility and View.SYSTEM_UI_FLAG_LOW_PROFILE == 0) {
+            if (diff and SYSTEM_UI_FLAG_LOW_PROFILE != 0
+                && visibility and SYSTEM_UI_FLAG_LOW_PROFILE == 0
+            ) {
                 setNavVisibility(true)
             }
         }
@@ -228,7 +229,7 @@ class ContentBrowserNavActivity :
         override fun onClick(v: View) {
             // When the user clicks, we toggle the visibility of navigation elements.
             val curVis = systemUiVisibility
-            setNavVisibility(curVis and View.SYSTEM_UI_FLAG_LOW_PROFILE != 0)
+            setNavVisibility(curVis and SYSTEM_UI_FLAG_LOW_PROFILE != 0)
         }
 
         /**
@@ -257,12 +258,12 @@ class ContentBrowserNavActivity :
          *
          * @param visible true makes our navigation elements visible, false makes them invisible.
          */
-        @TargetApi(Build.VERSION_CODES.KITKAT)
+        @RequiresApi(Build.VERSION_CODES.KITKAT)
         fun setNavVisibility(visible: Boolean) {
             var newVis = mBaseSystemUiVisibility
             if (!visible) {
-                newVis = newVis or (View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE)
+                newVis = newVis or (SYSTEM_UI_FLAG_LOW_PROFILE or SYSTEM_UI_FLAG_FULLSCREEN
+                    or SYSTEM_UI_FLAG_HIDE_NAVIGATION or SYSTEM_UI_FLAG_IMMERSIVE)
             }
             val changed = newVis == systemUiVisibility
 
@@ -275,8 +276,8 @@ class ContentBrowserNavActivity :
 
             // Set the new desired visibility.
             systemUiVisibility = newVis
-            mTitleView!!.visibility = if (visible) View.VISIBLE else View.INVISIBLE
-            mSeekView!!.visibility = if (visible) View.VISIBLE else View.INVISIBLE
+            mTitleView!!.visibility = if (visible) VISIBLE else INVISIBLE
+            mSeekView!!.visibility = if (visible) VISIBLE else INVISIBLE
         }
 
         /**
@@ -295,8 +296,11 @@ class ContentBrowserNavActivity :
             mText.isClickable = false
             mText.setOnClickListener(this)
             mText.setTextIsSelectable(true)
-            addView(mText, ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+            addView(
+                mText, ViewGroup.LayoutParams(
+                    LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT
+                )
+            )
             setOnSystemUiVisibilityChangeListener(this)
         }
     }
@@ -324,8 +328,10 @@ class ContentBrowserNavActivity :
         window.requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
         setContentView(R.layout.content_browser_nav)
         mContent = findViewById(R.id.content)
-        mContent!!.init(findViewById(R.id.title),
-                findViewById(R.id.seekbar))
+        mContent!!.init(
+            findViewById(R.id.title),
+            findViewById(R.id.seekbar)
+        )
         val bar = supportActionBar
         bar!!.addTab(bar.newTab().setText("Tab 1").setTabListener(this))
         bar.addTab(bar.newTab().setText("Tab 2").setTabListener(this))
@@ -350,7 +356,7 @@ class ContentBrowserNavActivity :
      * @param menu The options menu in which you place your items.
      * @return You must return true for the menu to be displayed.
      */
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    @RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.content_actions, menu)
@@ -455,7 +461,7 @@ class ContentBrowserNavActivity :
      * @param item The menu item that was selected.
      * @return Return false to allow normal menu processing to proceed, true to consume it here.
      */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.show_tabs -> {
@@ -463,15 +469,19 @@ class ContentBrowserNavActivity :
                 item.isChecked = true
                 return true
             }
+
             R.id.hide_tabs -> {
                 supportActionBar!!.navigationMode = ActionBar.NAVIGATION_MODE_STANDARD
                 item.isChecked = true
                 return true
             }
+
             R.id.stable_layout -> {
                 item.isChecked = !item.isChecked
-                mContent!!.setBaseSystemUiVisibility(if (item.isChecked) View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE else View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+                mContent!!.setBaseSystemUiVisibility(
+                    if (item.isChecked) View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE else View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                )
                 return true
             }
         }

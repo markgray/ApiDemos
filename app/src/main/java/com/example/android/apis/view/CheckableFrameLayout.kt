@@ -16,10 +16,10 @@
 package com.example.android.apis.view
 
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
 import android.widget.Checkable
 import android.widget.FrameLayout
+import androidx.core.graphics.drawable.toDrawable
 
 /**
  * While it is used in layout/simple_list_item_checkable_1.xml that file is not used by any demo.
@@ -32,7 +32,7 @@ class CheckableFrameLayout : FrameLayout, Checkable {
 
     override fun setChecked(checked: Boolean) {
         mChecked = checked
-        background = if (checked) ColorDrawable(-0xffff60) else null
+        background = if (checked) (-0xffff60).toDrawable() else null
     }
 
     override fun isChecked(): Boolean {

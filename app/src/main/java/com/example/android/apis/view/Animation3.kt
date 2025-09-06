@@ -53,9 +53,9 @@ class Animation3 : AppCompatActivity(), OnItemSelectedListener {
         setContentView(R.layout.animation_3)
         val s = findViewById<Spinner>(R.id.spinner)
         val adapter = ArrayAdapter(
-                this,
-                android.R.layout.simple_spinner_item,
-                INTERPOLATORS
+            /* context = */ this,
+            /* resource = */ android.R.layout.simple_spinner_item,
+            /* objects = */ INTERPOLATORS
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         s.adapter = adapter
@@ -107,28 +107,52 @@ class Animation3 : AppCompatActivity(), OnItemSelectedListener {
     override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, id: Long) {
         val target = findViewById<View>(R.id.target)
         val targetParent = target.parent as View
-        val a: Animation = TranslateAnimation(0.0f,
-                (targetParent.width - target.width - targetParent.paddingLeft -
-                        targetParent.paddingRight).toFloat(), 0.0f, 0.0f)
+        val a: Animation = TranslateAnimation(
+            /* fromXDelta = */ 0.0f,
+            /* toXDelta = */ (targetParent.width - target.width - targetParent.paddingLeft -
+                targetParent.paddingRight).toFloat(),
+            /* fromYDelta = */ 0.0f,
+            /* toYDelta = */ 0.0f
+        )
         a.duration = 1000
         a.startOffset = 300
         a.repeatMode = Animation.RESTART
         a.repeatCount = Animation.INFINITE
         when (position) {
-            0 -> a.interpolator = AnimationUtils.loadInterpolator(this,
-                    android.R.anim.accelerate_interpolator)
-            1 -> a.interpolator = AnimationUtils.loadInterpolator(this,
-                    android.R.anim.decelerate_interpolator)
-            2 -> a.interpolator = AnimationUtils.loadInterpolator(this,
-                    android.R.anim.accelerate_decelerate_interpolator)
-            3 -> a.interpolator = AnimationUtils.loadInterpolator(this,
-                    android.R.anim.anticipate_interpolator)
-            4 -> a.interpolator = AnimationUtils.loadInterpolator(this,
-                    android.R.anim.overshoot_interpolator)
-            5 -> a.interpolator = AnimationUtils.loadInterpolator(this,
-                    android.R.anim.anticipate_overshoot_interpolator)
-            6 -> a.interpolator = AnimationUtils.loadInterpolator(this,
-                    android.R.anim.bounce_interpolator)
+            0 -> a.interpolator = AnimationUtils.loadInterpolator(
+                this,
+                android.R.anim.accelerate_interpolator
+            )
+
+            1 -> a.interpolator = AnimationUtils.loadInterpolator(
+                this,
+                android.R.anim.decelerate_interpolator
+            )
+
+            2 -> a.interpolator = AnimationUtils.loadInterpolator(
+                this,
+                android.R.anim.accelerate_decelerate_interpolator
+            )
+
+            3 -> a.interpolator = AnimationUtils.loadInterpolator(
+                this,
+                android.R.anim.anticipate_interpolator
+            )
+
+            4 -> a.interpolator = AnimationUtils.loadInterpolator(
+                this,
+                android.R.anim.overshoot_interpolator
+            )
+
+            5 -> a.interpolator = AnimationUtils.loadInterpolator(
+                this,
+                android.R.anim.anticipate_overshoot_interpolator
+            )
+
+            6 -> a.interpolator = AnimationUtils.loadInterpolator(
+                this,
+                android.R.anim.bounce_interpolator
+            )
         }
         target.startAnimation(a)
     }
@@ -146,9 +170,9 @@ class Animation3 : AppCompatActivity(), OnItemSelectedListener {
          * `Spinner` with ID R.id.spinner in our layout file.
          */
         private val INTERPOLATORS = arrayOf(
-                "Accelerate", "Decelerate", "Accelerate/Decelerate",
-                "Anticipate", "Overshoot", "Anticipate/Overshoot",
-                "Bounce"
+            "Accelerate", "Decelerate", "Accelerate/Decelerate",
+            "Anticipate", "Overshoot", "Anticipate/Overshoot",
+            "Bounce"
         )
     }
 }
