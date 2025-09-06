@@ -18,7 +18,6 @@
 package com.example.android.apis.preference
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.preference.PreferenceActivity
 import android.preference.PreferenceManager
@@ -44,11 +43,11 @@ class SwitchPreference : PreferenceActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         PreferenceManager.setDefaultValues(
-                this,
-                "switch",
-                Context.MODE_PRIVATE,
-                R.xml.default_values,
-                false
+            /* context = */ this,
+            /* sharedPreferencesName = */ "switch",
+            /* sharedPreferencesMode = */ MODE_PRIVATE,
+            /* resId = */ R.xml.default_values,
+            /* readAgain = */ false
         )
 
         // Load the preferences from an XML resource

@@ -18,7 +18,6 @@
 package com.example.android.apis.os
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -27,6 +26,7 @@ import android.hardware.SensorManager
 import android.opengl.GLSurfaceView
 import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -45,7 +45,7 @@ import javax.microedition.khronos.opengles.GL10
  * Uses output from [Sensor.TYPE_ROTATION_VECTOR] to change the rotation matrix of an openGL Cube.
  */
 @SuppressLint("ObsoleteSdkInt")
-@TargetApi(Build.VERSION_CODES.GINGERBREAD)
+@RequiresApi(Build.VERSION_CODES.GINGERBREAD)
 class RotationVectorDemo : AppCompatActivity() {
     /**
      * The [GLSurfaceView] we use as our content view, contains a [MyRenderer.Cube]
@@ -76,7 +76,7 @@ class RotationVectorDemo : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // Get an instance of the SensorManager
-        mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
 
         // Create our Preview view and set it as the content of our
         // Activity
@@ -129,7 +129,8 @@ class RotationVectorDemo : AppCompatActivity() {
         /**
          * The default sensor for TYPE_ROTATION_VECTOR (rotation vector sensor type)
          */
-        private val mRotationVectorSensor: Sensor = mSensorManager!!.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)!!
+        private val mRotationVectorSensor: Sensor =
+            mSensorManager!!.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)!!
 
         /**
          * Rotation vector that we multiply the GL_MODELVIEW matrix by before telling our [Cube] field
@@ -145,7 +146,11 @@ class RotationVectorDemo : AppCompatActivity() {
         fun start() {
             // enable our sensor when the activity is resumed, ask for
             // 10 ms updates.
-            mSensorManager!!.registerListener(this, mRotationVectorSensor, 10000)
+            mSensorManager!!.registerListener(
+                /* listener = */ this,
+                /* sensor = */ mRotationVectorSensor,
+                /* samplingPeriodUs = */ 10000
+            )
         }
 
         /**
@@ -171,7 +176,10 @@ class RotationVectorDemo : AppCompatActivity() {
                 // convert the rotation-vector to a 4x4 matrix. the matrix
                 // is interpreted by Open GL as the inverse of the
                 // rotation-vector, which is what we want.
-                SensorManager.getRotationMatrixFromVector(mRotationMatrix, event.values)
+                SensorManager.getRotationMatrixFromVector(
+                    /* R = */ mRotationMatrix,
+                    /* rotationVector = */ event.values
+                )
             }
         }
 
@@ -313,30 +321,30 @@ class RotationVectorDemo : AppCompatActivity() {
              */
             init {
                 val vertices = floatArrayOf(
-                        -1f, -1f, -1f, 1f,
-                        -1f, -1f, 1f, 1f,
-                        -1f, -1f, 1f, -1f,
-                        -1f, -1f, 1f, 1f,
-                        -1f, 1f, 1f, 1f,
-                        1f, -1f, 1f, 1f
+                    -1f, -1f, -1f, 1f,
+                    -1f, -1f, 1f, 1f,
+                    -1f, -1f, 1f, -1f,
+                    -1f, -1f, 1f, 1f,
+                    -1f, 1f, 1f, 1f,
+                    1f, -1f, 1f, 1f
                 )
                 val colors = floatArrayOf(
-                        0f, 0f, 0f, 1f,
-                        1f, 0f, 0f, 1f,
-                        1f, 1f, 0f, 1f,
-                        0f, 1f, 0f, 1f,
-                        0f, 0f, 1f, 1f,
-                        1f, 0f, 1f, 1f,
-                        1f, 1f, 1f, 1f,
-                        0f, 1f, 1f, 1f
+                    0f, 0f, 0f, 1f,
+                    1f, 0f, 0f, 1f,
+                    1f, 1f, 0f, 1f,
+                    0f, 1f, 0f, 1f,
+                    0f, 0f, 1f, 1f,
+                    1f, 0f, 1f, 1f,
+                    1f, 1f, 1f, 1f,
+                    0f, 1f, 1f, 1f
                 )
                 val indices = byteArrayOf(
-                        0, 4, 5, 0, 5, 1,
-                        1, 5, 6, 1, 6, 2,
-                        2, 6, 7, 2, 7, 3,
-                        3, 7, 4, 3, 4, 0,
-                        4, 7, 6, 4, 6, 5,
-                        3, 0, 1, 3, 1, 2
+                    0, 4, 5, 0, 5, 1,
+                    1, 5, 6, 1, 6, 2,
+                    2, 6, 7, 2, 7, 3,
+                    3, 7, 4, 3, 4, 0,
+                    4, 7, 6, 4, 6, 5,
+                    3, 0, 1, 3, 1, 2
                 )
                 val vbb = ByteBuffer.allocateDirect(vertices.size * 4)
                 vbb.order(ByteOrder.nativeOrder())

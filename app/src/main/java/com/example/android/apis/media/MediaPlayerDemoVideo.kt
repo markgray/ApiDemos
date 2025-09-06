@@ -26,17 +26,19 @@ import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.Toast
-
 import androidx.appcompat.app.AppCompatActivity
-
 import com.example.android.apis.R
+import com.example.android.apis.media.MediaPlayerDemoVideo.Companion.LOCAL_AUDIO
+import com.example.android.apis.media.MediaPlayerDemoVideo.Companion.LOCAL_VIDEO
+import com.example.android.apis.media.MediaPlayerDemoVideo.Companion.RESOURCES_AUDIO
+import com.example.android.apis.media.MediaPlayerDemoVideo.Companion.STREAM_AUDIO
+import com.example.android.apis.media.MediaPlayerDemoVideo.Companion.STREAM_VIDEO
 
 /**
  * Activity launched by [MediaPlayerDemo] to play a video file
  */
 class MediaPlayerDemoVideo : AppCompatActivity(), OnBufferingUpdateListener, OnCompletionListener,
-        OnPreparedListener, OnVideoSizeChangedListener, SurfaceHolder.Callback
-{
+    OnPreparedListener, OnVideoSizeChangedListener, SurfaceHolder.Callback {
     /**
      * The width of the video, set by our [onVideoSizeChanged] override, and used to set the
      * surface we are using display our video to a fixed size.
@@ -150,14 +152,16 @@ class MediaPlayerDemoVideo : AppCompatActivity(), OnBufferingUpdateListener, OnC
                     if (path === "") {
                         // Tell the user to provide a media file URL.
                         Toast
-                                .makeText(
-                                        this@MediaPlayerDemoVideo,
-                                        "Please edit MediaPlayerDemo_Video Activity, "
-                                                + "and set the path variable to your media file path."
-                                                + " Your media file must be stored on sdcard.",
-                                        Toast.LENGTH_LONG).show()
+                            .makeText(
+                                this@MediaPlayerDemoVideo,
+                                "Please edit MediaPlayerDemo_Video Activity, "
+                                    + "and set the path variable to your media file path."
+                                    + " Your media file must be stored on sdcard.",
+                                Toast.LENGTH_LONG
+                            ).show()
                     }
                 }
+
                 STREAM_VIDEO -> {
                     /*
                      * TODO: Set path variable to progressive stream-able mp4 or
@@ -171,10 +175,12 @@ class MediaPlayerDemoVideo : AppCompatActivity(), OnBufferingUpdateListener, OnC
                     if (path === "") {
                         // Tell the user to provide a media file URL.
                         Toast
-                                .makeText(
-                                        this@MediaPlayerDemoVideo, "Please edit MediaPlayerDemo_Video Activity,"
-                                        + " and set the path variable to your media file URL.",
-                                        Toast.LENGTH_LONG).show()
+                            .makeText(
+                                this@MediaPlayerDemoVideo,
+                                "Please edit MediaPlayerDemo_Video Activity,"
+                                    + " and set the path variable to your media file URL.",
+                                Toast.LENGTH_LONG
+                            ).show()
                     }
                 }
             }
@@ -243,6 +249,7 @@ class MediaPlayerDemoVideo : AppCompatActivity(), OnBufferingUpdateListener, OnC
         mIsVideoSizeKnown = true
         mVideoWidth = width
         mVideoHeight = height
+        @Suppress("KotlinConstantConditions")
         if (mIsVideoReadyToBePlayed && mIsVideoSizeKnown) {
             startVideoPlayback()
         }
@@ -260,6 +267,7 @@ class MediaPlayerDemoVideo : AppCompatActivity(), OnBufferingUpdateListener, OnC
     override fun onPrepared(mediaplayer: MediaPlayer) {
         Log.d(TAG, "onPrepared called")
         mIsVideoReadyToBePlayed = true
+        @Suppress("KotlinConstantConditions")
         if (mIsVideoReadyToBePlayed && mIsVideoSizeKnown) {
             startVideoPlayback()
         }

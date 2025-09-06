@@ -16,7 +16,6 @@
 package com.example.android.apis.nfc
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentFilter
@@ -27,6 +26,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -34,8 +34,8 @@ import com.example.android.apis.R
  * An example of how to use the NFC foreground dispatch APIs. This will intercept any MIME data
  * based NDEF dispatch as well as all dispatched for NfcF tags.
  */
-@TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
-@SuppressLint("SetTextI18n")
+@RequiresApi(Build.VERSION_CODES.GINGERBREAD_MR1)
+@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
 class ForegroundDispatch : AppCompatActivity() {
     /**
      * Default NFC Adapter
@@ -108,16 +108,19 @@ class ForegroundDispatch : AppCompatActivity() {
                 mPendingIntent = PendingIntent.getActivity(
                     this,
                     0,
-                    Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                    Intent(this, javaClass)
+                        .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
                     PendingIntent.FLAG_MUTABLE
                 )
             }
+
             else -> {
                 @SuppressLint("UnspecifiedImmutableFlag")
                 mPendingIntent = PendingIntent.getActivity(
                     this,
                     0,
-                    Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                    Intent(this, javaClass)
+                        .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
                     0
                 )
             }

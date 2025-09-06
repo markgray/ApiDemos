@@ -16,7 +16,6 @@
 package com.example.android.apis.media
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -37,14 +36,17 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
+import com.example.android.apis.graphics.Utilities.id2p
 
 /**
  * Nifty equalizer with simplified audio waveform display using onWaveFormDataCapture callback of
  * the [Visualizer.OnDataCaptureListener] interface.
  */
-@TargetApi(Build.VERSION_CODES.GINGERBREAD)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.GINGERBREAD)
 class AudioFxDemo : AppCompatActivity() {
     /**
      * [MediaPlayer] that plays test_cbr.mp3
@@ -113,6 +115,7 @@ class AudioFxDemo : AppCompatActivity() {
         mStatusTextView = TextView(this)
         mLinearLayout = LinearLayout(this)
         mLinearLayout!!.orientation = LinearLayout.VERTICAL
+        mLinearLayout!!.setPadding(0, id2p(160), 0, id2p(60))
         mLinearLayout!!.addView(mStatusTextView)
         setContentView(mLinearLayout)
 
@@ -186,8 +189,9 @@ class AudioFxDemo : AppCompatActivity() {
             val band = i.toShort()
             val freqTextView = TextView(this)
             freqTextView.layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT)
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
             freqTextView.gravity = Gravity.CENTER_HORIZONTAL
             freqTextView.text = (mEqualizer!!.getCenterFreq(band) / 1000).toString() + " Hz"
             mLinearLayout!!.addView(freqTextView)
@@ -195,17 +199,20 @@ class AudioFxDemo : AppCompatActivity() {
             row.orientation = LinearLayout.HORIZONTAL
             val minDbTextView = TextView(this)
             minDbTextView.layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT)
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
             minDbTextView.text = (minEQLevel / 100).toString() + " dB"
             val maxDbTextView = TextView(this)
             maxDbTextView.layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT)
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
             maxDbTextView.text = (maxEQLevel / 100).toString() + " dB"
             val layoutParams = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT)
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
             layoutParams.weight = 1f
             val bar = SeekBar(this)
             bar.layoutParams = layoutParams
@@ -217,6 +224,7 @@ class AudioFxDemo : AppCompatActivity() {
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar) {}
+
                 override fun onStopTrackingTouch(seekBar: SeekBar) {}
             })
             row.addView(minDbTextView)
@@ -245,8 +253,9 @@ class AudioFxDemo : AppCompatActivity() {
         // wave form to a Canvas.
         mVisualizerView = VisualizerView(this)
         mVisualizerView!!.layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                (VISUALIZER_HEIGHT_DIP * resources.displayMetrics.density).toInt())
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            (VISUALIZER_HEIGHT_DIP * resources.displayMetrics.density).toInt()
+        )
         mLinearLayout!!.addView(mVisualizerView)
 
         // Create the Visualizer object and attach it to our media player.
@@ -254,17 +263,19 @@ class AudioFxDemo : AppCompatActivity() {
         mVisualizer!!.captureSize = Visualizer.getCaptureSizeRange()[1]
         mVisualizer!!.setDataCaptureListener(object : OnDataCaptureListener {
             override fun onWaveFormDataCapture(
-                    visualizer: Visualizer,
-                    bytes: ByteArray,
-                    samplingRate: Int
+                visualizer: Visualizer,
+                bytes: ByteArray,
+                samplingRate: Int
             ) {
                 mVisualizerView!!.updateVisualizer(bytes)
             }
 
             override fun onFftDataCapture(
-                    visualizer: Visualizer,
-                    bytes: ByteArray,
-                    samplingRate: Int) {}
+                visualizer: Visualizer,
+                bytes: ByteArray,
+                samplingRate: Int
+            ) {
+            }
 
         }, Visualizer.getMaxCaptureRate() / 2, true, false)
     }
@@ -382,10 +393,10 @@ internal class VisualizerView(context: Context?) : View(context) {
         for (i in 0 until mBytes!!.size - 1) {
             mPoints!![i * 4] = mRect.width() * i.toFloat() / (mBytes!!.size - 1)
             mPoints!![i * 4 + 1] = (mRect.height() / 2f
-                    + (mBytes!![i] + 128).toByte() * (mRect.height() / 2f) / 128f)
+                + (mBytes!![i] + 128).toByte() * (mRect.height() / 2f) / 128f)
             mPoints!![i * 4 + 2] = mRect.width() * (i + 1) / (mBytes!!.size - 1f)
             mPoints!![i * 4 + 3] = (mRect.height() / 2f
-                    + (mBytes!![i + 1] + 128f).toInt().toByte() * (mRect.height() / 2f) / 128)
+                + (mBytes!![i + 1] + 128f).toInt().toByte() * (mRect.height() / 2f) / 128)
         }
         canvas.drawLines(mPoints!!, mForePaint)
     }

@@ -15,7 +15,6 @@
  */
 package com.example.android.apis.os
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -27,8 +26,6 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-
-
 
 
 /**
@@ -92,8 +89,8 @@ class MorseCode : AppCompatActivity() {
         val pattern = MorseCodeConverter.pattern(text)
 
         // Start the vibration
-        val vibrator  = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val vibratorManager =  this.getSystemService(Context.VIBRATOR_MANAGER_SERVICE)
+        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager = this.getSystemService(VIBRATOR_MANAGER_SERVICE)
                 as VibratorManager
             vibratorManager.defaultVibrator
         } else {

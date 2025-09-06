@@ -30,6 +30,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
+import com.example.android.apis.preference.LaunchingPreferences.Companion.REQUEST_CODE_PREFERENCES
 
 /**
  * Demonstrates launching a [PreferenceActivity] and grabbing a value it saved.
@@ -81,19 +82,19 @@ class LaunchingPreferences : AppCompatActivity(), View.OnClickListener {
         launchPreferences.text = getString(R.string.launch_preference_activity)
         launchPreferences.setOnClickListener(this)
         layout.addView(
-                launchPreferences,
-                LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                )
+            /* child = */ launchPreferences,
+            /* params = */ LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
         )
         mCounterText = TextView(this)
         layout.addView(
-                mCounterText,
-                LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                )
+            mCounterText,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
         )
         updateCounterText()
     }

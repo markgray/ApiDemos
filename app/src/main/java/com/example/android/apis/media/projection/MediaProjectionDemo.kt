@@ -15,9 +15,7 @@
  */
 package com.example.android.apis.media.projection
 
-import android.annotation.TargetApi
-import android.app.Activity
-import android.content.Context
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
 import android.hardware.display.DisplayManager
@@ -38,15 +36,18 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import android.widget.ToggleButton
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
+import com.example.android.apis.media.projection.MediaProjectionDemo.Companion.RESOLUTIONS
 
 /**
  * Shows how to use a ProjectionManager.createScreenCaptureIntent to capture screen content to a
  * VirtualDisplay which is created using MediaProjection.createVirtualDisplay to display to a
  * SurfaceView.
  */
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class MediaProjectionDemo : AppCompatActivity() {
     /**
      * Screen density expressed as dots-per-inch. May be either DENSITY_LOW, DENSITY_MEDIUM, or
@@ -150,9 +151,13 @@ class MediaProjectionDemo : AppCompatActivity() {
         mScreenDensity = metrics.densityDpi
         mSurfaceView = findViewById(R.id.surface)
         mSurface = mSurfaceView!!.holder.surface
-        mProjectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+        mProjectionManager =
+            getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         val arrayAdapter = ArrayAdapter(
-                this, android.R.layout.simple_list_item_1, RESOLUTIONS)
+            /* context = */ this,
+            /* resource = */ android.R.layout.simple_list_item_1,
+            /* objects = */ RESOLUTIONS
+        )
         val s = findViewById<Spinner>(R.id.spinner)
         s.adapter = arrayAdapter
         s.onItemSelectedListener = ResolutionSelector()
@@ -212,9 +217,11 @@ class MediaProjectionDemo : AppCompatActivity() {
             Log.e(TAG, "Unknown request code: $requestCode")
             return
         }
-        if (resultCode != Activity.RESULT_OK) {
-            Toast.makeText(this,
-                    "User denied screen sharing permission", Toast.LENGTH_SHORT).show()
+        if (resultCode != RESULT_OK) {
+            Toast.makeText(
+                this,
+                "User denied screen sharing permission", Toast.LENGTH_SHORT
+            ).show()
             return
         }
         mMediaProjection = mProjectionManager!!.getMediaProjection(resultCode, data!!)
@@ -254,7 +261,10 @@ class MediaProjectionDemo : AppCompatActivity() {
         }
         if (mMediaProjection == null) {
             @Suppress("DEPRECATION")
-            startActivityForResult(mProjectionManager!!.createScreenCaptureIntent(), PERMISSION_CODE)
+            startActivityForResult(
+                mProjectionManager!!.createScreenCaptureIntent(),
+                PERMISSION_CODE
+            )
             return
         }
         mVirtualDisplay = createVirtualDisplay()
@@ -307,14 +317,15 @@ class MediaProjectionDemo : AppCompatActivity() {
      */
     private fun createVirtualDisplay(): VirtualDisplay {
         return mMediaProjection!!.createVirtualDisplay(
-                "ScreenSharingDemo",
-                mDisplayWidth,
-                mDisplayHeight,
-                mScreenDensity,
-                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
-                mSurface,
-                null /*Callbacks*/,
-                null /*Handler*/)!!
+            "ScreenSharingDemo",
+            mDisplayWidth,
+            mDisplayHeight,
+            mScreenDensity,
+            DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+            mSurface,
+            null /*Callbacks*/,
+            null /*Handler*/
+        )!!
     }
 
     /**
@@ -455,15 +466,16 @@ class MediaProjectionDemo : AppCompatActivity() {
      * @param x x dimension of the resolution
      * @param y y dimension of the resolution
      */
-    (
-            /**
-             * x dimension of the resolution
-             */
-            var x: Int,
-            /**
-             * y dimension of the resolution
-             */
-            var y: Int) {
+        (
+        /**
+         * x dimension of the resolution
+         */
+        var x: Int,
+        /**
+         * y dimension of the resolution
+         */
+        var y: Int
+    ) {
 
         /**
          * Returns a string containing a concise, human-readable description of this object. We

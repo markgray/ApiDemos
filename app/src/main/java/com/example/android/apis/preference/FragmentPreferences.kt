@@ -15,9 +15,10 @@
  */
 package com.example.android.apis.preference
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
 import com.example.android.apis.R
@@ -25,7 +26,8 @@ import com.example.android.apis.R
 /**
  * Demonstration of [PreferenceFragmentCompat], showing a single fragment in an activity.
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentPreferences : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -41,8 +43,8 @@ class FragmentPreferences : AppCompatActivity() {
 
         // Display the fragment as the main content.
         supportFragmentManager.beginTransaction()
-                .replace(android.R.id.content, PrefsFragment())
-                .commit()
+            .replace(android.R.id.content, PrefsFragment())
+            .commit()
     }
 
     /**

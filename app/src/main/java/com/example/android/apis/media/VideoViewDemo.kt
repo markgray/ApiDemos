@@ -15,7 +15,6 @@
  */
 package com.example.android.apis.media
 
-import android.annotation.TargetApi
 import android.content.ClipData
 import android.media.MediaPlayer
 import android.net.Uri
@@ -27,14 +26,16 @@ import android.view.View
 import android.view.View.OnDragListener
 import android.widget.MediaController
 import android.widget.VideoView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import com.example.android.apis.R
 
 /**
  * Shows how to use the [VideoView] class in an application to play a video, as well as a
  * [MediaController] to provide control buttons for the playback.
  */
-@TargetApi(Build.VERSION_CODES.N)
+@RequiresApi(Build.VERSION_CODES.N)
 class VideoViewDemo : AppCompatActivity() {
     /**
      * [VideoView] in our layout that we use to display our video (ID R.id.surface_view)
@@ -56,7 +57,7 @@ class VideoViewDemo : AppCompatActivity() {
         super.onCreate(icicle)
         setContentView(R.layout.videoview)
         mVideoView = findViewById(R.id.surface_view)
-        initPlayer(Uri.parse("android.resource://" + packageName + "/" + R.raw.videoviewdemo))
+        initPlayer(("android.resource://" + packageName + "/" + R.raw.videoviewdemo).toUri())
         mVideoView!!.setOnDragListener(mDragListener)
     }
 

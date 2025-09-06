@@ -1457,7 +1457,7 @@
             android:enabled="@bool/atLeastHoneycomb"
             android:exported="true"
             android:label="@string/fragment_preferences"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -1511,7 +1511,7 @@
             android:name=".preference.LaunchingPreferences"
             android:exported="true"
             android:label="@string/launching_preferences"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -4197,7 +4197,8 @@
             android:name=".media.VideoViewDemo"
             android:exported="true"
             android:label="Media/VideoView"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            tools:targetApi="24">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

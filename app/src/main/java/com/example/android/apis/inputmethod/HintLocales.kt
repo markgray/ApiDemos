@@ -22,6 +22,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.graphics.Utilities.id2p
 
 /**
  * Provide some [EditText] which specify different [android.view.inputmethod.EditorInfo.hintLocales]
@@ -76,6 +77,7 @@ class HintLocales : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val layout = LinearLayout(this)
         layout.orientation = LinearLayout.VERTICAL
+        layout.setPadding(0, id2p(160), 0, id2p(60))
 
         // Test EditorInfo#hintLocales = null. This is the default behavior and should be the same
         // to the behavior in Android M and prior.
@@ -87,21 +89,43 @@ class HintLocales : AppCompatActivity() {
         layout.addView(createEditTextWithImeHintLocales(LocaleList.forLanguageTags("en-US")))
 
         // Likewise, this gives a hint as a list of locales in the order of likelihood.
-        layout.addView(createEditTextWithImeHintLocales(
-                LocaleList.forLanguageTags("en-GB,en-US,en")))
+        layout.addView(
+            /* child = */ createEditTextWithImeHintLocales(
+                hintLocales = LocaleList.forLanguageTags(/* list = */ "en-GB,en-US,en")
+            )
+        )
 
         // Being able to support 3-letter language code correctly is really important.
-        layout.addView(createEditTextWithImeHintLocales(LocaleList.forLanguageTags("fil-ph")))
+        layout.addView(
+            createEditTextWithImeHintLocales(
+                LocaleList.forLanguageTags("fil-ph")
+            )
+        )
 
         // Likewise, test some more locales.
-        layout.addView(createEditTextWithImeHintLocales(LocaleList.forLanguageTags("fr")))
-        layout.addView(createEditTextWithImeHintLocales(LocaleList.forLanguageTags("zh_CN")))
-        layout.addView(createEditTextWithImeHintLocales(LocaleList.forLanguageTags("ja")))
+        layout.addView(
+            createEditTextWithImeHintLocales(
+                LocaleList.forLanguageTags("fr")
+            )
+        )
+        layout.addView(
+            createEditTextWithImeHintLocales(
+                LocaleList.forLanguageTags("zh_CN")
+            )
+        )
+        layout.addView(
+            createEditTextWithImeHintLocales(
+                LocaleList.forLanguageTags("ja")
+            )
+        )
 
         // Test more complex BCP 47 language tag.  Here the subtag starts with "x-" is a private-use
         // sub-tags.
-        layout.addView(createEditTextWithImeHintLocales(
-                LocaleList.forLanguageTags("ryu-Kana-JP-x-android")))
+        layout.addView(
+            createEditTextWithImeHintLocales(
+                LocaleList.forLanguageTags("ryu-Kana-JP-x-android")
+            )
+        )
         setContentView(layout)
     }
 }

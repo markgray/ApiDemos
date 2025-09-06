@@ -3,9 +3,8 @@ package com.example.android.apis.graphics
 import android.content.res.Resources
 
 /**
- * Contains important graphics utility methods which are unused :)
+ * Contains important graphics utility methods
  */
-@Suppress("unused")
 object Utilities {
     /**
      * Converts density-independent [Float] pixels (dp) to physical [Float] pixels (px).

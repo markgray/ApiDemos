@@ -15,6 +15,14 @@
  */
 package com.example.android.apis.os
 
+import com.example.android.apis.os.MorseCodeConverter.ERROR_GAP
+import com.example.android.apis.os.MorseCodeConverter.LETTERS
+import com.example.android.apis.os.MorseCodeConverter.LETTER_GAP
+import com.example.android.apis.os.MorseCodeConverter.NUMBERS
+import com.example.android.apis.os.MorseCodeConverter.WORD_GAP
+import com.example.android.apis.os.MorseCodeConverter.pattern
+
+
 /**
  * Class that implements the text to morse code conversion
  */
@@ -53,36 +61,36 @@ internal object MorseCodeConverter {
      * The characters from 'A' to 'Z'
      */
     private val LETTERS = arrayOf(
-            longArrayOf(DOT, GAP, DASH), longArrayOf(DASH, GAP, DOT, GAP, DOT, GAP, DOT),
-            longArrayOf(DASH, GAP, DOT, GAP, DASH, GAP, DOT), longArrayOf(DASH, GAP, DOT, GAP, DOT),
-            longArrayOf(DOT), longArrayOf(DOT, GAP, DOT, GAP, DASH, GAP, DOT),
-            longArrayOf(DASH, GAP, DASH, GAP, DOT), longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DOT),
-            longArrayOf(DOT, GAP, DOT), longArrayOf(DOT, GAP, DASH, GAP, DASH, GAP, DASH),
-            longArrayOf(DASH, GAP, DOT, GAP, DASH), longArrayOf(DOT, GAP, DASH, GAP, DOT, GAP, DOT),
-            longArrayOf(DASH, GAP, DASH), longArrayOf(DASH, GAP, DOT),
-            longArrayOf(DASH, GAP, DASH, GAP, DASH), longArrayOf(DOT, GAP, DASH, GAP, DASH, GAP, DOT),
-            longArrayOf(DASH, GAP, DASH, GAP, DOT, GAP, DASH), longArrayOf(DOT, GAP, DASH, GAP, DOT),
-            longArrayOf(DOT, GAP, DOT, GAP, DOT), longArrayOf(DASH),
-            longArrayOf(DOT, GAP, DOT, GAP, DASH), longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DASH),
-            longArrayOf(DOT, GAP, DASH, GAP, DASH), longArrayOf(DASH, GAP, DOT, GAP, DOT, GAP, DASH),
-            longArrayOf(DASH, GAP, DOT, GAP, DASH, GAP, DASH),
-            longArrayOf(DASH, GAP, DASH, GAP, DOT, GAP, DOT)
+        longArrayOf(DOT, GAP, DASH), longArrayOf(DASH, GAP, DOT, GAP, DOT, GAP, DOT),
+        longArrayOf(DASH, GAP, DOT, GAP, DASH, GAP, DOT), longArrayOf(DASH, GAP, DOT, GAP, DOT),
+        longArrayOf(DOT), longArrayOf(DOT, GAP, DOT, GAP, DASH, GAP, DOT),
+        longArrayOf(DASH, GAP, DASH, GAP, DOT), longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DOT),
+        longArrayOf(DOT, GAP, DOT), longArrayOf(DOT, GAP, DASH, GAP, DASH, GAP, DASH),
+        longArrayOf(DASH, GAP, DOT, GAP, DASH), longArrayOf(DOT, GAP, DASH, GAP, DOT, GAP, DOT),
+        longArrayOf(DASH, GAP, DASH), longArrayOf(DASH, GAP, DOT),
+        longArrayOf(DASH, GAP, DASH, GAP, DASH), longArrayOf(DOT, GAP, DASH, GAP, DASH, GAP, DOT),
+        longArrayOf(DASH, GAP, DASH, GAP, DOT, GAP, DASH), longArrayOf(DOT, GAP, DASH, GAP, DOT),
+        longArrayOf(DOT, GAP, DOT, GAP, DOT), longArrayOf(DASH),
+        longArrayOf(DOT, GAP, DOT, GAP, DASH), longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DASH),
+        longArrayOf(DOT, GAP, DASH, GAP, DASH), longArrayOf(DASH, GAP, DOT, GAP, DOT, GAP, DASH),
+        longArrayOf(DASH, GAP, DOT, GAP, DASH, GAP, DASH),
+        longArrayOf(DASH, GAP, DASH, GAP, DOT, GAP, DOT)
     )
 
     /**
      * The characters from '0' to '9'
      */
     private val NUMBERS = arrayOf(
-            longArrayOf(DASH, GAP, DASH, GAP, DASH, GAP, DASH, GAP, DASH),
-            longArrayOf(DOT, GAP, DASH, GAP, DASH, GAP, DASH, GAP, DASH),
-            longArrayOf(DOT, GAP, DOT, GAP, DASH, GAP, DASH, GAP, DASH),
-            longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DASH, GAP, DASH),
-            longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DOT, GAP, DASH),
-            longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DOT, GAP, DOT),
-            longArrayOf(DASH, GAP, DOT, GAP, DOT, GAP, DOT, GAP, DOT),
-            longArrayOf(DASH, GAP, DASH, GAP, DOT, GAP, DOT, GAP, DOT),
-            longArrayOf(DASH, GAP, DASH, GAP, DASH, GAP, DOT, GAP, DOT),
-            longArrayOf(DASH, GAP, DASH, GAP, DASH, GAP, DASH, GAP, DOT)
+        longArrayOf(DASH, GAP, DASH, GAP, DASH, GAP, DASH, GAP, DASH),
+        longArrayOf(DOT, GAP, DASH, GAP, DASH, GAP, DASH, GAP, DASH),
+        longArrayOf(DOT, GAP, DOT, GAP, DASH, GAP, DASH, GAP, DASH),
+        longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DASH, GAP, DASH),
+        longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DOT, GAP, DASH),
+        longArrayOf(DOT, GAP, DOT, GAP, DOT, GAP, DOT, GAP, DOT),
+        longArrayOf(DASH, GAP, DOT, GAP, DOT, GAP, DOT, GAP, DOT),
+        longArrayOf(DASH, GAP, DASH, GAP, DOT, GAP, DOT, GAP, DOT),
+        longArrayOf(DASH, GAP, DASH, GAP, DASH, GAP, DOT, GAP, DOT),
+        longArrayOf(DASH, GAP, DASH, GAP, DASH, GAP, DASH, GAP, DOT)
     )
 
     /**
@@ -109,9 +117,11 @@ internal object MorseCodeConverter {
             in 'a'..'z' -> {
                 LETTERS[c - 'a']
             }
+
             in '0'..'9' -> {
                 NUMBERS[c - '0']
             }
+
             else -> {
                 ERROR_GAP
             }

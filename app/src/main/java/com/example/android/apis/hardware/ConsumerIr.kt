@@ -89,18 +89,20 @@ class ConsumerIr : AppCompatActivity() {
      * pattern if our device has an infrared emitter.
      */
     var mSendClickListener: View.OnClickListener = View.OnClickListener {
-        if (mCIR == null ||!mCIR!!.hasIrEmitter()) {
+        if (mCIR == null || !mCIR!!.hasIrEmitter()) {
             Log.e(TAG, "No IR Emitter found\n")
             return@OnClickListener
         }
 
         // A pattern of alternating series of carrier on and off periods measured in
         // microseconds.
-        val pattern = intArrayOf(1901, 4453, 625, 1614, 625, 1588, 625, 1614, 625, 442, 625,
-                442, 625, 468, 625, 442, 625, 494, 572, 1614, 625, 1588, 625, 1614, 625, 494, 572,
-                442, 651, 442, 625, 442, 625, 442, 625, 1614, 625, 1588, 651, 1588, 625, 442, 625,
-                494, 598, 442, 625, 442, 625, 520, 572, 442, 625, 442, 625, 442, 651, 1588, 625,
-                1614, 625, 1588, 625, 1614, 625, 1588, 625, 48958)
+        val pattern = intArrayOf(
+            1901, 4453, 625, 1614, 625, 1588, 625, 1614, 625, 442, 625,
+            442, 625, 468, 625, 442, 625, 494, 572, 1614, 625, 1588, 625, 1614, 625, 494, 572,
+            442, 651, 442, 625, 442, 625, 442, 625, 1614, 625, 1588, 651, 1588, 625, 442, 625,
+            494, 598, 442, 625, 442, 625, 520, 572, 442, 625, 442, 625, 442, 651, 1588, 625,
+            1614, 625, 1588, 625, 1614, 625, 1588, 625, 48958
+        )
 
         // transmit the pattern at 38.4KHz
         mCIR!!.transmit(38400, pattern)

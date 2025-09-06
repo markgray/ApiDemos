@@ -15,7 +15,7 @@
  */
 package com.example.android.apis.os
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
@@ -24,6 +24,7 @@ import android.hardware.TriggerEventListener
 import android.os.Build
 import android.os.Bundle
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -40,7 +41,8 @@ import com.example.android.apis.R
  *  * os/TriggerSensors.java
  *  * res/layout/trigger_sensors.xml
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class TriggerSensors : AppCompatActivity() {
     /**
      * A [SensorManager] we use for accessing sensors.
@@ -82,7 +84,7 @@ class TriggerSensors : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.trigger_sensors)
-        mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         mSigMotion = mSensorManager!!.getDefaultSensor(Sensor.TYPE_SIGNIFICANT_MOTION)
         mTextView = findViewById(R.id.text)
         mListener = TriggerListener(this, mTextView)
@@ -132,17 +134,15 @@ class TriggerSensors : AppCompatActivity() {
 
 /**
  * [TriggerEventListener] for the TYPE_SIGNIFICANT_MOTION sensor (significant motion trigger sensor)
+ *
+ * @property mContext [Context] to use for accessing resources
+ * @property mTextView [TextView] to use to display information to the user in.
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-internal class TriggerListener (
-        /**
-         * [Context] to use for accessing resources
-         */
-        private val mContext: Context,
-        /**
-         * [TextView] to use to display information to the user in.
-         */
-        private val mTextView: TextView?
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+internal class TriggerListener(
+    private val mContext: Context,
+    private val mTextView: TextView?
 
 ) : TriggerEventListener() {
 

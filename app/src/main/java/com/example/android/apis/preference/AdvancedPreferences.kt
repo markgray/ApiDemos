@@ -27,6 +27,8 @@ import android.preference.CheckBoxPreference
 import android.preference.PreferenceActivity
 import android.widget.Toast
 import com.example.android.apis.R
+import com.example.android.apis.preference.AdvancedPreferences.Companion.KEY_ADVANCED_CHECKBOX_PREFERENCE
+import com.example.android.apis.preference.AdvancedPreferences.Companion.KEY_MY_PREFERENCE
 
 /**
  * Example that shows finding a preference from the hierarchy and a custom preference type.
@@ -131,8 +133,10 @@ class AdvancedPreferences : PreferenceActivity(), OnSharedPreferenceChangeListen
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         // Let's do something when my counter preference value changes
         if (key == KEY_MY_PREFERENCE) {
-            Toast.makeText(this, "Thanks! You increased my count to "
-                + sharedPreferences!!.getInt(key, 0), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this, "Thanks! You increased my count to " +
+                    sharedPreferences!!.getInt(key, 0), Toast.LENGTH_SHORT
+            ).show()
         }
     }
 

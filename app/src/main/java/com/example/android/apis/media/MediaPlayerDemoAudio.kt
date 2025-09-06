@@ -23,6 +23,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
+import com.example.android.apis.media.MediaPlayerDemoAudio.Companion.LOCAL_AUDIO
+import com.example.android.apis.media.MediaPlayerDemoAudio.Companion.LOCAL_VIDEO
+import com.example.android.apis.media.MediaPlayerDemoAudio.Companion.RESOURCES_AUDIO
+import com.example.android.apis.media.MediaPlayerDemoAudio.Companion.STREAM_AUDIO
+import com.example.android.apis.media.MediaPlayerDemoAudio.Companion.STREAM_VIDEO
 
 /**
  * Activity launched by `MediaPlayerDemo` to play an audio file
@@ -95,17 +100,20 @@ class MediaPlayerDemoAudio : AppCompatActivity() {
                     path = ""
                     if (path === "") {
                         // Tell the user to provide an audio file URL.
-                        Toast.makeText(this@MediaPlayerDemoAudio,
-                                "Please edit MediaPlayer_Audio Activity, "
-                                        + "and set the path variable to your audio file path."
-                                        + " Your audio file must be stored on sdcard.",
-                                Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            /* context = */ this@MediaPlayerDemoAudio,
+                            /* text = */ "Please edit MediaPlayer_Audio Activity, "
+                                + "and set the path variable to your audio file path."
+                                + " Your audio file must be stored on sdcard.",
+                            /* duration = */ Toast.LENGTH_LONG
+                        ).show()
                     }
                     mMediaPlayer = MediaPlayer()
                     mMediaPlayer!!.setDataSource(path)
                     mMediaPlayer!!.prepare()
                     mMediaPlayer!!.start()
                 }
+
                 RESOURCES_AUDIO -> {
                     mMediaPlayer = MediaPlayer.create(this, R.raw.test_cbr)
                     mMediaPlayer!!.start()

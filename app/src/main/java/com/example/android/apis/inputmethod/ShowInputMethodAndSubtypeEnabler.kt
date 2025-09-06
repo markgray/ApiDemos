@@ -27,7 +27,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import java.util.ArrayList
+import com.example.android.apis.graphics.Utilities.id2p
+import com.example.android.apis.inputmethod.ShowInputMethodAndSubtypeEnabler.Companion.showInputMethodAndSubtypeEnabler
 
 /**
  * Demonstrates how to show the input method subtype enabler without relying on
@@ -63,13 +64,14 @@ class ShowInputMethodAndSubtypeEnabler : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val layout = LinearLayout(this)
         layout.orientation = LinearLayout.VERTICAL
+        layout.setPadding(0, id2p(160), 0, id2p(60))
         run {
             val button = Button(this)
             button.text = "Show (All IMEs)"
             button.setOnClickListener { v: View? ->
                 showInputMethodAndSubtypeEnabler(
-                        this@ShowInputMethodAndSubtypeEnabler,
-                        null
+                    this@ShowInputMethodAndSubtypeEnabler,
+                    null
                 )
             }
             layout.addView(button)
@@ -80,8 +82,8 @@ class ShowInputMethodAndSubtypeEnabler : AppCompatActivity() {
             button.text = "Show ($id)"
             button.setOnClickListener { v: View? ->
                 showInputMethodAndSubtypeEnabler(
-                        this@ShowInputMethodAndSubtypeEnabler,
-                        id
+                    this@ShowInputMethodAndSubtypeEnabler,
+                    id
                 )
             }
             layout.addView(button)
@@ -103,7 +105,7 @@ class ShowInputMethodAndSubtypeEnabler : AppCompatActivity() {
     @Suppress("SENSELESS_COMPARISON")
     private val enabledInputMethodsThatHaveMultipleSubtypes: List<InputMethodInfo>
         get() {
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             val result: MutableList<InputMethodInfo> = ArrayList()
             if (imm == null) {
                 return result
@@ -144,8 +146,8 @@ class ShowInputMethodAndSubtypeEnabler : AppCompatActivity() {
         fun showInputMethodAndSubtypeEnabler(context: Context, inputMethodId: String?) {
             val intent = Intent(Settings.ACTION_INPUT_METHOD_SUBTYPE_SETTINGS)
             intent.flags = (Intent.FLAG_ACTIVITY_NEW_TASK
-                    or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
-                    or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+                or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             if (!TextUtils.isEmpty(inputMethodId)) {
                 intent.putExtra(Settings.EXTRA_INPUT_METHOD_ID, inputMethodId)
             }

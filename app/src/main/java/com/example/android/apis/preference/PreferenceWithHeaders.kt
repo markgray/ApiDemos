@@ -18,7 +18,6 @@
 package com.example.android.apis.preference
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceActivity
@@ -26,6 +25,7 @@ import android.preference.PreferenceFragment
 import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Button
+import androidx.annotation.RequiresApi
 import com.example.android.apis.R
 
 /**
@@ -33,8 +33,8 @@ import com.example.android.apis.R
  * headers which when clicked launch the PreferenceFragment's listed in the xml/preference_headers.xml
  * resource loaded using loadHeadersFromResource.
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-@SuppressLint("SetTextI18n")
+@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class PreferenceWithHeaders : PreferenceActivity() {
     /**
      * Called when the [PreferenceActivity] is starting. First we call through to our super's
@@ -115,7 +115,11 @@ class PreferenceWithHeaders : PreferenceActivity() {
             // Make sure default values are applied.  In a real app, you would
             // want this in a shared function that is used to retrieve the
             // SharedPreferences wherever they are needed.
-            PreferenceManager.setDefaultValues(activity, R.xml.advanced_preferences, false)
+            PreferenceManager.setDefaultValues(
+                /* context = */ activity,
+                /* resId = */ R.xml.advanced_preferences,
+                /* readAgain = */ false
+            )
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.fragmented_preferences)

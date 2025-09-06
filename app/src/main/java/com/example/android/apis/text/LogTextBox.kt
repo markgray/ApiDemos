@@ -47,9 +47,9 @@ class LogTextBox
  */
 @JvmOverloads
 constructor(
-        context: Context?,
-        attrs: AttributeSet? = null,
-        defStyle: Int = android.R.attr.textViewStyle
+    context: Context?,
+    attrs: AttributeSet? = null,
+    defStyle: Int = android.R.attr.textViewStyle
 ) : AppCompatTextView(context!!, attrs, defStyle) {
     /**
      * Subclasses override this to specify a default movement method. We return an instance of

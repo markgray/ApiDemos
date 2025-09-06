@@ -19,7 +19,6 @@
 package com.example.android.apis.security
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.os.AsyncTask
 import android.os.Build
@@ -35,6 +34,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import java.io.IOException
@@ -49,14 +49,13 @@ import java.security.Signature
 import java.security.SignatureException
 import java.security.UnrecoverableEntryException
 import java.security.cert.CertificateException
-import java.util.ArrayList
 import java.util.Enumeration
 
 /**
  * Shows how to use api to generate Key pairs, sign and verify.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.M)
+@RequiresApi(Build.VERSION_CODES.M)
 @SuppressLint("SetTextI18n")
 class KeyStoreUsage : AppCompatActivity() {
     /**
@@ -177,14 +176,14 @@ class KeyStoreUsage : AppCompatActivity() {
         mAdapter = AliasAdapter(applicationContext)
         lv.adapter = mAdapter
         lv.choiceMode = ListView.CHOICE_MODE_SINGLE
-        lv.onItemClickListener = OnItemClickListener {
-            _: AdapterView<*>?,
-            _: View?,
-            position: Int,
-            _: Long ->
-            mSelectedAlias = mAdapter!!.getItem(position)
-            setKeyActionButtonsEnabled(true)
-        }
+        lv.onItemClickListener =
+            OnItemClickListener { _: AdapterView<*>?,
+                                  _: View?,
+                                  position: Int,
+                                  _: Long ->
+                mSelectedAlias = mAdapter!!.getItem(position)
+                setKeyActionButtonsEnabled(true)
+            }
 
         // This is alias the user wants for a generated key.
         val aliasInput = findViewById<EditText>(R.id.entry_name)
@@ -240,13 +239,17 @@ class KeyStoreUsage : AppCompatActivity() {
         mPlainText = findViewById(R.id.plaintext)
         mPlainText!!.setOnFocusChangeListener { _: View?, _: Boolean ->
             @Suppress("DEPRECATION")
-            mPlainText!!.setTextColor(resources.getColor(android.R.color.primary_text_dark, null))
+            mPlainText!!.setTextColor(
+                resources.getColor(android.R.color.primary_text_dark, null)
+            )
         }
         mCipherText = findViewById(R.id.ciphertext)
         mCipherText!!.setOnFocusChangeListener { _: View?, _: Boolean ->
             @Suppress("DEPRECATION")
-            mCipherText!!.setTextColor(resources
-                    .getColor(android.R.color.primary_text_dark, null))
+            mCipherText!!.setTextColor(
+                resources
+                    .getColor(android.R.color.primary_text_dark, null)
+            )
         }
         updateKeyList()
     }
@@ -263,9 +266,9 @@ class KeyStoreUsage : AppCompatActivity() {
      *
      * @param context [Context] to use to access resources.
      */
-    (context: Context?) : ArrayAdapter<String?>(
-            context!!,
-            android.R.layout.simple_list_item_single_choice
+        (context: Context?) : ArrayAdapter<String?>(
+        context!!,
+        android.R.layout.simple_list_item_single_choice
     ) {
         /**
          * This clears out all previous aliases and replaces it with the current entries. First we
@@ -404,16 +407,18 @@ class KeyStoreUsage : AppCompatActivity() {
                  * SHA-512 as the message digest.
                  */
                 val kpg = KeyPairGenerator.getInstance(
-                        KeyProperties.KEY_ALGORITHM_EC,
-                        "AndroidKeyStore"
+                    /* algorithm = */ KeyProperties.KEY_ALGORITHM_EC,
+                    /* provider = */ "AndroidKeyStore"
                 )
-                kpg.initialize(KeyGenParameterSpec.Builder(
-                                alias!!,
-                                KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY
-                        )
+                kpg.initialize(
+                    KeyGenParameterSpec.Builder(
+                        /* keystoreAlias = */ alias!!,
+                        /* purposes = */ KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY
+                    )
                         .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
-                        .build())
-                @Suppress("UNUSED_VARIABLE")
+                        .build()
+                )
+                @Suppress("UNUSED_VARIABLE", "unused")
                 val kp = kpg.generateKeyPair()
                 true
             } catch (e: NoSuchAlgorithmException) {
@@ -582,7 +587,7 @@ class KeyStoreUsage : AppCompatActivity() {
                 val data = dataString!!.toByteArray()
                 val signature: ByteArray? = try {
                     Base64.decode(signatureString, Base64.DEFAULT)
-                } catch (e: IllegalArgumentException) {
+                } catch (_: IllegalArgumentException) {
                     ByteArray(0)
                 }
 

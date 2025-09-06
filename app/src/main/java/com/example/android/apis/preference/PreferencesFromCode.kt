@@ -18,9 +18,7 @@
 package com.example.android.apis.preference
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.preference.CheckBoxPreference
@@ -30,14 +28,16 @@ import android.preference.PreferenceActivity
 import android.preference.PreferenceCategory
 import android.preference.PreferenceScreen
 import android.preference.SwitchPreference
-
+import androidx.annotation.RequiresApi
+import androidx.core.content.withStyledAttributes
+import androidx.core.net.toUri
 import com.example.android.apis.R
 
 /**
  * Shows how to fill a PreferenceScreen using java code.
  */
-@SuppressLint("ExportedPreferenceActivity")
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+@SuppressLint("ExportedPreferenceActivity", "ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class PreferencesFromCode : PreferenceActivity() {
     /**
      * Called when the [PreferenceActivity] is starting. First we call through to our super's
@@ -190,7 +190,7 @@ class PreferencesFromCode : PreferenceActivity() {
         // Intent preference
         val intentPref = preferenceManager.createPreferenceScreen(this)
         intentPref.intent = Intent().setAction(Intent.ACTION_VIEW)
-                .setData(Uri.parse("http://www.android.com"))
+            .setData("http://www.android.com".toUri())
         intentPref.setTitle(R.string.title_intent_preference)
         intentPref.setSummary(R.string.summary_intent_preference)
         launchPrefCat.addPreference(intentPref)
@@ -210,14 +210,15 @@ class PreferencesFromCode : PreferenceActivity() {
         // Visual child toggle preference
         // See res/values/attrs.xml for the <declare-styleable> that defines
         // TogglePrefAttrs.
-        val a = obtainStyledAttributes(R.styleable.TogglePrefAttrs)
-        val childCheckBoxPref = CheckBoxPreference(this)
-        childCheckBoxPref.setTitle(R.string.title_child_preference)
-        childCheckBoxPref.setSummary(R.string.summary_child_preference)
-        childCheckBoxPref.layoutResource = a.getResourceId(R.styleable.TogglePrefAttrs_android_preferenceLayoutChild, 0)
-        prefAttrsCat.addPreference(childCheckBoxPref)
-        childCheckBoxPref.dependency = PARENT_CHECKBOX_PREFERENCE
-        a.recycle()
+        withStyledAttributes(null, R.styleable.TogglePrefAttrs) {
+            val childCheckBoxPref = CheckBoxPreference(this@PreferencesFromCode)
+            childCheckBoxPref.setTitle(R.string.title_child_preference)
+            childCheckBoxPref.setSummary(R.string.summary_child_preference)
+            childCheckBoxPref.layoutResource =
+                getResourceId(R.styleable.TogglePrefAttrs_android_preferenceLayoutChild, 0)
+            prefAttrsCat.addPreference(childCheckBoxPref)
+            childCheckBoxPref.dependency = PARENT_CHECKBOX_PREFERENCE
+        }
     }
 
     companion object {

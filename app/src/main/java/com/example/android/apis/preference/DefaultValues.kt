@@ -25,6 +25,8 @@ import android.preference.Preference
 import android.preference.PreferenceActivity
 import android.preference.PreferenceManager
 import com.example.android.apis.R
+import com.example.android.apis.preference.DefaultValues.Companion.PREFS_NAME
+import com.example.android.apis.preference.DefaultValues.Companion.getPrefs
 
 /**
  * This activity is an example of a simple settings screen that has default values. In order for the
@@ -64,7 +66,7 @@ class DefaultValues : PreferenceActivity() {
          * to be unique from other preferences so that we do not have unexpected name conflicts, and the
          * framework can correctly determine whether these preferences' defaults have already been written.
          */
-        const val PREFS_NAME = "defaults"
+        const val PREFS_NAME: String = "defaults"
 
         /**
          * Called to set the default values for the shared preferences file [PREFS_NAME] ("defaults"),
@@ -75,8 +77,14 @@ class DefaultValues : PreferenceActivity() {
          * @return our [SharedPreferences] read from [PREFS_NAME] ("defaults") (Unused by our caller)
          */
         fun getPrefs(context: Context): SharedPreferences {
-            PreferenceManager.setDefaultValues(context, PREFS_NAME, Context.MODE_PRIVATE, R.xml.default_values, false)
-            return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            PreferenceManager.setDefaultValues(
+                /* context = */ context,
+                /* sharedPreferencesName = */ PREFS_NAME,
+                /* sharedPreferencesMode = */ MODE_PRIVATE,
+                /* resId = */ R.xml.default_values,
+                /* readAgain = */ false
+            )
+            return context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
         }
     }
 }
