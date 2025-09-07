@@ -17,7 +17,7 @@ package com.example.android.apis.view
 
 // TODO: Update to use of VibratorManager
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -31,7 +31,12 @@ import android.view.InputDevice
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
-import java.util.ArrayList
+import androidx.annotation.RequiresApi
+import androidx.core.graphics.withTranslation
+import com.example.android.apis.view.GameView.Companion.getCenteredAxis
+import com.example.android.apis.view.GameView.Companion.isFireKey
+import com.example.android.apis.view.GameView.Companion.pythag
+import com.example.android.apis.view.GameView.Companion.setPaintARGBBlend
 import java.util.Random
 import kotlin.math.abs
 import kotlin.math.atan2
@@ -47,9 +52,14 @@ import kotlin.math.sin
  * system vibrator is used for that purpose.
  *
  * see [GameControllerInput]
+ *
+ * @param context The [Context] the view is running in, through which it can access the current
+ * theme, resources, etc.
+ * @param attrs The attributes of the XML tag that is inflating the view.
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     /**
@@ -65,12 +75,12 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     /**
      * List of [Bullet] objects that are currently in flight.
      */
-    private val mBullets: MutableList<Bullet>
+    private val mBullets: MutableList<Bullet> = ArrayList()
 
     /**
      * List of [Obstacle] objects that are currently in existence.
      */
-    private val mObstacles: MutableList<Obstacle>
+    private val mObstacles: MutableList<Obstacle> = ArrayList()
 
     /**
      * Milliseconds since boot of the previous time that our method [step] was called to advance
@@ -203,36 +213,40 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         if (event.repeatCount == 0) {
             when (keyCode) {
                 KeyEvent.KEYCODE_DPAD_LEFT -> {
-                    mShip!!.setHeadingX(-1f)
+                    mShip!!.setHeadingX(x = -1f)
                     mDPadState = mDPadState or DPAD_STATE_LEFT
                     handled = true
                 }
+
                 KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                    mShip!!.setHeadingX(1f)
+                    mShip!!.setHeadingX(x = 1f)
                     mDPadState = mDPadState or DPAD_STATE_RIGHT
                     handled = true
                 }
+
                 KeyEvent.KEYCODE_DPAD_UP -> {
-                    mShip!!.setHeadingY(-1f)
+                    mShip!!.setHeadingY(y = -1f)
                     mDPadState = mDPadState or DPAD_STATE_UP
                     handled = true
                 }
+
                 KeyEvent.KEYCODE_DPAD_DOWN -> {
-                    mShip!!.setHeadingY(1f)
+                    mShip!!.setHeadingY(y = 1f)
                     mDPadState = mDPadState or DPAD_STATE_DOWN
                     handled = true
                 }
-                else -> if (isFireKey(keyCode)) {
+
+                else -> if (isFireKey(keyCode = keyCode)) {
                     fire()
                     handled = true
                 }
             }
         }
         if (handled) {
-            step(event.eventTime)
+            step(currentStepTime = event.eventTime)
             return true
         }
-        return super.onKeyDown(keyCode, event)
+        return super.onKeyDown(/* keyCode = */ keyCode, /* event = */ event)
     }
 
     /**
@@ -263,7 +277,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
      * parameter [event] occurred, and return true to our caller. Otherwise we return the value
      * returned by our super's implementation of `onKeyDown`.
      *
-     * @param keyCode A key code that represents the button pressed, from [android.view.KeyEvent].
+     * @param keyCode A key code that represents the button pressed, from [KeyEvent].
      * @param event   The [KeyEvent] object that defines the button action.
      * @return true if we handled the event.
      */
@@ -274,34 +288,38 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         var handled = false
         when (keyCode) {
             KeyEvent.KEYCODE_DPAD_LEFT -> {
-                mShip!!.setHeadingX(0f)
+                mShip!!.setHeadingX(x = 0f)
                 mDPadState = mDPadState and DPAD_STATE_LEFT.inv()
                 handled = true
             }
+
             KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                mShip!!.setHeadingX(0f)
+                mShip!!.setHeadingX(x = 0f)
                 mDPadState = mDPadState and DPAD_STATE_RIGHT.inv()
                 handled = true
             }
+
             KeyEvent.KEYCODE_DPAD_UP -> {
-                mShip!!.setHeadingY(0f)
+                mShip!!.setHeadingY(y = 0f)
                 mDPadState = mDPadState and DPAD_STATE_UP.inv()
                 handled = true
             }
+
             KeyEvent.KEYCODE_DPAD_DOWN -> {
-                mShip!!.setHeadingY(0f)
+                mShip!!.setHeadingY(y = 0f)
                 mDPadState = mDPadState and DPAD_STATE_DOWN.inv()
                 handled = true
             }
-            else -> if (isFireKey(keyCode)) {
+
+            else -> if (isFireKey(keyCode = keyCode)) {
                 handled = true
             }
         }
         if (handled) {
-            step(event.eventTime)
+            step(currentStepTime = event.eventTime)
             return true
         }
-        return super.onKeyUp(keyCode, event)
+        return super.onKeyUp(/* keyCode = */ keyCode, /* event = */ event)
     }
 
     /**
@@ -336,8 +354,9 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
         // Check that the event came from a joystick since a generic motion event
         // could be almost anything.
-        if ((event.isFromSource(InputDevice.SOURCE_CLASS_JOYSTICK)
-                && event.action == MotionEvent.ACTION_MOVE)) {
+        if ((event.isFromSource(/* source = */ InputDevice.SOURCE_CLASS_JOYSTICK)
+                && event.action == MotionEvent.ACTION_MOVE)
+        ) {
             // Cache the most recently obtained device information.
             // The device information may change over time but it can be
             // somewhat expensive to query.
@@ -356,16 +375,16 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             }
 
             // Process all historical movement samples in the batch.
-            val historySize = event.historySize
+            val historySize: Int = event.historySize
             for (i in 0 until historySize) {
-                processJoystickInput(event, i)
+                processJoystickInput(event = event, historyPos = i)
             }
 
             // Process the current movement sample in the batch.
-            processJoystickInput(event, -1)
+            processJoystickInput(event = event, historyPos = -1)
             return true
         }
-        return super.onGenericMotionEvent(event)
+        return super.onGenericMotionEvent(/* event = */ event)
     }
 
     /**
@@ -399,14 +418,14 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         // Many game pads with two joysticks report the position of the second joystick
         // using the Z and RZ axes so we also handle those.
         // In a real game, we would allow the user to configure the axes manually.
-        var x = getCenteredAxis(event, mLastInputDevice, MotionEvent.AXIS_X, historyPos)
+        var x: Float = getCenteredAxis(event, mLastInputDevice, MotionEvent.AXIS_X, historyPos)
         if (x == 0f) {
             x = getCenteredAxis(event, mLastInputDevice, MotionEvent.AXIS_HAT_X, historyPos)
         }
         if (x == 0f) {
             x = getCenteredAxis(event, mLastInputDevice, MotionEvent.AXIS_Z, historyPos)
         }
-        var y = getCenteredAxis(event, mLastInputDevice, MotionEvent.AXIS_Y, historyPos)
+        var y: Float = getCenteredAxis(event, mLastInputDevice, MotionEvent.AXIS_Y, historyPos)
         if (y == 0f) {
             y = getCenteredAxis(event, mLastInputDevice, MotionEvent.AXIS_HAT_Y, historyPos)
         }
@@ -415,8 +434,14 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         // Set the ship heading.
-        mShip!!.setHeading(x, y)
-        step(if (historyPos < 0) event.eventTime else event.getHistoricalEventTime(historyPos))
+        mShip!!.setHeading(x = x, y = y)
+        step(
+            currentStepTime = if (historyPos < 0) {
+                event.eventTime
+            } else {
+                event.getHistoricalEventTime(/* pos = */ historyPos)
+            }
+        )
     }
 
     /**
@@ -441,17 +466,20 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         // Alternately, we could update the game state using the Activity onResume()
         // and onPause() lifecycle events.
         if (hasWindowFocus) {
-            handler.postDelayed(mAnimationRunnable, ANIMATION_TIME_STEP)
+            handler.postDelayed(
+                /* r = */ mAnimationRunnable,
+                /* delayMillis = */ ANIMATION_TIME_STEP
+            )
             mLastStepTime = SystemClock.uptimeMillis()
         } else {
-            handler.removeCallbacks(mAnimationRunnable)
+            handler.removeCallbacks(/* r = */ mAnimationRunnable)
             mDPadState = 0
             if (mShip != null) {
-                mShip!!.setHeading(0f, 0f)
-                mShip!!.setVelocity(0f, 0f)
+                mShip!!.setHeading(x = 0f, y = 0f)
+                mShip!!.setVelocity(x = 0f, y = 0f)
             }
         }
-        super.onWindowFocusChanged(hasWindowFocus)
+        super.onWindowFocusChanged(/* hasWindowFocus = */ hasWindowFocus)
     }
 
     /**
@@ -469,11 +497,14 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private fun fire() {
         if (mShip != null && !mShip!!.mDestroyed) {
             val bullet = Bullet()
-            bullet.setPosition(mShip!!.bulletInitialX, mShip!!.bulletInitialY)
-            bullet.setVelocity(mShip!!.getBulletVelocityX(mBulletSpeed), mShip!!.getBulletVelocityY(mBulletSpeed))
-            mBullets.add(bullet)
+            bullet.setPosition(x = mShip!!.bulletInitialX, y = mShip!!.bulletInitialY)
+            bullet.setVelocity(
+                x = mShip!!.getBulletVelocityX(relativeSpeed = mBulletSpeed),
+                y = mShip!!.getBulletVelocityY(relativeSpeed = mBulletSpeed)
+            )
+            mBullets.add(element = bullet)
             @Suppress("DEPRECATION")
-            vibrator.vibrate(20)
+            vibrator.vibrate(/* milliseconds = */ 20)
         }
     }
 
@@ -494,7 +525,10 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
      */
     private fun crash() {
         @Suppress("DEPRECATION")
-        vibrator.vibrate(longArrayOf(0, 20, 20, 40, 40, 80, 40, 300), -1)
+        vibrator.vibrate(
+            /* pattern = */ longArrayOf(0, 20, 20, 40, 40, 80, 40, 300),
+            /* repeat = */ -1
+        )
     }
 
     /**
@@ -530,7 +564,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                 }
             }
             @Suppress("DEPRECATION")
-            return context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            return context.getSystemService(/* name = */ Context.VIBRATOR_SERVICE) as Vibrator
         }
 
     /**
@@ -544,11 +578,14 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
      * locations will eventually be drawn.
      */
     fun animateFrame() {
-        val currentStepTime = SystemClock.uptimeMillis()
+        val currentStepTime: Long = SystemClock.uptimeMillis()
         step(currentStepTime)
         val handler: Handler? = handler
         if (handler != null) {
-            handler.postAtTime(mAnimationRunnable, currentStepTime + ANIMATION_TIME_STEP)
+            handler.postAtTime(
+                /* r = */ mAnimationRunnable,
+                /* uptimeMillis = */ currentStepTime + ANIMATION_TIME_STEP
+            )
             invalidate()
         }
     }
@@ -637,24 +674,24 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
      * @param currentStepTime current time of the frame we are to build
      */
     private fun step(currentStepTime: Long) {
-        val tau = (currentStepTime - mLastStepTime) * 0.001f
+        val tau: Float = (currentStepTime - mLastStepTime) * 0.001f
         mLastStepTime = currentStepTime
         ensureInitialized()
 
         // Move the ship.
-        mShip!!.accelerate(tau, mMaxShipThrust, mMaxShipSpeed)
-        if (!mShip!!.step(tau)) {
+        mShip!!.accelerate(tau = tau, maxThrust = mMaxShipThrust, maxSpeed = mMaxShipSpeed)
+        if (!mShip!!.step(tau = tau)) {
             reset()
         }
 
         // Move the bullets.
-        var numBullets = mBullets.size
+        var numBullets: Int = mBullets.size
         run {
             var i = 0
             while (i < numBullets) {
                 val bullet: Bullet = mBullets[i]
-                if (!bullet.step(tau)) {
-                    mBullets.removeAt(i)
+                if (!bullet.step(tau = tau)) {
+                    mBullets.removeAt(index = i)
                     i -= 1
                     numBullets -= 1
                 }
@@ -663,13 +700,13 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         // Move obstacles.
-        var numObstacles = mObstacles.size
+        var numObstacles: Int = mObstacles.size
         run {
             var i = 0
             while (i < numObstacles) {
                 val obstacle: Obstacle = mObstacles[i]
-                if (!obstacle.step(tau)) {
-                    mObstacles.removeAt(i)
+                if (!obstacle.step(tau = tau)) {
+                    mObstacles.removeAt(index = i)
                     i -= 1
                     numObstacles -= 1
                 }
@@ -679,10 +716,10 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
         // Check for collisions between bullets and obstacles.
         for (i in 0 until numBullets) {
-            val bullet = mBullets[i]
+            val bullet: Bullet = mBullets[i]
             for (j in 0 until numObstacles) {
-                val obstacle = mObstacles[j]
-                if (bullet.collidesWith(obstacle)) {
+                val obstacle: Obstacle = mObstacles[j]
+                if (bullet.collidesWith(other = obstacle)) {
                     bullet.destroy()
                     obstacle.destroy()
                     break
@@ -692,8 +729,8 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
         // Check for collisions between the ship and obstacles.
         for (i in 0 until numObstacles) {
-            val obstacle = mObstacles[i]
-            if (mShip!!.collidesWith(obstacle)) {
+            val obstacle: Obstacle = mObstacles[i]
+            if (mShip!!.collidesWith(other = obstacle)) {
                 mShip!!.destroy()
                 obstacle.destroy()
                 break
@@ -703,8 +740,9 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         // Spawn more obstacles offscreen when needed.
         // Avoid putting them right on top of the ship.
         OuterLoop@ while (mObstacles.size < MAX_OBSTACLES) {
-            val minDistance = mShipSize * 4
-            val size = mRandom.nextFloat() * (mMaxObstacleSize - mMinObstacleSize) + mMinObstacleSize
+            val minDistance: Float = mShipSize * 4
+            val size: Float =
+                mRandom.nextFloat() * (mMaxObstacleSize - mMinObstacleSize) + mMinObstacleSize
             var positionX: Float
             var positionY: Float
             var tries = 0
@@ -714,14 +752,17 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                         positionX = -size
                         positionY = mRandom.nextInt(height).toFloat()
                     }
+
                     1 -> {
                         positionX = width + size
                         positionY = mRandom.nextInt(height).toFloat()
                     }
+
                     2 -> {
                         positionX = mRandom.nextInt(width).toFloat()
                         positionY = -size
                     }
+
                     else -> {
                         positionX = mRandom.nextInt(width).toFloat()
                         positionY = height + size
@@ -730,16 +771,17 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                 if (++tries > 10) {
                     break@OuterLoop
                 }
-            } while (mShip!!.distanceTo(positionX, positionY) < minDistance)
-            val direction = mRandom.nextFloat() * Math.PI.toFloat() * 2
-            val speed = mRandom.nextFloat() * (mMaxObstacleSpeed - mMinObstacleSpeed) + mMinObstacleSpeed
-            val velocityX = cos(direction.toDouble()).toFloat() * speed
-            val velocityY = sin(direction.toDouble()).toFloat() * speed
+            } while (mShip!!.distanceTo(x = positionX, y = positionY) < minDistance)
+            val direction: Float = mRandom.nextFloat() * Math.PI.toFloat() * 2
+            val speed: Float =
+                mRandom.nextFloat() * (mMaxObstacleSpeed - mMinObstacleSpeed) + mMinObstacleSpeed
+            val velocityX: Float = cos(direction.toDouble()).toFloat() * speed
+            val velocityY: Float = sin(direction.toDouble()).toFloat() * speed
             val obstacle = Obstacle()
-            obstacle.setPosition(positionX, positionY)
-            obstacle.setSize(size)
-            obstacle.setVelocity(velocityX, velocityY)
-            mObstacles.add(obstacle)
+            obstacle.setPosition(x = positionX, y = positionY)
+            obstacle.setSize(size = size)
+            obstacle.setVelocity(x = velocityX, y = velocityY)
+            mObstacles.add(element = obstacle)
         }
     }
 
@@ -763,16 +805,16 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         // Draw bullets.
-        val numBullets = mBullets.size
+        val numBullets: Int = mBullets.size
         for (i in 0 until numBullets) {
-            val bullet = mBullets[i]
+            val bullet: Bullet = mBullets[i]
             bullet.draw(canvas)
         }
 
         // Draw obstacles.
-        val numObstacles = mObstacles.size
+        val numObstacles: Int = mObstacles.size
         for (i in 0 until numObstacles) {
-            val obstacle = mObstacles[i]
+            val obstacle: Obstacle = mObstacles[i]
             obstacle.draw(canvas)
         }
     }
@@ -861,7 +903,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          * @return distance from our position to the point (x,y) in pixels
          */
         fun distanceTo(x: Float, y: Float): Float {
-            return pythag(mPositionX - x, mPositionY - y)
+            return pythag(x = mPositionX - x, y = mPositionY - y)
         }
 
         /**
@@ -873,7 +915,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          * @return the distance in pixels between us and the position of [Sprite] parameter [other]
          */
         fun distanceTo(other: Sprite): Float {
-            return distanceTo(other.mPositionX, other.mPositionY)
+            return distanceTo(x = other.mPositionX, y = other.mPositionY)
         }
 
         /**
@@ -892,8 +934,8 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         fun collidesWith(other: Sprite): Boolean {
             // Really bad collision detection.
             return (!mDestroyed && !other.mDestroyed
-                && (distanceTo(other) <= mSize.coerceAtLeast(other.mSize)
-                + mSize.coerceAtMost(other.mSize) * 0.5f))
+                && (distanceTo(other = other) <= mSize.coerceAtLeast(minimumValue = other.mSize)
+                + mSize.coerceAtMost(maximumValue = other.mSize) * 0.5f))
         }
 
         /**
@@ -951,8 +993,8 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          */
         protected val isOutsidePlayfield: Boolean
             get() {
-                val width = this@GameView.width
-                val height = this@GameView.height
+                val width: Int = this@GameView.width
+                val height: Int = this@GameView.height
                 return (mPositionX < 0) || (mPositionX >= width
                     ) || (mPositionY < 0) || (mPositionY >= height)
             }
@@ -976,8 +1018,8 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          * plus 2 times [mSize] to it.
          */
         protected fun wrapAtPlayfieldBoundary() {
-            val width = this@GameView.width
-            val height = this@GameView.height
+            val width: Int = this@GameView.width
+            val height: Int = this@GameView.height
             while (mPositionX <= -mSize) {
                 mPositionX += width + mSize * 2
             }
@@ -1097,7 +1139,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          * @return X coordinate of the end of the vector
          */
         private fun polarX(radius: Float): Float {
-            return cos(mHeadingAngle.toDouble()).toFloat() * radius
+            return cos(x = mHeadingAngle.toDouble()).toFloat() * radius
         }
 
         /**
@@ -1108,7 +1150,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          * @return Y coordinate of the end of the vector
          */
         private fun polarY(radius: Float): Float {
-            return sin(mHeadingAngle.toDouble()).toFloat() * radius
+            return sin(x = mHeadingAngle.toDouble()).toFloat() * radius
         }
 
         /**
@@ -1119,7 +1161,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          * @return initial X coordinate of a bullet being fired from our spaceship.
          */
         val bulletInitialX: Float
-            get() = mPositionX + polarX(mSize)
+            get() = mPositionX + polarX(radius = mSize)
 
         /**
          * Calculates the initial Y coordinate of a bullet being fired from our spaceship, by adding
@@ -1129,7 +1171,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          * @return initial Y coordinate of a bullet being fired from our spaceship.
          */
         val bulletInitialY: Float
-            get() = mPositionY + polarY(mSize)
+            get() = mPositionY + polarY(radius = mSize)
 
         /**
          * Calculates the X component of the absolute velocity of a bullet (that is, its velocity
@@ -1143,7 +1185,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          * @return X component of the velocity of a bullet relative to the view.
          */
         fun getBulletVelocityX(relativeSpeed: Float): Float {
-            return mVelocityX + polarX(relativeSpeed)
+            return mVelocityX + polarX(radius = relativeSpeed)
         }
 
         /**
@@ -1158,7 +1200,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          * @return X component of the velocity of a bullet relative to the view.
          */
         fun getBulletVelocityY(relativeSpeed: Float): Float {
-            return mVelocityY + polarY(relativeSpeed)
+            return mVelocityY + polarY(radius = relativeSpeed)
         }
 
         /**
@@ -1177,12 +1219,12 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          */
         @Suppress("UNUSED_PARAMETER")
         fun accelerate(tau: Float, maxThrust: Float, maxSpeed: Float) {
-            val thrust = mHeadingMagnitude * maxThrust
-            mVelocityX += polarX(thrust)
-            mVelocityY += polarY(thrust)
-            val speed = pythag(mVelocityX, mVelocityY)
+            val thrust: Float = mHeadingMagnitude * maxThrust
+            mVelocityX += polarX(radius = thrust)
+            mVelocityY += polarY(radius = thrust)
+            val speed = pythag(x = mVelocityX, y = mVelocityY)
             if (speed > maxSpeed) {
-                val scale = maxSpeed / speed
+                val scale: Float = maxSpeed / speed
                 mVelocityX *= scale
                 mVelocityY *= scale
             }
@@ -1221,14 +1263,15 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          * @param canvas the [Canvas] on which the background will be drawn
          */
         override fun draw(canvas: Canvas) {
-            setPaintARGBBlend(mPaint, mDestroyAnimProgress,
-                255, 63, 255, 63,
-                0, 255, 0, 0)
-            canvas.save()
-            canvas.translate(mPositionX, mPositionY)
-            canvas.rotate(mHeadingAngle * TO_DEGREES)
-            canvas.drawPath(mPath, mPaint)
-            canvas.restore()
+            setPaintARGBBlend(
+                paint = mPaint, alpha = mDestroyAnimProgress,
+                a1 = 255, r1 = 63, g1 = 255, b1 = 63,
+                a2 = 0, r2 = 255, g2 = 0, b2 = 0
+            )
+            canvas.withTranslation(x = mPositionX, y = mPositionY) {
+                rotate(/* degrees = */ mHeadingAngle * TO_DEGREES)
+                drawPath(/* path = */ mPath, /* paint = */ mPaint)
+            }
         }
 
         /**
@@ -1270,15 +1313,15 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             mPath = Path()
             mPath.moveTo(0f, 0f)
             mPath.lineTo(
-                cos(-CORNER_ANGLE.toDouble()).toFloat() * mSize,
-                sin(-CORNER_ANGLE.toDouble()).toFloat() * mSize
+                /* x = */ cos(x = -CORNER_ANGLE.toDouble()).toFloat() * mSize,
+                /* y = */ sin(x = -CORNER_ANGLE.toDouble()).toFloat() * mSize
             )
-            mPath.lineTo(mSize, 0f)
+            mPath.lineTo(/* x = */ mSize, /* y = */ 0f)
             mPath.lineTo(
-                cos(CORNER_ANGLE.toDouble()).toFloat() * mSize,
-                sin(CORNER_ANGLE.toDouble()).toFloat() * mSize
+                /* x = */ cos(x = CORNER_ANGLE.toDouble()).toFloat() * mSize,
+                /* y = */ sin(x = CORNER_ANGLE.toDouble()).toFloat() * mSize
             )
-            mPath.lineTo(0f, 0f)
+            mPath.lineTo(/* x = */ 0f, /* y = */ 0f)
         }
     }
 
@@ -1320,11 +1363,16 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          */
         override fun draw(canvas: Canvas) {
             setPaintARGBBlend(
-                mPaint, mDestroyAnimProgress,
-                255, 255, 255, 0,
-                0, 255, 255, 255
+                paint = mPaint, alpha = mDestroyAnimProgress,
+                a1 = 255, r1 = 255, g1 = 255, b1 = 0,
+                a2 = 0, r2 = 255, g2 = 255, b2 = 255
             )
-            canvas.drawCircle(mPositionX, mPositionY, mSize, mPaint)
+            canvas.drawCircle(
+                /* cx = */ mPositionX,
+                /* cy = */ mPositionY,
+                /* radius = */ mSize,
+                /* paint = */ mPaint
+            )
         }
 
         /**
@@ -1345,7 +1393,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          */
         init {
             mPaint.style = Paint.Style.FILL
-            setSize(mBulletSize)
+            setSize(size = mBulletSize)
         }
     }
 
@@ -1370,7 +1418,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          * disappeared from the game.
          */
         override fun step(tau: Float): Boolean {
-            if (!super.step(tau)) {
+            if (!super.step(tau = tau)) {
                 return false
             }
             wrapAtPlayfieldBoundary()
@@ -1390,14 +1438,15 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          */
         override fun draw(canvas: Canvas) {
             setPaintARGBBlend(
-                mPaint, mDestroyAnimProgress,
-                255, 127, 127, 255,
-                0, 255, 0, 0
+                paint = mPaint, alpha = mDestroyAnimProgress,
+                a1 = 255, r1 = 127, g1 = 127, b1 = 255,
+                a2 = 0, r2 = 255, g2 = 0, b2 = 0
             )
             canvas.drawCircle(
-                mPositionX, mPositionY,
-                mSize * (1.0f - mDestroyAnimProgress),
-                mPaint
+                /* cx = */ mPositionX,
+                /* cy = */ mPositionY,
+                /* radius = */ mSize * (1.0f - mDestroyAnimProgress),
+                /* paint = */ mPaint
             )
         }
 
@@ -1418,7 +1467,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          * to a shade of blue and set its style to FILL.
          */
         init {
-            mPaint.setARGB(255, 127, 127, 255)
+            mPaint.setARGB(/* a = */ 255, /* r = */ 127, /* g = */ 127, /* b = */ 255)
             mPaint.style = Paint.Style.FILL
         }
     }
@@ -1437,12 +1486,10 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
      * and `mMaxObstacleSpeed` to be 3 times `baseSpeed`.
      */
     init {
-        mBullets = ArrayList()
-        mObstacles = ArrayList()
         isFocusable = true
         isFocusableInTouchMode = true
-        val baseSize = getContext().resources.displayMetrics.density * 5f
-        val baseSpeed = baseSize * 3
+        val baseSize: Float = getContext().resources.displayMetrics.density * 5f
+        val baseSpeed: Float = baseSize * 3
         mShipSize = baseSize * 3
         mMaxShipThrust = baseSpeed * 0.25f
         mMaxShipSpeed = baseSpeed * 12
@@ -1498,8 +1545,9 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          */
         private fun isFireKey(keyCode: Int): Boolean {
             return (KeyEvent.isGamepadButton(keyCode)
-                || (keyCode == KeyEvent.KEYCODE_DPAD_CENTER
-                ) || (keyCode == KeyEvent.KEYCODE_SPACE))
+                || (keyCode == KeyEvent.KEYCODE_DPAD_CENTER)
+                || (keyCode == KeyEvent.KEYCODE_SPACE)
+                )
         }
 
         /**
@@ -1529,10 +1577,15 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             historyPos: Int
         ): Float {
 
-            val range = device!!.getMotionRange(axis, event.source)
+            val range: InputDevice.MotionRange? =
+                device!!.getMotionRange(/* axis = */ axis, /* source = */ event.source)
             if (range != null) {
-                val flat = range.flat
-                val value = if (historyPos < 0) event.getAxisValue(axis) else event.getHistoricalAxisValue(axis, historyPos)
+                val flat: Float = range.flat
+                val value: Float =
+                    if (historyPos < 0) event.getAxisValue(axis) else event.getHistoricalAxisValue(
+                        /* axis = */ axis,
+                        /* pos = */ historyPos
+                    )
 
                 // Ignore axis values that are within the 'flat' region of the joystick axis center.
                 // A joystick at rest does not always report an absolute position of (0,0).
@@ -1551,7 +1604,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
          * @return the result of calling `Math.hypot` for x and y, cast to float
          */
         fun pythag(x: Float, y: Float): Float {
-            return hypot(x.toDouble(), y.toDouble()).toFloat()
+            return hypot(x = x.toDouble(), y = y.toDouble()).toFloat()
         }
 
         /**
@@ -1589,8 +1642,12 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             a2: Int, r2: Int, g2: Int, b2: Int
         ) {
 
-            paint.setARGB(blend(alpha, a1, a2), blend(alpha, r1, r2),
-                blend(alpha, g1, g2), blend(alpha, b1, b2))
+            paint.setARGB(
+                /* a = */ blend(alpha = alpha, from = a1, to = a2),
+                /* r = */ blend(alpha = alpha, from = r1, to = r2),
+                /* g = */ blend(alpha = alpha, from = g1, to = g2),
+                /* b = */ blend(alpha = alpha, from = b1, to = b2)
+            )
 
         }
 

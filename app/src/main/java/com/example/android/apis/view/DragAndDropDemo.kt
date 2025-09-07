@@ -16,21 +16,21 @@
 package com.example.android.apis.view
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.os.Build
 import android.os.Bundle
 import android.view.DragEvent
 import android.view.View
 import android.view.View.OnDragListener
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
  * Shows how to implement draggable views.
  */
-@SuppressLint("SetTextI18n")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class DragAndDropDemo : AppCompatActivity() {
     /**
      * Target [TextView] to display some messages in.
@@ -74,8 +74,7 @@ class DragAndDropDemo : AppCompatActivity() {
         mHiddenDot!!.setReportView(text)
         mResultText = findViewById(R.id.drag_result_text)
         val mainView = findViewById<View>(R.id.drag_main)
-        mainView.setOnDragListener(OnDragListener { v, event ->
-
+        mainView.setOnDragListener(OnDragListener { v: View, event: DragEvent ->
             /**
              * Called when a drag event is dispatched to a view. This allows listeners to get a
              * chance to override base [View] behavior. We retrieve the action from our [DragEvent]
@@ -105,12 +104,12 @@ class DragAndDropDemo : AppCompatActivity() {
              * If we have executed a break instead of a return above, we now return false.
              *
              * Parameter: v     The View that received the drag event.
-             * Parameter: event The [android.view.DragEvent] object for the drag event.
+             * Parameter: event The [DragEvent] object for the drag event.
              * @return `true` if the drag event was handled successfully, or `false`
              * if the drag event was not handled. We need to return true from ACTION_DRAG_STARTED
              * if we want to receive any more drag events.
              */
-            val action = event.action
+            val action: Int = event.action
             when (action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
 
@@ -121,24 +120,29 @@ class DragAndDropDemo : AppCompatActivity() {
                     mHiddenDot!!.visibility = View.VISIBLE
                     return@OnDragListener true
                 }
+
                 DragEvent.ACTION_DRAG_ENTERED -> {
                     mResultText!!.text = "ACTION_DRAG_ENTERED"
                 }
+
                 DragEvent.ACTION_DRAG_EXITED -> {
                     mResultText!!.text = "ACTION_DRAG_EXITED"
                 }
+
                 DragEvent.ACTION_DROP -> {
                     mResultText!!.text = "ACTION_DROP"
                 }
+
                 DragEvent.ACTION_DRAG_ENDED -> {
 
                     // Hide the surprise again
                     mHiddenDot!!.visibility = View.INVISIBLE
 
                     // Report the drop/no-drop result to the user
-                    val dropped = event.result
+                    val dropped: Boolean = event.result
                     mResultText!!.text = if (dropped) "Dropped!" else "No drop"
                 }
+
                 else -> {
                     mResultText!!.text = action.toString()
                 }

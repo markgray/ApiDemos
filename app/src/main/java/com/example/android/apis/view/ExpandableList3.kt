@@ -21,8 +21,6 @@ import android.widget.ExpandableListView
 import android.widget.SimpleExpandableListAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.ArrayList
-import java.util.HashMap
 
 /**
  * Demonstrates expandable lists backed by a Simple Map-based adapter, which is created using
@@ -124,15 +122,15 @@ class ExpandableList3 : AppCompatActivity() {
 
         // Set up our adapter
         mAdapter = SimpleExpandableListAdapter(
-                this,
-                groupData,
-                android.R.layout.simple_expandable_list_item_2,
-                arrayOf(NAME, IS_EVEN),
-                intArrayOf(android.R.id.text1, android.R.id.text2),
-                childData,
-                android.R.layout.simple_expandable_list_item_2,
-                arrayOf(NAME, IS_EVEN),
-                intArrayOf(android.R.id.text1, android.R.id.text2)
+            /* context = */ this,
+            /* groupData = */ groupData,
+            /* groupLayout = */ android.R.layout.simple_expandable_list_item_2,
+            /* groupFrom = */ arrayOf(NAME, IS_EVEN),
+            /* groupTo = */ intArrayOf(android.R.id.text1, android.R.id.text2),
+            /* childData = */ childData,
+            /* childLayout = */ android.R.layout.simple_expandable_list_item_2,
+            /* childFrom = */ arrayOf(NAME, IS_EVEN),
+            /* childTo = */ intArrayOf(android.R.id.text1, android.R.id.text2)
         )
         expandableList.setAdapter(mAdapter)
     }

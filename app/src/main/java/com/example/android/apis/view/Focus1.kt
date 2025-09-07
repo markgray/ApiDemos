@@ -45,15 +45,15 @@ class Focus1 : AppCompatActivity() {
         setContentView(R.layout.focus_1)
         val webView = findViewById<WebView>(R.id.rssWebView)
         webView.loadData(
-            "<html><body>Can I focus?<br /><a href=\"#\">No I cannot!</a>.</body></html>",
-            "text/html",
-            null
+            /* data = */ "<html><body>Can I focus?<br /><a href=\"#\">No I cannot!</a>.</body></html>",
+            /* mimeType = */ "text/html",
+            /* encoding = */ null
         )
         val listView = findViewById<ListView>(R.id.rssListView)
         listView.adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_list_item_1,
-            arrayOf("Ars Technica", "Slashdot", "GameKult")
+            /* context = */ this,
+            /* resource = */ android.R.layout.simple_list_item_1,
+            /* objects = */ arrayOf("Ars Technica", "Slashdot", "GameKult")
         )
     }
 }

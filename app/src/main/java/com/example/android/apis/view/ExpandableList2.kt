@@ -28,6 +28,7 @@ import android.widget.ExpandableListView
 import android.widget.SimpleCursorTreeAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
+import com.example.android.apis.view.ExpandableList2.Companion.CONTACTS_PROJECTION
 
 /**
  * Demonstrates expandable lists backed by Cursors-- uses Contacts data base to retrieve names and
@@ -86,26 +87,26 @@ class ExpandableList2 : AppCompatActivity() {
 
         // Set up our adapter
         mAdapter = MyExpandableListAdapter(
-                this,
-                android.R.layout.simple_expandable_list_item_1,
-                android.R.layout.simple_expandable_list_item_1,
-                arrayOf(ContactsContract.Contacts.DISPLAY_NAME),
-                intArrayOf(android.R.id.text1),
-                arrayOf(Phone.NUMBER),
-                intArrayOf(android.R.id.text1)
+            context = this,
+            groupLayout = android.R.layout.simple_expandable_list_item_1,
+            childLayout = android.R.layout.simple_expandable_list_item_1,
+            groupFrom = arrayOf(ContactsContract.Contacts.DISPLAY_NAME),
+            groupTo = intArrayOf(android.R.id.text1),
+            childrenFrom = arrayOf(Phone.NUMBER),
+            childrenTo = intArrayOf(android.R.id.text1)
         )
         expandableList.setAdapter(mAdapter)
         mQueryHandler = QueryHandler(this, mAdapter)
 
         // Query for people
         mQueryHandler!!.startQuery(
-                TOKEN_GROUP,
-                null,
-                ContactsContract.Contacts.CONTENT_URI,
-                CONTACTS_PROJECTION,
-                ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1",
-                null,
-                null
+            /* token = */ TOKEN_GROUP,
+            /* cookie = */ null,
+            /* uri = */ ContactsContract.Contacts.CONTENT_URI,
+            /* projection = */ CONTACTS_PROJECTION,
+            /* selection = */ ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1",
+            /* selectionArgs = */ null,
+            /* orderBy = */ null
         )
     }
 
@@ -119,32 +120,25 @@ class ExpandableList2 : AppCompatActivity() {
 
         // Null out the group cursor. This will cause the group cursor and all of the child cursors
         // to be closed.
-        mAdapter!!.changeCursor(null)
+        mAdapter!!.changeCursor(/* cursor = */ null)
         mAdapter = null
     }
 
     /**
      * Custom [AsyncQueryHandler] we use to query the contacts database.
-     */
-    private class QueryHandler
-    /**
      * Our constructor. First we call our super's constructor with a `ContentResolver` instance for
      * our application's package, then we save our [CursorTreeAdapter] parameter  in our field
      * [CursorTreeAdapter] field [mAdapter].
      *
      * @param context [Context] to use to get a `ContentResolver` instance for our application's
      * package, this in the `onCreate` method of [ExpandableList2]
-     * @param mAdapter [CursorTreeAdapter] whose cursors (group and child) we are to change.
+     * @property mAdapter [CursorTreeAdapter] whose cursors (group and child) we are to change,
+     * returned as the results of a query, initialized by an argument to our constructor.
      */
-    (
-            context: Context,
-
-        /**
-         * The `CursorTreeAdapter` whose group or child cursor is set to the `Cursor`
-         * returned as the results of a query, initialized by an argument to our constructor.
-         */
+    private class QueryHandler(
+        context: Context,
         private val mAdapter: CursorTreeAdapter?
-    ) : AsyncQueryHandler(context.contentResolver) {
+    ) : AsyncQueryHandler(/* cr = */ context.contentResolver) {
 
         /**
          * Called when an asynchronous query is completed. We switch based on the value of our [Int]
@@ -176,9 +170,6 @@ class ExpandableList2 : AppCompatActivity() {
     /**
      * Custom [SimpleCursorTreeAdapter] we use for [CursorTreeAdapter] field [mAdapter], its
      * group and children cursors are set by a query to the contacts database.
-     */
-    inner class MyExpandableListAdapter
-    /**
      * Our constructor. We simply call our super's constructor (after shuffling our parameters a
      * bit). Note that the constructor does not take a Cursor. This is done to avoid querying the
      * database on the main thread.
@@ -195,23 +186,23 @@ class ExpandableList2 : AppCompatActivity() {
      * @param childrenTo   The resource identifiers of the child views from the child layout that should
      *                     display columns in the childrenFrom parameter.
      */
-    (
-            context: Context?,
-            groupLayout: Int,
-            childLayout: Int,
-            groupFrom: Array<String?>?,
-            groupTo: IntArray?,
-            childrenFrom: Array<String?>?,
-            childrenTo: IntArray?
+    inner class MyExpandableListAdapter(
+        context: Context?,
+        groupLayout: Int,
+        childLayout: Int,
+        groupFrom: Array<String?>?,
+        groupTo: IntArray?,
+        childrenFrom: Array<String?>?,
+        childrenTo: IntArray?
     ) : SimpleCursorTreeAdapter(
-            context,
-            null,
-            groupLayout,
-            groupFrom,
-            groupTo,
-            childLayout,
-            childrenFrom,
-            childrenTo
+        /* context = */ context,
+        /* cursor = */ null,
+        /* groupLayout = */ groupLayout,
+        /* groupFrom = */ groupFrom,
+        /* groupTo = */ groupTo,
+        /* childLayout = */ childLayout,
+        /* childFrom = */ childrenFrom,
+        /* childTo = */ childrenTo
     ) {
         /**
          * Gets the Cursor for the children at the given group. We construct [Uri.Builder]
@@ -246,9 +237,16 @@ class ExpandableList2 : AppCompatActivity() {
             val builder: Uri.Builder = ContactsContract.Contacts.CONTENT_URI.buildUpon()
             ContentUris.appendId(builder, groupCursor.getLong(GROUP_ID_COLUMN_INDEX))
             builder.appendEncodedPath(ContactsContract.Contacts.Data.CONTENT_DIRECTORY)
-            val phoneNumbersUri = builder.build()
-            mQueryHandler!!.startQuery(TOKEN_CHILD, groupCursor.position, phoneNumbersUri,
-                    PHONE_NUMBER_PROJECTION, Phone.MIMETYPE + "=?", arrayOf(Phone.CONTENT_ITEM_TYPE), null)
+            val phoneNumbersUri: Uri? = builder.build()
+            mQueryHandler!!.startQuery(
+                /* token = */ TOKEN_CHILD,
+                /* cookie = */ groupCursor.position,
+                /* uri = */ phoneNumbersUri,
+                /* projection = */ PHONE_NUMBER_PROJECTION,
+                /* selection = */ Phone.MIMETYPE + "=?",
+                /* selectionArgs = */ arrayOf(Phone.CONTENT_ITEM_TYPE),
+                /* orderBy = */ null
+            )
             return null
         }
     }
@@ -257,9 +255,9 @@ class ExpandableList2 : AppCompatActivity() {
         /**
          * Projection used to query the contacts data base, consists of a list of the columns to return.
          */
-        private val CONTACTS_PROJECTION = arrayOf(
-                ContactsContract.Contacts._ID,
-                ContactsContract.Contacts.DISPLAY_NAME
+        private val CONTACTS_PROJECTION: Array<String> = arrayOf(
+            ContactsContract.Contacts._ID,
+            ContactsContract.Contacts.DISPLAY_NAME
         )
 
         /**
@@ -270,9 +268,9 @@ class ExpandableList2 : AppCompatActivity() {
         /**
          * Projection used to query a contact for its phone numbers
          */
-        private val PHONE_NUMBER_PROJECTION = arrayOf(
-                Phone._ID,
-                Phone.NUMBER
+        private val PHONE_NUMBER_PROJECTION: Array<String> = arrayOf(
+            Phone._ID,
+            Phone.NUMBER
         )
 
         /**

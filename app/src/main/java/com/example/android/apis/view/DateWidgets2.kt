@@ -52,18 +52,17 @@ class DateWidgets2 : AppCompatActivity() {
             timePicker.hour = 12
             timePicker.minute = 15
         } else {
-            @Suppress("DEPRECATION")
+            @Suppress("DEPRECATION") // Needed for SDK older than M
             timePicker.currentHour = 12
-            @Suppress("DEPRECATION")
+            @Suppress("DEPRECATION") // Needed for SDK older than M
             timePicker.currentMinute = 15
         }
 
         mTimeDisplay = findViewById(R.id.dateDisplay)
         updateDisplay(12, 15)
-        timePicker.setOnTimeChangedListener {
-            view,
-            hourOfDay,
-            minute ->
+        timePicker.setOnTimeChangedListener { view: TimePicker,
+                                              hourOfDay: Int,
+                                              minute: Int ->
 
             /**
              * The callback interface used to indicate the time has been adjusted. We call our method
@@ -73,7 +72,7 @@ class DateWidgets2 : AppCompatActivity() {
              * @param hourOfDay The current hour.
              * @param minute The current minute.
              */
-            updateDisplay(hourOfDay, minute)
+            updateDisplay(hourOfDay = hourOfDay, minute = minute)
         }
     }
 
@@ -85,8 +84,8 @@ class DateWidgets2 : AppCompatActivity() {
      */
     private fun updateDisplay(hourOfDay: Int, minute: Int) {
         mTimeDisplay!!.text = StringBuilder()
-                .append(pad(hourOfDay)).append(":")
-                .append(pad(minute))
+            .append(pad(hourOfDay)).append(":")
+            .append(pad(minute))
     }
 
     companion object {

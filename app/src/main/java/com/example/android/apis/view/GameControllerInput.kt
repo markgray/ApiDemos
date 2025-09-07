@@ -15,7 +15,7 @@
  */
 package com.example.android.apis.view
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.hardware.input.InputManager
@@ -36,9 +36,11 @@ import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.util.size
 import com.example.android.apis.R
-import java.util.ArrayList
+import com.example.android.apis.view.GameControllerInput.InputDeviceState.Companion.isGameKey
 
 /**
  * Demonstrates how to process input events received from game controllers.
@@ -50,7 +52,8 @@ import java.util.ArrayList
  * The game controller is also used to control a very simple game.  See [GameView]
  * for the game itself, it is used by our layout file R.layout.game_controller_input.
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class GameControllerInput : AppCompatActivity(), InputDeviceListener {
     /**
      * [InputManager] for interacting with input devices.
@@ -100,14 +103,16 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.game_controller_input)
-        mInputManager = getSystemService(Context.INPUT_SERVICE) as InputManager
+        mInputManager = getSystemService(INPUT_SERVICE) as InputManager
         mInputDeviceStates = SparseArray()
         mSummaryAdapter = SummaryAdapter(this, resources)
         mGame = findViewById(R.id.game)
         mSummaryList = findViewById(R.id.summary)
         mSummaryList!!.adapter = mSummaryAdapter
-        mSummaryList!!.setOnItemClickListener {
-            parent: AdapterView<*>?, view: View?, position: Int, id: Long ->
+        mSummaryList!!.setOnItemClickListener { parent: AdapterView<*>?,
+                                                view: View?,
+                                                position: Int,
+                                                id: Long ->
             mSummaryAdapter!!.onItemClick(position)
         }
 
@@ -135,7 +140,7 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
 
         // Query all input devices.
         // We do this so that we can see them in the log as they are enumerated.
-        val ids = mInputManager!!.inputDeviceIds
+        val ids: IntArray = mInputManager!!.inputDeviceIds
         for (id in ids) {
             getInputDeviceState(id)
         }
@@ -150,7 +155,7 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
         super.onPause()
 
         // Remove the input device listener when the activity is paused.
-        mInputManager!!.unregisterInputDeviceListener(this)
+        mInputManager!!.unregisterInputDeviceListener(/* listener = */ this)
     }
 
     /**
@@ -162,7 +167,7 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
      * @param hasFocus Whether the window of this activity has focus.
      */
     override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
+        super.onWindowFocusChanged(/* hasFocus = */ hasFocus)
         mGame!!.requestFocus()
     }
 
@@ -189,18 +194,19 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
      */
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         // Update device state for visualization and logging.
-        val state = getInputDeviceState(event.deviceId)
+        val state: InputDeviceState? = getInputDeviceState(deviceId = event.deviceId)
         if (state != null) {
             when (event.action) {
                 KeyEvent.ACTION_DOWN -> if (state.onKeyDown(event)) {
-                    mSummaryAdapter!!.show(state)
+                    mSummaryAdapter!!.show(state = state)
                 }
+
                 KeyEvent.ACTION_UP -> if (state.onKeyUp(event)) {
-                    mSummaryAdapter!!.show(state)
+                    mSummaryAdapter!!.show(state = state)
                 }
             }
         }
-        return super.dispatchKeyEvent(event)
+        return super.dispatchKeyEvent(/* event = */ event)
     }
 
     /**
@@ -221,15 +227,16 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
     override fun dispatchGenericMotionEvent(event: MotionEvent): Boolean {
         // Check that the event came from a joystick since a generic motion event
         // could be almost anything.
-        if (event.isFromSource(InputDevice.SOURCE_CLASS_JOYSTICK)
-                && event.action == MotionEvent.ACTION_MOVE) {
+        if (event.isFromSource(/* source = */ InputDevice.SOURCE_CLASS_JOYSTICK)
+            && event.action == MotionEvent.ACTION_MOVE
+        ) {
             // Update device state for visualization and logging.
-            val state = getInputDeviceState(event.deviceId)
-            if (state != null && state.onJoystickMotion(event)) {
-                mSummaryAdapter!!.show(state)
+            val state: InputDeviceState? = getInputDeviceState(deviceId = event.deviceId)
+            if (state != null && state.onJoystickMotion(event = event)) {
+                mSummaryAdapter!!.show(state = state)
             }
         }
-        return super.dispatchGenericMotionEvent(event)
+        return super.dispatchGenericMotionEvent(/* ev = */ event)
     }
 
     /**
@@ -250,11 +257,12 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
      * then cached for future calls) if this is the first time the device has appeared.
      */
     private fun getInputDeviceState(deviceId: Int): InputDeviceState? {
-        var state = mInputDeviceStates!![deviceId]
+        var state: InputDeviceState? = mInputDeviceStates!![deviceId]
         if (state == null) {
-            val device = mInputManager!!.getInputDevice(deviceId) ?: return null
-            state = InputDeviceState(device)
-            mInputDeviceStates!!.put(deviceId, state)
+            val device: InputDevice =
+                mInputManager!!.getInputDevice(/* id = */ deviceId) ?: return null
+            state = InputDeviceState(device = device)
+            mInputDeviceStates!!.put(/* key = */ deviceId, /* value = */ state)
             Log.i(TAG, "Device enumerated: " + state.device)
         }
         return state
@@ -269,7 +277,7 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
      * @param deviceId The id of the input device that was added.
      */
     override fun onInputDeviceAdded(deviceId: Int) {
-        val state = getInputDeviceState(deviceId)
+        val state: InputDeviceState? = getInputDeviceState(deviceId = deviceId)
         Log.i(TAG, "Device added: " + state!!.device)
     }
 
@@ -286,7 +294,7 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
      * @param deviceId The id of the input device that changed.
      */
     override fun onInputDeviceChanged(deviceId: Int) {
-        var state = mInputDeviceStates!![deviceId]
+        var state: InputDeviceState? = mInputDeviceStates!![deviceId]
         if (state != null) {
             mInputDeviceStates!!.remove(deviceId)
             state = getInputDeviceState(deviceId)
@@ -304,23 +312,21 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
      * @param deviceId The id of the input device that was removed.
      */
     override fun onInputDeviceRemoved(deviceId: Int) {
-        val state = mInputDeviceStates!![deviceId]
+        val state: InputDeviceState? = mInputDeviceStates!![deviceId]
         if (state != null) {
             Log.i(TAG, "Device removed: " + state.device)
-            mInputDeviceStates!!.remove(deviceId)
+            mInputDeviceStates!!.remove(/* key = */ deviceId)
         }
     }
 
     /**
      * Tracks the state of joystick axes and game controller buttons for a particular
      * input device for diagnostic purposes.
+     * (See our `init` block for details of our constructor.)
+     *
+     * @property device The [InputDevice] that we were created for.
      */
-    private class InputDeviceState(
-            /**
-             * The [InputDevice] that we were created for, set in our constructor.
-             */
-            val device: InputDevice
-    ) {
+    private class InputDeviceState(val device: InputDevice) {
 
         /**
          * Axis ID's if we are created for a SOURCE_CLASS_JOYSTICK (joystick).
@@ -371,7 +377,7 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
          * @return number of key-value mappings in the [SparseIntArray] array field [mKeys].
          */
         val keyCount: Int
-            get() = mKeys.size()
+            get() = mKeys.size
 
         /**
          * Given an index in the range 0...size()-1, returns the keycode from the [keyIndex]
@@ -384,7 +390,7 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
          * [keyIndex].
          */
         fun getKeyCode(keyIndex: Int): Int {
-            return mKeys.keyAt(keyIndex)
+            return mKeys.keyAt(/* index = */ keyIndex)
         }
 
         /**
@@ -397,7 +403,7 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
          * @return true if the key is pressed, false if it is not.
          */
         fun isKeyPressed(keyIndex: Int): Boolean {
-            return mKeys.valueAt(keyIndex) != 0
+            return mKeys.valueAt(/* index = */ keyIndex) != 0
         }
 
         /**
@@ -415,11 +421,11 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
          * @return true if the keycode is one our game is interested in, false if not.
          */
         fun onKeyDown(event: KeyEvent): Boolean {
-            val keyCode = event.keyCode
+            val keyCode: Int = event.keyCode
             if (isGameKey(keyCode)) {
                 if (event.repeatCount == 0) {
-                    mKeys.put(keyCode, 1)
-                    val symbolicName = KeyEvent.keyCodeToString(keyCode)
+                    mKeys.put(/* key = */ keyCode, /* value = */ 1)
+                    val symbolicName: String? = KeyEvent.keyCodeToString(/* keyCode = */ keyCode)
                     Log.i(TAG, device.name + " - Key Down: " + symbolicName)
                 }
                 return true
@@ -445,12 +451,12 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
          * @return true if the keycode is one our game is interested in, false if not.
          */
         fun onKeyUp(event: KeyEvent): Boolean {
-            val keyCode = event.keyCode
+            val keyCode: Int = event.keyCode
             if (isGameKey(keyCode)) {
-                val index = mKeys.indexOfKey(keyCode)
+                val index: Int = mKeys.indexOfKey(/* key = */ keyCode)
                 if (index >= 0) {
-                    mKeys.put(keyCode, 0)
-                    val symbolicName = KeyEvent.keyCodeToString(keyCode)
+                    mKeys.put(/* key = */ keyCode, /* value = */ 0)
+                    val symbolicName: String? = KeyEvent.keyCodeToString(/* keyCode = */ keyCode)
                     Log.i(TAG, device.name + " - Key Up: " + symbolicName)
                 }
                 return true
@@ -481,16 +487,18 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
         fun onJoystickMotion(event: MotionEvent): Boolean {
             val message = StringBuilder()
             message.append(device.name).append(" - Joystick Motion:\n")
-            val historySize = event.historySize
+            val historySize: Int = event.historySize
             for (i in mAxes.indices) {
-                val axis = mAxes[i]
-                val value = event.getAxisValue(axis)
+                val axis: Int = mAxes[i]
+                val value: Float = event.getAxisValue(/* axis = */ axis)
                 mAxisValues[i] = value
                 message.append("  ").append(MotionEvent.axisToString(axis)).append(": ")
 
                 // Append all historical values in the batch.
                 for (historyPos in 0 until historySize) {
-                    message.append(event.getHistoricalAxisValue(axis, historyPos))
+                    message.append(
+                        event.getHistoricalAxisValue(/* axis = */ axis, /* pos = */ historyPos)
+                    )
                     message.append(", ")
                 }
 
@@ -515,8 +523,11 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
              */
             private fun isGameKey(keyCode: Int): Boolean {
                 return when (keyCode) {
-                    KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_SPACE -> true
-                    else -> KeyEvent.isGamepadButton(keyCode)
+                    KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN,
+                    KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT,
+                    KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_SPACE -> true
+
+                    else -> KeyEvent.isGamepadButton(/* keyCode = */ keyCode)
                 }
             }
         }
@@ -535,9 +546,9 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
          */
         init {
             var numAxes = 0
-            val ranges = device.motionRanges
+            val ranges: List<InputDevice.MotionRange> = device.motionRanges
             for (range in ranges) {
-                if (range.isFromSource(InputDevice.SOURCE_CLASS_JOYSTICK)) {
+                if (range.isFromSource(/* source = */ InputDevice.SOURCE_CLASS_JOYSTICK)) {
                     numAxes += 1
                 }
             }
@@ -555,19 +566,18 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
 
     /**
      * A list adapter that displays a summary of the device state.
+     * (See our `init` block for details of our constructor.)
+     *
+     * @property mContext [Context]` to use toast a message, `this` when constructed in the `onCreate`
+     * override of the [GameControllerInput] activity.
+     * @property mResources [Resources] instance to use to access resources, the value returned by
+     * the `getResources` method when constructed in the `onCreate` method of the [GameControllerInput]
+     * activity.
      */
     private class SummaryAdapter(
-            /**
-             * [Context]` to use toast a message, this when constructed in the `onCreate`
-             * method of the [GameControllerInput] activity.
-             */
-            private val mContext: Context,
-            /**
-             * [Resources] instance to use to access resources, the value returned by the
-             * `getResources` method when constructed in the `onCreate` method of the
-             * [GameControllerInput] activity.
-             */
-            private val mResources: Resources) : BaseAdapter() {
+        private val mContext: Context,
+        private val mResources: Resources
+    ) : BaseAdapter() {
 
         /**
          * [SparseArray] used to hold both axes, and keycode [Item] objects, indexed by
@@ -680,34 +690,34 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
 
             // Populate axes.
             mVisibleItems.add(mAxesHeading)
-            val axisCount = state.axisCount
+            val axisCount: Int = state.axisCount
             for (i in 0 until axisCount) {
-                val axis = state.getAxis(i)
-                val id = BASE_ID_AXIS_ITEM or axis
-                var column = mDataItems[id] as TextColumn
+                val axis: Int = state.getAxis(axisIndex = i)
+                val id: Int = BASE_ID_AXIS_ITEM or axis
+                var column: TextColumn = mDataItems[id] as TextColumn
                 @Suppress("SENSELESS_COMPARISON")
                 if (column == null) {
                     column = TextColumn(id, MotionEvent.axisToString(axis))
                     mDataItems.put(id, column)
                 }
-                column.setContent(state.getAxisValue(i).toString())
+                column.setContent(state.getAxisValue(axisIndex = i).toString())
                 mVisibleItems.add(column)
             }
 
             // Populate keys.
-            mVisibleItems.add(mKeysHeading)
-            val keyCount = state.keyCount
+            mVisibleItems.add(/* e = */ mKeysHeading)
+            val keyCount: Int = state.keyCount
             for (i in 0 until keyCount) {
-                val keyCode = state.getKeyCode(i)
-                val id = BASE_ID_KEY_ITEM or keyCode
-                var column = mDataItems[id] as TextColumn
+                val keyCode: Int = state.getKeyCode(keyIndex = i)
+                val id: Int = BASE_ID_KEY_ITEM or keyCode
+                var column: TextColumn = mDataItems[id] as TextColumn
                 @Suppress("SENSELESS_COMPARISON")
                 if (column == null) {
-                    column = TextColumn(id, KeyEvent.keyCodeToString(keyCode))
-                    mDataItems.put(id, column)
+                    column = TextColumn(itemId = id, mLabel = KeyEvent.keyCodeToString(keyCode))
+                    mDataItems.put(/* key = */ id, /* value = */ column)
                 }
-                column.setContent(mResources.getString(if (state.isKeyPressed(i)) R.string.game_controller_input_key_pressed else R.string.game_controller_input_key_released))
-                mVisibleItems.add(column)
+                column.setContent(content = mResources.getString(if (state.isKeyPressed(i)) R.string.game_controller_input_key_pressed else R.string.game_controller_input_key_released))
+                mVisibleItems.add(/* e = */ column)
             }
             notifyDataSetChanged()
         }
@@ -768,23 +778,22 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
          * @return A View corresponding to the data at the specified position.
          */
         override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
-            return getItem(position).getView(convertView, parent)!!
+            return getItem(position = position).getView(
+                convertView = convertView,
+                parent = parent
+            )!!
         }
 
         /**
          * Abstract base class for the [Heading], and [TextColumn] classes.
+         *
+         * @property mItemId Stable Item ID that is returned by our method [getItemId], which is
+         * called from the `getItemId` method of the [SummaryAdapter] which is using us.
+         * @property mLayoutResourceId Resource ID for the layout which will display our information.
          */
-        private abstract class Item
-        (
-                /**
-                 * Stable Item ID that is returned by our method [getItemId], which is called from
-                 * the `getItemId` method of the [SummaryAdapter] which is using us.
-                 */
-                val mItemId: Int,
-                /**
-                 * Resource ID for the layout which will display our information.
-                 */
-                private val mLayoutResourceId: Int
+        private abstract class Item(
+            val mItemId: Int,
+            private val mLayoutResourceId: Int
         ) {
 
             /**
@@ -821,11 +830,16 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
             @Suppress("UNUSED_PARAMETER")
             fun getView(convertView: View?, parent: ViewGroup): View? {
                 if (mView == null) {
-                    val inflater = parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                    mView = inflater.inflate(mLayoutResourceId, parent, false)
-                    initView(mView)
+                    val inflater =
+                        parent.context.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                    mView = inflater.inflate(
+                        /* resource = */ mLayoutResourceId,
+                        /* root = */ parent,
+                        /* attachToRoot = */ false
+                    )
+                    initView(view = mView)
                 }
-                updateView(mView)
+                updateView(view = mView)
                 return mView
             }
 
@@ -847,19 +861,14 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
 
         /**
          * [Item] which displays constant heading text in a [TextView].
+         *
+         * @param itemId itemId Stable ID for this [Item]
+         * @property mLabel String we are supposed to display in our [TextView]
          */
-        private class Heading
-        (
-                /**
-                 * itemId Stable ID for this [Item]
-                 */
-                itemId: Int,
-                /**
-                 * String we are supposed to display in our [TextView]
-                 */
-                private val mLabel: String
-
-        ) : Item(itemId, R.layout.game_controller_input_heading) {
+        private class Heading(
+            itemId: Int,
+            private val mLabel: String
+        ) : Item(mItemId = itemId, mLayoutResourceId = R.layout.game_controller_input_heading) {
 
             /**
              * Initializes our view by setting the text of its [TextView] to the string in our
@@ -867,7 +876,7 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
              *
              * @param view [View] which will hold the information for this [Item]
              */
-            public override fun initView(view: View?) {
+            override fun initView(view: View?) {
                 val textView = view as TextView?
                 textView!!.text = mLabel
             }
@@ -877,19 +886,14 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
         /**
          * [Item] which displays constant heading text in one [TextView] and varying
          * information from its [String] field [mContent] in a second one.
+         *
+         * @param itemId itemId Stable ID for this [Item]
+         * @property mLabel String we are supposed to display in our first [TextView]
          */
-        private class TextColumn
-        (
-                /**
-                 * Stable ID for this `Item`
-                 */
-                itemId: Int,
-                /**
-                 * Constant string to display in our first `TextView`, set by our constructor.
-                 */
-                private val mLabel: String
-
-        ) : Item(itemId, R.layout.game_controller_input_text_column) {
+        private class TextColumn(
+            itemId: Int,
+            private val mLabel: String
+        ) : Item(mItemId = itemId, mLayoutResourceId = R.layout.game_controller_input_text_column) {
 
             /**
              * Varying information to display in our second [TextView], set by calling our
@@ -920,7 +924,7 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
              *
              * @param view [View] which will hold the information for this [Item].
              */
-            public override fun initView(view: View?) {
+            override fun initView(view: View?) {
                 val textView = view!!.findViewById<TextView>(R.id.label)
                 textView.text = mLabel
                 mContentView = view.findViewById(R.id.content)
@@ -932,7 +936,7 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
              *
              * @param view [View] which will hold the information for this [Item]
              */
-            public override fun updateView(view: View?) {
+            override fun updateView(view: View?) {
                 mContentView!!.text = mContent
             }
 
@@ -973,14 +977,22 @@ class GameControllerInput : AppCompatActivity(), InputDeviceListener {
          * with 2 (1026) and the string R.string.game_controller_input_heading_keys ("Keys and Buttons")
          */
         init {
-            mDeviceHeading = Heading(BASE_ID_HEADING or 0,
-                    mResources.getString(R.string.game_controller_input_heading_device))
-            mDeviceNameTextColumn = TextColumn(BASE_ID_DEVICE_ITEM or 0,
-                    mResources.getString(R.string.game_controller_input_label_device_name))
-            mAxesHeading = Heading(BASE_ID_HEADING or 1,
-                    mResources.getString(R.string.game_controller_input_heading_axes))
-            mKeysHeading = Heading(BASE_ID_HEADING or 2,
-                    mResources.getString(R.string.game_controller_input_heading_keys))
+            mDeviceHeading = Heading(
+                BASE_ID_HEADING or 0,
+                mResources.getString(R.string.game_controller_input_heading_device)
+            )
+            mDeviceNameTextColumn = TextColumn(
+                BASE_ID_DEVICE_ITEM or 0,
+                mResources.getString(R.string.game_controller_input_label_device_name)
+            )
+            mAxesHeading = Heading(
+                BASE_ID_HEADING or 1,
+                mResources.getString(R.string.game_controller_input_heading_axes)
+            )
+            mKeysHeading = Heading(
+                BASE_ID_HEADING or 2,
+                mResources.getString(R.string.game_controller_input_heading_keys)
+            )
         }
     }
 

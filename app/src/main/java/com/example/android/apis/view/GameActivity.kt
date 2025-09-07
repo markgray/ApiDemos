@@ -19,15 +19,17 @@
 
 package com.example.android.apis.view
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.AttributeSet
 import android.view.View
 import android.view.View.OnSystemUiVisibilityChangeListener
 import android.widget.Button
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import com.example.android.apis.graphics.TouchPaint.PaintView
@@ -36,17 +38,21 @@ import com.example.android.apis.graphics.TouchPaint.PaintView
  * This activity demonstrates how to use the system UI flags to
  * implement an immersive game.
  */
-@Suppress("MemberVisibilityCanBePrivate", "RedundantOverride")
+@Suppress("MemberVisibilityCanBePrivate")
 class GameActivity : AppCompatActivity() {
     /**
      * Implementation of a view for the game, filling the entire screen.
+     *
+     * @param context [Context] our view is running in, through which we can access the current
+     * theme, resources, etc
+     * @param attrs attributes of the XML tag that is inflating this view.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @SuppressLint("ObsoleteSdkInt")
+    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     class Content(context: Context?, attrs: AttributeSet?) :
-            PaintView(context, attrs),
-            OnSystemUiVisibilityChangeListener,
-            View.OnClickListener
-    {
+        PaintView(context, attrs),
+        OnSystemUiVisibilityChangeListener,
+        View.OnClickListener {
         /**
          * Set by our containing Activity to "this" by calling our [init] method, but never
          * used.
@@ -66,17 +72,17 @@ class GameActivity : AppCompatActivity() {
          * navigation UI elements are invisible and the text of [Button] field [mPlayButton] is set
          * to "Pause".
          */
-        var mPaused = false
+        var mPaused: Boolean = false
 
         /**
          * The last system UI visibility mask passed to our [onSystemUiVisibilityChange] callback.
          */
-        var mLastSystemUiVis = 0
+        var mLastSystemUiVis: Int = 0
 
         /**
          * Flag indicating that the system UI state should be updated during the next game loop
          */
-        var mUpdateSystemUi = false
+        var mUpdateSystemUi: Boolean = false
 
         /**
          * [Runnable] which is used to fade the current finger painting.
@@ -94,7 +100,7 @@ class GameActivity : AppCompatActivity() {
                     updateNavVisibility()
                 }
                 if (!mPaused) {
-                    handler.postDelayed(this, 1000 / 30.toLong())
+                    handler.postDelayed(/* r = */ this, /* delayMillis = */ 1000 / 30.toLong())
                 }
             }
         }
@@ -114,8 +120,8 @@ class GameActivity : AppCompatActivity() {
             // state of the game that it will interact with.
             mActivity = activity
             mPlayButton = playButton
-            mPlayButton!!.setOnClickListener(this)
-            setGamePaused(true)
+            mPlayButton!!.setOnClickListener(/* l = */ this)
+            setGamePaused(paused = true)
         }
 
         /**
@@ -137,7 +143,7 @@ class GameActivity : AppCompatActivity() {
             // Detect when we go out of nav-hidden mode, to reset back to having
             // it hidden; our game wants those elements to stay hidden as long
             // as it is being played and stay shown when paused.
-            val diff = mLastSystemUiVis xor visibility
+            val diff: Int = mLastSystemUiVis xor visibility
             mLastSystemUiVis = visibility
             if (!mPaused && diff and SYSTEM_UI_FLAG_HIDE_NAVIGATION != 0 && visibility and SYSTEM_UI_FLAG_HIDE_NAVIGATION == 0) {
                 // We are running and the system UI navigation has become
@@ -215,12 +221,12 @@ class GameActivity : AppCompatActivity() {
             mPlayButton!!.setText(if (paused) R.string.play else R.string.pause)
             keepScreenOn = !paused
             updateNavVisibility()
-            val h = handler
+            val h: Handler? = handler
             if (h != null) {
-                handler.removeCallbacks(mFader)
+                handler.removeCallbacks(/* r = */ mFader)
                 if (!paused) {
                     mFader.run()
-                    text("Draw!")
+                    text(text = "Draw!")
                 }
             }
         }
@@ -278,14 +284,14 @@ class GameActivity : AppCompatActivity() {
          * that the visibility of the status bar or other screen/window decorations be changed.
          * Finally we set our field [mUpdateSystemUi] to false.
          */
-        @TargetApi(Build.VERSION_CODES.KITKAT)
+        @RequiresApi(Build.VERSION_CODES.KITKAT)
         fun updateNavVisibility() {
-            var newVis = (SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or SYSTEM_UI_FLAG_LAYOUT_STABLE)
+            var newVis: Int = (SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or SYSTEM_UI_FLAG_LAYOUT_STABLE)
             if (!mPaused) {
                 newVis = newVis or (SYSTEM_UI_FLAG_LOW_PROFILE or SYSTEM_UI_FLAG_FULLSCREEN
-                        or SYSTEM_UI_FLAG_HIDE_NAVIGATION or SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+                    or SYSTEM_UI_FLAG_HIDE_NAVIGATION or SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
             }
 
             // Set the new desired visibility.
@@ -299,7 +305,7 @@ class GameActivity : AppCompatActivity() {
          * system bar changes.
          */
         init {
-            setOnSystemUiVisibilityChangeListener(this)
+            setOnSystemUiVisibilityChangeListener(/* l = */ this)
         }
     }
 

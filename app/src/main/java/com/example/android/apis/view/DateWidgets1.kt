@@ -92,10 +92,10 @@ class DateWidgets1 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.date_widgets_example_1)
         mDateDisplay = findViewById(R.id.dateDisplay)
-        setDialogOnClickListener(R.id.pickDate, DATE_DIALOG_ID)
-        setDialogOnClickListener(R.id.pickTime12, TIME_12_DIALOG_ID)
-        setDialogOnClickListener(R.id.pickTime24, TIME_24_DIALOG_ID)
-        val c = Calendar.getInstance()
+        setDialogOnClickListener(buttonId = R.id.pickDate, dialogId = DATE_DIALOG_ID)
+        setDialogOnClickListener(buttonId = R.id.pickTime12, dialogId = TIME_12_DIALOG_ID)
+        setDialogOnClickListener(buttonId = R.id.pickTime24, dialogId = TIME_24_DIALOG_ID)
+        val c: Calendar = Calendar.getInstance()
         mYear = c[Calendar.YEAR]
         mMonth = c[Calendar.MONTH]
         mDay = c[Calendar.DAY_OF_MONTH]
@@ -119,8 +119,8 @@ class DateWidgets1 : AppCompatActivity() {
     private fun setDialogOnClickListener(buttonId: Int, dialogId: Int) {
         val b = findViewById<Button>(buttonId)
         b.setOnClickListener { v: View? ->
-            @Suppress("DEPRECATION")
-            showDialog(dialogId)
+            @Suppress("DEPRECATION") // TODO: Use the new DialogFragment class with FragmentManager instead
+            showDialog(/* id = */ dialogId)
         }
     }
 
@@ -150,14 +150,20 @@ class DateWidgets1 : AppCompatActivity() {
     override fun onCreateDialog(id: Int): Dialog? {
         when (id) {
             TIME_12_DIALOG_ID, TIME_24_DIALOG_ID -> return TimePickerDialog(
-                    this,
-                    mTimeSetListener,
-                    mHour, mMinute, id == TIME_24_DIALOG_ID
+                /* context = */ this,
+                /* listener = */ mTimeSetListener,
+                /* hourOfDay = */ mHour,
+                /* minute = */ mMinute,
+                /* is24HourView = */
+                id == TIME_24_DIALOG_ID
             )
+
             DATE_DIALOG_ID -> return DatePickerDialog(
-                    this,
-                    mDateSetListener,
-                    mYear, mMonth, mDay
+                /* context = */ this,
+                /* listener = */ mDateSetListener,
+                /* year = */ mYear,
+                /* month = */ mMonth,
+                /* dayOfMonth = */ mDay
             )
         }
         return null
@@ -178,11 +184,19 @@ class DateWidgets1 : AppCompatActivity() {
      * @param id     The id of the managed dialog.
      * @param dialog The dialog.
      */
-    @Deprecated("Deprecated in Java")
+    @Deprecated("Deprecated in Java") // TODO: Old no-arguments version of onPrepareDialog(int, Dialog, Bundle).
     override fun onPrepareDialog(id: Int, dialog: Dialog) {
         when (id) {
-            TIME_12_DIALOG_ID, TIME_24_DIALOG_ID -> (dialog as TimePickerDialog).updateTime(mHour, mMinute)
-            DATE_DIALOG_ID -> (dialog as DatePickerDialog).updateDate(mYear, mMonth, mDay)
+            TIME_12_DIALOG_ID, TIME_24_DIALOG_ID -> (dialog as TimePickerDialog).updateTime(
+                /* hourOfDay = */ mHour,
+                /* minuteOfHour = */ mMinute
+            )
+
+            DATE_DIALOG_ID -> (dialog as DatePickerDialog).updateDate(
+                /* year = */ mYear,
+                /* month = */ mMonth,
+                /* dayOfMonth = */ mDay
+            )
         }
     }
 
@@ -192,11 +206,11 @@ class DateWidgets1 : AppCompatActivity() {
      */
     private fun updateDisplay() {
         mDateDisplay!!.text = StringBuilder() // Month is 0 based so add 1
-                .append(mMonth + 1).append("-")
-                .append(mDay).append("-")
-                .append(mYear).append(" ")
-                .append(pad(mHour)).append(":")
-                .append(pad(mMinute))
+            .append(mMonth + 1).append("-")
+            .append(mDay).append("-")
+            .append(mYear).append(" ")
+            .append(pad(mHour)).append(":")
+            .append(pad(mMinute))
     }
 
     /**
@@ -205,11 +219,10 @@ class DateWidgets1 : AppCompatActivity() {
      * respectively then call our method [updateDisplay] to update our display of these fields.
      */
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-    private val mDateSetListener = OnDateSetListener {
-        view,
-        year,
-        monthOfYear,
-        dayOfMonth ->
+    private val mDateSetListener = OnDateSetListener { view,
+                                                       year,
+                                                       monthOfYear,
+                                                       dayOfMonth ->
 
         /**
          * The callback used to indicate the user is done filling in the date. We simply save our
@@ -234,10 +247,9 @@ class DateWidgets1 : AppCompatActivity() {
      * method [updateDisplay] to update our display of these fields.
      */
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-    private val mTimeSetListener = OnTimeSetListener {
-        view,
-        hourOfDay,
-        minute ->
+    private val mTimeSetListener = OnTimeSetListener { view,
+                                                       hourOfDay,
+                                                       minute ->
 
         /**
          * Called when the user is done setting a new time and the dialog has closed. We simply save
@@ -258,19 +270,19 @@ class DateWidgets1 : AppCompatActivity() {
          * Dialog ID for the "change the time (12 hour)" dialog which is launched by the Button with
          * ID R.id.pickTime12
          */
-        const val TIME_12_DIALOG_ID = 0
+        const val TIME_12_DIALOG_ID: Int = 0
 
         /**
          * Dialog ID for the "change the time (24 hour)" dialog which is launched by the Button with
          * ID R.id.pickTime24
          */
-        const val TIME_24_DIALOG_ID = 1
+        const val TIME_24_DIALOG_ID: Int = 1
 
         /**
          * Dialog ID for the "change the date" dialog which is launched by the Button with
          * ID R.id.pickDate
          */
-        const val DATE_DIALOG_ID = 2
+        const val DATE_DIALOG_ID: Int = 2
 
         /**
          * Converts int to String, and Zero Pads numbers under 10. If our parameter [c] is greater

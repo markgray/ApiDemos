@@ -16,7 +16,6 @@
 package com.example.android.apis.view
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.ClipData
 import android.content.Context
 import android.graphics.Canvas
@@ -29,13 +28,20 @@ import android.util.Log
 import android.view.DragEvent
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.core.content.withStyledAttributes
 import com.example.android.apis.R
 
 /**
  * Used by [DragAndDropDemo] to draw the dots which the user can drag.
+ * (See our init block for the details of our construction.)
+ *
+ * @param context The [Context] the view is running in, through which it can access the current
+ * theme, resources, etc.
+ * @param attrs The attributes of the XML tag that is inflating the view.
  */
-@SuppressLint("SetTextI18n")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     /**
      * Flag used to indicate that a drag has started. Set to true when we receive a ACTION_DRAG_STARTED
@@ -121,9 +127,6 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
 
     /**
      * Shadow builder that can ANR if desired
-     */
-    internal inner class ANRShadowBuilder
-    /**
      * Constructs a shadow image builder based on a View which can optionally force an ANR.
      * First we call our super's constructor, then we save our [Boolean] parameter in our
      * field [mDoAnr].
@@ -131,11 +134,9 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
      * @param view   A View. Any View in scope can be used.
      * @param mDoAnr Flag to indicate whether we should for a ANR when we are long clicked.
      */
-    (view: View?,
-     /**
-      * Flag to indicate whether we should force an ANR when we are long clicked.
-      */
-     private var mDoAnr: Boolean
+    internal inner class ANRShadowBuilder(
+        view: View?,
+        private var mDoAnr: Boolean
     ) : DragShadowBuilder(view) {
 
         /**
@@ -192,27 +193,42 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
     override fun onDraw(canvas: Canvas) {
         var wf = width.toFloat()
         var hf = height.toFloat()
-        val cx = wf / 2
-        val cy = hf / 2
+        val cx: Float = wf / 2
+        val cy: Float = hf / 2
         wf -= paddingLeft + paddingRight.toFloat()
         hf -= paddingTop + paddingBottom.toFloat()
-        var rad = if (wf < hf) wf / 2 else hf / 2
-        canvas.drawCircle(cx, cy, rad, mPaint)
+        var rad: Float = if (wf < hf) wf / 2 else hf / 2
+        canvas.drawCircle(/* cx = */ cx, /* cy = */ cy, /* radius = */ rad, /* paint = */ mPaint)
         if (mLegend != null && mLegend!!.isNotEmpty()) {
-            canvas.drawText(mLegend!!, 0, mLegend!!.length,
-                cx, cy + mLegendPaint.fontSpacing / 2,
-                mLegendPaint)
+            canvas.drawText(
+                /* text = */ mLegend!!,
+                /* start = */ 0,
+                /* end = */ mLegend!!.length,
+                /* x = */ cx,
+                /* y = */ cy + mLegendPaint.fontSpacing / 2,
+                /* paint = */ mLegendPaint
+            )
         }
 
         // if we're in the middle of a drag, light up as a potential target
         if (mDragInProgress && mAcceptsDrag) {
             for (i in NUM_GLOW_STEPS downTo 1) {
-                var color = if (mHovering) WHITE_STEP else GREEN_STEP
+                var color: Int = if (mHovering) WHITE_STEP else GREEN_STEP
                 color = i * (color or ALPHA_STEP)
                 mGlow.color = color
-                canvas.drawCircle(cx, cy, rad, mGlow)
+                canvas.drawCircle(
+                    /* cx = */ cx,
+                    /* cy = */ cy,
+                    /* radius = */ rad,
+                    /* paint = */ mGlow
+                )
                 rad -= 0.5f
-                canvas.drawCircle(cx, cy, rad, mGlow)
+                canvas.drawCircle(
+                    /* cx = */ cx,
+                    /* cy = */ cy,
+                    /* radius = */ rad,
+                    /* paint = */ mGlow
+                )
                 rad -= 0.5f
             }
         }
@@ -226,14 +242,17 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
      *
      * @param widthSpec  horizontal space requirements as imposed by the parent.
      * The requirements are encoded with
-     * [android.view.View.MeasureSpec].
+     * [MeasureSpec].
      * @param heightSpec vertical space requirements as imposed by the parent.
      * The requirements are encoded with
-     * [android.view.View.MeasureSpec].
+     * [MeasureSpec].
      */
     override fun onMeasure(widthSpec: Int, heightSpec: Int) {
-        val totalDiameter = 2 * mRadius + paddingLeft + paddingRight
-        setMeasuredDimension(totalDiameter, totalDiameter)
+        val totalDiameter: Int = 2 * mRadius + paddingLeft + paddingRight
+        setMeasuredDimension(
+            /* measuredWidth = */ totalDiameter,
+            /* measuredHeight = */ totalDiameter
+        )
     }
 
     /**
@@ -282,10 +301,12 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
                 // cache whether we accept the drag to return for LOCATION events
                 mDragInProgress = true
                 result = true
+                @Suppress("KotlinConstantConditions")
                 mAcceptsDrag = result
                 // Redraw in the new visual state since we are a potential drop target
                 invalidate()
             }
+
             DragEvent.ACTION_DRAG_ENDED -> {
                 Log.i(TAG, "Drag ended.")
                 if (mAcceptsDrag) {
@@ -294,12 +315,14 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
                 mDragInProgress = false
                 mHovering = false
             }
+
             DragEvent.ACTION_DRAG_LOCATION -> {
 
                 // we returned true to DRAG_STARTED, so return true here
                 Log.i(TAG, "... seeing drag locations ...")
                 result = mAcceptsDrag
             }
+
             DragEvent.ACTION_DROP -> {
                 Log.i(TAG, "Got a drop! dot=$this event=$event")
                 if (mAnrType == ANR_DROP) {
@@ -308,16 +331,19 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
                 processDrop(event)
                 result = true
             }
+
             DragEvent.ACTION_DRAG_ENTERED -> {
                 Log.i(TAG, "Entered dot @ $this")
                 mHovering = true
                 invalidate()
             }
+
             DragEvent.ACTION_DRAG_EXITED -> {
                 Log.i(TAG, "Exited dot @ $this")
                 mHovering = false
                 invalidate()
             }
+
             else -> {
                 Log.i(TAG, "other drag event: $event")
                 result = mAcceptsDrag
@@ -341,10 +367,10 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
      * @param event [DragEvent] passed to our [onDragEvent] callback
      */
     private fun processDrop(event: DragEvent) {
-        val data = event.clipData
-        val n = data.itemCount
+        val data: ClipData = event.clipData
+        val n: Int = data.itemCount
         for (i in 0 until n) {
-            val item = data.getItemAt(i)
+            val item: ClipData.Item = data.getItemAt(i)
             Log.i(TAG, "Dropped item $i : $item")
             if (mReportView != null) {
                 var text = item.coerceToText(context).toString()
@@ -360,7 +386,7 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
         /**
          * TAG used for logging
          */
-        const val TAG = "DraggableDot"
+        const val TAG: String = "DraggableDot"
 
         /**
          * Number of steps in green, white, and alpha colors used when drawing the green or white circle
@@ -387,17 +413,17 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
         private const val ALPHA_STEP = -0x1000000 / NUM_GLOW_STEPS
 
         @Suppress("unused")
-        const val ANR_NONE = 0
+        const val ANR_NONE: Int = 0
 
         /**
          * Value of `mAnrType` set by dot:anr="thumbnail"
          */
-        const val ANR_SHADOW = 1
+        const val ANR_SHADOW: Int = 1
 
         /**
          * Value of `mAnrType` set by dot:anr="drop"
          */
-        const val ANR_DROP = 2
+        const val ANR_DROP: Int = 2
     }
 
     /**
@@ -456,25 +482,29 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
         mGlow.style = Paint.Style.STROKE
 
         // look up any layout-defined attributes
-        val a = context.obtainStyledAttributes(attrs, R.styleable.DraggableDot)
-        val n = a.indexCount
-        for (i in 0 until n) {
-            when (val attr = a.getIndex(i)) {
-                R.styleable.DraggableDot_radius -> {
-                    mRadius = a.getDimensionPixelSize(attr, 0)
-                }
-                R.styleable.DraggableDot_legend -> {
-                    mLegend = a.getText(attr)
-                }
-                R.styleable.DraggableDot_anr -> {
-                    mAnrType = a.getInt(attr, 0)
+        context.withStyledAttributes(set = attrs, attrs = R.styleable.DraggableDot) {
+            val n: Int = indexCount
+            for (i in 0 until n) {
+                when (val attr: Int = getIndex(i)) {
+                    R.styleable.DraggableDot_radius -> {
+                        mRadius = getDimensionPixelSize(/* index = */ attr, /* defValue = */ 0)
+                    }
+
+                    R.styleable.DraggableDot_legend -> {
+                        mLegend = getText(/* index = */ attr)
+                    }
+
+                    R.styleable.DraggableDot_anr -> {
+                        mAnrType = getInt(/* index = */ attr, /* defValue = */ 0)
+                    }
                 }
             }
         }
-        a.recycle()
-        Log.i(TAG, "DraggableDot @ " + this + " : radius=" + mRadius + " legend='" + mLegend
-            + "' anr=" + mAnrType)
-        setOnLongClickListener { v ->
+        Log.i(
+            TAG, "DraggableDot @ " + this + " : radius=" + mRadius + " legend='" + mLegend
+                + "' anr=" + mAnrType
+        )
+        setOnLongClickListener { v: View ->
 
             /**
              * Called when a view has been clicked and held. First we set the text of our [TextView]
@@ -501,10 +531,20 @@ class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs
             mReportView!!.text = ""
             val data = ClipData.newPlainText("dot", "Dot : $v")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                v.startDragAndDrop(data, ANRShadowBuilder(v, mAnrType == ANR_SHADOW), v as Any, 0)
+                v.startDragAndDrop(
+                    /* data = */ data,
+                    /* shadowBuilder = */ ANRShadowBuilder(v, mAnrType == ANR_SHADOW),
+                    /* myLocalState = */ v as Any,
+                    /* flags = */ 0
+                )
             } else {
-                @Suppress("DEPRECATION")
-                v.startDrag(data, ANRShadowBuilder(v, mAnrType == ANR_SHADOW), v as Any, 0)
+                @Suppress("DEPRECATION")  // Needed for SDK older than N
+                v.startDrag(
+                    /* data = */ data,
+                    /* shadowBuilder = */ ANRShadowBuilder(v, mAnrType == ANR_SHADOW),
+                    /* myLocalState = */ v as Any,
+                    /* flags = */ 0
+                )
             }
             true
         }
