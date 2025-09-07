@@ -61,13 +61,13 @@ class InternalSelectionView : View {
      * Number of rows of rectangles we are to draw, defaults to 5 but is settable by several of our
      * constructors.
      */
-    var mNumRows = 5
+    var mNumRows: Int = 5
         private set
 
     /**
      * Which row is selected (it will be drawn in RED, unselected rows will be BLACK).
      */
-    var mSelectedRow = 0
+    var mSelectedRow: Int = 0
         private set
 
     /**
@@ -94,6 +94,7 @@ class InternalSelectionView : View {
      */
     var mLabel: String? = null
         private set
+
     /**
      * The constructor used by the activity [InternalSelectionFocus] (and internally by us).
      * First we call through to our super's constructor, then we save our [Int] parameter
@@ -160,8 +161,8 @@ class InternalSelectionView : View {
      */
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         setMeasuredDimension(
-                measureWidth(widthMeasureSpec),
-                measureHeight(heightMeasureSpec)
+            /* measuredWidth = */ measureWidth(widthMeasureSpec),
+            /* measuredHeight = */ measureHeight(heightMeasureSpec)
         )
     }
 
@@ -179,17 +180,19 @@ class InternalSelectionView : View {
      * @return Width in pixels we would like to have.
      */
     private fun measureWidth(measureSpec: Int): Int {
-        val specMode = MeasureSpec.getMode(measureSpec)
-        val specSize = MeasureSpec.getSize(measureSpec)
+        val specMode: Int = MeasureSpec.getMode(measureSpec)
+        val specSize: Int = MeasureSpec.getSize(measureSpec)
         val desiredWidth = 300 + paddingLeft + paddingRight
         return when (specMode) {
             MeasureSpec.EXACTLY -> {
                 // We were told how big to be
                 specSize
             }
+
             MeasureSpec.AT_MOST -> {
-                desiredWidth.coerceAtMost(specSize)
+                desiredWidth.coerceAtMost(maximumValue = specSize)
             }
+
             else -> {
                 desiredWidth
             }
@@ -211,21 +214,23 @@ class InternalSelectionView : View {
      * @return Width in pixels we would like to have.
      */
     private fun measureHeight(measureSpec: Int): Int {
-        val specMode = MeasureSpec.getMode(measureSpec)
-        val specSize = MeasureSpec.getSize(measureSpec)
-        val desiredHeight = (
-                if (mDesiredHeight != null)
-                    mDesiredHeight!!
-                else mNumRows * mEstimatedPixelHeight + paddingTop + paddingBottom
-                )
+        val specMode: Int = MeasureSpec.getMode(measureSpec)
+        val specSize: Int = MeasureSpec.getSize(measureSpec)
+        val desiredHeight: Int = (
+            if (mDesiredHeight != null)
+                mDesiredHeight!!
+            else mNumRows * mEstimatedPixelHeight + paddingTop + paddingBottom
+            )
         return when (specMode) {
             MeasureSpec.EXACTLY -> {
                 // We were told how big to be
                 specSize
             }
+
             MeasureSpec.AT_MOST -> {
-                desiredHeight.coerceAtMost(specSize)
+                desiredHeight.coerceAtMost(maximumValue = specSize)
             }
+
             else -> {
                 desiredHeight
             }
@@ -266,17 +271,17 @@ class InternalSelectionView : View {
      * @param canvas the [Canvas] on which the background will be drawn
      */
     override fun onDraw(canvas: Canvas) {
-        val rowHeight = rowHeight
-        var rectTop = paddingTop
-        val rectLeft = paddingLeft
-        val rectRight = width - paddingRight
+        val rowHeight: Int = rowHeight
+        var rectTop: Int = paddingTop
+        val rectLeft: Int = paddingLeft
+        val rectRight: Int = width - paddingRight
         for (i in 0 until mNumRows) {
             mPainter.color = Color.BLACK
             mPainter.alpha = 0x20
 
             // draw background rect
             mTempRect[rectLeft, rectTop, rectRight] = rectTop + rowHeight
-            canvas.drawRect(mTempRect, mPainter)
+            canvas.drawRect(/* r = */ mTempRect, /* paint = */ mPainter)
 
             // draw foreground rect
             if (i == mSelectedRow && hasFocus()) {
@@ -289,14 +294,15 @@ class InternalSelectionView : View {
                 mTextPaint.alpha = 0xF0
             }
             mTempRect[rectLeft + 2, rectTop + 2, rectRight - 2] = rectTop + rowHeight - 2
-            canvas.drawRect(mTempRect, mPainter)
+            canvas.drawRect(/* r = */ mTempRect, /* paint = */ mPainter)
 
             // draw text to help when visually inspecting
             canvas.drawText(
-                    i.toString(),
-                    rectLeft + 2f,
-                    rectTop + 2f - mTextPaint.ascent(),
-                    mTextPaint)
+                /* text = */ i.toString(),
+                /* x = */ rectLeft + 2f,
+                /* y = */ rectTop + 2f - mTextPaint.ascent(),
+                /* paint = */ mTextPaint
+            )
             rectTop += rowHeight
         }
     }
@@ -325,8 +331,8 @@ class InternalSelectionView : View {
      * @param row  row number whose `Rect` we are to "get" to set `Rect rect`
      */
     fun getRectForRow(rect: Rect, row: Int) {
-        val rowHeight = rowHeight
-        val top = paddingTop + row * rowHeight
+        val rowHeight: Int = rowHeight
+        val top: Int = paddingTop + row * rowHeight
         rect[paddingLeft, top, width - paddingRight] = top + rowHeight
     }
 
@@ -338,8 +344,8 @@ class InternalSelectionView : View {
      * we want to scroll onto the screen if necessary.
      */
     fun ensureRectVisible() {
-        getRectForRow(mTempRect, mSelectedRow)
-        requestRectangleOnScreen(mTempRect)
+        getRectForRow(rect = mTempRect, row = mSelectedRow)
+        requestRectangleOnScreen(/* rectangle = */ mTempRect)
     }
 
     /**
@@ -372,6 +378,7 @@ class InternalSelectionView : View {
                 ensureRectVisible()
                 return true
             }
+
             KeyEvent.KEYCODE_DPAD_DOWN -> if (mSelectedRow < mNumRows - 1) {
                 mSelectedRow++
                 invalidate()
@@ -398,7 +405,7 @@ class InternalSelectionView : View {
      * onto the screen if necessary, and return true to our caller.
      *
      * @param event The motion event.
-     * @return True if the event was handled, false otherwise.
+     * @return `true` if the event was handled, `false` otherwise.
      */
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -436,7 +443,7 @@ class InternalSelectionView : View {
      * [mSelectedRow].
      */
     override fun getFocusedRect(r: Rect) {
-        getRectForRow(r, mSelectedRow)
+        getRectForRow(rect = r, row = mSelectedRow)
     }
 
     /**
@@ -475,7 +482,11 @@ class InternalSelectionView : View {
      */
     @SuppressLint("SwitchIntDef")
     override fun onFocusChanged(focused: Boolean, direction: Int, previouslyFocusedRect: Rect?) {
-        super.onFocusChanged(focused, direction, previouslyFocusedRect)
+        super.onFocusChanged(
+            /* gainFocus = */ focused,
+            /* direction = */ direction,
+            /* previouslyFocusedRect = */ previouslyFocusedRect
+        )
         if (focused) {
             when (direction) {
                 FOCUS_DOWN -> mSelectedRow = 0
@@ -483,12 +494,13 @@ class InternalSelectionView : View {
                 FOCUS_LEFT, FOCUS_RIGHT ->                     // set the row that is closest to the rect
                     mSelectedRow = if (previouslyFocusedRect != null) {
                         val y = (previouslyFocusedRect.top
-                                + previouslyFocusedRect.height() / 2)
+                            + previouslyFocusedRect.height() / 2)
                         val yPerRow = height / mNumRows
                         y / yPerRow
                     } else {
                         0
                     }
+
                 else ->
                     /**
                      * can't gleam any useful information about what internal selection should be...

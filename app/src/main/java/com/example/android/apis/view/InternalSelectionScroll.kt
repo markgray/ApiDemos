@@ -21,6 +21,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.graphics.Utilities.id2p
 
 /**
  * Demonstrates how a well behaved view with internal selection [InternalSelectionView]
@@ -52,18 +53,22 @@ class InternalSelectionScroll : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val sv = ScrollView(this)
+        sv.setPadding(0, id2p(120), 0, id2p(60))
         val svLp: ViewGroup.LayoutParams = FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT)
+            /* width = */ ViewGroup.LayoutParams.MATCH_PARENT,
+            /* height = */ ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         val ll = LinearLayout(this)
         ll.layoutParams = svLp
         sv.addView(ll)
         val isv = InternalSelectionView(this, 10)
+
         @Suppress("DEPRECATION")
         val screenHeight = windowManager.defaultDisplay.height
         val llLp = LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                2 * screenHeight) // 2x screen height to ensure scrolling
+            /* width = */ ViewGroup.LayoutParams.MATCH_PARENT,
+            /* height = */ 2 * screenHeight
+        ) // 2x screen height to ensure scrolling
         isv.layoutParams = llLp
         ll.addView(isv)
         setContentView(sv)

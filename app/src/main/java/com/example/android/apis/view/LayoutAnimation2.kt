@@ -60,18 +60,28 @@ class LayoutAnimation2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_animation_2)
         val list = findViewById<ListView>(R.id.list)
-        list.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mStrings)
-        val set = AnimationSet(true)
-        var animation: Animation = AlphaAnimation(0.0f, 1.0f)
-        animation.duration = 50
-        set.addAnimation(animation)
-        animation = TranslateAnimation(
-            Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
-            Animation.RELATIVE_TO_SELF, -1.0f, Animation.RELATIVE_TO_SELF, 0.0f
+        list.adapter = ArrayAdapter(
+            /* context = */ this,
+            /* resource = */ android.R.layout.simple_list_item_1,
+            /* objects = */ mStrings
         )
-        animation.setDuration(100)
-        set.addAnimation(animation)
-        val controller = LayoutAnimationController(set, 0.5f)
+        val set = AnimationSet(/* shareInterpolator = */ true)
+        var animation: Animation = AlphaAnimation(/* fromAlpha = */ 0.0f, /* toAlpha = */ 1.0f)
+        animation.duration = 50
+        set.addAnimation(/* a = */ animation)
+        animation = TranslateAnimation(
+            /* fromXType = */ Animation.RELATIVE_TO_SELF,
+            /* fromXValue = */ 0.0f,
+            /* toXType = */ Animation.RELATIVE_TO_SELF,
+            /* toXValue = */ 0.0f,
+            /* fromYType = */ Animation.RELATIVE_TO_SELF,
+            /* fromYValue = */ -1.0f,
+            /* toYType = */ Animation.RELATIVE_TO_SELF,
+            /* toYValue = */ 0.0f
+        )
+        animation.setDuration(/* durationMillis = */ 100)
+        set.addAnimation(/* a = */ animation)
+        val controller = LayoutAnimationController(/* animation = */ set, /* delay = */ 0.5f)
         list.layoutAnimation = controller
     }
 

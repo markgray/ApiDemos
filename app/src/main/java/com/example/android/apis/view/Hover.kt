@@ -15,13 +15,15 @@
  */
 package com.example.android.apis.view
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.widget.CheckBox
+import android.widget.CompoundButton
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -45,8 +47,9 @@ import com.example.android.apis.R
  * is intercepting events, the button will not change state as the pointer hovers
  * over it because the interceptor itself will grab the events.
  */
+@SuppressLint("ObsoleteSdkInt")
 @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+@RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class Hover : AppCompatActivity() {
     /**
      * [TextView] in our layout with ID R.id.message, it is used to display strings describing
@@ -92,7 +95,7 @@ class Hover : AppCompatActivity() {
         mInterceptCheckBox = findViewById(R.id.intercept_checkbox)
         mInterceptor = findViewById(R.id.interceptor)
         val container = findViewById<View>(R.id.container)
-        container.setOnHoverListener { v, event ->
+        container.setOnHoverListener { v: View, event: MotionEvent ->
 
             /**
              * Called when a hover event is dispatched to a view. This allows listeners to get a
@@ -120,18 +123,20 @@ class Hover : AppCompatActivity() {
             when (event.action) {
                 MotionEvent.ACTION_HOVER_ENTER ->
                     mMessageTextView!!.text = this@Hover.resources.getString(
-                        R.string.hover_message_entered_at,
-                        event.x, event.y
+                        /* id = */ R.string.hover_message_entered_at,
+                        /* ...formatArgs = */ event.x, event.y
                     )
+
                 MotionEvent.ACTION_HOVER_MOVE ->
                     mMessageTextView!!.text = this@Hover.resources.getString(
-                        R.string.hover_message_moved_at,
-                        event.x, event.y
+                        /* id = */ R.string.hover_message_moved_at,
+                        /* ...formatArgs = */ event.x, event.y
                     )
+
                 MotionEvent.ACTION_HOVER_EXIT ->
                     mMessageTextView!!.text = this@Hover.resources.getString(
-                        R.string.hover_message_exited_at,
-                        event.x, event.y
+                        /* id = */ R.string.hover_message_exited_at,
+                        /* ...formatArgs = */ event.x, event.y
                     )
             }
             false
@@ -145,7 +150,8 @@ class Hover : AppCompatActivity() {
          *  buttonView: The compound button view whose state has changed.
          *  isChecked:  The new checked state of buttonView.
          */
-        mInterceptCheckBox!!.setOnCheckedChangeListener{ buttonView, isChecked ->
+        mInterceptCheckBox!!.setOnCheckedChangeListener { buttonView: CompoundButton,
+                                                          isChecked: Boolean ->
             mInterceptor!!.setInterceptHover(isChecked)
         }
     }

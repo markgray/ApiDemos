@@ -34,17 +34,12 @@ import com.example.android.apis.R
  * view group that would like to prevent its children from being hovered
  * under certain situations.  Usually such custom views will be much more
  * interesting and complex than our little Interceptor example here.
- */
-class HoverInterceptorView
-/**
- * Constructor that is called when we are being inflated from XML. We just call our super's
- * constructor.
  *
  * @param context The Context the view is running in, through which it can access the current
  * theme, resources, etc.
  * @param attrs   The attributes of the XML tag that is inflating the view.
  */
-(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs) {
+class HoverInterceptorView(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs) {
     /**
      * Flag to indicate whether we should intercept hover events or not (true we intercept them,
      * false we let them through to our children).

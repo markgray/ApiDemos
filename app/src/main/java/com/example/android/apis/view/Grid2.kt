@@ -48,13 +48,13 @@ class Grid2 : AppCompatActivity() {
 
     /**
      * An adapter which returns [ImageView] objects loaded from an array of resource IDs.
+     *
+     * @property mContext [Context] we were constructed with ("this" in the `onCreate` method of the
+     * [Grid2] activity), used to access resources.
      */
     inner class ImageAdapter(
-            /**
-             * [Context] we were constructed with ("this" in the `onCreate` method of the
-             * [Grid2] activity), used to access resources.
-             */
-            private val mContext: Context) : BaseAdapter() {
+        private val mContext: Context
+    ) : BaseAdapter() {
 
         /**
          * Logical density of the display
@@ -64,13 +64,12 @@ class Grid2 : AppCompatActivity() {
         /**
          * Width of a photo in pixels (45*dp2px)
          */
-        @Suppress("JoinDeclarationAndAssignment")
-        private val w: Int
+        private val w: Int = (45 * dp2px).toInt()
 
         /**
          * Height of a photo in pixels (45*dp2px)
          */
-        private val h: Int
+        private val h: Int = (45 * dp2px).toInt()
 
         /**
          * How many items are in the data set represented by this Adapter, in our case this is the
@@ -128,11 +127,16 @@ class Grid2 : AppCompatActivity() {
                 imageView.layoutParams = AbsListView.LayoutParams(w, h)
                 imageView.adjustViewBounds = false
                 imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-                imageView.setPadding(8, 8, 8, 8)
+                imageView.setPadding(
+                    /* left = */ 8,
+                    /* top = */ 8,
+                    /* right = */ 8,
+                    /* bottom = */ 8
+                )
             } else {
                 imageView = convertView as ImageView
             }
-            imageView.setImageResource(mThumbIds[position])
+            imageView.setImageResource(/* resId = */ mThumbIds[position])
             return imageView
         }
 
@@ -140,94 +144,86 @@ class Grid2 : AppCompatActivity() {
          * The array of resource IDs our [ImageAdapter] uses as its data.
          */
         private val mThumbIds = arrayOf(
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
-                R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
-                R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
-                R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-                R.drawable.sample_thumb_6, R.drawable.sample_thumb_7)
-
-        /**
-         * The init block of our constructor. Our field `dp2px` contains the logical
-         * density of our display, so we use it to scale `w` to 45dp and `h` to 45dp.
-         */
-        init {
-            w = (45 * dp2px).toInt()
-            h = (45 * dp2px).toInt()
-        }
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7,
+            R.drawable.sample_thumb_0, R.drawable.sample_thumb_1,
+            R.drawable.sample_thumb_2, R.drawable.sample_thumb_3,
+            R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7
+        )
     }
 }

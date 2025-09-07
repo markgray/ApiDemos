@@ -66,9 +66,9 @@ class LayoutAnimation4 : AppCompatActivity() {
      * all activities that can be performed for intent `mainIntent` to initialize [mApps].
      */
     private fun loadApps() {
-        val mainIntent = Intent(Intent.ACTION_MAIN, null)
-        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
-        mApps = packageManager.queryIntentActivities(mainIntent, 0)
+        val mainIntent = Intent(/* action = */ Intent.ACTION_MAIN, /* uri = */ null)
+        mainIntent.addCategory(/* category = */ Intent.CATEGORY_LAUNCHER)
+        mApps = packageManager.queryIntentActivities(/* intent = */ mainIntent, /* flags = */ 0)
     }
 
     /**
@@ -92,11 +92,11 @@ class LayoutAnimation4 : AppCompatActivity() {
          */
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val i = ImageView(this@LayoutAnimation4)
-            val info = mApps!![position % mApps!!.size]
-            i.setImageDrawable(info.activityInfo.loadIcon(packageManager))
+            val info: ResolveInfo = mApps!![position % mApps!!.size]
+            i.setImageDrawable(info.activityInfo.loadIcon(/* pm = */ packageManager))
             i.scaleType = ImageView.ScaleType.FIT_CENTER
-            val w = (36 * resources.displayMetrics.density + 0.5f).toInt()
-            i.layoutParams = AbsListView.LayoutParams(w, w)
+            val w: Int = (36 * resources.displayMetrics.density + 0.5f).toInt()
+            i.layoutParams = AbsListView.LayoutParams(/* w = */ w, /* h = */ w)
             return i
         }
 
@@ -107,7 +107,7 @@ class LayoutAnimation4 : AppCompatActivity() {
          * @return Count of items.
          */
         override fun getCount(): Int {
-            return mApps!!.size.coerceAtMost(32)
+            return mApps!!.size.coerceAtMost(maximumValue = 32)
         }
 
         /**

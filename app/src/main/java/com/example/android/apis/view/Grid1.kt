@@ -54,9 +54,9 @@ class Grid1 : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.grid_1)
+        setContentView(/* layoutResID = */ R.layout.grid_1)
         loadApps() // do this in onResume?
-        mGrid = findViewById(R.id.myGrid)
+        mGrid = findViewById(/* id = */ R.id.myGrid)
         mGrid!!.adapter = AppsAdapter()
     }
 
@@ -75,19 +75,15 @@ class Grid1 : AppCompatActivity() {
      * retrieve all activities that can be performed for intent `mainIntent` to initialize [mApps].
      */
     private fun loadApps() {
-        val mainIntent = Intent(Intent.ACTION_MAIN, null)
-        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
-        mApps = packageManager.queryIntentActivities(mainIntent, 0)
+        val mainIntent = Intent(/* action = */ Intent.ACTION_MAIN, /* uri = */ null)
+        mainIntent.addCategory(/* category = */ Intent.CATEGORY_LAUNCHER)
+        mApps = packageManager.queryIntentActivities(/* intent = */ mainIntent, /* flags = */ 0)
     }
 
     /**
      * Adapter that displays the icons in `List<ResolveInfo>` field [mApps].
      */
-    inner class AppsAdapter
-    /**
-     * Our constructor.
-     */
-        : BaseAdapter() {
+    inner class AppsAdapter : BaseAdapter() {
 
         /**
          * Logical density of the display
@@ -113,15 +109,15 @@ class Grid1 : AppCompatActivity() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val i: ImageView
             if (convertView == null) {
-                i = ImageView(this@Grid1)
+                i = ImageView(/* context = */ this@Grid1)
                 i.scaleType = ImageView.ScaleType.FIT_CENTER
-                val scaled50 = (50f*dp2px).toInt()
-                i.layoutParams = AbsListView.LayoutParams(scaled50, scaled50)
+                val scaled50: Int = (50f * dp2px).toInt()
+                i.layoutParams = AbsListView.LayoutParams(/* w = */ scaled50, /* h = */ scaled50)
             } else {
                 i = convertView as ImageView
             }
-            val info = mApps!![position]
-            i.setImageDrawable(info.activityInfo.loadIcon(packageManager))
+            val info: ResolveInfo = mApps!![position]
+            i.setImageDrawable(/* drawable = */ info.activityInfo.loadIcon(/* pm = */ packageManager))
             return i
         }
 

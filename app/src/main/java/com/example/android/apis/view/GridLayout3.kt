@@ -16,7 +16,6 @@
 package com.example.android.apis.view
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
@@ -27,7 +26,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.graphics.Utilities.id2p
+import com.example.android.apis.view.GridLayout3.Companion.create
 
 /**
  * A form, showing use of the [GridLayout] API from java code. Here we demonstrate use of the
@@ -36,8 +38,8 @@ import androidx.appcompat.app.AppCompatActivity
  * UI elements. This can either be done by separating rows or separating columns - but we don't
  * need to do both and may only have enough space to do one or the other.
  */
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-@SuppressLint("SetTextI18n")
+@RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
 class GridLayout3 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
@@ -48,7 +50,9 @@ class GridLayout3 : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(create(this))
+        val view = create(this)
+        view.setPadding(0, id2p(160), 0, id2p(60))
+        setContentView(view)
     }
 
     companion object {
@@ -112,67 +116,110 @@ class GridLayout3 : AppCompatActivity() {
             val p = GridLayout(context)
             p.useDefaultMargins = true
             p.alignmentMode = GridLayout.ALIGN_BOUNDS
-            val configuration = context.resources.configuration
+            val configuration: Configuration = context.resources.configuration
             if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 p.isColumnOrderPreserved = false
             } else {
                 p.isRowOrderPreserved = false
             }
-            val titleRow = GridLayout.spec(0)
-            val introRow = GridLayout.spec(1)
-            val emailRow = GridLayout.spec(2, GridLayout.BASELINE)
-            val passwordRow = GridLayout.spec(3, GridLayout.BASELINE)
-            val button1Row = GridLayout.spec(5)
-            val button2Row = GridLayout.spec(6)
-            val centerInAllColumns = GridLayout.spec(0, 4, GridLayout.CENTER)
-            val leftAlignInAllColumns = GridLayout.spec(0, 4, GridLayout.LEFT)
-            val labelColumn = GridLayout.spec(0, GridLayout.RIGHT)
-            val fieldColumn = GridLayout.spec(1, GridLayout.LEFT)
-            val defineLastColumn = GridLayout.spec(3)
-            val fillLastColumn = GridLayout.spec(3, GridLayout.FILL)
+            val titleRow = GridLayout.spec(/* start = */ 0)
+            val introRow = GridLayout.spec(/* start = */ 1)
+            val emailRow = GridLayout.spec(/* start = */ 2, /* alignment = */ GridLayout.BASELINE)
+            val passwordRow =
+                GridLayout.spec(/* start = */ 3, /* alignment = */ GridLayout.BASELINE)
+            val button1Row = GridLayout.spec(/* start = */ 5)
+            val button2Row = GridLayout.spec(/* start = */ 6)
+            val centerInAllColumns = GridLayout.spec(
+                /* start = */ 0,
+                /* size = */ 4,
+                /* alignment = */ GridLayout.CENTER
+            )
+            val leftAlignInAllColumns = GridLayout.spec(
+                /* start = */ 0,
+                /* size = */ 4,
+                /* alignment = */ GridLayout.LEFT
+            )
+            val labelColumn = GridLayout.spec(/* start = */ 0, /* alignment = */ GridLayout.RIGHT)
+            val fieldColumn = GridLayout.spec(/* start = */ 1, /* alignment = */ GridLayout.LEFT)
+            val defineLastColumn = GridLayout.spec(/* start = */ 3)
+            val fillLastColumn = GridLayout.spec(/* start = */ 3, /* alignment = */ GridLayout.FILL)
+            var layoutParams: GridLayout.LayoutParams
             run {
                 val c = TextView(context)
                 c.textSize = 32f
                 c.text = "Email setup"
-                p.addView(c, GridLayout.LayoutParams(titleRow, centerInAllColumns))
+                layoutParams = GridLayout.LayoutParams(
+                    /* rowSpec = */ titleRow,
+                    /* columnSpec = */ centerInAllColumns
+                )
+                p.addView(/* child = */ c, /* params = */ layoutParams)
             }
             run {
                 val c = TextView(context)
                 c.textSize = 16f
                 c.text = "You can configure email in a few simple steps:"
-                p.addView(c, GridLayout.LayoutParams(introRow, leftAlignInAllColumns))
+                layoutParams = GridLayout.LayoutParams(
+                    /* rowSpec = */ introRow,
+                    /* columnSpec = */ leftAlignInAllColumns
+                )
+                p.addView(/* child = */ c, /* params = */ layoutParams)
             }
             run {
                 val c = TextView(context)
                 c.text = "Email address:"
-                p.addView(c, GridLayout.LayoutParams(emailRow, labelColumn))
+                layoutParams = GridLayout.LayoutParams(
+                    /* rowSpec = */ emailRow,
+                    /* columnSpec = */ labelColumn
+                )
+                p.addView(/* child = */ c, /* params = */ layoutParams)
             }
             run {
                 val c = EditText(context)
                 c.setEms(10)
-                c.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-                p.addView(c, GridLayout.LayoutParams(emailRow, fieldColumn))
+                c.inputType =
+                    InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+                layoutParams = GridLayout.LayoutParams(
+                    /* rowSpec = */ emailRow,
+                    /* columnSpec = */ fieldColumn
+                )
+                p.addView(/* child = */ c, /* params = */ layoutParams)
             }
             run {
                 val c = TextView(context)
                 c.text = "Password:"
-                p.addView(c, GridLayout.LayoutParams(passwordRow, labelColumn))
+                layoutParams = GridLayout.LayoutParams(
+                    /* rowSpec = */ passwordRow,
+                    /* columnSpec = */ labelColumn
+                )
+                p.addView(/* child = */ c, /* params = */ layoutParams)
             }
             run {
                 val c: TextView = EditText(context)
                 c.setEms(8)
                 c.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                p.addView(c, GridLayout.LayoutParams(passwordRow, fieldColumn))
+                layoutParams = GridLayout.LayoutParams(
+                    /* rowSpec = */ passwordRow,
+                    /* columnSpec = */ fieldColumn
+                )
+                p.addView(/* child = */ c, /* params = */ layoutParams)
             }
             run {
                 val c = Button(context)
                 c.text = "Manual setup"
-                p.addView(c, GridLayout.LayoutParams(button1Row, defineLastColumn))
+                layoutParams = GridLayout.LayoutParams(
+                    /* rowSpec = */ button1Row,
+                    /* columnSpec = */ defineLastColumn
+                )
+                p.addView(/* child = */ c, /* params = */ layoutParams)
             }
             run {
                 val c = Button(context)
                 c.text = "Next"
-                p.addView(c, GridLayout.LayoutParams(button2Row, fillLastColumn))
+                layoutParams = GridLayout.LayoutParams(
+                    /* rowSpec = */ button2Row,
+                    /* columnSpec = */ fillLastColumn
+                )
+                p.addView(/* child = */ c, /* params = */ layoutParams)
             }
             return p
         }

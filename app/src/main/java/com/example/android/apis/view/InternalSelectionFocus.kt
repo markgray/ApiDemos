@@ -19,6 +19,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android.apis.graphics.Utilities.id2p
 
 /**
  * [android.view.View.requestFocus] and [android.view.View.onFocusChanged] work together to give a
@@ -64,15 +65,14 @@ class InternalSelectionFocus : AppCompatActivity() {
         val layout = LinearLayout(this)
         layout.orientation = LinearLayout.HORIZONTAL
         layout.layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
+            /* width = */ ViewGroup.LayoutParams.MATCH_PARENT,
+            /* height = */ ViewGroup.LayoutParams.MATCH_PARENT
         )
-        // TODO: Use dp here
-        layout.setPadding(0, 240, 0, 120)
+        layout.setPadding(0, id2p(160), 0, id2p(60))
         val params = LinearLayout.LayoutParams(
-                0,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                1f
+            /* width = */ 0,
+            /* height = */ ViewGroup.LayoutParams.MATCH_PARENT,
+            /* weight = */ 1f
         )
         val leftColumn = InternalSelectionView(this, 5, "left column")
         leftColumn.layoutParams = params

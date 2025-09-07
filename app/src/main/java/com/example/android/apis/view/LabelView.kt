@@ -23,6 +23,7 @@ import android.util.AttributeSet
 import android.view.View
 
 import com.example.android.apis.R
+import androidx.core.content.withStyledAttributes
 
 /**
  * Example of how to write a custom subclass of View. LabelView
@@ -96,21 +97,29 @@ class LabelView : View {
      */
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         initLabelView()
-        val a: TypedArray = context.obtainStyledAttributes(attrs, R.styleable.LabelView)
-        val s: CharSequence? = a.getString(R.styleable.LabelView_text)
-        if (s != null) {
-            setText(s.toString())
-        }
+        context.withStyledAttributes(set = attrs, attrs = R.styleable.LabelView) {
+            val s: CharSequence? = getString(R.styleable.LabelView_text)
+            if (s != null) {
+                setText(s.toString())
+            }
 
-        // Retrieve the color(s) to be used for this view and apply them.
-        // Note, if you only care about supporting a single color, that you
-        // can instead call a.getColor() and pass that to setTextColor().
-        setTextColor(a.getColor(R.styleable.LabelView_textColor, -0x1000000))
-        val textSize = a.getDimensionPixelOffset(R.styleable.LabelView_textSize, 0)
-        if (textSize > 0) {
-            setTextSize(textSize)
+            // Retrieve the color(s) to be used for this view and apply them.
+            // Note, if you only care about supporting a single color, that you
+            // can instead call a.getColor() and pass that to setTextColor().
+            setTextColor(
+                color = getColor(
+                    /* index = */ R.styleable.LabelView_textColor,
+                    /* defValue = */ -0x1000000
+                )
+            )
+            val textSize: Int = getDimensionPixelOffset(
+                /* index = */ R.styleable.LabelView_textSize,
+                /* defValue = */ 0
+            )
+            if (textSize > 0) {
+                setTextSize(textSize)
+            }
         }
-        a.recycle()
     }
 
     /**
@@ -125,7 +134,7 @@ class LabelView : View {
         // Must manually scale the desired text size to match screen density
         mTextPaint!!.textSize = 16 * resources.displayMetrics.density
         mTextPaint!!.color = -0x1000000
-        setPadding(3, 3, 3, 3)
+        setPadding(/* left = */ 3, /* top = */ 3, /* right = */ 3, /* bottom = */ 3)
     }
 
     /**
@@ -180,12 +189,15 @@ class LabelView : View {
      * [setMeasuredDimension] to store the measured width and measured height.
      *
      * @param widthMeasureSpec  horizontal space requirements as imposed by the parent. The
-     * requirements are encoded with [android.view.View.MeasureSpec].
+     * requirements are encoded with [MeasureSpec].
      * @param heightMeasureSpec vertical space requirements as imposed by the parent. The
-     * requirements are encoded with [android.view.View.MeasureSpec].
+     * requirements are encoded with [MeasureSpec].
      */
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        setMeasuredDimension(measureWidth(widthMeasureSpec), measureHeight(heightMeasureSpec))
+        setMeasuredDimension(
+            /* measuredWidth = */ measureWidth(measureSpec = widthMeasureSpec),
+            /* measuredHeight = */ measureHeight(measureSpec = heightMeasureSpec)
+        )
     }
 
     /**
@@ -205,8 +217,8 @@ class LabelView : View {
      */
     private fun measureWidth(measureSpec: Int): Int {
         var result: Int
-        val specMode = MeasureSpec.getMode(measureSpec)
-        val specSize = MeasureSpec.getSize(measureSpec)
+        val specMode: Int = MeasureSpec.getMode(measureSpec)
+        val specSize: Int = MeasureSpec.getSize(measureSpec)
         if (specMode == MeasureSpec.EXACTLY) {
             // We were told how big to be
             result = specSize
@@ -215,7 +227,7 @@ class LabelView : View {
             result = mTextPaint!!.measureText(mText).toInt() + paddingLeft + paddingRight
             if (specMode == MeasureSpec.AT_MOST) {
                 // Respect AT_MOST value if that was what is called for by measureSpec
-                result = result.coerceAtMost(specSize)
+                result = result.coerceAtMost(maximumValue = specSize)
             }
         }
         return result
@@ -229,7 +241,7 @@ class LabelView : View {
      * we set `result` to `specSize`. Otherwise we set `result` to the total width of our text
      * field [mText] when drawn using [Paint] field [mTextPaint], plus the left padding and the
      * right padding of this view. If `specMode` is AT_MOST we then set `result` to the minimum
-     * of `result` and `specSize` (if it were UNSPECIFIED we leave `result` as is.
+     * of `result` and `specSize` (if it were UNSPECIFIED we leave `result` as is).
      *
      * Finally we return `result` to the caller.
      *
@@ -247,7 +259,7 @@ class LabelView : View {
         } else {
             // Measure the text (beware: ascent is a negative number)
             result = ((-mAscent + mTextPaint!!.descent()).toInt() + paddingTop
-                    + paddingBottom)
+                + paddingBottom)
             if (specMode == MeasureSpec.AT_MOST) {
                 // Respect AT_MOST value if that was what is called for by measureSpec
                 result = result.coerceAtMost(specSize)
@@ -266,6 +278,11 @@ class LabelView : View {
      */
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawText(mText!!, paddingLeft.toFloat(), paddingTop - mAscent.toFloat(), mTextPaint!!)
+        canvas.drawText(
+            /* text = */ mText!!,
+            /* x = */ paddingLeft.toFloat(),
+            /* y = */ paddingTop - mAscent.toFloat(),
+            /* paint = */ mTextPaint!!
+        )
     }
 }

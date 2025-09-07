@@ -42,7 +42,11 @@ class LayoutAnimation3 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_animation_3)
         val list = findViewById<ListView>(R.id.list)
-        list.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mStrings)
+        list.adapter = ArrayAdapter(
+            /* context = */ this,
+            /* resource = */ android.R.layout.simple_list_item_1,
+            /* objects = */ mStrings
+        )
     }
 
     /**

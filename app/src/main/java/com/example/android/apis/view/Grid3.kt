@@ -15,7 +15,7 @@
  */
 package com.example.android.apis.view
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ResolveInfo
@@ -32,6 +32,7 @@ import android.widget.Checkable
 import android.widget.FrameLayout
 import android.widget.GridView
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.example.android.apis.R
@@ -40,7 +41,8 @@ import com.example.android.apis.R
  * This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection mode on [GridView].
  * Implements multi-selection mode on [GridView]
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class Grid3 : AppCompatActivity() {
     /**
      * Our layout's [GridView], with ID R.id.myGrid.
@@ -83,9 +85,9 @@ class Grid3 : AppCompatActivity() {
      * all activities that can be performed for intent `mainIntent` to initialize [mApps].
      */
     private fun loadApps() {
-        val mainIntent = Intent(Intent.ACTION_MAIN, null)
-        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
-        mApps = packageManager.queryIntentActivities(mainIntent, 0)
+        val mainIntent = Intent(/* action = */ Intent.ACTION_MAIN, /* uri = */ null)
+        mainIntent.addCategory(/* category = */ Intent.CATEGORY_LAUNCHER)
+        mApps = packageManager.queryIntentActivities(/* intent = */ mainIntent, /* flags = */ 0)
     }
 
     /**
@@ -101,13 +103,12 @@ class Grid3 : AppCompatActivity() {
         /**
          * Width of an icon in pixels (50*dp2px)
          */
-        @Suppress("JoinDeclarationAndAssignment")
-        private val w: Int
+        private val w: Int = (50 * dp2px).toInt()
 
         /**
          * Height of an icon in pixels (50*dp2px)
          */
-        private val h: Int
+        private val h: Int = (50 * dp2px).toInt()
 
         /**
          * Get a View that displays the data at the specified position in the data set. First we
@@ -134,19 +135,19 @@ class Grid3 : AppCompatActivity() {
             if (convertView == null) {
                 i = ImageView(this@Grid3)
                 i.scaleType = ImageView.ScaleType.FIT_CENTER
-                i.layoutParams = ViewGroup.LayoutParams(w, h)
-                l = CheckableLayout(this@Grid3)
+                i.layoutParams = ViewGroup.LayoutParams(/* width = */ w, /* height = */ h)
+                l = CheckableLayout(context = this@Grid3)
                 l.layoutParams = AbsListView.LayoutParams(
-                    AbsListView.LayoutParams.WRAP_CONTENT,
-                    AbsListView.LayoutParams.WRAP_CONTENT
+                    /* w = */ AbsListView.LayoutParams.WRAP_CONTENT,
+                    /* h = */ AbsListView.LayoutParams.WRAP_CONTENT
                 )
-                l.addView(i)
+                l.addView(/* child = */ i)
             } else {
                 l = convertView as CheckableLayout
-                i = l.getChildAt(0) as ImageView
+                i = l.getChildAt(/* index = */ 0) as ImageView
             }
-            val info = mApps!![position]
-            i.setImageDrawable(info.activityInfo.loadIcon(packageManager))
+            val info: ResolveInfo = mApps!![position]
+            i.setImageDrawable(info.activityInfo.loadIcon(/* pm = */ packageManager))
             return l
         }
 
@@ -181,27 +182,14 @@ class Grid3 : AppCompatActivity() {
         override fun getItemId(position: Int): Long {
             return position.toLong()
         }
-
-        /**
-         * The init block of our constructor. We use our field `dp2px` to scale 50dp to pixels to
-         * initialize both our `w` and `h` fields.
-         */
-        init {
-            w = (50 * dp2px).toInt()
-            h = (50 * dp2px).toInt()
-        }
     }
 
     /**
      * View group which holds our [ImageView], and allows it to be checkable.
-     */
-    inner class CheckableLayout
-    /**
-     * Our constructor, we just call our super's constructor.
      *
      * @param context [Context] to use to access resources
      */
-    (context: Context?) : FrameLayout(context!!), Checkable {
+    inner class CheckableLayout(context: Context?) : FrameLayout(context!!), Checkable {
         /**
          * Flag to indicate whether we are checked or not.
          */
@@ -217,7 +205,11 @@ class Grid3 : AppCompatActivity() {
         override fun setChecked(checked: Boolean) {
             mChecked = checked
             background = if (checked) {
-                ResourcesCompat.getDrawable(resources, R.drawable.blue, null)
+                ResourcesCompat.getDrawable(
+                    /* res = */ resources,
+                    /* id = */ R.drawable.blue,
+                    /* theme = */ null
+                )
             } else {
                 null
             }
@@ -311,8 +303,13 @@ class Grid3 : AppCompatActivity() {
          * @param id       Adapter ID of the item that was checked or unchecked
          * @param checked  true if the item is now checked, false if the item is now unchecked.
          */
-        override fun onItemCheckedStateChanged(mode: ActionMode, position: Int, id: Long, checked: Boolean) {
-            when (val selectCount = mGrid!!.checkedItemCount) {
+        override fun onItemCheckedStateChanged(
+            mode: ActionMode,
+            position: Int,
+            id: Long,
+            checked: Boolean
+        ) {
+            when (val selectCount: Int = mGrid!!.checkedItemCount) {
                 1 -> mode.subtitle = "One item selected"
                 else -> mode.subtitle = "$selectCount items selected"
             }
