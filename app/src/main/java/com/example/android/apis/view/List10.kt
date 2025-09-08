@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
+import com.example.android.apis.view.List10.Companion.GENRES
 
 /**
  * This example shows how to use choice mode on a list. This list is
@@ -43,7 +44,11 @@ class List10 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.list_10)
         val list: ListView = findViewById(R.id.list)
-        list.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, GENRES)
+        list.adapter = ArrayAdapter(
+            /* context = */ this,
+            /* resource = */ android.R.layout.simple_list_item_single_choice,
+            /* objects = */ GENRES
+        )
         list.itemsCanFocus = false
         list.choiceMode = ListView.CHOICE_MODE_SINGLE
     }

@@ -29,7 +29,7 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import com.example.android.apis.view.List14.EfficientAdapter
+import com.example.android.apis.view.List14.Companion.DATA
 
 /**
  * Demonstrates how to write an efficient list adapter. The adapter used in this example binds
@@ -63,6 +63,8 @@ class List14 : AppCompatActivity() {
 
     /**
      * Our efficient list adapter.
+     *
+     * @param context the [Context] of the activity using us.
      */
     private class EfficientAdapter(context: Context) : BaseAdapter() {
         /**
@@ -74,8 +76,8 @@ class List14 : AppCompatActivity() {
          * [Bitmap] decoded from the resource png R.drawable.icon48x48_1
          */
         private val mIcon1: Bitmap = BitmapFactory.decodeResource(
-            context.resources,
-            R.drawable.icon48x48_1
+            /* res = */ context.resources,
+            /* id = */ R.drawable.icon48x48_1
         )
 
         /**
@@ -83,8 +85,8 @@ class List14 : AppCompatActivity() {
          * and one in drawable-hdpi)
          */
         private val mIcon2: Bitmap = BitmapFactory.decodeResource(
-            context.resources,
-            R.drawable.icon48x48_2
+            /* res = */ context.resources,
+            /* id = */ R.drawable.icon48x48_2
         )
 
         /**
@@ -144,7 +146,7 @@ class List14 : AppCompatActivity() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             // A ViewHolder keeps references to children views to avoid unnecessary calls
             // to findViewById() on each row.
-            var convertViewVar = convertView
+            var convertViewVar: View? = convertView
             val holder: ViewHolder
 
             // When convertView is not null, we can reuse it directly, there is no need
@@ -152,9 +154,9 @@ class List14 : AppCompatActivity() {
             // by ListView is null.
             if (convertViewVar == null) {
                 convertViewVar = mInflater.inflate(
-                    R.layout.list_item_icon_text,
-                    parent,
-                    false
+                    /* resource = */ R.layout.list_item_icon_text,
+                    /* root = */ parent,
+                    /* attachToRoot = */ false
                 )
                 // Creates a ViewHolder and store references to the two children views
                 // we want to bind data to.

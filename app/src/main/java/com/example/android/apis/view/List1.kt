@@ -51,7 +51,11 @@ class List1 : AppCompatActivity() {
 
         // Use an existing ListAdapter that will map an array
         // of strings to TextViews
-        list.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mStrings)
+        list.adapter = ArrayAdapter(
+            /* context = */ this,
+            /* resource = */ android.R.layout.simple_list_item_1,
+            /* objects = */ mStrings
+        )
         list.isTextFilterEnabled = true
     }
 }

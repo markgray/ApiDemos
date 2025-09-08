@@ -28,7 +28,6 @@ import android.widget.ImageView
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.ArrayList
 import kotlin.math.roundToInt
 
 /**
@@ -83,20 +82,12 @@ class List8 : AppCompatActivity() {
      * A simple adapter which maintains an ArrayList of photo resource Ids.
      * Each photo is displayed as an image. This adapter supports clearing the
      * list of photos and adding a new photo.
-     */
-    inner class PhotoAdapter
-    /**
-     * Our constructor, we just store our parameter in our [Context] field [mContext].
      *
      * @param mContext [Context] to use to construct views (this in the `onCreate` method
      * of [List8]
      */
-    (
-        /**
-         * [Context] to use to construct views (set to its parameter by our constructor).
-         */
+    inner class PhotoAdapter(
         private val mContext: Context
-
     ) : BaseAdapter() {
 
         /**
@@ -105,7 +96,8 @@ class List8 : AppCompatActivity() {
         private val mPhotoPool = arrayOf(
             R.drawable.sample_thumb_0, R.drawable.sample_thumb_1, R.drawable.sample_thumb_2,
             R.drawable.sample_thumb_3, R.drawable.sample_thumb_4, R.drawable.sample_thumb_5,
-            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7)
+            R.drawable.sample_thumb_6, R.drawable.sample_thumb_7
+        )
 
         /**
          * List of photos we are currently displaying in our `ListView`
@@ -165,8 +157,10 @@ class List8 : AppCompatActivity() {
             val i = ImageView(mContext)
             i.setImageResource(mPhotos[position])
             i.adjustViewBounds = true
-            i.layoutParams = AbsListView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT)
+            i.layoutParams = AbsListView.LayoutParams(
+                /* w = */ ViewGroup.LayoutParams.WRAP_CONTENT,
+                /* h = */ ViewGroup.LayoutParams.WRAP_CONTENT
+            )
             // Give it a nice background
             i.setBackgroundResource(R.drawable.picture_frame)
             return i
@@ -199,6 +193,5 @@ class List8 : AppCompatActivity() {
             mPhotos.add(newPhoto)
             notifyDataSetChanged()
         }
-
     }
 }

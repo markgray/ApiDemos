@@ -43,6 +43,9 @@ class List7 : AppCompatActivity(), OnItemSelectedListener {
      */
     private var mPhone: TextView? = null
 
+    /**
+     * The [ListView] we use to display our list of contacts.
+     */
     private lateinit var listView: ListView
 
     /**
@@ -70,24 +73,24 @@ class List7 : AppCompatActivity(), OnItemSelectedListener {
 
         // Get a cursor with all numbers.
         // This query will only return contacts with phone numbers
-        val c = contentResolver.query(
-            Phone.CONTENT_URI,
-            PHONE_PROJECTION,
-            Phone.NUMBER + " NOT NULL",
-            null,
-            null
+        val c: Cursor? = contentResolver.query(
+            /* uri = */ Phone.CONTENT_URI,
+            /* projection = */ PHONE_PROJECTION,
+            /* selection = */ Phone.NUMBER + " NOT NULL",
+            /* selectionArgs = */ null,
+            /* sortOrder = */ null
         )
         startManagingCursor(c)
         val adapter: ListAdapter = SimpleCursorAdapter(
-            this,
-            android.R.layout.simple_list_item_1, // Use a template that displays a text view
-            c, // Give the cursor to the list adapter
-            arrayOf(Phone.DISPLAY_NAME),
-            intArrayOf(android.R.id.text1)
+            /* context = */ this,
+            /* layout = */ android.R.layout.simple_list_item_1,
+            /* c = */ c, // Give the cursor to the list adapter
+            /* from = */ arrayOf(Phone.DISPLAY_NAME),
+            /* to = */ intArrayOf(android.R.id.text1)
         )
         listView.adapter = adapter
         listView.setOnItemClickListener { parent, view, position, id ->
-            onListItemClick(parent as ListView, view, position, id)
+            onListItemClick(l = parent as ListView, v = view, position = position, id = id)
         }
     }
 
@@ -112,15 +115,15 @@ class List7 : AppCompatActivity(), OnItemSelectedListener {
     fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
         l.setSelection(position)
         val c = listView.getItemAtPosition(position) as Cursor
-        val type = c.getInt(COLUMN_PHONE_TYPE)
-        val phone = c.getString(COLUMN_PHONE_NUMBER)
+        val type: Int = c.getInt(COLUMN_PHONE_TYPE)
+        val phone: String? = c.getString(COLUMN_PHONE_NUMBER)
         var label: String? = null
         //Custom type? Then get the custom label
         if (type == Phone.TYPE_CUSTOM) {
             label = c.getString(COLUMN_PHONE_LABEL)
         }
         //Get the readable string
-        val numberType = Phone.getTypeLabel(resources, type, label) as String
+        val numberType: String = Phone.getTypeLabel(resources, type, label) as String
         val text = "$numberType: $phone"
         mPhone!!.text = text
     }
@@ -146,15 +149,15 @@ class List7 : AppCompatActivity(), OnItemSelectedListener {
         if (position >= 0) {
             //Get current cursor
             val c = parent.getItemAtPosition(position) as Cursor
-            val type = c.getInt(COLUMN_PHONE_TYPE)
-            val phone = c.getString(COLUMN_PHONE_NUMBER)
+            val type: Int = c.getInt(COLUMN_PHONE_TYPE)
+            val phone: String? = c.getString(COLUMN_PHONE_NUMBER)
             var label: String? = null
             //Custom type? Then get the custom label
             if (type == Phone.TYPE_CUSTOM) {
                 label = c.getString(COLUMN_PHONE_LABEL)
             }
             //Get the readable string
-            val numberType = Phone.getTypeLabel(resources, type, label) as String
+            val numberType: String = Phone.getTypeLabel(resources, type, label) as String
             val text = "$numberType: $phone"
             mPhone!!.text = text
         }

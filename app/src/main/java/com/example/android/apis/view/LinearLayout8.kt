@@ -130,30 +130,37 @@ class LinearLayout8 : AppCompatActivity() {
                 mLinearLayout!!.orientation = LinearLayout.VERTICAL
                 return true
             }
+
             HORIZONTAL_ID -> {
                 mLinearLayout!!.orientation = LinearLayout.HORIZONTAL
                 return true
             }
+
             TOP_ID -> {
                 mLinearLayout!!.setVerticalGravity(Gravity.TOP)
                 return true
             }
+
             MIDDLE_ID -> {
                 mLinearLayout!!.setVerticalGravity(Gravity.CENTER_VERTICAL)
                 return true
             }
+
             BOTTOM_ID -> {
                 mLinearLayout!!.setVerticalGravity(Gravity.BOTTOM)
                 return true
             }
+
             LEFT_ID -> {
                 mLinearLayout!!.setHorizontalGravity(Gravity.LEFT)
                 return true
             }
+
             CENTER_ID -> {
                 mLinearLayout!!.setHorizontalGravity(Gravity.CENTER_HORIZONTAL)
                 return true
             }
+
             RIGHT_ID -> {
                 mLinearLayout!!.setHorizontalGravity(Gravity.RIGHT)
                 return true
@@ -164,13 +171,13 @@ class LinearLayout8 : AppCompatActivity() {
 
     companion object {
         // Menu item Ids
-        const val VERTICAL_ID = Menu.FIRST
-        const val HORIZONTAL_ID = Menu.FIRST + 1
-        const val TOP_ID = Menu.FIRST + 2
-        const val MIDDLE_ID = Menu.FIRST + 3
-        const val BOTTOM_ID = Menu.FIRST + 4
-        const val LEFT_ID = Menu.FIRST + 5
-        const val CENTER_ID = Menu.FIRST + 6
-        const val RIGHT_ID = Menu.FIRST + 7
+        const val VERTICAL_ID: Int = Menu.FIRST
+        const val HORIZONTAL_ID: Int = Menu.FIRST + 1
+        const val TOP_ID: Int = Menu.FIRST + 2
+        const val MIDDLE_ID: Int = Menu.FIRST + 3
+        const val BOTTOM_ID: Int = Menu.FIRST + 4
+        const val LEFT_ID: Int = Menu.FIRST + 5
+        const val CENTER_ID: Int = Menu.FIRST + 6
+        const val RIGHT_ID: Int = Menu.FIRST + 7
     }
 }

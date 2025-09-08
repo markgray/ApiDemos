@@ -51,10 +51,11 @@ class List2 : AppCompatActivity() {
 
         // Get a cursor with all people
         val c = contentResolver.query(
-            ContactsContract.Contacts.CONTENT_URI,
-            CONTACT_PROJECTION,
-            null,
-            null, null
+            /* uri = */ ContactsContract.Contacts.CONTENT_URI,
+            /* projection = */ CONTACT_PROJECTION,
+            /* selection = */ null,
+            /* selectionArgs = */ null,
+            /* sortOrder = */ null
         )
         startManagingCursor(c)
         /**
@@ -62,10 +63,11 @@ class List2 : AppCompatActivity() {
          */
         @Suppress("DEPRECATION")
         val adapter: ListAdapter = SimpleCursorAdapter(
-            this,
-            android.R.layout.simple_list_item_1,
-            c, arrayOf(ContactsContract.Contacts.DISPLAY_NAME),
-            intArrayOf(android.R.id.text1)
+            /* context = */ this,
+            /* layout = */ android.R.layout.simple_list_item_1,
+            /* c = */ c,
+            /* from = */ arrayOf(ContactsContract.Contacts.DISPLAY_NAME),
+            /* to = */ intArrayOf(android.R.id.text1)
         )
         list.adapter = adapter
     }

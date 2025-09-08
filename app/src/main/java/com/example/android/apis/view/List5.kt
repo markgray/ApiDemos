@@ -45,18 +45,13 @@ class List5 : AppCompatActivity() {
         list.adapter = MyListAdapter(this)
     }
 
-    private inner class MyListAdapter
     /**
-     * Our constructor, we simply save our [Context] parameter in our field [mContext].
+     * Our constructor, we simply extend [BaseAdapter]
      *
-     * @param mContext [Context] to use to access resources.
+     * @param mContext [Context] to use to inflate views.
      */
-    (
-        /**
-         * `Context` to use to access resources.
-         */
+    private inner class MyListAdapter(
         private val mContext: Context
-
     ) : BaseAdapter() {
 
         /**
@@ -133,9 +128,9 @@ class List5 : AppCompatActivity() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val tv: TextView = if (convertView == null) {
                 LayoutInflater.from(mContext).inflate(
-                    android.R.layout.simple_expandable_list_item_1,
-                    parent,
-                    false
+                    /* resource = */ android.R.layout.simple_expandable_list_item_1,
+                    /* root = */ parent,
+                    /* attachToRoot = */ false
                 ) as TextView
             } else {
                 convertView as TextView

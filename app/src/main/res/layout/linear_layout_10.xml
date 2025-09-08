@@ -20,10 +20,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:paddingHorizontal="8dp"
     android:paddingTop="120dp"
     android:paddingBottom="60dp"
-    android:orientation="vertical"
     tools:ignore="TextFields,RtlSymmetry,InefficientWeight,ContentDescription,RtlHardcoded,Autofill,LabelFor">
 
     <!-- Top label/button text field. -->
@@ -63,9 +63,9 @@
             style="@android:style/Widget.Button.Inset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dip"
-            android:layout_marginRight="2dip"
             android:layout_marginTop="2dip"
+            android:layout_marginRight="2dip"
+            android:layout_marginBottom="2dip"
             android:padding="10dip"
             android:src="@android:drawable/star_big_on" />
 
@@ -109,9 +109,9 @@
             style="@android:style/Widget.Button.Inset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dip"
-            android:layout_marginRight="2dip"
             android:layout_marginTop="2dip"
+            android:layout_marginRight="2dip"
+            android:layout_marginBottom="2dip"
             android:padding="10dip"
             android:src="@android:drawable/star_big_on" />
 

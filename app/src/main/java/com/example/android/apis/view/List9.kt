@@ -16,7 +16,6 @@
 
 package com.example.android.apis.view
 
-import android.content.Context
 import android.graphics.PixelFormat
 import android.os.Bundle
 import android.os.Handler
@@ -30,7 +29,6 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import com.example.android.apis.view.List9.RemoveWindow
 
 /**
  * Another variation of the list of cheeses. In this case, we use [AbsListView.OnScrollListener] to
@@ -60,7 +58,7 @@ class List9 : AppCompatActivity(), AbsListView.OnScrollListener {
      * [onCreate]) and to make it invisible again after a 3000ms delay (see the code in
      * [onScroll], [RemoveWindow] and [removeWindow]).
      */
-    var mHandler = Handler(Looper.myLooper()!!)
+    var mHandler: Handler = Handler(Looper.myLooper()!!)
 
     /**
      * Handle to the system level service WINDOW_SERVICE, we use it to call its `addView`
@@ -81,8 +79,8 @@ class List9 : AppCompatActivity(), AbsListView.OnScrollListener {
 
     /**
      * Flag indicating that our UI is ready to have [TextView] field [mDialogText] displayed, it is
-     * set to true by the [Runnable] scheduled to run in our [onCreate] callback, in our [onResume]
-     * callback, and set to false in our [onPause] and [onDestroy] callbacks. It is tested in our
+     * set to `true` by the [Runnable] scheduled to run in our [onCreate] callback, in our [onResume]
+     * callback, and set to `false` in our [onPause] and [onDestroy] callbacks. It is tested in our
      * [onScroll] callback to skip doing anything if it is false.
      */
     private var mReady = false
@@ -114,26 +112,30 @@ class List9 : AppCompatActivity(), AbsListView.OnScrollListener {
         setContentView(R.layout.list_9)
         val list: ListView = findViewById(R.id.list)
 
-        mWindowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        mWindowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
         // Use an existing ListAdapter that will map an array
         // of strings to TextViews
         list.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mStrings)
         list.setOnScrollListener(this)
-        val inflate = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        mDialogText = inflate.inflate(R.layout.list_position, list, false) as TextView
+        val inflate = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        mDialogText = inflate.inflate(
+            /* resource = */ R.layout.list_position,
+            /* root = */ list,
+            /* attachToRoot = */ false
+        ) as TextView
         mDialogText.visibility = View.INVISIBLE
         mHandler.post {
             mReady = true
             val lp = WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_APPLICATION,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                /* w = */ WindowManager.LayoutParams.WRAP_CONTENT,
+                /* h = */ WindowManager.LayoutParams.WRAP_CONTENT,
+                /* _type = */ WindowManager.LayoutParams.TYPE_APPLICATION,
+                /* _flags = */ WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                     or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                PixelFormat.TRANSLUCENT
+                /* _format = */ PixelFormat.TRANSLUCENT
             )
-            mWindowManager.addView(mDialogText, lp)
+            mWindowManager.addView(/* view = */ mDialogText, /* params = */ lp)
         }
     }
 

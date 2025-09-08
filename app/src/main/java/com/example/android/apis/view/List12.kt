@@ -24,7 +24,6 @@ import android.widget.EditText
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
-import java.util.ArrayList
 
 /**
  * Demonstrates the using a list view in transcript mode. The bottom of the layout is an
@@ -63,7 +62,11 @@ class List12 : AppCompatActivity(), View.OnClickListener, View.OnKeyListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.list_12)
         val list: ListView = findViewById(R.id.list)
-        mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mStrings)
+        mAdapter = ArrayAdapter(
+            /* context = */ this,
+            /* resource = */ android.R.layout.simple_list_item_1,
+            /* objects = */ mStrings
+        )
         list.adapter = mAdapter
         mUserText = findViewById(R.id.userText)
         mUserText!!.setOnClickListener(this)

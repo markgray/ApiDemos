@@ -95,11 +95,11 @@ class LayoutAnimation6 : AppCompatActivity() {
          */
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val i = ImageView(this@LayoutAnimation6)
-            val info = mApps!![position % mApps!!.size]
+            val info: ResolveInfo = mApps!![position % mApps!!.size]
             i.setImageDrawable(info.activityInfo.loadIcon(packageManager))
             i.scaleType = ImageView.ScaleType.FIT_CENTER
-            val w = (36 * resources.displayMetrics.density + 0.5f).toInt()
-            i.layoutParams = AbsListView.LayoutParams(w, w)
+            val w: Int = (36 * resources.displayMetrics.density + 0.5f).toInt()
+            i.layoutParams = AbsListView.LayoutParams(/* w = */ w, /* h = */ w)
             return i
         }
 
@@ -110,7 +110,7 @@ class LayoutAnimation6 : AppCompatActivity() {
          * @return Count of items.
          */
         override fun getCount(): Int {
-            return mApps!!.size.coerceAtMost(32)
+            return mApps!!.size.coerceAtMost(maximumValue = 32)
         }
 
         /**

@@ -25,7 +25,7 @@ import com.example.android.apis.R
  * an animation of the layout files TableLayout, with the layout of each TableRow
  * animated using an android:layoutAnimation so that alternating rows use
  * anim/layout_animation_row_right_slide and anim/layout_animation_row_left_slide.
- * Way too fast to see effect well even on Excite 10
+ * Way too fast to see effect well even on Excite 10, so I slowed it way down.
  */
 class LayoutAnimation7 : AppCompatActivity() {
     /**

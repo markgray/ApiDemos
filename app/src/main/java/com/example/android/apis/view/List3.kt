@@ -17,8 +17,10 @@
 // TODO: Switch to the new CursorLoader class with LoaderManager instead
 package com.example.android.apis.view
 
+import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Phone
+import android.view.View
 import android.widget.ListView
 import android.widget.SimpleCursorAdapter
 import android.widget.TextView
@@ -53,50 +55,61 @@ class List3 : AppCompatActivity() {
         val list = findViewById<ListView>(R.id.list)
 
         // Get a cursor with all phones
-        val c = contentResolver.query(Phone.CONTENT_URI, PHONE_PROJECTION,
-            null, null, null)
+        val c = contentResolver.query(
+            /* uri = */ Phone.CONTENT_URI,
+            /* projection = */ PHONE_PROJECTION,
+            /* selection = */ null,
+            /* selectionArgs = */ null,
+            /* sortOrder = */ null
+        )
         @Suppress("DEPRECATION")
         startManagingCursor(c)
 
         // Map Cursor columns to views defined in simple_list_item_2.xml
-        val adapter = SimpleCursorAdapter(this,
-            android.R.layout.simple_list_item_2, c, arrayOf(
-            Phone.TYPE,
-            Phone.NUMBER
-        ), intArrayOf(android.R.id.text1, android.R.id.text2))
+        val adapter = SimpleCursorAdapter(
+            /* context = */ this,
+            /* layout = */ android.R.layout.simple_list_item_2,
+            /* c = */ c,
+            /* from = */ arrayOf(
+                Phone.TYPE,
+                Phone.NUMBER
+            ),
+            /* to = */ intArrayOf(android.R.id.text1, android.R.id.text2)
+        )
         //Used to display a readable string for the phone type
-        adapter.viewBinder = SimpleCursorAdapter.ViewBinder { view, cursor, columnIndex ->
-            /**
-             * Binds the Cursor column defined by the specified index to the specified view. If the
-             * [columnIndex] is not our COLUMN_TYPE we return false so that the adapter will
-             * handle the binding itself. Otherwise we initialize `val type` with the value
-             * in column `COLUMN_TYPE` of the [cursor], and initialize [String] variable `var label`
-             * to null. If `type` is Phone.TYPE_CUSTOM we set [String] variable `var label` to the
-             * value of column COLUMN_LABEL of the cursor. We set `val text` to the [CharSequence]
-             * that best describes `type`, substituting `label` if `type` is TYPE_CUSTOM. We set the
-             * text of [view] to `text` and return true to the caller.
-             *
-             * @param view the view to bind the data to
-             * @param cursor the cursor to get the data from
-             * @param columnIndex the column at which the data can be found in the cursor
-             * @return true if the data was bound to the view, false otherwise
-             */
-            //Let the adapter handle the binding if the column is not TYPE
-            if (columnIndex != COLUMN_TYPE) {
-                return@ViewBinder false
+        adapter.viewBinder =
+            SimpleCursorAdapter.ViewBinder { view: View?, cursor: Cursor, columnIndex: Int ->
+                /**
+                 * Binds the Cursor column defined by the specified index to the specified view. If the
+                 * [columnIndex] is not our COLUMN_TYPE we return false so that the adapter will
+                 * handle the binding itself. Otherwise we initialize `val type` with the value
+                 * in column `COLUMN_TYPE` of the [cursor], and initialize [String] variable `var label`
+                 * to null. If `type` is Phone.TYPE_CUSTOM we set [String] variable `var label` to the
+                 * value of column COLUMN_LABEL of the cursor. We set `val text` to the [CharSequence]
+                 * that best describes `type`, substituting `label` if `type` is TYPE_CUSTOM. We set the
+                 * text of [view] to `text` and return true to the caller.
+                 *
+                 * @param view the view to bind the data to
+                 * @param cursor the cursor to get the data from
+                 * @param columnIndex the column at which the data can be found in the cursor
+                 * @return true if the data was bound to the view, false otherwise
+                 */
+                //Let the adapter handle the binding if the column is not TYPE
+                if (columnIndex != COLUMN_TYPE) {
+                    return@ViewBinder false
+                }
+                val type: Int = cursor.getInt(/* columnIndex = */ COLUMN_TYPE)
+                var label: String? = null
+                //Custom type? Then get the custom label
+                if (type == Phone.TYPE_CUSTOM) {
+                    label = cursor.getString(COLUMN_LABEL)
+                }
+                //Get the readable string
+                val text: String = Phone.getTypeLabel(resources, type, label) as String
+                //Set text
+                (view as TextView).text = text
+                true
             }
-            val type = cursor.getInt(COLUMN_TYPE)
-            var label: String? = null
-            //Custom type? Then get the custom label
-            if (type == Phone.TYPE_CUSTOM) {
-                label = cursor.getString(COLUMN_LABEL)
-            }
-            //Get the readable string
-            val text = Phone.getTypeLabel(resources, type, label) as String
-            //Set text
-            (view as TextView).text = text
-            true
-        }
         list.adapter = adapter
     }
 

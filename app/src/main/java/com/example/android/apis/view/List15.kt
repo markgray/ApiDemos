@@ -16,7 +16,7 @@
 
 package com.example.android.apis.view
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.ActionMode
@@ -26,6 +26,7 @@ import android.widget.AbsListView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -54,7 +55,8 @@ class List15 : AppCompatActivity() {
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @SuppressLint("ObsoleteSdkInt")
+    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.list_15)
@@ -72,7 +74,8 @@ class List15 : AppCompatActivity() {
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @SuppressLint("ObsoleteSdkInt")
+    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         supportActionBar!!.subtitle = "Long press to start selection"
@@ -83,7 +86,8 @@ class List15 : AppCompatActivity() {
      * clicked. It then inflates an action mode R.menu.list_select_menu which remains up
      * as long as at least one item is selected, or until the selected items are "shared"
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @SuppressLint("ObsoleteSdkInt")
+    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     private inner class ModeCallback : AbsListView.MultiChoiceModeListener {
         /**
          * Called when action mode is first created. The menu supplied will be used to generate
@@ -140,12 +144,19 @@ class List15 : AppCompatActivity() {
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
             when (item.itemId) {
                 R.id.share -> {
-                    Toast.makeText(this@List15, "Shared " + list.checkedItemCount +
-                        " items", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        /* context = */ this@List15,
+                        /* text = */ "Shared " + list.checkedItemCount + " items",
+                        /* duration = */ Toast.LENGTH_SHORT
+                    ).show()
                     mode.finish()
                 }
-                else -> Toast.makeText(this@List15, "Clicked " + item.title,
-                    Toast.LENGTH_SHORT).show()
+
+                else -> Toast.makeText(
+                    /* context = */ this@List15,
+                    /* text = */ "Clicked " + item.title,
+                    /* duration = */ Toast.LENGTH_SHORT
+                ).show()
             }
             return true
         }

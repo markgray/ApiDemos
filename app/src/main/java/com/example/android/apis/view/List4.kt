@@ -51,18 +51,12 @@ class List4 : AppCompatActivity() {
 
     /**
      * A sample `ListAdapter` that presents content from arrays of speeches and text.
-     */
-    private inner class SpeechListAdapter
-    /**
-     * Our constructor, we simply save our [Context] parameter  context` in our field [mContext].
      *
-     *  @param mContext [Context] to use when constructing views.
+     * @param mContext [Context] to use when constructing views.
      */
-    (
-            /**
-             * Remember our context so we can use it when constructing views.
-             */
-            private val mContext: Context) : BaseAdapter() {
+    private inner class SpeechListAdapter(
+        private val mContext: Context
+    ) : BaseAdapter() {
 
         /**
          * The number of items in the list is determined by the number of speeches in our array.
@@ -113,8 +107,11 @@ class List4 : AppCompatActivity() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val sv: SpeechView
             if (convertView == null) {
-                sv = SpeechView(mContext, TITLES[position],
-                        DIALOGUE[position])
+                sv = SpeechView(
+                    context = mContext,
+                    title = TITLES[position],
+                    words = DIALOGUE[position]
+                )
             } else {
                 sv = convertView as SpeechView
                 sv.setTitle(TITLES[position])
@@ -128,8 +125,14 @@ class List4 : AppCompatActivity() {
     /**
      * We will use a [SpeechView] to display each speech.
      * It's just a [LinearLayout] with two text fields.
+     * (See our `init` block for details of our constructor.)
+     *
+     * @param context [Context] to use when constructing views.
+     * @param title the title of the speech
+     * @param words the content of the speech
      */
-    private inner class SpeechView(context: Context?, title: String?, words: String?) : LinearLayout(context) {
+    private inner class SpeechView(context: Context?, title: String?, words: String?) :
+        LinearLayout(context) {
         /**
          * [TextView] we use to display the title of our speech.
          */
@@ -177,20 +180,20 @@ class List4 : AppCompatActivity() {
             mTitle = TextView(context)
             mTitle.text = title
             addView(
-                    mTitle,
-                    LayoutParams(
-                            LayoutParams.MATCH_PARENT,
-                            LayoutParams.WRAP_CONTENT
-                    )
+                /* child = */ mTitle,
+                /* params = */ LayoutParams(
+                    /* width = */ LayoutParams.MATCH_PARENT,
+                    /* height = */ LayoutParams.WRAP_CONTENT
+                )
             )
             mDialogue = TextView(context)
             mDialogue.text = words
             addView(
-                    mDialogue,
-                    LayoutParams(
-                            LayoutParams.MATCH_PARENT,
-                            LayoutParams.WRAP_CONTENT
-                    )
+                /* child = */ mDialogue,
+                /* params = */ LayoutParams(
+                    /* width = */ LayoutParams.MATCH_PARENT,
+                    /* height = */ LayoutParams.WRAP_CONTENT
+                )
             )
         }
     }

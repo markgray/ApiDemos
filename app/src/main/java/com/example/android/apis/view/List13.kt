@@ -51,13 +51,16 @@ class List13 : AppCompatActivity(), AbsListView.OnScrollListener {
     private var mBusy = false
 
     /**
-     * Will not bind views while the list is scrolling
+     * Will not bind views while the list is scrolling.
+     *
+     * @param context the [Context] of the activity using us
      */
     private inner class SlowAdapter(context: Context) : BaseAdapter() {
         /**
          * [LayoutInflater] instance we use to inflate our item views in our [getView] override.
          */
-        private val mInflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        private val mInflater: LayoutInflater =
+            context.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         /**
          * How many items are in the data set represented by this Adapter. The number of items in
@@ -114,9 +117,9 @@ class List13 : AppCompatActivity(), AbsListView.OnScrollListener {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val text: TextView = if (convertView == null) {
                 mInflater.inflate(
-                    android.R.layout.simple_list_item_1,
-                    parent,
-                    false
+                    /* resource = */ android.R.layout.simple_list_item_1,
+                    /* root = */ parent,
+                    /* attachToRoot = */ false
                 ) as TextView
             } else {
                 convertView as TextView
@@ -198,11 +201,11 @@ class List13 : AppCompatActivity(), AbsListView.OnScrollListener {
         when (scrollState) {
             AbsListView.OnScrollListener.SCROLL_STATE_IDLE -> {
                 mBusy = false
-                val first = view.firstVisiblePosition
-                val count = view.childCount
+                val first: Int = view.firstVisiblePosition
+                val count: Int = view.childCount
                 var i = 0
                 while (i < count) {
-                    val t = view.getChildAt(i) as TextView
+                    val t: TextView = view.getChildAt(i) as TextView
                     if (t.tag != null) {
                         t.text = mStrings[first + i]
                         t.tag = null
@@ -211,10 +214,12 @@ class List13 : AppCompatActivity(), AbsListView.OnScrollListener {
                 }
                 mStatus!!.text = "Idle"
             }
+
             AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL -> {
                 mBusy = true
                 mStatus!!.text = "Touch scroll"
             }
+
             AbsListView.OnScrollListener.SCROLL_STATE_FLING -> {
                 mBusy = true
                 mStatus!!.text = "Fling"
@@ -398,5 +403,6 @@ class List13 : AppCompatActivity(), AbsListView.OnScrollListener {
         "White Stilton", "Whitestone Farmhouse", "Wigmore",
         "Woodside Cabecou", "Xanadu", "Xynotyro", "Yarg Cornish",
         "Yarra Valley Pyramid", "Yorkshire Blue", "Zamorano",
-        "Zanetti Grana Padano", "Zanetti Parmigiano Reggiano")
+        "Zanetti Grana Padano", "Zanetti Parmigiano Reggiano"
+    )
 }

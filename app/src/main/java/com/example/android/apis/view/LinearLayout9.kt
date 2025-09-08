@@ -43,8 +43,10 @@ class LinearLayout9 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.linear_layout_9)
         val list = findViewById<ListView>(R.id.list)
-        list.adapter = ArrayAdapter(this,
-            android.R.layout.simple_list_item_1,
-            AutoComplete1.COUNTRIES)
+        list.adapter = ArrayAdapter(
+            /* context = */ this,
+            /* resource = */ android.R.layout.simple_list_item_1,
+            /* objects = */ AutoComplete1.COUNTRIES
+        )
     }
 }
