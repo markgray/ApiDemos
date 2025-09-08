@@ -30,7 +30,7 @@ class ProgressBar2 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we request the window feature FEATURE_INDETERMINATE_PROGRESS (removed
-     * since API 211 ), then we set our content view to our layout file R.layout.progressbar_2.
+     * since API 21), then we set our content view to our layout file R.layout.progressbar_2.
      * Finally we call the method [setProgressBarVisibility] to make sure the progress bar in the
      * title bar is visible (No longer supported starting in API 21).
      *
@@ -45,6 +45,6 @@ class ProgressBar2 : AppCompatActivity() {
         setContentView(R.layout.progressbar_2)
 
         // Make sure the progress bar is visible
-        setProgressBarVisibility(true)
+        setProgressBarVisibility(/* visible = */ true)
     }
 }

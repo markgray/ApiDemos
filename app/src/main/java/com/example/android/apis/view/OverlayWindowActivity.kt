@@ -19,7 +19,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.PixelFormat
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -34,6 +33,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import com.example.android.apis.R
 
 /**
@@ -86,8 +86,8 @@ class OverlayWindowActivity : AppCompatActivity() {
         } else {
             // Need to ask the user's permission first. We'll redirect them to Settings.
             val intent = Intent(
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                Uri.parse("package:$packageName")
+                /* action = */ Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                /* uri = */ "package:$packageName".toUri()
             )
             requestOverlayPermissionLauncher.launch(intent)
         }
@@ -98,9 +98,11 @@ class OverlayWindowActivity : AppCompatActivity() {
      * to grant our activity permission to draw on top of other apps.
      */
     private val requestOverlayPermissionLauncher: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        registerForActivityResult(
+            /* contract = */ ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
             if (result.resultCode == RESULT_OK) {
-                if (Settings.canDrawOverlays(this)) {
+                if (Settings.canDrawOverlays(/* context = */ this)) {
                     drawOverlay()
                 }
             }
@@ -160,12 +162,13 @@ class OverlayWindowActivity : AppCompatActivity() {
         textView.setTextColor(Color.BLACK)
         textView.setPadding(10, 10, 10, 10)
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40.0F)
-        val wm = windowManager
+        val wm: WindowManager = windowManager
         val params = WindowManager.LayoutParams()
+        @SuppressLint("ObsoleteSdkInt")
         params.type = if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
         } else {
-            @Suppress("DEPRECATION")
+            @Suppress("DEPRECATION") // Needed for SDK older than "O"
             WindowManager.LayoutParams.TYPE_PHONE
         }
         params.flags = (WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE

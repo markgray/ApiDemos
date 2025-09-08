@@ -96,7 +96,7 @@ class RatingBar1 : AppCompatActivity(), OnRatingBarChangeListener {
      *                  key/horizontal trackball movement.
      */
     override fun onRatingChanged(ratingBar: RatingBar, rating: Float, fromTouch: Boolean) {
-        val numStars = ratingBar.numStars
+        val numStars: Int = ratingBar.numStars
         mRatingText!!.text = getString(R.string.ratingbar_rating) + " " + rating + "/" + numStars
 
         // Since this rating bar is updated to reflect any of the other rating
@@ -109,7 +109,7 @@ class RatingBar1 : AppCompatActivity(), OnRatingBarChangeListener {
             mIndicatorRatingBar!!.rating = rating
             mSmallRatingBar!!.rating = rating
         }
-        val ratingBarStepSize = ratingBar.stepSize
+        val ratingBarStepSize: Float = ratingBar.stepSize
         if (mIndicatorRatingBar!!.stepSize != ratingBarStepSize) {
             mIndicatorRatingBar!!.stepSize = ratingBarStepSize
             mSmallRatingBar!!.stepSize = ratingBarStepSize

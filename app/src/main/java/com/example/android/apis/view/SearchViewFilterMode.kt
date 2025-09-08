@@ -15,13 +15,14 @@
  */
 package com.example.android.apis.view
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import com.example.android.apis.R
@@ -32,7 +33,8 @@ import com.example.android.apis.R
  * displayed in the [ListView] and the value it gets in the `onQueryTextChange` callback
  * it implements as a [SearchView.OnQueryTextListener] to `setFilterText` on the [ListView].
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class SearchViewFilterMode : AppCompatActivity(), SearchView.OnQueryTextListener {
     /**
      * [SearchView] with ID R.id.search_view in our layout
@@ -78,9 +80,9 @@ class SearchViewFilterMode : AppCompatActivity(), SearchView.OnQueryTextListener
         mSearchView = findViewById(R.id.search_view)
         mListView = findViewById(R.id.list_view)
         mListView!!.adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_list_item_1,
-            mStrings
+            /* context = */ this,
+            /* resource = */ android.R.layout.simple_list_item_1,
+            /* objects = */ mStrings
         ).also { mAdapter = it }
 
         mListView!!.isTextFilterEnabled = true

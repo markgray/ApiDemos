@@ -15,12 +15,13 @@
  */
 package com.example.android.apis.view
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -81,7 +82,8 @@ class RotatingButton : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+            @SuppressLint("ObsoleteSdkInt")
+            @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 rotatingButton.translationX = progress.toFloat()
             }
@@ -92,7 +94,8 @@ class RotatingButton : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+            @SuppressLint("ObsoleteSdkInt")
+            @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 rotatingButton.translationY = progress.toFloat()
             }
@@ -104,7 +107,8 @@ class RotatingButton : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+            @SuppressLint("ObsoleteSdkInt")
+            @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 rotatingButton.scaleX = progress.toFloat() / 10f
             }
@@ -116,7 +120,8 @@ class RotatingButton : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+            @SuppressLint("ObsoleteSdkInt")
+            @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 rotatingButton.scaleY = progress.toFloat() / 10f
             }
@@ -127,7 +132,8 @@ class RotatingButton : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+            @SuppressLint("ObsoleteSdkInt")
+            @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 // prevent seeking on app creation
                 rotatingButton.rotationX = progress.toFloat()
@@ -139,7 +145,8 @@ class RotatingButton : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+            @SuppressLint("ObsoleteSdkInt")
+            @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 // prevent seeking on app creation
                 rotatingButton.rotationY = progress.toFloat()
@@ -151,7 +158,8 @@ class RotatingButton : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+            @SuppressLint("ObsoleteSdkInt")
+            @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 // prevent seeking on app creation
                 rotatingButton.rotation = progress.toFloat()

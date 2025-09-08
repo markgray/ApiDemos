@@ -25,6 +25,7 @@ import android.view.MotionEvent
 import android.view.PointerIcon
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.graphics.createBitmap
 
 /**
  * Constructs a [PointerIcon] using kotlin code in its [onResolvePointerIcon] override (needs mouse)
@@ -44,47 +45,51 @@ class LivePointerIconButton : AppCompatButton {
     ) : super(context!!, attrs, defStyleAttr)
 
     override fun onResolvePointerIcon(event: MotionEvent, pointerIndex: Int): PointerIcon {
-        val cursorSize = height
-        val bitmap = Bitmap.createBitmap(cursorSize, cursorSize, Bitmap.Config.ARGB_8888)
+        val cursorSize: Int = height
+        val bitmap: Bitmap = createBitmap(width = cursorSize, height = cursorSize)
         val canvas = Canvas(bitmap)
         val paint = Paint()
-        paint.setARGB(255, 255, 255, 255)
+        paint.setARGB(/* a = */ 255, /* r = */ 255, /* g = */ 255, /* b = */ 255)
         paint.style = Paint.Style.STROKE
         val strokeWidth = 4
         paint.strokeWidth = strokeWidth.toFloat()
 
         // Draw a large circle filling the bitmap.
-        val outerCenterX = cursorSize / 2
-        val outerCenterY = cursorSize / 2
-        val outerRadius = cursorSize / 2 - strokeWidth
+        val outerCenterX: Int = cursorSize / 2
+        val outerCenterY: Int = cursorSize / 2
+        val outerRadius: Int = cursorSize / 2 - strokeWidth
         canvas.drawCircle(
-            outerCenterX.toFloat(),
-            outerCenterY.toFloat(),
-            outerRadius.toFloat(),
-            paint
+            /* cx = */ outerCenterX.toFloat(),
+            /* cy = */ outerCenterY.toFloat(),
+            /* radius = */ outerRadius.toFloat(),
+            /* paint = */ paint
         )
 
         // Compute relative offset of the mouse pointer from the view center.
         // It should be between -0.5 and 0.5.
-        val relativeX = event.getX(pointerIndex) / width - 0.5f
-        val relativeY = event.getY(pointerIndex) / height - 0.5f
+        val relativeX: Float = event.getX(pointerIndex) / width - 0.5f
+        val relativeY: Float = event.getY(pointerIndex) / height - 0.5f
 
         // Draw a smaller circle inside the large circle, offset towards the center of the view.
-        val innerCenterX = (cursorSize * (1 - relativeX) / 2).toInt()
-        val innerCenterY = (cursorSize * (1 - relativeY) / 2).toInt()
-        val innerRadius = cursorSize / 6
+        val innerCenterX: Int = (cursorSize * (1 - relativeX) / 2).toInt()
+        val innerCenterY: Int = (cursorSize * (1 - relativeY) / 2).toInt()
+        val innerRadius: Int = cursorSize / 6
         if (event.action == MotionEvent.ACTION_MOVE) {
             // Fill the inner circle if the mouse button is down.
             paint.style = Paint.Style.FILL
         }
         canvas.drawCircle(
-            innerCenterX.toFloat(),
-            innerCenterY.toFloat(),
-            innerRadius.toFloat(),
-            paint
+            /* cx = */ innerCenterX.toFloat(),
+            /* cy = */ innerCenterY.toFloat(),
+            /* radius = */ innerRadius.toFloat(),
+            /* paint = */ paint
         )
-        val hotSpotX = bitmap.width / 2
-        val hotSpotY = bitmap.height / 2
-        return PointerIcon.create(bitmap, hotSpotX.toFloat(), hotSpotY.toFloat())
+        val hotSpotX: Int = bitmap.width / 2
+        val hotSpotY: Int = bitmap.height / 2
+        return PointerIcon.create(
+            /* bitmap = */ bitmap,
+            /* hotSpotX = */ hotSpotX.toFloat(),
+            /* hotSpotY = */ hotSpotY.toFloat()
+        )
     }
 }

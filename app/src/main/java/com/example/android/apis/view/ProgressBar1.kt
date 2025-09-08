@@ -79,9 +79,9 @@ class ProgressBar1 : AppCompatActivity() {
         setSecondaryProgress(progressHorizontal.secondaryProgress * 100)
         var button = findViewById<Button>(R.id.increase)
         button.setOnClickListener { v: View? ->
-            progressHorizontal.incrementProgressBy(1)
+            progressHorizontal.incrementProgressBy(/* diff = */ 1)
             // Title progress is in range 0..10000
-            setProgress(100 * progressHorizontal.progress)
+            setProgress(/* progress = */ 100 * progressHorizontal.progress)
         }
         button = findViewById(R.id.decrease)
         button.setOnClickListener { v: View? ->

@@ -16,13 +16,14 @@
 
 package com.example.android.apis.view
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -56,7 +57,8 @@ class List17 : AppCompatActivity() {
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @SuppressLint("ObsoleteSdkInt")
+    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.list_17)
@@ -65,9 +67,9 @@ class List17 : AppCompatActivity() {
         // Use the built-in layout for showing a list item with a single
         // line of text whose background changes when activated.
         list.adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_list_item_activated_1,
-            mStrings
+            /* context = */ this,
+            /* resource = */ android.R.layout.simple_list_item_activated_1,
+            /* objects = */ mStrings
         )
         list.isTextFilterEnabled = true
 
@@ -76,9 +78,9 @@ class List17 : AppCompatActivity() {
 
         // Start with first item activated.
         // Make the newly clicked item the currently selected one.
-        list.setItemChecked(0, true)
+        list.setItemChecked(/* position = */ 0, /* value = */ true)
         list.setOnItemClickListener { parent, view, position, id ->
-            onListItemClick(parent as ListView, view, position, id)
+            onListItemClick(l = parent as ListView, v = view, position = position, id = id)
         }
     }
 

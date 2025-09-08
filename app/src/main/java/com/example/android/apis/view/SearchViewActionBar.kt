@@ -16,15 +16,17 @@
 package com.example.android.apis.view
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.SearchManager
-import android.content.Context
+import android.app.SearchableInfo
+import android.content.ComponentName
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.Window
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import com.example.android.apis.R
@@ -35,7 +37,8 @@ import com.example.android.apis.R
  * AndroidManifest.xml a `<meta-data>` element android:name="android.app.default_searchable"
  * android:value=".app.SearchQueryResults" sets the Activity to handle search requests.
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 open class SearchViewActionBar : AppCompatActivity(), SearchView.OnQueryTextListener {
     /**
      * [SearchView] in our options menu with ID R.id.action_search, and with the action view
@@ -81,11 +84,11 @@ open class SearchViewActionBar : AppCompatActivity(), SearchView.OnQueryTextList
      */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
-        val inflater = menuInflater
-        inflater.inflate(R.menu.searchview_in_menu, menu)
-        val searchItem = menu.findItem(R.id.action_search)
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(/* menuRes = */ R.menu.searchview_in_menu, /* menu = */ menu)
+        val searchItem: MenuItem = menu.findItem(R.id.action_search)
         mSearchView = searchItem.actionView as SearchView
-        setupSearchView(searchItem)
+        setupSearchView(searchItem = searchItem)
         return true
     }
 
@@ -115,7 +118,7 @@ open class SearchViewActionBar : AppCompatActivity(), SearchView.OnQueryTextList
      *
      * @param searchItem `MenuItem` in our action bar menu that is to be configured.
      */
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    @RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private fun setupSearchView(searchItem: MenuItem) {
         if (isAlwaysExpanded()) {
             mSearchView!!.setIconifiedByDefault(false)
@@ -126,17 +129,18 @@ open class SearchViewActionBar : AppCompatActivity(), SearchView.OnQueryTextList
             )
         }
         @Suppress("RedundantNullableReturnType")
-        val searchManager: SearchManager? = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchManager: SearchManager? = getSystemService(SEARCH_SERVICE) as SearchManager
         if (searchManager != null) {
-            val searchables = searchManager.searchablesInGlobalSearch
+            val searchables: List<SearchableInfo> = searchManager.searchablesInGlobalSearch
 
             // Try to use the "applications" global search provider
-            val componentName = componentName
-            var info = searchManager.getSearchableInfo(componentName)
+            val componentName: ComponentName = componentName
+            var info: SearchableInfo = searchManager.getSearchableInfo(componentName)
             for (inf in searchables) {
-                val suggestAuthority = inf.suggestAuthority
+                val suggestAuthority: String = inf.suggestAuthority
                 if (inf.suggestAuthority != null
-                    && suggestAuthority.startsWith("applications")) {
+                    && suggestAuthority.startsWith("applications")
+                ) {
                     info = inf
                 }
             }

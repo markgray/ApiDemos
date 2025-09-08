@@ -94,6 +94,7 @@ class ProgressBar3 : AppCompatActivity() {
                 dialog.setCancelable(true)
                 return dialog
             }
+
             DIALOG2_KEY -> {
                 val dialog = ProgressDialog(this)
                 dialog.setMessage("Please wait while loading...")

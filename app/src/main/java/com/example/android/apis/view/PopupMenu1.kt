@@ -15,12 +15,13 @@
  */
 package com.example.android.apis.view
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -52,9 +53,10 @@ class PopupMenu1 : AppCompatActivity() {
      *
      * @param button [View] that has been clicked.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @SuppressLint("ObsoleteSdkInt")
+    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     fun onPopupButtonClick(button: View?) {
-        val popup = PopupMenu(this, button)
+        val popup = PopupMenu(/* context = */ this, /* anchor = */ button)
         popup.menuInflater.inflate(R.menu.popup, popup.menu)
         popup.setOnMenuItemClickListener { item ->
 
@@ -66,8 +68,11 @@ class PopupMenu1 : AppCompatActivity() {
              * @param item `MenuItem` that was clicked
              * @return true if the event was handled, false otherwise.
              */
-            Toast.makeText(this@PopupMenu1, "Clicked popup menu item " + item.title,
-                    Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                /* context = */ this@PopupMenu1,
+                /* text = */ "Clicked popup menu item " + item.title,
+                /* duration = */ Toast.LENGTH_SHORT
+            ).show()
             true
         }
         popup.show()

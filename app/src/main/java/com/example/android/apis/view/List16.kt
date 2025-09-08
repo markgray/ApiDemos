@@ -16,7 +16,7 @@
 
 package com.example.android.apis.view
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.ActionMode
@@ -26,6 +26,7 @@ import android.widget.AbsListView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -39,6 +40,7 @@ class List16 : AppCompatActivity() {
      * The [ListView] in our layout file
      */
     private lateinit var list: ListView
+
     /**
      * Called when the activity is starting. First we call through to our super's implementation of
      * `onCreate`, then we set our content view to our layout file `R.layout.list_16` and initialize
@@ -50,7 +52,8 @@ class List16 : AppCompatActivity() {
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @SuppressLint("ObsoleteSdkInt")
+    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.list_16)
@@ -58,9 +61,9 @@ class List16 : AppCompatActivity() {
         list.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
         list.setMultiChoiceModeListener(ModeCallback())
         list.adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_list_item_activated_1,
-            Cheeses.sCheeseStrings
+            /* context = */ this,
+            /* resource = */ android.R.layout.simple_list_item_activated_1,
+            /* objects = */ Cheeses.sCheeseStrings
         )
     }
 
@@ -72,7 +75,8 @@ class List16 : AppCompatActivity() {
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @SuppressLint("ObsoleteSdkInt")
+    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         supportActionBar!!.subtitle = "Long press to start selection"
@@ -83,7 +87,8 @@ class List16 : AppCompatActivity() {
      * clicked. It then inflates an action mode R.menu.list_select_menu which remains up as long as
      * at least one item is selected, or until the selected items are "shared"
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @SuppressLint("ObsoleteSdkInt")
+    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     private inner class ModeCallback : AbsListView.MultiChoiceModeListener {
         /**
          * Called when action mode is first created. The menu supplied will be used to generate
@@ -137,12 +142,19 @@ class List16 : AppCompatActivity() {
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
             when (item.itemId) {
                 R.id.share -> {
-                    Toast.makeText(this@List16, "Shared " + list.checkedItemCount +
-                        " items", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        /* context = */ this@List16,
+                        /* text = */ "Shared " + list.checkedItemCount + " items",
+                        /* duration = */ Toast.LENGTH_SHORT
+                    ).show()
                     mode.finish()
                 }
-                else -> Toast.makeText(this@List16, "Clicked " + item.title,
-                    Toast.LENGTH_SHORT).show()
+
+                else -> Toast.makeText(
+                    /* context = */ this@List16,
+                    /* text = */ "Clicked " + item.title,
+                    /* duration = */ Toast.LENGTH_SHORT
+                ).show()
             }
             return true
         }
@@ -172,7 +184,12 @@ class List16 : AppCompatActivity() {
          * @param id       Adapter ID of the item that was checked or unchecked
          * @param checked  true if the item is now checked, false if the item is now unchecked.
          */
-        override fun onItemCheckedStateChanged(mode: ActionMode, position: Int, id: Long, checked: Boolean) {
+        override fun onItemCheckedStateChanged(
+            mode: ActionMode,
+            position: Int,
+            id: Long,
+            checked: Boolean
+        ) {
             when (val checkedCount = list.checkedItemCount) {
                 0 -> mode.subtitle = null
                 1 -> mode.subtitle = "One item selected"

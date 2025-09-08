@@ -77,13 +77,17 @@ class RadioGroup1 : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, Vie
         newRadioButton.setText(R.string.radio_group_snack)
         newRadioButton.id = R.id.snack
         val layoutParams: LinearLayout.LayoutParams = RadioGroup.LayoutParams(
-            RadioGroup.LayoutParams.WRAP_CONTENT,
-            RadioGroup.LayoutParams.WRAP_CONTENT
+            /* w = */ RadioGroup.LayoutParams.WRAP_CONTENT,
+            /* h = */ RadioGroup.LayoutParams.WRAP_CONTENT
         )
-        mRadioGroup!!.addView(newRadioButton, 0, layoutParams)
+        mRadioGroup!!.addView(
+            /* child = */ newRadioButton,
+            /* index = */ 0,
+            /* params = */ layoutParams
+        )
 
         // test listening to checked change events
-        val selection = getString(R.string.radio_group_selection)
+        val selection: String = getString(R.string.radio_group_selection)
         mRadioGroup!!.setOnCheckedChangeListener(this)
         mChoice = findViewById(R.id.choice)
         mChoice!!.text = selection + mRadioGroup!!.checkedRadioButtonId
@@ -106,8 +110,8 @@ class RadioGroup1 : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, Vie
      * @param checkedId the unique identifier of the newly checked radio button
      */
     override fun onCheckedChanged(group: RadioGroup, checkedId: Int) {
-        val selection = getString(R.string.radio_group_selection)
-        val none = getString(R.string.radio_group_none)
+        val selection: String = getString(R.string.radio_group_selection)
+        val none: String = getString(R.string.radio_group_none)
         mChoice!!.text = selection +
             if (checkedId == View.NO_ID) none else checkedId
     }

@@ -49,9 +49,10 @@ class NumberPickerActivity : AppCompatActivity() {
         setContentView(R.layout.number_picker)
         mNumberPicker = findViewById(R.id.number_picker)
         mNumberPicker.maxValue = 30
-        (findViewById<View>(R.id.enabled) as CheckBox).setOnCheckedChangeListener {
-            buttonView: CompoundButton?, isChecked: Boolean ->
-            mNumberPicker.isEnabled = isChecked
-        }
+        (findViewById<View>(R.id.enabled) as CheckBox)
+            .setOnCheckedChangeListener { buttonView: CompoundButton?,
+                                          isChecked: Boolean ->
+                mNumberPicker.isEnabled = isChecked
+            }
     }
 }
