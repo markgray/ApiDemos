@@ -19,7 +19,6 @@
 package com.example.android.apis.view
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
@@ -27,17 +26,20 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.AttributeSet
+import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.View.OnSystemUiVisibilityChangeListener
+import android.view.Window
 import android.view.WindowManager
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
@@ -57,13 +59,13 @@ import com.example.android.apis.R
  * TODO: replace deprecated Action bar navigation using tabs
  * TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
  */
-@Suppress("UNUSED_PARAMETER", "MemberVisibilityCanBePrivate", "UNUSED_ANONYMOUS_PARAMETER", "RedundantOverride")
-@TargetApi(Build.VERSION_CODES.KITKAT)
+@SuppressLint("ObsoleteSdkInt")
+@Suppress("UNUSED_PARAMETER", "MemberVisibilityCanBePrivate", "UNUSED_ANONYMOUS_PARAMETER")
+@RequiresApi(Build.VERSION_CODES.KITKAT)
 open class SystemUIModes :
     AppCompatActivity(),
     SearchView.OnQueryTextListener,
-    ActionBar.TabListener
-{
+    ActionBar.TabListener {
     /**
      * `ImageView` which is used as the background of our window.
      */
@@ -158,7 +160,8 @@ open class SystemUIModes :
              * @return true if the action mode should be created, false if entering this
              * mode should be aborted.
              */
-            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+            @SuppressLint("ObsoleteSdkInt")
+            @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
             override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
                 mode.title = "My Action Mode!"
                 mode.subtitle = null
@@ -267,11 +270,12 @@ open class SystemUIModes :
      * @param on true to allow window contents to extend in to the screen's overscan area, false to
      * disable this.
      */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    @SuppressLint("ObsoleteSdkInt")
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     private fun setOverscan(on: Boolean) {
-        val win = window
-        val winParams = win.attributes
-        val bits = WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN
+        val win: Window = window
+        val winParams: WindowManager.LayoutParams = win.attributes
+        val bits: Int = WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN
         if (on) {
             winParams.flags = winParams.flags or bits
         } else {
@@ -293,11 +297,12 @@ open class SystemUIModes :
      * @param on true to request a translucent status bar with minimal system-provided background
      * protection, false to disable this.
      */
-    @TargetApi(Build.VERSION_CODES.KITKAT)
+    @SuppressLint("ObsoleteSdkInt")
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
     private fun setTranslucentStatus(on: Boolean) {
-        val win = window
-        val winParams = win.attributes
-        val bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+        val win: Window = window
+        val winParams: WindowManager.LayoutParams = win.attributes
+        val bits: Int = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
         if (on) {
             winParams.flags = winParams.flags or bits
         } else {
@@ -320,11 +325,12 @@ open class SystemUIModes :
      * @param on true to request a translucent navigation bar with minimal system-provided background
      * protection, false to disable this.
      */
-    @TargetApi(Build.VERSION_CODES.KITKAT)
+    @SuppressLint("ObsoleteSdkInt")
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
     private fun setTranslucentNavigation(on: Boolean) {
-        val win = window
-        val winParams = win.attributes
-        val bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
+        val win: Window = window
+        val winParams: WindowManager.LayoutParams = win.attributes
+        val bits: Int = WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
         if (on) {
             winParams.flags = winParams.flags or bits
         } else {
@@ -346,7 +352,7 @@ open class SystemUIModes :
     @get:SuppressLint("DefaultLocale")
     private val displaySize: String
         get() {
-            val dm = resources.displayMetrics
+            val dm: DisplayMetrics = resources.displayMetrics
             return String.format("DisplayMetrics = (%d x %d)", dm.widthPixels, dm.heightPixels)
         }
 
@@ -359,9 +365,11 @@ open class SystemUIModes :
      */
     @get:SuppressLint("DefaultLocale")
     private val viewSize: String
-        get() = String.format("View = (%d,%d - %d,%d)",
+        get() = String.format(
+            "View = (%d,%d - %d,%d)",
             mImage!!.left, mImage!!.top,
-            mImage!!.right, mImage!!.bottom)
+            mImage!!.right, mImage!!.bottom
+        )
 
     /**
      * Called from the `onSizeChanged` and `onSystemUiVisibilityChange` callbacks of our
@@ -388,12 +396,13 @@ open class SystemUIModes :
      * in the [Int] array field [mCheckFlags] is set if the [CheckBox] is checked, and the
      * resulting mask is used to update the system UI using the method `setSystemUiVisibility`).
      */
-    var mCheckControls = arrayOfNulls<CheckBox>(8)
+    var mCheckControls: Array<CheckBox?> = arrayOfNulls(8)
 
     /**
      * System UI Flags controlled by the 8 checkboxes in [CheckBox] array field [mCheckControls]
      */
-    var mCheckFlags = intArrayOf(View.SYSTEM_UI_FLAG_LOW_PROFILE,
+    var mCheckFlags: IntArray = intArrayOf(
+        View.SYSTEM_UI_FLAG_LOW_PROFILE,
         View.SYSTEM_UI_FLAG_FULLSCREEN, View.SYSTEM_UI_FLAG_HIDE_NAVIGATION,
         View.SYSTEM_UI_FLAG_IMMERSIVE, View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY,
         View.SYSTEM_UI_FLAG_LAYOUT_STABLE, View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN,
@@ -455,7 +464,6 @@ open class SystemUIModes :
      *  of that mode, at the expense that some of its user interface may be covered by screen
      *  decorations when they are shown.
      *
-     *
      * Next we loop through all 8 of the checkboxes in [mCheckControls] and set their
      * `OnCheckedChangeListener` to `checkChangeListener`.
      *
@@ -512,24 +520,46 @@ open class SystemUIModes :
         for (i in mCheckControls.indices) {
             mCheckControls[i]!!.setOnCheckedChangeListener(checkChangeListener)
         }
-        (findViewById<View>(R.id.windowFullscreen) as CheckBox).setOnCheckedChangeListener { buttonView, isChecked -> setFullscreen(isChecked) }
-        (findViewById<View>(R.id.windowOverscan) as CheckBox).setOnCheckedChangeListener { buttonView, isChecked -> setOverscan(isChecked) }
-        (findViewById<View>(R.id.windowTranslucentStatus) as CheckBox).setOnCheckedChangeListener { buttonView, isChecked -> setTranslucentStatus(isChecked) }
-        (findViewById<View>(R.id.windowTranslucentNav) as CheckBox).setOnCheckedChangeListener { buttonView, isChecked -> setTranslucentNavigation(isChecked) }
-        (findViewById<View>(R.id.windowHideActionBar) as CheckBox).setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                supportActionBar!!.hide()
-            } else {
-                supportActionBar!!.hide()
+        (findViewById<View>(R.id.windowFullscreen) as CheckBox)
+            .setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
+                setFullscreen(
+                    isChecked
+                )
             }
-        }
-        (findViewById<View>(R.id.windowActionMode) as CheckBox).setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                mImage!!.startActionMode()
-            } else {
-                mImage!!.stopActionMode()
+        (findViewById<View>(R.id.windowOverscan) as CheckBox)
+            .setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
+                setOverscan(
+                    isChecked
+                )
             }
-        }
+        (findViewById<View>(R.id.windowTranslucentStatus) as CheckBox)
+            .setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
+                setTranslucentStatus(
+                    isChecked
+                )
+            }
+        (findViewById<View>(R.id.windowTranslucentNav) as CheckBox)
+            .setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
+                setTranslucentNavigation(
+                    isChecked
+                )
+            }
+        (findViewById<View>(R.id.windowHideActionBar) as CheckBox)
+            .setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
+                if (isChecked) {
+                    supportActionBar!!.hide()
+                } else {
+                    supportActionBar!!.hide()
+                }
+            }
+        (findViewById<View>(R.id.windowActionMode) as CheckBox)
+            .setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
+                if (isChecked) {
+                    mImage!!.startActionMode()
+                } else {
+                    mImage!!.stopActionMode()
+                }
+            }
         mMetricsText = findViewById(R.id.metricsText)
     }
 
@@ -551,7 +581,8 @@ open class SystemUIModes :
      * @param menu The options menu in which you place your items.
      * @return You must return true for the menu to be displayed.
      */
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    @SuppressLint("ObsoleteSdkInt")
+    @RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.content_actions, menu)
@@ -688,6 +719,7 @@ open class SystemUIModes :
                 item.isChecked = true
                 return true
             }
+
             R.id.hide_tabs -> {
                 supportActionBar!!.navigationMode = ActionBar.NAVIGATION_MODE_STANDARD
                 item.isChecked = true
@@ -775,6 +807,6 @@ open class SystemUIModes :
          * UNUSED
          */
         @Suppress("unused")
-        var TOAST_LENGTH = 500
+        var TOAST_LENGTH: Int = 500
     }
 }

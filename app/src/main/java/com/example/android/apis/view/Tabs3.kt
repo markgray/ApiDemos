@@ -21,6 +21,7 @@ package com.example.android.apis.view
 import android.app.TabActivity
 import android.content.Intent
 import android.os.Bundle
+import com.example.android.apis.graphics.Utilities.id2p
 
 /**
  * An example of tab content that launches an activity via
@@ -51,18 +52,32 @@ class Tabs3 : TabActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val tabHost = tabHost
-        tabHost.addTab(tabHost.newTabSpec("tab1")
+        tabHost.setPadding(
+            /* left = */ id2p(dpi = 8),
+            /* top = */ id2p(dpi = 60),
+            /* right = */ id2p(dpi = 8),
+            /* bottom = */ id2p(dpi = 60)
+        )
+        tabHost.addTab(
+            tabHost.newTabSpec("tab1")
                 .setIndicator("list")
-                .setContent(Intent(this, List1::class.java)))
-        tabHost.addTab(tabHost.newTabSpec("tab2")
+                .setContent(Intent(this, List1::class.java))
+        )
+        tabHost.addTab(
+            tabHost.newTabSpec("tab2")
                 .setIndicator("photo list")
-                .setContent(Intent(this, List8::class.java)))
+                .setContent(Intent(this, List8::class.java))
+        )
 
         // This tab sets the intent flag so that it is recreated each time
         // the tab is clicked.
-        tabHost.addTab(tabHost.newTabSpec("tab3")
+        tabHost.addTab(
+            tabHost.newTabSpec("tab3")
                 .setIndicator("destroy")
-                .setContent(Intent(this, Controls1::class.java)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)))
+                .setContent(
+                    Intent(this, Controls1::class.java)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                )
+        )
     }
 }

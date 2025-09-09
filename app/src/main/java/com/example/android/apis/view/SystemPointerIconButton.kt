@@ -25,6 +25,7 @@ import androidx.appcompat.widget.AppCompatButton
 
 /**
  * Loads a [PointerIcon] from one of the system pointer icons in its [onResolvePointerIcon] override
+ * (Used by .view.PointerShapes -- Needs Mouse.)
  */
 @RequiresApi(api = Build.VERSION_CODES.N)
 class SystemPointerIconButton : AppCompatButton {

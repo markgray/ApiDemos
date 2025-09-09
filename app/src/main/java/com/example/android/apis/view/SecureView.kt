@@ -16,7 +16,6 @@
 package com.example.android.apis.view
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
@@ -26,6 +25,7 @@ import android.view.View
 import android.view.View.OnTouchListener
 import android.widget.Button
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -98,12 +98,12 @@ class SecureView : AppCompatActivity() {
         val toastButton = findViewById<Button>(R.id.secure_view_toast_button)
         toastButton.setOnClickListener { showOverlay() }
         val unsecureButton = findViewById<Button>(R.id.secure_view_unsecure_button)
-        setClickedAction(unsecureButton)
+        setClickedAction(button = unsecureButton)
         val builtinSecureButton = findViewById<Button>(R.id.secure_view_builtin_secure_button)
-        setClickedAction(builtinSecureButton)
+        setClickedAction(button = builtinSecureButton)
         val customSecureButton = findViewById<Button>(R.id.secure_view_custom_secure_button)
-        setClickedAction(customSecureButton)
-        setTouchFilter(customSecureButton)
+        setClickedAction(button = customSecureButton)
+        setTouchFilter(button = customSecureButton)
     }
 
     /**
@@ -121,9 +121,9 @@ class SecureView : AppCompatActivity() {
         @SuppressLint("InflateParams")
         val overlay = layoutInflater
             .inflate(R.layout.secure_view_overlay, null) as SecureViewOverlay
-        overlay.setActivityToSpoof(this)
+        overlay.setActivityToSpoof(activity = this)
         val toast = Toast(applicationContext)
-        toast.setGravity(Gravity.FILL, 0, 0)
+        toast.setGravity(/* gravity = */ Gravity.FILL, /* xOffset = */ 0, /* yOffset = */ 0)
         @Suppress("DEPRECATION") // This is still OK if we are foreground.
         toast.view = overlay
         toast.show()
@@ -138,12 +138,15 @@ class SecureView : AppCompatActivity() {
     private fun setClickedAction(button: Button) {
         button.setOnClickListener {
             val messages = resources.getStringArray(R.array.secure_view_clicked)
-            val message = messages[mClickCount++ % messages.size]
+            val message: String = messages[mClickCount++ % messages.size]
             AlertDialog.Builder(this@SecureView)
                 .setTitle(R.string.secure_view_action_dialog_title)
                 .setMessage(message)
-                .setNeutralButton(resources.getString(
-                    R.string.secure_view_action_dialog_dismiss), null)
+                .setNeutralButton(
+                    resources.getString(
+                        R.string.secure_view_action_dialog_dismiss
+                    ), null
+                )
                 .show()
         }
     }
@@ -179,15 +182,20 @@ class SecureView : AppCompatActivity() {
              * @param event The [MotionEvent] object containing full information about the event.
              * @return True if the listener has consumed the event, false otherwise.
              */
-            @TargetApi(Build.VERSION_CODES.GINGERBREAD)
+            @SuppressLint("ObsoleteSdkInt")
+            @RequiresApi(Build.VERSION_CODES.GINGERBREAD)
             override fun onTouch(v: View, event: MotionEvent): Boolean {
                 if ((event.flags and MotionEvent.FLAG_WINDOW_IS_OBSCURED) != 0) {
                     if (event.action == MotionEvent.ACTION_UP) {
                         AlertDialog.Builder(this@SecureView)
                             .setTitle(R.string.secure_view_caught_dialog_title)
                             .setMessage(R.string.secure_view_caught_dialog_message)
-                            .setNeutralButton(resources.getString(
-                                R.string.secure_view_caught_dialog_dismiss), null)
+                            .setNeutralButton(
+                                /* text = */ resources.getString(
+                                    R.string.secure_view_caught_dialog_dismiss
+                                ),
+                                /* listener = */ null
+                            )
                             .show()
                     }
                     // Return true to prevent the button from processing the touch.

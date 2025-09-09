@@ -26,6 +26,7 @@ import android.widget.TabHost.TabContentFactory
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import com.example.android.apis.R
+import com.example.android.apis.graphics.Utilities.id2p
 
 /**
  * Example of using a tab content factory for the content via
@@ -52,18 +53,34 @@ open class Tabs2 : TabActivity(), TabContentFactory {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val tabHost = tabHost
-        tabHost.addTab(tabHost.newTabSpec("tab1")
-            .setIndicator(
-                "tab1",
-                ResourcesCompat.getDrawable(resources, R.drawable.star_big_on, null)
-            )
-            .setContent(this))
-        tabHost.addTab(tabHost.newTabSpec("tab2")
-            .setIndicator("tab2")
-            .setContent(this))
-        tabHost.addTab(tabHost.newTabSpec("tab3")
-            .setIndicator("tab3")
-            .setContent(this))
+        tabHost.setPadding(
+            /* left = */ id2p(dpi = 8),
+            /* top = */ id2p(dpi = 60),
+            /* right = */ id2p(dpi = 8),
+            /* bottom = */ id2p(dpi = 60)
+        )
+        tabHost.addTab(
+            tabHost.newTabSpec("tab1")
+                .setIndicator(
+                    "tab1",
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.star_big_on,
+                        null
+                    )
+                )
+                .setContent(this)
+        )
+        tabHost.addTab(
+            tabHost.newTabSpec("tab2")
+                .setIndicator("tab2")
+                .setContent(this)
+        )
+        tabHost.addTab(
+            tabHost.newTabSpec("tab3")
+                .setIndicator("tab3")
+                .setContent(this)
+        )
     }
 
     /**

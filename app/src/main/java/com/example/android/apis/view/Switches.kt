@@ -52,9 +52,9 @@ class Switches : AppCompatActivity(), CompoundButton.OnCheckedChangeListener {
      */
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
         Toast.makeText(
-            this,
-            "Monitored switch is ${if (isChecked) "on" else "off"}",
-            Toast.LENGTH_SHORT
+            /* context = */ this,
+            /* text = */ "Monitored switch is ${if (isChecked) "on" else "off"}",
+            /* duration = */ Toast.LENGTH_SHORT
         ).show()
     }
 }

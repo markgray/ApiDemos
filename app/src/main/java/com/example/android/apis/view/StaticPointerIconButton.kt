@@ -28,6 +28,7 @@ import com.example.android.apis.R
 
 /**
  * Constructs a [PointerIcon] from a [BitmapDrawable] in its [onResolvePointerIcon] override
+ * (Used by .view.PointerShapes -- Needs Mouse.)
  */
 @RequiresApi(api = Build.VERSION_CODES.N)
 class StaticPointerIconButton : AppCompatButton {

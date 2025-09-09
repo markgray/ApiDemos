@@ -73,28 +73,31 @@ class SplitTouchView : AppCompatActivity() {
      * string-array with the resource id R.array.cheese_responses.
      */
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-    private val itemClickListener = OnItemClickListener { parent, // The AdapterView where the click happened.
-                                                          view,           // The view within the AdapterView that was clicked
-                                                          position,         // The position of the view in the adapter.
-                                                          id              // The row id of the item that was clicked.
-        ->
+    private val itemClickListener =
+        OnItemClickListener { parent,   // The AdapterView where the click happened.
+                              view,     // The view within the AdapterView that was clicked
+                              position, // The position of the view in the adapter.
+                              id        // The row id of the item that was clicked.
+            ->
 
-        /**
-         * Callback method to be invoked when an item in this `AdapterView` has been clicked. First
-         * we initialize our `String` array variable `val responses` by fetching the string-array
-         * with id R.array.cheese_responses. We initialize `String` variable `val response` with the
-         * string in `responses` at index `responseIndex` modulo the length of `responses` (post
-         * incrementing `responseIndex` while we are at it). We then use the string with resource
-         * id R.string.split_touch_view_cheese_toast ("`Do you have any %1$s? %2$s`") to format the
-         * cheese name found at index `position` in `sCheeseStrings` and `response` to initialize
-         * our `String` variable `val message`. We create `Toast` variable `val toast` from `message`
-         * and then show it.
-         */
-        val responses = resources.getStringArray(R.array.cheese_responses)
-        val response = responses[responseIndex++ % responses.size]
-        val message = resources.getString(R.string.split_touch_view_cheese_toast,
-            Cheeses.sCheeseStrings[position], response)
-        val toast = Toast.makeText(applicationContext, message, Toast.LENGTH_LONG)
-        toast.show()
-    }
+            /**
+             * Callback method to be invoked when an item in this `AdapterView` has been clicked. First
+             * we initialize our `String` array variable `val responses` by fetching the string-array
+             * with id R.array.cheese_responses. We initialize `String` variable `val response` with the
+             * string in `responses` at index `responseIndex` modulo the length of `responses` (post
+             * incrementing `responseIndex` while we are at it). We then use the string with resource
+             * id R.string.split_touch_view_cheese_toast ("`Do you have any %1$s? %2$s`") to format the
+             * cheese name found at index `position` in `sCheeseStrings` and `response` to initialize
+             * our `String` variable `val message`. We create `Toast` variable `val toast` from `message`
+             * and then show it.
+             */
+            val responses = resources.getStringArray(R.array.cheese_responses)
+            val response = responses[responseIndex++ % responses.size]
+            val message = resources.getString(
+                R.string.split_touch_view_cheese_toast,
+                Cheeses.sCheeseStrings[position], response
+            )
+            val toast = Toast.makeText(applicationContext, message, Toast.LENGTH_LONG)
+            toast.show()
+        }
 }

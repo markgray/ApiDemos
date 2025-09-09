@@ -25,6 +25,7 @@ import android.view.View
 import android.widget.TabHost.TabContentFactory
 import android.widget.TextView
 import com.example.android.apis.R
+import com.example.android.apis.graphics.Utilities.id2p
 
 /**
  * Demonstrates the Tab scrolling when too many tabs are displayed to fit
@@ -49,6 +50,12 @@ class Tabs5 : TabActivity(), TabContentFactory {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tabs_scroll)
         val tabHost = tabHost
+        tabHost.setPadding(
+            /* left = */ id2p(dpi = 8),
+            /* top = */ id2p(dpi = 60),
+            /* right = */ id2p(dpi = 8),
+            /* bottom = */ id2p(dpi = 60)
+        )
         for (i in 1..30) {
             val name = "Tab $i"
             tabHost.addTab(tabHost.newTabSpec(name)

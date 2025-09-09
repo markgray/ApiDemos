@@ -19,6 +19,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.CheckBox
+import android.widget.CompoundButton
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
@@ -70,7 +71,7 @@ class SeekBar1 : AppCompatActivity(), OnSeekBarChangeListener {
         mProgressText = findViewById(R.id.progress)
         mTrackingText = findViewById(R.id.tracking)
         val checkBox = findViewById<View>(R.id.enabled) as CheckBox
-        checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
+        checkBox.setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
 
             /**
              * Called when the [CheckBox] with id R.id.enabled changes state. We find
@@ -100,8 +101,8 @@ class SeekBar1 : AppCompatActivity(), OnSeekBarChangeListener {
      */
     @SuppressLint("SetTextI18n")
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromTouch: Boolean) {
-        mProgressText!!.text = progress.toString() + " " +
-                getString(R.string.seekbar_from_touch) + "=" + fromTouch
+        mProgressText!!.text =
+            progress.toString() + " " + getString(R.string.seekbar_from_touch) + "=" + fromTouch
     }
 
     /**

@@ -13,11 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("UNUSED_PARAMETER", "MemberVisibilityCanBePrivate", "RedundantOverride", "DEPRECATION")
+@file:Suppress(
+    "UNUSED_PARAMETER",
+    "MemberVisibilityCanBePrivate",
+    "RedundantOverride",
+    "DEPRECATION"
+)
 
 package com.example.android.apis.view
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ClipData
 import android.content.Context
@@ -36,6 +41,7 @@ import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
@@ -56,7 +62,8 @@ import com.example.android.apis.R
  * TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
  * TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("ObsoleteSdkInt")
+@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class VideoPlayerActivity :
     AppCompatActivity(),
     SearchView.OnQueryTextListener,
@@ -65,6 +72,10 @@ class VideoPlayerActivity :
      * Implementation of a view for displaying full-screen video playback,
      * using system UI flags to transition in and out of modes where the entire
      * screen can be filled with content (at the expense of no user interaction).
+     * (See our `init` block for details of our contruction.)
+     *
+     * @param context the [Context] we are running in.
+     * @param attrs the attributes of the xml tag that is inflating the view.
      */
     class Content(context: Context?, attrs: AttributeSet?) :
         AppCompatImageView(context!!, attrs),
@@ -103,36 +114,36 @@ class VideoPlayerActivity :
          * action bar (which we do in our [onAttachedToWindow] override). If it is true we call
          * `removeOnMenuVisibilityListener` in our [onDetachedFromWindow] override to remove us.
          */
-        var mAddedMenuListener = false
+        var mAddedMenuListener: Boolean = false
 
         /**
          * Flag to indicate that the menus are currently open, it is set in [onMenuVisibilityChanged]
          * to its parameter, and if it is true our [setNavVisibility] will not schedule [Runnable]
          * field [mNavHider] to auto hide our navigation UI.
          */
-        var mMenusOpen = false
+        var mMenusOpen: Boolean = false
 
         /**
          * Paused flag, when true navigation UI is displayed.
          */
-        var mPaused = false
+        var mPaused: Boolean = false
 
         /**
          * Unused
          */
         @Suppress("unused")
-        var mNavVisible = false
+        var mNavVisible: Boolean = false
 
         /**
          * Last system UI visibility mask, received by [onSystemUiVisibilityChange] override.
          */
-        var mLastSystemUiVis = 0
+        var mLastSystemUiVis: Int = 0
 
         /**
          * [Runnable] which makes system UI visibility go away after 3000ms when play is
          * resumed, its running is scheduled in our [setNavVisibility] method
          */
-        var mNavHider = Runnable { setNavVisibility(false) }
+        var mNavHider: Runnable = Runnable { setNavVisibility(false) }
 
         /**
          * Called by our containing [Activity] to initialize our fields with information about
@@ -186,7 +197,9 @@ class VideoPlayerActivity :
         override fun onDetachedFromWindow() {
             super.onDetachedFromWindow()
             if (mAddedMenuListener) {
-                (mActivity as AppCompatActivity).supportActionBar!!.removeOnMenuVisibilityListener(this)
+                (mActivity as AppCompatActivity).supportActionBar!!.removeOnMenuVisibilityListener(
+                    this
+                )
             }
         }
 
@@ -210,8 +223,9 @@ class VideoPlayerActivity :
             // the state is changing and nav is no longer hidden.
             val diff = mLastSystemUiVis xor visibility
             mLastSystemUiVis = visibility
-            if (diff and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION != 0
-                && visibility and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION == 0) {
+            if (diff and SYSTEM_UI_FLAG_HIDE_NAVIGATION != 0
+                && visibility and SYSTEM_UI_FLAG_HIDE_NAVIGATION == 0
+            ) {
                 setNavVisibility(true)
             }
         }
@@ -329,15 +343,15 @@ class VideoPlayerActivity :
          *
          * @param visible if true we make our navigation visible, if false we hide the navigation.
          */
-        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+        @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
         fun setNavVisibility(visible: Boolean) {
-            var newVis = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+            var newVis = (SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or SYSTEM_UI_FLAG_LAYOUT_STABLE)
             if (!visible) {
-                newVis = newVis or (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+                newVis = newVis or (SYSTEM_UI_FLAG_LOW_PROFILE
+                    or SYSTEM_UI_FLAG_FULLSCREEN
+                    or SYSTEM_UI_FLAG_HIDE_NAVIGATION)
             }
 
             // If we are now visible, schedule a timer for us to go invisible.
@@ -354,9 +368,9 @@ class VideoPlayerActivity :
 
             // Set the new desired visibility.
             systemUiVisibility = newVis
-            mTitleView!!.visibility = if (visible) View.VISIBLE else View.INVISIBLE
-            mPlayButton!!.visibility = if (visible) View.VISIBLE else View.INVISIBLE
-            mSeekView!!.visibility = if (visible) View.VISIBLE else View.INVISIBLE
+            mTitleView!!.visibility = if (visible) VISIBLE else INVISIBLE
+            mPlayButton!!.visibility = if (visible) VISIBLE else INVISIBLE
+            mSeekView!!.visibility = if (visible) VISIBLE else INVISIBLE
         }
 
         /**
@@ -392,9 +406,11 @@ class VideoPlayerActivity :
         window.requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
         setContentView(R.layout.video_player)
         mContent = findViewById(R.id.content)
-        mContent!!.init(this, findViewById(R.id.title),
+        mContent!!.init(
+            this, findViewById(R.id.title),
             findViewById(R.id.play),
-            findViewById(R.id.seekbar))
+            findViewById(R.id.seekbar)
+        )
         val bar = supportActionBar
         bar!!.addTab(bar.newTab().setText("Tab 1").setTabListener(this))
         bar.addTab(bar.newTab().setText("Tab 2").setTabListener(this))
@@ -419,7 +435,7 @@ class VideoPlayerActivity :
      * @param menu The options menu in which you place your items.
      * @return You must return true for the menu to be displayed.
      */
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    @RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.content_actions, menu)
@@ -526,6 +542,7 @@ class VideoPlayerActivity :
                 item.isChecked = true
                 return true
             }
+
             R.id.hide_tabs -> {
                 // noinspection ConstantConditions
                 supportActionBar!!.navigationMode = ActionBar.NAVIGATION_MODE_STANDARD

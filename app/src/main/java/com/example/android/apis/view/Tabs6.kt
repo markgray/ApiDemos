@@ -57,7 +57,11 @@ class Tabs6 : TabActivity(), TabContentFactory {
             tabHost.newTabSpec("tab1")
                 .setIndicator(
                     "tab1",
-                    ResourcesCompat.getDrawable(resources, R.drawable.star_big_on, null)
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.star_big_on,
+                        null
+                    )
                 )
                 .setContent(this)
         )

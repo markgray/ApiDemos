@@ -27,16 +27,13 @@ import com.example.android.apis.R
  * This view is constructed in such a way as to obscure the buttons and descriptive
  * text of the activity in a poor attempt to fool the user into clicking on the buttons
  * despite the activity telling the user that they may be harmful.
- */
-class SecureViewOverlay
-/**
  * Constructor called to perform inflation from XML. We just call our super's constructor.
  *
  * @param context The [Context] the view is running in, through which it can access the current
  *                theme, resources, etc.
  * @param attrs   The attributes of the XML tag that is inflating the view.
  */
-(context: Context?, attrs: AttributeSet?) : ViewGroup(context, attrs) {
+class SecureViewOverlay(context: Context?, attrs: AttributeSet?) : ViewGroup(context, attrs) {
     /**
      * [SecureView] `AppCompatActivity` to use to find views we need to obscure.
      */
@@ -96,14 +93,22 @@ class SecureViewOverlay
      * @param b       Bottom position, relative to parent
      */
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        spoofLayout(findViewById(R.id.secure_view_overlay_description),
-            mActivity!!.findViewById(R.id.secure_view_description))
-        spoofLayout(findViewById(R.id.secure_view_overlay_button1),
-            mActivity!!.findViewById(R.id.secure_view_unsecure_button))
-        spoofLayout(findViewById(R.id.secure_view_overlay_button2),
-            mActivity!!.findViewById(R.id.secure_view_builtin_secure_button))
-        spoofLayout(findViewById(R.id.secure_view_overlay_button3),
-            mActivity!!.findViewById(R.id.secure_view_custom_secure_button))
+        spoofLayout(
+            spoof = findViewById(R.id.secure_view_overlay_description),
+            original = mActivity!!.findViewById(R.id.secure_view_description)
+        )
+        spoofLayout(
+            spoof = findViewById(R.id.secure_view_overlay_button1),
+            original = mActivity!!.findViewById(R.id.secure_view_unsecure_button)
+        )
+        spoofLayout(
+            spoof = findViewById(R.id.secure_view_overlay_button2),
+            original = mActivity!!.findViewById(R.id.secure_view_builtin_secure_button)
+        )
+        spoofLayout(
+            spoof = findViewById(R.id.secure_view_overlay_button3),
+            original = mActivity!!.findViewById(R.id.secure_view_custom_secure_button)
+        )
     }
 
     /**

@@ -66,12 +66,12 @@ class TextSwitcher1 : AppCompatActivity(), ViewSwitcher.ViewFactory, View.OnClic
         mSwitcher = findViewById(R.id.switcher)
         mSwitcher!!.setFactory(this)
         val inAnim = AnimationUtils.loadAnimation(
-                this,
-                android.R.anim.fade_in
+            this,
+            android.R.anim.fade_in
         )
         val outAnim = AnimationUtils.loadAnimation(
-                this,
-                android.R.anim.fade_out
+            this,
+            android.R.anim.fade_out
         )
         mSwitcher!!.inAnimation = inAnim
         mSwitcher!!.outAnimation = outAnim

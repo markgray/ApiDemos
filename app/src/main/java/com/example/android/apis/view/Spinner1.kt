@@ -75,9 +75,9 @@ class Spinner1 : AppCompatActivity() {
         setContentView(R.layout.spinner_1)
         val s1 = findViewById<Spinner>(R.id.spinner1)
         var adapter = ArrayAdapter.createFromResource(
-            this,
-            R.array.colors,
-            android.R.layout.simple_spinner_item
+            /* context = */ this,
+            /* textArrayResId = */ R.array.colors,
+            /* textViewResId = */ android.R.layout.simple_spinner_item
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         s1.adapter = adapter
@@ -100,7 +100,7 @@ class Spinner1 : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                showToast("Spinner1: position=$position id=$id")
+                showToast(msg = "Spinner1: position=$position id=$id")
             }
 
             /**
@@ -110,14 +110,14 @@ class Spinner1 : AppCompatActivity() {
              * @param parent The [AdapterView] that now contains no selected item.
              */
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                showToast("Spinner1: unselected")
+                showToast(msg = "Spinner1: unselected")
             }
         }
         val s2 = findViewById<Spinner>(R.id.spinner2)
         adapter = ArrayAdapter.createFromResource(
-            this,
-            R.array.planets,
-            android.R.layout.simple_spinner_item
+            /* context = */ this,
+            /* textArrayResId = */ R.array.planets,
+            /* textViewResId = */ android.R.layout.simple_spinner_item
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         s2.adapter = adapter
@@ -140,7 +140,7 @@ class Spinner1 : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                showToast("Spinner2: position=$position id=$id")
+                showToast(msg = "Spinner2: position=$position id=$id")
             }
 
             /**
@@ -150,7 +150,7 @@ class Spinner1 : AppCompatActivity() {
              * @param parent The [AdapterView] that now contains no selected item.
              */
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                showToast("Spinner2: unselected")
+                showToast(msg = "Spinner2: unselected")
             }
         }
     }
