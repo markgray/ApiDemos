@@ -18,13 +18,11 @@ package com.example.android.apis.app
 
 import android.app.Activity
 import android.content.Context
-import android.content.res.Resources
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract.Contacts
 import android.text.TextUtils
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
@@ -41,6 +39,7 @@ import androidx.fragment.app.ListFragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
+import com.example.android.apis.graphics.Utilities.id2p
 
 /**
  * Demonstration of the use of a CursorLoader to load and display contacts data in a fragment.
@@ -120,10 +119,10 @@ class LoaderCursor : AppCompatActivity() {
         override fun onViewStateRestored(savedInstanceState: Bundle?) {
             super.onViewStateRestored(savedInstanceState)
             getListView().setPadding(
-                dpToPixel(8, getListView().context),
-                dpToPixel(150, getListView().context),
-                dpToPixel(8, getListView().context),
-                dpToPixel(60, getListView().context)
+                id2p(8),
+                id2p(150),
+                id2p(8),
+                id2p(60),
             )
 
             // Give some text to display if there is no data.  In a real
@@ -149,24 +148,6 @@ class LoaderCursor : AppCompatActivity() {
             // Prepare the loader.  Either re-connect with an existing one,
             // or start a new one.
             LoaderManager.getInstance(this).initLoader(0, null, this)
-        }
-
-        /**
-         * This method converts dp unit to equivalent pixels, depending on device density. First we
-         * fetch a [Resources] instance for `val resources`, then we fetch the current display
-         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
-         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
-         * dots-per-inch, divided by the reference density used throughout the system.
-         *
-         * @param dp      A value in dp (density independent pixels) unit which we need to convert
-         *                into pixels
-         * @param context [Context] to get resources and device specific display metrics
-         * @return An [Int] value to represent px equivalent to dp depending on device density
-         */
-        private fun dpToPixel(dp: Int, context: Context): Int {
-            val resources: Resources = context.resources
-            val metrics = resources.displayMetrics
-            return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
         }
 
         /**

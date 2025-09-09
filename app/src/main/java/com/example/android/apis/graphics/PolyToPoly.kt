@@ -17,16 +17,15 @@ package com.example.android.apis.graphics
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.View
 import androidx.core.graphics.withSave
 import androidx.core.graphics.withTranslation
+import com.example.android.apis.graphics.Utilities.d2p
 
 /**
  * Shows how to use [Matrix.setPolyToPoly] to move and warp drawings done to a Canvas:
@@ -173,7 +172,7 @@ class PolyToPoly : GraphicsActivity() {
         @SuppressLint("DrawAllocation")
         override fun onDraw(canvas: Canvas) {
             canvas.drawColor(Color.WHITE)
-            canvas.translate(0f, dpToPixel(160, context).toFloat())
+            canvas.translate(0f, d2p(160f))
             canvas.withTranslation(x = 10f, y = 10f) {
                 // translate (1 point)
                 doDraw(canvas = this, src = floatArrayOf(0f, 0f), dst = floatArrayOf(5f, 5f))
@@ -202,25 +201,6 @@ class PolyToPoly : GraphicsActivity() {
                     dst = floatArrayOf(0f, 0f, 96f, 0f, 64f, 96f, 0f, 64f)
                 )
             }
-        }
-
-        /**
-         * This method converts dp unit to equivalent pixels, depending on device density. First we
-         * fetch a [Resources] instance for `val resources`, then we fetch the current display
-         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
-         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
-         * dots-per-inch, divided by the reference density used throughout the system.
-         *
-         * @param dp      A value in dp (density independent pixels) unit which we need to convert
-         *                into pixels
-         * @param context [Context] to get resources and device specific display metrics
-         * @return An [Int] value to represent px equivalent to dp depending on device density
-         */
-        @Suppress("SameParameterValue")
-        private fun dpToPixel(dp: Int, context: Context): Int {
-            val resources: Resources = context.resources
-            val metrics = resources.displayMetrics
-            return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
         }
 
         /**

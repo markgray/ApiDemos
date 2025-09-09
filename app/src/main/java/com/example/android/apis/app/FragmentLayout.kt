@@ -17,13 +17,10 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -33,13 +30,14 @@ import android.widget.ListView
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.ListFragment
 import com.example.android.apis.R
 import com.example.android.apis.Shakespeare
-import androidx.core.view.isVisible
+import com.example.android.apis.graphics.Utilities.id2p
 
 /**
  * Demonstration of using fragments to implement different activity layouts.
@@ -338,10 +336,10 @@ class FragmentLayout : FragmentActivity() {
 
             val scroller = ScrollView(activity)
             scroller.setPadding(
-                dpToPixel(8, container.context),
-                dpToPixel(120, container.context),
-                dpToPixel(8, container.context),
-                dpToPixel(60, container.context)
+                id2p(8),
+                id2p(120),
+                id2p(8),
+                id2p(60),
             )
             val text = TextView(activity)
 
@@ -353,24 +351,6 @@ class FragmentLayout : FragmentActivity() {
             scroller.addView(text)
             text.text = Shakespeare.DIALOGUE[shownIndex]
             return scroller
-        }
-
-        /**
-         * This method converts dp unit to equivalent pixels, depending on device density. First we
-         * fetch a [Resources] instance for `val resources`, then we fetch the current display
-         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
-         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
-         * dots-per-inch, divided by the reference density used throughout the system.
-         *
-         * @param dp      A value in dp (density independent pixels) unit which we need to convert
-         *                into pixels
-         * @param context [Context] to get resources and device specific display metrics
-         * @return An [Int] value to represent px equivalent to dp depending on device density
-         */
-        private fun dpToPixel(dp: Int, context: Context): Int {
-            val resources: Resources = context.resources
-            val metrics = resources.displayMetrics
-            return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
         }
 
         /**

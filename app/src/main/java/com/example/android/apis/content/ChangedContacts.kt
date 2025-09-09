@@ -22,13 +22,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
-import android.content.res.Resources
 import android.database.Cursor
 import android.database.CursorWrapper
 import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -44,6 +42,7 @@ import androidx.core.content.edit
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
+import com.example.android.apis.graphics.Utilities.id2p
 
 /**
  * Shows how to access the contacts database and list those that have changed or been deleted since
@@ -168,10 +167,10 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         val main = LinearLayout(this)
         main.orientation = LinearLayout.VERTICAL
         main.setPadding(
-            dpToPixel(8, this),
-            dpToPixel(150, this),
-            dpToPixel(8, this),
-            dpToPixel(60, this)
+            id2p(8),
+            id2p(150),
+            id2p(8),
+            id2p(60),
         )
         mChangeButton = Button(this)
         mChangeButton!!.text = "Changed since " + getLastTimestamp(0, PREF_KEY_CHANGE)
@@ -197,24 +196,6 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
         mList!!.layoutParams = LinearLayout.LayoutParams(WRAP, WRAP, 1f)
         main.addView(mList)
         setContentView(main)
-    }
-
-    /**
-     * This method converts dp unit to equivalent pixels, depending on device density. First we
-     * fetch a [Resources] instance for `val resources`, then we fetch the current display
-     * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
-     * Finally we return our [dp] parameter multiplied by the the screen density expressed as
-     * dots-per-inch, divided by the reference density used throughout the system.
-     *
-     * @param dp      A value in dp (density independent pixels) unit which we need to convert
-     *                into pixels
-     * @param context [Context] to get resources and device specific display metrics
-     * @return An [Int] value to represent px equivalent to dp depending on device density
-     */
-    private fun dpToPixel(dp: Int, context: Context): Int {
-        val resources: Resources = context.resources
-        val metrics = resources.displayMetrics
-        return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
     }
 
     /**

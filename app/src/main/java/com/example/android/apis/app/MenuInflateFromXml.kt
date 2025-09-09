@@ -17,11 +17,8 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -36,6 +33,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import com.example.android.apis.app.MenuInflateFromXml.Companion.sMenuExampleNames
 import com.example.android.apis.app.MenuInflateFromXml.Companion.sMenuExampleResources
+import com.example.android.apis.graphics.Utilities.id2p
 
 /**
  * Demonstrates inflating menus from XML. There are 6 different menu XML resources that the user can
@@ -101,10 +99,10 @@ class MenuInflateFromXml : AppCompatActivity() {
         val layout = LinearLayout(this)
         layout.orientation = LinearLayout.VERTICAL
         layout.setPadding(
-            dpToPixel(8, layout.context),
-            dpToPixel(120, layout.context),
-            dpToPixel(8, layout.context),
-            dpToPixel(60, layout.context)
+            id2p(8),
+            id2p(120),
+            id2p(8),
+            id2p(60),
         )
 
         // Create the spinner to allow the user to choose a menu XML
@@ -174,24 +172,6 @@ class MenuInflateFromXml : AppCompatActivity() {
 
         // Set the layout as our content view
         setContentView(layout)
-    }
-
-    /**
-     * This method converts dp unit to equivalent pixels, depending on device density. First we
-     * fetch a [Resources] instance for `val resources`, then we fetch the current display
-     * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
-     * Finally we return our [dp] parameter multiplied by the the screen density expressed as
-     * dots-per-inch, divided by the reference density used throughout the system.
-     *
-     * @param dp      A value in dp (density independent pixels) unit which we need to convert
-     *                into pixels
-     * @param context [Context] to get resources and device specific display metrics
-     * @return An [Int] value to represent px equivalent to dp depending on device density
-     */
-    private fun dpToPixel(dp: Int, context: Context): Int {
-        val resources: Resources = context.resources
-        val metrics = resources.displayMetrics
-        return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
     }
 
     /**

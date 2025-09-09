@@ -17,6 +17,8 @@
 package com.example.android.apis
 
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.os.Bundle
 import android.view.View
 import android.widget.ListView
@@ -63,16 +65,20 @@ open class ApiDemos : AppCompatActivity() {
         setContentView(R.layout.api_demos)
         listView = findViewById(R.id.list)
 
-        val intent = intent
+        val intent: Intent = intent
         var path = intent.getStringExtra("com.example.android.apis.Path")
 
         if (path == null) {
             path = ""
         }
 
-        listView.adapter = SimpleAdapter(this, getData(path),
-            android.R.layout.simple_list_item_1, arrayOf("title"),
-            intArrayOf(android.R.id.text1))
+        listView.adapter = SimpleAdapter(
+            /* context = */ this,
+            /* data = */ getData(prefix = path),
+            /* resource = */ android.R.layout.simple_list_item_1,
+            /* from = */ arrayOf("title"),
+            /* to = */ intArrayOf(android.R.id.text1)
+        )
         listView.isTextFilterEnabled = true
         listView.setOnItemClickListener { parent, view, position, id ->
             onListItemClick(parent as ListView, view, position, id)
@@ -166,13 +172,13 @@ open class ApiDemos : AppCompatActivity() {
         val mainIntent = Intent(Intent.ACTION_MAIN, null)
         mainIntent.addCategory(Intent.CATEGORY_SAMPLE_CODE)
 
-        val pm = packageManager
+        val pm: PackageManager = packageManager
 
         @Suppress("USELESS_ELVIS")
-        val list = pm.queryIntentActivities(mainIntent, 0) ?: return myData
+        val list: List<ResolveInfo> = pm.queryIntentActivities(mainIntent, 0) ?: return myData
 
         val prefixPath: Array<String>?
-        var prefixWithSlash = prefix
+        var prefixWithSlash: String = prefix
 
         if (prefix == "") {
             prefixPath = null
@@ -181,35 +187,48 @@ open class ApiDemos : AppCompatActivity() {
             prefixWithSlash = "$prefix/"
         }
 
-        val len = list.size
+        val len: Int = list.size
 
         val entries = HashMap<String, Boolean>()
 
         for (i in 0 until len) {
-            val info = list[i]
-            val labelSeq = info.loadLabel(pm)
-            val label = labelSeq?.toString() ?: info.activityInfo.name
+            val info: ResolveInfo = list[i]
+            val labelSeq: CharSequence? = info.loadLabel(pm)
+            val label: String = labelSeq?.toString() ?: info.activityInfo.name
 
             if (prefixWithSlash.isEmpty() || label.startsWith(prefixWithSlash)) {
 
-                val labelPath = label.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                val labelPath: Array<String> =
+                    label.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-                val nextLabel = if (prefixPath == null) labelPath[0] else labelPath[prefixPath.size]
+                val nextLabel: String =
+                    if (prefixPath == null) labelPath[0] else labelPath[prefixPath.size]
 
-                if (prefixPath?.size ?: 0 == labelPath.size - 1) {
-                    addItem(myData, nextLabel, activityIntent(
-                        info.activityInfo.applicationInfo.packageName,
-                        info.activityInfo.name))
+                if ((prefixPath?.size ?: 0) == labelPath.size - 1) {
+                    addItem(
+                        data = myData,
+                        name = nextLabel,
+                        intent = activityIntent(
+                            pkg = info.activityInfo.applicationInfo.packageName,
+                            componentName = info.activityInfo.name
+                        )
+                    )
                 } else {
                     if (entries[nextLabel] == null) {
-                        addItem(myData, nextLabel, browseIntent(if (prefix == "") nextLabel else "$prefix/$nextLabel"))
+                        addItem(
+                            data = myData,
+                            name = nextLabel,
+                            intent = browseIntent(
+                                path = if (prefix == "") nextLabel else "$prefix/$nextLabel"
+                            )
+                        )
                         entries[nextLabel] = true
                     }
                 }
             }
         }
 
-        Collections.sort(myData, sDisplayNameComparator)
+        Collections.sort(/* list = */ myData, /* c = */ sDisplayNameComparator)
 
         return myData
     }

@@ -16,17 +16,16 @@
 package com.example.android.apis.graphics
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Path.FillType
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.View
-import kotlin.math.roundToInt
 import androidx.core.graphics.withTranslation
+import com.example.android.apis.graphics.Utilities.d2p
+import kotlin.math.roundToInt
 
 /**
  * Shows the effect of four different Path.FillType's on the same Path, which consists of two
@@ -137,7 +136,7 @@ class PathFillTypes : GraphicsActivity() {
         /**
          * The init block of our constructor. We set our window to be focusable, and focusable in
          * touch mode. We initialize our field `mPixelMultiplier` with the return value of our method
-         * `convertDpToPixel` (a multiplier to convert dp units to pixels for devices with different
+         * `d2p` (a multiplier to convert dp units to pixels for devices with different
          * pixel densities). We allocate a new instance of `Path` for our `Path` field `mPath`, then
          * add two intersecting circles to it (both use counter clockwise direction to wind the
          * circle's contour).
@@ -145,7 +144,7 @@ class PathFillTypes : GraphicsActivity() {
         init {
             isFocusable = true
             isFocusableInTouchMode = true
-            mPixelMultiplier = convertDpToPixel(1f, context)
+            mPixelMultiplier = d2p(1f)
             mPath = Path()
             mPath.addCircle(
                 /* x = */ 40 * mPixelMultiplier,
@@ -159,26 +158,6 @@ class PathFillTypes : GraphicsActivity() {
                 /* radius = */ 45 * mPixelMultiplier,
                 /* dir = */ Path.Direction.CCW
             )
-        }
-    }
-
-    companion object {
-        /**
-         * This method converts dp unit to equivalent pixels, depending on device density. First we
-         * fetch a [Resources] instance for `val resources`, then we fetch the current display
-         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
-         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
-         * dots-per-inch, divided by the reference density used throughout the system.
-         *
-         * @param dp      A value in dp (density independent pixels) unit which we need to convert
-         *                into pixels
-         * @param context [Context] to get resources and device specific display metrics
-         * @return A float value to represent px equivalent to dp depending on device density
-         */
-        fun convertDpToPixel(dp: Float, context: Context): Float {
-            val resources: Resources = context.resources
-            val metrics = resources.displayMetrics
-            return dp * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
         }
     }
 }

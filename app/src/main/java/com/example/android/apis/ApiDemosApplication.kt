@@ -26,7 +26,7 @@ import androidx.multidex.MultiDexApplication
  * however it is recommended to use singletons for that instead rather than merge
  * all of these globals from across your application into one place here.
  */
-@Suppress("unused")
+@Suppress("unused") // Used in AndroidManifest.xml
 class ApiDemosApplication : MultiDexApplication() {
     @Suppress("RedundantOverride")
     override fun onCreate() {

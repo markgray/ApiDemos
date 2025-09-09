@@ -3,6 +3,7 @@ package com.example.android.apis
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -58,7 +59,7 @@ class AskForPermissions : AppCompatActivity() {
                 )
         }
         val askUser = findViewById<Button>(R.id.ask_for_permission)
-        askUser?.setOnClickListener { v ->
+        askUser?.setOnClickListener { v: View? ->
             ActivityCompat.requestPermissions(
                 this@AskForPermissions,
                 permissions.toTypedArray(),

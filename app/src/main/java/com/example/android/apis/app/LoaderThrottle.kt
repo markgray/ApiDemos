@@ -24,7 +24,6 @@ import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.UriMatcher
-import android.content.res.Resources
 import android.database.Cursor
 import android.database.DatabaseUtils
 import android.database.SQLException
@@ -36,7 +35,6 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.BaseColumns
 import android.text.TextUtils
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
@@ -44,12 +42,14 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.fragment.app.ListFragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
-import androidx.core.net.toUri
+import com.example.android.apis.app.LoaderThrottle.MainTable.Companion.CONTENT_URI
+import com.example.android.apis.graphics.Utilities.id2p
 
 /**
  * Demonstration of bottom to top implementation of a content provider holding
@@ -716,10 +716,10 @@ class LoaderThrottle : AppCompatActivity() {
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
             getListView().setPadding(
-                dpToPixel(8, getListView().context),
-                dpToPixel(120, getListView().context),
-                dpToPixel(8, getListView().context),
-                dpToPixel(60, getListView().context)
+                id2p(8),
+                id2p(120),
+                id2p(8),
+                id2p(60),
             )
 
             setEmptyText("No data.  Select 'Populate' to fill with data from Z to A at a rate of 4 per second.")
@@ -741,24 +741,6 @@ class LoaderThrottle : AppCompatActivity() {
             // Prepare the loader.  Either re-connect with an existing one,
             // or start a new one.
             LoaderManager.getInstance(this).initLoader(0, null, this)
-        }
-
-        /**
-         * This method converts dp unit to equivalent pixels, depending on device density. First we
-         * fetch a [Resources] instance for `val resources`, then we fetch the current display
-         * metrics that are in effect for this resource object to [DisplayMetrics] `val metrics`.
-         * Finally we return our [dp] parameter multiplied by the the screen density expressed as
-         * dots-per-inch, divided by the reference density used throughout the system.
-         *
-         * @param dp      A value in dp (density independent pixels) unit which we need to convert
-         *                into pixels
-         * @param context [Context] to get resources and device specific display metrics
-         * @return An [Int] value to represent px equivalent to dp depending on device density
-         */
-        private fun dpToPixel(dp: Int, context: Context): Int {
-            val resources: Resources = context.resources
-            val metrics = resources.displayMetrics
-            return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)
         }
 
         /**
@@ -856,7 +838,7 @@ class LoaderThrottle : AppCompatActivity() {
                                 builder.append(c)
                                 val values = ContentValues()
                                 values.put(MainTable.COLUMN_NAME_DATA, builder.toString())
-                                cr.insert(MainTable.CONTENT_URI, values)
+                                cr.insert(CONTENT_URI, values)
                                 // Wait a bit between each insert.
                                 try {
                                     Thread.sleep(250)
@@ -895,7 +877,7 @@ class LoaderThrottle : AppCompatActivity() {
                          */
                         @Deprecated("Deprecated in Java")
                         override fun doInBackground(vararg params: Void): Void? {
-                            cr.delete(MainTable.CONTENT_URI, null, null)
+                            cr.delete(CONTENT_URI, null, null)
                             return null
                         }
                     }
@@ -935,7 +917,7 @@ class LoaderThrottle : AppCompatActivity() {
 
             val cl = CursorLoader(
                 requireActivity(),
-                MainTable.CONTENT_URI,
+                CONTENT_URI,
                 PROJECTION,
                 null,
                 null,
