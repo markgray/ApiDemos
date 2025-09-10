@@ -32,10 +32,9 @@ import com.example.android.apis.R
  * The properties being animated are: translationY (expandAnimators), translationZ (towardAnimators),
  * rotationY and translationX (moveAwayAnimators), rotationY and translationX (moveBackAnimators),
  * translationZ (awayAnimators), and translationY (collapseAnimators).
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class ShadowCardStack : AppCompatActivity() {
     /**
      * Turns a list of [Animator] objects into an [AnimatorSet], with the [Animator] objects set to

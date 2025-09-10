@@ -16,8 +16,6 @@
 
 package com.example.android.apis.view
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.ActionMode
 import android.view.Menu
@@ -26,7 +24,6 @@ import android.widget.AbsListView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -54,9 +51,8 @@ class List15 : AppCompatActivity() {
      * [mStrings] using the layout android.R.layout.simple_list_item_checked.
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
+     * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
      */
-    @SuppressLint("ObsoleteSdkInt")
-    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.list_15)
@@ -73,9 +69,8 @@ class List15 : AppCompatActivity() {
      * "Long press to start selection".
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
+     * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
      */
-    @SuppressLint("ObsoleteSdkInt")
-    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         supportActionBar!!.subtitle = "Long press to start selection"
@@ -85,9 +80,8 @@ class List15 : AppCompatActivity() {
      * Our custom `MultiChoiceModeListener`, becomes active when the [ListView] is long
      * clicked. It then inflates an action mode R.menu.list_select_menu which remains up
      * as long as at least one item is selected, or until the selected items are "shared"
+     * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
      */
-    @SuppressLint("ObsoleteSdkInt")
-    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     private inner class ModeCallback : AbsListView.MultiChoiceModeListener {
         /**
          * Called when action mode is first created. The menu supplied will be used to generate

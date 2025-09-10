@@ -29,14 +29,12 @@ import android.graphics.RadialGradient
 import android.graphics.Shader
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.BounceInterpolator
 import android.widget.Button
 import android.widget.LinearLayout
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -44,10 +42,9 @@ import com.example.android.apis.R
  * Uses AnimatorSet.playTogether(Animator... items) to play four different
  * animations at once: yBouncer, yAlphaBouncer, whxyBouncer, and yxBouncer,
  * all of which are set up in the method createAnimation().
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class MultiPropertyAnimation : AppCompatActivity() {
 
     /**

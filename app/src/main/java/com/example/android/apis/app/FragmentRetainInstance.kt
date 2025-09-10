@@ -18,15 +18,12 @@ package com.example.android.apis.app
 // TODO: Replace suppresssed deprecation warnings with modern solution.
 // TODO: Fix comments
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.example.android.apis.R
@@ -37,10 +34,9 @@ import com.example.android.apis.R
  * changes. Shows how you can use a [Fragment] to easily propagate state (such as
  * threads) across activity instances when an activity needs to be restarted. This is
  * a lot easier than using the raw `Activity.onRetainNonConfigurationInstance()` API.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN", "MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentRetainInstance : FragmentActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of

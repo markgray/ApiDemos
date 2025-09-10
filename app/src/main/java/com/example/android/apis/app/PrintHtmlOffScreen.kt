@@ -15,8 +15,6 @@
  */
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
@@ -28,7 +26,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -42,9 +39,8 @@ import com.example.android.apis.R
  *
  * @see PrintManager
  * @see WebView
+ * RequiresApi(Build.VERSION_CODES.LOLLIPOP)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class PrintHtmlOffScreen : AppCompatActivity() {
     /**
      * WebView we load our HTML file into and print

@@ -24,7 +24,6 @@ import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.CursorWrapper
-import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.view.View
@@ -35,7 +34,6 @@ import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
@@ -48,9 +46,8 @@ import com.example.android.apis.graphics.Utilities.id2p
  * Shows how to access the contacts database and list those that have changed or been deleted since
  * a certain time. Layout is created by java code, includes instructive use of a [ListView] to
  * contain the results of the [Cursor] queries.
+ * RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
     /**
      * To see this in action, "clear data" for the contacts storage app in the system settings.

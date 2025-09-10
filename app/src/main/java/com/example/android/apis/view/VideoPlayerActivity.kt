@@ -22,7 +22,6 @@
 
 package com.example.android.apis.view
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ClipData
 import android.content.Context
@@ -61,9 +60,8 @@ import com.example.android.apis.R
  * TODO: replace deprecated Action bar navigation using tabs
  * TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
  * TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class VideoPlayerActivity :
     AppCompatActivity(),
     SearchView.OnQueryTextListener,

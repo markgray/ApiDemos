@@ -24,8 +24,6 @@ package com.example.android.apis.animation
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AccelerateInterpolator
@@ -33,7 +31,6 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import com.example.android.apis.R
@@ -43,9 +40,8 @@ import com.example.android.apis.R
  * by setting one to android:visibility="gone" and the other to android:visibility="visible"
  * when they are to be "flipped". The english list starts as the visible list as defined in the
  * Layout xml file.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class ListFlipper : AppCompatActivity() {
 
     /**

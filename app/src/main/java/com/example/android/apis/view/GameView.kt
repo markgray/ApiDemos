@@ -56,10 +56,9 @@ import kotlin.math.sin
  * @param context The [Context] the view is running in, through which it can access the current
  * theme, resources, etc.
  * @param attrs The attributes of the XML tag that is inflating the view.
+ * RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     /**

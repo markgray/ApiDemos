@@ -16,16 +16,13 @@
 
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.content.withStyledAttributes
 import androidx.fragment.app.Fragment
@@ -36,9 +33,8 @@ import com.example.android.apis.app.FragmentArguments.MyFragment.Companion.newIn
 /**
  * Demonstrates a fragment that can be configured through both Bundle arguments
  * and layout attributes.
+ * RequiresApi(Build.VERSION_CODES.LOLLIPOP)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class FragmentArguments : FragmentActivity() {
 
     /**

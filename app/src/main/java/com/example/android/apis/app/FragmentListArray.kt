@@ -16,14 +16,11 @@
 
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.ListFragment
 import com.example.android.apis.Shakespeare
@@ -34,9 +31,8 @@ import com.example.android.apis.Shakespeare
  * the list to display an array by constructing an `ArrayAdapter<String>` using that array
  * ([Shakespeare.TITLES]) as its data. It overrides `onListItemClick` simply to log the id of the
  * item clicked.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentListArray : FragmentActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of

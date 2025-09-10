@@ -15,27 +15,23 @@
  */
 package com.example.android.apis.view
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
-import android.os.Build
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RemoteViews.RemoteView
-import androidx.annotation.RequiresApi
-import com.example.android.apis.R
 import androidx.core.content.withStyledAttributes
+import com.example.android.apis.R
 
 /**
  * Example of writing a custom layout manager. This is a fairly full-featured
  * layout manager that is relatively general, handling all layout cases. You
  * can simplify it for more specific cases. Used by CustomLayoutActivity.kt in
  * its layout file layout/custom_layout.xml
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 @RemoteView
 class CustomLayout : ViewGroup {
     /**

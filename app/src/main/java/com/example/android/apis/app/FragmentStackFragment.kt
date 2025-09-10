@@ -15,25 +15,21 @@
  */
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.android.apis.R
 import com.example.android.apis.app.FragmentStack.CountingFragment.Companion.newInstance
 
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 /**
  * Used by the FragmentNestingTabs demo. It uses the CountingFragment code from the FragmentStack
  * demo to create a stack of `TextView`s displaying the fragment's depth in the stack.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
 class FragmentStackFragment : Fragment() {
     /**
@@ -56,8 +52,8 @@ class FragmentStackFragment : Fragment() {
      *
      * @param savedInstanceState If the fragment is being re-created from
      * a previous saved state, this is the state.
+     * RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
      */
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
@@ -135,8 +131,8 @@ class FragmentStackFragment : Fragment() {
      * [FragmentTransaction.TRANSIT_FRAGMENT_OPEN] (the [Fragment] is being added onto the stack),
      * and have `ft` add the transaction to the back stack with null as the name. Finally we call
      * the `commit` method of `ft` to schedule a commit of the transaction.
+     * RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
      */
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     fun addFragmentToStack() {
         mStackLevel++
 

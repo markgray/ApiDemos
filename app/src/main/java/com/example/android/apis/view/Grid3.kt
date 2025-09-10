@@ -15,11 +15,9 @@
  */
 package com.example.android.apis.view
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ResolveInfo
-import android.os.Build
 import android.os.Bundle
 import android.view.ActionMode
 import android.view.Menu
@@ -32,7 +30,6 @@ import android.widget.Checkable
 import android.widget.FrameLayout
 import android.widget.GridView
 import android.widget.ImageView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.example.android.apis.R
@@ -40,9 +37,8 @@ import com.example.android.apis.R
 /**
  * This demo illustrates the use of CHOICE_MODE_MULTIPLE_MODAL, a.k.a. selection mode on [GridView].
  * Implements multi-selection mode on [GridView]
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class Grid3 : AppCompatActivity() {
     /**
      * Our layout's [GridView], with ID R.id.myGrid.

@@ -23,9 +23,12 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.core.graphics.createBitmap
+import com.example.android.apis.graphics.BitmapPixels.SampleView.Companion.pack4444
+import com.example.android.apis.graphics.BitmapPixels.SampleView.Companion.pack565
+import com.example.android.apis.graphics.BitmapPixels.SampleView.Companion.pack8888
 import java.nio.IntBuffer
 import java.nio.ShortBuffer
-import androidx.core.graphics.createBitmap
 
 /**
  * Supposed to show Bitmap.Config.ARGB_8888, Bitmap.Config.RGB_565, and Bitmap.Config.ARGB_4444
@@ -52,7 +55,6 @@ class BitmapPixels : GraphicsActivity() {
      *
      * @param context the [Context] to use to retrieve resources
      */
-    @SuppressLint("ObsoleteSdkInt")
     private class SampleView(context: Context?) : View(context) {
         /**
          * Color ramp [Bitmap] using [Bitmap.Config.ARGB_8888] as its resolution
@@ -335,6 +337,8 @@ class BitmapPixels : GraphicsActivity() {
             )
             mBitmap1 = createBitmap(n, n)
             mBitmap2 = createBitmap(n, n, Bitmap.Config.RGB_565)
+
+            @SuppressLint("ObsoleteSdkInt")
             mBitmap3 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 createBitmap(n, n, Bitmap.Config.RGB_565)
             } else {
@@ -343,6 +347,7 @@ class BitmapPixels : GraphicsActivity() {
             }
             mBitmap1.copyPixelsFromBuffer(makeBuffer(data8888, n))
             mBitmap2.copyPixelsFromBuffer(makeBuffer(data565, n))
+            @SuppressLint("ObsoleteSdkInt")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 mBitmap3!!.copyPixelsFromBuffer(makeBuffer(data565, n))
             } else {

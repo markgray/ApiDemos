@@ -18,7 +18,6 @@ package com.example.android.apis.view
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.view.View
@@ -26,7 +25,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.graphics.Utilities.id2p
 import com.example.android.apis.view.GridLayout3.Companion.create
@@ -37,9 +35,9 @@ import com.example.android.apis.view.GridLayout3.Companion.create
  * when needed. The two buttons in the bottom right corner need to be separated from the other
  * UI elements. This can either be done by separating rows or separating columns - but we don't
  * need to do both and may only have enough space to do one or the other.
+ * RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
  */
-@RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
+@SuppressLint("SetTextI18n")
 class GridLayout3 : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of

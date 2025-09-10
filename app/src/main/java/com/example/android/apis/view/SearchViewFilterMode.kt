@@ -15,14 +15,11 @@
  */
 package com.example.android.apis.view
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.ListView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import com.example.android.apis.R
@@ -32,9 +29,8 @@ import com.example.android.apis.R
  * Calls `setTextFilterEnabled(true)` on the layout's [ListView] to filter the children
  * displayed in the [ListView] and the value it gets in the `onQueryTextChange` callback
  * it implements as a [SearchView.OnQueryTextListener] to `setFilterText` on the [ListView].
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class SearchViewFilterMode : AppCompatActivity(), SearchView.OnQueryTextListener {
     /**
      * [SearchView] with ID R.id.search_view in our layout

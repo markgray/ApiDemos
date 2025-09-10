@@ -18,23 +18,21 @@
 package com.example.android.apis.preference
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceActivity
 import android.preference.PreferenceFragment
 import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Button
-import androidx.annotation.RequiresApi
 import com.example.android.apis.R
 
 /**
  * After override of isValidFragment {return true;} you have a top-level preference panel with
  * headers which when clicked launch the PreferenceFragment's listed in the xml/preference_headers.xml
  * resource loaded using loadHeadersFromResource.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("SetTextI18n")
 class PreferenceWithHeaders : PreferenceActivity() {
     /**
      * Called when the [PreferenceActivity] is starting. First we call through to our super's

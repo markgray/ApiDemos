@@ -17,11 +17,9 @@ package com.example.android.apis.app
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
@@ -32,9 +30,9 @@ import com.example.android.apis.R
  * separate activity, so you have to use "recent" to switch to it, and then
  * the "up" button works as "up", otherwise it works as "Back". Uses the
  * attribute android:taskAffinity=":bar_navigation" to associate the activities.
+ * RequiresApi(Build.VERSION_CODES.LOLLIPOP)
  */
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
+@SuppressLint("SetTextI18n")
 class ActionBarNavigation : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation

@@ -70,9 +70,8 @@ import androidx.core.graphics.withSave
  * Drawing with a trackball is a simple matter of using the relative motions
  * of the trackball to move the paint brush around. The trackball may also
  * have a button, which we use to cycle through colors.
+ * RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class TouchPaint : GraphicsActivity() {
     /**
      * The view responsible for drawing the window.

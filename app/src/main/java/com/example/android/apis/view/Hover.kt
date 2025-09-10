@@ -15,15 +15,12 @@
  */
 package com.example.android.apis.view
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -46,10 +43,9 @@ import com.example.android.apis.R
  * events before they are sent to its child (a button).  When the Interceptor
  * is intercepting events, the button will not change state as the pointer hovers
  * over it because the interceptor itself will grab the events.
+ * RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-@RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class Hover : AppCompatActivity() {
     /**
      * [TextView] in our layout with ID R.id.message, it is used to display strings describing

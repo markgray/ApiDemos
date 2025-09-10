@@ -15,15 +15,12 @@
  */
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -35,10 +32,9 @@ import com.example.android.apis.R
  * includes the action bar by default and a menu resource is used to populate the
  * menu data itself. If you'd like to see how these things work under the hood, see
  * [ActionBarMechanics].
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class ActionBarUsage : AppCompatActivity(), OnQueryTextListener {
     /**
      * The [TextView] we use as our content view, we set its text in our [onQueryTextChange]

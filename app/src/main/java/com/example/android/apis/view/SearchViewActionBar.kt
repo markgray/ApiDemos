@@ -19,14 +19,12 @@ import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.app.SearchableInfo
 import android.content.ComponentName
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.Window
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import com.example.android.apis.R
@@ -36,9 +34,8 @@ import com.example.android.apis.R
  * a `SearchableInfo` on the [SearchView] for suggestions and submitting queries to. In
  * AndroidManifest.xml a `<meta-data>` element android:name="android.app.default_searchable"
  * android:value=".app.SearchQueryResults" sets the Activity to handle search requests.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 open class SearchViewActionBar : AppCompatActivity(), SearchView.OnQueryTextListener {
     /**
      * [SearchView] in our options menu with ID R.id.action_search, and with the action view
@@ -117,8 +114,8 @@ open class SearchViewActionBar : AppCompatActivity(), SearchView.OnQueryTextList
      * Finally we set the `OnQueryTextListener` of [mSearchView] to "this".
      *
      * @param searchItem `MenuItem` in our action bar menu that is to be configured.
+     * RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
      */
-    @RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private fun setupSearchView(searchItem: MenuItem) {
         if (isAlwaysExpanded()) {
             mSearchView!!.setIconifiedByDefault(false)

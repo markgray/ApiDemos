@@ -29,14 +29,12 @@ import android.graphics.RadialGradient
 import android.graphics.Shader
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
-import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.withTranslation
 import com.example.android.apis.R
@@ -49,9 +47,8 @@ import com.example.android.apis.R
  * fading it out from an alpha of 1.0 to 0.0 in 250 milliseconds The onAnimationEnd callback
  * of the fade animation is set to an AnimatorListenerAdapter which removes the ball when
  * the animation is done.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class BouncingBalls : AppCompatActivity() {
 
     /**

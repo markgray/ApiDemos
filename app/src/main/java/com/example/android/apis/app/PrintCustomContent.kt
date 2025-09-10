@@ -23,7 +23,6 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.pdf.PdfDocument
 import android.os.AsyncTask
-import android.os.Build
 import android.os.Bundle
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
@@ -43,11 +42,10 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.annotation.RequiresApi
+import androidx.core.util.size
 import com.example.android.apis.R
 import java.io.FileOutputStream
 import java.io.IOException
-import androidx.core.util.size
 
 /**
  * This class demonstrates how to implement custom printing support.
@@ -72,9 +70,8 @@ import androidx.core.util.size
  *
  * @see PrintManager
  * @see PrintDocumentAdapter
+ * RequiresApi(Build.VERSION_CODES.KITKAT)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.KITKAT)
 class PrintCustomContent : ListActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of

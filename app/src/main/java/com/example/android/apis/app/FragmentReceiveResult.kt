@@ -16,9 +16,7 @@
 
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
@@ -32,7 +30,6 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.example.android.apis.R
@@ -44,9 +41,8 @@ import com.example.android.apis.R
  * the users input in an intent passed to the [setResult] method which [FragmentReceiveResult]
  * receives in the callback [onActivityResult] and then appends it to the Editable [TextView]
  * with the ID R.id.results contained in the layout R.layout.receive_result.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentReceiveResult : FragmentActivity() {
 
     /**

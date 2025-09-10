@@ -19,7 +19,6 @@ package com.example.android.apis.app
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
@@ -28,7 +27,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ActionProvider
@@ -39,10 +37,9 @@ import com.example.android.apis.R
  * for adding functionality to the Action Bar. In particular this demo creates an
  * ActionProvider for launching the system settings and adds a menu item with that
  * provider.
+ * RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class ActionBarSettingsActionProviderActivity : AppCompatActivity() {
 
     /**

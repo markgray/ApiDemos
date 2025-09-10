@@ -15,23 +15,19 @@
  */
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.Window
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 
 /**
  * This demonstrates the basics of the Action Bar and how it inter-operates with the
  * standard options menu. This demo is for informative purposes only; see ActionBarUsage for
  * an example of using the Action Bar in a more idiomatic manner.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class ActionBarMechanics : AppCompatActivity() {
     /**
      * Called when the activity is starting. We first call through to our super's implementation

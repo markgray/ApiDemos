@@ -23,14 +23,12 @@ import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.LinearLayout
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -39,9 +37,8 @@ import com.example.android.apis.R
  * as items are hidden or shown in a container. Pressing the "Show Buttons" button while the
  * "Custom Animations" CheckBox is checked causes a crash which blanks out the system wallpaper.
  * (Sometimes? This may be fixed as of Android Q -- at least it doesn't seem to happen anymore).
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class LayoutAnimationsHideShow : AppCompatActivity() {
     /**
      * `LinearLayout` into which we place the buttons we are hiding or showing.

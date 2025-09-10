@@ -19,7 +19,6 @@ package com.example.android.apis.preference
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.preference.CheckBoxPreference
 import android.preference.EditTextPreference
@@ -28,16 +27,15 @@ import android.preference.PreferenceActivity
 import android.preference.PreferenceCategory
 import android.preference.PreferenceScreen
 import android.preference.SwitchPreference
-import androidx.annotation.RequiresApi
 import androidx.core.content.withStyledAttributes
 import androidx.core.net.toUri
 import com.example.android.apis.R
 
 /**
  * Shows how to fill a PreferenceScreen using java code.
+ * RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
  */
-@SuppressLint("ExportedPreferenceActivity", "ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+@SuppressLint("ExportedPreferenceActivity")
 class PreferencesFromCode : PreferenceActivity() {
     /**
      * Called when the [PreferenceActivity] is starting. First we call through to our super's

@@ -36,9 +36,8 @@ import java.io.IOException
  * AndroidManifest activity element has an android:launchMode="singleTop" attribute.
  *
  * @see InstallApk for a demo of the original
+ * RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 class InstallApkSessionApi : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,

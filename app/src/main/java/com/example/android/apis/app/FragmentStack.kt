@@ -17,14 +17,12 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -38,10 +36,9 @@ import com.example.android.apis.app.FragmentStack.CountingFragment.Companion.new
  * `getSupportFragmentManager().popBackStack()` (or simply pressing "back" button) goes back
  * one fragment, using a fancy animation for push and pop. (Not really visible on
  * Nexus 6 Marshmallow, but striking on Excite 10.)
+ * RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
 class FragmentStack : FragmentActivity() {
     /**
      * stack level of next [CountingFragment] to add to back stack

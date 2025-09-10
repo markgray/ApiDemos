@@ -16,15 +16,12 @@
 
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Menu
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.ShareActionProvider
 import androidx.core.view.MenuItemCompat
@@ -36,9 +33,8 @@ import com.example.android.apis.R
  * for adding functionality to the Action Bar. In particular this demo is adding
  * a menu item with [ShareActionProvider] as its action provider. The
  * [ShareActionProvider] is responsible for managing the UI for sharing actions.
+ * RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class ActionBarShareActionProviderActivity : AppCompatActivity() {
 
     /**

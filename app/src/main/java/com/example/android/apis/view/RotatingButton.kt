@@ -15,13 +15,10 @@
  */
 package com.example.android.apis.view
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -82,8 +79,17 @@ class RotatingButton : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-            @SuppressLint("ObsoleteSdkInt")
-            @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+            /**
+             * Notification that the progress level has changed. Clients can use the fromUser parameter
+             * to distinguish user-initiated changes from those that occurred programmatically.
+             * We just change the `translationX` of the [Button] variable `rotatingButton`
+             *
+             * @param seekBar The SeekBar whose progress has changed
+             * @param progress The current progress level. This will be in the range min..max where
+             * min and max were set by ProgressBar.setMin(int) and ProgressBar.setMax
+             * @param fromUser `true` if the progress change was initiated by the user.
+             * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+             */
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 rotatingButton.translationX = progress.toFloat()
             }
@@ -94,8 +100,17 @@ class RotatingButton : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-            @SuppressLint("ObsoleteSdkInt")
-            @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+            /**
+             * Notification that the progress level has changed. Clients can use the fromUser parameter
+             * to distinguish user-initiated changes from those that occurred programmatically.
+             * We just change the `translationY` of the [Button] variable `rotatingButton`
+             *
+             * @param seekBar The SeekBar whose progress has changed
+             * @param progress The current progress level. This will be in the range min..max where
+             * min and max were set by ProgressBar.setMin(int) and ProgressBar.setMax
+             * @param fromUser `true` if the progress change was initiated by the user.
+             * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+             */
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 rotatingButton.translationY = progress.toFloat()
             }
@@ -107,8 +122,17 @@ class RotatingButton : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-            @SuppressLint("ObsoleteSdkInt")
-            @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+            /**
+             * Notification that the progress level has changed. Clients can use the fromUser parameter
+             * to distinguish user-initiated changes from those that occurred programmatically.
+             * We just change the `scaleX` of the [Button] variable `rotatingButton`
+             *
+             * @param seekBar The SeekBar whose progress has changed
+             * @param progress The current progress level. This will be in the range min..max where
+             * min and max were set by ProgressBar.setMin(int) and ProgressBar.setMax
+             * @param fromUser `true` if the progress change was initiated by the user.
+             * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+             */
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 rotatingButton.scaleX = progress.toFloat() / 10f
             }
@@ -120,8 +144,17 @@ class RotatingButton : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-            @SuppressLint("ObsoleteSdkInt")
-            @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+            /**
+             * Notification that the progress level has changed. Clients can use the fromUser parameter
+             * to distinguish user-initiated changes from those that occurred programmatically.
+             * We just change the `scaleY` of the [Button] variable `rotatingButton`
+             *
+             * @param seekBar The SeekBar whose progress has changed
+             * @param progress The current progress level. This will be in the range min..max where
+             * min and max were set by ProgressBar.setMin(int) and ProgressBar.setMax
+             * @param fromUser `true` if the progress change was initiated by the user.
+             * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+             */
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 rotatingButton.scaleY = progress.toFloat() / 10f
             }
@@ -132,8 +165,19 @@ class RotatingButton : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-            @SuppressLint("ObsoleteSdkInt")
-            @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+            /**
+             * Notification that the progress level has changed. Clients can use the [fromUser]
+             * parameter to distinguish user-initiated changes from those that occurred
+             * programmatically.
+             *
+             * We just change the `rotationX` of the [Button] variable `rotatingButton`
+             *
+             * @param seekBar The SeekBar whose progress has changed
+             * @param progress The current progress level. This will be in the range min..max where
+             * min and max were set by ProgressBar.setMin(int) and ProgressBar.setMax
+             * @param fromUser `true` if the progress change was initiated by the user.
+             * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+             */
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 // prevent seeking on app creation
                 rotatingButton.rotationX = progress.toFloat()
@@ -145,8 +189,17 @@ class RotatingButton : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-            @SuppressLint("ObsoleteSdkInt")
-            @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+            /**
+             * Notification that the progress level has changed. Clients can use the fromUser parameter
+             * to distinguish user-initiated changes from those that occurred programmatically.
+             * We just change the `rotationY` of the [Button] variable `rotatingButton`
+             *
+             * @param seekBar The SeekBar whose progress has changed
+             * @param progress The current progress level. This will be in the range min..max where
+             * min and max were set by ProgressBar.setMin(int) and ProgressBar.setMax
+             * @param fromUser `true` if the progress change was initiated by the user.
+             * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+             */
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 // prevent seeking on app creation
                 rotatingButton.rotationY = progress.toFloat()
@@ -158,8 +211,19 @@ class RotatingButton : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-            @SuppressLint("ObsoleteSdkInt")
-            @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+            /**
+             * Notification that the progress level has changed. Clients can use the [fromUser]
+             * parameter to distinguish user-initiated changes from those that occurred
+             * programmatically.
+             *
+             * We just change the `rotation` of the [Button] variable `rotatingButton`
+             *
+             * @param seekBar The SeekBar whose progress has changed
+             * @param progress The current progress level. This will be in the range min..max where
+             * min and max were set by ProgressBar.setMin(int) and ProgressBar.setMax
+             * @param fromUser `true` if the progress change was initiated by the user.
+             * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+             */
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 // prevent seeking on app creation
                 rotatingButton.rotation = progress.toFloat()

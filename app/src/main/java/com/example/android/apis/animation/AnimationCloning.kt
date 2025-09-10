@@ -26,14 +26,12 @@ import android.graphics.RadialGradient
 import android.graphics.Shader
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.Button
 import android.widget.LinearLayout
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.withTranslation
 import com.example.android.apis.R
@@ -48,10 +46,9 @@ import com.example.android.apis.R
  * and first AnimatorSet, requesting that they be run at the same time by calling
  * playTogether(ObjectAnimator1,ObjectAnimator2,AnimatorSet1), and the second AnimatorSet
  * to run after the first AnimatorSet by calling playSequentially(AnimatorSet1,AnimatorSet2).
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class AnimationCloning : AppCompatActivity() {
 
     /**

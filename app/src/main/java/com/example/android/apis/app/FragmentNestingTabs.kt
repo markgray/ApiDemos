@@ -15,13 +15,10 @@
  */
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -31,10 +28,9 @@ import androidx.fragment.app.FragmentTransaction
 /**
  * This demonstrates the use of action bar tabs and how they interact
  * with other action bar features.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB_MR2)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("DEPRECATION") // TODO: replace tabs with modern navigation UI
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 class FragmentNestingTabs : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we turn on the framework's internal fragment

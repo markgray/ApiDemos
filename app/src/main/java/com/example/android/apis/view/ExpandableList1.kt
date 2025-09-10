@@ -16,7 +16,6 @@
 package com.example.android.apis.view
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.ContextMenu
@@ -32,7 +31,6 @@ import android.widget.ExpandableListView
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -42,9 +40,8 @@ import com.example.android.apis.R
  * different child lists under group names: "People Names", "Dog Names", "Cat Names",
  * and "Fish Names". When clicked the groups expand to show the child lists, any child
  * or group which is long-pressed will pop up a context menu with an "action button".
+ * RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 class ExpandableList1 : AppCompatActivity() {
     /**
      * The [ExpandableListAdapter] which serves as the `ListAdapter` for our activity.

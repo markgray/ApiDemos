@@ -1,7 +1,5 @@
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
@@ -9,7 +7,6 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -27,9 +24,8 @@ import com.example.android.apis.R
  * not be resized, and it will not be panned to make its focus visible)
  *
  * They are set with: `getWindow().setSoftInputMode(mResizeModeValues[ position ])`
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class SoftInputModes : AppCompatActivity() {
     /**
      * spinner used to select the soft input mode

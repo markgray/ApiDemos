@@ -21,7 +21,6 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.DocumentsContract
 import android.util.Log
@@ -33,7 +32,6 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.content.DocumentsSample.Companion.CODE_READ
 import com.example.android.apis.content.DocumentsSample.Companion.CODE_RENAME
@@ -49,9 +47,9 @@ import java.io.OutputStream
 
 /**
  * Example that exercises client side of [DocumentsContract].
+ * RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
  */
-@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+@SuppressLint("SetTextI18n")
 class DocumentsSample : AppCompatActivity() {
     /**
      * [TextView] used to display information concerning the results of our actions using our

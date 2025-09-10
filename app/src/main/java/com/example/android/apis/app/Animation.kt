@@ -29,16 +29,14 @@ import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Button
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
  * TODO: Remove deprecated use of drawing cache (unneeded since SDK 14)
  * Example of using a custom animation when transitioning between activities.
+ * RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
 class Animation : AppCompatActivity() {
 
     /**

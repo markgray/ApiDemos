@@ -18,7 +18,6 @@ package com.example.android.apis.view
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -27,7 +26,6 @@ import android.view.WindowId
 import android.view.WindowId.FocusObserver
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.ShareActionProvider
@@ -38,9 +36,9 @@ import com.example.android.apis.R
  * Implements a WindowId.FocusObserver() whose onFocusGained(WindowId) merely prints "Gained focus",
  * and whose onFocusLost(WindowId) prints "Lost focus". When menu items are clicked or the app is
  * put in the background the window loses focus even on a touch only device.
+ * RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
  */
-@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+@SuppressLint("SetTextI18n")
 class WindowFocusObserver : AppCompatActivity(), SearchView.OnQueryTextListener {
     /**
      * [TextView] in our layout file that we use to write focus status to from our [FocusObserver]

@@ -15,14 +15,11 @@
  */
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.OnInitListener
 import android.util.Log
 import android.widget.Button
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import com.example.android.apis.app.TextToSpeechActivity.Companion.HELLOS
@@ -41,9 +38,8 @@ import java.util.Random
  *
  * Documentation:
  * http://developer.android.com/reference/android/speech/tts/package-summary.html
+ * RequiresApi(Build.VERSION_CODES.LOLLIPOP)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class TextToSpeechActivity : AppCompatActivity(), OnInitListener {
     /**
      * [TextToSpeech] instance we use to read our text aloud.

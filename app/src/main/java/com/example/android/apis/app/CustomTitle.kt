@@ -16,8 +16,6 @@
 
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -25,7 +23,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
@@ -93,9 +90,8 @@ class CustomTitle : AppCompatActivity() {
      * to the contents of "rightTextEdit" when pressed.
      *
      * @param savedInstanceState always null since we not override onSaveInstanceState
+     * RequiresApi(Build.VERSION_CODES.LOLLIPOP)
      */
-    @SuppressLint("ObsoleteSdkInt")
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.custom_title)

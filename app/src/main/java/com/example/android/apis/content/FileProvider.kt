@@ -15,7 +15,6 @@
  */
 package com.example.android.apis.content
 
-import android.annotation.SuppressLint
 import android.content.ContentProvider
 import android.content.ContentProvider.PipeDataWriter
 import android.content.ContentValues
@@ -23,12 +22,10 @@ import android.content.res.AssetFileDescriptor
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.ParcelFileDescriptor
 import android.provider.OpenableColumns
 import android.util.Log
-import androidx.annotation.RequiresApi
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
@@ -38,9 +35,8 @@ import java.io.InputStream
  * A very simple content provider that can serve arbitrary asset files from our .apk.
  * Used by `ActionBarShareActionProviderActivity`, `ShareContent`, `ContentBrowserActivity`,
  * `ContentBrowserNavActivity`, `SystemUIModes`, `VideoPlayerActivity`.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class FileProvider : ContentProvider(), PipeDataWriter<InputStream> {
     /**
      * Implement this to initialize your content provider on startup, we simply return *true*

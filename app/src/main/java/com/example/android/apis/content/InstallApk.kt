@@ -27,7 +27,6 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
@@ -42,9 +41,8 @@ import java.io.IOException
  * package installation API that uses [Intent.ACTION_INSTALL_PACKAGE].
  *
  * @see InstallApkSessionApi for a demo of the newer Session API.
+ * RequiresApi(api = Build.VERSION_CODES.KITKAT)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(api = Build.VERSION_CODES.KITKAT)
 class InstallApk : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of

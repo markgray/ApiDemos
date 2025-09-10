@@ -15,15 +15,12 @@
  */
 package com.example.android.apis.animation
 
-import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toDrawable
@@ -106,9 +103,8 @@ class ActivityTransitionDetails : AppCompatActivity() {
      * `activityOptions` as additional options for how the Activity should be started.
      *
      * @param v ImageView R.id.titleImage clicked on
+     * RequiresApi(Build.VERSION_CODES.LOLLIPOP)
      */
-    @SuppressLint("ObsoleteSdkInt")
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun clicked(v: View) {
         val intent = Intent(this, ActivityTransition::class.java)
         intent.putExtra(KEY_ID, mName)

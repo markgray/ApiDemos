@@ -40,10 +40,9 @@ import com.example.android.apis.app.LoaderThrottle.ThrottledLoaderListFragment
 
 /**
  * Sample fragment that contains tabs of other fragments.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentTabsFragment : Fragment() {
     /**
      * Our custom [OnTabChangeListener] (Should use `FragmentTabHost` instead) Its `onTabChanged`

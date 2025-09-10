@@ -28,7 +28,6 @@ import android.util.Log
 import android.view.DragEvent
 import android.view.View
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.core.content.withStyledAttributes
 import com.example.android.apis.R
 
@@ -39,9 +38,9 @@ import com.example.android.apis.R
  * @param context The [Context] the view is running in, through which it can access the current
  * theme, resources, etc.
  * @param attrs The attributes of the XML tag that is inflating the view.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("SetTextI18n")
 class DraggableDot(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     /**
      * Flag used to indicate that a drag has started. Set to true when we receive a ACTION_DRAG_STARTED

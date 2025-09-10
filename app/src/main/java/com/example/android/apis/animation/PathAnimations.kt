@@ -27,7 +27,6 @@ import android.graphics.Path
 import android.graphics.Point
 import android.graphics.PointF
 import android.graphics.RectF
-import android.os.Build
 import android.os.Bundle
 import android.util.AttributeSet
 import android.util.Property
@@ -35,7 +34,6 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
 import android.widget.RadioGroup
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import kotlin.math.roundToInt
@@ -63,10 +61,9 @@ import kotlin.math.sqrt
  * TypeConverter PointFToPointConverter is necessary.). The radio buttons to choose
  * which way to use need to be in an HorizontalScrollView not a ScrollView in order
  * to be seen on narrow screens.
+ * RequiresApi(Build.VERSION_CODES.LOLLIPOP)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class PathAnimations : AppCompatActivity(), RadioGroup.OnCheckedChangeListener,
     View.OnLayoutChangeListener {
 

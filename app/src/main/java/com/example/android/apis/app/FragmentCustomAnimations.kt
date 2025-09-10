@@ -17,14 +17,12 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -41,10 +39,10 @@ import com.example.android.apis.R
  * [onSaveInstanceState] saves the [mStackLevel] field in an int "level" which is used when
  * the [FragmentActivity] is recreated to remember the stack level, [mStackLevel] is then used
  * to set the int argument "num" passed to the new fragment when it is created.
+ * RequiresApi(Build.VERSION_CODES.LOLLIPOP)
  */
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-@SuppressLint("DefaultLocale", "ObsoleteSdkInt")
+@SuppressLint("DefaultLocale")
 class FragmentCustomAnimations : FragmentActivity() {
     /**
      * Stack level for the next fragment

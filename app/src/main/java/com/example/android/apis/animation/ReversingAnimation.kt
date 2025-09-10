@@ -28,13 +28,11 @@ import android.graphics.RadialGradient
 import android.graphics.Shader
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.widget.Button
 import android.widget.LinearLayout
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.withTranslation
 import com.example.android.apis.R
@@ -42,10 +40,9 @@ import com.example.android.apis.R
 /**
  * Demonstrates the use of android.animation.ValueAnimator.reverse() method to play an
  * animation in "reverse".
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class ReversingAnimation : AppCompatActivity() {
 
     /**

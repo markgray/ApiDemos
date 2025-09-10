@@ -19,12 +19,10 @@
 // TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
 package com.example.android.apis.view
 
-import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -38,7 +36,6 @@ import android.widget.ScrollView
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -52,10 +49,9 @@ import com.example.android.apis.R
  * browser style of UI (such as a book reader) that hides the nav bar as well as
  * the status bar. The difference is the addition of the flags
  * SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION, and SYSTEM_UI_FLAG_IMMERSIVE.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("UNUSED_PARAMETER", "MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class ContentBrowserNavActivity :
     AppCompatActivity(),
     SearchView.OnQueryTextListener,
@@ -64,8 +60,8 @@ class ContentBrowserNavActivity :
      * Implementation of a view for displaying immersive content, using system UI
      * flags to transition in and out of modes where the user is focused on that
      * content.
+     * RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
      */
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     class Content(context: Context, attrs: AttributeSet?) :
         ScrollView(context, attrs),
         OnSystemUiVisibilityChangeListener,
@@ -257,8 +253,8 @@ class ContentBrowserNavActivity :
          * [mSeekView] to VISIBLE, or to INVISIBLE if `visible` is false.
          *
          * @param visible true makes our navigation elements visible, false makes them invisible.
+         * RequiresApi(Build.VERSION_CODES.KITKAT)
          */
-        @RequiresApi(Build.VERSION_CODES.KITKAT)
         fun setNavVisibility(visible: Boolean) {
             var newVis = mBaseSystemUiVisibility
             if (!visible) {
@@ -355,8 +351,8 @@ class ContentBrowserNavActivity :
      *
      * @param menu The options menu in which you place your items.
      * @return You must return true for the menu to be displayed.
+     * RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
      */
-    @RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.content_actions, menu)
@@ -460,8 +456,8 @@ class ContentBrowserNavActivity :
      *
      * @param item The menu item that was selected.
      * @return Return false to allow normal menu processing to proceed, true to consume it here.
+     * RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
      */
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.show_tabs -> {

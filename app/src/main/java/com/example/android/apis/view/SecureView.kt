@@ -17,7 +17,6 @@ package com.example.android.apis.view
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
 import android.view.MotionEvent
@@ -25,7 +24,6 @@ import android.view.View
 import android.view.View.OnTouchListener
 import android.widget.Button
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -181,9 +179,8 @@ class SecureView : AppCompatActivity() {
              * @param v The view the touch event has been dispatched to.
              * @param event The [MotionEvent] object containing full information about the event.
              * @return True if the listener has consumed the event, false otherwise.
+             * RequiresApi(Build.VERSION_CODES.GINGERBREAD)
              */
-            @SuppressLint("ObsoleteSdkInt")
-            @RequiresApi(Build.VERSION_CODES.GINGERBREAD)
             override fun onTouch(v: View, event: MotionEvent): Boolean {
                 if ((event.flags and MotionEvent.FLAG_WINDOW_IS_OBSCURED) != 0) {
                     if (event.action == MotionEvent.ACTION_UP) {

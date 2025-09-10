@@ -19,17 +19,14 @@
 
 package com.example.android.apis.view
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.AttributeSet
 import android.view.View
 import android.view.View.OnSystemUiVisibilityChangeListener
 import android.widget.Button
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import com.example.android.apis.graphics.TouchPaint.PaintView
@@ -46,9 +43,8 @@ class GameActivity : AppCompatActivity() {
      * @param context [Context] our view is running in, through which we can access the current
      * theme, resources, etc
      * @param attrs attributes of the XML tag that is inflating this view.
+     * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
      */
-    @SuppressLint("ObsoleteSdkInt")
-    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     class Content(context: Context?, attrs: AttributeSet?) :
         PaintView(context, attrs),
         OnSystemUiVisibilityChangeListener,
@@ -283,8 +279,8 @@ class GameActivity : AppCompatActivity() {
          * We then call the method [setSystemUiVisibility] with the argument `newVis` to request
          * that the visibility of the status bar or other screen/window decorations be changed.
          * Finally we set our field [mUpdateSystemUi] to false.
+         * RequiresApi(Build.VERSION_CODES.KITKAT)
          */
-        @RequiresApi(Build.VERSION_CODES.KITKAT)
         fun updateNavVisibility() {
             var newVis: Int = (SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION

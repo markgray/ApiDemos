@@ -23,14 +23,12 @@ import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import kotlin.math.min
@@ -38,10 +36,9 @@ import kotlin.math.min
 /**
  * This application demonstrates how to use LayoutTransition to automate transition animations
  * as items are removed from or added to a container.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class LayoutAnimations : AppCompatActivity() {
     /**
      * Counter of the number of buttons that have been added, used as the button label.

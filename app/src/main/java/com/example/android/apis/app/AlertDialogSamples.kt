@@ -21,7 +21,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.DialogInterface
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -33,7 +32,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import com.example.android.apis.app.AlertDialogSamples.Companion.mProgressHandler
@@ -46,10 +44,9 @@ import com.example.android.apis.app.AlertDialogSamples.Companion.mProgressHandle
  * Source files:
  *  - src/com.example.android.apis/app/AlertDialogSamples.java The Alert Dialog Samples implementation
  *  - /res/any/layout/alert_dialog.xml Defines contents of the screen
+ *  RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate", "UNUSED_ANONYMOUS_PARAMETER")
-@RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class AlertDialogSamples : AppCompatActivity() {
     /**
      * ProgressDialog used for DIALOG_PROGRESS_SPINNER

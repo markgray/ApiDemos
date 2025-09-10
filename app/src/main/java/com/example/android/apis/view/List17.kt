@@ -16,14 +16,11 @@
 
 package com.example.android.apis.view
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.ListView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -56,9 +53,8 @@ class List17 : AppCompatActivity() {
      * the [ListView] was clicked when this was a `ListActivity`).
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
+     * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
      */
-    @SuppressLint("ObsoleteSdkInt")
-    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.list_17)

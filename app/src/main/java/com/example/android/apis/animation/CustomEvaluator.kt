@@ -31,12 +31,10 @@ import android.graphics.RadialGradient
 import android.graphics.Shader
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.withScale
 import com.example.android.apis.R
@@ -47,9 +45,8 @@ import com.example.android.apis.R
  * function. The x and y coordinates of an "animation.ShapeHolder ball" are
  * animated by calling evaluate, and onAnimationUpdate is called which calls
  * invalidate() which causes the onDraw method to be called.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class CustomEvaluator : AppCompatActivity() {
 
     /**

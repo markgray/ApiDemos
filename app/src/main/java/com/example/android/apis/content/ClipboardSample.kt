@@ -21,7 +21,6 @@ import android.content.ClipboardManager
 import android.content.ClipboardManager.OnPrimaryClipChangedListener
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.View
@@ -30,16 +29,15 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.example.android.apis.R
 
 /**
  * Shows how to copy to, and paste from the clipboard using the different conversion methods available
+ * RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
  */
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
-@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
+@SuppressLint("SetTextI18n")
 class ClipboardSample : AppCompatActivity() {
     /**
      * Handle to the CLIPBOARD_SERVICE system-level service (Interface to the clipboard service,

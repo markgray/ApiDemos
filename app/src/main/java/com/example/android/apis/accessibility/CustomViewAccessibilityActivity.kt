@@ -193,7 +193,6 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
          * `onInitializeAccessibilityNodeInfo` and `onPopulateAccessibilityEvent` with
          * custom methods which add our custom accessibility features to the framework.
          */
-        @SuppressLint("ObsoleteSdkInt")
         fun tryInstallAccessibilityDelegate() {
             // If the API version of the platform we are running is too old
             // and does not support the AccessibilityDelegate APIs, do not
@@ -202,6 +201,7 @@ class CustomViewAccessibilityActivity : AppCompatActivity() {
             // be thrown.
             // NOTE: The android-support-v4 library contains APIs that enable
             // using the accessibility APIs in a backwards compatible fashion.
+            @SuppressLint("ObsoleteSdkInt")
             if (Build.VERSION.SDK_INT < 14) {
                 return
             }

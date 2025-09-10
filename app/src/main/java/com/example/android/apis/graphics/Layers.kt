@@ -15,23 +15,19 @@
  */
 package com.example.android.apis.graphics
 
-import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.Bitmap
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.RequiresApi
 
 /**
  * Shows the use of Canvas.saveLayerAlpha() and Canvas.restore() to save and restore
  * Canvas settings while doing some drawing in an off screen buffer.
+ * RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 class Layers : GraphicsActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of

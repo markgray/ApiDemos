@@ -15,11 +15,8 @@
  */
 package com.example.android.apis.view
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.Window
-import androidx.annotation.RequiresApi
 
 /**
  * Version of demo that uses the action bar in overlay mode. Extends
@@ -40,9 +37,8 @@ class SystemUIModesOverlay : SystemUIModes() {
      * `onCreate`.
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
+     * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
      */
-    @SuppressLint("ObsoleteSdkInt")
-    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     override fun onCreate(savedInstanceState: Bundle?) {
         window.requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
         super.onCreate(savedInstanceState)

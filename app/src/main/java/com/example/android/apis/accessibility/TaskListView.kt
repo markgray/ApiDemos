@@ -16,14 +16,11 @@
 
 package com.example.android.apis.accessibility
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.view.accessibility.AccessibilityEvent
 import android.widget.ListView
-import androidx.annotation.RequiresApi
 
 
 /**
@@ -56,9 +53,8 @@ class TaskListView(context: Context, attributeSet: AttributeSet) : ListView(cont
      * @param child The child which requests sending the event.
      * @param event The event to be sent.
      * @return True if the event should be sent.
+     * RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
      */
-    @SuppressLint("ObsoleteSdkInt")
-    @RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     override fun onRequestSendAccessibilityEvent(child: View, event: AccessibilityEvent): Boolean {
         // Add a record for ourselves as well.
         @Suppress("DEPRECATION") // Object pooling has been discontinued. Calling this function now will have no effect.

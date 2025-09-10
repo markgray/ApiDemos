@@ -44,9 +44,8 @@ import com.example.android.apis.graphics.Utilities.id2p
 /**
  * Nifty equalizer with simplified audio waveform display using onWaveFormDataCapture callback of
  * the [Visualizer.OnDataCaptureListener] interface.
+ * RequiresApi(Build.VERSION_CODES.GINGERBREAD)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.GINGERBREAD)
 class AudioFxDemo : AppCompatActivity() {
     /**
      * [MediaPlayer] that plays test_cbr.mp3

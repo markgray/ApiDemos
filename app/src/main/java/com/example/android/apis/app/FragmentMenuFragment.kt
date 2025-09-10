@@ -15,14 +15,11 @@
  */
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.android.apis.R
 import com.example.android.apis.app.FragmentMenu.Menu2Fragment
@@ -30,11 +27,10 @@ import com.example.android.apis.app.FragmentMenu.MenuFragment
 
 /**
  * Demonstrates how fragments can participate in the options menu.
+ * It is used by FragmentNestingTabs.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-// it is used by FragmentNestingTabs
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate", "UNUSED_ANONYMOUS_PARAMETER")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentMenuFragment : Fragment() {
     /**
      * Our [MenuFragment] instance.
@@ -92,8 +88,8 @@ class FragmentMenuFragment : Fragment() {
      * from a previous saved state as given here.
      *
      * @return Return the View for the fragment's UI, or null.
+     * RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
      */
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -149,8 +145,8 @@ class FragmentMenuFragment : Fragment() {
      * `ft` to hide it. If our [CheckBox] field [mCheckBox2] is checked we use `ft` to show our
      * [Fragment] field [mFragment2], and if unchecked we use `ft` to hide it. We then schedule a
      * commit of the `FragmentTransaction` we composed in `ft`.
+     * RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
      */
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     fun updateFragmentVisibility() {
         val ft = childFragmentManager.beginTransaction()
         if (mCheckBox1!!.isChecked) ft.show(mFragment1!!) else ft.hide(mFragment1!!)

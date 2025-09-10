@@ -23,7 +23,6 @@ import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.AttributeSet
 import android.util.DisplayMetrics
@@ -39,7 +38,6 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
@@ -58,10 +56,9 @@ import com.example.android.apis.R
  * TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
  * TODO: replace deprecated Action bar navigation using tabs
  * TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
+ * RequiresApi(Build.VERSION_CODES.KITKAT)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("UNUSED_PARAMETER", "MemberVisibilityCanBePrivate", "UNUSED_ANONYMOUS_PARAMETER")
-@RequiresApi(Build.VERSION_CODES.KITKAT)
 open class SystemUIModes :
     AppCompatActivity(),
     SearchView.OnQueryTextListener,
@@ -159,9 +156,8 @@ open class SystemUIModes :
              * @param menu [Menu] used to populate action buttons
              * @return true if the action mode should be created, false if entering this
              * mode should be aborted.
+             * RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
              */
-            @SuppressLint("ObsoleteSdkInt")
-            @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
             override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
                 mode.title = "My Action Mode!"
                 mode.subtitle = null
@@ -269,9 +265,8 @@ open class SystemUIModes :
      *
      * @param on true to allow window contents to extend in to the screen's overscan area, false to
      * disable this.
+     * RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
      */
-    @SuppressLint("ObsoleteSdkInt")
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     private fun setOverscan(on: Boolean) {
         val win: Window = window
         val winParams: WindowManager.LayoutParams = win.attributes
@@ -296,9 +291,8 @@ open class SystemUIModes :
      *
      * @param on true to request a translucent status bar with minimal system-provided background
      * protection, false to disable this.
+     * RequiresApi(Build.VERSION_CODES.KITKAT)
      */
-    @SuppressLint("ObsoleteSdkInt")
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
     private fun setTranslucentStatus(on: Boolean) {
         val win: Window = window
         val winParams: WindowManager.LayoutParams = win.attributes
@@ -324,9 +318,8 @@ open class SystemUIModes :
      *
      * @param on true to request a translucent navigation bar with minimal system-provided background
      * protection, false to disable this.
+     * RequiresApi(Build.VERSION_CODES.KITKAT)
      */
-    @SuppressLint("ObsoleteSdkInt")
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
     private fun setTranslucentNavigation(on: Boolean) {
         val win: Window = window
         val winParams: WindowManager.LayoutParams = win.attributes
@@ -580,9 +573,8 @@ open class SystemUIModes :
      *
      * @param menu The options menu in which you place your items.
      * @return You must return true for the menu to be displayed.
+     * RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
      */
-    @SuppressLint("ObsoleteSdkInt")
-    @RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.content_actions, menu)

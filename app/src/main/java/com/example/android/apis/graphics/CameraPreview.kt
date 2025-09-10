@@ -17,12 +17,10 @@
 // TODO: replace use of Camera with android.hardware.camera2
 package com.example.android.apis.graphics
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.hardware.Camera
 import android.hardware.Camera.CameraInfo
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -34,20 +32,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isNotEmpty
 import com.example.android.apis.R
 import java.io.IOException
 import kotlin.math.abs
-import androidx.core.view.isNotEmpty
 
 // ----------------------------------------------------------------------
 /**
  * Shows how to create a SurfaceView for the deprecated Camera api (use android.hardware.camera2)
+ * RequiresApi(Build.VERSION_CODES.GINGERBREAD)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.GINGERBREAD)
 class CameraPreview : AppCompatActivity() {
     /**
      * Our instance of our class [Preview]
@@ -306,7 +302,7 @@ class CameraPreview : AppCompatActivity() {
          * field [mHolder]. After exiting the *try* block we initialize `val parameters` to the
          * [Camera.Parameters] of [camera], then call the `setPreviewSize` method of `parameters`
          * to set the dimensions for preview pictures to the width and height of our [Camera.Size]
-         * field [mPreviewSize]. We then call the [requestLayout] method to call a layout pass of
+         * field [mPreviewSize]. We then call the `requestLayout` method to call a layout pass of
          * our view tree. Finally we set the [Camera.Parameters] of [camera] to `parameters`.
          *
          * @param camera new [Camera] to show the preview of

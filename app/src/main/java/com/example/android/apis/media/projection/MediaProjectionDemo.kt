@@ -45,9 +45,8 @@ import com.example.android.apis.media.projection.MediaProjectionDemo.Companion.R
  * Shows how to use a ProjectionManager.createScreenCaptureIntent to capture screen content to a
  * VirtualDisplay which is created using MediaProjection.createVirtualDisplay to display to a
  * SurfaceView.
+ * RequiresApi(Build.VERSION_CODES.LOLLIPOP)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class MediaProjectionDemo : AppCompatActivity() {
     /**
      * Screen density expressed as dots-per-inch. May be either DENSITY_LOW, DENSITY_MEDIUM, or

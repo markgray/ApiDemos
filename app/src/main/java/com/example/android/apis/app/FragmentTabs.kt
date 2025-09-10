@@ -18,13 +18,10 @@
 // TODO: Figure out how to add padding for edgeToEdge!!
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBar.Tab
 import androidx.appcompat.app.AppCompatActivity
@@ -37,9 +34,8 @@ import androidx.fragment.app.FragmentTransaction
  * are switched in and out by a class which implements the interface [ActionBar.TabListener]
  *
  * `TabListener<T extends Fragment> implements ActionBar.TabListener`
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB_MR2)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 class FragmentTabs : AppCompatActivity() {
 
     /**

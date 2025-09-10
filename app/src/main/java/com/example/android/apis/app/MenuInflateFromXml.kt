@@ -16,8 +16,6 @@
 
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -28,7 +26,6 @@ import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import com.example.android.apis.app.MenuInflateFromXml.Companion.sMenuExampleNames
@@ -43,9 +40,8 @@ import com.example.android.apis.graphics.Utilities.id2p
  * R.menu.title_icon does not show the icon (boo hoo!), but oddly enough the submenu does?
  * First, select an example resource from the spinner, and then hit the menu button. To choose
  * another, back out of the activity and start over.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class MenuInflateFromXml : AppCompatActivity() {
 
     /**

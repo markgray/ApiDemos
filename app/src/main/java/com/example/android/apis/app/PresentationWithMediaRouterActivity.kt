@@ -64,9 +64,8 @@ import com.example.android.apis.graphics.CubeRenderer
  * See also the [PresentationActivity] sample which uses the low-level display manager
  * to enumerate displays and to show multiple simultaneous presentations on different
  * displays.
+ * RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 class PresentationWithMediaRouterActivity : AppCompatActivity() {
 
     /**
@@ -328,9 +327,9 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
      * we call the `show` method of [mPresentation] to have it connect to the display. Finally we
      * call our method [updateContents] which will display our rotating cubes either in the main
      * activity or on the external display and will display some text explaining what is happening.
+     * RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
      */
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    @SuppressLint("NewApi", "ObsoleteSdkInt")
+    @SuppressLint("NewApi")
     private fun updatePresentation() {
         // Get the current route and its presentation display.
         val route = mMediaRouter!!.selectedRoute

@@ -15,19 +15,15 @@
  */
 package com.example.android.apis.preference
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
 import com.example.android.apis.R
 
 /**
  * Demonstration of [PreferenceFragmentCompat], showing a single fragment in an activity.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentPreferences : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of

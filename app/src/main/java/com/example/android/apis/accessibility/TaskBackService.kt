@@ -129,7 +129,7 @@ class TaskBackService : AccessibilityService(), OnInitListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mTts!!.speak(utterance.toString(), TextToSpeech.QUEUE_FLUSH, null, null)
         } else {
-            @Suppress("DEPRECATION")
+            @Suppress("DEPRECATION") // Needed for SDK older than LOLLIPOP
             mTts!!.speak(utterance.toString(), TextToSpeech.QUEUE_FLUSH, null)
         }
         Log.d(LOG_TAG, utterance.toString())

@@ -1,6 +1,5 @@
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.app.PendingIntent.CanceledException
 import android.content.ComponentName
@@ -10,7 +9,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View.OnClickListener
 import android.widget.Button
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -24,9 +22,8 @@ import com.example.android.apis.R
  * to these three "activities". It then launches these intents using startActivities() if the
  * FLAG_ACTIVITY_CLEAR_TASK button is pressed, or putting them into a PendingIntent which it
  * "later" calls using PendingIntent.send()
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class IntentActivityFlags : AppCompatActivity() {
 
     /**

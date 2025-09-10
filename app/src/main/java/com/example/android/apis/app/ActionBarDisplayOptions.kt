@@ -17,8 +17,6 @@
 
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
@@ -28,7 +26,6 @@ import android.view.ViewGroup.LayoutParams
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBar.Tab
 import androidx.appcompat.app.AppCompatActivity
@@ -38,9 +35,8 @@ import com.example.android.apis.R
 /**
  * This demo shows how various action bar display option flags can be combined
  * and their effects.
+ * RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
 class ActionBarDisplayOptions : AppCompatActivity(), View.OnClickListener, ActionBar.TabListener,
     AdapterView.OnItemSelectedListener, ActionBar.OnNavigationListener {
 

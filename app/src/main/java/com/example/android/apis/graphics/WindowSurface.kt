@@ -1,14 +1,11 @@
 package com.example.android.apis.graphics
 
-import android.annotation.SuppressLint
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.Window
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.math.abs
 
@@ -16,10 +13,9 @@ import kotlin.math.abs
  * Demonstrates how to take over the Surface from a window to do direct drawing to it (without going
  * through the view hierarchy). Good example of how to use a background thread to do your drawing.
  * Shows use of life cycle callbacks when a thread is running in the background.
+ * RequiresApi(Build.VERSION_CODES.GINGERBREAD)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN", "MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.GINGERBREAD)
 class WindowSurface : AppCompatActivity(), SurfaceHolder.Callback2 {
     /**
      * Our [DrawingThread] instance for background drawing.

@@ -15,15 +15,12 @@
  */
 package com.example.android.apis.animation
 
-import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.app.SharedElementCallback
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toDrawable
 import com.example.android.apis.R
@@ -41,10 +38,9 @@ import com.example.android.apis.animation.ActivityTransition.Companion.randomCol
  * the reverse transition to ActivityTransition activity occurs. The animation is set up using
  * AndroidManifest android:theme="@style/ActivityTransitionTheme" which contains elements which point
  * to files in res/transition
+ * RequiresApi(Build.VERSION_CODES.LOLLIPOP)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class ActivityTransition : AppCompatActivity() {
 
     /**
@@ -125,8 +121,8 @@ class ActivityTransition : AppCompatActivity() {
      * as the epicenter of the transition).
      *
      * @param v View in the GridView which has been clicked
+     * RequiresApi(Build.VERSION_CODES.LOLLIPOP)
      */
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun clicked(v: View) {
         mHero = v as ImageView
         val intent = Intent(this, ActivityTransitionDetails::class.java)

@@ -15,15 +15,12 @@
  */
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.print.PrintManager
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -37,9 +34,8 @@ import com.example.android.apis.R
  *
  * @see PrintManager
  * @see WebView
+ * RequiresApi(Build.VERSION_CODES.LOLLIPOP)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class PrintHtmlFromScreen : AppCompatActivity() {
     /**
      * WebView in our layout file

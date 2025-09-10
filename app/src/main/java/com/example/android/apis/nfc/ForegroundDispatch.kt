@@ -26,16 +26,15 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
  * An example of how to use the NFC foreground dispatch APIs. This will intercept any MIME data
  * based NDEF dispatch as well as all dispatched for NfcF tags.
+ * RequiresApi(Build.VERSION_CODES.GINGERBREAD_MR1)
  */
-@RequiresApi(Build.VERSION_CODES.GINGERBREAD_MR1)
-@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
+@SuppressLint("SetTextI18n")
 class ForegroundDispatch : AppCompatActivity() {
     /**
      * Default NFC Adapter

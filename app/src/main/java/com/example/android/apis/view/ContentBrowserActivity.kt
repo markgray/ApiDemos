@@ -18,12 +18,10 @@
 
 package com.example.android.apis.view
 
-import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -37,7 +35,6 @@ import android.widget.ScrollView
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -54,10 +51,9 @@ import com.example.android.apis.R
  * that content. When the user clicks, it toggles the visibility of navigation
  * elements.
  * TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("DEPRECATION", "MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class ContentBrowserActivity : AppCompatActivity(),
     SearchView.OnQueryTextListener,
     ActionBar.TabListener {
@@ -65,8 +61,8 @@ class ContentBrowserActivity : AppCompatActivity(),
      * Implementation of a view for displaying immersive content, using system UI
      * flags to transition in and out of modes where the user is focused on that
      * content.
+     * RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
      */
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     class Content(context: Context, attrs: AttributeSet?) : ScrollView(context, attrs),
         OnSystemUiVisibilityChangeListener,
         View.OnClickListener {
@@ -349,8 +345,8 @@ class ContentBrowserActivity : AppCompatActivity(),
      *
      * @param menu The options [Menu] in which you place your items.
      * @return You must return true for the menu to be displayed.
+     * RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
      */
-    @RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.content_actions, menu)
@@ -456,8 +452,8 @@ class ContentBrowserActivity : AppCompatActivity(),
      *
      * @param item The menu item that was selected.
      * @return Return false to allow normal menu processing to proceed, true to consume it here.
+     * RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
      */
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.show_tabs -> {

@@ -16,28 +16,23 @@
 
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
 import android.app.Dialog
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.example.android.apis.R
 
-
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 /**
  * Demonstrates how to show an [AlertDialog] that is managed by a `Fragment`. Uses [DialogFragment]
  * as the base class and overrides [onCreateDialog] in which it builds the [AlertDialog] using an
  * [AlertDialog.Builder]
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
 class FragmentAlertDialog : FragmentActivity() {
 

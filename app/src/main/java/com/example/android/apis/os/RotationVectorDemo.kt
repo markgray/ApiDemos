@@ -17,16 +17,13 @@
 
 package com.example.android.apis.os
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.opengl.GLSurfaceView
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -43,9 +40,8 @@ import javax.microedition.khronos.opengles.GL10
  * @see SensorManager
  *
  * Uses output from [Sensor.TYPE_ROTATION_VECTOR] to change the rotation matrix of an openGL Cube.
+ * RequiresApi(Build.VERSION_CODES.GINGERBREAD)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.GINGERBREAD)
 class RotationVectorDemo : AppCompatActivity() {
     /**
      * The [GLSurfaceView] we use as our content view, contains a [MyRenderer.Cube]

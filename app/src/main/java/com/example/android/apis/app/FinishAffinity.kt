@@ -18,13 +18,11 @@ package com.example.android.apis.app
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -32,10 +30,10 @@ import com.example.android.apis.R
  * Show how to end a deeply nested stack of activities, returning to the activity at the very top.
  * It does this by calling finishAffinity() which finishes this activity as well as all activities
  * immediately below it in the current task that have the same affinity.
+ * RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
  */
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
-@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
+@SuppressLint("SetTextI18n")
 class FinishAffinity : AppCompatActivity() {
     /**
      * Nesting level for this instance of `FinishAffinity`.

@@ -15,15 +15,12 @@
  */
 package com.example.android.apis.animation
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.transition.Scene
 import android.transition.TransitionInflater
 import android.transition.TransitionManager
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -32,10 +29,9 @@ import com.example.android.apis.R
  * [transitions][android.transition] APIs. Scenes and a TransitionManager
  * are loaded from resource files and transitions are run between those scenes
  * as well as a dynamically-configured scene.
+ * RequiresApi(Build.VERSION_CODES.KITKAT)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.KITKAT)
 class Transitions : AppCompatActivity() {
 
     /**

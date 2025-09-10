@@ -28,19 +28,19 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.Xfermode
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.core.graphics.createBitmap
+import com.example.android.apis.graphics.Xfermodes.SampleView.Companion.ROW_MAX
+import com.example.android.apis.graphics.Xfermodes.SampleView.Companion.sLabels
+import com.example.android.apis.graphics.Xfermodes.SampleView.Companion.sModes
 
 /**
  * Shows the results of using different Xfermode's when drawing an overlapping square and a circle
  * to the same Canvas. It was way too small on the newer devices (froyo OK), so I modified it to
  * scale for dpi.
+ * RequiresApi(Build.VERSION_CODES.LOLLIPOP)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class Xfermodes : GraphicsActivity() {
     /**
      * Called when the activity is starting. First we call through to our super's implementation of

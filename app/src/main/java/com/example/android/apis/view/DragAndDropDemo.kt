@@ -16,21 +16,19 @@
 package com.example.android.apis.view
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.DragEvent
 import android.view.View
 import android.view.View.OnDragListener
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
  * Shows how to implement draggable views.
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("SetTextI18n")
 class DragAndDropDemo : AppCompatActivity() {
     /**
      * Target [TextView] to display some messages in.

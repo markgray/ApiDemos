@@ -19,19 +19,17 @@ import android.annotation.SuppressLint
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
-import android.os.Build
 import android.os.Bundle
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
 /**
  * An example of how to use the NFC foreground NDEF push APIs to push an url to another android
  * device. Note: Android Beam has been removed as of Q
+ * RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
  */
-@SuppressLint("SetTextI18n", "ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
+@SuppressLint("SetTextI18n")
 class ForegroundNdefPush : AppCompatActivity() {
     /**
      * The default NFC Adapter of our device.

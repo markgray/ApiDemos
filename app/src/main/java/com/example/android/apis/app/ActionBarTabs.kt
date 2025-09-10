@@ -18,14 +18,12 @@
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBar.Tab
 import androidx.appcompat.app.AppCompatActivity
@@ -40,10 +38,9 @@ import com.example.android.apis.R
  * because it needs a zero argument constructor. The text should be passed in a bundle.
  * Working on doing this Right. Did so, but need to use retained fragments in order
  * to keep tabs (TODO: add retained fragments to this)
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class ActionBarTabs : AppCompatActivity() {
 
     /**

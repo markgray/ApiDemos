@@ -16,10 +16,8 @@
 
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -29,7 +27,6 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.ScrollView
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -49,9 +46,8 @@ import com.example.android.apis.graphics.Utilities.id2p
  *
  * This was obviously added by a runaway modification script, and the container
  * id should be R.id.details
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class FragmentLayout : FragmentActivity() {
 
     /**

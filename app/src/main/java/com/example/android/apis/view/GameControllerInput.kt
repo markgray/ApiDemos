@@ -15,12 +15,10 @@
  */
 package com.example.android.apis.view
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.hardware.input.InputManager
 import android.hardware.input.InputManager.InputDeviceListener
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.SparseArray
@@ -36,7 +34,6 @@ import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.util.size
 import com.example.android.apis.R
@@ -51,9 +48,8 @@ import com.example.android.apis.view.GameControllerInput.InputDeviceState.Compan
  *
  * The game controller is also used to control a very simple game.  See [GameView]
  * for the game itself, it is used by our layout file R.layout.game_controller_input.
+ * RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class GameControllerInput : AppCompatActivity(), InputDeviceListener {
     /**
      * [InputManager] for interacting with input devices.

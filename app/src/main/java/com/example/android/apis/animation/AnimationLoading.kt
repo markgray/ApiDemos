@@ -29,12 +29,10 @@ import android.graphics.RadialGradient
 import android.graphics.Shader
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -53,10 +51,9 @@ import com.example.android.apis.R
  * accelerate interpolator applied on each keyframe interval instead of the default used on
  * balls[5], As these two animations use the exact same path, the effect of the per-keyframe
  * interpolator has been made obvious.)
+ * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
  */
-@SuppressLint("ObsoleteSdkInt")
 @Suppress("MemberVisibilityCanBePrivate")
-@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
 class AnimationLoading : AppCompatActivity() {
 
     /**

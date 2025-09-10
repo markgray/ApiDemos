@@ -18,7 +18,6 @@ package com.example.android.apis.app
 
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -27,7 +26,6 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import com.example.android.apis.app.ScreenOrientation.Companion.mOrientationDescriptions
@@ -37,9 +35,8 @@ import com.example.android.apis.app.ScreenOrientation.Companion.mOrientationValu
  * Lets the user choose the screen orientation programmatically -- some orientations are only
  * available for v9+, and some only for v18+ but froyo ignores them rather than crashes.
  * Very nice example of spinner layout and use.
+ * RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class ScreenOrientation : AppCompatActivity() {
     /**
      * [Spinner] in layout used for choosing orientation

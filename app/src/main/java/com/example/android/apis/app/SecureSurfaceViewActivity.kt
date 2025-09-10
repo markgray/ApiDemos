@@ -16,12 +16,9 @@
 
 package com.example.android.apis.app
 
-import android.annotation.SuppressLint
 import android.opengl.GLSurfaceView
-import android.os.Build
 import android.os.Bundle
 import android.view.SurfaceView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import com.example.android.apis.graphics.CubeRenderer
@@ -44,9 +41,8 @@ import com.example.android.apis.graphics.CubeRenderer
  * secondary display should not show the contents of the secure surface.
  *  - Try mirroring the secure surface onto a secure display such as an
  * HDMI display with HDCP enabled.  The contents of the secure surface should appear
+ * RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 class SecureSurfaceViewActivity : AppCompatActivity() {
     /**
      * GLSurfaceView in our layout

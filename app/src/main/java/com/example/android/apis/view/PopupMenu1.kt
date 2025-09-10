@@ -15,13 +15,10 @@
  */
 package com.example.android.apis.view
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 
@@ -52,9 +49,8 @@ class PopupMenu1 : AppCompatActivity() {
      * show the menu popup anchored to the view specified during construction.
      *
      * @param button [View] that has been clicked.
+     * RequiresApi(Build.VERSION_CODES.HONEYCOMB)
      */
-    @SuppressLint("ObsoleteSdkInt")
-    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     fun onPopupButtonClick(button: View?) {
         val popup = PopupMenu(/* context = */ this, /* anchor = */ button)
         popup.menuInflater.inflate(R.menu.popup, popup.menu)

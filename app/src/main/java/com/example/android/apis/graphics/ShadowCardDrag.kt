@@ -48,9 +48,8 @@ import com.example.android.apis.R
 /**
  * Shows "material design" effects of simple draggable shapes that generate a shadow casting outline
  * on touching the screen.
+ * RequiresApi(Build.VERSION_CODES.LOLLIPOP)
  */
-@SuppressLint("ObsoleteSdkInt")
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class ShadowCardDrag : AppCompatActivity() {
     /**
      * [ShapeDrawable] presently being used for the draggable, it is cycled by the R.id.shape_select
