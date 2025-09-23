@@ -21,7 +21,6 @@ import android.app.Presentation
 import android.content.Context
 import android.content.DialogInterface
 import android.opengl.GLSurfaceView
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Display
@@ -29,7 +28,6 @@ import android.view.Menu
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuItemCompat
 import androidx.mediarouter.app.MediaRouteActionProvider
