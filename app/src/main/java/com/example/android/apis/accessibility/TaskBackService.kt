@@ -14,6 +14,8 @@
  * the License.
  */
 
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.accessibility
 
 import android.accessibilityservice.AccessibilityService
@@ -33,6 +35,7 @@ import java.util.Locale
  * This class demonstrates how an accessibility service can query
  * window content to improve the feedback given to the user.
  */
+@SuppressLint("AccessibilityPolicy")
 class TaskBackService : AccessibilityService(), OnInitListener {
 
     /** Flag whether Text-To-Speech is initialized.  */

@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
+@file:Suppress("unused")
+
 package com.example.android.apis.accessibility
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
+import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
 import android.view.KeyEvent
@@ -39,6 +42,7 @@ import kotlin.math.min
  * is referenced by a meta-data android:name="android.accessibilityservice"
  * android:resource="@xml/magnification_service" element in AndroidManifest.xml.
  */
+@SuppressLint("AccessibilityPolicy")
 @RequiresApi(api = Build.VERSION_CODES.N)
 class MagnificationService : AccessibilityService() {
 

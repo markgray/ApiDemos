@@ -1,3 +1,5 @@
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.graphics
 
 import android.graphics.Canvas
@@ -218,7 +220,7 @@ class WindowSurface : AppCompatActivity(), SurfaceHolder.Callback2 {
             val deltaCur = (Math.random() * minStep - minStep / 2).toFloat()
             var curVar = cur + deltaCur
             if (curVar < 0 && curVar > -minStep) curVar = -minStep
-            if (curVar >= 0 && curVar < minStep) curVar = minStep
+            if (curVar in 0.0..<minStep.toDouble()) curVar = minStep
             if (curVar > maxStep) curVar = maxStep
             if (curVar < -maxStep) curVar = -maxStep
             return curVar

@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.media
 
 import android.media.AudioManager
@@ -138,13 +140,13 @@ class MediaPlayerDemoVideo : AppCompatActivity(), OnBufferingUpdateListener, OnC
      * [OnCompletionListener], [OnPreparedListener], and [OnVideoSizeChangedListener] to "this", and
      * set its audio stream type to the audio stream for music playback STREAM_MUSIC.
      *
-     * @param Media data stored in the extras of the intent that launched us under the key MEDIA
+     * @param mediaType data stored in the extras of the intent that launched us under the key MEDIA
      * ("media"), either [LOCAL_VIDEO] or [STREAM_VIDEO].
      */
-    private fun playVideo(Media: Int) {
+    private fun playVideo(mediaType: Int) {
         doCleanUp()
         try {
-            when (Media) {
+            when (mediaType) {
                 LOCAL_VIDEO -> {
                     /*
                      * TODO: Set the path variable to a local media file path.

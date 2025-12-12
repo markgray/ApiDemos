@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "ReplaceNotNullAssertionWithElvisReturn")
 // TODO: replace Movie with android.graphics.drawable.AnimatedImageDrawable
 package com.example.android.apis.graphics
 

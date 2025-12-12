@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "ReplaceNotNullAssertionWithElvisReturn")
 // TODO: replace AsyncTask with coroutine usage.
 
 package com.example.android.apis.security
@@ -258,7 +258,7 @@ class KeyStoreUsage : AppCompatActivity() {
      * The `Adapter` we use for our [AliasAdapter] field [mAdapter], it stores the alias strings
      * the user has used in its `ArrayAdapter<String>`
      */
-    inner class AliasAdapter
+    class AliasAdapter
     /**
      * Our constructor. We call our super's constructor specifying
      * android.R.layout.simple_list_item_single_choice as the resource ID for the layout file

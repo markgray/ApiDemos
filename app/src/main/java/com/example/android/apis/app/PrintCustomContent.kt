@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "ReplaceNotNullAssertionWithElvisReturn")
 // TODO: Fix the many deprecated method usages
 package com.example.android.apis.app
 
@@ -180,7 +180,7 @@ class PrintCustomContent : ListActivity() {
      * @property mInflater `LayoutInflater` to use in `getView` override to inflate our xml layout file
      * R.layout.motogp_stat_item
      */
-    private inner class MotoGpStatAdapter(
+    private class MotoGpStatAdapter(
         private val mItems: List<MotoGpStatItem>,
         private val mInflater: LayoutInflater
     ) : BaseAdapter() {

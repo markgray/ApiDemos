@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint
@@ -112,6 +114,7 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
          * @param router the MediaRouter reporting the event
          * @param info Route that has been selected for the given route types
          */
+        @Suppress("OVERRIDE_DEPRECATION")
         @Deprecated("Deprecated in Java")
         override fun onRouteSelected(router: MediaRouter, info: RouteInfo) {
             Log.d(TAG, "onRouteSelected: type=do not know, info=$info")
@@ -125,6 +128,7 @@ class PresentationWithMediaRouterActivity : AppCompatActivity() {
          * @param router the MediaRouter reporting the event
          * @param info Route that has been unselected for the given route types
          */
+        @Suppress("OVERRIDE_DEPRECATION")
         @Deprecated("Deprecated in Java")
         override fun onRouteUnselected(router: MediaRouter, info: RouteInfo) {
             Log.d(TAG, "onRouteUnselected: type=do not know, info=$info")

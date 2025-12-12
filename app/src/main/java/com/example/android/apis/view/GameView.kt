@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.view
 
 // TODO: Update to use of VibratorManager
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
-import android.os.Build
 import android.os.Handler
 import android.os.SystemClock
 import android.os.Vibrator
@@ -31,7 +31,6 @@ import android.view.InputDevice
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.core.graphics.withTranslation
 import com.example.android.apis.view.GameView.Companion.getCenteredAxis
 import com.example.android.apis.view.GameView.Companion.isFireKey

@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.graphics
 
 import android.opengl.GLSurfaceView
@@ -42,7 +44,7 @@ class FrameBufferObjectActivity : AppCompatActivity() {
      * [GLSurfaceView.Renderer] which draws our demo, it consists of two rotating [Cube]
      * objects used as the texture for a rotating [Triangle] object.
      */
-    private inner class Renderer : GLSurfaceView.Renderer {
+    private class Renderer : GLSurfaceView.Renderer {
         /**
          * Flag indicating whether the current GL context supports the GL_OES_framebuffer_object
          * extension

@@ -17,11 +17,12 @@
     "UNUSED_PARAMETER",
     "MemberVisibilityCanBePrivate",
     "RedundantOverride",
-    "DEPRECATION"
+    "DEPRECATION", "ReplaceNotNullAssertionWithElvisReturn"
 )
 
 package com.example.android.apis.view
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ClipData
 import android.content.Context
@@ -341,6 +342,7 @@ class VideoPlayerActivity :
          *
          * @param visible if true we make our navigation visible, if false we hide the navigation.
          */
+        @SuppressLint("ObsoleteSdkInt")
         @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
         fun setNavVisibility(visible: Boolean) {
             var newVis = (SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -433,6 +435,7 @@ class VideoPlayerActivity :
      * @param menu The options menu in which you place your items.
      * @return You must return true for the menu to be displayed.
      */
+    @SuppressLint("ObsoleteSdkInt")
     @RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater

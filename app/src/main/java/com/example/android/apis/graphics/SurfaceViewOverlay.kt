@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.graphics
 
 import android.opengl.GLSurfaceView
@@ -114,7 +116,7 @@ class SurfaceViewOverlay : AppCompatActivity() {
      * [View.OnClickListener] which sets the visibility of the [View] it is constructed for
      * to INVISIBLE.
      */
-    internal inner class HideMeListener(
+    internal class HideMeListener(
         /**
          * `View` we were constructed to make INVISIBLE when it is clicked.
          */

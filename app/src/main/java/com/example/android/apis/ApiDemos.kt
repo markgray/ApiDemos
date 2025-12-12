@@ -193,6 +193,8 @@ open class ApiDemos : AppCompatActivity() {
 
         for (i in 0 until len) {
             val info: ResolveInfo = list[i]
+
+            @Suppress("RedundantNullableReturnType") // It used to be nullable, but now it isn't.
             val labelSeq: CharSequence? = info.loadLabel(pm)
             val label: String = labelSeq?.toString() ?: info.activityInfo.name
 

@@ -33,8 +33,8 @@ internal class Grid(w: Int, h: Int) {
     private val mH: Int
     private val mIndexCount: Int
     operator fun set(i: Int, j: Int, x: Float, y: Float, z: Float, u: Float, v: Float) {
-        require(!(i < 0 || i >= mW)) { "i" }
-        require(!(j < 0 || j >= mH)) { "j" }
+        require(i in 0..<mW) { "i" }
+        require(j in 0..<mH) { "j" }
         val index = mW * j + i
         val posIndex = index * 3
         mVertexBuffer.put(posIndex, x)
@@ -61,8 +61,8 @@ internal class Grid(w: Int, h: Int) {
     }
 
     init {
-        require(!(w < 0 || w >= 65536)) { "w" }
-        require(!(h < 0 || h >= 65536)) { "h" }
+        require(w in 0..<65536) { "w" }
+        require(h in 0..<65536) { "h" }
         require(w * h < 65536) { "w * h >= 65536" }
         mW = w
         mH = h

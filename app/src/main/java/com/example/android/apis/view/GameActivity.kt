@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "ReplaceNotNullAssertionWithElvisReturn")
 // TODO: replace deprecated OnSystemUiVisibilityChangeListener with OnApplyWindowInsetsListener
 // TODO: replace SYSTEM_UI_FLAG_* with WindowInsetsController
 

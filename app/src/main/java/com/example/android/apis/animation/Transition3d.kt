@@ -1,3 +1,5 @@
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.animation
 
 import android.graphics.Bitmap
@@ -115,7 +117,14 @@ class Transition3d : AppCompatActivity(), OnItemClickListener, View.OnClickListe
 
         // Create a new 3D rotation with the supplied parameter
         // The animation listener is used to trigger the next animation
-        val rotation = Rotate3dAnimation(start, end, centerX, centerY, 310.0f, true)
+        val rotation = Rotate3dAnimation(
+            mFromDegrees = start,
+            mToDegrees = end,
+            mCenterX = centerX,
+            mCenterY = centerY,
+            mDepthZ = 310.0f,
+            mReverse = true
+        )
         rotation.duration = 500
         rotation.fillAfter = true
         rotation.interpolator = AccelerateInterpolator()

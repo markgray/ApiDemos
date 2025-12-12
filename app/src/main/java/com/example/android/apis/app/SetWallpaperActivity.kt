@@ -21,6 +21,7 @@ package com.example.android.apis.app
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
 
+import android.Manifest
 import android.app.WallpaperManager
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -28,6 +29,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android.apis.R
 import java.io.IOException
@@ -60,6 +62,7 @@ class SetWallpaperActivity : AppCompatActivity() {
      *
      * @param savedInstanceState always null since onSaveInstanceState is not overridden
      */
+    @RequiresPermission(anyOf = ["android.permission.READ_WALLPAPER_INTERNAL", Manifest.permission.MANAGE_EXTERNAL_STORAGE])
     override fun onCreate(savedInstanceState: Bundle?) {
         // Be sure to call the super class.
         super.onCreate(savedInstanceState)

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "ReplaceNotNullAssertionWithElvisReturn")
 // TODO: correct comments, replace deprecated startManagingCursor and SimpleCursorAdapter
 package com.example.android.apis.view
 

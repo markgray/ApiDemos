@@ -58,9 +58,11 @@ class Tabs5 : TabActivity(), TabContentFactory {
         )
         for (i in 1..30) {
             val name = "Tab $i"
-            tabHost.addTab(tabHost.newTabSpec(name)
+            tabHost.addTab(
+                tabHost.newTabSpec(name)
                     .setIndicator(name)
-                    .setContent(this))
+                    .setContent(this)
+            )
         }
     }
 

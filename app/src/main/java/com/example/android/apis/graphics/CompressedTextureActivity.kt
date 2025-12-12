@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.graphics
 
 import android.opengl.ETC1Util
@@ -138,7 +140,7 @@ class CompressedTextureActivity : AppCompatActivity() {
     /**
      * Demonstrate how to create a compressed texture on the fly.
      */
-    private inner class SyntheticCompressedTextureLoader : TextureLoader {
+    private class SyntheticCompressedTextureLoader : TextureLoader {
         /**
          * Called to create and load the compressed texture, it is called in the `onSurfaceCreated`
          * override of [StaticTriangleRenderer] if TEST_CREATE_TEXTURE is *true*. We declare the

@@ -14,6 +14,8 @@
  * limitations under the License
  */
 
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.content
 
 import android.annotation.SuppressLint
@@ -474,7 +476,7 @@ class ChangedContacts : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curso
      *
      * @param cursor The underlying cursor to wrap.
      */
-    private inner class DeleteCursorWrapper(cursor: Cursor?) : CursorWrapper(cursor) {
+    private class DeleteCursorWrapper(cursor: Cursor?) : CursorWrapper(cursor) {
         /**
          * The super's implementation of this returns the zero-based index for the given column name,
          * or throws [IllegalArgumentException] if the column doesn't exist.

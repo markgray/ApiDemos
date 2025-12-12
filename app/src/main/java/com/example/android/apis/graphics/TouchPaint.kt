@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.graphics
 
 import android.annotation.SuppressLint
@@ -23,7 +25,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -33,7 +34,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
-import androidx.annotation.RequiresApi
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.withSave
 import com.example.android.apis.graphics.TouchPaint.Companion.BACKGROUND_COLOR
 import com.example.android.apis.graphics.TouchPaint.Companion.COLORS
 import com.example.android.apis.graphics.TouchPaint.Companion.FADE_DELAY
@@ -43,8 +45,6 @@ import com.example.android.apis.graphics.TouchPaint.PaintView.Companion.MAX_FADE
 import java.util.Random
 import kotlin.math.cos
 import kotlin.math.sin
-import androidx.core.graphics.createBitmap
-import androidx.core.graphics.withSave
 
 /**
  * Demonstrates the handling of touch screen, stylus, mouse and trackball events to

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "ReplaceNotNullAssertionWithElvisReturn")
 // TODO: Replace deprecated API usage
 
 package com.example.android.apis.app
@@ -84,7 +84,7 @@ class QuickContactsDemo : ListActivity() {
      * and the drop down views
      * @param c Cursor
      */
-    private inner class ContactListItemAdapter(
+    private class ContactListItemAdapter(
         context: Context,
         layout: Int,
         c: Cursor

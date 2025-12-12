@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("MemberVisibilityCanBePrivate")
+@file:Suppress("MemberVisibilityCanBePrivate", "ReplaceNotNullAssertionWithElvisReturn")
 
 package com.example.android.apis.animation
 
@@ -104,7 +104,7 @@ class CustomEvaluator : AppCompatActivity() {
      * to create animations on arbitrary property types, by allowing them to supply custom
      * evaluators for types that are not automatically understood and used by the animation system.
      */
-    inner class XYEvaluator : TypeEvaluator<XYHolder> {
+    class XYEvaluator : TypeEvaluator<XYHolder> {
 
         /**
          * This function returns the result of linearly interpolating the start and end values,
@@ -131,7 +131,7 @@ class CustomEvaluator : AppCompatActivity() {
      *
      * @property mBall Our [ShapeHolder]
      */
-    inner class BallXYHolder(private val mBall: ShapeHolder) {
+    class BallXYHolder(private val mBall: ShapeHolder) {
 
         /**
          * Constructs and returns a new instance of `XYHolder` containing the x and y

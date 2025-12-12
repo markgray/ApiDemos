@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.graphics.kube
 
 import android.opengl.GLSurfaceView
@@ -535,7 +537,7 @@ class Kube : AppCompatActivity(), KubeRenderer.AnimationCallback {
      * method of [mCurrentLayer] to set the angle of the [Layer] to the new [mCurrentAngle]
      */
     override fun animate() { // change our angle of view
-        mRenderer!!.mAngle = mRenderer!!.mAngle + 1.2f
+        mRenderer!!.mAngle += 1.2f
         if (mCurrentLayer == null) {
             val layerID = mRandom.nextInt(9)
             mCurrentLayer = mLayers[layerID]

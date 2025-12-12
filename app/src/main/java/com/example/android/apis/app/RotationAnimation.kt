@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "unused")
 // TODO: Replace deprecated use of LayoutParams.FLAG_FULLSCREEN with WindowInsetsController.hide
 
 package com.example.android.apis.app

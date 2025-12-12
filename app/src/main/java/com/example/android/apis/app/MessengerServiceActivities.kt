@@ -1,3 +1,5 @@
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint

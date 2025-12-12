@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.accessibility
 
 import android.accessibilityservice.AccessibilityService
@@ -51,6 +53,7 @@ import com.example.android.apis.R
  *  1. Providing dynamic, context-dependent feedback: feedback type changes depending
  *  on the ringer state.
  */
+@SuppressLint("AccessibilityPolicy")
 class ClockBackService : AccessibilityService() {
 
     // Sound pool related member fields.

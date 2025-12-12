@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("unused", "ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.animation
 
 import android.animation.Animator

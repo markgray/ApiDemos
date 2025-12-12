@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "ReplaceNotNullAssertionWithElvisReturn")
 // TODO: replace AsyncTask with coroutine approach.
 package com.example.android.apis.app
 
@@ -826,6 +826,7 @@ class LoaderThrottle : AppCompatActivity() {
                          *
                          * @return A result, defined by the subclass of this task (We return no result so Void)
                          */
+                        @Suppress("OVERRIDE_DEPRECATION")
                         @Deprecated("Deprecated in Java")
                         override fun doInBackground(vararg params: Void): Void? {
                             var c = 'Z'
@@ -875,6 +876,7 @@ class LoaderThrottle : AppCompatActivity() {
                          * is used
                          * @return we have nothing to return, so return null here
                          */
+                        @Suppress("OVERRIDE_DEPRECATION")
                         @Deprecated("Deprecated in Java")
                         override fun doInBackground(vararg params: Void): Void? {
                             cr.delete(CONTENT_URI, null, null)

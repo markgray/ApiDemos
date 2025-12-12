@@ -13,7 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION") // TODO: Replace lots of deprectated stuff in this guy.
+@file:Suppress(
+    "DEPRECATION",
+    "unused",
+    "ReplaceNotNullAssertionWithElvisReturn"
+) // TODO: Replace lots of deprectated stuff in this guy.
 package com.example.android.apis.app
 
 import android.annotation.SuppressLint

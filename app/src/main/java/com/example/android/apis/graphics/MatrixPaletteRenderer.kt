@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.graphics
 
 import android.content.Context
@@ -154,8 +156,8 @@ class MatrixPaletteRenderer(
             w0: Float, w1: Float,
             p0: Int, p1: Int
         ) {
-            require(value = !(i < 0 || i >= mW)) { "i" }
-            require(value = !(j < 0 || j >= mH)) { "j" }
+            require(value = i in 0..<mW) { "i" }
+            require(value = j in 0..<mH) { "j" }
             require(value = w0 + w1 == 1.0f) { "Weights must add up to 1.0f" }
             val index = mW * j + i
             mVertexBuffer!!.position(index * VERTEX_SIZE / FLOAT_SIZE)
@@ -415,8 +417,8 @@ class MatrixPaletteRenderer(
          * Parameter: h height of our `Grid` in vertices
          */
         init {
-            require(value = !(w < 0 || w >= 65536)) { "w" }
-            require(value = !(h < 0 || h >= 65536)) { "h" }
+            require(value = w in 0..<65536) { "w" }
+            require(value = h in 0..<65536) { "h" }
             require(value = w * h < 65536) { "w * h >= 65536" }
             mW = w
             mH = h

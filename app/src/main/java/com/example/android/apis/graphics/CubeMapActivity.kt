@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.graphics
 
 import android.graphics.Bitmap
@@ -495,8 +497,8 @@ class CubeMapActivity : AppCompatActivity() {
             ny: Float,
             nz: Float
         ) {
-            require(!(i < 0 || i >= mW)) { "i" }
-            require(!(j < 0 || j >= mH)) { "j" }
+            require(i in 0..<mW) { "i" }
+            require(j in 0..<mH) { "j" }
             val index = mW * j + i
             mVertexBuffer!!.position(index * VERTEX_SIZE / FLOAT_SIZE)
             mVertexBuffer!!.put(x)
@@ -698,8 +700,8 @@ class CubeMapActivity : AppCompatActivity() {
          * Parameter: h Height of the `Grid` (number of rows of vertices)
          */
         init {
-            require(!(w < 0 || w >= 65536)) { "w" }
-            require(!(h < 0 || h >= 65536)) { "h" }
+            require(w in 0..<65536) { "w" }
+            require(h in 0..<65536) { "h" }
             require(w * h < 65536) { "w * h >= 65536" }
             mW = w
             mH = h

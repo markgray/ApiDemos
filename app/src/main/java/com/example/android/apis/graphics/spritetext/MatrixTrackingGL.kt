@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn", "ImplicitThis")
+
 package com.example.android.apis.graphics.spritetext
 
 import android.util.Log

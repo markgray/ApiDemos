@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.app
 // TODO: Replace suppresssed deprecation warnings with modern solution.
 // TODO: Fix comments

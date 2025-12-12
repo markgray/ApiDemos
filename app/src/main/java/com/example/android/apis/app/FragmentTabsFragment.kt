@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "ReplaceNotNullAssertionWithElvisReturn")
 // TODO: Replace Tab use with modern navigation UI
 // TODO: Fix the TABS fragment TAB to respect system bar.
 package com.example.android.apis.app
@@ -59,6 +59,7 @@ class FragmentTabsFragment : Fragment() {
      * @param savedInstanceState If the fragment is being re-created from
      * a previous saved state, this is the state.
      */
+    @SuppressLint("ObsoleteSdkInt")
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -343,6 +344,7 @@ class FragmentTabsFragment : Fragment() {
          * @param savedInstanceState the previous saved state passed to the `onViewStateRestored`
          * override of our parent fragment.
          */
+        @SuppressLint("ObsoleteSdkInt")
         @RequiresApi(Build.VERSION_CODES.HONEYCOMB_MR2)
         fun handleViewStateRestored(savedInstanceState: Bundle?) {
             if (savedInstanceState != null) {
@@ -467,6 +469,7 @@ class FragmentTabsFragment : Fragment() {
          *
          * @return a [FragmentTransaction] which includes the commands necessary to switch tabs.
          */
+        @SuppressLint("ObsoleteSdkInt")
         @RequiresApi(Build.VERSION_CODES.HONEYCOMB_MR2)
         private fun doTabChanged(tabId: String?, ft: FragmentTransaction?): FragmentTransaction? {
             var ftVar = ft

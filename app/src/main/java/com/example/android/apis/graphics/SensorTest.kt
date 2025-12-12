@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.apis.graphics
 
 import android.content.Context
@@ -56,6 +58,7 @@ class SensorTest : GraphicsActivity() {
      * The `onDraw` method of [SampleView] rotates the canvas based on the value of
      * `mValues[0]` - must have been copied from the compass example.
      */
+    @Suppress("RedundantNullableReturnType")
     private val mValues: FloatArray? = FloatArray(1)
 
     /**

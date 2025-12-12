@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "ReplaceNotNullAssertionWithElvisReturn")
 // TODO: Use the AndroidX Preference Library for consistent behavior across all devices. For more
 //  information on using the AndroidX Preference Library see Settings.
 

@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "ReplaceNotNullAssertionWithElvisReturn")
+// Deprecated Action bar navigation modes are deprecated and not supported by inline toolbar action
+// bars. Consider using other common navigation patterns instead.
 
 package com.example.android.apis.app
 
